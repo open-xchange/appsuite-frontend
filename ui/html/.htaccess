@@ -32,6 +32,7 @@ ExpiresByType text/javascript "access plus 6 months"
 ExpiresByType application/x-javascript "access plus 6 months"
 ExpiresByType text/cache-manifest "access plus 0 seconds"
 ExpiresByType audio/mp3 "access plus 6 months"
+ExpiresByType application/font-woff "access plus 6 months"
 
 # cache buster (exclude cache manifests and main pages)
 <FilesMatch "^(?!(core|signin)).*$">
@@ -57,6 +58,9 @@ ExpiresByType audio/mp3 "access plus 6 months"
     Header set Content-type "text/html"
     ForceType "text/html"
     ExpiresByType text/html "now"
+    # always send 200 due to Safari's 304 bug (affects Desktop and iOS)
+    RequestHeader unset If-Modified-Since
+    RequestHeader unset If-None-Match
 </FilesMatch>
 
 # Avoid click jacking (https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet)
@@ -74,3 +78,4 @@ RewriteRule ^$ core [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !help/l10n/en_US
 RewriteRule help/l10n/([a-z_A-Z]+)(.+) help/l10n/en_US$2 [L]
+

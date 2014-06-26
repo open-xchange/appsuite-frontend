@@ -15,14 +15,14 @@ define('io.ox/mail/print',
     ['io.ox/core/print',
      'io.ox/mail/api',
      'io.ox/mail/util',
-     'io.ox/mail/view-detail',
+     'io.ox/mail/detail/content',
      'gettext!io.ox/mail'
-    ], function (print, api, util, detailview,  gt) {
+    ], function (print, api, util, content,  gt) {
 
     'use strict';
 
     var regImageSrc = /(<img[^>]+src=")\/ajax/g,
-        //TODO: add setting (html OR text)
+        // TODO: add setting (html OR text)
         type = 'html';
 
     function getContent(data) {
@@ -33,14 +33,13 @@ define('io.ox/mail/print',
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
         } else {
-            //use cleanup from detailview
-            return detailview.getContent(data, { autoCollapseBlockquotes: false }).content.html();
+            return content.get(data, { autoCollapseBlockquotes: false }).content.html();
         }
     }
 
     function getList(data, field) {
         return _(data[field || 'from']).map(function (obj) {
-            return util.getDisplayName(obj).replace(/\s/g, '\u00A0');
+            return util.getDisplayName(obj, true).replace(/\s/g, '\u00A0');
         }).join('\u00A0\u2022 ');
     }
 
@@ -73,7 +72,10 @@ define('io.ox/mail/print',
             print.smart({
 
                 get: function (obj) {
-                    return api.get(_.extend({ view: type}, obj));
+                    // is an embedded email?
+                    if (util.isEmbedded(selection[0])) return $.Deferred().resolve(selection[0]);
+                    // fetch normal message
+                    return api.get(_.extend({ view: type }, obj));
                 },
 
                 title: selection.length === 1 ? selection[0].subject : undefined,

@@ -2,7 +2,7 @@
 <h1>Piraten-Parteitag</h1>
 <h2>Zwischen Rausch und Realität</h2>
 <p>Von <a href="http://www.spiegel.de/extra/0,1518,632073,00.html">Annett Meiritz</a> und <a href="http://www.spiegel.de/extra/0,1518,785307,00.html">Fabian Reinbold</a>, Offenbach</p>
-<p style="text-align: right;">REUTERS</p>
+<p style="text-align: right; ">REUTERS</p>
 <p>Pirat bei der Abstimmung: Andere Debatten- und Streitkultur</p>
 <p><strong>Drogen sollen legalisiert werden, weg mit der Kirchensteuer, her mit privaten Spenden! Die Piraten haben bei ihrem bislang größten Parteitag versucht, ihr Profil zu schärfen – zumindest die Parteispitze ist mit dem Ergebnis zufrieden. </strong></p>
 <p>Aus Datenschutzgründen wird Ihre IP-Adresse nur dann gespeichert, wenn Sie angemeldeter und eingeloggter Facebook-Nutzer sind. Wenn Sie mehr zum Thema Datenschutz wissen wollen, klicken Sie auf das i.</p>

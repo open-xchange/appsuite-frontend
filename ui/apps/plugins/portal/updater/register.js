@@ -28,10 +28,11 @@ define('plugins/portal/updater/register',
 
             this.append(
                 $('<div class="content">').append(
-                    $('<div class="paragraph">').text(
-                        gt('The updater provides a simple installation wizard. Follow the instructions to install the application. ' +
-                        'The updater will inform you of any updates for the Connector for Microsoft Outlook, Notifier and Drive. ' +
-                        'You can download the updates from within the updater.')
+                    $('<div class="paragraph text-justify">').text(
+                        gt('When executing the downloaded file, an installation wizard will be launched. ' +
+                            'Follow the instructions and install the updater. ' +
+                            'Installs latest versions of Windows® client software. The Updater automatically informs about new updates. ' +
+                            'You can download the updates from within the Updater.')
                     ),
                     $('<div class="paragraph">').append(
                         $('<a>', { href: href, target: '_blank', tabindex: '1', 'role': 'button' }).addClass('action').text(gt('Download'))

@@ -25,7 +25,7 @@ define('io.ox/mail/settings/defaults', [], function () {
         'appendMailTextOnReply': true,
         'forwardMessageAs': 'Inline',
         'messageFormat': 'html',
-        'lineWrapAfter': '',
+        'lineWrapAfter': '0',
         'defaultSendAddress': '',
         'autoSaveDraftsAfter': false,
         'allowHtmlMessages': true,
@@ -36,7 +36,7 @@ define('io.ox/mail/settings/defaults', [], function () {
         'defaultSignature': false,
         'mobileSignature': undefined,
         'mobileSignatureType': 'none', // one of 'none', 'custom'
-        'threadView': 'off',
+        'threadSupport': true,
         //for persistent sort
         'sort': 'thread',
         'order': 'desc',

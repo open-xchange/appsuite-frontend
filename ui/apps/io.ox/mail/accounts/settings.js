@@ -19,7 +19,7 @@ define('io.ox/mail/accounts/settings',
      'io.ox/core/tk/dialogs',
      'io.ox/core/notifications',
      'gettext!io.ox/mail/accounts/settings',
-     'less!io.ox/settings/style.less'
+     'less!io.ox/settings/style'
     ], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
 
     'use strict';
@@ -35,6 +35,8 @@ define('io.ox/mail/accounts/settings',
             width: 600,
             async: true
         });
+        //TOOD: hack to avoid horizontal scrollbar
+        myView.dialog.getBody().css('padding-right', '15px');
 
         myView.dialog.append(
             myView.render().el
@@ -45,12 +47,28 @@ define('io.ox/mail/accounts/settings',
             this.find('input[type=text]:first').focus();
         });
 
+        //show errors
+        myModel.on('validated', function (valid, model, error) {
+            var $form = myView.$el;
+            $form.find('.error').removeClass('error');
+            $form.find('.help-block').remove();
+
+            _.each(error, function (message, key) {
+                var $field = myView.$el.find('#' + key).parent(),
+                    $row = $field.closest('.form-group'),
+                    helpBlock = $('<div class="help-block error">');
+                helpBlock.append($.txt(message));
+                $field.append(helpBlock);
+                $row.addClass('error');
+            });
+        });
+
         myView.dialog.on('save', function () {
             myModel.validate();
             if (myModel.isValid()) {
                 myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
             } else {
-                notifications.yell('error', gt('Account settings could not be saved.'));
+                notifications.yell('error', gt('Account settings could not be saved. Please take a look at the annotations in the form. '));
                 myView.dialog.idle();
 
                 //disable fields for primary account again
@@ -61,7 +79,7 @@ define('io.ox/mail/accounts/settings',
             }
         });
 
-        myView.succes = successDialog;
+        myView.success = successDialog;
         myView.collection = collection;
         return myView.node;
     }
@@ -85,8 +103,9 @@ define('io.ox/mail/accounts/settings',
         index: 100,
         draw: function () {
             this.append(
-                $('<label>').text(gt('Your mail address')).append(
-                    $('<input type="text" class="span6 add-mail-account-address" tabindex="1">')
+                $('<div class="form-group">').append(
+                    $('<label for="add-mail-account-address">').text(gt('Your mail address')),
+                    $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address" tabindex="1">')
                 )
             );
         }
@@ -97,8 +116,9 @@ define('io.ox/mail/accounts/settings',
         index: 200,
         draw: function () {
             this.append(
-                $('<label>').text(gt('Your password')).append(
-                    $('<input type="password" class="span6 add-mail-account-password" tabindex="1">')
+                $('<div class="form-group">').append(
+                    $('<label for="add-mail-account-password">').text(gt('Your password')),
+                    $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password" tabindex="1">')
                 )
             );
         }
@@ -130,14 +150,7 @@ define('io.ox/mail/accounts/settings',
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $('<div>')
-                .addClass('alert alert-error alert-block')
-                .append(
-                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert', 'aria-label': message + '. ' + gt('Press [enter] to close this alertbox.'), 'role': 'button' })
-                    .addClass('close')
-                    .html('&times;'),
-                    $('<p tabindex="1">').text(message)
-                )
+                $.alert({message: message, dismissable: true})
             );
         },
 
@@ -164,7 +177,7 @@ define('io.ox/mail/accounts/settings',
             alertPlaceholder.find('.notice').remove();
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.append(
-                $('<div>').addClass('alert alert-error').text(message)
+                $('<div>').addClass('alert alert-danger').text(message)
             );
         },
 
@@ -173,12 +186,7 @@ define('io.ox/mail/accounts/settings',
 
             myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
                 function success(response) {
-                    if (response === false) {
-                        var message = gt('There was no suitable server found for this mail/password combination');
-                        drawAlert(getAlertPlaceholder(popup), message);
-                        popup.idle();
-                        popup.getBody().find('a.close').focus();
-                    } else {
+                    if (response === true) {
                         myModel.save(data, deferedSave);
                         deferedSave.done(function (response) {
                             if (response.error_id) {
@@ -192,7 +200,15 @@ define('io.ox/mail/accounts/settings',
                                 successDialog();
                                 def.resolve(response);
                             }
+                        }).fail(function (response) {
+                            popup.close();
+                            failDialog(response.error);
                         });
+                    } else {
+                        var message = gt('There was no suitable server found for this mail/password combination');
+                        drawAlert(getAlertPlaceholder(popup), message);
+                        popup.idle();
+                        popup.getBody().find('a.close').focus();
                     }
                 },
                 function fail() {

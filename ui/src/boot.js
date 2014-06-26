@@ -11,17 +11,27 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+// change ms-viewport rule for WP8 devices
+// http://mattstow.com/responsive-design-in-ie10-on-windows-phone-8.html
+if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+    var vpRule = document.createElement('style');
+    vpRule.appendChild(
+        document.createTextNode('@-ms-viewport{width:auto!important}')
+    );
+    document.getElementsByTagName('head')[0].appendChild(vpRule);
+}
+
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop, info: $.noop };
 }
 
-// not document.ready casue we wait for CSS to be loaded
+// not document.ready cause we wait for CSS to be loaded
 $(window).load(function () {
 
     'use strict';
 
-    if (_.url.hash("cacheBusting")) {
+    if (_.url.hash('cacheBusting')) {
         ox.base = ox.base + _.now();
     }
 
@@ -33,7 +43,6 @@ $(window).load(function () {
     // animations
     var DURATION = 250,
         // functions
-        boot,
         cont,
         cleanUp,
         gotoCore,
@@ -66,7 +75,7 @@ $(window).load(function () {
         'input[type=checkbox]',
         '.btn',
         '.dropdown',
-        '.icon-search',
+        '.fa-search',
         '.contact-grid-index',
         '.file-icon .wrap',
         '.carousel',
@@ -83,14 +92,12 @@ $(window).load(function () {
     //if device small wait 10ms check again
     //maybe the check was made too early could be wrong
     //desktop was recognized as mobile in some cases because of this
-    if(_.device('small')) {
+    if (_.device('small')) {
         setTimeout(function () {
             _.recheckDevice();
         }, 10);
 
     }
-
-
 
     // continuation
     cont = function () {
@@ -109,24 +116,13 @@ $(window).load(function () {
         cleanUp = fnChangeLanguage = initialize = $.noop;
     };
 
-    // do we have a mouse?
-    if (!Modernizr.touch) {
-        $('html').addClass('mouse');
-    }
-
-    // no ellipsis? (firefox)
-    // TODO: fix this; v11 support text-overflow
-    if (_.browser.Firefox) {
-        $('html').addClass('no-ellipsis');
-    }
-
     if (_.device('iOS')) {
         $('html').addClass('ios');
     }
 
     if (_.device('Android')) {
         if (_.browser.chrome === 18 || !_.browser.chrome) {
-             $('html').addClass('legacy-chrome');
+            $('html').addClass('legacy-chrome');
         }
         // disable context menu on chrome for android
         document.oncontextmenu = function (e) {
@@ -135,16 +131,18 @@ $(window).load(function () {
         };
     }
 
-    if (_.device('tablet')) {
-        // dismiss dropdown on rotation change due to
-        // positioning issues
-        $(document).on('orientationchange', function () {
-            $('body').trigger('click');
-        });
+    if (_.device('firefox && windows')) {
+        $('html').addClass('fix-spin');
     }
 
-    // be busy
-    $('#background-loader').busy();
+    $(window).on('orientationchange', function () {
+        // dismiss dropdown on rotation change due to positioning issues
+        if (_.device('tablet')) $('body').trigger('click');
+        // ios scroll fix; only fix if scrollTop is below 64 pixel
+        // some apps like portal really scroll <body>
+        if ($(window).scrollTop() > 64) return;
+        _.defer(function () { $(window).scrollTop(0); });
+    });
 
     $(window).on('online offline', function (e) {
         ox.trigger('connection:' + e.type);
@@ -155,16 +153,15 @@ $(window).load(function () {
         ox.windowState = e.type === 'blur' ? 'background' : 'foreground';
     });
 
-    // detect if backend is down
-    var serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
+    var serverTimeout;
 
-    function serverUp() {
+    var serverUp = function () {
         $('body').removeClass('down'); // to be safe
         serverDown = $.noop;
         clearTimeout(serverTimeout);
-    }
+    };
 
-    function serverDown() {
+    var serverDown = function () {
         $('body').addClass('down');
         $('#io-ox-login-container').empty().append(
             $('<div class="alert alert-info">').append(
@@ -172,19 +169,22 @@ $(window).load(function () {
             )
             .on('click', function (e) { e.preventDefault(); location.reload(); })
         );
-        $('#background-loader').idle().fadeOut(DURATION);
+        $('#background-loader').fadeOut(DURATION);
         console.warn('Server is down.');
         serverDown = $.noop;
-    }
+    };
+
+    // detect if backend is down
+    serverTimeout = setTimeout(serverDown, 30000); // long timeout for slow connections & IE
 
     // teach require.js to use deferred objects
-    var req = window.req = require;
-    require = function (deps, success, fail) {
+    var req = window.req = window.require;
+    window.require = function (deps, success, fail) {
         if (_.isArray(deps)) {
             // use deferred object
             _(deps).each(function (m) {
-                $(window).trigger("require:require", m);
-            })
+                $(window).trigger('require:require', m);
+            });
             var def = $.Deferred().done(success).fail(fail);
             req(deps, def.resolve, def.reject);
             return def.promise();
@@ -214,7 +214,7 @@ $(window).load(function () {
             if (typeof node === 'string') node = $.txt(gt(node));
 
             $('#io-ox-login-feedback').empty().append(
-                $('<div role="alert" class="selectable-text alert alert-block alert-info">').append(
+                $('<div role="alert" class="selectable-text alert alert-info">').append(
                     node
                 )
             );
@@ -242,7 +242,7 @@ $(window).load(function () {
                     // use redirect servlet for real login request
                     // this even makes chrome and safari asking for storing credentials
                     // skip this for auto-login or during offline mode
-                    if (viaAutoLogin || !ox.online) {
+                    if (viaAutoLogin) {
                         _.url.redirect(location);
                     } else {
                         // use redirect servlet
@@ -270,10 +270,33 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core'], function (settings) {
-                var theme = _.url.hash('theme') || settings.get('theme') || 'default';
-                debug('boot.js: loadCore > load config ...');
+            require(['settings!io.ox/core', ox.base + '/precore.js'], function (settings) {
 
+                // greedy prefetch for mail app
+                // need to get this request out as soon as possible
+                if (settings.get('autoStart') === 'io.ox/mail/main') {
+                    var params = {
+                        action: 'threadedAll',
+                        folder: 'default0/INBOX',
+                        columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                        sort: '610',
+                        order: 'desc',
+                        includeSent: true,
+                        max: 300,
+                        timezone: 'utc',
+                        limit: '0,30'
+                    };
+                    http.GET({ module: 'mail', params: params }).done(function (data) {
+                        // the collection loader will check ox.rampup for this data
+                        ox.rampup['mail/' + $.param(params)] = data;
+                    });
+                }
+
+                var theme = _.url.hash('theme') || settings.get('theme') || 'default';
+
+                $('html').toggleClass('high-contrast', settings.get('highcontrast', false));
+
+                debug('boot.js: loadCore > load config ...');
                 debug('boot.js: loadCore > require "main" & set theme', theme);
 
                 var def1 = require(['io.ox/core/main']),
@@ -284,6 +307,8 @@ $(window).load(function () {
                         function success(core) {
                             // go!
                             debug('boot.js: core.launch()');
+                            //trigger load event so custom dropdown can add event listeners (loading to early causes js errors on mobile devices during login)
+                            $(document).trigger('core-main-loaded');
                             core.launch();
                         },
                         function fail(e) {
@@ -329,7 +354,7 @@ $(window).load(function () {
                 }
 
                 function fail() {
-                    console.error('Could not load theme: ' + theme);
+                    console.error('Could not load theme: default');
                     gotoSignin('autologin=false');
                 }
 
@@ -382,7 +407,7 @@ $(window).load(function () {
             if ($.trim(username).length === 0) {
                 return fail({ error: gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
             }
-            if ($.trim(password).length === 0 && ox.online) {
+            if ($.trim(password).length === 0) {
                 return fail({ error: gt('Please enter your password.'), code: 'UI-0002' }, 'password');
             }
             // login
@@ -406,6 +431,7 @@ $(window).load(function () {
         changeLanguage = function (id) {
             // if the user sets a language on the login page, it will be used for the rest of the session, too
             gettext.setLanguage(id).done(function () {
+                $('html').attr('lang', id.split('_')[0]);
                 gettext.enable();
                 // get all nodes
                 $('[data-i18n]').each(function () {
@@ -414,10 +440,18 @@ $(window).load(function () {
                         target = (node.attr('data-i18n-attr') || 'text').split(',');
                     _.each(target, function (el) {
                         switch (el) {
-                        case 'value': node.val(val); break;
-                        case 'text': node.text(val); break;
-                        case 'label': node.contents().get(-1).nodeValue = val; break;
-                        default: node.attr(el, val); break;
+                        case 'value':
+                            node.val(val);
+                            break;
+                        case 'text':
+                            node.text(val);
+                            break;
+                        case 'label':
+                            node.contents().get(-1).nodeValue = val;
+                            break;
+                        default:
+                            node.attr(el, val);
+                            break;
                         }
                     });
                 });
@@ -476,84 +510,34 @@ $(window).load(function () {
         };
 
         function updateServerConfig(data) {
+
             ox.serverConfig = data || {};
+
+            // transform language array (hash keeps insertion order if keys are not array indexes)
+            ox.serverConfig.languages = _(ox.serverConfig.languages).object();
+
             require('io.ox/core/capabilities').reset();
             require('io.ox/core/manifests').reset();
             capabilities.reset();
             manifests.reset();
         }
 
-        function setFallbackConfig() {
-            var webmail = {  path: 'io.ox/mail/main', requires: 'webmail', title: 'Mail' };
-            updateServerConfig({
-                buildDate: '',
-                contact: '',
-                copyright: '',
-                capabilities: [{ attributes: {}, backendSupport: false, id: 'webmail' }],
-                forgotPassword: false,
-                languages: {},
-                manifests: [webmail],
-                pageHeader: '',
-                pageHeaderPrefix: '',
-                pageTitle: '',
-                productName: '',
-                productNameMail: '',
-                serverVersion: '',
-                version: ''
-            });
-        }
-
-        function getCachedServerConfig(configCache, cacheKey, useFallback, def) {
-            if (!configCache || !cacheKey) {
-                setFallbackConfig();
-                def.resolve();
-                return;
-            }
-            configCache.get(cacheKey).done(function (co) {
-                if (co !== null) {
-                    updateServerConfig(co.data);
-                    def.resolve();
-                } else if (useFallback) {
-                    setFallbackConfig();
-                    def.resolve();
-                } else {
-                    def.reject();
-                }
-            });
-        }
-
-        var configCache,
-            HOUR = 60000 * 60,
-            DAY = HOUR * 24;
-
         function fetchServerConfig(cacheKey) {
-            var def = $.Deferred();
-            if (ox.online) {
-                // check cache
-                configCache.get(cacheKey).done(function (co) {
-                    if (co !== null && co.timestamp > (_.now() - HOUR * 12)) {
-                        updateServerConfig(co.data);
-                        def.resolve();
-                    }
-                    // fetch fresh manifests
-                    http.GET({
-                        module: 'apps/manifests',
-                        params: { action: 'config' },
-                        appendSession: (cacheKey === 'userconfig')
-                    })
-                    .done(function (data) {
-                        configCache.add(cacheKey, { data: data, timestamp: _.now() });
-                        updateServerConfig(data);
-                        def.resolve();
-                    })
-                    .fail(function () {
-                        getCachedServerConfig(configCache, cacheKey, false, def);
-                    });
-                });
-            } else {
-                getCachedServerConfig(configCache, cacheKey, true, def);
+            var haveSession = (cacheKey === 'userconfig'), data;
+            // try rampup data
+            if (haveSession && (data = ox.rampup.serverConfig)) {
+                updateServerConfig(data);
+                return $.Deferred().resolve(data);
             }
-            return def;
+            // fetch fresh manifests
+            return http.GET({
+                module: 'apps/manifests',
+                params: { action: 'config' },
+                appendSession: haveSession
+            })
+            .done(function (data) {
+                updateServerConfig(data);
+            });
         }
 
         function fetchUserSpecificServerConfig() {
@@ -568,7 +552,7 @@ $(window).load(function () {
             var ref = (location.hash || '').replace(/^#/, ''),
                 path = String(ox.serverConfig.loginLocation || ox.loginLocation),
                 glue = path.indexOf('#') > -1 ? '&' : '#';
-            path = path.replace("[hostname]", window.location.hostname);
+            path = path.replace('[hostname]', window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
             _.url.redirect((hash ? path + glue + hash : path));
         }
@@ -584,11 +568,6 @@ $(window).load(function () {
                 // Set user's language (as opposed to the browser's language)
                 // Load core plugins
                 gettext.setLanguage(ox.language);
-                if (!ox.online) {
-                    gettext.enable();
-                    return $.when();
-                }
-
                 debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
                 return manifests.manager.loadPluginsFor('core').always(gettext.enable);
             }
@@ -601,6 +580,11 @@ $(window).load(function () {
                             // now we're sure the server is up
                             serverUp();
                             debug('boot.js: fetchGeneralServerConfig > success');
+                            // forceHTTPS
+                            if (ox.serverConfig.forceHTTPS && location.protocol !== 'https:' && !ox.debug) {
+                                location.href = 'https:' + location.href.substring(location.protocol.length);
+                                return;
+                            }
                             // set page title now
                             if (_.device('!small')) {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login';
@@ -608,7 +592,7 @@ $(window).load(function () {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                                 $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
-
+                            // theme
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
                             gettext.setLanguage('en_US');
@@ -622,7 +606,9 @@ $(window).load(function () {
                     );
                 } else {
                     // we need to fetch the server config to get custom logout locations
-                    fetchGeneralServerConfig().always(gotoSignin);
+                    fetchGeneralServerConfig().always(function () {
+                        gotoSignin();
+                    });
                 }
             }
 
@@ -642,13 +628,11 @@ $(window).load(function () {
                 ox.session = hash.session;
 
                 // set store cookie?
-                (hash.store === 'true' ? session.store() : $.when()).always(function () {
-
-                    var ref = hash.ref;
-                    ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
-                    _.url.redirect(ref ? ref : '#');
-
-                    configCache = new cache.SimpleCache('manifests', true);
+                $.when(
+                    session.rampup(),
+                    hash.store === 'true' ? session.store() : $.when()
+                )
+                .always(function () {
 
                     // fetch user config
                     ox.secretCookie = hash.secretCookie === 'true';
@@ -657,7 +641,7 @@ $(window).load(function () {
                         if (hash.user && hash.language && hash.user_id) {
                             whoami.resolve(hash);
                         } else {
-                            require(["io.ox/core/http"], function (http) {
+                            require(['io.ox/core/http'], function (http) {
                                 http.GET({
                                     module: 'system',
                                     params: {
@@ -680,6 +664,12 @@ $(window).load(function () {
                                 user_id: parseInt(resp.user_id || '0', 10),
                                 context_id: resp.context_id
                             });
+
+                            var redirect = '#';
+                            if (hash.ref) {
+                                redirect += hash.ref;
+                            }
+
                             // cleanup url
                             _.url.hash({
                                 language: null,
@@ -688,8 +678,11 @@ $(window).load(function () {
                                 user_id: null,
                                 context_id: null,
                                 secretCookie: null,
-                                store: null
+                                store: null,
+                                ref: null
                             });
+                            _.url.redirect(redirect);
+
                             // go ...
                             loadCoreFiles().done(function () {
                                 loadCore();
@@ -702,32 +695,21 @@ $(window).load(function () {
             } else if (hash.autologin === 'false') {
 
                 // needed for show-stopping errors like broken settings
-                configCache = new cache.SimpleCache('manifests', true);
                 continueWithoutAutoLogin();
-
-            } else if (!ox.online) {
-
-                // not online - no auto-login possible
-                debug('boot.js: autoLogin > Offline');
-                gotoSignin();
 
             } else {
 
                 debug('boot.js: autoLogin > session.autoLogin()');
 
                 // try auto login!?
-                session.autoLogin()
-                .always(function () {
-                    // init manifest cache now (have ox.user now)
-                    configCache = new cache.SimpleCache('manifests', true);
-                })
-                .then(
+                session.autoLogin().then(
                     function loginSuccess(data) {
                         // now we're sure the server is up
                         serverUp();
                         debug('boot.js: autoLogin > loginSuccess');
                         // are we on login page?
                         if (ox.signin) {
+                            ox.language = data.locale; // bug #31433
                             gotoCore(true);
                         } else {
                             debug('boot.js: autoLogin > loginSuccess > fetch user config ...');
@@ -771,7 +753,6 @@ $(window).load(function () {
                 id = '',
                 footer = '',
                 i = 0,
-                cl = $('#io-ox-current-language').parent(),
                 maxLang = 30;
 
             debug('boot.js: initialize ...');
@@ -785,14 +766,13 @@ $(window).load(function () {
 
                 var langCount = _.size(lang),
                     defaultLanguage = _.getCookie('language') || getBrowserLanguage(),
-                    // Display native select box for languages if there are up to "maxLang" languages
+                    // Display native select box for languages if there are up to 'maxLang' languages
                     langSorted = _.toArray(_.invert(lang)).sort(function (a, b) {
                         return lang[a] <= lang[b] ? -1 : +1;
                     });
 
                 if (langCount < maxLang && !_.url.hash('language-select')) {
                     for (id in langSorted) {
-                        var link;
                         i++;
                         node.attr({'role': 'menu', 'aria-labeledby': 'io-ox-languages-label'}).append(
                             $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
@@ -805,7 +785,7 @@ $(window).load(function () {
                     }
                 } else {
                     $('#io-ox-language-list').append(
-                        $('<select>').change(function(e) {
+                        $('<select>').change(function (e) {
                             var id = $(this).val();
                             if (id !== '') {
                                 e.data = { id: id };
@@ -827,7 +807,7 @@ $(window).load(function () {
                     );
                 }
             } else {
-                $("#io-ox-languages").remove();
+                $('#io-ox-languages').remove();
             }
 
             // update header
@@ -843,7 +823,7 @@ $(window).load(function () {
             $('#io-ox-copyright').text(footer);
 
             // hide checkbox?
-            if (!capabilities.has("autologin")) {
+            if (!capabilities.has('autologin')) {
                 $('#io-ox-login-store').remove();
             } else {
                 // check/uncheck?
@@ -862,24 +842,10 @@ $(window).load(function () {
                 $('#io-ox-forgot-password').find('a').attr('href', sc.forgotPassword);
             }
 
-            // disable password?
-            if (!ox.online) {
-                $('#io-ox-login-password').prop('disabled', true);
-                feedback('info', 'Offline mode');
-            } else {
-                $('#io-ox-login-password').prop('disabled', false);
-            }
-
             // set username input type to text in IE
             if (_.device('IE > 9')) {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
-            }
-
-            //show errors saved inlocalstorage
-            if (localStorage.getItem('errormsg')) {
-                feedback('error', $.txt(localStorage.getItem('errormsg')));
-                localStorage.removeItem('errormsg');//remove errormessages from localstorage
             }
 
             debug('boot.js: Load "signin" plugins & set default language');
@@ -896,7 +862,7 @@ $(window).load(function () {
             .always(function () {
 
                 // autologout message
-                if (_.url.hash("autologout")) {
+                if (_.url.hash('autologout')) {
                     feedback('info', function () {
                         return $.txt(gt('You have been automatically signed out'));
                     });
@@ -954,10 +920,10 @@ $(window).load(function () {
                     // Offer Chrome to all non-chrome users on android
                     feedback('info', function () {
                         return $('<b>').text(
-                            //#. "Google Chrome" is a brand and should not be translated
+                            //#. 'Google Chrome' is a brand and should not be translated
                             gt('For best results we recommend using Google Chrome for Android.'))
                             .add($.txt(_.noI18n('\xa0')))
-                            //.# The missing word at the end of the sentence ("Play Store") will be injected later by script
+                            //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
                             .add($.txt(gt('Get the latest version from the ')))
                             .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
                     });
@@ -976,7 +942,7 @@ $(window).load(function () {
                 $('#io-ox-login-username').prop('disabled', false).focus().select();
 
                 debug('boot.js: Fade in ...');
-                $('#background-loader').idle().fadeOut(DURATION, cont);
+                $('#background-loader').fadeOut(DURATION, cont);
             });
         };
 
@@ -992,10 +958,11 @@ $(window).load(function () {
 
     debug('boot.js: require([...], loadSuccess, loadFail);');
 
-    require([
-        'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities',
-        'themes', 'io.ox/core/settings'],
-        loadSuccess, loadFail
-    );
+    var dependencies =
+        'io.ox/core/http io.ox/core/session io.ox/core/cache io.ox/core/extensions ' +
+        'gettext io.ox/core/manifests io.ox/core/capabilities themes io.ox/core/settings';
+
+    // load sources
+    require(dependencies.split(' '), loadSuccess, loadFail);
+
 });

@@ -13,11 +13,10 @@
 
 define('io.ox/tasks/view-grid-template',
     ['io.ox/core/tk/vgrid',
-     'less!io.ox/tasks/style.less'
+     'less!io.ox/tasks/style'
     ], function (VGrid) {
 
     'use strict';
-
 
     //grid-based list for portal
     var gridTemplate = {
@@ -28,13 +27,13 @@ define('io.ox/tasks/view-grid-template',
                     this.addClass('tasks').append(
                         $('<div class="first-row">').append(
                             end_date = $('<span>').addClass('end_date'),
-                            private_flag = $('<i class="icon-lock private-flag">').hide(),
+                            private_flag = $('<i class="fa fa-lock private-flag">').hide(),
                             title = $('<div>').addClass('title')
                         ),
                         $('<div class="second-row">').append(
                             status = $('<span>').addClass('status'),
-                            user = $('<i class="participants icon-user">').hide(),
-                            progress = $('<div class="progress"><div class="bar" style="width: 0%;"></div></div>').hide()
+                            user = $('<i class="participants fa fa-user">').hide(),
+                            progress = $('<div class="progress"><div class="progress-bar" style="width: 0%;"></div></div>').hide()
                         )
                     );
 
@@ -54,7 +53,7 @@ define('io.ox/tasks/view-grid-template',
                         fields.private_flag.hide();
                     }
                     if (data.percent_completed > 0 && data.percent_completed < 100) {
-                        fields.progress.find('.bar').css('width', data.percent_completed + '%').end().show();
+                        fields.progress.find('.progress-bar').css('width', data.percent_completed + '%').end().show();
                     } else {
                         fields.progress.hide();
                     }

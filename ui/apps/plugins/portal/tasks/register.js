@@ -43,6 +43,43 @@ define('plugins/portal/tasks/register',
             });
         },
 
+        summary: function (baton) {
+
+            if (this.find('.summary').length) return;
+
+            this.addClass('with-summary show-summary');
+
+            var tasks = _(baton.data).filter(function (task) {
+                    return task.end_date !== null && task.status !== 3;
+                }),
+                sum = $('<div>').addClass('summary');
+
+            if (tasks.length === 0) {
+                sum.text(gt('You don\'t have any tasks that are either due soon or overdue.'));
+            } else {
+                var task = util.interpretTask(_(tasks).first());
+
+                sum.append(
+                    $('<li class="item" tabindex="1">').data('item', task).append(
+                            $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, {max: 50}))), $.txt(' '),
+                            task.end_date === '' ? $() :
+                                $('<span class="accent">').text(
+                                    //#. Due on date
+                                    gt('Due on %1$s', _.noI18n(task.end_date))
+                                ),
+                            $.txt(' '),
+                            $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, {max: 100})))
+                        )
+                );
+
+                this.on('tap', 'h2', function (e) {
+                    $(e.delegateTarget).toggleClass('show-summary');
+                });
+            }
+
+            this.append(sum);
+        },
+
         preview: function (baton) {
 
             var content = $('<ul class="content list-unstyled">'),
@@ -54,7 +91,10 @@ define('plugins/portal/tasks/register',
 
             if (tasks.length === 0) {
                 this.append(
-                    content.text(gt('You don\'t have any tasks that are either due soon or overdue.'))
+                    content.append(
+                        $('<li>').text(gt('You don\'t have any tasks that are either due soon or overdue.'))
+                    )
+
                 );
                 return;
             }

@@ -346,4 +346,3 @@ define('io.ox/contacts/model',
         }
     };
 });
-

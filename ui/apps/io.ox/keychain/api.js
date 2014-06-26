@@ -43,7 +43,6 @@
     }
  })
 
-
  **/
 
 define('io.ox/keychain/api',
@@ -55,13 +54,25 @@ define('io.ox/keychain/api',
 
     'use strict';
 
-    var api = {};
+    var api = {}, data;
 
     Events.extend(api);
 
+    function byIndex(a, b) {
+        return a.index - b.index;
+    }
+
     function initExtensions() {
         api.submodules = {};
+        data = [];
         ext.point('io.ox/keychain/api').each(function (extension) {
+            data.push(extension);
+        });
+
+        //stable sort order (race conditions of ext.point.extend)
+        data.sort(byIndex);
+
+        _.each(data, function (extension) {
             api.submodules[extension.id] = extension;
             extension.invoke('init');
             if (extension.on) {
@@ -80,7 +91,6 @@ define('io.ox/keychain/api',
     initExtensions();
 
     ext.point('io.ox/keychain/api').on('extended', initExtensions);
-
 
     function invokeExtension(accountType, method) {
         var extension = api.submodules[accountType];

@@ -24,8 +24,9 @@ define('io.ox/files/fluid/view-detail',
      'io.ox/core/api/folder',
      'io.ox/core/tk/attachments',
      'gettext!io.ox/files',
-     'less!io.ox/files/style.less'
-    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt) {
+     'io.ox/files/util',
+     'less!io.ox/files/style'
+    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt, util) {
 
     'use strict';
 
@@ -53,7 +54,8 @@ define('io.ox/files/fluid/view-detail',
                     if ((e.keyCode || e.which) === 13) { // enter
                         actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                     }
-                })
+                }),
+                baton.data.url ? $('<a>').text(baton.data.url).attr({ href: baton.data.url, target: '_blank' }) : $()
             );
         }
     });
@@ -108,7 +110,7 @@ define('io.ox/files/fluid/view-detail',
                     if (!file.filename) {
                         return false;
                     }
-                    return (new preview.Preview(parseArguments(file))).supportsPreview();
+                    return (new preview.Preview(parseArguments(file))).supportsPreview() && util.previewMode(file);
                 }
 
                 var lastWidth = 0, $previewNode, drawResizedPreview;
@@ -192,44 +194,45 @@ define('io.ox/files/fluid/view-detail',
             $commentArea,
             $comment,
             $uploadButton,
+            $cancelUploadButton,
             $progressBarWrapper,
             $progressBar,
             $input = attachments.fileUploadWidget({
-                displayLabel: true,
-                displayButton: false,
-                displayLabelText: gt('Upload a new version')
+                multi: false,//two new versions at the same time makes no sense
+                buttontext: gt('Upload a new version')
             });
 
             $node = $('<form>').append(
-                $('<div>').addClass('row-fluid').append(
+                $('<div>').append(
                     $('<div class="pull-left">').append(
                         $input
                     ),
                     $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
                         .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
-                    $progressBarWrapper = $('<div>').addClass('row-fluid').append($progressBar = $('<div>').addClass('bar')),
+                    $cancelUploadButton = $('<button>', {'data-dismiss': 'fileupload', tabindex: 1, 'aria-label': 'cancel'})
+                        .addClass('btn pull-right').text(gt('Cancel')).hide(),
+                    $progressBarWrapper = $('<div>').addClass('row').append($progressBar = $('<div>').addClass('progress-bar')),
                     $('<div>').addClass('comment').append(
-                        $comment = $('<div class="row-fluid">').append(
+                        $comment = $('<div>').append(
                             $('<label>').text(gt('Version Comment')),
-                            $commentArea = $('<textarea rows="5" tabindex="1"></textarea>')
+                            $commentArea = $('<textarea class="form-control" rows="5" tabindex="1"></textarea>')
                         ).hide()
                     )
                 )
             ).appendTo(this);
 
             var resetCommentArea = function () {
-                if ($input.find('[data-dismiss="fileupload"]').is(':visible')) {
-                    $uploadButton.show().text(gt('Upload new version'));
-                    $commentArea.removeClass('disabled').val('');
-                    $comment.hide();
-                    $uploadButton.hide();
-                    //general upload error
-                    $uploadButton.removeClass('disabled');
-                    $input.closest('form').get(0).reset();
-                    //hide progressbar
-                    $progressBarWrapper.removeClass('progress');
-                    $progressBar.css('width', '0%');
-                }
+                $uploadButton.text(gt('Upload new version'));
+                $commentArea.removeClass('disabled').val('');
+                $comment.hide();
+                $uploadButton.hide();
+                $cancelUploadButton.hide();
+                //general upload error
+                $uploadButton.removeClass('disabled');
+                $input.closest('form').get(0).reset();
+                //hide progressbar
+                $progressBarWrapper.removeClass('progress');
+                $progressBar.css('width', '0%');
             };
 
             var uploadFailed = function (e) {
@@ -276,12 +279,16 @@ define('io.ox/files/fluid/view-detail',
             });
 
             $input.on('change', function () {
-                if ($input.find('[data-dismiss="fileupload"]').is(':visible')) {
+                if (!_.isEmpty($input.find('input[type="file"]').val())) {
+                    $cancelUploadButton.show();
                     $uploadButton.show();
                     $comment.show();
                     $commentArea.focus();
+                } else {
+                    resetCommentArea();
                 }
-            }).find('[data-dismiss="fileupload"]').on('click', function (e) {
+            });
+            $cancelUploadButton.on('click', function (e) {
                 e.preventDefault();
                 resetCommentArea(e);
             });
@@ -314,7 +321,6 @@ define('io.ox/files/fluid/view-detail',
                                 )
                             );
 
-
                     var baton = ext.Baton({ data: version, openedBy: openedBy});
                     baton.isCurrent = version.id === baton.data.current_version;
                     ext.point(POINT + '/version').invoke('draw', $entryRow, baton);
@@ -332,7 +338,6 @@ define('io.ox/files/fluid/view-detail',
                         )
                     )
                 );
-
 
                 // Then let's fetch all versions and update the table accordingly
                 if (!allVersions) {
@@ -362,7 +367,7 @@ define('io.ox/files/fluid/view-detail',
     });
 
     // dropdown
-    ext.point(POINT + '/version/dropdown').extend(new links.DropdownLinks({
+    ext.point(POINT + '/version/dropdown').extend(new links.Dropdown({
         index: 10,
         label: '',
         ref: 'io.ox/files/versions/links/inline'
@@ -434,21 +439,22 @@ define('io.ox/files/fluid/view-detail',
         if (!baton) return $('<div>');
 
         baton = ext.Baton.ensure(baton);
+        baton.app = app;
 
         if (app) { //save the appname so the extensions know what opened them (to disable some options for example)
             baton.openedBy = app.getName();
         }
 
         var node = $.createViewContainer(baton.data, filesAPI);
-        node.on('redraw', createRedraw(node)).addClass('file-details view');
+        node.on('redraw', createRedraw(node, app)).addClass('file-details view');
         ext.point(POINT).invoke('draw', node, baton, app);
 
         return node;
     };
 
-    var createRedraw = function (node) {
+    var createRedraw = function (node, app) {
         return function (e, data) {
-            var replacement = draw(data);
+            var replacement = draw(data, app);
             if ('former_id' in data) replacement.attr('former-id', data.former_id);
             node.replaceWith(replacement);
         };

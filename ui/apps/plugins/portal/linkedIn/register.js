@@ -27,7 +27,6 @@ define('plugins/portal/linkedIn/register',
         gtWithNode,
         displayNameLink;
 
-
     fnClick = function (e) {
         var person = e.data;
         e.preventDefault();
@@ -61,7 +60,6 @@ define('plugins/portal/linkedIn/register',
         });
     };
 
-
     gtWithNode = function (gtString, nodes) {
         var arr = gtString.split(/%\d\$[sid]/),
             node = $('<div>');
@@ -76,14 +74,12 @@ define('plugins/portal/linkedIn/register',
         return node;
     };
 
-
     displayNameLink = function (person) {
         var dname = person.firstName + ' ' + person.lastName;
         return $('<a tabindex="1" href="#" />')
             .text(dname)
             .on('click', person, fnClick);
     };
-
 
     ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
         id: 'CONN',
@@ -109,7 +105,6 @@ define('plugins/portal/linkedIn/register',
             return deferred.resolve();
         }
     });
-
 
     ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
         id: 'NCON',
@@ -161,7 +156,6 @@ define('plugins/portal/linkedIn/register',
         }
     };
 
-
     ext.point('io.ox/portal/widget/linkedIn').extend({
 
         title: 'LinkedIn',
@@ -174,11 +168,14 @@ define('plugins/portal/linkedIn/register',
             return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
         },
 
-        performSetUp: function () {
+        performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('linkedin', win);
+            return keychain.createInteractively('linkedin', win)
+                .then(function () {
+                    baton.model.node.removeClass('requires-setup');
+                    ox.trigger('refresh^');
+                });
         },
-
 
         load: function (baton) {
             if (capabilities.has('linkedinPlus')) {
@@ -196,9 +193,7 @@ define('plugins/portal/linkedIn/register',
                     }
                     return (baton.data = data.values);
                 })
-                .fail(function (err) {
-                    console.log('Nope', err);
-                });
+                .fail(require('io.ox/core/notifications').yell);
 
             } else {
                 return http.GET({
@@ -214,7 +209,6 @@ define('plugins/portal/linkedIn/register',
                 });
             }
         },
-
 
         preview: function (baton) {
             var content = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the linkedin stream.') + '">');
@@ -352,8 +346,6 @@ define('plugins/portal/linkedIn/register',
             );
         }
     });
-
-
 
     ext.point('io.ox/portal/widget/linkedIn/settings').extend({
         title: gt('LinkedIn'),

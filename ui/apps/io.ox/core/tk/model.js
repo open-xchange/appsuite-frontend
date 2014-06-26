@@ -264,7 +264,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // update value first
             this._data[key] = value;
 
-
             // trigger now
             if (result !== true) {
                 this.trigger('error:invalid', result);
@@ -326,7 +325,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return true;
         },
 
-
         // DEPRECATED
         getDefinition: function (prop) {
             console.warn('DEPRECATED: getDefinition -> schema.get()');
@@ -338,7 +336,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             console.warn('DEPRECATED: validate -> schema.validate()');
             return this.schema.validate(prop, value);
         },
-
 
         // DEPRECATED
         // can return deferred object / otherwise just instance of Error or nothing

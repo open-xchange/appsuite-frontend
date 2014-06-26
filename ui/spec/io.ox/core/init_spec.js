@@ -13,18 +13,15 @@
 define([], function () {
     describe('checking dependencies', function () {
         it('loads underscore', function () {
-            expect(_).toBeDefined();
+            expect(_).to.exist;
         });
 
         it('loads jQuery', function () {
-            expect($).toBeDefined();
+            expect($).to.exist;
         });
 
-        it('loads underscore', function () {
-            expect(_).toBeDefined();
-        });
         it('loads chai', function () {
-            expect(chai).toBeDefined();
+            expect(chai).to.exist;
         });
     });
 });

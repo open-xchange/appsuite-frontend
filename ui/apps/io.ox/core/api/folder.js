@@ -28,9 +28,9 @@ define('io.ox/core/api/folder',
     'use strict';
 
     var // folder object cache
-        folderCache = new cache.SimpleCache('folder', false),
-        subFolderCache = new cache.SimpleCache('subfolder', true),
-        visibleCache = new cache.SimpleCache('visible-folder', true),
+        folderCache = new cache.SimpleCache('folder'),
+        subFolderCache = new cache.SimpleCache('subfolder'),
+        visibleCache = new cache.SimpleCache('visible-folder'),
         firstSubFolderFetch = {},
 
         /**
@@ -161,6 +161,66 @@ define('io.ox/core/api/folder',
         return true;
     };
 
+    var processFolderList = function (id, data) {
+
+        // apply blacklist
+        data = _.filter(data, visible);
+
+        // fix order of mail folders (INBOX first)
+        if (id === '1') {
+
+            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+
+            // get unified folder first
+            _(data).find(function (folder) {
+                return account.isUnified(folder.id) && !!(head[0] = folder);
+            });
+
+            // get standard folders
+            _(data).each(function (folder) {
+                _(types).find(function (type, index) {
+                    return account.is(type, folder.id) && !!(head[index + 1] = folder);
+                });
+            });
+
+            // exclude unified and standard folders
+            data = _(data).reject(function (folder) {
+                return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
+            });
+
+            // sort the rest
+            data.sort(function (a, b) {
+                // external accounts at last
+                var extA = account.isExternal(a.id),
+                    extB = account.isExternal(b.id),
+                    order = a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
+                if (extA && extB) return order;
+                if (extA) return +1;
+                if (extB) return -1;
+                return order;
+            });
+
+            // combine
+            data.unshift.apply(data, _(head).compact());
+        }
+
+        return data;
+    };
+
+    // use ramp-up data
+    _(ox.rampup.folder).each(function (data, id) {
+        folderCache.add(id, data);
+    });
+
+    ox.rampup.folderlist = ox.rampup.folderlist || {};
+
+    _(ox.rampup.folderlist).each(function (list, id) {
+        // make objects
+        ox.rampup.folderlist[id] = _(list).map(function (data) {
+            return http.makeObject(data, 'folders');
+        });
+    });
+
     var api = {
 
         get: function (options) {
@@ -234,83 +294,57 @@ define('io.ox/core/api/folder',
                 });
             }
 
-            function getter() {
-                return http.GET({
-                    module: 'folders',
-                    params: {
-                        action: 'list',
-                        parent: opt.folder,
-                        tree: '1',
-                        all: opt.all ? '1' : '0',
-                        altNames: true,
-                        timezone: 'UTC'
-                    },
-                    appendColumns: true
-                })
-                .then(function (data, timestamp) {
-
-                    // rearrange on multiple ???
-                    if (data.timestamp) {
-                        timestamp = _.then(); // force update
-                        data = data.data;
-                    }
-
-                    // apply blacklist
-                    data = _.filter(data, visible);
-
-                    // fix order of mail folders (INBOX first)
-                    if (opt.folder === '1') {
-
-                        var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
-
-                        // get unified folder first
-                        _(data).find(function (folder) {
-                            return account.isUnified(folder.id) && !!(head[0] = folder);
-                        });
-
-                        // get standard folders
-                        _(data).each(function (folder) {
-                            _(types).find(function (type, index) {
-                                return account.is(type, folder.id) && !!(head[index + 1] = folder);
-                            });
-                        });
-
-                        // exclude unified and standard folders
-                        data = _(data).reject(function (folder) {
-                            return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
-                        });
-
-                        // sort the rest
-                        data.sort(function (a, b) {
-                            // external accounts at last
-                            if (account.isExternal(a.id)) return +1;
-                            if (account.isExternal(b.id)) return -1;
-                            return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
-                        });
-
-                        // combine
-                        data.unshift.apply(data, _(head).compact());
-                    }
-
-                    return $.when(
-                        // add to cache
-                        cache.add(opt.folder, data),
-                        // also add to folder cache
-                        $.when.apply($,
-                            _(data).map(function (folder) {
-                                return folderCache.add(folder.id, folder);
-                            })
-                        )
-                    )
-                    .pipe(function () {
-                        return data;
+            function fetch(opt) {
+                var data = ox.rampup.folderlist[opt.folder];
+                if (data) {
+                    delete ox.rampup.folderlist[opt.folder];
+                    return $.Deferred().resolve(data);
+                } else {
+                    return http.GET({
+                        module: 'folders',
+                        params: {
+                            action: 'list',
+                            parent: opt.folder,
+                            tree: '1',
+                            all: opt.all ? '1' : '0',
+                            altNames: true,
+                            timezone: 'UTC'
+                        },
+                        appendColumns: true
                     });
-                })
-                .fail(function (e) {
-                    if (ox.debug) {
-                        console.error('folder.getSubFolders', opt.folder, e.error, e);
+                }
+            }
+
+            function getter() {
+                return fetch(opt).then(
+                    function success(data, timestamp) {
+
+                        // rearrange on multiple ???
+                        if (data.timestamp) {
+                            timestamp = _.then(); // force update
+                            data = data.data;
+                        }
+
+                        data = processFolderList(opt.folder, data);
+
+                        return $.when(
+                            // add to cache
+                            cache.add(opt.folder, data),
+                            // also add to folder cache
+                            $.when.apply($,
+                                _(data).map(function (folder) {
+                                    return folderCache.add(folder.id, folder);
+                                })
+                            )
+                        )
+                        .then(function () {
+                            return data;
+                        });
+                    },
+                    function fail(e) {
+                        if (ox.debug) console.error('folder.getSubFolders', opt.folder, e.error, e);
                     }
-                });
+                );
             }
 
             return opt.cache === false ?
@@ -733,6 +767,8 @@ define('io.ox/core/api/folder',
                         return data.type === 3;
                     case 'system':
                         return data.type === 5;
+                    case 'trash':
+                        return data.type === 16;
                     case 'mail':
                         return data.module === 'mail';
                     case 'messaging':
@@ -757,6 +793,15 @@ define('io.ox/core/api/folder',
                         var folders = mailSettings.get('folder');
                         for (id in folders) {
                             if (folders[id] === data.id) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    case 'insideDefaultfolder':
+                        // get default folder
+                        var folders = mailSettings.get('folder');
+                        for (id in folders) {
+                            if (data.id.indexOf(folders[id]) === 0) {//folder starts with defaultfolder id
                                 return true;
                             }
                         }
@@ -1094,7 +1139,7 @@ define('io.ox/core/api/folder',
                             .attr({
                                 'role': 'menu',
                                 'aria-haspopup': 'true',
-                                'aria-label': gt.format('subfolders of %s', gt.noI18n(api.getFolderTitle(title, 30)))
+                                'aria-label': gt.format(gt('subfolders of %s'), gt.noI18n(api.getFolderTitle(title, 30)))
                             }).append(
                                 _(list).map(function (folder) {
                                     var $a, $li = $('<li>').append(
@@ -1147,7 +1192,6 @@ define('io.ox/core/api/folder',
                 } else {
                     li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').attr('title', folder.title).text(displayTitle));
                 }
-                li.append(isLast ? $() : $('<span class="divider" role="presentation">').text(gt.noI18n(' / ')));
             }
 
             elem.attr('data-folder-id', folder.id).data(folder);
@@ -1161,11 +1205,6 @@ define('io.ox/core/api/folder',
                     add.call(ul, o, i, list, options);
                 }
             });
-            if (options.leaf) {
-                ul.append(
-                    $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
-                );
-            }
             ul = null;
         };
 
@@ -1186,7 +1225,7 @@ define('io.ox/core/api/folder',
                     });
                 if (options.prefix) {
                     ul.append($('<li class="prefix">').append(
-                        $.txt(options.prefix), $('<span class="divider">').text(gt.noI18n(' '))
+                        $.txt(options.prefix)
                     ));
                 }
                 return ul;
@@ -1247,6 +1286,8 @@ define('io.ox/core/api/folder',
         }
 
         return function (list) {
+            // not array or just one?
+            if (!_.isArray(list) || list.length === 1) return list;
             // all from same folder?
             if (fromSameFolder(list)) return list;
             // else: exclude sent items

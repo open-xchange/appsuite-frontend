@@ -18,24 +18,21 @@ define('io.ox/mail/write/view-main',
      'io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/core/tk/view',
-     'io.ox/core/tk/model',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
-     'io.ox/core/api/user',
      'io.ox/core/capabilities',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
      'io.ox/core/api/snippets',
-     'io.ox/core/strings',
      'io.ox/core/util',
      'io.ox/core/notifications',
      'io.ox/mail/sender',
      'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, userAPI, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, contactsAPI, contactsUtil, mailUtil, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 
@@ -56,7 +53,7 @@ define('io.ox/mail/write/view-main',
         id: 'draft',
         index: 200,
         label: gt('Save'), // is 'Save as draft' but let's keep it short for small devices
-        cssClasses: 'btn',
+        cssClasses: 'btn btn-default',
         ref: POINT + '/actions/draft',
         tabIndex: '6'
     }));
@@ -65,7 +62,7 @@ define('io.ox/mail/write/view-main',
         id: 'discard',
         index: 1000,
         label: gt('Discard'),
-        cssClasses: 'btn',
+        cssClasses: 'btn btn-default',
         ref: POINT + '/actions/discard',
         tabIndex: '6'
     }));
@@ -82,9 +79,6 @@ define('io.ox/mail/write/view-main',
 
             // disable the button
             ext.point(POINT + '/toolbar').disable('draft');
-
-            // reorder button
-            ext.point(POINT + '/toolbar').replace({id: 'discard', index: 50});
 
             //invoke other buttons with new container
             ext.point(POINT + '/toolbar').invoke(
@@ -268,13 +262,13 @@ define('io.ox/mail/write/view-main',
         },
 
         createSenderField: function () {
-
-            var node, select;
-
-            var node = $('<div class="fromselect-wrapper">').append(
-               $('<label for="from" class="wrapping-label">').text(gt('From')),
-               select = $('<select class="sender-dropdown" name="from" tabindex="7">').css('width', '100%')
-            );
+            var node,
+                select,
+                guid = _.uniqueId('form-control-label-'),
+                node = $('<div class="fromselect-wrapper">').append(
+                    $('<label class="wrapping-label">').attr('for', guid).text(gt('From')),
+                    select = $('<select class="sender-dropdown form-control" name="from" tabindex="7">').attr('id', guid).css('width', '100%')
+                );
 
             sender.drawOptions(select);
 
@@ -326,7 +320,6 @@ define('io.ox/mail/write/view-main',
             return (this.sections[id + 'List'] = $('<div>'))
                 .addClass('recipient-list').hide();
         },
-
 
        /**
         * appends recipient nodes
@@ -407,7 +400,7 @@ define('io.ox/mail/write/view-main',
 
             this.editor
                 .val(insert(caret, content, icon.unicode))
-                .attr('caretPosition', caret + 2);
+                .attr('caretPosition', caret + icon.unicode.length);
 
             /* disabled emoji input on subject at the moment */
 
@@ -500,7 +493,6 @@ define('io.ox/mail/write/view-main',
             // side panel
             this.leftside = $('<div class="leftside io-ox-mail-write-sidepanel">');
             this.scrollpane = this.leftside.scrollable();
-
             // title
             this.scrollpane.append(
                 $('<h1 class="title">').text('\u00A0')
@@ -523,7 +515,6 @@ define('io.ox/mail/write/view-main',
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in copy'))).placeholder().end()
                     );
 
-
             // BCC
             this.addLink('bcc', gt('Blind copy (BCC) to'));
             this.addSection('bcc', gt('Blind copy (BCC) to'), false, true)
@@ -538,12 +529,9 @@ define('io.ox/mail/write/view-main',
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
 
             var $inputWrap = attachments.fileUploadWidget({
-                    multi: true,
-                    displayLabel: false,
-                    displayButton: true,
                     drive: true,
-                    buttontext: gt('Add Attachment'),
-                    buttonicon: 'icon-paper-clip'
+                    tabindex: 7,
+                    buttontext: gt('Add Attachment')
                 }),
                 $input = $inputWrap.find('input[type="file"]'),
                 changeHandler = function (e) {
@@ -577,100 +565,29 @@ define('io.ox/mail/write/view-main',
                         }
                     }
                 };
+
             $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
+
             $input.on('change', changeHandler);
 
             $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
                 e.preventDefault();
-
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api', 'io.ox/core/tk/selection']).done(function (dialogs, folderviews, cache, filesAPI, Selection) {
-
-                    var folderCache = new cache.SimpleCache('folder-all', false),
-                        subFolderCache = new cache.SimpleCache('subfolder-all', false),
-                        storage = {
-                            folderCache: folderCache,
-                            subFolderCache: subFolderCache
+                require(['io.ox/files/filepicker']).done(function (Picker) {
+                    var picker = new Picker({
+                        point: POINT,                   // prefix for custom ext. point
+                        filter: function () {           // filter function
+                            return true;
                         },
-                        container = $('<div>'),
-                        filesPane = $('<div>').addClass('io-ox-fileselection').attr({ tabindex: 0}),
-                        tree = new folderviews.ApplicationFolderTree(container, {
-                            type: 'infostore',
-                            tabindex: 0,
-                            rootFolderId: '9',
-                            all: true,
-                            storage: storage
-                        }),
-                        pane = new dialogs.ModalDialog({
-                            width: window.innerWidth * 0.8,
-                            height: 350,
-                            addclass: 'add-infostore-file'
-                        }),
-                        self = this;
-
-                    Selection.extend(this, filesPane, {});
-
-                    this.selection.keyboard(filesPane, true);
-                    this.selection.setEditable(true, '.labelwrapper');
-
-                    pane.header($('<h4>').text(gt('Add files')))
-                        .build(function () {
-                            this.getContentNode().append(container, filesPane);
-                        })
-                        .addPrimaryButton('save', gt('Add'), 'save', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                        .show(function () {
-                            tree.paint().done(function () {
-                                tree.selection.updateIndex().selectFirst();
-                                pane.getBody().find('.io-ox-foldertree').focus();
-                            });
-                        })
-                        .done(function (action) {
-                            if (action === 'save') {
-                                var result = [];
-                                filesPane.find('input:checked').each(function (index, el) {
-                                    result.push($(el).data('fileData'));
-                                });
-                                app.addFiles(result, 'infostore');
-                            }
-                            tree.destroy().done(function () {
-                                tree = pane = null;
-                            });
-                        });
-
-                    // add dbl-click option like native file-chooser
-                    filesPane.on('dblclick', '.file', function () {
-                        var data = $('input', this).data('fileData');
-                        if (data) {
-                            app.addFiles([data], 'infostore');
-                            pane.close();
-                        }
+                        primaryButtonText: gt('Add'),
+                        cancelButtonText: gt('Cancel'),
+                        header: gt('Add files'),
+                        multiselect: true
                     });
-
-                    // on foldertree change update file selection
-                    tree.selection.on('select', function (e, folderId) {
-                        filesPane.empty();
-                        filesAPI.getAll({ folder: folderId }, false).then(function (files) {
-                            filesPane.append(
-                                _(files).map(function (file) {
-                                    var title = (file.filename || file.title);
-                                    return $('<div class="file selectable">').attr('data-obj-id', _.cid(file)).append(
-                                        $('<div class="labelwrapper">').append(
-                                            $('<label class="checkbox">').attr('title', title).append(
-                                                $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
-                                                .val(file.id).data('fileData', file)
-                                            )
-                                        ),
-                                        $('<span>').text(' ' + title)
-                                    );
-                                })
-                            );
-                            self.selection.clear();
-                            self.selection.init(files);
-                            self.selection.selectFirst();
-                        });
+                    picker.done(function (files) {
+                        app.addFiles(files, 'infostore');
                     });
                 });
             });
@@ -692,8 +609,9 @@ define('io.ox/mail/write/view-main',
                 className: 'div',
                 preview: true,
                 index: 300,
-                $el: $('<div class="row-fluid">').insertBefore(uploadSection.section.find('div.row-fluid:last')),
-                registerTo: [self, this.baton]
+                $el: $('<div>').insertBefore(uploadSection.section.find('div.form-group:last')),
+                registerTo: [self, this.baton],
+                ref: POINT + '/filelist/file/customizer'
             }, this.baton), {
                 rowClass: 'collapsed'
             });
@@ -794,7 +712,7 @@ define('io.ox/mail/write/view-main',
                 // Attach vCard
                 $('<div>').addClass('section-item')
                 .css({ paddingTop: '1em', paddingBottom: '1em' })
-                .append(createCheckbox('disp_notification_to', gt('Delivery Receipt')))
+                .append(createCheckbox('disp_notification_to', gt('Return Receipt')))
             );
 
             if (!Modernizr.touch) {
@@ -858,7 +776,6 @@ define('io.ox/mail/write/view-main',
                         parentScrollpane = self.form.parent(),
                         paddingTop, paddingBottom, paddingHeight;
 
-
                     if (clientHeight < scrollHeight) {
                         paddingTop = parseFloat(input.css('padding-top'));
                         paddingBottom = parseFloat(input.css('padding-bottom'));
@@ -876,7 +793,7 @@ define('io.ox/mail/write/view-main',
                     .attr({ name: 'content', tabindex: '4', disabled: 'disabled', caretPosition: '0' })
                     .addClass('text-editor')
                     .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
-                    .on('keyup click', function () {
+                    .on('keyup click touchend', function () {
                         /* disabled emoji input for subject */
                         //$(this).attr('emojiFocus', 'true');
                         //self.subject.attr('emojiFocus', 'false');
@@ -886,7 +803,6 @@ define('io.ox/mail/write/view-main',
                             'offsetTop': $(this).offset().top
                         });
                     });
-
 
                 if (_.device('!smartphone')) {
                     // standard textarea for desktops
@@ -906,40 +822,39 @@ define('io.ox/mail/write/view-main',
                     self.textarea
                         .on('keyup change input paste', autogrow)
                         .on('focus', function () {
-                            $(this).attr('emojiFocus', 'true');
-                            //self.subject.attr('emojiFocus', 'false');
                             // do we have emoji support
-                            if (emojiMobileSupport && self.emojiview && self.emojiview.isOpen) {
+                            if (emojiMobileSupport) {
+                                $(this).attr('emojiFocus', 'true');
+                                if (self.emojiview && self.emojiview.isOpen) {
 
-                                if (self.emojiview.isOpen) {
-                                    self.emojiview.toggle();
-                                    self.spacer.hide();
-                                } else {
-                                    self.emojiview.toggle();
-                                    self.spacer.show();
-                                    self.scrollEmoji();
+                                    if (self.emojiview.isOpen) {
+                                        self.emojiview.toggle();
+                                        self.spacer.hide();
+                                    } else {
+                                        self.emojiview.toggle();
+                                        self.spacer.show();
+                                        self.scrollEmoji();
+                                    }
+                                    if (_.device('android')) {//android needs special handling here
+                                        setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
+                                            self.form.parent().scrollTop(self.form.parent().height());
+                                        }, 500);
+
+                                        self.textarea.on('blur', function () {
+                                            //hide spacer again after onscreen keyboard is closed
+                                            self.spacer.hide();
+                                        });
+                                    } else {
+                                        self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
+                                        self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
+                                    }
                                 }
                             }
-                            if (_.device('android')) {//android needs special handling here
-                                setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
-                                    self.form.parent().scrollTop(self.form.parent().height());
-                                }, 500);
-                            } else {
-                                self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
-                                self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
-                            }
+
                         });
-                    if (_.device('!android')) {
-                        self.textarea.on('blur', function () {
-                            //hide spacer again after onscreen keyboard is closed
-                            self.spacer.hide();
-                        });
-                    }
-                    // textarea only, no container overkill
                     return self.textarea;
                 }
             }
-
 
             this.rightside.append(
                 // buttons
@@ -1017,9 +932,9 @@ define('io.ox/mail/write/view-main',
                     this.priorityOverlay = $('<div class="priority-overlay">')
                         .attr('title', 'Priority')
                         .append(
-                            $('<i class="icon-exclamation">'),
-                            $('<i class="icon-exclamation">'),
-                            $('<i class="icon-exclamation">')
+                            $('<i class="fa fa-exclamation">'),
+                            $('<i class="fa fa-exclamation">'),
+                            $('<i class="fa fa-exclamation">')
                         )
                         .on('click', $.proxy(togglePriority, this))
                 ),
@@ -1047,6 +962,11 @@ define('io.ox/mail/write/view-main',
                     }
                 });
             }
+
+            // prevent dragging of links and text
+            $(this.leftside).on('dragstart', 'a, span', function (e) {
+                e.preventDefault();
+            });
         }
     });
 
@@ -1149,7 +1069,7 @@ define('io.ox/mail/write/view-main',
                 full_name: util.unescapeDisplayName(elem.full_name),
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
-                display_name: util.unescapeDisplayName(elem.display_name),
+                display_name: util.unescapeDisplayName(elem.full_name || elem.display_name).replace(/"/g, ''),
                 email: elem.email || elem.mail || '', // distribution lists just have "mail"
                 phone: elem.phone || '',
                 field: elem.field || '',
@@ -1305,7 +1225,7 @@ define('io.ox/mail/write/view-main',
                     $('<a href="#" class="remove">')
                         .attr('title', gt('Remove from recipient list'))
                         .append(
-                            $('<i class="icon-trash">')
+                            $('<i class="fa fa-trash-o">')
                         )
                         .on('click', { id: id }, function (e) {
                             e.preventDefault();

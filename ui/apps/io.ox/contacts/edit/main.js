@@ -21,7 +21,7 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
      'io.ox/core/util',
-     'less!io.ox/contacts/edit/style.less'
+     'less!io.ox/contacts/edit/style'
     ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
 
     'use strict';
@@ -245,7 +245,9 @@ define('io.ox/contacts/edit/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
-                        .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
+                        //#. "Discard changes" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {'tabIndex': '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                         .show()
                         .done(function (action) {
@@ -280,12 +282,12 @@ define('io.ox/contacts/edit/main',
         app.failRestore = function (point) {
             if (_.isUndefined(point.id)) {
                 this.contact.set(point);
-                editView.trigger('restore');
             } else {
                 this.contact.set(point);
                 this.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
                 //this.setTitle(point.title || gt('Edit Contact'));
             }
+            editView.trigger('restore');
             return $.when();
         };
 

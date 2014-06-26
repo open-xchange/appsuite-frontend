@@ -30,55 +30,61 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
         });
 
         it('should initialize', function () {
-            expect(this.node.find('.io-ox-dialog-popup').length).toBeTruthy();
+            expect(this.node.find('.io-ox-dialog-popup')).to.have.length.above(0);
         });
 
         it('should have a body', function () {
-            expect(this.node.find('.modal-body').length).toBeTruthy();
+            expect(this.node.find('.modal-body')).to.have.length.above(0);
         });
 
         it('should have a footer', function () {
-            expect(this.node.find('.modal-footer').length).toBeTruthy();
+            expect(this.node.find('.modal-footer')).to.have.length.above(0);
         });
 
         it('should have a title', function () {
-            expect(this.node.find('#dialog-title').text()).toBe(dialogTitle);
+            expect(this.node.find('#dialog-title').text()).to.equal(dialogTitle);
         });
 
         it('should have a cancel button', function () {
-            expect(this.node.find('[data-action="cancel"]').length).toBeTruthy();
+            expect(this.node.find('[data-action="cancel"]')).to.have.length.above(0);
         });
 
         it('should have a delete button', function () {
-            expect(this.node.find('[data-action="delete"]').length).toBeTruthy();
+            expect(this.node.find('[data-action="delete"]')).to.have.length.above(0);
         });
 
         it('should close when cancel button is clicked', function () {
+            expect(this.node.find('.io-ox-dialog-popup')).to.have.length.above(0);
             this.node.find('[data-action="cancel"]').click();
-            expect(this.node.find('.io-ox-dialog-popup').length).toBeFalsy();
+            expect(this.node.find('.io-ox-dialog-popup')).to.have.length(0);
         });
 
         it('should close on escape keydown', function () {
             var e = $.Event('keydown', { keyCode: 27});
             this.node.find('.io-ox-dialog-popup').trigger(e);
-            expect(this.node.find('.io-ox-dialog-popup').length).toBeFalsy();
+            expect(this.node.find('.io-ox-dialog-popup')).to.have.length(0);
         });
 
         it('should trap focus on tab keydown', function () {
+            var deleteButton = this.node.find('button[data-action="delete"]');
+            expect($(document.activeElement)[0]).to.equal(deleteButton[0]);
+
             var e = $.Event('keydown', { keyCode: 9});
             for (var i = 0; i < 4; i++) {
                 $(document.activeElement).trigger(e);
             }
-            expect(this.node.find('[data-action="delete"]')).toHaveFocus();
+
+            expect($(document.activeElement)[0]).to.equal(deleteButton[0]);
         });
 
         it('primary button should have focus', function () {
-            expect(this.node.find('[data-action="delete"]')).toHaveFocus();
+            var deleteButton = this.node.find('button[data-action="delete"]');
+            expect($(document.activeElement)[0]).to.equal(deleteButton[0]);
         });
 
         it('should remove blockscroll class on container when closed', function () {
             this.dialog.done(function (dialog) { dialog.close(); });
-            expect(this.node.find('.io-ox-dialog-popup').hasClass('blockscroll')).toBeFalsy();
+            expect(this.node.find('.io-ox-dialog-popup').hasClass('blockscroll')).to.be.false;
         });
 
     });
@@ -98,16 +104,16 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
         });
 
         it('primary button should be disabled', function () {
-            chai.expect(this.node.find('[data-action="delete"]')).to.be.disabled;
+            expect(this.node.find('[data-action="delete"]')).to.be.disabled;
         });
 
         it('cancel button should be disabled', function () {
-            chai.expect(this.node.find('[data-action="cancel"]')).to.be.disabled;
+            expect(this.node.find('[data-action="cancel"]')).to.be.disabled;
         });
 
         it('primary button should not be disabled when set to idle', function () {
             this.dialog.busy().idle();
-            chai.expect(this.node.find('[data-action="cancel"]')).not.to.be.disabled;
+            expect(this.node.find('[data-action="cancel"]')).not.to.be.disabled;
         });
 
     });

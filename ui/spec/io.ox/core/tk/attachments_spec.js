@@ -14,7 +14,8 @@
 define(['io.ox/core/extensions',
         'io.ox/core/tk/attachments',
         'io.ox/core/notifications',
-        'spec/shared/capabilities'], function (ext, attachments, notifications, caputil) {
+        'spec/shared/capabilities',
+        'fixture!io.ox/files/attachment.json'], function (ext, attachments, notifications, caputil, attachmentFile) {
 
     'use strict';
 
@@ -29,11 +30,11 @@ define(['io.ox/core/extensions',
                 });
                 it('and ox.drive is enabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: true});
-                    expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
                 it('and ox.drive is disabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: false});
-                    expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
             });
             describe('when capability "infostore" is enabled', function () {
@@ -42,16 +43,17 @@ define(['io.ox/core/extensions',
                 });
                 it('and ox.drive is enabled "Files" button should be shown', function () {
                     var node = attachments.fileUploadWidget({drive: true});
-                    expect(node.find('[data-action="addinternal"]').length).toBeTruthy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(1);
                 });
                 it('and ox.drive is disabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: false});
-                    expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
             });
         });
 
         describe('EditableFileList:', function () {
+            var def, baton;
 
             var setUploadLimit = function (limit) {
                 return require(['settings!io.ox/core']).then(function (coreSettings) {
@@ -81,50 +83,49 @@ define(['io.ox/core/extensions',
             };
 
             beforeEach(function () {
-                this.baton = new ext.Baton();
-                this.file = {
-                    name: 'Testfile',
-                    size: 1000
-                };
+                baton = new ext.Baton();
             });
 
-            afterEach(function () {
-                expect(this.def).toResolveWith('done');
+            afterEach(function (done) {
+                def.done(function (result) {
+                    expect(result).to.equal('done');
+                    done();
+                }).always(function () {
+                    def = null;
+                    baton = null;
+                });
             });
 
             describe('list with one file added', function () {
-
+                var setup;
                 beforeEach(function () {
-                    this.setup = setUploadLimit({
+                    setup = setUploadLimit({
                         'infostoreMaxUploadSize': 2000,
                         'infostoreQuota': 2000,
                         'infostoreUsage': 1000
                     })
-                    .then(createList(this.baton, this.file));
+                    .then(createList(baton, attachmentFile));
                 });
 
                 it('should be cleared', function () {
-                    var self = this;
 
-                    this.def = this.setup.then(getList(this.baton))
+                    def = setup.then(getList(baton))
                     .then(function () {
-                        self.baton.fileList.clear();
-                        var result = self.baton.fileList.get();
-                        chai.expect(result).to.be.an('array');
-                        chai.expect(result).not.to.contain(self.file);
+                        baton.fileList.clear();
+                        var result = baton.fileList.get();
+                        expect(result).to.be.an('array');
+                        expect(result).to.be.empty;
 
                         return 'done';
                     });
                 });
 
                 it('should return the file', function () {
-                    var self = this;
-
-                    this.def = this.setup.then(getList(this.baton))
+                    def = setup.then(getList(baton))
                     .then(function () {
-                        var result = self.baton.fileList.get();
-                        chai.expect(result).to.be.an('array');
-                        chai.expect(result).to.contain(self.file);
+                        var result = baton.fileList.get();
+                        expect(result).to.be.an('array');
+                        expect(result).to.have.deep.property('[0]', attachmentFile);
 
                         return 'done';
                     });
@@ -136,130 +137,130 @@ define(['io.ox/core/extensions',
                 describe('adding file to infostore', function () {
 
                     it('when exeeding infostore quota', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 2000,
                             'infostoreQuota': 1999,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.have.property('reason');
-                            expect(result.reason).toBe('quota');
-                            chai.expect(result.error).to.be.a('string');
+                            expect(result).to.have.property('added');
+                            expect(result).to.have.property('reason');
+                            expect(result.reason).to.equal('quota');
+                            expect(result.error).to.be.a('string');
 
                             return 'done';
                         });
                     });
 
                     it('when exceeding infostore maximum upload size limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 999,
                             'infostoreQuota': 2000,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.have.property('reason');
-                            expect(result.reason).toBe('filesize');
-                            chai.expect(result.error).to.be.a('string');
+                            expect(result).to.have.property('added');
+                            expect(result).to.have.property('reason');
+                            expect(result.reason).to.equal('filesize');
+                            expect(result.error).to.be.a('string');
 
                             return 'done';
                         });
                     });
 
                     it('when having the same size as available infostore quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1000,
                             'infostoreQuota': 2000,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when having the smaller size as available infostore quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1001,
                             'infostoreQuota': 2001,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when infostore quota limit is 0', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1000,
                             'infostoreQuota': 0,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when infostore quota limit is -1', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1000,
                             'infostoreQuota': -1,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when infostore max upload size is 0', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 0,
                             'infostoreQuota': 0,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when infostore max upload size is -1', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': -1,
                             'infostoreQuota': -1,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -269,81 +270,81 @@ define(['io.ox/core/extensions',
                 describe('adding a file as attachment', function () {
 
                     it('when exceeding attachment quota', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 999,
                             'attachmentQuotaPerFile': 1000
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.have.property('reason');
-                            expect(result.reason).toBe('quota');
-                            chai.expect(result.error).to.be.a('string');
+                            expect(result).to.have.property('added');
+                            expect(result).to.have.property('reason');
+                            expect(result.reason).to.equal('quota');
+                            expect(result.error).to.be.a('string');
 
                             return 'done';
                         });
                     });
 
                     it('when having the same size as available attachment quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 1000,
                             'attachmentQuotaPerFile': 1000
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when having the smaller size as available attachment quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 1001,
                             'attachmentQuotaPerFile': 1001
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when attachment quota limit is 0', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 0,
                             'attachmentQuotaPerFile': 0
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
 
                     it('when attachment quota limit is -1', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': -1,
                             'attachmentQuotaPerFile': -1
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
                     });
-                    
+
                 });
             });
         });

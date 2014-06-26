@@ -40,7 +40,7 @@ define('plugins/portal/tumblr/register',
             function initFeed() {
                 var url = baton.model.get('props').url;
                 baton.feed = new Feed({
-                    url: '' + apiUrl.join(url) + '&jsonp='
+                    url: String(apiUrl.join(url) + '&jsonp=')
                 });
             }
 
@@ -58,6 +58,15 @@ define('plugins/portal/tumblr/register',
             }
         },
 
+        summary: function () {
+            var self = this;
+            this.addClass('with-summary show-summary');
+            // this.on('tap', '.pointer', function () { console.log('treffer click'); });
+            this.on('click', 'h2', function () {
+                self.toggleClass('show-summary');
+            });
+        },
+
         preview: function (baton) {
 
             var data = baton.data,
@@ -70,7 +79,6 @@ define('plugins/portal/tumblr/register',
                 this.find('h2 span.title').text(_.noI18n(title));
             }
 
-
             if (firstPost && _.isArray(firstPost.photos) && firstPost.photos.length && (sizes = firstPost.photos[0].alt_sizes)) {
                 // add photo
                 // find proper size
@@ -81,7 +89,7 @@ define('plugins/portal/tumblr/register',
                     }
                 });
                 this.addClass('photo-stream').append(
-                    $('<ul class="content pointer decoration list-unstyled">').css('backgroundImage', 'url(' + url + ')').attr({
+                    $('<div class="content pointer decoration list-unstyled">').css('backgroundImage', 'url(' + url + ')').attr({
                         'tabindex': '1',
                         'role': 'button',
                         'aria-label': gt('Press [enter] to jump to the tumblr feed.')
@@ -100,13 +108,15 @@ define('plugins/portal/tumblr/register',
                     }
                 });
 
-                this.append(
-                    $('<li class="content pointer" >').attr({
-                        'tabindex': '1',
-                        'role': 'button',
-                        'aria-label': gt('Press [enter] to jump to the tumblr feed.')
-                    }).append(titles)
-                );
+                if (titles.length > 0) {
+                    this.append(
+                        $('<ul class="content pointer">').attr({
+                            'tabindex': '1',
+                            'role': 'button',
+                            'aria-label': gt('Press [enter] to jump to the tumblr feed.')
+                        }).append(titles)
+                    );
+                }
             }
 
         },
@@ -136,7 +146,7 @@ define('plugins/portal/tumblr/register',
                     if (post.tags && post.tags.length > 0) {
                         _(post.tags).each(function (tag) {
                             tags.push($('<a>', { href: tagBaseUri + tag, target: '_blank' })
-                                .addClass('tag').text(tag).prepend($('<i class="icon-tag">')));
+                                .addClass('tag').text(tag).prepend($('<i class="fa fa-tag">')));
                         });
                     }
                     return tags;
@@ -179,7 +189,7 @@ define('plugins/portal/tumblr/register',
                     return $('<a>', { href: post.post_url, target: '_blank', title: gt('Read article on tumblr.com') }).append($('<i class="icon-tumblr-sign">'));
                 },
                 postExternalLink = function () {
-                    return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="icon-external-link-sign">'));
+                    return $('<a>', { href: post.url, target: '_blank', title: gt('Open external link') }).append($('<i class="fa fa-external-link-square">'));
                 },
                 postNav = function () {
                     var nav = $('<div class="post-bar">');
@@ -224,18 +234,26 @@ define('plugins/portal/tumblr/register',
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $url = $('<input type="text" class="input-block-level" placeholder=".tumblr.com">').placeholder(),
-            $description = $('<input type="text" class="input-block-level">'),
-            $error = $('<div>').addClass('alert alert-error').hide(),
+            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">').placeholder(),
+            $description = $('<input id="tumblr_desc" type="text" class="form-control">'),
+            $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('Edit Tumblr feed')))
             .build(function () {
                 this.getContentNode().append(
-                    $('<label>').text(gt('Feed URL')),
-                    $url.val(props.url),
-                    $('<label>').text(gt('Description')),
-                    $description.val(props.description),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="tumblr_url">').text(gt('Feed URL')),
+                            $url.val(props.url)
+                        )
+                    ),
+                    $('<div class="row">').append(
+                        $('<div class="col-sm-12">').append(
+                            $('<label for="tumblr_desc">').text(gt('Description')),
+                            $description.val(props.description)
+                        )
+                    ),
                     $error
                 );
             })

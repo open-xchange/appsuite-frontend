@@ -23,7 +23,7 @@ define('io.ox/contacts/view-detail',
      'io.ox/core/date',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
-     'less!io.ox/contacts/style.less'
+     'less!io.ox/contacts/style'
     ], function (ext, util, api, actions, model, folderAPI, links, date, gt, settings) {
 
     'use strict';
@@ -81,7 +81,7 @@ define('io.ox/contacts/view-detail',
     }
 
     function buildDropdown(container, label, data) {
-        return new links.DropdownLinks({
+        return new links.Dropdown({
             label: label,
             classes: 'attachment-item',
             ref: 'io.ox/contacts/attachment/links'
@@ -110,7 +110,7 @@ define('io.ox/contacts/view-detail',
         draw: function (baton) {
             var node;
             this.append(
-                node = $('<header class="row-fluid contact-header">')
+                node = $('<header class="contact-header">')
             );
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
@@ -125,7 +125,7 @@ define('io.ox/contacts/view-detail',
             if (api.looksLikeDistributionList(baton.data)) return;
             this.append(
                 api.pictureHalo(
-                    $('<div class="picture">'),
+                    $('<div class="picture" aria-hidden="true">'),
                     $.extend(baton.data, { width: 64, height: 64, scaleType: 'cover' })
                 )
             );
@@ -146,7 +146,7 @@ define('io.ox/contacts/view-detail',
             this.append(
                 $('<div class="next-to-picture">').append(
                     // right side
-                    $('<i class="icon-lock private-flag">').attr('title', gt('Private')).hide(),
+                    $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
                     name.length ? $('<h1 class="header-name">').append(name) : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],
@@ -162,8 +162,7 @@ define('io.ox/contacts/view-detail',
 
             if (api.uploadInProgress(_.ecid(baton.data))) {
                 this.find('.attachments-container').show();
-            }
-            else if (baton.data.number_of_attachments > 0) {
+            } else if (baton.data.number_of_attachments > 0) {
                 ext.point('io.ox/contacts/detail/attachments').invoke('draw', this.find('.attachments-container'), baton.data);
             }
         }
@@ -209,7 +208,7 @@ define('io.ox/contacts/view-detail',
         id: 'contact-content',
         draw: function (baton) {
 
-            var node = $('<article>').appendTo(this),
+            var node = $('<article class="clearfix">').appendTo(this),//clearfix needed or halo design is broken
                 id = baton.data.mark_as_distributionlist ?
                     'io.ox/contacts/detail/list' :
                     'io.ox/contacts/detail/content';
@@ -327,11 +326,11 @@ define('io.ox/contacts/view-detail',
         });
     }
 
-    function mail(address, name) {
+    function mail(address, name, id) {
         if (!address) return null;
         return function () {
             $(this).append(
-                $('<dt>').text(gt('Email')),
+                $('<dt>').text(model.fields[id]),
                 $('<dd>').append(
                     $('<a>', { href: 'mailto:' + address })
                         .text(_.noI18n(address))
@@ -415,7 +414,7 @@ define('io.ox/contacts/view-detail',
                     .append(
                         $('<address>').text($.trim(text)),
                         $('<p>').append(
-                            $('<i class="icon icon-external-link">'),
+                            $('<i class="fa fa-external-link">'),
                             $.txt(' Google Maps \u2122') // \u2122 = &trade;
                         )
                     )
@@ -470,7 +469,11 @@ define('io.ox/contacts/view-detail',
                         }),
                         row('url', function () {
                             if (baton.data.url) {
-                                return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
+                                if (baton.data.url.indexOf('http://') !== 0 && baton.data.url.indexOf('https://') !== 0) {//fix urls
+                                    return $('<a>', { href: 'http://' + baton.data.url, target: '_blank' }).text(baton.data.url);
+                                } else {
+                                    return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
+                                }
                             }
                         })
                     )
@@ -685,53 +688,43 @@ define('io.ox/contacts/view-detail',
         }
     });
 
+    function showQRCode(node) {
+        require(['3rd.party/view-qrcode'], function (qr) {
+            node.find('a').text(gt('Hide QR code'));
+            var vc = qr.getVCard(node.data());
+            node.qrcode(vc);
+        });
+    }
+
+    function hideQRCode(node) {
+        node.find('canvas').remove();
+        node.find('a').text(gt('Show QR code'));
+    }
+
+    function toggleQRCode(e) {
+        e.preventDefault();
+        var node = $(e.delegateTarget);
+        if (node.find('canvas').length) hideQRCode(node); else showQRCode(node);
+    }
+
     ext.point('io.ox/contacts/detail/content').extend({
         index: 10000,
         id: 'qr',
         draw: function (baton) {
-            var data = baton.data;
 
             // disabled?
             if (!settings.get('features/qrcode', true)) return;
             // not supported
-            if (!Modernizr.canvas || data.mark_as_distributionlist) return;
-
-            var node = $('<fieldset class="block">'),
-                show = function (e) {
-                    e.preventDefault();
-                    node.empty().busy();
-                    require(['io.ox/contacts/view-qrcode'], function (qr) {
-                        var vc = qr.getVCard(data);
-                        node.append(
-                            $('<span>').addClass('qrcode').append(
-                                $('<i class="icon-qrcode">'), $.txt(' '),
-                                $('<a>', { href: '#' })
-                                .text(gt('Hide QR code'))
-                                .on('click', hide)
-                            )
-                        );
-                        node.idle().qrcode(vc);
-                        vc = qr = null;
-                    });
-                },
-                hide = function (e) {
-                    e.preventDefault();
-                    node.empty();
-                    node.append(
-                        $('<i class="icon-qrcode">'), $.txt(' '),
-                        showLink
-                    );
-                },
-                showLink = $('<a>', { href: '#' }).text(gt('Show QR code')).on('click', show);
+            if (!Modernizr.canvas || baton.data.mark_as_distributionlist) return;
 
             this.append(
-                node
-             );
-
-            node.append(
-                $('<legend class="sr-only">').text(gt('Show QR code')),
-                $('<i class="icon icon-qrcode">'), $.txt(' '),
-                showLink
+                $('<fieldset class="block">').append(
+                    $('<legend class="sr-only">').text(gt('Show QR code')),
+                    $('<i class="fa fa-qrcode">'), $.txt(' '),
+                    $('<a href="#">').text(gt('Show QR code'))
+                )
+                .data(baton.data)
+                .on('click', 'a', toggleQRCode)
             );
         }
     });
@@ -750,8 +743,8 @@ define('io.ox/contacts/view-detail',
                     options.handler = baton.app.folder.set;
                 }
                 this.append(
-                    folderAPI.getBreadcrumb(baton.data.folder_id, options)
-                    .addClass('chromeless clear-both')
+                    $('<div class="clearfix">'),
+                    folderAPI.getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
                 );
             }
         }

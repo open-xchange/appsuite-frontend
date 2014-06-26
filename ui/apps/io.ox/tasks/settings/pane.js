@@ -14,75 +14,90 @@
 define('io.ox/tasks/settings/pane',
     ['settings!io.ox/tasks',
      'io.ox/tasks/settings/model',
-     'dot!io.ox/tasks/settings/form.html',
      'io.ox/core/extensions',
-     'gettext!io.ox/tasks'
-    ], function (settings, tasksSettingsModel, tmpl, ext, gt) {
+     'gettext!io.ox/tasks',
+     'io.ox/backbone/mini-views'
+    ], function (settings, tasksSettingsModel, ext, gt, mini) {
 
     'use strict';
 
-    var tasksSettings =  settings.createModel(tasksSettingsModel),
-        staticStrings =  {
-        TITLE_TASKS: gt.pgettext('app', 'Tasks'),
-        TITLE_NOTIFICATIONS_FOR_TASKS: gt('Email notification for task'),
-        NOTIFICATIONS_FOR_NEWCHANGEDDELETED: gt('Email notification for New, Changed, Deleted?'),
-        TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('Email notification for Accept/Declined'),
-        NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('Email notification for task creator?'),
-        NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('Email notification for task participant?')
-    },
-        optionsYes = {label: gt('Yes'), value: true},
-        optionsNo = {label: gt('No'), value: false},
+    var model =  settings.createModel(tasksSettingsModel),
+        POINT = 'io.ox/tasks/settings/detail';
 
-        tasksViewSettings;
-
-    var TasksSettingsView = Backbone.View.extend({
-        tagName: 'div',
-        _modelBinder: undefined,
-        initialize: function () {
-            // create template
-            this._modelBinder = new Backbone.ModelBinder();
-
-        },
-        render: function () {
-            var self = this,
-                needBoolParser = [
-                    'notifyAcceptedDeclinedAsCreator',
-                    'notifyAcceptedDeclinedAsParticipant',
-                    'notifyNewModifiedDeleted'
-                ],
-                boolParser = function (direction, value) {
-                    return direction === 'ModelToView' ? value + '' : value === 'true';
-                };
-            self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
-                strings: staticStrings,
-                optionsYesAnswers: optionsYes,
-                optionsNoAnswers: optionsNo
-            }));
-            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            _(needBoolParser).each(function (prop) {
-                defaultBindings[prop].converter = boolParser;
-            });
-            self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-            return self;
-
-        }
+    model.on('change', function (model) {
+        model.saveAndYell();
     });
 
-    ext.point('io.ox/tasks/settings/detail').extend({
-        index: 200,
+    ext.point(POINT).extend({
+        index: 100,
         id: 'taskssettings',
         draw: function () {
 
-            tasksViewSettings = new TasksSettingsView({model: tasksSettings});
-            var holder = $('<div>').css('max-width', '800px');
-            this.append(holder.append(
-                    tasksViewSettings.render().el)
-            );
-        },
+            var self = this,
+                pane = $('<div class="io-ox-tasks-settings">'),
+                holder = $('<div>').css('max-width', '800px');
+            self.append(pane.append(holder));
+            ext.point(POINT + '/pane').invoke('draw', holder);
+        }
 
-        save: function () {
-            tasksViewSettings.model.saveAndYell();
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 100,
+        id: 'header',
+        draw: function () {
+            this.append(
+                $('<h1>').text(gt.pgettext('app', 'Tasks'))
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 200,
+        id: 'notifications',
+        draw: function () {
+
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for task')),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Email notification for New, Changed, Deleted?')).prepend(
+                                        new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for Accept/Declined')),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Email notification for task creator?')).prepend(
+                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Email notification for task participant?')).prepend(
+                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
         }
     });
 

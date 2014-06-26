@@ -17,7 +17,7 @@ define('io.ox/tasks/edit/main',
      'io.ox/tasks/model',
      'io.ox/tasks/edit/view',
      'io.ox/core/extPatterns/dnd',
-     'less!io.ox/tasks/edit/style.less'
+     'less!io.ox/tasks/edit/style'
     ], function (gt, ext, model, view, dnd) {
 
     'use strict';
@@ -157,12 +157,14 @@ define('io.ox/tasks/edit/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
-                        .addPrimaryButton('delete', gt('Discard changes'), 'delete', {tabIndex: '1'})
+                        //#. "Discard changes" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                clean(); // clean before resolve
                                 model.factory.realm('edit').release();//old model no longer needed
                                 def.resolve();
                             } else {
@@ -218,7 +220,6 @@ define('io.ox/tasks/edit/main',
     return {
 
         getApp: createApp,
-
 
         reuse: function (type, data) {
             if (type === 'edit') {

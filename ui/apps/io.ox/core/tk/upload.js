@@ -35,7 +35,7 @@ define('io.ox/core/tk/upload',
     //      {id: 'action1', label: 'Some cool Action'}, {id: 'action2', label: 'Some other cool action'}
     // ]}
     function DropZone(options) {
-        require(['less!io.ox/core/tk/upload.less']);
+        require(['less!io.ox/core/tk/upload']);
         var self = this, highlightedAction, dragLeaveTimer,
             $overlay = $('<div class="abs io-ox-dropzone-multiple-overlay">').on('click', removeOverlay),
 
@@ -103,7 +103,7 @@ define('io.ox/core/tk/upload',
                         for (var i = 0; i < files.length; i++) {
                             var valid_extensions = /(\.eml)$/i;
                             if (!valid_extensions.test(files[i].name)) {
-                                notifications.yell('error', gt('Mail was not imported, only .eml files are supported.'));
+                                notifications.yell('error', gt('Mail was not imported. Only .eml files are supported.'));
                                 removeOverlay(e);
                                 return false;
                             }
@@ -301,7 +301,8 @@ define('io.ox/core/tk/upload',
     }
 
     return {
-        dnd : {
+
+        dnd: {
             enabled: Modernizr.draganddrop,
             createDropZone: function (options) {
                 options = options || {};
@@ -311,6 +312,7 @@ define('io.ox/core/tk/upload',
                 return new DropZone(options);
             }
         },
+
         createQueue: function (delegate) {
             return new FileProcessingQueue(delegate);
         }

@@ -1,0 +1,6312 @@
+# Jacob Sparre Andersen <jacob@bureau-cornavin.com>, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: tours\n"
+"Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-06-13 12:21+0000\n"
+"Last-Translator: Jacob Sparre Andersen <jacob@jacob-sparre.dk>\n"
+"Language-Team: Danish <kde-i18n-doc@kde.org>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: apps/io.ox/tours/main.js:71 module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Velkommen til %s"
+
+#: apps/io.ox/tours/main.js:74 module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
+msgstr ""
+"Denne guidede tur vil give dig en kort introduktion til produktet.  Du kan få "
+"mere detaljerede oplysninger i turene for de enkelte programmer eller i "
+"on-line-hjælpen."
+
+#: apps/io.ox/tours/main.js:81 module:io.ox/tours
+msgid "Launching an app"
+msgstr "Start af et program"
+
+#: apps/io.ox/tours/main.js:84 module:io.ox/tours
+msgid "To launch an app, click on an entry on the left side of the menu bar."
+msgstr ""
+"For at starte et program, klikkes der på et element i venstre side af "
+"menulinjen."
+
+#: apps/io.ox/tours/main.js:88 module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Vis hjælp eller indstillinger"
+
+#: apps/io.ox/tours/main.js:91 module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"For at vise hjælpen eller indstillingerne, klik på menuikonet System i "
+"menulinjen."
+
+#: apps/io.ox/tours/main.js:97 module:io.ox/tours
+msgid "The New objects icon"
+msgstr "Nye objekter-ikonet"
+
+#: apps/io.ox/tours/main.js:100 module:io.ox/tours
+msgid ""
+"The New objects icon shows the number of unread E-Mails or other "
+"notifications. If clicking the icon, the info area opens."
+msgstr ""
+"Nye objekter-ikonet viser antallet af ulæste e-mails og andre påmindelser. "
+"Hvis der klikkes på ikonet, åbner informationsområdet."
+
+#: apps/io.ox/tours/main.js:105 module:io.ox/tours
+msgid "The info area"
+msgstr "Informationsområdet"
+
+#: apps/io.ox/tours/main.js:108 module:io.ox/tours
+msgid ""
+"In case of new notifications, e.g. appointment invitations, the info area is "
+"opened on the right side."
+msgstr ""
+"I tilfælde af nye påmindelser, fx en invitation til en aftale, åbnes "
+"informationsområdet i højre side."
+
+#: apps/io.ox/tours/main.js:112 module:io.ox/tours
+msgid "Creating new items"
+msgstr "Lav nye elementer"
+
+#: apps/io.ox/tours/main.js:115 module:io.ox/tours
+msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgstr ""
+"For at oprette en ny e-mail, klik \"Skriv ny e-mail\" i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:120 module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Åbning eller lukning af mappetræet"
+
+#: apps/io.ox/tours/main.js:123 module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"For et åbne eller lukke mappetræet, klik Visning > Mappevisning i højre side "
+"af værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:126 module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Søger efter objekter"
+
+#: apps/io.ox/tours/main.js:129 module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr "For at søge efter objekter, klik på \"Søg\"-ikonet i menulinjen."
+
+#: apps/io.ox/tours/main.js:132 module:io.ox/tours
+msgid "The toolbar"
+msgstr "Værktøjslinjen"
+
+#: apps/io.ox/tours/main.js:135 module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
+msgstr ""
+"Afhængigt af programmet indeholder værktøjslinjen forskellige funktioner til "
+"at oprette, redigere og organisere objekter."
+
+#: apps/io.ox/tours/main.js:138 module:io.ox/tours
+msgid "The folder tree"
+msgstr "Mappetræet"
+
+#: apps/io.ox/tours/main.js:141 module:io.ox/tours
+msgid ""
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
+msgstr ""
+"Bruge mappetræet, til at åbne mappen med de objekter, som du vil se i listen."
+
+#: apps/io.ox/tours/main.js:144 module:io.ox/tours
+msgid "The list"
+msgstr "Listen"
+
+#: apps/io.ox/tours/main.js:147 module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Brug listen til at vælge et objekt, for at se dets indhold eller aktivere "
+"funktioner."
+
+#: apps/io.ox/tours/main.js:150 module:io.ox/tours
+msgid "The Detail view"
+msgstr "Detaljevisningen"
+
+#: apps/io.ox/tours/main.js:153 module:io.ox/tours
+msgid ""
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"Detaljevisningen viser et objekts indhold.  Afhængigt af programmet kan der "
+"findes flere funktioner til at organisere objekter i detaljevisningen."
+
+#: apps/io.ox/tours/main.js:156 module:io.ox/tours
+msgid "Further information"
+msgstr "Yderligere information"
+
+#: apps/io.ox/tours/main.js:159 module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Detaljerede instruktioner for de enkelte programmer kan findes i menuen "
+"System > Hjælp."
+
+#: apps/io.ox/tours/main.js:175 module:io.ox/tours
+msgid "The Portal"
+msgstr "Portalen"
+
+#: apps/io.ox/tours/main.js:178 module:io.ox/tours
+msgid ""
+"The Portal informs you about current E-Mails, appointments or social network "
+"news."
+msgstr ""
+"Portalen informerer dig om aktuelle e-mails, aftaler eller nyheder på "
+"sociale netværk."
+
+#: apps/io.ox/tours/main.js:181 module:io.ox/tours
+msgid "Reading the details"
+msgstr "Læser detaljerne"
+
+#: apps/io.ox/tours/main.js:184 module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "For at læse detaljerne, klik på et element i en flise."
+
+#: apps/io.ox/tours/main.js:187 module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Træk og slip"
+
+#: apps/io.ox/tours/main.js:196 module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"For at ændre udseendet, træk en flises titel til en anden position, og slip "
+"den der."
+
+#: apps/io.ox/tours/main.js:199 module:io.ox/tours
+msgid "Closing a square"
+msgstr "Lukke en flise"
+
+#: apps/io.ox/tours/main.js:202 module:io.ox/tours
+msgid ""
+"If you no longer want to display a square, click the cross on the upper "
+"right side."
+msgstr ""
+"Hvis du ikke længere vil have en flise vist, så klik på krydset oppe i højre "
+"side."
+
+#: apps/io.ox/tours/main.js:207 module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Tilpasse Portalen"
+
+#: apps/io.ox/tours/main.js:210 module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"For at vise en flise igen, eller for at vise flere informationskilder,"
+"klik Tilpas denne side."
+
+#: apps/io.ox/tours/main.js:225 module:io.ox/tours
+msgid "Composing a new E-Mail"
+msgstr "Skriver en ny e-mail"
+
+#: apps/io.ox/tours/main.js:228 module:io.ox/tours
+msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgstr "For skrive en ny e-mail, klik på Skriv e-mail i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:246 module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Indtastning af modtagerens navn"
+
+#: apps/io.ox/tours/main.js:249 module:io.ox/tours
+msgid ""
+"Enter the recipient's name on the top left side. As soon as you typed the "
+"first letters, suggestions from the address books are displayed. To accept a "
+"recipient suggestion, click on it."
+msgstr ""
+"Skriv modtagerens navn til venstre i toppen. Så snart du har tastet de "
+"første bogstaver, vil forslag fra adressebogen blive vist. Tryk på en "
+"modtagers navn for at bruge et forslag."
+
+#: apps/io.ox/tours/main.js:254 module:io.ox/tours
+msgid "Further functions"
+msgstr "Flere funktioner"
+
+#: apps/io.ox/tours/main.js:257 module:io.ox/tours
+msgid ""
+"Below the recipient you will find further functions, e.g. for sending copies "
+"to other recipients or for adding attachments."
+msgstr ""
+"Under modtageren finder du flere funktioner, som fx til at sende kopier til "
+"andre modtagere, eller til at tilføje vedhæftninger."
+
+#: apps/io.ox/tours/main.js:260 module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Indtastning af emnet"
+
+#: apps/io.ox/tours/main.js:263 module:io.ox/tours
+msgid "Enter the subject on the right side of the recipient."
+msgstr "Indtast emnet på højre side af modtageren."
+
+#: apps/io.ox/tours/main.js:266 module:io.ox/tours
+msgid "Entering the E-Mail text"
+msgstr "Indtastning af e-mail-teksten"
+
+#: apps/io.ox/tours/main.js:269 module:io.ox/tours
+msgid ""
+"Enter the E-Mail text below the subject. If the text format was set to HTMl "
+"in the options, you can format the E-Mail text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"Indtast e-mail-teksten under emnet. Hvis tekstformatet er sat til HTML i "
+"indstillingerne, så kan du formatere e-mail-teksten. For at gøre dette, "
+"markeres et stykke tekst, og der klikkes på et ikon i formateringslinjen."
+
+#: apps/io.ox/tours/main.js:270 module:io.ox/tours
+msgid "Enter the E-Mail text below the subject."
+msgstr "Indtast brødteksten til e-mailen under emnelinjen."
+
+#: apps/io.ox/tours/main.js:275 module:io.ox/tours
+msgid "Sending the E-Mail"
+msgstr "Sender e-mail'en"
+
+#: apps/io.ox/tours/main.js:278 module:io.ox/tours
+msgid "To send the E-Mail, click on Send on the upper right side."
+msgstr "For at sende e-mail'en, klikkes der på Send i højre øverste hjørne."
+
+#: apps/io.ox/tours/main.js:293 module:io.ox/tours
+msgid "Sorting your E-Mails"
+msgstr "Sortering af dine e-mails"
+
+#: apps/io.ox/tours/main.js:296 module:io.ox/tours
+msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+msgstr ""
+"For at sortere e-mail, klik på Sortér efter.  Vælg et sorteringskriterie."
+
+#: apps/io.ox/tours/main.js:300 module:io.ox/tours
+#: apps/io.ox/tours/main.js:485 apps/io.ox/tours/main.js:529
+msgid "Selecting a view"
+msgstr "Vælger en visning"
+
+#: apps/io.ox/tours/main.js:303 module:io.ox/tours
+msgid ""
+"To choose between the different views. click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"For at vælge mellem forskellige visninger, klik Visning i værktøjslinjen.  "
+"Vælg en menuindgang i layoutet."
+
+#: apps/io.ox/tours/main.js:307 module:io.ox/tours
+msgid "Opening an E-Mail in a separate window"
+msgstr "Åbne en e-mail i et separat vindue"
+
+#: apps/io.ox/tours/main.js:310 module:io.ox/tours
+msgid ""
+"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"separate window."
+msgstr ""
+"Hvis du dobbeltklikker på en e-mail i listen, bliver den åbnet i et separat "
+"vindue."
+
+#: apps/io.ox/tours/main.js:314 module:io.ox/tours
+msgid "Reading E-Mail conversations"
+msgstr "Læse e-mail-samtaler"
+
+#: apps/io.ox/tours/main.js:324 module:io.ox/tours
+msgid ""
+"To open or close an E-Mail in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"For at åbne eller lukke en e-mail i en samtale, klik på et frit område i "
+"brevhovedet."
+
+#: apps/io.ox/tours/main.js:329 module:io.ox/tours
+msgid "Halo view"
+msgstr "Samlet visning"
+
+#: apps/io.ox/tours/main.js:332 module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"For at hente information om afsenderen eller andre modtagere, åbn samlet "
+"visning ved at klikke på et navn."
+
+#: apps/io.ox/tours/main.js:337 module:io.ox/tours
+msgid "Editing multiple E-Mails"
+msgstr "Redigering af flere e-mails"
+
+#: apps/io.ox/tours/main.js:341 module:io.ox/tours
+msgid ""
+"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
+"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"For at redigere flere e-mails ad gangen, skal tjekboksen på venstre side af "
+"e-mailene markeres. Hvis tjekboksen ikke er synlig, klik Visning > Tjekbokse "
+"i højre side af værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:345 module:io.ox/tours
+msgid "Opening the E-Mail settings"
+msgstr "Åbner E-mail-indstillingerne"
+
+#: apps/io.ox/tours/main.js:348 module:io.ox/tours
+msgid ""
+"To open the E-Mail settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on E-Mail on the left side. To "
+"display all settings, enable Advanced settings in the bottom left side"
+msgstr ""
+"For at åbne indstillingerne til e-mail, klik på menuikonet System i den "
+"øverste højre side af menulinjen. Vælg Indstillinger. Klik på E-mail i "
+"venstre side.  For at vise alle indstillinger, slå Avancerede indstillinger "
+"til i nederste venstre side."
+
+#: apps/io.ox/tours/main.js:363 module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Opretter en ny kontakt"
+
+#: apps/io.ox/tours/main.js:366 module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"For at oprette en ny kontakt, klikkes Ny > Tilføj kontakt i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:370 module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Navigationslinje"
+
+#: apps/io.ox/tours/main.js:373 module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Tryk på et bogstav i venstre side af navigationslinjen, for at vise de "
+"tilhørende kontakter fra den valgte adressebog."
+
+#: apps/io.ox/tours/main.js:376 module:io.ox/tours
+msgid "Sending an E-Mail to a contact"
+msgstr "Send en e-mail til en kontakt"
+
+#: apps/io.ox/tours/main.js:379 module:io.ox/tours
+msgid ""
+"To send an E-Mail to the contact, click on an E-Mail address or on Send "
+"email in the toolbar."
+msgstr ""
+"For at sende en e-mail til kontakten, klik på en e-mail-adresse eller på Send "
+"e-mail i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:382 module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Redigering af flere kontakter"
+
+#: apps/io.ox/tours/main.js:385 module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"For at redigere flere kontakter på én gang, marker tjekboksene på venstre "
+"side af kontakterne. Hvis tjekboksene ikke er vist, klik Visning > Tjekbokse "
+"i højre side af værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:399 module:io.ox/tours
+msgid "Creating a new appointment"
+msgstr "Opretter en ny aftale"
+
+#: apps/io.ox/tours/main.js:405 module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr "For at oprette en aftale, klik på Ny i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:422 module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Indtastning af aftalens data"
+
+#: apps/io.ox/tours/main.js:425 module:io.ox/tours
+msgid ""
+"Enter the subject, the start and the end date of the appointment. Other "
+"details are optional."
+msgstr ""
+"Indtast emnet samt start- og slutdatoen for aftalen. Andre detaljer er "
+"valgfrie."
+
+#: apps/io.ox/tours/main.js:428 module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Opretter en ny gentagende aftale"
+
+#: apps/io.ox/tours/main.js:431 module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"For at oprette gentagende aftaler, aktivér gentagelse. Funktioner til at "
+"sætte parametrene for gentagelse er vist."
+
+#: apps/io.ox/tours/main.js:434 module:io.ox/tours
+#: apps/io.ox/tours/main.js:640
+msgid "Using the reminder function"
+msgstr "Brug af funktionen til påmindelse"
+
+#: apps/io.ox/tours/main.js:437 module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en aftale."
+
+#: apps/io.ox/tours/main.js:440 module:io.ox/tours
+#: apps/io.ox/tours/main.js:657
+msgid "Inviting other participants"
+msgstr "Inviterer andre deltagere"
+
+#: apps/io.ox/tours/main.js:448 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"For at invitere andre deltagere, skriv deres navn i feltet under Deltagere. "
+"For at undgå konflikter med aftaler, klik på Find ledig tid øverst til højre."
+
+#: apps/io.ox/tours/main.js:451 module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Tilføjer vedhæftninger"
+
+#: apps/io.ox/tours/main.js:459 module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Længere nede kan du vedhæfte dokumenter til aftalen."
+
+#: apps/io.ox/tours/main.js:462 module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Opretter aftalen"
+
+#: apps/io.ox/tours/main.js:470 module:io.ox/tours
+msgid "To create the appointment, click on Create at the upper right side."
+msgstr "For at oprette en aftale, klikkes der på Opret i øverste højre side."
+
+#: apps/io.ox/tours/main.js:488 module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"For at vælge en af visningerne Dag, Måned eller Liste, klik på Visning i "
+"værktøjslinjen.  Vælg en menuindgang i Layout-gruppen."
+
+#: apps/io.ox/tours/main.js:496 module:io.ox/tours
+#: apps/io.ox/tours/main.js:535
+msgid "The List view"
+msgstr "Listevisningen"
+
+#: apps/io.ox/tours/main.js:499 module:io.ox/tours
+msgid ""
+"The List view shows a list of the appointments in the current folder. If "
+"clicking on an appointment, the appointment's data and some functions are "
+"displayed in the Detail view."
+msgstr ""
+"Listevisningen viser en liste med aftalerne i den aktuelle mappe.  Hvis du "
+"klikker på en aftale bliver aftalens data og nogle funktioner vist i "
+"Detaljevisningen."
+
+#: apps/io.ox/tours/main.js:507 module:io.ox/tours
+msgid "The calendar views"
+msgstr "Kalendervisningerne"
+
+#: apps/io.ox/tours/main.js:510 module:io.ox/tours
+msgid ""
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
+msgstr ""
+"Kalendervisningerne viser et kalenderark med aftaler for det valgte tidsrum."
+
+#: apps/io.ox/tours/main.js:523 module:io.ox/tours
+msgid "Folder tree"
+msgstr "Mappetræ"
+
+#: apps/io.ox/tours/main.js:526 module:io.ox/tours
+msgid ""
+"Use the folder tree to access own, public or shared files. If the folder "
+"tree is hidden, click on View > Folder view on the right side of the toolbar."
+msgstr ""
+"Brug mappetræet til at tilgå egne, offentlige eller delte filer.  Hvis "
+"mappetræet er skjult, klik Visning > Mappevisning i højre side af "
+"værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:532 module:io.ox/tours
+msgid ""
+"To select one of the views List, Icons or Squares, click on View on the "
+"right side of the toolbar."
+msgstr ""
+"For at vælge en af visningerne Liste, Ikon eller Fliser, klik Visning i højre "
+"side af værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:538 module:io.ox/tours
+msgid ""
+"The List view shows details like the size and date of change. Use the "
+"checkboxes to select files. Click on a file to view further details and "
+"functions in the pop-up."
+msgstr ""
+"Listevisningen viser detaljer som størrelse og dato for sidste ændring.  Brug "
+"tjekboksene til at vælge filer.  Klik på en fil for at se flere detaljer og "
+"funktioner i pop-op-vinduet."
+
+#: apps/io.ox/tours/main.js:541 module:io.ox/tours
+msgid "The Icons view"
+msgstr "Ikonvisningerne"
+
+#: apps/io.ox/tours/main.js:544 module:io.ox/tours
+msgid ""
+"The Icons view displays an icon and the file name for each file. Click on an "
+"icon to view further details and functions in the pop-up."
+msgstr ""
+"Ikonvisningen viser et ikon og filnavnet for hver fil.  Klik på en ikon for "
+"at se flere detaljer og funktioner i pop-op-vinduet."
+
+#: apps/io.ox/tours/main.js:547 module:io.ox/tours
+msgid "The Tiles view"
+msgstr "Flisevisningen"
+
+#: apps/io.ox/tours/main.js:550 module:io.ox/tours
+msgid ""
+"The Tiles view shows a big icon for each file. Click on an icon to view "
+"further details and functions in the pop-up."
+msgstr ""
+"Flisevisningen viser en stor ikon for hver fil.  Klik på en ikon for at se "
+"flere detaljer og funktioner i pop-op-vinduet."
+
+#: apps/io.ox/tours/main.js:558 module:io.ox/tours
+msgid "Uploading a file"
+msgstr "Overfører en fil"
+
+#: apps/io.ox/tours/main.js:562 module:io.ox/tours
+msgid "To upload a file, click on New > Upload new file in the toolbar."
+msgstr "For at overføre en fil, klik på Ny > Overfør ny fil i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:570 module:io.ox/tours
+msgid "Creating a note"
+msgstr "Opretter en note"
+
+#: apps/io.ox/tours/main.js:573 module:io.ox/tours
+msgid "To create a note, click on New > Add note in the toolbar."
+msgstr "For at oprette en note, klik på Ny > Tilføj note i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:576 module:io.ox/tours
+msgid "Slideshow"
+msgstr "Diasshow"
+
+#: apps/io.ox/tours/main.js:579 module:io.ox/tours
+msgid ""
+"If a folder contains images, you can display a slideshow. To do so click the "
+"View slideshow icon in the toolbar."
+msgstr ""
+"Hvis en mappe indeholder billeder, så kan du vise dem som et diasshow. For "
+"at gøre dette, klikkes på Diasshow i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:582 module:io.ox/tours
+msgid "Displaying information"
+msgstr "Viser information"
+
+#: apps/io.ox/tours/main.js:585 module:io.ox/tours
+msgid ""
+"To view further information, click on a file. A pop-up window displays "
+"further details and functions."
+msgstr ""
+"For at se flere informationer, klik på en fil. Et pop-op-vindue viser flere "
+"detaljer og funktioner."
+
+#: apps/io.ox/tours/main.js:598 module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Opretter en ny opgave"
+
+#: apps/io.ox/tours/main.js:601 module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr "For at oprette en ny opgave, klik på Ny i værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:617 module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Indtastning af en opgaves data"
+
+#: apps/io.ox/tours/main.js:620 module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Indtast emnet, startdatoen og en beskrivelse."
+
+#: apps/io.ox/tours/main.js:623 module:io.ox/tours
+msgid "Adding further details"
+msgstr "Tilføj flere detaljer"
+
+#: apps/io.ox/tours/main.js:626 module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "For at tilføje flere detaljer, klikkes der på Udvid."
+
+#: apps/io.ox/tours/main.js:634 module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Opretter gentagende opgaver"
+
+#: apps/io.ox/tours/main.js:637 module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"For at gentagende opgaver, arktivér gentagelse. Funktioner til at sætte "
+"parametrene for gentagelse er vist."
+
+#: apps/io.ox/tours/main.js:643 module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Brug påmindelsesfunktionen, så du ikke kommer til at overse en opgave."
+
+#: apps/io.ox/tours/main.js:646 module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Sporer status på redigering"
+
+#: apps/io.ox/tours/main.js:654 module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr "For at følge status på redigering, indtast den nuværende process."
+
+#: apps/io.ox/tours/main.js:665 module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"For at invitere andre deltagere, indtast deres navne i feltet under "
+"Deltagere. Du kan tilføje dokumenter som vedhæftninger til opgaven."
+
+#: apps/io.ox/tours/main.js:671 module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Indtaster faktureringsoplysninger"
+
+#: apps/io.ox/tours/main.js:674 module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "For at indtaste faktureringsoplysninger, klik på Vis detaljer."
+
+#: apps/io.ox/tours/main.js:678 module:io.ox/tours
+msgid "Creating the task"
+msgstr "Opretter opgaven"
+
+#: apps/io.ox/tours/main.js:686 module:io.ox/tours
+msgid "To create the task, click on Create on the upper right side."
+msgstr "For at oprette opgaven, klik på Opret øverst til højre."
+
+#: apps/io.ox/tours/main.js:699 module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Sorterer dine opgaver"
+
+#: apps/io.ox/tours/main.js:702 module:io.ox/tours
+msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgstr ""
+"For at sortere opgaver, klik på Sortér efter.  Vælg et sorteringskriterie."
+
+#: apps/io.ox/tours/main.js:706 module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Redigering af flere opgaver"
+
+#: apps/io.ox/tours/main.js:710 module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"For at redigere flere opgaver på én gang, aktivér tjekboksene på venstre side "
+"af opgaverne. Hvis tjekboksene ikke er vist, klik på Visning > Tjekbokse i "
+"højre side af værktøjslinjen."
+
+#: apps/io.ox/tours/main.js:724 module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Åbner indstillingerne"
+
+#: apps/io.ox/tours/main.js:727 module:io.ox/tours
+msgid ""
+"To open the settings, click the System menu icon on the upper right side of "
+"the menu bar. Select Settings."
+msgstr ""
+"For et åbne indstillingerne, klik på menuikonet System i øverste højre side "
+"af menulinjen. Vælg Indstillinger."
+
+#: apps/io.ox/tours/main.js:730 module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Hvordan indstillingerne er organiseret"
+
+#: apps/io.ox/tours/main.js:733 module:io.ox/tours
+msgid ""
+"The settings are organized in topics. Select the topic on the left side, e.g "
+"Basic settings or E-Mail. To view all settings, enable Advanced settings at "
+"the bottom."
+msgstr ""
+"Indstillingerne er organiseret i emner. Vælg et emne i venstre side, for "
+"eksempel Grundlæggende indstillinger eller E-mail.  Slå Avancerede "
+"indstillinger til i bunden for at se alle indstillinger."
+
+#: apps/io.ox/tours/main.js:736 module:io.ox/tours
+msgid "Editing settings"
+msgstr "Redigere indstillinger"
+
+#: apps/io.ox/tours/main.js:739 module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Redigér en indstilling i højre side. I de fleste tilfælde bliver ændringer "
+"aktiveret med det samme."
+
+#: apps/io.ox/tours/main.js:742 module:io.ox/tours
+msgid "Opening the help"
+msgstr "Åbning af hjælp"
+
+#: apps/io.ox/tours/main.js:745 module:io.ox/tours
+msgid ""
+"To open the help, click the System menu icon on the upper right side of the "
+"menu bar. Select Help. The help for the currently selected app is displayed. "
+"To browse the complete help, click on Start Page or Table Of Contents at the "
+"upper part of the window."
+msgstr ""
+"For et åbne hjælpen, klik på menuikonet System i øverste højre side af "
+"menulinjen. Vælg Hjælp.  Hjælpen for det aktuelle program bliver vist.  For "
+"at se den komplette hjælp, klik på Startside eller Indholdsfortegnelse øverst "
+"i vinduet."
+
+#: apps/io.ox/tours/main.js:748 module:io.ox/tours
+msgid "Signing out"
+msgstr "Logger ud"
+
+#: apps/io.ox/tours/main.js:751 module:io.ox/tours
+msgid ""
+"To sign out, click the System menu icon on the upper right side of the menu "
+"bar. Select Sign out."
+msgstr ""
+"For at logge af, tryk på menuikonet System i øverste højre side af "
+"menulinjen. Vælg log af."
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js:798 module:io.ox/tours
+msgid "Getting started"
+msgstr "Kom i gang"
+
+#: apps/io.ox/tours/main.js:824 module:io.ox/tours
+msgid "Guided tour for this app"
+msgstr "Guidet tur for denne app"
+
+#~ msgid ""
+#~ "At the top of the display area the path to the selected folder is shown. "
+#~ "Click on the path to switch to another folder."
+#~ msgstr ""
+#~ "I toppen af visningsområdet er stien til den valgte mappe vist. Klik på "
+#~ "stien for at skifte til en anden mappe."
+
+#~ msgid ""
+#~ "Detailed guides for all modules are located in the help section of the "
+#~ "settings."
+#~ msgstr ""
+#~ "Detaljerede guides til alle modulerne er placeret i hjælpe-sektionen af "
+#~ "indstillingerne."
+
+#~ msgid "Display area"
+#~ msgstr "Visningsområde"
+
+#~ msgid ""
+#~ "In the Details section at the bottom right side you can enter billing "
+#~ "information."
+#~ msgstr ""
+#~ "I sektionen Detaljer nederst i højre side kan du indtaste "
+#~ "faktureringsinformation."
+
+#~ msgid ""
+#~ "In the Icons view you can see the files of the selected folder in the "
+#~ "display area."
+#~ msgstr ""
+#~ "I ikonvisning kan du se filerne i den valgte mappe i visningsområdet."
+
+#~ msgid "Opening E-Mail threads"
+#~ msgstr "Åbner e-mail tråde"
+
+#~ msgid "Sidebar"
+#~ msgstr "Sidelinje"
+
+#~ msgid "The Icons view displays an icon for each file."
+#~ msgstr "Ikonvisningen viser et ikon for hver fil."
+
+#~ msgid ""
+#~ "The List view shows a sidebar with appointments and a display area with "
+#~ "the data of the selected appointment. This view corresponds to the view "
+#~ "in E-Mail and Contacts."
+#~ msgstr ""
+#~ "Listevisning viser en sidelinje med aftaler, og et visningsområde med den "
+#~ "valgte aftales data. Denne visning svarer til den i E-mail og Kontakter."
+
+#~ msgid ""
+#~ "The List view shows a sidebar with files and a display area with the data "
+#~ "of the selected file. This view corresponds to the views in E-Mail and "
+#~ "Contacts."
+#~ msgstr ""
+#~ "Listevisning viser en sidelinje og et visningsområde med den valgte fils "
+#~ "data. Denne visning svarer til visningen i E-mail og Kontakter."
+
+#~ msgid ""
+#~ "The display area shows an object's content. At the top of the display "
+#~ "area you will find functions for e.g. moving or deleting objects."
+#~ msgstr ""
+#~ "Visningsområdet viser et objekts indhold. I toppen af området finder du "
+#~ "funktioner til, fx at flytte eller slette objekter."
+
+#~ msgid ""
+#~ "The icon at the bottom right side helps you sort your tasks. Click the "
+#~ "icon to get a list of sort criteria."
+#~ msgstr ""
+#~ "Ikonet nederst til højre hjælper dig med at sortere dine opgaver. Klik på "
+#~ "ikonet for at få vist en liste med sorteringsmuligheder."
+
+#~ msgid ""
+#~ "The icon on the bottom right side helps you sort your E-Mails. Click the "
+#~ "icon to get a list of sort criteria."
+#~ msgstr ""
+#~ "Ikonnet nederst til højre hjælper dig med at sortere dine e-mails. Klik "
+#~ "på ikonet for en liste af sorteringsmuligheder."
+
+#~ msgid ""
+#~ "The number on the right side of the E-Mail subject corresponds to the "
+#~ "number of E-Mails in a thread. To open the thread, click on the number."
+#~ msgstr ""
+#~ "Nummeret på højre side af et e-mail-emne svarer til antallet af e-mails i "
+#~ "en tråd. Klik på nummeret for at åbne tråden."
+
+#~ msgid "To create a note, click the icon at the top. Select Add note."
+#~ msgstr "For at lave en note, tryk på ikonet i toppen. Vælg Tilføj note."
+
+#~ msgid "To launch an app, click on a tile's headline."
+#~ msgstr "For at starte et program, klik på en flises overskrift."
+
+#, fuzzy
+#~ msgid ""
+#~ "To open the help, click the System menu icon on the upper right side of "
+#~ "the menu bar. Select Help."
+#~ msgstr ""
+#~ "For at åbne hjælp, tryk på menuikonet System i øverste højre side af "
+#~ "menulinjen. Vælg hjælp."
+
+#~ msgid "Using the reminder functions"
+#~ msgstr "Brug af funktionerne til påmindelse"
+
+#~ msgid "%1$d %2$s"
+#~ msgstr "%1$d %2$s"
+
+#~ msgid "%1$d Day"
+#~ msgid_plural "%1$d Days"
+#~ msgstr[0] "%1$d dag"
+#~ msgstr[1] "%1$d dage"
+
+#~ msgid "%1$d Hour"
+#~ msgid_plural "%1$d Hours"
+#~ msgstr[0] "%1$d time"
+#~ msgstr[1] "%1$d timer"
+
+#~ msgid "%1$d Minute"
+#~ msgid_plural "%1$d Minutes"
+#~ msgstr[0] "%1$d minut"
+#~ msgstr[1] "%1$d minutter"
+
+#~ msgid "%1$d Week"
+#~ msgid_plural "%1$d Weeks"
+#~ msgstr[0] "%1$d uge"
+#~ msgstr[1] "%1$d uger"
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d dag, %2$s"
+#~ msgstr[1] "%1$d dage, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d dag, %2$s"
+#~ msgstr[1] "%1$d dage, %2$s"
+
+#~ msgid "%1$d files has been changed recently"
+#~ msgstr "%1$d filer er blevet ændret for nylig"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d time og %2$s"
+#~ msgstr[1] "%1$d timer og %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d time og %2$s"
+#~ msgstr[1] "%1$d timer og %2$s"
+
+#~ msgid "%1$d mail"
+#~ msgid_plural "%1$d mails"
+#~ msgstr[0] "%1$d e-mail"
+#~ msgstr[1] "%1$d e-mails"
+
+#, fuzzy
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "Samtaler for nyligt"
+
+#, fuzzy
+#~ msgid "%1$d messages selected"
+#~ msgstr "<b>%1$d</b> elementer valgt"
+
+#~ msgctxt "mail address"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgctxt "window title"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#, fuzzy
+#~ msgid "%1$s (Tentative)"
+#~ msgstr "%1$s (Forbehold)"
+
+#~ msgid "%1$s is a new contact"
+#~ msgstr "%1$s er en ny kontakt"
+
+#~ msgid "%1$s is now connected with %2$s"
+#~ msgstr "%1$s er nu forbundet med %2$s"
+
+#~ msgid "%1$s mail"
+#~ msgid_plural "%1$s mails"
+#~ msgstr[0] "%1$s e-mail"
+#~ msgstr[1] "%1$s e-mails"
+
+#~ msgid "%1$s mail, %2$s unread"
+#~ msgid_plural "%1$s mails, %2$s unread"
+#~ msgstr[0] "%1$s e-mail, %2$s ulæst"
+#~ msgstr[1] "%1$s e-mails, %2$s ulæste"
+
+#~ msgid "%1$s of %2$s"
+#~ msgstr "%1$s af %2$s"
+
+#, fuzzy
+#~ msgid "%1$s%2$s %3$s%4$s%5$s"
+#~ msgstr ""
+#~ "%1$s\n"
+#~ "%2$s %3$s\n"
+#~ "%4$s\n"
+#~ "%5$s"
+
+#~ msgid "%2$s, %1$s"
+#~ msgstr "%2$s, %1$s"
+
+#~ msgid "%3$s %2$s, %1$s"
+#~ msgstr "%3$s %2$s, %1$s"
+
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d dag"
+#~ msgstr[1] "%d dage"
+
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d dag"
+#~ msgstr[1] "%d dage"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d time"
+#~ msgstr[1] "%d timer"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d time"
+#~ msgstr[1] "%d timer"
+
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minut"
+#~ msgstr[1] "%d minutter"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minut"
+#~ msgstr[1] "%d minutter"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d uge"
+#~ msgstr[1] "%d uger"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d uge"
+#~ msgstr[1] "%d uger"
+
+#~ msgid "(%1$s) Attachments"
+#~ msgstr "(%1$s) vedhæftninger"
+
+#~ msgid "(Default)"
+#~ msgstr "(Standard)"
+
+#~ msgid "0 minutes"
+#~ msgstr "0 minutter"
+
+#~ msgid "1 day"
+#~ msgstr "1 dag"
+
+#~ msgid "1 file has been changed recently"
+#~ msgstr "En fil er blevet ændret for nylig"
+
+#~ msgid "1 hour"
+#~ msgstr "1 time"
+
+#~ msgid "1 item"
+#~ msgid_plural "%1$d items"
+#~ msgstr[0] "1 ting"
+#~ msgstr[1] "%1$d ting"
+
+#~ msgid "1 minute"
+#~ msgstr "1 minut"
+
+#~ msgid "1 week"
+#~ msgstr "1 uge"
+
+#~ msgid "10 minutes"
+#~ msgstr "10 minutter"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "12 hour"
+#~ msgstr "12 timer"
+
+#~ msgid "15 minutes"
+#~ msgstr "15 minutter"
+
+#~ msgid "150%"
+#~ msgstr "150%"
+
+#~ msgid "2 days"
+#~ msgstr "2 dage"
+
+#~ msgid "2 hour"
+#~ msgstr "2 timer"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 uger"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "3 days"
+#~ msgstr "3 dage"
+
+#~ msgid "3 minutes"
+#~ msgstr "3 minutter"
+
+#~ msgid "3 weeks"
+#~ msgstr "3 uger"
+
+#~ msgid "30 minutes"
+#~ msgstr "30 minutter"
+
+#~ msgid "4 days"
+#~ msgstr "4 dage"
+
+#~ msgid "4 hour"
+#~ msgstr "4 timer"
+
+#~ msgid "4 weeks"
+#~ msgstr "4 uger"
+
+#~ msgid "45 minutes"
+#~ msgstr "45 minutter"
+
+#~ msgid "5 days"
+#~ msgstr "5 dage"
+
+#~ msgid "5 minutes"
+#~ msgstr "5 minutter"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "6 days"
+#~ msgstr "6 dage"
+
+#~ msgid "6 hour"
+#~ msgstr "6 timer"
+
+#~ msgid "75%"
+#~ msgstr "75%"
+
+#~ msgid "8 hour"
+#~ msgstr "8 timer"
+
+#~ msgid "<b>%1$d</b> elements selected"
+#~ msgstr "<b>%1$d</b> elementer valgt"
+
+#~ msgid ""
+#~ "A refresh takes some time, so please be patient, while the refresh runs "
+#~ "in the background. Only one refresh per subscription and per session is "
+#~ "allowed."
+#~ msgstr ""
+#~ "En opdatering tager tid, så vær venligst tålmodig, imens opdateringen "
+#~ "kører i baggrunden. Kun én opdatering pr. abonnement og session er "
+#~ "tilladt."
+
+#, fuzzy
+#~ msgid "A return receipt has been sent"
+#~ msgstr "Har sendt en leveringskvittering"
+
+#~ msgid "A severe error occurred!"
+#~ msgstr "Der opstod en alvorlig fejl!"
+
+#~ msgid "About"
+#~ msgstr "Om"
+
+#~ msgid "Above quoted text"
+#~ msgstr "Over citeret tekst"
+
+#~ msgid "Absent"
+#~ msgstr "Fraværende"
+
+#~ msgid "Accept"
+#~ msgstr "Acceptér"
+
+#~ msgid "Accept / Decline"
+#~ msgstr "Acceptér / Afvis"
+
+#~ msgid "Accept changes"
+#~ msgstr "Acceptér ændringer"
+
+#~ msgid "Accept invitation"
+#~ msgstr "Acceptér invitation"
+
+#~ msgid "Accept/Decline"
+#~ msgstr "Acceptér/Afvis"
+
+#~ msgid "Accepted"
+#~ msgstr "Accepteret"
+
+#~ msgctxt "help"
+#~ msgid "Accessing Files with WebDAV"
+#~ msgstr "Tilgår filer med WebDAV"
+
+#~ msgid "Accessing global address book is not permitted"
+#~ msgstr "Må ikke tilgå global adressebog"
+
+#~ msgid "Account"
+#~ msgstr "Konto"
+
+#~ msgid "Account Settings"
+#~ msgstr "Kontoopsætning"
+
+#~ msgid "Account added successfully"
+#~ msgstr "Kontoen blev tilføjet med succes"
+
+#~ msgid "Account name"
+#~ msgstr "Kontonavn"
+
+#~ msgid "Account settings"
+#~ msgstr "Kontoindstillinger"
+
+#~ msgid "Account settings could not be saved."
+#~ msgstr "Kontoens opsætning kunne ikke gemmes."
+
+#~ msgid "Account updated"
+#~ msgstr "Konto opdateret"
+
+#~ msgid "Actions"
+#~ msgstr "Handlinger"
+
+#~ msgid "Actual costs"
+#~ msgstr "Faktiske omkostninger"
+
+#~ msgid "Actual duration in minutes"
+#~ msgstr "Faktisk varighed i minutter"
+
+#~ msgid "Add"
+#~ msgstr "Tilføj"
+
+#~ msgid "Add Attachment"
+#~ msgstr "Tilføj vedhæftning"
+
+#~ msgid "Add account"
+#~ msgstr "Tilføj konto"
+
+#~ msgid "Add action"
+#~ msgstr "Tilføj handling"
+
+#~ msgid "Add cipher code"
+#~ msgstr "Tilføj nøglekode"
+
+#~ msgid "Add condition"
+#~ msgstr "Tilføj betingelse"
+
+#~ msgid "Add contact"
+#~ msgstr "Tilføj kontakt"
+
+#~ msgid "Add distribution list"
+#~ msgstr "Tilføj distributionsliste"
+
+#~ msgid "Add files"
+#~ msgstr "Tilføj filer"
+
+#~ msgid "Add folder"
+#~ msgstr "Tilføj mappe"
+
+#~ msgid "Add folder menu"
+#~ msgstr "Tilføj mappemnu"
+
+#~ msgid "Add mail account"
+#~ msgstr "Tilføj e-mail konto"
+
+#~ msgid "Add member"
+#~ msgstr "Tilføj medlem"
+
+#~ msgid "Add new account"
+#~ msgstr "Tilføj ny konto"
+
+#~ msgid "Add new folder"
+#~ msgstr "Tilføj ny mappe"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "Tilføj ny mappe til abonnementet"
+
+#~ msgid "Add new participant"
+#~ msgstr "Tilføj ny deltager"
+
+#~ msgid "Add new rule"
+#~ msgstr "Tilføj ny regel"
+
+#~ msgid "Add new signature"
+#~ msgstr "Tilføj ny signatur"
+
+#~ msgid "Add new subfolder"
+#~ msgstr "Tilføj ny unermappe"
+
+#~ msgid "Add note"
+#~ msgstr "Tilføj note"
+
+#~ msgid "Add participant"
+#~ msgstr "Tilføj deltager"
+
+#~ msgid "Add participant/resource"
+#~ msgstr "Tilføj deltager/ressource"
+
+#~ msgid "Add signature"
+#~ msgstr "Tilføj signatur"
+
+#~ msgid "Add subfolder"
+#~ msgstr "Tilføj undermappe"
+
+#~ msgid "Add subject"
+#~ msgstr "Tilføj emne"
+
+#~ msgid "Add to address book"
+#~ msgstr "Tilføj til adressebog"
+
+#~ msgid "Add to calendar"
+#~ msgstr "Tilføj til kalender"
+
+#~ msgid "Add to portal"
+#~ msgstr "Tilføj til portal"
+
+#~ msgid "Add widget"
+#~ msgstr "Tilføj widget"
+
+#~ msgid "Add your account"
+#~ msgstr "Tilføj din konto"
+
+#~ msgid "Added the new participant"
+#~ msgstr "Tilføjede den nye deltager"
+
+#~ msgid "Adding subscription. This may take some seconds..."
+#~ msgstr "Tilføjer abonnement. Dette kan tage nogle sekunder..."
+
+#~ msgid "Address Book"
+#~ msgstr "Adressebog"
+
+#~ msgctxt "app"
+#~ msgid "Address Book"
+#~ msgstr "Adressebog"
+
+#~ msgid "Address Business"
+#~ msgstr "Firmaadresse"
+
+#~ msgid "Address Home"
+#~ msgstr "Hjemmeadresse"
+
+#~ msgid "Address Other"
+#~ msgstr "Anden adresse"
+
+#~ msgid "Addresses"
+#~ msgstr "Adresser"
+
+#~ msgid "Adjust"
+#~ msgstr "Justér"
+
+#~ msgid "Adjust start date"
+#~ msgstr "Justér startdatoen"
+
+#~ msgid "Administrator"
+#~ msgstr "Administrator"
+
+#, fuzzy
+#~ msgid "Advanced Settings"
+#~ msgstr "Drive-opsætning"
+
+#~ msgid "All Emoji"
+#~ msgstr "Alle Emoji"
+
+#~ msgid "All attachments"
+#~ msgstr "Alle vedhæftninger"
+
+#~ msgid "All day"
+#~ msgstr "Hele dagen"
+
+#, fuzzy
+#~| msgid "Add folder"
+#~ msgid "All folders"
+#~ msgstr "Tilføj mappe"
+
+#~ msgid "Allow html formatted emails"
+#~ msgstr "Tillad html-formateret e-mails"
+
+#~ msgid "Allow pre-loading of externally linked images"
+#~ msgstr "Tillad forhåndsindlæsning af eksternt linkede billeder"
+
+#~ msgid "An error occurred"
+#~ msgstr "Der opstod en fejl"
+
+#~ msgid "An error occurred while loading the document."
+#~ msgstr "Der opstod en fejl under indlæsningen af dokumentet."
+
+#~ msgid "An error occurred."
+#~ msgstr "Der opstod en fejl."
+
+#~ msgid "An error occurred. Please try again later"
+#~ msgstr "Der opstod en fejl. Prøv venligst igen senere"
+
+#~ msgid "An error occurred. Please try again."
+#~ msgstr "Der opstod en fejl. Prøv venligst igen."
+
+#~ msgid "An internal error occurred"
+#~ msgstr "Der opstod en intern fejl"
+
+#~ msgid "An unknown error occurred"
+#~ msgstr "Der opstod en ukendt fejl"
+
+#~ msgid "Anniversary"
+#~ msgstr "Jubilæum"
+
+#~ msgid "Any recipient"
+#~ msgstr "Enhver modtager"
+
+#~ msgid "Append vCard"
+#~ msgstr "Tilføj \"vCard\"-visitkort"
+
+#~ msgid "Application Toolbar"
+#~ msgstr "Programværktøjslinjen"
+
+#~ msgid "Application may not work as expected until this problem is solved."
+#~ msgstr ""
+#~ "Programmet virker ikke nødvendigvis som forventet før dette problem er "
+#~ "løst."
+
+#~ msgid "Applications"
+#~ msgstr "Programmer"
+
+#~ msgid "Apply role"
+#~ msgstr "Tildel rolle"
+
+#~ msgid "Apply rule if all conditions are met"
+#~ msgstr "Brug regel hvis alle betingelserne er opfyldt"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Brug regel hvis en betingelse er opfyldt."
+
+#~ msgid "Appointment"
+#~ msgstr "Aftale"
+
+#~ msgid "Appointment Details"
+#~ msgstr "Aftaledetaljer"
+
+#~ msgid "Appointment has been copied"
+#~ msgid_plural "Appointments have been copied"
+#~ msgstr[0] "Aftalen er blevet kopieret"
+#~ msgstr[1] "Aftalerne er blevet kopieret"
+
+#~ msgid "Appointment has been moved"
+#~ msgid_plural "Appointments have been moved"
+#~ msgstr[0] "Aftalen er blevet flyttet"
+#~ msgstr[1] "Aftalerne er blevet flyttet"
+
+#~ msgid ""
+#~ "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
+#~ msgstr ""
+#~ "Invitation til aftale. %1$s %2$s %3$s %4$s %5$s. Tast [enter] for at åbne"
+
+#~ msgid "Appointment invitations"
+#~ msgstr "Invitationer"
+
+#~ msgid "Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open"
+#~ msgstr "Påmindelse om aftale. %1$s %2$s %3$s %4$s. Tast [enter] for at åbne"
+
+#~ msgid "Appointment reminders"
+#~ msgstr "Aftalepåmindelser"
+
+#~ msgid "Appointments"
+#~ msgstr "Aftaler"
+
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "Cirka længde af abonnementer"
+
+#~ msgid "April"
+#~ msgstr "April"
+
+#~ msgid "Are you sure you want to delete this Tweet?"
+#~ msgstr "Er du sikker på du vil slette denne tweet?"
+
+#~ msgid "Are you sure?"
+#~ msgstr "Er du sikker?"
+
+#~ msgid "Ascending"
+#~ msgstr "Stigende"
+
+#, fuzzy
+#~ msgid "Ask for return receipt"
+#~ msgstr "Bed om en leveringskvittering"
+
+#~ msgid "Assistant"
+#~ msgstr "Assistent"
+
+#~ msgid "Attach my vCard"
+#~ msgstr "Vedhæft mit vCard"
+
+#~ msgid "Attachment"
+#~ msgstr "Vedhæftning"
+
+#~ msgctxt "plural"
+#~ msgid "Attachment"
+#~ msgid_plural "Attachments"
+#~ msgstr[0] "Vedhæftning"
+#~ msgstr[1] "Vedhæftninger"
+
+#~ msgid "Attachment has been saved"
+#~ msgid_plural "Attachments have been saved"
+#~ msgstr[0] "Vedhæftning blev gemt"
+#~ msgstr[1] "Vedhæftninger blev gemt"
+
+#~ msgid "Attachments"
+#~ msgstr "Vedhæftninger"
+
+#~ msgid "Attachments (%1$s)"
+#~ msgstr "Vedhæftninger (%1$s)"
+
+#~ msgid "Attachments have been saved!"
+#~ msgstr "Vedhæftningerne er blevet gemt!"
+
+#~ msgid "Attachments will be saved"
+#~ msgstr "Vedhæftninger bliver gemt"
+
+#~ msgid "Attachments   "
+#~ msgstr "Vedhæftninger..."
+
+#~ msgid "Attention"
+#~ msgstr "Bemærk"
+
+#~ msgid "August"
+#~ msgstr "August"
+
+#~ msgid "Author"
+#~ msgstr "Forfatter"
+
+#~ msgid "Auto Forward"
+#~ msgstr "Automatisk videresendelse"
+
+#~ msgid "Auto Logout"
+#~ msgstr "Automatisk logud"
+
+#~ msgid "Auto-save email drafts"
+#~ msgstr "Gem e-mail-kladder automatisk"
+
+#~ msgid "Auto-save email drafts?"
+#~ msgstr "Gem e-mail-kladder automatisk?"
+
+#~ msgid "Automatic opening of notification area"
+#~ msgstr "Automatisk åbning af påmindelsesområde"
+
+#~ msgid "Automatic sign out"
+#~ msgstr "Automatisk log ud"
+
+#~ msgid ""
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while reading"
+#~ msgstr ""
+#~ "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der læses"
+
+#~ msgid ""
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while reading?"
+#~ msgstr ""
+#~ "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der "
+#~ "læses?"
+
+#~ msgid ""
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while sending"
+#~ msgstr ""
+#~ "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der "
+#~ "sendes"
+
+#~ msgid ""
+#~ "Automatically collect contacts in the folder \"Collected addresses\" "
+#~ "while sending?"
+#~ msgstr ""
+#~ "Saml automatisk kontakter i mappen \"Indsamlede adresser\" imens der "
+#~ "sendes?"
+
+#~ msgid ""
+#~ "Automatically delete a notification mail after it has been accepted or "
+#~ "declined?"
+#~ msgstr ""
+#~ "Slet automatisk en e-mailunderretning efter at den er blevet accepteret "
+#~ "eller afslået?"
+
+#~ msgid "Average time: %1$s ms"
+#~ msgstr "Gennemsnitstid: %1$s ms"
+
+#~ msgid "B"
+#~ msgstr "B"
+
+#~ msgid "Back"
+#~ msgstr "Tilbage"
+
+#~ msgid "Back to appointment"
+#~ msgstr "Tilbage til aftale"
+
+#~ msgid "Basic settings"
+#~ msgstr "Grundlæggende opsætning"
+
+#~ msgid "Bcc"
+#~ msgstr "Blind kopi til (Bcc)"
+
+#~ msgid "Below quoted text"
+#~ msgstr "Under citeret tekst"
+
+#~ msgid "Billing information"
+#~ msgstr "Faktureringsoplysninger"
+
+#~ msgid "Birthdays"
+#~ msgstr "Fødselsdage"
+
+#~ msgid "Black"
+#~ msgstr "Sort"
+
+#~ msgid "Blind copy (BCC) to"
+#~ msgstr "Bcc til"
+
+#~ msgid "Block pre-loading of externally linked images"
+#~ msgstr "Blokér forhåndsindlæsning af eksternt linkede billeder"
+
+#~ msgid "Blue"
+#~ msgstr "Blå"
+
+#~ msgid "Branches"
+#~ msgstr "Afdelinger"
+
+#~ msgid "Browser"
+#~ msgstr "Browser"
+
+#~ msgid "Business Address"
+#~ msgstr "Virksomhedsadresse"
+
+#~ msgid "Business address"
+#~ msgstr "Virksomhedsadresse"
+
+#~ msgid "Business category"
+#~ msgstr "Virksomhedskategori"
+
+#~ msgid "Buy a gift"
+#~ msgstr "Køb en gave"
+
+#~ msgid "Buy now!"
+#~ msgstr "Køb nu!"
+
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series. Do you want to continue?"
+#~ msgstr ""
+#~ "Ved at ændre denne aftales dato, laver du en undtagelse til aftaleserien. "
+#~ "Vil du fortsætte?"
+
+#~ msgid "CC"
+#~ msgstr "Cc"
+
+#~ msgid "CSV"
+#~ msgstr "CSV"
+
+#~ msgid "CW"
+#~ msgstr "CW"
+
+#~ msgid "CW %1$d"
+#~ msgstr "Uge %1$d"
+
+#~ msgid "CalDAV URL"
+#~ msgstr "CalDAV URL"
+
+#~ msgid "Calendar"
+#~ msgstr "Kalender"
+
+#~ msgctxt "app"
+#~ msgid "Calendar"
+#~ msgstr "Kalender"
+
+#~ msgid "Cancel"
+#~ msgstr "Annullér"
+
+#~ msgid "Canceled"
+#~ msgstr "Annulleret"
+
+#~ msgid "Cannot find any messages this contact sent to you."
+#~ msgstr "Kan ikke finde nogle beskeder, som denne kontakt har sendt til dig."
+
+#~ msgid "Cannot find any messages you sent to this contact."
+#~ msgstr "Kan ikke finde nogle beskeder, som du har sendt til denne kontakt."
+
+#~ msgid "Cannot find user with given name."
+#~ msgstr "Kan ikke finde en bruger med det angivne navn."
+
+#~ msgid "Cannot print this item"
+#~ msgid_plural "Cannot print these items"
+#~ msgstr[0] "Dette element kan ikke udskrives"
+#~ msgstr[1] "Disse elementer kan ikke udskrives"
+
+#~ msgid "Capacity"
+#~ msgstr "Kapacitet"
+
+#~ msgid "Cart is empty."
+#~ msgstr "Indkøbsvogn er tom."
+
+#~ msgid "Cell phone"
+#~ msgstr "Mobiltelefon"
+
+#~ msgid "Cell phone (alt)"
+#~ msgstr "Mobiltelefon (alternativ)"
+
+#~ msgid "Change"
+#~ msgstr "Ændr"
+
+#~ msgid "Change View"
+#~ msgstr "Skift visning"
+
+#~ msgid "Change confirmation status"
+#~ msgstr "Ret bekræftelsesstatus"
+
+#~ msgid "Change due date"
+#~ msgstr "Ret slutdato"
+
+#~ msgid "Change password"
+#~ msgstr "Ændr adgangskode"
+
+#~ msgid "Change password and sign out"
+#~ msgstr "Ændr adgangskode og log ud"
+
+#~ msgid "Change state"
+#~ msgstr "Ændr tilstand"
+
+#~ msgid "Change status"
+#~ msgstr "Ændr status"
+
+#~ msgid "Change subscription"
+#~ msgstr "Ændr abonnement"
+
+#~ msgid "Change view"
+#~ msgstr "Skift visning"
+
+#~ msgid "Changed due date"
+#~ msgstr "Ændrede slutdato"
+
+#~ msgid "Changes have been saved"
+#~ msgstr "Ændringerne blev gemt"
+
+#~ msgid "Changes have been saved."
+#~ msgstr "Ændringerne er blevet gemt."
+
+#~ msgid "Character"
+#~ msgstr "Karakter"
+
+#, fuzzy
+#~ msgid "Checkboxes"
+#~ msgstr "Skift afkrydsningsfelter"
+
+#~ msgid "Checking credentials... This may take a few seconds."
+#~ msgstr "Tjekker loginoplysninger... Dette kan tage nogle sekunder."
+
+#~ msgid "Children"
+#~ msgstr "Børn"
+
+#~ msgid "City"
+#~ msgstr "By"
+
+#~ msgid "Clean up"
+#~ msgstr "Ryd op"
+
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Rydder op... Dette kan tage nogle sekunder."
+
+#~ msgid "Click for whole day appointment"
+#~ msgstr "Klik for heldagsaftale"
+
+#~ msgid "Click here for free trial."
+#~ msgstr "Klik her en gratis prøve."
+
+#~ msgid "Click here to add your account"
+#~ msgstr "Tryk her for at tilføje din konto"
+
+#~ msgid "Click here to quit the help center"
+#~ msgstr "Klik her for at afslutte hjælpecenteret"
+
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr "Klik på en sætning for at vælge hvornår aftalen skal gentages."
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "For at ændre værdierne kan der klikkes på et link."
+
+#~ msgid "Click to authorize your account again"
+#~ msgstr "Klik for at godkende din konto igen"
+
+#~ msgid "Click to open."
+#~ msgstr "Klik for at åbne."
+
+#~ msgid "Click to open. Drag to your desktop to download."
+#~ msgstr "Klik for at åbne. Træk til dit skrivebord for at hente."
+
+#~ msgid "Click to retry"
+#~ msgstr "Klik for at prøve igen"
+
+#~ msgid "Click to retry later."
+#~ msgstr "Klik for at prøve senere."
+
+#~ msgid "Click to try again."
+#~ msgstr "Tryk for at prøve igen."
+
+#~ msgid "Click to upload image"
+#~ msgstr "Klik for at overføre billede"
+
+#~ msgid "Close"
+#~ msgstr "Luk"
+
+#~ msgid "Close all"
+#~ msgstr "Luk alle"
+
+#~ msgid "Close document"
+#~ msgstr "Luk dokument"
+
+#, fuzzy
+#~| msgid "Folder view"
+#~ msgid "Close folder view"
+#~ msgstr "Mappevisning"
+
+#~ msgid "Close this reminder"
+#~ msgstr "Luk denne påmindelse"
+
+#~ msgid "Collapse form"
+#~ msgstr "Skjul form"
+
+#~ msgid "Color"
+#~ msgstr "Farve"
+
+#~ msgid "Color quoted lines"
+#~ msgstr "Farv citeret linier"
+
+#~ msgid "Comment"
+#~ msgstr "Kommentar"
+
+#~ msgid "Comments"
+#~ msgstr "Kommentarer"
+
+#~ msgid "Commercial Register"
+#~ msgstr "Kommercielt register"
+
+#~ msgid "Common"
+#~ msgstr "Fælles"
+
+#~ msgid "Common Emoji"
+#~ msgstr "Almindelige Emojis"
+
+#, fuzzy
+#~| msgid "Compact view"
+#~ msgid "Compact"
+#~ msgstr "Kompakt visning"
+
+#~ msgid "Compact view"
+#~ msgstr "Kompakt visning"
+
+#~ msgid "Companies"
+#~ msgstr "Virksomheder"
+
+#~ msgid "Company"
+#~ msgstr "Virksomhed"
+
+#~ msgid "Compose"
+#~ msgstr "Skriv"
+
+#, fuzzy
+#~ msgid "Compose new email"
+#~ msgstr "Skriv ny e-mail"
+
+#~ msgid "Compose new mail"
+#~ msgstr "Skriv ny e-mail"
+
+#~ msgid "Conditions"
+#~ msgstr "Betingelser"
+
+#~ msgid "Confirm"
+#~ msgstr "Bekræft"
+
+#~ msgid "Confirmation"
+#~ msgstr "Bekræftelse"
+
+#~ msgid "Confirmation message"
+#~ msgstr "Bekræftelsesbesked"
+
+#~ msgid "Confirmation status"
+#~ msgstr "Bekræftelsesstatus"
+
+#~ msgid "Confirmed"
+#~ msgstr "Bekræftet"
+
+#~ msgid "Conflicts detected"
+#~ msgstr "Konflikter fundet"
+
+#~ msgid "Conflicts with resources cannot be ignored"
+#~ msgstr "Konflikter med ressourcer kan ikke ignoreres"
+
+#~ msgid "Conflicts:"
+#~ msgstr "Konflikter:"
+
+#~ msgid "Contact"
+#~ msgstr "Kontakt"
+
+#~ msgid "Contact Details"
+#~ msgstr "Kontaktdetaljer"
+
+#, fuzzy
+#~ msgid "Contact pictures"
+#~ msgstr "Kontakter"
+
+#~ msgid "Contacts"
+#~ msgstr "Kontakter"
+
+#~ msgid "Contacts have been copied"
+#~ msgstr "Kontakterne blev kopieret"
+
+#~ msgid "Contacts have been moved"
+#~ msgstr "Kontakterne blev flyttet"
+
+#~ msgid "Contains"
+#~ msgstr "Indeholder"
+
+#~ msgid "Continue"
+#~ msgstr "Fortsæt"
+
+#~ msgid "Conversations"
+#~ msgstr "Samtaler"
+
+#~ msgctxt "app"
+#~ msgid "Conversations"
+#~ msgstr "Samtaler"
+
+#~ msgid "Copy"
+#~ msgstr "Kopiér"
+
+#~ msgctxt "CC"
+#~ msgid "Copy"
+#~ msgid_plural "Copy"
+#~ msgstr[0] "Kopi"
+#~ msgstr[1] "Kopier"
+
+#~ msgid "Copy (CC) to"
+#~ msgstr "Cc til"
+
+#~ msgid "Copy to description"
+#~ msgstr "Kopiér til beskrivelse"
+
+#~ msgid "Costs must be between -%1$d and %1$d."
+#~ msgstr "Omkostninger skal være mellem -%1$d og %1$d."
+
+#~ msgid "Could not get a default folder for this application."
+#~ msgstr "Kunne ikke få et standardkatalog for dette program."
+
+#~ msgid "Could not load all participants for this task."
+#~ msgstr "Kunne ikke indlæse alle deltagere for denne opgave."
+
+#~ msgid "Could not load attachments for this contact."
+#~ msgstr "Vedhæftninger for denne kontakt kunne ikke indlæses."
+
+#~ msgid "Could not load attachments for this task."
+#~ msgstr "Kunne ikke indlæse vedhæftninger for denne opgave."
+
+#~ msgid "Could not load data"
+#~ msgstr "Kunne ikke indlæse data"
+
+#~ msgid "Could not load new Tweets."
+#~ msgstr "Kunne ikke indlæse nye tweets."
+
+#~ msgid "Could not load this list"
+#~ msgstr "Kunne ikke indlæse denne liste"
+
+#~ msgid "Could not save auto forward"
+#~ msgstr "Kunne ikke automatisk videresendelse"
+
+#~ msgid "Could not save settings"
+#~ msgstr "Kunne ikke gemme opsætning"
+
+#~ msgid "Could not save settings."
+#~ msgstr "Kunne ikke gemme opsætning."
+
+#~ msgid ""
+#~ "Could not save settings. There have to be at least one user with "
+#~ "administration rights."
+#~ msgstr ""
+#~ "Opsætningen kunne ikke gemmes. Der skal minimum være én bruger med "
+#~ "administratorrettigheder."
+
+#~ msgid "Could not save vacation notice"
+#~ msgstr "Kunne ikke gemme feriesvar"
+
+#~ msgid "Couldn't load appointment data."
+#~ msgstr "Kunne ikke indlæse aftalens data."
+
+#~ msgid "Couldn't load contact data."
+#~ msgstr "Kunne ikke indlæse kontaktdata."
+
+#~ msgid "Couldn't load file data."
+#~ msgstr "Fildata kunne ikke indlæses."
+
+#~ msgid "Couldn't load folders."
+#~ msgstr "Mapper kunne ikke indlæses."
+
+#~ msgid "Couldn't load subfolders."
+#~ msgstr "Undermapper kunne ikke indlæses."
+
+#~ msgid "Couldn't load that email."
+#~ msgstr "Kunne ikke indlæse den e-mail."
+
+#~ msgid "Couldn't load that task."
+#~ msgstr "Kunne ikke indlæse den opgave."
+
+#~ msgid "Couldn't load your auto forward."
+#~ msgstr "Din automatiske videresendelse kunne ikke indlæses."
+
+#~ msgid "Couldn't load your contact data."
+#~ msgstr "Dine kontaktdata kunne ikke indlæses."
+
+#~ msgid "Couldn't load your mail filters."
+#~ msgstr "Kunne ikke indlæse dine e-mail-filtre."
+
+#~ msgid "Couldn't load your vacation notice."
+#~ msgstr "Kunne ikke indlæse dit feriesvar."
+
+#~ msgid "Country"
+#~ msgstr "Land"
+
+#~ msgid "Create"
+#~ msgstr "Opret"
+
+#~ msgid "Create appointment"
+#~ msgstr "Opret aftale"
+
+#~ msgid "Create contact"
+#~ msgstr "Opret kontakt"
+
+#~ msgid "Create distribution list"
+#~ msgstr "Opret distributionsliste"
+
+#~ msgid "Create list"
+#~ msgstr "Opret liste"
+
+#~ msgid "Create new rule"
+#~ msgstr "Lav ny regel"
+
+#~ msgid "Create new task"
+#~ msgstr "Lav ny opgave"
+
+#~ msgid "Create reminder"
+#~ msgstr "opret påmindelse"
+
+#~ msgid "Create task"
+#~ msgstr "Opret opgave"
+
+#~ msgid "Created"
+#~ msgstr "Oprettet"
+
+#~ msgid ""
+#~ "Created private folder '%1$s' in %2$s and subscribed successfully to "
+#~ "shared folder"
+#~ msgstr ""
+#~ "Oprettede privat mappe \"%1$s\" i %2$s og abonnerede med succes på delt "
+#~ "mappe"
+
+#~ msgctxt "help"
+#~ msgid "Creating Files"
+#~ msgstr "Opret filer"
+
+#~ msgid "Currency"
+#~ msgstr "Valuta"
+
+#~ msgid "Custom"
+#~ msgstr "Brugerdefineret"
+
+#~ msgid "Customize this page"
+#~ msgstr "Tilpas denne side"
+
+#~ msgid "Data imported successfully"
+#~ msgstr "Data importeret med succes"
+
+#~ msgid "Data only partially imported ( %1$s of %2$s records)"
+#~ msgstr "Data kun delvist importeret ( %1$s af %2$s poster)"
+
+#~ msgid "Date"
+#~ msgstr "Dato"
+
+#~ msgid "Date completed"
+#~ msgstr "Gennemført dato"
+
+#~ msgid "Date of birth"
+#~ msgstr "Fødselsdato"
+
+#~ msgid "Day"
+#~ msgstr "Dag"
+
+#~ msgid "Day View"
+#~ msgstr "Dagsvisning"
+
+#~ msgid "Days"
+#~ msgstr "Dage"
+
+#~ msgid "December"
+#~ msgstr "December"
+
+#~ msgid "Decline"
+#~ msgstr "Afslå"
+
+#~ msgid "Declined"
+#~ msgstr "Afslået"
+
+#~ msgid "Default Theme"
+#~ msgstr "Standard tema"
+
+#~ msgid "Default address"
+#~ msgstr "Standard adresse"
+
+#~ msgid "Default app after sign in"
+#~ msgstr "Standard program efter login"
+
+#~ msgid "Default calendar view"
+#~ msgstr "Standard kalendervisning"
+
+#~ msgid "Default reminder"
+#~ msgstr "Standard påmindelse"
+
+#~ msgid "Default sender address"
+#~ msgstr "Standard afsenderadresse"
+
+#~ msgid "Default sender address:"
+#~ msgstr "Standard afsenderadresse:"
+
+#~ msgid "Default view"
+#~ msgstr "Standard visning"
+
+#~ msgid "Deferred"
+#~ msgstr "Udskudt"
+
+#~ msgid "Delete"
+#~ msgstr "Slet"
+
+#~ msgid "Delete account"
+#~ msgstr "Slet konto"
+
+#~ msgid "Delete all accounts"
+#~ msgstr "Slet alle konti"
+
+#~ msgid "Delete appointment"
+#~ msgstr "Slet aftale"
+
+#~ msgid "Delete version"
+#~ msgstr "Slet version"
+
+#~ msgid "Delete whole series"
+#~ msgstr "Slet hele serier"
+
+#~ msgid "Delete widget"
+#~ msgstr "Slet widget"
+
+#~ msgid "Deleting messages on local storage also deletes them on server"
+#~ msgstr "Sletning af lokale beskeder sletter dem også på serveren"
+
+#~ msgid "Department"
+#~ msgstr "Afdeling"
+
+#~ msgid "Descending"
+#~ msgstr "Faldende"
+
+#~ msgid "Description"
+#~ msgstr "Beskrivelse"
+
+#~ msgid "Description has been copied"
+#~ msgstr "Beskrivelsen blev kopieret"
+
+#~ msgid "Details"
+#~ msgstr "Detaljer"
+
+#~ msgid "Direct link: %1$s"
+#~ msgstr "Direkte link: %1$s"
+
+#~ msgid "Disable"
+#~ msgstr "Deaktivér"
+
+#~ msgid "Disable widget"
+#~ msgstr "Deaktivér widget"
+
+#~ msgid "Disabled"
+#~ msgstr "Deaktiveret"
+
+#~ msgid "Discard"
+#~ msgstr "Kassér"
+
+#~ msgid "Discard changes"
+#~ msgstr "Kassér ændringer"
+
+#~ msgid "Display"
+#~ msgstr "Vis"
+
+#~ msgid "Display Name"
+#~ msgstr "Vist navn"
+
+#~ msgid "Display emoticons as graphics in text emails"
+#~ msgstr "Vis smilelys som grafik i tekst e-mails"
+
+#~ msgid "Display name"
+#~ msgstr "Vist navn"
+
+#~ msgid "Display of names"
+#~ msgstr "Visning af navne"
+
+#~ msgid "Distance"
+#~ msgstr "Distance"
+
+#~ msgid "Distribution List"
+#~ msgstr "Distributionsliste"
+
+#~ msgid "Distribution list"
+#~ msgstr "Distributionsliste"
+
+#~ msgid "Distribution list has been saved"
+#~ msgstr "Distributionsliste er blevet gemt"
+
+#~ msgid ""
+#~ "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
+#~ "\" ?"
+#~ msgstr "Vil du virkelig ændre filtypen fra \".%1$s\" til \".%2$s\" ?"
+
+#~ msgid "Do you really want to delete folder \"%s\"?"
+#~ msgstr "Vil du virkelig sletten mappen \"%s\"?"
+
+#~ msgid "Do you really want to delete these items?"
+#~ msgstr "Vil du virkelig slette disse elementer?"
+
+#~ msgid "Do you really want to delete this account?"
+#~ msgstr "Vil du virkelig slette denne konto?"
+
+#~ msgid "Do you really want to delete this contact?"
+#~ msgstr "Vil du virkelig slette denne kontakt?"
+
+#~ msgid "Do you really want to delete this distribution list?"
+#~ msgstr "Vil du virkelig slette denne distributionsliste?"
+
+#~ msgid "Do you really want to delete this file?"
+#~ msgid_plural "Do you really want to delete these files?"
+#~ msgstr[0] "Vil du virkelig slette denne fil?"
+#~ msgstr[1] "Vil du virkelig slette disse filer?"
+
+#~ msgid "Do you really want to delete this task?"
+#~ msgid_plural "Do you really want to delete this tasks?"
+#~ msgstr[0] "Vil du virkelig slette denne opgave?"
+#~ msgstr[1] "Vil du virkelig slette dise opgaver?"
+
+#~ msgid "Do you really want to delete this widget?"
+#~ msgstr "Vil du virkelig slette denne widget?"
+
+#~ msgid "Do you really want to discard this mail?"
+#~ msgstr "Vil du virkelig kassere denne e-mail?"
+
+#~ msgid "Do you really want to discard your changes?"
+#~ msgstr "Vil du virkelig kassere dine ændringer?"
+
+#~ msgid "Do you really want to empty folder \"%s\"?"
+#~ msgstr "Vil du virkelig tømme mappen \"%s\"?"
+
+#~ msgid ""
+#~ "Do you really want to remove the extension \".%1$s\" from your filename?"
+#~ msgstr "Vil du virkelig fjerne filtypen \".%1$s\" fra dit filnavn?"
+
+#, fuzzy
+#~| msgid ""
+#~| "Do you want to edit the whole series or just one appointment within the "
+#~| "series?"
+#~ msgid ""
+#~ "Do you want to confirm the whole series or just one appointment within "
+#~ "the series?"
+#~ msgstr "Vil du redigere hele serien, eller kun én aftale i serien?"
+
+#~ msgid ""
+#~ "Do you want to delete the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Vil du slette hele serien, eller kun én aftale i serien?"
+
+#~ msgid "Do you want to delete this appointment?"
+#~ msgstr "Vil du slette denne aftale?"
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or just one appointment within the "
+#~ "series?"
+#~ msgstr "Vil du redigere hele serien, eller kun én aftale i serien?"
+
+#~ msgid "Do you want to permanently delete this mail?"
+#~ msgid_plural "Do you want to permanently delete these mails?"
+#~ msgstr[0] "Vil du virkelig slette denne e-mail permanent? "
+#~ msgstr[1] "Vil du virkelig slette disse e-mails permanent?"
+
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgctxt "app"
+#~ msgid "Documents"
+#~ msgstr "Dokumenter"
+
+#~ msgid "Done"
+#~ msgstr "Færdig"
+
+#, fuzzy
+#~ msgid "Doubleclick in this row for whole day appointment"
+#~ msgstr "Klik for heldagsaftale"
+
+#~ msgid "Download"
+#~ msgstr "Hent"
+
+#~ msgid "Download install file (for Windows)"
+#~ msgstr "Hent installationsfil (til Windows)"
+
+#~ msgid "Downloads"
+#~ msgstr "Hentninger"
+
+#~ msgid "Drafts folder"
+#~ msgstr "Udkast mappe"
+
+#~ msgid "Drag to reorder widget"
+#~ msgstr "Træk for omarrangere widget"
+
+#~ msgctxt "app"
+#~ msgid "Drive"
+#~ msgstr "Drive"
+
+#~ msgctxt "help"
+#~ msgid "Drive Settings"
+#~ msgstr "Drive-opsætning"
+
+#, fuzzy
+#~ msgid "Drop EML file here for import"
+#~ msgstr "Slip her for at importere denne e-mail"
+
+#~ msgid "Drop here to import this mail"
+#~ msgstr "Slip her for at importere denne e-mail"
+
+#~ msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
+#~ msgstr ""
+#~ "Slip her for at overføre en <b class=\"dndignore\">ny vedhæftning</b>"
+
+#~ msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
+#~ msgstr "Slip her for at overføre en <b class=\"dndignore\">ny fil</b>"
+
+#~ msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
+#~ msgstr "Slip her for at overføre en <b class=\"dndignore\">ny version</b>"
+
+#~ msgid ""
+#~ "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
+#~ msgstr ""
+#~ "Slip her for at overføre en <b class=\"dndignore\">ny version</b> af "
+#~ "\"%1$s\""
+
+#~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
+#~ msgstr "Slip her at overføre en <b class='dndignore'>ny vedhæftning</b>"
+
+#~ msgid "Drop the file anywhere to add attachment"
+#~ msgstr "Slip filen hvorsomhelst for at vedhæfte den"
+
+#~ msgid "Due"
+#~ msgstr "Senest"
+
+#~ msgid "Due %1$s"
+#~ msgstr "Senest %1$s"
+
+#~ msgid "Due date"
+#~ msgstr "Senest dato"
+
+#~ msgid "Due on %1$s"
+#~ msgstr "Forfalder d. %1$s"
+
+#~ msgctxt "help"
+#~ msgid "E-Mail Settings"
+#~ msgstr "E-mail-opsætning"
+
+#~ msgid "EB"
+#~ msgstr "EB"
+
+#~ msgid "Each %s Day"
+#~ msgstr "Hver %s dag"
+
+#~ msgid "Each %s weeks on %s"
+#~ msgstr "Hver %s uge på %s"
+
+#~ msgid "Each %s. %s"
+#~ msgstr "Hver %s. %s"
+
+#~ msgid "Edit"
+#~ msgstr "Redigér"
+
+#~ msgid "Edit Contact"
+#~ msgstr "Redigér kontakt"
+
+#~ msgid "Edit Flickr photo stream"
+#~ msgstr "Redigér flickr billedestrøm"
+
+#~ msgid "Edit Tumblr feed"
+#~ msgstr "Redigér tumblr kilde"
+
+#~ msgid "Edit appointment"
+#~ msgstr "Redigér aftale"
+
+#~ msgid "Edit description"
+#~ msgstr "Redigér beskrivelse"
+
+#~ msgid "Edit document"
+#~ msgstr "Redigér dokument"
+
+#, fuzzy
+#~ msgid "Edit draft"
+#~ msgstr "Redigér kontakt"
+
+#~ msgid "Edit rule"
+#~ msgstr "Redigér regel"
+
+#~ msgid "Edit signature"
+#~ msgstr "Redigér signatur"
+
+#~ msgid "Edit task"
+#~ msgstr "Redigér opgave"
+
+#~ msgid "Edit to set a name."
+#~ msgstr "Redigér for at vælge et navn."
+
+#~ msgid "Editor"
+#~ msgstr "Editor"
+
+#~ msgid "Email"
+#~ msgstr "E-mail"
+
+#~ msgid "Email 1"
+#~ msgstr "E-mail 1"
+
+#~ msgid "Email 1 / Phone number"
+#~ msgstr "E-mailadresse 1 / telefonnummer"
+
+#~ msgid "Email 2"
+#~ msgstr "E-mail 2"
+
+#~ msgid "Email 3"
+#~ msgstr "E-mail 3"
+
+#~ msgid "Email Address:"
+#~ msgstr "E-mail-adresse:"
+
+#~ msgid "Email address"
+#~ msgstr "E-mailadresse"
+
+#~ msgid "Email addresses"
+#~ msgstr "A-mailadresser"
+
+#, fuzzy
+#~ msgid "Email from %1$s: %2$s"
+#~ msgstr "Hvert år den %2$d. %1$s"
+
+#~ msgid "Email notification for Accept/Declined"
+#~ msgstr "E-mailunderretning for accepterede/afslået"
+
+#~ msgid "Email notification for New, Changed, Deleted?"
+#~ msgstr "E-mail påmindelse for ny, ændret, slettet?"
+
+#~ msgid "Email notification for appointment"
+#~ msgstr "E-mail påmindelse for aftale"
+
+#~ msgid "Email notification for appointment creator?"
+#~ msgstr "E-mail påmindelse for aftalens opetter?"
+
+#~ msgid "Email notification for appointment participant?"
+#~ msgstr "E-mail påmindelse for aftalens deltager?"
+
+#~ msgid "Email notification for task"
+#~ msgstr "E-mailunderretning for opgave"
+
+#~ msgid "Email notification for task creator?"
+#~ msgstr "E-mailunderretning for opgavens opretter?"
+
+#~ msgid "Email notification for task participant?"
+#~ msgstr "E-mailunderretning for deltager af opgave?"
+
+#~ msgid ""
+#~ "Emails cannot be put into trash folder while your mail quota is exceeded."
+#~ msgstr ""
+#~ "E-mails kan ikke kommes i skraldemappen mens din e-mail-kvote er "
+#~ "overskredet."
+
+#~ msgid "Employee ID"
+#~ msgstr "Medarbejder ID"
+
+#~ msgid "Employee type"
+#~ msgstr "Medarbejder type"
+
+#~ msgctxt "vgrid"
+#~ msgid "Empty"
+#~ msgstr "Tom"
+
+#~ msgid "Empty folder"
+#~ msgstr "Tøm mappe"
+
+#~ msgid "Empty name and description found."
+#~ msgstr "Tomt navn og tom beskrivelse fundet."
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Tømmer mappe... Dette kan tage nogle sekunder."
+
+#~ msgid "Enable"
+#~ msgstr "Aktivér"
+
+#~ msgid "Enabled"
+#~ msgstr "Aktiveret"
+
+#~ msgid "Enabled for all mail folders"
+#~ msgstr "Aktiveret for alle e-mail-mapper"
+
+#~ msgid "Enabled for inbox only"
+#~ msgstr "Kun aktiveret for indboksen"
+
+#~ msgid "Enabled for the following addresses"
+#~ msgstr "Aktiveret for følgende adresser"
+
+#~ msgid "End"
+#~ msgstr "Slut"
+
+#~ msgid "End of working time"
+#~ msgstr "Slut på arbejdstid"
+
+#~ msgid "Ends on"
+#~ msgstr "Slutter om"
+
+#~ msgid "Enter document title here"
+#~ msgstr "Skriv dokumentets titel her"
+
+#~ msgid "Entire thread"
+#~ msgstr "Hele tråden"
+
+#~ msgid "Envelope"
+#~ msgstr "Kuvert"
+
+#~ msgid "Error"
+#~ msgstr "Fejl"
+
+#~ msgid "Error log"
+#~ msgstr "Fejllog"
+
+#~ msgid "Error:"
+#~ msgstr "Fejl:"
+
+#~ msgid "Errors"
+#~ msgstr "Fejl"
+
+#~ msgid "Estimated costs"
+#~ msgstr "Vurderet omkostninger"
+
+#~ msgid "Estimated duration in minutes"
+#~ msgstr "Anslået varighed i minutter"
+
+#~ msgid "Every %1$d days"
+#~ msgstr "Hver %1$d. dag"
+
+#~ msgid "Every %1$d months on day %2$d"
+#~ msgstr "Den %2$d hver %1$d. måned"
+
+#~ msgid "Every %1$d months on the %2$s %3$s"
+#~ msgstr "Den %2$s %3$s hver %1$d. måned"
+
+#~ msgid "Every %1$d weeks on %2$s"
+#~ msgstr "%2$s hver %1$d. uge"
+
+#~ msgid "Every %1$d weeks on all days"
+#~ msgstr "Alle dage, hver %1$d. uge"
+
+#~ msgid "Every %1$d weeks on work days"
+#~ msgstr "Hver %1$d. uge på arbejdsdage"
+
+#~ msgid "Every %1$d years on %2$s %3$d"
+#~ msgstr "Hvert %1$d. år den %3$d. %2$s"
+
+#~ msgid "Every %1$d years on the %2$s %3$s of %4$d"
+#~ msgstr "Hvert %1$d. år, den %2$s. %3$s i %4$s"
+
+#~ msgid "Every day"
+#~ msgstr "Hver dag"
+
+#~ msgid "Exit Fullscreen"
+#~ msgstr "Luk fuldskærm"
+
+#~ msgid "Expand form"
+#~ msgstr "Udvid form"
+
+#~ msgid "Expand timeframe by one month"
+#~ msgstr "Udvid tidsramme med en måned"
+
+#~ msgid "Expert mode"
+#~ msgstr "Ekspert mode"
+
+#~ msgid "Export"
+#~ msgstr "Eksport"
+
+#~ msgid "Export folder"
+#~ msgstr "Eksportér mappe"
+
+#~ msgid "Extended view"
+#~ msgstr "Udvidet visning"
+
+#~ msgctxt "help"
+#~ msgid "External E-Mail Accounts"
+#~ msgstr "Eksterne e-mail konti"
+
+#~ msgid "External contact"
+#~ msgstr "Ekstern kontakt"
+
+#~ msgid ""
+#~ "External images have been blocked to protect you against potential spam!"
+#~ msgstr ""
+#~ "Eksterne billeder er blevet blokkeret, for at beskytte dig imod spam!"
+
+#~ msgid "External link"
+#~ msgstr "Eksternt link"
+
+#~ msgid "External participants"
+#~ msgstr "Eksterne deltagere"
+
+#~ msgid "Face"
+#~ msgstr "Ansigt"
+
+#~ msgid "Facebook"
+#~ msgstr "Facebook"
+
+#~ msgid "Facebook reported an error:"
+#~ msgstr "Facebook raporterede en fejl:"
+
+#~ msgid "Failed to add. Maybe the vCard attachment is invalid."
+#~ msgstr ""
+#~ "Fejl ved tilføjelse. Måske er det vedhæftede \"vCard\"-visitkort ugyldigt."
+
+#~ msgid "Failed to connect."
+#~ msgstr "Kunne ikke forbinde."
+
+#~ msgid "Failed to recover accounts"
+#~ msgstr "Konti kunne ikke gendannes"
+
+#~ msgid "Failed to save distribution list."
+#~ msgstr "Kunne ikke gemme distributionsliste."
+
+#~ msgid "Failed to sign in"
+#~ msgstr "Kunne ikke logge ind"
+
+#~ msgid ""
+#~ "Failed to start application. Maybe you have connection problems. Please "
+#~ "try again."
+#~ msgstr ""
+#~ "Start af programmet fejlede. Måske har du forbindelsesproblemer. Prøv "
+#~ "venligst igen."
+
+#~ msgid ""
+#~ "Failed to update confirmation status; most probably the appointment has "
+#~ "been deleted."
+#~ msgstr ""
+#~ "Kunne ikke opdatere bekræftelsesstatus. Aftalen er sandsynligvis blevet "
+#~ "slettet."
+
+#~ msgid ""
+#~ "Failed to update confirmation status; most probably the task has been "
+#~ "deleted."
+#~ msgstr ""
+#~ "Kunne ikke opdatere bekræftelsesstatus. Opgaven er sandsynligvis blevet "
+#~ "slettet."
+
+#~ msgid "Favorite"
+#~ msgstr "Favorit"
+
+#~ msgid "Favorited"
+#~ msgstr "Farvoritiserede"
+
+#~ msgid "Fax"
+#~ msgstr "Fax"
+
+#~ msgid "Fax (Home)"
+#~ msgstr "Fax (hjemme)"
+
+#~ msgid "Fax (alt)"
+#~ msgstr "Fax (alternativ)"
+
+#~ msgid "Fax (business)"
+#~ msgstr "Fax (firma)"
+
+#~ msgid "Fax (other)"
+#~ msgstr "Fax (anden)"
+
+#~ msgid "Fax (private)"
+#~ msgstr "Fax (privat)"
+
+#~ msgid "February"
+#~ msgstr "Februar"
+
+#~ msgid "Feed URL"
+#~ msgstr "Kilde URL"
+
+#~ msgid "Feeling • Decoration"
+#~ msgstr "Følelser • Decoration"
+
+#~ msgid "File"
+#~ msgstr "Fil"
+
+#~ msgid "File Details"
+#~ msgstr "Fildetaljer"
+
+#~ msgid "File name"
+#~ msgstr "Filnavn"
+
+#~ msgid "File names must not be empty"
+#~ msgstr "Filnavne må ikke være tomme"
+
+#~ msgid "File names must not contain slashes"
+#~ msgstr "Filnavne må ikke indeholde skråstreger"
+
+#~ msgid "File quota"
+#~ msgstr "Filkvote"
+
+#~ msgid "File: %1$s"
+#~ msgstr "Fil: %1$s"
+
+#~ msgid "Files"
+#~ msgstr "Filer"
+
+#~ msgctxt "app"
+#~ msgid "Files"
+#~ msgstr "Filer"
+
+#~ msgid "Files View"
+#~ msgstr "Filvisning"
+
+#~ msgid "Files have been copied"
+#~ msgstr "Filerne er blevet kopieret"
+
+#~ msgid "Files have been moved"
+#~ msgstr "Filerne er blevet flyttet"
+
+#~ msgid "Find a free time"
+#~ msgstr "Find en ledig tid"
+
+#~ msgid "Finish tour"
+#~ msgstr "Afslut tur"
+
+#~ msgid "First name"
+#~ msgstr "Fornavn"
+
+#~ msgid "First name Last name"
+#~ msgstr "Fornavn Efternavn"
+
+#~ msgid "Fit to screen size"
+#~ msgstr "Tilpas til skærmstørrelse"
+
+#~ msgid "Fit to screen width"
+#~ msgstr "Tilpas til skærmbredde"
+
+#~ msgid "Flag mail with"
+#~ msgstr "Flag e-mail med"
+
+#~ msgid "Flickr"
+#~ msgstr "Flickr"
+
+#~ msgid "Folder"
+#~ msgstr "Mappe"
+
+#~ msgid "Folder actions"
+#~ msgstr "Mappehandlinger"
+
+#~ msgid "Folder name"
+#~ msgstr "Mappenavn"
+
+#~ msgid "Folder names must not be empty"
+#~ msgstr "Mappenavne må ikke være tomme"
+
+#~ msgid "Folder names must not contain slashes"
+#~ msgstr "Mappenavne må ikke indeholde skråstreger"
+
+#~ msgid "Folder permissions"
+#~ msgstr "Mappetilladelser"
+
+#~ msgid "Folder type"
+#~ msgstr "Mappetype"
+
+#~ msgid "Folder view"
+#~ msgstr "Mappevisning"
+
+#~ msgid ""
+#~ "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden "
+#~ "files and folders\" to access this folder again."
+#~ msgstr ""
+#~ "En mappe med navnet \"%1$s\" vil være skjult.  Slå \"Vis skjulte filer og "
+#~ "mapper\" til for at kunne finde denne mappe igen."
+
+#~ msgid "Folder-specific actions"
+#~ msgstr "Specifikke mappehandlinger"
+
+#~ msgid "Folders"
+#~ msgstr "Mapper"
+
+#~ msgid "Follow"
+#~ msgstr "Følg"
+
+#~ msgid "Following"
+#~ msgstr "Følger"
+
+#~ msgid "Food"
+#~ msgstr "Mad"
+
+#, fuzzy
+#~ msgid "For best results, please use"
+#~ msgstr "For det bedste resultat, brug venligst "
+
+#~ msgid ""
+#~ "For security reasons, all account passwords are encrypted with your "
+#~ "primary account password. If you change your primary password, your "
+#~ "external accounts might stop working. In this case, you can use your old "
+#~ "password to recover all account passwords:"
+#~ msgstr ""
+#~ "Af sikkerhedshensyn er alle adgangskoder krypterede med din kontos "
+#~ "primære adgangskode. Ændrer du din primære adgangskode, kan dine eksterne "
+#~ "konti stoppe med at virke. Hvis det sker, så kan du bruge din gamle "
+#~ "adgangskode, til at gendanne dine kontis adgangskoder:"
+
+#~ msgid "Forgot your password?"
+#~ msgstr "Glemt adgangskode?"
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Format emails as"
+#~ msgstr "Formatér e-mails som"
+
+#~ msgid "Format emails as:"
+#~ msgstr "Formatér e-mails som:"
+
+#~ msgid "Forward"
+#~ msgstr "Videresend"
+
+#~ msgid "Forward all incoming emails to this address"
+#~ msgstr "Videresend alle indkomne e-mails til denne adresse"
+
+#~ msgid "Forward emails as"
+#~ msgstr "Videresend e-mails som"
+
+#~ msgid "Forward emails as:"
+#~ msgstr "Videresend e-mails som:"
+
+#~ msgid "Free"
+#~ msgstr "Ledig"
+
+#~ msgid "Friday"
+#~ msgstr "Fredag"
+
+#~ msgid "From"
+#~ msgstr "Fra"
+
+#~ msgid "Fullscreen"
+#~ msgstr "Fuldskærm"
+
+#~ msgid "Furigana for company"
+#~ msgstr "Furigana for virksomhed"
+
+#~ msgid "Furigana for first name"
+#~ msgstr "Furigana for fornavn"
+
+#~ msgid "Furigana for last name"
+#~ msgstr "Furigana for efternavn"
+
+#~ msgid "GB"
+#~ msgstr "GB"
+
+#~ msgid "Get free upgrade"
+#~ msgstr "Få en gratis opgradering"
+
+#~ msgid "Go to page"
+#~ msgstr "Gå til side"
+
+#~ msgid "Good evening"
+#~ msgstr "God aften"
+
+#~ msgid "Good evening, %s"
+#~ msgstr "God aften %s"
+
+#~ msgid "Good morning"
+#~ msgstr "God morgen"
+
+#~ msgid "Good morning, %s"
+#~ msgstr "God morgen %s"
+
+#~ msgid "Gray"
+#~ msgstr "Grå"
+
+#~ msgid "Green"
+#~ msgstr "Grøn"
+
+#~ msgid "Group"
+#~ msgstr "Gruppe"
+
+#~ msgid "Guest"
+#~ msgstr "Gæst"
+
+#~ msgid "Guidance"
+#~ msgstr "Vejledning"
+
+#~ msgid "HTML"
+#~ msgstr "HTML"
+
+#~ msgid "HTML and plain text"
+#~ msgstr "HTML og ren tekst"
+
+#~ msgid "Header"
+#~ msgstr "Hoved"
+
+#~ msgid "Hello"
+#~ msgstr "Hej"
+
+#~ msgid "Hello %s"
+#~ msgstr "Hej %s"
+
+#~ msgid "Hello World"
+#~ msgstr "Hej verden"
+
+#~ msgid "Help"
+#~ msgstr "Hjælp"
+
+#~ msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
+#~ msgstr "Hej!<br><br>%1$s deler en udgivelse med dig:<br>%2$s"
+
+#, fuzzy
+#~ msgid "Hidden folders"
+#~ msgstr "Tilføj mappe"
+
+#~ msgid "Hide"
+#~ msgstr "Skjul"
+
+#~ msgid "Hide QR code"
+#~ msgstr "Skjul QR-kode"
+
+#~ msgctxt "plural"
+#~ msgid "Hide attachment"
+#~ msgid_plural "Hide attachments"
+#~ msgstr[0] "Skjul vedhæftning"
+#~ msgstr[1] "Skjul vedhæftninger"
+
+#~ msgid "Hide comments"
+#~ msgstr "Skjul kommentare"
+
+#~ msgid "Hide details"
+#~ msgstr "Skjul detaljer"
+
+#~ msgid "Hide request body"
+#~ msgstr "Skjul forespørgslens krop"
+
+#~ msgid "Hide side panel"
+#~ msgstr "Skjul sidepanel"
+
+#~ msgid "Hide stack trace"
+#~ msgstr "Skjul stakspor"
+
+#~ msgid "High"
+#~ msgstr "Høj"
+
+#~ msgid "High priority"
+#~ msgstr "Høj prioritet"
+
+#~ msgid "Hobby"
+#~ msgstr "Jobby"
+
+#~ msgid "Home Address"
+#~ msgstr "Hjemmeadresse"
+
+#~ msgid "Home address"
+#~ msgstr "Hjemmeadresse"
+
+#~ msgid "Host"
+#~ msgstr "Vært"
+
+#~ msgid "Hours"
+#~ msgstr "Timer"
+
+#~ msgid "How does this work?"
+#~ msgstr "Hvordan virker dette?"
+
+#~ msgid "IMAP folder subscription"
+#~ msgstr "IMAP mappeabonnement"
+
+#~ msgid "IP phone"
+#~ msgstr "IP telefon"
+
+#~ msgid "Icons"
+#~ msgstr "Ikoner"
+
+#~ msgid ""
+#~ "If you change the password, you will be signed out. Please ensure that "
+#~ "everything is closed and saved."
+#~ msgstr ""
+#~ "Hvis du ændrer adgangskoden, bliver du logget ud. Sørg venligst for at "
+#~ "alt er gemt og lukket."
+
+#~ msgid ""
+#~ "If you spot a free time, just select this area. To do this, move the "
+#~ "cursor to the start time, hold the mouse button, and <b>drag the mouse</"
+#~ "b> to the end time."
+#~ msgstr ""
+#~ "Hvis du ser en ledig tid, så bare marker dette område. For at gøre det "
+#~ "flyttes musen til starttiden, museknappen holdes nede, og <b>musen "
+#~ "trækkes</b> til sluttiden."
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorér"
+
+#~ msgid "Ignore conflicts"
+#~ msgstr "Ignorér konflikter"
+
+#~ msgid ""
+#~ "Ignore existing events. Helpful to import public holiday calendars, for "
+#~ "example."
+#~ msgstr ""
+#~ "Ignorér eksisterende begivenheder. For eksempel praktisk når man "
+#~ "importerer helligdagskalendre."
+
+#~ msgid "Image 1"
+#~ msgstr "Billede 1"
+
+#~ msgid "Import"
+#~ msgstr "Import"
+
+#~ msgid "Import into"
+#~ msgstr "Impoter ind i"
+
+#~ msgid "Import signatures"
+#~ msgstr "Impotér signature"
+
+#~ msgid "In %1$d days"
+#~ msgstr "Om %1$d dage"
+
+#~ msgid "In progress"
+#~ msgstr "Undervejs"
+
+#~ msgid "Inbox"
+#~ msgstr "Indbakke"
+
+#~ msgid "Include distribution lists"
+#~ msgstr "Inkludér distributionslister"
+
+#~ msgid "Incoming Notification Mails"
+#~ msgstr "Indkomne e-mailunderretninger"
+
+#~ msgid "Inconsistent dates"
+#~ msgstr "Inkonsistente datoer"
+
+#~ msgid "Info"
+#~ msgstr "Info"
+
+#~ msgid "Inline"
+#~ msgstr "Indlejret"
+
+#, fuzzy
+#~ msgid "Inline menu %1$s"
+#~ msgstr "Logget ind som %1$s"
+
+#~ msgid "Insert"
+#~ msgstr "Indsæt"
+
+#~ msgid "Insert inline image"
+#~ msgstr "Indsæt billede"
+
+#~ msgid "Insert the original email text to a reply"
+#~ msgstr "Indsæt den originale e-mails tekst i et svar"
+
+#~ msgid ""
+#~ "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
+#~ "Screen'%4$s"
+#~ msgstr ""
+#~ "Installér denne web-app på din %1$s: Tap %2$s og så %3$s'Tilføj til Home "
+#~ "Screen'%4$s"
+
+#~ msgid "Instant Messenger 1"
+#~ msgstr "Messenger 1"
+
+#~ msgid "Instant Messenger 2"
+#~ msgstr "Messenger 2"
+
+#~ msgid "Invalid data"
+#~ msgstr "Ugyldige data"
+
+#~ msgid "Invitations"
+#~ msgstr "Invitationer"
+
+#~ msgid "Invite to appointment"
+#~ msgstr "Invitér til aftale"
+
+#~ msgid "Invite to new appointment"
+#~ msgstr "Invitér til ny aftale"
+
+#~ msgid "Is bigger than"
+#~ msgstr "Er større end"
+
+#~ msgid "Is exactly"
+#~ msgstr "Er præcis"
+
+#~ msgid "Is smaller than"
+#~ msgstr "Er mindre end"
+
+#~ msgid "Items"
+#~ msgstr "Elementer"
+
+#~ msgid "Items without a file can not be downloaded."
+#~ msgstr "Elementer uden en fil kan ikke hentes."
+
+#~ msgid "Items without a file can not be opened."
+#~ msgstr "Elementer uden en fil kan ikke åbnes."
+
+#~ msgid "January"
+#~ msgstr "Januar"
+
+#~ msgid "Japanese Carrier"
+#~ msgstr "Japansk udbyder"
+
+#~ msgid "Job"
+#~ msgstr "Job"
+
+#~ msgid "Job description"
+#~ msgstr "Jobbeskrivelse"
+
+#~ msgid "July"
+#~ msgstr "Juli"
+
+#~ msgid "June"
+#~ msgstr "Juni"
+
+#~ msgid "Just disable widget"
+#~ msgstr "Deaktivér kun widget"
+
+#~ msgid "KB"
+#~ msgstr "KB"
+
+#~ msgid "Keep"
+#~ msgstr "Behold"
+
+#~ msgid "Label"
+#~ msgstr "Etiket"
+
+#~ msgid "Language"
+#~ msgstr "Sprog"
+
+#~ msgid "Language-specific default"
+#~ msgstr "Sprogspecifik standard"
+
+#~ msgid "Languages"
+#~ msgstr "Sprog"
+
+#~ msgid "Last Week"
+#~ msgstr "Sidste uge"
+
+#~ msgid "Last modified"
+#~ msgstr "Sidst ændret"
+
+#~ msgid "Last name"
+#~ msgstr "Efternavn"
+
+#~ msgid "Last name, First name"
+#~ msgstr "Efternavn, Fornavn"
+
+#~ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+#~ msgstr "Starter drop-ned liste. Tryk [enter] for at gå til hop-ned."
+
+#~ msgid "Letters • Symbols"
+#~ msgstr "Bogstaver • Symboler"
+
+#~ msgid "Life"
+#~ msgstr "Liv"
+
+#~ msgid "Light blue"
+#~ msgstr "Lyseblå"
+
+#~ msgid "Light green"
+#~ msgstr "Lysegrøn"
+
+#~ msgid "Liked a link: %s"
+#~ msgstr "Syntes om et link: %s"
+
+#, fuzzy
+#~ msgid "Line wrap when sending text mails after"
+#~ msgstr "Linieombryd når tekst e-mails sendes efter "
+
+#, fuzzy
+#~ msgid "Line wrap when sending text mails after how much characters"
+#~ msgstr "Linieombryd når tekst e-mails sendes efter "
+
+#~ msgid "Line wrap when sending text mails after: "
+#~ msgstr "Linieombryd når tekst e-mails sendes efter: "
+
+#~ msgid "Link"
+#~ msgstr "Link"
+
+#~ msgid "LinkedIn"
+#~ msgstr "LinkedIn"
+
+#~ msgid "LinkedIn Network Updates"
+#~ msgstr "LinkedIn netværksopdateringer"
+
+#~ msgid "LinkedIn reported an error:"
+#~ msgstr "LinkedIn gav en fejl:"
+
+#~ msgid "Links"
+#~ msgstr "Links"
+
+#~ msgid "List"
+#~ msgstr "Liste"
+
+#~ msgid "List name"
+#~ msgstr "Listenavn"
+
+#~ msgid "Load Error"
+#~ msgstr "Indlæsningsfejl"
+
+#~ msgid "Location"
+#~ msgstr "Placering"
+
+#~ msgid "Lock"
+#~ msgstr "Lås"
+
+#~ msgid "Login"
+#~ msgstr "Brugernavn"
+
+#~ msgid "Login must not be empty."
+#~ msgstr "Brugernavn må ikke være tomt."
+
+#~ msgid "Logout now"
+#~ msgstr "Log ud nu"
+
+#~ msgid "Loss"
+#~ msgstr "Tab"
+
+#~ msgid "Loss: %1$s %"
+#~ msgstr "Tab %1$s %"
+
+#~ msgid "Low"
+#~ msgstr "Lav"
+
+#~ msgid "Low priority"
+#~ msgstr "Lav prioritet"
+
+#~ msgid "MB"
+#~ msgstr "MB"
+
+#~ msgid "Mail"
+#~ msgstr "E-mail"
+
+#~ msgctxt "app"
+#~ msgid "Mail"
+#~ msgstr "E-mail"
+
+#~ msgid "Mail Details"
+#~ msgstr "Mail-detaljer"
+
+#~ msgid "Mail Filter"
+#~ msgstr "E-mail-filter"
+
+#~ msgid "Mail Thread Details"
+#~ msgstr "Posttrådsdetaljer"
+
+#~ msgid "Mail account"
+#~ msgstr "E-mail konto"
+
+#~ msgid "Mail and Messaging"
+#~ msgstr "E-mail og messenger"
+
+#~ msgid "Mail and Social Accounts"
+#~ msgstr "E-mail og sociale konti"
+
+#~ msgid "Mail count quota"
+#~ msgstr "E-mail mængdekvote"
+
+#~ msgid "Mail has been copied"
+#~ msgstr "E-mail blev kopieret"
+
+#~ msgid "Mail has been imported"
+#~ msgstr "E-mail er blevet importeret"
+
+#~ msgid "Mail has been moved"
+#~ msgstr "E-mail blev flyttet"
+
+#~ msgid "Mail has empty subject. Send it anyway?"
+#~ msgstr "E-mail'ens emne er tomt. Send alligevel?"
+
+#~ msgid "Mail has no recipient."
+#~ msgstr "E-mail'en har ingen modtager."
+
+#~ msgid "Mail quota"
+#~ msgstr "E-mailkvote"
+
+#~ msgid "Mail quota exceeded"
+#~ msgstr "E-mail-kvote overskredet"
+
+#~ msgid "Mail reminder"
+#~ msgstr "E-mail påmindelse"
+
+#~ msgid "Mail reminder for"
+#~ msgstr "E-mail påmindelse for"
+
+#~ msgid "Mail saved as draft"
+#~ msgstr "E-mail gemt som kladde"
+
+#~ msgid "Mail source"
+#~ msgstr "E-mail kilde"
+
+#~ msgid "Mail text"
+#~ msgstr "E-mail tekst"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr "E-mail blev ikke importeret. Kan kun læse \".eml\"-filer."
+
+#, fuzzy
+#~ msgid "Mail was not imported. Only .eml files are supported."
+#~ msgstr "E-mail blev ikke importeret. Kan kun læse \".eml\"-filer."
+
+#~ msgid "Mailfilter created"
+#~ msgstr "E-mail-filter oprettet"
+
+#~ msgid "Mailfilter updated"
+#~ msgstr "E-mail-filter opdateret"
+
+#~ msgid "Mailing list"
+#~ msgstr "E-mail-liste"
+
+#~ msgid "Mails have been copied"
+#~ msgstr "E-mail's blev kopieret"
+
+#~ msgid "Mails have been moved"
+#~ msgstr "E-mail's blev flyttet"
+
+#~ msgid "Mails per hour (%)"
+#~ msgstr "E-mails pr. time (%)"
+
+#~ msgid "Mails per week-day (%)"
+#~ msgstr "E-mails pr. ugedag (%)"
+
+#~ msgid "Make this the current version"
+#~ msgstr "Gør denne til nuværende version"
+
+#~ msgid "Manage applications"
+#~ msgstr "Håndtér programmer"
+
+#~ msgid "Manager"
+#~ msgstr "Leder"
+
+#~ msgctxt "help"
+#~ msgid "Managing E-Mail messages"
+#~ msgstr "Håndtér e-mail-beskeder"
+
+#~ msgctxt "help"
+#~ msgid "Managing Files"
+#~ msgstr "Håndtér filer"
+
+#~ msgid "Manual"
+#~ msgstr "Manuelt"
+
+#~ msgid "March"
+#~ msgstr "Marts"
+
+#~ msgid "Marital status"
+#~ msgstr "Civilstand"
+
+#~ msgid "Mark all day appointments as free"
+#~ msgstr "Markér alle dagens aftaler som frie"
+
+#~ msgid "Mark all mails as read"
+#~ msgstr "Markér alle e-mails som læst"
+
+#~ msgid "Mark as distributionlist"
+#~ msgstr "Markér som distributionsliste"
+
+#, fuzzy
+#~ msgid "Mark as done"
+#~ msgstr "Markér som spam"
+
+#, fuzzy
+#~ msgid "Mark as read"
+#~ msgstr "Markér som læst"
+
+#~ msgid "Mark as spam"
+#~ msgstr "Markér som spam"
+
+#, fuzzy
+#~ msgid "Mark as unread"
+#~ msgstr "Markér som ulæst"
+
+#~ msgid "Mark mail as"
+#~ msgstr "Markér e-mail som"
+
+#~ msgid "Mark read"
+#~ msgstr "Markér som læst"
+
+#~ msgid "Mark unread"
+#~ msgstr "Markér som ulæst"
+
+#~ msgid "Matches"
+#~ msgstr "Matcher"
+
+#~ msgid "May"
+#~ msgstr "Maj"
+
+#~ msgid "Medium"
+#~ msgstr "Medium"
+
+#, fuzzy
+#~ msgid "Medium priority"
+#~ msgstr "Høj prioritet"
+
+#~ msgid "Members"
+#~ msgstr "Medlemmer"
+
+#~ msgid "Messaging"
+#~ msgstr "Messenger"
+
+#~ msgid "Messenger"
+#~ msgstr "Messenger"
+
+#~ msgid "Middle name"
+#~ msgstr "Mellemnavn"
+
+#~ msgid "Minimize"
+#~ msgstr "Minimér"
+
+#~ msgid "Minutes"
+#~ msgstr "Minutter"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Diverse"
+
+#~ msgid "Mobile"
+#~ msgstr "Mobil"
+
+#, fuzzy
+#~ msgid "Mobile device settings:"
+#~ msgstr "Mappeindstillinger"
+
+#~ msgid "Model is incomplete."
+#~ msgstr "Modellen er ikke færdig."
+
+#~ msgid "Modified"
+#~ msgstr "Ændret"
+
+#~ msgid "Monday"
+#~ msgstr "Mandag"
+
+#~ msgid "Month"
+#~ msgstr "Måned"
+
+#~ msgid "Month View"
+#~ msgstr "Månedsvisning"
+
+#~ msgid "Monthly on day %1$d"
+#~ msgstr "Den %1$d. hver måned"
+
+#~ msgid "Monthly on the %1$s %2$s"
+#~ msgstr "Den %1$s %2$s hver måned"
+
+#~ msgid "Months"
+#~ msgstr "Måneder"
+
+#~ msgid "More"
+#~ msgstr "Mere"
+
+#~ msgid "More zoom settings"
+#~ msgstr "Flere indstillinger for zoom"
+
+#~ msgid "Move"
+#~ msgstr "Flyt"
+
+#~ msgid "Move folder"
+#~ msgstr "Flyt mappe"
+
+#~ msgid "Move to folder"
+#~ msgstr "Flyt til mappe"
+
+#~ msgid "Moving mails ... This may take a few seconds."
+#~ msgstr "Flytter e-mails... Dette kan tage nogle sekunder."
+
+#~ msgid "My contact data"
+#~ msgstr "Mine kontaktdata"
+
+#~ msgid "My latest files"
+#~ msgstr "Mine seneste filer"
+
+#~ msgid "My password"
+#~ msgstr "Min adgangskode"
+
+#~ msgid "Name"
+#~ msgstr "Navn"
+
+#~ msgid "Name already taken"
+#~ msgstr "Navn allerede taget"
+
+#~ msgid "Names and email addresses"
+#~ msgstr "Navne og e-mailadresser"
+
+#~ msgid "Nature"
+#~ msgstr "Natur"
+
+#~ msgid "Never"
+#~ msgstr "Aldrig"
+
+#~ msgid "New Folder"
+#~ msgstr "Ny mappe"
+
+#~ msgid "New Mail"
+#~ msgstr "Ny e-email"
+
+#~ msgid "New Mail from %1$s %2$s. Press [enter] to open"
+#~ msgstr "Ny e-mail fra %1$s %2$s. Tryk [enter] for at åbne"
+
+#~ msgid "New Mails"
+#~ msgstr "Nye e-mails"
+
+#~ msgid "New appointment"
+#~ msgstr "Ny aftale"
+
+#~ msgid "New contact"
+#~ msgstr "Ny kontakt"
+
+#~ msgid "New folder"
+#~ msgstr "Ny mappe"
+
+#~ msgid "New password"
+#~ msgstr "Ny adgangskode"
+
+#~ msgid "New private folder"
+#~ msgstr "Ny privat mappe"
+
+#~ msgid "New public folder"
+#~ msgstr "Ny offentlig mappe"
+
+#~ msgid "New rule"
+#~ msgstr "Ny regel"
+
+#~ msgid "New subfolder"
+#~ msgstr "Ny undermappe"
+
+#~ msgid "New subscription"
+#~ msgstr "Nyt abonnement"
+
+#~ msgid "Next"
+#~ msgstr "Næste"
+
+#~ msgid "Next Day"
+#~ msgstr "Næste dag"
+
+#~ msgid "Next Week"
+#~ msgstr "Næste uge"
+
+#~ msgid "Next birthdays"
+#~ msgstr "Næste fødselsdage"
+
+#~ msgid "Next step"
+#~ msgstr "Næste skridt"
+
+#~ msgid "Nickname"
+#~ msgstr "Kaldenavn"
+
+#~ msgid "No"
+#~ msgstr "Nej"
+
+#~ msgid "No RSS feeds found."
+#~ msgstr "Ingen RSS-kilder fundet."
+
+#~ msgid "No Tweets yet."
+#~ msgstr "Endnu ingen tweets."
+
+#, fuzzy
+#~ msgid "No appointments found for \"%s\""
+#~ msgstr "Ingen e-mails findet for \"%s\""
+
+#, fuzzy
+#~ msgid "No appointments found until %s"
+#~ msgstr "Aftaledetaljer"
+
+#~ msgid "No birthdays within the next %1$d weeks"
+#~ msgstr "Ingen fødselsdage i de næste %1$d uger"
+
+#~ msgid ""
+#~ "No connection to server. Please check your internet connection and retry."
+#~ msgstr ""
+#~ "Ingen forbindelse til serveren. Tjek venligst din internetforbindelse og "
+#~ "prøv igen."
+
+#~ msgid "No downloads available"
+#~ msgstr "Ingen hentninger tilgængelige"
+
+#~ msgid "No elements selected"
+#~ msgstr "Ingen elementer valgt"
+
+#~ msgid "No errors"
+#~ msgstr "Ingen fejl"
+
+#~ msgid "No file selected for upload."
+#~ msgstr "Ingen fil valgt for overførelse."
+
+#~ msgid "No files have been changed recently"
+#~ msgstr "Ingen filer er blevet ændret for nylig"
+
+#, fuzzy
+#~| msgid "No RSS feeds found."
+#~ msgid "No items found"
+#~ msgstr "Ingen RSS-kilder fundet."
+
+#~ msgid "No lost requests"
+#~ msgstr "Ingen tabte forespørgsler"
+
+#~ msgid "No mails"
+#~ msgstr "Ingen e-mails"
+
+#~ msgid "No mails found for \"%s\""
+#~ msgstr "Ingen e-mails findet for \"%s\""
+
+#~ msgid "No mails in this folder"
+#~ msgstr "Ingen e-mails i denne mappe"
+
+#~ msgid "No mails in your inbox"
+#~ msgstr "Ingen e-mails i din indbakke"
+
+#~ msgid "No matching templates on this Server"
+#~ msgstr "Ingen matchende skabeloner på denne server"
+
+#, fuzzy
+#~ msgid "No message selected"
+#~ msgstr "Ingen elementer valgt"
+
+#~ msgid "No notifications"
+#~ msgstr "Ingen påmindelser"
+
+#~ msgid "No preview available"
+#~ msgstr "Forhåndsvisning ikke tilgængelig"
+
+#, fuzzy
+#~ msgid "No priority"
+#~ msgstr "Lav prioritet"
+
+#~ msgid "No recipients"
+#~ msgstr "Ingen modtagere"
+
+#~ msgid "No reminder"
+#~ msgstr "Ingen påmindelse"
+
+#~ msgid "No signature"
+#~ msgstr "Ingen signatur"
+
+#~ msgid "No slow requests"
+#~ msgstr "Ingen langsomme forespørgsler"
+
+#~ msgid "No subject"
+#~ msgstr "Intet emne"
+
+#~ msgid "No title."
+#~ msgstr "Ingen titel."
+
+#~ msgid "No wall posts yet."
+#~ msgstr "Ingen poster på væggen endnu."
+
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgid "Not spam"
+#~ msgstr "Ikke spam"
+
+#~ msgid "Not started"
+#~ msgstr "Ikke startet"
+
+#~ msgid "Not yet confirmed"
+#~ msgstr "Endnu ikke bekræftet"
+
+#~ msgid "Note"
+#~ msgstr "Note"
+
+#~ msgid "Note: One contact is not shown due to missing phone numbers"
+#~ msgid_plural ""
+#~ "Note: %1$d contacts are not shown due to missing phone numbers"
+#~ msgstr[0] ""
+#~ "Bemærk: Én kontakt er ikke vist som følge af manglende telefonnumre"
+#~ msgstr[1] ""
+#~ "Bemærk: %1$d kontakter er ikke vist som følge af manglende telefonnumre"
+
+#~ msgid ""
+#~ "Note: Refreshing this subscription will replace the calendar content with "
+#~ "the external content. Changes you have made inside appsuite will be "
+#~ "overwritten"
+#~ msgstr ""
+#~ "Note: Opdatering af dette abonnement vil erstatte kalenderens indhold med "
+#~ "det eksterne indhold. Ændringer som du har lavet i app-suiten, vil blive "
+#~ "overskrevet"
+
+#~ msgid "Note: The vCard format cannot contain distribution lists"
+#~ msgstr "Bemærk: \"vCard\"-formatet kan ikke indeholde distributionslister"
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "Note: Dette abonnement vil erstatte kalenderens indhold med eksternt "
+#~ "indhold. Derfor skal du lave en ny mappe til dette abonnement."
+
+#~ msgid "Notify all participants by email."
+#~ msgstr "Underret alle deltagere pr. e-mail."
+
+#~ msgid "November"
+#~ msgstr "November"
+
+#~ msgid "Number of days between vacation notices to the same sender"
+#~ msgstr "Antal af dage imellem feriesvar bliver sendt til samme afsender"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Object permissions"
+#~ msgstr "Objekttilladelser"
+
+#~ msgid "Objects"
+#~ msgstr "Objekter"
+
+#~ msgid "October"
+#~ msgstr "Oktober"
+
+#~ msgid "Off"
+#~ msgstr "Fra"
+
+#~ msgid "Offline"
+#~ msgstr "Offline"
+
+#~ msgid "Offline mode"
+#~ msgstr "Offline mode"
+
+#~ msgid "Ok"
+#~ msgstr "OK"
+
+#~ msgid "On %s %s each %s. months"
+#~ msgstr "På %s %s hver %s. måned"
+
+#~ msgid "On %s %s every month"
+#~ msgstr "På %s %s hver måned"
+
+#~ msgid "On %s %s in %s"
+#~ msgstr "På %s %s i %s"
+
+#~ msgid "On %s. day every %s. month"
+#~ msgstr "På %s. dag hver %s. måned"
+
+#~ msgid "On %s. day every month"
+#~ msgstr "På %s. dag hver måned"
+
+#~ msgid "On every new notification"
+#~ msgstr "På alle nye påmindelser"
+
+#~ msgid "On new notifications except mails"
+#~ msgstr "På nye påmindelser undtagen e-mail"
+
+#~ msgid "On work days"
+#~ msgstr "På arbejdsdage"
+
+#~ msgid ""
+#~ "One or more attached files exceed the size limit per email. Therefore, "
+#~ "the files are not sent as attachments but kept on the server. The email "
+#~ "you have sent just contains links to download these files."
+#~ msgstr ""
+#~ "En eller flere vedhæftede filer overskrider størrelsen pr. e-mail. Derfor "
+#~ "bliver filerne ikke sendt som vedhæftninger, men gemt på serveren. E-"
+#~ "mail'en du lige har sendt, indeholder et eller flere links til serveren, "
+#~ "hvor filerne kan hentes fra."
+
+#~ msgid "Only showing items related to folder \"%1$s\""
+#~ msgstr "Viser kun elementer relaterede til mappen \"%1$s\""
+
+#~ msgid "Open"
+#~ msgstr "Åbn"
+
+#~ msgid "Open external link"
+#~ msgstr "Åbn eksternt link"
+
+#, fuzzy
+#~| msgid "Folder view"
+#~ msgid "Open folder view"
+#~ msgstr "Mappevisning"
+
+#~ msgid "Open in browser"
+#~ msgstr "Åbn i browser"
+
+#~ msgid "Open in new tab"
+#~ msgstr "Åbn i ny fane"
+
+#, fuzzy
+#~ msgid "Open on LinkedIn"
+#~ msgstr "LinkedIn"
+
+#, fuzzy
+#~| msgid "All messages"
+#~ msgid "Open/close all messages"
+#~ msgstr "Alle beskeder"
+
+#~ msgid "Optional 01"
+#~ msgstr "Valgfri 01"
+
+#~ msgid "Optional 02"
+#~ msgstr "Valgfri 02"
+
+#~ msgid "Optional 03"
+#~ msgstr "Valgfri 03"
+
+#~ msgid "Optional 04"
+#~ msgstr "Valgfri 04"
+
+#~ msgid "Optional 05"
+#~ msgstr "Valgfri 05"
+
+#~ msgid "Optional 06"
+#~ msgstr "Valgfri 06"
+
+#~ msgid "Optional 07"
+#~ msgstr "Valgfri 07"
+
+#~ msgid "Optional 08"
+#~ msgstr "Valgfri 08"
+
+#~ msgid "Optional 09"
+#~ msgstr "Valgfri 09"
+
+#~ msgid "Optional 10"
+#~ msgstr "Valgfri 10"
+
+#~ msgid "Optional 11"
+#~ msgstr "Valgfri 11"
+
+#~ msgid "Optional 12"
+#~ msgstr "Valgfri 12"
+
+#~ msgid "Optional 13"
+#~ msgstr "Valgfri 13"
+
+#~ msgid "Optional 14"
+#~ msgstr "Valgfri 14"
+
+#~ msgid "Optional 15"
+#~ msgstr "Valgfri 15"
+
+#~ msgid "Optional 16"
+#~ msgstr "Valgfri 16"
+
+#~ msgid "Optional 17"
+#~ msgstr "Valgfri 17"
+
+#~ msgid "Optional 18"
+#~ msgstr "Valgfri 18"
+
+#~ msgid "Optional 19"
+#~ msgstr "Valgfri 19"
+
+#~ msgid "Optional 20"
+#~ msgstr "Valgfri 20"
+
+#~ msgid "Options"
+#~ msgstr "Indstillinger"
+
+#~ msgid "Orange"
+#~ msgstr "Orange"
+
+#~ msgid "Organizer"
+#~ msgstr "Organisér"
+
+#~ msgid "Other Address"
+#~ msgstr "Anden adresse"
+
+#~ msgid "Other address"
+#~ msgstr "Anden adresse"
+
+#~ msgid "Outgoing server settings (SMTP)"
+#~ msgstr "Udgående serverindstillinger (SMTP)"
+
+#~ msgid "Overdue"
+#~ msgstr "Over tid"
+
+#~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
+#~ msgstr "Opgave som er over tid. %1$s %2$s. Tryk [enter] for at åbne"
+
+#~ msgid "Overdue Tasks"
+#~ msgstr "Opgaver over tid"
+
+#~ msgid "Owner"
+#~ msgstr "Ejer"
+
+#~ msgid "PB"
+#~ msgstr "PB"
+
+#~ msgid "Page %1$d of %2$d"
+#~ msgstr "Side %1$d af %2$d"
+
+#~ msgid "Page number"
+#~ msgstr "Sidenummer"
+
+#~ msgid "Pager"
+#~ msgstr "Personsøger"
+
+#~ msgid "Participants"
+#~ msgstr "Deltagere"
+
+#~ msgid "Password"
+#~ msgstr "Adgangskode"
+
+#, fuzzy
+#~ msgid "Password length must be between %1$d and %2$d characters."
+#~ msgstr "Omkostninger skal være mellem -%1$d og %1$d."
+
+#~ msgid "People"
+#~ msgstr "Mennesker"
+
+#~ msgid "Permanently remove deleted emails"
+#~ msgstr "Fjen slettede e-mails permanent"
+
+#~ msgid "Permanently remove deleted emails?"
+#~ msgstr "Fjern slettede e-mails permanent?"
+
+#~ msgid "Permissions"
+#~ msgstr "Tilladelser"
+
+#~ msgid "Personal"
+#~ msgstr "Personlig"
+
+#~ msgid "Personal information"
+#~ msgstr "Personlig information"
+
+#~ msgid "Phone"
+#~ msgstr "Telefon"
+
+#~ msgid "Phone & fax numbers"
+#~ msgstr "Telefon- og faxnumre"
+
+#~ msgid "Phone (assistant)"
+#~ msgstr "Telefon (assistent)"
+
+#~ msgid "Phone (business alt)"
+#~ msgstr "Telefon (arbejde, alternativt)"
+
+#~ msgid "Phone (business)"
+#~ msgstr "Telefon (arbejde)"
+
+#~ msgid "Phone (car)"
+#~ msgstr "Telefon (bil)"
+
+#~ msgid "Phone (company)"
+#~ msgstr "Telefon (firma)"
+
+#~ msgid "Phone (home alt)"
+#~ msgstr "Telefon (hjemme, alternativ)"
+
+#~ msgid "Phone (home)"
+#~ msgstr "Telefon (hjemme)"
+
+#~ msgid "Phone (other)"
+#~ msgstr "Telefon (anden)"
+
+#~ msgid "Phone (private)"
+#~ msgstr "Telefon (privat)"
+
+#~ msgid "Phone alt"
+#~ msgstr "Telefon, alternativ"
+
+#~ msgid "Phone numbers"
+#~ msgstr "Telefonnumre"
+
+#~ msgid "Pick a time here"
+#~ msgstr "Vælg en tid her"
+
+#~ msgid "Pink"
+#~ msgstr "Lyserød"
+
+#~ msgid "Places"
+#~ msgstr "Steder"
+
+#~ msgid "Plain text"
+#~ msgstr "Ren tekst"
+
+#~ msgid "Play audio files"
+#~ msgstr "Afspil lydfiler"
+
+#~ msgid "Play video files"
+#~ msgstr "Afspil videofiler"
+
+#~ msgid "Please choose a sentence below."
+#~ msgstr "Vælg venligst en sætning nedenunder."
+
+#~ msgid "Please enter a correct number."
+#~ msgstr "Indtast venligst et korrekt nummer."
+
+#~ msgid "Please enter a date in the past"
+#~ msgstr "Skriv venligst en dato i fortiden"
+
+#~ msgid "Please enter a description"
+#~ msgstr "Indtast venligst en beskrivelse"
+
+#~ msgid "Please enter a description."
+#~ msgstr "Indtast venligst en beskrivelse."
+
+#~ msgid "Please enter a feed URL."
+#~ msgstr "Indtast venligst en kilde-URL."
+
+#~ msgid "Please enter a search query"
+#~ msgstr "Indtast venligst en søgeforespørgsel"
+
+#~ msgid "Please enter a valid date"
+#~ msgstr "Skriv venligst en gyldig dato"
+
+#~ msgid "Please enter a valid date."
+#~ msgstr "Indtast venligst en gyldig dato."
+
+#~ msgid "Please enter a valid email address"
+#~ msgstr "Skriv venligst en gyldig e-mailadresse"
+
+#~ msgid "Please enter a valid email address or phone number"
+#~ msgstr ""
+#~ "Skriv venligst en gyldig e-mailadresse eller et gyldigt telefonnummer"
+
+#~ msgid "Please enter a valid name"
+#~ msgstr "Indtast venligst et gyldigt navn"
+
+#, fuzzy
+#~ msgid "Please enter a valid number"
+#~ msgstr "Indtast venligst et gyldigt navn"
+
+#~ msgid "Please enter a valid object"
+#~ msgstr "Skriv venligst et gyldigt objekt"
+
+#~ msgid "Please enter a valid phone number. Allowed characters are: %1$s"
+#~ msgstr "Skriv venligst et gyldigt telefonnummer. Tilladte tegn: %1$s"
+
+#~ msgid "Please enter a value"
+#~ msgstr "Skriv venligst en værdi"
+
+#~ msgid "Please enter an blog url."
+#~ msgstr "Indtast venligst en blog-URL."
+
+#~ msgid "Please enter correct password"
+#~ msgstr "Indtast venligst korrekt adgangskode"
+
+#~ msgid "Please enter the following data: %1$s"
+#~ msgstr "Indtast venligst følgende data: %1$s"
+
+#~ msgid "Please enter value between 0 and 100."
+#~ msgstr "Indtast venligst værdien imellem 0 og 100."
+
+#~ msgid "Please enter your credentials."
+#~ msgstr "Indtast venligst dine loginoplysninger."
+
+#~ msgid "Please enter your password."
+#~ msgstr "Indtast venligst din adgangskode."
+
+#~ msgid ""
+#~ "Please note, changing or removing the file extension will cause problems "
+#~ "when viewing or editing."
+#~ msgstr ""
+#~ "Bemærk venligst at en ændring eller fjernelse af filtypen, giver "
+#~ "problemer ved visning eller redigering."
+
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr ""
+#~ "Angiv venligst den gamle adgangskode, så kontoadgangskoderne kan "
+#~ "gendannes."
+
+#~ msgid "Please select a file to import"
+#~ msgstr "Vælg venligst en fil at importere"
+
+#~ msgid "Please select a file to insert"
+#~ msgstr "Vælg venligst en fil at indsætte"
+
+#~ msgid "Please select a valid iCal File to import"
+#~ msgstr "Vælg venligst en gyldig \"iCal\"-fil at importere"
+
+#~ msgid "Please select a valid image File to insert"
+#~ msgstr "Vælg venligst en gyldig billedfil at indsætte"
+
+#~ msgid "Please sign in again to continue"
+#~ msgstr "Log venligst ind igen for at fortsætte"
+
+#, fuzzy
+#~ msgid "Please specify these missing variables:"
+#~ msgstr "Angiv venligst disse manglende variable: "
+
+#~ msgid "Please update your browser."
+#~ msgstr "Opdater venligst din browser."
+
+#~ msgctxt "app"
+#~ msgid "Portal"
+#~ msgstr "Portal"
+
+#~ msgid "Portal Widgets"
+#~ msgstr "Portal-widgets"
+
+#~ msgid "Portal settings"
+#~ msgstr "Portalopsætning"
+
+#~ msgid "Position"
+#~ msgstr "Stilling"
+
+#~ msgid "Postcode"
+#~ msgstr "Postnummer"
+
+#~ msgid "Press [enter] to close this alertbox."
+#~ msgstr "Tast [enter] for at lukke denne advarsel."
+
+#, fuzzy
+#~ msgid "Press [enter] to jump to"
+#~ msgstr "Tast [enter] for at gå til"
+
+#~ msgid "Press [enter] to jump to complete list of Birthdays."
+#~ msgstr "Tast [enter] for at gå til den komplette liste med fødselsdage."
+
+#~ msgid "Press [enter] to jump to the facebook stream."
+#~ msgstr "Tast [enter] for at gå til Facebook-strømmen."
+
+#~ msgid "Press [enter] to jump to the flicker stream."
+#~ msgstr "Tast [enter] for at gå til flicker-strømmen."
+
+#~ msgid "Press [enter] to jump to the linkedin stream."
+#~ msgstr "Tast [enter] for at gå til LinkedIn-strømmen."
+
+#~ msgid "Press [enter] to jump to the rss stream."
+#~ msgstr "Tast [enter] for at gå til RSS-strømmen."
+
+#~ msgid "Press [enter] to jump to the tumblr feed."
+#~ msgstr "Tast [enter] for at gå til tumblr-strømmen."
+
+#~ msgid "Press [enter] to jump to the twitter feed."
+#~ msgstr "Tast [enter] for at gå til Twitter-strømmen."
+
+#~ msgid "Press [enter] to select a time when you want to be reminded again"
+#~ msgstr "Tryk [enter] for at vælge et tidspunkt, hvor du gerne påmindes igen"
+
+#~ msgid "Press to hide all appointment invitations."
+#~ msgstr "Klik for at skjule alle invitationer."
+
+#~ msgid "Press to hide all appointment reminders."
+#~ msgstr "Klik for at skjule alle aftalepåmindelser."
+
+#~ msgid "Press to hide all notifications for new mails."
+#~ msgstr "Klik for at skjule alle påmindelser om ny e-mail."
+
+#~ msgid "Press to hide all notifications for overdue tasks."
+#~ msgstr "Klik for at skjule alle påmindelser om forsinkede opgaver."
+
+#~ msgid "Press to hide all task invitations."
+#~ msgstr "Klik for at skjule alle opgaveinvitationer."
+
+#~ msgid "Press to hide all task reminders."
+#~ msgstr "Klik for at skjule alle opgavepåmindelser."
+
+#~ msgid "Preview"
+#~ msgstr "Forhåndsvisning"
+
+#, fuzzy
+#~ msgid "Preview pane"
+#~ msgstr "Forhåndsvisning"
+
+#~ msgid "Previous"
+#~ msgstr "Foregående"
+
+#~ msgid "Previous Day"
+#~ msgstr "Foregående dag"
+
+#~ msgid "Previous Week"
+#~ msgstr "Foregående uge"
+
+#~ msgid "Primary account"
+#~ msgstr "Primær konto"
+
+#~ msgid "Print"
+#~ msgstr "Udskriv"
+
+#~ msgid "Print tasks"
+#~ msgstr "Udskriv opgaver"
+
+#~ msgid "Printout"
+#~ msgstr "Udskrivning"
+
+#~ msgid "Priority"
+#~ msgstr "Prioritet"
+
+#~ msgid "Privacy Notice"
+#~ msgstr "Persondatapolitik"
+
+#~ msgid "Private"
+#~ msgstr "Privat"
+
+#~ msgid "Process subsequent rules"
+#~ msgstr "Afvikl efterfølgende regler"
+
+#~ msgid "Profession"
+#~ msgstr "Profession"
+
+#~ msgid "Progress"
+#~ msgstr "Fremgang"
+
+#~ msgid "Progress %1$s %"
+#~ msgstr "Fremgang %1$s %"
+
+#~ msgid "Progress in %"
+#~ msgstr "Fremgang i %"
+
+#~ msgid "Progress must be a valid number between 0 and 100"
+#~ msgstr "Fremgang skal være et gyldigt nummer imellem 0 og 100"
+
+#~ msgid "Properties"
+#~ msgstr "Egenskaber"
+
+#~ msgid "Public"
+#~ msgstr "Offentlig"
+
+#~ msgid "Publication"
+#~ msgstr "Udgivelse"
+
+#~ msgid "Publication has been added"
+#~ msgstr "Udgivelse blev tilføjet"
+
+#~ msgid "Publication must have a site."
+#~ msgstr "Udgivelsen skal have en side."
+
+#~ msgid "Publication must have a target."
+#~ msgstr "Udgivelsen skal have et mål."
+
+#~ msgid "Publications"
+#~ msgstr "Udgivelser"
+
+#~ msgid "Publications and Subscriptions"
+#~ msgstr "Udgivelser og abonnementer"
+
+#~ msgid "Publications must have a name"
+#~ msgstr "Ugivelser skal have et navn"
+
+#~ msgid "Publish"
+#~ msgstr "Udgiv"
+
+#~ msgid "Publish folder"
+#~ msgstr "Udgiv mappe"
+
+#~ msgid "Publish item"
+#~ msgstr "Udgiv element"
+
+#~ msgid "Purchase confirmation"
+#~ msgstr "Købsbekræftelse"
+
+#~ msgid "Purple"
+#~ msgstr "Lilla"
+
+#~ msgid "Quit"
+#~ msgstr "Afslut"
+
+#~ msgid "Quota"
+#~ msgstr "Kvote"
+
+#~ msgid "RSS Feed"
+#~ msgstr "RSS kilde"
+
+#~ msgid "RSS Feeds"
+#~ msgstr "RSS-kilder"
+
+#~ msgid "Read article on tumblr.com"
+#~ msgstr "Læs artikler op tumblr.com"
+
+#~ msgid "Reauthorize"
+#~ msgstr "Re-godkend"
+
+#~ msgid "Received mails"
+#~ msgstr "Modtaget e-mails"
+
+#~ msgid "Recent activities"
+#~ msgstr "Nylige aktiviteter"
+
+#~ msgid "Recently changed files"
+#~ msgstr "Nyligt ændrede filer"
+
+#~ msgid "Recently used"
+#~ msgstr "Nyligt brugt"
+
+#~ msgid "Recipient"
+#~ msgstr "Modtager"
+
+#~ msgid "Recover"
+#~ msgstr "Gendan"
+
+#~ msgid "Recover passwords"
+#~ msgstr "Gendan adgangskoder"
+
+#, fuzzy
+#~ msgid "Recurring tasks need a valid due date."
+#~ msgstr "Gentagende opgaver skal have en gyldig slutdato."
+
+#~ msgid "Recurring tasks need a valid end date."
+#~ msgstr "Gentagende opgaver skal have en gyldig slutdato."
+
+#~ msgid "Recurring tasks need a valid start date."
+#~ msgstr "Gentagende opgaver skal have en gyldig startdato."
+
+#~ msgid "Red"
+#~ msgstr "Rød"
+
+#~ msgid "Redirect to"
+#~ msgstr "Omdirigér til"
+
+#~ msgid "Refresh"
+#~ msgstr "Opdatér"
+
+#~ msgid "Refresh interval"
+#~ msgstr "Opdateringsfrekvens"
+
+#~ msgid "Refresh rate in minutes:"
+#~ msgstr "Opdateringsfrekvens i minutter:"
+
+#~ msgid "Regex"
+#~ msgstr "Regulært udtryk"
+
+#~ msgid "Reject changes"
+#~ msgstr "Afvis ændringer"
+
+#~ msgid "Reject with reason"
+#~ msgstr "Afvis med grunden"
+
+#~ msgid "Related articles"
+#~ msgstr "Relaterede artikler"
+
+#~ msgid "Reload statistics"
+#~ msgstr "Genindlæs statistikker"
+
+#~ msgid "Relogin"
+#~ msgstr "Log ind igen"
+
+#~ msgid "Remind me"
+#~ msgstr "Påmind mig"
+
+#~ msgid "Remind me again"
+#~ msgstr "Påmind mig igen"
+
+#~ msgid "Remind me again "
+#~ msgstr "Påmind mig igen"
+
+#~ msgid "Reminder"
+#~ msgstr "Påmindelse"
+
+#~ msgid "Reminder date"
+#~ msgstr "Påmindelsesdato"
+
+#~ msgid "Reminder date %1$s"
+#~ msgstr "Påmindelsesdato %1$s"
+
+#~ msgid "Reminder has been created"
+#~ msgstr "Påmindelse blev oprettet"
+
+#~ msgid "Remove attachment"
+#~ msgstr "Fjern vedhæftning"
+
+#~ msgid "Remove copy from server after retrieving a message"
+#~ msgstr "Fjern serverens kopi efter en besked er blevet hentet"
+
+#~ msgid "Remove from recipient list"
+#~ msgstr "Fjern fra modtagerliste"
+
+#~ msgid "Rename"
+#~ msgstr "Omdøb"
+
+#~ msgid "Rename folder"
+#~ msgstr "Omdøb mappe"
+
+#~ msgid "Repeat"
+#~ msgstr "Gentag"
+
+#~ msgid "Repeat new password"
+#~ msgstr "Gentag ny adgangskode"
+
+#~ msgid "Reply"
+#~ msgstr "Svar"
+
+#~ msgid "Reply All"
+#~ msgstr "Svar alle"
+
+#~ msgid "Reply all"
+#~ msgstr "Svar alle"
+
+#~ msgid "Reply to"
+#~ msgstr "Svar til"
+
+#, fuzzy
+#~ msgid "Reply to all recipients"
+#~ msgstr "Alle modtagere"
+
+#, fuzzy
+#~ msgid "Reply to sender"
+#~ msgstr "Svar til"
+
+#~ msgid "Reserved"
+#~ msgstr "Reserveret"
+
+#~ msgid "Reset this list"
+#~ msgstr "Nulstil denne liste"
+
+#~ msgid "Resource"
+#~ msgstr "Ressource"
+
+#~ msgid "Resource group"
+#~ msgstr "Ressourcegruppe"
+
+#~ msgid "Resources"
+#~ msgstr "Ressourcer"
+
+#~ msgid "Restore applications"
+#~ msgstr "Gendan programmer"
+
+#~ msgid "Retry"
+#~ msgstr "Prøv igen"
+
+#, fuzzy
+#~ msgid "Return Receipt"
+#~ msgstr "Leveringskvittering"
+
+#~ msgid "Retweet"
+#~ msgstr "Retweet"
+
+#~ msgid "Retweet this to your followers?"
+#~ msgstr "Tweet dette igen til dine følgere?"
+
+#~ msgid "Retweeted"
+#~ msgstr "Retweet"
+
+#~ msgid "Retweeted by %s"
+#~ msgstr "Retweeted af %s"
+
+#~ msgid "Review your purchases"
+#~ msgstr "Se dine indkøb igennem"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "i aften"
+
+#~ msgid "Room number"
+#~ msgstr "Værelsesnummer"
+
+#~ msgid "Rule name"
+#~ msgstr "Navn på regel"
+
+#~ msgid "Running applications"
+#~ msgstr "Kør programmer"
+
+#~ msgid "Sales Volume"
+#~ msgstr "Salgsmængde"
+
+#~ msgid "Saturday"
+#~ msgstr "Lørdag"
+
+#~ msgid "Save"
+#~ msgstr "Gem"
+
+#~ msgid "Save as distribution list"
+#~ msgstr "Gem som distributionsliste"
+
+#~ msgid "Save as draft"
+#~ msgstr "Gem som kladde"
+
+#~ msgid "Save as file"
+#~ msgstr "Gem som fil"
+
+#, fuzzy
+#~ msgid "Save attachment"
+#~ msgstr "Fjern vedhæftning"
+
+#~ msgid "Save changes"
+#~ msgstr "Gem ændringer"
+
+#~ msgid "Save in file store"
+#~ msgstr "Gem i fillager"
+
+#, fuzzy
+#~ msgid "Save to Drive"
+#~ msgstr "Gem på Drive"
+
+#~ msgid "Saved in"
+#~ msgstr "Gemt i"
+
+#, fuzzy
+#~ msgid "Saved mail attachment"
+#~ msgstr "Fjern vedhæftning"
+
+#, fuzzy
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Gemmer vedhæftning på Drive"
+#~ msgstr[1] "Gemmer vedhæftninger på Drive"
+
+#~ msgid "Scheduling"
+#~ msgstr "Planlægning"
+
+#~ msgctxt "app"
+#~ msgid "Scheduling"
+#~ msgstr "Planlægning"
+
+#~ msgid "Search"
+#~ msgstr "Søg"
+
+#~ msgid "Search for items"
+#~ msgstr "Søg efter elementer"
+
+#~ msgid "Search here"
+#~ msgstr "Søg her"
+
+#, fuzzy
+#~ msgid "Search in"
+#~ msgstr "Søgte i"
+
+#~ msgid "Searched for: %1$s"
+#~ msgstr "Søgte efter: %1$s"
+
+#~ msgid "Searched in"
+#~ msgstr "Søgte i"
+
+#~ msgid "Searched in all folders"
+#~ msgstr "Søgte i alle mapper"
+
+#~ msgid "Select"
+#~ msgstr "Vælg"
+
+#~ msgid "Select all"
+#~ msgstr "Vælg alle"
+
+#~ msgid "Select file"
+#~ msgstr "Vælg fil"
+
+#~ msgid "Select folder"
+#~ msgstr "Vælg mappe"
+
+#~ msgid "Select none"
+#~ msgstr "Vælg ingen"
+
+#~ msgid "Selection Details"
+#~ msgstr "Udvalgsdetaljer"
+
+#~ msgid "Send"
+#~ msgstr "Send"
+
+#, fuzzy
+#~ msgid "Send a return receipt"
+#~ msgstr "Send en leveringskvittering"
+
+#~ msgid "Send as internal link"
+#~ msgstr "Send som internt link"
+
+#~ msgid "Send as mail"
+#~ msgstr "Send som e-mail"
+
+#~ msgid "Send as vCard"
+#~ msgstr "Send som vCard"
+
+#~ msgid "Send by mail"
+#~ msgstr "Send med e-mail"
+
+#~ msgid "Send mail"
+#~ msgstr "Send e-mail"
+
+#~ msgid "Send mail to all participants"
+#~ msgstr "Send e-mail til alle deltagere"
+
+#~ msgid "Send new mail"
+#~ msgstr "Send ny e-mail"
+
+#~ msgid "Send vacation notice during this time only"
+#~ msgstr "Send kun feriesvar i dette tidsrum"
+
+#~ msgid "Sender"
+#~ msgstr "Sender"
+
+#~ msgid "Sender/From"
+#~ msgstr "Sender/Fra"
+
+#~ msgid "Sent folder"
+#~ msgstr "Sendt mappe"
+
+#~ msgid "Sent from %s via mobile"
+#~ msgstr "Sendt fra %s via mobil"
+
+#~ msgid "Sent mails"
+#~ msgstr "Sendte e-mails"
+
+#~ msgid "September"
+#~ msgstr "September"
+
+#~ msgid "Series"
+#~ msgstr "Serie"
+
+#~ msgid "Server name"
+#~ msgstr "Servernavn"
+
+#~ msgid "Server port"
+#~ msgstr "Serverport"
+
+#~ msgid "Server settings"
+#~ msgstr "Serverindstillinger"
+
+#~ msgid "Server type"
+#~ msgstr "Servertype"
+
+#~ msgid "Server unreachable"
+#~ msgstr "Kan ikke tilgå server"
+
+#~ msgid "Server version"
+#~ msgstr "Server udgave"
+
+#~ msgid "Set as default"
+#~ msgstr "Sæt som standard"
+
+#~ msgid "Settings"
+#~ msgstr "Opsætning"
+
+#~ msgctxt "app"
+#~ msgid "Settings"
+#~ msgstr "Opsætning"
+
+#~ msgid "Share"
+#~ msgstr "Del"
+
+#~ msgid "Share link by email"
+#~ msgstr "Del link med e-mail"
+
+#~ msgid "Share this file"
+#~ msgstr "Del denne fil"
+
+#~ msgid "Share this folder"
+#~ msgstr "Del denne mappe"
+
+#~ msgid "Shared"
+#~ msgstr "Delt"
+
+#~ msgid "Shared Appointments"
+#~ msgstr "Delte aftaler"
+
+#~ msgid "Shopping cart"
+#~ msgstr "Indkøbsvogn"
+
+#, fuzzy
+#~ msgid "Show"
+#~ msgstr "Vis som"
+
+#~ msgid "Show QR code"
+#~ msgstr "Vis QR-kode"
+
+#~ msgid "Show all %1$d messages in inbox"
+#~ msgstr "Vis alle %1$d beskeder i indbakke"
+
+#~ msgid "Show all items"
+#~ msgstr "Vis alle elementer"
+
+#~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
+#~ msgstr ""
+#~ "Vis alle e-mails. Bemærk: E-mails er ikke længere samlet i samtaler."
+
+#~ msgid "Show all my appointments from all calendars"
+#~ msgstr "Vis alle mine aftaler fra alle kalendere"
+
+#, fuzzy
+#~ msgid "Show appointment details"
+#~ msgstr "Vis aftale"
+
+#~ msgctxt "plural"
+#~ msgid "Show attachment"
+#~ msgid_plural "Show attachments"
+#~ msgstr[0] "Vis vedhæftning"
+#~ msgstr[1] "Vis vedhæftninger"
+
+#~ msgid "Show comments"
+#~ msgstr "Vis kommentare"
+
+#~ msgid "Show conflicts"
+#~ msgstr "Vis konflikter"
+
+#~ msgid "Show declined appointments"
+#~ msgstr "Vis afslået aftaler"
+
+#~ msgid "Show details"
+#~ msgstr "Vis detaljer"
+
+#~ msgid "Show done tasks"
+#~ msgstr "Vis færdige opgaver"
+
+#~ msgid "Show file"
+#~ msgstr "Vis fil"
+
+#~ msgid "Show first page"
+#~ msgstr "Vis første side"
+
+#~ msgid "Show hidden files and folders"
+#~ msgstr "Vis skjulte filer og mapper"
+
+#~ msgid "Show images"
+#~ msgstr "Vis billeder"
+
+#~ msgid "Show inbox"
+#~ msgstr "Vis indbakke"
+
+#~ msgid "Show internal link"
+#~ msgstr "Vis internt link"
+
+#~ msgid "Show last page"
+#~ msgstr "Vis sidste side"
+
+#~ msgid "Show legal information"
+#~ msgstr "Vis juridsik information"
+
+#~ msgid "Show less"
+#~ msgstr "Vis mindre"
+
+#~ msgid "Show more"
+#~ msgstr "Vis mere"
+
+#~ msgid "Show next page"
+#~ msgstr "Vis næste side"
+
+#~ msgid "Show original message"
+#~ msgstr "Vis oprindelig besked"
+
+#~ msgid "Show original publication"
+#~ msgstr "Vis original udgivelse"
+
+#~ msgid "Show previous page"
+#~ msgstr "Vis forgående side"
+
+#, fuzzy
+#~ msgid "Show quoted text"
+#~ msgstr "Under citeret tekst"
+
+#~ msgid "Show request body"
+#~ msgstr "Vis forespørgslens krop"
+
+#~ msgid "Show side panel"
+#~ msgstr "Vis sidepanel"
+
+#~ msgid "Show stack trace"
+#~ msgstr "Vis stakspor"
+
+#~ msgid "Show strack trace"
+#~ msgstr "Vis strack sporing"
+
+#~ msgid "Show task"
+#~ msgstr "Vis opgave"
+
+#, fuzzy
+#~ msgid "Show task details"
+#~ msgstr "Vis detaljer"
+
+#~ msgid "Show version history"
+#~ msgstr "Vis versionshistorik"
+
+#, fuzzy
+#~ msgid "Show/hide folder"
+#~ msgstr "Flyt mappe"
+
+#~ msgid "Shown as"
+#~ msgstr "Vis som"
+
+#~ msgid "Sign in"
+#~ msgstr "Log ind"
+
+#~ msgid "Sign out"
+#~ msgstr "Log ud"
+
+#~ msgid "Sign out now"
+#~ msgstr "Log ud nu"
+
+#~ msgid "Signature"
+#~ msgstr "Signature"
+
+#~ msgid "Signature name"
+#~ msgstr "Signaturs navn"
+
+#~ msgid "Signature position"
+#~ msgstr "Siganturs position"
+
+#~ msgid "Signature text"
+#~ msgstr "Siganturs tekst"
+
+#~ msgid "Signatures"
+#~ msgstr "Signature"
+
+#~ msgid "Signed in as %1$s"
+#~ msgstr "Logget ind som %1$s"
+
+#~ msgid "Size"
+#~ msgstr "Størrelse"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Størrelse (bytes)"
+
+#~ msgid "Skip this step"
+#~ msgstr "Spring dette skridt over"
+
+#~ msgid "Slow requests"
+#~ msgstr "Langsomme forespørgsler"
+
+#~ msgid ""
+#~ "Social accounts are only used to download contact and/or calendar data"
+#~ msgstr ""
+#~ "Sociale konti bruges kun til at hente kontakt- og/eller kalenderdata"
+
+#~ msgid "SoftBank"
+#~ msgstr "SoftBank"
+
+#~ msgid "Some fields contain invalid data"
+#~ msgstr "Nogle felter indeholder ugyldige data"
+
+#~ msgid "Someone shared a file with you"
+#~ msgstr "Der var en der delte en fil med dig"
+
+#~ msgid ""
+#~ "Someone shared a folder with you. Would you like to subscribe those %1$s?"
+#~ msgstr ""
+#~ "Der var en der delte en mappe med dig. Vil du gerne abonnere på %1$s?"
+
+#~ msgid "Something went wrong reauthorizing the %s account."
+#~ msgstr "Der gik noget galt med at re-godkende denne %s konto."
+
+#~ msgid "Something went wrong reauthorizing the account."
+#~ msgstr "Der gik noget galt under re-godkendelsen af kontoen."
+
+#~ msgid "Something went wrong saving your changes."
+#~ msgstr "Der gik noget galt, da dine indstillinger skulle gemmes."
+
+#~ msgid "Sorry, this page is not available at the moment."
+#~ msgstr "Undskyld. Denne side er ikke tilgængelig lige nu."
+
+#~ msgid ""
+#~ "Sorry, we cannot help you here. Your provider needs to obtain a key from "
+#~ "LinkedIn with the permission to do read messages."
+#~ msgstr ""
+#~ "Beklager, men vi kan ikke hjælpe dig her. Din udbyder skal skaffe en "
+#~ "nøgle fra LinkedIn, med tilladelse til at læse beskeder."
+
+#~ msgid "Sort options"
+#~ msgstr "Indstillinger for sortering"
+
+#~ msgid "Source"
+#~ msgstr "Kilde"
+
+#~ msgid "Spam folder"
+#~ msgstr "Spam mappe"
+
+#~ msgid "Spouse's name"
+#~ msgstr "Ægtefælle"
+
+#~ msgid "Start"
+#~ msgstr "Start"
+
+#~ msgid "Start date"
+#~ msgstr "Startdato"
+
+#~ msgid "Start of working time"
+#~ msgstr "Start på arbejdstid"
+
+#~ msgid "Starts on"
+#~ msgstr "Starter på"
+
+#~ msgid "State"
+#~ msgstr "Stat"
+
+#~ msgid "Status"
+#~ msgstr "Status"
+
+#~ msgid "Stay signed in"
+#~ msgstr "Forbliv logget ind"
+
+#~ msgid "Street"
+#~ msgstr "Gade"
+
+#~ msgid "Subject"
+#~ msgstr "Emne"
+
+#~ msgid "Subscribe"
+#~ msgstr "Abonnér"
+
+#~ msgid "Subscribe IMAP folders"
+#~ msgstr "Tilmeld IMAP mapper"
+
+#~ msgid ""
+#~ "Subscribing to items that are not delivered by another Open-Xchange "
+#~ "Server (i.e. OXMF) may take some time. Example: Importing 100 contacts "
+#~ "from Xing takes about 5 minutes. We are continually improving this "
+#~ "functionality. Future releases will work significantly faster."
+#~ msgstr ""
+#~ "Abonnement på ting som ikke leveres af en anden Open-Xchange-server (som "
+#~ "fx OXMF) kan tage et stykke tid. Eksempel: Importering af 100 kontakter "
+#~ "fra Xing tager omkring 5 minutter. Vi arbejder løbende på at forbedre "
+#~ "denne funktionalitet. Fremtidige udgivelser vil være betragteligt "
+#~ "hurtigere."
+
+#~ msgid "Subscription refresh"
+#~ msgstr "Opdater abonnement"
+
+#~ msgid "Subscription successfully created."
+#~ msgstr "Abonnement oprettet med succes."
+
+#~ msgid "Subscriptions"
+#~ msgstr "Abonnementer"
+
+#~ msgid "Such data will never be uploaded"
+#~ msgstr "Data af den type vil aldrig blive overført"
+
+#~ msgid "Suffix"
+#~ msgstr "Titel"
+
+#~ msgid "Sunday"
+#~ msgstr "Søndag"
+
+#~ msgid "Symbols"
+#~ msgstr "Symboler"
+
+#~ msgid "TAX ID"
+#~ msgstr "Told ID"
+
+#~ msgid "TB"
+#~ msgstr "TB"
+
+#~ msgid "TTY/TDD"
+#~ msgstr "TTY/TDD"
+
+#~ msgid "Tag mail with"
+#~ msgstr "Mærk e-mail med"
+
+#~ msgid "Task"
+#~ msgstr "Opgave"
+
+#~ msgid "Task Details"
+#~ msgstr "Opgavedetaljer"
+
+#~ msgid "Task has been deleted!"
+#~ msgid_plural "Tasks have been deleted!"
+#~ msgstr[0] "Opgaven blev slettet!"
+#~ msgstr[1] "Opgaverne blev slettet!"
+
+#~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
+#~ msgstr "Invitation til opgave. %1$s %2$s %3$s. Tryk [enter] for at åbne"
+
+#~ msgid "Task invitations"
+#~ msgstr "Opgaveinvitationer"
+
+#~ msgid "Task moved."
+#~ msgid_plural "Tasks moved."
+#~ msgstr[0] "Opgave flyttet."
+#~ msgstr[1] "Opgaverne flyttet."
+
+#~ msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
+#~ msgstr "Påmindelse om opgave. %1$s %2$s %3$s. Tryk [enter] for at åbne"
+
+#~ msgid "Task reminders"
+#~ msgstr "Opgavepåmindelser"
+
+#~ msgid "Task was already deleted!"
+#~ msgstr "Opgaven var allerede slettet!"
+
+#~ msgid "Task was modified before, please reload"
+#~ msgstr "Opgaven blev ændret tidligere, opdatér venligst"
+
+#~ msgid "Tasks"
+#~ msgstr "Opgaver"
+
+#~ msgctxt "app"
+#~ msgid "Tasks"
+#~ msgstr "Opgaver"
+
+#~ msgid "Tasks have been moved"
+#~ msgstr "Opgaverne er blevet flyttet"
+
+#~ msgid "Telephone (ISDN)"
+#~ msgstr "Telefon (ISDN)"
+
+#~ msgid "Telephone callback"
+#~ msgstr "Telefonnummer at ringe tilbage på"
+
+#~ msgid "Telephone primary"
+#~ msgstr "Telefon, primær"
+
+#~ msgid "Telephone radio"
+#~ msgstr "Telefon, radio"
+
+#~ msgid "Telex"
+#~ msgstr "Telex"
+
+#~ msgid "Template"
+#~ msgstr "Skabelon"
+
+#~ msgid "Temporary"
+#~ msgstr "Midlertidig"
+
+#~ msgid "Tentative"
+#~ msgstr "Forbehold"
+
+#~ msgid "Tentatively accepted"
+#~ msgstr "Accepteret forsøgsvis"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "Text format"
+#~ msgstr "Tekst format"
+
+#~ msgctxt "help"
+#~ msgid "The Drive App"
+#~ msgstr "Drive-app'en"
+
+#~ msgctxt "help"
+#~ msgid "The E-Mail Components"
+#~ msgstr "E-mail-komponenterne"
+
+#~ msgctxt "help"
+#~ msgid "The Files Components"
+#~ msgstr "Fil-komponenterne"
+
+#~ msgid "The account must be named"
+#~ msgstr "Kontoen skal have navn"
+
+#~ msgid "The allowed quota is reached."
+#~ msgstr "Den tilladte kvote er nået."
+
+#~ msgid "The appointment has been added to your calendar"
+#~ msgstr "Aftalen er blevet tilføjet din kalender"
+
+#~ msgid "The appointment has been deleted"
+#~ msgstr "Aftalen blev slettet"
+
+#~ msgid "The appointment has been updated"
+#~ msgstr "Aftalen blev opdateret"
+
+#, fuzzy
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "Aftalen gentages <a href=\"#\"  data-widget=\"number\" data-attribute="
+#~ "\"interval\">hver <span class=\"number-control\">anden</span> dag</a>. "
+
+#, fuzzy
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "Aftalen gentages <a href=\"#\"  data-widget=\"number\" data-attribute="
+#~ "\"interval\">hver <span class=\"number-control\">anden</span> uge</a> på "
+#~ "<a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">mandage</"
+#~ "a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "Opgaven gentages <a href=\"#\" data-attribute=\"recurrenceType\" data-"
+#~ "widget=\"options\">ugentligt</a>."
+
+#, fuzzy
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "Opgaven gentages den <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"ordinal\">første</a> <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"day\">onsdag</a> i <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"month\">oktober</a>. "
+
+#, fuzzy
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "Opgaven gentages hver år på den <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"dayInMonth\"><span class=\"number-control\">tiende dag</"
+#~ "span></a> i <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
+#~ "\">oktober</a>. "
+
+#, fuzzy
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "Opgaven gentages den <a href=\"#\" data-widget=\"number\" data-attribute="
+#~ "\"dayInMonth\"><span class=\"number-control\">tiende dag</span></a> <a "
+#~ "href=\"#\" data-widget=\"number\" data-attribute=\"interval\">hver <span "
+#~ "class=\"number-control\">anden</span> måned</a>. "
+
+#, fuzzy
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "Opgaven gentages hver <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"ordinal\">anden</a> <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"day\">onsdag</a> <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"interval\">hver <span class=\"number-control\">anden</"
+#~ "span> måned</a>. "
+
+#~ msgid ""
+#~ "The blue graph shows the distribution of request durations in percent. "
+#~ "The gray graph shows a trivial network ping to recognize slow connections."
+#~ msgstr ""
+#~ "Den blå graf viser fordelingen af forespørgslers varighed i procent. Den "
+#~ "grå graf viser et almindeligt netværksping, så langsomme forbindelser kan "
+#~ "identificeres."
+
+#~ msgid "The changes have been rejected"
+#~ msgstr "Ændringerne blev afvist"
+
+#~ msgid "The character \" \" is not allowed."
+#~ msgstr "Karakteren \" \" er ikke tilladt."
+
+#~ msgid "The document is protected by a password."
+#~ msgstr "Dokumentet er beskyttet med en adgangskode."
+
+#~ msgid "The due date cannot be before start date. Adjust start date?"
+#~ msgstr "Slutdato kan ikke være før startdato. Justér startdato?"
+
+#~ msgid "The email has been sent"
+#~ msgstr "E-mailen er sendt"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+#~ "size of %2$s"
+#~ msgstr ""
+#~ "Filen \"%1$s\" kan ikke overføres, da dens størrelse er over loftet på "
+#~ "%2$s"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Filen \"%1$s\" kan ikke overføres, da den vil overskride kvoten på %2$s"
+
+#~ msgid "The file is available at %1$s"
+#~ msgstr "Denne fil er tilgængelig på %1$s"
+
+#~ msgid "The first 90 days are free."
+#~ msgstr "De første 90 dage er gratis."
+
+#~ msgid "The folder has been cleaned up."
+#~ msgstr "Denne mappe er blevet ryddet op."
+
+#~ msgid "The folder has been emptied."
+#~ msgstr "Mappen er blevet tømt."
+
+#~ msgid "The folder is available at %1$s"
+#~ msgstr "Denne mappe er tilgængelig på %1$s"
+
+#~ msgid ""
+#~ "The following applications can be restored. Just remove the restore point "
+#~ "if you don't want it to be restored."
+#~ msgstr ""
+#~ "De følgende programmer kan gendannes. Bare fjen gendannelsespunktet hvis "
+#~ "du ikke vil gendanne det."
+
+#~ msgid "The following products will be activated now:"
+#~ msgstr "De følgende produkter vil blive aktiveret nu:"
+
+#~ msgid "The number of recipients is limited to %1$s recipients per field"
+#~ msgstr "Antallet af modtagere er begrænset til %1$s per felt"
+
+#~ msgid "The provided filename exceeds the allowed length."
+#~ msgstr "Det givede filnavn overskirder den tilladte længde."
+
+#~ msgid "The publication has been made available as %s"
+#~ msgstr "Udgivelsen blev gjort tilgængelig som %s"
+
+#~ msgid "The requested email no longer exists"
+#~ msgstr "Den forespurgte e-mail findes ikke længere"
+
+#, fuzzy
+#~ msgid "The sender wants to get notified when you have read this email"
+#~ msgstr "Afsenderen vil gerne have besked, når du har læst denne e-mail"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ender</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">efter <span class=\"number-control\">2</span> aftaler</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
+#~ "\">11/03/2013</a>."
+#~ msgstr ""
+#~ "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">slutter</a> d. <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"custom\">11/03/2013</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">slutter aldrig</a>."
+
+#~ msgid ""
+#~ "The setting has been saved and will become active when you enter the "
+#~ "application the next time."
+#~ msgstr ""
+#~ "Indstillingen er blevet gemt, og vil være aktiv næste gang du starter "
+#~ "programmet."
+
+#~ msgid "The setting has been saved."
+#~ msgstr "Indstillingen er blevet gemt."
+
+#~ msgid ""
+#~ "The settings for collecting contacts in this folder will become disabled "
+#~ "when you enter the application the next time."
+#~ msgstr ""
+#~ "Opsætningen for at samle kontakter i denne mappe, vil blive deaktiveret "
+#~ "næste gang du går ind i programmet."
+
+#~ msgid ""
+#~ "The shared data will be accessible to everyone on the Internet. Please "
+#~ "consider, which data you want to share."
+#~ msgstr ""
+#~ "Alle på internettet vil have adgang til de delte data. Overvej venligst "
+#~ "hvilke data du vil dele."
+
+#, fuzzy
+#~ msgid "The start date must be before the due date."
+#~ msgstr "Startdatoen skal være før slutdatoen."
+
+#~ msgid "The start date must be before the end date."
+#~ msgstr "Startdatoen skal være før slutdatoen."
+
+#~ msgid "The subscription could not be created."
+#~ msgstr "Abonnement kunne ikke oprettes."
+
+#~ msgid "The task could not be deleted."
+#~ msgid_plural "The tasks could not be deleted."
+#~ msgstr[0] "Opgaven kunne ikke slettes."
+#~ msgstr[1] "Opgaverne kunne ikke slettes."
+
+#~ msgid "The two newly entered passwords do not match."
+#~ msgstr "De to indtastede adgangskoder er forskellige."
+
+#~ msgid ""
+#~ "The unrecoverable items have been cleaned up successfully. Please refresh "
+#~ "this page to see the changes."
+#~ msgstr ""
+#~ "De elementer der ikke kunne gendannes er blevet ryddet op med succes. "
+#~ "Opdatér venligst denne side for at se ændringerne."
+
+#~ msgid ""
+#~ "The updater provides a simple installation wizard. Follow the "
+#~ "instructions to install the application. The updater will inform you of "
+#~ "any updates for the Connector for Microsoft Outlook, Notifier and Drive. "
+#~ "You can download the updates from within the updater."
+#~ msgstr ""
+#~ "Opdatereren har en simpel installationsguide. Følg instruktionerne for at "
+#~ "installere programmet. Opdatereren vil informere dig om eventuelle "
+#~ "opdateringer til forbinderen til Microsoft Outlook, \"Notifier\" og "
+#~ "\"Drive\". Du kan hente opdateringerne inde fra opdatereren."
+
+#~ msgid "The user has administrative rights"
+#~ msgstr "Brugeren har administrative"
+
+#~ msgid "Theme"
+#~ msgstr "Tema"
+
+#~ msgid "There are unsaved changes."
+#~ msgstr "Der er ugemte ændringer."
+
+#~ msgid "There is already %1$d appointment in this timeframe."
+#~ msgid_plural "There are already %1$d appointments in this timeframe."
+#~ msgstr[0] "Der er allerede %1$d aftale i dette tidsrum."
+#~ msgstr[1] "Der er allerede %1$d aftaler i dette tidsrum."
+
+#~ msgid "There is no rule defined"
+#~ msgstr "Der er ingen regel defineret"
+
+#~ msgid ""
+#~ "There was no suitable server found for this mail/password combination"
+#~ msgstr ""
+#~ "Der blev ikke fundet en passende server for denne e-mail/adgangskode-"
+#~ "kombination"
+
+#~ msgid "There were not activities in your network"
+#~ msgstr "Der var ikke aktivitet i dit netværk"
+
+#~ msgid ""
+#~ "These statistics only include folders, which have a depth less than four "
+#~ "in the folder structure from the folder \"%1$s\"."
+#~ msgstr ""
+#~ "Disse statistikker inkluderer kun mapper, som har en dybde på mindre end "
+#~ "4 mapper i mappestrukturen, fra mappen \"%1$s\"."
+
+#~ msgid "This account cannot be validated"
+#~ msgstr "Denne konto kan ikke valideres"
+
+#~ msgid "This contact is private and cannot be shared"
+#~ msgstr "Denne kontakt er privat og kan ikke deles"
+
+#~ msgid "This distribution list has been added to the portal"
+#~ msgstr "Denne distributionsliste er blevet tilføjet portalen"
+
+#~ msgid "This email address cannot be used for appointments"
+#~ msgstr "Denne e-mailadresse kan ikke bruges til aftaler"
+
+#~ msgid "This email contains a task"
+#~ msgstr "Denne e-mail indeholder en opgave"
+
+#~ msgid "This email contains an appointment"
+#~ msgstr "Denne e-mail indeholder en aftale"
+
+#~ msgid ""
+#~ "This feature is not available. In order to use it, you need to upgrade "
+#~ "your account now."
+#~ msgstr ""
+#~ "Denne funktion er ikke tilgængelig. For at kunne bruge den, er du nødt "
+#~ "til at opgradere din konto nu."
+
+#~ msgid "This field has to be filled"
+#~ msgstr "Dette felt skal udfyldes"
+
+#~ msgid "This file has been added"
+#~ msgstr "Denne fil er blevet tilføjet"
+
+#~ msgid "This file has been added to the portal"
+#~ msgstr "Denne fil er blevet tilføjet portalen"
+
+#~ msgid "This file has been deleted"
+#~ msgid_plural "These files have been deleted"
+#~ msgstr[0] "Denne fil er blevet slettet"
+#~ msgstr[1] "Disse filer er blevet slettet"
+
+#~ msgid "This file has been locked"
+#~ msgid_plural "These files have been locked"
+#~ msgstr[0] "Denne fil er blevet låst"
+#~ msgstr[1] "Disse filer er blevet låst"
+
+#~ msgid "This file has been unlocked"
+#~ msgid_plural "These files have been unlocked"
+#~ msgstr[0] "Denne fil er blevet låst op"
+#~ msgstr[1] "Disse filer er blevet låst op"
+
+#~ msgid "This file has not been added"
+#~ msgstr "Denne fil er ikke blevet tilføjet"
+
+#~ msgid "This file has not been deleted"
+#~ msgid_plural "These files have not been deleted"
+#~ msgstr[0] "Denne fil er ikke blevet slettet"
+#~ msgstr[1] "Diser filer er ikke blevet slettet"
+
+#~ msgid "This file has not been deleted, as it is locked by its owner."
+#~ msgid_plural ""
+#~ "These files have not been deleted, as they are locked by their owner."
+#~ msgstr[0] "Denne fil er ikke blevet slettet, da den er låst af sin ejer."
+#~ msgstr[1] "Disse filer er ikke blevet slettet, da de er låste af sin ejer."
+
+#~ msgid "This file has not been locked"
+#~ msgid_plural "These files have not been locked"
+#~ msgstr[0] "Denne fil er ikke blevet låst"
+#~ msgstr[1] "Disse filer er ikke blevet låst"
+
+#~ msgid "This file has not been unlocked"
+#~ msgid_plural "These files have not been unlocked"
+#~ msgstr[0] "Denne fil er ikke blevet låst op"
+#~ msgstr[1] "Disse filer er ikke blevet låst op"
+
+#~ msgid "This file is locked by %1$s"
+#~ msgstr "Denne fil er låst af %1$s"
+
+#~ msgid "This file is locked by you"
+#~ msgstr "Denne fil er låst af dig"
+
+#~ msgid "This file will be written in your default folder to allow editing"
+#~ msgstr ""
+#~ "Filen vil blive skrevet i din din standardmappe for at tillade redigering"
+
+#~ msgid "This folder has no publications"
+#~ msgstr "Denne mappe har ingen udgivelser"
+
+#~ msgid "This folder has no subscriptions"
+#~ msgstr "Denne mappe har ingen abonnementer"
+
+#~ msgid "This folder has publications and/or subscriptions"
+#~ msgstr "Denne mappe har udgivelser og/eller abonementer"
+
+#~ msgid ""
+#~ "This folder has publications but you are not allowed to view or edit them"
+#~ msgstr ""
+#~ "Denne mappe har udgivelser, men du har ikke tilladelse til at se eller "
+#~ "redigere dem"
+
+#~ msgid ""
+#~ "This folder has subscriptions but you are not allowed to view or edit them"
+#~ msgstr ""
+#~ "Denne mappe har abonnementer, men du har ikke tilladelse til at se eller "
+#~ "redigere dem"
+
+#~ msgid "This is a standard folder, which can't be renamed."
+#~ msgstr "Dette er en standardmappe, som ikke kan omdøbes."
+
+#~ msgid "This is not a valid email address"
+#~ msgstr "Dette er ikke en gyldig e-mailadresse"
+
+#~ msgid "This is not a valid mail address"
+#~ msgstr "Dette er ikke en gyldig e-mailadresse"
+
+#~ msgid "This is not a valid user or group."
+#~ msgstr "Dette er ikke en gyldig bruger eller gruppe."
+
+#~ msgid "This list has no contacts yet"
+#~ msgstr "Denne liste har endnu ikke nogen kontakter"
+
+#~ msgid "This mail has been added to the portal"
+#~ msgstr "Denne e-mail er blevet tilføjet portalen"
+
+#~ msgid "This mail has no content"
+#~ msgstr "Denne e-mail har ikke noget indhold"
+
+#~ msgid "This note will not be printed"
+#~ msgstr "Denne note vil ikke blive udskrevet"
+
+#~ msgid ""
+#~ "This rule applies to all messages. Please add a condition to restrict "
+#~ "this rule to specific messages."
+#~ msgstr "Denne regel gælder for alle beskeder."
+
+#~ msgid "This task recurs"
+#~ msgstr "Denne opgave gentager"
+
+#~ msgid ""
+#~ "This widget is currently offline because the twitter rate limit exceeded."
+#~ msgstr ""
+#~ "Denne widget er ikke til rådighed i øjeblikket, fordi Twitters "
+#~ "forbrugsgrænse er overskredet."
+
+#, fuzzy
+#~| msgid "Thread view"
+#~ msgid "Thread"
+#~ msgstr "Trådet visning"
+
+#~ msgid "Thursday"
+#~ msgstr "Torsdag"
+
+#~ msgid "Tile"
+#~ msgstr "Titel"
+
+#~ msgid "Tiles"
+#~ msgstr "Fliser"
+
+#~ msgid "Time"
+#~ msgstr "Tid"
+
+#~ msgid "Time range for the calender view"
+#~ msgstr "Tidsinterval for kalendervisning"
+
+#~ msgid "Time range for the list view"
+#~ msgstr "Tidsinterval for listevisning"
+
+#~ msgid "Time range for the team view"
+#~ msgstr "Tidsinterval for holdvisning"
+
+#~ msgid "Time scale in minutes"
+#~ msgstr "Tidsskala i minutter"
+
+#~ msgid "Time zone"
+#~ msgstr "Tidszone"
+
+#~ msgid "Timezone"
+#~ msgstr "Tidszone"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgctxt "salutation"
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "To"
+#~ msgstr "Til"
+
+#~ msgid ""
+#~ "To add contacts manually, just provide a valid email address (e.g john."
+#~ "doe@example.com or \"John Doe\" <jd@example.com>)"
+#~ msgstr ""
+#~ "For at tilføje kontakter manuelt, skal der bare gives en gyldig e-mail-"
+#~ "adresse (for eksempel john.doe@example.com eller \"John Doe\" <jd@example."
+#~ "com>)"
+
+#~ msgid "Today"
+#~ msgstr "I dag"
+
+#~ msgid "Toggle checkboxes"
+#~ msgstr "Skift afkrydsningsfelter"
+
+#~ msgid "Toggle folder"
+#~ msgstr "Vælg mappe til/fra"
+
+#~ msgid "Toggle search"
+#~ msgstr "Slå søgning til/fra"
+
+#~ msgid "Tomorrow"
+#~ msgstr "I morgen"
+
+#~ msgid "Tool"
+#~ msgstr "Værktøj"
+
+#~ msgid "Top 10 file types"
+#~ msgstr "Top 10 filtyper"
+
+#~ msgid "Top 10 folder size"
+#~ msgstr "Top 10 mappestørrelse"
+
+#~ msgid "Top 10 you got mail from"
+#~ msgstr "Top 10 du har modtaget e-mail fra"
+
+#~ msgid "Top 10 you sent mail to"
+#~ msgstr "Top 10 du har sendt e-mail til"
+
+#~ msgid "Total cost"
+#~ msgstr "Samlede omkostninger"
+
+#~ msgid "Total: %1$s requests"
+#~ msgstr "Total: %1$s forespørgelser"
+
+#~ msgid "Touchselect on/off"
+#~ msgstr "Pegevalg til/fra"
+
+#~ msgid "Tour: Coming from OX6"
+#~ msgstr "Tur: Kommer fra OX6"
+
+#~ msgid "Town"
+#~ msgstr "By"
+
+#~ msgid "Trash folder"
+#~ msgstr "Skrald mappe"
+
+#~ msgid "Trying to auto-configure your mail account"
+#~ msgstr "Prøver at konfigurere din e-mail konto automatisk"
+
+#~ msgid "Tuesday"
+#~ msgstr "Tirsdag"
+
+#~ msgid "Tumblr"
+#~ msgstr "Tumblr"
+
+#~ msgid "Tweet"
+#~ msgstr "Tweet"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Twitter reported the following errors:"
+#~ msgstr "Twitter rapporterede følgende fejl:"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "UI version"
+#~ msgstr "UI udgave"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Unable to load mail filter settings."
+#~ msgstr "Kan ikke indlæse e-mail-filter-opsætning."
+
+#~ msgid "Unconfirmed"
+#~ msgstr "Ubekræftet"
+
+#~ msgid "Under construction"
+#~ msgstr "Under opbygning"
+
+#~ msgid "Undone"
+#~ msgstr "Fortryd"
+
+#~ msgid "Unfollow"
+#~ msgstr "Følg ikke"
+
+#~ msgid "Unified"
+#~ msgstr "Standard"
+
+#~ msgid "Unknown error while checking tumblr-blog."
+#~ msgstr "Ukendt fejl imens tumblr blog blev tjekket."
+
+#, fuzzy
+#~ msgid "Unknown sender"
+#~ msgstr "Ingen afsender"
+
+#~ msgid "Unlock"
+#~ msgstr "Lås op"
+
+#~ msgid "Unread"
+#~ msgstr "Ulæst"
+
+#~ msgid "Unread only"
+#~ msgstr "Kun ulæste"
+
+#~ msgid "Unselect all"
+#~ msgstr "Afmarkér alle"
+
+#, fuzzy
+#~ msgid "Unset default signature"
+#~ msgstr "Redigér signatur"
+
+#~ msgid ""
+#~ "Unsupported Preview - Certain functions disabled and stability not "
+#~ "assured until general release later this year"
+#~ msgstr ""
+#~ "Ikke understøttet forhåndsvisning - Bestemte funktioner og stabilitet er "
+#~ "ikke garanteret før udgivelsen senere i år"
+
+#~ msgid "Updater"
+#~ msgstr "Opdatere"
+
+#~ msgid "Updating account data. This might take a few seconds."
+#~ msgstr "Opdatere kontoens data. Dette kan tage nogle sekunder."
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "Det tager tid at opdatere abonnerede data.  Det kan for eksempel tage op "
+#~ "til fem minutter at importere 100 kontakter.  Vær venligst tålmodig."
+
+#~ msgid "Upgrade required"
+#~ msgstr "Opgradering påkrævet"
+
+#~ msgid "Upgrade to premium"
+#~ msgstr "Opgradér til præmium"
+
+#~ msgid "Upgrade to premium edition"
+#~ msgstr "Opgradér til præmium-udgaven"
+
+#~ msgid "Upload a new version"
+#~ msgstr "Overfør en ny version"
+
+#~ msgid "Upload file"
+#~ msgstr "Overfør fil"
+
+#~ msgid "Upload new file"
+#~ msgstr "Overfør ny fil"
+
+#~ msgid "Upload new files"
+#~ msgstr "Overfør nye filer"
+
+#~ msgid "Upload new version"
+#~ msgstr "Overfør en ny version"
+
+#~ msgid "Uploading folders is not supported."
+#~ msgstr "Overførelse af mapper er ikke understøttet."
+
+#~ msgid "Uploading..."
+#~ msgstr "Overfører..."
+
+#~ msgid "Uptime: %1$s minutes"
+#~ msgstr "Oppetid %1$s minutter"
+
+#~ msgid "Use SSL connection"
+#~ msgstr "Brug en SSL-forbindelse"
+
+#~ msgid ""
+#~ "Use cursor keys to change the date. Press ctrl-key at the same time to "
+#~ "change year or shift-key to change month. Close date-picker by pressing "
+#~ "ESC key."
+#~ msgstr ""
+#~ "Brug piltasterne for at ændre datoen. Tast \"Shift\" og piltaster for at "
+#~ "ændre måned eller \"Ctrl\" og piltaster for at ændre år.  Tast \"Esc\" "
+#~ "for at få vist en kalender."
+
+#~ msgid "Use cursor keys to change the item position"
+#~ msgstr "Brug piltaster for at ændre elementets position"
+
+#~ msgid "Use fixed-width font for text mails"
+#~ msgstr "Brug fast-bredde skrifttype for e-mails"
+
+#~ msgid "Use unified mail for this account"
+#~ msgstr "Brug forenet e-mail for denne konto"
+
+#~ msgid "Use username and password"
+#~ msgstr "Brug brugernavn og adgangskode"
+
+#~ msgid "User data"
+#~ msgstr "Brugerdata"
+
+#~ msgid "User fields"
+#~ msgstr "Brugerfelter"
+
+#~ msgid "User name"
+#~ msgstr "Brugernavn"
+
+#~ msgid "Username"
+#~ msgstr "Brugernavn"
+
+#~ msgid "Username must not be empty."
+#~ msgstr "Brugernavn må ikke være tom."
+
+#~ msgid "Vacation Notice"
+#~ msgstr "Feriesvar"
+
+#~ msgid "Version Comment"
+#~ msgstr "Versionskommentar"
+
+#~ msgid "Version history"
+#~ msgstr "versionshistorik"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "Dagsvisning"
+
+#~ msgid "View Slideshow"
+#~ msgstr "Se diasshow"
+
+#~ msgid "View source"
+#~ msgstr "Vis kilde"
+
+#~ msgid "Waiting"
+#~ msgstr "Venter"
+
+#~ msgid "Warning: This message might be a phishing or scam mail"
+#~ msgstr "Advarsel: Denne besked kan være en phishing eller fidus e-mail"
+
+#~ msgid "Weather • Season"
+#~ msgstr "Vejr • Sæson"
+
+#~ msgid "Wednesday"
+#~ msgstr "Onsdag"
+
+#~ msgid "Week"
+#~ msgstr "Uge"
+
+#~ msgid "Week View"
+#~ msgstr "Ugevisning"
+
+#~ msgid "Weekend Day"
+#~ msgstr "Wekkenddag"
+
+#~ msgid "Weekly on %1$s"
+#~ msgstr "%1$s hver uge"
+
+#~ msgid ""
+#~ "When using this feature, you as the current owner of the data are "
+#~ "responsible for being careful with privacy rules and for complying with "
+#~ "legal obligations (Copyright, Privacy Laws). Especially when sharing "
+#~ "personal data you are the responsible party according to the Federal Data "
+#~ "Protection Act (BDSG, Germany) or other Privacy Acts of your country. "
+#~ "According to European and other national regulations you as the "
+#~ "responsible party are in charge of data economy, and must not publish or "
+#~ "forward personal data without the person's consent. Beyond legal "
+#~ "obligations, we would like to encourage extreme care when dealing with "
+#~ "personal data. Please consider carefully where you store and to whom you "
+#~ "forward personal data. Please ensure appropriate access protection, e.g. "
+#~ "by proper password protection."
+#~ msgstr ""
+#~ "Når du bruger denne funktion, så er du, som nuværende administrator af "
+#~ "data, ansvarlig for at beskytte privatlivets fred, og for at overholde "
+#~ "gældende lov (for eksempel ophavsret og databeskyttelse). Dette er især "
+#~ "gældende når du deler personlige data, og lovgivningen for det land du er "
+#~ "i skal altid følges. Det betyder, at du sandsynligvis ikke må udgive "
+#~ "personlige data, uden en forudgående skriftlig accept fra den person "
+#~ "dataene omhandler. Udover det juridiske ansvar i forbindelse med "
+#~ "personlige data, så vil vi gerne opfordre til, at udvise forsigtighed når "
+#~ "personlige data omgås, gemmes og videresendes. Sørg altid for at beskytte "
+#~ "personlige data forsvarligt, fx ved at forhindre uautoriserede adgang. "
+#~ "Dette kan for eksempel gøres ved at bruge en stærk adgangskode."
+
+#~ msgid "Whole day"
+#~ msgstr "Hel dag"
+
+#~ msgid "Workweek"
+#~ msgstr "Arbejdsuge"
+
+#~ msgid "Workweek View"
+#~ msgstr "Arbejdsugevisning"
+
+#~ msgid "YB"
+#~ msgstr "YB"
+
+#~ msgid "Year"
+#~ msgstr "År"
+
+#~ msgid "Yearly on %1$s %2$d"
+#~ msgstr "Hvert år den %2$d. %1$s"
+
+#~ msgid "Yearly on the %1$s %2$s of %3$d"
+#~ msgstr "Hvert år, den %1$s. %2$s i %3$s"
+
+#~ msgid "Years"
+#~ msgstr "År"
+
+#~ msgid "Yellow"
+#~ msgstr "Gul"
+
+#~ msgid "Yes"
+#~ msgstr "Ja"
+
+#~ msgid "Yes, send without subject"
+#~ msgstr "Ja, send uden emne"
+
+#~ msgid "Yesterday"
+#~ msgstr "I går"
+
+#~ msgid ""
+#~ "You are about to change your confirmation status. Please leave a comment "
+#~ "for other participants."
+#~ msgstr ""
+#~ "Du er ved at ændre din bekræftelsesstatus. Efterlad venligst en kommentar "
+#~ "til andre deltagere."
+
+#, fuzzy
+#~ msgid ""
+#~ "You are currently using %1$s of your %2$s available disk space. You have "
+#~ "%3$s left."
+#~ msgstr ""
+#~ "Du bruger i øjeblikket %1$s af din %2$s tilgængelige diskplads. Du har "
+#~ "%3$s tilbage."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
+#~ "Appointments will therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Du har ikke tilladelse til at lave aftaler i \"%1$s\" ejet af %2$s. "
+#~ "Aftaler vil derfor blive lavet i din private kaldender."
+
+#~ msgid ""
+#~ "You are not allowed to create appointments in \"%1$s\". Appointments will "
+#~ "therefore be created in your private calendar."
+#~ msgstr ""
+#~ "Du har ikke tilladelse til at lave aftaler i \"%1$s\". Aftaler vil derfor "
+#~ "blive lavet i din private kaldender."
+
+#~ msgid "You are the organizer"
+#~ msgstr "Du er arrangøren"
+
+#~ msgid ""
+#~ "You can drag and drop files from your computer here to add as attachment."
+#~ msgstr ""
+#~ "Du kan trække-og-slippe filer fra din computer her for at vedhæfte dem."
+
+#~ msgid ""
+#~ "You can drag and drop files from your computer to upload either a new "
+#~ "file or another version of a file."
+#~ msgstr ""
+#~ "Du kan trække-og-slippe filer fra din computer til her, for enten at "
+#~ "overføre en ny fil, eller en anden version af en fil."
+
+#~ msgid "You can quick-save your changes via Ctrl+Enter."
+#~ msgstr "Du kan hurtig-gemme dine ændringer med CTRL+return."
+
+#~ msgid "You declined this appointment"
+#~ msgstr "Du har afslået denne aftale"
+
+#~ msgid "You declined this task"
+#~ msgstr "Du har afslået denne opgave"
+
+#~ msgid "You don't have any appointments in the near future."
+#~ msgstr "Du har ingen aftaler i den nære fremtid."
+
+#~ msgid "You don't have any publications yet"
+#~ msgstr "Du har ingen udgivelser endnu"
+
+#~ msgid "You don't have any subscriptions yet"
+#~ msgstr "Du har ingen abonnementer endnu"
+
+#~ msgid "You don't have any tasks that are either due soon or overdue."
+#~ msgstr "Du har ingen opgaver som snart forfalder eller er forfaldet."
+
+#, fuzzy
+#~| msgid "You have %1$d notification"
+#~| msgid_plural "You have %1$d notifications"
+#~ msgid "You have %1$d notification."
+#~ msgid_plural "You have %1$d notifications."
+#~ msgstr[0] "Du har %1$d påmindelse"
+#~ msgstr[1] "Du har %1$d påmindelser"
+
+#~ msgid ""
+#~ "You have %1$d notifications. Press [enter] to jump to the notification "
+#~ "area and [escape] to close it again."
+#~ msgid_plural ""
+#~ "You have %1$d notifications. Press [enter] to jump to the notification "
+#~ "area and [escape] to close it again."
+#~ msgstr[0] ""
+#~ "Du har %1$d påmindelse. Tast [enter] for at hoppe til påmindelsesområdet "
+#~ "og [esc] for at lukke det igen."
+#~ msgstr[1] ""
+#~ "Du har %1$d påmindelser. Tast [enter] for at hoppe til påmindelsesområdet "
+#~ "og [esc] for at lukke det igen."
+
+#~ msgid "You have %1$d unread messages"
+#~ msgstr "Du har %1$d ulæste beskeder"
+
+#~ msgid "You have 1 unread message"
+#~ msgstr "Du har en ulæst besked"
+
+#~ msgid "You have accepted the appointment"
+#~ msgstr "Du har accepteret aftalen"
+
+#~ msgid "You have accepted this appointment"
+#~ msgstr "Du har accepteret denne aftale"
+
+#~ msgid "You have accepted this task"
+#~ msgstr "Du har accepteret denne opgave"
+
+#~ msgid "You have been automatically signed out"
+#~ msgstr "Du er automatisk blevet logget ud"
+
+#~ msgid "You have declined the appointment"
+#~ msgstr "Du har afslået aftalen"
+
+#~ msgid "You have no new messages"
+#~ msgstr "Du har ingen nye beskeder"
+
+#~ msgid "You have no unread messages"
+#~ msgstr "Du har ingen ulæste beskeder"
+
+#~ msgid "You have reauthorized this %s account."
+#~ msgstr "Du har re-godkendt denne %s konto."
+
+#~ msgid "You have reauthorized this account."
+#~ msgstr "Du har re-godkendt denne konto."
+
+#~ msgid "You have tentatively accepted the appointment"
+#~ msgstr "Du har accepteret aftalen forsøgsvis"
+
+#~ msgid "You have to enter a username and password to subscribe."
+#~ msgstr "Du skal indtaste et brugernavn og en adgangskode for at abonnere."
+
+#~ msgid "You need to use Android %n or higher."
+#~ msgstr "Du skal bruge Android %n eller højere."
+
+#~ msgid "You need to use iOS %n or higher."
+#~ msgstr "Du skal bruge iOS %n eller højere."
+
+#~ msgid "You share this folder with other users"
+#~ msgstr "Du deler denne mappe med andre brugere"
+
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "Du accepterede denne invitation med forbehold"
+
+#~ msgid "You tentatively accepted this task"
+#~ msgstr "Du accepterede denne opgave forsøgsvis"
+
+#~ msgid ""
+#~ "You will automatically return to the appointment dialog. The selected "
+#~ "start and end time as well as the current participant list will be "
+#~ "applied."
+#~ msgstr ""
+#~ "Du vil automatisk vende tilbage til aftalevinduet. Den valgte start- og "
+#~ "sluttid, samt deltagerlisten, vil blive anvendt."
+
+#~ msgid "You will be automatically signed out in %1$d second"
+#~ msgid_plural "You will be automatically signed out in %1$d seconds"
+#~ msgstr[0] "Du bliver automatisk logget ud om %1$d sekund"
+#~ msgstr[1] "Du bliver automatisk logget ud om %1$d sekunder"
+
+#~ msgid "Your Applications"
+#~ msgstr "Dine programmer"
+
+#~ msgid "Your IP address has changed"
+#~ msgstr "Din IP-adresse er blevet ændret"
+
+#~ msgid "Your answer"
+#~ msgstr "Dit svar"
+
+#~ msgid "Your applications"
+#~ msgstr "Dine programmer"
+
+#~ msgid "Your auto forward has been saved"
+#~ msgstr "Din automatiske videresendelse blev gemt"
+
+#~ msgid "Your browser is not supported!"
+#~ msgstr "Din browser er ikke understøttet!"
+
+#~ msgid "Your browser version is not supported!"
+#~ msgstr "Din browser version er ikke understøttet!"
+
+#~ msgid "Your browser's cookie functionality is disabled. Please turn it on."
+#~ msgstr "Cookies er slået fra i din browser. Slå dem venligst til."
+
+#, fuzzy
+#~ msgid ""
+#~ "Your capacity is shared with all members of your group. Your group is "
+#~ "currently using %1$s of its %2$s available disk space. The amount of free "
+#~ "space is %3$s."
+#~ msgstr ""
+#~ "Din kapacitet er delt med alle medlemmer af din gruppe. Din gruppe bruger "
+#~ "i øjeblikket %1$s af sin %2$s tilgængelige diskplads. Mængden af fri "
+#~ "plads er %3$s. "
+
+#~ msgid "Your current password"
+#~ msgstr "Din nuværende adgangskode"
+
+#~ msgid "Your data has been saved"
+#~ msgstr "Dine data er blevet gemt"
+
+#~ msgid "Your mail address"
+#~ msgstr "Din e-mailadresse"
+
+#~ msgid "Your messages"
+#~ msgstr "Dine beskeder"
+
+#~ msgid "Your name"
+#~ msgstr "Dit navn"
+
+#~ msgid "Your old password"
+#~ msgstr "Din gamle adgangskode"
+
+#~ msgid "Your operating system is not supported."
+#~ msgstr "Dit styresystem er ikke understøttet."
+
+#~ msgid "Your password"
+#~ msgstr "Din adgangskode"
+
+#~ msgid "Your selected picture will be displayed after saving"
+#~ msgstr "Dit valgte billede bliver vist når der er blevet gemt"
+
+#~ msgid "Your session is expired"
+#~ msgstr "Din session er udløbet"
+
+#~ msgid "Your timezone"
+#~ msgstr "Din tidszone"
+
+#~ msgid "Your vacation notice has been saved"
+#~ msgstr "Dir feriesvar blev gemt"
+
+#~ msgid "ZB"
+#~ msgstr "ZB"
+
+#~ msgid "Zoom in"
+#~ msgstr "Zoom ind"
+
+#~ msgid "Zoom out"
+#~ msgstr "Zoom ud"
+
+#~ msgid "Zoom: %1$d%"
+#~ msgstr "Zoom: %1$d%"
+
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "efter %1$d aftale"
+#~ msgstr[1] "efter %1$d aftaler"
+
+#~ msgid "all"
+#~ msgstr "alle"
+
+#~ msgid "and"
+#~ msgstr "og"
+
+#~ msgid "by noon"
+#~ msgstr "ved middag"
+
+#, fuzzy
+#~ msgid "characters"
+#~ msgstr " karaktere"
+
+#~ msgid "clear"
+#~ msgstr "ryd"
+
+#~ msgid "close"
+#~ msgstr "Luk"
+
+#~ msgid "close for %1$s"
+#~ msgstr "luk for %1$s"
+
+#~ msgid "create objects"
+#~ msgstr "Opret objekter"
+
+#~ msgid "create objects and subfolders"
+#~ msgstr "Opret objekter og undermapper"
+
+#~ msgid "daily"
+#~ msgstr "dagligt"
+
+#~ msgid "day of the week"
+#~ msgstr "ugedag"
+
+#~ msgid "day of the weekend"
+#~ msgstr "wekkenddag"
+
+#~ msgid "delete all objects"
+#~ msgstr "slet alle objekter"
+
+#~ msgid "delete only own objects"
+#~ msgstr "slet kun egne objekter"
+
+#~ msgid "deleted"
+#~ msgstr "slettet"
+
+#~ msgid "disabled"
+#~ msgstr "deaktiveret"
+
+#~ msgid "edit all objects"
+#~ msgstr "ændr alle objekter"
+
+#~ msgid "edit own objects"
+#~ msgstr "ændr egne objekter"
+
+#, fuzzy
+#~ msgid "end date"
+#~ msgstr "slutdato"
+
+#~ msgid "ends"
+#~ msgstr "slutter"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "slutter efter et bestemt antal aftaler"
+
+#~ msgid "ends on a specific date"
+#~ msgstr "slutter på en bestemt dato"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "hver %1$d dag"
+#~ msgstr[1] "hver %1$d dage"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "hver %1$d måned"
+#~ msgstr[1] "hver %1$d måneder"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "hver %1$d uge"
+#~ msgstr[1] "hver %1$d uger"
+
+#~ msgid "every day"
+#~ msgstr "hver dag"
+
+#~ msgid "every month"
+#~ msgstr "hver måned"
+
+#~ msgid "every week"
+#~ msgstr "hver uge"
+
+#~ msgid "files"
+#~ msgstr "Filer"
+
+#~ msgid "first"
+#~ msgstr "første"
+
+#~ msgid "flickr.people.getPublicPhotos"
+#~ msgstr "flickr.folk.hentOffentligeBilleder"
+
+#~ msgid "flickr.photos.search"
+#~ msgstr "flickr.billede.søgning"
+
+#~ msgid "fourth"
+#~ msgstr "fjerde"
+
+#~ msgid "hCard Export"
+#~ msgstr "hCard eksport"
+
+#~ msgid "iCal"
+#~ msgstr "iCal"
+
+#~ msgctxt "in"
+#~ msgid "in %d minute"
+#~ msgid_plural "in %d minutes"
+#~ msgstr[0] "i %d minut"
+#~ msgstr[1] "i %d minutter"
+
+#~ msgid "in 15 minutes"
+#~ msgstr "om 15 minutter"
+
+#~ msgid "in 30 minutes"
+#~ msgstr "om 30 minutter"
+
+#~ msgid "in 5 minutes"
+#~ msgstr "om 5 minutter"
+
+#~ msgid "in blind copy"
+#~ msgstr "i blind kopi"
+
+#~ msgid "in copy"
+#~ msgstr "i kopi"
+
+#~ msgid "in one hour"
+#~ msgstr "om en time"
+
+#~ msgid "in one week"
+#~ msgstr "om en uge"
+
+#, fuzzy
+#~ msgid "is not a valid user or group."
+#~ msgstr " er ikke en gyldig bruger eller gruppe."
+
+#~ msgid "last"
+#~ msgstr "sidste"
+
+#~ msgid "late in the evening"
+#~ msgstr "sent på aftenen"
+
+#~ msgid "monthly"
+#~ msgstr "månedsligt"
+
+#~ msgid "more"
+#~ msgstr "mere"
+
+#~ msgid "never ends"
+#~ msgstr "slutter aldrig"
+
+#~ msgid "next Friday"
+#~ msgstr "næste fredag"
+
+#~ msgid "next Monday"
+#~ msgstr "næste mandag"
+
+#~ msgid "next Saturday"
+#~ msgstr "næste lørdag"
+
+#~ msgid "next Sunday"
+#~ msgstr "næste søndag"
+
+#~ msgid "next Thursday"
+#~ msgstr "næste torsdag"
+
+#~ msgid "next Tuesday"
+#~ msgstr "næste tirsdag"
+
+#~ msgid "next Wednesday"
+#~ msgstr "næste onsdag"
+
+#~ msgid "next week"
+#~ msgstr "næste uge"
+
+#~ msgid "no delete permissions"
+#~ msgstr "ingen slettetilladelse"
+
+#~ msgid "no edit permissions"
+#~ msgstr "ingen ændringstilladelse"
+
+#~ msgid "no read permissions"
+#~ msgstr "ingen læsetilladelser"
+
+#~ msgid "previous week"
+#~ msgstr "foregående uge"
+
+#~ msgid "read all objects"
+#~ msgstr "læs alle objekter"
+
+#~ msgid "read own objects"
+#~ msgstr "læs egne objekter"
+
+#~ msgid "remove"
+#~ msgstr "fjern"
+
+#~ msgid "second"
+#~ msgstr "anden"
+
+#~ msgid "seen"
+#~ msgstr "set"
+
+#~ msgid "select format"
+#~ msgstr "vælg format"
+
+#~ msgid "show all"
+#~ msgstr "Vis alle"
+
+#~ msgid "show image"
+#~ msgstr "vis billede"
+
+#, fuzzy
+#~ msgid "status"
+#~ msgstr "status"
+
+#, fuzzy
+#~ msgid "subfolders of %s"
+#~ msgstr "Ny undermappe"
+
+#~ msgid "third"
+#~ msgstr "tredje"
+
+#~ msgid "this afternoon"
+#~ msgstr "denne eftermiddag"
+
+#~ msgid "this morning"
+#~ msgstr "denne morgen"
+
+#~ msgid "tomorrow"
+#~ msgstr "imorgen"
+
+#~ msgid "tonight"
+#~ msgstr "i aften"
+
+#~ msgid "unknown"
+#~ msgstr "ukendt"
+
+#~ msgid "unlimited"
+#~ msgstr "Ubegrænset"
+
+#~ msgid "unnamed"
+#~ msgstr "unavngiven"
+
+#~ msgid "vCard"
+#~ msgstr "vCard"
+
+#~ msgid "vacation notice"
+#~ msgstr "feriesvar"
+
+#~ msgid "via"
+#~ msgstr "via"
+
+#~ msgid "view the folder"
+#~ msgstr "Vis mappen"
+
+#~ msgid "weekly"
+#~ msgstr "ugentligt"
+
+#~ msgid "work days"
+#~ msgstr "arbejdsdage"
+
+#~ msgid "yearly"
+#~ msgstr "årsligt"

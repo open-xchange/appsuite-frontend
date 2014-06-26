@@ -23,8 +23,9 @@ define('io.ox/wizards/upsell', [
     'io.ox/backbone/mini-views',
     'settings!plugins/upsell',
     'gettext!io.ox/wizards',
-    'less!io.ox/wizards/upsell.less'
+    'less!io.ox/wizards/upsell'
 ], function (ext, wizards, miniViews, settings, gt)  {
+
     'use strict';
 
     var getProducts,
@@ -63,7 +64,6 @@ define('io.ox/wizards/upsell', [
         return result;
     };
 
-
     printPrice = function (prod) {
         return _.printf(priceFormat, prod.get('price').toFixed(2));
     };
@@ -71,9 +71,6 @@ define('io.ox/wizards/upsell', [
     link = shop.target;
     priceFormat = shop.priceFormat ? shop.priceFormat : priceFormat;
     products = getProducts(shop);
-
-
-
 
     point.extend({
         id: 'upsell-selection',
@@ -132,7 +129,7 @@ define('io.ox/wizards/upsell', [
 
             /* draw cart */
             $cart.append(
-                $('<i class="icon icon-shopping-cart icon-2x">'),
+                $('<i class="fa fa-shopping-cart fa-2x">'),
                 $('<span class="title">').text(gt('Shopping cart')),
                 $('<br/>'),
                 $('<span class="upsell-shopping-cart-status">').text(gt('Cart is empty.'))
@@ -174,8 +171,6 @@ define('io.ox/wizards/upsell', [
             updateCart();
         }
     });
-
-
 
     point.extend({
         id: 'upsell-confirmation',
@@ -230,8 +225,6 @@ define('io.ox/wizards/upsell', [
         }
     });
 
-
-
     point.extend({
         id: 'upsell-acknowledgement',
         index: 300,
@@ -264,8 +257,6 @@ define('io.ox/wizards/upsell', [
             $('.wizard-prev').hide();
         }
     });
-
-
 
     return {
         getInstance: function () {

@@ -84,7 +84,7 @@ define('plugins/portal/calendar/register',
 
             if (appointments.length === 0) {
                 $content.append(
-                    $('<div class="line">')
+                    $('<li class="line">')
                     .text(gt('You don\'t have any appointments in the near future.'))
                 );
             } else {
@@ -119,7 +119,7 @@ define('plugins/portal/calendar/register',
             require(['io.ox/calendar/view-detail'], function (view) {
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data));
+                    popup.idle().append(view.draw(data, {deeplink: true}));
                 });
             });
         },

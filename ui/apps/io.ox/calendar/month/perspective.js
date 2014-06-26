@@ -407,13 +407,12 @@ define('io.ox/calendar/month/perspective',
                     .append(
                         this.monthInfo = $('<div>').addClass('info').text(gt.noI18n(this.current.format('MMMM y'))),
                         $('<div>')
-                            .addClass('pagination')
                             .append(
-                                $('<ul>')
+                                $('<ul class="pagination">')
                                     .append(
                                         $('<li>')
                                             .append(
-                                                $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
+                                                $('<a href="#">').addClass('control prev').append($('<i class="fa fa-chevron-left">'))
                                             ).on('click', $.proxy(function (e) {
                                                 e.preventDefault();
                                                 this.gotoMonth({
@@ -432,7 +431,7 @@ define('io.ox/calendar/month/perspective',
                                         }, this)),
                                         $('<li>')
                                             .append(
-                                                    $('<a href="#">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
+                                                    $('<a href="#">').addClass('control next').append($('<i class="fa fa-chevron-right">'))
                                             ).on('click', $.proxy(function (e) {
                                                 e.preventDefault();
                                                 this.gotoMonth({

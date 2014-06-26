@@ -60,7 +60,6 @@ define('io.ox/backbone/modelFactory',
                 keys[key] = 1;
             });
 
-
             _(keys).chain().keys().each(function (key) {
 
                 var o = oldAttributes[key],
@@ -402,7 +401,6 @@ define('io.ox/backbone/modelFactory',
                 });
             });
         });
-
 
         _(this.internal.destroyEvents).each(function (eventName) {
 

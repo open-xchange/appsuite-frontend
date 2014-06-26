@@ -13,80 +13,116 @@
 
  @thumbIndexWidth: 45px; // was 35, but we need 45 for proper Japanese
 
+/* App */
+
+.io-ox-contacts-window .foldertree-sidepanel {
+    left: 0;
+}
+
 /* VGrid elements */
 
 .contact-grid-container {
+
     &.abs {
         left: @thumbIndexWidth;
-        overflow: auto;
     }
+
     .vgrid-cell {
+
         &.contact {
-            height: 40px;
+
+            height: 60px;
+
             .private_flag {
                 float: left;
                 color: #AAA;
                 font-size: 17px;
                 margin-right: 3px;
             }
-            .fullname { font-weight: bold; }
+
+            .fullname {
+                font-weight: normal;
+                .last_name { font-weight: bold; }
+            }
+
         }
 
         &.vgrid-label {
             text-align: left;
-            font-weight: 200;
-            font-size: 32px;
-            line-height: 32px;
-            color: @linkColor;
-            padding-top: 25px;
-            padding-bottom: 15px;
+            font-weight: 300;
+            font-size: 21px;
+            line-height: 28px;
+            color: @link-color;
+            padding-top: 14px;
+            padding-bottom: 7px;
             background-image: none;
             background-color: #fff;
             border-top: 0 none;
             border-bottom: 0 none;
         }
+
     }
+
 }
 
 /* Tabs */
 
 .contact-grid-index {
+
     width: @thumbIndexWidth;
     overflow: hidden;
     .user-select(none);
 
     .thumb-index {
+
         font-size: 8pt;
         line-height: 10pt;
-        padding: 5px 5px 4px 5px;
+        padding: 4px 5px;
         font-weight: bold;
         text-align: center;
         white-space: nowrap;
         cursor: pointer;
         margin: 1px 1px 0 1px;
+
         &:hover {
-            color: white;
-            background-color: @linkColor;
+            color: @white;
+            background-color: @link-color;
         }
+
         &.thumb-index-disabled, &.thumb-index-disabled:hover {
+
             color: #ccc;
             font-weight: normal;
             cursor: default;
+
+            html.high-contrast & {
+                color: @hc-gray;
+            }
+
         }
+
     }
+
 }
 
 /* Detail view */
 
-.contact-detail, .contact-detail-edit  { width: 100%; }
+.contact-detail-edit  {
+    width: 100%;
+}
 
 .contact-detail {
 
-    .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
+    width: 100%;
+
+    .io-ox-inline-links:first-child {
+        margin: 0 0 20px 0;
+    }
 
     .contact-header {
 
         margin-bottom: 26px;
+        min-height: 80px;
 
         .picture {
             float: left;
@@ -101,7 +137,7 @@
         }
 
         .private-flag {
-            color: #888;
+            color: @hc-gray;
             font-size: 32px;
             line-height: 32px;
             margin-right: 10px;
@@ -109,7 +145,7 @@
         }
 
         h1 {
-            font-family: @lightFontFamily;
+            font-family: @light-font-family;
             font-weight: 200;
             font-size: 24px;
             line-height: 28px;
@@ -117,28 +153,45 @@
         }
 
         h2 {
+
             font-size: 16px;
             line-height: 20px;
             font-weight: 200;
-            &.header-company { margin: 14px 0 14px 0; }
+
+            &.header-company {
+                margin: 14px 0 14px 0;
+            }
+
             &.header-job {
-                color: #888;
+                color: @hc-gray;
                 margin: 0 0 14px 0;
             }
+
         }
 
-        h1:empty + h2.header-company { margin-top: 0; }
+        h1:empty + h2.header-company {
+            margin-top: 0;
+        }
+
     }
 
     .attachments-container {
+
         min-height: 3em;
         font-weight: 300;
 
         .dropdown {
+
+            display: inline-block;
             position: static;
             margin-right: 1em;
-            &.open { position: relative; }
+
+            &.open {
+                position: relative;
+            }
+
         }
+
     }
 
     .attachments-in-progress {
@@ -167,7 +220,7 @@
         margin: 0 10px 30px 0;
 
         legend {
-            font-family: @lightFontFamily;
+            font-family: @light-font-family;
             font-size: 16px;
             line-height: 20px;
             font-weight: 200;
@@ -180,14 +233,21 @@
             margin-bottom: 0px;
 
             dt {
+
                 width: 150px;
                 text-align: left;
                 color: #aaa;
                 font-weight: 200;
+
+                html.high-contrast & {
+                    color: @hc-gray;
+                }
+
             }
 
             dd {
                 margin-left: 160px;
+                word-wrap: break-word;
             }
         }
     }
@@ -200,21 +260,20 @@
         &:hover { text-decoration: none; }
 
         p {
+
             font-size: 12px;
-            color: @linkColor;
+            color: @link-color;
             margin-top: 10px;
+
+            html.high-contrast & {
+                color: @hc-link-color;
+            }
+
         }
+
     }
 
-    span.qrcode {
-        display: block;
-    }
-
-    .clear-both { clear: both; }
-
-    .breadcrumb {
-        margin: 26px 0 0 0;
-    }
+    span.qrcode { display: block; }
 
     .member {
         height: 48px;
@@ -236,37 +295,73 @@
 
 // smartphone
 @media (max-width: 480px), (max-device-width: 480px) {
+
     .contact-grid-container {
+
         &.abs {
             left: 0;
             right: @thumbIndexWidth;
         }
+
     }
+
     .contact-grid-index {
+
         left: auto;
         right: 0;
         width: @thumbIndexWidth;
         padding: 10px 0;
+
         .thumb-index {
             font-size: 11px;
             line-height: 12px;
             padding: 0 5px 0 5px;
             margin: 0 1px 0 1px;
         }
+
     }
+
     .contact-detail {
+
         .io-ox-inline-links:first-child {
+
             margin: 0;
-            padding: 15px 0px;
+            padding: 15px 0;
+
             span.io-ox-action-link.dropdown {
                 float: right;
             }
+
         }
+
         .block {
             width: 100%;
             margin-right: 0;
             line-height: 24px;
+
+            .dl-horizontal dt {
+                float: left;
+            }
         }
+
+    }
+
+}
+
+
+//io.ox/contacts/listview, io.ox/contacts/common-extensions
+.contact-item {
+
+    .fullname {
+        .ellipsis();
+        font-weight: bold;
+        color: rgb(51, 51, 51);
+    }
+
+    .bright {
+        .ellipsis();
+        color: rgb(136, 136, 136);
+        font-weight: 300;
     }
 }
 

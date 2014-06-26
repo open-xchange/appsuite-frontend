@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/about/c64',
-    ['less!io.ox/core/about/c64.less'], function () {
+    ['less!io.ox/core/about/c64'], function () {
 
     'use strict';
 

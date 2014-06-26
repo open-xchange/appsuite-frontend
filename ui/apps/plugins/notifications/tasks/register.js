@@ -16,10 +16,8 @@ define('plugins/notifications/tasks/register',
      'gettext!plugins/notifications',
      'io.ox/tasks/api',
      'io.ox/core/api/reminder',
-     'io.ox/tasks/util',
-     'io.ox/core/tk/reminder-util',
-     'less!plugins/notifications/tasks/style.less'
-    ], function (ext, gt, api, reminderAPI, util, reminderUtil) {
+     'less!plugins/notifications/tasks/style'
+    ], function (ext, gt, api, reminderAPI) {
 
     'use strict';
 
@@ -32,12 +30,14 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/due-tasks/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Overdue Tasks'))
-                    .append($('<div>').attr({ tabindex: 1,
+                $('<legend class="section-title">').text(gt('Overdue Tasks')).append(
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({ tabindex: 1,
                         'aria-label': gt('Press to hide all notifications for overdue tasks.'),
                         'data-action': 'clear',
-                        'focus-id': 'task-overdue-notification-clear',
-                        role: 'button'}).addClass('clear-button icon-remove refocus')),
+                        'focus-id': 'task-overdue-notification-clear'
+                    })
+                ),
                 $('<div class="notifications">')
             );
         }
@@ -54,7 +54,7 @@ define('plugins/notifications/tasks/register',
         var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
 
         node.append(
-            $('<div class="taskNotification item refocus" tabindex="1" role="listItem">')
+            $('<div class="taskNotification item refocus" tabindex="1" role="listitem">')
             .attr({'data-cid': model.get('cid'),
                    'focus-id': 'task-overdue-notification-' + model.get('cid'),
                    'model-cid': model.cid,
@@ -80,6 +80,7 @@ define('plugins/notifications/tasks/register',
 
     var NotificationsView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-tasks',
 
@@ -93,14 +94,16 @@ define('plugins/notifications/tasks/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/due-tasks/header').invoke('draw', this.$el.empty(), baton);
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
+                ext.point('io.ox/core/notifications/due-tasks/header').invoke('draw', this.$el, baton);
 
-            this.collection.each(function (model) {
-                baton = ext.Baton({ model: model, view: this });
-                ext.point('io.ox/core/notifications/due-tasks/item').invoke('draw', this.$('.notifications'), baton);
-            }, this);
-
+                this.collection.each(function (model) {
+                    baton = ext.Baton({ model: model, view: this });
+                    ext.point('io.ox/core/notifications/due-tasks/item').invoke('draw', this.$('.notifications'), baton);
+                }, this);
+            }
             return this;
         },
 
@@ -186,26 +189,33 @@ define('plugins/notifications/tasks/register',
 
             function add(e, tasks, reset) {
                 var items = [];
-                _(tasks).each(function (taskObj) {
-                    if (!hiddenOverDueItems[_.ecid(taskObj)]) {
-                        var task = util.interpretTask(taskObj),
-                            tmp = new Backbone.Model({
-                                id: task.id,
-                                folder_id: task.folder_id,
-                                badge: task.badge,
-                                title: _.noI18n(task.title),
-                                end_date: task.end_date,
-                                status: task.status,
-                                cid: _.cid(task)
-                            });
+
+                if(tasks.length > 0) {
+                    require(['io.ox/tasks/util'], function (util) {
+                        _(tasks).each(function (taskObj) {
+                            if (!hiddenOverDueItems[_.ecid(taskObj)]) {
+                                var task = util.interpretTask(taskObj),
+                                    tmp = new Backbone.Model({
+                                        id: task.id,
+                                        folder_id: task.folder_id,
+                                        badge: task.badge,
+                                        title: _.noI18n(task.title),
+                                        end_date: task.end_date,
+                                        status: task.status,
+                                        cid: _.cid(task)
+                                    });
+                                if (reset) {
+                                    items.push(tmp);
+                                } else {
+                                    notifications.collection.push(tmp, {merge: true, silent: true});//update data but don't throw events until we are finished(causes many redraws)
+                                }
+                            }
+                        });
                         if (reset) {
-                            items.push(tmp);
-                        } else {
-                            notifications.collection.push(tmp, {silent: true});
+                            notifications.collection.reset(items);
                         }
-                    }
-                });
-                if (reset) {
+                    });
+                } else if (reset) {
                     notifications.collection.reset(items);
                 }
             }
@@ -242,13 +252,15 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task reminders'))
-                    .append($('<div>')
-                    .attr({ tabindex: 1,
+                $('<legend class="section-title">').text(gt('Task reminders')).append(
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({
+                        tabindex: 1,
                         'aria-label': gt('Press to hide all task reminders.'),
                         'data-action': 'clear',
-                        'focus-id': 'task-reminder-notification-clear',
-                        role: 'button'}).addClass('clear-button icon-remove refocus')),
+                        'focus-id': 'task-reminder-notification-clear'
+                    })
+                ),
                 $('<div class="notifications">')
             );
         }
@@ -256,7 +268,10 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            reminderUtil.draw(this, baton.model, util.buildOptionArray());
+            var self = this;
+            require(['io.ox/tasks/util', 'io.ox/core/tk/reminder-util'], function (util, reminderUtil) {
+                reminderUtil.draw(self, baton.model, util.buildOptionArray());
+            });
         }
     });
 
@@ -266,8 +281,8 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="ok"]': 'deleteReminder',
-            'change [data-action="selector"]': 'remindAgain',
-            'click [data-action="selector"]': 'remindAgain',
+            'change [data-action="reminder"]': 'remindAgain',
+            'click [data-action="reminder"]': 'remindAgain',
             'click': 'onClickItem',
             'keydown': 'onClickItem'
         },
@@ -291,12 +306,14 @@ define('plugins/notifications/tasks/register',
                 time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
             if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
-                reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, model.get('reminder').id).then(function () {
-                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
-                }).done(function () {
-                    api.trigger('update:' + _.ecid(key[0]));//update detailview
+                require(['io.ox/tasks/util'], function (util) {
+                    reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, model.get('reminder').id).then(function () {
+                        return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
+                    }).done(function () {
+                        api.trigger('update:' + _.ecid(key[0]));//update detailview
+                    });
+                    model.collection.remove(model);
                 });
-                model.collection.remove(model);
             }
         },
 
@@ -352,6 +369,7 @@ define('plugins/notifications/tasks/register',
 
     var NotificationsReminderView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-reminder-tasks',
         events: {
@@ -361,15 +379,18 @@ define('plugins/notifications/tasks/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/task-reminder/header').invoke('draw', this.$el.empty(), baton);
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
 
-            this.collection.each(function (model) {
-                this.$el.find('.notifications').append(
-                    new ReminderView({ model: model }).render().$el
-                );
-            }, this);
+                ext.point('io.ox/core/notifications/task-reminder/header').invoke('draw', this.$el, baton);
 
+                this.collection.each(function (model) {
+                    this.$el.find('.notifications').append(
+                        new ReminderView({ model: model }).render().$el
+                    );
+                }, this);
+            }
             return this;
         },
 
@@ -401,15 +422,19 @@ define('plugins/notifications/tasks/register',
                 });
 
                 api.getList(taskIds).done(function (tasks) {
-                    _(tasks).each(function (task) {
-                        _(reminders).each(function (reminder) {
-                            if (reminder.target_id === task.id) {
-                                var obj = util.interpretTask(task);
-                                obj.reminder = reminder;
-                                notifications.collection.add(new Backbone.Model(obj));
-                            }
+                    if (tasks && tasks.length > 0) {
+                        require(['io.ox/tasks/util'], function (util) {
+                            _(tasks).each(function (task) {
+                                _(reminders).each(function (reminder) {
+                                    if (reminder.target_id === task.id) {
+                                        var obj = util.interpretTask(task);
+                                        obj.reminder = reminder;
+                                        notifications.collection.add(new Backbone.Model(obj));
+                                    }
+                                });
+                            });
                         });
-                    });
+                    }
                 });
             }).on('remove:reminder', function (e, ids) {//ids of task objects
                 _(ids).each(function (id) {
@@ -442,12 +467,11 @@ define('plugins/notifications/tasks/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Task invitations'))
-                    .append($('<div>')
+                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({ tabindex: 1,
                         'aria-label': gt('Press to hide all task invitations.'),
                         'data-action': 'clear',
-                        'focus-id': 'task-invitation-notification-clear',
-                        role: 'button'}).addClass('clear-button icon-remove refocus')),
+                        'focus-id': 'task-invitation-notification-clear'})),
                 $('<div class="notifications">')
             );
         }
@@ -455,36 +479,39 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-confirmation/item').extend({
         draw: function (baton) {
-            var task = util.interpretTask(baton.model.toJSON()),
-                endText = '';
-            if (_.noI18n(baton.model.get('end_date'))) {
-                endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
-            }
-                    //#. %1$s task title
-                    //#. %2$s task end date
-                    //#, c-format
-            var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
-            this.attr({role: 'listItem',
-                       'data-cid': _.ecid(baton.model.attributes),
-                       'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
-                       tabindex: 1,
-                       'aria-label': label})
-            .append(
-                $('<div class="title">').text(_.noI18n(task.title)),
-                $('<span class="end_date">').text(_.noI18n(task.end_date)),
-                $('<span class="status">').text(task.status).addClass(task.badge),
-                $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
-                    .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
-                    .text(gt('Accept/Decline')),
-                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                        .attr({'title': gt('Accept invitation'),
-                               'aria-label': gt('Accept invitation'),
-                               'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
-                        .append('<i class="icon-ok">')
-                )
-            );
-            task = null;
+            var self = this;
+            require(['io.ox/tasks/util'], function (util) {
+                var task = util.interpretTask(baton.model.toJSON()),
+                    endText = '';
+                if (_.noI18n(baton.model.get('end_date'))) {
+                    endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
+                }
+                        //#. %1$s task title
+                        //#. %2$s task end date
+                        //#, c-format
+                var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
+                self.attr({role: 'listitem',
+                           'data-cid': _.ecid(baton.model.attributes),
+                           'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
+                           tabindex: 1,
+                           'aria-label': label})
+                .append(
+                    $('<div class="title">').text(_.noI18n(task.title)),
+                    $('<span class="end_date">').text(_.noI18n(task.end_date)),
+                    $('<span class="status">').text(task.status).addClass(task.badge),
+                    $('<div class="actions">').append(
+                        $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
+                        .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
+                        .text(gt('Accept/Decline')),
+                        $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                            .attr({'title': gt('Accept invitation'),
+                                   'aria-label': gt('Accept invitation'),
+                                   'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
+                            .append('<i class="fa fa-check">')
+                    )
+                );
+                task = null;
+            });
         }
     });
 
@@ -575,32 +602,19 @@ define('plugins/notifications/tasks/register',
             e.stopPropagation();
             if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
 
-            var model = this.model;
-            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs'], function (editUtil, dialogs) {
-                //build popup
-                var popup = editUtil.buildConfirmationPopup(model, dialogs);
-                //go
-                popup.popup.show().done(function (action) {
-                    if (action === 'ChangeConfState') {
-                        var state = popup.state.prop('selectedIndex') + 1,
-                            message = popup.message.val();
-                        api.confirm({id: model.get('id'),
-                                     folder_id: model.get('folder_id'),
-                                     data: {confirmation: state,
-                                            confirmmessage: message}
-                        }).done(function () {
-                            //update detailview
-                            var data = model.toJSON();
-                            api.trigger('update:' + _.ecid(data));
-                        });
-                    }
-                });
+            var data = this.model.attributes;
+            ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
+                acceptdeny(data, {taskmode: true, api: api, callback: function () {
+                    //update detailview
+                    api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
+                }});
             });
         }
     });
 
     var NotificationsConfirmationView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-confirmation-tasks',
 
@@ -611,15 +625,18 @@ define('plugins/notifications/tasks/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/task-confirmation/header').invoke('draw', this.$el.empty(), baton);
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
 
-            this.collection.each(function (model) {
-                this.$el.append(
-                    new ConfirmationView({ model: model }).render().$el
-                );
-            }, this);
+                ext.point('io.ox/core/notifications/task-confirmation/header').invoke('draw', this.$el, baton);
 
+                this.collection.each(function (model) {
+                    this.$el.append(
+                        new ConfirmationView({ model: model }).render().$el
+                    );
+                }, this);
+            }
             return this;
         },
 
@@ -654,6 +671,13 @@ define('plugins/notifications/tasks/register',
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
+            }).on('mark:task:to-be-confirmed', function (e, ids) {
+                _(ids).each(function (id) {
+                    if (!hiddenInvitationItems[_.ecid(id)]) {
+                        notifications.collection.push(new Backbone.Model(id), {silent: true});
+                    }
+                });
+                notifications.collection.trigger('add');
             }).on('delete', function (e, ids) {
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);

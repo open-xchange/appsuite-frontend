@@ -62,6 +62,7 @@ define('io.ox/core/session',
                 params: {
                     action: 'autologin',
                     client: that.client(),
+                    rampup: true,
                     version: that.version()
                 }
             })
@@ -69,6 +70,7 @@ define('io.ox/core/session',
             .then(
                 function (data) {
                     ox.secretCookie = true;
+                    ox.rampup = data.rampup || ox.rampup || {};
                     return data;
                 },
                 function (data) {
@@ -165,7 +167,12 @@ define('io.ox/core/session',
                                 def.resolve(data);
                             }
                         })
-                        .fail(def.reject);
+                        .fail(function (response) {
+                            if (console && console.error) {
+                                console.error('Login failed!', response.error, response.error_desc || '');
+                            }
+                            def.reject(response);
+                        });
                     }
                 } else {
                     // offline
@@ -175,6 +182,21 @@ define('io.ox/core/session',
                 return def;
             };
         }()),
+
+        rampup: function () {
+            return http.GET({
+                module: 'login',
+                params: {
+                    action: 'rampup',
+                    rampup: true
+                },
+                appendColumns: false,
+                processResponse: false
+            })
+            .then(function (data) {
+                return (ox.rampup = data.rampup || ox.rampup || {});
+            });
+        },
 
         store: function () {
             var def = $.Deferred();

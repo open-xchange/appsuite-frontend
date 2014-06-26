@@ -36,11 +36,9 @@ define.async('io.ox/oauth/keychain',
 
     generateId.id = 1;
 
-
     function simplifyId(id) {
         return id.substring(id.lastIndexOf('.') + 1);
     }
-
 
     // Extension
     function OAuthKeychainAPI(service) {
@@ -78,7 +76,6 @@ define.async('io.ox/oauth/keychain',
             return name;
         }
 
-
         this.getAll = function () {
             return _(cache[service.id].accounts).chain().map(function (account) { return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
         };
@@ -113,7 +110,7 @@ define.async('io.ox/oauth/keychain',
                 }
 
                 // this is far too late not to run into popup blocker
-                var popupWindow = win || window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+                var popupWindow = win || window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
 
                 http.GET({
                     module: 'oauth/accounts',
@@ -189,7 +186,7 @@ define.async('io.ox/oauth/keychain',
             if (account) {
                 params.id = account.id;
             }
-            var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+            var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
             popupWindow.focus();
 
             http.GET({
@@ -218,8 +215,6 @@ define.async('io.ox/oauth/keychain',
             return def;
         };
     }
-
-
 
     // Fetch services & accounts
     $.when(

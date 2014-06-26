@@ -47,35 +47,9 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    function markMailFolderRead(e) {
-        var folder = e.data.folder;
-
+    function markFolderSeen(e) {
         e.preventDefault();
-
-        $.when(
-            mailAPI.markFolderRead(folder),
-            mailAPI.markRead(unhandledMails(e.data.app, folder))
-          ).done(function () {
-            // TODO: unify events?
-            mailAPI.trigger('update:set-seen', {}); //remove notifications in notification area
-            folderAPI.trigger('update:unread', { folder_id: folder });
-        });
-    }
-
-    function unhandledMails(app, folder) {
-        if (app.folder.get() !== folder) {
-            console.warn('unhandledMails: folders not in sync, yet, assuming unread mails');
-            return {unread: true};
-        }
-
-        return _.chain(app.getGrid().getIds() || [])
-            .pluck('thread')
-            .compact()
-            .flatten(true)
-            .filter(function notInFolderAndUnseen(mail) {
-                return mail.folder_id !== folder && (mail.flags & mailAPI.FLAGS.SEEN) === 0;
-            })
-            .value();
+        mailAPI.allSeen(e.data.folder);
     }
 
     ext.point(POINT + '/sidepanel/context-menu').extend({
@@ -86,7 +60,7 @@ define('io.ox/mail/folderview-extensions',
                 $('<li>').append(
                     $('<a href="#" data-action="markfolderread" tabindex="1" role="menuitem">')
                         .text(gt('Mark all mails as read'))
-                        .on('click', { folder: baton.data.id, app: baton.app }, markMailFolderRead)
+                        .on('click', { folder: baton.data.id, app: baton.app }, markFolderSeen)
                 )
             );
         }

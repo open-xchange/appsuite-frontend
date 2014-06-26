@@ -22,7 +22,9 @@ define('io.ox/core/tk/selection',
     'use strict';
 
     function joinTextNodes(nodes, delimiter) {
-        nodes = nodes.map(function () { return $.trim($(this).text()); });
+        nodes = nodes.map(function () {
+            return $.trim($(this).attr('title') || $(this).text());
+        });
         return $.makeArray(nodes).join(delimiter || '');
     }
 
@@ -68,7 +70,7 @@ define('io.ox/core/tk/selection',
             clickHandler,
             mouseupHandler,
             mousedownHandler,
-            touchstartHandler,
+            touchHandler,
             update,
             clear,
             isSelected,
@@ -314,15 +316,17 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        touchstartHandler = function (e) {
+        touchHandler = function (e) {
             var node, key, id;
-
-            // check if the touchstart was triggerd from a inline button or folder tree
-            if (mobileSelectMode) {
+            if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                apply(id, e, true);
+
+                // check if the touchstart was triggerd from a inline button or folder tree
+                if (mobileSelectMode) {
+                    apply(id, e, true);
+                }
             }
         };
 
@@ -343,9 +347,8 @@ define('io.ox/core/tk/selection',
             var key = self.serialize(id);
             selectedItems[key] = id;
             var $node = (node || getNode(key));
-            if (options.tabFix !== false) {
-                $node.focus();
-            }
+            // set focus?
+            if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
             return $node
                 .addClass(self.classSelected)
                 .attr({
@@ -914,7 +917,7 @@ define('io.ox/core/tk/selection',
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
             .on('click', '.selectable', clickHandler)
-            .on('tap', '.selectable', touchstartHandler);
+            .on('tap', '.selectable', touchHandler);
 
         /*
         * DND
@@ -1040,7 +1043,7 @@ define('io.ox/core/tk/selection',
                 }
                 // create helper
                 helper = $('<div class="drag-helper">').append(
-                    $('<span class="badge badge-important">').text(data.length),
+                    $('<span class="drag-counter">').text(data.length),
                     $('<span>').text(options.dragMessage.call(container, data, source))
                 );
                 // get fast access

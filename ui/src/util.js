@@ -19,12 +19,12 @@
     var slice = Array.prototype.slice,
         // deserialize
         deserialize = function (str, delimiter) {
-            var pairs = (str || "").split(delimiter === undefined ? "&" : delimiter);
+            var pairs = (str || '').split(delimiter === undefined ? '&' : delimiter);
             var i = 0, $l = pairs.length, pair, obj = {}, d = decodeURIComponent;
             for (; i < $l; i++) {
                 pair = pairs[i];
                 var keyValue = pair.split(/\=/), key = keyValue[0], value = keyValue[1];
-                if (key !== "" || value !== undefined) {
+                if (key !== '' || value !== undefined) {
                     obj[d(key)] = value !== undefined ? d(value) : undefined;
                 }
             }
@@ -32,14 +32,12 @@
         },
         // stupid string rotator
         rot = function (str, shift) {
-            return _(String(str).split("")).map(function (i) {
+            return _(String(str).split('')).map(function (i) {
                 return String.fromCharCode(i.charCodeAt(0) + shift);
-            }).join("");
+            }).join('');
         },
         // get query
         queryData = deserialize(document.location.search.substr(1), /&/),
-        // local timezone offset
-        timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000,
 
         //units
         sizes = ['Byte', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
@@ -51,7 +49,7 @@
             var ExtendableClass;
 
             // The constructor function for the new subclass is either defined by you
-            // (the "constructor" property in your `extend` definition), or defaulted
+            // (the 'constructor' property in your `extend` definition), or defaulted
             // by us to simply call the parent's constructor.
             if (protoProps && protoProps.hasOwnProperty('constructor')) {
                 ExtendableClass = protoProps.constructor;
@@ -98,16 +96,16 @@
          * @param {string} [delimiter] Delimiter
          * @returns {string} Serialized object
          * @example
-         * _.serialize({ a: 1, b: 2, c: "text" });
+         * _.serialize({ a: 1, b: 2, c: 'text' });
          */
         serialize: function (obj, delimiter, replacer) {
             var tmp = [], e = replacer || encodeURIComponent, id;
-            if (typeof obj === "object") {
+            if (typeof obj === 'object') {
                 for (id in (obj || {})) {
-                    tmp.push(e(id) + (obj[id] !== undefined ? "=" + e(obj[id]) : ""));
+                    tmp.push(e(id) + (obj[id] !== undefined ? '=' + e(obj[id]) : ''));
                 }
             }
-            return tmp.join(delimiter === undefined ? "&" : delimiter);
+            return tmp.join(delimiter === undefined ? '&' : delimiter);
         },
 
         /**
@@ -118,7 +116,7 @@
          * @function
          * @name _.deserialize
          * @example
-         * _.deserialize("a=1&b=2&c=text");
+         * _.deserialize('a=1&b=2&c=text');
          */
         deserialize: deserialize
     });
@@ -146,7 +144,7 @@
                 // firefox has a bug and already decodes the hash string, so we use href
                 hashData = location.href.split(/#/)[1] || '';
                 hashData = deserialize(
-                     hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
+                     hashData.substr(0, 1) === '?' ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
                 );
             }
 
@@ -204,10 +202,9 @@
 
         get: function (path) {
             var l = location;
-            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, '/' + path);
+            return l.protocol + '//' + l.host + l.pathname.replace(/\/[^\/]*$/, '/' + path);
         }
     };
-
 
     // extend underscore utilities
     _.mixin({
@@ -232,7 +229,7 @@
 
         setCookie: function (key, value, lifetime) {
             // yep, works this way:
-            var c = key + "=" + encodeURIComponent(value) +
+            var c = key + '=' + encodeURIComponent(value) +
                 (lifetime ? '; expires=' + new Date(new Date().getTime() + lifetime).toGMTString() : '') + '; path=/';
             document.cookie = c;
         },
@@ -242,7 +239,7 @@
          * Useful to debug callbacks, e.g. event handlers.
          * @returns {Object} First parameter to support inline inspecting
          * @example
-         * http.GET({ module: "calendar", params: { id: 158302 }, success: _.inspect });
+         * http.GET({ module: 'calendar', params: { id: 158302 }, success: _.inspect });
          */
         inspect: function (first) {
             var args = slice.call(arguments);
@@ -334,17 +331,21 @@
          */
         lfo: function () {
             // call counter
-            var curry = slice.call(arguments),
-                fn = curry.shift() || $.noop,
-                count = (fn.count = (fn.count || 0) + 1);
+            var curry = slice.call(arguments), sync = false, fn, count;
+            // sync or async (default)
+            if (curry[0] === true) { curry.shift(); sync = true; }
+            // get function and count
+            fn = curry.shift() || $.noop;
+            count = (fn.count = (fn.count || 0) + 1);
             // wrap
             return function () {
                 var args = slice.call(arguments);
-                setTimeout(function () {
+                function cont() {
                     if (count === fn.count) {
                         fn.apply(fn, curry.concat(args));
                     }
-                }, 0);
+                }
+                if (sync) cont(); else setTimeout(cont, 0);
             };
         },
 
@@ -395,7 +396,7 @@
                             index = n - 1;
                         }
                         //return params[index++];
-                        var val = params[index++]
+                        var val = params[index++];
                         return val !== undefined ? val : 'unknown';
                     }
                 )
@@ -448,7 +449,7 @@
         // good for leading-zeros for example
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
-            return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
+            return (diff > 0 ? new Array(diff + 1).join(fill || '0') : '') + str;
         },
 
         /**
@@ -547,9 +548,9 @@
         tick: function (num, type, fn) {
             fn = fn || $.noop;
             var interval = 1000;
-            if (type === "hour") {
+            if (type === 'hour') {
                 interval *= 3600;
-            } else if (type === "minute") {
+            } else if (type === 'minute') {
                 interval *= 60;
             }
             // wait until proper clock tick
@@ -566,6 +567,44 @@
                 def = null;
             }, t || 0);
             return def;
+        },
+
+        /*
+         * first and last call within wait will call original function
+         * hint: throttle of lo-dash can be used alternatively
+         * @param  {function} func
+         * @param  {nunber} wait
+         * @return {function} debonced version of func
+         */
+        mythrottle: function (func, wait) {
+            var context, args, result,
+                timeout = null,
+                previous = 0,
+                later = function () {
+                    previous = new Date();
+                    timeout = null;
+                    result = func.apply(context, args);
+                };
+
+            return function () {
+                var now = new Date(),
+                    remaining;
+                //set closures
+                context = this;
+                args = arguments;
+                //clear old ones
+                clearTimeout(timeout);
+                timeout = null;
+                //immediate vs delayed
+                remaining = wait - (now - previous);
+                if (remaining <= 0) {
+                    previous = now;
+                    result = func.apply(context, args);
+                } else {
+                    timeout = setTimeout(later, remaining);
+                }
+                return result;
+            };
         },
 
         makeExtendable: (function () {
@@ -613,12 +652,12 @@
             }
 
             return function (o) {
-                var tmp, r = 'recurrence_position', split, m, f;
+                var tmp, r = 'recurrence_position', m, f;
                 if (typeof o === 'string') {
                     // integer based ids?
                     if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
-                        tmp = { folder_id: String(m[1]), id: m[2] + '' };
-                        if (m[4] !== undefined) { tmp[r] = m[4] + ''; }
+                        tmp = { folder_id: String(m[1]), id: String(m[2])};
+                        if (m[4] !== undefined) { tmp[r] = String(m[4]); }
                         return tmp;
                     }
                     // character based? (double tuple)
@@ -638,7 +677,7 @@
             };
         }()),
 
-        // escape cid - usefull for evant handlers
+        // escape cid - usefull for event handlers
         ecid: function (o) {
             var cid = typeof o === 'string' ? o : _.cid(o);
             return encodeURIComponent(cid).replace(/\./g, ':');
@@ -682,7 +721,7 @@
     };
 
     window.assert = function (value, message) {
-        if (value) return;
+        if (ox.debug || value) return;
         console.error(message || 'Assertion failed!');
         if (console.trace) console.trace();
     };
@@ -700,10 +739,13 @@
                                        hex    ? String.fromCharCode(parseInt(hex, 16)) :
                                                 String.fromCharCode(parseInt(dec, 10));
                             });
-    }
+    };
 
+    /* jshint -W015 */
     _.unescapeHTML.entities = (function (es) {
-        for (var i in es) es[i] = String.fromCharCode(es[i]);
+        for (var i in es) {
+            es[i] = String.fromCharCode(es[i]);
+        }
         return es;
     }({
         nbsp: 160, iexcl: 161, cent: 162, pound: 163, curren: 164, yen: 165,
@@ -737,7 +779,7 @@
       hArr: 8660, forall: 8704, part: 8706, exist: 8707, empty: 8709, nabla: 8711,
       isin: 8712, notin: 8713, ni: 8715, prod: 8719, sum: 8721, minus: 8722,
       lowast: 8727, radic: 8730, prop: 8733, infin: 8734, ang: 8736, and: 8743,
-      or: 8744, cap: 8745, cup: 8746, "int": 8747, there4: 8756, sim: 8764,
+      or: 8744, cap: 8745, cup: 8746, 'int': 8747, there4: 8756, sim: 8764,
       cong: 8773, asymp: 8776, ne: 8800, equiv: 8801, le: 8804, ge: 8805,
       sub: 8834, sup: 8835, nsub: 8836, sube: 8838, supe: 8839, oplus: 8853,
       otimes: 8855, perp: 8869, sdot: 8901, lceil: 8968, rceil: 8969,
@@ -749,5 +791,6 @@
       sbquo: 8218, ldquo: 8220, rdquo: 8221, bdquo: 8222, dagger: 8224,
       Dagger: 8225, permil: 8240, lsaquo: 8249, rsaquo: 8250, euro: 8364
     }));
+    /* jshint +W015 */
 
 }());

@@ -13,7 +13,7 @@
 
 (function () {
 
-    "use strict";
+    'use strict';
 
     // save some original jQuery methods
     $.original = { val: $.fn.val };
@@ -23,14 +23,16 @@
     };
 
     $.escape = function (str) {
-        return String(str).replace(/([!"#$%&'()*+,.\/:;<=>?@\[\]\^`{|}~])/g, '\\$1');
+        // escape !"#$%&'()*+,./:;<=>?@[\]^`{|}~
+        // see http://api.jquery.com/category/selectors/
+        return String(str).replace(/([!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~])/g, '\\$1');
     };
 
     $.button = function (options) {
 
         // options
         var opt = $.extend({
-            label: "",
+            label: '',
             click: $.noop,
             enabled: true,
             data: {},
@@ -48,9 +50,9 @@
         // class name
         var className;
         if (opt.purelink === true) {
-            className = "button io-ox-action-link";
+            className = 'button io-ox-action-link';
         } else {
-            className = "btn" + (!opt.enabled ? " btn-disabled" : "") + (opt.primary ? " btn-primary" : "") + (opt.info ? " btn-info" : "") + (opt.success ? " btn-success" : "") + (opt.warning ? " btn-warning" : "") + (opt.danger ? " btn-danger" : "") + (opt.inverse ? " btn-inverse" : "");
+            className = 'btn' + (!opt.enabled ? ' btn-disabled' : '') + (opt.primary ? ' btn-primary' : '') + (opt.info ? ' btn-info' : '') + (opt.success ? ' btn-success' : '') + (opt.warning ? ' btn-warning' : '') + (opt.danger ? ' btn-danger' : '') + (opt.inverse ? ' btn-inverse' : '');
 
         }
 
@@ -66,24 +68,24 @@
         // create button
         var button;
         if (opt.purelink === true) {
-            button = $("<a>").addClass(className).append(text);
+            button = $('<a>').addClass(className).append(text);
         } else {
-            button = $("<button>").addClass(className).append(
-                $("<span>").append(text)
+            button = $('<button>').addClass(className).append(
+                $('<span>').append(text)
             );
         }
-        button.on("click", opt.data, opt.click);
+        button.on('click', opt.data, opt.click);
 
         // add id?
         if (opt.id !== undefined) {
-            button.attr("id", opt.id);
+            button.attr('id', opt.id);
         }
 
-        button.attr("data-action", opt.dataaction || opt.data.action);
+        button.attr('data-action', opt.dataaction || opt.data.action);
 
         // add tabindex?
         if (opt.tabIndex !== undefined) {
-            button.attr("tabindex", opt.tabIndex);
+            button.attr('tabindex', opt.tabIndex);
         }
 
         return button;
@@ -92,21 +94,19 @@
     $.fn.busy = function (empty) {
         return this.each(function () {
             var self = $(this);
-            clearTimeout(self.data("busy-timeout"));
-            self.data("busy-timeout", setTimeout(function () {
-                self.addClass("io-ox-busy");
-                if (empty) {
-                    self.empty();
-                }
-            }, 200));
+            clearTimeout(self.data('busy-timeout'));
+            self.data('busy-timeout', setTimeout(function () {
+                self.addClass('io-ox-busy');
+                if (empty) self.empty();
+            }, 300));
         });
     };
 
     $.fn.idle = function () {
         return this.each(function () {
             var self = $(this);
-            clearTimeout(self.data("busy-timeout"));
-            self.removeClass("io-ox-busy");
+            clearTimeout(self.data('busy-timeout'));
+            self.removeClass('io-ox-busy');
         });
     };
 
@@ -120,8 +120,6 @@
 
             // get pane
             var pane = $(node),
-                // get pane height
-                height = 0,
                 // get visible area
                 y1 = pane.scrollTop(),
                 y2 = 0,
@@ -148,7 +146,7 @@
         } catch (e) {
             // IE sometimes crashes
             // even Chrome might get in trouble during ultra fast scrolling
-            console.error("$.fn.intoViewport", this, e);
+            console.error('$.fn.intoViewport', this, e);
         }
 
         return this;
@@ -162,56 +160,6 @@
 
     $.txt = function (str) {
         return document.createTextNode(str !== undefined ? str : '');
-    };
-
-    $.inlineEdit = function () {
-
-        var restore, blur, key, click;
-
-        restore = function (node, text) {
-            node.text(text).insertBefore(this);
-            $(this).remove();
-        };
-
-        blur = function (e) {
-            restore.call(this, e.data.node, $(this).val());
-        };
-
-        key = function (e) {
-            var val;
-            if (e.which === 13) {
-                // enter = update
-                if ((val = $.trim($(this).val()))) {
-                    restore.call(this, e.data.node, val);
-                    e.data.node.trigger("update", val);
-                }
-            } else if (e.which === 27) {
-                // escape = cancel
-                restore.call(this, e.data.node, e.data.text);
-            }
-        };
-
-        click = function (e) {
-            // create input field as replacement for current element
-            var self = $(this);
-            $('<input type="text" class="nice-input">')
-            .css({
-                width: self.width() + "px",
-                fontSize: self.css("fontSize"),
-                fontWeight: self.css("fontWeight"),
-                lineHeight: self.css("lineHeight"),
-                marginBottom: self.css("marginBottom")
-            })
-            .val(self.text())
-            .on("keydown", { node: self, text: self.text() }, key)
-            .on("blur", { node: self }, blur)
-            .insertBefore(self)
-            .focus()
-            .select();
-            self.detach();
-        };
-
-        return $('<div>').on("dblclick", click);
     };
 
     $.fn.scrollable = function () {
@@ -232,31 +180,21 @@
         };
     }());
 
-    $.alert = function (title, text, classes) {
-        return $('<div>').addClass('alert alert-block ' + (classes || 'alert-error'))
-            .append(
-                $('<a>', { href: '#' }).addClass('close').attr('data-dismiss', 'alert').html('&times;'),
-                title ? $('<h4>').addClass('alert-heading').text(title) : $(),
-                text ? $('<p>').text(text) : $()
-            );
+    $.alert = function (o) {
+        o = _.extend({
+            title: false,
+            message: false,
+            classes: 'alert-danger',
+            dismissable: false
+        }, o);
+        return $('<div class="alert fade in">')
+            .addClass(o.classes)
+            .addClass(o.dismissable ? 'alert-dismissable' : '')
+                .append(
+                    o.dismissable ? $('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">').html('&times;') : $(),
+                    o.title ? $('<h4 class="alert-heading">').text(o.title) : $(),
+                    o.message ? $('<p>').text(o.message) : $()
+                );
     };
-
-    $.linkSplit = function(str) {
-        var regex = new RegExp("(?:https?:\/\/|ftp:\/\/|mailto:|news\\\\.|www\\\\.)[-A-Za-z0-9+&@#\/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#\/%=~_()|]", "gi");
-        var parts = [], match, lastIndex = 0;
-
-        while (match = regex.exec(str)) {
-            parts.push($( document.createTextNode(str.substring(lastIndex, match.index))));
-            parts.push($( document.createTextNode(' ')));
-            parts.push($('<a>', {href: match[0], target: '_blank'}).text(match[0]));
-            parts.push($( document.createTextNode(' ')));
-            lastIndex = match.index + match[0].length;
-        }
-        if(lastIndex < str.length) {
-            parts.push($( document.createTextNode(str.substring(lastIndex, str.length))));
-        }
-
-    	return parts;
-    }
 
 }());

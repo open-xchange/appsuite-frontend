@@ -107,7 +107,9 @@ define.async('io.ox/core/manifests',
 
     function isDisabled(manifest) {
         return (manifest.requires && manifest.upsell !== true) &&
-               !capabilities.has(manifest.requires);
+               !capabilities.has(manifest.requires) ||
+               // check devie. this check cannot be bypassed by upsell=true
+               (!!manifest.device && !_.device(manifest.device));
     }
 
     function process(manifest) {
@@ -132,9 +134,6 @@ define.async('io.ox/core/manifests',
         // Such plugins take care of missing capabilities own their own
         if (isDisabled(manifest))
             return;
-
-        // check devie. this check cannot be bypassed by upsell=true
-        if (manifest.device && !_.device(manifest.device)) return;
 
         // loop over namespaces (might be multiple)
         // supports: 'one', ['array'] or 'one two three'

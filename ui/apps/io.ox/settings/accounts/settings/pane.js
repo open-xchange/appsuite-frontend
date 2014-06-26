@@ -40,7 +40,8 @@ define('io.ox/settings/accounts/settings/pane',
                     'data-accounttype': o.get('accountType')
                 })
                 .append(
-                    $('<div class="pull-right">').append(
+                    $('<span data-property="displayName" class="list-title pull-left">'),
+                    $('<div class="widget-controls">').append(
                         // edit
                         $('<a class="action">').text(gt('Edit')).attr({
                             href: '#',
@@ -53,7 +54,7 @@ define('io.ox/settings/accounts/settings/pane',
                         // delete
                         o.get('id') !== 0 ?
                             // trash icon
-                            $('<a class="close">').attr({
+                            $('<a class="remove">').attr({
                                 href: '#',
                                 tabindex: 1,
                                 role: 'button',
@@ -61,30 +62,27 @@ define('io.ox/settings/accounts/settings/pane',
                                 'data-action': 'delete',
                                 'aria-label': o.get('displayName') + ', ' + gt('Delete')
                             })
-                            .append($('<i class="icon-trash">')) :
+                            .append($('<i class="fa fa-trash-o">')) :
                             // empty dummy
-                            $('<a class="close">').attr({
+                            $('<a class="remove" style="display: none">').attr({
                                 href: '#',
                                 tabindex: -1,
                                 role: 'button',
                                 title: gt('Delete'),
                                 'aria-label': o.get('displayName') + ', ' + gt('Delete')
                             })
-                            .append($('<i class="icon-trash" style="visibility: hidden">'))
-                    ),
-                    $('<span data-property="displayName" class="list-title">')
+                            .append($('<i class="fa fa-trash-o" >'))
+                    )
                 );
         },
 
         drawAddButton = function () {
-            return $('<div class="controls">').append(
-                $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
-                        $.txt(gt('Add account')), $.txt(' '),
-                        $('<span class="caret">')
-                    ),
-                    $('<ul class="dropdown-menu" role="menu">')
-                )
+            return $('<div class="btn-group col-md-4 col-xs-12">').append(
+                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                    $.txt(gt('Add account')), $.txt(' '),
+                    $('<span class="caret">')
+                ),
+                $('<ul class="dropdown-menu" role="menu">')
             );
         },
 
@@ -119,9 +117,11 @@ define('io.ox/settings/accounts/settings/pane',
 
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
-                $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
-                drawAddButton(),
-                $('<ul class="settings-list">')
+                $('<div>').addClass('row').append(
+                    $('<h1 class="col-md-8 col-xs-12">').text(gt('Mail and Social Accounts')),
+                    drawAddButton()
+                ),
+                $('<ul class="list-unstyled list-group widget-list">')
             );
         },
 
@@ -129,23 +129,21 @@ define('io.ox/settings/accounts/settings/pane',
 
             tagName: 'li',
 
+            className: 'widget-settings-view',
+
             events: {
                 'click [data-action="edit"]': 'onEdit',
                 'click [data-action="delete"]': 'onDelete'
             },
 
-            _modelBinder: undefined,
-
             initialize: function () {
-                this._modelBinder = new Backbone.ModelBinder();
+                this.model.on('change', this.render, this);
             },
 
             render: function () {
                 var self = this;
                 self.$el.empty().append(drawItem(self.model));
-
-                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                self._modelBinder.bind(self.model, self.el, defaultBindings);
+                self.$el.find('[data-property="displayName"]').text(self.model.attributes.displayName);
 
                 return self;
             },
@@ -194,7 +192,6 @@ define('io.ox/settings/accounts/settings/pane',
             }
         });
 
-
     /**
      * Extension point for account settings detail view
      *
@@ -207,8 +204,6 @@ define('io.ox/settings/accounts/settings/pane',
      * button.
      *
      */
-
-
 
     ext.point('io.ox/settings/accounts/settings/detail').extend({
         index: 300,
@@ -226,7 +221,7 @@ define('io.ox/settings/accounts/settings/pane',
                 var AccountsView = Backbone.View.extend({
 
                     initialize: function () {
-                        _.bindAll(this);
+                        _.bindAll(this, 'render', 'onAdd');
                         this.collection = collection;
 
                         this.collection.bind('add', this.render);
@@ -245,7 +240,7 @@ define('io.ox/settings/accounts/settings/pane',
                         }
 
                         this.collection.each(function (item) {
-                            self.$el.find('.settings-list').append(
+                            self.$el.find('.widget-list').append(
                                 new AccountSelectView({ model: item }).render().el
                             );
                         });
@@ -266,7 +261,7 @@ define('io.ox/settings/accounts/settings/pane',
                                         e.preventDefault();
                                         // looks like oauth?
                                         if ('reauthorize' in submodule) {
-                                            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+                                            var win = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
                                             submodule.createInteractively(win);
                                         } else {
                                             submodule.createInteractively(e);
@@ -307,4 +302,3 @@ define('io.ox/settings/accounts/settings/pane',
     return {};
 
 });
-

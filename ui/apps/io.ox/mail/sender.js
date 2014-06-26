@@ -132,7 +132,6 @@ define('io.ox/mail/sender',
             return api.getAllSenderAddresses();
         },
 
-
         /**
          * display name
          * accessible for testing purposes

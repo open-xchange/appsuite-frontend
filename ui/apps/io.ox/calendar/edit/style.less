@@ -12,17 +12,25 @@
  */
 
 .io-ox-calendar-edit {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+
+    max-width: 880px;
     margin-top: 20px;
 
-    .btn {
-        &.save {
+    div.header {
+        margin-bottom: 10px;
+
+       .btn {
             float: right;
-            margin-left: 13px;
+            &.save {
+                margin-left: 13px;
+            }
         }
-        &.discard { float: right; }
+
+        h1.title {
+            line-height:0;
+            font-size: 20px;
+            float: left;
+        }
     }
 
     .app-bottom-toolbar {
@@ -32,11 +40,29 @@
         }
     }
 
-    label.desc {
+    .btn.btn-link {
+        padding-right:0;
         font-size: 13px;
-        color: #888;
+        font-weight: 700;
+    }
 
-        span { white-space: nowrap; }
+    .sectiontitle {
+        font-family: @normal-font-family;
+        color: #333;
+    }
+
+    legend, label {
+        color: #888;
+        margin-bottom: 5px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    legend {
+        padding-top: 8px;
+        display: inline-block;
+        width: 100%;
+        border: 0;
     }
 
     div.section {
@@ -45,96 +71,54 @@
         padding: 20px;
     }
 
-    h1.title {
-        font-size: 20px;
-        float: left;
-    }
-
-    input {
-        &.title {
-            width: 99%;
-            font-weight: bold;
-            font-size: 14px;
-            text-overflow: ellipsis;
+    .dateinput {
+        .label-default {
+            background-color: #aaa;
         }
-        &.location { width: 100%; }
+
+        .form-inline input {
+            width: 90px;
+            &.datepicker-day-field {
+                width: 107px;
+            }
+        }
     }
 
-    .label {
-        padding: 1px 3px 2px;
-        font-size: 9.75px;
-        font-weight: bold;
-        color: white;
-        text-transform: uppercase;
-        .border-radius(3px);
+    .recurrenceview .checkbox.control-label {
+        margin-top: 0;
+    }
+
+    .privateflag .checkbox.control-label {
+        margin-top: 4px;
+        padding-top: 0;
     }
 
     textarea.note {
-        font-family: @normalFontFamily;
-        font-size: 13px;
-        line-height: 18px;
-        color: black;
-        background-color: transparent;
-        border: 1px solid #CCC;
-        outline: none;
-        width: 100%;
-        height: 100%;
         resize: vertical;
         padding: 10px;
-        margin: 0;
         min-height: 120px;
-        .box-sizing(border-box);
-
-        &:focus {
-            border-color: white;
-            .box-shadow(0 0 4px 0 #006897);
-        }
     }
 
-    .sectiontitle {
-        font-size: 13px;
-        font-family: @normalFontFamily;
-        font-weight: normal;
-        margin: 20px 0 15px 0;
-        color: #888;
+    .find-free-time {
+        margin-top: 13px;
     }
 
-    .find-free-time { font-size: 13px; }
-
-    legend {
-        display: block;
-        width: 100%;
-        padding: 0;
-        margin-bottom: 27px;
-        font-size: 19.5px;
-        line-height: 26px;
-        color: #333;
-        border: 0;
+    .find-free-time-top {
+        margin-top: 26px;
     }
 
-    input.add-participant { width: 345px; }
-
-    select { width: 100%; }
-
-    .participantsrow { margin-bottom: 30px; }
-
-    .add-participants {
-        margin-bottom: 200px;
-
-        .help {
-            color: #888;
-            margin-top: 5px;
-        }
+    .participantsrow {
+        margin-bottom: 30px;
     }
 
-    .hard-conflict { margin: 1em 0 0 0; }
+    .hard-conflict {
+        margin: 1em 0 0 0;
+    }
 
     .filename {
         word-wrap: break-word;
         word-break: break-all;
     }
-
-    .attachment-edit-row { margin-bottom: 9px; }
 
     .typeahead.calendaredit {
         height: 200px;
@@ -147,57 +131,40 @@
             padding: 3px 15px 3px 3px;
         }
     }
-}
 
-.io-ox-calendar-edit-sidepanel {
-    padding: 13px;
-    background-color: whiteSmoke;
-}
+    .io-ox-recurrence-view {
+        background-color: #eee;
+        padding: 10px;
+        margin: 7px 0 10px 0;
+        min-height: 140px;
 
-.edit-appointment input[type="text"].discreet:focus {
-    font-size: 12px;
-    line-height: 18px;
-    height: 29px;
-    border: 1px solid #CCC;
-    background-color: white;
-    color: black;
-    outline: 0;
-    margin: 0;
-    padding: 5px 5px 4px 5px;
-    width: 100%;
-    .box-sizing(border-box);
-    -webkit-border-radius: 0;
-    -webkit-appearance: none;
-}
+        * {
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
 
-.io-ox-recurrence-view {
-    background-color: #eee;
-    padding: 10px;
-    margin: 7px 0 20px 0;
-    min-height: 140px;
+        .recurrence-detail-toggle .fa-times {
+            color: #888;
+        }
 
-    .recurrence-detail-toggle .icon-remove { color: #888; }
+        span.dropdown {
+            position: static;
 
-    * {
-        .box-sizing(border-box);
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
+            &.open {
+                position: relative;
+            }
+        }
+
+        .inset {
+            padding-left: 5px;
+            height: 20px;
+        }
+
+        input[type="text"] {
+            min-width: 25px;
+            padding: 0 2px;
+        }
     }
 
-    span.dropdown {
-        position: static;
-
-        &.open { position: relative; }
-    }
-
-    .inset {
-        padding-left: 5px;
-        height: 20px;
-    }
-
-    input[type="text"] {
-        min-width: 25px;
-        padding: 0 2px;
-    }
 }
 
 /* Mobile */
@@ -207,19 +174,19 @@
         margin-top: 0;
         padding: 0 13px;
 
-        .header { margin-bottom: 9px; }
+        div.header {
+            margin-bottom: 9px;
 
-        h1.title { float: none; }
+            h1.title {
+                float: none;
+            }
+        }
 
-        .sectiontitle { margin: 0; }
-
-        .dateinput .span6 {
-            width: 50%;
-            float: left;
-
-            &[data-extension-id="end-date"] .control-group { float: right; }
-
-            .input-small { width: 9em; }
+        .dateinput .form-inline input {
+            padding: 4px 6px;
+            &.datepicker-day-field {
+                width: 100%;
+            }
         }
 
         .actionToggle {
@@ -229,20 +196,20 @@
             &.spacer { padding-bottom: 40px; }
         }
 
-        .collapsed { display: none; }
+        .collapsed {
+            display: none;
+        }
 
-        .control-group { margin-bottom: 0; }
+        textarea.note {
+            min-height: 0;
+        }
 
-        textarea.note { min-height: 0; }
+        .io-ox-recurrence-view .inset {
+            height: auto;
+        }
 
-        .io-ox-recurrence-view .inset { height: auto; }
-
-        .fileupload .uneditable-input { width: 185px; }
-
-        .participant-wrapper {
-            .participant-email {
-                display: block;
-            }
+        .participant-wrapper .participant-email {
+            display: block;
         }
     }
 }

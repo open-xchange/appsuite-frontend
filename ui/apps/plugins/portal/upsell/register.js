@@ -31,7 +31,7 @@ define('plugins/portal/upsell/register',
                 $('<div class="content centered" style="cursor: pointer; padding-top: 3em;">').append(
                     $('<h2>').append(
                         $.txt(title + ' '),
-                        $('<i class="icon-star">')
+                        $('<i class="fa fa-star">')
                     ),
                     $('<div>').text(gt('Click here for free trial.'))
                 )

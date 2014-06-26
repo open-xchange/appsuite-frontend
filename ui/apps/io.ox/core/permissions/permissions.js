@@ -23,7 +23,7 @@ define('io.ox/core/permissions/permissions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/http',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.less'
+     'less!io.ox/core/permissions/style'
     ], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
@@ -69,7 +69,7 @@ define('io.ox/core/permissions/permissions',
                 this.model.on('remove', performRemove, this);
             },
 
-            className: 'permission row-fluid',
+            className: 'permission row',
 
             events: {
                 'click a.bit': 'updateDropdown',
@@ -212,7 +212,7 @@ define('io.ox/core/permissions/permissions',
             } else {
                 this.append(
                     $('<div class="pull-left contact-picture group">').append(
-                        $('<i class="icon-group">')
+                        $('<i class="fa fa-group">')
                     )
                 );
             }
@@ -251,6 +251,7 @@ define('io.ox/core/permissions/permissions',
                 options.addClass('readwrite');
             } else {
                 options.addClass('readonly');
+                options.find('span.dropdown a').attr({'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled'});//disable dropdown
             }
             node.append(
                 addRemoveButton(baton.model.get('entity')),
@@ -263,7 +264,7 @@ define('io.ox/core/permissions/permissions',
 
     addRemoveButton = function (entity) {
         if (isFolderAdmin && entity !== ox.user_id) {
-            return $('<a href="# "class="close">').append($('<i class="icon-trash">'));
+            return $('<a href="# "class="close">').append($('<i class="fa fa-trash-o">'));
         } else {
             return $();
         }
@@ -342,7 +343,6 @@ define('io.ox/core/permissions/permissions',
                         isFolderAdmin = false;
                     }
 
-
                     var options = {top: 60, width: 800, center: false, maximize: true};
                     if (_.device('!desktop')) {
                         options = {top: '40px', center: false};
@@ -359,8 +359,9 @@ define('io.ox/core/permissions/permissions',
                         dialog.getFooter().hide();
                     }
 
-                    // mail folders show up with "null"
-                    var owner = data.created_by || ox.user_id;
+                    // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
+                    // shared folder only have admins, no owner, because it's not possible to determine the right one
+                    var owner = data.created_by || api.is('insideDefaultfolder', data) ? ox.user_id : null;
 
                     collection.on('reset', function () {
                         var node = dialog.getContentNode().empty();
@@ -398,12 +399,14 @@ define('io.ox/core/permissions/permissions',
                             dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
                         }
 
-                        var node =  $('<div class="autocomplete-controls input-append">').append(
-                                $('<input type="text" class="add-participant permissions-participant-input-field">').on('focus', function () {
+                        var node =  $('<div class="autocomplete-controls input-group">').append(
+                                $('<input type="text" class="add-participant permissions-participant-input-field form-control">').on('focus', function () {
                                     autocomplete.trigger('update');
                                 }),
-                                $('<button type="button" class="btn" data-action="add">')
-                                    .append($('<i class="icon-plus">'))
+                                $('<span class="input-group-btn">').append(
+                                    $('<button type="button" class="btn btn-default" data-action="add">')
+                                        .append($('<i class="fa fa-plus">'))
+                                )
                             ),
                             autocomplete = new AddParticipantsView({ el: node });
 

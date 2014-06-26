@@ -37,36 +37,63 @@ define('io.ox/core/extPatterns/links',
                     ref = node.data('ref');
                 baton.e = e;
                 actions.invoke(ref, this, baton, e);
+                _.defer(function () { node.tooltip('hide'); });
             },
-            drawDefault = function () {
-                return $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+            drawDefault = function (baton) {
+                var prio = _.device('small') ? self.mobile : self.prio;
+                var icons = self.icon && baton.options.icons !== false;
+                var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
+                        'role': 'menuitem',
+                        'title': self.title || self.label || '',
                         'data-section': self.section || 'default',
-                        'data-prio': self.prio || 'lo',
-                        'data-ref': self.ref,
-                        'data-prio-mobile': self.prioMobile || 'none',
-                        'role': 'menuitem'
+                        'data-prio': _.device('small') ? (self.mobile || 'none') : (self.prio || 'lo'),
+                        'data-ref': self.ref
+                    });
+                // icons are prefered over labels
+                a.append(
+                    (icons && prio === 'hi' && $('<i>').addClass(self.icon)) ||
+                    (self.label && $.txt(self.label)) ||
+                    $()
+                );
+                // has icon?
+                if (icons) a.addClass('no-underline');
+                // use tooltip?
+                if (!_.device('smartphone') && (icons && self.label) || self.title) {
+                    a.attr({
+                        'data-toggle': 'tooltip',
+                        'data-placement': 'bottom',
+                        'data-animation': 'false',
+                        'data-container': 'body'
                     })
-                    .append(self.label ? $.txt(String(self.label)) : $())
-                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $())
-                    .attr('title', options.title || '');
+                    .tooltip()
+                    .on('dispose', function () {
+                        $(this).tooltip('hide');
+                    });
+                }
+                return a;
             };
 
         this.draw = this.draw || function (baton) {
+
             baton = ext.Baton.ensure(baton);
+            var link = drawDefault(baton);
 
             this.append(
-                drawDefault(baton)
-                .data({ ref: self.ref, baton: baton })
-                .click(click)
+                link.data({ ref: self.ref, baton: baton }).click(click)
             );
+
+            // call customize? (call after append; must be self - not this)
+            if (self.customize) self.customize.call(link, baton);
         };
 
         if (this.drawDisabled === true) {
-            this.drawDisabled = function () {
+            this.drawDisabled = function (baton) {
+                var link = drawDefault(baton);
                 this.append(
-                    drawDefault()
+                    link
+                    .tooltip('destroy')
                     .addClass('disabled')
                     .attr({
                         'aria-disabled': true
@@ -77,12 +104,10 @@ define('io.ox/core/extPatterns/links',
                     })
                     .removeAttr('href')
                 );
+                // call customize? (call after append; must be self - not this)
+                if (self.customize) self.customize.call(link, baton);
             };
         }
-    };
-
-    var XLink = function (id, options) {
-        ext.point(id).extend(new Link(options));
     };
 
     function actionClick(e) {
@@ -99,8 +124,11 @@ define('io.ox/core/extPatterns/links',
             draw: function (baton) {
                 baton = ext.Baton.ensure(baton);
                 this.append(
-                    $('<li>').attr('role', 'menuitem').append(
-                        $('<a href="#" tabindex="1">').attr('data-action', extension.ref).text(extension.label)
+                    $('<li>').append(
+                        $('<a href="#" tabindex="1">').attr({
+                            'data-action': extension.ref,
+                            'role': 'menuitem'
+                        }).text(extension.label)
                         .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
@@ -129,7 +157,7 @@ define('io.ox/core/extPatterns/links',
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
-            var attr = { href: '#', 'class': 'btn', 'data-action': self.id, tabIndex: self.tabIndex };
+            var attr = { href: '#', 'class': 'btn btn-default', 'data-action': self.id, tabIndex: self.tabIndex };
             if (tag === 'button') attr.type = 'button';
             this.append(
                 node = $('<' + tag + '>', attr)
@@ -157,15 +185,12 @@ define('io.ox/core/extPatterns/links',
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
 
         baton = ext.Baton.ensure(baton);
-        var nav = $('<ul role="menu">').appendTo(node);
 
-        // customize
-        if (extension.attributes) {
-            nav.attr(extension.attributes);
-        }
-        if (extension.classes) {
-            nav.addClass(extension.classes);
-        }
+        var nav = baton.$el ||
+            $('<ul class="list-unstyled" role="menubar">')
+            .addClass(extension.classes || '')
+            .attr(extension.attributes || {})
+            .appendTo(node);
 
         return getLinks(extension, collection, baton, args)
             .always(function (items) {
@@ -182,16 +207,11 @@ define('io.ox/core/extPatterns/links',
                     }
                     else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
-                        if (_.isFunction(link.customize)) {
-                            link.customize.call(nav.find('a'), baton);
-                        }
                         count++;
                     }
                 });
                 // empty?
-                if (count === 0) {
-                    nav.addClass('empty');
-                }
+                if (count === 0) nav.addClass('empty');
             })
             .then(function () {
                 return nav;
@@ -226,9 +246,6 @@ define('io.ox/core/extPatterns/links',
                     }
                     else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
-                        if (_.isFunction(link.customize)) {
-                            link.customize.call(group.find('a'), baton);
-                        }
                         count++;
                     }
                 });
@@ -266,6 +283,20 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
+    function injectDividers(node) {
+        // loop over all items and visually group by "section"
+        var currentSection = '';
+        node.children('li').each(function () {
+            var node = $(this), section = node.children('a').attr('data-section');
+            // add divider?
+            if (section === undefined) return;
+            if (currentSection !== '' && currentSection !== section) {
+                node.before('<li class="divider" role="presentation">');
+            }
+            currentSection = section;
+        });
+    }
+
     /**
      * @param {object}  options
      * @param {boolean} options.forcelimit force usage of 'more...'
@@ -276,76 +307,69 @@ define('io.ox/core/extPatterns/links',
         var extension = _.extend(this, {
             classes: 'io-ox-inline-links',
             attributes: {
-                'aria-label': gt.format('Inline menu %s', options.title || '')
+                //#. %1$s inline menu title for better accessibility
+                'aria-label': gt('Inline menu %1$s', options.title || '')
             }
         }, options);
+
+        function processItems(baton, nav) {
+
+            // add toggle unless multi-selection
+            var multiple = _.isArray(baton.data) && baton.data.length > 1,
+                all = nav.children(),
+                lo = all.children().filter('[data-prio="lo"]').parent(),
+                links = lo.find('a'),
+                allDisabled = links.length === links.filter('.disabled').length,
+                isSmall = _.device('small');
+
+            // remove unimportant links on smartphone (prio='none')
+            if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
+
+            if (lo.length > 1 && !allDisabled && (!multiple || options.forcelimit)) {
+                nav.append(
+                    $('<li class="dropdown">').append(
+                        $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
+                        .append(
+                            $.txt(isSmall ? gt('Actions') : gt('More')),
+                            $('<i class="fa fa-caret-down">')
+                        )
+                        .on(Modernizr.touch ? 'touchstart' : 'click', function () {
+                            // fix dropdown position on-the-fly
+                            var left = $(this).parent().position().left;
+                            $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' pull-right'));
+                        }),
+                        $('<ul class="dropdown-menu pull-right" role="menu">')
+                        .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
+                        .append(lo)
+                    )
+                );
+                injectDividers(nav.find('ul'));
+            }
+
+            // hide if all links are disabled
+            if (allDisabled) lo.hide();
+            if (options.customizeNode) options.customizeNode(nav);
+
+            // move to real target node
+            if (baton.$.target) baton.$.target.append(nav.children());
+
+            // clear
+            all = lo = null;
+        }
 
         this.draw = function (baton) {
 
             baton = ext.Baton.ensure(baton);
 
-            // create & add node first, since the rest is async
-            var args = $.makeArray(arguments),
-                multiple = _.isArray(baton.data) && baton.data.length > 1;
+            // use temporary container and remember real target node
+            if (baton.$el) {
+                baton.$.temp = $('<div>');
+                baton.$.target = baton.$el;
+                baton.$el = null;
+            }
 
-            drawLinks(extension, new Collection(baton.data), this, baton, args, true).done(function (nav) {
-
-                // add toggle unless multi-selection
-                var all = nav.children(),
-                    lo = all.children().filter('[data-prio="lo"]').parent(),
-                    isSmall = _.device('small');
-
-                if ((!multiple || options.forcelimit) && (isSmall || (all.length > 5 && lo.length > 1))) {
-                    nav.append(
-                        $('<li class="dropdown">').append(
-                            $('<a class="actionlink">')
-                            .attr({
-                                'href': '#',
-                                'data-toggle': 'dropdown',
-                                'data-action': 'more',
-                                'aria-haspopup': 'true',
-                                'tabindex': '1',
-                                'role': 'menuitem'
-                            }).append(
-                                isSmall ?
-                                    [$.txt(gt('Actions')), $('<b class="caret">')] :
-                                    [$.txt(gt('More')), $.txt(_.noI18n(' ...')), $('<b class="caret">')]
-                            )
-                            .on(Modernizr.touch ? 'touchstart' : 'click', function () {
-                                // fix dropdown position on-the-fly
-                                var left = $(this).parent().position().left;
-                                $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
-                            }),
-                            $('<ul class="dropdown-menu dropdown-right">')
-                            .attr({
-                                'role': 'menu',
-                                'aria-label': isSmall ? gt('Actions') : gt('More')
-                            }).append((function () {
-                                if (isSmall) {
-                                    return all.children().filter('[data-prio-mobile="none"]').parent();
-                                }
-                                // loop over all items and visually group by "section"
-                                var items = [], currentSection = '';
-                                lo.each(function () {
-                                    var node = $(this), section = node.attr('data-section');
-                                    // add divider?
-                                    if (currentSection !== '' && currentSection !== section) {
-                                        items.push($('<li class="divider" role="presentation">'));
-                                    }
-                                    currentSection = section;
-                                    // add item
-                                    items.push(node);
-                                });
-                                return items;
-                            }()))
-                        )
-                    );
-                }
-                all = lo = null;
-                if (options.customizeNode) {
-                    options.customizeNode(nav);
-                }
-            });
+            drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true)
+                .done(_.lfo(true, processItems, baton));
         };
     };
 
@@ -362,54 +386,60 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
-    var z = 0;
+    var drawDropDownItems = function (options, baton, args) {
+        var ul = this.data('ul');
+        if (!ul) return; // race-condition
+        baton.$el = ul.empty();
+        drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
+            injectDividers(baton.$el);
+        });
+    };
+
+    var beforeOpenDropDown = function (e) {
+        var baton = e.data.baton;
+        baton.data = baton.model ? baton.model.toJSON() : baton.data;
+        baton.options.icons = false;
+        drawDropDownItems.call($(this), e.data.options, baton, e.data.args);
+    };
+
     var drawDropDown = function (options, baton) {
-        if (options.zIndex !== undefined) {
-            z = options.zIndex;
-        }
-        var args = $.makeArray(arguments),
-            node = $('<div>').addClass('dropdown')
-                .css('display', 'inline-block')
-                .appendTo(this),
-            label = options.label || baton.label || '###',
-            $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
-                .data('context', baton.data)
-                .append(
-                    _.isString(label) ? $.txt(label) : label,
-                    $('<span>').text(_.noI18n(' ')),
-                    $('<b>').addClass('caret')
-                )
-                .appendTo(node);
 
-        if (options.zIndex !== undefined) {
-            node.css('zIndex', (z = z > 0 ? z - 1 : 11000));
-        }
+        var label = options.label, args = $.makeArray(arguments), node, ul;
 
-        // TODO remove this whole 'inline-js-spacing' solution
-        // better use CSS :after to insert spaces
-        // dont' do this crap on mobile, textnode can not be styled or overwritten later...
-        if (_.device('!smartphone')) {
-            node.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
-        }
+        // label: Use baton or String or DOM node
+        label = baton.label || label;
+        label = _.isString(label) ? $.txt(label) : label;
 
-        // create & add node first, since the rest is async
-        options.classes += ' dropdown-menu';
-        if (options.open === 'left') {
-            options.classes += ' pull-right';
+        node = baton.$el || $('<div>');
+
+        // build dropdown
+        this.append(
+            node.addClass('dropdown').append(
+                $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
+                .append(label, $('<i class="fa fa-caret-down">')),
+                ul = $('<ul class="dropdown-menu" role="menu">')
+            )
+        );
+
+        // store reference to <ul>; we need that for mobile drop-downs
+        node.data('ul', ul);
+
+        // use smart update?
+        if (baton.model) {
+            node.on('show.bs.dropdown', { options: options, baton: baton, args: args }, beforeOpenDropDown);
         } else {
-            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function () {
-                // fix dropdown position on-the-fly
-                node.find('ul.dropdown-menu').addClass(node.position().left < 100 ? '' : 'dropdown-right');
-            });
+            _.defer(drawDropDownItems.bind(node), options, baton, args);
         }
-        drawLinks(options, new Collection(baton.data), node, baton, args, true);
 
-        $toggle.dropdown();
+        // usual customizations
+        if (options.classes) node.addClass(options.classes);
+        if (options.attributes) node.attr(options.attributes);
 
         return node;
     };
 
-    var DropdownLinks = function (options) {
+    // full dropdown; <div> <a> + <ul> + inks </div>
+    var Dropdown = function (options) {
         var o = _.extend(this, options);
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
@@ -417,18 +447,20 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
-    var Dropdown = function (id, options) {
-        var o = options || {};
-        o.ref = id + '/' + o.id;
-        ext.point(id).extend(
-            _.extend({
-                ref: o.ref,
-                draw: function (baton) {
-                    baton = ext.Baton.ensure(baton);
-                    drawDropDown.call(this, o, baton);
+    // just the dropdown - <ul> + links; not the container
+    var DropdownLinks = function (options, baton, wrap) {
+        options = options || {};
+        baton.$el = $('<ul class="dropdown-menu" role="menu">');
+        var wrap = options.wrap === undefined ? true : !!options.wrap;
+        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap)
+            .done(function () {
+                //if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
+                if (options.emptyCallback && baton.$el.hasClass('empty')) {
+                    options.emptyCallback();
                 }
-            }, o)
-        );
+                injectDividers(baton.$el);
+                });
+        return baton.$el;
     };
 
     var drawButtonGroup = function (options, baton) {
@@ -466,12 +498,12 @@ define('io.ox/core/extPatterns/links',
         function draw(extension, baton) {
             var args = $.makeArray(arguments), a, ul, div, title = [];
             this.append(
-                div = $('<div class="toolbar-button dropdown">').append(
+                div = $('<li class="toolbar-button dropdown">').append(
                     a = $('<a href="#" data-toggle="dropdown" title="" tabindex="1">')
                         .attr('data-ref', extension.ref)
                         .addClass(extension.addClass)
                         .append(extension.icon()),
-                    ul = $('<ul class="dropdown-menu dropdown-right-side" role="menu" aria-hidden="true">')
+                    ul = $('<ul class="dropdown-menu dropdown-right-side" role="menu">')
                 )
             );
             // get links
@@ -492,15 +524,18 @@ define('io.ox/core/extPatterns/links',
                                 x.draw.call(ul, baton);
                             });
                         // set title attribute
-                        a.attr('title', extension.label || title.join(', '))
-                         .attr('aria-label', extension.label || title.join(', '))
-                         .attr('aria-haspopup', true);
+                        a.attr({
+                            'title': extension.label || title.join(', '),
+                            'aria-label': extension.label || title.join(', '),
+                            'role': 'menuitem',
+                            'aria-haspopup': true
+                        });
 
                         div.attr('role', 'menu');
                         // add footer label?
                         if (extension.label) {
                             ul.append(
-                                $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
+                                $('<li class="dropdown-footer">').text(extension.label)
                             );
                         }
                     } else {
@@ -510,21 +545,28 @@ define('io.ox/core/extPatterns/links',
                         if (links.length === 1) {
                             // directly link actions
                             a.attr({
-                                title: links[0].label || '',
+                                'title': links[0].label || '',
                                 'aria-label': links[0].label || '',
-                                role: 'menuitem',
-                                tabindex: 1
+                                'role': 'menuitem',
+                                'tabindex': 1,
+                                // add tooltip
+                                'data-animation': 'false',
+                                'data-placement': 'right',
+                                'data-container': 'body'
                             })
                             .on('click', { baton: baton, extension: links[0] }, actionClick);
+                            if (!_.device('touch')) {
+                                a.tooltip();
+                            }
                         } else {
-                            a.addClass('disabled').on('click', preventDefault);
+                            a.addClass('disabled').removeAttr('tabindex').attr({ 'aria-disabled': true }).on('click', preventDefault);
                         }
                     }
                 });
         }
 
         function icon() {
-            return $('<i class="icon-magic">');
+            return $('<i class="fa fa-magic">');
         }
 
         return function ActionGroup(id, extension) {
@@ -546,17 +588,15 @@ define('io.ox/core/extPatterns/links',
     return {
         Action: Action,
         Link: Link,
-        XLink: XLink, // TODO: consolidate Link/XLink
         Button: Button,
         ActionLink: ActionLink,
         ToolbarButtons: ToolbarButtons,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         InlineButtonGroup: InlineButtonGroup,
-        DropdownLinks: DropdownLinks,
         Dropdown: Dropdown,
+        DropdownLinks: DropdownLinks,
         ButtonGroup: ButtonGroup,
         ActionGroup: ActionGroup
     };
 });
-

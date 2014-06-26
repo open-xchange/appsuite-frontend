@@ -17,7 +17,7 @@ define('io.ox/emoji/main',
        'io.ox/core/extensions',
        'settings!io.ox/mail/emoji',
        'css!3rd.party/emoji/emoji.css',
-       'less!io.ox/emoji/emoji.less'
+       'less!io.ox/emoji/emoji'
     ], function (emoji, categories, conversions, ext, settings) {
 
     'use strict';
@@ -273,7 +273,11 @@ define('io.ox/emoji/main',
                 createImageTag = function (css, unicode) {
                     return $('<div>').append(
                         $('<img src="apps/themes/login/1x1.gif" class="emoji ' + css + '">')
-                        .attr('data-emoji-unicode', unicode)
+                        .attr({
+                            'data-emoji-unicode': unicode,
+                            'data-mce-resize': 'false',
+                            'alt': unicode
+                        })
                     ).html();
                 };
 
@@ -366,6 +370,13 @@ define('io.ox/emoji/main',
                     return self.imageTagsToPUA(self.unifiedToImageTag(text, {
                         forceEmojiIcons: true
                     }), format);
+                };
+            } else if (options.from === 'all' && options.to === 'unified') {
+                return function (text) {
+                    text = text || '';
+                    text = self.softbankToUnified(text);
+                    text = self.jisToUnified(text);
+                    return text;
                 };
             }
             return;

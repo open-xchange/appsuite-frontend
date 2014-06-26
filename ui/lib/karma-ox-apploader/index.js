@@ -7,11 +7,11 @@ var createCustomFileHandler = function(handlers, builddir) {
         prefixes: [builddir]
     };
     var appsLoad = function (request, response) {
-        var f = require('../appserver/middleware/appsload').create(options);
+        var f = require('appserver').middleware.appsload(options);
         return f(request, response, noop);
     };
     var localFiles = function (request, response) {
-        var f = require('../appserver/middleware/localfiles').create(options);
+        var f = require('appserver').middleware.localfiles(options);
         return f(request, response, noop);
     };
 
@@ -22,6 +22,11 @@ var createCustomFileHandler = function(handlers, builddir) {
 
     handlers.push({
         urlRegex: /(\/apps\/)/,
+        handler: localFiles
+    });
+
+    handlers.push({
+        urlRegex: /(\/static\/)/,
         handler: localFiles
     });
 }

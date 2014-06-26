@@ -11,7 +11,6 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-
 define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], function (main, core, api) {
 
     'use strict';
@@ -139,21 +138,7 @@ define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], functio
             'data': {
                 'id': 510778
             }
-        },
-
-        TIMEOUT = ox.testTimeout;
-
-    // helpers
-    function Done() {
-        var f = function () {
-            return f.value;
         };
-        f.value = false;
-        f.yep = function () {
-            f.value = true;
-        };
-        return f;
-    }
 
     /*
      * Suite: Contacts Test
@@ -175,28 +160,23 @@ define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], functio
         });
 
         it('should provide a getApp function ', function () {
-            expect(main.getApp).toBeTruthy();
+            expect(main.getApp).to.be.a('function');
         });
 
         it('should provide a launch function ', function () {
             var app = main.getApp();
-            expect(app.launch).toBeTruthy();
+            expect(app.launch).to.be.a('function');
         });
 
-        it('opens contact app ', function () {
-
-            var loaded = new Done();
-
-            waitsFor(loaded, 'Could not load app', TIMEOUT);
-
+        it('opens contact app ', function (done) {
             main.getApp().launch().done(function () {
                 app = this;
-                loaded.yep();
-                expect(app.get('state')).toBe('running');
+                expect(app.get('state')).to.equal('running');
+                done();
             });
         });
 
-        it('creates a fresh obj', function () {
+        it('creates a fresh obj', function (done) {
 
             var flag, value;
 
@@ -205,13 +185,11 @@ define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], functio
                 flag = true;
             });
 
-            runs(function () {
-                flag = false;
-                api.create(testObject).done(function () {
-                    expect(value).toBe(response.data.id);
-                });
+            flag = false;
+            api.create(testObject).done(function () {
+                expect(value).to.equal(response.data.id);
+                done();
             });
-
         });
 
     });

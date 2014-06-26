@@ -17,7 +17,7 @@ define('io.ox/backbone/forms',
      'io.ox/core/date',
      'settings!io.ox/calendar',
      'gettext!io.ox/core',
-     'less!io.ox/backbone/forms.less'
+     'less!io.ox/backbone/forms'
     ], function (ext, Events, date, settings, gt) {
 
     'use strict';
@@ -33,11 +33,11 @@ define('io.ox/backbone/forms',
             init: function () {
                 var self = this;
 
-                function showBackendError(error) {
-                    if (!self.isRelevant(error)) {
+                function showBackendError(error, xhr) {
+                    if (!self.isRelevant(error, xhr)) {
                         return;
                     }
-                    var alert = $.alert(self.errorTitle, self.formatError(error));
+                    var alert = $.alert({title: self.errorTitle, message: self.formatError(error)});
                     self.$el.find('.alert').remove();
                     self.$el.append(alert);
 
@@ -75,12 +75,8 @@ define('io.ox/backbone/forms',
             if (this.nodes.controlGroup) {
                 return this.nodes.controlGroup;
             }
-            this.buildControls();
 
-            this.nodes.controlGroup = $('<div class="control-group">').appendTo(this.$el);
-            if (options.fluid) {
-                this.nodes.controlGroup.addClass('row-fluid');
-            }
+            this.nodes.controlGroup = $('<div class="form-group">').appendTo(this.$el);
             this.nodes.controlGroup.append(
                 this.buildLabel(),
                 this.buildControls()
@@ -88,11 +84,11 @@ define('io.ox/backbone/forms',
         };
 
         this.buildControls = function () {
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(this.buildElement()));
+            return this.nodes.controls || (this.nodes.controls = $('<div>').addClass(options.controlCssClass).append(this.buildElement()));
         };
 
         this.buildLabel = function () {
-            return this.nodes.label || (this.nodes.label = $('<label class="control-label">').text(this.label));
+            return this.nodes.label || (this.nodes.label = $('<label class="control-label" for="' + this.attribute + '">').addClass(options.labelCssClass).text(this.label));
         };
 
         this.buildElement = function () {
@@ -156,7 +152,6 @@ define('io.ox/backbone/forms',
 
         this.modelEvents = {};
 
-
         if (options.rare) {
             this.modelEvents['change:' + options.attribute] = 'handleRareModelChange updateElement';
         } else {
@@ -172,14 +167,15 @@ define('io.ox/backbone/forms',
     }
 
     function SelectControlGroup(options) {
-        _.extend(this, new ControlGroup({}), {
+        _.extend(this, new ControlGroup(options), {
             buildElement: function () {
-                var self = this;
+                var self = this,
+                    guid = _.uniqueId('form-control-label-');
                 if (this.nodes.element) {
                     return this.nodes.element;
                 }
-
-                this.nodes.element = $('<select tabindex="1">').addClass('control');
+                this.nodes.label.attr('for', guid);
+                this.nodes.element = $('<select>').attr({ tabindex: options.tabindex || 1, id: guid}).addClass('form-control');
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.element.append(
                         $('<option>', {value: value}).text(label)
@@ -195,127 +191,31 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
-    function createSelect(name, from, to, setter, format) {
 
-        var node = $('<select tabindex="1">').attr('name', name),
-            i = Math.min(from, to),
-            $i = Math.max(from, to),
-            d = new date.Local(0),
-            options = [];
-
-        for (; i <= $i; i++) {
-            setter.call(d, i);
-            options.push($('<option>').val(i).text(d.format(format)));
-        }
-
-        // revert?
-        if (from > to) {
-            options.reverse();
-        }
-
-        // add empty option
-        options.unshift($('<option>').text(''));
-
-        // append
-        return node.append(options);
-    }
-
-    function buildDateControl() {
-
-        var set = $();
-
-        date.getFormat(date.DATE).replace(
-            /(Y+|y+|u+)|(M+|L+)|(d+)|(?:''|'(?:[^']|'')*'|[^A-Za-z'])+/g,
-            function (match, y, m, d) {
-                var proto = date.Local.prototype, node;
-                if (y) {
-                    var year = (new date.Local()).getYear();
-                    node = createSelect('year', year, year - 150, proto.setYear, y).addClass('year');
-                } else if (m) {
-                    node = createSelect('month', 0, 11, proto.setMonth, 'MMMM').addClass('month');
-                } else if (d) {
-                    node = createSelect('day', 1, 31, proto.setDate, match).addClass('date');
+    function CheckControlGroup(options) {
+        _.extend(this, new ControlGroup(options), {
+            buildElement: function () {
+                var self = this;
+                if (this.nodes.element) {
+                    return this.nodes.element;
                 }
-                set = set.add(node);
-            }
-        );
-
-        return set;
-    }
-
-    function DateControlGroup(options) {
-
-        ControlGroup.call(this, _.extend({
-            buildElement: buildElement,
-            setValueInElement: setValueInElement,
-            updateModel: updateModel
-        }, options || {}));
-
-        function buildElement() {
-            var self = this;
-            var parent = $('<span>');
-            this.nodes.dropelements = {};
-
-            parent.append(
-                buildDateControl().each(function () {
-                    var node = $(this), name = node.attr('name');
-                    node.addClass(self.inputClassName || 'input-medium');
-                    self.nodes.dropelements[name] = node;
-                })
-            );
-
-            parent.on('change', 'select', function () {
-                self.updateModel($(this).val() === '');
-            });
-
-            return parent;
-        }
-
-        function setValueInElement(valueFromModel) {
-            if (!this.nodes.dropelements) return;
-
-            var de = this.nodes.dropelements;
-
-            if (valueFromModel) {
-                var d = new date.Local(date.Local.utc(valueFromModel));
-                de.year.val(d.getYear());
-                de.month.val(d.getMonth());
-                de.day.val(d.getDate());
-                //check how many days this month has and hide invalid ones
-                var month = d.getMonth(),
-                    dayNodes = $(this.nodes.dropelements.day).children();
-                d.setDate('31');
-                dayNodes.show();
-                if (month  !== d.getMonth()) {//this month does not have 31 days
-                    var days = d.setDate(0).getDate(),//get number of days of current month
-                        nodesToHide = dayNodes.slice(days + 1, dayNodes.length);
-                    nodesToHide.hide();
+                this.nodes.element = $('<label class="checkbox">')
+                    .addClass(this.labelClassName || '')
+                    .append(
+                        this.nodes.checkbox = $('<input tabindex="1" type="checkbox">'),
+                        this.label
+                    );
+                if (this.model.get(this.attribute)) {
+                    this.nodes.checkbox.prop('checked', true);
                 }
-            } else {
-                de.year.val('');
-                de.month.val('');
-                de.day.val('');
+                this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
+                this.nodes.checkbox.on('change', function () {
+                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), {validate: true});
+                });
+                this.nodes.label.empty();
+                return this.nodes.element;
             }
-        }
-
-        function updateModel(clear) {
-            var de = this.nodes.dropelements,
-                tempDate = new date.Local(
-                    de.year.val()  || new date.Local().getYear(),
-                    de.month.val() || 0,
-                    de.day.val()   || 1);
-            //check if there is a month jump because of the day being invalid for the new month (eg. february 31th)
-            if (tempDate.getMonth() !== parseInt(de.month.val(), 10)) {
-                tempDate.setDate(0);//set to last valid day of last month
-                if (this.model.get(this.attribute) === date.Local.localTime(tempDate)) {//trigger change manually so selectboxes get changed correctly
-                    this.model.trigger('change:' + this.attribute);
-                }
-            }
-
-            this.setValueInModel(clear ? null :
-                date.Local.localTime(tempDate));
-        }
-
+        }, options);
     }
 
     function addErrorHandling(options, object) {
@@ -354,9 +254,14 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.nodes = {};
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.inputField = $(this.control || '<input type="text">')));
+                var guid = _.uniqueId('form-control-label-');
+                this.$el.append(
+                    $('<label>').addClass(this.labelClassName || '').attr('for', guid).text(this.label),
+                    this.nodes.inputField = $(this.control || '<input type="text">').attr('id', guid)
+                );
                 this.nodes.inputField
                     .val(this.model.get(this.attribute))
+                    .addClass('form-control')
                     .attr({ tabindex: 1 });
                 if (options.changeAppTitleOnKeyUp) {
                     this.nodes.inputField.on('keyup', $.proxy(function () {
@@ -383,13 +288,13 @@ define('io.ox/backbone/forms',
         modelEvents['change:' + options.attribute] = 'updateCheckbox';
 
         var basicImplementation = {
-            tagName: 'div',
+            tagName: options.header ? 'fieldset' : 'div',
             modelEvents: modelEvents,
             render: function () {
                 var self = this;
                 this.nodes = {};
                 if (this.header) {
-                    this.$el.append($('<label>').addClass(this.headerClassName || '').text(this.header));
+                    this.$el.append($('<legend>').addClass(this.headerClassName || '').text(this.header));
                 }
                 this.$el.append(
                         $('<label class="checkbox">')
@@ -422,9 +327,10 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             modelEvents: modelEvents,
             render: function () {
-                var self = this;
+                var self = this,
+                    guid = _.uniqueId('form-control-label-');
                 this.nodes = {};
-                this.nodes.select = $('<select tabindex="1">');
+                this.nodes.select = $('<select class="form-control">').attr({ id: guid, tabindex: 1 });
                 if (options.multiple) {
                     this.nodes.select.prop('multiple', true);
                 }
@@ -433,7 +339,7 @@ define('io.ox/backbone/forms',
                         $('<option>', {value: value}).text(label)
                     );
                 });
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.select));
+                this.$el.append($('<label>').attr('for', guid).addClass(this.labelClassName || '').text(this.label)).append(this.nodes.select);
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
                     self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
@@ -451,7 +357,7 @@ define('io.ox/backbone/forms',
      */
     function SectionLegend(options) {
         _.extend(this, {
-            tagName: 'div',
+            tagName: 'fieldset',
             render: function () {
                 this.nodes = {};
                 this.$el.append(this.nodes.legend = $('<legend>').text(this.label).addClass('sectiontitle'));
@@ -468,207 +374,6 @@ define('io.ox/backbone/forms',
                   ));
             }
         }, options);
-    }
-
-    // Form Sections made up of horizontal forms
-
-    function Section(options) {
-        var self = this;
-        _.extend(this, {
-
-            tagName: 'div',
-            className: 'section',
-
-            init: function () {
-                Events.extend(this);
-                this.nodes = {};
-            },
-
-            point: function () {
-                return ext.point(self.ref);
-            },
-
-            render: function () {
-                var self = this,
-                    anyHidden = false,
-                    anyVisible = false;
-                this.point().each(function (extension) {
-                    if (extension.metadata('hidden', [self.model]) && !extension.metadata('isRare', [])) {
-                        anyHidden = anyHidden || true;
-                    } else {
-                        anyVisible = anyVisible || true;
-                    }
-                });
-
-                // If no extension is visible collapse completely unless overridden
-                if (anyVisible && anyHidden) {
-                    // Show more / less links
-                    this.state = 'mixed';
-                } else if (!anyVisible) {
-                    // All extensions are hidden -> completely collapse section
-                    this.state = 'collapsed';
-                } else if (!anyHidden) {
-                    // Everything is visible -> leave out more / less links
-                    this.state = 'allVisible';
-                }
-
-                this.initialState = this.state;
-
-                if (_.device('small')) {
-                    this.drawExtensions();
-                    this.drawHeader();
-                } else if (_.device('!small')) {
-                    this.drawHeader();
-                    this.drawExtensions();
-                }
-
-                if (this.state === 'mixed' || this.state === 'collapsed') {
-                    this.less();
-                }
-
-            },
-
-            more: function () {
-                var self = this;
-                this.state = 'allVisible';
-                this.nodes.toggleLink.text(gt('Show less'));
-                if (this.initialState === 'mixed') {
-                    // show all
-                    this.point().each(function (extension) {
-                        if (!extension.metadata('hidden', [self.model])) {
-                            return;
-                        }
-                        if (extension.show) {
-                            extension.show();
-                        } else {
-                            self.nodes.extensionNodes[extension.id].show();
-                        }
-                    });
-                    // Show regular header
-                    this.nodes.collapsedHeader.hide();
-                    this.nodes.header.show()
-                                     .find('a').focus(); //IE9
-                } else if (this.initialState === 'collapsed') {
-                    // Show regular header
-                    this.nodes.collapsedHeader.hide();
-                    this.nodes.header.show()
-                                     .find('a').focus(); //IE9
-
-                    // show extensions
-                    this.nodes.extensions.show();
-                }
-            },
-
-            less: function () {
-                var self = this;
-                if (this.initialState === 'mixed') {
-                    // hide initially hidden
-                    this.point().each(function (extension) {
-                        if (!extension.metadata('hidden', [self.model])) {
-                            return;
-                        }
-                        if (extension.hide) {
-                            extension.hide();
-                        } else {
-                            self.nodes.extensionNodes[extension.id].hide();
-                        }
-                    });
-                    // show collapsedHeader
-                    this.nodes.collapsedHeader.show()
-                                              .find('a').focus(); //IE9
-                    this.nodes.header.hide();
-                } else if (this.initialState === 'collapsed') {
-                    // hide all
-                    this.nodes.extensions.hide();
-
-                    // show collapsedHeader
-                    this.nodes.collapsedHeader.show()
-                                            .find('a').focus(); //IE9
-                    this.nodes.header.hide();
-                }
-
-                this.state = this.initialState;
-                if (this.nodes.toggleLink) {
-                    this.nodes.toggleLink.text(gt('Show more'));
-                }
-            },
-
-            /**
-             * Draw the header of a section.
-             *
-             * There can be four states a section might be in.
-             * 1. allVisible
-             *   * if this is the initial state, section can never be collapsed
-             *   * neither + or - sign are shown
-             * 2. mixed open
-             *   * section contains some visible fields that can be hidden by the user
-             *   * - sign is shown
-             * 3. mixed close
-             *   * section contains some hidden fields that can be made visible by the user
-             *   * + sign is shown
-             * 3. collapsed
-             *   * some or all fields of this section are hidden
-             *   * + sign is shown
-             *
-             * TODO: this code might need some cleanup (drawHeader, less and more)
-             */
-            drawHeader: function () {
-                var self = this;
-
-                this.nodes.header = $('<div class="row sectionheader">').append(
-                    $('<span class="offset1 span4">').append(
-                        $('<i class="icon-minus-sign">'),
-                        $('<a tabindex="1" href="#">').text(this.title).on('click', function () {
-                            if (self.state === 'mixed') {
-                                self.more();
-                            } else if (self.state === 'allVisible') {
-                                self.less();
-                            }
-                        })
-                    )
-                ).appendTo(this.$el);
-
-                if (this.state === 'allVisible') {
-                    this.nodes.header.find('.icon-minus-sign').hide();
-                    return;
-                }
-
-                this.nodes.toggleLink = $('<a href="#" tabindex="1" class="span6" data-action="toggle-' + options.id + '">').on('click', function () {
-                    if (self.state === 'mixed') {
-                        self.more();
-                    } else if (self.state === 'allVisible') {
-                        self.less();
-                    }
-                });
-
-                if (this.state === 'collapsed' || this.initialState === 'mixed') {
-                    this.nodes.collapsedHeader = $('<div class="row sectionheader collapsed">').appendTo(this.$el);
-                    $('<span class="offset1 span4">').append(
-                        $('<i class="icon-plus-sign">'),
-                        $('<a tabindex="1" href="#" data-action="toggle-' + options.id + '">').text(this.title).on('click', function () {
-                            self.more();
-                        })
-                    ).appendTo(this.nodes.collapsedHeader);
-                }
-            },
-
-            drawExtensions: function () {
-                var self = this;
-                this.nodes.extensions = this.buildExtensionContainer().appendTo(this.$el);
-                this.nodes.extensionNodes = {};
-
-                this.point().each(function (extension) {
-                    self.nodes.extensionNodes[extension.id] = $('<div>').appendTo(self.nodes.extensions);
-                    extension.invoke('draw', self.nodes.extensionNodes[extension.id], self.options);
-                });
-
-            },
-
-            buildExtensionContainer: function () {
-                return $(this.container || '<form class="form-horizontal">');
-            }
-        }, options);
-
     }
 
     function DatePicker(options) {
@@ -799,17 +504,19 @@ define('io.ox/backbone/forms',
                 this.nodes = {};
                 this.mobileSet = {};
                 this.$el.append(
-                    this.nodes.controlGroup = $('<div class="control-group">').append(
-                        $('<label>').addClass(options.labelClassName || '').text(this.label),
-                        $('<div class="controls">').append(
+                    this.nodes.controlGroup = $('<fieldset>').append(
+                        $('<legend>').addClass(options.labelClassName || '').text(this.label),
+                        $('<div class="form-inline">').append(
                             function () {
-                                self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small datepicker-day-field">');
+                                var guid = _.uniqueId('form-control-label-');
+                                self.nodes.dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date'));
+                                self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr('id', guid);
                                 if (options.initialStateDisabled) {
                                     self.nodes.dayField.prop('disabled', true);
                                 }
 
                                 if (options.display === 'DATETIME') {
-                                    self.nodes.timezoneField = $('<span class="label">');
+                                    self.nodes.timezoneField = $('<span class="label label-default">');
                                     if (self.model.get(self.attribute)) {
                                         self.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr));
                                     } else {
@@ -818,19 +525,22 @@ define('io.ox/backbone/forms',
                                 }
 
                                 if (mobileMode) {
-                                    self.nodes.dayField.toggleClass('input-medium', 'input-small');
-                                    return [self.nodes.dayField];
+                                    self.nodes.dayField.toggleClass('input-medium', 'input-sm');
+                                    return [self.nodes.dayFieldLabel, self.nodes.dayField];
                                 } else {
                                     if (options.display === 'DATE') {
-                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
+                                        return [self.nodes.dayFieldLabel, self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === 'DATETIME') {
-
-                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="input-mini">');
+                                        guid = _.uniqueId('form-control-label-');
+                                        self.nodes.timeFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Time'));
+                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">').attr('id', guid).attr({
+                                            'aria-label': gt('Use up and down keys to change the time. Close selection by pressing ESC key.')
+                                        });
                                         if (self.model.get('full_time')) {
                                             self.nodes.timeField.hide();
                                             self.nodes.timezoneField.hide();
                                         }
-                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
+                                        return [self.nodes.dayFieldLabel, self.nodes.dayField, '&nbsp;', self.nodes.timeFieldLabel, self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
                                     }
                                 }
                             }
@@ -850,7 +560,8 @@ define('io.ox/backbone/forms',
                         weekStart: date.locale.weekStart,
                         parentEl: self.nodes.controlGroup,
                         todayHighlight: true,
-                        todayBtn: true
+                        todayBtn: true,
+                        autoclose: true
                     });
                 } else {
                     require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
@@ -883,7 +594,7 @@ define('io.ox/backbone/forms',
                 if (!mobileMode && options.display === 'DATETIME') {
                     var hours_typeahead = [],
                         filldate = new date.Local().setHours(0, 0, 0, 0),
-                        interval = parseInt(settings.get('interval'), 10);
+                        interval = parseInt(settings.get('interval'), 10) || 30;
                     for (var i = 0; i < 1440; i += interval) {
                         hours_typeahead.push(filldate.format(date.TIME));
                         filldate.add(interval * date.MINUTE);
@@ -957,25 +668,17 @@ define('io.ox/backbone/forms',
             },
 
             onFullTimeChange: function () {
+                // toggle time input fields
+                var ft = this.model.get('full_time');
                 if (mobileMode) {
-                    if (this.model.get('full_time')) {
-                        this.nodes.dayField.mobiscroll('option', 'timeWheels', '');//remove the timewheels
-                        this.nodes.dayField.mobiscroll('option', 'timeFormat', '');//remove the timeFormat
-                        this.nodes.timezoneField.hide();
-                    } else {
-                        this.nodes.dayField.mobiscroll('option', 'timeWheels', this.mobileSet.timeWheels);//add the timewheels again
-                        this.nodes.dayField.mobiscroll('option', 'timeFormat', this.mobileSet.timeFormat);//add the timeFormat again
-                        this.nodes.timezoneField.show();
-                    }
+                    this.nodes.dayField.mobiscroll('option', {
+                        timeWheels: ft ? '' : this.mobileSet.timeWheels,
+                        timeFormat: ft ? '' : this.mobileSet.timeFormat
+                    });
                 } else {
-                    if (this.model.get('full_time')) {
-                        this.nodes.timeField.hide();
-                        this.nodes.timezoneField.hide();
-                    } else {
-                        this.nodes.timeField.css('display', '');
-                        this.nodes.timezoneField.css('display', '');
-                    }
+                    this.nodes.timeField.css('display', ft ? 'none' : '');
                 }
+                this.nodes.timezoneField.css('display', ft ? 'none' : '');
             },
 
             modelEvents: modelEvents
@@ -983,22 +686,18 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
-
     var forms = {
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
         SelectControlGroup: SelectControlGroup,
-        DateControlGroup: DateControlGroup,
-        Section: Section,
         Header: Header,
         InputField: InputField,
         CheckBoxField: CheckBoxField,
+        CheckControlGroup: CheckControlGroup,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,
-        DatePicker: DatePicker,
-        buildDateControl: buildDateControl
+        DatePicker: DatePicker
     };
 
     return forms;
 });
-

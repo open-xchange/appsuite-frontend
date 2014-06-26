@@ -27,39 +27,37 @@ define('io.ox/core/api/snippets',
 
     'use strict';
 
-    var api = {};
+    var api = {}, cache = null;
 
     Events.extend(api);
-
-    /**
-     * trigger events
-     * @param  {string} event
-     * @return {undefined}
-     */
-    function fnTrigger(event) {
-        return function () {
-            api.trigger(event);
-        };
-    }
 
     /**
      * get all snippets
      * @return {deferred} array of snippet objects
      */
     api.getAll = function () {
+
+        if (cache) return $.Deferred().resolve(cache);
+
         return http.GET({
             module: 'snippet',
             params: {
                 action: 'all'
             }
         })
-        .pipe(function (data) {
-            return _(data).map(function (sig) {
-                // robustness: snippet migration
-                sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
-                return sig;
-            });
-        });
+        .then(
+            function success(data) {
+                cache = _(data).map(function (sig) {
+                    // robustness: snippet migration
+                    sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
+                    return sig;
+                });
+                return cache;
+            },
+            function fail() {
+                return (cache = []);
+            }
+        );
     };
 
     /**
@@ -75,7 +73,11 @@ define('io.ox/core/api/snippets',
                 action: 'new'
             },
             data: snippet
-        }).done(fnTrigger('refresh.all'));
+        })
+        .done(function () {
+            cache = null;
+            api.trigger('refresh.all');
+        });
     };
 
     /**
@@ -92,7 +94,11 @@ define('io.ox/core/api/snippets',
                 id: snippet.id
             },
             data: snippet
-        }).done(fnTrigger('refresh.all'));
+        })
+        .done(function () {
+            cache = null;
+            api.trigger('refresh.all');
+        });
     };
 
     /**
@@ -140,10 +146,12 @@ define('io.ox/core/api/snippets',
                 action: 'delete',
                 id: id
             }
-        }).done(fnTrigger('refresh.all'));
+        })
+        .done(function () {
+            cache = null;
+            api.trigger('refresh.all');
+        });
     };
 
-
     return api;
-
 });

@@ -29,8 +29,8 @@ define('io.ox/mail/write/main',
      'settings!io.ox/mail',
      'settings!io.ox/core',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'
+     'less!io.ox/mail/style',
+     'less!io.ox/mail/write/style'
     ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, coreSettings, gt) {
 
     'use strict';
@@ -68,7 +68,11 @@ define('io.ox/mail/write/main',
         timerScale = {
             minute: 60000, //60s
             minutes: 60000
-        };
+        },
+        convertAllToUnified = emoji.converterFor({
+            from: 'all',
+            to: 'unified'
+        });
 
     function stopAutoSave(app) {
         if (app.autosave) {
@@ -255,7 +259,13 @@ define('io.ox/mail/write/main',
             // remove current signature from editor
             if (isHTML) {
                 ed.find('.io-ox-signature').each(function () {
-                    var node = $(this), text = node.html();
+                    var node = $(this),
+                        text = node.html()
+                            //remove added image urls(tiny adds them automatically)
+                            .replace(/ data-mce-src="[^"]+"\s?/, '')
+                            //remove empty alt attribute(added by tiny)
+                            .replace(/ alt=""/, '');
+
                     if (app.isSignature(text)) {
                         // remove entire node
                         node.remove();
@@ -275,24 +285,14 @@ define('io.ox/mail/write/main',
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
+                if (isHTML) text = getParagraph(text);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
-                if (isHTML) {
-                    text = getParagraph(text);
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                if (signature.misc && signature.misc.insertion === 'below') {
+                    ed.appendContent(text);
+                    ed.scrollTop('bottom');
                 } else {
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                    ed.prependContent(text);
+                    ed.scrollTop('top');
                 }
                 currentSignature = text;
             }
@@ -368,7 +368,7 @@ define('io.ox/mail/write/main',
 
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
-                return require([editorSrc]).pipe(function (Editor) {
+                return require([editorSrc]).then(function (Editor) {
                     return (editorHash[mode] = new Editor(view.textarea))
                         .done(function () {
                             app.setEditor(editorHash[mode]);
@@ -443,17 +443,19 @@ define('io.ox/mail/write/main',
         };
 
         app.setFrom = function (data) {
-
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                select = view.leftside.find('.sender-dropdown');
+                select = view.leftside.find('.sender-dropdown'),
+                filteredAccountId;
 
             // from is already set in the mail, prefer this
-            if (data.from && data.from.length === 2) {
-                sender.set(select, data.from);
+            if (data.from && data.from.length === 1) {
+                sender.set(select, data.from[0]);
                 return;
             }
 
-            accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
+            filteredAccountId = accountAPI.isUnified(data.account_id) ? accountAPI.parseAccountId(data.msgref) : data.account_id;
+
+            accountAPI.getPrimaryAddressFromFolder(filteredAccountId || folder_id).done(function (from) {
                 sender.set(select, from);
             });
         };
@@ -466,34 +468,47 @@ define('io.ox/mail/write/main',
             return str.replace(/[\s\uFEFF\xA0]+$/, '');
         }
 
-        var addBlankLine = function (content, signature) {
-            var blankline = editorMode === 'html' ? '<p></p>' : '',
-                pos = signature ? signature.misc && signature.misc.insertion || 'below' : 'below';
-            //avoid extra blank lines for 'below' default signatures (take a look at prependConent for details)
-            if (!(content === '' && pos === 'below' && editorMode === 'text'))
+        // only used on mobile to add blank lines above reply text
+        var addBlankLineSimple = function (number) {
+            var blankline = '\n';
+            for (var i = 0; i < number; i++) {
                 app.getEditor().prependContent(blankline);
+            }
+        };
+
+        var prependNewLine = function () {
+            var content = editor.getContent(),
+                nl = editorMode === 'html' ? '<p><br></p>' : '\n\n';
+            if (content !== '' && content.indexOf(nl) !== 0) {
+                editor.setContent(nl + content);
+            }
         };
 
         app.setBody = function (str) {
             var content = trimContent(str),
-                dsID, ds;
+                dsID, ds, isPhone = _.device('smartphone');
             //get default signature
-            dsID = _.device('smartphone') ?
+            dsID = isPhone ?
                 (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
                 settings.get('defaultSignature');
             ds = _.find(view.signatures, function (o, i) {
                     o.index = i;
                     return o.id === dsID;
                 });
+
             //set content
             app.getEditor().setContent(content);
             //fix misc property and set signature
             if (ds) {
+                if (isPhone) {
+                    ds.misc = {
+                        insertion: 'below'
+                    };
+                }
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 app.setSignature(({ data: ds}));
             }
-            //get position
-            addBlankLine(content, ds);
+            prependNewLine();
         };
 
         app.getRecipients = function (id) {
@@ -638,7 +653,6 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
         };
 
-
         /**
          * store headers data in form
          * @param {object} header key/value pairs
@@ -689,7 +703,7 @@ define('io.ox/mail/write/main',
             var data = mail.data;
 
             this.setFrom(data);
-            this.setSubject(data.subject);
+            this.setSubject(convertAllToUnified(data.subject));
             this.setTo(data.to);
             this.setCC(data.cc);
             this.setBCC(data.bcc);
@@ -726,6 +740,8 @@ define('io.ox/mail/write/main',
                 if (editorMode === 'html') {
                     content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
                 }
+                // convert different emoji encodings to unified
+                content = convertAllToUnified(content);
                 if (mail.replaceBody !== 'no') {
                     app[mail.initial ? 'setBody' : 'setRawBody'](content);
                 }
@@ -815,7 +831,6 @@ define('io.ox/mail/write/main',
                     } else {
                         focus('to');
                     }
-                    ox.trigger('mail:compose:stop', data, app);
                     def.resolve({app: app});
                 })
                 .fail(function (e) {
@@ -861,8 +876,11 @@ define('io.ox/mail/write/main',
                                     if (_.device('ios')) {
                                         view.textarea.trigger('blur');
                                     }
+                                    // add some blank lines to textarea
+                                    addBlankLineSimple(1);
+                                    view.textarea.focus();
+                                    app.getWindow().nodes.main.scrollTop(0);
                                 }
-                                ox.trigger('mail:reply:stop', data, app);
                             });
                         })
                         .fail(function (e) {
@@ -902,16 +920,16 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
+                        if (_.device('smartphone')) {
+                            // trigger keyup to resize the textarea
+                            view.textarea.trigger('keyup');
+                        }
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
                         win.idle();
                         focus('to');
                         def.resolve();
-                        if (_.device('smartphone')) {
-                            // trigger keyup to resize the textarea
-                            view.textarea.trigger('keyup');
-                        }
-                        ox.trigger('mail:forward:stop', data, app);
+
                     });
                 })
                 .fail(function (e) {
@@ -1052,7 +1070,7 @@ define('io.ox/mail/write/main',
                 bcc: parse(data.bcc),
                 headers: headers,
                 reply_to: mailUtil.formatSender(replyTo),
-                subject: data.subject + '',
+                subject: String(data.subject),
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
                 attachments: [attachments],
@@ -1105,6 +1123,7 @@ define('io.ox/mail/write/main',
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
                 //convert to send encoding (NOOP, if target encoding is 'unified')
+                mail.data.subject = convert(mail.data.subject);
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
             }
 
@@ -1117,7 +1136,7 @@ define('io.ox/mail/write/main',
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
 
-                if (attachmentsExceedQouta(mail)) {
+                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQouta(mail)) {
                     notifications.yell({
                         type: 'info',
                         message: gt(
@@ -1225,7 +1244,6 @@ define('io.ox/mail/write/main',
                             });
                     });
                 }
-
 
             } else {
                 cont();
@@ -1359,8 +1377,10 @@ define('io.ox/mail/write/main',
             if (app.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt('Do you really want to discard this mail?'))
-                        .addPrimaryButton('delete', gt('Discard'), 'delete', {tabIndex: '1'})
+                        .text(gt('Do you really want to discard your message?'))
+                        //#. "Discard message" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', {tabIndex: '1'})
                         .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show()
@@ -1416,5 +1436,3 @@ define('io.ox/mail/write/main',
     };
 
 });
-
-

@@ -26,7 +26,7 @@ define('plugins/halo/contacts/register', ['io.ox/core/extensions'], function (ex
 
             var self = this, def = $.Deferred();
 
-            require(['io.ox/contacts/view-detail', 'less!io.ox/contacts/style.less'], function (view) {
+            require(['io.ox/contacts/view-detail', 'less!io.ox/contacts/style'], function (view) {
                 self.append(view.draw(baton.data[0]));
                 def.resolve();
             });

@@ -23,12 +23,12 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/api/folder',
+     'io.ox/files/util',
      'gettext!io.ox/files',
-     'io.ox/core/capabilities',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
-     'apps/io.ox/core/tk/jquery.imageloader.js'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, gt, capabilities, Selection, notifications) {
+     'static/3rd.party/jquery-imageloader/jquery.imageloader.js'
+     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, util, gt, Selection, notifications) {
 
     'use strict';
 
@@ -36,27 +36,25 @@ define('io.ox/files/fluid/perspective',
         loadFilesDef = $.Deferred(),
         dialog = new dialogs.SidePopup({ focus: false }),
         //nodes
-        filesContainer, breadcrumb, inlineRight, inline, wrapper,
-        scrollpane = $('<div class="files-scrollable-pane" role="section">'),
-        topBar = $('<div class="window-content-top">'), // used on desktop
-        topActions = $('<div class="inline-actions-ms">').appendTo(topBar);
+        filesContainer, breadcrumb, wrapper,
+        scrollpane = $('<div class="files-scrollable-pane" role="section">');
 
     //init
-    filesContainer = inlineRight = inline = wrapper = $('');
+    filesContainer = wrapper = $('');
 
     // *** helper functions ***
 
     function drawGenericIcon(name) {
         var node = $('<i>');
-        if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
-        else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
-        else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
-        else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('icon-music'); }
-        else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('icon-film'); }
-        else if ((/(epub|mobi)$/i).test(name)) { node.addClass('icon-book'); }
-        else if ((/(cbz|cbr|cb7|cbt|cba)$/i).test(name)) { node.addClass('icon-comment-alt'); }
-        else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('icon-archive'); }
-        else { node.addClass('icon-file'); }
+        if (/docx?$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
+        else if (/xlsx?$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
+        else if (/pptx?$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
+        else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('fa fa-music'); }
+        else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('fa fa-film'); }
+        else if ((/(epub|mobi)$/i).test(name)) { node.addClass('fa fa-book'); }
+        else if ((/(cbz|cbr|cb7|cbt|cba)$/i).test(name)) { node.addClass('fa fa-comment-o'); }
+        else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('fa fa-archive'); }
+        else { node.addClass('fa fa-file'); }
         return node.addClass('not-selectable');
     }
 
@@ -90,28 +88,16 @@ define('io.ox/files/fluid/perspective',
         if (dropZone) dropZone.remove();
     }
 
-    var regIsImage = /^(image\/(gif|png|jpe?g|bmp|tiff))$/i,
-        regIsAudio = /^audio\/(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)$/i,
-        regIsOffice = /^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i,
-        regIsText = /^text\/.*(rtf|plain).*$/i;
-
-    function previewMode(file) {
-        if (regIsImage.test(file.file_mimetype)) return 'thumbnail';
-        if (regIsAudio.test(file.file_mimetype)) return 'cover';
-        if (capabilities.has('document_preview') &&
-            (regIsOffice.test(file.file_mimetype) || regIsText.test(file.file_mimetype))) return 'preview';
-        return false;
-    }
-
     function cid_find(str) {
         return str.replace(/\\\./g, '\\\\.');
     }
 
     function loadFiles(app) {
         var def = $.Deferred();
-        if (!app.getWindow().search.active) {
+        if (!app.getWindow().search.active || app.getWindow().search.query === '') {//empty search query shows folder again
             api.getAll({ folder: app.folder.get() }, false).done(def.resolve).fail(def.reject);
         } else {
+            _.url.hash('id', null);//remove selection to prevent errors (file might not be in our search results)
             api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
         }
         return def;
@@ -171,7 +157,7 @@ define('io.ox/files/fluid/perspective',
                     });
                 el = popup.closest('.io-ox-sidepopup');
             });
-            _.defer(function () { el.focus(); }); // Focus SidePopup
+            _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
         });
     }
     // mobile multiselect helpers
@@ -188,12 +174,13 @@ define('io.ox/files/fluid/perspective',
         return node;
     }
 
-    function toggleToolbar(selected, selection) {
-        // get current toolbar buttons
-        var buttons = $('.window-toolbar .toolbar-button'),
-            toolbar = $('.window-toolbar'),
+    function toggleToolbar(selected, selection, baton) {
+        var context = $(baton.app.getWindow().nodes.outer),  // get current app's window container as context
+            buttons = $('.window-toolbar .toolbar-button', context),
+            toolbar = $('.window-toolbar', context),
             toolbarID = 'multi-select-toolbar',
             container;
+
         if ($('#' + toolbarID).length > 0) {
             // reuse old toolbar
             container = $('#' + toolbarID);
@@ -204,14 +191,14 @@ define('io.ox/files/fluid/perspective',
         _.defer(function () {
             if (selected.length > 0) {
                 buttons.hide();
-                $('#multi-select-toolbar').remove();
+                $('#' + toolbarID).remove();
                 toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
             } else {
                 // selection empty
-                $('#multi-select-toolbar').remove();
+                $('#' + toolbarID).remove();
                 buttons.show();
             }
-        });
+        }, 10);
     }
     // END mobile multiselect helpers
 
@@ -227,41 +214,32 @@ define('io.ox/files/fluid/perspective',
     ext.point('io.ox/files/icons').extend({
         id: 'selection',
         register: function (baton) {
-            var pers = this;
-            Selection.extend(pers, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
+
+            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
             //selection accessible via app
-            baton.app.selection = pers.selection;
+            baton.app.selection = this.selection;
+
+            // forward selection:change event
+            this.selection.on('change', function (e, list) {
+                baton.app.trigger('selection:change', list);
+            });
+
+            var pers = this;
+
             //init
             pers.selection
                 .setEditable(true, '.checkbox')
                 .keyboard(scrollpane, true)
                 // toggle visibility of multiselect actions
                 .on('change', function (e, selected) {
-                    var self = this, dummy = $('<div>');
 
-                    // clear top-bar
-                    topActions.empty();
+                    var self = this;
 
                     if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
-                        toggleToolbar(selected, self);
-                    } else {
-
-                        if (selected.length > 1) {
-                            // workaround for mediaplayer
-                            var dummyGrid =  { getApp: function () { return baton.app; } };
-                            // draw inline links
-                            commons.multiSelection('io.ox/files', dummy, selected, api, dummyGrid, {forcelimit: true});
-                            // append to bar
-                            topActions.append(dummy.find('.io-ox-inline-links'));
-                            // fade in or yet visible?
-                            if (!topActions.is(':visible')) {
-                                topBar.stop().fadeIn(250);
-                            }
-                        } else {
-                            topBar.stop().hide();
-                        }
+                        toggleToolbar(selected, self, baton);
                     }
+
                     // set url
                     var id = _(selected.length > 50 ? selected.slice(0, 1) : selected).map(function (obj) {
                         return self.serialize(obj);
@@ -316,7 +294,8 @@ define('io.ox/files/fluid/perspective',
                         }
 
                         //deep link handling
-                        if (state === 'inital' && list.length === 1) {
+                        //deactivate for search or every item is loaded at once(may cause huge server load)
+                        if (state === 'inital' && list.length === 1 && !baton.app.attributes.window.search.active) {
                             cid = _.cid(this.get()[0]);
                             node = filesContainer.find('[data-obj-id="' + cid + '"]');
                             //node not drawn yet?
@@ -401,7 +380,7 @@ define('io.ox/files/fluid/perspective',
         draw: function (baton) {
             var file = baton.data,
                 options = _.extend({ version: true, scaletype: 'cover' }, baton.options),
-                mode = previewMode(file),
+                mode = util.previewMode(file),
                 changed = getDateFormated(baton.data.last_modified),
                 //view mode: icon
                 iconImage = drawGenericIcon(file.filename),
@@ -419,7 +398,7 @@ define('io.ox/files/fluid/perspective',
                                 alt: '',
                                 'data-src': url
                             })
-                            .addClass('img-polaroid lazy')
+                            .addClass('img-thumbnail lazy')
                             .one({
                                 load: function () {
                                     //list/tile view
@@ -433,6 +412,8 @@ define('io.ox/files/fluid/perspective',
                             })
                     );
             }
+
+            var title = file.filename || file.title;
 
             this.addClass('file-cell pull-left selectable')
                 .attr('data-obj-id', _.cid(file))
@@ -449,10 +430,15 @@ define('io.ox/files/fluid/perspective',
                     //details
                     $('<div class="details">').append(
                         //title
-                        $('<div class="text title drag-title">').append(
-                            $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 90))).append(
-                                    (api.tracker.isLocked(file) ? $('<i class="icon-lock">') : '')
-                                )
+                        $('<div class="text title drag-title">')
+                        .attr('title', title)
+                        .append(
+                            // lock icon
+                            api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : $(),
+                            // long title
+                            $('<span class="not-selectable title-long">').text(gt.noI18n(cut(title, 90))),
+                            // short title
+                            $('<span class="not-selectable title-short">').text(gt.noI18n(cut(title, 50)))
                         ),
                         //smart last modified
                         $('<span class="text modified">').text(gt.noI18n(changed)),
@@ -460,11 +446,15 @@ define('io.ox/files/fluid/perspective',
                         $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''})))
                     )
                 );
+            if (_.device('smartphone')) {
+                this.removeClass('selectable').find('.checkbox')
+                    .attr('data-obj-id', _.cid(file))
+                    .addClass('selectable');
+            }
         }
     });
 
     // Mobile multi select extension points
-    // action
 
     // move
     ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
@@ -476,7 +466,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button">')
                 .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
                     .append(
-                        $('<i class="icon-signin">')
+                        $('<i class="fa fa-sign-in">')
                     )
                 )
             );
@@ -485,6 +475,7 @@ define('io.ox/files/fluid/perspective',
         }
     });
 
+    // delete
     ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
         id: 'delete',
         index: 20,
@@ -493,8 +484,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#" data-action="io.ox/files/actions/delete">')
                     .append(
-                        $('<i>')
-                            .addClass('icon-trash')
+                        $('<i class="fa fa-trash-o">')
                     )
                 )
             );
@@ -510,65 +500,7 @@ define('io.ox/files/fluid/perspective',
             $(this).append($('<div class="toolbar-button" style="float:right">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i class="icon-remove">').on('tap', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            data.selection.clear();
-                        })
-                    )
-                )
-            );
-        }
-    });
-
-    // Mobile multi select extension points
-    // action
-
-    // move
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'move',
-        index: 10,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data}),
-            var btn;
-            $(this).append($('<div class="toolbar-button">')
-                .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
-                    .append(
-                        $('<i class="icon-signin">')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data, {cssDisable: true, eventType: 'tap'});
-
-        }
-    });
-
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'delete',
-        index: 20,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data});
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#" data-action="io.ox/files/actions/delete">')
-                    .append(
-                        $('<i>')
-                            .addClass('icon-trash')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data,  {cssDisable: true, eventType: 'tap'});
-        }
-    });
-
-    // selection clear button
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'selectionclear',
-        index: 50,
-        draw: function (data) {
-            $(this).append($('<div class="toolbar-button" style="float:right">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="icon-remove">').on('tap', function (e) {
+                        $('<i class="fa fa-times">').on('tap', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             data.selection.clear();
@@ -587,13 +519,6 @@ define('io.ox/files/fluid/perspective',
             var mode = identifyMode(opt), baton = this.baton;
             //mode changed?
             if (baton.options.mode !== mode) {
-                //set button group state
-                inlineRight
-                    .find('a')
-                    .removeClass('active');
-                inlineRight
-                    .find('[data-action="layout-' + mode + '"]')
-                    .addClass('active');
                 //switch to mode
                 filesContainer.removeClass('view-' + baton.options.mode)
                                      .addClass('view-' + mode);
@@ -631,15 +556,14 @@ define('io.ox/files/fluid/perspective',
             baton.options.mode = identifyMode(opt);
 
             self.main.empty().append(
-                                topBar,
-                                wrapper = $('<div class="files-wrapper">')
-                                            .attr({
-                                                'role': 'main',
-                                                'aria-label': gt('Files View')
-                                            })
-                                            .append(
-                                                scrollpane
-                                            )
+                wrapper = $('<div class="files-wrapper">')
+                    .attr({
+                        'role': 'main',
+                        'aria-label': gt('Files View')
+                    })
+                    .append(
+                        scrollpane
+                )
             );
 
             //register selection accessible via 'self.selection'
@@ -675,7 +599,9 @@ define('io.ox/files/fluid/perspective',
                     container.addClass('width-less-than-768 width-less-than-480');
             };
             adjustWidth();
-            app.on('folderview:close folderview:open folderview:resize', _.debounce(adjustWidth, 300));
+            app.on('folderview:close folderview:open folderview:resize', _.debounce(function () {
+                adjustWidth();
+            }, 300));//let the foldertree draw or we get wrong values
 
             //register dnd handler
             dropZoneInit(app);
@@ -704,14 +630,24 @@ define('io.ox/files/fluid/perspective',
                 });
             });
 
-            //register click handler
-            scrollpane.on(_.device('smartphone') ? 'tap' : 'click', '.selectable', function (e, data) {
-                var cid = _.cid($(this).attr('data-obj-id')),
-                    special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
-                    valid = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable') || data === 'automated';
-                if (valid & !special)
-                    preview.call(self, e, cid);
-            });
+            if (_.device('!smartphone')) {
+                scrollpane.on('click', '.selectable', function (e, data) {
+                    var cid = _.cid($(this).attr('data-obj-id')),
+                        special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
+                        valid = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable') || data === 'automated';
+                    if (valid && !special)
+                        preview.call(self, e, cid);
+                });
+            } else {
+                scrollpane.on('click', '.file-cell', function (e, data) {
+                    var cid = _.cid($(this).attr('data-obj-id')),
+                        //special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
+                        valid = e.target.type !== 'checkbox' || data === 'automated';
+                    if (valid)
+                        preview.call(self, e, cid);
+                });
+            }
+
 
             //register dialog handler
             dialog.on('close', function () {
@@ -742,7 +678,7 @@ define('io.ox/files/fluid/perspective',
             };
 
             drawFiles = function (files) {
-                filesContainer.find('.scroll-spacer').before(
+                filesContainer.append(
                     _(files).map(function (file) {
                         drawnCids.push(_.cid(file));
                         return drawFile(file);
@@ -790,7 +726,7 @@ define('io.ox/files/fluid/perspective',
                     }
                 });
                 //requesting data-src and setting to src after load finised (icon view only)
-                $('img.img-polaroid.lazy').imageloader({
+                $('img.img-thumbnail.lazy').imageloader({
                     timeout: 60000
                 });
 
@@ -830,37 +766,24 @@ define('io.ox/files/fluid/perspective',
                         ext.point('io.ox/files/icons').invoke('draw', scrollpane, baton);
 
                         //anchor node
-                        if (!breadcrumb)
-                            scrollpane.prepend(breadcrumb = $('<div>'));
-                        // add inline link
-                        if ($('.inline-actions', scrollpane).length === 0) {
-                            breadcrumb.after(
-                                inline = $('<div>').addClass('inline-actions'),
-                                inlineRight = $('<div>').addClass('inline-actions-right'),
-                                $('<div>').addClass('clearfix')
-                            );
-                        }
-
-                        // add element to provoke scrolling
-                        filesContainer.append(
-                            $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
-                        );
+                        if (!breadcrumb) scrollpane.prepend(breadcrumb = $('<div>'));
 
                         displayedRows = layout.iconRows;
                         start = 0;
                         end = displayedRows * layout.iconCols;
-                        if (layout.iconCols <= 3) end = end + 10;
+                        if (layout.iconCols <= 3) { end = end + 10; }
+                        var displayedIds = allIds.slice(start, end);
 
-                        redraw(allIds.slice(start, end));
+                        // provoke scrolling if not all elements are displayed
+                        // if not, there is no possibility to display all elements due to our loading on demand
+                        if (displayedIds < allIds) {
+                            filesContainer.css('height', parseInt(parseInt(wrapper.css('height'), 10) + 1, 10) + 'px');//one pixel to large so a scrollbar is displayed
+                        }
 
-                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
-                        ext.point('io.ox/files/icons/actions-right').invoke('draw', inlineRight.empty(), baton);
-                        //set button state
-                        inlineRight.find('[data-ref="io.ox/files/actions/layout-' + baton.options.mode + '"]').addClass('active');
+                        redraw(displayedIds);
 
-                        self.selection
-                                .init(allIds)
-                                .trigger('update', 'inital');
+                        self.selection.init(allIds).trigger('update', 'inital');
+
                         //focus handling
                         filesContainer.trigger('data:loaded');
                     },
@@ -889,6 +812,10 @@ define('io.ox/files/fluid/perspective',
                 redraw(allIds.slice(start, end));
                 //adjust topBar width on window resize
                 adjustWidth();
+            };
+
+            app.getIds = function () {
+                return allIds;
             };
 
             app.queues = {};
@@ -953,7 +880,7 @@ define('io.ox/files/fluid/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search', function (e) {
+            win.on('search cancel-search search:clear', function (e) {
                 //only reload when search was executed
                 if (e.type === 'cancel-search' && !filesContainer.hasClass('searchresult')) return;
                 breadcrumb = undefined;
@@ -974,7 +901,7 @@ define('io.ox/files/fluid/perspective',
                         // draw file ...
                         drawFile(obj)
                         // ... and reset lazy loader
-                        .find('img.img-polaroid.lazy').imageloader({ timeout: 60000 }).end()
+                        .find('img.img-thumbnail.lazy').imageloader({ timeout: 60000 }).end()
                     );
                 }
             });
@@ -1053,7 +980,6 @@ define('io.ox/files/fluid/perspective',
                         //something changed?
                         if (changed.length + deleted.length + added.length + Object.keys(duplicates).length) {
                             baton.allIds = allIds = ids;
-                            ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
                             _(changed).each(function (cid) {
                                 var data = hash[cid],

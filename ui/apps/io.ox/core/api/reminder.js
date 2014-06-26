@@ -32,7 +32,7 @@ define('io.ox/core/api/reminder',
                     reminderStorage[reminder.id] = reminder;
                 } else if (reminderStorage[reminder.id].alarm !== reminder.alarm) {//alarm was updated
                     if (reminderStorage[reminder.id].displayed) {
-                        api.trigger('remove:reminder', [reminder.target_id]);
+                        api.trigger('remove:reminder', [{id: reminder.target_id, folder_id: reminder.folder}]);
                         needsForceCheck = true;
                     }
                     reminderStorage[reminder.id] = reminder;
@@ -81,7 +81,6 @@ define('io.ox/core/api/reminder',
             }
         };
 
-
     var api = {
         /**
         * delete reminder
@@ -95,6 +94,9 @@ define('io.ox/core/api/reminder',
                     removedNext = true;
                     clearTimeout(reminderTimer);
                     nextReminder = null;
+                }
+                if (reminderStorage[id].displayed) {
+                    api.trigger('remove:reminder', [{id: reminderStorage[id].target_id, folder_id: reminderStorage[id].folder}]);//remove displayed reminders
                 }
                 delete reminderStorage[id];
             });
@@ -204,7 +206,6 @@ define('io.ox/core/api/reminder',
     ox.on('refresh^', function () {
         api.refresh();
     });
-
 
     return api;
 

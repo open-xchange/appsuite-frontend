@@ -32,23 +32,6 @@ define('io.ox/calendar/api',
         DAY = HOUR * 24;
     // object to store appointments, that have attachments uploading atm
     var uploadInProgress = {},
-        //grepRemove equivalent
-        grepRemove = function (pattern, cache) {
-            var keys = Object.keys(cache),
-                cache = cache || {};
-
-            if (typeof pattern === 'string') {
-                pattern = new RegExp(_.escapeRegExp(pattern));
-            }
-
-            if (_.isRegExp(pattern)) {
-                _.each(keys, function (key) {
-                    if (pattern.test(key)) {
-                        delete cache[key];
-                    }
-                });
-            }
-        },
 
         checkForNotification = function (obj, removeAction) {
             if (removeAction) {
@@ -222,7 +205,7 @@ define('io.ox/calendar/api',
          * @return {deferred} returns current appointment object
          */
         update: function (o) {
-            var folder_id = o.folder_id || o.folder, pattern,
+            var folder_id = o.folder_id || o.folder,
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
             delete o.tempAttachmentIndicator;
@@ -267,13 +250,6 @@ define('io.ox/calendar/api',
                             if (attachmentHandlingNeeded) {
                                 //to make the detailview show the busy animation
                                 api.addToUploadList(_.ecid(data));
-                            }
-                            //series master changed?
-                            if (data.recurrence_type > 0 && !data.recurrence_position) {
-                                //id without specified recurrence_position
-                                pattern = (o.folder || o.folder_id) + '.' + o.id + '.';
-                                grepRemove(pattern, get_cache);
-                                api.trigger('update:series:' + _.ecid(pattern), data);
                             }
                             api.trigger('update', data);
                             api.trigger('update:' + _.ecid(o), data);
@@ -402,10 +378,9 @@ define('io.ox/calendar/api',
             });
         },
 
-
         /**
          * change confirmation status
-         * @param  {object} o (properties: id, folder, data)
+         * @param  {object} o (properties: id, folder, data, occurrence)
          * @fires  api#mark:invite:confirmed (o)
          * @fires  api#update (data)
          * @fires  api#update: + cid
@@ -414,8 +389,15 @@ define('io.ox/calendar/api',
         confirm: function (o) {
 
             var folder_id = o.folder_id || o.folder,
-                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
-                alarm = -1;
+                key = folder_id + '.' + o.id + '.' + (o.occurrence || 0),
+                alarm = -1,
+                params = {
+                    action: 'confirm',
+                    folder: folder_id,
+                    id: o.id,
+                    timestamp: _.now(),
+                    timezone: 'UTC'
+                };
 
             // contains alarm?
             if ('alarm' in o.data) {
@@ -423,15 +405,14 @@ define('io.ox/calendar/api',
                 delete o.data.alarm;
             }
 
+            // occurrence
+            if (o.occurrence) {
+                params.occurrence = o.occurrence;
+            }
+
             return http.PUT({
                 module: 'calendar',
-                params: {
-                    action: 'confirm',
-                    folder: o.folder,
-                    id: o.id,
-                    timestamp: _.now(),
-                    timezone: 'UTC'
-                },
+                params: params,
                 data: o.data,
                 appendColumns: false
             })
@@ -446,8 +427,8 @@ define('io.ox/calendar/api',
             })
             .then(function () {
                 get_cache = {};
-                api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 all_cache = {};
+                api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 delete get_cache[key];
                 return api.get(o).then(function (data) {
                     api.trigger('update', data);
@@ -463,18 +444,19 @@ define('io.ox/calendar/api',
     /**
      * removes recurrence information
      * @param  {object} obj (appointment object)
-     * @return {object} appointment object
+     * @return {object} reduced copy of appointment object
      */
     api.removeRecurrenceInformation = function (obj) {
         var recAttr = ['change_exceptions', 'delete_exceptions', 'days',
-            'day_in_month', 'month', 'interval', 'until', 'occurrences'];
+            'day_in_month', 'month', 'interval', 'until', 'occurrences'],
+            ret = _.clone(obj);
         for (var i = 0; i < recAttr.length; i++) {
-            if (obj[recAttr[i]]) {
-                delete obj[recAttr[i]];
+            if (ret[recAttr[i]]) {
+                delete ret[recAttr[i]];
             }
         }
-        obj.recurrence_type = 0;
-        return obj;
+        ret.recurrence_type = 0;
+        return ret;
     };
 
     /**

@@ -17,7 +17,7 @@
 }
 
 .contact-detail .furigana {
-    font-family: @normalFontFamily;
+    font-family: @normal-font-family;
     font-size: 14px;
     line-height: 1.2em;
     color: #888;

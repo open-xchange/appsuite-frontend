@@ -1,0 +1,34 @@
+{
+    "io.ox/core": {
+        "folder": {
+            "infostore": 14048,
+            "eas": true,
+            "tasks": 14047,
+            "calendar": 14045,
+            "contacts": 14046
+        },
+        "search": {
+            "modules": [
+                "mail",
+                "contacts",
+                "calendar",
+                "tasks",
+                "drive"
+            ],
+            "mandatory": {
+                "folder": [
+                    "mail"
+                ]
+            }
+        }
+    },
+    "io.ox/mail": {
+        "folder": {
+            "sent": "default0/INBOX/Sent Items",
+            "inbox": "default0/INBOX",
+            "trash": "default0/INBOX/Trash",
+            "spam": "default0/INBOX/Spam",
+            "drafts": "default0/INBOX/Drafts"
+        }
+    }
+}

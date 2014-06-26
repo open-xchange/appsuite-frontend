@@ -14,7 +14,7 @@
 define('io.ox/core/tk/dialogs',
     ['io.ox/core/event',
      'gettext!io.ox/core',
-     'less!io.ox/core/tk/dialog.less'
+     'less!io.ox/core/tk/dialog'
     ], function (Events, gt) {
 
     'use strict';
@@ -25,12 +25,14 @@ define('io.ox/core/tk/dialogs',
             .append(
                 $('<div class="modal-header">'),
                 $('<div class="modal-body">'),
+                $('<div class="clearfix">'),
                 $('<div class="modal-footer">')
             );
 
     var Dialog = function (options) {
 
         var o = _.extend({
+                width: 500,
                 underlayAction: null,
                 defaultAction: null,
                 easyOut: true,
@@ -38,7 +40,7 @@ define('io.ox/core/tk/dialogs',
                 async: false,
                 maximize: false,
                 top: '50%',
-                container: $('body'),
+                container: $('#io-ox-core'),
                 tabTrap: true,
                 focus: true
             }, options),
@@ -71,6 +73,10 @@ define('io.ox/core/tk/dialogs',
             },
 
             close = function () {
+                if (!self) {
+                    //already closed
+                    return;
+                }
 
                 // disable scrollblocker - Bug 29011
                 o.container.removeClass('blockscroll');
@@ -89,6 +95,7 @@ define('io.ox/core/tk/dialogs',
                     lastFocus.focus();
                 }
                 // self destruction
+                self.events.destroy();
                 for (var prop in self) {
                     delete self[prop];
                 }
@@ -123,7 +130,7 @@ define('io.ox/core/tk/dialogs',
                     .find('input, select, button')
                     .add(
                         nodes.body
-                            .css('opacity', '')
+                            .css('opacity','')
                             .find('input, select, button, textarea')
                     )
                     .each(function (key, val) {
@@ -148,7 +155,7 @@ define('io.ox/core/tk/dialogs',
                 // trigger action event
                 self.trigger('action ' + action, data, self);
                 // resolve & close?
-                if (!async) {
+                if (!async && self) {
                     deferred.resolveWith(nodes.popup, [action, data, self.getContentNode().get(0)]);
                     close();
                 }
@@ -212,7 +219,6 @@ define('io.ox/core/tk/dialogs',
         _(['header', 'body', 'footer']).each(function (part) {
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
-
 
         if (o.addclass) {
             nodes.popup.addClass(o.addclass);
@@ -293,7 +299,7 @@ define('io.ox/core/tk/dialogs',
         };
 
         this.addButton = function (action, label, dataaction, options) {
-            nodes.footer.prepend(addButton(action, label, dataaction, options));
+            nodes.footer.prepend(addButton(action, label, dataaction, options).addClass('btn-default'));
             return this;
         };
 
@@ -318,7 +324,7 @@ define('io.ox/core/tk/dialogs',
         };
 
         this.addAlternativeButton = function (action, label, dataaction, options) {
-            nodes.footer.prepend(addButton(action, label, dataaction, options).css({ 'float': 'left', marginLeft: 0 }));
+            nodes.footer.prepend(addButton(action, label, dataaction, options).addClass('btn-default').css({ 'float': 'left', marginLeft: 0 }));
             return this;
         };
 
@@ -388,10 +394,10 @@ define('io.ox/core/tk/dialogs',
                 if (nodes) {
                     var dim = fnSetDimensions();
                     nodes.popup.css({
-                        width: dim.width,
+                        'max-width': dim.width,
                         top: o.top || 0
                     });
-                    var height = $(window).height() - 170 - o.top;
+                    var height = $('#io-ox-core').height() - 170 - o.top;//not window here, or we might overlap ads or sth
                     nodes.body.css({
                         'height': height,
                         'max-height': height
@@ -403,7 +409,7 @@ define('io.ox/core/tk/dialogs',
 
             // apply dimensions, only on desktop and pad
             if (_.device('!small')) {
-                var css = { width: dim.width + 'px' };
+                var css = { 'max-width': dim.width + 'px' };
                 if (o.center) {
                     // center vertically
                     css.top = '50%';
@@ -443,13 +449,14 @@ define('io.ox/core/tk/dialogs',
 
                 // rebuild button section for mobile devices
                 nodes.popup.addClass('mobile-dialog');
-                nodes.footer.rowfluid = $('<div class="row-fluid">');
+                nodes.footer.rowfluid = $('<div class="row">');
                 nodes.footer.append(nodes.footer.rowfluid);
 
                 _.each(nodes.buttons, function (buttonNode) {
                     nodes.footer.rowfluid.prepend(buttonNode.addClass('btn-medium'));
-                    buttonNode.wrap('<div class="span3">');
+                    buttonNode.wrap('<div class="col-xs-12 col-md-3">');
                 });
+                //nodes.body.css('margin-bottom', Math.ceil(nodes.buttons.length / 2) * 40);
             }
 
             this.trigger('beforeshow');
@@ -752,7 +759,6 @@ define('io.ox/core/tk/dialogs',
                 self.nodes.click.on('click', closeByClick);
                 popup.on('view:remove remove', closeByEvent);
                 $(document).on('keydown', closeByEscapeKey);
-
 
                 // decide for proper side
                 var docWidth = $('body').width(), mode,

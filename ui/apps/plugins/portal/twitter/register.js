@@ -21,21 +21,20 @@ define('plugins/portal/twitter/register',
      'plugins/portal/twitter/network',
      'io.ox/core/cache',
      'plugins/portal/twitter/util',
-     'less!plugins/portal/twitter/style.less'
+     'less!plugins/portal/twitter/style'
     ], function (ext, strings, keychain, gt, notifications, network, cache, util) {
 
     'use strict';
 
     var loadEntriesPerPage = 10,
         offset = 0,
-        $tweets = $('<div>').addClass('twitter'),
+        $tweets = $('<ul>').addClass('twitter list-unstyled'),
         $busyIndicator = $('<div>').html('&nbsp;'),
-        tweetCache = new cache.SimpleCache('twitter-cache', true),
+        tweetCache = new cache.SimpleCache('twitter-cache'),
         composeBox,
         offline = false;
 
     util.setup({$tweets: $tweets, tweetCache: tweetCache});
-
 
     var setOffline = function (options) {
         if (options !== undefined && options.offline !== undefined && options.offline !== offline) {
@@ -175,7 +174,7 @@ define('plugins/portal/twitter/register',
 
     var onPullToRefresh = function () {
         offset = 0;
-        var $first = $('div.tweet:first');
+        var $first = $('li.tweet:first');
         var newestId = $first.data('entry').id_str;
         $tweets.addClass('pulltorefresh-refreshing');
 
@@ -280,9 +279,13 @@ define('plugins/portal/twitter/register',
             return keychain.isEnabled('twitter') && !keychain.hasStandardAccount('twitter');
         },
 
-        performSetUp: function () {
+        performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('twitter', win);
+            return keychain.createInteractively('twitter', win)
+                .then(function () {
+                    baton.model.node.removeClass('requires-setup');
+                    ox.trigger('refresh^');
+                });
         },
 
         load: function (baton) {
@@ -315,11 +318,11 @@ define('plugins/portal/twitter/register',
                 $(this).off('onPullToRefresh', onPullToRefresh);
                 //ptr.detachEvents();
             }).on('onPullToRefreshDown', function () {
-                $('div.tweet > div.text').addClass('pulltorefresh-unselectable');
-                $('div.tweet > div.text > span').addClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text').addClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text > span').addClass('pulltorefresh-unselectable');
             }).on('onPullToRefreshUp', function () {
-                $('div.tweet > div.text').removeClass('pulltorefresh-unselectable');
-                $('div.tweet > div.text > span').removeClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text').removeClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text > span').removeClass('pulltorefresh-unselectable');
             }).on('onAppended', function () {
                 //ptr.attachEvents($('div.io-ox-sidepopup-pane'), $(this), $tweets);
             });
@@ -371,20 +374,20 @@ define('plugins/portal/twitter/register',
             );
         },
 
-        error: function (error) {
+        error: function (error, baton) {
 
             if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
             $(this).empty().append(
                 $('<div class="decoration">').append(
                     $('<h2>').append(
-                        $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>'),
+                        $('<a href="#" class="disable-widget"><i class="fa fa-times"/></a>'),
                         $('<span class="title">').text(gt('Twitter'))
                     )
                 ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp');
+                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp', null, baton);
                 })
             );
         }

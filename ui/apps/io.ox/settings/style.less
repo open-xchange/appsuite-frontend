@@ -16,8 +16,138 @@
         display: inline-block;
         margin-bottom: 0;
     }
-}
+    .window-content .rightside > .scrollable-pane {
+        max-width: 780px;
 
+        .widget-list {
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .widget-settings-view {
+            background-color: #f5f5f5;
+            padding: 13px;
+            margin: 0 0 7px 0;
+            text-align: right;
+            position: relative;
+
+            &.draggable { 
+                padding-left: 60px;
+                padding-right: 40px;
+            }
+
+            .drag-handle {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                width: 45px;
+                cursor: pointer;
+
+                i {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    margin: -7px 0 0 -6px;
+                    color: #aaa;
+                }
+                &:hover {
+                    text-decoration: none;
+                    background-color: rgba(0, 0, 0, 0.05);
+                    i { color: #888; }
+                }
+                &:focus {
+                    background-color: @link-color;
+                    outline: 0;
+                    i { color: #FFF; }
+                }
+            }
+
+            .widget-controls {
+                display: inline-block;
+                a[data-action="remove"], a[data-action="delete"] {
+                    &:hover {
+                        i.fa-trash-o {
+                            color: @trash-icon-hover-color;
+                            text-decoration: none;
+                        }
+                    }
+                    i.fa-trash-o {
+                        color: #aaa;
+                    }
+                }
+            }
+
+            .widget-title {
+                font-weight: bold;
+                margin-top: 1px;
+                margin-right: 2em;
+                white-space: nowrap;
+                text-align: left;
+                max-width: 100%;
+                .ellipsis;
+            }
+
+            .action {
+                padding: 0;
+                margin-top: 1px;
+                margin-right: 2em;
+            }
+
+            a[data-action="toggle"] { margin-right: 1.4em; }
+
+            a[data-action="remove"], a[data-action="delete"] {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 45px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: @trash-icon-hover-background;
+                }
+
+                i {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    margin: -7px 0 0 -6px;
+                    color: #aaa;
+                }
+            }
+
+            @media (max-width: 480px), (max-device-width: 480px) {
+                a[data-action="toggle"] {
+                    color: #000000;
+                    text-shadow: 0 1px 0 #ffffff;
+                    opacity: 0.2;
+                    &:hover {
+                        opacity: 0.4;
+                        text-decoration: none;
+                    }
+                }
+
+                a[data-toggle="dropdown"]:hover {
+                    text-decoration: none;
+                }
+            }
+
+            &.disabled {
+                background-color: #eee;
+                .widget-title { font-style: italic; font-weight: normal; color: #888; }
+            }
+        }
+
+        .io-ox-accounts-settings li.widget-settings-view {
+             padding-right: 40px;
+        }
+
+    }
+}
+.io-ox-mail-settings {
+
+}
 .vgrid-cell.settings {
     height: 3.5em;
     padding: 0.75em 13px 0.75em 13px;
@@ -44,11 +174,18 @@
     text-align: right;
     padding: 0.25em 0 0.5em 0;
     margin: 1.5em 0 1.5em 0;
-    border-bottom: 1px solid @inlineLinkBorderColor;
+    border-bottom: 1px solid @inline-link-border-color;
     height: 1px;
 }
 
 .settings-detail-pane {
+
+    fieldset {
+        padding: 0;
+        margin: 30px 0;
+        border: 0;
+        min-width: 0;
+    }
 
     label, legend { cursor: default; }
     label.checkbox, label.radio { cursor: pointer; }
@@ -56,7 +193,7 @@
     .section { max-width: 800px; }
 
     h1, h1.pane-headline {
-        font-family: @lightFontFamily;
+        font-family: @light-font-family;
         font-weight: 200;
         font-size: 26px;
         line-height: 32px;
@@ -74,12 +211,23 @@
         &.no-margin { margin: 0; }
     }
 
-    .form-horizontal {
+/*    .form-horizontal {
         .control-group > label {
             float: left;
             width: 150px;
             padding-top: 5px;
             text-align: right;
+        }
+
+        .control-label {
+            float: left;
+            width: 150px;
+            padding-top: 5px;
+            text-align: right;
+            padding-top: 5px;
+            font-size: 14px;
+            border-bottom: none;
+            line-height: 20px;
         }
 
         .controls, .help-inline { margin-left: 170px; }
@@ -90,9 +238,15 @@
         text-align: right;
         width: 440px;
     }
+*/
+
+    .form-inline .controls {
+        input {
+            width: 70px;
+        }
+    }
 
     .io-ox-accounts-settings {
-        max-width: 700px;
 
         .controls {
             padding: 13px;
@@ -105,6 +259,26 @@
             padding: 14px 14px 0 14px;
             max-width: 500px;
         }
+
+        button.btn.folderselect {
+            margin-left: 5px;
+        }
+    }
+
+    .io-ox-account-settings {
+
+        input#sent_fullname, input#trash_fullname, input#drafts_fullname, input#spam_fullname {
+            margin-bottom: 5px;
+        }
+
+        button.folderselect {
+            margin-bottom: 5px;
+        }
+
+        button.btn.folderselect {
+            margin-left: 5px;
+        }
+
     }
 
     .settings-list {
@@ -184,16 +358,15 @@
 }
 
 .settings-detail-pane legend.sectiontitle {
-    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
     display: block;
     width: 100%;
-    padding: 0;
-    margin-bottom: 20px;
-    font-size: 21px;
-    line-height: 40px;
+    font-size: 16px;
+    line-height: 24px;
     color: #333;
     border: 0;
-    border-bottom: 1px solid #E5E5E5;
+    margin: 0;
+    padding: 0 0 5px 0;
 }
 
 @media (max-width: 480px), (max-device-width: 480px)  {
@@ -208,6 +381,10 @@
     .settings-detail-pane {
 
         h1:first-child, h1.pane-headline:first-child { margin: 0; }
+
+        .btn.btn-primary {
+            margin-bottom: 7px;
+        }
 
         h1 + .sectiondelimiter {
             border: none;
@@ -252,6 +429,14 @@
 
                  .btn-group.pull-right { float: none; }
             }
+
+        }
+
+        .io-ox-account-settings {
+
+            button.btn.folderselect {
+                margin-left: 0px;
+            }
         }
 
         .io-ox-calendar-settings, .io-ox-tasks-settings {
@@ -263,6 +448,13 @@
         }
 
         .form-horizontal {
+
+            .control-label {
+                margin-bottom: 0px;
+                float: none;
+                text-align: left;
+                width: auto;
+            }
 
             .control-group > label { text-align: left; }
 

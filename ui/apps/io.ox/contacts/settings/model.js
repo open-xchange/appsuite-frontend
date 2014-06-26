@@ -20,8 +20,12 @@ define('io.ox/contacts/settings/model',
         initialize: function () {
         },
 
+        saveAndYell: function () {
+            return settings.saveAndYell(this.attributes);
+        },
+
         save: function () {
-            settings.save(this.attributes);
+            return settings.save(this.attributes);
         },
 
         destroy: function () {

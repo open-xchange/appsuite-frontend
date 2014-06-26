@@ -17,7 +17,7 @@ define('io.ox/contacts/distrib/main',
      'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/distrib/style.less'
+     'less!io.ox/contacts/distrib/style'
     ], function (api, contactModel, ContactCreateDistView, gt) {
 
     'use strict';
@@ -54,6 +54,7 @@ define('io.ox/contacts/distrib/main',
 
             if (initdata) {
                 model = contactModel.factory.create({
+                    display_name: initdata.display_name ? initdata.display_name : '',
                     folder_id: folderId,
                     mark_as_distributionlist: true,
                     distribution_list: initdata.distribution_list,
@@ -158,7 +159,7 @@ define('io.ox/contacts/distrib/main',
                 }, 150));
             });
 
-            container = $('<div>').addClass('create-distributionlist container-fluid default-content-padding');
+            container = $('<div>').addClass('create-distributionlist container default-content-padding');
 
             win.nodes.main.addClass('scrollable').append(container);
 
@@ -180,7 +181,9 @@ define('io.ox/contacts/distrib/main',
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt('Do you really want to discard your changes?'))
-                            .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
+                            //#. "Discard changes" appears in combination with "Cancel" (this action)
+                            //#. Translation should be distinguishable for the user
+                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {'tabIndex': '1'})
                             .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                             .show()
                             .done(function (action) {

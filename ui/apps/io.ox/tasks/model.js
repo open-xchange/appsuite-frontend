@@ -26,7 +26,7 @@ define('io.ox/tasks/model',
     var defaults = {
             title: '',
             status: 1,
-            priority: 2,
+            priority: 0, // changed from 2 (medium) to "no-priority" which is 0 at OX, see BUG 31466
             percent_completed: 0,
             folder_id: api.getDefaultFolder(),
             recurrence_type: 0,
@@ -88,8 +88,8 @@ define('io.ox/tasks/model',
         priority: {format: 'number'},
         percent_completed: {format: 'number'},
         number_of_attachments: {format: 'number'},
-        actual_costs: {format: 'number'},
-        target_costs: {format: 'number'},
+        actual_costs: {format: 'anyFloat'},//floats with , or . as separator
+        target_costs: {format: 'anyFloat'},//floats with , or . as separator
         actual_duration: {format: 'number'},
         target_duration: {format: 'number'},
         private_flag: { format: 'boolean'}
@@ -98,9 +98,9 @@ define('io.ox/tasks/model',
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            if (attributes.start_date && attributes.end_date && attributes.end_date <= attributes.start_date) {
+            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {//start_date = end_date is valid
                 //this.add('start_date', gt('The start date must be before the end date.')); // see Bug 27742
-                this.add('end_date', gt('The start date must be before the end date.'));
+                this.add('end_date', gt('The start date must be before the due date.'));
             }
         }
     });
@@ -120,6 +120,21 @@ define('io.ox/tasks/model',
         validate: function (attributes) {
             if (attributes.target_costs && (attributes.target_costs < -MAX || attributes.target_costs > MAX)) {
                 this.add('target_costs', gt('Costs must be between -%1$d and %1$d.', MAX, MAX));
+            }
+        }
+    });
+
+    ext.point('io.ox/tasks/model/validation').extend({
+        id: 'more than 2 decimal places',
+        validate: function (attributes) {
+            var tCosts = String(attributes.target_costs),
+                aCosts = String(attributes.actual_costs);
+
+            if (tCosts && (tCosts.substr(tCosts.indexOf('.')).length > 3 || tCosts.substr(tCosts.indexOf(',')).length > 3)) {
+                this.add('target_costs', gt('Costs must only have two decimal places.'));
+            }
+            if (aCosts && (aCosts.substr(aCosts.indexOf('.')).length > 3 || aCosts.substr(aCosts.indexOf(',')).length > 3)) {
+                this.add('actual_costs', gt('Costs must only have two decimal places.'));
             }
         }
     });
@@ -146,7 +161,7 @@ define('io.ox/tasks/model',
         id: 'recurrence-needs-end-date',
         validate: function (attributes) {
             if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {//0 is a valid number so check precisely
-                this.add('end_date', gt('Recurring tasks need a valid end date.'));
+                this.add('end_date', gt('Recurring tasks need a valid due date.'));
             }
         }
     });

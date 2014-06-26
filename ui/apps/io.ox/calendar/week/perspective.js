@@ -20,7 +20,7 @@ define('io.ox/calendar/week/perspective',
      'io.ox/calendar/conflicts/conflictList',
      'io.ox/core/notifications',
      'gettext!io.ox/calendar',
-     'less!io.ox/calendar/week/style.less'
+     'less!io.ox/calendar/week/style'
     ], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
@@ -310,7 +310,7 @@ define('io.ox/calendar/week/perspective',
             var cid = _.url.hash('id'), e;
             if (cid) {
                 e = $.Event('click', { target: this.main });
-                this.setNewStart = true;//marker to make the view open in the correct week
+                this.setNewStart = true; //marker to make the view open in the correct week
                 this.showAppointment(e, _.cid(cid), { arrow: false });
             }
         },

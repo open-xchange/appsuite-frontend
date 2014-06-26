@@ -21,7 +21,7 @@ define('io.ox/core/pubsub/settings/pane',
      'io.ox/core/capabilities',
      'settings!io.ox/core/pubsub',
      'gettext!io.ox/core/pubsub',
-     'less!io.ox/core/pubsub/style.less'
+     'less!io.ox/core/pubsub/style'
     ], function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';
@@ -213,7 +213,7 @@ define('io.ox/core/pubsub/settings/pane',
                 $('<div class="actions">').append(
                     enabled ? dynamicAction : '',
                     $('<a href="#" tabindex="1" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable')),
-                    $('<a href="#" tabindex="1" class="close" data-action="remove">').append($('<i class="icon-trash">'))
+                    $('<a href="#" tabindex="1" class="close" data-action="remove">').append($('<i class="fa fa-trash-o">'))
                 ),
                 $('<div class="content">').append(
                     $('<div class="name">').text(getDisplayName(data) || '\u00A0'),
@@ -231,7 +231,7 @@ define('io.ox/core/pubsub/settings/pane',
             if (data.source && (baton.model.refreshState() === 'pending')) {
                 // this is a subscription and we are refreshing
                 this.find('.name').append(
-                    $('<i class="icon-refresh icon-spin">')
+                    $('<i class="fa fa-refresh fa-spin">')
                 );
             }
         }
@@ -389,7 +389,7 @@ define('io.ox/core/pubsub/settings/pane',
         function addHint() {
             if ((hint = getHint())) {
                 // add node
-                node.after(hintNode = $('<div class="empty">').text(hint + '.'));
+                node.append(hintNode = $('<li class="empty">').text(hint + '.'));
             }
         }
 
@@ -404,18 +404,22 @@ define('io.ox/core/pubsub/settings/pane',
 
             if (capabilities.has('publication')) {
                 this.$el.append(
-                    // pub
-                    both ? $('<h2 class="pane-headline">').text(gt('Publications')) : $(),
-                    baton.pubListNode = $('<ul class="publications">')
+                    $('<fieldset>').append(
+                        // pub
+                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Publications')) : $(),
+                        baton.pubListNode = $('<ul class="list-unstyled publications">')
+                    )
                 );
                 setupList(baton.pubListNode.empty(), baton.publications, 'publication');
             }
 
             if (capabilities.has('subscription')) {
                 this.$el.append(
-                    // sub
-                    both ? $('<h2 class="pane-headline">').text(gt('Subscriptions')) : $(),
-                    baton.subListNode = $('<ul class="subscriptions">')
+                    $('<fieldset>').append(
+                        // sub
+                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Subscriptions')) : $(),
+                        baton.subListNode = $('<ul class="list-unstyled subscriptions">')
+                    )
                 );
                 setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
             }

@@ -15,8 +15,9 @@ define('io.ox/linkedIn/view-detail',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/core/http',
-     'less!io.ox/linkedIn/style.less'
-    ], function (ext, dialogs, http) {
+     'gettext!io.ox/portal',
+     'less!io.ox/linkedIn/style'
+    ], function (ext, dialogs, http, gt) {
 
     'use strict';
 
@@ -61,7 +62,7 @@ define('io.ox/linkedIn/view-detail',
 
     actionPoint.extend({
         id: 'linkedin/details/connect',
-        label: 'Open on LinkedIn',
+        label: gt('Open on LinkedIn'),
         action: function (data) {
             window.open(data.publicProfileUrl);
         },
@@ -72,7 +73,6 @@ define('io.ox/linkedIn/view-detail',
     });
 
     // Detail renderers
-
 
     // Past Engagements
     rendererPoint.extend({

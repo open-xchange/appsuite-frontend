@@ -12,9 +12,7 @@
  */
 define([], function () {
 
-
     describe('Global Utilities:', function () {
-        var expect = chai.expect;
 
         describe('all utils', function () {
 
@@ -78,6 +76,7 @@ define([], function () {
                 _.isSet();
                 _.lfo();
                 _.makeExtendable();
+                _.mythrottle();
                 _.noI18n();
                 _.noI18n.fix();
                 _.noI18n.text();
@@ -99,58 +98,6 @@ define([], function () {
             });
         });
 
-        describe('_.rot', function () {
-            //TODO
-        });
-
-        describe('_.getCookie', function () {
-            //TODO
-        });
-
-        describe('_.setCookie', function () {
-            //TODO
-        });
-
-        describe('_.firstOf', function () {
-            //TODO
-        });
-
-        describe('_.call', function () {
-            //TODO
-        });
-
-        describe('_.now', function () {
-            //TODO
-        });
-
-        describe('_.utc', function () {
-            //TODO
-        });
-
-        describe('_.then', function () {
-            //TODO
-        });
-
-        describe('_.firstOf', function () {
-            //TODO
-        });
-
-        describe('_.copy', function () {
-            //TODO
-        });
-
-        describe('_.deepClone', function () {
-            //TODO
-        });
-
-        describe('_.lfo', function () {
-            //TODO
-        });
-
-        describe('_.queued', function () {
-            //TODO
-        });
-
         describe('_.printf', function () {
             var str = 'The answer to life, the universe and everything is %1$s';
             it('should always return a string and ignore invalid args', function () {
@@ -165,10 +112,6 @@ define([], function () {
             it('should replace placeholders with args', function () {
                 expect(_.printf(str, 42)).to.equal('The answer to life, the universe and everything is 42');
             });
-        });
-
-        describe('_.aprintf', function () {
-            //TODO
         });
 
         describe('_.formatError', function () {
@@ -251,20 +194,51 @@ define([], function () {
             });
         });
 
-        describe('_.tick', function () {
+        //describe('_.tick', function () {
             //TODO
-        });
+        //});
 
-        describe('_.wait', function () {
+        //describe('_.wait', function () {
             //TODO
-        });
+        //});
 
-        describe('_.makeExtendable', function () {
-            //TODO
-        });
+        it.skip('_.mythrottle', function () {
+            var finished,
+                //now = new Date(),
+                counter = 0,
+                counterrepaint = 0,
+                debounced = _.mythrottle(function () {
+                                    //console.warn((new Date() - now), 'repaint: debounced at ', counter);
+                                    counterrepaint = counterrepaint + 1;
+                                }, 100, {leading: true, trailing: true}),
+                repaint = function () {
+                    //counter = counter + 1;
+                    //console.warn((new Date() - now), 'repaint', counter);
+                    debounced();
+                };
 
-        describe('_.clock', function () {
-            //TODO
+            //call debouncedn function every 50 ms
+            repaint();
+            var interval = setInterval(repaint, 5);
+
+            //cancel interal
+            setTimeout(function () {
+                clearInterval(interval);
+            }, 130);
+
+            //wait
+            setTimeout(function () {
+                finished = true;
+            }, 300);
+
+            waitsFor(function () {
+                return finished;
+            }, 'no data in grid');
+            runs(function () {
+                // console.log('counter: ', counter);
+                // console.log('called: ', counterrepaint);
+                expect(counterrepaint).to.be.equal(3);
+            });
         });
 
         describe('_.cid', function () {
@@ -370,14 +344,10 @@ define([], function () {
                 expect(_.noI18n.fix('')).to.be.a('string');
                 expect(_.noI18n.fix('abed')).to.be.a('string');
             });
-            it('.text should alway return jquery list', function () {
+            it.skip('.text should alway return jquery list', function () {
                 this.expect(_.noI18n.text()).toBeJquery(_.noI18n.text());
                 this.expect(_.noI18n.text('abed', 'troy')).toBeJquery();
             });
-        });
-
-        describe('_.escapeRegExp', function () {
-            //TODO
         });
 
         describe('_.unescapeHTML', function () {

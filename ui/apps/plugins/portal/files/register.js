@@ -46,8 +46,8 @@ define('plugins/portal/files/register',
         },
 
         preview: function (baton) {
-
-            var content = $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to ') + baton.data.filename + '">'),
+                                                                                                     //#. %1$s is a filename
+            var content = $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt.format('Press [enter] to jump to %1$s', baton.data.filename) + '">'),
                 data, options, url;
 
             if (_.isEmpty(baton.data.filename)) {
@@ -68,7 +68,7 @@ define('plugins/portal/files/register',
                 this.addClass('photo-stream');
                 content.addClass('decoration');
                 content.css('backgroundImage', 'url(' + url + ')');
-            } else if ((/(txt)$/i).test(baton.data.filename)) {
+            } else if ((/(txt|json|md)$/i).test(baton.data.filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 $.ajax({ type: 'GET', url: api.getUrl(data, 'view') + '&' + _.now(), dataType: 'text' }).done(function (filecontent) {
                     content.html(_.escape(filecontent).replace(/\n/g, '<br>'));
@@ -87,9 +87,7 @@ define('plugins/portal/files/register',
         },
 
         draw: function (baton) {
-
             var popup = this.busy();
-
             require(['io.ox/files/fluid/view-detail'], function (view) {
                 var obj = api.reduce(baton.data);
                 api.get(obj).done(function (data) {

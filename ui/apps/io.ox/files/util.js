@@ -13,10 +13,13 @@
 
 define('io.ox/files/util',
     ['io.ox/core/tk/dialogs',
-     'gettext!io.ox/files'
-    ], function (dialogs, gt) {
+     'gettext!io.ox/files',
+     'io.ox/core/capabilities',
+    ], function (dialogs, gt, Caps) {
 
     'use strict';
+
+    var regexp = {};
 
     return {
         /**
@@ -33,7 +36,7 @@ define('io.ox/files/util',
             var def = $.Deferred(),
                 extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
                 extForm = _.last(formFilename.split('.')),
-                $hint = $('<div class="row-fluid muted inset">').append(
+                $hint = $('<div class="muted inset">').append(
                             $('<small style="padding-top: 8px">').text(
                                 gt('Please note, changing or removing the file extension will cause problems when viewing or editing.')
                             )
@@ -69,6 +72,40 @@ define('io.ox/files/util',
                 def.resolve();
             }
             return def.promise();
+        },
+
+        //returns previewmode and checks capabilities
+        previewMode: function (file) {
+            var image = '(gif|png|jpe?g|bmp|tiff)',
+                audio = '(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)',
+                office = '(xls|xlb|xlt|ppt|pps|doc|dot|xlsx|xltx|pptx|ppsx|potx|docx|dotx|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',
+                application = '(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf)',
+                text = '(rtf|plain)';
+
+            //check file extension or mimetype (when type is defined)
+            function is(list, type) {
+                var key = (type || '') + '.' + list;
+                if (regexp[key]) {
+                    //use cached
+                    return regexp[key].test(type ? file.file_mimetype : file.filename);
+                } else if (type) {
+                    //e.g. /^image\/.*(gif|png|jpe?g|bmp|tiff).*$/i
+                    return (regexp[key] = new RegExp('^' + type + '\\/.*' + list + '.*$', 'i')).test(file.file_mimetype);
+                } else {
+                    //e.g. /^.*\.(gif|png|jpe?g|bmp|tiff)$/i
+                    return (regexp[key] = new RegExp('^.*\\.' + list + '$', 'i')).test(file.filename);
+                }
+            }
+
+            //identify mode
+            if (is(image, 'image') || is(image)) {
+                return 'thumbnail';
+            } else if (is(audio, 'audio') || is(audio)) {
+                return 'cover';
+            } else if (Caps.has('document_preview') && (is(application, 'application') || is(text, 'text') || is(office))) {
+                return 'preview';
+            }
+            return false;
         }
     };
 });

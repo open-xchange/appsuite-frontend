@@ -220,7 +220,7 @@ define('io.ox/core/tk/vgrid',
             draggable: true,
             dragType: '',
             selectFirst: true,
-            toolbarPlacement: 'bottom',
+            toolbarPlacement: 'top',
             secondToolbar: false,
             swipeLeftHandler: false,
             swipeRightHandler: false,
@@ -288,24 +288,25 @@ define('io.ox/core/tk/vgrid',
                 }
             },
 
-            topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom' : ' top'))
+            topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
                 .prependTo(node),
-            toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top' : ' bottom'))
+            toolbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top'))
                 .append(
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<label class="select-all">').append(
-                            $('<input type="checkbox" value="true" tabindex="1">').attr('title', gt('Select all'))
-                        )
-                        .on('change', 'input', { grid: this }, fnToggleCheckbox),
+                        $('<label class="select-all">')
+                            .append(
+                                $('<input type="checkbox" value="true" tabindex="1">').attr('title', gt('Select all'))
+                            )
+                            .on('change', 'input', { grid: this }, fnToggleCheckbox),
                     // show toggle
                     options.showToggle === false ?
                         [] :
                         $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes')})
-                        .css('float', 'left')
-                        .append($('<i class="icon-th-list">'))
-                        .on('click', { grid: this }, fnToggleEditable)
+                            .addClass('select-all-toggle')
+                            .append($('<i class="fa fa-th-list">'))
+                            .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),
             // item template
@@ -401,48 +402,6 @@ define('io.ox/core/tk/vgrid',
 
         // selection
         Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
-
-        // second toolbar
-        if (_.device('!small')) {
-            // create extension point for second toolbar
-            ext.point('io.ox/core/vgrid/secondToolbar').extend({
-                index: 100,
-                id: 'secondToolbar',
-                draw: function (baton) {
-                    // select all/none
-                    var link,
-                        sel = baton.grid.selection,
-                        fnShowAll = function () {
-                            var checked = link.prop('checked');
-                            sel[checked ? 'clear' : 'selectAll']();
-                            setLink(!checked);
-                        },
-                        setLink = function (all) {
-                            all = all || false;
-                            link
-                                .prop('checked', all)
-                                .text(all ? gt('Select none') : gt('Select all'))
-                                .attr('aria-checked', all ? 'true' : 'false');
-                        };
-
-                    // fix link if selection is empty
-                    sel.on('empty', function () {
-                        setLink(false);
-                    });
-
-                    // draw link
-                    this.append(
-                        $('<div class="grid-info">').append(
-                            link = $('<a href="#" tabindex="1" role="checkbox" aria-label="' + gt('Select all') + '">').on('click', fnShowAll)
-                        )
-                    );
-                    setLink(false);
-                }
-            });
-        }
-
-        // draw second toolbar
-        ext.point('io.ox/core/vgrid/secondToolbar').invoke('draw', topbar, new ext.Baton({ grid: self, options: options }));
 
         // swipe delegate
         if (_.device('touch')) {
@@ -994,7 +953,6 @@ define('io.ox/core/tk/vgrid',
                 setIndex(all.length - 1);
             });
 
-
         // public methods
 
         this.setApp = function (app) {
@@ -1068,7 +1026,7 @@ define('io.ox/core/tk/vgrid',
             return initLabels();
         };
 
-        this.repaint = _.debounce(function () {
+        this.repaint = _.mythrottle(function () {
             var offset = currentOffset || 0;
             currentOffset = null;
             // reset loader
@@ -1077,7 +1035,7 @@ define('io.ox/core/tk/vgrid',
             // don't remove debouce cause repaint is likely wired with APIs' refresh.list
             // which may be called many times in a row
             paint(offset);
-        }, 100, true);
+        }, 100);
 
         this.clear = function () {
             return apply([], true);

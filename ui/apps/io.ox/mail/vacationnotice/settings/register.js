@@ -29,11 +29,11 @@ define('io.ox/mail/vacationnotice/settings/register',
         }
     },
         createDaysObject = function (from, to) {
-        var objectOfValues = {};
+        var arrayOfValues = [];
         for (var i = from; i <= to; i += 1) {
-            objectOfValues[i] = i;
+            arrayOfValues.push({ label: i, value: i });
         }
-        return objectOfValues;
+        return arrayOfValues;
     };
 
     ext.point('io.ox/settings/pane').extend({

@@ -14,7 +14,7 @@ define('plugins/mobile/addToHomescreen/register',
 
     'use strict';
 
-    if (ox.debug || _.browser.ios === 7) return;
+    if (ox.debug || _.browser.ios >= 7) return;
 
     var nav = window.navigator,
         isIDevice = _.device('iOS'),
@@ -211,7 +211,6 @@ define('plugins/mobile/addToHomescreen/register',
             closeTimeout = setTimeout(close, options.lifespan);
         }
     });
-
 
     function manualShow(override) {
         if (!isIDevice || balloon) return;

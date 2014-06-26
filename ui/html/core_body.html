@@ -1,33 +1,39 @@
 
-<!-- Visual overlays -->
-<div id="background-loader" class="busy"></div>
+{{!-- Visual overlays --}}
+<div id="background-loader" class="busy">
+    <div class="throbber">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+</div>
 
-<!-- Core Panel -->
+{{!-- Core Panel --}}
 <div id="io-ox-core" class="abs unselectable" style="display: none">
-    <!-- top bar -->
+    {{!-- top bar --}}
     <div id="io-ox-topbar" role="navigation" class="f6-target">
-        <ul class="launchers" role="menubar"></ul>
+        <ul class="launchers list-unstyled" role="menubar"></ul>
         <div class="launcher-dropdown dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1"><i class="icon-reorder" aria-hidden="true"></i></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1"><i class="fa fa-bars" aria-hidden="true"></i></a>
             <ul class="dropdown-menu"></ul>
         </div>
     </div>
-    <!-- screens -->
+    {{!-- screens --}}
     <div id="io-ox-screens" class="abs">
-        <!-- window manager -->
+        {{!-- window manager --}}
         <div id="io-ox-windowmanager" class="abs" style="display: none">
             <div id="io-ox-windowmanager-pane" class="atb"></div>
         </div>
-        <!-- empty desktop -->
+        {{!-- empty desktop --}}
         <div id="io-ox-desktop" class="abs"></div>
     </div>
 </div>
 
-<!-- Login screen -->
+{{!-- Login screen --}}
 <div id="io-ox-login-screen-decorator" style="display: none"></div>
 <div id="io-ox-login-screen" class="unselectable" style="display: block">
 
-    <!-- Background decoration -->
+    {{!-- Background decoration --}}
     <div id="io-ox-login-background" class="wallpaper"></div>
     <div id="io-ox-login-form-background"></div>
 
@@ -49,49 +55,46 @@
 
             <div class="css-table-row">
             <div class="css-table-cell" id="io-ox-login-form-container">
-                <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
+                {{!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials --}}
                 <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" novalidate>
-                    <input type="hidden" name="location" value=""><!-- used by redirect servlet -->
-
-                    <div class="row-fluid control-group">
-                        <div class="span6">
-                            <label class="no-margin"><input type="email" id="io-ox-login-username" name="username" tabindex="1"
-                                class="span12" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
-                                aria-label="User name"
-                                aria-required="true"
-                                placeholder="User name" data-i18n="User name" data-i18n-attr="placeholder,aria-label"></label>
+                    <input type="hidden" name="location" value="">{{!-- used by redirect servlet --}}
+                    <div class="row">
+                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label for="io-ox-login-username" class="sr-only" data-i18n="User name">User name</label>
+                            <input type="email" id="io-ox-login-username" name="username" class="form-control"
+                                maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false"
+                                aria-required="true" placeholder="User name" data-i18n="User name" data-i18n-attr="placeholder,aria-label">
                         </div>
-                        <div class="span3">
-                            <label class="no-margin"><input type="password" id="io-ox-login-password" name="password" tabindex="1"
-                                class="span12" maxlength="100" autocorrect="off" autocapitalize="off"
-                                aria-label="Password"
-                                aria-required="true"
-                                placeholder="Password" data-i18n="Password" data-i18n-attr="placeholder,aria-label"></label>
+                        <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <label for="io-ox-login-password" class="sr-only" data-i18n="Password">Password</label>
+                            <input type="password" id="io-ox-login-password" name="password" class="form-control col-lg-6"
+                                maxlength="100" autocorrect="off" autocapitalize="off" aria-required="true"
+                                placeholder="Password" data-i18n="Password" data-i18n-attr="placeholder,aria-label">
                         </div>
-                        <div class="span3">
-                            <input type="submit" tabindex="1" name="signin"
-                                id="login-button" class="span12 btn btn-primary"
-                                role="button"
-                                aria-label="Sign in"
-                                value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label">
+                        <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <input type="submit" name="signin"
+                                    id="login-button" class="btn btn-primary btn-block"
+                                    value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label">
                         </div>
                     </div>
-
-                    <div class="row-fluid control-group">
-                        <div class="span6" id="io-ox-login-store">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="io-ox-login-store">
                             <label for="io-ox-login-store-box" class="checkbox" aria-label="Stay signed in"
                                 data-i18n="Stay signed in" data-i18n-attr="label,aria-label"
-                                ><input type="checkbox" tabindex="1" id="io-ox-login-store-box" checked="checked" name="store" value="1">
+                                ><input type="checkbox" id="io-ox-login-store-box" checked="checked" name="store" value="1">
                                 Stay signed in
                             </label>
                         </div>
-                        <div class="span6" id="io-ox-forgot-password">
-                            <a href="#" target="_blank" tabindex="1" data-i18n="Forgot your password?">Forgot your password?</a>
+                        <div class="col-md-6" id="io-ox-forgot-password">
+                            <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
                         </div>
                     </div>
 
-                    <!-- Feedback area -->
-                    <div id="io-ox-login-feedback"></div>
+                    {{!-- Feedback area --}}
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="io-ox-login-feedback"></div>
+                    </div>
+
 
                 </form>
             </div>
@@ -109,10 +112,12 @@
     </div>
 </div>
 
-<!-- offline notifier -->
+{{!-- offline notifier --}}
 <div id="io-ox-offline" style="bottom: -41px; display: none;"></div>
 
 <div id="tmp" style="display: none;"></div>
 
-<!-- blur effect overlay for browsers without cssfilter support -->
+{{!-- blur effect overlay for browsers without cssfilter support --}}
 <svg style="height:0;"><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>
+
+<script src="{{ base }}/boot.js"></script>

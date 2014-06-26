@@ -20,8 +20,9 @@ define('io.ox/contacts/api',
      'io.ox/core/api/user',
      'io.ox/contacts/util',
      'l10n/ja_JP/io.ox/collation',
-     'settings!io.ox/contacts'
-    ], function (ext, http, apiFactory, notifications, cache, userApi, util, collation, settings) {
+     'settings!io.ox/contacts',
+     'io.ox/core/date'
+    ], function (ext, http, apiFactory, notifications, cache, userApi, util, collation, settings, date) {
 
     'use strict';
 
@@ -34,6 +35,21 @@ define('io.ox/contacts/api',
             cellular: ['551', '552'],
             fax: ['544', '550', '554'],
             addresses: '506 507 508 509 510 523 525 526 527 528 538 539 540 541'.split(' ')
+        },
+        convertResponseToGregorian = function (response) {//helper function
+            if (response.id) {//we have only one contact
+                if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {//convert birthdays with year 1 from julian to gregorian calendar
+                    response.birthday = util.julianToGregorian(response.birthday);
+                }
+                return response;
+            } else {//we have an array of contacts
+                _(response).each(function (contact) {//convert birthdays with year 1 from julian to gregorian calendar
+                    if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {//birthday without year
+                        contact.birthday = util.julianToGregorian(contact.birthday);
+                    }
+                });
+                return response;
+            }
         };
 
     //mapped ids for msisdn
@@ -57,7 +73,7 @@ define('io.ox/contacts/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -65,7 +81,7 @@ define('io.ox/contacts/api',
             },
             search: {
                 action: 'search',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
@@ -146,7 +162,7 @@ define('io.ox/contacts/api',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
                 extendColumns: 'io.ox/contacts/api/list',
                 sort: '607', // magic sort field - ignores asc/desc
-                getData: function (originalQuery, opt) {
+                getData: function (query, opt) {
                     var queryFields = {
                             names: ('display_name first_name last_name yomiFirstName yomiLastName company yomiCompany ' +
                             'email1 email2 email3').split(' '),
@@ -161,23 +177,18 @@ define('io.ox/contacts/api',
                         },
                         filter = ['or'],
                         data,
-                        defaultBehaviour = true,
-                        includes_display_name = false,
-                        words = [],
-                        query = '';
+                        defaultBehaviour = true;
 
                     opt = opt || {};
-
-                    // add wildcards to front and back if none is specified
-                    if ((originalQuery.indexOf('*') + originalQuery.indexOf('?')) < -1) {
-                        query = '*' + originalQuery + '*';
+                    //add wildcards to front and back if none is specified
+                    if ((query.indexOf('*') + query.indexOf('?')) < -1) {
+                        query = '*' + query + '*';
                     }
 
                     _(opt).each(function (value, key) {
                         if (_(queryFields).chain().keys().contains(key).value() && value === 'on') {
                             _(queryFields[key]).each(function (name) {
-                                filter.push(['=', { 'field': name }, query]);
-                                if (name === 'display_name') includes_display_name = true;
+                                filter.push(['=', {'field': name}, query]);
                             });
                             defaultBehaviour = false;
                         }
@@ -188,21 +199,9 @@ define('io.ox/contacts/api',
                             filter.push(['=', {'field': name}, query]);
                         });
                     }
-
-                    // client-side display_name fix
-                    if (originalQuery.indexOf('*') === -1 && includes_display_name) {
-                        words = String(originalQuery).trim().split(/\s+/);
-                        if (words.length > 1) {
-                            filter.push(
-                                ['and'].concat(_(words).map(function (word) {
-                                    return ['=', { 'field': 'display_name' }, '*' + word + '*'];
-                                }))
-                            );
-                        }
-                    }
-
                     data = { 'filter': filter };
-                    ext.point('io.ox/contacts/api/search').invoke('getData', data, query, opt);
+                    ext.point('io.ox/contacts/api/search')
+                        .invoke('getData', data, query, opt);
                     return data;
                 }
             }
@@ -226,25 +225,30 @@ define('io.ox/contacts/api',
                 }
                 return response;
             },
-            list: function (data) {
+            listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
                     api.caches.get.dedust(obj, 'last_modified');
                 });
                 api.trigger('list:ready');
                 return data;
-            }
+            },
+            get: convertResponseToGregorian,
+            search: convertResponseToGregorian,
+            advancedsearch: convertResponseToGregorian
         }
     });
 
     /**
-    * clear userapi cache
-    * @returns defered
-    */
+     * clear userapi cache
+     * @returns defered
+     */
     function clearUserApiCache(data) {
-        return $.when(userApi.caches.get.remove({ id: data.user_id }),
-                      userApi.caches.all.clear(),
-                      userApi.caches.list.remove({ id: data.user_id }));
+        return $.when(
+            userApi.caches.get.remove({ id: data.user_id }),
+            userApi.caches.all.clear(),
+            userApi.caches.list.remove({ id: data.user_id })
+        );
     }
 
     /**
@@ -273,6 +277,10 @@ define('io.ox/contacts/api',
         wat(data, 'email1');
         wat(data, 'email2');
         wat(data, 'email3');
+
+        if (data.birthday && new date.UTC(data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+            data.birthday = util.gregorianToJulian(data.birthday);
+        }
 
         var method,
             attachmentHandlingNeeded = data.tempAttachmentIndicator,
@@ -345,12 +353,16 @@ define('io.ox/contacts/api',
                 return $.when().then(function () {
                     api.addToUploadList(_.ecid(o));//to make the detailview show the busy animation
                     api.trigger('update:' + _.ecid(o));
+                    api.trigger('update', o);
                     return { folder_id: o.folder, id: o.id };
                 });
             } else {
                 return $.when();
             }
         } else {
+            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+                o.data.birthday = util.gregorianToJulian(o.data.birthday);
+            }
             // go!
             return http.PUT({
                 module: 'contacts',
@@ -486,7 +498,7 @@ define('io.ox/contacts/api',
     });
 
     /** @define {object} simple contact cache */
-    var fetchCache = new cache.SimpleCache('contacts-fetching', true);
+    var fetchCache = new cache.SimpleCache('contacts-fetching');
 
     /**
      * clear fetching cache
@@ -537,11 +549,11 @@ define('io.ox/contacts/api',
                 if (data.length) {
                     // favor contacts with an image
                     data.sort(function (a, b) {
-                        return !!b.image1_url ? +1 : -1;
+                        return !!b.image1_url ? + 1 : -1;
                     });
                     // favor contacts in global address book
                     data.sort(function (a, b) {
-                        return b.folder_id === '6' ? +1 : -1;
+                        return b.folder_id === '6' ? + 1 : -1;
                     });
                     // just use the first one
                     data = data[0];
@@ -561,10 +573,19 @@ define('io.ox/contacts/api',
         });
     };
 
+    // local hash to recognize URLs that have been fetched already
+    var cachesURLs = {}, uniq = ox.t0;
+
+    // update uniq on picture change
+    api.on('update:image', function () {
+        uniq = _.now();
+    });
+
     // node is optional. if missing function returns just the URL
     api.pictureHalo = function (/* [node], options */) {
 
-        var args = _(arguments).toArray(), node, options, params, fallback, url, img;
+        var args = _(arguments).toArray(), node, options, params, fallback, url;
+
         // use copy of data object because of delete-statements
         if (args.length === 1) {
             options = _.clone(args[0]);
@@ -575,19 +596,29 @@ define('io.ox/contacts/api',
 
         // duck checks
         if (api.looksLikeResource(options)) {
+
             url = ox.base + '/apps/themes/default/dummypicture_resource.png';
-        }
-        else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+
+        } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+
             url = ox.base + '/apps/themes/default/dummypicture_group.png';
-        }
-        else if (_.isString(options.image1_url) && options.image1_url !== '') {
-            params = $.param($.extend({}, {
+
+        } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+
+            params = $.extend({}, {
                 // scale
                 width: options.width,
                 height: options.height,
                 scaleType: options.scaleType
-            }));
+            });
             url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+
+        }
+        else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
+            url = fallback;
+        }
+        else if (_.device('phantomjs')) {
+            url = fallback;
         }
 
         // already done?
@@ -615,7 +646,8 @@ define('io.ox/contacts/api',
             // scale
             width: options.width,
             height: options.height,
-            scaleType: options.scaleType
+            scaleType: options.scaleType,
+            uniq: uniq
         });
         // remove options
         options = null;
@@ -633,14 +665,39 @@ define('io.ox/contacts/api',
         // just return URL
         if (!node) return url;
 
-        // load image and return node
-        img = new Image();
-        $(img).one('load error', function (e) {
-            var fail = img.width === 1 || e.type === 'error';
-            node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-            node = img = null;
+        // cached?
+        if (cachesURLs[url]) {
+            return node.css('background-image', 'url(' + cachesURLs[url] + ')');
+        }
+
+        // load image
+        _.defer(function () {
+            // use lazyload?
+            var scrollpane = node.closest('.scrollpane');
+            if (scrollpane.length) {
+                node.attr('data-original', url).lazyload({
+                    container: scrollpane,
+                    effect: 'show',
+                    error: function () {
+                        node.css('background-image', 'url(' + fallback + ')');
+                        node = scrollpane = null;
+                    },
+                    load: function (elements_left, settings, image) {
+                        if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
+                        else cachesURLs[url] = url;
+                        node = scrollpane = null;
+                    }
+                });
+            } else {
+                $(new Image()).one('load error', function (e) {
+                    var fail = this.width === 1 || e.type === 'error';
+                    if (!fail) cachesURLs[url] = url;
+                    node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                    node = null;
+                })
+                .attr('src', url);
+            }
         });
-        img.src = url;
 
         return node;
     };
@@ -692,11 +749,12 @@ define('io.ox/contacts/api',
             if (_.isString(data)) return set(data);
 
             if (data) {
-                if (!_.isEmpty(data))
+                if (!_.isEmpty(data)) {
                     set(util[options.stringify](data));
-                else
+                } else {
                     //fallback
                     set(display_name);
+                }
                 clear();
             }
         };
@@ -705,14 +763,14 @@ define('io.ox/contacts/api',
         if (data && data.full_name) {
             cont(data.full_name);
             clear();
-        }
+
         // looks like a full object?
-        else if (data && (data.last_name || data.first_name)) {
+        } else if (data && (data.last_name || data.first_name)) {
             cont(data);
             clear();
-        }
+
         // load data
-        else {
+        } else {
             api.getByEmailadress(data.email).done(cont).fail(clear);
         }
 
@@ -807,7 +865,7 @@ define('io.ox/contacts/api',
         return http.GET({
             module: 'contacts',
             params: params
-        });
+        }).then(convertResponseToGregorian);
     };
 
     /**

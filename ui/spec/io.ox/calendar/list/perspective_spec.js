@@ -12,18 +12,8 @@
  */
 
 define(['io.ox/calendar/main',
-    'fixture!io.ox/calendar/list/calendar-list.json'], function (main, fixture) {
-
-    function Done() {
-        var f = function () {
-            return f.value;
-        };
-        f.value = false;
-        f.yep = function () {
-            f.value = true;
-        };
-        return f;
-    }
+    'fixture!io.ox/calendar/list/calendar-list.json',
+    'waitsFor'], function (main, fixture, waitsFor) {
 
     describe('calendar app and the corresponding listview ', function () {
 
@@ -36,215 +26,194 @@ define(['io.ox/calendar/main',
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
             });
 
+            this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userList));
+            });
 
+            this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userGet));
+            });
         });
 
         it('should provide a getApp function ', function () {
-            expect(main.getApp).toBeTruthy();
+            expect(main.getApp).to.exist;
         });
 
         it('should provide a launch function ', function () {
             var app = main.getApp();
-            expect(app.launch).toBeTruthy();
+            expect(app.launch).to.be.a('function');
         });
 
-        it('should open the calendar app ', function () {
-            var loaded = new Done();
-            waitsFor(loaded, ' calendar app did not start', ox.TestTimeout);
+        it('should open the calendar app ', function (done) {
             main.getApp().launch().done(function () {
                 var app = this;
-                loaded.yep();
-                expect(app.get('state')).toBe('running');
+                expect(app.get('state')).to.equal('running');
+                done();
             });
         });
 
-        it('should open the listview perspective', function () {
-            var app = main.getApp(),
-                loaded = new Done();
-            waitsFor(loaded, ' change perspective to listview not completed', ox.TestTimeout);
+        it('should open the listview perspective', function (done) {
+            var app = main.getApp();
             ox.ui.Perspective.show(app, 'list').done(function () {
-                loaded.yep();
                 var perspective = app.attributes.window.currentPerspective;
-                expect(perspective).toBe('list');
-            });
-
-        });
-
-        it('should get all appointments', function () {
-            this.grid = main.getApp().getGrid();
-            waitsFor(function () {
-                return this.grid.getIds().length > 0;
-            }, 'no data in grid');
-
-            runs(function () {
-                expect(this.grid.getIds().length).toBe(2);
+                expect(perspective).to.equal('list');
+                done();
             });
         });
 
-        it('should show 2 appointments in the grid', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                length = $('.vgrid-cell.calendar', c).length;
-            expect(length).toBe(2);
+        describe('is running with list perspective', function () {
 
-        });
-
-        it('should show 2 label cells in the grid', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                length = $('.vgrid-cell.vgrid-label', c).length;
-            expect(length).toBe(2);
-
-        });
-
-        it('should show 1 tail cell in the grid', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                length = $('.vgrid-cell.tail', c).length;
-            expect(length).toBe(1);
-
-        });
-
-        it('should have a text in its grid-label cells', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                cells = $('.vgrid-cell.vgrid-label', c),
-                textLength1 = $(cells[0]).text().length,
-                textLength2 = $(cells[1]).text().length;
-            expect(textLength1).toBeGreaterThan(0);
-            expect(textLength2).toBeGreaterThan(0);
-        });
-
-        it('should have all from and to time fields in an appointment cells', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                cells = $('.vgrid-cell.calendar', c);
-
-            var fromToTime = $(cells).find('.fragment');
-
-            expect($(fromToTime[0]).text().length).toBeGreaterThan(0);
-            expect($(fromToTime[1]).text().length).toBeGreaterThan(0);
-            expect($(fromToTime[2]).text().length).toBeGreaterThan(0);
-            expect($(fromToTime[3]).text().length).toBeGreaterThan(0);
-        });
-
-        it('should have all title fields in its appointment cells', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                cells = $('.vgrid-cell.calendar', c);
-            var titles = $(cells).find('.title');
-            expect($(titles[0]).text()).toBe('Termin 1');
-            expect($(titles[1]).text()).toBe('Termin 2');
-        });
-
-        it('should have all locations fields in its appointment cells', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                cells = $('.vgrid-cell.calendar', c);
-            var locations = $(cells).find('.location');
-            expect($(locations[0]).text()).toBe('Confroom 1');
-            expect($(locations[1]).text()).toBe('Confroom 2');
-        });
-
-        it('should have the right colors in the time divider bars', function () {
-            var c = main.getApp().getGrid().getContainer(),
-                cells = $('.vgrid-cell.calendar', c);
-            var timebars = $(cells).find('.time');
-            expect($(timebars[0]).hasClass('reserved')).toBe(true);
-            expect($(timebars[1]).hasClass('free')).toBe(true);
-        });
-
-        describe(' should show the right data in detailview ', function () {
-            beforeEach(function () {
-                this.gc = main.getApp().getGrid().getContainer();
-                this.g = main.getApp().getGrid();
+            beforeEach(function (done) {
                 this.app = main.getApp();
-                this.nodes = this.app.getWindow().nodes;
-                this.g.selection.selectFirst();
-
-                this.server.respondWith('GET', /api\/calendar\?action=get.+id=1337/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
-                });
-
-                this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userList));
-                });
-
-                this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userGet));
+                this.app.launch().then(function () {
+                    return ox.ui.Perspective.show(this.app, 'list');
+                }.bind(this)).then(function () {
+                    this.grid = this.app.getGrid();
+                    var container = this.grid.getContainer();
+                    return waitsFor(function () {
+                        return $('.vgrid-cell.calendar', container).length !== 200;
+                    });
+                }.bind(this)).done(function () {
+                    done();
                 });
             });
 
-            it(' and should show an appointment in detail view if something is selected in list', function () {
-                var right = this.nodes.body.find('.rightside');
-                expect(right.length).toBeGreaterThan(0);
+            it('should get all appointments', function () {
+                expect(this.grid.getIds()).to.have.length(2);
             });
 
-            it(' and it should show the title of the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                waitsFor(function () {
-                    return right.find('.title').text() === 'Termin 1';
-                }, 'did not find rightside content');
+            it('should show 2 appointments in the grid', function () {
+                var c = this.grid.getContainer(),
+                    cells = $('.vgrid-cell.calendar', c);
+                expect(cells).to.have.length(2);
+            });
 
-                runs(function () {
-                    expect(right.find('.title').text()).toBe('Termin 1');
+            it('should show 2 label cells in the grid', function () {
+                var c = this.grid.getContainer(),
+                    labelCells = $('.vgrid-cell.vgrid-label', c);
+                expect(labelCells).to.have.length(2);
+            });
+
+            it('should show 1 tail cell in the grid', function () {
+                var c = this.grid.getContainer(),
+                    tailCell = $('.vgrid-cell.tail', c);
+                expect(tailCell).to.have.length(1);
+            });
+
+            it('should have a text in its grid-label cells', function () {
+                var c = this.grid.getContainer(),
+                    cells = $('.vgrid-cell.vgrid-label', c),
+                    textLength1 = $(cells[0]).text().length,
+                    textLength2 = $(cells[1]).text().length;
+                expect(textLength1).to.be.above(0);
+                expect(textLength2).to.be.above(0);
+            });
+
+            it('should have all from and to time fields in an appointment cells', function () {
+                var c = this.grid.getContainer(),
+                    cells = $('.vgrid-cell.calendar', c);
+
+                var fromToTime = $(cells).find('.fragment');
+
+                expect($(fromToTime[0]).text().length).to.be.above(0);
+                expect($(fromToTime[1]).text().length).to.be.above(0);
+                expect($(fromToTime[2]).text().length).to.be.above(0);
+                expect($(fromToTime[3]).text().length).to.be.above(0);
+            });
+
+            it('should have all title fields in its appointment cells', function () {
+                var c = main.getApp().getGrid().getContainer(),
+                    cells = $('.vgrid-cell.calendar', c);
+                var titles = $(cells).find('.title');
+                expect($(titles[0]).text()).to.equal('Termin 1');
+                expect($(titles[1]).text()).to.equal('Termin 2');
+            });
+
+            it('should have all locations fields in its appointment cells', function () {
+                var c = main.getApp().getGrid().getContainer(),
+                    cells = $('.vgrid-cell.calendar', c);
+                var locations = $(cells).find('.location');
+                expect($(locations[0]).text()).to.equal('Confroom 1');
+                expect($(locations[1]).text()).to.equal('Confroom 2');
+            });
+
+            it('should have the right colors in the time divider bars', function () {
+                var c = main.getApp().getGrid().getContainer(),
+                    cells = $('.vgrid-cell.calendar', c);
+                var timebars = $(cells).find('.time');
+
+                //TODO: use jquery matchers
+                expect($(timebars[0]).hasClass('reserved')).to.be.true;
+                expect($(timebars[1]).hasClass('free')).to.be.true;
+            });
+
+            describe(' should show the right data in detailview ', function () {
+                beforeEach(function () {
+                    this.gc = this.grid.getContainer();
+                    this.nodes = this.app.getWindow().nodes;
+                    this.grid.selection.selectFirst();
                 });
-            });
 
-            it('and it should show the locations of the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                expect(right.find('.location').text()).toBe('Confroom');
-            });
+                it(' and should show an appointment in detail view if something is selected in list', function () {
+                    var right = this.nodes.body.find('.rightside');
 
-            it('and it should show the day and date of the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                expect(right.find('.day').text()).toBe('Do., 28.11.2013');
-            });
-
-            it('and it should show the duration of the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                expect(right.find('.interval').text()).toBe('13:00-14:00 UTC');
-            });
-
-            it('and it should show the notes of the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                expect(right.find('.note').text()).toBe('Some Text');
-            });
-
-            it('and it should show the participants of the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                waitsFor(function () {
-                    return right.find('.person').length > 0;
-                }, 'could not find participants');
-                runs(function () {
-                    expect($(right.find('.person')[0]).text()).toBe('Horst Hrubesch');
-                    expect($(right.find('.person')[1]).text()).toBe('Karl Napp');
+                    expect(right.length).to.be.above(0);
                 });
-            });
-            it('and it should show the participants confirm message for the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                waitsFor(function () {
-                    return right.find('.comment').length > 0;
-                }, 'could not find comment');
-                runs(function () {
-                    expect($(right.find('.comment')[0]).text()).toBe('super');
-                    expect($(right.find('.comment')[1]).text()).toBe('immer gerne');
-                });
-            });
 
-            it('and it should show the details section for the appointment', function () {
-                var right = this.nodes.body.find('.rightside');
-                waitsFor(function () {
-                    return right.find('.organizer').text().length > 0;
-                }, 'could not find details');
-                runs(function () {
+                it(' and it should show the title of the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+
+                    expect(right.find('.title').text()).to.equal('Termin 1');
+                });
+
+                it('and it should show the locations of the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+                    expect(right.find('.location').text()).to.equal('Confroom');
+                });
+
+                it('and it should show the day and date of the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+                    expect(right.find('.day').text()).to.equal('Do., 28.11.2013');
+                });
+
+                it('and it should show the duration of the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+                    expect(right.find('.interval').text()).to.equal('13:00-14:00UTC');
+                });
+
+                it('and it should show the notes of the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+
+                    expect(right.find('.note').text()).to.equal('Some Text');
+                });
+
+                it('and it should show the participants of the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+
+                    expect($(right.find('.person')[0]).text()).to.equal('Horst Hrubesch');
+                    expect($(right.find('.person')[1]).text()).to.equal('Karl Napp');
+                });
+                it('and it should show the participants confirm message for the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+
+                    expect($(right.find('.comment')[0]).text()).to.equal('super');
+                    expect($(right.find('.comment')[1]).text()).to.equal('immer gerne');
+                });
+
+                it('and it should show the details section for the appointment', function () {
+                    var right = this.nodes.body.find('.rightside');
+
                     var d = right.find('.details');
                     var orga = d.find('.organizer').text();
                     var shown_as = d.find('.shown_as').hasClass('reserved');
                     var created = d.find('.created').text();
                     var modified = d.find('.modified').text();
-                    expect(orga).toBe('Horst Hrubesch');
-                    expect(shown_as).toBe(true);
-                    expect(created).toBe('Do., 28.11.2013 – Horst Hrubesch');
-                    expect(modified).toBe('Do., 28.11.2013 – Horst Hrubesch');
+                    expect(orga, 'organizer text').to.equal('Horst Hrubesch');
+                    expect(shown_as, 'shown as reserved').to.be.true;
+                    expect(created, 'created date').to.equal('Do., 28.11.2013 – Horst Hrubesch');
+                    expect(modified, 'modified date').to.equal('Do., 28.11.2013 – Horst Hrubesch');
                 });
             });
         });
-
     });
-
 });
-

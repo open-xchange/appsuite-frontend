@@ -23,7 +23,7 @@ define('io.ox/portal/main',
      'io.ox/portal/settings/pane',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'less!io.ox/portal/style.less'
+     'less!io.ox/portal/style'
     ], function (ext, userAPI, contactAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
@@ -67,7 +67,7 @@ define('io.ox/portal/main',
                 )
             );
 
-            if (_.device('!small')) {
+            if (_.device('!smartphone')) {
                 widgets.loadAllPlugins().done(function () {
                     // add widgets
                     ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
@@ -76,16 +76,15 @@ define('io.ox/portal/main',
                         }
                     });
                     // please no button
-                    $btn.find('.controls')
-                        .prepend($('<button type="button" class="btn btn-primary pull-right">')
-                        .css({ marginLeft: '5px' })
+                    $btn.find('.btn-group-portal').after($greeting);
+                    $btn.find('.btn-group-portal')
+                        .prepend($('<button type="button" class="btn btn-primary">')
                         .attr({
                             'data-action': 'customize',
                             tabindex: 1
                         })
                         .text(gt('Customize this page'))
                         .on('click', openSettings));
-                    $btn.append($greeting);
                 });
             } else {
                 $btn.append($greeting);
@@ -137,7 +136,7 @@ define('io.ox/portal/main',
                     $('<h2>').append(
                         // add remove icon
                         baton.model.get('protectedWidget') ? [] :
-                            $('<a class="disable-widget"><i class="icon-remove"/></a>')
+                            $('<a class="disable-widget"><i class="fa fa-times icon-remove"/></a>')
                             .attr({
                                 href: '#',
                                 role: 'button',
@@ -160,8 +159,6 @@ define('io.ox/portal/main',
             util.setColor(this, baton.model.get('color'));
         }
     });
-
-
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
@@ -210,7 +207,7 @@ define('io.ox/portal/main',
             } else if (this.wasElementDeleted(model)) {
                 // element was removed, no need to refresh it.
                 return;
-            } else if ('unset' in e && 'candidate' in model.changed) {
+            } else if ('unset' in e && 'candidate' in model.changed && model.drawn) {
                 // redraw fresh widget
                 app.refreshWidget(model);
             } else if ('props' in model.changed && model.drawn) {
@@ -269,9 +266,6 @@ define('io.ox/portal/main',
                 tabindex: 1
             });
 
-        if (_.device('small')) {
-            node.css('minHeight', 300);
-        }
         model.node = node;
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
 
@@ -329,8 +323,17 @@ define('io.ox/portal/main',
         return $.when.apply($, defs).done(function () {
                 node.find('.content').remove();
                 // draw summary only on small devices, i.e. smartphones
-                if (_.device('smartphone')) {
-                    point.invoke('summary', node, baton);
+                if (_.device('smartphone') && settings.get('mobile/summaryView')) {
+                    if (point.all()[0].summary) {
+                        //invoke special summary if there is one
+                        point.invoke('summary', node, baton);
+                    }
+                    else if(!node.hasClass('generic-summary')) {//add generic open close if it's not added yet
+                        node.addClass('with-summary show-summary generic-summary');
+                        node.on('tap', 'h2', function (e) {
+                            $(e.delegateTarget).toggleClass('show-summary generic-summary');
+                        });
+                    }
                 }
                 point.invoke('preview', node, baton);
                 node.removeClass('error-occurred');
@@ -382,7 +385,8 @@ define('io.ox/portal/main',
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
                 $title = node.find('h2 .title').text(_.noI18n(title)),
-                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
+                requiresCustomSetUp = point.invoke('requiresCustomSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
@@ -390,9 +394,13 @@ define('io.ox/portal/main',
                 'aria-label': title + ', ' + gt('Disable widget'),
             });
             // setup?
-            if (requiresSetUp) {
+            if (requiresSetUp || requiresCustomSetUp) {
                 node.find('.decoration').removeClass('pending');
-                app.drawDefaultSetup(baton);
+                if (requiresSetUp) {
+                    app.drawDefaultSetup(baton);
+                } else {
+                    point.invoke('performCustomSetUp', node, baton);
+                }
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {
@@ -416,25 +424,24 @@ define('io.ox/portal/main',
 
     app.refreshWidget = function (model, index) {
 
-        if (model.drawn) {
+        if (!model.drawn) return;
 
-            index = index || 0;
+        index = index || 0;
 
-            var node = model.node,
-                delay = (index / 2 >> 0) * 1000,
-                baton = model.get('baton'),
-                point = ext.point(baton.point);
+        var node = model.node,
+            delay = (index / 2 >> 0) * 1000,
+            baton = model.get('baton'),
+            point = ext.point(baton.point);
 
-            _.defer(function () {
+        _.defer(function () {
+            _.delay(function () {
+                node.find('.decoration').addClass('pending');
                 _.delay(function () {
-                    node.find('.decoration').addClass('pending');
-                    _.delay(function () {
-                        loadAndPreview(point, node, baton);
-                        node = baton = point = null;
-                    }, 300); // CSS Transition delay 0.3s
-                }, delay);
-            });
-        }
+                    loadAndPreview(point, node, baton);
+                    node = baton = point = null;
+                }, 300); // CSS Transition delay 0.3s
+            }, delay);
+        });
     };
 
     // can be called every 30 seconds
@@ -540,7 +547,7 @@ define('io.ox/portal/main',
 
             // make sortable, but not for Touch devices
             if (!Modernizr.touch) {
-                require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
+                require(['static/3rd.party/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
                         items: '> li.draggable',
                         cancel: 'li.protected',

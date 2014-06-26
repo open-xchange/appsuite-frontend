@@ -20,7 +20,7 @@ define('io.ox/calendar/edit/view-main',
 
     var CommonView = views.point('io.ox/calendar/edit/section').createView({
         tagName: 'div',
-        className: 'io-ox-calendar-edit container-fluid default-content-padding',
+        className: 'io-ox-calendar-edit container default-content-padding',
         render: function () {
             var self = this;
             var rows = [];
@@ -49,7 +49,7 @@ define('io.ox/calendar/edit/view-main',
                 row.push(extension);
             });
             _(rows).each(function (row) {
-                var $rowNode = $('<div class="row-fluid">').appendTo(self.$el);
+                var $rowNode = $('<div class="row">').appendTo(self.$el);
                 _(row).each(function (extension) {
                     $rowNode.addClass(extension.rowClass || '');
                     extension.invoke('draw', $rowNode, self.baton);

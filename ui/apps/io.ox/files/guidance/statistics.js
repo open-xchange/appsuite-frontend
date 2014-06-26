@@ -8,7 +8,7 @@ define('io.ox/files/guidance/statistics',
      'io.ox/files/api',
      'gettext!io.ox/files',
      'io.ox/core/capabilities',
-     'apps/io.ox/core/tk/charts.js'
+     'static/3rd.party/Chart.js/Chart.js'
     ], function (strings, folderAPI, api, gt, capabilities) {
 
     'use strict';
@@ -185,7 +185,7 @@ define('io.ox/files/guidance/statistics',
                 node.idle();
 
                 node.append($('<div class="progress" style="width: ' + WIDTH + 'px;" >').append(
-                    $('<div class="bar" style="width: ' + ((baton.quota.infostoreUsage / baton.quota.infostoreQuota) * 100) + '%;">')
+                    $('<div class="progress-bar" style="width: ' + ((baton.quota.infostoreUsage / baton.quota.infostoreQuota) * 100) + '%;">')
                         .text(((baton.quota.infostoreUsage / baton.quota.infostoreQuota) * 100).toFixed(2) + ' %')
                 ));
 

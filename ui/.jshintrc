@@ -41,7 +41,6 @@
         "requirejs": false,
         "assert": false,
         "include": false,
-        "doT": false,
         "Backbone": false,
         "BigScreen": false,
         "MediaElementPlayer": false,

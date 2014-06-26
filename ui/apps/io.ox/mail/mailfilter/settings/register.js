@@ -14,7 +14,7 @@
 define('io.ox/mail/mailfilter/settings/register',
     ['io.ox/core/extensions',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/mailfilter/settings/style.less'
+     'less!io.ox/mail/mailfilter/settings/style'
     ], function (ext, gt) {
 
     'use strict';
@@ -24,7 +24,8 @@ define('io.ox/mail/mailfilter/settings/register',
         title: gt('Mail Filter'),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
-        index: 500
+        index: 500,
+        advancedMode: true
     });
 
     ext.point('io.ox/mailfilter/settings/detail').extend({

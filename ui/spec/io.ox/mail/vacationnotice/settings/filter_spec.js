@@ -98,11 +98,11 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
-            expect(this.node.find('input[name="subject"]').length).toBe(1);
-            expect(this.node.find('textarea[name="text"]').length).toBe(1);
-            expect(this.node.find('select').length).toBe(1);
-            expect(this.node.find('option').length).toBe(31);
-            expect(this.node.find('input[type="checkbox"]').length).toBe(2);
+            expect(this.node.find('input[name="subject"]')).to.have.length(1);
+            expect(this.node.find('textarea[name="text"]')).to.have.length(1);
+            expect(this.node.find('select')).to.have.length(1);
+            expect(this.node.find('option')).to.have.length(31);
+            expect(this.node.find('input[type="checkbox"]')).to.have.length(2);
 
         });
 
@@ -110,7 +110,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
-            expect(this.node.find('input[type="checkbox"]:checked').length).toBe(1);
+            expect(this.node.find('input[type="checkbox"]:checked')).to.have.length(1);
 
         });
 
@@ -135,7 +135,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
-            expect(this.node.find('input[type="checkbox"]:checked').length).toBe(2);
+            expect(this.node.find('input[type="checkbox"]:checked')).to.have.length(2);
 
         });
 
@@ -145,16 +145,16 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             });
             this.server.respond();
 
-            model.get('id').should.be.equal(expextedModel['id']);
-            model.get('text').should.be.equal(expextedModel['text']);
-            model.get('subject').should.be.equal(expextedModel['subject']);
-            model.get('addresses').should.be.deep.equal(expextedModel['addresses']);
-            model.get('internal_id').should.be.equal(expextedModel['internal_id']);
-            model.get('activateTimeFrame').should.be.equal(expextedModel['activateTimeFrame']);
-            model.get('primaryMail').should.be.equal(expextedModel['primaryMail']);
+            model.get('id').should.be.equal(expextedModel.id);
+            model.get('text').should.be.equal(expextedModel.text);
+            model.get('subject').should.be.equal(expextedModel.subject);
+            model.get('addresses').should.be.deep.equal(expextedModel.addresses);
+            model.get('internal_id').should.be.equal(expextedModel.internal_id);
+            model.get('activateTimeFrame').should.be.equal(expextedModel.activateTimeFrame);
+            model.get('primaryMail').should.be.equal(expextedModel.primaryMail);
             model.get('tester@open-xchange.com').should.be.equal(expextedModel['tester@open-xchange.com']);
             model.get('tester2@open-xchange.com').should.be.equal(expextedModel['tester2@open-xchange.com']);
-        })
+        });
 
     });
 

@@ -19,12 +19,15 @@
     .leftside .scrollable-pane .title {
         white-space: nowrap;
     }
+    .leftside .alert {
+        margin-top: 13px;
+    }
 }
 
 .oldschool { margin: 0; }
 
 .io-ox-mail-write h1.title {
-    font-family: @lightFontFamily;
+    font-family: @light-font-family;
     font-weight: 300;
     font-size: 20px;
     line-height: 30px;
@@ -53,7 +56,7 @@
 }
 
 .io-ox-mail-write .priority-overlay.high {
-    color: @mailPriority;
+    color: @mail-priority;
 }
 
 .io-ox-mail-write .priority-overlay.normal {
@@ -112,12 +115,12 @@
 }
 
 .touch .io-ox-mail-write textarea {
-    font-size: @touchFontSize;
+    font-size: @font-size-touch;
 }
 
 .io-ox-mail-write input[type=text],
 .io-ox-mail-write input[type=text].discreet:focus {
-    font-size: @baseFontSize;
+    font-size: @font-size-base;
     line-height: 18px;
     height: 29px;
     border: 1px solid #ccc;
@@ -127,16 +130,15 @@
     margin: 0;
     padding: 5px 5px 4px 5px;
     width: 100%;
-    .box-sizing(border-box);
     -webkit-border-radius: 0;
     -webkit-appearance: none;
 }
 
 .touch .io-ox-mail-write input[type=text],
 .touch .io-ox-mail-write input[type=text].discreet:focus {
-    font-size: @touchFontSize;
-    line-height: @touchFontSize + 6;
-    height: @touchFontSize + 6 + 9;
+    font-size: @font-size-touch;
+    line-height: @font-size-touch + 6;
+    height: @font-size-touch + 6 + 9;
 }
 
 .io-ox-mail-write input[type=text]:focus,
@@ -157,7 +159,7 @@
 }
 
 .touch .io-ox-mail-write input[type=text].subject {
-    font-size: @touchFontSize + 2;
+    font-size: @font-size-touch + 2;
 }
 
 .io-ox-mail-write input[type=file] {
@@ -165,7 +167,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    .box-shadow(0 0 4px 0 @outlineColor);
+    .box-shadow(0 0 4px 0 @outline-color);
 }
 
 .io-ox-mail-write .wrapping-label {
@@ -178,7 +180,7 @@
     color: #000;
     line-height: 1.25em;
     padding: 0 0 5px 0;
-    font-family: @lightFontFamily;
+    font-family: @light-font-family;
     cursor: pointer;
 }
 
@@ -194,19 +196,17 @@
 }
 
 .io-ox-mail-write .section-link {
-    font-family: @lightFontFamily;
+    font-family: @light-font-family;
     white-space: nowrap;
     line-height: 1em;
     margin-bottom: 1em;
 }
 
 .io-ox-mail-write .section[data-section='All']{
-    font-family: @lightFontFamily;
+    font-family: @light-font-family;
 }
 
 .io-ox-mail-write-contact {
-
-    height: 3em;
 
     .contact-image {
         height: 3 * 14px;
@@ -220,10 +220,12 @@
 
     .recipient-name {
         font-weight: 500;
+        .ellipsis();
     }
 
     .email {
-        color: @linkColor;
+        color: @link-color;
+        .ellipsis();
     }
 }
 
@@ -239,19 +241,15 @@
     margin-bottom: 2px;
     padding: 4px 2.5em 4px 5px;
 
-
     &.pointer {
         cursor: pointer;
     }
 
     div {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .ellipsis();
     }
 
     .remove {
-        display: inline-block;
         position: absolute;
         top: 1px;
         right: 1px;
@@ -269,13 +267,11 @@
         text-decoration: none;
     }
 
-    .remove [class^="icon-"] {
+    .remove .fa {
         position: absolute;
         top: 50%;
-        left: 0;
-        right: 0;
-        margin-top: -0.5em;
-        text-align: center;
+        left: 50%;
+        margin: -7px 0 0 -6px;
     }
 
     .group-label {
@@ -314,12 +310,18 @@
 }
 
 .io-ox-mail-write .section-item .row-1 {
-    position: absolute; left: 40px; right: 30px;
-    overflow: hidden; text-overflow: ellipsis;
+    position: absolute;
+    left: 40px;
+    right: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .io-ox-mail-write .section-item .row-2 {
-    position: absolute; left: 40px; right: 30px; top: 23px;
+    position: absolute;
+    left: 40px;
+    right: 30px;
+    top: 23px;
 }
 
 .io-ox-mail-write .section-item .filesize {
@@ -351,7 +353,7 @@
 }
 
 .io-ox-mail-write .text-editor {
-    font-family: @normalFontFamily;
+    font-family: @normal-font-family;
     font-size: 14px;
     line-height: 20px;
     color: black;
@@ -363,7 +365,6 @@
     resize: none;
     padding: 10px;
     margin: 0;
-    .box-sizing(border-box);
 }
 
 .io-ox-mail-write .text-editor:focus {
@@ -376,15 +377,14 @@
 }
 
 .io-ox-mail-write .change-format a {
-    color: @linkColor;
+    color: @link-color;
     font-weight: 300;
 }
 
 .io-ox-mail-write .change-format a.active {
-    color: darken(@linkColor, 50%);
+    color: darken(@link-color, 50%);
     font-weight: 500;
 }
-
 
 
 /* Proofread */
@@ -398,7 +398,7 @@
 
 /* tinyMCE polishing */
 
-.editor-inner-container {
+/*.editor-inner-container {
 
     .oxSkin table.mceLayout.focused tr.mceLast td {
         border-color: rgba(82, 168, 236, 0.8);
@@ -429,6 +429,7 @@
         border-color: rgba(82, 168, 236, 0.8); background-color: rgba(82, 168, 236, 0.2);
     }
 }
+*/
 
 /* tablet */
 @media (max-width: 1024px), (max-device-width: 1024px) {
@@ -474,7 +475,6 @@
             position: relative;
             height: 100%;
             width: 100%;
-            .box-sizing(border-box);
         }
 
         /* only apply this adjustments on tablet, therefore checking for .touch */
@@ -509,7 +509,6 @@
                 background-color: #ccc;
                 border: 1px solid white;
                 cursor: pointer;
-                .box-sizing(border-box);
             }
 
             .emoji-tab.left {
@@ -547,7 +546,6 @@
                     width: 100%;
                     padding-right: 30px;
                     .ellipsis();
-                    .box-sizing(border-box);
                 }
 
                 i {
@@ -586,11 +584,11 @@
             }
 
             .emoji-use-tabs .emoji-icons {
-                top: 34px + @emojiTabHeight;
+                top: 25px + @emojiTabHeight;
             }
 
             .reset-recents {
-                color: @linkColor;
+                color: @link-color;
                 cursor: pointer;
                 display: block;
                 margin: 7px 0;
@@ -772,7 +770,6 @@
         position: relative;
         height: 100%;
         width: 100%;
-        .box-sizing(border-box);
     }
 
     .touch & .mceEmojiPane {
@@ -806,7 +803,6 @@
             background-color: #ccc;
             border: 1px solid white;
             cursor: pointer;
-            .box-sizing(border-box);
         }
 
         .emoji-tab.left {
@@ -844,7 +840,6 @@
                 width: 100%;
                 padding-right: 30px;
                 .ellipsis();
-                .box-sizing(border-box);
             }
 
             i {
@@ -883,11 +878,11 @@
         }
 
         .emoji-use-tabs .emoji-icons {
-            top: 34px + @emojiTabHeight;
+            top: 25px + @emojiTabHeight;
         }
 
         .reset-recents {
-            color: @linkColor;
+            color: @link-color;
             cursor: pointer;
             display: block;
             margin: 7px 0;

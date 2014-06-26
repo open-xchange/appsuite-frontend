@@ -70,9 +70,11 @@ define('io.ox/contacts/actions',
         },
         action: function (baton) {
             var data = baton.data;
+            //get full object first, because data might be a restored selection resulting in only having id and folder_id.
+            //This would make distribution lists behave as normal contacts
             if (data.mark_as_distributionlist === true) {
-                require(['io.ox/contacts/distrib/main'], function (m) {
-                    if (m.reuse('edit', data)) return;
+            require(['io.ox/contacts/distrib/main'], function (m) {
+                if (m.reuse('edit', data)) return;
                     m.getApp(data).launch().done(function () {
                         this.edit(data);
                     });
@@ -93,11 +95,11 @@ define('io.ox/contacts/actions',
             return e.collection.has('create');
         },
         action: function (baton) {
+            var folder = baton.folder || baton.app.folder.get();
             require(['io.ox/contacts/edit/main'], function (m) {
-                baton.data.folder_id = baton.folder;
-                m.getApp(baton.data).launch()
+                m.getApp({ folder_id: folder }).launch()
                     .done(function (data) {
-                        baton.app.getGrid().selection.set(data);
+                        if (data) baton.app.getGrid().selection.set(data);
                     });
             });
         }
@@ -117,7 +119,6 @@ define('io.ox/contacts/actions',
             });
         }
     });
-
 
     function moveAndCopy(type, label, success, requires) {
 
@@ -162,6 +163,7 @@ define('io.ox/contacts/actions',
                                 select: function (id) {
                                     settings.set('folderpopup/last', id).save();
                                 },
+                                targetmode: true,
                                 dialogmode: true
                             });
 
@@ -282,13 +284,9 @@ define('io.ox/contacts/actions',
         requires: function (e) {
             if (_.device('small')) return false;
             // check if collection has min 1 contact
-            return api.getList(e.context)
-                .then(function (list) {
-                    //ignore distribution lists
-                    return e.collection.has('some', 'read') && (_.filter([].concat(list), function (el) {
-                        return !el.mark_as_distributionlist;
-                    })).length > 0;
-                });
+            return e.collection.has('some', 'read') && (_.filter([].concat(e.context), function (el) {
+                return !el.mark_as_distributionlist;
+            })).length > 0;
         },
         multiple: function (list) {
             print.request('io.ox/contacts/print', list);
@@ -346,10 +344,6 @@ define('io.ox/contacts/actions',
 
                     });
                 });
-
-
-
-
             });
         }
     });
@@ -457,7 +451,10 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            return e.collection.has('one') && !!e.context.mark_as_distributionlist && !addedToPortal(e.context);
+            if (!e.collection.has('one') || !e.context.id || !e.folder_id) return false;
+            return api.get(api.reduce(e.context)).then(function (data) {
+                return !!data.mark_as_distributionlist && !addedToPortal(data);
+            });
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
@@ -625,7 +622,6 @@ define('io.ox/contacts/actions',
         }
     });
 
-
     // Mobile multi select extension points
     // action send mail to contact
     ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
@@ -636,8 +632,7 @@ define('io.ox/contacts/actions',
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i>')
-                            .addClass('icon-envelope')
+                        $('<i class="fa fa-envelope">')
                             .on('click', {grid: data.grid}, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -650,21 +645,65 @@ define('io.ox/contacts/actions',
             );
         }
     });
-    // delete contact(s)
+
+    // invite contact(s)
     ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
-        id: 'delete',
+        id: 'invite',
         index: 20,
         draw: function (data) {
             var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
-                        $('<i>')
-                            .addClass('icon-trash')
+                        $('<i class="fa fa-calendar-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/contacts/actions/invite', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // delete contact(s)
+    ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 30,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-trash-o">')
                             .on('click', {grid: data.grid}, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/contacts/actions/delete', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // delete contact(s)
+    ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
+        id: 'vcard',
+        index: 30,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-share-square-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/contacts/actions/vcard', null, baton);
                                 e.data.grid.selection.clear();
                             })
                     )
@@ -686,7 +725,7 @@ define('io.ox/contacts/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="fa fa-plus accent-color">');
         }
     });
 
@@ -712,6 +751,7 @@ define('io.ox/contacts/actions',
         id: 'send',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Send mail'),
         ref: 'io.ox/contacts/actions/send'
     }));
@@ -720,6 +760,7 @@ define('io.ox/contacts/actions',
         id: 'vcard',
         index: INDEX += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Send as vCard'),
         ref: 'io.ox/contacts/actions/vcard'
     }));
@@ -735,6 +776,7 @@ define('io.ox/contacts/actions',
         id: 'invite',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Invite to appointment'),
         ref: 'io.ox/contacts/actions/invite'
     }));
@@ -743,6 +785,7 @@ define('io.ox/contacts/actions',
         id: 'edit',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Edit'),
         ref: 'io.ox/contacts/actions/update'
     }));
@@ -751,6 +794,8 @@ define('io.ox/contacts/actions',
         id: 'delete',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
+        icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/contacts/actions/delete'
     }));
@@ -758,6 +803,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'add-to-portal',
         index: INDEX += 100,
+        mobile: 'lo',
         label: gt('Add to portal'),
         ref: 'io.ox/contacts/actions/add-to-portal'
     }));
@@ -765,6 +811,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'move',
         index: INDEX += 100,
+        mobile: 'lo',
         label: gt('Move'),
         ref: 'io.ox/contacts/actions/move'
     }));
@@ -772,6 +819,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'copy',
         index: INDEX += 100,
+        mobile: 'lo',
         label: gt('Copy'),
         ref: 'io.ox/contacts/actions/copy'
     }));
@@ -815,7 +863,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save to drive'),
+        label: gt('Save to Drive'),
         ref: 'io.ox/contacts/actions/save-attachment'
     }));
 });

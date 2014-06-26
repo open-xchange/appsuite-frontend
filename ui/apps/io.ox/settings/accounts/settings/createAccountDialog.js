@@ -22,7 +22,7 @@ define('io.ox/settings/accounts/settings/createAccountDialog',
 
         var def = $.Deferred(),
             dialog,
-            $servicesPane = $('<div class="container-fluid">'),
+            $servicesPane = $('<div class="container">'),
             newRow = 0,
             $currentRow = null;
 
@@ -35,14 +35,14 @@ define('io.ox/settings/accounts/settings/createAccountDialog',
 
         _(keychain.submodules).each(function (submodule) {
             if (newRow === 0) {
-                $currentRow = $('<div class="row-fluid">').css({
+                $currentRow = $('<div class="row">').css({
                     padding: '10px'
                 }).appendTo($servicesPane);
             }
 
             newRow = (newRow + 1) % 2;
 
-            $('<div class="span6">').append($('<a href="#">').text(submodule.displayName).on('click', selectService(submodule.id))).appendTo($currentRow);
+            $('<div class="col-md-6">').append($('<a href="#">').text(submodule.displayName).on('click', selectService(submodule.id))).appendTo($currentRow);
         });
 
         dialog = new dialogs.ModalDialog();

@@ -33,6 +33,10 @@ define('plugins/portal/rss/register',
         load: function (baton) {
             var urls = baton.model.get('props').url || [],
                 title = baton.model.attributes.title;
+            //remove empty urls (causes backend error)
+            urls = _(urls).filter(function (url) {
+                return $.trim(url) !== '';
+            });
             return rss.getMany(urls).done(function (data) {
                 //limit data manually till api call can be limited
                 data = data.slice(0, 100);
@@ -127,27 +131,32 @@ define('plugins/portal/rss/register',
     });
 
     function edit(model, view) {
-        //disable widget till data is set by user
+
+        // disable widget till data is set by user
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true }),
-            $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
-            $description = $('<input type="text" class="input-block-level">'),
-            $error = $('<div class="alert alert-error">').hide(),
+            $url = $('<textarea id="rss_url" class="form-control" rows="5">').attr({ placeholder: 'http://', tabindex: 1 }).placeholder(),
+            $description = $('<input id="rss_desc" type="text" class="form-control" tabindex="1">'),
+            $error = $('<div class="alert alert-danger">').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('RSS Feeds')))
             .build(function () {
                 this.getContentNode().append(
-                    $('<label>').text(gt('URL')),
-                    $url.val((props.url || []).join('\n')),
-                    $('<label>').text(gt('Description')),
-                    $description.val(props.description),
-                    $error
+                    $('<div class="form-group">').append(
+                        $('<label for="rss_url">').text(gt('URL')),
+                        $url.val((props.url || []).join('\n'))
+                    ),
+                    $('<div class="form-group">').append(
+                        $('<label for="rss_desc">').text(gt('Description')),
+                        $description.val(props.description),
+                        $error
+                    )
                 );
             })
-            .addPrimaryButton('save', gt('Save'))
-            .addButton('cancel', gt('Cancel'))
+            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
             .show(function () {
                 $url.focus();
             });
@@ -174,11 +183,15 @@ define('plugins/portal/rss/register',
             }
 
             deferred.done(function () {
+                //split and remove empty urls (causes backend error)
+                url = _(url.split(/\n/)).filter(function (feed) {
+                    return $.trim(feed) !== '';
+                });
                 dialog.close();
                 model.set({
                     title: description,
-                    props: { url: url.split(/\n/), description: description }
-                }, {validate: true});
+                    props: { url: url, description: description }
+                }, { validate: true });
                 model.unset('candidate');
             });
 

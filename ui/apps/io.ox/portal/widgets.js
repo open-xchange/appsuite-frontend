@@ -196,6 +196,8 @@ define('io.ox/portal/widgets',
             var dependencies = _.intersection(collection.pluck('plugin'), api.getAvailablePlugins());
             return require(dependencies).then(function () {
                 return api.removeDisabled();
+            }).fail(function () {
+                console.error('Could not load portal plugin in loadUsedPlugins.');
             });
         },
 
@@ -314,16 +316,16 @@ define('io.ox/portal/widgets',
 
         toJSON: function () {
             // get latest values
-            widgets = {};
+            var w = {};
             collection.each(function (model) {
                 if (!model.get('userWidget')) {
                     return;
                 }
                 var id = model.get('id');
-                widgets[id] = model.toJSON();
-                delete widgets[id].baton;
+                w[id] = model.toJSON();
+                delete w[id].baton;
             });
-            return widgets;
+            return w;
         },
 
         extraSettingsToJSON: function () {
@@ -366,15 +368,31 @@ define('io.ox/portal/widgets',
             // update current data first
             settings.load().then(function () {
                 // update collection
-                api.getSettingsSorted();
 
                 var obj = _.extend({}, widgets),
-                    old_state = obj;
+                    old_state = obj,
+                    index = 0;
+
+                var protectedIDs = _(obj).chain().filter(function (e) {
+                    return e.protectedWidget;
+                }).pluck('index').value();
+
+                function getIndex(i) {
+                    if (_.contains(protectedIDs, i)) {
+                        return getIndex(i + 1);
+                    } else {
+                        return i;
+                    }
+                }
+
                 // update all indexes
-                widgetList.children().each(function (index) {
+                widgetList.children().each(function () {
                     var node = $(this), id = node.attr('data-widget-id');
                     if (id in obj) {
-                        obj[id].index = index + 1;
+                        if (!obj[id].protectedWidget) {
+                            index++;
+                            obj[id].index = getIndex(index);
+                        }
                     }
                 });
                 self.update(obj);

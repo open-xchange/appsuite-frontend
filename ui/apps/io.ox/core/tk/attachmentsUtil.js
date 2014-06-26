@@ -18,8 +18,9 @@ define('io.ox/core/tk/attachmentsUtil',
      'gettext!io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
      'io.ox/core/capabilities',
-     'less!io.ox/core/tk/attachments.less'
-    ], function (strings, pre, dialogs, gt, links, capabilities) {
+     'io.ox/core/extensions',
+     'less!io.ox/core/tk/attachments'
+    ], function (strings, pre, dialogs, gt, links, capabilities, ext) {
 
     'use strict';
 
@@ -187,25 +188,26 @@ define('io.ox/core/tk/attachmentsUtil',
                     }, options),
                 //normalisation
                 name = obj.name || obj.filename || obj.subject || '\u00A0',
-                size = obj.file_size || obj.size || 0;
+                size = obj.file_size || obj.size || 0,
+                $node;
 
             //prepare data
             size = size !== 0 ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
 
             if (obj.group !== 'vcard') {
                 //default
-                icon = $('<i>').addClass('icon-paper-clip');
+                icon = $('<i class="fa fa-paperclip">');
                 info = $('<span>').addClass('filesize').text(size);
             } else {
                 //vcard
-                icon = $('<i>').addClass('icon-list-alt');
+                icon = $('<i class="fa fa-list-alt">');
                 info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
                 //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
                 name = obj.file.display_name || obj.file.email1 || '';
             }
 
             //create node
-            return $('<div>')
+            $node = $('<div>')
                 .addClass(this.itemClasses)
                 .append(
                     //file
@@ -223,7 +225,7 @@ define('io.ox/core/tk/attachmentsUtil',
                             $('<a href="#" class="remove" tabindex="6">')
                             .attr('title', gt('Remove attachment'))
                             .append(
-                                $('<i class="icon-trash">')
+                                $('<i class="fa fa-trash-o">')
                             )
                             .on('click', function (e) {
                                 e.preventDefault();
@@ -233,6 +235,15 @@ define('io.ox/core/tk/attachmentsUtil',
                             })
                     )
             );
+            
+            if (options.ref) {
+                var fileObj = JSON.parse(JSON.stringify(obj));
+                fileObj.name = name;
+                fileObj.size = size;
+                ext.point(options.ref).invoke('customize', $node, fileObj);
+            }
+
+            return $node;
         },
 
         /**

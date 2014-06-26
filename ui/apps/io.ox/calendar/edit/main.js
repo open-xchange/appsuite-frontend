@@ -19,7 +19,7 @@ define('io.ox/calendar/edit/main',
      'io.ox/core/notifications',
      'gettext!io.ox/calendar/edit/main',
      'settings!io.ox/calendar',
-     'less!io.ox/calendar/edit/style.less'
+     'less!io.ox/calendar/edit/style'
     ], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';
@@ -47,7 +47,9 @@ define('io.ox/calendar/edit/main',
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt('Do you really want to discard your changes?'))
-                            .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
+                            //#. "Discard changes" appears in combination with "Cancel" (this action)
+                            //#. Translation should be distinguishable for the user
+                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
                             .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                             .show()
                             .done(function (action) {
@@ -148,6 +150,7 @@ define('io.ox/calendar/edit/main',
                                             center: false,
                                             container: self.getWindowNode()
                                         })
+                                        .header(conflictView.drawHeader())
                                         .append(conflictView.drawList(con).addClass('additional-info'));
                                     if (hardConflict) {
                                         dialog.prepend(

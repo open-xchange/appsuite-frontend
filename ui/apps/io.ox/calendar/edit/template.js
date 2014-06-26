@@ -52,10 +52,10 @@ define('io.ox/calendar/edit/template',
 
     ext.point('io.ox/calendar/edit/section/header').extend({
         draw: function (baton) {
-            var row = $('<div class="row-fluid header">');
+            var row = $('<div class="col-lg-12 header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
-            this.append(row);
+            this.append($('<div class="row">').append(row));
         }
     });
 
@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'title',
         draw: function (baton) {
-            this.append($('<h1>').addClass('clear-title title').text(gt(baton.mode === 'edit' ? 'Edit appointment' : 'Create appointment')));
+            this.append($('<h1>').addClass('clear-title title').text(baton.mode === 'edit' ? gt('Edit appointment') : gt('Create appointment')));
         }
     });
 
@@ -93,8 +93,7 @@ define('io.ox/calendar/edit/template',
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append($('<button type="button" class="btn discard" data-action="discard" >')
-                .text(gt('Discard'))
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
                 .on('click', function () {
                     baton.app.quit();
                 })
@@ -111,11 +110,16 @@ define('io.ox/calendar/edit/template',
 
     // alert error
     point.extend(new forms.ErrorAlert({
-        index: 100,
         id: 'error',
-        isRelevant: function (response) {
+        index: 100,
+        className: 'error-alerts col-xs-12',
+        isRelevant: function (response, xhr) {
             // don't handle conflicts as error
             if (response.conflicts) {
+                return false;
+            }
+            if (xhr.status === 404 || xhr.status === 0) {
+                notifications.yell(response);
                 return false;
             }
             return true;
@@ -126,9 +130,9 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.InputField({
         id: 'title',
         index: 200,
-        className: 'span12',
-        labelClassName: 'control-label desc',
-        control: '<input type="text" class="span12">',
+        className: 'col-xs-12',
+        labelClassName: 'control-label',
+        control: '<input type="text" class="form-control">',
         attribute: 'title',
         label: gt('Subject'),
         changeAppTitleOnKeyUp: true
@@ -137,21 +141,20 @@ define('io.ox/calendar/edit/template',
     // location input
     point.extend(new forms.InputField({
         id: 'location',
-        className: 'span12',
-        labelClassName: 'control-label desc',
+        className: 'col-xs-12',
+        labelClassName: 'control-label',
         index: 300,
-        control: '<input type="text" class="span12">',
+        control: '<input type="text" class="form-control">',
         attribute: 'location',
         label: gt('Location')
     }));
 
-    var datepickerSpan = _.device('small') ? 'span6' : 'span4';
     // start date
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: datepickerSpan,
-        labelClassName: 'control-label desc',
+        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
+        labelClassName: 'control-label',
         display: 'DATETIME',
         attribute: 'start_date',
         label: gt('Starts on')
@@ -160,15 +163,14 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: datepickerSpan,
-        labelClassName: 'control-label desc',
+        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
+        labelClassName: 'control-label',
         display: 'DATETIME',
         index: 500,
         attribute: 'end_date',
         label: gt('Ends on')
     }), {
-        nextTo: 'start-date',
-        rowClass: 'dateinput'
+        nextTo: 'start-date'
     });
 
     // find free time link
@@ -177,19 +179,17 @@ define('io.ox/calendar/edit/template',
         index: 550,
         nextTo: 'end-date',
         draw: function () {
-            if (_.device('!small')) {
-                this.append(
-                    $('<div class="span4"><label class="find-free-time"></label></div>')
-                );
-            }
+            this.append(
+                $('<div class="hidden-xs col-sm-12 col-md-4 find-free-time-top"></div>')
+            );
         }
     });
 
     // full time
     point.extend(new forms.CheckBoxField({
         id: 'full_time',
-        className: 'span12',
-        labelClassName: 'control-label desc',
+        className: 'col-xs-12',
+        labelClassName: 'control-label',
         label: gt('All day'),
         attribute: 'full_time',
         index: 600
@@ -200,7 +200,7 @@ define('io.ox/calendar/edit/template',
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
-        className: 'span12',
+        className: 'col-xs-12 recurrenceview',
         index: recurrenceIndex
     }), {
         rowClass: 'collapsed'
@@ -210,9 +210,9 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.InputField({
         id: 'note',
         index: 700,
-        className: 'span12',
-        labelClassName: 'control-label desc',
-        control: '<textarea class="note">',
+        className: 'col-xs-12',
+        labelClassName: 'control-label',
+        control: '<textarea class="note form-control">',
         attribute: 'note',
         label: gt('Description')
     }));
@@ -226,10 +226,10 @@ define('io.ox/calendar/edit/template',
                 this.append(
                     $('<a href="#">')
                         .text(gt('Expand form'))
-                        .addClass('actionToggle spacer')
+                        .addClass('btn btn-link actionToggle spacer')
                         .on('click', function (e) {
                             e.preventDefault();
-                            $('.row-fluid.collapsed', baton.parentView.$el).toggle();
+                            $('.row.collapsed', baton.parentView.$el).toggle();
                             if (collapsed) {
                                 $(this).text(gt('Expand form')).addClass('spacer');
                             } else {
@@ -249,8 +249,8 @@ define('io.ox/calendar/edit/template',
         point.extend(new forms.SelectBoxField({
             id: 'alarm',
             index: 800,
-            labelClassName: 'control-label desc',
-            className: 'span4',
+            labelClassName: 'control-label',
+            className: 'col-md-4',
             attribute: 'alarm',
             label: gt('Reminder'),
             selectOptions: calendarUtil.getReminderOptions()
@@ -263,11 +263,11 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.SelectBoxField({
         id: 'shown_as',
         index: 900,
-        className: 'span4',
+        className: 'col-md-4',
         attribute: 'shown_as',
         label: //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
                gt('Shown as'),
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label',
         selectOptions: {
             1: gt('Reserved'),
             2: gt('Temporary'),
@@ -282,9 +282,9 @@ define('io.ox/calendar/edit/template',
     // private?
     point.extend(new forms.CheckBoxField({
         id: 'private_flag',
-        labelClassName: 'control-label desc',
-        headerClassName: 'control-label desc',
-        className: 'span4',
+        labelClassName: 'control-label',
+        headerClassName: 'control-label',
+        className: 'col-md-4 privateflag',
         header: gt('Type'),
         label: gt('Private'),
         attribute: 'private_flag',
@@ -297,7 +297,7 @@ define('io.ox/calendar/edit/template',
     // participants label
     point.extend(new forms.SectionLegend({
         id: 'participants_legend',
-        className: 'span12 find-free-time',
+        className: 'col-md-12 find-free-time',
         label: gt('Participants'),
         index: 1300
     }), {
@@ -324,12 +324,29 @@ define('io.ox/calendar/edit/template',
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var pNode;
+            var pNode,
+                guid = _.uniqueId('form-control-label-');
             this.append(
-                pNode = $('<div class="input-append span6">').append(
-                    $('<input type="text" class="add-participant" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
-                    $('<button type="button" class="btn" data-action="add" tabindex="1">')
-                        .append($('<i class="icon-plus">'))
+                $('<div class="col-md-6">').append(
+                    pNode = $('<div class="input-group">').append(
+                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
+                        $('<input class="add-participant form-control">').attr({
+                            type: 'text',
+                            tabindex: 1,
+                            id: guid,
+                            placeholder: gt('Add participant/resource')
+                        }),
+                        $('<span class="input-group-btn">').append(
+                            $('<button class="btn btn-default">')
+                                .attr({
+                                    type: 'button',
+                                    tabindex: 1,
+                                    'data-action': 'add',
+                                    'aria-label': gt('Add participant/resource')
+                                })
+                                .append($('<i class="fa fa-plus">'))
+                        )
+                    )
                 )
             );
 
@@ -350,9 +367,6 @@ define('io.ox/calendar/edit/template',
                         }
                     });
                 }
-
-                if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
-
                 autocomplete.render();
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
@@ -416,15 +430,13 @@ define('io.ox/calendar/edit/template',
 
     point.extend(new forms.CheckBoxField({
         id: 'notify',
-        labelClassName: 'control-label desc',
-        //headerClassName: 'control-label desc',
-        className: 'span6',
-        //header: gt('Notify all participants via email.'),
+        labelClassName: 'control-label',
+        className: 'col-md-6',
         label: gt('Notify all participants by email.'),
         attribute: 'notification',
         index: 1510,
         customizeNode: function () {
-            this.$el.css('paddingTop', '5px');
+            this.$el.css({'top': '-12px'});
         }
     }), {
         nextTo: 'add-participant',
@@ -436,13 +448,12 @@ define('io.ox/calendar/edit/template',
     // attachments label
     point.extend(new forms.SectionLegend({
         id: 'attachments_legend',
-        className: 'span12',
+        className: 'col-md-12',
         label: gt('Attachments'),
         index: 1600
     }), {
         rowClass: 'collapsed'
     });
-
 
     point.extend(new attachments.EditableAttachmentList({
         id: 'attachment_list',
@@ -468,8 +479,9 @@ define('io.ox/calendar/edit/template',
         index: 1800,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
-                $inputWrap = attachments.fileUploadWidget({displayButton: false, multi: true}),
+            var guid = _.uniqueId('form-control-label-'),
+                $node = $('<form class="attachments-form">').appendTo(this).attr('id', guid),
+                $inputWrap = attachments.fileUploadWidget({multi: true}),
                 $input = $inputWrap.find('input[type="file"]'),
                 changeHandler = function (e) {
                     e.preventDefault();
@@ -501,7 +513,7 @@ define('io.ox/calendar/edit/template',
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
-            $node.append($('<div>').addClass('span12').append($inputWrap));
+            $node.append($('<div>').addClass('col-md-12').append($inputWrap));
         }
     });
 
@@ -546,10 +558,10 @@ define('io.ox/calendar/edit/template',
         index: 100000,
         draw: function (baton) {
             // because that works
-            if (capabilities.has('freebusy !alone') && _.device('!small')) {
-                var selector = 'label.find-free-time, .find-free-time legend';
+            if (capabilities.has('freebusy !alone')) {
+                var selector = '.find-free-time-top, .find-free-time legend';
                 this.parent().find(selector).append(
-                    $('<a href="#" class="pull-right" tabindex="1">').text(gt('Find a free time'))
+                    $('<button type="button" class="btn btn-link pull-right hidden-xs" tabindex="1">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );
             }

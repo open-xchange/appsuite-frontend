@@ -83,13 +83,11 @@ define('io.ox/mail/write/inline-images',
 
     return {
         show: function () {
-
             var dialog = new dialogs.ModalDialog({async: true}),
-                iframe = $(document).find('iframe'),
-                tinymce_input_src = $(iframe[1].contentDocument).find('input#src'),
                 baton =  new ext.Baton({$: {}}),
+                def = $.Deferred(),
                 form;
-            
+
             dialog.build(function () {
                 form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                 this.getContentNode().append(form);
@@ -112,28 +110,25 @@ define('io.ox/mail/write/inline-images',
                         }
                         popup.idle();
                     };
+
                 popup.busy();
-                if (file.val() === '') {
-                    notifications.yell('error', gt('Please select a file to insert'));
-                    popup.idle();
-                    return;
-                } else if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
+
+                if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));
                     popup.idle();
-                    return;
+                    def.reject();
                 } else {
-                    api.inlineImage({
+                    return api.inlineImage({
                         file: file[0].files ? file[0].files[0] : [],
                         form: form
-                    }).done(function (data) {
-                        tinymce_input_src
-                            .val(api.getInsertedImageUrl(data))
-                            .trigger('change');
+                    }).then(function (data) {
                         popup.close();
+                        def.resolve(api.getInsertedImageUrl(data));
                     }).fail(failHandler);
                 }
             })
             .show();
+            return def;
         }
     };
 

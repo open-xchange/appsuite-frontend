@@ -14,7 +14,7 @@ define('io.ox/core/wizard/registry',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'gettext!io.ox/core/wizard',
-     'less!io.ox/core/wizard/style.less'
+     'less!io.ox/core/wizard/style'
     ], function (ext, dialogs, gt) {
 
     'use strict';
@@ -44,7 +44,7 @@ define('io.ox/core/wizard/registry',
         this.wizardIsRunning = null;
 
         this.navButtons = $('<div/>').append(
-            $('<button class="btn wizard-next" tabindex="1">').text(gt('Next')).on('click', function () {
+            $('<button class="btn btn-default wizard-next" tabindex="1">').text(gt('Next')).on('click', function () {
                 self.next();
             }),
             $('<button class="btn btn-primary wizard-done" tabindex="1">').text(gt('Done')).on('click', function () {
@@ -57,13 +57,11 @@ define('io.ox/core/wizard/registry',
 
         if (options.closeable) {
             this.navButtons.append(
-                $('<button class="btn wizard-close" tabindex="1">').text(gt('Close')).on('click', function () {
+                $('<button class="btn btn-default wizard-close" tabindex="1">').text(gt('Close')).on('click', function () {
                     self.close();
                 })
             );
         }
-
-
 
         function isNextEnabled() {
             return getBaton().buttons.nextEnabled;
@@ -79,7 +77,6 @@ define('io.ox/core/wizard/registry',
             self.dialog.idle();
             self.updateButtonState();
         }
-
 
         function getBaton(index) {
             if (_.isUndefined(index)) {
@@ -364,7 +361,6 @@ define('io.ox/core/wizard/registry',
         this.goToPage = goToPage;
 
     }
-
 
     return {
         getWizard: function (options) {

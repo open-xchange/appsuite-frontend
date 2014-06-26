@@ -20,7 +20,7 @@ define('io.ox/launchpad/main',
      'io.ox/core/extensions',
      'io.ox/core/upsell',
      'gettext!io.ox/core',
-     'less!io.ox/launchpad/style.less'
+     'less!io.ox/launchpad/style'
     ], function (desktop, api, coreConfig, ext, upsell, gt) {
 
     'use strict';
@@ -48,7 +48,7 @@ define('io.ox/launchpad/main',
             '<a href="#" class="app" tabindex="1" data-app-name="<%= id %>">' +
             '  <img src="<%= icon %>" class="icon" alt="">' +
             '  <div class="title ellipsis"><%= title %></div>' +
-            '  <div class="lock abs"><i class="icon-lock"></i></div>' +
+            '  <div class="lock abs"><i class="fa fa-lock"></i></div>' +
             '</a>'
         ),
 
@@ -151,7 +151,7 @@ define('io.ox/launchpad/main',
         },
 
         drawApp = function (data) {
-            data.title = gt.pgettext('app', data.title);
+            data.title = /*#, dynamic*/gt.pgettext('app', data.title);
             return $(appTmpl(data));
         },
 

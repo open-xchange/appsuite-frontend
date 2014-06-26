@@ -17,7 +17,7 @@ html {
 
 body {
     padding: 1.5cm;
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size: 13px;
     line-height: 18px;
     max-width: 21cm;
@@ -73,7 +73,7 @@ label {
 }
 
 pre.content {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
     white-space: pre-line;
 }
 /* only apply for html-mail content*/

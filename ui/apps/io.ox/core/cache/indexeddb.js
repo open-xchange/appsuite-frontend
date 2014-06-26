@@ -43,7 +43,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
             myDB,
             dbOpened = $.Deferred(); // OP(opened);
 
-
         var opened =  window.indexedDB.open('appsuite.cache', SCHEMA);
         opened.onupgradeneeded = function (e) {
             // Set up object stores

@@ -13,26 +13,29 @@
 define(['plugins/portal/quota/register',
         'io.ox/core/extensions',
         'spec/shared/capabilities'], function (quotaPlugin, ext, caputil) {
-    
+
     var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
 
     describe('portal Quota plugin', function () {
-        beforeEach(function () {
-            capabilities.reset();
+        beforeEach(function (done) {
+            capabilities.reset().then(function () {
+                done();
+            });
         });
-        
+
         describe('should', function () {
-            beforeEach(function () {
+            beforeEach(function (done) {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                            '[{ "timestamp":1368791630910,"data": {"quota":1200, "countquota":50, "use":1200, "countuse":5}},' + 
+                            '[{ "timestamp":1368791630910,"data": {"quota":1200, "countquota":50, "use":1200, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":' + 100 * 1024 * 1024 + ', "use":' + 91 * 1024 * 1024 + '} }]');
                 });
                 this.node = $('<div>');
 
-                ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-                waitsFor(function () {//wait till its actually drawn
-                    return this.node.children().length === 1;
+                var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
+
+                def._wrapped[0].done(function () {
+                    done();
                 });
             });
 
@@ -41,68 +44,67 @@ define(['plugins/portal/quota/register',
             });
 
             it('draw content', function () {
-                expect(this.node.children().length).toEqual(1);
+                expect(this.node.children()).to.have.length(1);
             });
             it('have 3 bars', function () {
-                expect(this.node.find('li.paragraph').length).toEqual(3);
-                expect(this.node.find('.progress').length).toEqual(3);
+                expect(this.node.find('li.paragraph')).to.have.length(3);
+                expect(this.node.find('.progress')).to.have.length(3);
             });
             it('show correct values', function () {
-                expect(this.node.find('.quota-memory-mail').text()).toEqual('100%');
-                expect(this.node.find('.quota-memory-file').text()).toEqual('91 MB von 100 MB');
-                expect(this.node.find('.quota-mailcount').text()).toEqual('5 von 50');
+                expect(this.node.find('.quota-memory-mail').text()).to.equal('100%');
+                expect(this.node.find('.quota-memory-file').text()).to.equal('91 MB von 100 MB');
+                expect(this.node.find('.quota-mailcount').text()).to.equal('5 von 50');
             });
             it('show correct bar colors and lengths', function () {
-                expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().hasClass('bar-danger')).toBeTruthy();
-                expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().css('width')).toEqual('91%');
-                expect(this.node.find('.plugins-portal-quota-memory-mailbar').children().first().hasClass('bar-danger')).toBeTruthy();
-                expect(this.node.find('.plugins-portal-quota-memory-mailbar').children().first().css('width')).toEqual('100%');
-                expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().hasClass('bar-danger')).toBeFalsy();
-                expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().css('width')).toEqual('10%');
+                expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().hasClass('bar-danger')).to.be.true;
+                expect(this.node.find('.plugins-portal-quota-memory-filebar').children().first().css('width')).to.equal('91%');
+                expect(this.node.find('.plugins-portal-quota-memory-mailbar').children().first().hasClass('bar-danger')).to.be.true;
+                expect(this.node.find('.plugins-portal-quota-memory-mailbar').children().first().css('width')).to.equal('100%');
+                expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().hasClass('bar-danger')).to.be.false;
+                expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().css('width')).to.equal('10%');
             });
-            
         });
         describe('should', function () {
-            beforeEach(function () {
+            beforeEach(function (done) {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' + 
+                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
                 });
                 this.node = $('<div>');
 
-                ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-                waitsFor(function () {//wait till its actually drawn
-                    return this.node.children().length === 1;
+                var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
+                def._wrapped[0].done(function () {//wait till its actually drawn
+                    done();
                 });
             });
             it('show correct unlimited values', function () {
-                expect(this.node.find('li.paragraph').length).toEqual(3);
-                expect(this.node.find('.progress').length).toEqual(0);
-                
-                expect(this.node.find('.quota-memory-mail').text()).toEqual('unbegrenzt');
-                expect(this.node.find('.quota-memory-file').text()).toEqual('unbegrenzt');
-                expect(this.node.find('.quota-mailcount').text()).toEqual('unbegrenzt');
+                expect(this.node.find('li.paragraph')).to.have.length(3);
+                expect(this.node.find('.progress')).to.have.length(0);
+
+                expect(this.node.find('.quota-memory-mail').text()).to.equal('unbegrenzt');
+                expect(this.node.find('.quota-memory-file').text()).to.equal('unbegrenzt');
+                expect(this.node.find('.quota-mailcount').text()).to.equal('unbegrenzt');
             });
         });
         describe('should', function () {
-            beforeEach(function () {
+            beforeEach(function (done) {
                 capabilities.disable('infostore');
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' + 
+                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
                 });
                 this.node = $('<div>');
 
-                ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
-                waitsFor(function () {//wait till its actually drawn
-                    return this.node.children().length === 1;
+                var def = ext.point('io.ox/portal/widget/quota').invoke('preview', this.node, {});
+                def._wrapped[0].done(function () {//wait till its actually drawn
+                    done();
                 });
             });
             it('react to missing infostore capability', function () {
-                expect(this.node.find('li.paragraph').length).toEqual(2);
-                expect(this.node.find('.progress').length).toEqual(0);
+                expect(this.node.find('li.paragraph')).to.have.length(2);
+                expect(this.node.find('.progress')).to.have.length(0);
             });
         });
     });

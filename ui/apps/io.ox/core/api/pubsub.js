@@ -86,17 +86,16 @@ define('io.ox/core/api/pubsub',
              */
             create: function (data) {
                 var that = this;
-                return clearCache(that, data.entity)
-                    .pipe(function () {
-                        return http.PUT({
-                            module: opt.module,
-                            appendColumns: false,
-                            params: {
-                                action: 'new'
-                            },
-                            data: data
-                        });
+                return clearCache(that, data.entity).then(function () {
+                    return http.PUT({
+                        module: opt.module,
+                        appendColumns: false,
+                        params: {
+                            action: 'new'
+                        },
+                        data: data
                     });
+                });
             }
         })
         .on('delete', function () {

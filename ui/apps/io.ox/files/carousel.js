@@ -14,13 +14,17 @@
 
 define('io.ox/files/carousel',
     ['io.ox/core/commons',
+     'io.ox/core/capabilities',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
-     'less!io.ox/files/carousel.less'
-    ], function (commons, gt, api, folderAPI) {
+     'less!io.ox/files/carousel'
+    ], function (commons, capabilities, gt, api, folderAPI) {
 
     'use strict';
+
+    var regIsImage = /\.(gif|tiff|jpe?g|gmp|png)$/i,
+        regIsDocument = /\.(pdf|docx?|xlsx?|pptx?)$/i;
 
     var carouselSlider = {
 
@@ -40,9 +44,9 @@ define('io.ox/files/carousel',
         list: [],
         container:      $('<div class="abs carousel slide">'),
         inner:          $('<div class="abs carousel-inner">'),
-        prevControl:    $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev'),
-        nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
-        closeControl:   $('<button type="button" class="btn btn-primary closecarousel">').text(gt('Close')),
+        prevControl:    $('<a class="left carousel-control">').attr('data-slide', 'prev').append($('<i class="icon-prev fa fa-angle-left">')),
+        nextControl:    $('<a class="right carousel-control">').attr('data-slide', 'next').append($('<i class="icon-next fa fa-angle-right">')),
+        closeControl:   $('<button type="button" class="btn btn-link closecarousel">').append($('<i class="fa fa-times">')),
 
        /**
         * The config parameter used to initialize a carousel.
@@ -66,7 +70,26 @@ define('io.ox/files/carousel',
             fullScreen: false,
             baton: null,
             step: 3,
-            attachmentMode: false
+            attachmentMode: false,
+            useSelectionAsStart: false
+        },
+        /**
+         * returns index of a possible startitem in the current selection or 0
+         * @param baton baton with data of current selection
+         * @param list list of images in this folder
+         */
+        findStartItem: function (baton, list) {
+            var startIndex = 0,
+                idsList = _(list).map(_.ecid),
+                idsSelection = _([].concat(baton.data)).map(_.ecid);
+
+            if (idsList && idsSelection) {
+                var item = _.intersection(idsList, idsSelection)[0];
+                if (item) {
+                    startIndex = _(idsList).indexOf(item);
+                }
+            }
+            return startIndex;
         },
 
         init: function (config) {
@@ -83,7 +106,12 @@ define('io.ox/files/carousel',
                 this.win = this.app.getWindow();
             }
             this.list = this.filterImagesList(config.baton.allIds);
-            this.pos = _.extend({}, this.defaults); // get a fresh copy
+            if (config.useSelectionAsStart) {
+                var index = this.findStartItem (config.baton, this.list);
+                this.pos = _.defaults({cur: index}, this.defaults );
+            } else {
+                this.pos = _.extend({}, this.defaults); // get a fresh copy
+            }
             this.firstStart = true; // should have a better name
 
             // no automatic animation
@@ -109,18 +137,24 @@ define('io.ox/files/carousel',
 
             pos.first = parseInt(this.inner.find('.item:first').attr('data-index'), 10);
             pos.last = parseInt(this.inner.find('.item:last').attr('data-index'), 10);
-            // Hide left control on start
-            this.prevControl.hide();
-            if (this.list.length > 1) {
+            // Hide controls if we are at one end of the list
+            if (pos.cur === pos.first) {
+                this.prevControl.hide();
+            } else {
+                this.prevControl.show();
+            }
+            if (pos.cur === pos.last) {
+                this.nextControl.show();
+            } else {
                 this.nextControl.show();
             }
             // before transition
-            this.container.on('slide', function () {
+            this.container.on('slide.bs.carousel', function () {
                 self.pos.sliding = true;
             });
 
             // after transition
-            this.container.on('slid', function () {
+            this.container.on('slid.bs.carousel', function () {
                 var oldpos = pos.cur;
                 pos.cur = parseInt(self.container.find('.item.active').attr('data-index'), 10);
 
@@ -171,8 +205,9 @@ define('io.ox/files/carousel',
         },
 
         filterImagesList: function (list) {
-            return $.grep(list, function (o) {
-                return (/\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename);
+            var supportsDocuments = capabilities.has('document_preview');
+            return _(list).filter(function (o) {
+                return regIsImage.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
             });
         },
 
@@ -182,10 +217,15 @@ define('io.ox/files/carousel',
         },
 
         imgError: function () {
-            $(this).replaceWith($('<i>').addClass('icon-picture file-type-ppt'));
+            $(this).parent().idle();
+            $(this).replaceWith($('<i>').addClass('fa fa-picture-o file-type-ppt'));
         },
 
-        getItems: function () {
+        imgLoad: function () {
+            $(this).parent().idle();
+        },
+
+        getItems: function (loadBoth) {//if we start in the middle of our slideshow we need to preload both directions
 
             var self = this;
             var pos = this.pos,
@@ -193,7 +233,10 @@ define('io.ox/files/carousel',
                 start = pos.start,
                 end   = pos.end;
 
-            if (pos.direction === 'next') {
+            if (loadBoth) {
+                start = Math.max(pos.cur - this.config.step, 0);
+                end = Math.min(pos.cur + this.config.step, this.list.length);
+            } else if (pos.direction === 'next') {
                 start = pos.cur;
                 end = Math.min(start + this.config.step, this.list.length);
             } else {
@@ -222,25 +265,27 @@ define('io.ox/files/carousel',
                 self = null;
             }
 
-            if (this.firstStart) {
+            if (this.firstStart && this.pos.cur === index) {//support starting the slideshow in the middle
                 item.addClass('active');
                 this.firstStart = false;
             }
 
             if (item.children().length === 0) {
                 if (!this.config.attachmentMode) {
-                    item.append(
+                    item.busy().append(
                         $('<img>', { alt: '', src: this.urlFor(file) })
-                            .on('error', this.imgError) /* error doesn't seem to bubble */,
+                            .on('load', this.imgLoad)
+                            .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
                             file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {
-                    item.append(
-                        $('<img>', { alt: '', src: file.url })
-                            .on('error', this.imgError) /* error doesn't seem to bubble */,
+                    item.busy().append(
+                        $('<img>', { alt: '', src: this.urlFor(file) })
+                            .on('load', this.imgLoad)
+                            .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append($('<h4>').text(gt.noI18n(file.filename)))
                     );
                 }
@@ -290,7 +335,7 @@ define('io.ox/files/carousel',
             );
             if (this.list.length === 1) this.nextControl.hide();
             win.idle();
-            this.getItems();
+            this.getItems(this.pos.cur !== 0);//if we start in the middle we need to preload both directions
         },
 
         close: function () {
@@ -299,8 +344,8 @@ define('io.ox/files/carousel',
                 container: this.container
             });
             this.container
-                .off('slid')
-                .off('slide')
+                .off('slid.bs.carousel')
+                .off('slide.bs.carousel')
                 .off('click swipeleft', '.item')
                 .off('click swiperight', '.item');
 

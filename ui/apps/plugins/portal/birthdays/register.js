@@ -17,7 +17,7 @@ define('plugins/portal/birthdays/register',
      'io.ox/contacts/util',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/birthdays/style.less'
+     'less!plugins/portal/birthdays/style'
     ], function (ext, api, date, util, gt, settings) {
 
     'use strict';
@@ -47,9 +47,8 @@ define('plugins/portal/birthdays/register',
         title: gt('Birthdays'),
 
         load: function (baton) {
-            var aDay = 24 * 60 * 60 * 1000,
-                start = new date.UTC().setHours(0, 0, 0, 0).getTime() - aDay,
-                end = start + WEEKS * aDay * 7;
+            var start = new date.UTC().setHours(0, 0, 0, 0).getTime() - date.DAY,
+                end = start + WEEKS * date.WEEK;
             return api.birthdays({ start: start, end: end, right_hand_limit: 25 }).done(function (data) {
                 baton.data = data;
             });
@@ -127,7 +126,7 @@ define('plugins/portal/birthdays/register',
                         $('<div class="buy-a-gift">').append(
                             $('<a>', { href: url, target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
                             $.txt(' '),
-                            $('<i class="icon-external-link">')
+                            $('<i class="fa fa-external-link">')
                         )
                     );
                 }

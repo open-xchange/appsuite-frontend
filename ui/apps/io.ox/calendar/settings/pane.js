@@ -15,156 +15,250 @@ define('io.ox/calendar/settings/pane',
     ['settings!io.ox/calendar',
      'io.ox/core/date',
      'io.ox/calendar/settings/model',
-     'dot!io.ox/calendar/settings/form.html',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
-     'gettext!io.ox/calendar'
-    ], function (settings, date, calendarSettingsModel, tmpl, ext, notifications, gt) {
+     'gettext!io.ox/calendar',
+     'io.ox/backbone/mini-views'
+    ], function (settings, date, calendarSettingsModel, ext, notifications, gt, mini) {
 
     'use strict';
 
-    var calendarSettings =  settings.createModel(calendarSettingsModel),
-        staticStrings =  {
-            TITLE_CALENDAR: gt.pgettext('app', 'Calendar'),
-            TITLE_TIME: gt('Time'),
-            INTERVAL_IN_MINUTES: gt('Time scale in minutes'),
-            WORKING_TIME_START: gt('Start of working time'),
-            WORKING_TIME_END: gt('End of working time'),
-            TITLE_VIEW: gt('Default calendar view'),
-            VIEW: gt('Default view'),
-            TR_CALENDAR_VIEW: gt('Time range for the calender view'),
-            TR_TEAM_VIEW: gt('Time range for the team view'),
-            TR_LIST_VIEW: gt('Time range for the list view'),
-            TITLE_NEW_APPOINTMENT: gt('New appointment'),
-            TIME_FOR_REMINDER: gt('Default reminder'),
-            TITLE_NOTIFICATIONS_FOR_APPOINTMENT: gt('Email notification for appointment'),
-            NOTIFICATIONS_FOR_APPOINTMENTS: gt('Email notification for New, Changed, Deleted?'),
-            TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('Email notification for Accept/Declined'),
-            NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('Email notification for appointment creator?'),
-            NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('Email notification for appointment participant?'),
-            SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments'),
-            NOTIFICATION_MAILS_ARE_DELETED: gt('Automatically delete a notification mail after it has been accepted or declined?'),
-            TITLE_NOTIFICATION_MAIL_HANDLING: gt('Incoming Notification Mails'),
-            MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt('Mark all day appointments as free')
-        },
-
+    var model =  settings.createModel(calendarSettingsModel),
+        POINT = 'io.ox/calendar/settings/detail',
         reloadMe = [],
 
-        optionsInterval = _([5, 10, 15, 20, 30, 60]).map(gt.noI18n),
+        optionsInterval = [
+            {label: gt.noI18n('5'), value: '5'},
+            {label: gt.noI18n('10'), value: '10'},
+            {label: gt.noI18n('15'), value: '15'},
+            {label: gt.noI18n('20'), value: '20'},
+            {label: gt.noI18n('30'), value: '30'},
+            {label: gt.noI18n('60'), value: '60'}
+        ],
 
         optionsTime = function () {
             var array = [];
             for (var i = 0; i < 24; i++) {
                 array.push({
                     label : new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME),
-                    value : i + ''
+                    value : String(i)
                 });
             }
             return array;
         },
 
-        optionsView = [{label: gt('Day'), value: 'week:day'},
-                       {label: gt('Workweek'), value: 'week:workweek'},
-                       {label: gt('Week'), value: 'week:week'},
-                       {label: gt('Month'), value: 'month'},
-                       {label: gt('List'), value: 'list'}],
+        optionsReminder = [
+            {label: gt('No reminder'), value: '-1'},
+            {label: gt('0 minutes'), value: '0'},
+            {label: gt('15 minutes'), value: '15'},
+            {label: gt('30 minutes'), value: '30'},
+            {label: gt('45 minutes'), value: '45'},
+            {label: gt('1 hour'), value: '60'},
+            {label: gt('2 hour'), value: '120'},
+            {label: gt('4 hour'), value: '240'},
+            {label: gt('6 hour'), value: '360'},
+            {label: gt('8 hour'), value: '480'},
+            {label: gt('12 hour'), value: '720'},
+            {label: gt('1 day'), value: '1440'},
+            {label: gt('2 days'), value: '2880'},
+            {label: gt('3 days'), value: '4320'},
+            {label: gt('4 days'), value: '5760'},
+            {label: gt('5 days'), value: '7200'},
+            {label: gt('6 days'), value: '8640'},
+            {label: gt('1 week'), value: '10080'},
+            {label: gt('2 weeks'), value: '20160'},
+            {label: gt('3 weeks'), value: '30240'},
+            {label: gt('4 weeks'), value: '40320'}
+        ];
 
-        optionsCalendarRange =  [{label: gt('Day'), value: 'day'},
-                                 {label: gt('Workweek'), value: 'workweek'},
-                                 {label: gt('Month'), value: 'month'},
-                                 {label: gt('Week'), value: 'week'},
-                                 {label: gt('Custom'), value: 'custom'}],
-
-        optionsReminder = [{label: gt('No reminder'), value: '-1'},
-                            {label: gt('0 minutes'), value: '0'},
-                            {label: gt('15 minutes'), value: '15'},
-                            {label: gt('30 minutes'), value: '30'},
-                            {label: gt('45 minutes'), value: '45'},
-                            {label: gt('1 hour'), value: '60'},
-                            {label: gt('2 hour'), value: '120'},
-                            {label: gt('4 hour'), value: '240'},
-                            {label: gt('6 hour'), value: '360'},
-                            {label: gt('8 hour'), value: '480'},
-                            {label: gt('12 hour'), value: '720'},
-                            {label: gt('1 day'), value: '1440'},
-                            {label: gt('2 days'), value: '2880'},
-                            {label: gt('3 days'), value: '4320'},
-                            {label: gt('4 days'), value: '5760'},
-                            {label: gt('5 days'), value: '7200'},
-                            {label: gt('6 days'), value: '8640'},
-                            {label: gt('1 week'), value: '10080'},
-                            {label: gt('2 weeks'), value: '20160'},
-                            {label: gt('3 weeks'), value: '30240'},
-                            {label: gt('4 weeks'), value: '40320'}],
-
-        optionsYes = {label: gt('Yes'), value: true},
-        optionsNo = {label: gt('No'), value: false},
-
-        calendarViewSettings,
-        CalendarSettingsView = Backbone.View.extend({
-            tagName: 'div',
-            _modelBinder: undefined,
-            initialize: function () {
-                // create template
-                this._modelBinder = new Backbone.ModelBinder();
-
-            },
-            render: function () {
-                var self = this,
-                    needBoolParser = [
-                        'showDeclinedAppointments',
-                        'notifyNewModifiedDeleted',
-                        'notifyAcceptedDeclinedAsCreator',
-                        'notifyAcceptedDeclinedAsParticipant',
-                        'deleteInvitationMailAfterAction',
-                        'markFulltimeAppointmentsAsFree'
-                    ],
-                    boolParser = function (direction, value) {
-                        return direction === 'ModelToView' ? value + '' : value === 'true';
-                    };
-
-                self.$el.empty().append(tmpl.render('io.ox/calendar/settings', {
-                    strings: staticStrings,
-                    optionsIntervalMinutes: optionsInterval,
-                    optionsTimeWorktime: optionsTime(),
-                    optionsViewDefault: optionsView,
-                    optionsCalendarRangeDefault: optionsCalendarRange,
-                    optionsReminderSelection: optionsReminder,
-                    optionsYesAnswers: optionsYes,
-                    optionsNoAnswers: optionsNo
-                }));
-
-                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                _(needBoolParser).each(function (prop) {
-                    defaultBindings[prop].converter = boolParser;
+    model.on('change', function (e, path) {
+        model.saveAndYell().then(
+            function success() {
+                var showNotice = _(reloadMe).any(function (attr) {
+                    return attr === path;
                 });
-                self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-                return self;
+                if (showNotice) {
+                    notifications.yell(
+                        'success',
+                        gt('The setting has been saved and will become active when you enter the application the next time.')
+                    );
+                }
             }
-        });
+        );
+    });
 
-    ext.point('io.ox/calendar/settings/detail').extend({
-        index: 200,
+    ext.point(POINT).extend({
+        index: 100,
         id: 'calendarsettings',
         draw: function () {
-            calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
-            this.append($('<div>').addClass('section').append(calendarViewSettings.render().el));
-            settings.on('change', function (e, path) {
-                calendarSettings.saveAndYell().then(
-                    function success() {
-                        var showNotice = _(reloadMe).any(function (attr) {
-                            return attr === path;
-                        });
-                        if (showNotice) {
-                            notifications.yell(
-                                'success',
-                                gt('The setting has been saved and will become active when you enter the application the next time.')
-                            );
-                        }
-                    }
-                );
-            });
+            var self = this,
+                pane = $('<div class="io-ox-tasks-settings">');
+            self.append($('<div>').addClass('section').append(pane));
+            ext.point(POINT + '/pane').invoke('draw', pane);
         }
     });
+
+    ext.point(POINT + '/pane').extend({
+        index: 100,
+        id: 'header',
+        draw: function () {
+            this.append(
+                $('<h1>').text(gt.pgettext('app', 'Calendar'))
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 200,
+        id: 'time',
+        draw: function () {
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').text(gt('Time')),
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('row').append(
+                            $('<label>').attr('for', 'interval').addClass('control-label col-sm-4').text(gt('Time scale in minutes')),
+                            $('<div>').addClass('col-sm-4').append(
+                                new mini.SelectView({ list: optionsInterval, name: 'interval', model: model, id: 'interval', className: 'form-control' }).render().$el
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('row').append(
+                            $('<label>').attr('for', 'startTime').addClass('control-label col-sm-4').text(gt('Start of working time')),
+                            $('<div>').addClass('col-sm-4').append(
+                                new mini.SelectView({ list: optionsTime(), name: 'startTime', model: model, id: 'startTime', className: 'form-control' }).render().$el
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('row').append(
+                            $('<label>').attr('for', 'endTime').addClass('control-label col-sm-4').text(gt('End of working time')),
+                            $('<div>').addClass('col-sm-4').append(
+                                new mini.SelectView({ list: optionsTime(), name: 'endTime', model: model, id: 'endTime', className: 'form-control' }).render().$el
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 300,
+        id: 'calendar_view',
+        draw: function () {
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Default calendar view')),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Show declined appointments')).prepend(
+                                        new mini.CheckboxView({ name: 'showDeclinedAppointments', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 400,
+        id: 'appointment',
+        draw: function () {
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('New appointment')),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<label>').attr('for', 'defaultReminder').addClass('control-label col-sm-4').text(gt('Default reminder')),
+                            $('<div>').addClass('col-sm-4').append(
+                                new mini.SelectView({ list: optionsReminder, name: 'defaultReminder', model: model, id: 'defaultReminder', className: 'form-control' }).render().$el
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Mark all day appointments as free')).prepend(
+                                        new mini.CheckboxView({ name: 'markFulltimeAppointmentsAsFree', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 500,
+        id: 'notifications',
+        draw: function () {
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for appointment')),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Email notification for New, Changed, Deleted?')).prepend(
+                                        new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                $('<fieldset>').append(
+
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for Accept/Declined')),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Email notification for appointment creator?')).prepend(
+                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Email notification for appointment participant?')).prepend(
+                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Incoming Notification Mails')),
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<div>').addClass('row').append(
+                            $('<div>').addClass('col-sm-8').append(
+                                $('<div>').addClass('checkbox').append(
+                                    $('<label>').addClass('control-label').text(gt('Automatically delete a notification mail after it has been accepted or declined?')).prepend(
+                                        new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: model}).render().$el
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    });
+
 });

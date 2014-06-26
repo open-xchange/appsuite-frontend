@@ -11,32 +11,37 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-.list-view {
+.calendar-list-view {
+
     .search-view {
+
         .vgrid-cell {
+
             &.calendar {
+
                 .date {
                     display: block;
                 }
             }
         }
     }
+
+    .vgrid.editable .vgrid-cell {
+        padding-left: 48px;
+    }
+
     .vgrid-cell {
 
         &.calendar {
 
-            height: 55px; /* = 3 rows */
-            padding-top: 7px;
-            padding-bottom: 7px;
+            height: 60px; /* = 3 rows */
 
             .vgrid-cell-checkbox {
                 padding-top: 9px;
             }
+
             .contentContainer {
-                padding-left: 5px;
-            }
-            .title {
-                font-weight: bold;
+                padding-left: 10px;
             }
 
             .private {
@@ -45,24 +50,12 @@
                 display: inline-block;
             }
 
-            .private-flag {
-                color: #AAA;
-                float: left;
-                font-size: 14px;
-                margin-right: 4px;
-                line-height: 20px;
-            }
-
-            .location {
-                color: #888;
-            }
-
             .shown_as.label-info {
                 width: 1em;
                 height: 1em;
-                border-radius: 4px;
                 float: right;
                 margin-left: 1em;
+                .border-radius(4px);
             }
 
             &.declined {
@@ -74,65 +67,41 @@
             }
 
             .time {
-                width: 20%;
+
+                width: 64px;
                 height: 100%;
                 border-right: 3px solid #ccc;
-                color: #555;
                 float: left;
-                text-align: right;
-                display: inline-block;
+
                 .fragment {
-                    white-space: normal;
                     text-overflow: clip;
                     margin-right: 5px;
                 }
+
             }
 
             .date {
                 display: none;
-                color: #555;
             }
-
-        }
-
-        &.vgrid-label.calendar-label {
-
-            text-align: left;
-            font-weight: 200;
-            font-size: 20px;
-            line-height: 20px;
-            color: @linkColor;
-            padding-top: 32px;
-            padding-bottom: 14px;
-            background-image: none;
-            background-color: #fff;
-            border-top: 0 none;
-            border-bottom: 0 none;
         }
 
         .custom_shown_as {
 
             &.reserved {
-                border-color: @appointmentReserved;
+                border-color: @appointment-reserved;
             }
 
             &.temporary {
-                border-color: @appointmentTemporary;
+                border-color: @appointment-temporary;
             }
 
             &.absent {
-                border-color: @appointmentAbsent;
+                border-color: @appointment-absent;
             } /* red */
 
             &.free {
-                border-color: @appointmentFree;
+                border-color: @appointment-free;
             }
-        }
-        .tail {
-            &.middle {
-
-            }
-
         }
     }
 }

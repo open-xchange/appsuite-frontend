@@ -24,47 +24,48 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 };
 
             it('last week', function () {
+                //FIXME: this test seems to break on sundays (lol)
                 data.start_date = testDate.add(-7 * date.DAY).getTime();
-                expect(util.getSmartDate(data, true)).toEqual('Letzte Woche');
+                expect(util.getSmartDate(data, true)).to.equal('Letzte Woche');
             });
 
             it('yesterday', function () {
                 data.start_date = testDate.add(6 * date.DAY).getTime();
-                expect(util.getSmartDate(data, true)).toEqual('Gestern');
+                expect(util.getSmartDate(data, true)).to.equal('Gestern');
             });
 
             it('same day', function () {
                 data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).toEqual('Heute');
+                expect(util.getSmartDate(data, false)).to.equal('Heute');
             });
 
             it('tomorrow', function () {
                 data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).toEqual('Morgen');
+                expect(util.getSmartDate(data, false)).to.equal('Morgen');
             });
 
             it('next week', function () {
                 data.start_date = testDate.add(6 * date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).toEqual('Nächste Woche');
+                expect(util.getSmartDate(data, false)).to.equal('Nächste Woche');
             });
 
             it('next week with showdate option', function () {
                 data.start_date = testDate.getTime();
-                expect(util.getSmartDate(data, true)).toEqual(testDate.format(date.DATE));
+                expect(util.getSmartDate(data, true)).to.equal(testDate.format(date.DATE));
             });
 
             it('after next week', function () {
                 data.start_date = testDate.add(7 * date.DAY).getTime();
-                expect(util.getSmartDate(data, false)).toEqual(date.locale.months[testDate.getMonth()] + ' ' + testDate.getYear());
+                expect(util.getSmartDate(data, false)).to.equal(date.locale.months[testDate.getMonth()] + ' ' + testDate.getYear());
             });
 
             it('date in the past', function () {
                 data.start_date = testDate.setYear(2012, 10, 11).getTime();
-                expect(util.getSmartDate(data, false)).toEqual('November 2012');
+                expect(util.getSmartDate(data, false)).to.equal('November 2012');
             });
 
             it('date in the past with showdate option', function () {
-                expect(util.getSmartDate(data, true)).toEqual('11.11.2012');
+                expect(util.getSmartDate(data, true)).to.equal('11.11.2012');
             });
 
         });
@@ -79,22 +80,22 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
 
             it('yesterday', function () {
                 data.start_date = testDate.add(-date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).toEqual('Gestern, ' + testDate.format(date.DATE));
+                expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format(date.DATE));
             });
 
             it('same day', function () {
                 data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).toEqual('Heute, ' + testDate.format(date.DATE));
+                expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format(date.DATE));
             });
 
             it('tomorrow', function () {
                 data.start_date = testDate.add(date.DAY).getTime();
-                expect(util.getEvenSmarterDate(data)).toEqual('Morgen, ' + testDate.format(date.DATE));
+                expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format(date.DATE));
             });
 
             it('date in the past', function () {
                 data.start_date = testDate.setYear(2012, 10, 11).getTime();
-                expect(util.getEvenSmarterDate(data)).toEqual('So., 11.11.2012');
+                expect(util.getEvenSmarterDate(data)).to.equal('So., 11.11.2012');
             });
 
         });
@@ -102,36 +103,35 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
         describe('can convert two dates to a date interval string', function () {
 
             it('no given dates', function () {
-                expect(util.getDateInterval()).toEqual('');
+                expect(util.getDateInterval()).to.be.empty;
             });
 
             it('same day', function () {
                 var start = new date.Local(2012, 10, 11).getTime();
-                expect(util.getDateInterval({ start_date: start, end_date: start })).toEqual('So., 11.11.2012');
+                expect(util.getDateInterval({ start_date: start, end_date: start })).to.equal('So., 11.11.2012');
             });
 
             it('same day', function () {
                 var start = new date.Local(2012, 10, 11).getTime();
-                expect(util.getDateInterval({ start_date: start, end_date: start + date.WEEK})).toEqual('So., 11.11.2012 – So., 18.11.2012');
+                expect(util.getDateInterval({ start_date: start, end_date: start + date.WEEK})).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
-
 
         });
 
         describe('can convert two time values to an interval string', function () {
 
             it('no given dates', function () {
-                expect(util.getTimeInterval()).toEqual('');
+                expect(util.getTimeInterval()).to.be.empty;
             });
 
             it('same time', function () {
                 var start = new date.Local(2012, 10, 11, 11, 11, 0).getTime();
-                expect(util.getTimeInterval({ start_date: start, end_date: start })).toEqual('11:11-11:11');
+                expect(util.getTimeInterval({ start_date: start, end_date: start })).to.equal('11:11-11:11');
             });
 
             it('same day', function () {
                 var start = new date.Local(2012, 10, 11, 11, 11, 0).getTime();
-                expect(util.getTimeInterval({ start_date: start, end_date: start + date.HOUR})).toEqual('11:11-12:11');
+                expect(util.getTimeInterval({ start_date: start, end_date: start + date.HOUR})).to.equal('11:11-12:11');
             });
 
         });
@@ -164,7 +164,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                     30240 : '3 Wochen',
                     40320 : '4 Wochen'
                 };
-                expect(util.getReminderOptions()).toEqual(result);
+                expect(util.getReminderOptions()).to.deep.equal(result);
             });
 
         });
@@ -180,19 +180,19 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             };
 
             it('Only works for en_US', function () {
-                expect(ox.language).toEqual('de_DE');
+                expect(ox.language).to.equal('de_DE');
             });
 
             // Daily
             it('Every day', function () {
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Jeden Tag');
+                expect(str).to.equal('Jeden Tag');
             });
 
             it('Every 10 days', function () {
                 data.interval = 10;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 10 Tage');
+                expect(str).to.equal('Alle 10 Tage');
             });
 
             // Weekly
@@ -201,32 +201,32 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.interval = 1;
                 data.recurrence_type = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Wöchentlich am Montag');
+                expect(str).to.equal('Wöchentlich am Montag');
             });
 
             it('Weekly on Monday and Tuesday', function () {
                 data.days = util.days.MONDAY | util.days.TUESDAY;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Wöchentlich am Montag und Dienstag');
+                expect(str).to.equal('Wöchentlich am Montag und Dienstag');
             });
 
             it('Weekly on Monday, Tuesday, Wednesday', function () {
                 data.days = util.days.MONDAY | util.days.TUESDAY | util.days.WEDNESDAY;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Wöchentlich am Montag, Dienstag, Mittwoch');
+                expect(str).to.equal('Wöchentlich am Montag, Dienstag, Mittwoch');
             });
 
             it('On work days', function () {
                 data.days = 2 + 4 + 8 + 16 + 32;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('An Arbeitstagen');
+                expect(str).to.equal('An Arbeitstagen');
             });
 
             it('Weekly on all days -> Every day', function () {
                 data.interval = 1;
                 data.days = 127;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Jeden Tag');
+                expect(str).to.equal('Jeden Tag');
             });
 
             // Weekly - interval > 1
@@ -234,25 +234,25 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.days = util.days.MONDAY;
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 2 Wochen am Montag');
+                expect(str).to.equal('Alle 2 Wochen am Montag');
             });
 
             it('Every 2 weeks on Monday, Tuesday, Wednesday', function () {
                 data.days = util.days.MONDAY | util.days.TUESDAY | util.days.WEDNESDAY;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 2 Wochen am Montag, Dienstag, Mittwoch');
+                expect(str).to.equal('Alle 2 Wochen am Montag, Dienstag, Mittwoch');
             });
 
             it('Every 2 weeks on work days', function () {
                 data.days = 2 + 4 + 8 + 16 + 32;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 2 Wochen an Arbeitstagen');
+                expect(str).to.equal('Alle 2 Wochen an Arbeitstagen');
             });
 
             it('Every 2 weeks on all days', function () {
                 data.days = 127;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 2 Wochen an allen Tagen');
+                expect(str).to.equal('Alle 2 Wochen an allen Tagen');
             });
 
             // Monthly
@@ -262,13 +262,13 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.interval = 1;
                 data.recurrence_type = 3;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Jeden 11. Tag im Monat');
+                expect(str).to.equal('Jeden 11. Tag im Monat');
             });
 
             it('Every 2 months on day 11', function () {
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 2 Monate am 11. Tag');
+                expect(str).to.equal('Alle 2 Monate am 11. Tag');
             });
 
             // Monthly - specific days
@@ -277,7 +277,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.days = util.days.FRIDAY;
                 data.interval = 1;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Am ersten Freitag jeden Monats');
+                expect(str).to.equal('Am ersten Freitag jeden Monats');
             });
 
             it('Monthly on the last Sunday', function () {
@@ -285,7 +285,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.days = util.days.SUNDAY;
                 data.interval = 1;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Am letzten Sonntag jeden Monats');
+                expect(str).to.equal('Am letzten Sonntag jeden Monats');
             });
 
             // Monthly - specific days - interval > 1
@@ -294,7 +294,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.days = util.days.FRIDAY;
                 data.interval = 3;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 3 Monate am ersten Freitag');
+                expect(str).to.equal('Alle 3 Monate am ersten Freitag');
             });
 
             it('Every 3 months on the last Sunday', function () {
@@ -302,7 +302,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.day_in_month = -1;
                 data.interval = 3;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 3 Monate am letzten Sonntag');
+                expect(str).to.equal('Alle 3 Monate am letzten Sonntag');
             });
 
             // Yearly
@@ -313,13 +313,13 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.month = 0;
                 data.recurrence_type = 4;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Jährlich am 29. Januar');
+                expect(str).to.equal('Jährlich am 29. Januar');
             });
 
             it('Every 2 years on January 29', function () {
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 2 Jahre am 29. Januar');
+                expect(str).to.equal('Alle 2 Jahre am 29. Januar');
             });
 
             // Yearly - specific days
@@ -329,7 +329,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.interval = 1;
                 data.month = 6;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Jährlich am ersten Freitag im Juli');
+                expect(str).to.equal('Jährlich am ersten Freitag im Juli');
             });
 
             it('Every 2 years on the first Friday of July', function () {
@@ -338,7 +338,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 data.interval = 2;
                 data.month = 6;
                 var str = util.getRecurrenceString(data);
-                expect(str).toEqual('Alle 2 Jahre am ersten Freitag im Juli');
+                expect(str).to.equal('Alle 2 Jahre am ersten Freitag im Juli');
             });
         });
 
@@ -357,15 +357,15 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(userList));
                 });
-                this.server.respondWith('GET', /api\/group\?action=get/, function (xhr) {
+                this.server.respondWith('PUT', /api\/group\?action=list/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                        '{"timestamp":1383694139525,"data":{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}}'
+                        '{"timestamp":1383694139525,"data":[{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}]}'
                     );
                 });
             });
 
-            it('for test group', function () {
-                this.expect(util.resolveGroupMembers([1337], [4])).toResolveWith(function (result) {
+            it('for test group', function (done) {
+                util.resolveGroupMembers([{id: 1337}], [4]).then(function (result) {
                     var expectedResult = [{
                         'id': 1,
                         'folder_id': 6,
@@ -419,8 +419,8 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                         'mail': 'maxmuster4@open-xchange.com',
                         'mail_field': 1
                     }];
-                    expect(result).toEqual(expectedResult);
-                    return true;
+                    expect(result).to.deep.equal(expectedResult);
+                    done();
                 });
             });
 

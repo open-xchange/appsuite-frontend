@@ -18,16 +18,17 @@ define('io.ox/portal/settings/pane',
      'io.ox/core/upsell',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
-     'apps/io.ox/core/tk/jquery-ui.min.js',
-     'less!io.ox/portal/style.less'
-    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt) {
+     'settings!io.ox/portal',
+     'static/3rd.party/jquery-ui.min.js',
+     'less!io.ox/portal/style'
+    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings) {
 
     'use strict';
 
     var POINT = 'io.ox/portal/settings/detail', pane;
 
     var collection = widgets.getCollection(),
-        list = $('<ol class="widget-list">');
+        list = $('<ol class="list-group list-unstyled widget-list">');
 
     collection
         .on('remove', function (model) {
@@ -60,7 +61,7 @@ define('io.ox/portal/settings/pane',
         id: 'header',
         draw: function () {
             this.addClass('io-ox-portal-settings').append(
-                $('<h1 class="no-margin">').text(gt('Portal settings'))
+                $('<h1 class="pull-left">').text(gt('Portal settings'))
             );
         }
     });
@@ -89,15 +90,14 @@ define('io.ox/portal/settings/pane',
 
     function drawAddButton() {
         this.append(
-            $('<div class="controls">').append(
-                $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" tabindex="1">').append(
-                        $.txt(gt('Add widget')), $.txt(' '),
-                        $('<span class="caret">')
-                    ),
-                    $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
-                )
-            )
+            $('<div class="btn-group-portal pull-right">').append(
+                $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" tabindex="1">').append(
+                    $.txt(gt('Add widget')), $.txt(' '),
+                    $('<span class="caret">')
+                ),
+                $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
+            ),
+            $('<div class="clearfix">')
         );
         repopulateAddButton();
     }
@@ -126,13 +126,13 @@ define('io.ox/portal/settings/pane',
     function appendIconText(target, text, type, activeColor) {
         if (type === 'color') {
             if (_.device('small')) {
-                return $(target).addClass('widget-color-' + activeColor).append($('<i>').addClass('icon-tint').css('font-size', '20px'));
+                return $(target).addClass('widget-color-' + activeColor).append($('<i class="fa fa-tint">').css('font-size', '20px'));
             } else {
                 return target.text(text);
             }
         } else {
             if (_.device('small')) {
-                var iconClass = (type === 'edit' ? 'icon-pencil' : 'icon-off');
+                var iconClass = (type === 'edit' ? 'fa fa-pencil' : 'fa fa-power-off');
                 return $(target).append($('<i>').addClass(iconClass).css('font-size', '20px'));
             } else {
                 return target.text(text);
@@ -200,7 +200,6 @@ define('io.ox/portal/settings/pane',
         }
     });
 
-
     function dragViaKeyboard(e) {
 
         var node = $(this),
@@ -248,15 +247,15 @@ define('io.ox/portal/settings/pane',
                 .append(
                     data.protectedWidget && data.protectedWidget === true ? $() :
                     $('<a>')
-                    .addClass('drag-handle')
+                    .addClass('drag-handle ' + (baton.model.collection.length <= 1 ? 'hidden' : ''))
                     .attr({
                         href: '#',
-                        'aria-label': title + ', ' + gt('Use cursor keys to change the item position'),
                         'title': gt('Drag to reorder widget'),
+                        'aria-label': title + ', ' + gt('Use cursor keys to change the item position'),
                         role: 'button',
                         tabindex: 1
                     })
-                    .append($('<i class="icon-reorder">'))
+                    .append($('<i class="fa fa-bars">'))
                     .on('click', $.preventDefault)
                     .on('keydown', dragViaKeyboard)
                 );
@@ -345,7 +344,7 @@ define('io.ox/portal/settings/pane',
                         tabindex: 1,
                         'data-action': 'remove',
                         'aria-label': title + ', ' + gt('remove')
-                    }).append('<i class="icon-trash"/>')
+                    }).append('<i class="fa fa-trash-o">')
             );
 
             this.append($controls);
@@ -368,13 +367,15 @@ define('io.ox/portal/settings/pane',
             this.append(list.empty());
 
             collection.each(function (model) {
-                list.append(createView(model).render().el);
+                if (model.get('protectedWidget') !== true || model.get('enabled') !== false) {
+                    list.append(createView(model).render().el);
+                }
             });
 
             // make sortable
             list.sortable({
                 axis: 'y',
-                containment: list.parent().parent(),
+                containment: list.parent(),
                 delay: 150,
                 handle: '.drag-handle',
                 cancel: 'li.protected',
@@ -402,11 +403,41 @@ define('io.ox/portal/settings/pane',
                     this.sort({ silent: true });
                     list.empty();
                     this.each(function (model) {
-                        list.append(createView(model).render().el);
+                        if (model.get('protectedWidget') !== true || model.get('enabled') !== false) {
+                            list.append(createView(model).render().el);
+                        }
                     });
                 });
         }
     });
 
+    ext.point(POINT + '/pane').extend({
+        index: 500,
+        id: 'summaryView',
+        draw: function () {
+
+            var buildCheckbox = function () {
+                var checkbox = $('<input type="checkbox" tabindex="1">')
+                .on('change', function () {
+                    settings.set('mobile/summaryView', checkbox.prop('checked')).save();
+                }).addClass('input-xlarge');
+                checkbox.prop('checked', settings.get('mobile/summaryView'));
+                return checkbox;
+
+            };
+            this.append(
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').text(gt('Mobile device settings:')),
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').text(gt('Only show widget summary on mobile devices')).prepend(
+                                buildCheckbox('showHidden')
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    });
     return {};
 });

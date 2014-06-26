@@ -16,7 +16,7 @@ define('io.ox/calendar/list/view-grid-template',
      'io.ox/core/extensions',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
-     'less!io.ox/calendar/list/style.less'
+     'less!io.ox/calendar/list/style'
     ], function (util, ext, folderAPI, gt) {
 
     'use strict';
@@ -36,7 +36,7 @@ define('io.ox/calendar/list/view-grid-template',
                     time = $('<div class="time">'),
                     contentContainer = $('<div class="contentContainer">').append(
                         date = $('<div class="date">'),
-                        isPrivate = $('<i class="icon-lock private-flag">').hide(),
+                        isPrivate = $('<i class="fa fa-lock private-flag">').hide(),
                         title = $('<div class="title">'),
                         $('<div class="location-row">').append(
                             location = $('<span class="location">')

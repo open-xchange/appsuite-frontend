@@ -74,7 +74,6 @@
     -webkit-border-bottom-right-radius:2px;
 }
 
-
 /**
  *
  * The balloon arrow for iPad
@@ -86,7 +85,6 @@
     -webkit-box-shadow:inset -1px -1px 0 #fff;
     top:-9px; bottom:auto; left:50%;
 }
-
 
 /**
  *
@@ -109,7 +107,6 @@
     font-size:16px;
 }
 
-
 /**
  *
  * The '+' icon, displayed only on iOS < 4.2
@@ -119,7 +116,6 @@
     font-weight:bold;
     font-size:1.3em;
 }
-
 
 /**
  *
@@ -136,7 +132,6 @@
     text-indent:-9999em;
     overflow:hidden;
 }
-
 
 /**
  *
@@ -161,7 +156,6 @@
     -webkit-background-clip:padding-box;
     background-clip:padding-box;
 }
-
 
 /**
  *

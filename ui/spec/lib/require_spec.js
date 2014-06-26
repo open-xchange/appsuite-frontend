@@ -12,43 +12,28 @@
  */
 define(function () {
     describe('require static files', function () {
-        it('should fetch static files via backend', function () {
+        it('should fetch static files via backend', function (done) {
             var def = require(['apps/file/doesnt/exist.js']);
 
-            waitsFor(function () {
-                return def.state() !== 'pending';
-            }, 'loading fake file failed', 500);
-
             def.fail(function (err) {
-                expect(err.requireType).toBe('define');
-                expect(err.message).toBe('Could not read \'file/doesnt/exist.js\'');
-            });
+                expect(err.requireType).to.equal('define');
+                expect(err.message).to.equal('Could not read \'file/doesnt/exist.js\'');
+                done();
+            }).done(done);
         });
 
         describe('with fixture plugin', function () {
-            it('should load JSON data as objects', function () {
-                var testData;
+            it('should load JSON data as objects', function (done) {
                 require(['fixture!test/data.json'], function (data) {
-                    testData = data;
-                });
-                waitsFor(function () {
-                    return !!testData;
-                }, 'Loading JSON test data', ox.testTimeout);
-                runs(function () {
-                    expect(testData.test).toEqual('bar');
+                    expect(data.test).to.equal('bar');
+                    done();
                 });
             });
 
-            it('should load require modules', function () {
-                var testModule;
+            it('should load require modules', function (done) {
                 require(['fixture!test/module.js'], function (data) {
-                    testModule = data;
-                });
-                waitsFor(function () {
-                    return !!testModule;
-                }, 'Loading test module', ox.testTimeout);
-                runs(function () {
-                    expect(testModule.someMethod).toBeFunction();
+                    expect(data.someMethod).to.be.a('function');
+                    done();
                 });
             });
         });

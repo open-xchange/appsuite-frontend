@@ -73,7 +73,7 @@ define('io.ox/mail/detail/content',
             ':(': '&#x1F61E;'
         };
 
-        var regex = /(&quot)?([:;]-?[(|)D])\W/g;
+        var regex = /(&quot)?([:;]-?[(|)D])(\W|$)/g;
 
         return function (text) {
             if (settings.get('displayEmoticons') && capabilities.has('emoji')) {
@@ -109,7 +109,7 @@ define('io.ox/mail/detail/content',
                 if (/<br\/?>/.test(args[0])) return args[0];
                 // ignore if display name is again mail address
                 if (/@/.test(args[2])) return args[0];
-                return '<a href="mailto:' + args[6] + '">' + args[2] + (args[3] || '') + '</a>';
+                return '<a href="mailto:' + args[6] + '" target="_blank">' + args[2] + (args[3] || '') + '</a>';
             });
 
         // split source to safely ignore tags
@@ -131,25 +131,7 @@ define('io.ox/mail/detail/content',
         return text;
     };
 
-    var blockquoteMore, blockquoteClickOpen, blockquoteCollapsedHeight = 57, mailTo;
-
-    blockquoteMore = function (e) {
-        e.preventDefault();
-        blockquoteClickOpen.call($(this).prev().get(0));
-        $(this).hide();
-    };
-
-    blockquoteClickOpen = function () {
-        var h = this.scrollHeight + 'px';
-        $(this)
-            .off('click.open')
-            .stop().animate({ maxHeight: h }, 300, function () {
-                $(this).css('opacity', 1.00).removeClass('collapsed-blockquote');
-            });
-        $(this).next().hide();
-    };
-
-    mailTo = function (e) {
+    var mailTo = function (e) {
         e.preventDefault();
         var node = $(this),
             email = node.attr('href').substr(7), // cut off leading "mailto:"
@@ -187,7 +169,7 @@ define('io.ox/mail/detail/content',
             if (baton.source !== '') return;
             // stop any further processing
             baton.stopPropagation();
-            baton.source = '<div class="alert alert-info">' + gt('This mail has no content') + '</div>';
+            baton.source = '<div class="no-content">' + gt('This mail has no content') + '</div>';
         }
     });
 
@@ -244,21 +226,25 @@ define('io.ox/mail/detail/content',
         }
     });
 
-    // content
-
-    ext.point('io.ox/mail/detail/content').extend({
-        id: 'remove',
-        index: 100,
+    ext.point('io.ox/mail/detail/source').extend({
+        id: 'white-space',
+        index: 600,
         process: function (baton) {
-            if (!baton.isHTML) return;
-            // remove stupid tags
-            this.find('meta, base').remove();
+            baton.source = baton.source
+                // remove leading white-space
+                .replace(/^(<div[^>]+>)(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '$1')
+                // remove closing <html> tag
+                .replace(/\s*<\/html>\s*$/g, '')
+                // remove tailing white-space
+                .replace(/(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+<\/div>$/g, '');
         }
     });
 
+    // content
+
     ext.point('io.ox/mail/detail/content').extend({
         id: 'pseudo-blockquotes',
-        index: 200,
+        index: 100,
         process: function (baton) {
             if (!baton.isHTML) return;
             // transform outlook's pseudo blockquotes
@@ -270,7 +256,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'blockquotes',
-        index: 300,
+        index: 200,
         process: function (baton) {
             if (!baton.isHTML) return;
             this.find('blockquote')
@@ -283,23 +269,24 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'images',
-        index: 400,
+        index: 300,
         process: function (baton) {
             if (!baton.isHTML) return;
             // images with attribute width/height
             this.find('img[width], img[height]').each(function () {
-                var node = $(this), w = node.attr('width'), h = node.attr('height');
+                var node = $(this), w = node.attr('width'), h = node.attr('height'),
+                    pat = /%/;
                 node.removeAttr('width height');
                 // just set width; max-width=100% should still apply
-                if (w) { node.css({ width: w + 'px' }); }
-                if (h) { node.css({ height: h + 'px'}); }
+                if (w) { node.css({ width: pat.test(w) ? w : w + 'px'}); }
+                if (h) { node.css({ height: pat.test(h) ? h : h + 'px'}); }
             });
         }
     });
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'tables',
-        index: 500,
+        index: 400,
         process: function (baton) {
             if (!baton.isHTML) return;
             // tables with bgcolor attribute
@@ -307,12 +294,24 @@ define('io.ox/mail/detail/content',
                 var node = $(this), bgcolor = node.attr('bgcolor');
                 node.css('background-color', bgcolor);
             });
+            this.find('table[cellpadding]').each(function () {
+                var node = $(this), cellpadding = node.attr('cellpadding');
+                if (node.attr('cellspacing') === '0') {
+                    node.css('border-collapse', 'collapse');
+                }
+                node.find('th, td').each(function () {
+                    var node = $(this), style = node.attr('style');
+                    // style might already contain padding or padding-top/right/bottom/left.
+                    // So we add the cellpadding at the beginning so that it doesn't overwrite existing paddings
+                    node.attr('style', 'padding: ' + cellpadding + 'px; ' + style);
+                });
+            });
         }
     });
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'nested',
-        index: 600,
+        index: 500,
         process: function (baton) {
             if (!baton.isHTML) return;
             // nested message?
@@ -335,7 +334,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'fixed-width',
-        index: 700,
+        index: 600,
         process: function (baton) {
             if (baton.isText && settings.get('useFixedWidthFont', false)) this.addClass('fixed-width-font');
         }
@@ -343,7 +342,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'color-quotes',
-        index: 800,
+        index: 700,
         process: function () {
             if (settings.get('isColorQuoted', true)) this.addClass('colorQuoted');
         }
@@ -369,41 +368,96 @@ define('io.ox/mail/detail/content',
             // for support for very large mails we do the following stuff manually,
             // otherwise jQuery explodes with "Maximum call stack size exceeded"
             _(this.get(0).getElementsByTagName('A')).each(function (node) {
-                $(node).filter('[href^="mailto:"]').on('click', mailTo);
+                var link = $(node)
+                        .filter('[href^="mailto:"]')
+                        .on('click', mailTo)
+                        .attr('target', '_blank'), // to be safe
+                    text = link.text();
+                // trim text if it contains mailto:...
+                if (text.search(/^mailto:/) > -1) {
+                    text = text.substring(7);//cut of mailto
+                    text = text.split(/\?/, 2)[0];//cut of additional parameters
+                    link.text(text);
+                }
             });
         }
     });
+
+    function getText(node) {
+        // get text content for current node if it's a text node
+        var value = (node.nodeType === 3 && String(node.nodeValue).trim()) || '',
+            // ignore white-space
+            str = value ? value + ' ' : '';
+        // loop over child nodes for recursion
+        _(node.childNodes).each(function (child) {
+            if (child.tagName === 'STYLE') return;
+            str += getText(child);
+        });
+        return str;
+    }
+
+    var explandBlockquote = function (e) {
+        e.preventDefault();
+        $(this).hide().prev().slideDown('fast', function () {
+            $(e.delegateTarget).trigger('resize');
+        });
+    };
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'auto-collapse',
         index: 1000,
         process: function (baton) {
             // auto-collapse blockquotes?
-            if (baton.isLarge) return;
-            if (baton.options.autoCollapseBlockquotes === false) return;
+            if (baton.options.autoCollapseBlockquotes === false) return; // use by printing, for example
             if (settings.get('features/autoCollapseBlockquotes', true) !== true) return;
             // blockquotes (top-level only)
             this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
-                var node = $(this);
-                node.addClass('collapsed-blockquote')
-                    .css({ opacity: 0.50, maxHeight: blockquoteCollapsedHeight })
-                    .on('click.open', blockquoteClickOpen)
-                    .after(
-                        $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
-                        .on('click', blockquoteMore)
-                    );
-                setTimeout(function () {
-                    if ((node.prop('scrollHeight') - 3) <= node.prop('offsetHeight')) { // 3 rows a 20px line-height
-                        node.removeClass('collapsed-blockquote')
-                            .css('maxHeight', '')
-                            .off('click.open dblclick.close')
-                            .next().remove();
-                    }
-                    node = null;
-                }, 0);
+                var text = getText(this);
+                if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
+                $(this).addClass('collapsed-blockquote').after(
+                    $('<div class="blockquote-toggle">').append(
+                        // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
+                        $('<i class="fa fa-ellipsis-h" tabindex="1">')
+                        .attr('title', gt('Show quoted text')),
+                        $.txt(text)
+                    )
+                );
             });
+            // delegate
+            this.on('click', '.blockquote-toggle', explandBlockquote);
         }
     });
+
+    function isBlockquoteToggle(node) {
+        return node.parent().hasClass('blockquote-toggle');
+    }
+
+    function findFarthestElement(memo, node) {
+        var pos;
+        if (node.css('position') === 'absolute' && !isBlockquoteToggle(node) && (pos = node.position())) {
+            memo.x = Math.max(memo.x, pos.left + node.width());
+            memo.y = Math.max(memo.y, pos.top + node.height());
+            memo.found = true;
+        }
+        return memo;
+    }
+
+    function fixAbsolutePositions(content) {
+        var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight, found: false },
+            width = content.width(), height = content.height();
+        if (!content.isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
+            farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
+        }
+        // only do this for absolute elements
+        if (farthest.found) {
+            content.css('overflow-x', 'auto');
+            if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
+        }
+        // look for resize event
+        content.one('resize', function () {
+            fixAbsolutePositions($(this));
+        });
+    }
 
     return {
 
@@ -437,7 +491,11 @@ define('io.ox/mail/detail/content',
                 baton.source = $.trim(baton.source);
                 baton.isHTML = regHTML.test(baton.type);
                 baton.isText = !baton.isHTML;
-                baton.isLarge = baton.source.length > 1024 * 32; // > 32 KB
+                // large emails cannot be processed because it takes too much time
+                // on slow devices or slow browsers. 32 KB is a good size limit; we cannot
+                // measure the overall performance of the device but we know that
+                // a fresh Chrome browser can handle larger mails without grilling the CPU.
+                baton.isLarge = baton.source.length > (1024 * (_.device('chrome >= 30') ? 64 : 32));
 
                 // process source
                 ext.point('io.ox/mail/detail/source').invoke('process', $(), baton);
@@ -449,7 +507,7 @@ define('io.ox/mail/detail/content',
                     content.innerHTML = baton.source;
                     content = $(content);
                     // last line of defense
-                    content.find('script').remove();
+                    content.find('script, base, meta').remove();
                 } else {
                     // plain TEXT
                     content = $('<div class="content plain-text noI18n">');
@@ -463,6 +521,8 @@ define('io.ox/mail/detail/content',
 
                 // process content unless too large
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
+
+                setTimeout(fixAbsolutePositions, 10, content);
 
             } catch (e) {
                 console.error('mail.getContent', e.message, e, data);

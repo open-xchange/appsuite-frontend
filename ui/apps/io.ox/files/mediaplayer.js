@@ -28,11 +28,11 @@ define('io.ox/files/mediaplayer',
     ['io.ox/core/commons',
      'gettext!io.ox/files',
      'io.ox/files/api',
-     'apps/3rd.party/mediaelement/mediaelement-and-player.js',
+     'static/3rd.party/mediaelement/mediaelement-and-player.js',
      'io.ox/files/actions',
-     'less!io.ox/files/mediaplayer.less',
+     'less!io.ox/files/mediaplayer',
      'css!3rd.party/mediaelement/mediaelementplayer.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'
+     'static/3rd.party/jquery-ui.min.js'
     ], function (commons, gt, api) {
 
     'use strict';
@@ -48,12 +48,11 @@ define('io.ox/files/mediaplayer',
         features: ['playpause', 'progress', 'current', 'volume'],
 
         container: $('<div class="abs mediaplayer_container" tabindex="-1">'),
-        trackdisplay: $('<div class="mediaplayer_track css-table"><div class="css-table-row">' +
-                '<div class="css-table-cell album"></div><div class="css-table-cell"><div class="track"></div></div>' +
+        trackdisplay: $('<div class="mediaplayer_track"><div class="row">' +
+                '<div class="col-xs-3 album"></div><div class="col-xs-9"><div class="track"></div></div>' +
                 '</div></div>'),
         player: $('<div class="mediaplayer_player">'),
         playlist: $('<ul class="mediaplayer_playlist">'),
-
 
         config: {
             list: [],
@@ -63,7 +62,11 @@ define('io.ox/files/mediaplayer',
         init: function (config) {
             _.extend(this.config, config);
             this.app = config.baton.app;
-            this.win = this.app.getWindow();
+            if (this.app) {
+                this.win = this.app.getWindow();
+            } else {
+                this.win = {nodes: { outer: $('.window-container:visible').first()}};//get active window by hand
+            }
             this.lastActiveElement = $(document.activeElement);
 
             this.restore();
@@ -142,7 +145,7 @@ define('io.ox/files/mediaplayer',
         drawTrackInfo: (function () {
 
             function audioIconError() {
-                this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
+                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music"></i>'));
             }
 
             function getCover(file) {
@@ -280,7 +283,10 @@ define('io.ox/files/mediaplayer',
         },
 
         show: function () {
-            this.win.busy().nodes.outer.append(
+            if (this.app) {
+                this.win.busy();
+            }
+            this.win.nodes.outer.append(
                 this.container.append(
                     $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(
                         $('<div class="mediaplayer_buttons pull-right">').append(
@@ -295,7 +301,9 @@ define('io.ox/files/mediaplayer',
                     )
                 )
             );
-            this.win.idle();
+            if (this.app) {
+                this.win.idle();
+            }
             if (this.config.videoSupport) {
                 this.trackdisplay.remove();
                 this.container
@@ -306,12 +314,12 @@ define('io.ox/files/mediaplayer',
                 this.container
                     .removeClass('videoplayer')
                     .addClass('audioplayer');
-                this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
+                this.trackdisplay.find('.album').empty().append($('<i class="fa fa-music"></i>'));
             }
 
             this.playlist.empty();
             this.drawItems();
-            if (_.device('!touch')) { this.playlist.sortable({ axis: 'y', distance: 30 }); }
+            if (_.device('!touch')) { this.playlist.sortable({ containment: this.playlist, axis: 'y', distance: 30 }); }
             this.play(this.list[0]);
             _.defer(function () { $('#io-ox-mediaplayer').focus(); });
         },
@@ -321,7 +329,7 @@ define('io.ox/files/mediaplayer',
             $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
             $('#io-ox-topbar > div.launchers-secondary').prepend(
                 minimizedPlayerLauncher = $('<div class="launcher minimizedmediaplayer" tabindex="1">').append(
-                    $('<i>').addClass('icon-play icon-white')
+                    $('<i>').addClass('fa fa-play icon-white')
                 ).one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();

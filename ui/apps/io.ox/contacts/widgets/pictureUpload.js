@@ -13,7 +13,7 @@
 define('io.ox/contacts/widgets/pictureUpload',
     ['io.ox/core/notifications',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/widgets/widgets.less'
+     'less!io.ox/contacts/widgets/widgets'
     ], function (notifications, gt) {
 
     'use strict';
@@ -104,6 +104,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 var self = this,
                     dataUrl,
                     imageUrl = this.model.get('image1_url'),
+                    guid = _.uniqueId('form-picture-upload-'),
                     hasImage = false;
 
                 self.oldMode = _.browser.IE < 10;
@@ -131,7 +132,8 @@ define('io.ox/contacts/widgets/pictureUpload',
                             )[hasImage ? 'hide' : 'show']()
                     ),
                     $('<form>').append(
-                        self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">')
+                        $('<label class="sr-only">').attr('for', guid).text(gt('Click to upload image')),
+                        self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">').attr('id', guid)
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
@@ -151,10 +153,6 @@ define('io.ox/contacts/widgets/pictureUpload',
                 self.imgCon.on('click', function () { self.fileInput.trigger('click'); });
 
                 self.setImageURL(dataUrl || imageUrl);
-
-                if (this.clear) {
-                    this.$el.append($('<div>').css({ clear: 'both' }));
-                }
             }
         }, options);
     }

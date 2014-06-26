@@ -35,14 +35,14 @@ define('io.ox/mail/autoforward/settings/model',
                         {
                             'id': 'redirect',
                             'to': attributes.forwardmail
-                        },
-                        {
-                            'id': 'keep'
                         }
                     ],
                     'flags': ['autoforward'],
                     'active': attributes.active ? true : false
                 };
+            if (attributes.keep !== false) {
+                preparedData.actioncmds.push({ 'id': 'keep' });
+            }
             //first rule gets 0
             if (!_.isUndefined(attributes.id) && !_.isNull(attributes.id)) {
                 preparedData.id = attributes.id;
@@ -86,7 +86,8 @@ define('io.ox/mail/autoforward/settings/model',
     var fields = {
         headline: gt('Auto Forward'),
         forwardmail: gt('Forward all incoming emails to this address'),
-        active: gt('Enabled')
+        active: gt('Enabled'),
+        keep: gt('Keep a copy of the message')
     };
 
     return {
@@ -97,4 +98,3 @@ define('io.ox/mail/autoforward/settings/model',
         }
     };
 });
-

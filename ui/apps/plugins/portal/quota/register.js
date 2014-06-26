@@ -17,7 +17,7 @@ define('plugins/portal/quota/register',
      'io.ox/core/api/quota',
      'io.ox/core/strings',
      'io.ox/core/capabilities',
-     'less!plugins/portal/quota/style.less'
+     'less!plugins/portal/quota/style'
     ], function (ext, gt, api, strings, capabilities) {
 
     'use strict';
@@ -42,7 +42,6 @@ define('plugins/portal/quota/register',
             name: 'memory-mail',
             i18nName: gt('Mail quota')
         });
-
 
         fields.push({
             quota: quota.mail.countquota,
@@ -86,7 +85,7 @@ define('plugins/portal/quota/register',
 
             var width = getWidth(usage, size);
 
-            return $('<div class="bar">')
+            return $('<div class="progress-bar">')
                 .css('width', width + '%')
                 .addClass(width < 90 ? 'default' : 'bar-danger');
         };

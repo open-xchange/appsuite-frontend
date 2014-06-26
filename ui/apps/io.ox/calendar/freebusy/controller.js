@@ -27,8 +27,8 @@ define('io.ox/calendar/freebusy/controller',
      'io.ox/calendar/view-detail',
      'gettext!io.ox/calendar/freebusy',
      'settings!io.ox/core',
-     'less!io.ox/calendar/week/style.less',
-     'less!io.ox/calendar/freebusy/style.less'
+     'less!io.ox/calendar/week/style',
+     'less!io.ox/calendar/freebusy/style'
     ], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
 
     'use strict';
@@ -100,7 +100,6 @@ define('io.ox/calendar/freebusy/controller',
                 } else {
                     this.updateAppointment(data);
                 }
-
             };
 
             this.postprocess = function () {
@@ -438,14 +437,6 @@ define('io.ox/calendar/freebusy/controller',
             var freebusy = new that.FreeBusy(options);
             options.$el.append(freebusy.$el);
 
-            var pagination = freebusy.$el.find('.pagination'),
-                infoDateWidth = freebusy.$el.find('.info').outerWidth(),
-                widthPagination = pagination.outerWidth();
-
-            if (widthPagination <= '370') {
-                pagination.css('margin-left', infoDateWidth);
-            }
-
             folderAPI.get({ folder: options.folder }).always(function (data) {
                 // pass folder data over to view (needs this for permission checks)
                 // use fallback data on error
@@ -453,9 +444,9 @@ define('io.ox/calendar/freebusy/controller',
                 if (data.error) {
                     data = fallback;
                     options.folder = fallback.id;
-                }
+
                 // show warning in case of missing 'create' right
-                else if (!folderAPI.can('create', data)) {
+                } else if (!folderAPI.can('create', data)) {
                     templates.informAboutfallback(data);
                     data = fallback;
                     options.folder = fallback.id;

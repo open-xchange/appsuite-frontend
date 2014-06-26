@@ -77,7 +77,6 @@ define.async('io.ox/mail/accounts/keychain',
         });
     }
 
-
     init().done(function () {
         moduleDeferred.resolve({message: 'Loaded mail keychain'});
     });
@@ -92,9 +91,9 @@ define.async('io.ox/mail/accounts/keychain',
     accountAPI.on('deleted', trigger('deleted'));
     accountAPI.on('updated', trigger('updated'));
 
-
     extension = {
         id: 'mail',
+        index: 100,
         // displayName appears in drop-down menu
         displayName: gt('Mail account'),
         actionName: 'mailaccount',

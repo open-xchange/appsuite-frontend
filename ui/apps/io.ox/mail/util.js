@@ -29,6 +29,7 @@ define('io.ox/mail/util',
         format = _.printf,
         MINUTE = 60 * 1000,
         HOUR = MINUTE * 60,
+        DAY = HOUR * 24,
 
         ngettext = function (s, p, n) {
             return n > 1 ? p : s;
@@ -42,11 +43,14 @@ define('io.ox/mail/util',
         },
 
         getDateFormated = function (timestamp, options) {
-            if (!_.isNumber(timestamp))
-                return gt('unknown');
-            var opt = $.extend({ fulldate: true, filtertoday: true }, options || {}),
+
+            if (!_.isNumber(timestamp)) return gt('unknown');
+
+            var opt = $.extend({ fulldate: false, filtertoday: true }, options || {}),
                 now = new date.Local(),
                 d = new date.Local(timestamp),
+                base, delta,
+
                 timestr = function () {
                     return d.format(date.TIME);
                 },
@@ -58,7 +62,18 @@ define('io.ox/mail/util',
                         d.getMonth() === now.getMonth() &&
                         d.getYear() === now.getYear();
                 };
-            return isSameDay() && opt.filtertoday ? timestr() : datestr();
+
+            if (opt.filtertoday && isSameDay()) return timestr();
+
+            if (opt.smart) {
+                base = Math.floor(timestamp / DAY) * DAY;
+                now = Math.floor(_.utc() / DAY) * DAY;
+                delta = Math.floor((now - base) / DAY);
+                if (delta === 1) return gt('Yesterday');
+                else if (delta <= 6) return d.format('EEEE');
+            }
+
+            return datestr();
         },
 
         trimAddress = function (address) {
@@ -88,7 +103,6 @@ define('io.ox/mail/util',
             addresses[address.toLowerCase()] = true;
         });
     });
-
 
     that = {
 
@@ -255,8 +269,9 @@ define('io.ox/mail/util',
                 }
 
                 if (i < $i - 1) {
-                    tmp.append($('<span>').addClass('delimiter')
-                        .append($.txt(_.noI18n('\u00A0\u00A0\u2022\u00A0 ')))); // '&nbsp;&nbsp;&bull;&nbsp; '
+                    tmp.append(
+                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2014 '))) // '&nbsp;&mdash; '
+                    );
                 }
             }
             return tmp.contents();
@@ -287,7 +302,7 @@ define('io.ox/mail/util',
             return tmp;
         },
 
-        getDisplayName: function (pair) {
+        getDisplayName: function (pair, forceShowMail) {
 
             if (!_.isArray(pair)) return '';
 
@@ -295,7 +310,14 @@ define('io.ox/mail/util',
                 email = String(pair[1] || '').toLowerCase(),
                 display_name = util.unescapeDisplayName(name);
 
-            return display_name || email;
+            // fix order ("last name, firstname" becomes "first name last name")
+            display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
+
+            if (forceShowMail && display_name && email) {
+                display_name += ' <' + email + '>';
+            }
+
+            return _.escape(display_name || email);
         },
 
         // takes care of special edge-case: no from address
@@ -307,7 +329,9 @@ define('io.ox/mail/util',
             field = field || 'from';
             var list = data[field] || [['', '']],
                 dn = that.getDisplayName(list[0]);
-            if (field === 'to' && dn === '') {
+            if (field === 'from' && dn === '') {
+                dn = gt('Unknown sender');
+            } else if (field === 'to' && dn === '') {
                 dn = gt('No recipients');
             } else {
                 dn = _.noI18n(dn);
@@ -339,16 +363,29 @@ define('io.ox/mail/util',
             return (quote === false ? name : '"' + name + '"') + ' <' + address + '>';
         },
 
+        // remove typical "Re: Re: Fwd: Re sequences".
+        // keepFirstPrefix <bool> allows to keep the most recent one.
+        // that mode is useful in list view to indicate that it's not the original email.
+        getSubject: function (data, keepFirstPrefix) {
+
+            var subject = $.trim(_.isString(data) ? data : data.subject);
+
+            if (subject === '') return gt('No subject');
+
+            // remove mailing list stuff (optional)
+            if (settings.get('features/cleanSubjects', false))
+                subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+
+            return keepFirstPrefix ?
+                subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
+                subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
+        },
+
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-            var i = '<i class="icon-exclamation"/>',
-                indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
-            if (data && data.priority < 3) {
-                return indicator.addClass('high').attr('title', gt('High priority'));
-            } else {
-                return indicator.addClass('low').attr('title', gt('Low priority'));
-            }
+            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt('High priority'));
+            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt('Low priority'));
         },
 
         getAccountName: function (data) {
@@ -358,11 +395,12 @@ define('io.ox/mail/util',
             return (data && data.account_name) || 'N/A';
         },
 
-        getTime: function (timestamp) {
-            return getDateFormated(timestamp, { fulldate: false });
+        getTime: function (timestamp, options) {
+            return getDateFormated(timestamp, options);
         },
 
         getDateTime: function (timestamp, options) {
+            options = _.extend({ fulldate: true }, options);
             return getDateFormated(timestamp, options);
         },
 
@@ -392,10 +430,10 @@ define('io.ox/mail/util',
             if (d.getDate() === now.getDate()) {
                 if (delta < HOUR) {
                     n = Math.ceil(delta / MINUTE);
-                    return '' + format(ngettext('%d minute ago', '%d minutes ago', n), n); /*i18n*/
+                    return String(format(ngettext('%d minute ago', '%d minutes ago', n), n)); /*i18n*/
                 } else {
                     n = Math.ceil(delta / HOUR);
-                    return '' + format(ngettext('%d hour ago', '%d hours ago', n), n); /*i18n*/
+                    return String(format(ngettext('%d hour ago', '%d hours ago', n), n)); /*i18n*/
                 }
             } else if (d.getDate() === now.getDate() - 1) {
                 // yesterday
@@ -411,16 +449,21 @@ define('io.ox/mail/util',
             }, 0);
         },
 
+        isToplevel: function (data) {
+            return _.isObject(data) && 'folder_id' in data && !('filename' in data);
+        },
+
         isUnseen: function (data) {
-            return data && data.hasOwnProperty('flags') ? (data.flags & 32) !== 32 : undefined;
+            data = _.isObject(data) ? data.flags : data;
+            return _.isNumber(data) ? (data & 32) !== 32 : undefined;
         },
 
         isDeleted: function (data) {
-            return data && data.hasOwnProperty('flags') ? (data.flags & 2) === 2 : undefined;
+            return data && _.isNumber(data.flags) ? (data.flags & 2) === 2 : undefined;
         },
 
         isSpam: function (data) {
-            return data && data.hasOwnProperty('flags') ? (data.flags & 128) === 128 : undefined;
+            return data && _.isNumber(data.flags) ? (data.flags & 128) === 128 : undefined;
         },
 
         isAnswered: function () {
@@ -440,6 +483,11 @@ define('io.ox/mail/util',
             return typeof (data || {}).parent !== 'undefined';
         },
 
+        isEmbedded: function (data) {
+            if (!_.isObject(data)) return false;
+            return data.folder_id === undefined && data.filename !== undefined;
+        },
+
         byMyself: function (data) {
             data = data || {};
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
@@ -447,11 +495,12 @@ define('io.ox/mail/util',
 
         hasOtherRecipients: function (data) {
             data = data || {};
-            var list = [].concat(data.to || [], data.cc || [], data.bcc || []);
-            return 0 < _(list).reduce(function (memo, arr) {
-                var email = String(arr[1] || '').toLowerCase();
-                return memo + (email && !(email in addresses) ? 1 : 0);
-            }, 0);
+            var list = [].concat(data.to || [], data.cc || [], data.bcc || []),
+                others = _(list).reduce(function (memo, arr) {
+                    var email = String(arr[1] || '').toLowerCase();
+                    return memo + (email && !(email in addresses) ? 1 : 0);
+                }, 0);
+            return others > 0;
         },
 
         //deprecated?
@@ -480,9 +529,11 @@ define('io.ox/mail/util',
                         .trim();
                 },
                 add = function (text, isHTML) {
-                    return general(text)
-                        //remove html tags (for plaintext emails)
-                        .replace(isHTML ? nothing : htmltags, '');
+                    var clean = general(text)
+                                //remove html tags (for plaintext emails)
+                                .replace(isHTML ? nothing : htmltags, '');
+                    //special entities like '&'/&amp;
+                    return isHTML ? $('<dummy>').html(clean).html() : clean;
                 },
                 preview = function (text) {
                     return general(text)
@@ -513,7 +564,9 @@ define('io.ox/mail/util',
                                         .replace(/>[\t\f\v ]+/g, '>')
                                         .replace(/[\t\f\v ]+</g, '<')
                                         //set breaks
-                                        .replace(/(\r\n|\n|\r)/g, '<br>');
+                                        .replace(/(\r\n|\n|\r)/g, '<br>')
+                                        //remove empty alt attribute(added by tiny)
+                                        .replace(/ alt=""/, '');
                             }
                         });
                     return _(signatures).indexOf(text) > - 1;
@@ -575,7 +628,7 @@ define('io.ox/mail/util',
                 // get non-inline attachments
                 for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
                     obj = data.attachments[i];
-                    if (obj.disp === 'attachment') {
+                    if (obj.disp === 'attachment' || /^image/.test(obj.content_type)) {
                         fixIds(data, obj);
                         attachments.push(
                             _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })

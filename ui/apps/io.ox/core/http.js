@@ -586,8 +586,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         if (isError) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
-                isAutoLogin = o.module === 'login' && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin) {
+                isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
+            if (isSessionError && !isLogin) {
                 // login dialog
                 ox.session = '';
                 ox.trigger('relogin:required', o, deferred, response);
@@ -740,14 +740,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     ox.trigger('connection:down');
                 } else {
                     that.trigger('reachable');
-                    ox.trigger('connection:up');
+                    ox.trigger('connection:online connection:up');
                 }
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
             });
 
             // TODO: remove backend fix
-            ajax.pipe(function (response) {
+            ajax.then(function (response) {
                     if (fixPost) {
                         // Extract the JSON text
                         var matches = /\((\{.*?\})\)/.exec(response);
@@ -759,7 +759,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 .done(function (response) {
 
                     that.trigger('reachable');
-                    ox.trigger('connection:up');
+                    ox.trigger('connection:online connection:up');
 
                     //write response to console
                     if (ox.debug)
@@ -794,9 +794,15 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
                     that.trigger('stop fail', r.xhr);
-                    r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'general') }, xhr);
+                    r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'An unknown error occurred') }, xhr);
                     r = null;
                 });
+        }
+
+        // to avoid bugs based on passing objects by reference
+        function clone(data) {
+            if (!data) return data; // null, undefined, empty string, numeric zero
+            return JSON.parse(JSON.stringify(data));
         }
 
         function send(r) {
@@ -809,26 +815,35 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
                 try { hash = JSON.stringify(r.xhr); } catch (e) { }
 
-                if (hash && requests[hash] !== undefined) {
+                if (hash && _.isArray(requests[hash])) {
                     // enqueue callbacks
-                    requests[hash].then(r.def.resolve, r.def.reject)
-                        .then(
-                            function success() {
-                                that.trigger('stop done', r.xhr);
-                                r = null;
-                            },
-                            function fail() {
-                                that.trigger('stop fail', r.xhr);
-                                r  = null;
-                            }
-                        );
-                    hash = null;
+                    requests[hash].push(r);
+                    r = hash = null;
                 } else {
                     // create new request
-                    requests[hash] = r.def.always(function () {
+                    r.def.then(
+                        function success() {
+                            if (!requests[hash].length) return;
+                            var args = _(arguments).map(clone);
+                            _(requests[hash]).each(function (r) {
+                                r.def.resolve.apply(r.def, args);
+                                that.trigger('stop done', r.xhr);
+                            });
+                        },
+                        function fail() {
+                            var args = _(arguments).map(clone);
+                            if (!requests[hash].length) return;
+                            _(requests[hash]).each(function (r) {
+                                r.def.reject.apply(r.def, args);
+                                that.trigger('stop fail', r.xhr);
+                            });
+                        }
+                    )
+                    .always(function () {
                         delete requests[hash];
                         hash = null;
                     });
+                    requests[hash] = [];
                     lowLevelSend(r);
                     r = null;
                 }
@@ -898,7 +913,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 }
                 r = o = null;
             }
-            that.trigger('start', r.xhr);
+            that.trigger('start', r.xhr, o);
             if (slow && Number(_.url.hash('slow'))) {
                 // simulate slow connection
                 setTimeout(cont, 250 * Number(_.url.hash('slow')) + (Math.random() * 500 >> 0));
@@ -1087,7 +1102,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
          * @return {deferred} resolve returns array
          */
         fixList: function (ids, deferred) {
-
             return deferred.then(function (data) {
                 // simplify
                 ids = that.simplify(ids);

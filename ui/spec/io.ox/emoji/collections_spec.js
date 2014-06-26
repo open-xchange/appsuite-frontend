@@ -45,29 +45,29 @@ define([
                 settings.set({defaultCollection: 'unified'});
                 this.emoji = emoji.getInstance();
 
-                expect(this.emoji.getCollection()).toBe('unified');
+                expect(this.emoji.getCollection()).to.equal('unified');
             });
 
             it('should be possible to have a user defined collection', function () {
                 settings.set({userCollection: 'unified'});
                 this.emoji = emoji.getInstance();
 
-                expect(this.emoji.getCollection()).toBe('unified');
+                expect(this.emoji.getCollection()).to.equal('unified');
             });
 
             it('should parse the availableCollections setting', function () {
 
                 settings.set({availableCollections: ''});
 
-                expect(emoji.getInstance().collections).toEqual([]);
+                expect(emoji.getInstance().collections).to.be.empty;
 
                 settings.set({availableCollections: 'unified'});
 
-                expect(emoji.getInstance().collections).toEqual(['unified']);
+                expect(emoji.getInstance().collections).to.deep.equal(['unified']);
 
                 settings.set({availableCollections: 'unified,bar'});
 
-                expect(emoji.getInstance().collections).toEqual(['unified', 'bar']);
+                expect(emoji.getInstance().collections).to.deep.equal(['unified', 'bar']);
             });
 
             it('should be possible to get a custom emoji collection', function () {
@@ -78,8 +78,8 @@ define([
                 var softbank = emoji.getInstance({collection: 'softbank'}),
                     defaultCollection = emoji.getInstance();
 
-                expect(softbank.getCollection()).toBe('softbank');
-                expect(defaultCollection.getCollection()).not.toBe('softbank');
+                expect(softbank.getCollection()).to.equal('softbank');
+                expect(defaultCollection.getCollection()).not.to.equal('softbank');
             });
 
             it('should set a valid collection', function () {
@@ -89,9 +89,9 @@ define([
                 var collection = emoji.getInstance();
                 collection.collections = parseCollections();
 
-                expect(collection.getCollection()).toBe('unified');
+                expect(collection.getCollection()).to.equal('unified');
                 collection.setCollection('softbank');
-                expect(collection.getCollection()).toBe('softbank');
+                expect(collection.getCollection()).to.equal('softbank');
             });
 
             it('should not set an invalid collection', function () {
@@ -101,9 +101,9 @@ define([
                 var collection = emoji.getInstance();
                 collection.collections = parseCollections();
 
-                expect(collection.getCollection()).toBe('unified');
+                expect(collection.getCollection()).to.equal('unified');
                 collection.setCollection('softbank');
-                expect(collection.getCollection()).toBe('unified');
+                expect(collection.getCollection()).to.equal('unified');
             });
 
             describe('configuring collection precedence', function () {
@@ -124,9 +124,9 @@ define([
                     result.japan_carrier = emoji.unifiedToImageTag(this.testIcons.japan_carrier);
                     result.softbank = emoji.unifiedToImageTag(this.testIcons.softbank);
                     result.unified = emoji.unifiedToImageTag(this.testIcons.unified);
-                    expect(result.japan_carrier).toContain('emoji-japan_carrier');
-                    expect(result.softbank).toContain('emoji-softbank');
-                    expect(result.unified).toContain('emoji-unified');
+                    expect(result.japan_carrier).to.contain('emoji-japan_carrier');
+                    expect(result.softbank).to.contain('emoji-softbank');
+                    expect(result.unified).to.contain('emoji-unified');
                 });
 
                 it('should prefer user collection when searching icons', function () {
@@ -138,9 +138,9 @@ define([
                     result.japan_carrier = emoji.unifiedToImageTag(this.testIcons.japan_carrier);
                     result.softbank = emoji.unifiedToImageTag(this.testIcons.softbank);
                     result.unified = emoji.unifiedToImageTag(this.testIcons.unified);
-                    expect(result.japan_carrier).toContain('emoji-unified');
-                    expect(result.softbank).toContain('emoji-unified');
-                    expect(result.unified).toContain('emoji-unified');
+                    expect(result.japan_carrier).to.contain('emoji-unified');
+                    expect(result.softbank).to.contain('emoji-unified');
+                    expect(result.unified).to.contain('emoji-unified');
                 });
 
                 it('should not prefer user collections when turned of by setting', function () {
@@ -153,9 +153,9 @@ define([
                     result.japan_carrier = emoji.unifiedToImageTag(this.testIcons.japan_carrier);
                     result.softbank = emoji.unifiedToImageTag(this.testIcons.softbank);
                     result.unified = emoji.unifiedToImageTag(this.testIcons.unified);
-                    expect(result.japan_carrier).toContain('emoji-japan_carrier');
-                    expect(result.softbank).toContain('emoji-softbank');
-                    expect(result.unified).toContain('emoji-unified');
+                    expect(result.japan_carrier).to.contain('emoji-japan_carrier');
+                    expect(result.softbank).to.contain('emoji-softbank');
+                    expect(result.unified).to.contain('emoji-unified');
                 });
             });
         });

@@ -19,8 +19,9 @@ define('io.ox/calendar/actions',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'settings!io.ox/core',
+     'io.ox/core/extPatterns/actions',
      'gettext!io.ox/calendar'
-    ], function (ext, links, api, util, notifications, print, coreSettings, gt) {
+    ], function (ext, links, api, util, notifications, print, coreSettings, actions, gt) {
 
     'use strict';
 
@@ -75,7 +76,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         action: function (baton) {
-            util.createRecipientsArray(baton.data.participants).done(function (recipients) {
+            util.createRecipientsArray(baton.data).done(function (recipients) {
                 ox.load(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.compose({to: recipients, subject: baton.data.title});
@@ -90,10 +91,21 @@ define('io.ox/calendar/actions',
         action: function (baton) {
             require(['io.ox/calendar/edit/main'], function (m) {
                 m.getApp().launch().done(function () {
+                    // include external organizer
+                    var data = baton.data,
+                        participants = data.participants.slice();
+                    if (!data.organizerId && _.isString(data.organizer)) {
+                        participants.unshift({
+                            display_name: data.organizer,
+                            email1: data.organizer,
+                            mail: data.organizer,
+                            type: 5
+                        });
+                    }
                     // open create dialog with same participants
-                    var data = {
+                    data = {
                         folder_id: coreSettings.get('folder/calendar'),
-                        participants: baton.data.participants
+                        participants: participants
                     };
                     this.create(data);
                     this.model.toSync = data;
@@ -105,7 +117,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            util.createDistlistArray(baton.data.participants).done(function (distlist) {
+            util.createDistlistArray(baton.data).done(function (distlist) {
                 ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
@@ -136,7 +148,8 @@ define('io.ox/calendar/actions',
                     id: params.id,
                     folder: params.folder_id
                 };
-            if (!_.isUndefined(params.recurrence_position)) {
+
+            if (!!params.recurrence_position) {
                 o.recurrence_position = params.recurrence_position;
             }
 
@@ -194,7 +207,6 @@ define('io.ox/calendar/actions',
         }
     });
 
-
     new Action('io.ox/calendar/detail/actions/delete', {
         id: 'delete',
         requires: function (e) {
@@ -212,7 +224,7 @@ define('io.ox/calendar/actions',
                     id: obj.id,
                     folder: obj.folder_id
                 };
-                if (!_.isUndefined(obj.recurrence_position)) {
+                if (!!obj.recurrence_position) {
                     o.recurrence_position = obj.recurrence_position;
                 }
 
@@ -285,12 +297,9 @@ define('io.ox/calendar/actions',
         }
     });
 
-
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
-        requires: function (e) {
-            return e.collection.has('one', 'create');
-        },
+        requires: 'create',
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
             // arguments are the same (the app)
@@ -312,18 +321,28 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/changestatus', {
         id: 'change_status',
         requires: function (e) {
-            var app = e.baton.data,
-                iamUser = false;
-            if (app.users) {
-                for (var i = 0; i < app.users.length; i++) {
-                    if (app.users[i].id === ox.user_id) {
-                        iamUser = true;
+
+            function cont(app) {
+                return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
+                    var iamUser = false;
+                    if (app.users) {
+                        for (var i = 0; i < app.users.length; i++) {
+                            if (app.users[i].id === ox.user_id) {
+                                iamUser = true;
+                            }
+                        }
                     }
-                }
+                    return e.collection.has('one') && iamUser && isBossy;
+                });
             }
-            return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
-                return e.collection.has('one') && iamUser && isBossy;
-            });
+
+            var app = e.baton.data;
+            // incomplete
+            if (app.id && !app.users) {
+                return api.get(app).then(cont);
+            } else {
+                return cont(app);
+            }
         },
         action: function (baton) {
             // load & call
@@ -417,6 +436,7 @@ define('io.ox/calendar/actions',
                             select: function (id) {
                                 contactSettings.set('folderpopup/last', id).save();
                             },
+                            targetmode: true,
                             dialogmode: true
                         });
 
@@ -468,13 +488,59 @@ define('io.ox/calendar/actions',
         }
     });
 
-    // Links - toolbar
 
+    // Mobile multi select extension points
+    // delete appointment(s)
+    ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 10,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-trash-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/calendar/detail/actions/delete', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // move appointment(s)
+    ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 20,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-sign-in">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+                                // need to clear the selection after aciton is invoked
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // Links - toolbar
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="fa fa-plus accent-color">');
         }
     });
 
@@ -491,7 +557,7 @@ define('io.ox/calendar/actions',
         id: 'view',
         index: 400,
         icon: function () {
-            return $('<i class="icon-eye-open">');
+            return $('<i class="fa fa-eye">');
         }
     });
 
@@ -536,7 +602,7 @@ define('io.ox/calendar/actions',
         id: 'freebusy',
         index: 500,
         icon: function () {
-            return $('<i class="icon-group">');
+            return $('<i class="fa fa-group">');
         }
     });
 
@@ -551,7 +617,7 @@ define('io.ox/calendar/actions',
         id: 'print',
         index: 600,
         icon: function () {
-            return $('<i class="icon-print">');
+            return $('<i class="fa fa-print">');
         }
     });
 
@@ -570,6 +636,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        mobile: 'lo',
         id: 'edit',
         label: gt('Edit'),
         ref: 'io.ox/calendar/detail/actions/edit'
@@ -578,6 +645,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 200,
         prio: 'hi',
+        mobile: 'lo',
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
@@ -585,7 +653,17 @@ define('io.ox/calendar/actions',
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
+        prio: 'hi',
+        mobile: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/calendar/detail/actions/delete'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 400,
         prio: 'lo',
+        mobile: 'lo',
         id: 'move',
         label: gt('Move'),
         drawDisabled: true,
@@ -593,19 +671,11 @@ define('io.ox/calendar/actions',
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 400,
+        index: 500,
         prio: 'lo',
         id: 'print',
         label: gt('Print'),
         ref: 'io.ox/calendar/detail/actions/print-appointment'
-    }));
-
-    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 500,
-        prio: 'hi',
-        id: 'delete',
-        label: gt('Delete'),
-        ref: 'io.ox/calendar/detail/actions/delete'
     }));
 
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
@@ -618,6 +688,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        mobile: 'lo',
         id: 'send mail',
         label: gt('Send mail to all participants'),
         ref: 'io.ox/calendar/detail/actions/sendmail'
@@ -626,6 +697,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 200,
         prio: 'hi',
+        mobile: 'lo',
         id: 'invite',
         label: gt('Invite to new appointment'),
         ref: 'io.ox/calendar/detail/actions/invite'
@@ -634,6 +706,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 300,
         prio: 'hi',
+        mobile: 'lo',
         id: 'save as distlist',
         label: gt('Save as distribution list'),
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'

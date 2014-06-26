@@ -1,0 +1,80 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+.star-wrapper {
+
+    margin-top: 3px;
+	font-size: 18px;//don't make the stars too small since those are buttons as well
+
+    .rating-star {
+        cursor: pointer;
+        color: #ccc;//light grey
+    }
+
+    .active-star {
+    	color: #fd0;//gold
+    }
+
+}
+
+.feedback-note {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0px;
+}
+
+.feedback-button {
+
+	padding-top: 2px;
+	text-align: center;
+	background-color: #aaa; //grey
+	border: 1px solid #aaa; //grey
+	border-bottom-color: transparent;
+    height: 26px;
+    width: 90px;
+    z-index: 50;
+    font-size: 11pt;
+    color: white;
+    top: 80%;
+    position: absolute;
+    cursor: pointer;
+    -webkit-border-radius: 4px 4px 0 0;
+	-moz-border-radius: 4px 4px 0 0;
+	border-radius: 4px 4px 0 0;
+
+    html.high-contrast & {
+        background-color: @hc-gray; //grey
+    }
+}
+
+.feedback-label {
+	color: #888;
+}
+
+.feedback-userdata-notice {
+    margin-top: 6px;
+}
+
+.rightside-button {//text rotation
+	right: -37px;
+    transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg); /* IE 9 */
+    -webkit-transform:rotate(-90deg); /* Safari and Chrome */
+}
+
+.leftside-button {//text rotation
+	left: -37px;
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg); /* IE 9 */
+    -webkit-transform:rotate(90deg); /* Safari and Chrome */
+}

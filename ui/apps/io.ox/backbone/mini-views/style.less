@@ -1,0 +1,162 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
+ */
+
+.participants-mini-view {
+
+    @participant-unconfirmed:   #428BCA; /* blue */
+    @participant-accepted:      #799952; /* green */
+    @participant-declined:      #913F3F; /* red */
+    @participant-tentative:     #cc8800; /* orange */
+
+	.io-ox-label {
+        font-size: 0.9em;
+        padding: 1em 0 0.25em 0em;
+        margin-bottom: 0.5em;
+    }
+
+    min-height: 2em;
+
+    .group {
+        border: none;
+    }
+
+    .status {
+		//prevent icons from floating around with multiple columns
+        display: inline-block;
+		vertical-align: top;
+
+        margin-left: 4px;
+
+        &.unconfirmed {
+            color: @participant-unconfirmed;
+        }
+
+        &.accepted {
+
+            color: @participant-accepted;
+
+            i {
+
+                opacity: 0.35;
+
+                html.high-contrast & {
+                    opacity: 1;
+                }
+
+            }
+
+        }
+
+        &.declined {
+            color: @participant-declined;
+        }
+
+        &.tentative {
+
+            color: @participant-tentative;
+
+            i {
+
+                opacity: 0.50;
+
+                html.high-contrast & {
+                    opacity: 1;
+                }
+
+            }
+
+        }
+
+    }
+
+    .summary {
+
+        float: right;
+        display: inline-block;
+
+        .status {
+            position: relative;
+            margin-right: 0.3em;
+        }
+
+        .countgroup {
+
+            margin-right: 0.5em;
+            cursor: pointer;
+
+            &.badge {
+                background-color: @white;
+                color: @black;
+                border: 1px solid #888;
+                margin: 0;
+            }
+
+        }
+
+    }
+
+    .participant-list {
+
+        -webkit-column-width: 250px;
+        -webkit-column-gap: 20px;
+        -moz-column-width: 250px;
+        -moz-column-gap: 20px;
+        column-width: 250px;
+        column-gap: 20px;
+
+        .participant {
+
+            line-height: 2em;
+            width: 250px;
+            margin: 0 20px 0em 0;
+            cursor: pointer;
+
+            .person {
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 222px; //icons and padding need 28px
+                display: inline-block;
+
+                &.accepted {
+
+                    color: @participant-accepted;
+
+                    html.high-contrast & {
+                        color: @hc-green;
+                    }
+
+                }
+
+                &.declined {
+                    text-decoration: line-through;
+                    color: @participant-declined;
+                }
+
+            }
+
+            .comment {
+                color: @hc-gray;
+                white-space: normal;
+                padding-left: 1em;
+                line-height: 1.2em;
+                margin-bottom: 0.5em;
+            }
+
+        }
+
+    }
+
+}

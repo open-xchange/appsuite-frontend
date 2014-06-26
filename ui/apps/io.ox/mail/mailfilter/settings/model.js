@@ -74,4 +74,3 @@ define('io.ox/mail/mailfilter/settings/model',
         }
     };
 });
-

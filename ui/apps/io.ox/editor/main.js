@@ -16,18 +16,19 @@ define('io.ox/editor/main',
      'io.ox/core/api/folder',
      'io.ox/core/notifications',
      'gettext!io.ox/editor',
-     'less!io.ox/editor/style.less'
+     'less!io.ox/editor/style'
     ], function (api, folderAPI, notifications, gt) {
 
     'use strict';
 
     var EditorView = Backbone.View.extend({
 
-        className: 'io-ox-editor abs',
+        className: 'io-ox-editor container-fluid abs',
 
         events: {
-            'submit .form-inline': 'onSubmit',
+            'submit form': 'onSubmit',
             'keydown .title': 'onTitleKeydown',
+            'keyup .title': 'onTitleKeyup',
             'keydown .content': 'onContentKeydown',
             'click .save': 'onSave',
             'click .quit': 'onQuit'
@@ -42,6 +43,10 @@ define('io.ox/editor/main',
                 e.preventDefault();
                 this.focus();
             }
+        },
+
+        onTitleKeyup: function () {
+            this.model.trigger('keyup:title', this.getTitle());
         },
 
         onContentKeydown: function (e) {
@@ -119,7 +124,7 @@ define('io.ox/editor/main',
 
         busy: function () {
             this.$el.find('input.title, button.save').prop('disabled', true);
-            this.$el.find('button.save').empty().append($('<i class="icon-refresh icon-spin">'));
+            this.$el.find('button.save').empty().append($('<i class="fa fa-refresh fa-spin">'));
         },
 
         idle: function () {
@@ -128,27 +133,36 @@ define('io.ox/editor/main',
         },
 
         render: function () {
-
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<form class="form-inline">').append(
-                    $('<div class="header">').append(
+                $('<form role="form">').append(
+                    $('<div class="row">').append(
                         // title
-
-                        $('<input type="text" class="title" tabindex="1" maxlength="350">')
-                        .attr('placeholder', gt('Enter document title here')),
+                        $('<div class="form-group col-xs-12 col-sm-8">').append(
+                            $('<label class="sr-only">').attr('for', guid).text(gt('Enter document title here')),
+                            $('<input class="title form-control">').attr({
+                                id: guid,
+                                placeholder: gt('Enter document title here'),
+                                maxlength: 350,
+                                tabindex: 1,
+                                type: 'text'
+                            })
+                        ),
 
                         // save & close buttons
-
-                        $('<div class="button-wrap">').append(
-                            $('<button type="button" class="save btn btn-primary" tabindex="3">').text(gt('Save')),
-                            $('<button type="button" class="quit btn" tabindex="4">').text(gt('Close'))
+                        $('<div class="form-group col-xs-6 col-sm-2">').append(
+                            $('<button type="button" class="save btn btn-primary btn-block" tabindex="3">').text(gt('Save'))
+                        ),
+                        $('<div class="form-group col-xs-6 col-sm-2">').append(
+                            $('<button type="button" class="quit btn btn-default btn-block" tabindex="4">').text(gt('Close'))
                         )
-
                     ),
-                    $('<div class="body">').append(
-                        // editor
-                        $('<textarea class="content" tabindex="2">').val('')
-                        .attr('placeholder', _.device('ios || android') ? '': gt('You can quick-save your changes via Ctrl+Enter.'))
+                    $('<div class="body row">').append(
+                        $('<div class="col-md-12">').append(
+                            // editor
+                            $('<textarea class="content form-control" tabindex="2">').val('')
+                                .attr('placeholder', _.device('ios || android') ? '': gt('You can quick-save your changes via Ctrl+Enter.'))
+                        )
                     )
                 )
             );
@@ -162,7 +176,7 @@ define('io.ox/editor/main',
 
         var app, win, model = new Backbone.Model(), view, previous = {};
 
-        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor' });
+        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor', closable: true });
 
         // launcher
         app.setLauncher(function (options) {
@@ -171,7 +185,6 @@ define('io.ox/editor/main',
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/editor',
                 title: gt('Editor'),
-                search: false,
                 chromeless: true
             }));
 
@@ -188,6 +201,15 @@ define('io.ox/editor/main',
             } else {
                 app.create();
             }
+
+            model.on('keyup:title', function (title) {
+                if (!title) {
+                    title = gt('Editor');
+                }
+                win.setTitle(title);
+                app.setTitle(title);
+            });
+
         });
 
         app.create = function (options) {
@@ -271,6 +293,7 @@ define('io.ox/editor/main',
 
         app.load = function (o) {
             var def = $.Deferred();
+            app.cid = 'io.ox/editor:edit.' + _.cid(o);
             win.on('show', function () {
                 app.setState({ folder: o.folder_id, id: o.id });
             });
@@ -284,6 +307,13 @@ define('io.ox/editor/main',
                 .done(function (data, text) {
                     win.idle();
                     app.setState({ folder: o.folder_id, id: o.id });
+                    var title = data.title;
+                    if (!title) {
+                        title = gt('Editor');
+                    }
+                    win.setTitle(title);
+                    app.setTitle(title);
+
                     model.set(previous = $.extend(data, { content: text[0] }));
                     view.focus();
                     def.resolve();
@@ -310,7 +340,9 @@ define('io.ox/editor/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                     .text(gt('Do you really want to discard your changes?'))
-                    .addPrimaryButton('quit', gt('Discard'))
+                    //#. "Discard changes" appears in combination with "Cancel" (this action)
+                    //#. Translation should be distinguishable for the user
+                    .addPrimaryButton('quit', gt.pgettext('dialog', 'Discard changes'))
                     .addButton('cancel', gt('Cancel'))
                     .on('quit', def.resolve)
                     .on('cancel', def.reject)
@@ -328,6 +360,11 @@ define('io.ox/editor/main',
     }
 
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (data) {
+            return ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(data));
+        }
     };
 });

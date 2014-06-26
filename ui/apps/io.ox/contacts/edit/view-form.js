@@ -25,7 +25,7 @@ define('io.ox/contacts/edit/view-form',
      'io.ox/backbone/mini-views',
      'io.ox/backbone/mini-views/attachments',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/edit/style.less'
+     'less!io.ox/contacts/edit/style'
     ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
 
     'use strict';
@@ -119,7 +119,7 @@ define('io.ox/contacts/edit/view-form',
         delete meta.i18n.attachments;
     }
 
-    if (capabilities.has('gab')) {
+    if (capabilities.has('read_create_shared_folders')) {
         meta.sections.personal.push('private_flag');
     }
 
@@ -149,7 +149,7 @@ define('io.ox/contacts/edit/view-form',
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact container-fluid'
+                className: 'edit-contact compact container'
             });
 
         point.extend(new PictureUpload({
@@ -180,7 +180,7 @@ define('io.ox/contacts/edit/view-form',
                 index: 120,
                 label: gt('Discard'),
                 ref: ref + '/actions/edit/discard',
-                cssClasses: 'btn control',
+                cssClasses: 'btn btn-default control',
                 tabIndex: 3,
                 tagtype: 'button'
             }));
@@ -240,12 +240,12 @@ define('io.ox/contacts/edit/view-form',
 
             var isCompact = node.hasClass('compact'),
                 label = isCompact ? gt('Extended view') : gt('Compact view'),
-                icon = isCompact ? 'icon-expand-alt' : 'icon-collapse-alt';
+                icon = isCompact ? 'fa fa-plus-square-o' : 'fa fa-minus-square-o';
 
             // update hidden
             node.find('.block').each(function () {
                 var block = $(this),
-                    hidden = isCompact && block.children('p.has-content, p.always').length === 0;
+                    hidden = isCompact && block.children('div.has-content, div.always').length === 0;
                 block.removeClass('odd even hidden');
                 if (hidden) block.addClass('hidden');
             });
@@ -301,9 +301,8 @@ define('io.ox/contacts/edit/view-form',
                     $('<nav class="toggle-compact">').append(
                         $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
-                        $('<i class="icon-expand-alt">')
+                        $('<i class="fa fa-plus-square-o">')
                     )
-                    //$('<div class="clear">')
                 );
             }
         });
@@ -317,12 +316,13 @@ define('io.ox/contacts/edit/view-form',
                     $('<nav class="toggle-compact clear">').append(
                         link = $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
-                        $('<i class="icon-expand-alt">')
+                        $('<i class="fa fa-plus-square-o">')
                     )
                 );
 
                 var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');//check if all non rare non attachment fields are filled
 
+                this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">')); // wrap userfields in a row
                 if (inputs.length === 0) {//if all fields are filled the link must be compact view, not extend view
                     link.trigger('click');//only one button must trigger this
                 }
@@ -374,8 +374,7 @@ define('io.ox/contacts/edit/view-form',
                 if (ref === 'io.ox/core/user') {
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
-                }
-                else {
+                } else {
                     var button;
                     if (_.device('small')) {
                         // really not so nice...
@@ -400,8 +399,8 @@ define('io.ox/contacts/edit/view-form',
         function drawDefault(options, model) {
             var input;
             this.append(
-                $('<label class="input">').append(
-                    $.txt(options.label), $('<br>'),
+                $('<label class="control-label col-lg-12 col-md-12 col-sm-12 col-xs-12">').append(
+                    $.txt(options.label),
                     input = new mini.InputView({ name: options.field, model: model }).render().$el,
                     $('<div class="inline-error" aria-live="assertive">').hide()
                 )
@@ -436,7 +435,7 @@ define('io.ox/contacts/edit/view-form',
 
         function drawTextarea(options, model) {
             this.append(
-                $('<label>').append(
+                $('<label>').addClass('control-label col-lg-12 col-md-12 col-sm-12 col-xs-12').append(
                     $.txt('\u00A0'), $('<br>'),
                     new mini.TextView({ name: options.field, model: model }).render().$el
                 )
@@ -445,7 +444,7 @@ define('io.ox/contacts/edit/view-form',
 
         function drawDate(options, model) {
             this.append(
-                $('<fieldset>').append(
+                $('<fieldset class="col-lg-12 form-group birthdate">').append(
                     $('<legend class="simple">').text(options.label),
                     // don't wrap the date control with a label (see bug #27559)
                     new mini.DateView({ name: options.field, model: model }).render().$el
@@ -455,10 +454,12 @@ define('io.ox/contacts/edit/view-form',
 
         function drawCheckbox(options, model) {
             this.append(
-                $('<label class="checkbox">').append(
-                    new mini.CheckboxView({ name: options.field, model: model }).render().$el,
-                    $.txt(' '),
-                    $.txt(options.label)
+                $('<div class="col-lg-12">').append(
+                    $('<label class="checkbox">').append(
+                        new mini.CheckboxView({ name: options.field, model: model }).render().$el,
+                        $.txt(' '),
+                        $.txt(options.label)
+                    )
                 )
             );
         }
@@ -466,7 +467,7 @@ define('io.ox/contacts/edit/view-form',
         function propagateAttachmentChange(model, id, errors) {
 
             var folder_id = model.get('folder_id'), id = model.get('id') || id,
-                upload = api.uploadInProgress(_.ecid(model.attributes));
+                upload = api.uploadInProgress(_.ecid({ folder: folder_id, id: id}));
 
             //if there are errors show them
             if (errors.length > 0) {
@@ -530,16 +531,22 @@ define('io.ox/contacts/edit/view-form',
 
                     // a block has a fixed width and floats left
                     var guid = _.uniqueId('group-'),
-                        block = $('<div class="block" role="group">')
+                        block = $('<fieldset class="block" role="group">')
                             .attr({ 'data-id': id, 'aria-labelledby': guid })
                             .append(
-                                $('<h2 class="group">')
+                                $('<legend class="group">')
                                 .attr('id', guid)
                                 .text(meta.i18n[id])
                             );
 
-                    if (id === 'attachments') block.addClass('double-block');
-                    if (id === 'userfields') block.addClass('double-block two-columns');
+                    if (id === 'attachments') {
+                        block.addClass('col-lg-12');
+                        this.append($('<div class="clearfix">'));
+                    } else if (id === 'userfields') {
+                        block.addClass('col-lg-12');
+                    } else {
+                        block.addClass('col-sm-6 col-md-6 col-lg-6');
+                    }
 
                     // draw fields inside block
                     ext.point(ref + '/edit/' + id).invoke('draw', block, baton);
@@ -547,11 +554,15 @@ define('io.ox/contacts/edit/view-form',
                     this.append(block);
 
                     // hide block if block contains no paragraph with content
-                    if (block.children('p.has-content, p.always').length === 0) {
+                    if (block.children('div.has-content, div.always').length === 0) {
                         block.addClass('hidden');
                     } else {
-                        var position = this.find('.block:not(.hidden)').length;
-                        block.addClass(position % 2 ? 'odd' : 'even');
+                        if (this.find('fieldset.block').length % 2) {
+                            block.addClass('odd');
+                        } else {
+                            block.addClass('even');
+                            this.append($('<div class="clearfix">'));
+                        }
                     }
                 }
             });
@@ -568,7 +579,7 @@ define('io.ox/contacts/edit/view-form',
                             isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
                             isRare = _(meta.rare).indexOf(field) > -1,
                             hasContent = !!value,
-                            paragraph,
+                            node,
                             options = {
                                 index: index,
                                 field: field,
@@ -576,9 +587,10 @@ define('io.ox/contacts/edit/view-form',
                                 value: value
                             };
 
-                        paragraph = $('<p>')
+                        node = $('<div>')
                             .attr('data-field', field)
                             .addClass(
+                                'row ' +
                                 'field' +
                                 (isAlwaysVisible ? ' always' : '') +
                                 (hasContent ? ' has-content' : '') +
@@ -586,9 +598,17 @@ define('io.ox/contacts/edit/view-form',
                             );
 
                         // call requires "draw" method
-                        (draw[field] || drawDefault).call(paragraph, options, baton.model, baton);
+                        (draw[field] || drawDefault).call(node, options, baton.model, baton);
 
-                        this.append(paragraph);
+                        if (baton.model.get('folder_id') === 6 && field === 'email1') {
+                            node.find('input').prop('disabled', true);
+                        }
+                        if (id === 'userfields') {
+                            this.append($('<div class="col-sm-6 col-md-6 col-lg-6">').append(node));
+                        } else {
+                            this.append(node);
+                        }
+
                     }
                 });
             });

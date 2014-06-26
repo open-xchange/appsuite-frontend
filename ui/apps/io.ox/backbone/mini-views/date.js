@@ -41,7 +41,7 @@ define('io.ox/backbone/mini-views/date',
     // helper
     function createSelect(name, from, to, setter, format) {
 
-        var node = $('<select tabindex="1">').attr({ name: name, title: titles[name] }),
+        var node = $('<select tabindex="1">').attr({ name: name, title: titles[name] }).addClass('form-control'),
             i = Math.min(from, to),
             $i = Math.max(from, to),
             d = new date.UTC(0),
@@ -70,7 +70,7 @@ define('io.ox/backbone/mini-views/date',
 
     var DateView = AbstractView.extend({
 
-        className: 'native-date-picker',
+        className: 'native-date-picker row',
         events: { 'change select': 'onChange' },
 
         onChange: function () {
@@ -160,11 +160,17 @@ define('io.ox/backbone/mini-views/date',
                     var proto = date.Local.prototype, node, year;
                     if (y) {
                         year = (new date.Local()).getYear();
-                        node = createSelect('year', year, year - 150, proto.setYear, y).addClass('year');
+                        node = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">').append(
+                            createSelect('year', year, year - 150, proto.setYear, y).addClass('year')
+                        );
                     } else if (m) {
-                        node = createSelect('month', 0, 11, proto.setMonth, 'MMMM').addClass('month');
+                        node = $('<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">').append(
+                            createSelect('month', 0, 11, proto.setMonth, 'MMMM').addClass('month')
+                        );
                     } else if (d) {
-                        node = createSelect('date', 1, 31, proto.setDate, match).addClass('date');
+                        node = $('<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">').append(
+                            createSelect('date', 1, 31, proto.setDate, match).addClass('date')
+                        );
                     }
                     self.$el.append(node);
                 }

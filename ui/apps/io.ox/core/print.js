@@ -34,18 +34,15 @@ define('io.ox/core/print',
     }
 
     function addCallback(options, it) {
-
         var id = 'print_' + _.now();
 
         window[id] = function (document) {
             try {
-                //probably some naming conflict in ie within templates
-                //do not use 'item' as doT variable name for current element
                 var selector = options.selector || 'script',
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
-                    compiled = doT.template(template),
                     title = (options.title  || '').trim();
-                $(document.body).html(compiled(it));
+
+                $(document.body).html(_.template(template, it));
                 //hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename
                 document.title = escapeTitle(ox.serverConfig.pageTitle) + escapeTitle(title.length ? ' ' + title : '') + ' ' + gt('Printout');
             } catch (e) {
@@ -180,14 +177,17 @@ define('io.ox/core/print',
                 // create new callback & open print window
                 var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length  }),
                     url = options.file + '?' + id;
-                if (options.window) {
-                    options.window.location = url;
-                    callbacks[id] = options.window;
-                } else {
-                    callbacks[id] = that.openURL(url);
-                }
-                // remove old callbacks
-                removeCallbacks();
+                // defer the following (see bug #31301)
+                _.defer(function () {
+                    if (options.window) {
+                        options.window.location = url;
+                        callbacks[id] = options.window;
+                    } else {
+                        callbacks[id] = that.openURL(url);
+                    }
+                    // remove old callbacks
+                    removeCallbacks();
+                });
             })
             .fail(function () {
                 if (options.window) {

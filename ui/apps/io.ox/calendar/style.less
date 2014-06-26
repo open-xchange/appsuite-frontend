@@ -11,25 +11,35 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+.io-ox-calendar-window .foldertree-sidepanel {
+    left: 0;
+}
+
 .week-view, .month-view {
 
     .toolbar {
-        height: @calendarToolbarHeight;
+
+        height: @calendar-toolbar-height;
         text-align: center;
-        padding-top: @calendarToolbarTopPadding;
+        padding-top: @calendar-toolbar-top-padding;
 
         .info {
+
+            text-align: left;
+            width: 30%;
             position: absolute;
-            left: @weekviewTimeWith;
-            line-height: @calendarToolbarHeight - @calendarToolbarTopPadding;
-            font-family: @lightFontFamily;
+            left: 20px;
+            line-height: @calendar-toolbar-height - @calendar-toolbar-top-padding;
             font-size: 20px;
             color: #333;
+            .ellipsis();
+            .fontWeight(300);
 
             .cw {
                 font-size: 14px;
-                color: #888;
+                color: @hc-gray;
             }
+
         }
 
         .showall {
@@ -52,21 +62,14 @@
         }
 
         .pagination {
-
-            margin:  0 0 0 @weekviewTimeWith;
-
-            a {
-                line-height: 26px;
-                height: 34px;
-            }
-
+            margin:  0 0 0 @weekview-time-width;
         }
 
     }
 
     .footer-container {
 
-        height: @weekviewFooterHeight;
+        height: @weekview-footer-height;
         left: 0;
         right: 0;
         width: 100%;
@@ -77,7 +80,7 @@
             position: absolute;
             line-height: normal;
             right: 0;
-            left: @weekviewTimeWith;
+            left: @weekview-time-width;
             white-space: nowrap;
             padding-top: 13px;
 
@@ -85,15 +88,20 @@
 
                 display: inline-block;
                 font-size: 13px;
-                text-align: left;
+                text-align: center;
+                padding: 1px 0;
                 .ellipsis();
 
                 &.today {
                     font-weight: bold;
-                    color: @weekviewToday;
+                    background-color: @weekview-today;
+                    color: #333;
                 }
+
             }
+
         }
+
     }
 
     /* Mobile */
@@ -101,7 +109,7 @@
 
         .toolbar {
 
-            height: @calendarToolbarHeight - 7px;
+            height: @calendar-toolbar-height - 7px;
             padding-top: 0;
 
             .info {
@@ -109,7 +117,7 @@
                 left: 10px;
                 font-size: 15px;
                 line-height: 20px;
-                width: 140px;
+                width: 160px;
                 text-align: left;
             }
 
@@ -129,11 +137,47 @@
 
     }
 
+    // dark colors (define first)
+    .dark-colors & .appointment {
+
+        .appointment-content { border-left: 0; }
+        .title { color: white; }
+        .location { color: rgba(255, 255, 255, 0.60); }
+
+        .background(@color) {
+            background-color: @color;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.50);
+            &.hover { background-color: darken(@color, 10%); }
+        }
+
+        &.reserved { .background(@appointment-reserved); }
+        &.absent { .background(@appointment-absent); }
+        &.temporary { .background(@appointment-temporary); }
+        &.free { .background(@appointment-free); }
+        &.private { .background(@appointment-private); }
+
+        &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
+
+        &.declined { background-color: @appointment-declined; }
+        &.unconfirmed { background-color: @appointment-unconfirmed; }
+
+        &.unconfirmed:not(.hover) {
+            .title { color: rgba(0, 0, 0, 0.7); }
+            .location { color: rgba(0, 0, 0, 0.5); }
+        }
+
+        &.io-ox-busy:before { color: white; opacity: 0.30; }
+    }
+
     .appointment {
 
-        .location {
-            color: #ccc;
-            color: rgba(255, 255, 255, 0.6);
+        &.io-ox-busy:before {
+            color: inherit;
+            opacity: 0.50;
+        }
+
+        .title {
+            font-weight: bold;
         }
 
         &.opac {
@@ -141,94 +185,109 @@
             .transition(opacity 0.2s);
         }
 
+        .common() {
+
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+            html.high-contrast & .location, html.high-contrast & .title {
+                color: @black;
+            }
+        }
+
         &.reserved {
 
-            background-color: @appointmentReserved;
+            @r: #D0EAFF; // lighten(@appointment-reserved, 50%);
+            border-color: lighten(@appointment-reserved, 10%);
+            color: darken(@appointment-reserved, 5%);
+            background-color: @r;
 
             &.hover {
-                background-color: darken(@appointmentReserved, @appointmentHoverPct);
+                background-color: darken(@r, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@appointmentReserved), saturation(@appointmentReserved), lightness(@appointmentReserved), @appointmentUnconfirmedAlpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@appointmentReserved), saturation(@appointmentReserved), lightness(@appointmentReserved), @appointmentDeclinedAlpha);
-            }
-
+            .common();
         }
 
         &.temporary {
 
-            background-color: @appointmentTemporary;
+            @t: lighten(@appointment-temporary, 25%);
+            border-color: darken(@appointment-temporary, 15%);
+            color: darken(@appointment-temporary, 25%);
+            background-color: @t;
 
             &.hover {
-                background-color: darken(@appointmentTemporary, @appointmentHoverPct);
+                background-color: darken(@t, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@appointmentTemporary), saturation(@appointmentTemporary), lightness(@appointmentTemporary), @appointmentUnconfirmedAlpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@appointmentTemporary), saturation(@appointmentTemporary), lightness(@appointmentTemporary), @appointmentDeclinedAlpha);
-            }
-
-        }
+            .common();
+       }
 
         &.absent {
 
-            background-color: @appointmentAbsent;
+            @a: lighten(@appointment-absent, 50%);
+            border-color: lighten(@appointment-absent, 10%);
+            color: darken(@appointment-absent, 0%);
+            background-color: @a;
 
             &.hover {
-                background-color: darken(@appointmentAbsent, @appointmentHoverPct);
+                background-color: darken(@a, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@appointmentAbsent), saturation(@appointmentAbsent), lightness(@appointmentAbsent), @appointmentUnconfirmedAlpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@appointmentAbsent), saturation(@appointmentAbsent), lightness(@appointmentAbsent), @appointmentDeclinedAlpha);
-            }
-
+            .common();
         }
 
         &.free {
 
-            background-color: @appointmentFree;
+            @f: lighten(@appointment-free, 30%);
+            border-color: darken(@appointment-free, 10%);
+            color: darken(@appointment-free, 30%);
+            background-color: @f;
 
             &.hover {
-                background-color: darken(@appointmentFree, @appointmentHoverPct);
+                background-color: darken(@f, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@appointmentFree), saturation(@appointmentFree), lightness(@appointmentFree), @appointmentUnconfirmedAlpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@appointmentFree), saturation(@appointmentFree), lightness(@appointmentFree), @appointmentDeclinedAlpha);
-            }
-
+            .common();
         }
 
         &.private {
 
-            background-color: @appointmentPrivate;
+            border-color: darken(@appointment-private, 10%);
+            color: @white;
+            background-color: @appointment-private;
 
             &.hover {
-                background-color: darken(@appointmentPrivate, @appointmentHoverPct);
+                background-color: darken(@appointment-private, @appointment-hover-pct);
+                color: @white;
             }
 
             &.disabled {
                 cursor: normal;
             }
+
+            .common();
+        }
+
+        &.unconfirmed {
+            color: @appointment-unconfirmed-font;
+            background-color: @appointment-unconfirmed;
+            border-left-color: rgba(0, 0, 0, 0.2);
+            &.hover {
+                background-color: darken(@appointment-unconfirmed, @appointment-hover-pct);
+            }
+        }
+
+        &.declined {
+            background-color: @appointment-declined;
+            border-left-color: rgba(0, 0, 0, 0.1);
+            &.hover {
+                background-color: darken(@appointment-declined, @appointment-hover-pct);
+            }
         }
 
         &.declined .appointment-content * {
+            color: @appointment-declined-font;
             text-decoration: line-through;
-            color: @appointmentDeclinedFont;
         }
 
         &:focus {
@@ -244,14 +303,6 @@
 .vgrid-cell {
 
     &.calendar {
-
-        height: 60px; /* = 3 rows */
-        padding-top: 13px;
-        padding-bottom: 13px;
-
-        .vgrid-cell-checkbox {
-            padding-top: 9px;
-        }
 
         .title {
             font-weight: bold;
@@ -271,13 +322,17 @@
         }
 
         .location {
+
             color: #888;
+
+            html.high-contrast & {
+                color: @black;
+            }
+
         }
 
         .shown_as.label {
-            width: 1em;
             float: right;
-            margin-left: 1em;
             border: 1px solid rgba(0, 0, 0, 0.4);
         }
 
@@ -302,14 +357,13 @@
     }
 
     &.vgrid-label.calendar-label {
-
         text-align: left;
-        font-weight: 200;
-        font-size: 20px;
-        line-height: 20px;
-        color: @linkColor;
-        padding-top: 32px;
-        padding-bottom: 14px;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 21px;
+        color: @link-color;
+        padding-top: 14px;
+        padding-bottom: 7px;
         background-image: none;
         background-color: #fff;
         border-top: 0 none;
@@ -319,19 +373,19 @@
     .shown_as {
 
         &.reserved {
-            background-color: @appointmentReserved;
+            background-color: @appointment-reserved;
         }
 
         &.temporary {
-            background-color: @appointmentTemporary;
+            background-color: @appointment-temporary;
         }
 
         &.absent {
-            background-color: @appointmentAbsent;
+            background-color: @appointment-absent;
         } /* red */
 
         &.free {
-            background-color: @appointmentFree;
+            background-color: @appointment-free;
         }
     }
 }
@@ -353,7 +407,7 @@
         width: 100%;
         margin: 10px 0;
 
-        .span12 {
+        .col-md-12 {
             position: relative;
         }
     }
@@ -365,7 +419,8 @@
         }
 
         &.declined {
-            text-decoration: line-through; color: #913F3F;
+            text-decoration: line-through;
+            color: #913F3F;
         }
 
         &.tentative {
@@ -378,70 +433,61 @@
 
 /* Detail view */
 .calendar-detail {
+
     font-weight: 300;
 
     .io-ox-inline-links:first-child {
-        margin: 0 0 26px 0;
-    }
-
-    .appointment-date {
-        font-family: @lightFontFamily;
-        font-weight: 300;
-        font-size: 1.1em;
-        color: #ccc;
+        margin-top: 0;
     }
 
     .interval {
+
         color: #555;
         white-space: nowrap;
         float: right;
+
+        .label-default {
+            margin-left: 5px;
+
+            html.high-contrast & {
+                background-color: @black;
+            }
+
+        }
+
     }
 
     .day {
+
+        font-size: 1.1em;
         color: #888;
+
+        html.high-contrast & {
+            color: @black;
+        }
+
     }
 
     .private-flag {
-            font-size: 18pt;
-            margin-right: 11px;
-            color: #aaa;
+        font-size: 18pt;
+        margin-right: 11px;
+        color: #aaa;
     }
 
     .title {
         display: inline-block;
-        font-size: 18pt;
-        line-height: 22pt;
         margin: 0.25em 0 0.25em 0;
     }
 
     .location {
+
         color: #888;
         margin-bottom: 1em;
-    }
 
-    .io-ox-label {
-        font-family: @lightFontFamily;
-        font-weight: 300;
-        font-size: 9pt;
-        color: #333;
-        clear: both;
-        border-bottom: 1px solid #eee;
-        padding: 1em 0 0.25em 0em;
-        margin-bottom: 0.5em;
-    }
+        html.high-contrast & {
+            color: @black;
+        }
 
-    .io-ox-label.participants-block .io-ox-inline-links {
-        float: right;
-        margin: 0;
-        font-size: 9pt;
-        font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
-
-        a { color: #333; }
-    }
-
-    .io-ox-label.sublabel {
-        border-bottom: none;
-        color: #AAA;
     }
 
     .note {
@@ -450,154 +496,72 @@
         word-wrap: break-word;
         margin: 2em 0 1em 0;
         cursor: text;
-        .box-sizing(border-box);
     }
 
-    .participants {
-        min-height: 2em;
+    .io-ox-label {
+        font-size: 0.9em;
+        padding: 1em 0 0.25em 0em;
+        margin-bottom: 0.5em;
     }
-
-    .participants-clear {
-        clear: both;
-        height: 1px;
-    }
-
-    .participant-list {
-        -webkit-column-width: 250px;
-        -webkit-column-gap: 20px;
-        -moz-column-width: 250px;
-        -moz-column-gap: 20px;
-        column-width: 250px;
-        column-gap: 20px;
-    }
-
-    .participant {
-        line-height: 2em;
-        position: relative; //needed so icons position correctly if participants are displayed in 2 columns
+    .attachment-list .dropdown.attachment-link {
         display: inline-block;
-        width: 250px;
-        margin: 0 20px 0em 0;
-        float: left;
-        cursor: pointer;
-    }
-
-    .detail-label {
-        font-family: @lightFontFamily;
-        font-weight: 300;
-        display: inline-block;
-        width: 110px;
-        white-space: nowrap;
-        color: #666;
     }
 
     .details {
+
         font-size: 0.9em;
-    }
 
-    .detail {
-        white-space: nowrap;
-    }
-
-    .detail.shown_as {
-
-        display: inline-block;
-        height: 14px;
-        width: 14px;
-        line-height: 14px;
-
-        &.reserved {
-            background-color: @appointmentReserved;
+        dt {
+            font-weight: 300;
+            color: #666;
+            text-align: left;
         }
-        &.temporary {
-            background-color: @appointmentTemporary;
-        }
-        &.absent {
-            background-color: @appointmentAbsent;
-        }
-        &.free {
-            background-color: @appointmentFree;
-        }
-    }
 
-    .participant {
+        .shown_as {
 
-        .person {
-
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			max-width: 236px; //icons are 14px
-			display: inline-block;
-
-            &.accepted {
-                color: #799952;  /* green */
+            &.reserved {
+                color: @appointment-reserved;
             }
 
-            &.declined {
-                text-decoration: line-through; color: #913F3F;
+            &.temporary {
+                color: @appointment-temporary;
+            }
+
+            &.absent {
+                color: @appointment-absent;
+            }
+
+            &.free {
+                color: @appointment-free;
             }
 
         }
 
-        .status {
-
-			position: absolute;
-			margin-left: 2px;
-
-            &.accepted {
-
-                color: #8EB360; /* green */
-
-                i {
-                    opacity: 0.25;
-                }
-
-            }
-
-            &.declined {
-                color: #913F3F; /* red */
-            }
-
-            &.tentative {
-                color: #c80; /* orange */
-            }
-
-        }
-
-        .icon-remove, .icon-question-sign {
-            opacity: 0.50;
-        }
-
-        .comment {
-            color: #888;
-            display: block;
-            white-space: normal;
-            padding-left: 1em;
-            line-height: 1.2em;
-            margin-bottom: 0.5em;
-        }
-    }
-
-
-    .group {
-        margin: 0.75em 0 0.25em 0;
-        color: #333;
     }
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
+
         .io-ox-inline-links:first-child {
+
             margin: 0;
-            padding: 15px 0px;
+            padding: 15px 0;
+
             span.io-ox-action-link.dropdown {
                 float: right;
             }
+
         }
+
         .io-ox-inline-links {
+
             &.embedded {
                 text-align: left;
             }
+
         }
+
     }
+
 }
 
 .csscolumns .calendar-detail .participant {
@@ -614,105 +578,120 @@
         min-width: 236px;
         width: 280px;
 
-        .popover-content .list {
+        .popover-content ul {
 
-            .clear {
-                clear: both;
-            }
-
-            i {
-                font-style: normal;
-                display: inline-block;
+            .time {
                 float: right;
             }
 
-            b {
-                font-weight: normal;
-                padding-left: 1em;
-                width: 3em;
-                display: inline-block;
+            .label {
                 float: right;
+                margin-left: 5px;
             }
         }
     }
 }
 
-
 /* Invitations */
-.itip-section {
-    min-height: 40px;
+.itip-section.io-ox-busy {
+    min-height: 60px;
 }
 
 .itip-actions {
-
     text-align: right;
-    margin: 1em 0 0 1em;
+    margin: 14px 0 0 14px;
     white-space: nowrap;
     display: inline-block;
-
-    &.block {
-        text-align: right;
-        margin: 1em 0 0 0;
-        white-space: nowrap;
-        display: block;
-    }
-
 }
 
-.io-ox-calendar-itip-analysis {
+.itip-item {
+    padding: 20px;
+    min-height: 80px;
+    background-color: #F5F5F5; // same color as .well
+}
 
-    margin: 20px 0 0 0;
+.itip-item + .itip-item {
+    border-top: 1px solid #aaa;
+}
 
+.itip-annotations, .itip-changes, .itip-conflicts {
+    margin: 14px 0;
+}
+
+.itip-controls {
+    text-align: right;
+    margin-top: 14px;
+    min-height: 30px;
+    &:empty {
+        min-height: initial;
+    }
+}
+
+.itip-reminder {
+    text-align: left;
+    display: inline-block;
+}
+
+.itip-details {
+    .confirmation-status {
+        margin: 7px 0;
+        &.accepted { color: @green; }
+        &.declined { color: @red; }
+        &.tentative { color: @orange; }
+    }
+}
+
+.itip-conflicts {
+    .vgrid-cell {
+        padding: 10px 0;
+        background-color: transparent;
+        border-bottom: 1px solid #ccc;
+        &:first-child { border-top: 1px solid #ccc; }
+        &:last-child { border-bottom: 1px solid #ccc; }
+    }
     .date {
         margin-right: 14px;
-    }
-
-    &.auto-height {
-        min-height: 0;
-    }
-
-    .confirmation-status {
-
-        margin: 0.5em 0 0.5em 0;
-
-        &.accepted {
-            color: @green;
-        }
-
-        &.declined {
-            color: @red;
-        }
-
-        &.tentative {
-            color: @orange;
-        }
-
-    }
-
-    .change {
-
-        .appointment, .task {
-            background-color: white;
-        }
-
-    }
-
-    .changes {
-
-        margin: 1em 0;
-        font-size: 11pt;
-
-        .original, .recurrencePosition, .updated {
-            font-weight: bold;
-        }
     }
 }
 
 .show-all-checkbox {
+
     padding-right: 14px;
     margin-bottom: 14px;
+
     label {
         font-weight: 300;
-        color: #777;
+        color: @hc-gray;
+    }
+
+}
+
+//io.ox/calendar/listview, io.ox/calendar/common-extensions
+.calendar-item {
+
+    .title {
+        .ellipsis();
+        font-weight: bold;
+    }
+
+    .interval {
+        color: rgb(85, 85, 85);
+        float: right;
+        font-weight: 300;
+    }
+
+    .day {
+        color: rgb(136, 136, 136);
+        font-weight: 300;
+    }
+
+    .location {
+        color: rgb(136, 136, 136);
+        font-weight: 300;
+        float: right;
+    }
+
+    .label {
+        margin-left: 5px;
     }
 }

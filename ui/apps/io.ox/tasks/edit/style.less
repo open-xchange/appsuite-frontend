@@ -13,10 +13,23 @@
 
 .io-ox-tasks-edit-main {
 
-    label {
-        display: block;
-        font-size: 13px;
-        color: #888;
+    label, legend , .sectiontitle{
+		margin-bottom: 5px;
+		font-size: 13px;
+		font-weight: 700;
+		font-family: @normal-font-family;
+		color: #888;
+		border: 0;
+    }
+    .row legend {
+        padding-top: 8px;
+    }
+
+    .form-inline input{
+        width: 90px;
+        &.datepicker-day-field {
+            width: 107px;
+        }
     }
 
     .typeahead.calendaredit {
@@ -33,35 +46,41 @@
 
     }
 
+    .nav-tabs { margin-top: 20px; }
+    .tab-content { margin-top: 13px; }
 
-    .title {
-        float: left;
-        font-size: 20px;
-    }
-    .collapsed      { display: none;      }
+    .collapsed, .task-edit-details {//hide collapsed and details on startup
+        display: none;
+        }
     .cancel         { float: right;       }
     .progress-field { text-align: center; }
 
     .private-flag {
-        width: auto;
         margin: 0 5px 0 0;
         top: 26px;
-        color: #000000;
         position: relative;
     }
-    .task-edit-wrapper {
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
+    .io-ox-tasks-edit {
+        max-width: 880px;
         margin-top: 20px;
+
+        .participantsrow {
+            margin-bottom: 30px;
+        }
+        h1.clear-title {
+            line-height:0;
+            font-size: 20px;
+            float: left;
+            padding-bottom: 10px;
+        }
     }
-    .task-participant-input-field { width: 340px; }
 
     .attachment-edit-row,
     .task-edit-row { margin-bottom: 9px; }
 
-    .expand-link {
+    .expand-link, .expand-details-link {
         margin-bottom: 9px;
+        padding-left: 0px;
         display: block;
     }
 
@@ -71,16 +90,6 @@
         min-height: 364px;
         overflow: visible;
     }
-
-    #task-edit-progress-field {
-        width: 61px;
-        float: left; //fix order of inputfields in combined inputs
-    }
-
-    //fix for gap between input and button in combined inputs
-    .fluid-grid-fix { margin-left: -1px; }
-
-    .participantsrow { margin-bottom: 30px; }
 
     .note-field {
         height: 120px;
@@ -107,31 +116,17 @@
 
     .task-add-attachments-input { margin-left: 10px; }
 
-    .sectiontitle {
-        font-size: 13px;
-        font-family: @normalFontFamily;
-        font-weight: normal;
-        margin: 20px 0 15px 0;
-        color: #888;
-    }
-
-    legend {
-        display: block;
-        width: 100%;
-        padding: 0;
-        margin-bottom: 27px;
-        font-size: 19.5px;
-        line-height: 26px;
-        color: #333;
-        border: 0;
-    }
-
     /* Mobile */
     @media all and (max-width: 980px) {
         .progress-field { width: 49px; }
     }
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
-        .title {
+
+    	.form-control[readonly] {//datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
+    		background-color: #fff;//white
+    	}
+
+        .clear-title {
             width: 100%; //to push the buttons under the title
         }
         .cancel {
@@ -143,8 +138,9 @@
         .tab-content {
             min-height: 0;
         }
-        .task-edit-wrapper {
+        .io-ox-tasks-edit {
             margin-top: 0;
+            padding-bottom: 40px;
         }
 
         .participant-wrapper {
@@ -156,8 +152,8 @@
 }
 
 @media (max-width: 767px) {
-    .span3.btn.fluid-grid-fix {
-        width:auto;
+    .col-md-3.btn.fluid-grid-fix {
+        width: auto;
     }
     .io-ox-tasks-edit-main .private-flag {
         top: 5px;

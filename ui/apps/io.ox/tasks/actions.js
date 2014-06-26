@@ -18,8 +18,9 @@ define('io.ox/tasks/actions',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
      'io.ox/core/print',
-     'io.ox/core/extPatterns/actions'
-    ], function (ext, util, links, gt, notifications, print, actions) {
+     'io.ox/core/extPatterns/actions',
+     'io.ox/tasks/common-extensions'
+    ], function (ext, util, links, gt, notifications, print, actions, extensions) {
 
     'use strict';
 
@@ -99,7 +100,10 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
-            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
+            if (!e.collection.has('some')) {
+                return false;
+            }
+            return (e.baton.data.status !== 3);
         },
         action: function (baton) {
             changeState(baton, 1);
@@ -108,6 +112,9 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
+            if (!e.collection.has('some')) {
+                return false;
+            }
             return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
@@ -199,6 +206,7 @@ define('io.ox/tasks/actions',
                     var tree = new views.FolderList(popup.getBody(), {
                             type: 'tasks',
                             tabindex: 0,
+                            targetmode: true,
                             dialogmode: true
                         }),
                         id = String(task.folder || task.folder_id);
@@ -258,22 +266,13 @@ define('io.ox/tasks/actions',
         },
         action: function (baton) {
             var data = baton.data;
-            ox.load(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs', 'io.ox/tasks/api']).done(function (editUtil, dialogs, api) {
-                //build popup
-                var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
-                //go
-                popup.popup.show().done(function (action) {
-                    if (action === 'ChangeConfState') {
-                        var state = popup.state.prop('selectedIndex') + 1,
-                            message = popup.message.val();
-                        api.confirm({id: data.id,
-                                     folder_id: data.folder_id,
-                                     data: {confirmation: state,
-                                            confirmmessage: message}
-                        }).done(function () {
-                            //update detailview
-                            api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
-                        });
+            ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
+                acceptdeny(data, {
+                    taskmode: true,
+                    api: api,
+                    callback: function () {
+                        //update detailview
+                        api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
                     }
                 });
             });
@@ -440,7 +439,7 @@ define('io.ox/tasks/actions',
         id: 'default',
         index: 100,
         icon: function () {
-            return $('<i class="icon-plus accent-color">');
+            return $('<i class="fa fa-plus accent-color">');
         }
     });
 
@@ -456,32 +455,9 @@ define('io.ox/tasks/actions',
         id: 'edit',
         index: 100,
         prio: 'hi',
+        mobile: 'hi',
         label: gt('Edit'),
         ref: 'io.ox/tasks/actions/edit'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'delete',
-        index: 200,
-        prio: 'hi',
-        label: gt('Delete'),
-        ref: 'io.ox/tasks/actions/delete'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'done',
-        index: 300,
-        prio: 'hi',
-        label: gt('Done'),
-        ref: 'io.ox/tasks/actions/done'
-    }));
-
-    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
-        id: 'unDone',
-        index: 310,
-        prio: 'hi',
-        label: gt('Undone'),
-        ref: 'io.ox/tasks/actions/undone'
     }));
 
     //strange workaround because extend only takes new links instead of plain objects with draw method
@@ -491,66 +467,19 @@ define('io.ox/tasks/actions',
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'changeDueDate',
-        index: 400,
-        prio: 'lo',
+        index: 200,
+        prio: 'hi',
+        mobile: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
-            var data = baton.data;
-            this.append(
-                $('<span class="dropdown io-ox-action-link">').append(
-                    // link
-                    $('<a href="#" data-action="change-due-date" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
-                    .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
-                    // drop down
-                    $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                        util.buildDropdownMenu({bootstrapDropdown: true, daysOnly: true})
-                    )
-                    .on('click', 'li>a:not([data-action="close-menu"])', { task: data }, function (e) {
-                        e.preventDefault();
-                        var finderId = $(e.target).val();
-                        ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(finderId).endDate,
-                                modifications = {
-                                    end_date: endDate,
-                                    id: e.data.task.id,
-                                    folder_id: e.data.task.folder_id || e.data.task.folder
-                                };
 
-                            //check if startDate is still valid with new endDate, if not, show dialog
-                            if (e.data.task.start_date && e.data.task.start_date > endDate) {
-                                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                    var popup = new dialogs.ModalDialog()
-                                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                                        .addPrimaryButton('change', gt('Adjust start date'), 'changechange', {tabIndex: '1'});
-                                    //text
-                                    popup.getBody().append(
-                                        $('<h4>').text(gt('Inconsistent dates')),
-                                        $('<div>').text(
-                                            //#. If the user changes the duedate of a task, it may be before the start date, which is not allowed
-                                            //#. If this happens the user gets the option to change the start date so it matches the due date
-                                            gt('The due date cannot be before start date. Adjust start date?')
-                                        )
-                                    );
-                                    popup.show().done(function (action) {
-                                        if (action === 'cancel') {
-                                            notifications.yell('info', gt('Canceled'));
-                                        } else {
-                                            modifications.start_date = modifications.end_date;
-                                            api.update(modifications).done(function () {
-                                                notifications.yell('success', gt('Changed due date'));
-                                            });
-                                        }
-                                    });
-                                });
-                            } else {
-                                api.update(modifications).done(function () {
-                                    notifications.yell('success', gt('Changed due date'));
-                                });
-                            }
-                        });
-                    })
-                )
+            var link = $('<a href="#">').text(gt('Change due date'));
+
+            this.append(
+                $('<span class="io-ox-action-link">').append(link)
             );
+
+            extensions.dueDate.call(link, baton);
         }
     }));
 
@@ -643,9 +572,39 @@ define('io.ox/tasks/actions',
     });
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'done',
+        index: 300,
+        prio: 'hi',
+        mobile: 'hi',
+        icon: 'fa fa-check-square-o',
+        label: gt('Mark as done'),
+        ref: 'io.ox/tasks/actions/done'
+    }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'unDone',
+        index: 310,
+        prio: 'hi',
+        mobile: 'hi',
+        label: gt('Undone'),
+        ref: 'io.ox/tasks/actions/undone'
+    }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'delete',
+        index: 400,
+        prio: 'hi',
+        mobile: 'hi',
+        icon: 'fa fa-trash-o',
+        label: gt('Delete'),
+        ref: 'io.ox/tasks/actions/delete'
+    }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'move',
         index: 500,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Move'),
         ref: 'io.ox/tasks/actions/move'
     }));
@@ -654,6 +613,7 @@ define('io.ox/tasks/actions',
         id: 'confirm',
         index: 600,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Change confirmation status'),
         ref: 'io.ox/tasks/actions/confirm'
     }));
@@ -662,6 +622,7 @@ define('io.ox/tasks/actions',
         id: 'print',
         index: 700,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Print'),
         ref: 'io.ox/tasks/actions/print'
     }));
@@ -698,7 +659,7 @@ define('io.ox/tasks/actions',
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save to drive'),
+        label: gt('Save to Drive'),
         ref: 'io.ox/tasks/actions/save-attachment'
     }));
 });

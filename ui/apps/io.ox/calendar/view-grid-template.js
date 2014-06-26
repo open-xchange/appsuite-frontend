@@ -19,7 +19,7 @@ define('io.ox/calendar/view-grid-template',
      'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/core/api/resource',
-     'less!io.ox/calendar/style.less'
+     'less!io.ox/calendar/style'
     ], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
     'use strict';
@@ -39,7 +39,7 @@ define('io.ox/calendar/view-grid-template',
                 this.addClass('calendar').append(
                     time = $('<div class="time">'),
                     date = $('<div class="date">'),
-                    isPrivate = $('<i class="icon-lock private-flag">').hide(),
+                    isPrivate = $('<i class="fa fa-lock private-flag">').hide(),
                     title = $('<div class="title">'),
                     $('<div class="location-row">').append(
                         shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
@@ -140,7 +140,7 @@ define('io.ox/calendar/view-grid-template',
                 } else {
                     fields.isPrivate.hide();
                 }
-                this.attr({ 'aria-label': a11yLabel });
+                this.attr({ 'aria-label': _.escape(a11yLabel) });
             }
         },
 

@@ -70,7 +70,6 @@ define('io.ox/core/tk/keys', ['io.ox/core/event'], function (Events) {
             return this;
         };
 
-
         this.remove = function () {
             if (!included) {
                 return;

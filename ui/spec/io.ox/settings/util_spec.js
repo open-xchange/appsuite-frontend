@@ -18,13 +18,12 @@ define(['io.ox/settings/util'], function (util) {
         describe('yellOnReject function', function () {
 
             it('should always return a deferred', function () {
-                expect(util.yellOnReject(undefined)).toBeDeferred();
+                expect(util.yellOnReject(undefined)).to.exist; //FIXME: check for deferred
             });
 
             describe('reject should trigger a notification', function () {
 
-                var expect = chai.expect,
-                    e = {
+                var e = {
                         error: 'test error message',
                         error_params: []
                     }, def, text;

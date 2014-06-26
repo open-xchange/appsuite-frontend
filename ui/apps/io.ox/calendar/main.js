@@ -18,35 +18,185 @@ define('io.ox/calendar/main',
      'io.ox/core/extensions',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar',
+     'io.ox/core/tk/vgrid',
+     'io.ox/calendar/toolbar',
      'io.ox/calendar/actions',
-     'less!io.ox/calendar/style.less'
-    ], function (date, coreConfig, commons, ext, settings, gt) {
+     'less!io.ox/calendar/style'
+    ], function (date, coreConfig, commons, ext, settings, gt, VGrid) {
 
     'use strict';
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
-        // app window
-        win,
-        lastPerspective = settings.get('viewView', 'week:workweek');
+    var app = ox.ui.createApp({
+        name: 'io.ox/calendar',
+        title: 'Calendar'
+    }), win;
 
-    if (_.device('smartphone')) {
-        // map different views here
-        switch (lastPerspective) {
-        case 'week:workweek':
-            lastPerspective = 'month';
-            break;
-        case 'week:week':
-            lastPerspective = 'month';
-            break;
-        case 'calendar':
-            lastPerspective = 'month';
-            break;
+    app.mediator({
+
+        /*
+         * Early List view vsplit - we need that to get a Vgrid instance
+         */
+        'list-vsplit': function (app) {
+            // this causes problems on mobile, the dummy div down here will never be appended
+            var vsplit = commons.vsplit($('<div>'), app);
+            app.left = vsplit.left;
+            app.right = vsplit.right;
+        },
+
+        /*
+         * VGrid
+         */
+        'vgrid': function (app) {
+
+            var gridOptions = {
+                settings: settings,
+                showToggle: _.device('small')
+            };
+
+            // show "load more" link
+            gridOptions.tail = function () {
+                var link = $('<div class="vgrid-cell tail">').append(
+                    //#. Label for a button which shows more upcoming
+                    //#. appointments in a listview by extending the search
+                    //#. by one month in the future
+                    $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
+                );
+                return link;
+            };
+
+            app.grid = new VGrid(app.left, gridOptions);
+
+            app.getGrid = function () {
+                return this.grid;
+            };
+        },
+
+        /*
+         * Folder view support
+         */
+        'folder-view': function (app) {
+            // folder tree
+            commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
+            app.getWindow().nodes.sidepanel.addClass('border-right');
+        },
+
+        /*
+         * Default application properties
+         */
+        'props': function (app) {
+            var view = settings.get('viewView', 'week:week');
+            // introduce shared properties
+            app.props = new Backbone.Model({
+                'layout': view,
+                'checkboxes': app.settings.get('showCheckboxes', true),
+                'darkColors': app.settings.get('darkColors', false)
+            });
+        },
+
+        'vgrid-checkboxes': function (app) {
+            // always hide checkboxes on small devices initially
+            if (_.device('small')) return;
+            var grid = app.getGrid();
+            grid.setEditable(app.props.get('checkboxes'));
+        },
+
+        /*
+         * Set folderview property
+         */
+        'prop-folderview': function (app) {
+            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+        },
+
+        /*
+         * Store view options
+         */
+        'store-view-options': function (app) {
+            app.props.on('change', _.debounce(function () {
+                var data = app.props.toJSON();
+                app.settings
+                    .set('viewView', data.layout)
+                    .set('showCheckboxes', data.checkboxes)
+                    .set('darkColors', data.darkColors)
+                    .save();
+            }, 500));
+        },
+
+        /*
+         * Respond to folder view changes
+         */
+        'change:folderview': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:folderview', function (model, value) {
+                app.toggleFolderView(value);
+            });
+            app.on('folderview:close', function () {
+                app.props.set('folderview', false);
+            });
+            app.on('folderview:open', function () {
+                app.props.set('folderview', true);
+            });
+        },
+
+        /*
+         * Respond to change:checkboxes
+         */
+        'change:checkboxes': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:checkboxes', function (model, value) {
+                var grid = app.getGrid();
+                grid.setEditable(value);
+            });
+        },
+
+        /*
+         * Respond to change:darkColors
+         */
+        'change:darkColors': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:darkColors', function (model, value) {
+                app.getWindow().nodes.outer.toggleClass('dark-colors', value);
+            });
+            app.getWindow().nodes.outer.toggleClass('dark-colors', app.props.get('darkColors'));
+        },
+
+        /*
+         * Folerview toolbar
+         */
+        'folderview-toolbar': function (app) {
+            if (_.device('small')) return;
+            commons.mediateFolderView(app);
+        },
+
+        /*
+         * Respond to layout change
+         */
+        'change:layout': function (app) {
+            app.props.on('change:layout', function (model, value) {
+                ox.ui.Perspective.show(app, value);
+            });
+        },
+        /*
+         * This fixes the missing back button for listview's detailview
+         * Can be removed until this App is converted to the Pagecontroller
+         */
+        'mobile-compatibility': function (app) {
+            if (!_.device('smartphone')) return;
+            app.left.one('select', function () {
+                var content = app.getWindow().nodes.body.find('.window-content');
+                $(content).append(app.navbar = $('<div class="rightside-navbar">'));
+                app.navbar.append(
+                    $('<a href="#" tabindex="-1">').append(
+                        $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                    ).on('tap', function (e) {
+                        e.preventDefault();
+                        app.getGrid().selection.clear();
+                        $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
+                    })
+                );
+            });
         }
-    } else {
-        // corrupt data fix
-        if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
-    }
+    });
 
     // launcher
     app.setLauncher(function (options) {
@@ -54,14 +204,16 @@ define('io.ox/calendar/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            toolbar: true,
-            search: true
+            chromeless: _.device('!small')
         }));
 
         app.settings = settings;
         app.refDate = new date.Local();
 
         win.addClass('io-ox-calendar-main');
+
+        // easy debugging
+        window.calendar = app;
 
         // "show all" extension for folder view
 
@@ -100,34 +252,31 @@ define('io.ox/calendar/main',
             }
         });
 
-        // folder tree
-        commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
-
         // go!
         commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
-            .pipe(commons.showWindow(win))
+            .always(function () {
+                app.mediate();
+                win.show();
+            })
             .done(function () {
-                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
+
+                // app perspective
+                var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
+
+                if (_.device('small') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
+                    lastPerspective = 'week:day';
+                } else {
+                    // corrupt data fix
+                    if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
+                }
+
+                ox.ui.Perspective.show(app, lastPerspective);
             });
 
-        win.on('search:open', function () {
-                lastPerspective = win.currentPerspective;
-                if (lastPerspective && lastPerspective !== 'list') {
-                    ox.ui.Perspective.show(app, 'list');
-                }
-            })
-            .on('search:close', function () {
-                if (lastPerspective && lastPerspective !== 'list') {
-                    ox.ui.Perspective.show(app, lastPerspective);
-                }
-            })
-            .on('change:perspective', function (e, name, long) {
-                // save current perspective to settings
-                settings.set('viewView', long).save();
-                if (name !== 'list') {
-                    win.search.close();
-                }
-            });
+        win.on('change:perspective', function (e, name, id) {
+            // save current perspective to settings
+            app.props.set('layout', id);
+        });
 
     });
 

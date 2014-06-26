@@ -70,28 +70,33 @@ define('io.ox/core/capabilities', function () {
 
     api.reset();
 
-    var hash = _.url.hash('cap');
-    if (hash) {
-        _(hash.split(/\s*[, ]\s*/)).each(function (id) {
-            if (id[0] === '-') {
-                id = id.substr(1);
-                disabled[id] = true;
-                console.info('Disabled feature', id);
-            } else {
-                capabilities[id] = added[id] = {
-                    attributes: {},
-                    backendSupport: false,
-                    id: id
-                };
-                console.info('Enabled feature', id);
-            }
-        });
-    }
+    // custom cap
+    var cap = [];
+    // via local.conf?
+    if (ox.cap) cap = ox.cap.split(/\s*[, ]\s*/);
+    // via URL parameter
+    var hash = _.url.hash('ref') ? _.deserialize(_.url.hash('ref')) : _.url.hash();
+    if (hash.cap) cap = cap.concat(hash.cap.split(/\s*[, ]\s*/));
+
+    _(cap).each(function (id) {
+        if (id[0] === '-') {
+            id = id.substr(1);
+            disabled[id] = true;
+            console.info('Disabled feature', id);
+        } else {
+            capabilities[id] = added[id] = {
+                attributes: {},
+                backendSupport: false,
+                id: id
+            };
+            delete disabled[id];
+            console.info('Enabled feature', id);
+        }
+    });
 
     // disable via hash?
-    hash = _.url.hash('disableFeature');
-    if (hash) {
-        _(hash.split(/\s*[, ]\s*/)).each(function (id) {
+    if (hash.disableFeature) {
+        _(hash.disableFeature.split(/\s*[, ]\s*/)).each(function (id) {
             disabled[id] = true;
         });
         if (!_.isEmpty(disabled)) {

@@ -92,6 +92,19 @@ define('io.ox/core/commons',
             };
         }()),
 
+        simpleMultiSelection: function (node, selection) {
+
+            if (selection.length <= 1) return;
+
+            node.idle().empty().append(
+                $('<div class="io-ox-center multi-selection-message">').append(
+                    $('<div>').text(
+                        gt('%1$d messages selected', selection.length)
+                    )
+                )
+            );
+        },
+
         mobileMultiSelection: (function () {
             var points = {};
 
@@ -118,10 +131,13 @@ define('io.ox/core/commons',
             }
 
             return function (id, node, selection, api, grid) {
-                var buttons = $('.window-toolbar .toolbar-button'),
-                    toolbar = $('.window-toolbar'),
+
+                var context = $(node).closest('.window-container'),  // get current app's window container as context
+                    buttons = $('.window-toolbar .toolbar-button', context),
+                    toolbar = $('.window-toolbar', context),
                     toolbarID = 'multi-select-toolbar',
                     container;
+
                 if ($('#' + toolbarID).length > 0) {
                     // reuse old toolbar
                     container = $('#' + toolbarID);
@@ -140,11 +156,11 @@ define('io.ox/core/commons',
                         $('#' + toolbarID).remove();
                         buttons.show();
                     }
-                }, 100);
+                }, 10);
             };
         }()),
 
-        wireGridAndSelectionChange: function (grid, id, draw, node, api) {
+        wireGridAndSelectionChange: function (grid, id, draw, node, api, simple) {
             var last = '', label;
             grid.selection.on('change', function (e, selection) {
 
@@ -158,7 +174,7 @@ define('io.ox/core/commons',
                     var parent = node.parent();
                     if (len <= 1 && label) {
                         //reset label
-                        parent.attr('aria-label', label);
+                        parent.attr('aria-label', _.escape(label));
                     } else if (len > 1) {
                         //remember label
                         label = label || parent.attr('aria-label');
@@ -177,7 +193,11 @@ define('io.ox/core/commons',
                         // multi selection
                         if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
-                        commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
+                        if (simple) {
+                            commons.simpleMultiSelection(node, this.unique(this.unfold()));
+                        } else {
+                            commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
+                        }
                     } else {
                         // empty
                         if (draw.cancel) draw.cancel();
@@ -622,7 +642,15 @@ define('io.ox/core/commons',
             });
         },
 
-        addFolderView: FolderView.add,
+        addFolderView: function (app, options) {
+            var view = new FolderView(app, options);
+            view.handleFolderChange();
+            view.resizable();
+            view.actionLink();
+            view.handleDrag();
+            view.start();
+            return view;
+        },
 
         vsplit: (function () {
             var selectionInProgress = false;
@@ -634,7 +662,7 @@ define('io.ox/core/commons',
                 }
                 $(this).parent().find('.rightside-inline-actions').empty();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
-                if (e.data.app) {
+                if (e.data.app && e.data.app.getGrid) {
                     if (_.device('small')) {
                         e.data.app.getGrid().selection.trigger('changeMobile');
                     }
@@ -653,7 +681,6 @@ define('io.ox/core/commons',
                 }, 100);
             };
 
-
             return function (parent, app) {
                 var sides = {};
                 parent.addClass('vsplit').append(
@@ -667,8 +694,8 @@ define('io.ox/core/commons',
                     // navigation
                     $('<div class="rightside-navbar">').append(
                         $('<div class="rightside-inline-actions">'),
-                        $('<a href="#" class="btn" tabindex="-1">').append(
-                            $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                        $('<a href="#" tabindex="-1">').append(
+                            $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', { app: app }, click)
                     ),
                     // right
@@ -677,7 +704,60 @@ define('io.ox/core/commons',
                 //
                 return sides;
             };
-        }())
+        }()),
+
+        mediateFolderView: function (app) {
+
+            function toggleFolderView(e) {
+                e.preventDefault();
+                e.data.app.toggleFolderView(e.data.state);
+            }
+
+            function onFolderViewOpen(app) {
+                app.getWindow().nodes.main.find('.vgrid').removeClass('bottom-toolbar');
+            }
+
+            function onFolderViewClose(app) {
+                app.getWindow().nodes.main.find('.vgrid').addClass('bottom-toolbar');
+            }
+
+            // create extension point for second toolbar
+            ext.point(app.get('name') + '/vgrid/second-toolbar').extend({
+                id: 'default',
+                index: 100,
+                draw: function () {
+                    this.addClass('visual-focus').append(
+                        $('<a href="#" class="toolbar-item" tabindex="1">')
+                        .attr('title', gt('Open folder view'))
+                        .append($('<i class="fa fa-angle-double-right">'))
+                        .on('click', { app: app, state: true }, toggleFolderView)
+                    );
+                }
+            });
+
+            var side = app.getWindow().nodes.sidepanel;
+
+            side.find('.foldertree-container').addClass('bottom-toolbar');
+            side.find('.foldertree-sidepanel').append(
+                $('<div class="generic-toolbar bottom visual-focus">').append(
+                    $('<a href="#" class="toolbar-item" tabindex="1">')
+                    .attr('title', gt('Close folder view'))
+                    .append($('<i class="fa fa-angle-double-left">'))
+                    .on('click', { app: app, state: false }, toggleFolderView)
+                )
+            );
+
+            app.on({
+                'folderview:open': onFolderViewOpen.bind(null, app),
+                'folderview:close': onFolderViewClose.bind(null, app)
+            });
+
+            var grid = app.getGrid(), topbar = grid.getTopbar();
+            ext.point(app.get('name') + '/vgrid/second-toolbar').invoke('draw', topbar, ext.Baton({ grid: grid }));
+            onFolderViewClose(app);
+
+            if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        }
     };
 
     /*
@@ -687,18 +767,21 @@ define('io.ox/core/commons',
     // view container with dispose capability
     var originalCleanData = $.cleanData,
         triggerDispose = function (elem) {
-            return $(elem).triggerHandler('dispose');
+            $(elem).triggerHandler('dispose');
         };
 
     $.cleanData = function (list) {
-        return originalCleanData(_(list).map(triggerDispose));
+        _(list).map(triggerDispose);
+        return originalCleanData.call(this, list);
     };
 
     // factory
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-            cid, ecid, pattern,
+            cid = _.cid(data),
+            ecid = _.ecid(data),
+            shortecid = 'recurrence_position' in data ? _.ecid({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
@@ -751,42 +834,27 @@ define('io.ox/core/commons',
             // multiple items - just listen to generic events.
             // otherweise "select all" of some thousands items freezes browser
             folderAPI.on('update',  redraw);
-            api.on('delete', redraw);
-            api.on('update', redraw);
             // ignore move case for multiple
+            api.on('delete update', redraw);
         } else {
             // single item
-            cid = _.cid(data);
-            ecid = _.ecid(data);
             folderAPI.on('update',  { cid: cid, folder: data.folder_id }, checkFolder);
             api.on('delete:' + ecid, remove);
-            api.on('update:' + ecid, update);
+            api.on('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
             api.on('move:' + ecid, move);
-            api.on('create', update);
-            //calendar: update element of a series if master changes
-            if (data.recurrence_position && data.recurrence_position > 0 && (data.recurrence_id === data.id)) {
-                pattern = (data.folder || data.folder_id) + '.' + data.id + '.';
-                api.on('update:series:' + _.ecid(pattern), update);
-            }
         }
 
         return node.one('dispose', function () {
                 if (_.isArray(data)) {
                     folderAPI.off('update', redraw);
-                    api.off('delete', redraw);
-                    api.off('update', redraw);
+                    api.off('delete update', redraw);
                 } else {
-                    cid = _.cid(data);
-                    ecid = _.ecid(data);
                     folderAPI.off('update', checkFolder);
                     api.off('delete:' + ecid, remove);
-                    api.off('update:' + ecid, update);
+                    api.off('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
                     api.off('move:' + ecid, move);
-                    api.off('create', update);
-                    if (pattern)
-                        api.off('update:series:' + _.ecid(pattern));
                 }
-                api = update = data = node = getter = cid = ecid = pattern = null;
+                api = update = data = node = getter = cid = ecid = null;
             });
     };
 

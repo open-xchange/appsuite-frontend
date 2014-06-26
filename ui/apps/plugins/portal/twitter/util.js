@@ -1,8 +1,8 @@
 define('plugins/portal/twitter/util',
     ['plugins/portal/twitter/network',
-    'gettext!plugins/portal',
-    'io.ox/core/notifications',
-    'io.ox/core/date'
+     'gettext!plugins/portal',
+     'io.ox/core/notifications',
+     'io.ox/core/date'
     ], function (network, gt, notifications, date) {
 
     'use strict';
@@ -163,7 +163,7 @@ define('plugins/portal/twitter/util',
             var $temp = renderTweet(tweet.retweeted_status, opt);
             $temp.find('.text').append(
                 $('<div class="io-ox-twitter-retweet-source">').append(
-                    $('<i class="icon-retweet">'),
+                    $('<i class="fa fa-retweet">'),
                     ' ',
                     $('<span>').text(gt('Retweeted by %s', tweet.user.screen_name))
                 )
@@ -177,7 +177,7 @@ define('plugins/portal/twitter/util',
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str,
             profileLink = 'https://twitter.com/' + tweet.user.screen_name,
             tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME),
-            $myTweet = $('<div class="tweet">').data('entry', tweet),
+            $myTweet = $('<li class="tweet">').data('entry', tweet),
             isCurrentUser = tweet.user.id_str === currentUserID,
             hideFollowButton = (opt === undefined || opt.hideFollowButton === undefined || !opt.hideFollowButton),
             hideLinks = (opt === undefined || opt.hideLinks === undefined || !opt.hideLinks);
@@ -314,7 +314,7 @@ define('plugins/portal/twitter/util',
                 'href': '#',
                 role: 'button'})
             .append(
-                $('<i>').addClass('icon-trash'),
+                $('<i class="fa fa-trash-o">'),
                 $('<span>').text(gt('Delete'))
                 .on('click', function (e) {
                     e.preventDefault();
@@ -388,7 +388,7 @@ define('plugins/portal/twitter/util',
     };
 
     var followButton = function (tweet) {
-        var btn = $('<div>').addClass('io-ox-twitter-follow btn small')
+        var btn = $('<div>').addClass('io-ox-twitter-follow btn btn-default small')
             .attr({'user_id': tweet.user.id_str,
                 'role': 'button'});
 
@@ -479,9 +479,8 @@ define('plugins/portal/twitter/util',
     var TwitterTextBox = function (title, options) {
         var replyBoxContainer = $('<div>').attr({'class': 'io-ox-twitter-tweet-container'}),
             textArea = $('<textarea>').attr({
-                    'class': 'io-ox-twitter-tweet-textarea',
+                    'class': 'io-ox-twitter-tweet-textarea form-control',
                     'aria-required': 'true',
-                    maxlength: 140,
                     rows: '4'
                 })
                 .on('click', function (e) {
@@ -507,7 +506,7 @@ define('plugins/portal/twitter/util',
                 }),
             buttonContainer = $('<div>').attr({'class': 'io-ox-twitter-tweet-button'}),
             tweetCounter = $('<div>').attr({'class': 'io-ox-twitter-tweet-counter'}).text(140),
-            tweetButton = $('<a>').attr({'class': 'btn disabled', role: 'button'})
+            tweetButton = $('<a>').attr({'class': 'btn btn-default disabled', role: 'button'})
                 .text(title)
                 .on('click', function (e) {
                     var text = textArea.val();
@@ -524,7 +523,6 @@ define('plugins/portal/twitter/util',
                     }
                 }),
             success = options !== undefined ? options.success : undefined;
-
 
         replyBoxContainer.append(
             textArea,
@@ -555,7 +553,17 @@ define('plugins/portal/twitter/util',
         }
 
         function updateTextLength() {
-            tweetCounter.text((140 - textArea.val().length));
+            var linkRegexp = /\b(https?:\/\/|www.)\S+\.\S+\b/gi,
+                linkLength = (textArea.val().match(linkRegexp) || [] ).length * 22, //calculate the length of links (twitter makes every link 22 chars long)
+                nonLinkLength = textArea.val().replace(linkRegexp, '').length; //cut out links
+
+            tweetCounter.text((140 - (linkLength + nonLinkLength)));
+
+            if (linkLength + nonLinkLength > 140) {
+                tweetCounter.addClass('limit-exceeded');
+            } else {
+                tweetCounter.removeClass('limit-exceeded');
+            }
 
             if (textArea.val().length === 0) {
                 tweetButton.addClass('disabled').removeClass('btn-primary');

@@ -18,8 +18,11 @@ define('io.ox/mail/mailfilter/settings/filter',
      'io.ox/core/tk/dialogs',
      'io.ox/settings/util',
      'io.ox/mail/mailfilter/settings/filter/view-form',
-     'gettext!io.ox/mail'
-    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt) {
+     'gettext!io.ox/mail',
+     'io.ox/mail/mailfilter/settings/filter/defaults',
+     'static/3rd.party/jquery-ui.min.js'
+
+    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt, DEFAULTS) {
 
     'use strict';
 
@@ -89,11 +92,11 @@ define('io.ox/mail/mailfilter/settings/filter',
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();
-        
+
         if (data.id === undefined) {
             myView.$el.find('input[name="rulename"]').trigger('select');
         }
-       
+
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
@@ -139,7 +142,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                     tabindex: 1,
                     'aria-label': title + ', ' + (texttoggle)
                 }),
-                $('<a>').addClass('close').append($('<i/>').addClass('icon-trash')).attr({
+                $('<a>').append($('<i/>').addClass('fa fa-trash-o')).attr({
                     href: '#',
                     role: 'button',
                     'data-action': 'delete',
@@ -183,35 +186,48 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                     render: function () {
                         var flag = (this.model.get('flags') || [])[0],
-                            self = this;
+                            self = this,
+                            actions = (this.model.get('actioncmds') || []);
 
-                        function getEditableState() {
-                            return _.contains(['autoforward', 'spam', 'vacation'], flag) ? 'fixed' : 'editable';
+                        function checkForUnknown() {
+                            var unknown = false;
+                            _.each(actions, function (action) {
+                                if (!_.contains(['stop', 'vacation'], action.id)) {
+                                    unknown = _.isEmpty(_.where(DEFAULTS.actions, { id: action.id }));
+                                }
+                            });
+
+                            return unknown ? 'unknown' : undefined;
                         }
 
-                        var title = self.model.get('rulename');
+                        function getEditableState() {
+                            return (checkForUnknown() === 'unknown' || _.contains(['autoforward', 'spam', 'vacation'], flag))  ? 'fixed' : 'editable';
+                        }
+
+                        var title = self.model.get('rulename'),
+                            titleNode;
                         this.$el.attr({
                                 'data-id': self.model.get('id')
                             })
-                            .addClass('selectable deletable-item ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
+                            .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                             .append(
-                                $('<a>').addClass('drag-handle').append(
-                                    $('<i/>').addClass('icon-reorder')
+                                $('<a>').addClass('drag-handle ' + (this.model.collection.length <= 1 ? 'hidden' : '')).append(
+                                    $('<i class="fa fa-bars">')
                                 ).attr({
                                     href: '#',
                                     role: 'button',
                                     tabindex: 1,
                                     'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
                                 }),
-                                $('<div>').addClass('pull-right').append(function () {
-                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (flag || 'common'));
+                                titleNode = $('<span>').addClass('widget-title pull-left').text(title),
+                                $('<div class="widget-controls">').append(function () {
+                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
                                     point.invoke('draw', $(this), self.model);
-                                }),
-                                title = $('<span>').addClass('list-title').text(title)
+                                })
                             );
 
                         self.model.on('change:rulename', function (el, val) {
-                            title.text(val);
+                            titleNode.text(val);
                         });
                         return self;
                     },
@@ -342,18 +358,16 @@ define('io.ox/mail/mailfilter/settings/filter',
                     },
 
                     render: function () {
-                        this.$el.append(
-                            $('<h1>').addClass('no-margin').text(gt('Mail Filter')),
-                            $('<div>').addClass('controls').append(
-                                $('<div>').addClass('btn-group pull-right').append(
-                                    $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
-                                        'data-action': 'add',
-                                        tabindex: 1,
-                                        type: 'button'
-                                    })
-                                )
+                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter')),
+                            $('<div>').addClass('btn-group pull-right').append(
+                                $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
+                                    'data-action': 'add',
+                                    tabindex: 1,
+                                    type: 'button'
+                                })
                             ),
-                            $('<ol>').addClass('widget-list')
+                            $('<div class="clearfix">'),
+                            $('<ol>').addClass('list-group list-unstyled widget-list ui-sortable')
                         );
                         this.renderFilter();
                         return this;

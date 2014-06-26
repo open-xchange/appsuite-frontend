@@ -20,9 +20,6 @@ define('io.ox/core/tk/autocomplete',
 
     'use strict';
 
-    var popup = $('<div>').addClass('autocomplete-popup'),
-        scrollpane = popup.scrollable();
-
     //returns the input elem
     $.fn.autocomplete = function (o) {
 
@@ -39,6 +36,10 @@ define('io.ox/core/tk/autocomplete',
             autoselect: false,
             api: null,
             node: null,
+            container: $('<div>').addClass('autocomplete-popup'),
+            mode: 'participant',
+
+            cbshow: null,
 
             //get data
             source: function (val) {
@@ -67,10 +68,13 @@ define('io.ox/core/tk/autocomplete',
             }
         }, o || {});
 
+        var scrollpane = o.container.scrollable();
+
         var self = $(this),
 
             // last search
             lastValue = '',
+            lastSearch = $.Deferred().resolve(),
             // no-results prefix
             emptyPrefix = '\u0000',
             // current search result index
@@ -78,10 +82,17 @@ define('io.ox/core/tk/autocomplete',
             // state
             isOpen = false,
 
+            reposition = _.debounce(function () {
+                    //popup stays next to input
+                    var left = parseInt(o.container.css('left').replace('px', ''), 10),
+                        diff = self.offset().left - o.container.offset().left;
+                    o.container.css('left', (left + diff) + 'px');
+                }, 100),
+
             update = function () {
                 // get data from current item and update input field
                 var data = scrollpane.children().eq(Math.max(0, index)).data();
-                lastValue = data !== undefined ? o.stringify(data) + '' : lastValue;
+                lastValue = data !== undefined ? String(o.stringify(data)) : lastValue;
                 self.val(lastValue);
 
                 // if two related Fields are needed
@@ -98,7 +109,17 @@ define('io.ox/core/tk/autocomplete',
                     processData = typeof processData === 'undefined' ? true : processData;
                     var children;
                     if (i >= 0 && i < (children = scrollpane.children()).length) {
-                        children.removeClass('selected').eq(i).addClass('selected').intoViewport(popup);
+                        children.removeClass('selected').eq(i).addClass('selected').intoViewport(o.container);
+
+                        //TODO: select next one
+                        if (o.mode === 'search') {
+                            if (scrollpane.children().eq(i).hasClass('unselectable')) {
+                                var next = index < i ? i + 1 : i - 1;
+                                select(next, processData);
+                                return;
+                            }
+                        }
+
                         index = i;
                         if (processData) {
                             update();
@@ -114,7 +135,6 @@ define('io.ox/core/tk/autocomplete',
                     select(0, false);
                 }
             },
-
 
             fnBlur = function () {
                     setTimeout(close, 200);
@@ -134,30 +154,31 @@ define('io.ox/core/tk/autocomplete',
                     if (!isOpen) {
                         // toggle blur handlers
                         self.off('blur', o.blur).on('blur', fnBlur);
+                        $(window).on('resize', reposition);
                         // calculate position/dimension and show popup
                         var off = self.offset(),
                             w = self.outerWidth(),
                             h = self.outerHeight();
-
-                        popup.hide().appendTo(self.closest(o.parentSelector));
+                        o.container.hide().appendTo(self.closest(o.parentSelector));
 
                         var parent = self.closest(o.parentSelector).offsetParent(),
                             parentOffset = parent.offset(),
                             myTop = off.top + h - parentOffset.top + parent.scrollTop(),
                             myLeft = off.left - parentOffset.left;
 
-                        popup.removeClass('top-placement bottom-placement');
+                        o.container.removeClass('top-placement bottom-placement');
                         if (o.placement === 'top') {
                             // top
-                            popup.addClass('top-placement').css({ top: myTop - h - popup.outerHeight(), left: myLeft + 4, width: w });
+                            o.container.addClass('top-placement').css({ top: myTop - h - o.container.outerHeight(), left: myLeft + 4, width: w });
                         } else {
                             // bottom
-                            popup.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
+                            o.container.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
                         }
 
-                        popup.show();
+                        o.container.show();
+                        if (_.isFunction(o.cbshow)) o.cbshow();
 
-                        window.popup = popup;
+                        window.container = o.container;
 
                         isOpen = true;
                     }
@@ -167,12 +188,87 @@ define('io.ox/core/tk/autocomplete',
                     if (isOpen) {
                         // toggle blur handlers
                         self.on('blur', o.blur).off('blur', fnBlur);
+                        //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
+                        //body.has(self) is needed to check if the input is still attached (may happen if you close mail compose with opened dropdown for example)
+                        if (self.val() && $('body').has(self).length && !self.is(document.activeElement) && !o.container.has(document.activeElement).length) {
+                            //focus is outside so this can be handled as a blur
+                            self.trigger('blur');
+                        }
+                        $(window).off('resize', reposition);
                         scrollpane.empty();
-                        popup.detach();
+                        o.container.detach();
                         isOpen = false;
                         index = -1;
                     }
                 },
+
+            create = function (list, query) {
+                if (o.mode === 'participant') {
+                    _(list.slice(0, o.maxResults)).each(function (data, index) {
+                        var node = $('<div class="autocomplete-item">')
+                            .data({
+                                index: index,
+                                contact: data.data,
+                                email: data.email,
+                                field: data.field || '',
+                                phone: data.phone || '',
+                                type: data.type,
+                                distlistarray: data.data.distribution_list,
+                                id: data.data.id,
+                                folder_id: data.data.folder_id,
+                                image1_url: data.data.image1_url,
+                                first_name: data.data.first_name,
+                                last_name: data.data.last_name,
+                                display_name: data.data.display_name
+                            })
+                            .on('click', fnSelectItem);
+                        o.draw.call(node, data, query);
+                        node.appendTo(scrollpane);
+                    });
+                } else {
+                    var count = 0, regular, childs;
+
+                    //apply style
+                    o.container
+                        .addClass('autocomplete-search');
+                    scrollpane.addClass('dropdown-menu-inline');
+
+                    //ignore hidden facets
+                    list = _(list).filter(function (facet) {
+                        return !facet.hidden;
+                    });
+
+                    _(list).each(function (facet) {
+                        regular = facet.style !== 'simple' && !!facet.display_name;
+                        childs = facet.values && facet.values.length > 0;
+                        //facet
+                        count++;
+                        if (facet.display_name && childs && regular) {
+                            $('<div class="autocomplete-item unselectable dropdown-header">')
+                                .html(facet.display_name)
+                                .data({
+                                    index: count,
+                                    id: facet.id,
+                                    label: facet.display_name,
+                                    type: 'group'
+                                })
+                                //delimiter
+                                .appendTo(scrollpane);
+                        }
+                        //values
+                        _([].concat(facet.style === 'simple' ? facet : facet.values)).each(function (value) {
+                            value.facet = facet.id;
+                            var node = $('<div class="autocomplete-item">')
+                                .on('click', fnSelectItem);
+                            //intend
+                            if (regular)
+                                node.addClass('indent');
+                            o.draw.call(node, value);
+                            node.appendTo(scrollpane);
+                        });
+                    });
+                }
+            },
 
             fnSelectItem = function (e) {
                     e.data = $(this).data();
@@ -183,49 +279,32 @@ define('io.ox/core/tk/autocomplete',
 
             // handle search result
             cbSearchResult = function (query, data) {
+                    // reset scrollpane and show drop-down
+                    scrollpane.empty();
                     open();
                     var list = data.list;
                     if (list.length) {
+                        o.container.idle();
                         // draw results
-                        popup.idle();
-                        _(list.slice(0, o.maxResults)).each(function (data, index) {
-                            var node = $('<div class="autocomplete-item">')
-                                .data({
-                                    index: index,
-                                    contact: data.data,
-                                    email: data.email,
-                                    field: data.field || '',
-                                    phone: data.phone || '',
-                                    type: data.type,
-                                    distlistarray: data.data.distribution_list,
-                                    id: data.data.id,
-                                    folder_id: data.data.folder_id,
-                                    image1_url: data.data.image1_url,
-                                    first_name: data.data.first_name,
-                                    last_name: data.data.last_name,
-                                    display_name: data.data.display_name
-                                })
-                                .on('click', fnSelectItem);
-                            o.draw.call(node, data, query);
-                            node.appendTo(scrollpane);
-                        });
+                        create.call(self, list, query);
                         // leads to results
                         emptyPrefix = '\u0000';
                         index = -1;
-                        //select first element without updating input field
-                        if (o.autoselect) {
-                            selectFirst();
-                        }
+                        // select first element without updating input field
+                        if (o.autoselect) selectFirst();
                     } else {
                         // leads to no results if returned data wasn't filtered before (allready participant)
                         emptyPrefix = data.hits ? emptyPrefix : query;
                         close();
                     }
+                    //lastSearch will never reject
+                    lastSearch.resolve('succeeded', query);
                 },
 
             // adds 'retry'-item to popup
-            cbSearchResultFail = function () {
-                    popup.idle();
+            cbSearchResultFail = function (query) {
+                    scrollpane.empty();
+                    o.container.idle();
                     var node = $('<div>')
                         .addClass('io-ox-center')
                         .append(
@@ -243,11 +322,40 @@ define('io.ox/core/tk/autocomplete',
                             )
                         );
                     node.appendTo(scrollpane);
+                    //lastSearch will will never reject
+                    lastSearch.resolve('failed', query);
                 },
+
+            autoSelectFirst = function () {
+                scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
+            },
+
+            //waits for finished server call/drawn dropdown
+            autoSelectFirstWait = _.debounce(function () {
+                /*
+                 * EXAMPLE:
+                 * 123...t°......4.t¹..t²..t³....
+                 * t°: search request ('123')
+                 * t¹: search response
+                 * t²: enter
+                 * t³: search request ('1234')
+                */
+                lastSearch.done(function (state, query) {
+                    if (self.val() !== query) {
+                        //t¹
+                        autoSelectFirstWait();
+                    } else {
+                        //else
+                        autoSelectFirst();
+                    }
+                });
+            }, o.delay),
 
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
-                // e.stopPropagation();
+
+                var selected;
+
                 if (isOpen) {
                     switch (e.which) {
                     case 27: // escape
@@ -255,9 +363,7 @@ define('io.ox/core/tk/autocomplete',
                         break;
                     case 39: // cursor right
                         e.preventDefault();
-                        if (!e.shiftKey) {
-                            update();
-                        }
+                        if (!e.shiftKey) update();
                         break;
                     case 13: // enter
 
@@ -266,26 +372,35 @@ define('io.ox/core/tk/autocomplete',
                         // 2. use selected item or auto-select first item
                         // we use second approach here - this still allows to add custom mail addresses
 
-                        var selected = scrollpane.find('.selected');
+                        selected = scrollpane.find('.selected');
 
                         if (selected.length) {
                             // use selected item
                             selected.trigger('click');
                         } else {
                             // auto-select first item
-                            scrollpane.find('.autocomplete-item').first().click();
+                            if (o.mode === 'participant') {
+                                autoSelectFirst();
+                            } else {
+                                autoSelectFirstWait();
+                            }
                         }
 
                         // calendar: add string
                         var value = $.trim($(this).val());
-                        if (value.length > 0) $(this).trigger('selected', val);
+                        if (value.length > 0) $(this).trigger('selected', val, (val || '').length >= o.minLength);
 
                         break;
                     case 9:  // tab
-                        e.preventDefault();
                         if (!e.shiftKey) { // ignore back-tab
-                            val = $.trim($(this).val(''));
-                            close();
+                            selected = scrollpane.find('.selected');
+                            if (selected.length) {
+                                e.preventDefault();
+                                selected.trigger('click');
+                            } else {
+                                $(this).val(val = '');
+                                close();
+                            }
                         }
                         break;
                     case 38: // cursor up
@@ -313,10 +428,14 @@ define('io.ox/core/tk/autocomplete',
                         }
                         break;*/
                     case 13:
+                        if (o.mode !== 'participant') {
+                            autoSelectFirstWait();
+                        }
+                        /* falls through */
                     case 9:
                         var val = $.trim($(this).val());
                         if (val.length > 0) {
-                            $(this).trigger('selected', val);
+                            $(this).trigger('selected', val, (val || '').length >= o.minLength);
                         }
                         break;
                     }
@@ -324,15 +443,21 @@ define('io.ox/core/tk/autocomplete',
             },
 
             // handle key up (debounced)
-            fnKeyUp = _.debounce(function (e, isRetry) {
+            fnKeyUp = _.debounce(function (e, options) {
+                //TODO: element destroyed before debounce resolved
+                if (!document.body.contains(this)) return;
+                this.focus();
                 e.stopPropagation();
-                var val = $.trim($(this).val());
-                isRetry = isRetry || false;
-                if (val.length >= o.minLength) {
-                    if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
+
+                var opt = _.extend({}, (e.data || {}), options || {}),
+                    val = $.trim($(this).val());
+
+                if (val.length >= o.minLength && !opt.keepClosed) {
+                    //request data?
+                    if (opt.isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
+                        lastSearch = $.Deferred();
                         lastValue = val;
-                        scrollpane.empty();
-                        popup.busy();
+                        o.container.busy();
                         o.source(val)
                             .then(o.reduce)
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
@@ -342,7 +467,6 @@ define('io.ox/core/tk/autocomplete',
                     close();
                 }
             }, o.delay);
-
 
        /**
         * get the selected item
@@ -372,9 +496,15 @@ define('io.ox/core/tk/autocomplete',
             });
 
             if (_.device('!desktop') || _.device('ie')) {//internet explorer needs this fix too or it closes if you try to scroll
-                popup.on('mousedown', blurOff).on('mouseup', blurOn);
+                o.container.on('mousedown', blurOff).on('mouseup', blurOn);
             }
         }
+
+        this.isOpen = function () {
+            return isOpen;
+        };
+
+        this.open = open;
 
         return this;
     };

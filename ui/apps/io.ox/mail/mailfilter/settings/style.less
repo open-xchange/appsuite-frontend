@@ -1,116 +1,21 @@
 .io-ox-mailfilter-settings {
 
-    max-width: 700px;
-
-    span.list-title {
-        display: inline-block;
-    }
-
-    ol.widget-list {
-        list-style-type: none;
-        margin: 0;
-    }
-
     .controls {
         padding: 13px;
         height: 30px;
         margin-bottom: 13px;
     }
-
-    li {
-
-        &.selectable {
-
-            background-color: #f5f5f5;
-            padding: 13px 13px 13px 60px;
-            margin: 0 0 7px 0;
-            position: relative;
-            text-align: left;
-
-            &.disabled {
-                font-style: italic;
-                font-weight: normal;
-                color: #888;
-            }
-
-        }
-
-        .drag-handle {
-
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.05);
-            }
-
-            i {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                margin: -7px 0 0 -9px;
-                color: #aaa;
-            }
-
-        }
-
-        a.action {
-            margin-right: 2em;
-        }
-
-    }
-
 }
 
-.io-ox-mailfilter-edit{
+.io-ox-mailfilter-edit {
 
-    .warning {
-        color:  #B94A48;
-    }
+    .warning { color:  #B94A48; border-color: #B94A48; }
 
-    .sectiontitle, label {
-        cursor: default;
-    }
+    .action.dropup.open { position:relative; }
 
-    .line {
-        margin-bottom: 5px;
-    }
-
-    .close {
-        line-height: 30px;
-    }
-
-    .pull-right {
-        position: relative;
-        float: right;
-
-    }
-
-    .action.dropdown.value {
-        display: inline;
-        margin-right: 2em;
-        float: left;
-    }
-
-    .action.dropdown.value.mark-as {
-        margin-right: 15px;
-    }
-
-    .action.dropdown.value.no-positioning {
-        position: relative;
-        margin: 0;
-        float: none;
-    }
-
-    .action.dropdown.value.no-positioning.block, .action.dropup.value.no-positioning.block {
-        position: relative;
-        right: 0;
-        display: block;
-        margin: 20px 0;
+    a.dropdown-toggle {
+        padding-top: 5px;
+        display: inline-block;
     }
 
     a.newcondition, a.newaction {
@@ -120,17 +25,15 @@
     }
 
     a.folderselect {
-        margin: 0 10px;
+        padding-top: 5px;
         float: left;
     }
 
     legend {
         display: block;
         width: 100%;
-        padding: 0;
-        margin-bottom: 20px;
         font-size: 14px;
-        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-family: @normal-font-family;
         font-weight: bold;
         line-height: 40px;
         color: #333;
@@ -143,57 +46,32 @@
         padding: 8px 13px 8px 13px;
         margin: 0 0 7px 0;
         text-align: left;
-        cursor: pointer;
-        position: relative;
-        /*width: 630px;*/
-        width: auto;
-        line-height: 30px;
+
+        .singleline {
+            line-height: 30px;
+        }
+
+        .doubleline {
+            line-height: 63px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .rightalign {
+            text-align: right;
+
+            .dropdown-menu {
+                text-align: left;
+            }
+
+        }
+
     }
 
     li.filter-settings-view.warning {
         color:  #B94A48;
-    }
-
-    li[data-type-second="headers"] {
-
-        label {
-            line-height: 30px;
-        }
-
-        .close {
-            line-height: 70px;
-        }
-
-        span.list-title {
-            line-height: 70px;
-        }
-
-        .pull-right div.inner {
-            float: left;
-            margin-right: 1em;
-        }
-
-        input[data-action="change-text-test"] {
-            margin-right: 0;
-        }
-
-    }
-
-    ol.widget-list {
-        list-style-type: none;
-        margin: 0;
-    }
-
-    input[data-action="change-text-test"], input[data-action="change-text-action"] {
-        margin-bottom: 0;
-        margin-right: 1em;
-        width: 260px;
-    }
-
-     input[data-action="change-text-test-second"]{
-        margin-bottom: 0;
-        width: 260px;
-        float: right;
     }
 
     .flag-dropdown {
@@ -203,35 +81,32 @@
         border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
         border-radius: 5px;
-        /*float: right;*/
         display: inline-block;
-        position: absolute;
-        top: 3px;
-        right: 40px;
     }
 
     .flag-dropdown ul {
-        font: 14px/20 @normalFontFamily;
+        text-align: left;
+        font: 14px/20 @normal-font-family;
         right: -2px;
         left: auto;
         top: 125%;
         width: 200px;
     }
 
-    .flag-dropdown a {
+    /*.flag-dropdown a {
         line-height: 24px;
-    }
+    }*/
 
     .flag_1  { background-color: @red; } /* red */
     .flag_7  { background-color: @orange; } /* orange */
     .flag_10 { background-color: @yellow; } /* yellow */
-    .flag_6  { background-color: @greenLight; } /* light green */
+    .flag_6  { background-color: @green-light; } /* light green */
     .flag_3  { background-color: @green; } /* green */
-    .flag_9  { background-color: @blueLight; } /* light blue */
+    .flag_9  { background-color: @blue-light; } /* light blue */
     .flag_2  { background-color: @blue; } /* blue */
     .flag_5  { background-color: @purple; } /* purple (former brown) */
     .flag_8  { background-color: @pink; } /* pink */
-    .flag_4  { background-color: @grayLight; } /* dark gray */
+    .flag_4  { background-color: @gray-light; } /* dark gray */
 
     .flag-example {
         display: inline-block;
@@ -242,35 +117,37 @@
         .border-radius(5px);
     }
 
+    a[data-action="remove-test"], a[data-action="remove-action"] {
+        position: absolute;
+        top: -8px;
+        color: #aaa;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: @trash-icon-hover-background;
+            text-decoration: none;
+
+            i {
+                color: @trash-icon-hover-color;
+            }
+        }
+
+        i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -7px 0 0 -6px;
+            color: #aaa;
+        }
+    }
+
 }
 
 .control-group.mailfilter {
     display: inline-block;
     float: left;
     padding-top: 4px;
-}
-
-.ios .io-ox-mailfilter-edit {
-
-    li.filter-settings-view,  .pull-right, .action.dropdown, .action.dropdown.no-positioning.block {
-        position: static;
-    }
-
-    li.filter-settings-view[data-type="text"] .pull-right {
-        position: relative;
-    }
-
-    .actions li.filter-settings-view[data-type="text"] .pull-right {
-        position: static;
-    }
-
-    .actions li.filter-settings-view .pull-right .mark-as{
-        z-index: 1001;
-    }
-
-    .action.dropdown.open, .action.dropdown.no-positioning.block.open {
-        position: relative;
-    }
-
 }
 

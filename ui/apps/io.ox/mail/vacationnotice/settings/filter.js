@@ -53,7 +53,6 @@ define('io.ox/mail/vacationnotice/settings/filter',
                     VacationEdit,
                     vacationNotice;
 
-
                 if (data[0] && data[0].actioncmds[0]) {
                     vacationData = data[0].actioncmds[0];
                     vacationData.internal_id = vacationData.id;

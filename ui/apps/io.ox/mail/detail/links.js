@@ -31,20 +31,33 @@ define('io.ox/mail/detail/links',
     $(document).on('click', '.deep-link-files', function (e) {
         e.preventDefault();
         var data = $(this).data();
-        ox.launch('io.ox/files/main', { folder: data.folder, perspective: 'fluid:list' }).done(function () {
-            var app = this, folder = data.folder, id = data.id;
-            // switch to proper perspective
-            ox.ui.Perspective.show(app, 'fluid:list').done(function () {
-                // set proper folder
-                if (app.folder.get() === folder) {
-                    app.selection.set(id);
-                } else {
-                    app.folder.set(folder).done(function () {
-                        app.selection.set(id);
+        if (data.id) {
+            // open file in side-popup
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail']).done(function (dialogs, api, view) {
+                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                    popup.busy();
+                    api.get(_.cid(data.id)).done(function (data) {
+                        popup.idle().append(view.draw(data));
                     });
-                }
+                });
             });
-        });
+        } else {
+            // open files app
+            ox.launch('io.ox/files/main', { folder: data.folder, perspective: 'fluid:list' }).done(function () {
+                var app = this, folder = data.folder, id = data.id;
+                // switch to proper perspective
+                ox.ui.Perspective.show(app, 'fluid:list').done(function () {
+                    // set proper folder
+                    if (app.folder.get() === folder) {
+                        app.selection.set(id);
+                    } else {
+                        app.folder.set(folder).done(function () {
+                            app.selection.set(id);
+                        });
+                    }
+                });
+            });
+        }
     });
 
     $(document).on('click', '.deep-link-contacts', function (e) {
@@ -65,20 +78,32 @@ define('io.ox/mail/detail/links',
     $(document).on('click', '.deep-link-calendar', function (e) {
         e.preventDefault();
         var data = $(this).data();
-        ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
-            var app = this, folder = data.folder, id = data.id;
-            // switch to proper perspective
-            ox.ui.Perspective.show(app, 'list').done(function () {
-                // set proper folder
-                if (app.folder.get() === folder) {
-                    app.trigger('show:appointment', { id: id, folder_id: folder, recurrence_position: 0 }, true);
-                } else {
-                    app.folder.set(folder).done(function () {
-                        app.trigger('show:appointment', { id: id, folder_id: folder, recurrence_position: 0 }, true);
+        if (data.id) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
+                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                    popup.busy();
+                    api.get(data).done(function (data) {
+                        popup.idle().append(view.draw(data));
                     });
-                }
+                });
             });
-        });
+
+        } else {
+            ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
+                var app = this, folder = data.folder;
+                // switch to proper perspective
+                ox.ui.Perspective.show(app, 'week:week').done(function (p) {
+                    // set proper folder
+                    if (app.folder.get() === folder) {
+                        p.view.trigger('showAppointment', e, data);
+                    } else {
+                        app.folder.set(folder).done(function () {
+                            p.view.trigger('showAppointment', e, data);
+                        });
+                    }
+                });
+            });
+        }
     });
 
     $(document).on('click', '.deep-link-tasks', function (e) {
@@ -132,13 +157,9 @@ define('io.ox/mail/detail/links',
         processDeepLink = function (text, node) {
 
             var data = parse(text),
-                link = $('<a href="" target="_blank" class="deep-link" style="text-decoration: none; font-family: Arial;">')
+                link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
                     .attr('href', data.link)
-                    .append(
-                        $('<span class="label label-info">').text(
-                            'id' in data ? items[data.app] : folders[data.app]
-                        )
-                    );
+                    .text('id' in data ? items[data.app] : folders[data.app]);
 
             // internal document?
             if (isValidHost(data.link)) {
@@ -173,13 +194,13 @@ define('io.ox/mail/detail/links',
             if (baton.isHTML && regMailComplex.test(text)) {
                 node.replaceWith(
                     $('<div>')
-                    .html(text.replace(regMailComplexReplace, '<a href="mailto:$6">$2$3</a>'))
+                    .html(text.replace(regMailComplexReplace, '<a href="mailto:$6" target="_blank">$2$3</a>'))
                     .contents()
                 );
             } else {
                 node.replaceWith(
                     $('<div>')
-                    .html(text.replace(regMailReplace, '<a href="mailto:$1">$1</a>'))
+                    .html(text.replace(regMailReplace, '<a href="mailto:$1" target="_blank">$1</a>'))
                     .contents()
                 );
             }

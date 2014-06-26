@@ -15,9 +15,10 @@ define('io.ox/core/settings/errorlog/settings/pane',
     ['io.ox/core/extensions',
      'io.ox/core/http',
      'io.ox/core/date',
+     'settings!io.ox/core',
      'gettext!io.ox/core',
-     'apps/io.ox/core/tk/charts.js'
-    ], function (ext, http, date, gt) {
+     'static/3rd.party/Chart.js/Chart.js'
+    ], function (ext, http, date, settings, gt) {
 
     'use strict';
 
@@ -25,7 +26,8 @@ define('io.ox/core/settings/errorlog/settings/pane',
         id: 'errorlog',
         title: gt('Error log'),
         ref: 'io.ox/core/settings/errorlog',
-        index: 'last'
+        index: 'last',
+        advancedMode: true
     });
 
     var ErrorLogView = Backbone.View.extend({
@@ -86,9 +88,13 @@ define('io.ox/core/settings/errorlog/settings/pane',
             this.$el.empty();
 
             this.renderSummary();
-            this.renderStatistics();
-            this.renderChart();
-            this.updateStatistics();
+
+            if (settings.get('ping/enabled', false)) {
+                this.renderStatistics();
+                this.renderChart();
+                this.updateStatistics();
+            }
+
             this.renderTabs();
             this.collection.each(this.renderError, this);
 
@@ -181,7 +187,6 @@ define('io.ox/core/settings/errorlog/settings/pane',
 
                 return data;
             }
-
 
             var data = transform(http.statistics.data()),
                 ping = transform(http.statistics.ping());

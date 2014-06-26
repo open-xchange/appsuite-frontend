@@ -6,247 +6,780 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-/* VGrid elements */
+/* definitions */
+@icon-size: 18px;
+@unread-toggle-width: 40px;
+@toolbar-line-height: 24px;
+@toolbar-vertical-padding: 10px;
+@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
 
-.vgrid-cell.mail {
-    padding: 10px 13px 13px 13px;
-    line-height: 1.5em;
+/* phone */
+@phone-font-size: 14px;
+@phone-line-height: 24px;
+
+/* preview panes */
+
+.flag-picker-view {
+    position: absolute;
+    z-index: 10000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    width: 300px;
+    min-height: 50px;
 }
 
-.vgrid-cell-checkbox {
-    padding: 7px 0 0 13px;
+.rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
+
+.list-view-control .toolbar {
+    .user-select(none);
+    .select-all {
+        color: #555;
+        cursor: pointer;
+        outline: 0;
+        i {
+            color: #ccc;
+            margin-right: 14px;
+            width: 16px;
+            font-size: 18px;
+            position: relative;
+            top: 2px;
+        }
+    }
+    .dropdown-menu {
+        font-size: 14px;
+    }
 }
 
-.io-ox-portal-widget .vgrid-cell.mail { /* portal */
-    padding: 6px 2px 6px 2px;
+.preview-right {
+    .leftside {
+        width: 320px;
+    }
+    .rightside {
+        left: 320px;
+    }
 }
 
-.vgrid-cell.mail .flag,
-.mail-detail .flag-dropdown {
+@media(max-width: 700px) {
+    .preview-right {
+        .leftside {
+            width: 280px;
+        }
+        .rightside {
+            left: 280px;
+        }
+    }
+}
+
+.preview-bottom {
+    .leftside { left: 0; right: 0; bottom: auto; width: auto !important; height: 45%; border-bottom: 1px solid #ccc;  z-index: 2; }
+    .rightside { left: 0 !important; right: 0; top: 45%; z-index: 1; }
+    // horizontal resizebar
+    .list-view-control .resizebar {
+        display: none;
+        &.vertical {
+            background: transparent;
+            width: 100%;
+            height: 5px;
+            position: absolute;
+            z-index: 10000;
+            cursor: s-resize;
+            cursor: ns-resize;
+            cursor: row-resize;
+            right: auto;
+            top: auto;
+            bottom: 0;
+            display: block;
+        }
+    }
+}
+
+.preview-none {
+    .leftside { top: 0; left: 0; right: 0; bottom: 0; width: auto !important; z-index: 1; }
+    .rightside { top: 0; right: 0; bottom: 0; left: 0 !important; width: auto; display: none; z-index: 2; }
+    .rightside.preview-visible { display: block; }
+}
+
+.list-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.list-item.small {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.list-item.small .list-item-checkmark .fa.fa-checkmark {
+    top: 8px;
+}
+
+.list-item.small .list-item-content,
+.thread-view .list-item.small {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.list-item-column {
+    display: table-cell;
+    vertical-align: middle;
     padding: 0;
-    margin-left: 1em;
-    float: right;
-    .box-sizing(border-box);
+    &.column-1 { width: 30px; text-align: center; }
+    &.column-2 { width: 30px; text-align: center; }
+    &.column-3 { width: 35%; }
+    &.column-4 { width: 55%; }
+    &.column-5 { width: 100px; text-align: right; }
 }
 
-.vgrid-cell.mail .flag {
-    font-size: 18px;
+.list-view .list-item {
+
+    &.small {
+
+        .priority { float: none; }
+        .from span.person { .fontWeight(normal); }
+
+        &.unread {
+            .from span.person, .subject, .date { .fontWeight(bold); }
+        }
+    }
+
+    &.unread {
+        .date { opacity: 1; .fontWeight(bold); }
+        .subject {
+            html.high-contrast & {
+                color: @hc-link-color;
+            }
+        }
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px)  {
+        &.unread.selected {
+            .subject { color: #000; }
+        }
+        &.complete > .list-item:last-child {
+            margin-bottom: @toolbar-height;
+            border-bottom: 0;
+        }
+        font-size: @phone-font-size;
+        line-height: @phone-line-height;
+
+    }
 }
 
-.vgrid-cell.mail .flag.flag_0 {
-    display: none;
+.list-view {
+    @media (max-width: 480px), (max-device-width: 480px)  {
+        .list-item:hover {
+            background-color: rgba(221, 221, 221, 0.5);
+        }
+        &.complete > .list-item:last-child {
+            margin-bottom: @toolbar-height;
+            border-bottom: 0;
+        }
+    }
 }
 
-.vgrid-cell.mail {
+.preview-bottom .mail-detail-pane .mail-detail-decorator { padding: 0; }
+.preview-bottom .inplace-reply { margin: 14px; }
+
+.list-view.thread-view .list-item.small { padding: 7px 14px 7px 48px; }
+
+.io-ox-mail-window .foldertree-sidepanel { left: 0; }
+
+.simple-mail-writer {
+    z-index: 10;
+    background-color: white;
+    @header-height: 190px;
+    @padding: 7px;
+    .header {
+        background-color: #eee;
+        position: absolute;
+        top: 40px + @padding;
+        right: @padding;
+        left: @padding;
+        height: @header-height;
+        td {
+            height: 45px;
+            padding: 0 14px 0 0;
+            vertical-align: middle;
+        }
+        td.row-label {
+            width: 100px;
+            text-align: right;
+        }
+        input {
+            height: 30px;
+            margin: 0px;
+        }
+    }
+    .editor {
+        color: #aaa;
+        background-color: white;
+        position: absolute;
+        top: @header-height + 40px;
+        right: @padding;
+        bottom: @padding;
+        left: @padding;
+        textarea {
+            height: 100%;
+            width: 100%;
+            padding: 14px;
+            overflow: auto;
+            outline: 0;
+            border: 0px none;
+        }
+    }
+}
+
+.mail-detail {
+    section.body {
+        margin: 0;
+        padding: 10px 20px 20px 20px;
+        background-color: #fff;
+        display: none;
+        width: 100%;
+        cursor: default;
+        outline: 0;
+        &.loading {
+            min-height: 80px;
+        }
+    }
+    section.attachments {
+        margin-bottom: 10px;
+        display: none;
+    }
+    section.notifications {
+        display: none;
+        margin: 14px 0;
+        &:empty { margin: 0; }
+    }
+
+    &.expanded {
+        section.attachments, section.notifications { display: block; }
+        section.body { display: table; /* for proper overflow behavior */ }
+        section.attachments:empty { display: none; }
+    }
+
+    &.no-padding {
+        h1.subject,
+        section.body,
+        section.notifications,
+        section.attachments { padding-left: 0; padding-right: 0; }
+    }
+}
+
+.mail-reader {
+    background-color: #eee;
+    .overflow();
+    .thread-view-control {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .thread-view-control, .thread-view-list {
+        position: static;
+    }
+}
+
+/* ListView */
+
+.mail-item {
+
+    .contact-picture {
+        float: left;
+        margin: 0px 14px 0 0;
+        .picture(40px, 40px);
+        html.high-contrast & {
+            display: none;
+        }
+    }
+
+    .selected .contact-picture {
+        opacity: 0.25;
+        -webkit-filter: saturate(0);
+    }
+
+    .from {
+        .ellipsis();
+        span.person {
+            color: inherit;
+            .fontWeight(500);
+        }
+    }
+
+    .unread .from span.person { font-weight: bold; }
+
+    .date, .size {
+        .fontWeight(300);
+        display: inline-block;
+        margin-left: 0.5em;
+        float: right;
+    }
+
+    .date {
+
+        opacity: 0.50;
+
+        html.high-contrast & {
+            opacity: 1;
+        }
+
+    }
+
+    .size {
+        color: @link-color;
+    }
+
+    .actions {
+        margin-left: 14px;
+
+    }
+
+    div.subject {
+
+        .fontWeight(300);
+        line-height: 20px; // need that to avoid flicker base on icon height
+        .ellipsis();
+
+        i {
+            font-size: 14px;
+            display: inline-block;
+            float: left;
+            line-height: 20px;
+            margin-right: 7px;
+        }
+
+        i.icon-unread { color: @link-color; }
+        i.icon-answered { color: #aaa; }
+        i.icon-forwarded { color: #888; }
+    }
+
+    &.visible-selection.has-focus .list-item.selected i {
+        color: rgba(255, 255, 255, 0.50);
+    }
+
+    .fa-paperclip.has-attachments {
+        font-size: @icon-size;
+        width: 18px;
+        height: 18px;
+        margin-left: 7px;
+        float: right;
+    }
+
+    .flag {
+        font-size: 18px;
+        padding: 0;
+        margin-left: 7px;
+        float: right;
+    }
 
     .priority {
-        font-weight: bold;
         float: right;
-        .high {
-            color: @mailPriority;
+        .high { color: @mail-priority; }
+        .low { color: @mail-priority-low; }
+    }
+
+    .list-item.deleted {
+        text-decoration: line-through;
+        color: rgba(0, 0, 0, 0.20);
+    }
+
+    &.visible-selection.has-focus .list-item.deleted.selected {
+        color: rgba(255, 255, 255, 0.50);
+    }
+
+    .box() {
+        color: #888;
+        padding: 0 7px;
+        margin-left: 7px;
+        display: inline-block;
+        float: right;
+        overflow: visible;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.10);
+        .fontWeight(normal);
+        .border-radius(3px);
+    }
+
+    .account-name {
+        .box();
+    }
+
+    .thread-size {
+        .box();
+        min-width: 2em;
+        html.high-contrast & {
+            color: @hc-gray; //HC
         }
-        .low {
-            i:first-child { color: #888; }
+    }
+
+    &.visible-selection.has-focus .selected {
+        .thread-size, .account-name { color: #fff; }
+    }
+
+    .thread-item {
+
+        padding: 5px @list-view-padding 5px (@list-view-padding + 30px);
+
+        .from span.person {
+            .fontWeight(normal);
+        }
+
+        i.icon-unread {
+            color: @link-color;
+            position: absolute;
+            line-height: 20px;
+            left: @list-view-padding;
+        }
+    }
+
+    .thread-item:first-child { padding-top: 7px; }
+    .thread-item:last-child { padding-bottom: 7px; }
+
+    a.n-more {
+        .fontWeight(300);
+    }
+
+    .attachments {
+        padding: 19px 20px 19px 20px;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+
+    .attachment-list {
+
+        b { opacity: 0.30; }
+        .dropdown {
+            margin-right: 1em;
+        }
+        .fa-paperclip {
+            font-size: 16px;
+            color: @link-color;
+        }
+        .io-ox-inline-links {
+            display: inline;
+            font-family: @normal-font-family;
+            font-size: 13px;
+            li { margin-right: 14px; }
+        }
+    }
+
+    .attachment-preview {
+
+        margin: 14px 0 0 0;
+        padding: 0;
+        list-style: none;
+        white-space: nowrap;
+        height: 120px;
+        overflow-y: hidden;
+        overflow-x: auto;
+
+        li {
+            margin: 0 1px 0 0;
+            padding: 0;
+            width: 120px;
+            height: 120px;
+            background-size: cover;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        li:hover {
+            opacity: 0.50;
+        }
+    }
+
+    .unread-toggle {
+        position: absolute;
+        left: 60px;
+        width: @unread-toggle-width;
+        height: 40px;
+        text-align: center;
+        font-size: 14px;
+        color: #ccc;
+        &:hover { text-decoration: none; color: #aaa; }
+        i.fa:before { content: "\f003"; /* fa-envelope-o */ }
+    }
+
+    &.no-padding .unread-toggle { left: 40px; }
+
+    &.unread .unread-toggle {
+        color: #08c;
+        i.fa:before { content: "\f0e0"; /* fa-envelope */ }
+    }
+
+    .flag-picker {
+        float: right;
+        display: inline-block;
+        margin-left: 7px;
+        position: relative;
+        .dropdown-toggle {
+            font-size: @icon-size;
+            &:hover { text-decoration: none; }
+        }
+        .flag-dropdown-icon.flag_0 {
             color: #ccc;
         }
     }
-
-    &.selected .priority {
-        .low {
-            i:first-child { opacity: 1; }
-            i { opacity: 0.5; }
-        }
-    }
 }
 
-/* flags */
-
-.vgrid-cell.mail {
-
-    .subject {
-        font-weight: 200;
+.flag-picker .dropdown-menu {
+    right: 0;
+    left: auto;
+    width: 200px;
+    a {
+        line-height: 24px;
         .ellipsis();
     }
+}
 
-    .subject i {
-        display: none;
-        width: 1.25em;
-        font-size: 16px;
-        line-height: 18px;
-        position: relative;
-        top: 1px;
+.mail-detail .flag-picker .dropdown-menu {
+    font: 14px/20 @normal-font-family;
+    top: 110%;
+}
+
+.flag-dropdown {
+
+    font-size: 22px;
+    margin: 7px 0 0 14px;
+    cursor: pointer;
+    float: right;
+
+    ul {
+        font: 14px/20 @normal-font-family;
+        right: -20px;
+        left: auto;
+        top: 120%;
+        width: 200px;
     }
 
-    .subject .empty {
-        font-style: italic;
+    a {
+        line-height: 24px;
+        text-decoration: none;
+    }
+
+    .flag-dropdown-icon.flag_0 {
+        color: #ddd;
+    }
+
+    .flag-dropdown-icon.flag_0:hover {
         color: #aaa;
     }
-
-    /* unread */
-    &.unread i.icon-unread { display: inline-block; float: left; color: @linkColor; }
-
-    /* answered */
-    &.answered i.icon-answered { display: inline-block; color: darken(@greenLight, 20%); float: left; }
-
-    /* forward */
-    &.forwarded i.icon-forwarded { display: inline-block; color: #888; float: left;}
-
-    &.unread .subject {
-        font-weight: normal;
-    }
-
-    &.unread .date {
-        font-weight: bold;
-        color: #333;
-    }
-
-    &.unread .from span.person {
-        font-weight: 800;
-    }
-
-    &.deleted *:not(.swipeDelete) {
-        text-decoration: line-through;
-        color: #888 !important;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    &.deleted .label {
-        color: @white !important;
-    }
-
-    &.selected.deleted * { color: @selectedColor !important; }
-
-    .account-name {
-        text-align: right;
-        padding: 5px 0 0 0;
-        font-style: italic;
-        color: #555;
-    }
-}
-/* end:unread */
-
-.vgrid-cell.mail .from {}
-
-.vgrid-cell.mail .from span.person {
-    color: black;
-    font-weight: 500;
 }
 
-.vgrid-cell.mail.me .from {
-    color: #aaa;
-    font-weight: normal;
-}
-
-.vgrid-cell.mail .date,
-.vgrid-cell.thread-summary .date {
-    color: #777;
-    font-weight: 300;
+.flag-example {
     display: inline-block;
     float: right;
+    width: 28px;
+    height: 22px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    .border-radius(5px);
 }
 
-.vgrid-cell.mail .icon-paper-clip {
-    font-size: 20px;
-    width: 18px;
-    height: 18px;
-    margin-left: 0.5em;
-    float: right;
-}
-
-.vgrid-cell.mail {
-
-    .thread-size {
-        color: #999;
-        min-width: 1em;
-        font-weight: normal;
-        padding: 0 0.5em 0 0.5em;
-        margin-left: 10px;
-        display: inline-block;
-        float: right;
-        cursor: pointer;
-        overflow: visible;
-
-        background-color: #e5e5e5;
-        text-align: center;
-        border-radius: 5px;
-    }
-
-    &.selected .thread-size {
-        background-color: darken(#ddd, 10%);
-    }
-
-    .vgrid-scrollpane-container:focus &.selected .thread-size {
-        background-color: #08c;
-    }
-}
-
-.vgrid.editable .vgrid-cell.thread-summary,
-.vgrid-cell.thread-summary {
-    padding: 0;
-}
-
-.vgrid-cell .thread-summary-item {
-    padding: 5px 13px 5px 13px;
-    border-top: 1px solid #fff;
+.thread-view-control {
     background-color: #eee;
-    cursor: pointer;
 }
 
-.vgrid-cell .thread-summary-item.unread,
-.vgrid-cell .thread-summary-item.unread .date {
-    font-weight: bold;
+.subject() {
+    font-size: 20px;
+    line-height: 24px;
+    padding: 20px;
+    margin: 0;
+    .fontWeight(300);
 }
 
-.vgrid-cell {
+.thread-view-list {
 
-    .thread-summary-item.selected,
-    .thread-summary-item.selected:hover {
-        background-color: #ddd;
-    }
+    padding: 20px;
+    background-color: #eee;
+    &.scrollable { overflow: auto; }
 
-    .vgrid .vgrid-scrollpane-container:focus & {
-        .thread-summary-item.selected,
-        .thread-summary-item.selected:hover {
-            background-color: @selectedBackground;
+    & > h1 {
+
+        .subject();
+        background-color: white;
+
+        .toggle-all {
+            color: #ccc;
+            float: right;
+            outline: 0;
+            &:hover { color: #aaa; }
+            &:focus { color: @link-color; }
         }
 
-        .thread-summary-item.selected * {
-            color: white !important;
+        .summary {
+
+            color: #888;
+            font-size: 13px;
+            line-height: 16px;
+
+            html.high-contrast & {
+                color: @hc-gray;
+            }
+
+        }
+
+    }
+
+}
+
+@media(max-width: 700px) {
+    .thread-view-list {
+        padding: 0;
+    }
+}
+
+.thread-view.list-view .list-item { cursor: default; }
+.thread-view.list-view.multiple-messages .list-item { cursor: pointer; }
+
+.inplace-reply {
+    margin: 20px 20px 0 20px;
+}
+
+textarea.inplace-editor {
+    width: 100%;
+    height: 100px;
+    padding: 19px;
+    margin: 0;
+    resize: vertical;
+    border-radius: 0;
+    border: 1px solid white;
+    .box-shadow(none);
+    &:focus {
+        border-color: #66AFE9;
+        outline: 0;
+        .box-shadow(~"inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6)");
+    }
+}
+
+.thread-view-control {
+
+    @height: 45px;
+
+    .back-navigation {
+
+        display: none;
+        top: 0px;
+        border-bottom: 1px solid #ccc;
+
+        a { outline: 0; }
+        a:hover { text-decoration: none; }
+        a.disabled { color: #aaa; cursor: default; }
+
+        .button {
+            display: table-cell;
+            width: 40%;
+            padding-left: 20px;
+            i { margin-right: 14px; }
+        }
+
+        .position {
+            color: #888;
+            display: table-cell;
+            text-align: center;
+            width: 20%;
+        }
+
+        .prev-next {
+            display: table-cell;
+            text-align: right;
+            width: 40%;
+            padding-right: 20px;
+            i { margin-left: 14px; }
+        }
+
+         .fa { // was [class^="icon-"]
+            color: inherit;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 18px;
+        }
+    }
+
+    .detail-view {
+        top: 0;
+        outline: 0;
+        overflow: auto;
+        z-index: 1;
+    }
+
+    &.back-navigation-visible {
+        .back-navigation { display: table; }
+        .detail-view, .thread-view-list { top: @height; }
+    }
+
+    &.thread-view-navigation-visible {
+        .thread-view-navigation { display: table; }
+        .detail-view { top: @height; }
+    }
+}
+
+.thread-view.list-view {
+
+    list-style-type: none;
+    padding: 0;
+    overflow: visible;
+    height: auto;
+
+    .list-item {
+        background-color: white;
+        clear: both;
+        padding: 0;
+        margin-bottom: 7px;
+        border-bottom: 1px solid transparent;
+    }
+
+    .list-item:last-child {
+        margin-bottom: 0;
+        border-bottom-color: transparent;
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px)  {
+        .list-item:last-child {
+            .detail-view-header {
+                border-bottom: 0;
+            }
+            margin-bottom: @toolbar-height;
+        }
+    }
+
+    .list-item:focus {
+        border-bottom: 1px solid @link-color;
+    }
+}
+
+.mail-detail {
+
+    .contact-picture {
+        display: inline-block;
+        html.high-contrast & {
+            display: none;
+        }
+    }
+
+    .from {
+        .ellipsis();
+        span.person {
+            color: inherit;
+            .fontWeight(500);
         }
     }
 }
 
-.vgrid-cell .thread-summary-item:hover {
-    background-color: #ccc;
-}
-
-.vgrid-cell .thread-summary-pos {
-    display: inline-block;
-    min-width: 1.5em;
-    color: #777;
-    text-align: right;
-    padding-right: 0.75em;
-}
-
-
-.vgrid-cell .thread-summary-from { }
-.vgrid-cell .thread-summary-subject { font-weight: 300; color: #555; }
-
-.vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vgrid-cell .thread-summary-right {
-    float: right;
-    .flag { display: inline-block; margin-right: 10px; }
-    .flag.icon-bookmark-empty { color: #aaa }
-}
-
-
-/* vgrid touch helper */
 .io-ox-mail-window {
+    @media(max-width: 700px) {
+        .vsplit {
+            width: 100%;
+            .rightside {
+                width: auto;
+                top: 0;
+                right: 0;
+            }
+        }
+    }
+
     .vgrid-cell {
         .touch-helper {
             /*
@@ -263,38 +796,28 @@
             top: 10%;
         }
     }
+    button.btn.btn-default.search-options {
+        border-radius:0;
+        border-left:0;
+    }
 }
 
 /* Detail view */
 
 .rightside.mail-detail-pane {
-}
 
-/* page-based layout */
+    background-color: #eee;
 
-.mail-detail-pane .scrollable-pane {
-    margin-bottom: 20px;
-    height: 110%; /* allows hiding "Entire thread" */
-}
+    .thread-view-control { display: none; }
 
-.mail-detail-pane .mail-detail.by-myself {
-    background-color: #f5f5f5;
-}
-
-.mail-detail-pane .thread-inline-actions {
-    padding: 20px 0 0 20px;
-
-    .dropdown {
-        z-index: 12007 !important;/* override so dropdown is above inline links. See: Bug 25687*/
+    &.selection-one {
+        .multi-selection-message { display: none; }
+        .thread-view-control { display: block; }
     }
-}
 
-.rightside-inline-actions {
-    float: right;
-    display: inline-block;
-    margin-right: 17px;
-    a {
-        .ellipsis();
+    .scrollable-pane {
+        margin-bottom: 20px;
+        height: 110%; /* allows hiding "Entire thread" */
     }
 }
 
@@ -305,35 +828,34 @@
     .mail-detail-decorator {
 
         position: relative;
-        padding: 20px 20px 0 20px;
+        padding: 20px;
         display: table;
         width: 100%;
-        .box-sizing(border-box);
+        min-height: 100%; // to make sure the quick-reply field can scroll out of viewport
 
         .mail-detail {
             background-color: white;
-            padding: 20px;
-            .box-shadow(0 8px 20px -8px #333);
         }
 
         .mail-detail:focus {
             outline: 0;
-            .box-shadow(0 1px 3px 1px #ccc);
         }
     }
 }
 
 .mail-detail {
 
+    position: relative;
     overflow-y: visible;
     clear: both;
-
-    display: table;
     width: 100%;
-    .box-sizing(border-box);
 
-    .io-ox-inline-links:first-child {
-        margin: 0 0 26px 0;
+    @picture-width: 40px;
+    @header-padding: 19px;
+    @picture-padding: @picture-width + @header-padding;
+
+    &.list-item:focus {
+        outline: 0;
     }
 
     &.io-ox-busy {
@@ -375,33 +897,26 @@
         a.all-link {
             text-decoration: none;
         }
-        i.icon-group {
+        i.fa-group {
             color: #aaa;
         }
     }
 
-    .alert {
-        margin: 1em 0;
-    }
-
     .date {
-        color: #888;
         display: block;
         float: right;
-    }
-
-    .subject.empty {
-        font-style: italic;
-        color: #aaa;
     }
 
     .from.list {
         display: block;
     }
 
-    .subject, .thread-size {
-        font-size: 16pt;
-        margin: 13px 0;
+    .subject {
+        .subject();
+        &.empty {
+            font-style: italic;
+            color: #aaa;
+        }
     }
 
     .from .person-link.person-sender {
@@ -409,7 +924,7 @@
     }
 
     .from .person-link.person-from {
-        font-weight: 500;
+        .fontWeight(500);
         color: black;
     }
 
@@ -418,10 +933,17 @@
     }
 
     &.unread .subject {
-        color: @linkColor;
+        position: relative;
+        padding-left: 28px;
         .icon-unread {
+            color: @link-color;
             display: inline-block;
-            margin-right: 0.5em;
+            position: absolute;
+            left: 0px;
+            top: 2px;
+            html.high-contrast & {
+                color: @hc-link-color;
+            }
         }
     }
 
@@ -432,18 +954,23 @@
         margin-left: 0.5em;
     }
 
-    .account-name {
+    .external-images, .disposition-notification {
+        display: table;
+        width: 100%;
+        .btn { float: left; margin-right: 20px; }
+        .comment { display: table; }
+        .close { position: relative; right: -10px; }
     }
 
     .flag-dropdown {
 
-        height: 24px;
-        margin: 14px 0 0 1em;
+        font-size: 22px;
+        margin: 7px 0 0 14px;
         cursor: pointer;
         float: right;
 
         ul {
-            font: 14px/20 @normalFontFamily;
+            font: 14px/20 @normal-font-family;
             right: -20px;
             left: auto;
             top: 120%;
@@ -474,11 +1001,13 @@
     }
 
     .priority {
-        font-weight: bold;
-        vertical-align: top;
-        white-space: nowrap;
+        float: right;
+        font-size: @icon-size;
+        .fontWeight(bold);
+        display: inline-block;
+        margin-left: 7px;
         .high {
-            color: @mailPriority;
+            color: @mail-priority;
         }
         .low {
             i:first-child { color: #888; }
@@ -487,29 +1016,37 @@
     }
 
     .contact-picture {
-        float: right;
-        margin: 0 0 5px 26px;
-        .picture();
+        position: absolute;
+        left: 20px;
+        .picture(@picture-width, @picture-width);
     }
+
+    &.no-padding .contact-picture { left: 0; }
 
     .io-ox-label {
         color: #888;
-        font-weight: 300;
+        .fontWeight(300);
         white-space: nowrap;
+
+        html.high-contrast & {
+            color: @hc-gray;
+        }
     }
 
-    .to-cc .person-link {
-        color: #333;
+    .recipients {
+        .person-link { color: #333; }
     }
 
-    .attachment-list {
-        b { opacity: 0.30; }
-        .dropdown {
-            margin-right: 1em;
+    &:not(.expanded) .recipients {
+
+        height: 20px;
+        opacity: 0.3;
+        .ellipsis();
+
+        html.high-contrast & {
+            opacity: 1;
         }
-        .icon-paper-clip {
-            color: @linkColor;
-        }
+
     }
 
     .instant-preview {
@@ -526,10 +1063,8 @@
     blockquote {
         font-size: 13px;
         border-left: 1px solid #08c;
-        padding-top: 0.5em;
-        padding-bottom: 0.5em;
-        margin-top: 1em;
-        margin-bottom: 1em;
+        padding: 7px 0 7px 20px;
+        margin: 10px 0;
     }
 
     @colorQuotedWidth: 1px;
@@ -555,49 +1090,91 @@
     }
 
     .collapsed-blockquote {
-        /* padding: 0 1em 0 39px !important; */
-        max-width: 450px;
-        overflow: hidden !important;
-        cursor: pointer;
+        display: none;
     }
 
-    .toggle-blockquote {
-        display: block;
-        margin: 0em 0 1em 0;
-        font-size: 12px;
-        position: relative;
-        left: 16px;
+    .blockquote-toggle {
+        color: #888;
+        font-size: 13px;
+        padding-left: 44px;
+        margin: 14px 0;
+        min-height: 18px;
+        i {
+            color: #888;
+            background-color: #eee;
+            padding: 1px 10px;
+            display: inline-block;
+            font-size: 14px;
+            line-height: 16px;
+            cursor: pointer;
+            outline: none;
+            position: absolute;
+            left: 0;
+            &:hover, &:focus {
+                color: #fff;
+                background-color: @link-color;
+                text-decoration: none;
+            }
+        }
     }
 
     /* label dropdown */
     .active-label {
-        font-weight: bold;
+        .fontWeight(bold);
     }
 
-    article.io-ox-busy {
-        min-height: 100px;
+    .detail-view-header {
+        .fontWeight(300);
+        padding: 14px @header-padding;
+        padding-left: @picture-padding + @unread-toggle-width;
+    }
+
+    &.no-padding .detail-view-header {
+        padding-left: @picture-padding + @unread-toggle-width - 20;
+        padding-right: 0;
+    }
+
+    .notifications {
+        cursor: default;
+    }
+
+    .alert, .well {
+        margin: 0;
+        border: 0;
+        padding: 14px 40px 14px 20px;
+        .border-radius(0px);
+        .box-shadow(none);
+    }
+
+    .alert + .alert {
+        margin-top: 1px;
+    }
+
+    .well + .well {
+        border-top: 1px solid #ddd;
+    }
+
+    article {
+        padding: 19px;
+        border: 1px solid white; // to work with outline
+        display: table;
+        background-color: white;
     }
 
     article.text-html.horizontal-scrolling {
         max-width: 100%;
         overflow-x: auto;
-        box-sizing: border-box;
         margin-right: -10000px; /* funky trick */
-    }
-
-    header {
-        font-weight: 300;
     }
 
     .content {
 
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-weight: 400;
+        font-family: @normal-font-family;
+        .fontWeight(400);
         font-size: 14px;
         line-height: 20px;
         /* max-width: 1000px; */ /* Max-width does not work here, see Bug #24505 */
         width: 100%;
-        margin-top: 26px;
         cursor: auto;
         display: block; /* for large images (see bug #22756 and #25033) */
         position: relative;
@@ -606,6 +1183,7 @@
         * {
             /* fixes https://bugs.open-xchange.com/show_bug.cgi?id=25737 */
             line-height: 1.4em;
+            box-sizing: content-box;
         }
 
         /* TODO: remove / temp. fix for bootstrap */
@@ -615,11 +1193,11 @@
         }
 
         /* TODO: remove / temp. fix for sanitized HTML */
-        padding: 0 !important;
+        padding: 0;
         & > div > [class$="-content"] { padding: 0; }
 
         &.plain-text {
-            font-family: @normalFontFamily;
+            font-family: @normal-font-family;
             white-space: pre-wrap;
 
             blockquote {
@@ -631,21 +1209,36 @@
             font-family: monospace;
         }
 
-        // fix long links
+        @base: 14px;
+        h1 { font-size: 2.00 * @base; }
+        h2 { font-size: 1.50 * @base; }
+        h3 { font-size: 1.17 * @base; }
+        h4 { font-size: 1.00 * @base; }
+        h5 { font-size: 0.83 * @base; }
+        h6 { font-size: 0.67 * @base; }
+
         a {
-            word-break: break-word;
+            word-break: break-word; // fix long links
+            color: #007dbc; // not @linkColor!
+            text-decoration: underline;
+            &:hover { color: #08c; }
         }
 
         // reset bootstrap stuff
 
         img {
+
+            // TODO: Remove width:auto for correct styling of mail-chimp mails
+            // Leaving this for now, needs testing!
             width: auto;
+
             max-width: 10000px;
             vertical-align: middle;
         }
 
         p {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: @normal-font-family;
+            margin: 0 0 14px 0;
         }
 
         small {
@@ -661,37 +1254,45 @@
             border: 0 none; line-height: normal; border-collapse: initial;
         }
 
-        li { line-height: 16px; margin-bottom: 0.7em; }
+        ul {
+            padding: 0;
+            margin: 10px 0 10px 25px;
+        }
+
+        ul { list-style-type: disc; }
+        ul ul { list-style-type: circle; }
+        ul ul ul { list-style-type: square; }
+
+        li {
+            line-height: 1.33333em;
+            margin-bottom: 0.5em;
+        }
 
         pre {
             word-break: keep-all; // for firefox
             word-break: initial;
+            white-space: pre-wrap;
             background-color: transparent;
             border: 0 none;
             .border-radius(0);
         }
 
+        th {
+            padding: @table-cell-padding;
+            text-align: center;
+        }
+
+        ul, ol { padding-left: 25px; }
+
         /* Fix for Bug 24995 */
         .calendar-detail .label {
             display: block;
             text-shadow: none;
-            font-weight: normal;
+            .fontWeight(normal);
             background-color: transparent;
         }
 
         img.emoji-softbank { margin: 0 2px; }
-    }
-
-    .mail-warning {
-        height: auto;
-    }
-
-    .mail-warning .bar {
-        color: black;
-        width: 100%;
-        padding: 6px 13px 6px 13px;
-        font-weight: bold;
-        text-shadow: 0 0 3px white;
     }
 }
 
@@ -699,46 +1300,55 @@
 .flag_1  { color: @red; } /* red */
 .flag_7  { color: @orange; } /* orange */
 .flag_10 { color: @yellow; } /* yellow */
-.flag_6  { color: @greenLight; } /* light green */
+.flag_6  { color: @green-light; } /* light green */
 .flag_3  { color: @green; } /* green */
-.flag_9  { color: @blueLight; } /* light blue */
+.flag_9  { color: @blue-light; } /* light blue */
 .flag_2  { color: @blue; } /* blue */
 .flag_5  { color: @purple; } /* purple (former brown) */
 .flag_8  { color: @pink; } /* pink */
-.flag_4  { color: @grayLight; } /* dark gray */
+.flag_4  { color: @gray-light; } /* dark gray */
 
 .flag_bg_1  { background-color: @red; } /* red */
 .flag_bg_7  { background-color: @orange; } /* orange */
 .flag_bg_10 { background-color: @yellow; } /* yellow */
-.flag_bg_6  { background-color: @greenLight; } /* light green */
+.flag_bg_6  { background-color: @green-light; } /* light green */
 .flag_bg_3  { background-color: @green; } /* green */
-.flag_bg_9  { background-color: @blueLight; } /* light blue */
+.flag_bg_9  { background-color: @blue-light; } /* light blue */
 .flag_bg_2  { background-color: @blue; } /* blue */
 .flag_bg_5  { background-color: @purple; } /* purple (former brown) */
 .flag_bg_8  { background-color: @pink; } /* pink */
-.flag_bg_4  { background-color: @grayLight; } /* dark gray */
+.flag_bg_4  { background-color: @gray-light; } /* dark gray */
 
 /* multi selection */
 
 .multi-selection-flag {
+
     white-space: nowrap;
+
     i {
         font-size: 28px;
         display: inline-block;
         margin-right: 14px;
     }
-    .icon-bookmark-empty {
+
+    .fa-bookmark-o {
         color: #aaa;
     }
+
     a {
+
         outline: 0;
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        &:focus i {
+            text-shadow: 0 0 8px #888;
+        }
+
     }
-    a:hover {
-        text-decoration: none;
-    }
-    a:focus i {
-        text-shadow: 0 0 8px #888;
-    }
+
 }
 
 /* attachment preview */
@@ -748,144 +1358,217 @@ h4.mail-attachment-preview {
     color: #333;
 }
 
-.io-ox-mail-window .border-right { border-color: #eee; }
-
 .touch .mail-detail .content.plain-text {
-    font-size: @touchFontSize;
+    font-size: @font-size-touch;
 }
-
-.rightside-navbar {
-    display: none;
-}
-
 
 @media (max-width: 700px) {
 
     .mail-detail-pane {
+
         .mail-detail-decorator {
+
             background-color: #fff;
             padding: 0;
             border-bottom: 2px solid #555;
+
             .mail-detail  {
+
                 padding: 26px 13px 26px 13px;
                 .box-shadow(none);
+
             }
+
         }
+
         .mail-detail-decorator:last-child {
             border-bottom: 0 none;
         }
+
         .scrollable-pane {
             background-color: #fff;
         }
+
     }
 
-    .rightside-navbar {
-        display: block;
+    .rightside.mail-detail-pane {
+        background-color: #fff;
     }
-
-    .rightside.mail-detail-pane { background-color: #fff; }
 
     .mail-detail-pane .thread-inline-actions {
         background-color: white;
         padding: 20px 0 0 13px;
     }
+
     .scrollable-pane::after {
         content: ''
     }
-    .mail-detail .contact-picture { display: none; }
-    .mail-detail .subject { padding-right: 0; }
+
+    .mail-detail {
+        .subject {
+            padding-right: 0;
+        }
+    }
 }
 
 .mail-source-view {
     width: 100%;
     visibility: hidden;
-    .box-sizing(border-box);
 }
 
-/* z-indexes */
-
-.vgrid-cell.mail .thread-size {
-    z-index: 2;
-}
-
-
-.mail-detail {
-
-    .io-ox-inline-links:first-child {
-        z-index: 12006;
-    }
-
-    div.dropdown:not(.flag-dropdown) {//flag dropdown has its own styles
-        position: static;
-        &.open {
-            position: static;
-        }
-        .dropdown-menu {
-            top:auto;
-            left:auto;
-            right:auto;
-        }
-    }
-
-    div.dropdown ul.dropdown-menu {
-        z-index:auto; // reset bootstraps z-index
-    }
-    div.dropdown,
-    ul.dropdown {
-        z-index: 11001;
-    }
-    div.to-cc {
-        z-index: 11003;
-    }
-    div.attachment-list {
-        position: relative;
-        z-index: 11002;
-        ul.dropdown-menu {
-            position: absolute;
-            z-index: 11003;
-        }
-    }
-    div.flag-dropdown {
-        position: relative;
-        z-index: 12004; // to be above attachment dropdowns
-        ul.dropdown-menu {
-            position: absolute;
-            z-index: 12005;
-        }
+// disable all fa icons in halo view for mail (recent conversation)
+// seems to be buggy
+.io-ox-halo .vgrid-cell.mail {
+    i {
+        display: none;
     }
 }
+
 /* smartphone */
 @media (max-width: 480px), (max-device-width: 480px)  {
-    .vgrid-cell.mail .from span.person {
-        font-weight: 600;
+
+    .thread-view-list {
+
+        padding: 0;
+
+        & > h1 {
+            font-size: 16px;
+        }
+
     }
+
+    .mail-detail {
+
+        list-style-type: none;
+        border-bottom: 0;
+
+        .contact-picture {
+            display: none;
+        }
+
+        .subject {
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+
+        .detail-view-header {
+            padding-left: 20px;
+            .sp {
+                margin-right: 4px;
+            }
+        }
+
+        .unread-toggle {
+            left: 0px;
+        }
+
+        section.body {
+            margin-bottom: @toolbar-height;
+            padding: 10px;
+        }
+
+        &:not(.expanded) .recipients {
+            opacity: 1;
+        }
+
+        .subject {
+            font-size: 16px;
+            padding: 10px 0 0 0;
+        }
+
+        header {
+
+            border-bottom: 1px solid #ccc;
+
+            &.mobile-detail-view-mail {
+
+                .date {
+                    margin-left: 0;
+                    display: inline-block;
+                    float: none;
+                }
+
+                .flag-picker {
+                    display: inline-block;
+                    float: none;
+                    position: absolute;
+                    right: 10px;
+                }
+
+            }
+
+        }
+
+    }
+
+    .thread-view.list-view {
+
+        .list-item {
+            margin-bottom: 0px;
+        }
+
+    }
+
     .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail {
         padding: 5px;
     }
+
     .mail-detail-pane .mail-detail-decorator .mail-detail {
         padding: 13px;
     }
+
     .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail,
     .mail-detail-pane .mail-detail-decorator .mail-detail {
-        a, span { font-size: 13px; }
+
+        a, span {
+            font-size: 13px;
+        }
+
         nav.io-ox-inline-links {
             float: right;
             margin: 0;
         }
+
         .flag {
+
             width: 16px;
-            i { font-size: 15px; }
+
+            i {
+                font-size: 15px;
+            }
+
         }
-        .mail-detail-clear-left { clear: both; }
+
+        .mail-detail-clear-left {
+            clear: both;
+        }
 
         .from.list {
+
             font-size: 13px;
-            a { word-break: break-all; font-weight: bold;}
-            i { display: none; }
+            a {
+                word-break: break-all;
+                .fontWeight(bold);
+            }
+
+            i {
+                display: none;
+            }
+
         }
-        .to-cc.list, .attachment-list.list { margin-bottom: 5px; }
-        .attachment-list.list { margin-top: 5px; }
-        .person-link { white-space: normal; word-break: break-all;}
+
+        .to-cc.list, .attachment-list.list {
+            margin-bottom: 5px;
+        }
+
+        .attachment-list.list {
+            margin-top: 5px;
+        }
+
+        .person-link {
+            white-space: normal; word-break: break-all;
+        }
+
         .contact-picture {
             margin: 0;
             margin-left: 13px;
@@ -894,35 +1577,58 @@ h4.mail-attachment-preview {
             width: 24px;
             height: 24px;
         }
+
         .subject {
             font-size: 13px;
-            font-weight: bold;
+            .fontWeight(bold);
             margin: 5px 0 0 0;
         }
+
         .date {
             font-size: 13px;
             float: none;
             padding-bottom: 4px;
             border-bottom: 1px solid #f1f1f1;
         }
+
         a.attachment-link {
             display: block;
             word-break: break-all;
         }
-        div.dropdown.flag-dropdown.clear-title.flag { margin: 0; }
 
-        .recipient-actions { display: block; margin-bottom: 5px; }
+        div.dropdown.flag-dropdown.flag {
+            margin: 0;
+        }
 
-        .content { margin-top: 13px; }
+        .recipient-actions {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .content {
+            margin-top: 13px;
+        }
 
         .details-collapsed {
+
             .to-cc.list {
-                span, a { display: none; }
-                span:first-child, a:nth-child(2),span:nth-child(2) { display: inline; }
+
+                span, a {
+                    display: none;
+                }
+
+                span:first-child, a:nth-child(2),span:nth-child(2) {
+                    display: inline;
+                }
+
             }
+
             .recipient-actions {
                 display: none;
             }
+
         }
+
     }
+
 }

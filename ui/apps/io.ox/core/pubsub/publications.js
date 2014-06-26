@@ -14,7 +14,6 @@
 define('io.ox/core/pubsub/publications',
     ['io.ox/core/pubsub/model',
      'io.ox/core/extensions',
-     'io.ox/backbone/forms',
      'io.ox/core/api/pubsub',
      'io.ox/core/api/templating',
      'io.ox/core/api/folder',
@@ -22,8 +21,8 @@ define('io.ox/core/pubsub/publications',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/core',
      'gettext!io.ox/core/pubsub',
-     'less!io.ox/core/pubsub/style.less'
-    ], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
+     'less!io.ox/core/pubsub/style'
+    ], function (pubsub, ext, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';
 
@@ -73,7 +72,6 @@ define('io.ox/core/pubsub/publications',
     },
     PublicationView = Backbone.View.extend({
         tagName: 'div',
-        _modelBinder: undefined,
         editMode: undefined,
         infostoreItem: false,
         initialize: function () {
@@ -86,15 +84,12 @@ define('io.ox/core/pubsub/publications',
             if (this.model.attributes.entityModule === 'infostore/object') {
                 this.infostoreItem = true;
             }
-
-            this._modelBinder = new Backbone.ModelBinder();
         },
 
         finish: function (url) {
 
             url = _.escape(url);
-
-            var isFolder = !!this.model.attributes.entity.folder,
+            var isFolder = !!this.model.attributes.entity.folder && !this.model.attributes.entity.id,
                 message = isFolder ?
                     //#. %1$s is the publication link http://...
                     gt('The folder is available at %1$s') :
@@ -124,7 +119,7 @@ define('io.ox/core/pubsub/publications',
                 popup.getHeader().append($('<h4>').text(gt('Share this file')));
             }
             //Body
-            popup.getBody().addClass('form-horizontal publication-dialog max-height-250');
+            popup.getBody().addClass('publication-dialog max-height-250');
 
             var baton = ext.Baton({
                 view: self,
@@ -169,7 +164,7 @@ define('io.ox/core/pubsub/publications',
                     if (!self.model.valid) {
                         if (!error.model) { //backend Error
                             if (error.code === 'PUB-0006') {
-                                popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
+                                popup.getBody().find('.siteName-control').addClass('has-error').find('.help-block').text(gt('Name already taken'));
                             }
                         } else { //validation gone wrong
                             //must be namefield empty because other fields are correctly filled by default
@@ -229,20 +224,19 @@ define('io.ox/core/pubsub/publications',
             var node,
                 control;
 
-            this.append(control = $('<div>').addClass('control-group siteName-control').append(
+            this.append(control = $('<div>').addClass('form-group siteName-control').append(
                             $('<label>').addClass('siteName-label control-label').text(gt('Name')).attr('for', 'siteName-value'),
-                            $('<div>').addClass('controls').append(
-                                node = $('<input>').attr({type: 'text', id: 'siteName-value'}).addClass('siteName-value').on('change', function () {
+                                node = $('<input class="form-control siteName-value">').attr({type: 'text', id: 'siteName-value'}).on('change', function () {
                                     if (node.val() === '' || node.val() === undefined) {
-                                        control.addClass('error');
-                                        control.find('.help-inline').text(gt('Publications must have a name'));
+                                        control.addClass('has-error');
+                                        control.find('.help-block').text(gt('Publications must have a name'));
                                     } else {
-                                        control.removeClass('error');
-                                        control.find('.help-inline').text('');
+                                        control.removeClass('has-error');
+                                        control.find('.help-block').text('');
                                     }
                                     baton.target.siteName = node.val();
                                 }),
-                             $('<span>').addClass('help-inline'))));
+                                 $('<span>').addClass('help-block')));
             //prefill
             node.val(baton.target.siteName);
         }
@@ -268,10 +262,10 @@ define('io.ox/core/pubsub/publications',
             if (templates.length === 1) {
                 node = $('<div>').val(templates[0]);
             } else if (templates.length > 0) {
-                this.append($('<div>').addClass('control-group').append(
+                this.append($('<div>').addClass('form-group').append(
                     $('<label>').addClass('template-label control-label').attr('for', 'template-value').text(gt('Template')),
                     $('<div>').addClass('controls').append(
-                        node = $('<select>').attr('id', 'template-value').addClass('template-value input-xlarge').on('change', function () {
+                        node = $('<select class="template-value form-control">').attr('id', 'template-value').on('change', function () {
                             baton.target.template = node.val();
                         }))));
                 buildTemplates(node, templates);
@@ -300,7 +294,7 @@ define('io.ox/core/pubsub/publications',
             // end-users don't understand this, so this becomes optional
             if (settings.get('features/publicationCipherCode', false)) {
                 this.append(
-                    $('<div class="control-group">').append(
+                    $('<div class="form-group">').append(
                         $('<div class="controls checkboxes">').append(
                             $('<label class="checkbox">').text(gt('Add cipher code')).append(
                                 $('<input type="checkbox" class="cypher-checkbox">')
@@ -380,7 +374,7 @@ define('io.ox/core/pubsub/publications',
                 this.append(
                     $('<div>').addClass('control-group').append(
                         $('<div>').addClass('controls').append(
-                        $('<button type="button" class="email-btn btn">')
+                        $('<button type="button" class="email-btn btn btn-default">')
                             .text(gt('Share link by email'))
                             .on('click', function () {
                                 sendInvitation(baton).always(function () {

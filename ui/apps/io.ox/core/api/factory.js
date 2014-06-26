@@ -86,10 +86,10 @@ define('io.ox/core/api/factory',
 
         // create 3 caches for all, list, and get requests
         var caches = {
-            all: new cache.SimpleCache(o.id + '-all', true),
+            all: new cache.SimpleCache(o.id + '-all'),
             // no persistant cache for list, because burst-writes block read (stupid queue implementation)
             list: new cache.ObjectCache(o.id + '-list', false, o.keyGenerator),
-            get: new cache.ObjectCache(o.id + '-get', true, o.keyGenerator)
+            get: new cache.ObjectCache(o.id + '-get', false, o.keyGenerator)
         };
 
         // hash to track very first cache hit
@@ -133,7 +133,7 @@ define('io.ox/core/api/factory',
                         params: params,
                         processResponse: processResponse === undefined ? true : processResponse
                     })
-                    .pipe(function (data) {
+                    .then(function (data) {
                         // deferred
                         var ready = $.when();
                         // do we have the last_modified columns?
@@ -159,17 +159,17 @@ define('io.ox/core/api/factory',
                                     }
                                 })
                             )
-                            .pipe(function () { return data; });
+                            .then(function () { return data; });
                         } else {
                             return data;
                         }
                     })
-                    .pipe(function (data) {
+                    .then(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
                     })
-                    .pipe(function (data) {
+                    .then(function (data) {
                         // add to cache
-                        return $.when(cache.add(cid, data)).pipe(function () {
+                        return $.when(cache.add(cid, data)).then(function () {
                             return data;
                         });
                     });
@@ -186,7 +186,7 @@ define('io.ox/core/api/factory',
                 };
 
                 return (useCache ? cache.get(cid, getter, hit) : getter())
-                    .pipe(o.pipe.allPost)
+                    .then(o.pipe.allPost)
                     .done(o.done.all || $.noop);
             },
 
@@ -219,14 +219,14 @@ define('io.ox/core/api/factory',
                         params: params,
                         data: http.simplify(ids)
                     }))
-                    .pipe(function (data) {
+                    .then(function (data) {
                         return (o.pipe.list || _.identity)(data);
                     })
-                    .pipe(function (data) {
+                    .then(function (data) {
                         // add to cache
                         var method = options.allColumns ? 'add' : 'merge';
                         // merge with or add to 'get' cache
-                        return $.when(caches.list.add(data), caches.get[method](data)).pipe(function () {
+                        return $.when(caches.list.add(data), caches.get[method](data)).then(function () {
                             return data;
                         });
                     });
@@ -234,29 +234,30 @@ define('io.ox/core/api/factory',
                 // empty?
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]).done(o.done.list || $.noop);
-                } else if (ids.length === 1) {
+                /* see bug 32300 */
+                // } else if (ids.length === 1) {
 
-                    // if just one item, we use get request
-                    if (typeof ids[0] === 'number') {
-                        ids = [{id: ids[0]}];
-                    }
+                //     // if just one item, we use get request
+                //     if (typeof ids[0] === 'number') {
+                //         ids = [{id: ids[0]}];
+                //     }
 
-                    var getOptions = http.simplify(ids)[0];
+                //     var getOptions = http.simplify(ids)[0];
 
-                    //look if special handling is needed
-                    if (_.isFunction(o.simplify)) {
-                        getOptions = o.simplify({ original: ids[0], simplified: getOptions });
-                    }
+                //     //look if special handling is needed
+                //     if (_.isFunction(o.simplify)) {
+                //         getOptions = o.simplify({ original: ids[0], simplified: getOptions });
+                //     }
 
-                    // go!
-                    return this.get(getOptions, useCache)
-                        .pipe(function (data) { return [data]; })
-                        .pipe(o.pipe.listPost)
-                        .done(o.done.list || $.noop);
+                //     // go!
+                //     return this.get(getOptions, useCache)
+                //         .then(function (data) { return [data]; })
+                //         .then(o.pipe.listPost)
+                //         .done(o.done.list || $.noop);
                 } else {
                     // cache miss?
                     return (useCache ? caches.list.get(ids, getter) : getter())
-                        .pipe(o.pipe.listPost)
+                        .then(o.pipe.listPost)
                         .done(o.done.list || $.noop);
                 }
             },
@@ -279,10 +280,10 @@ define('io.ox/core/api/factory',
                         module: o.module,
                         params: fix(opt)
                     })
-                    .pipe(function (data) {
+                    .then(function (data) {
                         return (o.pipe.get || _.identity)(data, opt);
                     })
-                    .pipe(function (data) {
+                    .then(function (data) {
                         // use cache?
                         if (useCache) {
                             // add to cache
@@ -293,7 +294,7 @@ define('io.ox/core/api/factory',
                                         api.trigger('refresh.list');
                                     }
                                 })
-                            ).pipe(function () {
+                            ).then(function () {
                                 return data;
                             });
                         } else {
@@ -305,10 +306,9 @@ define('io.ox/core/api/factory',
                     });
                 };
                 return (useCache ? caches.get.get(opt, getter, o.pipe.getCache) : getter())
-                    .pipe(o.pipe.getPost)
+                    .then(o.pipe.getPost)
                     .done(o.done.get || $.noop);
             },
-
 
             /**
              * remove elements from list
@@ -350,11 +350,11 @@ define('io.ox/core/api/factory',
                     defs = _(folders).map(function (value, folder_id) {
                         // grep keys
                         var cache = api.caches.all;
-                        return cache.grepKeys(folder_id + DELIM).pipe(function (keys) {
+                        return cache.grepKeys(folder_id + DELIM).then(function (keys) {
                             // loop
                             return $.when.apply($, _(keys).map(function (key) {
                                 // now get cache entry
-                                return cache.get(key).pipe(function (data) {
+                                return cache.get(key).then(function (data) {
                                     if (data) {
                                         if ('data' in data) {
                                             data.data = api.localRemove(data.data, hash, getKey);
@@ -469,7 +469,7 @@ define('io.ox/core/api/factory',
              * @return {deferred}      (resolves returns boolean)
              */
             needsRefresh: function (folder, sort, order) {
-                return caches.all.keys(folder + DELIM + sort + '.' + order).pipe(function (data) {
+                return caches.all.keys(folder + DELIM + sort + '.' + order).then(function (data) {
                     return data !== null;
                 });
             },
@@ -541,6 +541,9 @@ define('io.ox/core/api/factory',
                     module: o.module,
                     params: opt,
                     data: getData(query, options)
+                })
+                .then(function (data) {
+                    return (o.pipe.search || _.identity)(data);
                 });
             };
         }
@@ -601,6 +604,20 @@ define('io.ox/core/api/factory',
 
         ox.on('refresh^', function () {
             api.refresh(); // write it this way so that API's can overwrite refresh
+        });
+
+        // basic model with custom cid
+        api.Model = Backbone.Model.extend({
+            constructor: function () {
+                Backbone.Model.apply(this, arguments);
+                this.cid = _.cid(this.attributes);
+            }
+        });
+
+        // collection using custom models
+        api.Collection = Backbone.Collection.extend({
+            comparator: 'index',
+            model: api.Model
         });
 
         return api;

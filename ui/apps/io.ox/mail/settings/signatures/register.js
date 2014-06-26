@@ -17,7 +17,7 @@ define('io.ox/mail/settings/signatures/register',
      'settings!io.ox/mail',
      'io.ox/core/tk/dialogs',
      'io.ox/core/api/snippets',
-     'less!io.ox/mail/settings/signatures/style.less'
+     'less!io.ox/mail/settings/signatures/style'
     ], function (ext, gt, settings, dialogs, snippets) {
 
     'use strict';
@@ -26,11 +26,10 @@ define('io.ox/mail/settings/signatures/register',
         id: 'name',
         index: 100,
         draw: function (baton) {
-            var inputId = _.uniqueId('signature-name_');
             this.append(
-                $('<div class="row-fluid">').append(
-                    $('<label>').attr('for', inputId).text(gt('Signature name')),
-                    baton.$.name = $('<input type="text" class="span12" tabindex="1">').attr('id', inputId)
+                $('<div class="form-group">').append(
+                    $('<label for="signature-name">').text(gt('Signature name')),
+                    baton.$.name = $('<input type="text" class="form-control">').attr({'id': 'signature-name', 'tabindex': 1})
                 )
             );
         }
@@ -50,11 +49,10 @@ define('io.ox/mail/settings/signatures/register',
         id: 'textarea',
         index: 300,
         draw: function (baton) {
-            var inputId = _.uniqueId('signature-textarea_');
             this.append(
-                $('<div class="row-fluid">').append(
-                    $('<label>').attr('for', inputId).text(gt('Signature text')),
-                    baton.$.signature = $('<textarea class="span12" rows="10" tabindex="1">').attr('id', inputId)
+                $('<div class="form-group">').append(
+                    $('<label for="signature-text">').text(gt('Signature text')),
+                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">').attr({'tabindex': 1})
                 )
             );
         }
@@ -64,11 +62,11 @@ define('io.ox/mail/settings/signatures/register',
         id: 'position',
         index: 400,
         draw: function (baton) {
-            var inputId = _.uniqueId('signature-position_');
             this.append(
-                $('<div class="row-fluid">').append(
-                    $('<label>').attr('for', inputId).text(gt('Signature position')),
-                    baton.$.insertion = $('<select tabindex="1">').attr('id', inputId)
+                $('<div class="form-group">').append(
+                    $('<label for="signature-position">').text(gt('Signature position')),
+                    baton.$.insertion = $('<select id="signature-position" class="form-control">')
+                        .attr({'tabindex': 1})
                         .append(
                             $('<option value="above">').text(gt('Above quoted text')),
                             $('<option value="below">').text(gt('Below quoted text'))
@@ -89,7 +87,7 @@ define('io.ox/mail/settings/signatures/register',
         }
 
         function validateField(field, target) {
-            if (field.val() === '') {
+            if ($.trim(field.val()) === '') {//trim here because backend does not allow names containing only spaces
                 field.addClass('error');
                 target.text(gt('Please enter a valid name'));
             } else {
@@ -131,7 +129,6 @@ define('io.ox/mail/settings/signatures/register',
                         // set very first signature as default if no other signatures exist
                         if (sigs.length === 1) {
                             settings.set('defaultSignature', sigs[0].id).save();
-                            snippets.trigger('refresh.all');
                         }
                         popup.idle();
                         popup.close();
@@ -175,7 +172,6 @@ define('io.ox/mail/settings/signatures/register',
             $pane.addClass('io-ox-signature-import');
             var $container;
             var $entirePopup = $pane.closest('.io-ox-sidepopup');
-
 
             function busy() {
                 dialogs.busy($entirePopup);
@@ -261,9 +257,9 @@ define('io.ox/mail/settings/signatures/register',
     ext.point('io.ox/mail/settings/detail').extend({
         id: 'signatures',
         index: 300,
-        draw: function () {
-            var $node = this;
-            var $list, signatures;
+        draw: function (baton) {
+            var $node, $list, signatures;
+            this.append($node = $('<fieldset>'));
             function fnDrawAll() {
                 snippets.getAll('signature').done(function (sigs) {
                     signatures = {};
@@ -272,17 +268,17 @@ define('io.ox/mail/settings/signatures/register',
                         signatures[signature.id] = signature;
 
                         var isDefault = settings.get('defaultSignature') === signature.id,
-                            $item = $('<li>')
+                            $item = $('<li class="widget-settings-view">')
                                 .attr('data-id', signature.id)
                                 .append(
                                     $('<div class="pull-right">').append(
                                         $('<a class="action" tabindex="1" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))),
                                         $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')),
-                                        $('<a class="close">').attr({
+                                        $('<a class="remove-widget">').attr({
                                             'data-action': 'delete',
                                             title: gt('Delete'),
                                             tabindex: 1
-                                        }).append($('<i class="icon-trash">'))
+                                        }).append($('<i class="fa fa-trash-o">'))
                                     ),
                                     $('<span class="list-title">').text(gt.noI18n(signature.displayname))
                                 );
@@ -310,7 +306,7 @@ define('io.ox/mail/settings/signatures/register',
                             .append(radioCustom = $('<input type="radio" name="mobileSignature">')
                                 .prop('checked', type === 'custom')
                                 .on('change', radioChange))
-                            .append(signatureText = $('<textarea class="span12">')
+                            .append(signatureText = $('<textarea class="form-control col-xs-12" rows="5">')
                                 .val(settings.get('mobileSignature'))
                                 .on('change', textChange)));
                 } else {
@@ -323,16 +319,16 @@ define('io.ox/mail/settings/signatures/register',
 
             function radioChange() {
                 var type = radioCustom.prop('checked') ? 'custom' : 'none';
-                settings.set('mobileSignatureType', type).save();
+                baton.model.set('mobileSignatureType', type);
             }
 
             function textChange() {
-                settings.set('mobileSignature', signatureText.val()).save();
+                baton.model.set('mobileSignature', signatureText.val());
             }
 
             function addSignatureList($node) {
                 // List
-                $list = $('<ul class="settings-list">')
+                $list = $('<ul class="list-unstyled list-group settings-list">')
                 .on('click keydown', 'a[data-action=edit]', function (e) {
                     if ((e.type === 'click') || (e.which === 13)) {
                         var id = $(this).closest('li').attr('data-id');
@@ -366,16 +362,25 @@ define('io.ox/mail/settings/signatures/register',
                 var section;
 
                 $node.append(
-                    section = $('<div class="sectioncontent">').append(
-                        $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
+                    section = $('<div class="sectioncontent btn-toolbar">').append(
+                        $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
                     )
+                );
+
+                section.append(
+                    $('<button type="button" class="btn btn-primary" tabindex="1">')
+                        .text(gt('Unset default signature'))
+                        .on('click', function () {
+                            settings.set('defaultSignature', '');
+                            fnDrawAll();
+                        })
                 );
 
                 require(['io.ox/core/config'], function (config) {
                     if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
                         section.append(
-                            $('<br>'),
-                            $('<a href="#">').text(gt('Import signatures')).on('click', function (e) {
+
+                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
                                 fnImportSignatures(e, config.get('gui.mail.signatures'));
                                 return false;
                             })

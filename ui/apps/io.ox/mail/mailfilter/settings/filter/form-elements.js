@@ -16,22 +16,42 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
     'use strict';
 
     return {
-        drawInputfieldTest: function (activeValue) {
-            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'}).val(activeValue);
+        drawInputfieldTest: function (labeltext, activeValue) {
+            var inputid = _.uniqueId('change-text-test-first'),
+                inputField = $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'});
+
+                if (activeValue.trim() === '') {
+                    inputField.addClass('warning');
+                }
+                inputField.on('keyup', function () {
+                    if (inputField.val().trim() !== '') {
+                        inputField.removeClass('warning');
+                    } else {
+                        inputField.addClass('warning');
+                    }
+                });
+
+            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), inputField.val(activeValue)];
         },
 
         drawInputfieldTestSecond: function (activeValue, label) {
-            return $('<label>').text(label = label ? label : '').append(
-                $('<input>').attr({ type: 'text', 'data-action': 'change-text-test-second', 'tabindex': '1'}).val(activeValue)
-            );
+            var inputid = _.uniqueId('change-text-test-second');
+            return [
+                $('<label>').addClass('col-md-3 control-label').attr('for', inputid).text(label = label ? label : ''),
+                $('<div>').addClass('first-label inline-input col-md-9').append(
+                    $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test-second', 'tabindex': '1'}).val(activeValue)
+                )
+            ];
         },
 
-        drawInputfieldAction: function (activeValue) {
-            return $('<input>').attr({ type: 'text', 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
+        drawInputfieldAction: function (labeltext, activeValue) {
+            var inputid = _.uniqueId('change-text-action');
+            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue)];
         },
 
-        drawDisabledInputfield: function (activeValue) {
-            return $('<input>').attr({ type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
+        drawDisabledInputfield: function (labeltext, activeValue) {
+            var inputid = _.uniqueId('change-text-action');
+            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), $('<input class="form-control">').attr({ id: inputid, type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue)];
         },
 
         drawFolderSelect: function () {
@@ -39,7 +59,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
         },
 
         drawDeleteButton: function (type) {
-            return $('<a href="#" class="close" tabindex="1" data-action="remove-' + type + '">').append($('<i class="icon-trash"/>'));
+            return $('<a href="#" class="remove" tabindex="1" data-action="remove-' + type + '">').append($('<i class="fa fa-trash-o">'));
         },
 
         drawOptions: function (activeValue, values) {
@@ -130,7 +150,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             return $('<div>').addClass('control-group mailfilter').append(
                 $('<div>').addClass('controls'),
                 $('<label>').addClass('checkbox').text(gt('Process subsequent rules')).append(
-                    $('<input type="checkbox" tabindex="1   ">').attr({'data-action': 'check-for-stop', 'checked': value})
+                    $('<input type="checkbox" tabindex="1">').attr({'data-action': 'check-for-stop', 'checked': value})
                 )
             );
         }

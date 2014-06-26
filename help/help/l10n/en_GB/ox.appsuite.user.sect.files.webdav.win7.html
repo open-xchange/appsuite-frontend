@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>9.6.4. Setting up WebDAV under Windows 7</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="OX App Suite">
+<link rel="up" href="ox.appsuite.user.sect.files.webdav.html" title="9.6. Accessing Files with WebDAV">
+<link rel="prev" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="9.6.3. Setting up WebDAV under Windows Vista">
+<link rel="next" href="ox.appsuite.user.sect.files.share.html" title="9.7. Files and Teams">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.webdav.winvista.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.share.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="ox.appsuite.user.sect.files.webdav.win7"></a>9.6.4. Setting up WebDAV under Windows 7</h3></div></div></div>
+<a class="indexterm" name="idm140667750230192"></a><a class="indexterm" name="idm140667750228800"></a><p><a name="ox.appsuite.user.concept.files.webdav.win7"></a>In order to set up WebDAV access under Windows 7, use one of the following options:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Use the OX Updater. Information can be found in the OX Updater user documentation.</p></li>
+<li class="listitem"><p>Then, manually set up the <a class="link" href="ox.appsuite.user.sect.files.webdav.win7.html#ox.appsuite.user.task.webdav.win7" title="How to manually set up WebDAV access under Windows 7:">WebDav access</a>.</p></li>
+</ul></div>
+<p><span class="phrase"><strong>Note:</strong></span> Depending on the Windows 7 setup, there can be delays when accessing WebDAV folders. If this is the case, follow the instructions in this article: <code class="uri">http://support.microsoft.com/kb/2445570</code>.</p>
+<div class="task">
+<a name="ox.appsuite.user.task.webdav.win7"></a><p class="title"><b>How to manually set up WebDAV access under Windows 7:</b></p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>Prerequisite:</strong></span> The registry key <span class="guilabel"><strong>BasicAuthLevel</strong></span> has to be set to <span class="guilabel"><strong>2</strong></span> in the Windows registry database. Additional information can be found in the Microsoft articles <a class="ulink" href="http://support.microsoft.com/kb/928692" target="_top">http://support.microsoft.com/kb/928692</a> and <a class="ulink" href="https://support.microsoft.com/kb/841215" target="_top">https://support.microsoft.com/kb/841215</a>. </p>
+        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>In the navigation area of the Windows Explorer select the entry <span class="guibutton"><strong>Computer</strong></span>.</p></li>
+<li class="step"><p>In the icon bar click on <span class="guibutton"><strong>Connect drive</strong></span>. The <span class="guilabel"><strong>Connect drive</strong></span> window opens.</p></li>
+<li class="step"><p>Click on <span class="guibutton"><strong>Connect to a Web site that you can use to store your documents</strong></span>. The <span class="guilabel"><strong>Add network address</strong></span> window opens. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
+<li class="step"><p>Select <span class="guibutton"><strong>Select custom network address</strong></span>. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
+<li class="step"><p>In the <span class="guilabel"><strong>Add network path</strong></span> dialogue window enter the following address: https://&lt;address&gt;/servlet/webdav.infostore where &lt;address&gt; needs to be replaced by the Groupware server's IP address or URL. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
+<li class="step"><p>Enter your username and password for accessing the Groupware Server. Click on <span class="guibutton"><strong>OK</strong></span>.</p></li>
+<li class="step"><p>On the next page you can assign a name to the network address. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
+<li class="step"><p>Click on <span class="guibutton"><strong>Finish</strong></span>.</p></li>
+</ol></div>
+<div class="taskrelated">
+          <p class="order.result"><span class="phrase"><strong>Result:</strong></span> Below <span class="guibutton"><strong>Computer </strong></span> you can access your <span class="phrase"><span class="guilabel"><strong>Files</strong></span></span> app files.</p>
+        </div>
+</div>
+</div>
+</body>
+</html>

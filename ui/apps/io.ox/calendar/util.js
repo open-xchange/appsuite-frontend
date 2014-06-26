@@ -32,7 +32,12 @@ define('io.ox/calendar/util',
         shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
         confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
-        n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'];
+        confirmTitles = [/*appointment confirmation status*/gt('unconfirmed'),
+            /*appointment confirmation status*/gt('accepted'),
+            /*appointment confirmation status*/gt('declined'),
+            /*appointment confirmation status*/gt('tentative')
+        ],
+        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'];
 
     var that = {
 
@@ -284,9 +289,9 @@ define('io.ox/calendar/util',
             return (data.end_date - data.start_date) / date.DAY >> 0;
         },
 
-        getFullTimeInterval: function (data) {
+        getFullTimeInterval: function (data, smart) {
             var length = this.getDurationInDays(data);
-            return length <= 1 ? gt('Whole day') : gt.format(
+            return length <= 1  && smart ? gt('Whole day') : gt.format(
                 //#. General duration (nominative case): X days
                 //#. %d is the number of days
                 //#, c-format
@@ -296,7 +301,7 @@ define('io.ox/calendar/util',
         getTimeInterval: function (data, D) {
             if (!data || !data.start_date || !data.end_date) return '';
             if (data.full_time) {
-                return this.getFullTimeInterval(data);
+                return this.getFullTimeInterval(data, true);
             } else {
                 D = D || date.Local;
                 var diff = date.locale.intervals[(date.locale.h12 ? 'hm' : 'Hm') + (date.TIME & date.TIMEZONE ? 'v' : '')];
@@ -308,7 +313,7 @@ define('io.ox/calendar/util',
             var ret = [];
             if (!data || !data.start_date || !data.end_date) return ret;
             if (data.full_time) {
-                ret.push(this.getFullTimeInterval(data));
+                ret.push(this.getFullTimeInterval(data, false));
             } else {
                 ret.push(new date.Local(data.start_date).format(date.TIME), new date.Local(data.end_date).format(date.TIME));
             }
@@ -318,33 +323,27 @@ define('io.ox/calendar/util',
         addTimezoneLabel: function (parent, data) {
 
             var current = date.Local.getTTInfoLocal(data.start_date);
-
             parent.append(
-                $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
-                $('<span class="label pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
+                $.txt(gt.noI18n(that.getTimeInterval(data))),
+                $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
-                    content: getContent,
+                    content: getContent(),
                     html: true,
-                    animation: false,
-                    trigger: 'focus',
-                    container: $('#tmp'),
-                    placement: function (tip, element) {
+                    trigger: 'hover',
+                    placement: function (tip) {
                         // add missing outer class
                         $(tip).addClass('timezones');
                         // get placement
-                        var off = $(element).offset(),
-                            width = $('body').width() / 2;
-                        return off.left > width ? 'left' : 'right';
+                        return 'left';
                     }
-                })
-                .on('dispose', function () {
-                    $(this).popover('destroy'); // avoids zombie-popovers
+                }).on('blur', function () {
+                    $(this).popover('hide');
                 })
             );
 
             function getContent() {
                 // hard coded for demo purposes
-                var div = $('<div>');
+                var div = $('<ul class="list-unstyled">');
                 $.when.apply($, _.map(
                     ['America/Los_Angeles',
                      'America/New_York',
@@ -354,17 +353,20 @@ define('io.ox/calendar/util',
                     .done(function () {
                         _(Array.prototype.slice.call(arguments)).each(function (zone) {
                             // must use outer DIV with "clear: both" here for proper layout in firefox
-                            div.append($('<div class="clear">').append(
-                                $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
-                                $('<b>').append($('<span>')
+                            div.append($('<li>').append(
+                                $('<span>')
+                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
+                                $('<span>')
                                     .addClass('label label-info')
-                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr))),
-                                $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
+                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
+                                $('<span>')
+                                    .addClass('time')
+                                    .text(gt.noI18n(that.getTimeInterval(data, zone)))
                             ));
                         });
                     });
 
-                return $('<div class="list">').append(div);
+                return div;
             }
 
             return parent;
@@ -452,7 +454,6 @@ define('io.ox/calendar/util',
                         //#. %1$d: numeric
                         gt('Every %1$d weeks on all days', interval);
                 }
-
 
                 // special case: weekly on work days
                 if (days === 62) {
@@ -572,6 +573,24 @@ define('io.ox/calendar/util',
             return hash[user] ? hash[user].comment : '';
         },
 
+        getConfirmationSummary: function (conf) {
+            var ret = { count: 0 };
+            // init
+            _.each(confirmClass, function (cls, i) {
+                ret[i] = {
+                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle">',
+                    count: 0,
+                    css: cls,
+                    title: confirmTitles[i] || ''
+                };
+            });
+            _.each(conf, function (c) {
+                ret[c.status].count++;
+                ret.count++;
+            });
+            return ret;
+        },
+
         getWeekScaffold: function (timestamp) {
             var day = new date.Local(timestamp).setStartOfWeek(),
                 i = 0, obj, ret = {}, today = new date.Local().getDays();
@@ -653,12 +672,30 @@ define('io.ox/calendar/util',
             });
         },
 
-        createRecipientsArray: function (participants) {
-            return this.resolveParticipants(participants, 'rec');
+        createRecipientsArray: function (data) {
+            // include external organizer
+            var list = data.participants.slice();
+            if (!data.organizerId && _.isString(data.organizer)) {
+                list.unshift({
+                    display_name: data.organizer,
+                    mail: data.organizer,
+                    type: 5
+                });
+            }
+            return this.resolveParticipants(list, 'rec');
         },
 
-        createDistlistArray: function (participants) {
-            return this.resolveParticipants(participants, 'dist');
+        createDistlistArray: function (data) {
+            // include external organizer
+            var list = data.participants.slice();
+            if (!data.organizerId && _.isString(data.organizer)) {
+                list.unshift({
+                    display_name: data.organizer,
+                    mail: data.organizer,
+                    type: 5
+                });
+            }
+            return this.resolveParticipants(list, 'dist');
         },
 
         getUserIdByInternalId: function (internal) {
@@ -666,7 +703,6 @@ define('io.ox/calendar/util',
                 return data.user_id;
             });
         }
-
     };
 
     return that;

@@ -16,7 +16,6 @@ define('io.ox/core/settings/pane',
      'io.ox/backbone/basicModel',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
-     'io.ox/core/http',
      'io.ox/core/api/apps',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
@@ -24,7 +23,7 @@ define('io.ox/core/settings/pane',
      'settings!io.ox/core',
      'settings!io.ox/core/settingOptions',
      'gettext!io.ox/core'
-    ], function (ext, BasicModel, views, forms, http, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
+    ], function (ext, BasicModel, views, forms, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -38,6 +37,10 @@ define('io.ox/core/settings/pane',
         draw: function () {
             var model = settings.createModel(BasicModel);
             model.on('change', function (model) {
+
+                if ('highcontrast' in model.changed) {
+                    $('html').toggleClass('high-contrast', model.changed.highcontrast);
+                }
 
                 settings.saveAndYell().then(
                     function success() {
@@ -70,7 +73,7 @@ define('io.ox/core/settings/pane',
             this.addClass('settings-container').append(
                 $('<h1>').text(gt('Basic settings'))
             );
-            new SettingView({model: model}).render().$el.appendTo(this);
+            new SettingView({model: model}).render().$el.attr('role', 'form').appendTo(this);
         }
     });
 
@@ -82,7 +85,7 @@ define('io.ox/core/settings/pane',
                 this.append(
                     $('<div class="control-group">').append(
                         $('<div class="controls">').append(
-                            $('<a class="btn">').text(gt('Change password'))
+                            $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Change password'))
                             .on('click', userSettings.changePassword)
                         )
                     )
@@ -94,6 +97,8 @@ define('io.ox/core/settings/pane',
     point.extend(new forms.SelectControlGroup({
         id: 'language',
         index: 100,
+        labelCssClass: 'col-sm-4',
+        controlCssClass: 'col-sm-4',
         attribute: 'language',
         label: gt('Language'),
         selectOptions: ox.serverConfig.languages || {},
@@ -142,29 +147,41 @@ define('io.ox/core/settings/pane',
         point.extend(new forms.SelectControlGroup({
             id: 'timezones',
             index: 200,
+            labelCssClass: 'col-sm-4',
+            controlCssClass: 'col-sm-4',
             attribute: 'timezone',
             label: gt('Time zone'),
             selectOptions: sorted
         }));
 
         // Themes
-        var availableThemes = settingOptions.get('themes');
+        var availableThemes = settingOptions.get('themes') || {};
 
         //  until we get translated themes from backend
         if (availableThemes['default']) {
             availableThemes['default'] = gt('Default Theme');
         }
 
-
         if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
             point.extend(new forms.SelectControlGroup({
                 id: 'theme',
                 index: 400,
+                labelCssClass: 'col-sm-4',
+                controlCssClass: 'col-sm-4',
                 attribute: 'theme',
                 label: gt('Theme'),
                 selectOptions: availableThemes
             }));
         }
+
+        point.extend(new forms.CheckControlGroup({
+            id: 'highcontrast',
+            index: 401,
+            labelCssClass: 'col-sm-4',
+            controlCssClass: 'col-sm-4',
+            attribute: 'highcontrast',
+            label: gt('High contrast theme')
+        }));
 
     }());
 
@@ -178,10 +195,11 @@ define('io.ox/core/settings/pane',
             options[15 * MINUTES] = gt('15 minutes');
             options[30 * MINUTES] = gt('30 minutes');
 
-
             point.extend(new forms.SelectControlGroup({
                 id: 'refreshInterval',
                 index: 300,
+                labelCssClass: 'col-sm-4',
+                controlCssClass: 'col-sm-4',
                 attribute: 'refreshInterval',
                 label: gt('Refresh interval'),
                 selectOptions: options
@@ -192,16 +210,18 @@ define('io.ox/core/settings/pane',
     // Auto Start App
 
     (function () {
-        if (settings.isConfigurable('autoStart') && _.device('!smartphone')) {
+        if (settings.isConfigurable('autoStart')) {
             var options = {};
             _(appAPI.getFavorites()).each(function (app) {
-                options[app.path] = gt.pgettext('app', app.title);
+                options[app.path] = /*#, dynamic*/gt.pgettext('app', app.title);
             });
 
             options.none = gt('None');
             point.extend(new forms.SelectControlGroup({
                 id: 'autoStart',
                 index: 500,
+                labelCssClass: 'col-sm-4',
+                controlCssClass: 'col-sm-4',
                 attribute: 'autoStart',
                 label: gt('Default app after sign in'),
                 selectOptions: options
@@ -221,6 +241,8 @@ define('io.ox/core/settings/pane',
             point.extend(new forms.SelectControlGroup({
                 id: 'autoOpenNotfication',
                 index: 700,
+                labelCssClass: 'col-sm-4',
+                controlCssClass: 'col-sm-4',
                 attribute: 'autoOpenNotification',
                 label: gt('Automatic opening of notification area'),
                 selectOptions: options
@@ -243,6 +265,8 @@ define('io.ox/core/settings/pane',
         point.extend(new forms.SelectControlGroup({
             id: 'autoLogout',
             index: 600,
+            labelCssClass: 'col-sm-4',
+            controlCssClass: 'col-sm-4',
             attribute: 'autoLogout',
             label: gt('Automatic sign out'),
             selectOptions: options,
@@ -252,7 +276,6 @@ define('io.ox/core/settings/pane',
             }
         }));
 
-
     }());
 
     // point.basicExtend({
@@ -260,7 +283,7 @@ define('io.ox/core/settings/pane',
     //     index: 200000,
     //     draw: function () {
     //         this.append(
-    //             $('<button type="button" class="btn">').text(gt("Clear cache")).on("click", function (e) {
+    //             $('<button type="button" class="btn btn-default">').text(gt("Clear cache")).on("click", function (e) {
     //                 e.preventDefault();
     //                 require(["io.ox/core/cache"], function () {
     //                     ox.cache.clear();

@@ -12,7 +12,7 @@
  */
 define(['io.ox/files/util'], function (util) {
 
-    describe('Utilities for files:', function () {
+    describe.skip('Utilities for files:', function () {
         var container = $('<div>'),
             options = {
                 container: container

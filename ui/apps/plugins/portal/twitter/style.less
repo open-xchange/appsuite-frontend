@@ -14,7 +14,8 @@
 
 .twitter {
     margin-top: 26px;
-    
+    padding: 0;
+
     .tweet {
         position: relative;
         min-height: 55px;
@@ -39,7 +40,7 @@
 
 .io-ox-twitter-title:after {
     content: " ";
-    background: url('bird_blue_128.png');
+    background: url('apps/plugins/portal/twitter/bird_blue_128.png');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: contain;
@@ -63,7 +64,7 @@
 
     &:before {
         content: " ";
-        background: url('everything-spritev2.png');
+        background: url('apps/plugins/portal/twitter/everything-spritev2.png');
         background-repeat: no-repeat;
         background-position: center center;
         position: absolute;
@@ -104,7 +105,6 @@
     padding: 0 6px;
     font-size: 11px;
     font-weight: bold;
-    width: 70px;
 
     div {
         overflow: hidden;
@@ -113,7 +113,7 @@
 
         &:before {
             content: " ";
-            background: url('bird_blue_32.png');
+            background: url('apps/plugins/portal/twitter/bird_blue_32.png');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: contain;
@@ -149,8 +149,13 @@
 .io-ox-twitter-tweet-counter {
     padding: 0 5px;
     display: inline-block;
-    width: 30px;
+    width: 40px;
     color: gray;
     text-align: right;
 }
+
+.io-ox-twitter-tweet-counter.limit-exceeded {
+    color: red;
+}
+
 .io-ox-twitter-hidden { display: none; }

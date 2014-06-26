@@ -68,7 +68,7 @@ define('io.ox/oauth/settings',
                     $('<div class="control-group">').append(
                         $('<label for="displayName">').text(gt('Display Name')),
                         $('<div class="controls">').append(
-                            $displayNameField = $('<input type="text" name="displayName" tabindex="1">').val(account.displayName)
+                            $displayNameField = $('<input type="text" name="displayName" class="form-control" tabindex="1">').val(account.displayName)
                         ) // End controls
                     ) // End control-group
                 ) // End form

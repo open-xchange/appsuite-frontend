@@ -22,119 +22,155 @@ define('io.ox/calendar/acceptdeny',
 
     'use strict';
 
-    return function (o) {
+    return function (o, options) {
+        options = options || {};
+        function cont(series) {
 
-        var showReminderSelect = util.getConfirmationStatus(o) !== 1,
-            message = util.getConfirmationMessage(o),
-            reminderSelect = $(),
-            inputid = _.uniqueId('dialog'),
-            defaultReminder = calSettings.get('defaultReminder', 15);
+            var showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
+                message = util.getConfirmationMessage(o),
+                reminderSelect = $(),
+                inputid = _.uniqueId('dialog'),
+                defaultReminder = calSettings.get('defaultReminder', 15),
+                apiData = { folder: o.folder_id, id: o.id };
 
-        o = { folder: o.folder_id, id: o.id };
+            if (options.api) {//use different api if provided (tasks use this)
+                api = options.api;
+            }
 
-        return api.get(o).then(function (data) {
+            if (!options.taskmode && !series && o.recurrence_position) {
+                apiData.recurrence_position = o.recurrence_position;
+            }
 
-            if (showReminderSelect) {
-                reminderSelect = $('<div>')
-                    .addClass('controls')
-                    .css({'margin-right': '10px'})
-                    .append(
-                        $('<select id="reminderSelect" data-property="reminder">').append(function () {
+            return api.get(apiData).then(function (data) {
+
+                if (showReminderSelect) {
+                    reminderSelect = $('<div class="form-group">').append(
+                        $('<label>').attr('for', 'reminderSelect').text(gt('Reminder')),
+                        $('<select id="reminderSelect" class="form-control" data-property="reminder">').append(function () {
                             var self = $(this),
-                                options = util.getReminderOptions();
-                            _(options).each(function (label, value) {
-                                self.append($('<option>', {value: value}).text(label));
+                                reminderOptions = util.getReminderOptions();
+                            _(reminderOptions).each(function (label, value) {
+                                self.append($('<option>', { value: value }).text(label));
                             });
                         })
                         .val(defaultReminder)
-                    ).before(
-                        $('<label>').addClass('control-label').attr('for', 'reminderSelect').text(gt('Reminder'))
                     );
-            }
+                }
 
-            return new dialogs.ModalDialog()
-                .build(function () {
-
-                    var recurrenceString = util.getRecurrenceString(data);
-
-                    this.getHeader().append(
-                        $('<h4>').text(gt('Change confirmation status'))
-                    );
-                    this.getContentNode().append(
-                        $('<p>').text(
-                            gt('You are about to change your confirmation status. Please leave a comment for other participants.')
-                        ),
-                        $('<p>').append(
-                            $('<b>').text(data.title),
-                            $.txt(', '),
-                            $.txt(gt.noI18n(util.getDateInterval(data))),
-                            $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
-                            $.txt(' '),
-                            $.txt(util.getTimeInterval(data))
-                        ),
-                        $('<div class="row-fluid">').css({'margin-top': '20px'}).append(
-                            $('<div class="control-group span12">').css({'margin-bottom': '0px'}).append(
-                                $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
-                                $('<div class="controls">').css({'margin-right': '10px'}).append(
-                                    $('<input type="text" data-property="comment">')
-                                        .attr({ id: inputid, tabindex: '1'})
-                                        .css({ width: '100%' })
-                                        .val(message)
-                                )
-                            ),
-                            reminderSelect
-                        )
-                    );
-                })
-                .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
-                .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
-                .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
-                .show(function () {
-                    $(this).find('[data-property="comment"]').focus();
-                })
-                .done(function (action, data, node) {
-
-                    if (action === 'cancel') return;
-
-                    // add confirmmessage to request body
-                    o.data = {
-                        confirmmessage: $.trim($(node).find('[data-property="comment"]').val())
-                    };
-
-                    folderAPI.get({ folder: o.folder }).done(function (folder) {
-
-                        // add current user id in shared or public folder
-                        if (folderAPI.is('shared', folder)) {
-                            o.data.id = folder.created_by;
+                return new dialogs.ModalDialog()
+                    .build(function () {
+                        if (!series && o.recurrence_position) {
+                            data = api.removeRecurrenceInformation(data);
                         }
 
-                        switch (action) {
-                        case 'accepted':
-                            o.data.confirmation = 1;
-                            break;
-                        case 'declined':
-                            o.data.confirmation = 2;
-                            break;
-                        case 'tentative':
-                            o.data.confirmation = 3;
-                            break;
-                        default:
-                            return;
+                        var recurrenceString = util.getRecurrenceString(data),
+                            description = $('<b>').text(data.title);
+                        if (!options.taskmode) {
+                            description = [
+                                $('<b>').text(data.title),
+                                $.txt(', '),
+                                $.txt(gt.noI18n(util.getDateInterval(data))),
+                                $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
+                                $.txt(' '),
+                                $.txt(util.getTimeInterval(data))
+                            ];
                         }
 
-                        // set (default) reminder?
-                        if (showReminderSelect) {
-                            o.data.alarm = parseInt(reminderSelect.find('select').val(), 10);
-                        }
-
-                        api.confirm(o).fail(
-                            function fail(e) {
-                                if (ox.debug) console.log('error', e);
-                            }
+                        this.getHeader().append(
+                            $('<h4>').text(gt('Change confirmation status'))
                         );
+                        this.getContentNode().append(
+                            $('<p>').text(
+                                gt('You are about to change your confirmation status. Please leave a comment for other participants.')
+                            ),
+                            $('<p>').append(
+                                description
+                            ),
+                            $('<div class="form-group">').css({'margin-top': '20px'}).append(
+                                $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
+                                $('<input type="text" class="form-control" data-property="comment">').attr({ id: inputid, tabindex: '1' }).val(message),
+                                reminderSelect
+                            )
+                        );
+                    })
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                    .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
+                    .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
+                    .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
+                    .show(function () {
+                        $(this).find('[data-property="comment"]').focus();
+                    })
+                    .done(function (action, data, node) {
+
+                        if (action === 'cancel') return;
+
+                        // add confirmmessage to request body
+                        apiData.data = {
+                            confirmmessage: $.trim($(node).find('[data-property="comment"]').val())
+                        };
+
+                        folderAPI.get({ folder: apiData.folder }).done(function (folder) {
+
+                            // add current user id in shared or public folder
+                            if (folderAPI.is('shared', folder)) {
+                                apiData.data.id = folder.created_by;
+                            }
+
+                            switch (action) {
+                            case 'accepted':
+                                apiData.data.confirmation = 1;
+                                break;
+                            case 'declined':
+                                apiData.data.confirmation = 2;
+                                break;
+                            case 'tentative':
+                                apiData.data.confirmation = 3;
+                                break;
+                            default:
+                                return;
+                            }
+
+                            // set (default) reminder?
+                            if (showReminderSelect) {
+                                apiData.data.alarm = parseInt(reminderSelect.find('select').val(), 10);
+                            }
+
+                            if (!options.taskmode && !series && o.recurrence_position) {
+                                _.extend(apiData, { occurrence: o.recurrence_position });
+                            }
+
+                            api.confirm(apiData).done(function () {
+                                if (options.callback) {
+                                    options.callback();
+                                }
+                            }).fail(
+                                function fail(e) {
+                                    if (ox.debug) console.log('error', e);
+                                }
+                            );
+                        });
                     });
+            });
+        }
+
+        // series?
+        if (!options.taskmode && o.recurrence_type > 0 && o.recurrence_position) {
+            return new dialogs.ModalDialog()
+                .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
+                .addPrimaryButton('series',
+                    //#. Use singular in this context
+                    gt('Series'), 'series', {tabIndex: '1'})
+                .addButton('appointment', gt('Appointment'), 'appointment', {tabIndex: '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                .show()
+                .then(function (action) {
+                    if (action === 'cancel') {
+                        return;
+                    }
+                    return cont(action === 'series');
                 });
-        });
+        } else {
+            return cont();
+        }
     };
 });

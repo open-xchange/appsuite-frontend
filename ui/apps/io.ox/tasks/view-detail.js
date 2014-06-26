@@ -18,9 +18,10 @@ define('io.ox/tasks/view-detail',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/tasks/api',
+     'io.ox/backbone/mini-views/participants',
      'io.ox/tasks/actions',
-     'less!io.ox/tasks/style.less'
-    ], function (util, calendarUtil, gt, ext, links, api) {
+     'less!io.ox/tasks/style'
+    ], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
 
@@ -38,20 +39,131 @@ define('io.ox/tasks/view-detail',
 
             var node = $.createViewContainer(data, api)
                 .on('redraw', function (e, tmp) {
-                    node.replaceWith(self.draw(tmp));
+                    baton.data = tmp;
+                    node.replaceWith(self.draw(baton));
                 })
                 .addClass('tasks-detailview');
-
+            baton.interpretedData = task;
             // inline links
             ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
+            //content
+            ext.point('io.ox/tasks/detail-view').invoke('draw', node, baton);
 
-            var header = $('<header>');
+            return node;
+        }
+    };
 
-            var infoPanel = $('<div>').addClass('info-panel');
+    // detail-view
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 100,
+        id: 'header',
+        draw: function (baton) {
+            var infoPanel,
+                task = baton.interpretedData;
+            this.append(
+                $('<header>').append(
+                    infoPanel = $('<div>').addClass('info-panel'),
+                    $('<h1 class="title clear-title">').append(
+                        // lock icon
+                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
+                        // priority
+                        $('<span class="priority">').append(
+                            util.getPriority(task)
+                        ),
+                        // title
+                        $.txt(gt.noI18n(task.title))
+                    )
+                )
+            );
+            ext.point('io.ox/tasks/detail-view/infopanel').invoke('draw', infoPanel, task);
+        }
+    });
 
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 200,
+        id: 'attachments',
+        draw: function (baton) {
+            var task = baton.interpretedData;
+            if (api.uploadInProgress(_.ecid(baton.data))) {
+                this.append($('<div>').addClass('attachments-container')
+                    .append(
+                        $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
+                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy()));
+            } else if (task.number_of_attachments > 0) {
+                ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
+            }
+        }
+    });
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 300,
+        id: 'note',
+        draw: function (baton) {
+            this.append(
+                $('<div class="note">').html(
+                    gt.noI18n(_.escape($.trim(baton.interpretedData.note)).replace(/\n/g, '<br>'))
+                )
+            );
+        }
+    });
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 400,
+        id: 'details',
+        draw: function (baton) {
+            var task = baton.interpretedData,
+                fields = {
+                    start_date: gt('Start date'),
+                    target_duration: gt('Estimated duration in minutes'),
+                    actual_duration: gt('Actual duration in minutes'),
+                    target_costs: gt('Estimated costs'),
+                    actual_costs: gt('Actual costs'),
+                    trip_meter: gt('Distance'),
+                    billing_information: gt('Billing information'),
+                    companies: gt('Companies'),
+                    date_completed: gt('Date completed')
+                },
+                $details = $('<dl class="task-details dl-horizontal">'),
+                hasDetails = false;
+
+            if (task.recurrence_type) {
+                $details.append(
+                    $('<dd class="detail-value">').text(gt('This task recurs')),
+                    $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data)));
+                hasDetails = true;
+            }
+
+            _(fields).each(function (label, key) {
+                if (task[key] !== undefined && task[key] !== null && task[key] !== '') {//0 is valid
+                    $details.append($('<dt class="detail-label">').text(label));
+                    if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
+                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
+                    } else {
+                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key])));
+                    }
+                    hasDetails = true;
+                }
+            });
+
+            if (hasDetails) {
+                this.append($details);
+            }
+        }
+    });
+
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 500,
+        id: 'participants',
+        draw: function (baton) {
+            var pView = new ParticipantsView(baton);
+            this.append(pView.draw());
+        }
+    });
+
+    ext.point('io.ox/tasks/detail-view/infopanel').extend({
+        index: 100,
+        id: 'infopanel',
+        draw: function (task) {
             if (task.end_date) {
-                infoPanel.append(
-                        $('<br>'),
+                this.append(
                         $('<div>').addClass('end-date').text(
                             //#. %1$s due date of a task
                             //#, c-format
@@ -61,8 +173,7 @@ define('io.ox/tasks/view-detail',
             }
 
             if (task.alarm && !_.device('small')) {//alarm makes no sense if reminders are disabled
-                infoPanel.append(
-                        $('<br>'),
+                this.append(
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
                             //#, c-format
@@ -71,8 +182,7 @@ define('io.ox/tasks/view-detail',
                 );
             }
             if (task.percent_completed && task.percent_completed !== 0) {
-                infoPanel.append(
-                        $('<br>'),
+                this.append(
                         $('<div>').addClass('task-progress').text(
                             //#. %1$s how much of a task is completed in percent, values from 0-100
                             //#, c-format
@@ -80,168 +190,14 @@ define('io.ox/tasks/view-detail',
                         )
                     );
             }
-            infoPanel.append(
-                $('<br>'),
+            this.append(
                 // status
-                $('<div>').text(task.status).addClass('status ' +  task.badge)
+                $('<div>').text(task.status).addClass('state ' +  task.badge)
             );
-
-            //check to see if there is a leading <br> and remove it
-            var firstBr = infoPanel.find('br:first');
-            if (firstBr.is(infoPanel.find('*:first'))) {
-                firstBr.remove();
-            }
-
-            node.append(
-                header.append(
-                    infoPanel,
-                    $('<div class="title clear-title">').append(
-                        // lock icon
-                        data.private_flag ? $('<i class="icon-lock private-flag">') : [],
-                        // title
-                        $.txt(gt.noI18n(task.title)),
-                        // priority
-                        $('<span class="priority">').append(
-                            util.getPriority(task)
-                        )
-                    )
-                )
-            );
-
-            if (api.uploadInProgress(_.ecid(data))) {
-                $('<div>').addClass('attachments-container')
-                    .append(
-                        $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
-                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy())
-                    .appendTo(node);
-            } else if (task.number_of_attachments > 0) {
-                ext.point('io.ox/tasks/detail-attach').invoke('draw', node, task);
-            }
-
-            node.append(
-                $('<div class="note">').html(
-                    gt.noI18n(_.escape($.trim(task.note)).replace(/\n/g, '<br>'))
-                )
-            );
-
-            var fields = {
-                start_date: gt('Start date'),
-                target_duration: gt('Estimated duration in minutes'),
-                actual_duration: gt('Actual duration in minutes'),
-                target_costs: gt('Estimated costs'),
-                actual_costs: gt('Actual costs'),
-                trip_meter: gt('Distance'),
-                billing_information: gt('Billing information'),
-                companies: gt('Companies'),
-                date_completed: gt('Date completed')
-            };
-
-            var $details = $('<div class="task-details">'), hasDetails = false;
-
-            //add recurrence sentence, use calendarfunction to avoid code duplicates
-            if (task.recurrence_type) {
-                $details.append($('<div class="detail-item">').append($('<label class="detail-label">').text(gt('This task recurs')),
-                                $('<div class="detail-value">').text(calendarUtil.getRecurrenceString(data))));
-            }
-            var temp;
-            _(fields).each(function (label, key) {
-                if (task[key] !== undefined && task[key] !== null && task[key] !== '') {//0 is valid
-                    $details.append(temp = $('<div class="detail-item">').append($('<label class="detail-label">').text(label)));
-                    if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
-                        temp.append($('<div class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
-                    } else {
-                        temp.append($('<div class="detail-value">').text(gt.noI18n(task[key])));
-                    }
-                    hasDetails = true;
-                }
-            });
-
-            if (hasDetails) {
-                node.append($details);
-            }
-
-            if (task.participants && task.participants.length > 0) {
-                require(['io.ox/core/api/user'], function (userAPI) {
-                    var table,
-                        states = [
-                            [gt('Not yet confirmed'), 'gray'],
-                            [gt('Confirmed'), 'green'],
-                            [gt('Declined'), 'red'],
-                            [gt('Tentative'), 'yellow']
-                        ],
-                        lookupParticipant = function (node, table, participant) {
-                            if (participant.id) {//external participants don't have an id but the display name is already given
-                                userAPI.get({id: participant.id}).done(function (userInformation) {
-                                        drawParticipant(table, participant, userInformation.display_name, userInformation);
-                                    }).fail(function () {
-                                        failedToLoad(node, table, participant);
-                                    });
-                            } else {
-                                participant.display_name = participant.display_name || participant.mail.split('@')[0] || '';
-                                drawParticipant(table, participant, $.trim(participant.display_name + ' <' + participant.mail + '>'));
-                            }
-                        },
-                        drawParticipant = function (table, participant, name, userInformation) {
-                            var row;
-                            if (userInformation) {
-                                table.append(row = $('<div class="task-participant">').append(
-                                    $('<span class="halo-link participants-table-name">').data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 })).append($('<a href="#">').text(name)))
-                                );
-                            } else {
-                                table.append(row = $('<div class="task-participant">').append(
-                                    $('<span class="halo-link participants-table-name">').data(_.extend(participant, { display_name: name, email1: participant.mail })).append($('<a href="#">').text(name)))
-                                );
-                            }
-                            row.append(
-                                $('<span>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1]),
-                                $('<span>').text(states[participant.confirmation || 0][0])
-                                );
-                            if (participant.confirmmessage) {
-                                row.append($('<span>').addClass('participants-table-confirmmessage').text(_.noI18n(participant.confirmmessage)));
-                            }
-                        },
-                        failedToLoad = function (node, table, participant) {
-                            node.append(
-                                $.fail(gt('Could not load all participants for this task.'), function () {
-                                    lookupParticipant(node, table, participant);
-                                })
-                            );
-                        },
-                        intParticipants = [],
-                        extParticipants = [];
-
-
-                    //divide participants into internal and external users
-
-                    _(task.participants).each(function (participant) {
-                        if (participant.type === 5) {
-                            extParticipants.push(participant);
-                        } else {
-                            intParticipants.push(participant);
-                        }
-                    });
-                    if (intParticipants.length > 0) {
-                        node.append($('<label class="detail-label">').text(gt('Participants')),
-                                table = $('<div class="task-participants-table">'));
-                        _(intParticipants).each(function (participant) {
-                            lookupParticipant(node, table, participant);
-                        });
-                    }
-                    if (extParticipants.length > 0) {
-                        node.append($('<label class="detail-label">').text(gt('External participants')),
-                                table = $('<div class="task-participants-table">'));
-                        _(extParticipants).each(function (participant) {
-                            lookupParticipant(node, table, participant);
-                        });
-                    }
-                });
-            }
-
-            return node;
         }
-    };
+    });
 
-    // inline links for each task
+    // inline links
     ext.point('io.ox/tasks/detail-inline').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
@@ -254,7 +210,7 @@ define('io.ox/tasks/view-detail',
         id: 'attachments',
         draw: function (task) {
             var attachmentNode;
-            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is allready there
+            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is already there
                 attachmentNode = this;
             } else {
                 attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);//else build new
@@ -286,7 +242,7 @@ define('io.ox/tasks/view-detail',
     };
 
     var buildDropdown = function (container, label, data) {
-        var bla = new links.DropdownLinks({
+        var bla = new links.Dropdown({
                 label: label,
                 classes: 'attachment-item',
                 ref: 'io.ox/tasks/attachment/links'

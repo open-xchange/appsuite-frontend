@@ -14,8 +14,9 @@
 define('io.ox/contacts/util',
     ['io.ox/core/util',
      'settings!io.ox/contacts',
-     'gettext!io.ox/contacts'
-    ], function (util, settings, gt) {
+     'gettext!io.ox/contacts',
+     'io.ox/core/date'
+    ], function (util, settings, gt, date) {
 
     'use strict';
 
@@ -35,7 +36,25 @@ define('io.ox/contacts/util',
 
     // vanity fix
     function getTitle(field) {
-        return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
+        return (/^(<span class="title">)?(dr\.?|prof\.?)/i).test(field) ? field : '';
+    }
+
+    //helper function for birthdays without year
+    //calculates the difference between gregorian and julian calendar
+    function calculateDayDifference(time) {
+        var myDay = new date.UTC(time),
+            century, tempA, tempB;
+
+        if (myDay.getMonth() < 2) {
+            century = Math.floor((myDay.getYear() - 1) / 100);
+        } else {
+            century = Math.floor(myDay.getYear() / 100);
+        }
+        tempA = Math.floor(century / 4);
+        tempB = century % 4;
+
+        return Math.abs((3 * tempA + tempB - 2) * date.DAY);
+
     }
 
     var that = {
@@ -70,11 +89,9 @@ define('io.ox/contacts/util',
 
                 if (preference === 'firstname lastname') {
                     format = title ? '%3$s %1$s %2$s' : '%1$s %2$s';
-                }
-                else if (preference === 'lastname, firstname') {
+                } else if (preference === 'lastname, firstname') {
                     format = title ? '%3$s %2$s, %1$s' : '%2$s, %1$s';
-                }
-                else {
+                } else {
                     // auto/fallback
                     format = title ?
                         //#. Name with title
@@ -108,8 +125,17 @@ define('io.ox/contacts/util',
             return { format: _.noI18n(''), params: [] };
         },
 
-        getFullName: function (obj) {
-            var fmt = this.getFullNameFormat(obj);
+        getFullName: function (obj, htmlOutput) {
+            var copy = obj, fmt;
+            if (htmlOutput === true) {
+                copy = {};
+                _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
+                    if (obj[id]) {
+                        copy[id] = '<span class="' + id + '">' + _.escape(obj[id]) + '</span>';
+                    }
+                });
+            }
+            fmt = this.getFullNameFormat(copy);
             return gt.format(fmt.format, fmt.params);
         },
 
@@ -140,7 +166,8 @@ define('io.ox/contacts/util',
          * parameters to gettext.format to obtain the full name.
          */
         getMailFullNameFormat: function (obj) {
-            //combine first name and last name
+
+            // combine first name and last name
             if (obj.last_name && obj.first_name) {
                 return {
                     format:
@@ -152,14 +179,20 @@ define('io.ox/contacts/util',
                 };
             }
 
-            // use existing display name?
+            // we need last_name and first_name ahead of display_name,
+            // for example, to keep furigana support.
+            // and this should be same order as getFullNameFormat()
+
+            // fallback #1: just last_name
+            if (obj.last_name) return single(2, obj.last_name);
+
+            // fallback #2: just first_name
+            if (obj.first_name) return single(1, obj.first_name);
+
+            // fallback #3: use existing display name?
             if (obj.display_name) {
                 return single(4, util.unescapeDisplayName(obj.display_name));
             }
-
-            // fallback
-            if (obj.last_name) { return single(2, obj.last_name); }
-            if (obj.first_name) { return single(1, obj.first_name); }
 
             return { format: _.noI18n(''), params: [] };
         },
@@ -230,6 +263,14 @@ define('io.ox/contacts/util',
                 }
             });
             return field;
+        },
+        //used to change birthdays without year(we save them as year 1) from gregorian to julian calendar (year 1 is julian, current calendar is gregorian)
+        gregorianToJulian: function (timestamp) {
+            return new date.UTC(timestamp - calculateDayDifference(timestamp)).getTime();
+        },
+        //used to change birthdays without year(we save them as year 1) from julian to gregorian calendar (year 1 is julian, current calendar is gregorian)
+        julianToGregorian: function (timestamp) {
+            return new date.UTC(timestamp + calculateDayDifference(timestamp)).getTime();
         }
     };
 

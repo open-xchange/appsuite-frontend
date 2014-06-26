@@ -56,12 +56,13 @@ define('io.ox/core/extPatterns/actions',
         baton.tracker = [].concat(baton.data);
 
         var point = ext.point(ref),
-            capabilities = point.pluck('capabilities'),
+            capabilities = _(point.pluck('capabilities')).filter(function (cap) {return !_(cap).isEmpty(); }),
+            ignoreEmptyTracker = baton.tracker.length === 0,
             list = point.list(), i = 0, $i = list.length, extension, tmp;
 
         // check capabilities upfront; if no action can be applied due to missing
         // capabilities, we try to offer upsell
-        if (!upsell.any(capabilities)) {
+        if (capabilities.length && !upsell.any(capabilities)) {
             if (upsell.enabled(capabilities)) {
                 upsell.trigger({
                     type: 'inline-action',
@@ -78,7 +79,7 @@ define('io.ox/core/extPatterns/actions',
             // avoid default behaviour?
             if (extension.id === 'default' && baton.isDefaultPrevented()) continue;
             // empty tracker?
-            if (baton.tracker.length === 0) break;
+            if (!ignoreEmptyTracker && baton.tracker.length === 0) break;
             // apply filter
             if (_.isFunction(extension.filter)) {
                 tmp = _(baton.tracker).filter(extension.filter);
@@ -86,7 +87,7 @@ define('io.ox/core/extPatterns/actions',
             } else {
                 tmp = baton.tracker.slice();
             }
-            if (tmp.length) {
+            if (tmp.length || ignoreEmptyTracker) {
                 // call handlers
                 try {
                     if (_.isFunction(extension.action)) {

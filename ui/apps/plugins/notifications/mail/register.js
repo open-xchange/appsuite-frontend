@@ -14,10 +14,9 @@
 
 define('plugins/notifications/mail/register',
     ['io.ox/mail/api',
-     'io.ox/mail/util',
      'io.ox/core/extensions',
      'gettext!plugins/notifications'
-    ], function (api, util, ext, gt) {
+    ], function (api, ext, gt) {
 
     'use strict';
 
@@ -28,15 +27,14 @@ define('plugins/notifications/mail/register',
             this.append(
                 $('<legend class="section-title">').text(gt('New Mails'))
                     .attr('focusId', 'mail-notification-')//special attribute to restore focus on redraw
-                    .append($('<div>')
+                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all notifications for new mails.'),
                             'data-action': 'clear',
-                            'focus-id': 'mail-notification-clear',
-                            role: 'button'}).addClass('clear-button icon-remove refocus')),
-                $('<div class="notifications">'),
+                            'focus-id': 'mail-notification-clear'})),
+                $('<div class="items">'),
                 $('<div class="open-app">').append(
-                    $('<a role="button" href="#" data-action="open-app" tabindex="1" class="refocus" focus-id="mail-notification-open-app">').text(
+                    $('<a role="button" href="#" data-action="open-app" tabindex="1" class="btn btn-primary btn-sm refocus" focus-id="mail-notification-open-app">').text(
                         baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
                     )
                 )
@@ -46,21 +44,23 @@ define('plugins/notifications/mail/register',
 
     function drawItem(node, data) {
         if (data) {
-            var f = data.from || [['', '']];
-            node.append(
-                $('<div class="item refocus" tabindex="1" role="listItem">')
-                    .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
-                           'data-cid': _.cid(data),
-                            //#. %1$s mail sender
-                            //#. %2$s mail subject
-                            //#, c-format
-                            'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
-                          }).append(
-                    $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                    $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
-                    // TODO: re-add teaser once we get this via getList(...)
-                )
-            );
+            require(['io.ox/mail/util'], function (util) {
+                var f = data.from || [['', '']];
+                node.append(
+                    $('<div class="item refocus" tabindex="1" role="listitem">')
+                        .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
+                               'data-cid': _.cid(data),
+                                //#. %1$s mail sender
+                                //#. %2$s mail subject
+                                //#, c-format
+                                'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+                              }).append(
+                        $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                        $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+                        // TODO: re-add teaser once we get this via getList(...)
+                    )
+                );
+            });
         }
     }
 
@@ -72,6 +72,7 @@ define('plugins/notifications/mail/register',
 
     var NotificationsView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-mail',
         events: {
@@ -79,53 +80,54 @@ define('plugins/notifications/mail/register',
             'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems',
             'click .item': 'openMail',
-            'keydown .item': 'openMail',
-            'dispose .item': 'removeNotification' //seems to be unused
+            'keydown .item': 'openMail'
         },
 
         render: function () {
 
-            var i = 0, size = this.collection.size(),
-                $i = Math.min(size, numMessages),
-                baton,
-                mails = new Array($i),
-                view = this;
+            this.$el.empty();
+            if (this.collection.length) {
+                var i = 0, size = this.collection.size(),
+                    $i = Math.min(size, numMessages),
+                    baton,
+                    mails = new Array($i),
+                    view = this;
 
-            baton = ext.Baton({ view: view, size: size, more: size > $i });
-            ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
+                baton = ext.Baton({ view: view, size: size, more: size > $i });
+                ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el, baton);
 
-            for (i = 0; i < $i; i++) {
-                mails[i] = api.reduce(this.collection.at(i).toJSON());
-            }
+                for (i = 0; i < $i; i++) {
+                    mails[i] = api.reduce(this.collection.at(i).toJSON());
+                }
 
-            //no need to request mails where we have all the information already
-            mails = _(mails).filter(function (item) {
-                return view.collection._byId[item.id].get('subject') === undefined;
-            });
+                //no need to request mails where we have all the information already
+                mails = _(mails).filter(function (item) {
+                    return view.collection._byId[item.id].get('subject') === undefined;
+                });
 
-            if (mails.length > 0) {
-                api.getList(mails).done(function (response) {
+                if (mails.length > 0) {
+                    api.getList(mails, true, {unseen: true}).done(function (response) {
+                        view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
+                        //save data to model so we don't need to ask again everytime
+                        for (i = 0; i < mails.length; i++) {
+                            view.collection._byId[response[i].id].attributes = response[i];
+                        }
+                        // draw mails
+                        for (i = 0; i < $i; i++) {
+                            baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
+                            ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
+                        }
+
+                    });
+                } else {
                     view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
-                    //save data to model so we don't need to ask again everytime
-                    for (i = 0; i < mails.length; i++) {
-                        view.collection._byId[response[i].id].attributes = response[i];
-                    }
                     // draw mails
                     for (i = 0; i < $i; i++) {
                         baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
-                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
+                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
                     }
-                    
-                });
-            } else {
-                view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
-                // draw mails
-                for (i = 0; i < $i; i++) {
-                    baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
-                    ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
                 }
             }
-
             return this;
         },
 
@@ -136,40 +138,44 @@ define('plugins/notifications/mail/register',
                 sidepopup = overlay.prop('sidepopup'),
                 cleanUp = function (e, mails) {
                     _(mails).each(function (obj) {
-                        if (cid === _.cid(obj)) {
-                            e.data.popup.close();
-                        }
+                        if (cid === _.cid(obj)) e.data.popup.close();
                     });
                 };
             // toggle?
             if (sidepopup && cid === overlay.find('[data-cid]').data('cid')) {
                 sidepopup.close();
             } else {
+                // open dialog first to be visually responsive
+                require(['io.ox/core/tk/dialogs', 'io.ox/mail/detail/view'], function (dialogs, detail) {
+                    // open SidePopup without array
+                    var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
+                        .setTarget(overlay.empty())
+                        .on('close', function () {
+                            api.off('deleted-mails', cleanUp);
+                            if (_.device('smartphone') && overlay.children().length > 0) {
+                                overlay.addClass('active');
+                            } else if (_.device('smartphone')) {
+                                overlay.removeClass('active');
+                                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                            }
+                            $('#io-ox-notifications .item').first().focus();//focus first for now
+                        })
+                        .show(e, function (popup) {
+                            // fetch proper mail now
+                            popup.busy();
+                            api.get(_.extend(_.cid(cid), {unseen: true})).done(function (data) {//detail view sets unseen so get the unseen mail here to prevent errors
 
-                // fetch proper mail first
-                api.get(_.cid(cid)).done(function (data) {
-                    require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
-                        // open SidePopup without array
-                        var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
-                            .setTarget(overlay.empty())
-                            .on('close', function () {
-                                api.off('delete', cleanUp);
-                                if (_.device('smartphone') && overlay.children().length > 0) {
-                                    overlay.addClass('active');
-                                } else if (_.device('smartphone')) {
-                                    overlay.removeClass('active');
-                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
-                                }
-                                $('#io-ox-notifications .item').first().focus();//focus first for now
-                            })
-                            .show(e, function (popup) {
-                                popup.append(view.draw(data));
+                                var view = new detail.View({ data: data });
+                                popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+
                                 if (_.device('smartphone')) {
                                     $('#io-ox-notifications').removeClass('active');
                                 }
-                                api.on('delete', {popup: detailPopup}, cleanUp);//if mail gets deleted we must close the sidepopup or it will show a blank page
+
+                                // if mail gets deleted we must close the sidepopup or it will show a blank page
+                                api.on('deleted-mails', { popup: detailPopup }, cleanUp);
                             });
-                    });
+                        });
                 });
             }
         },
@@ -190,17 +196,6 @@ define('plugins/notifications/mail/register',
                 seenMails[_.ecid(item.attributes)] = true;
             });
             this.collection.reset();
-        },
-
-        removeNotification: function (e) {
-            e.preventDefault();
-            var cid = $(e.target).attr('data-cid'),
-                idArray = cid.split('.');
-            for (var i = 0; i < this.collection.length; i++) {
-                if (this.collection.models[i].get('folder_id') === idArray[0] && this.collection.models[i].get('id') === idArray[1]) {
-                    this.collection.remove(this.collection.models[i]);
-                }
-            }
         }
     });
 
@@ -242,18 +237,22 @@ define('plugins/notifications/mail/register',
                     notifications.collection.unshift(new Backbone.Model(mail), { silent: true });
                 });
             }
-            function removeMails(e, mails) {//removes mails from notificationview
+            function removeMails(e, mails) {
                 _(mails).each(function (mail) {
                     notifications.collection.remove(notifications.collection._byId[mail.id]);
-                    seenMails[_.ecid(mail)] = true;//make sure this mail is not added again because it's seen already
+                    seenMails[_.ecid(mail)] = true; // make sure this mail is not added again because it's seen already
                 });
             }
-            function removeFolder(e, folder) {//removes mails of a whole folder from notificationview
-                _(notifications.collection.models).each(function (mail) {
-                    if (mail.get('folder_id') === folder) {
-                        notifications.collection.remove(notifications.collection._byId[mail.id]);
-                        seenMails[_.ecid(mail)] = true;//make sure this mail is not added again because it's seen already
-                    }
+
+            // removes mails of a whole folder from notificationview
+            function removeFolder(e, folder) {
+                // create a copy / each & remove doesn't work
+                var list = notifications.collection.filter(function (model) {
+                    return model.get('folder_id') === folder;
+                });
+                _(list).each(function (model) {
+                    notifications.collection.remove(model);
+                    seenMails[_.ecid(model.toJSON())] = true; // make sure this mail is not added again because it's seen already
                 });
             }
 
@@ -281,19 +280,9 @@ define('plugins/notifications/mail/register',
                 }
             });
 
-            api.on('delete update:set-seen', function (e, mails) {
-                if (!_.isArray(mails)) {
-                    mails = [].concat(mails);
-                }
-                if (mails.length > 0 && !mails[0].id) {//check if we have a folder seen action
-                    removeFolder(e, mails[0].folder);
-                } else {
-                    removeMails(e, mails);
-                }
-                if (notifications.collection.length === 0) {//all mails read. remove new Mail title
-                    api.newMailTitle(false);
-                }
-
+            api.on('deleted-mails update:set-seen', function (e, param) {//mail has a special delete event
+                if (_.isArray(param)) removeMails(e, param); else removeFolder(e, param);
+                if (notifications.collection.length === 0) api.newMailTitle(false);
             });
 
             api.checkInbox();

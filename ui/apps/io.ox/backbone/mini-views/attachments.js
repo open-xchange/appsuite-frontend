@@ -15,8 +15,9 @@ define('io.ox/backbone/mini-views/attachments',
     ['io.ox/backbone/mini-views/abstract',
      'io.ox/core/api/attachment',
      'io.ox/core/tk/attachments',
-     'io.ox/core/strings'
-    ], function (AbstractView, api, attachments, strings) {
+     'io.ox/core/strings',
+     'gettext!io.ox/core/tk/attachments'
+    ], function (AbstractView, api, attachments, strings, gt) {
 
     'use strict';
 
@@ -76,17 +77,17 @@ define('io.ox/backbone/mini-views/attachments',
         renderAttachment: function (attachment) {
 
             var size = attachment.file_size > 0 ? strings.fileSize(attachment.file_size) : '\u00A0';
-
             return $('<div class="attachment">').append(
-                $('<i class="icon-paper-clip">'),
+                $('<i class="fa fa-paperclip">'),
                 $('<div class="row-1">').text(attachment.filename),
                 $('<div class="row-2">').append(
                     $('<span class="filesize">').text(size)
                 ),
-                $('<a href="#" class="remove" tabindex="1" title="Remove attachment">')
+                $('<a href="#" class="remove" tabindex="1">')
+                .attr('title', gt('Remove attachment'))
                 .data(attachment)
                 .append(
-                    $('<i class="icon-trash">')
+                    $('<i class="fa fa-trash-o">')
                 )
             );
         },
@@ -232,8 +233,6 @@ define('io.ox/backbone/mini-views/attachments',
             var self = this;
 
             var uploadWidget = attachments.fileUploadWidget({
-                displayButton: false,
-                multi: true,
                 wrapperClass: 'form-horizontal control-group'
             });
 

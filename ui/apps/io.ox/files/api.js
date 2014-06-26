@@ -15,17 +15,18 @@
 
 define('io.ox/files/api',
     ['io.ox/core/http',
+     'io.ox/core/extensions',
      'io.ox/core/api/factory',
      'io.ox/core/api/folder',
      'settings!io.ox/core',
      'io.ox/core/cache',
      'io.ox/core/date',
      'io.ox/files/mediasupport',
-     'gettext!io.ox/files'
-    ], function (http, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
+     'gettext!io.ox/files',
+     'io.ox/filter/files'
+    ], function (http, ext, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
 
     'use strict';
-
 
     var tracker = (function () {
 
@@ -210,6 +211,20 @@ define('io.ox/files/api',
 
     var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
+    var processFiles = function (data) {
+        return _(data).filter(function (file) {
+            return ext.point('io.ox/files/filter').filter(function (p) {
+                    return p.invoke('isEnabled', this, file) !== false;
+                })
+                .map(function (p) {
+                    return p.invoke('isVisible', this, file);
+                })
+                .reduce(function (acc, isVisible) {
+                    return acc && isVisible;
+                }, true);
+        });
+    };
+
     // generate basic API
     var api = apiFactory({
         module: 'files',
@@ -244,6 +259,7 @@ define('io.ox/files/api',
         },
         pipe: {
             all: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     fixContentType(obj);
                     // remove from cache if get cache is outdated
@@ -257,18 +273,21 @@ define('io.ox/files/api',
                 return data;
             },
             allPost: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     api.tracker.updateFile(obj);
                 });
                 return data;
             },
             list: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     fixContentType(obj);
                 });
                 return data;
             },
             listPost: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     if (obj) api.tracker.updateFile(obj);
                 });
@@ -279,6 +298,7 @@ define('io.ox/files/api',
                 return fixContentType(data);
             },
             search: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     fixContentType(obj);
                     api.tracker.updateFile(obj);
@@ -313,7 +333,7 @@ define('io.ox/files/api',
     //     });
     // };
 
-    api.caches.versions = new cache.SimpleCache('files-versions', true);
+    api.caches.versions = new cache.SimpleCache('files-versions');
 
     /**
      * map error codes and text phrases for user feedback
@@ -326,7 +346,7 @@ define('io.ox/files/api',
         if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
             e.data.custom = {
                 type: 'error',
-                text: gt(e.error, e.error_params[0], e.error_params[1])
+                text: /*#, dynamic*/gt(e.error, e.error_params[0], e.error_params[1])
             };
         } else if (e && e.code && e.code === 'IFO-0100' && e.problematic && e.problematic[0] && e.problematic[0].id === 700) {
             e.data.custom = {
@@ -962,6 +982,33 @@ define('io.ox/files/api',
      */
     api.lock = function (list) {
         return lockToggle(list, 'lock');
+    };
+
+    /**
+     * deletes all files from a specific folder
+     * @param  {string} folder_id
+     * @fires  api#refresh.all
+     * @return {deferred}
+     */
+    api.clear = function (folder_id) {
+        // new clear
+        return http.PUT({
+            module: 'folders',
+            appendColumns: false,
+            params: {
+                action: 'clear',
+                tree: '1'
+            },
+            data: [folder_id]
+        })
+        .then(function () {
+            return api.caches.all.grepRemove(folder_id + api.DELIM);
+        })
+        .done(function () {
+            folderAPI.reload(folder_id);
+            folderAPI.sync();
+            api.trigger('refresh.all');
+        });
     };
 
     return api;

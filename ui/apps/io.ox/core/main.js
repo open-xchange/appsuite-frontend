@@ -26,8 +26,7 @@ define('io.ox/core/main',
      'io.ox/core/ping',
      'settings!io.ox/core',
      'gettext!io.ox/core',
-     'io.ox/core/relogin',
-     'io.ox/core/bootstrap/basics'
+     'io.ox/core/relogin'
     ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
 
     'use strict';
@@ -38,7 +37,6 @@ define('io.ox/core/main',
     var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
 
     debug('core: Loaded');
-    ox.trigger('core:load');
 
     _.stepwiseInvoke = function (list, method, context) {
         if (!_.isArray(list)) return $.when();
@@ -94,61 +92,74 @@ define('io.ox/core/main',
         });
     };
 
-    // listen for logout event
+    // trigger all apps to save restorepoints
     ext.point('io.ox/core/logout').extend({
-        id: 'saveSettings',
-        logout: function () {
-            // force save requests for all pending settings
-            var pending = settings.getAllPendingSettings(),
-                defs = [];
-            if (!_.isEmpty(pending)) {
-                _(pending).each(function (setting) {
-                    defs.push(setting.save(undefined, { force: true }));
+        id: 'saveRestorePoint',
+        index: 'first',
+        logout: function (baton) {
+            http.pause();
+            var def = $.Deferred();
+            if (baton.autologout || ox.online) {
+                // TODO: add http pause / resume
+                $.when.apply($,
+                    ox.ui.apps.map(function (app) {
+                        return app.saveRestorePoint();
+                    })
+                ).always(def.resolve);
+            } else {
+                ox.ui.App.canRestore().then(function (canRestore) {
+                    if (canRestore) {
+                        $('#io-ox-core').show();
+                        $('#background-loader').hide();
+                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                            new dialogs.ModalDialog()
+                                .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
+                                .addPrimaryButton('Yes', gt('Yes'))
+                                .addButton('No', gt('No'))
+                                .show()
+                                .then(function (action) {
+                                    if (action === 'No') {
+                                        def.reject();
+                                    } else {
+                                        $('#io-ox-core').hide();
+                                        $('#background-loader').show();
+                                        def.resolve();
+                                    }
+                                });
+                        });
+                    } else {
+                        def.resolve();
+                    }
                 });
             }
-            return $.when(defs);
+            // save core settings
+            settings.save();
+            http.resume();
+            return def;
         }
     });
 
+    // clear all caches
     ext.point('io.ox/core/logout').extend({
         id: 'clearCache',
-        logout: function (baton) {
-            var clear = function () {
-                return ox.cache.clear();
-            };
-            if (baton.autologout && baton.autologout === true) {
-                return clear();
-            } else {
-                return ox.ui.App.canRestore().then(
-                    function success(canRestore) {
-                        if (canRestore && !ox.online) {
-                            return ox.load(['io.ox/core/tk/dialogs']).then(function (dialogs) {
-                                var def = $.Deferred();
-                                new dialogs.ModalDialog()
-                                    .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
-                                    .addPrimaryButton('Yes', gt('Yes'))
-                                    .addButton('No', gt('No'))
-                                    .show()
-                                    .then(function (action) {
-                                        if (action === 'No') {
-                                            return def.reject();
-                                        } else {
-                                            clear().then(function () {
-                                                def.resolve();
-                                            });
-                                        }
-                                    });
-                                return def;
-                            });
-                        } else {
-                            return clear();
-                        }
-                    },
-                    function fail() {
-                        return clear();
-                    }
-                );
-            }
+        logout: function () {
+            return ox.cache.clear();
+        }
+    });
+
+    // wait for all pending settings
+    ext.point('io.ox/core/logout').extend({
+        id: 'savePendingSettings',
+        index: 'last',
+        logout: function () {
+            // force save requests for all pending settings
+            http.pause();
+            $.when.apply($,
+                _(settings.getAllPendingSettings()).map(function (set) {
+                    return set.save(undefined, { force: true });
+                })
+            );
+            return http.resume();
         }
     });
 
@@ -255,9 +266,6 @@ define('io.ox/core/main',
                 if (hidden === 1) {
                     itemsLeftWidth += launcherDropDownIconWidth;
                 }
-                if (visibleTabs <= 4) {
-                    //$('.launcher.left-corner', topbar).hide();
-                }
             }
         }
         $('li', launcherDropdown).hide();
@@ -279,7 +287,7 @@ define('io.ox/core/main',
                 e.preventDefault();
                 var self = $(this), content;
                 // set fixed width, hide label, be busy
-                content = self.contents();
+                content = self.contents().detach();
                 self.css('width', self.width() + 'px').text('\u00A0').busy();
                 // call launcher
                 (fn.call(this) || $.when()).done(function () {
@@ -292,9 +300,9 @@ define('io.ox/core/main',
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + arialabel + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
+                return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + _.escape(arialabel) + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
             } else {
                 return label;
             }
@@ -315,21 +323,27 @@ define('io.ox/core/main',
             if (count === 0 && timer === null) {
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                    refreshIcon.addClass('icon-spin-paused').removeClass('icon-spin');
+                    if (refreshIcon.hasClass('fa-spin')) {
+                        refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
+                    }
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
                 }
             }
         }
 
-        http.on('start', function () {
+        http.on('start', function (e, xhr, options) {
             if (count === 0) {
                 if (timer === null) {
-                    if (useSpinner) {
-                        refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                        refreshIcon.addClass('icon-spin').removeClass('icon-spin-paused');
-                    } else {
-                        $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                    if (!options.silent) {
+                        if (useSpinner) {
+                            refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                            if (!refreshIcon.hasClass('fa-spin')) {
+                                refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
+                            }
+                        } else {
+                            $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                        }
                     }
                 }
                 clearTimeout(timer);
@@ -352,10 +366,11 @@ define('io.ox/core/main',
     (function () {
 
         var interval = parseInt(settings.get('refreshInterval', 300000), 10),
-            next = _.now() + interval;
+            next = _.now() + interval,
+            REFRESH_THROTTLE = 10000; // only trigger every 10 seconds
 
         ext.point('io.ox/core/refresh').extend({
-            action: function () {
+            action: _.throttle(function () {
                 if (ox.online && ox.session !== '') {
                     try {
                         // trigger global event
@@ -364,7 +379,7 @@ define('io.ox/core/main',
                         console.error('io.ox/core/refresh:default', e.message, e);
                     }
                 }
-            }
+            }, REFRESH_THROTTLE)
         });
 
         refresh = function () {
@@ -379,7 +394,6 @@ define('io.ox/core/main',
         setInterval(check, 10000); // check every 10 seconds
 
     }());
-
 
     (function () {
 
@@ -523,7 +537,6 @@ define('io.ox/core/main',
     // Connection metrics
     //
 
-
     function launch() {
 
         debug('core: launch()');
@@ -543,7 +556,7 @@ define('io.ox/core/main',
                 node.addClass('placeholder');
                 if (!upsell.has(model.get('requires'))) {
                     node.addClass('upsell').children('a').first().prepend(
-                        $('<i class="icon-lock">')
+                        $('<i class="fa fa-lock">')
                     );
                 }
             } else {
@@ -555,12 +568,12 @@ define('io.ox/core/main',
             }
         }
 
-        function addUserContent(model, launcher, first) {
+        function quit(model) {
             var ariaBasicLabel =
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
                 quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
-                    .append($('<i class="icon-remove">'))
+                    .append($('<i class="fa fa-times">'))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
@@ -569,11 +582,14 @@ define('io.ox/core/main',
                     .on('focus', function () {
                         quitApp.attr('aria-label', ariaBasicLabel);
                     });
+            return quitApp;
+        }
 
+        function addUserContent(model, launcher, first) {
             if (model.get('closable')) {
                 launcher.addClass('closable');
                 if (first) {
-                    launcher.find('a').after(quitApp);
+                    launcher.find('a').after(quit(model));
                 }
             }
 
@@ -593,6 +609,7 @@ define('io.ox/core/main',
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
                 title = model.get('title'),
+                closable = model.get('closable') && !_.device('smartphone'),
                 name;
 
             add(node, launchers, model);
@@ -613,8 +630,17 @@ define('io.ox/core/main',
                     tabindex: 1,
                     'role': 'menuitem'
                 })
-                .text(gt.pgettext('app', title))
+                .addClass(closable ? 'closable' : '')
+                .text(/*#, dynamic*/gt.pgettext('app', title))
             );
+
+            if (closable) {
+                //add close button
+                node.append(
+                    quit(model)
+                );
+            }
+
             launcherDropdown.append(
                 node.on('click', function (e) {
                     e.preventDefault();
@@ -652,28 +678,68 @@ define('io.ox/core/main',
             tabManager();
         });
 
+        // ext.point('io.ox/core/topbar/right').extend({
+        //     id: 'search-input',
+        //     index: 101,
+        //     draw: function () {
+        //         if (capabilities.has('search')) {
+        //             var placeholder = $('<span>'),
+        //                 self = this;
+        //             //add search field placeholder
+        //             self.append(
+        //                 addLauncher('right', placeholder, $.noop(), gt('Search'))
+        //                 .attr('id', 'io-ox-search-topbar')
+        //                 .addClass('io-ox-search widget-content')
+        //             );
+
+        //             //replace placeholder with concrete search field
+        //             require(['io.ox/search/main'], function (searchapp) {
+        //                 placeholder.replaceWith(searchapp.init());
+        //             });
+        //         }
+        //     }
+        // });
+
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
             index: 100,
             draw: function () {
                 var self = this;
-                // we don't need this right from the start,
-                // so let's delay this for responsiveness
                 if (ox.online) {
-                    _.defer(function () {
-                        self.prepend(notifications.attach(addLauncher));
-                        tabManager();
-                    });
+                    // we don't need this right from the start,
+                    // so let's delay this for responsiveness!
+                    // only requests are delayed by 2s, the badge is drawn normally
+                    self.append(notifications.attach(addLauncher, 2000));
+                    tabManager();
                 }
             }
         });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'search',
+            index: 150,
+            draw: function () {
+                if (capabilities.has('search')) {
+                    this.append(
+                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+                                require(['io.ox/search/main'], function (searchapp) {
+                                    searchapp.run({reset: true});
+                                });
+                            },  gt('Search'))
+                        .attr('id', 'io-ox-search-topbar-icon')
+                        .addClass('io-ox-search')
+                    );
+                }
+            }
+        });
+
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'refresh',
             index: 200,
             draw: function () {
                 this.append(
-                    addLauncher('right', $('<i class="icon-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
+                    addLauncher('right', $('<i class="fa fa-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
                         refresh();
                         return $.when();
                     },  gt('Refresh'))
@@ -747,7 +813,6 @@ define('io.ox/core/main',
             }
         });
 
-
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'divider-before-fullscreen',
             index: 290,
@@ -804,7 +869,8 @@ define('io.ox/core/main',
             }
         });
 
-        if (settings.get('features/dedicatedLogoutButton', false) === false) {
+        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
+        if (!dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right/dropdown').extend({
                 id: 'logout',
                 index: 1000,
@@ -827,34 +893,28 @@ define('io.ox/core/main',
             id: 'dropdown',
             index: 1000,
             draw: function () {
-                var div, a, ul;
+                var ul;
                 this.append(
-                    div = $('<div class="launcher" role="presentation">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">').append(
-                            $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
+                    $('<li class="launcher dropdown" role="presentation">').append(
+                        $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
+                        .attr('aria-label', gt('Settings'))
+                        .append(
+                            $('<i class="fa fa-cog launcher-icon" aria-hidden="true">')
                         ),
-                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu pull-right" role="menu">')
+                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
                 );
-                if (!Modernizr.touch) {
-                    div.hover(
-                        function () { $(this).addClass('hover'); },
-                        function () { $(this).removeClass('hover'); }
-                    );
-                }
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
-                a.attr('aria-label', gt('Settings'));
-                a.dropdown();
             }
         });
 
-        if (settings.get('features/dedicatedLogoutButton', false) === true) {
+        if (dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right').extend({
                 id: 'logout-button',
                 index: 2000,
                 draw: function () {
                     this.append(
-                        addLauncher('right', $('<i class="icon-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                        addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
                             logout();
                         },  gt('Sign out'))
                     );
@@ -868,7 +928,7 @@ define('io.ox/core/main',
             draw: function () {
                 // add small logo to top bar
                 this.append(
-                    $('<div>', { id: 'io-ox-top-logo-small' })
+                    $('<div id="io-ox-top-logo-small" aria-hidden="true">')
                 );
             }
         });
@@ -878,7 +938,7 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
                 if (capabilities.has('launchpad')) {
-                    addLauncher('left', $('<i class="icon-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
+                    addLauncher('left', $('<i class="fa fa-th">').attr('aria-label', gt('Your Applications')), function () {
                         return require(['io.ox/launchpad/main'], function (m) {
                             launchers.children().removeClass('active-app');
                             launcherDropdown.children().removeClass('active-app');
@@ -886,7 +946,8 @@ define('io.ox/core/main',
                             m.show();
                         });
                     })
-                    .addClass('left-corner'); // to match dimensions of side navigation
+                    .addClass('left-corner') // to match dimensions of side navigation
+                    .attr('data-app-name', 'launchpad'); // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
                 }
             }
         });
@@ -896,18 +957,16 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
 
-                var topbar = settings.get('topbar/order'),
-                    apps = [],
+                var favorites = appAPI.getAllFavorites(),
+                    topbar = settings.get('topbar/order'),
                     hash = {};
 
                 // use custom order?
                 if (topbar) {
-                    // get apps
-                    apps = appAPI.getAvailable();
                     // get hash of exisiting favorites
-                    _(apps).each(function (obj) { hash[obj.id] = obj; });
+                    _(favorites).each(function (obj) { hash[obj.id] = obj; });
                     // get proper order
-                    apps = _(topbar.split(','))
+                    favorites = _(topbar.split(','))
                         .chain()
                         .map(function (id) {
                             return hash[id];
@@ -915,16 +974,14 @@ define('io.ox/core/main',
                         .compact()
                         .value();
                 } else {
-                    // get apps
-                    apps = appAPI.getAllFavorites();
                     // sort by index
-                    apps.sort(function (a, b) {
+                    favorites.sort(function (a, b) {
                         return ext.indexSorter(a, b);
                     });
                 }
 
-                _(apps).each(function (obj) {
-                    if (upsell.visible(obj.requires)) {
+                _(favorites).each(function (obj) {
+                    if (upsell.visible(obj.requires) && _.device(obj.device)) {
                         ox.ui.apps.add(new ox.ui.AppPlaceholder({
                             id: obj.id,
                             title: obj.title,
@@ -994,11 +1051,11 @@ define('io.ox/core/main',
         };
 
         var mobileAutoLaunchArray = function () {
-            var autoStart = _([].concat(settings.get('autoStartMobile', 'io.ox/portal'))).filter(function (o) {
+            var autoStart = _([].concat(settings.get('autoStartMobile', 'io.ox/mail'))).filter(function (o) {
                 return !_.isUndefined(o) && !_.isNull(o);
             });
-            //always add mail as fallback
-            autoStart.push('io.ox/mail');
+            // add mail as fallback
+            if (autoStart[0] !== 'io.ox/mail') autoStart.push('io.ox/mail');
             return autoStart;
         };
 
@@ -1034,13 +1091,14 @@ define('io.ox/core/main',
 
             // always use portal on small devices!
             if (_.device('small')) {
-                return mobileAutoLaunchArray();
+                mobileAutoLaunchArray();
             }
 
             var appURL = _.url.hash('app'),
-                manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app];
+                manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
+                mailto = _.url.hash('mailto') !== undefined && appURL === 'io.ox/mail/write:compose';
 
-            if (manifest && manifest.refreshable) {
+            if (manifest && (manifest.refreshable || mailto)) {
                 return appURL.split(/,/);
             } else {
                 return autoLaunchArray();
@@ -1081,8 +1139,9 @@ define('io.ox/core/main',
         });
 
         function fail(type) {
-            return function () {
-                console.error('core: Failed to load:', type, baton);
+            return function (e) {
+                var message = (e && e.message) || '';
+                console.error('core: Failed to load:', type, message, e, baton);
             };
         }
 
@@ -1113,46 +1172,47 @@ define('io.ox/core/main',
             }
         });
 
-        new Stage('io.ox/core/stages', {
-            id: 'update-tasks',
-            index: 200,
-            run: function () {
+        // new Stage('io.ox/core/stages', {
+        //     id: 'update-tasks',
+        //     index: 200,
+        //     run: function () {
 
-                debug('core: Stage "update-tasks"');
+        //         debug('core: Stage "update-tasks"');
 
-                require(['io.ox/core/updates/updater']).then(
-                    function success(updater) {
-                        // this is not mission-critical so continue if anything fails
-                        return updater.runUpdates().always(function () {
-                            return $.when();
-                        });
-                    },
-                    function fail() {
-                        return $.when();
-                    }
-                );
-            }
-        });
+        //         require(['io.ox/core/updates/updater']).then(
+        //             function success(updater) {
+        //                 // this is not mission-critical so continue if anything fails
+        //                 return updater.runUpdates().always(function () {
+        //                     return $.when();
+        //                 });
+        //             },
+        //             function fail() {
+        //                 return $.when();
+        //             }
+        //         );
+        //     }
+        // });
 
-        new Stage('io.ox/core/stages', {
-            id: 'secretCheck',
-            index: 250,
-            run: function () {
-                if (ox.online) {
-                    require(['io.ox/keychain/api'], function (keychainAPI) {
-                        keychainAPI.checkSecrets().done(function (analysis) {
-                            if (!analysis.secretWorks) {
-                                // Show dialog
-                                require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
-                                if (ox.debug) {
-                                    console.error('Couldn\'t decrypt accounts: ', analysis.diagnosis);
-                                }
-                            }
-                        });
-                    });
-                }
-            }
-        });
+        // TODO (mattes): Solve this differently.
+        // new Stage('io.ox/core/stages', {
+        //     id: 'secretCheck',
+        //     index: 250,
+        //     run: function () {
+        //         if (ox.online) {
+        //             require(['io.ox/keychain/api'], function (keychainAPI) {
+        //                 keychainAPI.checkSecrets().done(function (analysis) {
+        //                     if (!analysis.secretWorks) {
+        //                         // Show dialog
+        //                         require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });
+        //                         if (ox.debug) {
+        //                             console.error('Couldn\'t decrypt accounts: ', analysis.diagnosis);
+        //                         }
+        //                     }
+        //                 });
+        //             });
+        //         }
+        //     }
+        // });
 
         new Stage('io.ox/core/stages', {
             id: 'restore-check',
@@ -1176,13 +1236,16 @@ define('io.ox/core/main',
 
                 if (baton.canRestore) {
 
+                    baton.restoreHash = _.url.hash();
+
                     var dialog,
                         def = $.Deferred().done(function () {
                             $('#background-loader').busy().fadeIn();
                             topbar.show();
                             dialog.remove();
                             dialog = null;
-                        });
+                        }),
+                        btn1, btn2;
 
                     $('#io-ox-core').append(
                         dialog = $('<div class="core-boot-dialog" tabindex="0">').append(
@@ -1192,12 +1255,18 @@ define('io.ox/core/main',
                                     gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
                                 )
                             ),
-                            $('<ul class="content">'),
+                            $('<ul class="list-unstyled content">'),
                             $('<div class="footer">').append(
-                                $('<button type="button" class="btn btn-primary">').text(gt('Continue'))
+                                btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
+
+                    if (_.device('small')) {
+                        btn1.addClass('btn-block btn-lg');
+                        btn2.addClass('btn-block btn-lg');
+                    }
 
                     // draw savepoints to allow the user removing them
                     ox.ui.App.getSavePoints().done(function (list) {
@@ -1214,7 +1283,7 @@ define('io.ox/core/main',
                             this.append(
                                 $('<li class="restore-item">').append(
                                     $('<a href="#" role="button" class="remove">').data(item).append(
-                                        $('<i class="icon-trash">')
+                                        $('<i class="fa fa-trash-o">')
                                     ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
                                     $('<span>').text(gt.noI18n(info)),
@@ -1224,7 +1293,15 @@ define('io.ox/core/main',
                         }, dialog.find('.content'));
                     });
 
-                    dialog.on('click', '.footer .btn', def.resolve);
+                    dialog.on('click', '.footer .btn.continue', def.resolve);
+                    dialog.on('click', '.footer .btn.cancel', function (e) {
+                        e.preventDefault();
+                        ox.ui.App.removeAllRestorePoints().done(function () {
+                            _.url.hash(baton.restoreHash);
+                            baton.canRestore = false;
+                            def.resolve();
+                        });
+                    });
                     dialog.on('click', '.content .remove', function (e) {
                         e.preventDefault();
                         var node = $(this),
@@ -1235,7 +1312,7 @@ define('io.ox/core/main',
                         ox.ui.App.removeRestorePoint(id).done(function (list) {
                             // continue if list is empty
                             if (list.length === 0) {
-                                _.url.hash({});
+                                _.url.hash(baton.restoreHash);
                                 baton.canRestore = false;
                                 def.resolve();
                             }
@@ -1291,6 +1368,8 @@ define('io.ox/core/main',
                         $('#io-ox-screens').css('top', '0px');
                         topbar.hide();
                     }
+                    //draw plugins
+                    ext.point('io.ox/core/plugins').invoke('draw');
 
                     debug('core: Stage "load" > autoLaunch ...');
 
@@ -1349,14 +1428,6 @@ define('io.ox/core/main',
                     $('#background-loader').idle().fadeOut(DURATION, def.resolve);
                     return def;
                 }
-            }
-        });
-
-        new Stage('io.ox/core/stages', {
-            id: 'ready',
-            index: 'last',
-            run: function () {
-                ox.trigger('core:ready');
             }
         });
 

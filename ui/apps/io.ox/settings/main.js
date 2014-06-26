@@ -15,15 +15,14 @@ define('io.ox/settings/main',
     ['io.ox/core/tk/vgrid',
      'io.ox/core/api/apps',
      'io.ox/core/extensions',
-     'io.ox/core/tk/forms',
-     'io.ox/core/tk/view',
      'io.ox/core/commons',
      'gettext!io.ox/core',
      'settings!io.ox/settings/configjump',
+     'settings!io.ox/core',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
-     'less!io.ox/settings/style.less'
-    ], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
+     'less!io.ox/settings/style'
+    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, advancedModeSettings) {
 
     'use strict';
 
@@ -38,17 +37,19 @@ define('io.ox/settings/main',
                     );
                 if (_.device('smartphone')) {
                     title.css('margin', '4px 0'); // must use inline styles because vgrid's height calculon-o-mat does not respect any css values bound via classes for its calculation..
-                    title.prepend($('<i class="icon-chevron-right pull-right">'));
+                    title.prepend($('<i class="fa fa-chevron-right pull-right">'));
                 }
                 return { title: title };
             },
             set: function (data, fields) {
-                var title = gt.pgettext('app', data.title);
+                var title = /*#, dynamic*/gt.pgettext('app', data.title);
                 this.attr({
                     'aria-label': title
                 });
+                //clean template
+                fields.title.empty();
                 fields.title.append($.txt(
-                        title === data.title ? gt(data.title) : title
+                        title === data.title ? /*#, dynamic*/gt(data.title) : title
                     )
                 );
             }
@@ -77,10 +78,9 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = true, // for testing - better: false,
+        expertmode = advancedModeSettings.get('settings/advancedMode', false),
         currentSelection = null,
         previousSelection = null;
-
 
     function updateExpertMode() {
         var nodes = $('.expertmode');
@@ -143,26 +143,13 @@ define('io.ox/settings/main',
             return $.when();
         };
 
-        win.nodes.controls.append(
-            forms.createCheckbox({
-                dataid: 'settings-expertcb',
-                initialValue: expertmode,
-                label: gt('Expert mode')
-            })
-            .on('update.model', function (e, options) {
-                expertmode = options.value;
-                updateExpertMode();
-            })
-        );
-
         win.addClass('io-ox-settings-main');
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
-        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr('tabindex', 1).scrollable();
+        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').scrollable();
 
-
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none', selectSmart: _.device('!smartphone') });
+        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -202,7 +189,7 @@ define('io.ox/settings/main',
             }
 
             // try to get a translated title
-            var title = declaration['title_' + ox.language] || gt(declaration.title || '');
+            var title = declaration['title_' + ox.language] || /*#, dynamic*/gt(declaration.title) || '';
 
             ext.point('io.ox/settings/pane').extend(_.extend({
                 id: id,
@@ -261,7 +248,14 @@ define('io.ox/settings/main',
         var getAllSettingsPanes = function () {
             var def = $.Deferred();
             appsInitialized.done(function () {
-                def.resolve(ext.point('io.ox/settings/pane').list());
+
+                def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
+                    if (expertmode) {
+                        return true;
+                    } else if (!point.advancedMode) {
+                        return true;
+                    }
+                }));
             });
 
             appsInitialized.fail(def.reject);
@@ -353,6 +347,40 @@ define('io.ox/settings/main',
                 return $.when();
             }
         };
+
+        ext.point('settings/vgrid/toolbar').extend({
+            id: 'info',
+            index: 200,
+            draw: function () {
+
+                var buildCheckbox = function () {
+                    var checkbox = $('<input type="checkbox">')
+                    .on('change', function () {
+
+                        expertmode = checkbox.prop('checked');
+                        advancedModeSettings.set('settings/advancedMode', expertmode).save();
+                        grid.setAllRequest(getAllSettingsPanes);
+                        grid.paint();
+                        updateExpertMode();
+
+                    }).addClass('input-xlarge');
+                    checkbox.prop('checked', expertmode);
+                    return checkbox;
+                };
+
+                this.append(
+                    $('<div>').addClass('advanced-mode').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Advanced Settings')).prepend(
+                                buildCheckbox()
+                            )
+                        )
+                    )
+                );
+            }
+        });
+
+        ext.point('settings/vgrid/toolbar').invoke('draw', grid.getToolbar());
 
         // go!
         win.show(function () {

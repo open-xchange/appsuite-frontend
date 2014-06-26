@@ -49,7 +49,7 @@ define.async('io.ox/realtime/rt',
     var TIMEOUT = 2 * 60 * 1000;
     var INFINITY = TIMEOUT / 5000;
     var offlineCountdown;
-    
+
     var mode = 'lazy';
     var intervals = {
         lazy: 10000, // When traffic is low, don't ask for data as often
@@ -86,7 +86,6 @@ define.async('io.ox/realtime/rt',
         stanzas: []
     };
 
-
     var lastDelivery = _.now();
     var lastCheck = _.now();
     var ticks = 0;
@@ -117,7 +116,6 @@ define.async('io.ox/realtime/rt',
     function stop() {
         running = false;
     }
-
 
     // Keep sending stanzas until buffer is empty
     function purge() {
@@ -173,7 +171,8 @@ define.async('io.ox/realtime/rt',
             },
             data: stanzas,
             noRetry: true,
-            timeout: TIMEOUT
+            timeout: TIMEOUT,
+            silent: true
         }).done(function (resp) {
             transmitting = false;
             purging = false;
@@ -219,7 +218,8 @@ define.async('io.ox/realtime/rt',
                     action: 'poll',
                     resource: tabId
                 },
-                timeout: TIMEOUT
+                timeout: TIMEOUT,
+                silent: true
             }).done(handleResponse).fail(handleError);
         }
 
@@ -262,7 +262,6 @@ define.async('io.ox/realtime/rt',
     };
 
     Event.extend(api);
-
 
     function matches(json, namespace, element) {
         return json.namespace === namespace && json.element === element;
@@ -377,7 +376,8 @@ define.async('io.ox/realtime/rt',
                 resource: tabId
             },
             timeout: TIMEOUT,
-            data: {type: 'nextSequence', seq: newSequence}
+            data: {type: 'nextSequence', seq: newSequence},
+            silent: true
         }).done(function () {
             if (api.debug) {
                 console.log('Done resetting the sequence, no longer rejecting all sends.');
@@ -405,22 +405,9 @@ define.async('io.ox/realtime/rt',
 
     function received(stanza) {
         if (api.debug) {
-            console.log('Received  Stanza');
+            console.log('Received  Stanza', stanza);
         }
-        if (stanza.get('', 'error')) {
-            if (api.debug) {
-                console.log('Received Stanza contained an error');
-            }
-            var error = stanza.get('', 'error');
-            if (error.data && error.data.code === 1005) {
-                ox.trigger('relogin:required');
-            } else if (error.data && error.data.code === 1006) {
-                if (api.debug) {
-                    console.log('Got error 1006, so resetting sequence');
-                }
-                resetSequence(-1);
-            }
-        } else if (stanza.get('atmosphere', 'received')) {
+        if (stanza.get('atmosphere', 'received')) {
             _(stanza.getAll('atmosphere', 'received')).each(function (receipt) {
                 var sequenceNumber = Number(receipt.data);
                 receivedAcknowledgement(sequenceNumber);
@@ -459,18 +446,40 @@ define.async('io.ox/realtime/rt',
             if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
                 var outOfOrder = false;
                 if (stanza.seq > 0 && stanza.seq - serverSequenceThreshhold > 1) {
-                    console.error('Received a sequence number that is too far out of order: Expected: ' + serverSequenceThreshhold + 1 + ', but got: ' + stanza.seq);
+                    console.error('Received a sequence number that is too far out of order: Expected: ' + (serverSequenceThreshhold + 1) + ', but got: ' + stanza.seq);
                     outOfOrder = true;
                 }
                 if (stanza.seq > 0 && stanza.seq <= serverSequenceThreshhold) {
                     return; // Discard, as we have already seen this stanza
                 }
                 if (!outOfOrder) {
-                    if (api.debug) {
-                        console.log('RECEIVED', stanza.seq, stanza);
+                    if (stanza.get('', 'error')) {
+                        if (api.debug) {
+                            console.log('Received Stanza contained an error', stanza);
+                        }
+                        var error = stanza.get('', 'error');
+                        if (error.data && error.data.code === 1005) {
+                            ox.trigger('relogin:required');
+                        } else if (error.data && error.data.code === 1006) {
+                            if (api.debug) {
+                                console.log('Got error 1006, so resetting sequence');
+                            }
+                            resetSequence(-1);
+                        } else {
+                            api.trigger('error', stanza);
+                            api.trigger('error:' + stanza.selector, stanza);
+                            if (error.data && error.data.code) {
+                                api.trigger('error:code:' + error.data.code, stanza);
+                            }
+                        }
+                    } else {
+                        if (api.debug) {
+                            console.log('RECEIVED', stanza.seq, stanza);
+                        }
+                        api.trigger('receive', stanza);
+                        api.trigger('receive:' + stanza.selector, stanza);
+                        api.trigger('receive:from:' + stanza.from, stanza);
                     }
-                    api.trigger('receive', stanza);
-                    api.trigger('receive:' + stanza.selector, stanza);
                     if (stanza.seq !== -1) {
                         serverSequenceThreshhold = stanza.seq;
                     }
@@ -541,7 +550,6 @@ define.async('io.ox/realtime/rt',
         return result;
     }
 
-
     function enrol() {
         if (!running) {
             return $.when();
@@ -553,7 +561,8 @@ define.async('io.ox/realtime/rt',
                     action: 'enrol',
                     resource: tabId
                 },
-                timeout: TIMEOUT
+                timeout: TIMEOUT,
+                silent: true
             }).done(function (resp) {
                 enroled = true;
                 handleResponse(resp);
@@ -573,14 +582,18 @@ define.async('io.ox/realtime/rt',
         if (api.debug) {
             console.log('Relogin was successful, resuming operation');
         }
+        enroled = false;
         start();
+        enrol();
     });
 
     ox.on('change:session', function () {
         if (api.debug) {
             console.log('Got a new sessionID. Resuming operation.');
         }
+        enroled = false;
         start();
+        enrol();
     });
 
     ox.on('connection:down connection:offline', function () {
@@ -642,7 +655,8 @@ define.async('io.ox/realtime/rt',
                 resource: tabId
             },
             timeout: TIMEOUT,
-            data: options
+            data: options,
+            silent: true
         }).pipe(function (resp) {
             transmitting = false;
             if (api.debug) {

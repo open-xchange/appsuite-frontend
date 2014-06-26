@@ -29,6 +29,7 @@ window.ox = {
     loginLocation: 'signin',
     logoutLocation: 'signin',
     online: true,
+    rampup: {},
     revision: '1',
     root: root,
     secretCookie: false, // auto-login
@@ -62,7 +63,7 @@ window.ox = {
                     $('<ul class="launchers" role="menubar">'),
                     $('<div class="launcher-dropdown dropdown" aria-hidden="true">').append(
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').append(
-                            $('<i class="icon-reorder">')
+                            $('<i class="fa fa-bars">')
                         ),
                         $('<ul class="dropdown-menu" role="menu">')
                     )
@@ -126,10 +127,7 @@ if (sinon) {
             });
             fakeServer.respondWith("GET", /api\/apps\/manifests\?action=config/, function (xhr) {
                 var configData = {
-                    languages: {
-                        de_DE: 'Deutsch',
-                        en_US: 'English (US)'
-                    }
+                    languages: [['de_DE', 'Deutsch'], ['en_US', 'English (US)']]
                 };
                 xhr.respond(200, {"Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify({
                     data: configData

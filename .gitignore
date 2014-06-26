@@ -1,8 +1,9 @@
 .DS_Store
-/open-xchange-gui?*
 ui/watch.sh
 ui/node_modules
 *.sublime-*
 *~
 *.swp
 *.kate-swp
+ui/lib/bootstrap/node_modules
+npm-debug.log

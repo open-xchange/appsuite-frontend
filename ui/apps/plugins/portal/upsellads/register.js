@@ -15,7 +15,7 @@ define('plugins/portal/upsellads/register',
     ['io.ox/core/extensions',
      'gettext!plugins/portal',
      'settings!plugins/upsell',
-     'less!plugins/portal/upsellads/style.less'], function (ext, gt, settings) {
+     'less!plugins/portal/upsellads/style'], function (ext, gt, settings) {
 
     'use strict';
 
@@ -79,13 +79,11 @@ define('plugins/portal/upsellads/register',
 
         } else {
             console.error('Do not know type "' + type + '"', fromAd, toTarget);
-
         }
     };
 
     nextAd = function (content, ad, slides) {
         currPos = (currPos + 1) % slides.length;
-
 
         /* show next ad */
         content.empty();
@@ -120,7 +118,7 @@ define('plugins/portal/upsellads/register',
                     .on('click', function () {
                         return nextAd(content, ad, slides);
                     })
-                    .append($('<i class="icon-circle-arrow-right icon-2x">'))
+                    .append($('<i class="fa fa-circle-arrow-right fa-2x">'))
             );
             content.on('click', function () {
                 var def = $.Deferred();

@@ -14,11 +14,59 @@
 define('io.ox/mail/statistics',
     ['io.ox/mail/api',
      'io.ox/core/api/account',
+     'io.ox/core/extensions',
+     'io.ox/core/date',
+     'io.ox/core/tk/dialogs',
      'gettext!io.ox/mail',
-     'apps/io.ox/core/tk/charts.js'
-    ], function (api, accountAPI, gt) {
+     'static/3rd.party/Chart.js/Chart.js'
+    ], function (api, accountAPI, ext, date, dialogs, gt) {
 
     'use strict';
+
+    var INDEX = 100;
+
+    ext.point('io.ox/mail/statistics').extend({
+        id: 'foldername',
+        index: INDEX += 100,
+        draw: function (baton) {
+            this.append(
+                $('<h1 class="folder-name">').text(baton.data.title)
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/statistics').extend({
+        id: 'folder-statistic-from',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var node = $('<section>').busy();
+            baton.statistics.sender(node, { folder: baton.folder });
+            this.append(node);
+        }
+    });
+
+    ext.point('io.ox/mail/statistics').extend({
+        id: 'folder-statistic-weekday',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var node = $('<section>').busy();
+            baton.statistics.weekday(node, { folder: baton.folder });
+            this.append(node);
+        }
+    });
+
+    ext.point('io.ox/mail/statistics').extend({
+        id: 'folder-statistic-hour',
+        index: INDEX += 100,
+        draw: function (baton) {
+
+            var node = $('<section>').busy();
+            baton.statistics.hour(node, { folder: baton.folder });
+            this.append(node);
+        }
+    });
 
     var COLUMNS = '603,604,610',
         WIDTH = _.device('small') ? 280 : 500,
@@ -123,19 +171,22 @@ define('io.ox/mail/statistics',
             fetch({ folder: options.folder, columns: COLUMNS }).then(
                 function success(data) {
 
-                    var days = [0, 0, 0, 0, 0, 0, 0];
+                    var days = [0, 0, 0, 0, 0, 0, 0],
+                        tempDays = date.locale.daysShort,//get localized dates
+                        weekdays = tempDays.slice(date.locale.weekStart, tempDays.length).concat(tempDays.slice(0, date.locale.weekStart));//adjust weekstart
 
                     _(data).each(function (obj) {
-                        var day = (new Date(obj.received_date).getUTCDay() + 6) % 7;
+                        var day = new Date(obj.received_date).getUTCDay();
                         days[day]++;
                     });
 
                     days = _(days).map(function (sum) {
                         return Math.round(sum / data.length * 100);
                     });
+                    days = days.slice(date.locale.weekStart, days.length).concat(days.slice(0, date.locale.weekStart));//adjust weekstart
 
                     var chart = {
-                        labels: 'Mo Di Mi Do Fr Sa So'.split(' '),
+                        labels: weekdays,
                         datasets: [{
                             fillColor: 'rgba(0, 136, 204, 0.15)',
                             strokeColor: 'rgba(0, 136, 204, 0.80)',
@@ -199,6 +250,27 @@ define('io.ox/mail/statistics',
                     node.idle().empty();
                 }
             );
+        },
+
+        open: function (app) {
+
+            var statistics = this;
+
+            new dialogs.ModalDialog({
+                top: 60,
+                width: 600,
+                center: false,
+                maximize: true
+            })
+            .build(function () {
+                var node = this.getContentNode().addClass('statistics');
+                app.folder.getData().done(function (data) {
+                    var baton = ext.Baton({ data: data, app: app, folder: app.folder.get(), statistics: statistics });
+                    ext.point('io.ox/mail/statistics').invoke('draw', node, baton);
+                });
+            })
+            .addPrimaryButton('cancel', gt('Close'), 'cancel', { 'tabIndex': '1' })
+            .show();
         }
     };
 });

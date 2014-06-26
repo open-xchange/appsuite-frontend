@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>9.6.4. Configurer WebDAV sous Windows 7</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="OX App Suite">
+<link rel="up" href="ox.appsuite.user.sect.files.webdav.html" title="9.6. Accéder aux fichiers avec WebDAV">
+<link rel="prev" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="9.6.3. Configurer WebDAV sous Windows Vista">
+<link rel="next" href="ox.appsuite.user.sect.files.share.html" title="9.7. Fichiers et équipes">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.webdav.winvista.html">Précédent</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.share.html">Suivant</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="ox.appsuite.user.sect.files.webdav.win7"></a>9.6.4. Configurer WebDAV sous Windows 7</h3></div></div></div>
+<a class="indexterm" name="idm139841082852336"></a><a class="indexterm" name="idm139841082850944"></a><p><a name="ox.appsuite.user.concept.files.webdav.win7"></a>Pour configurer l'accès WebDAV sous Windows 7, vous disposez de plusieurs options : </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Utilisez le Programme de mise à jour de OX. Vous trouverez des informations à ce sujet dans la documentation utilisateur du Programme de mise à jour de OX.</p></li>
+<li class="listitem"><p>Puis configurez manuellement l'<a class="link" href="ox.appsuite.user.sect.files.webdav.win7.html#ox.appsuite.user.task.webdav.win7" title="Pour régler manuellement l'accès par WebDAV sous Windows 7 :">accès WebDav</a>.</p></li>
+</ul></div>
+<p><span class="phrase"><strong>Remarque :</strong></span> Suivant la configuration de Windows 7, vous pouvez observer une certaine latence dans l'accès aux dossiers WebDAV. Si tel est le cas, suivez les instructions fournies dans cet article : <code class="uri">http://support.microsoft.com/kb/2445570</code>.</p>
+<div class="task">
+<a name="ox.appsuite.user.task.webdav.win7"></a><p class="title"><b>Pour régler manuellement l'accès par WebDAV sous Windows 7 :</b></p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>Pré-requis :</strong></span> La clé de registre<span class="guilabel"><strong>BasicAuthLevel</strong></span> doit avoir la valeur <span class="guilabel"><strong>2</strong></span> dans la base de registre de Windows. Vous pouvez trouver davantage d'informations à ce sujet dans les articles de la base Microsoft <a class="ulink" href="http://support.microsoft.com/kb/928692" target="_top">http://support.microsoft.com/kb/928692</a> et <a class="ulink" href="https://support.microsoft.com/kb/841215" target="_top">https://support.microsoft.com/kb/841215</a>. </p>
+        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Dans la zone de navigation de l'explorateur Windows, sélectionnez l'élément <span class="guibutton"><strong>Ordinateur</strong></span>.</p></li>
+<li class="step"><p>Dans la barre d'icônes, cliquez sur <span class="guibutton"><strong>Connecter  un lecteur réseau</strong></span>. La fenêtre <span class="guilabel"><strong>Connecter un lecteur réseau</strong></span> apparaît.</p></li>
+<li class="step"><p>Cliquez sur <span class="guibutton"><strong>Se connecter à un site Web permettant de stocker des documents et des images</strong></span>. L'écran <span class="guilabel"><strong>Ajouter un emplacement réseau</strong></span> apparaît. Cliquez sur <span class="guibutton"><strong>Suivant</strong></span>.</p></li>
+<li class="step"><p>Sélectionnez <span class="guibutton"><strong>Choisissez un emplacement réseau personnalisé</strong></span>. Cliquez sur <span class="guibutton"><strong>Suivant</strong></span>.</p></li>
+<li class="step"><p>Dans la boîte de dialogue <span class="guilabel"><strong>Adresse réseau ou Internet</strong></span>, saisissez l'adresse suivant : https://&lt;adresse&gt;/servlet/webdav.infostore Remplacez &lt;adresse&gt; par l'adresse IP ou l'URL du serveur de travail collaboratif. Cliquez sur <span class="guibutton"><strong>Suivant</strong></span>.</p></li>
+<li class="step"><p>Saisissez votre nom d'utilisateur et votre mot de passe d'accès au serveur de travail collaboratif. Cliquez sur <span class="guibutton"><strong>OK</strong></span>.</p></li>
+<li class="step"><p>Sur l'écran suivant, vous pouvez associer un nom à l'adresse réseau. Cliquez sur <span class="guibutton"><strong>Suivant</strong></span>.</p></li>
+<li class="step"><p>Cliquez sur <span class="guibutton"><strong>Terminer</strong></span>.</p></li>
+</ol></div>
+<div class="taskrelated">
+          <p class="order.result"><span class="phrase"><strong>Résultat :</strong></span> sous <span class="guibutton"><strong>Ordinateur</strong></span>, vous pouvez accéder à vos fichiers de l'app <span class="guibutton"><strong>Computer </strong></span> you can access your <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span>.</p>
+        </div>
+</div>
+</div>
+</body>
+</html>

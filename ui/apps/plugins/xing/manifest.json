@@ -1,0 +1,10 @@
+{
+    "namespace": "io.ox/core/main",
+    "title": "XING",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "settings": false,
+    "index": 100,
+    "path": "plugins/xing/main",
+    "requires": "xing xingjson"
+}

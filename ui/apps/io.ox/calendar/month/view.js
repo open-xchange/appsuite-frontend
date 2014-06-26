@@ -17,8 +17,8 @@ define('io.ox/calendar/month/view',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
-     'less!io.ox/calendar/month/style.less',
-     'apps/io.ox/core/tk/jquery-ui.min.js'
+     'less!io.ox/calendar/month/style',
+     'static/3rd.party/jquery-ui.min.js'
     ], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
@@ -60,7 +60,7 @@ define('io.ox/calendar/month/view',
                 cT = $('[data-cid="' + cid + '"]', this.pane);
             if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid(cid + '');
+                    obj = _.cid(String(cid));
 
                 if (!cT.hasClass('current')) {
                     self.trigger('showAppointment', e, obj);
@@ -102,13 +102,13 @@ define('io.ox/calendar/month/view',
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            var cid = _.cid($(e.currentTarget).data('cid') + '');
+            var cid = _.cid(String($(e.currentTarget).data('cid')));
             $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            var cid = _.cid($(e.currentTarget).data('cid') + '');
+            var cid = _.cid(String($(e.currentTarget).data('cid')));
             $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
         },
 
@@ -206,11 +206,10 @@ define('io.ox/calendar/month/view',
             var self = this,
                 tempDate;
             // clear first
-            $('.appointment, .icon-circle', this.$el).remove();
+            $('.appointment, .fa-circle', this.$el).remove();
 
             // loop over all appointments
             this.collection.each(function (model) {
-
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
@@ -274,15 +273,17 @@ define('io.ox/calendar/month/view',
                 helper: function () {
                     return $(this)
                         .clone()
-                        .width($(this).outerWidth())
-                        .css({zIndex: 999});
+                        .width($(this).outerWidth());
                 },
                 appendTo: self.$el,
                 scroll: true,
+                scrollSpeed: 100,
+                scrollSensitivity: 100,
                 snap: '.day>.list',
                 snapMode: 'inner',
                 snapTolerance: 20,
                 distance: 20,
+                zIndex: 999,
                 containment: self.$el.parent(),
                 revertDuration: 0,
                 revert: function (drop) {
@@ -364,7 +365,7 @@ define('io.ox/calendar/month/view',
                         //#. add confirmation status behind appointment title
                         //#. %1$s = apppintment title
                         //#, c-format
-                        gt('%1$s\u00A0(Tentative)');
+                        gt('%1$s (Tentative)');
                 }
             }
 
@@ -376,9 +377,9 @@ define('io.ox/calendar/month/view',
                     .addClass('appointment-content')
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        $('<span class="private-flag"><i class="icon-lock"></i></span>')[a.get('private_flag') ? 'show' : 'hide'](),
-                        $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))),
-                        $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0'))
+                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock"></i></span>'): '',
+                        a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
+                        a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )
                 )
                 .attr({
@@ -397,7 +398,7 @@ define('io.ox/calendar/month/view',
         id: 'default',
         index: 100,
         draw: function () {
-            this.append('<i class="icon-circle">');
+            this.append('<i class="fa fa-circle">');
         }
     });
 

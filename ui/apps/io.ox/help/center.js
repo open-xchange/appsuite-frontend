@@ -15,7 +15,7 @@ define('io.ox/help/center',
     ['io.ox/core/extensions',
      'io.ox/help/core_doc',
      'gettext!io.ox/help',
-     'less!io.ox/help/style.less'
+     'less!io.ox/help/style'
     ], function (ext, core_doc, gt) {
     //TODO Launcher refactoren, hier hin
     'use strict';
@@ -115,7 +115,7 @@ define('io.ox/help/center',
 
         //add cancel button
         console.log('Check help button:', $helpButton);
-        $('<i class="icon-remove-circle icon-white" id="io-ox-help-off">')
+        $('<i class="fa fa-times-circle icon-white" id="io-ox-help-off">')
         .css({
             position: 'absolute',
             top: $helpButton.offset().top,
@@ -153,7 +153,6 @@ define('io.ox/help/center',
         $('.io-ox-help-highlight').detach();
         $('#io-ox-help-off').detach();
     };
-
 
     return center;
 

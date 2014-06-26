@@ -13,7 +13,7 @@
 define('io.ox/participants/views',
     ['io.ox/contacts/api',
      'gettext!io.ox/calendar/edit/main',
-     'less!io.ox/participants/participants.less'
+     'less!io.ox/participants/participants'
     ], function (api, gt) {
 
     'use strict';
@@ -42,7 +42,7 @@ define('io.ox/participants/views',
                 $text: $('<div class="participant-name">'),
                 $mail: $('<a class="participant-email">'),
                 $extra: $('<a class="extra-decorator">'),
-                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="icon-trash"></i></div></a>')
+                $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="fa fa-trash-o"></i></div></a>')
             };
 
             this.setDisplayName();
@@ -197,7 +197,7 @@ define('io.ox/participants/views',
 
     var UserContainer = Backbone.View.extend({
         tagName: 'div',
-        className: 'participantsrow',
+        className: 'participantsrow col-xs-12',
         initialize: function (options) {
             options.collection.on('add remove reset', _.bind(this.updateContainer, this));
         },
@@ -215,7 +215,7 @@ define('io.ox/participants/views',
                     counter++;
                 }
             });
-            var row = $('<div class="row-fluid">');
+            var row = $('<div class="row">');
             _(this.nodes).chain().values().each(function (node) {
                 row.append(node);
             });
@@ -226,7 +226,7 @@ define('io.ox/participants/views',
             return new ParticipantEntryView({
                 model: participant,
                 baton: this.options.baton,
-                className: 'span6',
+                className: 'col-xs-12 col-sm-6',
                 halo: true,
                 callbacks: this.options.baton.callbacks || {}
             }).render().$el;
@@ -243,4 +243,3 @@ define('io.ox/participants/views',
         UserContainer: UserContainer
     };
 });
-

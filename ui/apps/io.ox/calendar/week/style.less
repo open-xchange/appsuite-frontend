@@ -11,17 +11,12 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-@weekviewTimeWithSmall: @weekviewTimeWith - 13;
+@weekview-time-widthSmall: @weekview-time-width - 13;
 
 .week-view {
 
     * {
-        .box-sizing(border-box);
         -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
-
-    .info {
-        cursor: pointer;
     }
 
     .week {
@@ -30,10 +25,27 @@
         height: 100%;
         position: relative;
         display: inline-block;
-        border-right: 1px solid #ccc;
+        border-right: 1px solid @weekview-border;
         overflow: hidden;
         .transition(background-color 0.4s);
         .backface-visibility(hidden);
+    }
+
+    .toolbar {
+
+        .info {
+            cursor: pointer;
+        }
+
+    }
+
+    .footer-container {
+
+        .footer {
+            .overflow-y(scroll);
+            .overflow-x(hidden);
+        }
+
     }
 
     .week-view-container {
@@ -42,16 +54,16 @@
         left: 0;
         right: 0;
         bottom: 0;
-        top: @calendarToolbarHeight + @weekviewFooterHeight;
+        top: @calendar-toolbar-height + @weekview-footer-height;
 
         .fulltime-container {
 
             position: absolute;
-            height: @weekviewFooterHeight;
-            overflow-y: scroll;
-            overflow-x: hidden;
-            border-bottom: 1px solid #ccc;
-            left: @weekviewTimeWith;
+            height: @weekview-footer-height;
+            .overflow-y(scroll);
+            .overflow-x(hidden);
+            border-bottom: 1px solid @weekview-border;
+            left: @weekview-time-width;
             right: 0;
 
             .fulltime {
@@ -76,10 +88,6 @@
                     border: none;
                 }
 
-                .appointment-content {
-                    border-left: 1px solid rgba(255, 255, 255, 0.6);
-                }
-
             }
 
         }
@@ -89,7 +97,7 @@
             .overflow-y(scroll);
             .overflow-x(hidden);
             position: absolute;
-            top: @weekviewFooterHeight;
+            top: @weekview-footer-height;
             left: 0;
             right: 0;
             bottom: 0;
@@ -97,19 +105,20 @@
 
             .week-container-label {
 
-                width: @weekviewTimeWith;
+                width: @weekview-time-width;
                 position: absolute;
 
                 .time {
 
                     position: relative;
                     height: 48px;
+                    margin-left: 1em;
+                    border-bottom: 1px solid @weekview-border;
 
                     .number {
                         font-size: 12px;
                         position: absolute;
-                        right: 8px;
-                        bottom: -9px;
+                        bottom: -1.6em;
                     }
 
                 }
@@ -118,21 +127,28 @@
 
             .week-container {
 
-                left: @weekviewTimeWith;
+                left: @weekview-time-width;
                 right: 0;
                 position: absolute;
 
                 .timeline {
                     position: absolute;
-                    height: 3px;
+                    height: 0;
                     width: 100%;
-                    background-color: @weekviewTimeline;
+                    border-bottom: 2px dashed @weekview-timeline;
                     z-index: 10;
                     .user-select(none);
                 }
 
-            }
+                .appointment-content {
+                    line-height: 16px;
+                    padding: 4px 7px;
+                }
 
+                .dark-colors & .appointment-content {
+                    padding: 4px 10px;
+                }
+            }
         }
 
         .day {
@@ -140,18 +156,18 @@
             position: relative;
             height: 100%;
             float: left;
-            border-left: 1px solid #ccc;
             background-color: rgba(0, 0, 0, 0.01);
+            border-left: 1px solid @weekview-border;
             .user-select(none);
 
             .timeslot {
 
                 -webkit-touch-callout: none !important;
-                border-bottom: 1px solid #ccc;
+                border-bottom: 1px solid @weekview-border;
                 height: 24px;
 
                 &:nth-child(2n+1) {
-                    border-bottom-style: dotted;
+                    border-color: lighten(@weekview-border, 10%);
                 }
 
                 &:last-child, .time:last-child {
@@ -159,11 +175,11 @@
                 }
 
                 &.in {
-                    background-color: @weekviewDayIn;
+                    background-color: @weekview-day-in;
                 }
 
                 &.out {
-                    background-color: @weekviewDayOut;
+                    background-color: @weekview-day-out;
                 }
 
             }
@@ -171,11 +187,11 @@
             &.today .timeslot {
 
                 &.in {
-                    background-color: darken(@weekviewDayIn, 5%);
+                    background-color: lighten(@weekview-day-out, 1%);
                 }
 
                 &.out {
-                    background-color: darken(@weekviewDayOut, 3%);
+                    background-color: darken(@weekview-day-out, 2%);
                 }
 
             }
@@ -188,11 +204,11 @@
     .dayview {
 
         .toolbar {
-            padding-bottom: @calendarToolbarTopPadding;
+            padding-bottom: @calendar-toolbar-top-padding;
         }
 
         .week-view-container {
-            top: @calendarToolbarHeight + @calendarToolbarTopPadding;
+            top: @calendar-toolbar-height + @calendar-toolbar-top-padding;
         }
 
         .footer-container {
@@ -204,9 +220,9 @@
     .appointment {
 
         position: absolute;
-        background-color: #ccc;
+        background-color: @appointment-reserved;
         opacity: 1;
-        .transition(opacity 0.2s);
+        .transition(~"opacity 0.2s, background-color 0.3s, color 0.3s");
         .backface-visibility(hidden);
 
         &.modify {
@@ -214,7 +230,10 @@
         }
 
         &.border {
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            @border: 1px solid rgba(0, 0, 0, 0.2);
+            border-top: @border;
+            border-right: @border;
+            border-bottom: @border;
         }
 
         &.current, &.hover {
@@ -224,11 +243,10 @@
 
         &.lasso {
             border: 1px solid #08c;
-            background-color: @weekviewAppointmentLasso;
-            opacity: @appointmentDeclinedAlpha;
+            background-color: @weekview-appointment-lasso;
+            opacity: 0.4;
             width: 100%;
             cursor: default;
-            .box-sizing(border-box);
         }
 
         .private-flag {
@@ -241,8 +259,9 @@
 
             height: 100%;
             font-size: 12px;
-            color: #fff;
-            padding: 0 7px 0 7px;
+            padding: 0 7px;
+            border-left: 3px solid;
+            border-color: inherit;
             .ellipsis();
 
             * {
@@ -296,6 +315,27 @@
         height: 100%;
     }
 
+    /* Big Screen */
+    @media all and (min-height: 1200px) {
+
+        .week-view-container {
+
+            .scrollpane {
+
+                .week-container {
+
+                    .appointment-content {
+                        line-height: 20px;
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
     /* Mobile */
     @media all and (max-width: 480px), all and (max-device-width: 480px)  {
 
@@ -306,17 +346,17 @@
         .week-view-container {
 
             .fulltime-container {
-                left: @weekviewTimeWithSmall;
+                left: @weekview-time-widthSmall;
             }
 
             .scrollpane {
 
                 .week-container-label {
-                    width: @weekviewTimeWithSmall;
+                    width: @weekview-time-widthSmall;
                 }
 
                 .week-container {
-                    left:  @weekviewTimeWithSmall;
+                    left:  @weekview-time-widthSmall;
                 }
 
             }
@@ -326,7 +366,7 @@
         .dayview {
 
             .week-view-container {
-               top: @calendarToolbarHeight + 15;
+               top: @calendar-toolbar-height;
             }
 
         }

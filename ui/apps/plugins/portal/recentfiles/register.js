@@ -18,7 +18,7 @@ define('plugins/portal/recentfiles/register',
      'io.ox/core/date',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/recentfiles/style.less'
+     'less!plugins/portal/recentfiles/style'
     ], function (ext, filesAPI, userAPI, date, gt, settings) {
 
     'use strict';

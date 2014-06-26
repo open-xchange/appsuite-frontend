@@ -15,7 +15,7 @@
 define('plugins/halo/view-detail',
     ['plugins/halo/api',
      'io.ox/core/extensions',
-     'less!plugins/halo/style.less'
+     'less!plugins/halo/style'
     ], function (api, ext) {
 
     'use strict';

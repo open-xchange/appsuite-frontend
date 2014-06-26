@@ -17,14 +17,23 @@
         position: relative;
         min-height: 55px;
         margin: 0 0 20px 65px;
-
-        a.profile-picture {
+        
+        >a.profile-picture {
             position: absolute;
             top: 2px;
             left: -65px;
-
-            img.picture { .picture(50px, 50px); }
         }
+
+        a.profile-picture img.picture { .picture(50px, 50px); }
+
+        .wall-post-content {
+            max-height: 350px;
+            overflow: hidden;
+    	}
+    	.facebook-content-expand, .comment-toggle{
+    		border: none;
+    		padding-left: 0px;
+    	}
     }
 
     .from { display: inline; }
@@ -42,7 +51,7 @@
     .wall-comment .picture {
         display: block;
         position: absolute;
-        left: 0px;
+        left: 0;
         top: 1em;
         width: 50px;
     }
@@ -63,6 +72,12 @@
         }
     }
 
+	.facebook-image {
+		display: inline-block;
+		margin-right: 3px;
+		margin-bottom: 3px;
+	}
+
     img {
         &.posted-image {
             display: block;
@@ -76,9 +91,23 @@
     }
 
     .datetime  {
-        display: block;
         font-size: 80%;
+        color: #888;
         clear: both;
+    }
+
+    .likeinfo {
+    	margin-left: 5px;
+
+    	.youlike {
+    		margin-right: 5px;
+    	}
+
+        i, .count { color: #3b5998; }
+
+    	.count {
+    		margin-left: 2px;
+    	}
     }
 
     .caption {

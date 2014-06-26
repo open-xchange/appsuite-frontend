@@ -113,7 +113,6 @@ define('io.ox/preview/main',
         }
     }));
 
-
     // register audio typed renderer
     if (mediasupport.hasSupport('audio')) {
         Renderer.point.extend(new Engine({
@@ -135,7 +134,7 @@ define('io.ox/preview/main',
                     autoplay: false
                 }).hide().appendTo(this.on('click', function () { return false; }));
                 var self = this;
-                require(['apps/3rd.party/mediaelement/mediaelement-and-player.js',
+                require(['static/3rd.party/mediaelement/mediaelement-and-player.js',
                         'css!3rd.party/mediaelement/mediaelementplayer.css'], function () {
 
                     var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
@@ -184,8 +183,8 @@ define('io.ox/preview/main',
         id: 'eml',
         supports: ['eml', 'message/rfc822'],
         draw: function (file) {
-            var self = this;
-            require(['io.ox/mail/view-detail'], function (view) {
+            var self = this.busy();
+            require(['io.ox/mail/detail/view'], function (detail) {
                 var data = file.data.nested_message;
                 data.parent = file.parent;
                 //preview during compose (forward mail as attachment)
@@ -202,7 +201,8 @@ define('io.ox/preview/main',
                         needsfix: true
                     };
                 }
-                self.append(view.draw(data).css('padding', 0));
+                var view = new detail.View({ data: data, loaded: true });
+                self.idle().append(view.render().expand().$el.addClass('no-padding'));
             });
         },
         omitClick: true
@@ -210,10 +210,10 @@ define('io.ox/preview/main',
 
     Renderer.point.extend(new Engine({
         id: 'text',
-        supports: ['txt', 'plain/text', 'asc', 'js', 'md'],
+        supports: ['txt', 'plain/text', 'asc', 'js', 'md', 'json'],
         draw: function (file) {
             var node = this;
-            require(['io.ox/core/emoji/util', 'less!io.ox/preview/style.less'], function (emoji) {
+            require(['io.ox/core/emoji/util', 'less!io.ox/preview/style'], function (emoji) {
                 $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
                     // plain text preview with emoji support
                     // need to escape here; plain text might surprise with bad HTML

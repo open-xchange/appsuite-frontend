@@ -22,6 +22,22 @@ define('io.ox/core/api/user',
 
     'use strict';
 
+    var convertResponseToGregorian = function (response) {//helper function
+        if (response.id) {//we have only one user
+            if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {//convert birthdays with year 1 from julian to gregorian calendar
+                response.birthday = util.julianToGregorian(response.birthday);
+            }
+            return response;
+        } else {//we have an array of users
+            _(response).each(function (contact) {//convert birthdays with year 1 from julian to gregorian calendar
+                if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {//birthday without year
+                    contact.birthday = util.julianToGregorian(contact.birthday);
+                }
+            });
+            return response;
+        }
+    };
+
     // generate basic API
     var api = apiFactory({
         module: 'user',
@@ -53,8 +69,17 @@ define('io.ox/core/api/user',
                     return { pattern: query };
                 }
             }
+        },
+        pipe: {
+            get: convertResponseToGregorian,
+            search: convertResponseToGregorian
         }
     });
+
+    // use rampup data
+    if (ox.rampup.user && ox.rampup.user.id === ox.user_id) {
+        api.caches.get.add(ox.rampup.user);
+    }
 
     /**
      * update user attributes
@@ -68,6 +93,9 @@ define('io.ox/core/api/user',
         if (_.isEmpty(o.data)) {
             return $.when();
         } else {
+            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+                o.data.birthday = util.gregorianToJulian(o.data.birthday);
+            }
             return http.PUT({
                     module: 'user',
                     params: {
@@ -86,8 +114,12 @@ define('io.ox/core/api/user',
                             return $.when(
                                 api.caches.get.add(data),
                                 api.caches.all.clear(),
-                                api.caches.list.remove({ id: o.id })
-                                // TODO: What about the contacts cache?
+                                api.caches.list.remove({ id: o.id }),
+                                // update contact caches
+                                contactsApi.caches.get.remove({folder_id: data.folder_id, id: data.contact_id}),//no add here because this userdata not contactdata (similar but not equal)
+                                contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
+                                contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
+                                contactsApi.clearFetchCache()
                             )
                             .done(function () {
                                 api.trigger('update:' + _.ecid(data), data);

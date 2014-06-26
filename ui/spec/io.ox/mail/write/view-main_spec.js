@@ -11,8 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/mail/write/main'], function (main) {
-    var view = main.getApp().getView(),
-        expect = chai.expect;
+    var view = main.getApp().getView();
 
     describe('mail write view', function () {
 

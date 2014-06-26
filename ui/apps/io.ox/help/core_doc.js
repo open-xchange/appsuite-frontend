@@ -55,4 +55,3 @@ define('io.ox/help/core_doc',  ['io.ox/core/extensions'], function (ext) {
         }
     });
 });
-

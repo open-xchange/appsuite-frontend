@@ -46,10 +46,11 @@ define('io.ox/core/desktop',
             title: ''
         },
 
-        initialize: function () {
+        initialize: function (options) {
             var self = this;
             this.guid = appGuid++;
             this.id = this.id || 'app-' + appGuid;
+            this.options = options || {};
             this.getInstance = function () {
                 return self;
             };
@@ -67,6 +68,8 @@ define('io.ox/core/desktop',
         getTitle: function () {
             return this.get('title');
         },
+
+        saveRestorePoint: $.noop,
 
         call: $.noop
     });
@@ -88,6 +91,7 @@ define('io.ox/core/desktop',
                          .always(def.resolve);
             } else {
                 upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
+                return $.when();
             }
         },
 
@@ -98,6 +102,38 @@ define('io.ox/core/desktop',
             ox.ui.apps.remove(this);
         }
     });
+
+    var apputil = {
+        LIMIT: 60000,
+        length: function (obj) {
+            return JSON.stringify(obj).length;
+        },
+        //crop save point
+        crop: function (list, data, pos) {
+            var length = apputil.length,
+                latest = list[pos],
+                exceeds =  apputil.LIMIT < length(list) - length(latest || '') + length(data);
+
+            if (exceeds) {
+                if (latest) {
+                    //use latest sucessfully saved state
+                    data = latest;
+                } else {
+                    //remove data property
+                    data.point.data = {};
+                }
+                //notify user
+                if (!('exceeded' in data)) {
+                    notifications.yell('warning', gt('Failed to automatically save current stage of work. Please save your work to avoid data loss in case the browser closes unexpectedly.'));
+                    //flag to yell only once
+                    data.exceeded = true;
+                }
+            } else {
+                delete data.exceeded;
+            }
+            return data;
+        }
+    };
 
     ox.ui.App = AbstractApp.extend({
 
@@ -277,6 +313,27 @@ define('io.ox/core/desktop',
         },
 
         /**
+         * Add mediator extensions
+         * ext.point('<app-name>/mediator'').extend({ ... });
+         */
+        mediator: function (obj) {
+            ox.ui.App.mediator(this.getName(), obj);
+        },
+
+        /*
+         * setup all mediator extensions
+         */
+        mediate: function () {
+            var self = this;
+            return ext.point(this.getName() + '/mediator').each(function (extension) {
+                try {
+                    if (extension.setup) extension.setup(self);
+                } catch (e) {
+                    console.error('mediate', extension.id, e.message, e);
+                }
+            });
+        },
+        /**
          * Registers an event handler at a global browser object (e.g. the
          * window, the document, or the <body> element) that listens to the
          * specified event or events. The event handler will only be active
@@ -357,14 +414,15 @@ define('io.ox/core/desktop',
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
+                ox.trigger('app:init', this);
                 if (isDisabled) {
                     deferred = $.Deferred().reject();
                 } else {
-                    options = options || {};
+                    _.extend(this.options, options);
                     if (name) {
-                        ext.point(name + '/main').invoke('launch', this, options);
+                        ext.point(name + '/main').invoke('launch', this, this.options);
                     }
-                    deferred = this.get('launch').call(this, options) || $.when();
+                    deferred = this.get('launch').call(this, this.options) || $.when();
                 }
                 deferred.then(
                     function success() {
@@ -383,6 +441,7 @@ define('io.ox/core/desktop',
                 // toggle app window
                 this.get('window').show();
                 this.trigger('resume', this);
+                ox.trigger('app:resume', this);
             }
 
             return deferred.pipe(function () {
@@ -399,7 +458,7 @@ define('io.ox/core/desktop',
                     self.destroy();
                 }
                 // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
-                if (self.getWindow().state.visible && (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0])) {
+                if ((self.getWindow() && self.getWindow().state.visible) && (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0])) {
                     //we are still in the app to close so we can clear the URL
                     _.url.hash({ app: null, folder: null, perspective: null, id: null });
                 }
@@ -412,7 +471,6 @@ define('io.ox/core/desktop',
                 if (self.has('window')) {
                     win = self.get('window');
                     win.trigger('quit');
-                    ox.trigger('app:stop', self);
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
@@ -420,6 +478,7 @@ define('io.ox/core/desktop',
                 ox.ui.apps.remove(self);
                 // mark as not running
                 self.trigger('quit');
+                ox.trigger('app:stop', self);
                 self.set('state', 'stopped');
                 // remove app's properties
                 for (var id in self) {
@@ -433,7 +492,7 @@ define('io.ox/core/desktop',
         saveRestorePoint: function () {
             var self = this, uniqueID = self.get('uniqueID');
             if (this.failSave) {
-                ox.ui.App.getSavePoints().done(function (list) {
+                return ox.ui.App.getSavePoints().then(function (list) {
                     // might be null, so:
                     list = list || [];
                     var data, ids, pos;
@@ -446,6 +505,8 @@ define('io.ox/core/desktop',
                         data.version = ox.version;
                         data.ua = navigator.userAgent;
                         if (data) {
+                            //consider db limit for jslob
+                            data = apputil.crop(list, data, pos);
                             if (pos > -1) {
                                 // replace
                                 list.splice(pos, 1, data);
@@ -459,9 +520,13 @@ define('io.ox/core/desktop',
                         if (pos > -1) { list.splice(pos, 1); delete self.failSave; }
                     }
                     if (list.length > 0) {
-                        ox.ui.App.setSavePoints(list);
+                        return ox.ui.App.setSavePoints(list);
+                    } else {
+                        return $.when();
                     }
                 });
+            } else {
+                return $.when();
             }
         },
 
@@ -473,6 +538,19 @@ define('io.ox/core/desktop',
 
     // static methods
     _.extend(ox.ui.App, {
+
+        /**
+         * Add mediator extensions
+         * ext.point('<app-name>/mediator'').extend({ ... });
+         */
+        mediator: function (name, obj) {
+            // get extension point
+            var point = ext.point(name + '/mediator'), index = 0;
+            // loop over key/value object
+            _(obj).each(function (fn, id) {
+                point.extend({ id: id, index: (index += 100), setup: fn });
+            });
+        },
 
         canRestore: function () {
             // use get instead of contains since it might exist as empty list
@@ -500,6 +578,10 @@ define('io.ox/core/desktop',
             return appCache.add('savepoints', list);
         },
 
+        removeAllRestorePoints: function () {
+            return this.setSavePoints([]);
+        },
+
         removeRestorePoint: function (id) {
             var self =  this;
             return this.getSavePoints().then(function (list) {
@@ -518,18 +600,18 @@ define('io.ox/core/desktop',
 
         restore: function () {
             var self = this;
-            this.getSavePoints().done(function (data) {
-                $.when.apply($,
+            return this.getSavePoints().then(function (data) {
+                return $.when.apply($,
                     _(data).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).pipe(function (m) {
-                            return m.getApp().launch().done(function () {
+                            return m.getApp().launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
                                 if (this.failRestore) {
                                     // restore
-                                    this.failRestore(obj.point);
+                                    return this.failRestore(obj.point);
                                 }
                             });
                         });
@@ -570,14 +652,6 @@ define('io.ox/core/desktop',
 
         getCurrentWindow: function () {
             return currentWindow;
-        }
-    });
-
-    // listen for logout event
-    ext.point('io.ox/core/logout').extend({
-        id: 'saveCoreSettings',
-        logout: function () {
-            return coreConfig.save();
         }
     });
 
@@ -845,13 +919,16 @@ define('io.ox/core/desktop',
         var guid = 0,
 
             pane = $('#io-ox-windowmanager-pane'),
-
+            /*
             getX = function (node) {
                 return node.data('x') || 0;
             },
-
-            scrollTo = function (node, cont) {
-
+            */
+            /*scrollTo = function (node, cont) {
+                if (true) {
+                    _.call(cont);
+                    return;
+                }
                 var index = node.data('index') || 0,
                     left = (-index * 101),
                     done = function () {
@@ -883,15 +960,14 @@ define('io.ox/core/desktop',
                 } else {
                     done();
                 }
-            },
+            },*/
 
             // window class
-            Window = function (id, name) {
+            Window = function (options) {
 
-                name = name || 'generic';
-
-                this.id = id;
-                this.name = name;
+                this.options = options || {};
+                this.id = options.id;
+                this.name = options.name || 'generic';
                 this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
@@ -903,7 +979,8 @@ define('io.ox/core/desktop',
                     perspectives = {},
                     self = this,
                     firstShow = true,
-                    shown = $.Deferred();
+                    shown = $.Deferred(),
+                    name = this.name;
 
                 this.updateToolbar = function () {
                     var folder = this.app && this.app.folder ? this.app.folder.get() : null,
@@ -931,7 +1008,8 @@ define('io.ox/core/desktop',
                 ext.point(name + '/window-toolbar').extend({
                     id: 'default',
                     draw: function () {
-                        return $('<div class="window-toolbar">')
+                        return $('<nav class="window-toolbar">')
+                            .addClass('f6-target')
                             .attr({
                                 'role': 'navigation',
                                 'aria-label': gt('Application Toolbar')
@@ -974,9 +1052,11 @@ define('io.ox/core/desktop',
                     // if not current window or if detached (via funny race conditions)
                     if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
                         // show
-                        if (firstShow) {
+
+                        /*if (firstShow) {
                             node.data('index', guid - 1).css('left', ((guid - 1) * 101) + '%');
-                        }
+                        }*/
+
                         if (node.parent().length === 0) {
                             if (this.simple) {
                                 node.insertAfter('#io-ox-topbar');
@@ -993,43 +1073,44 @@ define('io.ox/core/desktop',
                             _.url.hash('app', self.app.getName());
                         }
                         node.show();
-                        scrollTo(node, function () {
-                            if (self === null) return;
-                            if (currentWindow && currentWindow !== self) {
-                                currentWindow.hide();
-                            }
-                            currentWindow = self;
-                            _.call(cont);
-                            self.state.visible = true;
-                            self.state.open = true;
-                            self.trigger('show');
-                            if (_.device('!small')) {
-                                document.temptitle = gt.format(
-                                    //#. Title of the browser window
-                                    //#. %1$s is the name of the page, e.g. OX App Suite
-                                    //#. %2$s is the title of the active app, e.g. Calendar
-                                    gt.pgettext('window title', '%1$s %2$s'),
-                                    _.noI18n(ox.serverConfig.pageTitle),
-                                    self.getTitle());
-                                if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
-                                    document.title = document.temptitle;
-                                }
-                            } else {
-                                document.title = _.noI18n(ox.serverConfig.pageTitle);
-                            }
 
-                            if (firstShow) {
-                                shown.resolve();
-                                self.trigger('show:initial'); // alias for open
-                                self.trigger('open');
-                                self.state.running = true;
-                                ox.ui.windowManager.trigger('window.open', self);
-                                ox.trigger('app:ready', self.app);
-                                firstShow = false;
+                        //scrollTo(node, function () {
+                        if (self === null) return;
+                        if (currentWindow && currentWindow !== self) {
+                            currentWindow.hide();
+                        }
+                        currentWindow = self;
+                        _.call(cont);
+                        self.state.visible = true;
+                        self.state.open = true;
+                        self.trigger('show');
+                        if (_.device('!small')) {
+                            document.temptitle = gt.format(
+                                //#. Title of the browser window
+                                //#. %1$s is the name of the page, e.g. OX App Suite
+                                //#. %2$s is the title of the active app, e.g. Calendar
+                                gt.pgettext('window title', '%1$s %2$s'),
+                                _.noI18n(ox.serverConfig.pageTitle),
+                                self.getTitle());
+                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                                document.title = document.temptitle;
                             }
-                            ox.ui.windowManager.trigger('window.show', self);
-                            ox.ui.apps.trigger('resume', self.app);
-                        });
+                        } else {
+                            document.title = _.noI18n(ox.serverConfig.pageTitle);
+                        }
+
+                        if (firstShow) {
+                            shown.resolve();
+                            self.trigger('show:initial'); // alias for open
+                            self.trigger('open');
+                            self.state.running = true;
+                            ox.ui.windowManager.trigger('window.open', self);
+                            firstShow = false;
+                        }
+                        ox.ui.windowManager.trigger('window.show', self);
+                        ox.ui.apps.trigger('resume', self.app);
+
+                        //});
                     } else {
                         _.call(cont);
                     }
@@ -1115,9 +1196,9 @@ define('io.ox/core/desktop',
                             .not(':disabled').prop('disabled', true).addClass(TOGGLE_CLASS);
                         if (_.isNumber(pct)) {
                             pct = Math.max(0, Math.min(pct, 1));
-                            blocker.idle().find('.bar').eq(0).css('width', (pct * 100) + '%').parent().show();
+                            blocker.idle().find('.progress-bar').eq(0).css('width', (pct * 100) + '%').parent().show();
                             if (_.isNumber(sub)) {
-                                blocker.find('.bar').eq(1).css('width', (sub * 100) + '%').parent().show();
+                                blocker.find('.progress-bar').eq(1).css('width', (sub * 100) + '%').parent().show();
                             }
                             blocker.show();
                         } else {
@@ -1197,7 +1278,7 @@ define('io.ox/core/desktop',
                         }
                         this.trigger('change:title');
                     } else {
-                        console.error('window.setTitle(str) exprects string!', str);
+                        console.error('window.setTitle(str) expects string!', str);
                     }
                     return this;
                 };
@@ -1363,7 +1444,7 @@ define('io.ox/core/desktop',
                 width = meta[0],
                 unit = meta[1],
                 // create new window instance
-                win = new Window(opt.id, opt.name);
+                win = new Window(opt);
 
             // window container
             win.nodes.outer = $('<div class="window-container">')
@@ -1391,8 +1472,8 @@ define('io.ox/core/desktop',
                         // blocker
                         win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
                             $('<div class="abs header">'),
-                            $('<div class="progress progress-striped active first"><div class="bar" style="width: 0%;"></div></div>').hide(),
-                            $('<div class="progress progress-striped progress-warning active second"><div class="bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="progress progress-striped active first"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="progress progress-striped progress-warning active second"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
                         // window HEAD
@@ -1425,13 +1506,12 @@ define('io.ox/core/desktop',
             Events.extend(win);
 
             // search?
+            // deprecatd: enable search via io.ox/find application extension points instead
             if (opt.search) {
                 // search
                 var triggerSearch = function (query) {
                         win.trigger('search', query);
                     };
-
-                var searchId = 'search_' + _.now(); // acccessibility
 
                 var searchHandler = {
 
@@ -1464,32 +1544,26 @@ define('io.ox/core/desktop',
                 };
 
                 $('<form class="form-search form-inline" role="search">')
-                .attr({
-                    'aria-label': gt('Search for items')
-                })
+                .attr('aria-label', gt('Search for items'))
                 .append(
-                    $('<div class="input-append">').append(
-                        $('<label>', { 'for': searchId }).addClass('search-query-container').append(
-                            // search field
-                            win.nodes.searchField = $('<input type="text" class="span6 search-query">')
-                            .attr({
-                                name: 'query',
-                                autocomplete: 'off',
-                                tabindex: '1',
-                                placeholder: gt('Search') + ' ...',
-                                id: searchId,
-                                'aria-label': gt('Search')
-                            })
-                            .on(searchHandler)
-                            .placeholder(),
-                            // 'clear' X
-                            $('<i class="icon-remove clear-query">')
-                            .on('click', searchHandler.clear)
-                        ),
-                        $('<button type="submit" data-action="search" class="btn margin-right" aria-hidden="true">')
-                            .on('click', searchHandler.change)
-                            .append('<i class="icon-search">')
-
+                    $('<div class="search-query-container input-group">').append(
+                        // search field
+                        win.nodes.searchField = $('<input type="text" class="form-control search-query">')
+                        .attr({ name: 'query',
+                            autocomplete: 'off',
+                            tabindex: '1',
+                            placeholder: gt('Search') + ' ...',
+                            'aria-label': gt('Search')
+                        })
+                        .on(searchHandler)
+                        .placeholder(),
+                        // 'clear' X
+                        $('<i class="fa fa-times clear-query">').on('click', searchHandler.clear),
+                        $('<span class="input-group-btn">').append(
+                            $('<button type="submit" data-action="search" class="btn btn-default" aria-hidden="true">')
+                                .on('click', searchHandler.change)
+                                .append($('<i class="fa fa-search">'))
+                        )
                     ),
                     //abort button
                     $('<a href="#" data-action="remove" tabindex="1">×</a>')
@@ -1515,6 +1589,7 @@ define('io.ox/core/desktop',
                 }));
 
                 // add search
+                // deprecatd: enable search via io.ox/find application extension points instead
                 if (opt.search === true) {
 
                     new links.Action(opt.name + '/actions/search', {
@@ -1536,7 +1611,7 @@ define('io.ox/core/desktop',
                         id: 'search',
                         index: 300,
                         icon: function () {
-                            return $('<i class="icon-search">').attr('aria-label', gt('Search'));
+                            return $('<i class="fa fa-search">').attr('aria-label', gt('Search'));
                         }
                     });
 
@@ -1570,7 +1645,7 @@ define('io.ox/core/desktop',
                         id: 'fullscreen',
                         index: 1000,
                         icon: function () {
-                            return $('<i class="icon-resize-full">');
+                            return $('<i class="fa fa-expand">');
                         }
                     });
                 }
@@ -1606,6 +1681,7 @@ define('io.ox/core/desktop',
                         });
                         $blocker
                             .append(button);
+                        button.focus();
                     }
                 }, 5000);
             }, 1000);
@@ -1625,7 +1701,7 @@ define('io.ox/core/desktop',
         }
 
         function clearViaLauncher(blockerTimer) {
-//            launched is a deferred used for a delayed clear
+            // launched is a deferred used for a delayed clear
             launched.always(function () {
                 clear(blockerTimer);
             });
@@ -1645,7 +1721,8 @@ define('io.ox/core/desktop',
 
             require(req).always(clearViaLauncher(blockertimer)).then(
                 def.resolve,
-                function fail() {
+                function fail(errcode) {
+                    console.error(errcode);
                     def.reject(false);
                     if (_.isArray(req)) {
                         for (var i = 0; i < req.length; i++) {
@@ -1711,7 +1788,6 @@ define('io.ox/core/desktop',
         adaptiveLoader.stop();
         adaptiveLoader.listen(app.get('name'));
     });
-
 
     return {};
 
