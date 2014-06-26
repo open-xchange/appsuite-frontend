@@ -54,7 +54,7 @@ define('io.ox/mail/compose/model',
             to: [],
             unread: '',
             user: [],
-            vcard: false
+            vcard: 0
         },
 
         parse: function (list) {
