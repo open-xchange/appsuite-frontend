@@ -5,7 +5,7 @@
   },
   "optionalDependencies": {
     "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
-    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.4.2"
+    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.5.1"
   },
   "devDependencies": {
     "grunt-contrib-watch": "^0.6.1",
