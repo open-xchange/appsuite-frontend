@@ -109,7 +109,12 @@ define('io.ox/files/carousel',
             }
             this.list = this.filterImagesList(config.baton.allIds);
             if (config.useSelectionAsStart) {
-                var index = this.findStartItem (config.baton, this.list);
+                var index;
+                if (config.baton.startIndex !== undefined && config.baton.startIndex !== null) {
+                    index = config.baton.startIndex;
+                } else {
+                    index = this.findStartItem (config.baton, this.list);
+                }
                 this.pos = _.defaults({cur: index}, this.defaults );
             } else {
                 this.pos = _.extend({}, this.defaults); // get a fresh copy
@@ -146,7 +151,7 @@ define('io.ox/files/carousel',
                 this.prevControl.show();
             }
             if (pos.cur === pos.last) {
-                this.nextControl.show();
+                this.nextControl.hide();
             } else {
                 this.nextControl.show();
             }
@@ -208,9 +213,15 @@ define('io.ox/files/carousel',
 
         filterImagesList: function (list) {
             var supportsDocuments = capabilities.has('document_preview');
-            return _(list).filter(function (o) {
-                return regIsImage.test(o.filename) || regIsPlainText.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
-            });
+            if (this.config.attachmentMode) {
+                return _(list).filter(function (o) {
+                    return regIsImage.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
+                });
+            } else {
+                return _(list).filter(function (o) {
+                    return regIsImage.test(o.filename) || regIsPlainText.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
+                });
+            }
         },
 
         urlFor: function (file) {
@@ -299,9 +310,10 @@ define('io.ox/files/carousel',
                         )
                     );
                 } else {
-                    var prev = new preview.Preview(parseArguments(file), { width: 'auto', height: $(window).height()});
-                    prev.appendTo(item);
                     item.busy().append(
+                        $('<img>', { alt: '', src: this.urlFor(file) })
+                            .on('load', this.imgLoad)
+                            .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append($('<h4>').text(gt.noI18n(file.filename)))
                     );
                 }

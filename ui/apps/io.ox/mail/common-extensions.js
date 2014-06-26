@@ -394,7 +394,7 @@ define('io.ox/mail/common-extensions',
                 );
 
                 $ul.on('click', 'li', function () {
-                    var baton = ext.Baton({ data: [$(this).data()] });
+                    var baton = ext.Baton({ startItem: $(this).data(), data: list });
                     actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
                 });
 

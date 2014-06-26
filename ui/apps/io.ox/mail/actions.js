@@ -495,7 +495,7 @@ define('io.ox/mail/actions',
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             require(['io.ox/files/carousel'], function (slideshow) {
                 var regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i,
                     files = _(list).map(function (file) {
@@ -504,11 +504,20 @@ define('io.ox/mail/actions',
                         // non-image files need special format parameter
                         if (!regIsImage.test(file.filename)) url += '&format=preview_image&session=' + ox.session;
                         return { url: url, filename: file.filename };
+                    }),
+                    startIndex = 0;
+                if (baton.startItem) {
+                    _(files).each(function (file, index) {
+                       if (file.url.indexOf('attachment=' + baton.startItem.id) !== -1) {
+                           startIndex = index;
+                       }
                     });
+                }
                 slideshow.init({
                     fullScreen: false,
-                    baton: {allIds: files},
-                    attachmentMode: true
+                    baton: {allIds: files, startIndex: startIndex},
+                    attachmentMode: true,
+                    useSelectionAsStart: true
                 });
             });
         }
