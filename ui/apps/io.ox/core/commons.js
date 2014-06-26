@@ -884,6 +884,8 @@ define('io.ox/core/commons',
 
     // Accessibility F6 jump
     var macos = _.device('macos');
+    // do not focus nodes with negative tabindex, or hidden nodes
+    var tabindexSelector = '[tabindex]:not([tabindex^="-"]):visible';
     $(document).on('keydown.f6', function (e) {
 
         if (e.which === 117 && (macos || e.ctrlKey)) {
@@ -899,10 +901,10 @@ define('io.ox/core/commons',
             if (index < 0) index = items.length - 1;
             next = items.eq(index);
 
-            if (next.attr('tabindex')) {
+            if (next.is(tabindexSelector)) {
                 next.focus();
             } else {
-                next.find('[tabindex]:visible').first().focus();
+                next.find(tabindexSelector).first().focus();
             }
         }
     });
