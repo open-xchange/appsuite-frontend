@@ -79,18 +79,17 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
 
     var fields = $('#customize-dialog input[data-name]'),
         defaults = {
-            headerSize: 0, headerText: '**Purple** |CableCom|', headerColor: '#aaaaaa', headerBackground: '#ffffff', topbarVisible: true, url: ''
+            headerSize: 0, headerText: '**OX** App Suite', headerColor: '#aaaaaa', headerBackground: '#ffffff', topbarVisible: true, url: ''
         },
         presets = [
             { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA' }, // blue
-            { topbarColor: '#587a20', selectionColor: '#606961', linkColor: '#608e21' }, // green
-            { topbarColor: '#992019', selectionColor: '#af1916', linkColor: '#ad1c13' }, // red
+            { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA', headerSize: 2, headerColor: '#ffffff', headerBackground: '#275276' }, // blue
+            { topbarColor: '#992019', selectionColor: '#535353', linkColor: '#6e6e6e', headerSize: 2, headerColor: '#ffffff', headerBackground: '#6b1711' }, // red
+            { topbarColor: '#49a8c6', selectionColor: '#50607f', linkColor: '#ce5200', headerSize: 2, headerColor: '#ffffff', headerBackground: '#50607f' }, // purple
+            { topbarColor: '#18a0ae', selectionColor: '#1baebd', linkColor: '#e84f1b', headerSize: 2, headerColor: '#ffffff', headerBackground: '#0f6b75' }, // cyan
+            { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 2, headerColor: '#555555', topbarVisible: false }, // pink
             { topbarColor: '#474243', selectionColor: '#656465', linkColor: '#377fb5' }, // gray
-            { topbarColor: '#18a0ae', selectionColor: '#1baebd', linkColor: '#e84f1b', headerSize: 4, headerColor: '#ffffff', headerBackground: '#0f6b75' }, // cyan
-            { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 4, headerColor: '#555555', topbarVisible: false }, // pink
             { topbarColor: '#424242', selectionColor: '#39A9E1', linkColor: '#0088cc' }, // 7.4.2
-            { topbarColor: '#4a9dae', selectionColor: '#bd1e02', linkColor: '#077271' }, // cyan/red
-            { topbarColor: '#98631e', selectionColor: '#90956b', linkColor: '#ba7a30' }, // brown/green
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700' }, // gray/orange
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', headerSize: 3, headerColor: '#d24518', topbarVisible: false, headerText: '**Purple** |||CableCom|||' }, // gray/orange
             { topbarColor: '#736f71', selectionColor: '#707274', linkColor: '#cc2c20', headerSize: 3, headerColor: '#555555', topbarVisible: false }, // gray/red
@@ -115,6 +114,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             '#io-ox-topbar { background-color: ' + model.get('topbarColor') + '; }\n' +
             // selection
             '.list-view.visible-selection.has-focus .list-item.selected,\n' +
+            '.folder-tree .folder .selectable:focus,\n' +
             '.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected,\n' +
             '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder:focus.selected {\n' +
             '  background-color: ' + model.get('selectionColor') + ';\n' +
