@@ -77,12 +77,12 @@ define('io.ox/mail/compose/extensions',
     var extensions = {
         title: function () {
             this.append(
-                $('<div class="row" data-extension-id="title">').append(
-                    $('<div class="col-lg-12 header">').append(
-                        $('<h1 class="clear-title title">').text(gt('Compose new mail')),
-                        $('<button type="button" class="btn btn-primary" data-action="send">').text(gt('Send')),
+                $('<div class="row header" data-extension-id="title">').append(
+                    $('<h1 class="col-md-6 clear-title title">').text(gt('Compose new mail')),
+                    $('<div class="col-md-6 text-right">').append(
+                        $('<button type="button" class="btn btn-default" data-action="discard">').text(gt('Discard')),
                         $('<button type="button" class="btn btn-default" data-action="save">').text(gt('Save')),
-                        $('<button type="button" class="btn btn-default" data-action="discard">').text(gt('Discard'))
+                        $('<button type="button" class="btn btn-primary" data-action="send">').text(gt('Send'))
                     )
                 )
             );
@@ -107,45 +107,65 @@ define('io.ox/mail/compose/extensions',
             this.append(node);
         },
         to: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="row" data-extension-id="to">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('To'))),
+                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('To')).attr({
+                        'for': guid
+                    }),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<div class="recipient-actions">').append(
                             $('<a href="#" data-action="add-cc">').text(gt('CC')),
                             $('<a href="#" data-action="add-bcc">').text(gt('BCC'))
                         ),
-                        $('<input type="text" class="form-control to tokenfield">').data('type', 'to')
+                        $('<input type="text" class="form-control to tokenfield">').data('type', 'to').attr({
+                            id: guid
+                        })
                     )
                 )
             );
         },
         cc: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div class="row hidden" data-extension-id="cc">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('CC'))),
+                $('<div class="row hidden io-ox-core-animation slidedown in" data-extension-id="cc">').append(
+                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('CC')).attr({
+                        'for': guid
+                    }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control cc tokenfield">').data('type', 'cc')
+                        $('<input type="text" class="form-control cc tokenfield">').data('type', 'cc').attr({
+                            id: guid
+                        })
                     )
                 )
             );
         },
         bcc: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div class="row hidden" data-extension-id="bcc">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('BCC'))),
+                $('<div class="row hidden io-ox-core-animation slidedown in" data-extension-id="bcc">').append(
+                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('BCC')).attr({
+                        'for': guid
+                    }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control bcc tokenfield">').data('type', 'bcc')
+                        $('<input type="text" class="form-control bcc tokenfield">').data('type', 'bcc').attr({
+                            id: guid
+                        })
                     )
                 )
             );
         },
         subject: function (baton) {
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="row" data-extension-id="subject">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('Subject'))),
+                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('Subject')).attr({
+                        'for': guid
+                    }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input class="form-control">').val(baton.model.get('subject'))
+                        $('<input class="form-control">').val(baton.model.get('subject')).attr({
+                            id: guid
+                        })
                     )
                 )
             );
@@ -182,14 +202,13 @@ define('io.ox/mail/compose/extensions',
             );
         },
         body: function () {
-            var self = this;
-            var editorId = _.uniqueId('tmce-');
-            var editorToolbarId = _.uniqueId('tmcetoolbar-');
-            var node;
+            var self = this,
+                editorId = _.uniqueId('tmce-'),
+                editorToolbarId = _.uniqueId('tmcetoolbar-');
 
             self.append($('<div class="row">').append($('<div class="col-sm-12">').append(
                 $('<div class="editable-toolbar">').attr('id', editorToolbarId),
-                node = $('<div class="editable">').attr('id', editorId).css('min-height', '400px')
+                $('<div class="editable">').attr('id', editorId).css('min-height', '400px')
             )));
         },
         mailto: function () {
