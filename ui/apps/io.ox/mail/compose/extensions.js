@@ -106,13 +106,14 @@ define('io.ox/mail/compose/extensions',
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<div class="recipient-actions">').append(
-                            $('<a href="#" data-action="add-cc">').text(gt('CC')),
-                            $('<a href="#" data-action="add-bcc">').text(gt('BCC'))
-                        ),
                         $('<input type="text" class="form-control to tokenfield">').data('type', 'to').attr({
-                            id: guid
-                        })
+                            id: guid,
+                            tabindex: 1
+                        }),
+                        $('<div class="recipient-actions">').append(
+                            $('<a href="#" data-action="add-cc" tabindex="1">').text(gt('CC')),
+                            $('<a href="#" data-action="add-bcc" tabindex="1">').text(gt('BCC'))
+                        )
                     )
                 )
             );
@@ -126,7 +127,8 @@ define('io.ox/mail/compose/extensions',
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<input type="text" class="form-control cc tokenfield">').data('type', 'cc').attr({
-                            id: guid
+                            id: guid,
+                            tabindex: 1
                         })
                     )
                 )
@@ -141,7 +143,8 @@ define('io.ox/mail/compose/extensions',
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<input type="text" class="form-control bcc tokenfield">').data('type', 'bcc').attr({
-                            id: guid
+                            id: guid,
+                            tabindex: 1
                         })
                     )
                 )
@@ -156,7 +159,8 @@ define('io.ox/mail/compose/extensions',
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<input class="form-control">').val(baton.model.get('subject')).attr({
-                            id: guid
+                            id: guid,
+                            tabindex: 1
                         })
                     )
                 )
