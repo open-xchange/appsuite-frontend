@@ -64,12 +64,21 @@ define('io.ox/mail/compose/model',
                     return ['"' + recipient[0] + '"', recipient[1], typesuffix];
                 });
         },
-        setFrom: function () {
-
-        },
 
         getMail: function() {
-            return this.toJSON();
+            return _(this.toJSON()).pick(
+                'from',
+                'to',
+                'cc',
+                'bcc',
+                'headers',
+                'reply_to',
+                'subject',
+                'priority',
+                'vcard',
+                'attachments',
+                'nested_msgs'
+            );
         },
         convertAllToUnified: emoji.converterFor({
             from: 'all',

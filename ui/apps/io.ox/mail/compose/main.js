@@ -73,19 +73,23 @@ define('io.ox/mail/compose/main',
         };
 
         app.failRestore = function (point) {
-            return $.when();
-            // var def = $.Deferred();
-            // win.busy().show(function () {
-            //     _.url.hash('app', 'io.ox/mail/compose:' + point.mode);
-            //     debugger;
-            //     app.view.setMail(point).done(function () {
-            //         app.dirty(true);
-            //         win.idle();
-            //         app.getEditor().focus();
-            //         def.resolve();
-            //     });
-            // });
-            // return def;
+            var def = $.Deferred();
+
+            var model = new MailModel(point.data);
+            app.view = new MailComposeView({ model: model, app: app });
+
+            _.url.hash('app', 'io.ox/mail/compose:' + point.mode);
+
+            win.busy().show(function () {
+                win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                app.view.setMail(point.data).done(function () {
+                    //app.dirty(true);
+                    win.idle();
+                    //app.getEditor().focus();
+                    def.resolve({app: app});
+                });
+            });
+            return def;
         };
 
         function compose(data) {

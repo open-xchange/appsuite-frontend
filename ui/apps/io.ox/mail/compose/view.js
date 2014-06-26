@@ -619,25 +619,13 @@ define('io.ox/mail/compose/view',
         },
 
         getMail: function () {
-            var data = this.model.getMail(),
-                headers,
-                attachments,
-                mail,
-                files = [],
-                fileList = [], //view.baton.fileList,
-                parse = function (list) {
-                    return _(mailUtil.parseRecipients([].concat(list).join(', ')))
-                        .map(function (recipient) {
-                            var typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : mailUtil.getChannelSuffixes().msisdn;
-                            return ['"' + recipient[0] + '"', recipient[1], typesuffix];
-                        });
-                },
-                replyTo = parse(data.replyTo)[0] || [];
+            var files = [],
+                fileList = [];
+                attachments: {
+                    content: (this.editor ? this.editor.getContent() : ''),
+                    content_type: this.getContentType(this.editorMode)
+                }
 
-            // get content
-            attachments = {
-                content: (this.editor ? this.editor.getContent() : '')
-            };
             if (this.editorMode !== 'html') {
                 attachments.raw = true;
             }
@@ -646,39 +634,10 @@ define('io.ox/mail/compose/view',
             attachments.content = attachments.content.replace(
                 /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
             );
-
-            attachments.content_type = this.getContentType(this.editorMode);
-
-            // might fail
-            try {
-                headers = JSON.parse(data.headers);
-            } catch (e) {
-                headers = {};
-            }
-
-            mail = {
-                from: data.from,
-                to: data.to,
-                cc: data.cc,
-                bcc: data.bcc,
-                headers: headers,
-                reply_to: mailUtil.formatSender(replyTo),
-                subject: String(data.subject),
-                priority: parseInt(data.priority, 10) || 3,
-                vcard: parseInt(data.vcard, 10) || 0,
-                attachments: [attachments],
-                nested_msgs: []
-            };
-
-            // add disp_notification_to?
-            if (data.disp_notification_to) mail.disp_notification_to = true;
-            // add msgref?
-            if (data.msgref) mail.msgref = data.msgref;
-            // sendtype
-            mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
+            this.model.set('attachments', [attachments]);
 
             return {
-                data: mail,
+                data: this.model.getMail(),
                 mode: this.composeMode,
                 format: this.editorMode
             };
@@ -686,7 +645,7 @@ define('io.ox/mail/compose/view',
 
         setMail: function (mail) {
             var self = this,
-                data = mail || {};
+                data = this.model.toJSON();
 
             data.initial = data.initial || true;
 
