@@ -26,50 +26,32 @@ define('io.ox/mail/compose/extensions',
 
     var SenderDropdown = Dropdown.extend({
         update: function () {
-            var $el = this.$el;
+            var $ul = this.$ul,
+                self = this;
             _(this.model.changed).each(function (value, name) {
-                var li = $el.find('[data-name="' + name + '"]');
-                var a = li.filter('[data-display-name="' + value[0][0] + '"]').filter('[data-address="' + value[0][1] + '"]');
+                var li = $ul.find('[data-name="' + name + '"]');
                 li.children('i').attr('class', 'fa fa-fw fa-none');
-                a.children('i').attr('class', 'fa fa-fw fa-check');
-                if (name === 'from') {
-                    this.label = a.text();
-                    this.$el.empty();
-                    this.render();
-                }
+                li.each(function() {
+                    if ($(this).attr('data-value') ===  JSON.stringify(value)) {
+                        $(this).children('i').attr('class', 'fa fa-fw fa-check');
+                        self.label = $(this).children('span').text();
+                        self.$el.find('a[data-toggle="dropdown"]').empty().append(
+                            $.txt(self.label), $('<i class="fa fa-caret-down">')
+                        );
+                    }
+                });
             }, this);
         },
-        option: function (name, o) {
-            var address = sender.getsender(o);
-
+        option: function (name, value, text) {
             this.$ul.append(
                 $('<li>').append(
-                    $('<a>', {
-                        href: '#',
-                        'data-name': name,
-                        'data-value': address.text,
-                        'data-toggle': _.isBoolean(address.value),
-                        'data-display-name': address.display_name,
-                        'data-address': address.address
-                    }).append(
-                        $('<i class="fa fa-fw">').addClass(this.model.get(name).toString() === [[address.display_name, address.address]] ? 'fa-check' : 'fa-none'),
-                        $('<span>').text(address.text)
+                    $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
+                        $('<i class="fa fa-fw">').addClass(JSON.stringify(this.model.get(name)) === value ? 'fa-check' : 'fa-none'),
+                        $('<span>').text(text)
                     )
                 )
             );
             return this;
-        },
-        onClick: function (e) {
-            e.preventDefault();
-            var node = $(e.currentTarget);
-            var from = [node.data('display-name'), node.data('address')];
-            this.model.set('from', [from]);
-        },
-        populate: function (senders) {
-            var self = this;
-            senders.map(function (o) {
-                self.option('from', o);
-            });
         }
     });
 
@@ -90,18 +72,28 @@ define('io.ox/mail/compose/extensions',
 
         sender: function (baton) {
 
-          var node = $('<div class="row" data-extension-id="sender">');
-
-            var dropdown = new SenderDropdown({ model: baton.model, label: gt('From') });
+            var node = $('<div class="row" data-extension-id="sender">');
 
 
-            sender.drawDropdown().done(function (list) {
-                if (list.sortedAddresses.length >= 1) {
-                    dropdown.populate(_(list.sortedAddresses).pluck('option'));
+
+            sender.getDefaultSendAddressWithDisplayname().done(function (defaultSender) {
+
+                baton.model.set('from', defaultSender);
+
+                var dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>' });
+
+                sender.drawDropdown().done(function (list) {
+
+                    if (list.sortedAddresses.length >= 1) {
+                        _.each(_(list.sortedAddresses).pluck('option'), function (item) {
+                            dropdown.option('from', JSON.stringify([item]), item[0] + ' <' + item[1] + '>');
+                        });
+                    }
+
                     node.append(
                         $('<div class="col-sm-12">').append(dropdown.render().$el.attr('data-dropdown', 'from'))
                     );
-                }
+                });
             });
 
             this.append(node);

@@ -16,9 +16,8 @@ define('io.ox/mail/compose/model',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/emoji/main',
-     'io.ox/mail/sender',
      'settings!io.ox/mail'
-    ], function (mailAPI, mailUtil, emoji, sender, settings) {
+    ], function (mailAPI, mailUtil, emoji, settings) {
 
     'use strict';
 
@@ -37,7 +36,7 @@ define('io.ox/mail/compose/model',
             flag_seen: '',
             flags: '',
             folder_id: 'default0/INBOX',
-            from: sender.getDefaultSendAddressWithDisplayname(),
+            from: '',
             headers: {},
             infostore_ids: [],
             level: '',

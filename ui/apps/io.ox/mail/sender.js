@@ -78,7 +78,6 @@ define('io.ox/mail/sender',
 
             // still empty?
             if (children.length === 0) {
-                //console.log('set data-default', address, from[1]);
                 select.attr('data-default', address);
                 return;
             }
@@ -124,7 +123,9 @@ define('io.ox/mail/sender',
          * @return {string}
          */
         getDefaultSendAddressWithDisplayname: function () {
-            return [[api.getDefaultDisplayName(), $.trim(settings.get('defaultSendAddress', ''))]];
+            return $.when(api.getDefaultDisplayName()).then(function (display_name) {
+                return [[display_name, $.trim(settings.get('defaultSendAddress', ''))]];
+            });
         },
 
         /**
@@ -258,7 +259,6 @@ define('io.ox/mail/sender',
 
                 // process with mail addresses and phone numbers
                 list = _(list).map(function (address) {
-                    console.log(address);
                     var sender = getSender(address);
                     //support typed or typeless defaultAddress
                     if (address[1] === defaultAddress || sender.address === defaultAddress) {
