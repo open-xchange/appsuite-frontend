@@ -120,18 +120,19 @@ define('io.ox/core/folder/view',
                     else storeWidth(width || 250);
                 }
 
-                return {
+                function mousedown(e) {
+                    e.preventDefault();
+                    maxSidePanelWidth = $(document).width() / 2;
+                    $(document).on({
+                        'mousemove.resize': mousemove,
+                        'mouseup.resize': mouseup
+                    });
+                }
 
+                return {
                     enable: function () {
                         sidepanel.append(
-                            bar = $('<div class="resizebar">').on('mousedown', function (e) {
-                                e.preventDefault();
-                                maxSidePanelWidth = $(document).width() / 2;
-                                $(document).on({
-                                    'mousemove.resize': mousemove,
-                                    'mouseup.resize': mouseup
-                                });
-                            })
+                            bar = $('<div class="resizebar">').on('mousedown.resize', mousedown)
                         );
                     }
                 };
@@ -212,6 +213,13 @@ define('io.ox/core/folder/view',
 
         // render tree and add to DOM
         sidepanel.append(tree.render().$el);
+
+        // a11y adjustments
+        // TODO: clarify role. tree? navigation?
+        tree.$el.attr({
+            // 'role': 'navigation',
+            'aria-label': gt('Folders')
+        });
 
         // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
         if (open && open[_.display()]) open = open[_.display()];
