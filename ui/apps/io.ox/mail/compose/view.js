@@ -106,9 +106,9 @@ define('io.ox/mail/compose/view',
         draw: function () {
             this.data('view')
                 .header(gt('Priority'))
-                .option('priority', 0, gt('Low'))
+                .option('priority', 0, gt('High'))
                 .option('priority', 3, gt('Normal'))
-                .option('priority', 5, gt('High'));
+                .option('priority', 5, gt('Low'));
         }
     });
 
