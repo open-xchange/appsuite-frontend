@@ -620,11 +620,11 @@ define('io.ox/mail/compose/view',
 
         getMail: function () {
             var files = [],
-                fileList = [];
-                attachments: {
+                fileList = [],
+                attachments = {
                     content: (this.editor ? this.editor.getContent() : ''),
                     content_type: this.getContentType(this.editorMode)
-                }
+                };
 
             if (this.editorMode !== 'html') {
                 attachments.raw = true;
