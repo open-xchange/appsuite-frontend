@@ -740,7 +740,7 @@ define('io.ox/mail/compose/view',
                 });
 
                 // set initial values
-                self.tokenfield('setTokens', model.get(type), true, false);
+                self.tokenfield('setTokens', model.get(type, []).map(function (o) { return { label: o[0] || '', value: o[1] || '' }; }), true, false);
 
                 self.data('bs.tokenfield').$input.on({
                     // IME support (e.g. for Japanese)
