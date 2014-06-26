@@ -272,11 +272,11 @@ define('io.ox/core/tk/autocomplete',
             },
 
             fnSelectItem = function (e) {
-                    e.data = $(this).data();
-                    select(e.data.index);
-                    o.click.call(self.get(0), e);
-                    close();
-                },
+                e.data = $(this).data();
+                select(e.data.index);
+                o.click.call(self.get(0), e);
+                close();
+            },
 
             // handle search result
             cbSearchResult = function (query, data) {

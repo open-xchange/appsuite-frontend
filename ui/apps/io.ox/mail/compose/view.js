@@ -267,8 +267,8 @@ define('io.ox/mail/compose/view',
             'click [data-action="save"]':       'onSave',
             'click [data-action="send"]':       'onSend',
             'click [data-action="discard"]':    'onDiscard',
-            'click [data-action="add-cc"]':     'addCC',
-            'click [data-action="add-bcc"]':    'addBCC',
+            'click [data-action="add-cc"]':     'toggleCC',
+            'click [data-action="add-bcc"]':    'toggleBCC',
             'change [data-action="from"]':      'setFrom',
             'keyup [data-extension-id="subject"] input': 'setSubject'
         },
@@ -491,12 +491,12 @@ define('io.ox/mail/compose/view',
             this.app.quit();
         },
 
-        addCC: function (e) {
+        toggleCC: function (e) {
             $(e.target).toggleClass('active');
             this.$el.find('[data-extension-id="cc"]').toggleClass('hidden');
         },
 
-        addBCC: function (e) {
+        toggleBCC: function (e) {
             $(e.target).toggleClass('active');
             this.$el.find('[data-extension-id="bcc"]').toggleClass('hidden');
         },
@@ -693,6 +693,7 @@ define('io.ox/mail/compose/view',
                         }
                     },
                     'tokenfield:createdtoken': function (e) {
+                        // A11y: set title
                         var title = '';
                         if (e.attrs) {
                             if (e.attrs.label !== e.attrs.value) {
@@ -770,7 +771,7 @@ define('io.ox/mail/compose/view',
                             el.find('[data-extension-id="bcc"]').removeClass('hidden');
                         }
                     }
-                });
+                }).first().focus();
             });
 
             el.append(this.textarea);
