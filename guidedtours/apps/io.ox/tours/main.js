@@ -142,7 +142,7 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('The list'),
-                placement: 'left',
+                placement: 'right',
                 target: function () { return $('.list-view:visible')[0]; },
                 content: gt('Use the list to select an object, show its contents or activate functions.')
             },
