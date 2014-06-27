@@ -24,13 +24,14 @@ define('io.ox/mail/compose/view',
      'io.ox/emoji/main',
      'settings!io.ox/mail',
      'settings!io.ox/core',
+     'settings!io.ox/contacts',
      'io.ox/core/notifications',
-     'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
      'gettext!io.ox/mail',
-     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js'
-    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, notifications, autocomplete, AutocompleteAPI, accountAPI, gt) {
+     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js'
+    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, contactSettings, notifications, AutocompleteAPI, accountAPI, gt) {
 
     'use strict';
 
@@ -680,18 +681,31 @@ define('io.ox/mail/compose/view',
 
                 self.tokenfield({
                     createTokensOnBlur: true,
-                    minLength: 1
-                }).on({
-                    'tokenfield:createtoken': function (e) {
-                        var ac = $(this).data('bs.tokenfield').$input;
-                        // prevent default token creation on autocomplete select event
-                        if (ac.isOpen() && !ac.preventToken) {
-                            ac.preventToken = true;
-                            e.preventDefault();
-                        } else {
-                            ac.preventToken = false;
+                    minLength: contactSettings.get('search/minimumQueryLength', 3),
+                    typeahead: [{
+                            highlight: true
+                        }, {
+                            source: function(query, callback) {
+                                autocompleteAPI.search(query).then(function (matches) {
+                                    callback(_(matches).map(function (data) {
+                                        return {
+                                            value: data.email || data.phone || '',
+                                            label: contactsUtil.getMailFullName(data),
+                                            data: data
+                                        };
+                                    }));
+                                });
+                            },
+                            templates: {
+                                suggestion: function (item) {
+                                    var node = $('<div class="autocomplete-item">');
+                                    ext.point(POINT + '/autoCompleteItem').invoke('draw', node, ext.Baton({ data: item.data }));
+                                    return node;
+                                }
+                            }
                         }
-                    },
+                    ]
+                }).on({
                     'tokenfield:createdtoken': function (e) {
                         // A11y: set title
                         var title = '';
@@ -708,34 +722,6 @@ define('io.ox/mail/compose/view',
                     },
                     'change': function () {
                         model.setTokens(type, self.tokenfield('getTokens'));
-                    }
-                });
-
-                self.data('bs.tokenfield').$input.autocomplete({
-                    api: autocompleteAPI,
-                    keyupRefocus: false, // suppress focus on keyup
-                    reduce: function (data) {
-
-                        // TODO: remove duplicates
-
-                        var list = _(data).map(function (elem) {
-                            return elem.type === 'contact' ? elem : { data: {}, display_name: elem[0], email: elem[1] };
-                        });
-                        return { list: list, hits: data.length };
-                    },
-                    draw: function (data) {
-                        ext.point(POINT + '/autoCompleteItem').invoke('draw', this, ext.Baton({ data: data }));
-                    },
-                    stringify: function (data) {
-                        var name = contactsUtil.getMailFullName(data),
-                            address = data.email || data.phone || '';
-                        return name ? '"' + name + '" <' + address + '>' : address;
-                    },
-                    click: function (e) {
-                        var data = e.data,
-                            name = contactsUtil.getMailFullName(data),
-                            address = data.email || data.phone || '';
-                        self.tokenfield('createToken', { value: address, label: name ? name : address });
                     }
                 });
 

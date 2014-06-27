@@ -2829,7 +2829,7 @@ ul.io-ox-inline-links + header {
 
 /* auto complete */
 
-.autocomplete-popup {
+.autocomplete-popup, .tt-dropdown-menu {
 
     @width: 3px;
 
@@ -2852,6 +2852,9 @@ ul.io-ox-inline-links + header {
         cursor: pointer;
     }
 
+    .tt-suggestion > .autocomplete-item:hover,
+    .tt-suggestion > .autocomplete-item:focus,
+    .tt-suggestion.tt-cursor .autocomplete-item,
     .autocomplete-item.selected {
         background-color: #eee;
     }
