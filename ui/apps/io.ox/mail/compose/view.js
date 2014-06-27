@@ -495,16 +495,16 @@ define('io.ox/mail/compose/view',
 
         toggleCC: function (e) {
             $(e.target).toggleClass('active');
-            this.toggleInput('cc');
+            return this.toggleInput('cc');
         },
 
         toggleBCC: function (e) {
             $(e.target).toggleClass('active');
-            this.toggleInput('bcc');
+            return this.toggleInput('bcc');
         },
 
-        toggleInput: function (type) {
-            this.$el.find('[data-extension-id="' + type + '"]').toggleClass('hidden');
+        toggleInput: function (type, show) {
+            return this.$el.find('[data-extension-id="' + type + '"]').toggleClass('hidden', show);
         },
 
         render: function () {
@@ -655,7 +655,8 @@ define('io.ox/mail/compose/view',
 
         postRender: function () {
             var model = this.model,
-                el = this.$el;
+                el = this.$el,
+                selfView = this;
 
             el.find('.tokenfield').each(function () {
 
@@ -708,7 +709,12 @@ define('io.ox/mail/compose/view',
                 });
 
                 // set initial values
-                self.tokenfield('setTokens', model.getTokens(type), true, false);
+                var values = model.getTokens(type) || [];
+                // display tokeninputfields if necessary
+                if (values.length) {
+                    selfView.toggleInput(type, false);
+                }
+                self.tokenfield('setTokens', values, true, false);
 
                 self.data('bs.tokenfield').$input.on({
                     // IME support (e.g. for Japanese)
@@ -733,10 +739,10 @@ define('io.ox/mail/compose/view',
                             $(this).val('');
                         } else if ((/^cc:?\s/i).test(val)) {
                             $(this).val('');
-                            el.find('[data-extension-id="cc"]').removeClass('hidden').find('.token-input').focus();
+                            selfView.toggleInput('cc', false).find('.token-input').focus();
                         } else if ((/^bcc:?\s/i).test(val)) {
                             $(this).val('');
-                            el.find('[data-extension-id="bcc"]').removeClass('hidden').find('.token-input').focus();
+                            selfView.toggleInput('bcc', false).find('.token-input').focus();
                         }
                     }
                 }).first().focus();
