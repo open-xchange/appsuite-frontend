@@ -234,6 +234,8 @@ define('io.ox/core/main',
             return;
         }
 
+        var itemsLeftWidth = launchers.offset().left;
+
         // Reset first
         launchers.children('.launcher:hidden').each(function (i, node) {
             $(node).show();
@@ -241,7 +243,6 @@ define('io.ox/core/main',
 
         var itemsVisible = launchers.children('.launcher:visible'),
             itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
-            itemsLeftWidth = 0,
             viewPortWidth = $(document).width(),
             launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
 
