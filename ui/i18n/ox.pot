@@ -175,7 +175,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:561
 #: module:io.ox/calendar/main
-#: apps/io.ox/mail/actions.js:1130
+#: apps/io.ox/mail/actions.js:1139
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -269,7 +269,7 @@ msgstr ""
 #: apps/io.ox/mail/actions.js:91
 #: apps/io.ox/mail/actions.js:113
 #: apps/io.ox/mail/actions.js:308
-#: apps/io.ox/mail/actions.js:865
+#: apps/io.ox/mail/actions.js:874
 #: apps/io.ox/mail/actions/attachmentSave.js:66
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
@@ -408,7 +408,7 @@ msgstr ""
 #: apps/io.ox/files/toolbar.js:108
 #: apps/io.ox/mail/actions.js:90
 #: apps/io.ox/mail/actions.js:112
-#: apps/io.ox/mail/actions.js:992
+#: apps/io.ox/mail/actions.js:1001
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:280
 #: apps/io.ox/mail/toolbar.js:75
@@ -466,7 +466,7 @@ msgstr[1] ""
 #: apps/io.ox/files/actions.js:1362
 #: apps/io.ox/files/toolbar.js:143
 #: apps/io.ox/mail/actions.js:348
-#: apps/io.ox/mail/actions.js:1084
+#: apps/io.ox/mail/actions.js:1093
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81
 #: apps/io.ox/mail/toolbar.js:116
 #: apps/io.ox/tasks/actions.js:202
@@ -531,7 +531,7 @@ msgstr ""
 #: apps/io.ox/contacts/toolbar.js:98
 #: apps/io.ox/core/print.js:108
 #: module:io.ox/core
-#: apps/io.ox/mail/actions.js:1102
+#: apps/io.ox/mail/actions.js:1111
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:130
 #: apps/io.ox/tasks/actions.js:626
@@ -557,7 +557,7 @@ msgstr ""
 #: apps/io.ox/core/pubsub/settings/pane.js:220
 #: apps/io.ox/files/actions.js:879
 #: module:io.ox/files
-#: apps/io.ox/mail/actions.js:982
+#: apps/io.ox/mail/actions.js:991
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:143
@@ -596,7 +596,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions.js:711
 #: module:io.ox/calendar
-#: apps/io.ox/mail/actions.js:1073
+#: apps/io.ox/mail/actions.js:1082
 #: module:io.ox/mail
 msgid "Save as distribution list"
 msgstr ""
@@ -1105,7 +1105,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:137
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/mail/actions.js:875
+#: apps/io.ox/mail/actions.js:884
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 #: module:io.ox/settings/settings
@@ -1333,7 +1333,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:130
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/mail/actions.js:880
+#: apps/io.ox/mail/actions.js:889
 #: module:io.ox/mail
 msgid "Note"
 msgstr ""
@@ -2292,7 +2292,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js:1374
 #: apps/io.ox/files/toolbar.js:152
 #: apps/io.ox/mail/actions.js:349
-#: apps/io.ox/mail/actions.js:1093
+#: apps/io.ox/mail/actions.js:1102
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:123
 msgid "Copy"
@@ -2359,7 +2359,7 @@ msgstr ""
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:55
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:69
-#: apps/io.ox/mail/actions.js:1064
+#: apps/io.ox/mail/actions.js:1073
 msgid "Invite to appointment"
 msgstr ""
 
@@ -2370,7 +2370,7 @@ msgstr ""
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:1354
 #: apps/io.ox/files/toolbar.js:138
-#: apps/io.ox/mail/actions.js:1139
+#: apps/io.ox/mail/actions.js:1148
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:159
 msgid "Add to portal"
@@ -2378,7 +2378,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/actions.js:830
 #: module:io.ox/contacts
-#: apps/io.ox/mail/actions.js:1149
+#: apps/io.ox/mail/actions.js:1158
 #: module:io.ox/mail
 msgid "Add to address book"
 msgstr ""
@@ -2389,7 +2389,7 @@ msgstr ""
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/files/toolbar.js:79
 #: module:io.ox/files
-#: apps/io.ox/mail/actions.js:1163
+#: apps/io.ox/mail/actions.js:1172
 #: module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:634
 #: module:io.ox/tasks
@@ -2401,7 +2401,7 @@ msgstr ""
 #: apps/io.ox/core/tk/attachments.js:446
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/attachmentsUtil.js:93
-#: apps/io.ox/mail/actions.js:1170
+#: apps/io.ox/mail/actions.js:1179
 #: module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:641
 #: module:io.ox/tasks
@@ -2412,7 +2412,7 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:453
 #: module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/actions.js:1177
+#: apps/io.ox/mail/actions.js:1186
 #: module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:648
 #: module:io.ox/tasks
@@ -2428,7 +2428,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js:1037
 #: apps/io.ox/files/actions.js:1306
 #: apps/io.ox/files/toolbar.js:101
-#: apps/io.ox/mail/actions.js:1184
+#: apps/io.ox/mail/actions.js:1193
 #: module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:655
 #: module:io.ox/tasks
@@ -2441,7 +2441,7 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:467
 #: module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/actions.js:1191
+#: apps/io.ox/mail/actions.js:1200
 #: module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:662
 #: module:io.ox/tasks
@@ -6382,45 +6382,45 @@ msgstr ""
 msgid "Mail has been copied"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:575
+#: apps/io.ox/mail/actions.js:584
 #: module:io.ox/mail
 msgid "Failed to add. Maybe the vCard attachment is invalid."
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:636
+#: apps/io.ox/mail/actions.js:645
 #: module:io.ox/mail
 msgid "The appointment has been added to your calendar"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:690
+#: apps/io.ox/mail/actions.js:699
 #: module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:864
+#: apps/io.ox/mail/actions.js:873
 #: module:io.ox/mail
 msgid "Create reminder"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:868
+#: apps/io.ox/mail/actions.js:877
 #: module:io.ox/mail
-#: apps/io.ox/mail/actions.js:885
+#: apps/io.ox/mail/actions.js:894
 #: apps/io.ox/tasks/edit/view-template.js:206
 #: module:io.ox/tasks/edit
 msgid "Remind me"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:876
+#: apps/io.ox/mail/actions.js:885
 #: module:io.ox/mail
 msgid "Mail reminder"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:881
+#: apps/io.ox/mail/actions.js:890
 #: module:io.ox/mail
 msgid "Mail reminder for"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:881
+#: apps/io.ox/mail/actions.js:890
 #: module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/model.js:136
 #: apps/io.ox/mail/view-options.js:31
@@ -6428,18 +6428,18 @@ msgstr ""
 msgid "From"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:909
+#: apps/io.ox/mail/actions.js:918
 #: module:io.ox/mail
 msgid "Reminder has been created"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:930
+#: apps/io.ox/mail/actions.js:939
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:666
 msgid "Compose new mail"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:951
+#: apps/io.ox/mail/actions.js:960
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:668
 #: apps/plugins/portal/twitter/util.js:230
@@ -6448,12 +6448,12 @@ msgstr ""
 msgid "Reply"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:960
+#: apps/io.ox/mail/actions.js:969
 #: module:io.ox/mail
 msgid "Reply All"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:972
+#: apps/io.ox/mail/actions.js:981
 #: module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:64
 #: apps/io.ox/mail/toolbar.js:67
@@ -6464,7 +6464,7 @@ msgstr ""
 #. Translation should be as short a possible
 #. Instead of "Mark as unread" it's just "Mark unread"
 #. German, for example, should be just "Ungelesen"
-#: apps/io.ox/mail/actions.js:1006
+#: apps/io.ox/mail/actions.js:1015
 #: module:io.ox/mail
 msgid "Mark unread"
 msgstr ""
@@ -6472,45 +6472,45 @@ msgstr ""
 #. Translation should be as short a possible
 #. Instead of "Mark as read" it's just "Mark read"
 #. German, for example, should be just "Gelesen"
-#: apps/io.ox/mail/actions.js:1020
+#: apps/io.ox/mail/actions.js:1029
 #: module:io.ox/mail
 msgid "Mark read"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:1035
+#: apps/io.ox/mail/actions.js:1044
 #: module:io.ox/mail
 msgid "Mark as spam"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:1044
+#: apps/io.ox/mail/actions.js:1053
 #: module:io.ox/mail
 msgid "Not spam"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:1055
+#: apps/io.ox/mail/actions.js:1064
 #: module:io.ox/mail
 msgid "Send new mail"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:1111
+#: apps/io.ox/mail/actions.js:1120
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:137
 msgid "Save as file"
 msgstr ""
 
 #. source in terms of source code
-#: apps/io.ox/mail/actions.js:1121
+#: apps/io.ox/mail/actions.js:1130
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:145
 msgid "View source"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:1156
+#: apps/io.ox/mail/actions.js:1165
 #: module:io.ox/mail
 msgid "Add to calendar"
 msgstr ""
 
-#: apps/io.ox/mail/actions.js:1200
+#: apps/io.ox/mail/actions.js:1209
 #: module:io.ox/mail
 msgid "Drop here to import this mail"
 msgstr ""
