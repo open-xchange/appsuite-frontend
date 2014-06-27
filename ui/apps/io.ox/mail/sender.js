@@ -123,8 +123,8 @@ define('io.ox/mail/sender',
          * @return {string}
          */
         getDefaultSendAddressWithDisplayname: function () {
-            return $.when(api.getDefaultDisplayName()).then(function (display_name) {
-                return [[display_name, $.trim(settings.get('defaultSendAddress', ''))]];
+            return that.getAddresses().then(function (addresses, numbers, primary) {
+                return [primary];
             });
         },
 
