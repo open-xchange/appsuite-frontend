@@ -251,7 +251,7 @@ define('io.ox/contacts/actions',
                 // set recipient
                 var data = { to: _.chain(list).map(mapContact).flatten(true).filter(filterContact).value() };
                 // open compose
-                require(['io.ox/mail/write/main'], function (m) {
+                require(['io.ox/mail/compose/main'], function (m) {
                     m.getApp().launch().done(function () {
                         this.compose(data);
                     });
@@ -269,7 +269,7 @@ define('io.ox/contacts/actions',
 
         multiple: function (list) {
             tentativeLoad(list).done(function (list) {
-                require(['io.ox/mail/write/main'], function (m) {
+                require(['io.ox/mail/compose/main'], function (m) {
                     api.getList(list).done(function (list) {
                         m.getApp().launch().done(function () {
                             this.compose({ contacts_ids: list });

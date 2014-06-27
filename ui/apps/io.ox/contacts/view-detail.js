@@ -319,7 +319,7 @@ define('io.ox/contacts/view-detail',
         // set recipient
         var data = { to: [[e.data.display_name, e.data.email]] };
         // open compose
-        ox.load(['io.ox/mail/write/main']).done(function (m) {
+        ox.load(['io.ox/mail/compose/main']).done(function (m) {
             m.getApp().launch().done(function () {
                 this.compose(data);
             });

@@ -495,16 +495,16 @@ define('io.ox/mail/compose/view',
 
         toggleCC: function (e) {
             $(e.target).toggleClass('active');
-            this.$el.find('[data-extension-id="cc"]').toggleClass('hidden');
+            this.toggleInput('cc');
         },
 
         toggleBCC: function (e) {
             $(e.target).toggleClass('active');
-            this.$el.find('[data-extension-id="bcc"]').toggleClass('hidden');
+            this.toggleInput('bcc');
         },
 
-        setFrom: function (e) {
-            this.model.set('from', this.val());
+        toggleInput: function (type) {
+            this.$el.find('[data-extension-id="' + type + '"]').toggleClass('hidden');
         },
 
         render: function () {
@@ -666,7 +666,6 @@ define('io.ox/mail/compose/view',
                     createTokensOnBlur: true,
                     minLength: contactSettings.get('search/minimumQueryLength', 3),
                     typeahead: [{
-                            highlight: true
                         }, {
                             source: function(query, callback) {
                                 autocompleteAPI.search(query).then(function (matches) {
@@ -734,10 +733,10 @@ define('io.ox/mail/compose/view',
                             $(this).val('');
                         } else if ((/^cc:?\s/i).test(val)) {
                             $(this).val('');
-                            el.find('[data-extension-id="cc"]').removeClass('hidden');
+                            el.find('[data-extension-id="cc"]').removeClass('hidden').find('.token-input').focus();
                         } else if ((/^bcc:?\s/i).test(val)) {
                             $(this).val('');
-                            el.find('[data-extension-id="bcc"]').removeClass('hidden');
+                            el.find('[data-extension-id="bcc"]').removeClass('hidden').find('.token-input').focus();
                         }
                     }
                 }).first().focus();

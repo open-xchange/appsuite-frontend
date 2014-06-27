@@ -336,7 +336,7 @@ define('io.ox/core/pubsub/publications',
     });
 
     function sendInvitation(baton) {
-        return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
+        return require(['io.ox/mail/compose/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
                 userAPI.getCurrentUser().then(function (user) {
                     //predefined data for mail
                     var url = baton.target.url,

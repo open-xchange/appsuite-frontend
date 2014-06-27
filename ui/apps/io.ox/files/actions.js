@@ -235,7 +235,7 @@ define('io.ox/files/actions',
             }
         },
         multiple: function (list) {
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 api.getList(list).done(function (list) {
                     m.getApp().launch().done(function () {
                         //generate text and html content
@@ -273,7 +273,7 @@ define('io.ox/files/actions',
             }
         },
         multiple: function (list) {
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 api.getList(list).done(function (list) {
                     var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
                     if (filtered_list.length > 0) {
