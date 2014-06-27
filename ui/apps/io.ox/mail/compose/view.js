@@ -504,7 +504,9 @@ define('io.ox/mail/compose/view',
         },
 
         toggleInput: function (type, show) {
-            return this.$el.find('[data-extension-id="' + type + '"]').toggleClass('hidden', show);
+            var input = this.$el.find('[data-extension-id="' + type + '"]').toggleClass('hidden', show);
+            $(window).trigger('resize.tinymce');
+            return input;
         },
 
         render: function () {
