@@ -106,7 +106,7 @@ define('io.ox/mail/compose/extensions',
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control to tokenfield">').data('type', 'to').attr({
+                        $('<input type="text" class="form-control tokenfield">').data('type', 'to').attr({
                             id: guid,
                             tabindex: 1
                         }),
@@ -126,7 +126,7 @@ define('io.ox/mail/compose/extensions',
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control cc tokenfield">').data('type', 'cc').attr({
+                        $('<input type="text" class="form-control tokenfield">').data('type', 'cc').attr({
                             id: guid,
                             tabindex: 1
                         })
@@ -142,7 +142,7 @@ define('io.ox/mail/compose/extensions',
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control bcc tokenfield">').data('type', 'bcc').attr({
+                        $('<input type="text" class="form-control tokenfield">').data('type', 'bcc').attr({
                             id: guid,
                             tabindex: 1
                         })

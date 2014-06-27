@@ -696,7 +696,8 @@ define('io.ox/mail/compose/view',
                 }).on({
                     'tokenfield:createdtoken': function (e) {
                         // A11y: set title
-                        var title = '';
+                        var title = '',
+                            token = $(e.relatedTarget);
                         if (e.attrs) {
                             if (e.attrs.label !== e.attrs.value) {
                                 title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
@@ -704,14 +705,26 @@ define('io.ox/mail/compose/view',
                                 title = e.attrs.label;
                             }
                         }
-                        $(e.relatedTarget).attr({
+                        token.attr({
                             title: title
                         });
+                        if (e.attrs) {
+                            var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
+                            token.prepend(
+                                contactsAPI.pictureHalo(
+                                    $('<div class="contact-image">'),
+                                    $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
+                                )
+                            );
+                        }
                     },
                     'change': function () {
                         model.setTokens(type, self.tokenfield('getTokens'));
                     }
                 });
+
+                // add class to tokenfield wrapper
+                self.parent().addClass(type);
 
                 // set initial values
                 var values = model.getTokens(type) || [];

@@ -656,8 +656,6 @@ define('io.ox/contacts/api',
             scaleType: options.scaleType,
             uniq: uniq
         });
-        // remove options
-        options = null;
 
         // remove empty values
         for (var k in params) {
@@ -676,7 +674,7 @@ define('io.ox/contacts/api',
         if (cachesURLs[url]) {
             return node.css('background-image', 'url(' + cachesURLs[url] + ')');
         }
-
+        var hideOnFallback = options.hideOnFallback || false;
         // load image
         _.defer(function () {
             // use lazyload?
@@ -687,6 +685,9 @@ define('io.ox/contacts/api',
                     effect: 'show',
                     error: function () {
                         node.css('background-image', 'url(' + fallback + ')');
+                        if (hideOnFallback) {
+                            node.hide();
+                        }
                         node = scrollpane = null;
                     },
                     load: function (elements_left, settings, image) {
@@ -699,12 +700,18 @@ define('io.ox/contacts/api',
                 $(new Image()).one('load error', function (e) {
                     var fail = this.width === 1 || e.type === 'error';
                     if (!fail) cachesURLs[url] = url;
+                    if (fail && hideOnFallback) {
+                        node.hide();
+                    }
                     node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
                     node = null;
                 })
                 .attr('src', url);
             }
         });
+
+        // remove options
+        options = null;
 
         return node;
     };

@@ -155,6 +155,10 @@
     .tokenfield-focus();
   }
 
+  &.to {
+    padding-right: 65px;
+  }
+
   // Tokens
   .token {
     .box-sizing(border-box);
@@ -167,6 +171,12 @@
     height: 22px;
     vertical-align: top;
     cursor: default;
+    .contact-image {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin: 2px;
+    }
     &:hover {
       border-color: @token-hover-border;
     }
