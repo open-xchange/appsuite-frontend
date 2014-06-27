@@ -49,7 +49,14 @@ define('io.ox/core/tk/text-editor', function () {
                 // ignore valid white-space pattern at beginning (see Bug 26316)
                 if (/^\n{0,2}[ \t\xA0]*\S/.test(str)) return str;
                 // remove white-space
-                return str.replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
+                str = str.replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
+
+                // remove trailing white-space, line-breaks, and empty paragraphs
+                str = str.replace(
+                    /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+                );
+
+                return str;
             },
 
             set = function (str) {

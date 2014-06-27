@@ -598,6 +598,12 @@ define.async('io.ox/core/tk/html-editor',
                 .replace(/\sdata-[^=]+="[^"]*"/g, '')
                 .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                 .replace(/(<p>(<br>)?<\/p>)+$/, '');
+
+            // remove trailing white-space, line-breaks, and empty paragraphs
+            content = content.replace(
+                /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+            );
+
             // remove trailing white-space
             return trimOut(content);
         };

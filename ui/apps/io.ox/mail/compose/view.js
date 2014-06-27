@@ -300,6 +300,7 @@ define('io.ox/mail/compose/view',
         },
 
         prepareMailForSending: function (mail) {
+            var convert = emoji.converterFor({to: emoji.sendEncoding()});
             // get flat ids for data.infostore_ids
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
@@ -318,17 +319,6 @@ define('io.ox/mail/compose/view',
                 });
             });
             delete mail.data.nested_msgs;
-        },
-
-        send: function () {
-            // get mail
-            var self = this,
-                mail = this.getMail(),
-                def = $.Deferred(),
-                convert = emoji.converterFor({to: emoji.sendEncoding()});
-
-            this.blockReuse(mail.data.sendtype);
-            this.prepareMailForSending(mail);
 
             if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                 mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
@@ -343,6 +333,17 @@ define('io.ox/mail/compose/view',
 
              // fix inline images
             mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
+        },
+
+        send: function () {
+            // get mail
+            var self = this,
+                mail = this.getMail(),
+                def = $.Deferred();
+
+            this.blockReuse(mail.data.sendtype);
+
+            this.prepareMailForSending(mail);
 
             function cont() {
                 var win = self.app.getWindow();
@@ -544,10 +545,6 @@ define('io.ox/mail/compose/view',
             return $.when();
         },
 
-        setEditor: function (editor) {
-            this.editor = editor;
-        },
-
         getEditor: function () {
             var def = $.Deferred();
             if (this.editor) {
@@ -578,10 +575,6 @@ define('io.ox/mail/compose/view',
             }
         },
 
-        setRawBody: function (str) {
-            this.editor.setContent(str);
-        },
-
         setBody: function (str) {
 
             var self = this;
@@ -603,12 +596,7 @@ define('io.ox/mail/compose/view',
 
             var content = prependNewLine(trimContent(str));
 
-            //set content
-            this.editor.setContent(content);
-        },
-
-        getFrom: function () {
-            return this.model.get('from');
+            return content;
         },
 
         getContentType: function (mode) {
@@ -620,22 +608,16 @@ define('io.ox/mail/compose/view',
         },
 
         getMail: function () {
-            var files = [],
-                fileList = [],
-                attachments = {
+            var attachment = {
                     content: (this.editor ? this.editor.getContent() : ''),
                     content_type: this.getContentType(this.editorMode)
                 };
 
             if (this.editorMode !== 'html') {
-                attachments.raw = true;
+                attachment.raw = true;
             }
 
-            // remove trailing white-space, line-breaks, and empty paragraphs
-            attachments.content = attachments.content.replace(
-                /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
-            );
-            this.model.set('attachments', [attachments]);
+            this.model.set('attachments', [attachment]);
 
             return {
                 data: this.model.getMail(),
@@ -647,8 +629,6 @@ define('io.ox/mail/compose/view',
         setMail: function (mail) {
             var self = this,
                 data = this.model.toJSON();
-
-            data.initial = data.initial || true;
 
             return this.changeEditorMode().done(function () {
                 var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[self.editorMode] || []) : (undefined);
@@ -665,7 +645,10 @@ define('io.ox/mail/compose/view',
                 // convert different emoji encodings to unified
                 content = convertAllToUnified(content);
                 if (data.replaceBody !== 'no') {
-                    self[data.initial ? 'setBody' : 'setRawBody'](content);
+                    if (data.initial) {
+                        content = self.setBody(content);
+                    }
+                    self.editor.setContent(content);
                 }
             });
         },
