@@ -590,13 +590,13 @@ define('io.ox/mail/compose/view',
 
             function prependNewLine(content) {
                 var nl = self.editorMode === 'html' ? '<p><br></p>' : '\n\n';
-                if (content !== '' && content.indexOf(nl) !== 0) {
+                if (content !== '' && content.indexOf(nl) !== 0 && content.indexOf('<br>') !== 0) {
                     content = nl + content;
                 }
                 return content;
             }
 
-            var content = prependNewLine(trimContent(str));
+            var content = trimContent(prependNewLine(str));
 
             return content;
         },
