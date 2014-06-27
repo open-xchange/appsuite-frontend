@@ -536,6 +536,9 @@ define('io.ox/mail/compose/view',
                         self.editor = self.editorHash[self.editorMode];
                         self.editor.setPlainText(content);
                         self.editor.handleShow();
+                        if (self.model.get('mode') !== 'compose') {
+                            self.editor.focus();
+                        }
                     });
             });
         },
@@ -747,9 +750,12 @@ define('io.ox/mail/compose/view',
                             selfView.toggleInput('bcc', false).find('.token-input').focus();
                         }
                     }
-                }).first().focus();
+                });
             });
 
+            if (model.get('mode') === 'compose') {
+                el.find('.tokenfield:first .token-input').focus();
+            }
             el.append(this.textarea);
 
         },
