@@ -40,7 +40,7 @@ msgstr ""
 #: apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83
 #: module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Today"
 msgstr ""
 
@@ -232,8 +232,8 @@ msgstr ""
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
 #: apps/io.ox/core/import/import.js:129
-#: apps/io.ox/core/main.js:463
-#: apps/io.ox/core/main.js:1265
+#: apps/io.ox/core/main.js:464
+#: apps/io.ox/core/main.js:1266
 #: apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:399
 #: apps/io.ox/core/print.js:113
@@ -1314,7 +1314,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/core/main.js:808
+#: apps/io.ox/core/main.js:809
 #: module:io.ox/core
 #: apps/io.ox/help/center.js:103
 #: module:io.ox/help
@@ -1969,7 +1969,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/plugins/portal/birthdays/register.js:87
 #: module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Yesterday"
 msgstr ""
 
@@ -1983,7 +1983,7 @@ msgstr ""
 #: apps/io.ox/calendar/util.js:199
 #: apps/plugins/portal/birthdays/register.js:85
 #: module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Tomorrow"
 msgstr ""
 
@@ -3199,7 +3199,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/settings/pane.js:91
 #: module:io.ox/contacts
-#: apps/io.ox/core/main.js:779
+#: apps/io.ox/core/main.js:780
 #: module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:220
 msgid "My contact data"
@@ -3792,7 +3792,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/desktop.js:1556
 #: apps/io.ox/core/desktop.js:1614
-#: apps/io.ox/core/main.js:733
+#: apps/io.ox/core/main.js:734
 #: apps/io.ox/search/main.js:162
 #: module:io.ox/search
 #: apps/io.ox/search/main.js:183
@@ -4139,31 +4139,31 @@ msgctxt "app"
 msgid "Conversations"
 msgstr ""
 
-#: apps/io.ox/core/main.js:441
+#: apps/io.ox/core/main.js:442
 #: module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/core/main.js:460
+#: apps/io.ox/core/main.js:461
 #: module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:271
 msgid "Automatic sign out"
 msgstr ""
 
-#: apps/io.ox/core/main.js:464
+#: apps/io.ox/core/main.js:465
 #: module:io.ox/core
 msgid "Sign out now"
 msgstr ""
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:574
+#: apps/io.ox/core/main.js:575
 #: module:io.ox/core
 msgid "close for %1$s"
 msgstr ""
 
-#: apps/io.ox/core/main.js:750
+#: apps/io.ox/core/main.js:751
 #: module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:204
 #: module:io.ox/core/pubsub
@@ -4171,62 +4171,62 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
-#: apps/io.ox/core/main.js:762
+#: apps/io.ox/core/main.js:763
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:905
+#: apps/io.ox/core/main.js:906
 msgid "Settings"
 msgstr ""
 
-#: apps/io.ox/core/main.js:840
+#: apps/io.ox/core/main.js:841
 #: module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/main.js:843
+#: apps/io.ox/core/main.js:844
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:847
+#: apps/io.ox/core/main.js:848
 msgid "Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/main.js:865
+#: apps/io.ox/core/main.js:866
 #: module:io.ox/core
 msgid "About"
 msgstr ""
 
-#: apps/io.ox/core/main.js:886
+#: apps/io.ox/core/main.js:887
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:924
+#: apps/io.ox/core/main.js:925
 msgid "Sign out"
 msgstr ""
 
-#: apps/io.ox/core/main.js:946
+#: apps/io.ox/core/main.js:947
 #: module:io.ox/core
 msgid "Your Applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1024
+#: apps/io.ox/core/main.js:1025
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1025
+#: apps/io.ox/core/main.js:1026
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1258
+#: apps/io.ox/core/main.js:1259
 #: module:io.ox/core
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1260
+#: apps/io.ox/core/main.js:1261
 #: module:io.ox/core
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1266
+#: apps/io.ox/core/main.js:1267
 #: module:io.ox/core
 msgid "Continue"
 msgstr ""
@@ -8743,7 +8743,7 @@ msgstr ""
 #: apps/plugins/portal/birthdays/register.js:47
 #: module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:114
-#: apps/plugins/portal/birthdays/register.js:188
+#: apps/plugins/portal/birthdays/register.js:181
 msgid "Birthdays"
 msgstr ""
 
@@ -8758,17 +8758,17 @@ msgstr ""
 msgid "No birthdays within the next %1$d weeks"
 msgstr ""
 
-#: apps/plugins/portal/birthdays/register.js:127
+#: apps/plugins/portal/birthdays/register.js:128
 #: module:plugins/portal
 msgid "External link"
 msgstr ""
 
-#: apps/plugins/portal/birthdays/register.js:127
+#: apps/plugins/portal/birthdays/register.js:128
 #: module:plugins/portal
 msgid "Buy a gift"
 msgstr ""
 
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 #: module:plugins/portal
 msgid "In %1$d days"
 msgstr ""

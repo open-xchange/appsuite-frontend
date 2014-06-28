@@ -454,7 +454,7 @@ msgstr "A fost trimisă o confirmare de primire"
 msgid "A severe error occurred!"
 msgstr "A apărut o eroare gravă!"
 
-#: apps/io.ox/core/main.js:865 module:io.ox/core
+#: apps/io.ox/core/main.js:866 module:io.ox/core
 msgid "About"
 msgstr "Despre"
 
@@ -1003,7 +1003,7 @@ msgstr "Salvare automată a schițelor de mesaje"
 msgid "Automatic opening of notification area"
 msgstr "Deschidere automată a zonei de notificare"
 
-#: apps/io.ox/core/main.js:460 module:io.ox/core
+#: apps/io.ox/core/main.js:461 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:271
 msgid "Automatic sign out"
 msgstr "Deconectare automată"
@@ -1079,7 +1079,7 @@ msgstr "Informații de facturare"
 
 #: apps/plugins/portal/birthdays/register.js:47 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:114
-#: apps/plugins/portal/birthdays/register.js:188
+#: apps/plugins/portal/birthdays/register.js:181
 msgid "Birthdays"
 msgstr "Aniversări"
 
@@ -1120,7 +1120,7 @@ msgstr "Adresă profesională"
 msgid "Business category"
 msgstr "Categorie profesională"
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "Buy a gift"
 msgstr "Cumpără un cadou"
 
@@ -1182,8 +1182,8 @@ msgstr "Calendar"
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:463
-#: apps/io.ox/core/main.js:1265 apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:464
+#: apps/io.ox/core/main.js:1266 apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
@@ -1591,7 +1591,7 @@ msgstr "Contactele au fost mutate"
 msgid "Contains"
 msgstr "Conține"
 
-#: apps/io.ox/core/main.js:1266 module:io.ox/core
+#: apps/io.ox/core/main.js:1267 module:io.ox/core
 msgid "Continue"
 msgstr "Continuă"
 
@@ -2653,7 +2653,7 @@ msgstr "Date exacte"
 msgid "Executive"
 msgstr "Director"
 
-#: apps/io.ox/core/main.js:840 module:io.ox/core
+#: apps/io.ox/core/main.js:841 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Ieșire ecran complet"
 
@@ -2699,7 +2699,7 @@ msgstr ""
 "Imaginile externe au fost blocate pentru a vă proteja împotriva eventualelor "
 "mesaje nedorite!"
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "External link"
 msgstr "Legătură externă"
 
@@ -3033,7 +3033,7 @@ msgstr "Vineri"
 msgid "From"
 msgstr "De la"
 
-#: apps/io.ox/core/main.js:843 module:io.ox/core apps/io.ox/core/main.js:847
+#: apps/io.ox/core/main.js:844 module:io.ox/core apps/io.ox/core/main.js:848
 msgid "Fullscreen"
 msgstr "Ecran complet"
 
@@ -3122,7 +3122,7 @@ msgid "Hello World"
 msgstr "Salut lume"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:808
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:809
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Ajutor"
@@ -3284,7 +3284,7 @@ msgstr "Importă în"
 msgid "Import signatures"
 msgstr "Importă semnăturile"
 
-#: apps/plugins/portal/birthdays/register.js:152 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:145 module:plugins/portal
 msgid "In %1$d days"
 msgstr "Peste %1$d zile"
 
@@ -3959,7 +3959,7 @@ msgid "Move to folder"
 msgstr "Mută în dosar"
 
 #: apps/io.ox/contacts/settings/pane.js:91 module:io.ox/contacts
-#: apps/io.ox/core/main.js:779 module:io.ox/core
+#: apps/io.ox/core/main.js:780 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:220
 msgid "My contact data"
 msgstr "Datele mele de contact"
@@ -4820,7 +4820,7 @@ msgstr ""
 "Selectați datele pe care le putem utiliza pentru a crea contul dumneavoastră "
 "%s:"
 
-#: apps/io.ox/core/main.js:1025 module:io.ox/core
+#: apps/io.ox/core/main.js:1026 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Autentificați-vă din nou pentru a continua"
@@ -5178,7 +5178,7 @@ msgstr "Roșu"
 msgid "Redirect to"
 msgstr "Redirecționează către"
 
-#: apps/io.ox/core/main.js:750 module:io.ox/core
+#: apps/io.ox/core/main.js:751 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:204 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:205
 msgid "Refresh"
@@ -5335,7 +5335,7 @@ msgstr "Grup de resurse"
 msgid "Resources"
 msgstr "Resurse"
 
-#: apps/io.ox/core/main.js:1258 module:io.ox/core
+#: apps/io.ox/core/main.js:1259 module:io.ox/core
 msgid "Restore applications"
 msgstr "Restabilește aplicațiile"
 
@@ -5504,7 +5504,7 @@ msgstr "Programare"
 
 #: apps/io.ox/core/desktop.js:1555 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1556 apps/io.ox/core/desktop.js:1614
-#: apps/io.ox/core/main.js:733 apps/io.ox/search/main.js:162
+#: apps/io.ox/core/main.js:734 apps/io.ox/search/main.js:162
 #: module:io.ox/search apps/io.ox/search/main.js:183
 #: apps/io.ox/search/view-template.js:48
 #: apps/io.ox/search/view-template.js:128
@@ -5683,7 +5683,7 @@ msgstr "Setează ca implicit"
 msgid "Set color"
 msgstr "Setează culoarea"
 
-#: apps/io.ox/core/main.js:762 module:io.ox/core apps/io.ox/core/main.js:905
+#: apps/io.ox/core/main.js:763 module:io.ox/core apps/io.ox/core/main.js:906
 msgid "Settings"
 msgstr "Setări "
 
@@ -5839,11 +5839,11 @@ msgstr "Afișat ca"
 msgid "Sign in"
 msgstr "Autentificare"
 
-#: apps/io.ox/core/main.js:886 module:io.ox/core apps/io.ox/core/main.js:924
+#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:925
 msgid "Sign out"
 msgstr "Deconectare"
 
-#: apps/io.ox/core/main.js:464 module:io.ox/core
+#: apps/io.ox/core/main.js:465 module:io.ox/core
 msgid "Sign out now"
 msgstr "Deconectează acum"
 
@@ -6418,7 +6418,7 @@ msgstr "Dosarul a fost golit."
 msgid "The folder is available at %1$s"
 msgstr "Dosarul este disponibil la %1$s"
 
-#: apps/io.ox/core/main.js:1260 module:io.ox/core
+#: apps/io.ox/core/main.js:1261 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6878,7 +6878,7 @@ msgstr ""
 #: apps/io.ox/calendar/util.js:160 apps/io.ox/calendar/util.js:197
 #: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Today"
 msgstr "Astăzi"
 
@@ -6898,7 +6898,7 @@ msgstr "Comutare căutare"
 #: apps/io.ox/calendar/util.js:162 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:199
 #: apps/plugins/portal/birthdays/register.js:85 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Tomorrow"
 msgstr "Mâine"
 
@@ -7391,7 +7391,7 @@ msgstr "Da, trimite fără subiect"
 #: apps/io.ox/calendar/util.js:153 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:190 apps/io.ox/mail/util.js:72
 #: module:io.ox/core apps/plugins/portal/birthdays/register.js:87
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:152
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:145
 msgid "Yesterday"
 msgstr "Ieri"
 
@@ -7593,7 +7593,7 @@ msgstr ""
 "Veți reveni automat la fereastra de dialog pentru întâlnire. Data de început "
 "și cea de sfârșit, precum și lista actuală de participanți, vor fi aplicate."
 
-#: apps/io.ox/core/main.js:441 module:io.ox/core
+#: apps/io.ox/core/main.js:442 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Veți fi deconectat automat peste %1$d secundă"
@@ -7611,7 +7611,7 @@ msgstr ""
 msgid "Your %s newsfeed"
 msgstr "Fluxul de știri %s "
 
-#: apps/io.ox/core/main.js:946 module:io.ox/core
+#: apps/io.ox/core/main.js:947 module:io.ox/core
 msgid "Your Applications"
 msgstr "Aplicațiile dumneavoastră"
 
@@ -7701,7 +7701,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Imaginea selectată va fi afișată după salvare"
 
-#: apps/io.ox/core/main.js:1024 module:io.ox/core
+#: apps/io.ox/core/main.js:1025 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Sesiunea dumneavoastră a expirat"
@@ -7772,7 +7772,7 @@ msgid "close"
 msgstr "închide"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:574 module:io.ox/core
+#: apps/io.ox/core/main.js:575 module:io.ox/core
 msgid "close for %1$s"
 msgstr "închide pentru %1$s"
 

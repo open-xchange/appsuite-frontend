@@ -453,7 +453,7 @@ msgstr "Piegādes apstiprinājums ir nosūtīts"
 msgid "A severe error occurred!"
 msgstr "Reģistrēta smaga kļūda!"
 
-#: apps/io.ox/core/main.js:865 module:io.ox/core
+#: apps/io.ox/core/main.js:866 module:io.ox/core
 msgid "About"
 msgstr "Par"
 
@@ -1002,7 +1002,7 @@ msgstr "Automātiski saglabāt e-pasta melnrakstus"
 msgid "Automatic opening of notification area"
 msgstr "Automātiski atvērt paziņojuma apgabalu"
 
-#: apps/io.ox/core/main.js:460 module:io.ox/core
+#: apps/io.ox/core/main.js:461 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:271
 msgid "Automatic sign out"
 msgstr "Automātiska atslēgšanās"
@@ -1080,7 +1080,7 @@ msgstr "Rēķina informācija"
 
 #: apps/plugins/portal/birthdays/register.js:47 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:114
-#: apps/plugins/portal/birthdays/register.js:188
+#: apps/plugins/portal/birthdays/register.js:181
 msgid "Birthdays"
 msgstr "Dzimšanas dienas"
 
@@ -1121,7 +1121,7 @@ msgstr "Darba adrese"
 msgid "Business category"
 msgstr "Biznesa kategorija"
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "Buy a gift"
 msgstr "Pirkt dāvanu"
 
@@ -1183,8 +1183,8 @@ msgstr "Kalendārs"
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:463
-#: apps/io.ox/core/main.js:1265 apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:464
+#: apps/io.ox/core/main.js:1266 apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
@@ -1589,7 +1589,7 @@ msgstr "Kontakts ir pārvietots"
 msgid "Contains"
 msgstr "Satur"
 
-#: apps/io.ox/core/main.js:1266 module:io.ox/core
+#: apps/io.ox/core/main.js:1267 module:io.ox/core
 msgid "Continue"
 msgstr "Turpināt"
 
@@ -2666,7 +2666,7 @@ msgstr "Sākuma datums"
 msgid "Executive"
 msgstr "Vadītājs"
 
-#: apps/io.ox/core/main.js:840 module:io.ox/core
+#: apps/io.ox/core/main.js:841 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Iziet no pilnekrāna"
 
@@ -2711,7 +2711,7 @@ msgid ""
 msgstr ""
 "Ārējie attēli ir bloķēti lai pasargātu jūs no potenciāla mēstuļu satura!"
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "External link"
 msgstr "Ārēja saite"
 
@@ -3048,7 +3048,7 @@ msgstr "Piektdiena"
 msgid "From"
 msgstr "Sūtītājs"
 
-#: apps/io.ox/core/main.js:843 module:io.ox/core apps/io.ox/core/main.js:847
+#: apps/io.ox/core/main.js:844 module:io.ox/core apps/io.ox/core/main.js:848
 msgid "Fullscreen"
 msgstr "Pilnekrāns"
 
@@ -3137,7 +3137,7 @@ msgid "Hello World"
 msgstr "Labdien, pasaule"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:808
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:809
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Palīgs"
@@ -3299,7 +3299,7 @@ msgstr "Importēt iekš"
 msgid "Import signatures"
 msgstr "Importēt parakstus"
 
-#: apps/plugins/portal/birthdays/register.js:152 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:145 module:plugins/portal
 msgid "In %1$d days"
 msgstr "%1$d dienās"
 
@@ -3973,7 +3973,7 @@ msgid "Move to folder"
 msgstr "Pārvietot uz mapi"
 
 #: apps/io.ox/contacts/settings/pane.js:91 module:io.ox/contacts
-#: apps/io.ox/core/main.js:779 module:io.ox/core
+#: apps/io.ox/core/main.js:780 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:220
 msgid "My contact data"
 msgstr "Mani kontakta dati"
@@ -4834,7 +4834,7 @@ msgid ""
 "account:"
 msgstr "Lūdzu norādiet kādus jūsu datus var izmantot %s konta izveidošanai:"
 
-#: apps/io.ox/core/main.js:1025 module:io.ox/core
+#: apps/io.ox/core/main.js:1026 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Lai turpinātu lūdzu pieslēdzieties no jauna"
@@ -5188,7 +5188,7 @@ msgstr "Sarkans"
 msgid "Redirect to"
 msgstr "Pāradresēt"
 
-#: apps/io.ox/core/main.js:750 module:io.ox/core
+#: apps/io.ox/core/main.js:751 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:204 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:205
 msgid "Refresh"
@@ -5345,7 +5345,7 @@ msgstr "Resursu grupa"
 msgid "Resources"
 msgstr "Resursi"
 
-#: apps/io.ox/core/main.js:1258 module:io.ox/core
+#: apps/io.ox/core/main.js:1259 module:io.ox/core
 msgid "Restore applications"
 msgstr "Atjaunot aplikācijas"
 
@@ -5514,7 +5514,7 @@ msgstr "Plānošana"
 
 #: apps/io.ox/core/desktop.js:1555 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1556 apps/io.ox/core/desktop.js:1614
-#: apps/io.ox/core/main.js:733 apps/io.ox/search/main.js:162
+#: apps/io.ox/core/main.js:734 apps/io.ox/search/main.js:162
 #: module:io.ox/search apps/io.ox/search/main.js:183
 #: apps/io.ox/search/view-template.js:48
 #: apps/io.ox/search/view-template.js:128
@@ -5695,7 +5695,7 @@ msgstr "Uzstādīt kā noklusēto"
 msgid "Set color"
 msgstr "Iestatīt krāsu"
 
-#: apps/io.ox/core/main.js:762 module:io.ox/core apps/io.ox/core/main.js:905
+#: apps/io.ox/core/main.js:763 module:io.ox/core apps/io.ox/core/main.js:906
 msgid "Settings"
 msgstr "Iestatījumi"
 
@@ -5851,11 +5851,11 @@ msgstr "Rādīts kā"
 msgid "Sign in"
 msgstr "Pieslēgšanās"
 
-#: apps/io.ox/core/main.js:886 module:io.ox/core apps/io.ox/core/main.js:924
+#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:925
 msgid "Sign out"
 msgstr "Atslēgties"
 
-#: apps/io.ox/core/main.js:464 module:io.ox/core
+#: apps/io.ox/core/main.js:465 module:io.ox/core
 msgid "Sign out now"
 msgstr "Atslēgties"
 
@@ -6434,7 +6434,7 @@ msgstr "Mape ir iztukšota."
 msgid "The folder is available at %1$s"
 msgstr "Mape ir pieejama iekš %1$s"
 
-#: apps/io.ox/core/main.js:1260 module:io.ox/core
+#: apps/io.ox/core/main.js:1261 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6884,7 +6884,7 @@ msgstr ""
 #: apps/io.ox/calendar/util.js:160 apps/io.ox/calendar/util.js:197
 #: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Today"
 msgstr "Šodien"
 
@@ -6904,7 +6904,7 @@ msgstr "Pārslēgt meklēšanu"
 #: apps/io.ox/calendar/util.js:162 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:199
 #: apps/plugins/portal/birthdays/register.js:85 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Tomorrow"
 msgstr "Rītdien"
 
@@ -7399,7 +7399,7 @@ msgstr "Jā, nosūtīt bez temata"
 #: apps/io.ox/calendar/util.js:153 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:190 apps/io.ox/mail/util.js:72
 #: module:io.ox/core apps/plugins/portal/birthdays/register.js:87
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:152
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:145
 msgid "Yesterday"
 msgstr "Vakar"
 
@@ -7602,7 +7602,7 @@ msgstr ""
 "Jūs automātiski atgriezīsieties pie tikšanās dialoga, kurā tiks piemēroti "
 "izvēlētie sākuma un beigu laiki un dalībnieku saraksts."
 
-#: apps/io.ox/core/main.js:441 module:io.ox/core
+#: apps/io.ox/core/main.js:442 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Jūs tiksiet automātiski izrakstīts pēc %1$d sekundes"
@@ -7620,7 +7620,7 @@ msgstr ""
 msgid "Your %s newsfeed"
 msgstr "Jūsu %s ziņu straumējums"
 
-#: apps/io.ox/core/main.js:946 module:io.ox/core
+#: apps/io.ox/core/main.js:947 module:io.ox/core
 msgid "Your Applications"
 msgstr "Jūsu aplikācijas"
 
@@ -7710,7 +7710,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Jūsu izvēlētais attēls tiks parādīts pēc saglabāšanas"
 
-#: apps/io.ox/core/main.js:1024 module:io.ox/core
+#: apps/io.ox/core/main.js:1025 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Jūsu sesijas derīgums ir beidzies"
@@ -7783,7 +7783,7 @@ msgid "close"
 msgstr "Aizvērt"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:574 module:io.ox/core
+#: apps/io.ox/core/main.js:575 module:io.ox/core
 msgid "close for %1$s"
 msgstr "slēgts priekš %1$s"
 

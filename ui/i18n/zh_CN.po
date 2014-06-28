@@ -437,7 +437,7 @@ msgstr "已发送一个送达回执"
 msgid "A severe error occurred!"
 msgstr "发生一个严重错误！"
 
-#: apps/io.ox/core/main.js:865 module:io.ox/core
+#: apps/io.ox/core/main.js:866 module:io.ox/core
 msgid "About"
 msgstr "关于"
 
@@ -977,7 +977,7 @@ msgstr "自动保存电子邮件草稿"
 msgid "Automatic opening of notification area"
 msgstr "自动打开通知区域"
 
-#: apps/io.ox/core/main.js:460 module:io.ox/core
+#: apps/io.ox/core/main.js:461 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:271
 msgid "Automatic sign out"
 msgstr "自动注销"
@@ -1049,7 +1049,7 @@ msgstr "开票信息"
 
 #: apps/plugins/portal/birthdays/register.js:47 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:114
-#: apps/plugins/portal/birthdays/register.js:188
+#: apps/plugins/portal/birthdays/register.js:181
 msgid "Birthdays"
 msgstr "生日"
 
@@ -1090,7 +1090,7 @@ msgstr "业务地址"
 msgid "Business category"
 msgstr "业务类别"
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "Buy a gift"
 msgstr "购买一份礼物"
 
@@ -1150,8 +1150,8 @@ msgstr "日历"
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:463
-#: apps/io.ox/core/main.js:1265 apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:464
+#: apps/io.ox/core/main.js:1266 apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
@@ -1555,7 +1555,7 @@ msgstr "联系人已移动"
 msgid "Contains"
 msgstr "包含"
 
-#: apps/io.ox/core/main.js:1266 module:io.ox/core
+#: apps/io.ox/core/main.js:1267 module:io.ox/core
 msgid "Continue"
 msgstr "继续"
 
@@ -2604,7 +2604,7 @@ msgstr "准确日期"
 msgid "Executive"
 msgstr "行政主管"
 
-#: apps/io.ox/core/main.js:840 module:io.ox/core
+#: apps/io.ox/core/main.js:841 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "离开全屏幕"
 
@@ -2648,7 +2648,7 @@ msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "为保护您的隐私，从外部链接的图像的预加载已被阻止！"
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "External link"
 msgstr "外部链接"
 
@@ -2974,7 +2974,7 @@ msgstr "星期五"
 msgid "From"
 msgstr "从"
 
-#: apps/io.ox/core/main.js:843 module:io.ox/core apps/io.ox/core/main.js:847
+#: apps/io.ox/core/main.js:844 module:io.ox/core apps/io.ox/core/main.js:848
 msgid "Fullscreen"
 msgstr "全屏幕"
 
@@ -3063,7 +3063,7 @@ msgid "Hello World"
 msgstr "您好世界"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:808
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:809
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "帮助"
@@ -3218,7 +3218,7 @@ msgstr "导入到"
 msgid "Import signatures"
 msgstr "导入签名"
 
-#: apps/plugins/portal/birthdays/register.js:152 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:145 module:plugins/portal
 msgid "In %1$d days"
 msgstr "%1$d 天内"
 
@@ -3889,7 +3889,7 @@ msgid "Move to folder"
 msgstr "移动到文件夹"
 
 #: apps/io.ox/contacts/settings/pane.js:91 module:io.ox/contacts
-#: apps/io.ox/core/main.js:779 module:io.ox/core
+#: apps/io.ox/core/main.js:780 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:220
 msgid "My contact data"
 msgstr "我的联系人数据"
@@ -4735,7 +4735,7 @@ msgid ""
 "account:"
 msgstr "请选择以下哪些数据我们可以用作创建您的 %s 户口："
 
-#: apps/io.ox/core/main.js:1025 module:io.ox/core
+#: apps/io.ox/core/main.js:1026 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "请再登入继续"
@@ -5086,7 +5086,7 @@ msgstr "红色"
 msgid "Redirect to"
 msgstr "转送到"
 
-#: apps/io.ox/core/main.js:750 module:io.ox/core
+#: apps/io.ox/core/main.js:751 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:204 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:205
 msgid "Refresh"
@@ -5243,7 +5243,7 @@ msgstr "资源组"
 msgid "Resources"
 msgstr "资源"
 
-#: apps/io.ox/core/main.js:1258 module:io.ox/core
+#: apps/io.ox/core/main.js:1259 module:io.ox/core
 msgid "Restore applications"
 msgstr "复原应用"
 
@@ -5411,7 +5411,7 @@ msgstr "排程"
 
 #: apps/io.ox/core/desktop.js:1555 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1556 apps/io.ox/core/desktop.js:1614
-#: apps/io.ox/core/main.js:733 apps/io.ox/search/main.js:162
+#: apps/io.ox/core/main.js:734 apps/io.ox/search/main.js:162
 #: module:io.ox/search apps/io.ox/search/main.js:183
 #: apps/io.ox/search/view-template.js:48
 #: apps/io.ox/search/view-template.js:128
@@ -5590,7 +5590,7 @@ msgstr "保存为默认"
 msgid "Set color"
 msgstr "设定颜色"
 
-#: apps/io.ox/core/main.js:762 module:io.ox/core apps/io.ox/core/main.js:905
+#: apps/io.ox/core/main.js:763 module:io.ox/core apps/io.ox/core/main.js:906
 msgid "Settings"
 msgstr "设置"
 
@@ -5746,11 +5746,11 @@ msgstr "显示为"
 msgid "Sign in"
 msgstr "登入"
 
-#: apps/io.ox/core/main.js:886 module:io.ox/core apps/io.ox/core/main.js:924
+#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:925
 msgid "Sign out"
 msgstr "登出"
 
-#: apps/io.ox/core/main.js:464 module:io.ox/core
+#: apps/io.ox/core/main.js:465 module:io.ox/core
 msgid "Sign out now"
 msgstr "现在登出"
 
@@ -6314,7 +6314,7 @@ msgstr "文件夹已清空。"
 msgid "The folder is available at %1$s"
 msgstr "文件夹于 %1$s 可用"
 
-#: apps/io.ox/core/main.js:1260 module:io.ox/core
+#: apps/io.ox/core/main.js:1261 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6734,7 +6734,7 @@ msgstr ""
 #: apps/io.ox/calendar/util.js:160 apps/io.ox/calendar/util.js:197
 #: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Today"
 msgstr "今天"
 
@@ -6754,7 +6754,7 @@ msgstr "切换搜寻"
 #: apps/io.ox/calendar/util.js:162 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:199
 #: apps/plugins/portal/birthdays/register.js:85 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Tomorrow"
 msgstr "明天"
 
@@ -7227,7 +7227,7 @@ msgstr "是，不带题目发送"
 #: apps/io.ox/calendar/util.js:153 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:190 apps/io.ox/mail/util.js:72
 #: module:io.ox/core apps/plugins/portal/birthdays/register.js:87
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:152
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:145
 msgid "Yesterday"
 msgstr "昨天"
 
@@ -7416,7 +7416,7 @@ msgid ""
 msgstr ""
 "您会自动回到约会对话。选择的开始和结束时间，还有当前参与者列表将会套用。"
 
-#: apps/io.ox/core/main.js:441 module:io.ox/core
+#: apps/io.ox/core/main.js:442 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "您会在 %1$d 秒后自动注销"
@@ -7431,7 +7431,7 @@ msgstr "您的 %s 户口已创建，您快将收到来自 %s 邮件。"
 msgid "Your %s newsfeed"
 msgstr "您的 %s 新闻条目"
 
-#: apps/io.ox/core/main.js:946 module:io.ox/core
+#: apps/io.ox/core/main.js:947 module:io.ox/core
 msgid "Your Applications"
 msgstr "您的应用程序"
 
@@ -7516,7 +7516,7 @@ msgstr "您的密码会在它包含大写、数字、和如 $、_、% 字符时�
 msgid "Your selected picture will be displayed after saving"
 msgstr "您选择的图像将会在保存后显示"
 
-#: apps/io.ox/core/main.js:1024 module:io.ox/core
+#: apps/io.ox/core/main.js:1025 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "会话已过期"
@@ -7584,7 +7584,7 @@ msgid "close"
 msgstr "关闭"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:574 module:io.ox/core
+#: apps/io.ox/core/main.js:575 module:io.ox/core
 msgid "close for %1$s"
 msgstr "按 %1$s 关闭"
 

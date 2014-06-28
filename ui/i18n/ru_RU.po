@@ -452,7 +452,7 @@ msgstr "Уведомление отправлено"
 msgid "A severe error occurred!"
 msgstr "Произошла критическая ошибка."
 
-#: apps/io.ox/core/main.js:865 module:io.ox/core
+#: apps/io.ox/core/main.js:866 module:io.ox/core
 msgid "About"
 msgstr "О программе"
 
@@ -999,7 +999,7 @@ msgstr "Автосохранение черновиков"
 msgid "Automatic opening of notification area"
 msgstr "Автоматически открывать область уведомлений"
 
-#: apps/io.ox/core/main.js:460 module:io.ox/core
+#: apps/io.ox/core/main.js:461 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:271
 msgid "Automatic sign out"
 msgstr "Автоматический выход"
@@ -1074,7 +1074,7 @@ msgstr "Сведения об оплате"
 
 #: apps/plugins/portal/birthdays/register.js:47 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:114
-#: apps/plugins/portal/birthdays/register.js:188
+#: apps/plugins/portal/birthdays/register.js:181
 msgid "Birthdays"
 msgstr "Дни рождения"
 
@@ -1115,7 +1115,7 @@ msgstr "Рабочий адрес"
 msgid "Business category"
 msgstr "Бизнес-категория"
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "Buy a gift"
 msgstr "Купить подарок"
 
@@ -1175,8 +1175,8 @@ msgstr "Календарь"
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:463
-#: apps/io.ox/core/main.js:1265 apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:464
+#: apps/io.ox/core/main.js:1266 apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
@@ -1581,7 +1581,7 @@ msgstr "Контакты перенесены"
 msgid "Contains"
 msgstr "содержит"
 
-#: apps/io.ox/core/main.js:1266 module:io.ox/core
+#: apps/io.ox/core/main.js:1267 module:io.ox/core
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -2640,7 +2640,7 @@ msgstr "Точные даты"
 msgid "Executive"
 msgstr "Руководитель"
 
-#: apps/io.ox/core/main.js:840 module:io.ox/core
+#: apps/io.ox/core/main.js:841 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Закрыть полноэкранный режим"
 
@@ -2684,7 +2684,7 @@ msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Внешние изображения были заблокированы с целью защиты от спама."
 
-#: apps/plugins/portal/birthdays/register.js:127 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "External link"
 msgstr "Внешняя ссылка"
 
@@ -3016,7 +3016,7 @@ msgstr "Пятница"
 msgid "From"
 msgstr "От"
 
-#: apps/io.ox/core/main.js:843 module:io.ox/core apps/io.ox/core/main.js:847
+#: apps/io.ox/core/main.js:844 module:io.ox/core apps/io.ox/core/main.js:848
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
 
@@ -3105,7 +3105,7 @@ msgid "Hello World"
 msgstr "Здравствуй, мир!"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:808
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:809
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Справка"
@@ -3264,7 +3264,7 @@ msgstr "Импорт в"
 msgid "Import signatures"
 msgstr "Импорт подписей"
 
-#: apps/plugins/portal/birthdays/register.js:152 module:plugins/portal
+#: apps/plugins/portal/birthdays/register.js:145 module:plugins/portal
 msgid "In %1$d days"
 msgstr "Через %1$d д."
 
@@ -3937,7 +3937,7 @@ msgid "Move to folder"
 msgstr "Переместить в папку"
 
 #: apps/io.ox/contacts/settings/pane.js:91 module:io.ox/contacts
-#: apps/io.ox/core/main.js:779 module:io.ox/core
+#: apps/io.ox/core/main.js:780 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:220
 msgid "My contact data"
 msgstr "Мои контактные данные"
@@ -4794,7 +4794,7 @@ msgid ""
 "account:"
 msgstr "Выберите данные, на основе которых будет создана учетная запись %s:"
 
-#: apps/io.ox/core/main.js:1025 module:io.ox/core
+#: apps/io.ox/core/main.js:1026 module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Авторизуйтесь для продолжения"
@@ -5147,7 +5147,7 @@ msgstr "Красный"
 msgid "Redirect to"
 msgstr "Переслать"
 
-#: apps/io.ox/core/main.js:750 module:io.ox/core
+#: apps/io.ox/core/main.js:751 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:204 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:205
 msgid "Refresh"
@@ -5304,7 +5304,7 @@ msgstr "Группы ресурсов"
 msgid "Resources"
 msgstr "Ресурсы"
 
-#: apps/io.ox/core/main.js:1258 module:io.ox/core
+#: apps/io.ox/core/main.js:1259 module:io.ox/core
 msgid "Restore applications"
 msgstr "Восстановить приложения"
 
@@ -5473,7 +5473,7 @@ msgstr "Планирование"
 
 #: apps/io.ox/core/desktop.js:1555 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1556 apps/io.ox/core/desktop.js:1614
-#: apps/io.ox/core/main.js:733 apps/io.ox/search/main.js:162
+#: apps/io.ox/core/main.js:734 apps/io.ox/search/main.js:162
 #: module:io.ox/search apps/io.ox/search/main.js:183
 #: apps/io.ox/search/view-template.js:48
 #: apps/io.ox/search/view-template.js:128
@@ -5652,7 +5652,7 @@ msgstr "Использовать по умолчанию"
 msgid "Set color"
 msgstr "Изменить цвет"
 
-#: apps/io.ox/core/main.js:762 module:io.ox/core apps/io.ox/core/main.js:905
+#: apps/io.ox/core/main.js:763 module:io.ox/core apps/io.ox/core/main.js:906
 msgid "Settings"
 msgstr "Параметры"
 
@@ -5808,11 +5808,11 @@ msgstr "Статус в календаре:"
 msgid "Sign in"
 msgstr "Вход"
 
-#: apps/io.ox/core/main.js:886 module:io.ox/core apps/io.ox/core/main.js:924
+#: apps/io.ox/core/main.js:887 module:io.ox/core apps/io.ox/core/main.js:925
 msgid "Sign out"
 msgstr "Выход"
 
-#: apps/io.ox/core/main.js:464 module:io.ox/core
+#: apps/io.ox/core/main.js:465 module:io.ox/core
 msgid "Sign out now"
 msgstr "Выход"
 
@@ -6380,7 +6380,7 @@ msgstr "Папка освобождена."
 msgid "The folder is available at %1$s"
 msgstr "Папка доступна в %1$s"
 
-#: apps/io.ox/core/main.js:1260 module:io.ox/core
+#: apps/io.ox/core/main.js:1261 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6826,7 +6826,7 @@ msgstr ""
 #: apps/io.ox/calendar/util.js:160 apps/io.ox/calendar/util.js:197
 #: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Today"
 msgstr "Сегодня"
 
@@ -6846,7 +6846,7 @@ msgstr "Включить режим поиска"
 #: apps/io.ox/calendar/util.js:162 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:199
 #: apps/plugins/portal/birthdays/register.js:85 module:plugins/portal
-#: apps/plugins/portal/birthdays/register.js:152
+#: apps/plugins/portal/birthdays/register.js:145
 msgid "Tomorrow"
 msgstr "Завтра"
 
@@ -7328,7 +7328,7 @@ msgstr "Да, отправить без темы"
 #: apps/io.ox/calendar/util.js:153 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:190 apps/io.ox/mail/util.js:72
 #: module:io.ox/core apps/plugins/portal/birthdays/register.js:87
-#: module:plugins/portal apps/plugins/portal/birthdays/register.js:152
+#: module:plugins/portal apps/plugins/portal/birthdays/register.js:145
 msgid "Yesterday"
 msgstr "Вчера"
 
@@ -7524,7 +7524,7 @@ msgstr ""
 "Вы автоматически вернетесь к диалогу встречи. Время начала и окончания, а "
 "также текущий участник будут сохранены."
 
-#: apps/io.ox/core/main.js:441 module:io.ox/core
+#: apps/io.ox/core/main.js:442 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Сеанс будет завершен через %1$d секунду"
@@ -7540,7 +7540,7 @@ msgstr "Учетная запись %s создана. Вы получите п�
 msgid "Your %s newsfeed"
 msgstr "Лента новостей %s"
 
-#: apps/io.ox/core/main.js:946 module:io.ox/core
+#: apps/io.ox/core/main.js:947 module:io.ox/core
 msgid "Your Applications"
 msgstr "Ваши приложения"
 
@@ -7627,7 +7627,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Изображение будет показано после сохранения."
 
-#: apps/io.ox/core/main.js:1024 module:io.ox/core
+#: apps/io.ox/core/main.js:1025 module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Время сеанса истекло"
@@ -7696,7 +7696,7 @@ msgid "close"
 msgstr "закрыть"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:574 module:io.ox/core
+#: apps/io.ox/core/main.js:575 module:io.ox/core
 msgid "close for %1$s"
 msgstr "закрыть для %1$s"
 
