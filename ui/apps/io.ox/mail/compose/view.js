@@ -27,11 +27,10 @@ define('io.ox/mail/compose/view',
      'settings!io.ox/contacts',
      'io.ox/core/notifications',
      'io.ox/core/api/autocomplete',
-     'io.ox/core/api/account',
      'gettext!io.ox/mail',
      'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
      'static/3rd.party/typeahead.js/dist/typeahead.jquery.js'
-    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, contactSettings, notifications, AutocompleteAPI, accountAPI, gt) {
+    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, contactSettings, notifications, AutocompleteAPI, gt) {
 
     'use strict';
 
@@ -541,6 +540,7 @@ define('io.ox/mail/compose/view',
 
             ext.point('io.ox/mail/compose/fields').invoke('draw', this.$el, this.baton);
 
+            // add subject to app title
             this.setTitle();
 
             this.$el.find('.tokenfield').each(function () {

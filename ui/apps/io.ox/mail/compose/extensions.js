@@ -15,14 +15,8 @@
 define('io.ox/mail/compose/extensions',
     ['io.ox/mail/sender',
      'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/tk/autocomplete',
-     'io.ox/core/api/autocomplete',
-     'io.ox/core/api/account',
-     'io.ox/mail/util',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail'], function (sender, Dropdown, autocomplete, AutocompleteAPI, accountAPI, mailUtil, settings, gt) {
-
-    var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
+     'gettext!io.ox/mail'], function (sender, Dropdown, settings, gt) {
 
     var SenderDropdown = Dropdown.extend({
         update: function () {

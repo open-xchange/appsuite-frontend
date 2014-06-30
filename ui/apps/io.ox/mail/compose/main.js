@@ -14,14 +14,13 @@
 
 define('io.ox/mail/compose/main',
     ['io.ox/mail/api',
-     'io.ox/emoji/main',
-     'io.ox/core/notifications',
      'io.ox/mail/compose/model',
      'io.ox/mail/compose/view',
+     'io.ox/core/notifications',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'less!io.ox/mail/compose/style'
-    ], function (mailAPI, emoji, notifications, MailModel, MailComposeView, gt) {
+    ], function (mailAPI, MailModel, MailComposeView, notifications, gt) {
 
     'use strict';
 
