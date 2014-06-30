@@ -283,10 +283,30 @@ define('io.ox/mail/compose/view',
             this.editor = null;
             this.composeMode = 'compose';
             this.textarea = $('<textarea class="plain-text">');
+            this.baton = ext.Baton({
+                // please don't use this data attribute - use model instead
+                data: this.model.toJSON(),
+                model: this.model,
+                view: this
+            });
+
+            this.model.on('change', this.onChange.bind(this));
+        },
+
+        onChange: function (model) {
+            for (var key in model.changed) {
+                ext.point(POINT + '/' + key).invoke('redraw', this, this.baton);
+            }
         },
 
         setSubject: function (e) {
-            this.model.set('subject', $(e.target).val());
+            var value = e.target ? $(e.target).val() : e;
+            this.model.set('subject', value);
+            if (value !== '') {
+                this.app.setTitle(value);
+            } else {
+                this.app.setTitle(gt('Compose'));
+            }
         },
 
         onSave: function (e) {
@@ -510,16 +530,19 @@ define('io.ox/mail/compose/view',
         },
 
         render: function () {
-            var self = this,
-                data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, model: this.model, view: this });
+            var self = this;
 
-            ext.point('io.ox/mail/compose/fields').invoke('draw', this.$el, baton);
+            ext.point('io.ox/mail/compose/fields').invoke('draw', this.$el, this.baton);
 
             _.defer($.proxy(this.postRender, this));
 
-            this.model.on('change:editorMode', function () {
-                self.changeEditorMode();
+            this.model.on({
+                'change:editorMode': function () {
+                    self.changeEditorMode();
+                },
+                'change:subject': function () {
+
+                }
             });
 
             return this;

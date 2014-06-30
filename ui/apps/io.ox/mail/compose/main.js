@@ -93,10 +93,10 @@ define('io.ox/mail/compose/main',
         };
 
         function compose(data) {
+            data = _.extend(data, { mode: 'compose'});
 
-            var def = $.Deferred();
-            data.mode = 'compose';
-            var model = new MailModel(data);
+            var def = $.Deferred(),
+                model = new MailModel(data);
             app.view = new MailComposeView({ model: model, app: app });
 
             _.url.hash('app', 'io.ox/mail/compose:compose');
