@@ -144,9 +144,13 @@ define('io.ox/mail/compose/view',
         id: 'composetoolbar',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div class="row">');
+            var node = $('<div class="row composetoolbar">');
             ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
             this.append(node);
+        },
+        redraw: function (baton) {
+            var node = this.find('.row.composetoolbar');
+            ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
         }
     });
 
@@ -294,9 +298,7 @@ define('io.ox/mail/compose/view',
         },
 
         onChange: function (model) {
-            for (var key in model.changed) {
-                ext.point(POINT + '/' + key).invoke('redraw', this, this.baton);
-            }
+            ext.point(POINT + '/fields').invoke('redraw', this.$el, this.baton);
         },
 
         setSubject: function (e) {
