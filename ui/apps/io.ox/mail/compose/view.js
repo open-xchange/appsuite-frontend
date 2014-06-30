@@ -734,26 +734,7 @@ define('io.ox/mail/compose/view',
             return content;
         },
 
-        getContentType: function (mode) {
-            if (mode === 'text') {
-                return 'text/plain';
-            } else {
-                return this.messageFormat === 'html' ? 'text/html' : 'alternative';
-            }
-        },
-
         getMail: function () {
-            var attachment = {
-                    content: (this.editor ? this.editor.getContent() : ''),
-                    content_type: this.getContentType(this.editorMode)
-                };
-
-            if (this.editorMode !== 'html') {
-                attachment.raw = true;
-            }
-
-            this.model.set('attachments', [attachment]);
-
             return {
                 data: this.model.getMail(),
                 mode: this.composeMode,

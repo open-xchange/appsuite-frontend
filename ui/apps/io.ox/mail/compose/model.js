@@ -58,6 +58,26 @@ define('io.ox/mail/compose/model',
             vcard: 0
         },
 
+        initialize: function () {
+            var attachment = {
+                    content: '',
+                    content_type: this.getContentType()
+                };
+
+            if (this.get('editorMode') !== 'html') {
+                attachment.raw = true;
+            }
+
+            this.set('attachments', [attachment], {silent: true});
+        },
+
+        getContentType: function () {
+            if (this.get('editorMode') === 'text') {
+                return 'text/plain';
+            } else {
+                return this.get('editorMode') === 'html' ? 'text/html' : 'alternative';
+            }
+        },
         parse: function (list) {
             return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                 .map(function (recipient) {
