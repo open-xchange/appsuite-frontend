@@ -46,9 +46,9 @@ define('io.ox/files/fluid/perspective',
 
     function drawGenericIcon(name) {
         var node = $('<i>');
-        if (/docx?$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
-        else if (/xlsx?$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
-        else if (/pptx?$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
+        if (/(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)?$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
+        else if (/(xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)?$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
+        else if (/(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)?$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
         else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('fa fa-music'); }
         else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('fa fa-film'); }
         else if ((/(epub|mobi)$/i).test(name)) { node.addClass('fa fa-book'); }
