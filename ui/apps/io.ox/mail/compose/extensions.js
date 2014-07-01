@@ -15,8 +15,129 @@
 define('io.ox/mail/compose/extensions',
     ['io.ox/mail/sender',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/core/extensions',
+     'io.ox/core/api/autocomplete',
+     'io.ox/contacts/util',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail'], function (sender, Dropdown, settings, gt) {
+     'settings!io.ox/contacts',
+     'gettext!io.ox/mail',
+     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
+     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
+    ], function (sender, Dropdown, ext, AutocompleteAPI, contactsUtil, settings, contactSettings, gt) {
+
+    $.fn.tokenize = function (o) {
+        // defaults
+        o = $.extend({
+            api: null,
+            model: null,
+            attr: 'to',
+            addClass: ''
+        }, o || {});
+
+        var input = $(this);
+
+        input.tokenfield({
+            createTokensOnBlur: true,
+            minLength: contactSettings.get('search/minimumQueryLength', 3),
+            typeahead: [{}, {
+                    source: function(query, callback) {
+                        autocompleteAPI.search(query).then(function (matches) {
+                            callback(_(matches).map(function (data) {
+                                return {
+                                    value: data.email || data.phone || '',
+                                    label: contactsUtil.getMailFullName(data),
+                                    data: data
+                                };
+                            }));
+                        });
+                    },
+                    templates: {
+                        suggestion: function (item) {
+                            var node = $('<div class="autocomplete-item">'),
+                                baton = ext.Baton({ data: item.data, autocomplete: true });
+                            ext.point('io.ox/mail/compose' + '/autoCompleteItem').invoke('draw', node, baton);
+                            return node;
+                        }
+                    }
+                }
+            ]
+        }).on({
+            'tokenfield:createdtoken': function (e) {
+                // A11y: set title
+                var title = '',
+                    token = $(e.relatedTarget);
+                if (e.attrs) {
+                    if (e.attrs.label !== e.attrs.value) {
+                        title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
+                    } else {
+                        title = e.attrs.label;
+                    }
+                }
+                token.attr({
+                    title: title
+                });
+                if (e.attrs) {
+                    // var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
+                    // token.prepend(
+                    //     contactsAPI.pictureHalo(
+                    //         $('<div class="contact-image">'),
+                    //         $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
+                    //     )
+                    // );
+                }
+            },
+            'change': function () {
+                o.model.setTokens(o.attr, input.tokenfield('getTokens'));
+            }
+        });
+
+        // add class to tokenfield wrapper
+        input.parent().addClass(o.addClass);
+
+        // set initial values
+        input.tokenfield('setTokens', o.model.getTokens(o.attr) || [], true, false);
+
+
+        // // display tokeninputfields if necessary
+        // if (values.length) {
+        //     self.toggleInput(type, false);
+        // }
+
+
+        // input.data('bs.tokenfield').$input.on({
+        //     // IME support (e.g. for Japanese)
+        //     compositionstart: function () {
+        //         $(this).attr('data-ime', 'active');
+        //     },
+        //     compositionend: function () {
+        //         $(this).attr('data-ime', 'inactive');
+        //     },
+        //     keydown: function (e) {
+        //         if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
+        //             // clear tokenfield input
+        //             $(this).val('');
+        //         }
+        //     },
+        //     // shortcuts (to/cc/bcc)
+        //     keyup: function (e) {
+        //         if (e.which === 13) return;
+        //         // look for special prefixes
+        //         var val = $(this).val();
+        //         if ((/^to:?\s/i).test(val)) {
+        //             $(this).val('');
+        //         } else if ((/^cc:?\s/i).test(val)) {
+        //             $(this).val('');
+        //             self.toggleInput('cc', false).find('.token-input').focus();
+        //         } else if ((/^bcc:?\s/i).test(val)) {
+        //             $(this).val('');
+        //             self.toggleInput('bcc', false).find('.token-input').focus();
+        //         }
+        //     }
+        // });
+
+        return input;
+    };
 
     var SenderDropdown = Dropdown.extend({
         update: function () {
@@ -49,8 +170,14 @@ define('io.ox/mail/compose/extensions',
         }
     });
 
+    var autocompleteAPI = new AutocompleteAPI({
+        id: 'mailwrite',
+        contacts: true,
+        msisdn: true
+    });
 
     var extensions = {
+
         title: function () {
             this.append(
                 $('<div class="row header" data-extension-id="title">').append(
@@ -67,8 +194,6 @@ define('io.ox/mail/compose/extensions',
         sender: function (baton) {
 
             var node = $('<div class="row sender" data-extension-id="sender">');
-
-
 
             sender.getDefaultSendAddressWithDisplayname().done(function (defaultSender) {
 
@@ -96,15 +221,17 @@ define('io.ox/mail/compose/extensions',
 
             this.append(node);
         },
-        to: function () {
-            var guid = _.uniqueId('form-control-label-');
+
+        to: function (baton) {
+            var guid = _.uniqueId('form-control-label-'),
+                input;
             this.append(
                 $('<div class="row" data-extension-id="to">').append(
                     $('<label class="maillabel col-xs-2 col-md-1">').text(gt('To')).attr({
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control tokenfield">').data('type', 'to').attr({
+                        input = $('<input type="text" class="form-control tokenfield">').attr({
                             id: guid,
                             tabindex: 1
                         }),
@@ -115,39 +242,47 @@ define('io.ox/mail/compose/extensions',
                     )
                 )
             );
+            input.tokenize({ model: baton.model, api: autocompleteAPI, attr: 'to', addClass: 'to' });
         },
-        cc: function () {
-            var guid = _.uniqueId('form-control-label-');
+
+        cc: function (baton) {
+            var guid = _.uniqueId('form-control-label-'),
+                input;
             this.append(
                 $('<div class="row hidden io-ox-core-animation slidedown in" data-extension-id="cc">').append(
                     $('<label class="maillabel col-xs-2 col-md-1">').text(gt('CC')).attr({
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control tokenfield">').data('type', 'cc').attr({
+                        input = $('<input type="text" class="form-control tokenfield">').data('type', 'cc').attr({
                             id: guid,
                             tabindex: 1
                         })
                     )
                 )
             );
+            input.tokenize({ model: baton.model, api: autocompleteAPI, attr: 'cc', addClass: 'cc' });
         },
-        bcc: function () {
-            var guid = _.uniqueId('form-control-label-');
+
+        bcc: function (baton) {
+            var guid = _.uniqueId('form-control-label-'),
+                input;
             this.append(
                 $('<div class="row hidden io-ox-core-animation slidedown in" data-extension-id="bcc">').append(
                     $('<label class="maillabel col-xs-2 col-md-1">').text(gt('BCC')).attr({
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control tokenfield">').data('type', 'bcc').attr({
+                        input = $('<input type="text" class="form-control tokenfield">').data('type', 'bcc').attr({
                             id: guid,
                             tabindex: 1
                         })
                     )
                 )
             );
+            input.tokenize({ model: baton.model, api: autocompleteAPI, attr: 'bcc', addClass: 'bcc' });
         },
+
         subject: function (baton) {
             var guid = _.uniqueId('form-control-label-');
             this.append(
@@ -164,6 +299,7 @@ define('io.ox/mail/compose/extensions',
                 )
             );
         },
+
         signature: function (baton) {
             var dropdown = new Dropdown({ model: baton.model, label: gt('Signature'), tagName: 'span' })
                 .option('signature', '', gt('No signature'));
@@ -189,6 +325,7 @@ define('io.ox/mail/compose/extensions',
                 )
             );
         },
+
         attachment: function () {
             this.append(
                 $('<div class="col-xs-12 col-md-6">').append(
@@ -196,6 +333,7 @@ define('io.ox/mail/compose/extensions',
                 )
             );
         },
+
         body: function () {
             var self = this,
                 editorId = _.uniqueId('tmce-'),
@@ -206,6 +344,7 @@ define('io.ox/mail/compose/extensions',
                 $('<div class="editable">').attr('id', editorId).css('min-height', '400px')
             )));
         },
+
         mailto: function () {
             // register mailto!
             if (settings.get('features/registerProtocolHandler', true)) {
@@ -220,6 +359,7 @@ define('io.ox/mail/compose/extensions',
                 }
             }
         }
+
     };
 
     return extensions;
