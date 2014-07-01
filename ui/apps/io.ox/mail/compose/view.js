@@ -27,10 +27,11 @@ define('io.ox/mail/compose/view',
      'settings!io.ox/contacts',
      'io.ox/core/notifications',
      'io.ox/core/api/autocomplete',
+     'io.ox/core/api/snippets',
      'gettext!io.ox/mail',
      'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
      'static/3rd.party/typeahead.js/dist/typeahead.jquery.js'
-    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, contactSettings, notifications, AutocompleteAPI, gt) {
+    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, contactSettings, notifications, AutocompleteAPI, snippetAPI, gt) {
 
     'use strict';
 
@@ -290,8 +291,10 @@ define('io.ox/mail/compose/view',
 
             this.model.on({
                 'change': this.onChange.bind(this),
-                'change:editorMode': this.changeEditorMode.bind(this)
+                'change:editorMode': this.changeEditorMode.bind(this),
+                'change:signature': this.setSelectedSignature.bind(this)
             });
+            this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
         },
 
         onChange: function (model) {
@@ -587,36 +590,127 @@ define('io.ox/mail/compose/view',
             }
         },
 
-        setBody: function (str) {
-
-            var self = this;
-
-            function trimContent(str) {
-                // remove white-space at beginning except in first-line
-                str = String(str || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
-                // remove white-space at end
-                return str.replace(/[\s\uFEFF\xA0]+$/, '');
-            }
-
-            function prependNewLine(content) {
-                var nl = self.editorMode === 'html' ? '<p><br></p>' : '\n\n';
-                if (content !== '' && content.indexOf(nl) !== 0 && content.indexOf('<br>') !== 0) {
-                    content = nl + content;
-                }
-                return content;
-            }
-
-            var content = trimContent(prependNewLine(str));
-
-            return content;
-        },
-
         getMail: function () {
             return {
                 data: this.model.getMail(),
                 mode: this.composeMode,
                 format: this.editorMode
             };
+        },
+
+        setBody: function (content) {
+
+            var self = this;
+
+            if (this.model.get('initial')) {
+                // remove white-space at beginning except in first-line
+                content = String(content || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
+                // remove white-space at end
+                content = content.replace(/[\s\uFEFF\xA0]+$/, '');
+            }
+
+            this.editor.setContent(content);
+
+            this.setSelectedSignature();
+            this.prependNewLine();
+        },
+
+        getMobileSignature: function () {
+            var value = settings.get('mobileSignature');
+            if (value === undefined) {
+                value =
+                    //#. %s is the product name
+                    gt('Sent from %s via mobile', ox.serverConfig.productName);
+            }
+            return value;
+        },
+
+        setSelectedSignature: function () {
+            var ds = _.where(this.signatures, { id: String(this.model.get('signature')) })[0];
+            if (ds) {
+                ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
+                this.setSignature(ds);
+            } else {
+                this.removeSignature();
+            }
+        },
+
+        removeSignature: function () {
+            var self = this,
+                text,
+                isHTML = !!this.editor.find,
+                currentSignature = this.model.get('currentSignature');
+
+            // remove current signature from editor
+
+            if (isHTML) {
+                this.editor.find('.io-ox-signature').each(function () {
+                    var node = $(this),
+                        text = node.html()
+                            //remove added image urls(tiny adds them automatically)
+                            .replace(/ data-mce-src="[^"]+"\s?/, '')
+                            //remove empty alt attribute(added by tiny)
+                            .replace(/ alt=""/, '');
+
+                    if (self.isSignature(text)) {
+                        // remove entire node
+                        node.remove();
+                    } else {
+                        // was modified so remove class
+                        node.removeClass('io-ox-signature');
+                    }
+                });
+            } else {
+                if (currentSignature) {
+                    this.editor.replaceParagraph(currentSignature, '');
+                }
+            }
+        },
+
+        isSignature: function (text) {
+            var isHTML = !!this.editor.find;
+            return mailUtil.signatures.is(text, this.signatures, isHTML);
+        },
+
+        setSignature: function (signature) {
+            var self = this,
+                text,
+                isHTML = !!this.editor.find;
+
+            this.removeSignature();
+
+            // add signature?
+            if (this.signatures.length > 0) {
+                text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
+                if (isHTML) text = this.getParagraph(text);
+                if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
+                if (signature.misc && signature.misc.insertion === 'below') {
+                    this.editor.appendContent(text);
+                    this.editor.scrollTop('bottom');
+                } else {
+                    this.editor.prependContent(text);
+                    this.editor.scrollTop('top');
+                }
+                this.model.set('currentSignature', text);
+            }
+
+            //this.editor.focus();
+        },
+
+        getParagraph: function (text) {
+            //use div for html cause innerHTML for p tags with nested tags fail
+            var node = (/(<([^>]+)>)/ig).test(text) ? $('<div>') : $('<p>');
+            node.addClass('io-ox-signature')
+                .append(this.editor.ln2br(text));
+            return $('<div>').append(node).html();
+        },
+
+        prependNewLine: function (content) {
+            var content = this.editor.getContent(),
+                nl = this.editorMode === 'html' ? '<p><br></p>' : '\n\n';
+            if (content !== '' && content.indexOf(nl) !== 0 && content.indexOf('<br>') !== 0) {
+                this.editor.setContent(nl + content);
+            }
         },
 
         setMail: function (mail) {
@@ -638,10 +732,7 @@ define('io.ox/mail/compose/view',
                 // convert different emoji encodings to unified
                 content = convertAllToUnified(content);
                 if (data.replaceBody !== 'no') {
-                    if (data.initial) {
-                        content = self.setBody(content);
-                    }
-                    self.editor.setContent(content);
+                    self.setBody(content);
                 }
             });
         },

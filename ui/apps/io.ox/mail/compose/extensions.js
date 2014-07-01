@@ -166,9 +166,10 @@ define('io.ox/mail/compose/extensions',
         },
         signature: function (baton) {
             var dropdown = new Dropdown({ model: baton.model, label: gt('Signature'), tagName: 'span' })
-                .option('signature', false, gt('No signature'));
+                .option('signature', '', gt('No signature'));
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').done(function (signatures) {
+                    baton.view.signatures = signatures;
                     var sa = _.map(signatures, function (o) {
                         return { 'id': o.id, 'displayName': o.displayname };
                     });
