@@ -18,39 +18,67 @@
 .io-ox-mail-compose {
 
     max-width: 880px;
-    margin-top: 20px;
 
     & > .row {
+
         margin-bottom: 13px;
+
+        &.sender {
+
+            margin-bottom: 8px;
+
+            label.maillabel {
+                margin-bottom: 0;
+                padding-top: 0;
+            }
+
+        }
+
+        &.subject input {
+            font-weight: bold;
+        }
+
     }
 
     .header {
+
+        margin-bottom: 20px;
+
         h1 {
             margin: 0;
             font-size: 20px;
         }
+
         .btn {
             margin-left: 10px;
         }
+
     }
 
     .recipient-actions {
+
         position: absolute;
         top: 0;
         right: 0;
         padding-right: 15px;
         margin-top: 6px;
+
         a {
             padding-right: 7px;
         }
+
     }
 
     .editable-toolbar {
+
         height: 37px;
+
         & > div {
             display: block !important;
         }
+
     }
+
     .editable {
         background: white;
     }

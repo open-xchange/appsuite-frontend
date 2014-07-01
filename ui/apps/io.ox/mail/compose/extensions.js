@@ -66,7 +66,7 @@ define('io.ox/mail/compose/extensions',
 
         sender: function (baton) {
 
-            var node = $('<div class="row" data-extension-id="sender">');
+            var node = $('<div class="row sender" data-extension-id="sender">');
 
 
 
@@ -74,7 +74,8 @@ define('io.ox/mail/compose/extensions',
 
                 baton.model.set('from', defaultSender);
 
-                var dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>' });
+                var dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>' }),
+                    guid = _.uniqueId('form-control-label-');
 
                 sender.drawDropdown().done(function (list) {
 
@@ -85,7 +86,10 @@ define('io.ox/mail/compose/extensions',
                     }
 
                     node.append(
-                        $('<div class="col-sm-12">').append(dropdown.render().$el.attr('data-dropdown', 'from'))
+                        $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')).attr({
+                            'for': guid
+                        }),
+                        $('<div class="col-xs-10 col-md-11">').append(dropdown.render().$el.attr('data-dropdown', 'from'))
                     );
                 });
             });
@@ -147,7 +151,7 @@ define('io.ox/mail/compose/extensions',
         subject: function (baton) {
             var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div class="row" data-extension-id="subject">').append(
+                $('<div class="row subject" data-extension-id="subject">').append(
                     $('<label class="maillabel col-xs-2 col-md-1">').text(gt('Subject')).attr({
                         'for': guid
                     }),
