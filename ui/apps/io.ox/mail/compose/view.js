@@ -285,15 +285,10 @@ define('io.ox/mail/compose/view',
             });
 
             this.model.on({
-                'change': this.onChange.bind(this),
                 'change:editorMode': this.changeEditorMode.bind(this),
                 'change:signature': this.setSelectedSignature.bind(this)
             });
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
-        },
-
-        onChange: function (model) {
-            ext.point(POINT + '/fields').invoke('redraw', this.$el, this.baton);
         },
 
         setSubject: function (e) {
