@@ -15,7 +15,7 @@ define('io.ox/tasks/mobile-toolbar-actions',
    ['io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/tasks/api',
-    'gettext!io.ox/mail'],
+    'gettext!io.ox/tasks'],
     function (ext, links, api, gt) {
 
     'use strict';
@@ -54,14 +54,14 @@ define('io.ox/tasks/mobile-toolbar-actions',
                 mobile: 'hi',
                 label: gt('Mark as done'),
                 drawDisabled: true,
-                ref: 'io.ox/tasks/actions/delete'
+                ref: 'io.ox/tasks/actions/done'
             },
             'undone': {
                 prio: 'hi',
                 mobile: 'hi',
                 label: gt('Undone'),
                 drawDisabled: true,
-                ref: 'io.ox/tasks/actions/delete'
+                ref: 'io.ox/tasks/actions/undone'
             },
             'confirm': {
                 prio: 'hi',
@@ -69,6 +69,12 @@ define('io.ox/tasks/mobile-toolbar-actions',
                 label: gt('Change confirmation status'),
                 drawDisabled: true,
                 ref: 'io.ox/tasks/actions/confirm'
+            },
+            'move': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Move'),
+                ref: 'io.ox/tasks/actions/move'
             }
         };
 
@@ -84,13 +90,13 @@ define('io.ox/tasks/mobile-toolbar-actions',
     }
 
     addAction(pointListView, ['create']);
-    addAction(actions, ['done', 'undone', 'confirm', 'edit', 'delete', 'confirm']);
+    addAction(actions, ['done', 'undone', 'confirm', 'edit', 'delete', 'confirm', 'move']);
 
     // add submenu as text link to toolbar in multiselect
     pointDetailView.extend(new links.Dropdown({
         index: 50,
         label: $('<span>').text(
-            //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
+            //.# Will be used as menu heading in tasks module which then show the actions which can be performed with a task like "mark as done"
             gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
@@ -98,7 +104,7 @@ define('io.ox/tasks/mobile-toolbar-actions',
         ref: 'io.ox/tasks/mobile/actions'
     }));
 
-    gt();
+
     var updateToolbar = _.debounce(function (task) {
         var self = this;
         //get full data, needed for require checks for example

@@ -1430,6 +1430,8 @@ div.hopscotch-bubble {
     .dropdown {
         display: inline-block;
         position: static;
+        line-height: 45px;
+        margin-left: 5px;
     }
 }
 
@@ -2181,9 +2183,11 @@ a.button {
         padding: 0 10px 0 10px;
         line-height: 61px;
         height: 100%;
-        background-color: #DA4F49;
+        background-color: #FF4105;
         color: #FFF;
-        font-size: 14px;
+        font-size: 22px;
+        width: 80px;
+        text-align: center;
         &:active {
             background-color: darken(#DA4F49, 10%);
         };
@@ -4339,6 +4343,15 @@ input.flat-input {
 
 }
 
+@-webkit-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
 /* fixes WBR handling in long character sequences, esp. for IE */
 wbr:after {
     content: "\00200B"

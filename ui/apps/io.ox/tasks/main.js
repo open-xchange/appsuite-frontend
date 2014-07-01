@@ -29,7 +29,6 @@ define('io.ox/tasks/main',
      'io.ox/tasks/toolbar',
      'io.ox/tasks/mobile-navbar-extensions',
      'io.ox/tasks/mobile-toolbar-actions'
-     //'io.ox/tasks/mobile-toolbar-actions',
     ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, FolderView, Bars, PageController) {
 
     'use strict';
@@ -125,7 +124,7 @@ define('io.ox/tasks/main',
             app.pages.addPage({
                 name: 'listView',
                 container: app.getWindow().nodes.main,
-                classes: 'leftside'
+                classes: 'leftside border-right'
             });
             app.pages.addPage({
                 name: 'detailView',
@@ -263,7 +262,50 @@ define('io.ox/tasks/main',
             grid.setListRequest(listRequest);
         },
 
-        'show-contact': function (app) {
+        'grid-options': function (app) {
+            var grid = app.grid;
+            // add grid options
+            grid.prop('done', true);
+            grid.prop('sort', 'state');
+            grid.prop('order', 'asc');
+
+            function updateGridOptions() {
+                var dropdown = grid.getToolbar().find('.grid-options'),
+                    list = dropdown.find('ul'),
+                    props = grid.prop();
+                // uncheck all
+                list.find('i').attr('class', 'fa fa-fw');
+                // check right options
+                list.find(
+                        '[data-option="' + props.sort + '"], ' +
+                        '[data-option="' + props.order + '"], ' +
+                        '[data-option="' + (props.done ? 'done' : '~done') + '"]'
+                    ).find('i').attr('class', 'fa fa-check');
+                // order
+                if (props.order === 'desc') {
+                    dropdown.find('.fa-arrow-down').css('opacity', 1).end()
+                        .find('.fa-arrow-up').css('opacity', 0.4);
+                } else {
+                    dropdown.find('.fa-arrow-up').css('opacity', 1).end()
+                        .find('.fa-arrow-down').css('opacity', 0.4);
+                }
+                //update api property (used cid in api.updateAllCache, api.create)
+                api.options.requests.all.sort = props.sort !== 'state' ? props.sort : 202;
+                api.options.requests.all.order = props.order;
+            }
+
+            grid.selection.on('change', app.removeButton);
+
+            grid.on('change:prop', function () {
+                updateGridOptions();
+                //hasDeletePermission = undefined;
+            });
+
+            updateGridOptions();
+            commons.addGridToolbarFolder(app, grid);
+        },
+
+        'show-task': function (app) {
             var showTask, drawTask, drawFail;
 
             //detailview lfo callbacks
@@ -284,7 +326,7 @@ define('io.ox/tasks/main',
             drawTask = function (data) {
                 var baton = ext.Baton({ data: data });
                 // since we use a classic toolbar on non-small devices, we disable inline links in this case
-                if (_.device('!small')) baton.disable('io.ox/tasks/detail-inline', 'inline-links');
+                baton.disable('io.ox/tasks/detail-inline', 'inline-links');
                 app.right.idle().empty().append(viewDetail.draw(baton));
             };
 
@@ -428,6 +470,23 @@ define('io.ox/tasks/main',
         'folderview-toolbar': function (app) {
             if (_.device('small')) return;
             commons.mediateFolderView(app);
+        },
+        /*
+         * Drag and Drop support
+         */
+        'drag-n-drop': function (app) {
+            if (_.device('!touch')) return;
+            // drag & drop
+            app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
+                actions.invoke('io.ox/tasks/actions/move', null, baton);
+            });
+        },
+
+        'create:task': function (app) {
+            //jump to newly created items
+            api.on('create', function (e, data) {
+                app.grid.selection.set(data);
+            });
         }
     });
 
@@ -453,11 +512,7 @@ define('io.ox/tasks/main',
 
         var // app window
             win,
-            // grid
             grid,
-            // nodes
-            //left,
-            //right,
             showSwipeButton = false,
             hasDeletePermission;
 
@@ -480,6 +535,8 @@ define('io.ox/tasks/main',
             }
         };
 
+        app.removeButton = removeButton;
+
         ext.point('io.ox/tasks/swipeDelete').extend({
             index: 666,
             id: 'deleteButton',
@@ -488,20 +545,18 @@ define('io.ox/tasks/main',
                 if (showSwipeButton) {
                     removeButton();
                 }
-
+                var div = $('<div class="swipeDelete fadein fast"><i class="fa fa-trash-o trashicon"/></div>');
                 this.append(
-                    $('<div class="cell-button swipeDelete fadein fast">')
-                        .text(gt('Delete'))
-                        .on('mousedown', function (e) {
-                            // we have to use mousedown as the selection listens to this, too
-                            // otherwise we are to late to get the event
-                            e.stopImmediatePropagation();
-                        }).on('tap', function (e) {
-                            e.preventDefault();
-                            removeButton();
-                            showSwipeButton = false;
-                            actions.invoke('io.ox/tasks/actions/delete', null, baton);
-                        })
+                    div.on('mousedown', function (e) {
+                        // we have to use mousedown as the selection listens to this, too
+                        // otherwise we are to late to get the event
+                        e.stopImmediatePropagation();
+                    }).on('tap', function (e) {
+                        e.preventDefault();
+                        removeButton();
+                        showSwipeButton = false;
+                        actions.invoke('io.ox/tasks/actions/delete', null, baton);
+                    })
                 );
                 showSwipeButton = true;
             }
@@ -525,11 +580,11 @@ define('io.ox/tasks/main',
           // grid
         var grid = new VGrid(app.gridContainer, {
             settings: settings,
-            swipeRightHandler: swipeRightHandler,
+            swipeLeftHandler: swipeRightHandler,
             showToggle: _.device('small'),
             hideTopbar: _.device('small'),
             hideToolbar: _.device('small'),
-            toolbarPlacement: 'none'
+            toolbarPlacement: _.device('small') ? 'none' : 'top'
         });
 
         app.grid = grid;
@@ -537,57 +592,9 @@ define('io.ox/tasks/main',
         app.getGrid = function () {
             return grid;
         };
-
-        // add grid options
-        grid.prop('done', true);
-        grid.prop('sort', 'state');
-        grid.prop('order', 'asc');
-
-        function updateGridOptions() {
-            var dropdown = grid.getToolbar().find('.grid-options'),
-                list = dropdown.find('ul'),
-                props = grid.prop();
-            // uncheck all
-            list.find('i').attr('class', 'fa fa-fw');
-            // check right options
-            list.find(
-                    '[data-option="' + props.sort + '"], ' +
-                    '[data-option="' + props.order + '"], ' +
-                    '[data-option="' + (props.done ? 'done' : '~done') + '"]'
-                ).find('i').attr('class', 'fa fa-check');
-            // order
-            if (props.order === 'desc') {
-                dropdown.find('.fa-arrow-down').css('opacity', 1).end()
-                    .find('.fa-arrow-up').css('opacity', 0.4);
-            } else {
-                dropdown.find('.fa-arrow-up').css('opacity', 1).end()
-                    .find('.fa-arrow-down').css('opacity', 0.4);
-            }
-            //update api property (used cid in api.updateAllCache, api.create)
-            api.options.requests.all.sort = props.sort !== 'state' ? props.sort : 202;
-            api.options.requests.all.order = props.order;
-        }
-        grid.selection.on('change', removeButton);
-
-        grid.on('change:prop', function () {
-            updateGridOptions();
-            removeButton();
-            hasDeletePermission = undefined;
-        });
-        updateGridOptions();
-
-        commons.addGridToolbarFolder(app, grid);
-
-        // drag & drop
-        win.nodes.outer.on('selection:drop', function (e, baton) {
-            actions.invoke('io.ox/tasks/actions/move', null, baton);
-        });
-
-        //jump to newly created items
-        api.on('create', function (e, data) {
-            grid.selection.set(data);
-        });
+        // debugging
         window.tasks = app;
+
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks', options.folder)
             .always(function () {
