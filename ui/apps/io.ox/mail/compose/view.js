@@ -74,9 +74,39 @@ define('io.ox/mail/compose/view',
     });
 
     ext.point(POINT + '/composetoolbar').extend({
-        id: 'attachment',
+        id: 'add_attachments',
         index: INDEX += 100,
-        draw: extensions.attachment
+        draw: function (baton) {
+            extensions.attachment.call(this, baton).done(function ($el) {
+                $el.find('button[data-action="addinternal"]').click(function (e) {
+                    e.preventDefault();
+                    require(['io.ox/files/filepicker'], function (Picker) {
+                        var picker = new Picker({
+                            point: POINT,                   // prefix for custom ext. point
+                            filter: function () {           // filter function
+                                return true;
+                            },
+                            primaryButtonText: gt('Add'),
+                            cancelButtonText: gt('Cancel'),
+                            header: gt('Add files'),
+                            multiselect: true
+                        });
+                        //FIXME: why must the model be binded, here?
+                        picker
+                            .then(baton.model.attachFiles.bind(baton.model));
+                    });
+                });
+            }).done(function ($el) {
+                $el.find('input[type="file"]').on('change', function (e) {
+                    var list = [];
+                    //fileList to array of files
+                    _(e.target.files).each(function (file) {
+                        list.push(_.extend(file, {group: 'file'}));
+                    });
+                    baton.model.attachFiles.call(baton.model, list);
+                });
+            });
+        }
     });
 
     ext.point(POINT + '/composetoolbar').extend({
@@ -146,6 +176,26 @@ define('io.ox/mail/compose/view',
         redraw: function (baton) {
             var node = this.find('.row.composetoolbar');
             ext.point(POINT + '/composetoolbar').invoke('redraw', node, baton);
+        }
+    });
+
+    ext.point(POINT + '/fields').extend({
+        id: 'attachments',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var node = $('<div class="row attachments">');
+            ext.point(POINT + '/attachments').invoke('draw', node, baton);
+            this.append(node);
+        }
+    });
+
+    ext.point(POINT + '/attachments').extend({
+        id: 'attachmentList',
+        index: 200,
+        draw: function (baton) {
+            var node = $('<div class="row attachments-list">');
+            extensions.attachmentList.call(node, baton);
+            node.appendTo(this);
         }
     });
 

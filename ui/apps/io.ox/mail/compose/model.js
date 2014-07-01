@@ -68,7 +68,8 @@ define('io.ox/mail/compose/model',
             if (list.length === 0) {
                 list.add({
                     content: '',
-                    content_type: this.getContentType()
+                    content_type: this.getContentType(),
+                    disp: 'inline'
                 }, {silent: true});
             }
         },

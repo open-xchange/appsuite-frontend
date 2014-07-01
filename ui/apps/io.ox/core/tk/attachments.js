@@ -609,31 +609,56 @@ define('io.ox/core/tk/attachments',
     };
 
     var Attachment = Backbone.Model.extend({
+        defaults: {
+            filename: '',
+            disp: 'attachment'
+        },
+        initialize: function (attributes) {
+            if (attributes.name)
+                this.set('filename', attributes.name, {silent: true});
+        },
+        getTitle: function () {
+            return this.get('filename');
+        },
+        isFileAttachment: function () {
+            return this.get('disp') === 'attachment';
+        }
     });
 
     var Attachments = Backbone.Collection.extend({
-        model: Attachment
+        model: Attachment,
+        fileAttachments: function () {
+            return this.filter(function (model) {
+                return model.isFileAttachment();
+            });
+        }
     });
 
     var AttachmentList = Backbone.View.extend({
         tagName: 'ul',
-        className: 'attachment-list',
+        className: 'io-ox-core-tk-attachment-list list-unstyled',
         initialize: function () {
             this.listenTo(this.collection, 'add', this.addAttachment);
             this.listenTo(this.collection, 'remove', this.removeAttachment);
         },
         addAttachment: function (model) {
-            var view = new AttachmentView(model);
+            if (!model.isFileAttachment()) return;
+
+            var view = new AttachmentView({
+                model: model
+            });
             view.render();
             this.$el.append(view.$el);
         },
         removeAttachment: function (model, collection, options) {
-            this.$el.children()[options.index].remove();
+            this.$el.children()[options.index - 1].remove();
         },
         render: function () {
             var $el = this.$el.empty();
-            this.collection.forEach(function (attachment) {
-                var view = new AttachmentView(attachment);
+            this.collection.fileAttachments().forEach(function (attachment) {
+                var view = new AttachmentView({
+                    model: attachment
+                });
                 view.render();
                 $el.append(view.$el);
             });
@@ -643,8 +668,22 @@ define('io.ox/core/tk/attachments',
 
     var AttachmentView = Backbone.View.extend({
         tagName: 'li',
-        className: 'attachment-item',
+        className: 'item',
+        onRemove: function () {
+            var c = this.model.collection;
+            c.remove(this.model);
+        },
+        events: {
+            'click a.remove': 'onRemove'
+        },
         render: function () {
+            var widget = this.$el;
+            widget.append(
+                this.model.getTitle(),
+                $('<a href="#" class="remove" tabindex="1">')
+                    .attr('title', gt('Remove attachment'))
+                    .append($('<i class="fa fa-trash-o">'))
+            );
             return this;
         }
     });

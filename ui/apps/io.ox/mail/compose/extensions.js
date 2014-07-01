@@ -261,12 +261,37 @@ define('io.ox/mail/compose/extensions',
             );
         },
 
-        attachment: function () {
-            this.append(
-                $('<div class="col-xs-12 col-md-6">').append(
+        attachmentList: function (baton) {
+            var $el = this,
+                def = $.Deferred();
 
-                )
-            );
+            require(['io.ox/core/tk/attachments'], function (attachments) {
+                var view = new attachments.view.AttachmentList({
+                    collection: baton.model.get('attachments')
+                });
+                view.render();
+                $el.append(view.$el);
+                view.$el.addClass('inline-items');
+                def.resolve(view);
+            }, def.reject);
+            return def;
+        },
+        attachment: function (baton) {
+            var $el = $('<div class="col-xs-12 col-md-6">'),
+                def = $.Deferred();
+            $el.appendTo(this);
+
+            require(['io.ox/core/tk/attachments'], function (attachments) {
+                var $widget = attachments.fileUploadWidget({
+                    drive: true,
+                    tabindex: 7,
+                    buttontext: gt('Add Attachment')
+                });
+                $widget.find('.btn').addClass('btn-link');
+                $widget.appendTo($el);
+                def.resolve($widget);
+            }, def.reject);
+            return def;
         },
 
         body: function () {
