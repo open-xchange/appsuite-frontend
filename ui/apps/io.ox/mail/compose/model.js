@@ -16,8 +16,9 @@ define('io.ox/mail/compose/model',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/emoji/main',
+     'io.ox/core/tk/attachments',
      'settings!io.ox/mail'
-    ], function (mailAPI, mailUtil, emoji, settings) {
+    ], function (mailAPI, mailUtil, emoji, attachments, settings) {
 
     'use strict';
 
@@ -26,7 +27,7 @@ define('io.ox/mail/compose/model',
             editorMode: settings.get('messageFormat', 'html'),
             account_name: '',
             attachment: '',
-            attachments: [],
+            attachments: new attachments.model.Attachments(),
             bcc: [],
             cc: [],
             color_label: '',
@@ -60,19 +61,16 @@ define('io.ox/mail/compose/model',
         },
 
         initialize: function () {
-            var attachment = this.get('attachments');
-            if (_.isEmpty(attachment)) {
-                attachment = [{
+            var list = this.get('attachments');
+            if (_.isArray(list)) {
+                list = this.set('attachments', new attachments.model.Attachments(list), {silent: true});
+            }
+            if (list.length === 0) {
+                list.add({
                     content: '',
                     content_type: this.getContentType()
-                }];
+                }, {silent: true});
             }
-
-            if (this.get('editorMode') !== 'html') {
-                attachment[0].raw = true;
-            }
-
-            this.set('attachments', attachment, {silent: true});
         },
 
         getContentType: function () {
@@ -116,7 +114,10 @@ define('io.ox/mail/compose/model',
         convertAllToUnified: emoji.converterFor({
             from: 'all',
             to: 'unified'
-        })
+        }),
+        attachFiles: function attachFiles(files) {
+            this.get('attachments').add(files);
+        }
     });
 
     return MailModel;

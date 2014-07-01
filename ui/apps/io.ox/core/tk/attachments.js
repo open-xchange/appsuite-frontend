@@ -608,10 +608,59 @@ define('io.ox/core/tk/attachments',
         return node;
     };
 
+    var Attachment = Backbone.Model.extend({
+    });
+
+    var Attachments = Backbone.Collection.extend({
+        model: Attachment
+    });
+
+    var AttachmentList = Backbone.View.extend({
+        tagName: 'ul',
+        className: 'attachment-list',
+        initialize: function () {
+            this.listenTo(this.collection, 'add', this.addAttachment);
+            this.listenTo(this.collection, 'remove', this.removeAttachment);
+        },
+        addAttachment: function (model) {
+            var view = new AttachmentView(model);
+            view.render();
+            this.$el.append(view.$el);
+        },
+        removeAttachment: function (model, collection, options) {
+            this.$el.children()[options.index].remove();
+        },
+        render: function () {
+            var $el = this.$el.empty();
+            this.collection.forEach(function (attachment) {
+                var view = new AttachmentView(attachment);
+                view.render();
+                $el.append(view.$el);
+            });
+            return this;
+        }
+    });
+
+    var AttachmentView = Backbone.View.extend({
+        tagName: 'li',
+        className: 'attachment-item',
+        render: function () {
+            return this;
+        }
+    });
+
     return {
         EditableAttachmentList: EditableAttachmentList,
         EditableFileList: EditableFileList,
         AttachmentList: AttachmentList,
-        fileUploadWidget: fileUploadWidget
+        fileUploadWidget: fileUploadWidget,
+        view: {
+            AttachmentList: AttachmentList,
+            Attachment: AttachmentView
+        },
+        model: {
+            Attachments: Attachments,
+            Attachment: Attachment
+        }
     };
 });
