@@ -258,8 +258,6 @@ define('io.ox/mail/compose/view',
     });
 
 
-    var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
-
     var MailComposeView = Backbone.View.extend({
 
         className: 'io-ox-mail-compose container default-content-padding',
@@ -311,7 +309,7 @@ define('io.ox/mail/compose/view',
         },
 
         setTitle: function () {
-            this.app.setTitle(this.model.get('subject', gt('Compose')));
+            this.app.setTitle(this.model.get('subject') || gt('Compose'));
         },
 
         onSave: function (e) {
@@ -534,131 +532,10 @@ define('io.ox/mail/compose/view',
             return input;
         },
 
-        render: function () {
-            var model = this.model,
-                selfView = this;
-
-            ext.point('io.ox/mail/compose/fields').invoke('draw', this.$el, this.baton);
-
-            // add subject to app title
-            this.setTitle();
-
-            this.$el.find('.tokenfield').each(function () {
-
-                var self = $(this),
-                    type = self.data('type');
-
-                self.tokenfield({
-                    createTokensOnBlur: true,
-                    minLength: contactSettings.get('search/minimumQueryLength', 3),
-                    typeahead: [{}, {
-                            source: function(query, callback) {
-                                autocompleteAPI.search(query).then(function (matches) {
-                                    callback(_(matches).map(function (data) {
-                                        return {
-                                            value: data.email || data.phone || '',
-                                            label: contactsUtil.getMailFullName(data),
-                                            data: data
-                                        };
-                                    }));
-                                });
-                            },
-                            templates: {
-                                suggestion: function (item) {
-                                    var node = $('<div class="autocomplete-item">'),
-                                        baton = ext.Baton({ data: item.data, autocomplete: true });
-                                    ext.point(POINT + '/autoCompleteItem').invoke('draw', node, baton);
-                                    return node;
-                                }
-                            }
-                        }
-                    ]
-                }).on({
-                    'tokenfield:createdtoken': function (e) {
-                        // A11y: set title
-                        var title = '',
-                            token = $(e.relatedTarget);
-                        if (e.attrs) {
-                            if (e.attrs.label !== e.attrs.value) {
-                                title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
-                            } else {
-                                title = e.attrs.label;
-                            }
-                        }
-                        token.attr({
-                            title: title
-                        });
-                        if (e.attrs) {
-                            var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
-                            token.prepend(
-                                contactsAPI.pictureHalo(
-                                    $('<div class="contact-image">'),
-                                    $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
-                                )
-                            );
-                        }
-                    },
-                    'change': function () {
-                        model.setTokens(type, self.tokenfield('getTokens'));
-                    }
-                });
-
-                // add class to tokenfield wrapper
-                self.parent().addClass(type);
-
-                // set initial values
-                var values = model.getTokens(type) || [];
-                // display tokeninputfields if necessary
-                if (values.length) {
-                    selfView.toggleInput(type, false);
-                }
-                self.tokenfield('setTokens', values, true, false);
-
-                self.data('bs.tokenfield').$input.on({
-                    // IME support (e.g. for Japanese)
-                    compositionstart: function () {
-                        $(this).attr('data-ime', 'active');
-                    },
-                    compositionend: function () {
-                        $(this).attr('data-ime', 'inactive');
-                    },
-                    keydown: function (e) {
-                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
-                            // clear tokenfield input
-                            $(this).val('');
-                        }
-                    },
-                    // shortcuts (to/cc/bcc)
-                    keyup: function (e) {
-                        if (e.which === 13) return;
-                        // look for special prefixes
-                        var val = $(this).val();
-                        if ((/^to:?\s/i).test(val)) {
-                            $(this).val('');
-                        } else if ((/^cc:?\s/i).test(val)) {
-                            $(this).val('');
-                            selfView.toggleInput('cc', false).find('.token-input').focus();
-                        } else if ((/^bcc:?\s/i).test(val)) {
-                            $(this).val('');
-                            selfView.toggleInput('bcc', false).find('.token-input').focus();
-                        }
-                    }
-                });
-            });
-
-            if (this.model.get('mode') === 'compose') {
-                this.$el.find('.tokenfield:first .token-input').focus();
-            }
-
-            this.$el.append(this.textarea);
-
-            return this;
-        },
-
         loadEditor: function (content) {
 
-            var editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'html' ? 'html-editor' : 'text-editor');
-            var self = this;
+            var self = this,
+                editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'html' ? 'html-editor' : 'text-editor');
 
             return require([editorSrc]).then(function (Editor) {
                 return (self.editorHash[self.editorMode] = new Editor(self.textarea))
@@ -777,6 +654,131 @@ define('io.ox/mail/compose/view',
             this.blocked[sendtype] = (this.blocked[sendtype] || 0) - 1;
             if (this.blocked[sendtype] <= 0)
                 delete this.blocked[sendtype];
+        },
+
+        render: function () {
+            var self = this,
+                autocompleteAPI = new AutocompleteAPI({
+                    id: 'mailwrite',
+                    contacts: true,
+                    msisdn: true
+                });
+
+            ext.point('io.ox/mail/compose/fields').invoke('draw', this.$el, this.baton);
+
+            // add subject to app title
+            this.setTitle();
+
+            this.$el.find('.tokenfield').each(function () {
+
+                var input = $(this),
+                    type = input.data('type');
+
+                input.tokenfield({
+                    createTokensOnBlur: true,
+                    minLength: contactSettings.get('search/minimumQueryLength', 3),
+                    typeahead: [{}, {
+                            source: function(query, callback) {
+                                autocompleteAPI.search(query).then(function (matches) {
+                                    callback(_(matches).map(function (data) {
+                                        return {
+                                            value: data.email || data.phone || '',
+                                            label: contactsUtil.getMailFullName(data),
+                                            data: data
+                                        };
+                                    }));
+                                });
+                            },
+                            templates: {
+                                suggestion: function (item) {
+                                    var node = $('<div class="autocomplete-item">'),
+                                        baton = ext.Baton({ data: item.data, autocomplete: true });
+                                    ext.point(POINT + '/autoCompleteItem').invoke('draw', node, baton);
+                                    return node;
+                                }
+                            }
+                        }
+                    ]
+                }).on({
+                    'tokenfield:createdtoken': function (e) {
+                        // A11y: set title
+                        var title = '',
+                            token = $(e.relatedTarget);
+                        if (e.attrs) {
+                            if (e.attrs.label !== e.attrs.value) {
+                                title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
+                            } else {
+                                title = e.attrs.label;
+                            }
+                        }
+                        token.attr({
+                            title: title
+                        });
+                        if (e.attrs) {
+                            var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
+                            token.prepend(
+                                contactsAPI.pictureHalo(
+                                    $('<div class="contact-image">'),
+                                    $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
+                                )
+                            );
+                        }
+                    },
+                    'change': function () {
+                        self.model.setTokens(type, input.tokenfield('getTokens'));
+                    }
+                });
+
+                // add class to tokenfield wrapper
+                input.parent().addClass(type);
+
+                // set initial values
+                var values = self.model.getTokens(type) || [];
+                // display tokeninputfields if necessary
+                if (values.length) {
+                    self.toggleInput(type, false);
+                }
+                input.tokenfield('setTokens', values, true, false);
+
+                input.data('bs.tokenfield').$input.on({
+                    // IME support (e.g. for Japanese)
+                    compositionstart: function () {
+                        $(this).attr('data-ime', 'active');
+                    },
+                    compositionend: function () {
+                        $(this).attr('data-ime', 'inactive');
+                    },
+                    keydown: function (e) {
+                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
+                            // clear tokenfield input
+                            $(this).val('');
+                        }
+                    },
+                    // shortcuts (to/cc/bcc)
+                    keyup: function (e) {
+                        if (e.which === 13) return;
+                        // look for special prefixes
+                        var val = $(this).val();
+                        if ((/^to:?\s/i).test(val)) {
+                            $(this).val('');
+                        } else if ((/^cc:?\s/i).test(val)) {
+                            $(this).val('');
+                            self.toggleInput('cc', false).find('.token-input').focus();
+                        } else if ((/^bcc:?\s/i).test(val)) {
+                            $(this).val('');
+                            self.toggleInput('bcc', false).find('.token-input').focus();
+                        }
+                    }
+                });
+            });
+
+            if (this.model.get('mode') === 'compose') {
+                this.$el.find('.tokenfield:first .token-input').focus();
+            }
+
+            this.$el.append(this.textarea);
+
+            return this;
         }
 
     });
