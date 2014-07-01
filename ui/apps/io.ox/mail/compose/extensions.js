@@ -17,6 +17,7 @@ define('io.ox/mail/compose/extensions',
      'io.ox/backbone/mini-views/dropdown',
      'io.ox/core/extensions',
      'io.ox/core/api/autocomplete',
+     'io.ox/contacts/api',
      'io.ox/contacts/util',
      'settings!io.ox/mail',
      'settings!io.ox/contacts',
@@ -24,7 +25,7 @@ define('io.ox/mail/compose/extensions',
      'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
      'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
      'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
-    ], function (sender, Dropdown, ext, AutocompleteAPI, contactsUtil, settings, contactSettings, gt) {
+    ], function (sender, Dropdown, ext, AutocompleteAPI, contactsAPI, contactsUtil, settings, contactSettings, gt) {
 
     $.fn.tokenize = function (o) {
         // defaults
@@ -78,13 +79,13 @@ define('io.ox/mail/compose/extensions',
                     title: title
                 });
                 if (e.attrs) {
-                    // var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
-                    // token.prepend(
-                    //     contactsAPI.pictureHalo(
-                    //         $('<div class="contact-image">'),
-                    //         $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
-                    //     )
-                    // );
+                    var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
+                    token.prepend(
+                        contactsAPI.pictureHalo(
+                            $('<div class="contact-image">'),
+                            $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
+                        )
+                    );
                 }
             },
             'change': function () {
@@ -97,44 +98,6 @@ define('io.ox/mail/compose/extensions',
 
         // set initial values
         input.tokenfield('setTokens', o.model.getTokens(o.attr) || [], true, false);
-
-
-        // // display tokeninputfields if necessary
-        // if (values.length) {
-        //     self.toggleInput(type, false);
-        // }
-
-
-        // input.data('bs.tokenfield').$input.on({
-        //     // IME support (e.g. for Japanese)
-        //     compositionstart: function () {
-        //         $(this).attr('data-ime', 'active');
-        //     },
-        //     compositionend: function () {
-        //         $(this).attr('data-ime', 'inactive');
-        //     },
-        //     keydown: function (e) {
-        //         if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
-        //             // clear tokenfield input
-        //             $(this).val('');
-        //         }
-        //     },
-        //     // shortcuts (to/cc/bcc)
-        //     keyup: function (e) {
-        //         if (e.which === 13) return;
-        //         // look for special prefixes
-        //         var val = $(this).val();
-        //         if ((/^to:?\s/i).test(val)) {
-        //             $(this).val('');
-        //         } else if ((/^cc:?\s/i).test(val)) {
-        //             $(this).val('');
-        //             self.toggleInput('cc', false).find('.token-input').focus();
-        //         } else if ((/^bcc:?\s/i).test(val)) {
-        //             $(this).val('');
-        //             self.toggleInput('bcc', false).find('.token-input').focus();
-        //         }
-        //     }
-        // });
 
         return input;
     };
@@ -228,7 +191,9 @@ define('io.ox/mail/compose/extensions',
             var attr = label.toLowerCase();
             return function (baton) {
                 var guid = _.uniqueId('form-control-label-'),
-                    cls = 'row' + (addActions ? '' : ' hidden io-ox-core-animation slidedown in'),
+                    value = baton.model.get(attr) || [],
+                    // display tokeninputfields if necessary
+                    cls = 'row' + (addActions || value.length ? '' : ' hidden io-ox-core-animation slidedown in'),
                     input;
                 this.append(
                     $('<div data-extension-id="' + attr + '">')

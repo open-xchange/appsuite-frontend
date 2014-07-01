@@ -741,12 +741,49 @@ define('io.ox/mail/compose/view',
         },
 
         render: function () {
+            var self = this;
 
             // draw all extensionpoints
             ext.point('io.ox/mail/compose/fields').invoke('draw', this.$el, this.baton);
 
             // add subject to app title
             this.setTitle();
+
+            // add view specific event handling to tokenfields
+            this.$el.find('input.tokenfield').each(function () {
+                // get original input field from token plugin
+                var input = $(this).data('bs.tokenfield').$input;
+                input.on({
+                    // IME support (e.g. for Japanese)
+                    compositionstart: function () {
+                        $(this).attr('data-ime', 'active');
+                    },
+                    compositionend: function () {
+                        $(this).attr('data-ime', 'inactive');
+                    },
+                    keydown: function (e) {
+                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
+                            // clear tokenfield input
+                            $(this).val('');
+                        }
+                    },
+                    // shortcuts (to/cc/bcc)
+                    keyup: function (e) {
+                        if (e.which === 13) return;
+                        // look for special prefixes
+                        var val = $(this).val();
+                        if ((/^to:?\s/i).test(val)) {
+                            $(this).val('');
+                        } else if ((/^cc:?\s/i).test(val)) {
+                            $(this).val('');
+                            self.toggleInput('cc', false).find('.token-input').focus();
+                        } else if ((/^bcc:?\s/i).test(val)) {
+                            $(this).val('');
+                            self.toggleInput('bcc', false).find('.token-input').focus();
+                        }
+                    }
+                });
+            });
 
             // control focus in compose mode
             if (this.model.get('mode') === 'compose') {
