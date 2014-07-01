@@ -282,13 +282,9 @@ define('io.ox/contacts/actions',
         requires: function (e) {
             if (_.device('small')) return false;
             // check if collection has min 1 contact
-            return api.getList(e.context)
-                .then(function (list) {
-                    //ignore distribution lists
-                    return e.collection.has('some', 'read') && (_.filter([].concat(list), function (el) {
-                        return !el.mark_as_distributionlist;
-                    })).length > 0;
-                });
+            return e.collection.has('some', 'read') && (_.filter([].concat(e.context), function (el) {
+                return !el.mark_as_distributionlist;
+            })).length > 0;
         },
         multiple: function (list) {
             print.request('io.ox/contacts/print', list);

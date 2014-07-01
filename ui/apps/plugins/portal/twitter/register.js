@@ -280,9 +280,13 @@ define('plugins/portal/twitter/register',
             return keychain.isEnabled('twitter') && !keychain.hasStandardAccount('twitter');
         },
 
-        performSetUp: function () {
+        performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('twitter', win);
+            return keychain.createInteractively('twitter', win)
+                .then(function () {
+                    baton.model.node.removeClass('requires-setup');
+                    ox.trigger('refresh^');
+                });
         },
 
         load: function (baton) {
@@ -371,7 +375,7 @@ define('plugins/portal/twitter/register',
             );
         },
 
-        error: function (error) {
+        error: function (error, baton) {
 
             if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
@@ -384,7 +388,7 @@ define('plugins/portal/twitter/register',
                 ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp');
+                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp', null, baton);
                 })
             );
         }
