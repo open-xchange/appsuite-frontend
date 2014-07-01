@@ -60,16 +60,19 @@ define('io.ox/mail/compose/model',
         },
 
         initialize: function () {
-            var attachment = {
+            var attachment = this.get('attachments');
+            if (_.isEmpty(attachment)) {
+                attachment = [{
                     content: '',
                     content_type: this.getContentType()
-                };
-
-            if (this.get('editorMode') !== 'html') {
-                attachment.raw = true;
+                }];
             }
 
-            this.set('attachments', [attachment], {silent: true});
+            if (this.get('editorMode') !== 'html') {
+                attachment[0].raw = true;
+            }
+
+            this.set('attachments', attachment, {silent: true});
         },
 
         getContentType: function () {

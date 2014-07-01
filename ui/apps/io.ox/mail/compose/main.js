@@ -17,10 +17,11 @@ define('io.ox/mail/compose/main',
      'io.ox/mail/compose/model',
      'io.ox/mail/compose/view',
      'io.ox/core/notifications',
+     'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'less!io.ox/mail/compose/style'
-    ], function (mailAPI, MailModel, MailComposeView, notifications, gt) {
+    ], function (mailAPI, MailModel, MailComposeView, notifications, settings, gt) {
 
     'use strict';
 
@@ -127,7 +128,7 @@ define('io.ox/mail/compose/main',
 
                 function cont(obj) {
                     win.busy().show(function () {
-                        mailAPI[type](obj, 'html')
+                        mailAPI[type](obj, settings.get('messageFormat', 'html'))
                         .done(function (data) {
                             data.sendtype = type === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                             data.mode = type;
