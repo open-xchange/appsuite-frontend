@@ -222,65 +222,35 @@ define('io.ox/mail/compose/extensions',
             this.append(node);
         },
 
-        to: function (baton) {
-            var guid = _.uniqueId('form-control-label-'),
-                input;
-            this.append(
-                $('<div class="row" data-extension-id="to">').append(
-                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('To')).attr({
-                        'for': guid
-                    }),
-                    $('<div class="col-xs-10 col-md-11">').append(
-                        input = $('<input type="text" class="form-control tokenfield">').attr({
-                            id: guid,
-                            tabindex: 1
-                        }),
-                        $('<div class="recipient-actions">').append(
-                            $('<a href="#" data-action="add-cc" tabindex="1">').text(gt('CC')),
-                            $('<a href="#" data-action="add-bcc" tabindex="1">').text(gt('BCC'))
+        tokenfield: function (label, addActions) {
+            addActions = addActions || false;
+            label = String(label);
+            var attr = label.toLowerCase();
+            return function (baton) {
+                var guid = _.uniqueId('form-control-label-'),
+                    cls = 'row' + (addActions ? '' : ' hidden io-ox-core-animation slidedown in'),
+                    input;
+                this.append(
+                    $('<div data-extension-id="' + attr + '">')
+                        .addClass(cls)
+                        .append(
+                            $('<label class="maillabel col-xs-2 col-md-1">').text(gt(label)).attr({
+                                'for': guid
+                            }),
+                            $('<div class="col-xs-10 col-md-11">').append(
+                                input = $('<input type="text" class="form-control tokenfield">').attr({
+                                    id: guid,
+                                    tabindex: 1
+                                }),
+                                addActions ? $('<div class="recipient-actions">').append(
+                                    $('<a href="#" data-action="add-cc" tabindex="1">').text(gt('CC')),
+                                    $('<a href="#" data-action="add-bcc" tabindex="1">').text(gt('BCC'))
+                                ) : $()
+                            )
                         )
-                    )
-                )
-            );
-            input.tokenize({ model: baton.model, api: autocompleteAPI, attr: 'to', addClass: 'to' });
-        },
-
-        cc: function (baton) {
-            var guid = _.uniqueId('form-control-label-'),
-                input;
-            this.append(
-                $('<div class="row hidden io-ox-core-animation slidedown in" data-extension-id="cc">').append(
-                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('CC')).attr({
-                        'for': guid
-                    }),
-                    $('<div class="col-xs-10 col-md-11">').append(
-                        input = $('<input type="text" class="form-control tokenfield">').data('type', 'cc').attr({
-                            id: guid,
-                            tabindex: 1
-                        })
-                    )
-                )
-            );
-            input.tokenize({ model: baton.model, api: autocompleteAPI, attr: 'cc', addClass: 'cc' });
-        },
-
-        bcc: function (baton) {
-            var guid = _.uniqueId('form-control-label-'),
-                input;
-            this.append(
-                $('<div class="row hidden io-ox-core-animation slidedown in" data-extension-id="bcc">').append(
-                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('BCC')).attr({
-                        'for': guid
-                    }),
-                    $('<div class="col-xs-10 col-md-11">').append(
-                        input = $('<input type="text" class="form-control tokenfield">').data('type', 'bcc').attr({
-                            id: guid,
-                            tabindex: 1
-                        })
-                    )
-                )
-            );
-            input.tokenize({ model: baton.model, api: autocompleteAPI, attr: 'bcc', addClass: 'bcc' });
+                    );
+                input.tokenize({ model: baton.model, api: autocompleteAPI, attr: attr, addClass: attr });
+            };
         },
 
         subject: function (baton) {
