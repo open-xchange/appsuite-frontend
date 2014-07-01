@@ -75,4 +75,21 @@ module.exports = function (grunt) {
             ]
         }
     });
+
+    grunt.config.extend('less', {
+        build_tokenfield: {
+            options: {
+                lessrc: '.lessrc',
+                process: function (src) {
+                    return src.replace(/@import "..\/bower_components\/(.*)";/g, '');
+                }
+            },
+            files: [{
+                expand: true,
+                src: ['bower_components/bootstrap-tokenfield/less/bootstrap-tokenfield.less'],
+                rename: function (dest) { return dest; },
+                dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
+            }]
+        }
+    });
 };

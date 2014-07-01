@@ -30,7 +30,8 @@ define('io.ox/mail/compose/view',
      'io.ox/core/api/snippets',
      'gettext!io.ox/mail',
      'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
-     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js'
+     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
+     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
     ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, contactSettings, notifications, AutocompleteAPI, snippetAPI, gt) {
 
     'use strict';
