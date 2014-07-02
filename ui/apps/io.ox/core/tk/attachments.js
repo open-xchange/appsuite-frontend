@@ -381,7 +381,7 @@ define('io.ox/core/tk/attachments',
         this.init();
     }
 
-    function AttachmentList(options) {
+    function AttachmentListOld(options) {
         var self = this;
         _.extend(this, {
 
@@ -652,7 +652,7 @@ define('io.ox/core/tk/attachments',
     return {
         EditableAttachmentList: EditableAttachmentList,
         EditableFileList: EditableFileList,
-        AttachmentList: AttachmentList,
+        AttachmentList: AttachmentListOld,
         fileUploadWidget: fileUploadWidget,
         view: {
             AttachmentList: AttachmentList,
