@@ -96,16 +96,21 @@
 
     // Bootstrap Tokenfield overrides
     .tokenfield {
+
+        &.to {
+            padding-right: 65px;
+        }
+
         .token {
+
             .contact-image {
                 display: inline-block;
-                width: 16px;
-                height: 16px;
                 margin: 2px;
-                background-repeat: no-repeat;
-                background-position: 50% 50%;
+                .picture(16px, 16px);
             }
+
         }
+
     }
 
 }
@@ -113,22 +118,18 @@
 .io-ox-mail-compose-contact {
 
     .contact-image {
-        height: 3 * 14px;
-        width: 3 * 14px;
         margin-right: 14px;
         display: inline-block;
-        background-size: cover;
-        background-repeat: no-repeat;
         float: left;
+        .picture(42px, 42px);
     }
 
     .recipient-name {
-        font-weight: 500;
+        font-weight: bold;
         .ellipsis();
     }
 
     .email {
-        color: @link-color;
         .ellipsis();
     }
 }
