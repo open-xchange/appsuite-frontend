@@ -193,7 +193,7 @@ define('io.ox/mail/compose/extensions',
                 var guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
                     // display tokeninputfields if necessary
-                    cls = 'row' + (addActions || value.length ? '' : ' hidden io-ox-core-animation slidedown in'),
+                    cls = 'row' + (addActions || value.length ? '' : ' hidden'),
                     input;
                 this.append(
                     $('<div data-extension-id="' + attr + '">')
