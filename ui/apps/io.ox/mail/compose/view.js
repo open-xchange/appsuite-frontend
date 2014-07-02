@@ -707,16 +707,9 @@ define('io.ox/mail/compose/view',
 
             return this.changeEditorMode().done(function () {
                 var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[self.editorMode] || []) : (undefined);
-                var content = attachments && attachments.length ? (attachments[0].content || '') : '';
-                var format = attachments && attachments.length && attachments[0].content_type === 'text/plain' ? 'text' : 'html';
 
-                if (self.editorMode === 'text') {
-                    content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
-                }
-                // image URL fix
-                if (self.editorMode === 'html') {
-                    content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
-                }
+                var content = self.model.getContent();
+
                 // convert different emoji encodings to unified
                 content = convertAllToUnified(content);
                 if (data.replaceBody !== 'no') {

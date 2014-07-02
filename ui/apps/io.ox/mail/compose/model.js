@@ -80,6 +80,23 @@ define('io.ox/mail/compose/model',
                 return this.get('editorMode') === 'html' ? 'text/html' : 'alternative';
             }
         },
+
+        getContent: function () {
+            var content = this.get('attachments').at(0).get('content'),
+                mode = this.get('editorMode');
+
+            if (mode === 'text') {
+                content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
+            }
+
+            // image URL fix
+            if (mode === 'html') {
+                content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
+            }
+
+            return content;
+        },
+
         parse: function (list) {
             return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                 .map(function (recipient) {
