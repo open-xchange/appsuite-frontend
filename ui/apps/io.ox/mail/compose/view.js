@@ -631,6 +631,11 @@ define('io.ox/mail/compose/view',
         },
 
         getMail: function () {
+            //sync editor content to model
+            //TODO: move me elsewhere?
+            if (this.editor) {
+                this.model.setContent(this.editor.getContent());
+            }
             return {
                 data: this.model.getMail(),
                 mode: this.composeMode,

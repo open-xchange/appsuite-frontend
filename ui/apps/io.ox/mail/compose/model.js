@@ -82,6 +82,10 @@ define('io.ox/mail/compose/model',
             }
         },
 
+        setContent: function (content) {
+            var model = this.get('attachments').at(0);
+            model.set('content', content);
+        },
         getContent: function () {
             var content = this.get('attachments').at(0).get('content'),
                 mode = this.get('editorMode');
