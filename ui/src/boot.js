@@ -593,7 +593,7 @@ $(window).load(function () {
                                 $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
                             // theme
-                            themes.set(ox.serverConfig.signinTheme || 'login');
+                            themes.set(_.url.hash('theme') || ox.serverConfig.signinTheme || 'login');
                             // continue
                             gettext.setLanguage('en_US');
                             require(['io.ox/core/login-i18n']).done(initialize);
