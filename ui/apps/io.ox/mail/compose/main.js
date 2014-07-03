@@ -1,4 +1,3 @@
-/* jshint unused: false */
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -30,16 +29,6 @@ define('io.ox/mail/compose/main',
     // multi instance pattern
     function createInstance() {
 
-        function blockReuse(sendtype) {
-            blocked[sendtype] = (blocked[sendtype] || 0) + 1;
-        }
-
-        function unblockReuse(sendtype) {
-            blocked[sendtype] = (blocked[sendtype] || 0) - 1;
-            if (blocked[sendtype] <= 0)
-                delete blocked[sendtype];
-        }
-
         // application object
         var app = ox.ui.createApp({
                 name: 'io.ox/mail/compose',
@@ -47,8 +36,6 @@ define('io.ox/mail/compose/main',
                 userContent: true,
                 closable: true
             }),
-            editor,
-            editorHash = {},
             win;
 
         app.setLauncher(function () {
@@ -72,9 +59,9 @@ define('io.ox/mail/compose/main',
         };
 
         app.failRestore = function (point) {
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                model = new MailModel(point);
 
-            var model = new MailModel(point);
             app.view = new MailComposeView({ model: model, app: app });
 
             _.url.hash('app', 'io.ox/mail/compose:' + point.mode);
@@ -96,6 +83,7 @@ define('io.ox/mail/compose/main',
 
             var def = $.Deferred(),
                 model = new MailModel(data);
+
             app.view = new MailComposeView({ model: model, app: app });
 
             _.url.hash('app', 'io.ox/mail/compose:compose');
@@ -137,7 +125,7 @@ define('io.ox/mail/compose/main',
                             app.view = new MailComposeView({ model: model, app: app });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);
 
-                            app.view.setMail(data)
+                            app.view.setMail()
                             .done(function () {
                                 win.idle();
                                 def.resolve({app: app});
@@ -151,11 +139,7 @@ define('io.ox/mail/compose/main',
                     });
                 }
 
-                if (obj === undefined) {
-                    cont({ folder: _.url.hash('folder'), id: _.url.hash('id') });
-                } else {
-                    cont(obj);
-                }
+                cont(obj || { folder: _.url.hash('folder'), id: _.url.hash('id') });
 
                 return def;
             };
@@ -175,8 +159,8 @@ define('io.ox/mail/compose/main',
         reuse: function (type, data) {
             //disable reuse if at least one app is sending (depends on type)
             var unblocked = function (sendtype) {
-                    return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
-                };
+                return blocked[sendtype] === undefined || blocked[sendtype] <= 0;
+            };
             if (type === 'reply' && unblocked(mailAPI.SENDTYPE.REPLY)) {
                 return ox.ui.App.reuse('io.ox/mail:reply.' + _.cid(data));
             }

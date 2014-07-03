@@ -1,4 +1,3 @@
-/* jshint unused: false */
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -276,7 +275,7 @@ define('io.ox/mail/compose/extensions',
             }, def.reject);
             return def;
         },
-        attachment: function (baton) {
+        attachment: function () {
             var $el = $('<div class="col-xs-12 col-md-6">'),
                 def = $.Deferred();
             $el.appendTo(this);

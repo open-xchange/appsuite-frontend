@@ -1,5 +1,3 @@
-/* jshint unused: false */
-
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -339,11 +337,7 @@ define('io.ox/mail/compose/view',
         setSubject: function (e) {
             var value = e.target ? $(e.target).val() : e;
             this.model.set('subject', value);
-            if (value !== '') {
-                this.app.setTitle(value);
-            } else {
-                this.app.setTitle(gt('Compose'));
-            }
+            this.app.setTitle(value || gt('Compose'));
         },
 
         setTitle: function () {
@@ -596,8 +590,6 @@ define('io.ox/mail/compose/view',
 
         setBody: function (content) {
 
-            var self = this;
-
             if (this.model.get('initial')) {
                 // remove white-space at beginning except in first-line
                 content = String(content || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
@@ -633,7 +625,6 @@ define('io.ox/mail/compose/view',
 
         removeSignature: function () {
             var self = this,
-                text,
                 isHTML = !!this.editor.find,
                 currentSignature = this.model.get('currentSignature');
 
@@ -669,8 +660,7 @@ define('io.ox/mail/compose/view',
         },
 
         setSignature: function (signature) {
-            var self = this,
-                text,
+            var text,
                 isHTML = !!this.editor.find;
 
             this.removeSignature();
@@ -707,7 +697,7 @@ define('io.ox/mail/compose/view',
             }
         },
 
-        setMail: function (mail) {
+        setMail: function () {
 
             var self = this,
                 data = this.model.toJSON();
