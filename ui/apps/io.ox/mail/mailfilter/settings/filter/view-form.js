@@ -91,22 +91,50 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             '$cl_10': '10'
         },
 
-        adjustRulePosition = function (models, flags) {
-            var position,
-                indicator = false;
-            _(models).each(function (model) {
+        adjustRulePosition = function (models) {
+            var position, firstPos, secondPos,
+                posibleStaticFilters = _.last(models, 2),
+                getStaticFilterStatus =  function (model) {
+                    if (model.length === 0) {
+                        return '0';
+                    } else if (model.length === 1) {
+                        firstPos = _.isEqual(model[0].get('flags'), ['vacation']) ? _.isEqual(model[0].get('flags'), ['vacation']) : _.isEqual(model[0].get('flags'), ['autoforward']);
+                    } else {
+                        firstPos = _.isEqual(model[0].get('flags'), ['vacation']) ? _.isEqual(model[0].get('flags'), ['vacation']) : _.isEqual(model[0].get('flags'), ['autoforward']);
+                        secondPos = _.isEqual(model[1].get('flags'), ['vacation']) ? _.isEqual(model[1].get('flags'), ['vacation']) : _.isEqual(model[1].get('flags'), ['autoforward']);
+                    }
 
-                if (_.isEqual(model.attributes.flags, flags)) {
-                    position = model.attributes.position;
-                    indicator = true;
+                    if (firstPos && secondPos === undefined) {
+                        return '3';
+                    } else if (firstPos && secondPos) {
+                        return '2';
+                    } else if (!firstPos && secondPos) {
+                        return '1';
+                    } else if (!firstPos && !secondPos) {
+                        return '0';
+                    }
+                };
+                switch (getStaticFilterStatus(posibleStaticFilters)) {
+                    case '0':
+                        break;
+                    case '1':
+                        position = posibleStaticFilters[1].attributes.position;
+                        posibleStaticFilters[1].attributes.position = posibleStaticFilters[1].attributes.position +1;
+                        break;
+                    case '2':
+                        position = posibleStaticFilters[0].get('position');
+                        posibleStaticFilters[0].set('position', posibleStaticFilters[0].attributes.position +1);
+                        posibleStaticFilters[1].set('position', posibleStaticFilters[1].attributes.position +1);
+                        break;
+                    case '3':
+                        position = posibleStaticFilters[0].attributes.position;
+                        posibleStaticFilters[0].attributes.position = posibleStaticFilters[0].attributes.position +1;
+                        break;
+                    default:
+                        break;
                 }
 
-                if (indicator === true) {
-                    model.attributes.position = model.attributes.position + 1;
-                }
-            });
-
-            return position;
+                return position;
         },
 
         checkForMultipleTests = function (el) {
@@ -221,8 +249,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
 
                 if (!this.model.has('position')) {
-                    rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
-                    this.model.set('position', rulePosition);
+                    rulePosition = adjustRulePosition(self.options.listView.collection.models);
+                    if (rulePosition !== undefined) {
+                        this.model.set('position', rulePosition);
+                    }
                 }
 
                 if (testsPart.tests) {
