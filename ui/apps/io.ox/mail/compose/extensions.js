@@ -277,8 +277,13 @@ define('io.ox/mail/compose/extensions',
         },
         attachment: function () {
             var $el = $('<div class="col-xs-12 col-md-6">'),
-                def = $.Deferred();
-            $el.appendTo(this);
+                def = $.Deferred(),
+                dropdown = new Dropdown({ model: baton.model, label: gt('Attachments'), tagName: 'span' });
+
+            dropdown.render();
+            this.append(
+                $el.append(dropdown.$el)
+            );
 
             require(['io.ox/core/tk/attachments'], function (attachments) {
                 var $widget = attachments.fileUploadWidget({
@@ -286,8 +291,10 @@ define('io.ox/mail/compose/extensions',
                     tabindex: 7,
                     buttontext: gt('Add Attachment')
                 });
+                $widget.addClass('dropdown-menu');
                 $widget.find('.btn').addClass('btn-link');
-                $widget.appendTo($el);
+                dropdown.$('ul').remove();
+                dropdown.$el.append($widget);
                 def.resolve($widget);
             }, def.reject);
             return def;
