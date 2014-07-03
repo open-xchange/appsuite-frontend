@@ -61,11 +61,12 @@ define('io.ox/mail/compose/main',
         });
 
         app.failSave = function () {
-            var mail = app.view.getMail();
+            app.view.syncMail();
+            var mail = app.view.model.toJSON();
             delete mail.files;
             return {
                 module: 'io.ox/mail/compose',
-                description: gt('Mail') + ': ' + (mail.data.subject || gt('No subject')),
+                description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
                 point: mail
             };
         };
@@ -73,7 +74,7 @@ define('io.ox/mail/compose/main',
         app.failRestore = function (point) {
             var def = $.Deferred();
 
-            var model = new MailModel(point.data);
+            var model = new MailModel(point);
             app.view = new MailComposeView({ model: model, app: app });
 
             _.url.hash('app', 'io.ox/mail/compose:' + point.mode);

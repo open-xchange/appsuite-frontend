@@ -589,8 +589,6 @@ define('io.ox/mail/compose/view',
         },
 
         syncMail: function () {
-            //sync editor content to model
-            //TODO: move me elsewhere?
             if (this.editor) {
                 this.model.setContent(this.editor.getContent());
             }
@@ -608,10 +606,8 @@ define('io.ox/mail/compose/view',
             }
 
             this.editor.setContent(content);
-
             this.setSelectedSignature();
             this.prependNewLine();
-
 
         },
 
