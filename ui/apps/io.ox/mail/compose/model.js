@@ -86,6 +86,7 @@ define('io.ox/mail/compose/model',
             var model = this.get('attachments').at(0);
             model.set('content', content);
         },
+
         getContent: function () {
             var content = this.get('attachments').at(0).get('content'),
                 mode = this.get('editorMode');
@@ -98,6 +99,9 @@ define('io.ox/mail/compose/model',
             if (mode === 'html') {
                 content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
             }
+
+            // convert different emoji encodings to unified
+            content = this.convertAllToUnified(content);
 
             return content;
         },
@@ -119,6 +123,45 @@ define('io.ox/mail/compose/model',
         },
 
         getMail: function() {
+
+            var convert = emoji.converterFor({to: emoji.sendEncoding()});
+            var content = this.get('attachments').at(0).get('content');
+            // get flat ids for data.infostore_ids
+            /*if (mail.data.infostore_ids) {
+                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+            }
+            // get flat cids for data.contacts_ids
+            if (mail.data.contacts_ids) {
+                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
+            }
+            // move nested messages into attachment array
+            _(mail.data.nested_msgs).each(function (obj) {
+                mail.data.attachments.push({
+                    id: mail.data.attachments.length + 1,
+                    filemname: obj.subject,
+                    content_type: 'message/rfc822',
+                    msgref: obj.msgref
+                });
+            });
+            delete mail.data.nested_msgs;
+            */
+            if (this.get('sendtype') === mailAPI.SENDTYPE.EDIT_DRAFT) {
+                this.set('sendtype', mailAPI.SENDTYPE.DRAFT, {silent: true});
+            }
+
+            //convert to target emoji send encoding
+            if (convert && emoji.sendEncoding() !== 'unified') {
+                //convert to send encoding (NOOP, if target encoding is 'unified')
+                this.set('subject', convert(this.get('subject')), {silent: true});
+
+                content = convert(content, this.get('editorMode'));
+            }
+
+            // fix inline images
+            content = mailUtil.fixInlineImages(content);
+
+            this.get('attachments').at(0).set('content', content, {silent: true});
+
             return _(this.toJSON()).pick(
                 'from',
                 'to',

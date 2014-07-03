@@ -20,22 +20,17 @@ define('io.ox/mail/compose/view',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/contacts/api',
-     'io.ox/emoji/main',
      'settings!io.ox/mail',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'io.ox/core/api/snippets',
      'gettext!io.ox/mail'
-    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, emoji, settings, coreSettings, notifications, snippetAPI, gt) {
+    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, settings, coreSettings, notifications, snippetAPI, gt) {
 
     'use strict';
 
     var INDEX = 0,
-        POINT = 'io.ox/mail/compose',
-        convertAllToUnified = emoji.converterFor({
-            from: 'all',
-            to: 'unified'
-        });
+        POINT = 'io.ox/mail/compose';
 
     ext.point(POINT + '/fields').extend({
         id: 'title',
@@ -365,51 +360,14 @@ define('io.ox/mail/compose/view',
             this.send();
         },
 
-        prepareMailForSending: function (mail) {
-            var convert = emoji.converterFor({to: emoji.sendEncoding()});
-            // get flat ids for data.infostore_ids
-            if (mail.data.infostore_ids) {
-                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
-            }
-            // get flat cids for data.contacts_ids
-            if (mail.data.contacts_ids) {
-                mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
-            }
-            // move nested messages into attachment array
-            _(mail.data.nested_msgs).each(function (obj) {
-                mail.data.attachments.push({
-                    id: mail.data.attachments.length + 1,
-                    filemname: obj.subject,
-                    content_type: 'message/rfc822',
-                    msgref: obj.msgref
-                });
-            });
-            delete mail.data.nested_msgs;
-
-            if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
-            }
-
-            //convert to target emoji send encoding
-            if (convert && emoji.sendEncoding() !== 'unified') {
-                //convert to send encoding (NOOP, if target encoding is 'unified')
-                mail.data.subject = convert(mail.data.subject);
-                mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
-            }
-
-             // fix inline images
-            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
-        },
-
         send: function () {
+            this.syncMail();
             // get mail
             var self = this,
-                mail = this.getMail(),
+                mail = this.model.getMail(),
                 def = $.Deferred();
 
-            this.blockReuse(mail.data.sendtype);
-
-            this.prepareMailForSending(mail);
+            this.blockReuse(mail.sendtype);
 
             function cont() {
                 var win = self.app.getWindow();
@@ -431,7 +389,7 @@ define('io.ox/mail/compose/view',
                 }*/
 
                 // send!
-                mailAPI.send(mail.data, mail.files /*view.form.find('.oldschool') */)
+                mailAPI.send(mail, mail.files /*view.form.find('.oldschool') */)
                 .always(function (result) {
 
                     if (result.error && !result.warnings) {
@@ -450,17 +408,17 @@ define('io.ox/mail/compose/view',
                     }
 
                     // update base mail
-                    var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
-                        isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
+                    var isReply = mail.sendtype === mailAPI.SENDTYPE.REPLY,
+                        isForward = mail.sendtype === mailAPI.SENDTYPE.FORWARD,
                         sep = mailAPI.separator,
                         base, folder, id, msgrefs, ids;
 
                     if (isReply || isForward) {
                         //single vs. multiple
-                        if (mail.data.msgref) {
-                            msgrefs = [ mail.data.msgref ];
+                        if (mail.msgref) {
+                            msgrefs = [ mail.msgref ];
                         } else {
-                            msgrefs = _.chain(mail.data.attachments)
+                            msgrefs = _.chain(mail.attachments)
                                 .filter(function (attachment) {
                                     return attachment.content_type === 'message/rfc822';
                                 })
@@ -494,19 +452,19 @@ define('io.ox/mail/compose/view',
                     self.app.quit();
                 })
                 .always(function (result) {
-                    self.unblockReuse(mail.data.sendtype);
+                    self.unblockReuse(mail.sendtype);
                     def.resolve(result);
                 });
             }
 
             // ask for empty to,cc,bcc and/or empty subject
-            var noRecipient = _.isEmpty(mail.data.to) && _.isEmpty(mail.data.cc) && _.isEmpty(mail.data.bcc);
-            if ($.trim(mail.data.subject) === '' || noRecipient) {
+            var noRecipient = _.isEmpty(mail.to) && _.isEmpty(mail.cc) && _.isEmpty(mail.bcc);
+            if ($.trim(mail.subject) === '' || noRecipient) {
                 if (noRecipient) {
                     notifications.yell('error', gt('Mail has no recipient.'));
                     focus('to');
                     def.reject();
-                } else if ($.trim(mail.data.subject) === '') {
+                } else if ($.trim(mail.subject) === '') {
                     // show dialog
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
@@ -536,7 +494,7 @@ define('io.ox/mail/compose/view',
 
         attachmentsExceedQouta: function (mail) {
 
-            var allAttachmentsSizes = [].concat(mail.files).concat(mail.data.attachments)
+            var allAttachmentsSizes = [].concat(mail.files).concat(mail.attachments)
                     .map(function (m) {
                         return m.size || 0;
                     }),
@@ -630,17 +588,12 @@ define('io.ox/mail/compose/view',
             }
         },
 
-        getMail: function () {
+        syncMail: function () {
             //sync editor content to model
             //TODO: move me elsewhere?
             if (this.editor) {
                 this.model.setContent(this.editor.getContent());
             }
-            return {
-                data: this.model.getMail(),
-                mode: this.composeMode,
-                format: this.editorMode
-            };
         },
 
         setBody: function (content) {
@@ -658,6 +611,8 @@ define('io.ox/mail/compose/view',
 
             this.setSelectedSignature();
             this.prependNewLine();
+
+
         },
 
         getMobileSignature: function () {
@@ -757,18 +712,13 @@ define('io.ox/mail/compose/view',
         },
 
         setMail: function (mail) {
+
             var self = this,
                 data = this.model.toJSON();
 
             return this.changeEditorMode().done(function () {
-                var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[self.editorMode] || []) : (undefined);
-
-                var content = self.model.getContent();
-
-                // convert different emoji encodings to unified
-                content = convertAllToUnified(content);
                 if (data.replaceBody !== 'no') {
-                    self.setBody(content);
+                    self.setBody(self.model.getContent());
                 }
             });
         },
