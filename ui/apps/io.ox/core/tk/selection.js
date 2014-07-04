@@ -24,7 +24,7 @@ define('io.ox/core/tk/selection',
 
     function joinTextNodes(nodes, delimiter) {
         nodes = nodes.map(function () {
-            return $.trim($(this).attr('title') || $(this).text());
+            return $.trim($(this).attr('title') || $(this).text());
         });
         return $.makeArray(nodes).join(delimiter || '');
     }

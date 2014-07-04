@@ -382,7 +382,7 @@ define('io.ox/mail/threadview',
         // update zIndex for all list-items (descending)
         zIndex: function () {
             var items = this.getItems(), length = items.length;
-            items.each(function (index) {
+            items.each(function (index) {
                 $(this).css('zIndex', length - index);
             });
         }

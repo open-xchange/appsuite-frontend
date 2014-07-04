@@ -312,7 +312,7 @@ define('io.ox/core/extPatterns/links',
             }
         }, options);
 
-        function processItems(baton, nav) {
+        function processItems(baton, nav) {
 
             // add toggle unless multi-selection
             var multiple = _.isArray(baton.data) && baton.data.length > 1,

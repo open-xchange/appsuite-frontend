@@ -172,7 +172,7 @@ define('io.ox/core/session',
                         })
                         .fail(function (response) {
                             if (console && console.error) {
-                                console.error('Login failed!', response.error, response.error_desc || '');
+                                console.error('Login failed!', response.error, response.error_desc || '');
                             }
                             def.reject(response);
                         });

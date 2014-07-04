@@ -241,7 +241,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         },
 
         getTitle: function () {
-            return this.options.title || this.model.get('title') || '';
+            return this.options.title || this.model.get('title') || '';
         },
 
         renderTitle: function () {

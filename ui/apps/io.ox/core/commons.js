@@ -731,7 +731,7 @@ define('io.ox/core/commons',
                         $('<a href="#" class="toolbar-item" tabindex="1">')
                         .attr('title', gt('Open folder view'))
                         .append($('<i class="fa fa-angle-double-right">'))
-                        .on('click', { app: app, state: true }, toggleFolderView)
+                        .on('click', { app: app, state: true }, toggleFolderView)
                     );
                 }
             });

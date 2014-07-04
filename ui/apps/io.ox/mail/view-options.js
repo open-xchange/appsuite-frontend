@@ -140,7 +140,7 @@ define('io.ox/mail/view-options',
                 $('<a href="#" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
-                .on('click', { app: baton.app, state: true }, toggleFolderView)
+                .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
             var side = baton.app.getWindow().nodes.sidepanel;
