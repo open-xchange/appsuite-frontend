@@ -238,10 +238,12 @@ define('io.ox/core/folder/api',
                 appendColumns: false
             })
             .then(function () {
-                // get fresh folder data:
-                // 1. parent folder (might be first subfolder)
-                // 2. parent folder's sub-folders
-                return $.when(get(id), list(id));
+                // reload parent folder's sub-folders
+                return list(id, { cache: false });
+            })
+            .done(function () {
+                // update parent folder
+                pool.getModel(id).set('subfolders', true);
             })
             .then(
                 function success(data) {
@@ -261,11 +263,16 @@ define('io.ox/core/folder/api',
     function remove(id) {
 
         // get model
-        var model = pool.getModel(id), data = model.toJSON();
+        var model = pool.getModel(id),
+            data = model.toJSON(),
+            parent = model.get('folder_id'),
+            collection = pool.getCollection(parent);
         // trigger event
         api.trigger('remove:prepare', data);
         // remove model from collection
-        pool.getCollection(model.get('folder_id')).remove(model);
+        collection.remove(model);
+        // update parent folder; subfolders might have changed
+        pool.getModel(parent).set('subfolders', collection.length > 0);
 
         // delete on server
         return http.PUT({

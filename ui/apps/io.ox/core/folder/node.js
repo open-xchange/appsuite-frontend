@@ -35,8 +35,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
 
             this.$.subfolders
                 .empty()
-                .append(models.map(this.getTreeNode, this))
-                .show();
+                .append(models.map(this.getTreeNode, this));
 
             // trigger events
             models.each(function (model) {
@@ -91,6 +90,11 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             if (model.changed.index !== undefined) {
                 this.renderAttributes();
                 if (this.options.parent.onSort) this.options.parent.onSort();
+            }
+
+            if (model.changed.subfolders) {
+                this.options.open = !!model.changed.subfolders;
+                this.onChangeSubFolders();
             }
 
             this.repaint();
