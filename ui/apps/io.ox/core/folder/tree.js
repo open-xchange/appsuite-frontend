@@ -48,7 +48,7 @@ define('io.ox/core/folder/tree',
         filter: function (folder, model) {
             // only standard folder on top level
             if (folder === '1') {
-                return account.isStandardFolder(model.id);
+                return true || account.isStandardFolder(model.id);
             }
             // other folders
             var module = model.get('module');

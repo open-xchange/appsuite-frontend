@@ -128,6 +128,7 @@ define('io.ox/core/folder/selection', [], function () {
             // ignore virtual folders
             if (/^virtual/.test(id)) return;
             // trigger change event on view
+            console.log('trigger change event', id);
             this.view.trigger('change', id);
         }, 300)
     });

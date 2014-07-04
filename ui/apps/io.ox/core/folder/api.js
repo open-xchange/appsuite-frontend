@@ -11,63 +11,86 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
+define('io.ox/core/folder/api', ['io.ox/core/http', 'io.ox/core/event', 'gettext!io.ox/core'], function (http, Events, gt) {
 
     'use strict';
 
-    function newModel(data) {
-        var model = new Backbone.Model(data || {});
-        model.fetched = false;
-        return model;
-    }
-
-    function newCollection(list) {
-        var collection = new Backbone.Collection(list || []);
-        collection.fetched = false;
-        return collection;
-    }
-
     // collection pool
     var pool = {
-
         models: {},
-        collections: {},
+        collections: {}
+    };
+
+    //
+    // Utility functions
+    //
+
+    function injectIndex(item, index) {
+        item.index = index;
+    }
+
+    function onChangeModelId(model) {
+        delete pool.models[model.previous('id')];
+        pool.models[model.id] = model;
+    }
+
+    //
+    // Model & Collections
+    //
+
+    var FolderModel = Backbone.Model.extend({
+        constructor: function () {
+            Backbone.Model.apply(this, arguments);
+            this.on('change:id', onChangeModelId);
+        }
+    });
+
+    var FolderCollection = Backbone.Collection.extend({
+        constructor: function () {
+            Backbone.Collection.apply(this, arguments);
+            this.fetched = false;
+        },
+        comparator: 'index',
+        model: FolderModel
+    });
+
+    // collection pool
+    _.extend(pool, {
 
         addModel: function (data) {
             var id = data.id;
             if (this.models[id] === undefined) {
                 // add new model
-                this.models[id] = newModel(data);
+                this.models[id] = new FolderModel(data);
             } else {
                 // update existing model
                 this.models[id].set(data);
             }
+            return this.models[id];
         },
 
         addCollection: function (id, list) {
-            // add folder models first
-            _(list).each(this.addModel, this);
-            // add to pool
-            if (this.collections[id] === undefined) {
-                // add new collection
-                this.collections[id] = newCollection(list);
-            } else {
-                // update existing collection
-                var collection = this.collections[id];
-                if (!collection.fetched) collection.reset(list); else collection.set(list);
-            }
+            // transform list to models
+            var models = _(list).map(this.addModel, this);
+            // update collection
+            var collection = this.getCollection(id),
+                type = collection.fetched ? 'set' : 'reset';
+            collection[type](models);
         },
 
         getModel: function (id) {
-            return this.models[id] || (this.models[id] = newModel({ id: id }));
+            return this.models[id] || (this.models[id] = new FolderModel({ id: id }));
         },
 
         getCollection: function (id) {
-            return this.collections[id] || (this.collections[id] = newCollection());
+            return this.collections[id] || (this.collections[id] = new FolderCollection());
         }
-    };
+    });
 
-    // use ramp-up data
+    //
+    // Use ramp-up data
+    //
+
     _(ox.rampup.folder).each(function (data) {
         pool.addModel(data);
     });
@@ -81,7 +104,10 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
         pool.addCollection(id, list);
     });
 
-    // get a folder
+    //
+    // Get a single folder
+    //
+
     function get(id) {
 
         var model = pool.models[id];
@@ -102,14 +128,17 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
         });
     }
 
-    // get subfolders
+    //
+    // Get subfolders
+    //
+
     function list(id, options) {
 
-        options = _.extend({ all: false }, options);
+        options = _.extend({ all: false, cache: true }, options);
 
         // already cached?
         var collection = pool.getCollection(id);
-        if (collection.fetched) return $.when(collection.toJSON());
+        if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
 
         return http.GET({
             module: 'folders',
@@ -124,14 +153,84 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
             appendColumns: true
         })
         .done(function (list) {
+            // inject index
+            _(list).each(injectIndex);
             pool.addCollection(id, list);
             collection.fetched = true;
         });
     }
 
-    return {
+    //
+    // Update folder
+    //
+
+    function update(id, changes) {
+
+        // update model first
+        var model = pool.getModel(id);
+        model.set(changes);
+
+        return http.PUT({
+            module: 'folders',
+            params: {
+                action: 'update',
+                id: id,
+                tree: '1',
+                timezone: 'UTC'
+            },
+            data: changes,
+            appendColumns: false
+        })
+        .then(
+            function success(new_id) {
+                // id change?
+                if (id !== new_id) {
+                    model.set('id', new_id);
+                    // fetch sub-folders of parent folder to ensure proper order after rename
+                    return list(model.get('folder_id'), { cache: false });
+                }
+                // trigger event
+                api.trigger('update', id, new_id, model.toJSON());
+            },
+            function fail(error) {
+                if (error && error.code && error.code === 'FLD-0018')
+                    error.error = gt('Could not save settings. There have to be at least one user with administration rights.');
+                api.trigger('update:fail', error, id);
+            }
+        );
+    }
+
+    //
+    // Refresh all folders
+    //
+
+    function refresh() {
+        // pause http layer to get one multiple
+        http.pause();
+        // loop over all subfolder collection and reload
+        _(pool.collections).each(function (collection, id) {
+            // check collection.fetched; no need to fetch brand new subfolders
+            if (collection.fetched) list(id, { cache: false });
+        });
+        // go!
+        http.resume();
+    }
+
+    ox.on('please:refresh refresh^', refresh);
+
+    // publish api
+    var api = {
+        FolderModel: FolderModel,
+        FolderCollection: FolderCollection,
         pool: pool,
         get: get,
-        list: list
+        list: list,
+        update: update,
+        refresh: refresh
     };
+
+    // add event hub
+    Events.extend(api);
+
+    return api;
 });

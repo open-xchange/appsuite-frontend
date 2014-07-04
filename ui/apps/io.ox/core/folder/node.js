@@ -44,22 +44,56 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             });
         },
 
+        onSort: _.debounce(function () {
+            // check
+            if (!this.$) return;
+            // re-append to apply sorting
+            var nodes = _(this.$.subfolders.children()).sortBy(function (node) {
+                var index = $(node).attr('data-index'); // don't use data() here
+                return parseInt(index, 10);
+            });
+            this.$.subfolders.append(nodes);
+        }, 10),
+
         onAdd: function (model) {
             this.$.subfolders.append(this.getTreeNode(model));
             this.options.tree.trigger('appear:' + model.id, model);
         },
 
         onRemove: function (model) {
-
-            var nodes = this.$.subfolders.children(),
-                node = nodes.filter('[data-id="' + $.escape(model.id) + '"]');
-
+            var node = this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]');
             node.remove();
         },
 
+        // respond to changed id
+        onChangeId: function (model) {
+            var id = model.get('id'),
+                previous = model.previous('id'),
+                selection = this.options.tree.selection,
+                selected = selection.get();
+            // update DOM
+            this.folder = this.model_id = String(id);
+            this.renderAttributes();
+            // trigger selection change event
+            if (previous === selected) this.options.tree.trigger('change', id);
+            // close sub-folders
+            this.options.open = false;
+            this.onChangeSubFolders();
+        },
+
         // re-render on any attribute change
-        onChange: function () {
-            this.render();
+        onChange: function (model) {
+
+            if (model.changed.id !== undefined) {
+                this.onChangeId(model);
+            }
+
+            if (model.changed.index !== undefined) {
+                this.renderAttributes();
+                if (this.options.parent.onSort) this.options.parent.onSort();
+            }
+
+            this.repaint();
         },
 
         // open/close folder
@@ -149,9 +183,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             // collection changes
             if (o.subfolders) {
                 this.listenTo(this.collection, {
-                    'reset'  : this.onReset,
                     'add'    : this.onAdd,
-                    'remove' : this.onRemove
+                    'remove' : this.onRemove,
+                    'reset'  : this.onReset,
+                    'sort'   : this.onSort
                 });
             }
 
@@ -221,7 +256,19 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             );
         },
 
+        renderAttributes: function () {
+            this.$el.attr({
+                'data-id': this.folder,
+                'data-index': this.model.get('index')
+            });
+            // and again for selectable
+            this.$.selectable.attr('data-id', this.folder);
+        },
+
+        repaint: _.throttle(function () { if (this.model !== null) this.render(); }, 10),
+
         render: function () {
+            this.renderAttributes();
             this.renderTitle();
             this.renderCounter();
             this.onChangeSubFolders();
@@ -230,7 +277,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
 
         remove: function () {
             this.stopListening();
-            this.collection = this.model = this.options = this.$ =null;
+            this.collection = this.model = this.options = this.$ = null;
         }
     });
 
