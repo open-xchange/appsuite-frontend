@@ -62,8 +62,21 @@
         .rightalign {
             text-align: right;
 
+            .flag-dropdown {
+
+                 .dropdown-menu {
+                    text-align: left;
+                    right: 207px;
+                    top: -272px;
+                    position: relative;
+                 }
+
+            }
+            
             .dropdown-menu {
                 text-align: left;
+                left: auto;
+                right: -2px;
             }
 
         }
@@ -89,7 +102,7 @@
         font: 14px/20 @normal-font-family;
         right: -2px;
         left: auto;
-        top: 125%;
+        // top: 125%;
         width: 200px;
     }
 
@@ -140,6 +153,15 @@
             left: 50%;
             margin: -7px 0 0 -6px;
             color: #aaa;
+        }
+    }
+
+    .line {
+        margin-top: 25px;
+        margin-bottom: 20px;
+
+        .dropdown-toggle {
+            padding-top: 0;
         }
     }
 

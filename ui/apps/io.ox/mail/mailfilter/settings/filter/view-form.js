@@ -146,7 +146,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         renderWarningForEmptyTests = function (node) {
-            var warning = $('<div>').addClass('alert alert-warning').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
+            var warning = $('<div>').addClass('alert alert-info').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
             node.append(warning);
         },
 
@@ -771,7 +771,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
-                    toggle: 'dropdown'
+                    toggle: 'dropup'
                 }),
                 headlineActions, listActions,
                 elements.drawOptionsExtern(gt('Add action'), actionsTranslations, {
@@ -801,7 +801,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             var arrayOfTests = baton.model.get('test'),
                 options = {
                     target: 'id',
-                    toggle: 'dropdown',
+                    toggle: 'dropup',
                     classes: 'no-positioning',
                     caret: true
 //                    test: { nrInArray: '', target: ''  },

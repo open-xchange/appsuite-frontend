@@ -20,16 +20,16 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             var inputid = _.uniqueId('change-text-test-first'),
                 inputField = $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'});
 
-                if (activeValue.trim() === '') {
+            if (_.isString(activeValue) && activeValue.trim() === '') {
+                inputField.addClass('warning');
+            }
+            inputField.on('keyup', function () {
+                if (inputField.val().trim() !== '') {
+                    inputField.removeClass('warning');
+                } else {
                     inputField.addClass('warning');
                 }
-                inputField.on('keyup', function () {
-                    if (inputField.val().trim() !== '') {
-                        inputField.removeClass('warning');
-                    } else {
-                        inputField.addClass('warning');
-                    }
-                });
+            });
 
             return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), inputField.val(activeValue)];
         },
@@ -65,7 +65,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
         drawOptions: function (activeValue, values) {
 
             var active = values[activeValue];
-            return $('<div class="action dropdown value">').append(
+            return $('<div class="action dropup value">').append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(active),
                 $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
@@ -103,7 +103,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
 
             var active = values[activeValue];
             classes = classes ? classes : '';
-            return $('<div class="action dropdown value ' + classes + '">').append(
+            return $('<div class="action dropup value ' + classes + '">').append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(active),
                 $('<ul class="dropdown-menu">').append(
                     _(values).map(function (name, value) {
@@ -125,7 +125,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             }
 
             var flagclass = 'flag_' + colorflags[activeColor];
-            return $('<div class="dropdown flag-dropdown clear-title flag">').attr({'data-color-value': activeColor})
+            return $('<div class="dropup flag-dropdown clear-title flag">').attr({'data-color-value': activeColor})
             .addClass(flagclass)
             .append(
                 // box
