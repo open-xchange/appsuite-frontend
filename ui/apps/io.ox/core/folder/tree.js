@@ -125,7 +125,7 @@ define('io.ox/core/folder/tree',
                 var baton = new ext.Baton({ app: app, data: data, options: { type: module } });
                 ext.point(point).invoke('draw', ul, baton);
                 // check if menu exceeds viewport
-                if (ul.offset().top + ul.outerHeight() > $(window).height()) {
+                if (ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
                     ul.css({ top: 'auto', bottom: '20px' });
                 }
             });

@@ -13,7 +13,7 @@
  */
 
 define('io.ox/core/folder/actions/add',
-    ['io.ox/core/api/folder',
+    ['io.ox/core/folder/api',
      'io.ox/core/tk/dialogs',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
@@ -46,12 +46,9 @@ define('io.ox/core/folder/actions/add',
         if (invalid) return $.Deferred().reject();
 
         // call API
-        return api.create({
-            folder: folder,
-            data: {
-                title: $.trim(title),
-                module: opt.module
-            }
+        return api.create(folder, {
+            title: $.trim(title),
+            module: opt.module
         });
     }
 

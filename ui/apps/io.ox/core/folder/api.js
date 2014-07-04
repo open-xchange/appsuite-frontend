@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/api', ['io.ox/core/http', 'io.ox/core/event', 'gettext!io.ox/core'], function (http, Events, gt) {
+define('io.ox/core/folder/api',
+    ['io.ox/core/http',
+     'io.ox/core/event',
+     'settings!io.ox/mail',
+     'settings!io.ox/core',
+     'gettext!io.ox/core'], function (http, Events, mailSettings, coreSettings, gt) {
 
     'use strict';
 
@@ -32,6 +37,11 @@ define('io.ox/core/folder/api', ['io.ox/core/http', 'io.ox/core/event', 'gettext
     function onChangeModelId(model) {
         delete pool.models[model.previous('id')];
         pool.models[model.id] = model;
+    }
+
+    function getDefaultFolder(type) {
+        type = type || 'mail';
+        return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 
     //
@@ -182,20 +192,100 @@ define('io.ox/core/folder/api', ['io.ox/core/http', 'io.ox/core/event', 'gettext
             appendColumns: false
         })
         .then(
-            function success(new_id) {
+            function success(newId) {
                 // id change?
-                if (id !== new_id) {
-                    model.set('id', new_id);
+                if (id !== newId) {
+                    model.set('id', newId);
                     // fetch sub-folders of parent folder to ensure proper order after rename
                     return list(model.get('folder_id'), { cache: false });
                 }
                 // trigger event
-                api.trigger('update', id, new_id, model.toJSON());
+                api.trigger('update', id, newId, model.toJSON());
             },
             function fail(error) {
                 if (error && error.code && error.code === 'FLD-0018')
                     error.error = gt('Could not save settings. There have to be at least one user with administration rights.');
                 api.trigger('update:fail', error, id);
+            }
+        );
+    }
+
+    //
+    // Create folder
+    //
+
+    function create(id, data) {
+
+        // default data
+        data = _.extend({
+            title: gt('New Folder'),
+            subscribed: 1
+        }, data);
+
+        // get parent folder first - actually just to inherit 'module';
+        return get(id).then(function (parent) {
+            // go!
+            return http.PUT({
+                module: 'folders',
+                params: {
+                    action: 'new',
+                    autorename: true,
+                    folder_id: id,
+                    module: data.module || parent.module,
+                    tree: '1'
+                },
+                data: data,
+                appendColumns: false
+            })
+            .then(function () {
+                // get fresh folder data:
+                // 1. parent folder (might be first subfolder)
+                // 2. parent folder's sub-folders
+                return $.when(get(id), list(id));
+            })
+            .then(
+                function success(data) {
+                    api.trigger('create', data);
+                },
+                function fail(error) {
+                    api.trigger('create:fail', error, id);
+                }
+            );
+        });
+    }
+
+    //
+    // Remove folder
+    //
+
+    function remove(id) {
+
+        // get model
+        var model = pool.getModel(id), data = model.toJSON();
+        // trigger event
+        api.trigger('remove:prepare', data);
+        // remove model from collection
+        pool.getCollection(model.get('folder_id')).remove(model);
+
+        // delete on server
+        return http.PUT({
+            module: 'folders',
+            params: {
+                action: 'delete',
+                tree: '1',
+                failOnError: true
+            },
+            data: [id],
+            appendColumns: false
+        })
+        .then(
+            function success() {
+                api.trigger('remove', id, data);
+                api.trigger('remove:' + id, data);
+                api.trigger('remove:' + data.module, data);
+            },
+            function fail() {
+                api.trigger('remove:fail', id);
             }
         );
     }
@@ -226,7 +316,10 @@ define('io.ox/core/folder/api', ['io.ox/core/http', 'io.ox/core/event', 'gettext
         get: get,
         list: list,
         update: update,
-        refresh: refresh
+        create: create,
+        remove: remove,
+        refresh: refresh,
+        getDefaultFolder: getDefaultFolder
     };
 
     // add event hub

@@ -13,13 +13,14 @@
 
 define('io.ox/core/folder/view',
     ['io.ox/core/extensions',
+     'io.ox/core/folder/api',
      // 'io.ox/core/extPatterns/links',
      // 'io.ox/core/notifications',
      // 'io.ox/core/api/folder',
      // 'settings!io.ox/core'
      // 'io.ox/core/capabilities',
      'gettext!io.ox/core'
-    ], function (ext, gt) {
+    ], function (ext, api, gt) {
 
     'use strict';
 
@@ -247,6 +248,13 @@ define('io.ox/core/folder/view',
                 tree.selection.preselect(id);
             });
         }
+
+        // respond to folder removal
+        api.on('remove:prepare', function (e, data) {
+            // select parent or default folder
+            var id = data.folder_id === '1' ? api.getDefaultFolder(data.module) || '1' : data.folder_id;
+            tree.selection.set(id);
+        });
 
         // show
         if (options.visible) app.folderView.show();
