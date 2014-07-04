@@ -16,13 +16,12 @@ define('io.ox/contacts/distrib/create-dist-view',
     ['io.ox/backbone/views',
      'io.ox/backbone/forms',
      'gettext!io.ox/contacts',
-     'io.ox/core/tk/autocomplete',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/extensions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/notifications'
-    ], function (views, forms, gt, autocomplete, api, util, ext, AddParticipantsView, notifications) {
+    ], function (views, forms, gt, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
 

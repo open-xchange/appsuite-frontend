@@ -329,13 +329,13 @@ define('io.ox/calendar/edit/template',
             this.append(
                 $('<div class="col-md-6">').append(
                     pNode = $('<div class="input-group">').append(
-                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
                         $('<input class="add-participant form-control">').attr({
                             type: 'text',
                             tabindex: 1,
                             id: guid,
                             placeholder: gt('Add participant/resource')
                         }),
+                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
                         $('<span class="input-group-btn">').append(
                             $('<button class="btn btn-default">')
                                 .attr({
