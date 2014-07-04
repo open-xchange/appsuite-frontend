@@ -514,7 +514,7 @@ msgstr "アカウントが更新されました。"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:106 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342 apps/io.ox/mail/detail/view.js:88
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:733
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:763
 #: module:io.ox/settings/settings
 msgid "Actions"
 msgstr "アクション"
@@ -546,7 +546,7 @@ msgstr "添付ファイルを追加"
 msgid "Add account"
 msgstr "アカウントを追加"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:747
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:777
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "アクションを追加"
@@ -555,18 +555,18 @@ msgstr "アクションを追加"
 msgid "Add cipher code"
 msgstr "暗号コードを追加"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:742
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:772
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "条件を追加"
 
-#: apps/io.ox/contacts/actions.js:735 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:736 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js:105
 #: apps/io.ox/contacts/distrib/create-dist-view.js:107
 msgid "Add contact"
 msgstr "メンバを追加する"
 
-#: apps/io.ox/contacts/actions.js:742 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:743 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "配布リストを追加"
 
@@ -597,7 +597,7 @@ msgstr "この登録用に新規フォルダを追加"
 msgid "Add new participant"
 msgstr "新規出席者を追加"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:363 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:364 module:io.ox/mail
 msgid "Add new rule"
 msgstr "新規のルールを追加"
 
@@ -637,7 +637,7 @@ msgstr "署名を追加"
 msgid "Add subject"
 msgstr "件名を追加"
 
-#: apps/io.ox/contacts/actions.js:830 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:831 module:io.ox/contacts
 #: apps/io.ox/mail/actions.js:1158 module:io.ox/mail
 msgid "Add to address book"
 msgstr "アドレス帳に追加"
@@ -646,7 +646,7 @@ msgstr "アドレス帳に追加"
 msgid "Add to calendar"
 msgstr "予定表に追加"
 
-#: apps/io.ox/contacts/actions.js:807 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:808 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:948
 #: module:io.ox/files apps/io.ox/files/actions.js:1354
 #: apps/io.ox/files/toolbar.js:138 apps/io.ox/mail/actions.js:1148
@@ -804,13 +804,13 @@ msgstr "アプリケーション"
 msgid "Apply role"
 msgstr "ロールを割り当てる"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:780
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:810
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:784
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:814
 msgid "Apply rule if all conditions are met"
 msgstr "すべての条件を満たす場合にルールを適用"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:780
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:810
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "いずれかの条件を満たす場合にルールを適用"
@@ -928,7 +928,7 @@ msgstr[0] "添付ファイルを保存しました。"
 msgid "Attachments"
 msgstr "添付ファイル"
 
-#: apps/io.ox/contacts/actions.js:620 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:621 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:573 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:431 module:io.ox/tasks
 msgid "Attachments have been saved!"
@@ -1158,8 +1158,8 @@ msgstr "予定表"
 #: apps/io.ox/mail/actions.js:113 apps/io.ox/mail/actions.js:308
 #: apps/io.ox/mail/actions.js:874 apps/io.ox/mail/actions/attachmentSave.js:66
 #: apps/io.ox/mail/folderview-extensions.js:106
-#: apps/io.ox/mail/mailfilter/settings/filter.js:91
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
+#: apps/io.ox/mail/mailfilter/settings/filter.js:92
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:457
 #: apps/io.ox/mail/main.js:256 apps/io.ox/mail/main.js:967
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1385 apps/io.ox/mail/write/view-main.js:585
@@ -1481,7 +1481,7 @@ msgstr "新規メールを作成"
 msgid "Compose new mail"
 msgstr "新規メールを作成"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:732
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:762
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "条件"
@@ -1556,7 +1556,7 @@ msgid "Conversations"
 msgstr "スレッド"
 
 #: apps/io.ox/contacts/actions.js:195 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:823
+#: apps/io.ox/contacts/actions.js:824
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:81 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:113 apps/io.ox/files/actions.js:676
 #: module:io.ox/files apps/io.ox/files/actions.js:986
@@ -1711,7 +1711,7 @@ msgstr "配布リストを作成"
 msgid "Create list"
 msgstr "リストを作成"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:42 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:43 module:io.ox/mail
 msgid "Create new rule"
 msgstr "新規のルールを作成"
 
@@ -1851,7 +1851,7 @@ msgstr "延期"
 #: apps/io.ox/calendar/actions.js:659
 #: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
-#: module:io.ox/contacts apps/io.ox/contacts/actions.js:799
+#: module:io.ox/contacts apps/io.ox/contacts/actions.js:800
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:69 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
 #: module:io.ox/core apps/io.ox/core/folder/contextmenu.js:173
@@ -1946,8 +1946,8 @@ msgstr "ダイレクト リンク: %1$s"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:233 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:234
-#: apps/io.ox/mail/mailfilter/settings/filter.js:128 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:252
+#: apps/io.ox/mail/mailfilter/settings/filter.js:129 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:253
 #: apps/io.ox/portal/settings/pane.js:331 module:io.ox/portal
 msgid "Disable"
 msgstr "無効"
@@ -2156,7 +2156,7 @@ msgstr "完了"
 msgid "Doubleclick in this row for whole day appointment"
 msgstr "終日のアポイントを作成するには、この行をダブル クリックしてください。"
 
-#: apps/io.ox/contacts/actions.js:859 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:860 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:460 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/actions.js:888 module:io.ox/files
 #: apps/io.ox/files/actions.js:1037 apps/io.ox/files/actions.js:1306
@@ -2269,7 +2269,7 @@ msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:789
+#: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:790
 #: module:io.ox/contacts apps/io.ox/contacts/main.js:350
 #: apps/io.ox/contacts/main.js:356 apps/io.ox/contacts/main.js:689
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:62 module:io.ox/mail
@@ -2277,8 +2277,8 @@ msgstr "EB"
 #: apps/io.ox/core/pubsub/settings/pane.js:219 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:220 apps/io.ox/files/actions.js:879
 #: module:io.ox/files apps/io.ox/mail/actions.js:991
-#: apps/io.ox/mail/mailfilter/settings/filter.js:131
-#: apps/io.ox/mail/mailfilter/settings/filter.js:136
+#: apps/io.ox/mail/mailfilter/settings/filter.js:132
+#: apps/io.ox/mail/mailfilter/settings/filter.js:137
 #: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
 #: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:971
 #: apps/io.ox/mail/settings/signatures/register.js:277
@@ -2323,7 +2323,7 @@ msgstr "配布リストを編集"
 msgid "Edit draft"
 msgstr "下書きを編集"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:42 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:43 module:io.ox/mail
 msgid "Edit rule"
 msgstr "ルールを編集"
 
@@ -2462,8 +2462,8 @@ msgstr "フォルダを空にしています... 数秒かかる場合があり�
 
 #: apps/io.ox/core/pubsub/settings/pane.js:233 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:234
-#: apps/io.ox/mail/mailfilter/settings/filter.js:128 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:252
+#: apps/io.ox/mail/mailfilter/settings/filter.js:129 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:253
 #: apps/io.ox/portal/settings/pane.js:335 module:io.ox/portal
 msgid "Enable"
 msgstr "有効"
@@ -3331,7 +3331,7 @@ msgstr "出席依頼"
 msgid "Invite to %s"
 msgstr "%s に出席依頼"
 
-#: apps/io.ox/contacts/actions.js:780 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:781 module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:55 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:69 apps/io.ox/mail/actions.js:1073
 msgid "Invite to appointment"
@@ -3573,7 +3573,7 @@ msgstr "メール"
 msgid "Mail Details"
 msgstr "メールの詳細"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:361 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:362 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 #, fuzzy
 #| msgid "Mail Filter"
@@ -3883,7 +3883,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:424 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:474 apps/io.ox/calendar/actions.js:668
 #: apps/io.ox/calendar/toolbar.js:85 apps/io.ox/contacts/actions.js:194
-#: module:io.ox/contacts apps/io.ox/contacts/actions.js:815
+#: module:io.ox/contacts apps/io.ox/contacts/actions.js:816
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:75 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:105
 #: apps/io.ox/core/commons-folderview.js:644 module:io.ox/core
@@ -3925,7 +3925,7 @@ msgstr "マイ パスワード"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:80 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:228 module:io.ox/core/pubsub
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:531
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:561
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "名前"
@@ -4114,7 +4114,7 @@ msgstr "メッセージが選択されていません。"
 msgid "No notifications"
 msgstr "通知はありません。"
 
-#: apps/io.ox/contacts/actions.js:577 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:578 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:509 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:388 module:io.ox/tasks
 msgid "No preview available"
@@ -4315,7 +4315,7 @@ msgstr "外部リンクを開く"
 msgid "Open folder view"
 msgstr "フォルダ ビューを開く"
 
-#: apps/io.ox/contacts/actions.js:852 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:853 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:453 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1186 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:648 module:io.ox/tasks
@@ -4861,7 +4861,7 @@ msgstr "仕事への出席依頼をすべて隠す"
 msgid "Press to hide all task reminders."
 msgstr "仕事のアラームをすべて隠す"
 
-#: apps/io.ox/contacts/actions.js:845 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:846 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:446 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/attachmentsUtil.js:93 apps/io.ox/mail/actions.js:1179
 #: module:io.ox/mail apps/io.ox/tasks/actions.js:641 module:io.ox/tasks
@@ -4886,8 +4886,8 @@ msgstr "既定のアカウント"
 
 #: apps/io.ox/calendar/actions.js:625 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:677 apps/io.ox/calendar/toolbar.js:78
-#: apps/io.ox/calendar/toolbar.js:152 apps/io.ox/contacts/actions.js:317
-#: module:io.ox/contacts apps/io.ox/contacts/actions.js:771
+#: apps/io.ox/calendar/toolbar.js:152 apps/io.ox/contacts/actions.js:318
+#: module:io.ox/contacts apps/io.ox/contacts/actions.js:772
 #: apps/io.ox/contacts/toolbar.js:98 apps/io.ox/core/print.js:108
 #: module:io.ox/core apps/io.ox/mail/actions.js:1111 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:130 apps/io.ox/tasks/actions.js:626
@@ -5313,7 +5313,7 @@ msgstr "購入品を確認"
 msgid "Room number"
 msgstr "部屋番号"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:761
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:791
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "ルール名"
@@ -5347,7 +5347,7 @@ msgstr "土曜日"
 #: apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:65 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:90
+#: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/settings/signatures/register.js:108
 #: apps/io.ox/mail/write/view-main.js:55 apps/io.ox/oauth/settings.js:80
 #: module:io.ox/settings/oauth apps/io.ox/tasks/edit/view-template.js:47
@@ -5377,7 +5377,7 @@ msgstr "ファイルとして保存"
 msgid "Save attachment"
 msgstr "添付ファイルを保存"
 
-#: apps/io.ox/contacts/actions.js:866 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:867 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:467 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1200 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:662 module:io.ox/tasks
@@ -5486,7 +5486,7 @@ msgstr "すべてを選択"
 
 #: apps/io.ox/mail/accounts/view-form.js:341 module:io.ox/settings/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:58
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:423
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:453
 msgid "Select folder"
 msgstr "フォルダを選択"
 
@@ -5509,7 +5509,7 @@ msgstr "開封通知を送信"
 msgid "Send as internal link"
 msgstr "内部リンクとして送信"
 
-#: apps/io.ox/contacts/actions.js:764 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:765 module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:48 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:91
 msgid "Send as vCard"
@@ -5524,7 +5524,7 @@ msgstr "メールで送信"
 msgid "Send feedback"
 msgstr "フィードバックを送信"
 
-#: apps/io.ox/contacts/actions.js:755 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:756 module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:41 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:62
 msgid "Send mail"
@@ -5816,7 +5816,7 @@ msgstr "サイズ"
 msgid "Size (bytes)"
 msgstr "サイズ (バイト)"
 
-#: apps/io.ox/contacts/actions.js:838 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:839 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:439 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/toolbar.js:79 module:io.ox/files
 #: apps/io.ox/mail/actions.js:1172 module:io.ox/mail
@@ -6281,7 +6281,7 @@ msgstr ""
 msgid "The changes have been rejected"
 msgstr "変更が拒否されました。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:398
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:428
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr "文字 \" \" は許可されていません。"
@@ -6375,6 +6375,10 @@ msgstr "一つのフィールド内の宛先の数は %1$s 件に制限されま
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186 module:io.ox/contacts
 msgid "The person %1$s is already in the list"
 msgstr "人 %1$s は既に一覧に存在します。"
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
+msgid "The positions of vacation notice and auto forward cannot be changed"
+msgstr ""
 
 #: apps/io.ox/files/api.js:354 module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -6498,7 +6502,7 @@ msgstr[0] "この期間には既に %1$d 件のアポイントがあります。
 msgid "There is no recent activity in your Xing network."
 msgstr "ご利用のネットワークでは、アクティビティがありません。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:380 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:381 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "定義されているルールはありません。"
 
@@ -6546,7 +6550,7 @@ msgid "This contact is private and cannot be shared"
 msgstr ""
 "この連絡先はプライベートの連絡先として設定されているため、共有できません。"
 
-#: apps/io.ox/contacts/actions.js:471 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:472 module:io.ox/contacts
 msgid "This distribution list has been added to the portal"
 msgstr "この配布リストをポータルに追加しました。"
 
@@ -6695,7 +6699,7 @@ msgstr "このメールには内容がありません。"
 msgid "This note will not be printed"
 msgstr "このメモは印刷されません。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:121
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:149
 #: module:io.ox/settings/settings
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
@@ -7045,7 +7049,7 @@ msgstr ""
 "キーと同時に押すと年を、また、カーソル キーと Shift キーを同時に押すと月を変"
 "更できます。日付の選択ウィンドウを閉じるには、Esc キーを押してください。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:220 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:221 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:254 module:io.ox/portal
 msgid "Use cursor keys to change the item position"
 msgstr "カーソルキーを使用して、アイテムの位置を変更できます。"
@@ -7959,7 +7963,7 @@ msgstr "すべてのオブジェクトを表示"
 msgid "read own objects"
 msgstr "自分のオブジェクトのみを表示"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:150 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:151 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:346 module:io.ox/portal
 msgid "remove"
 msgstr "削除"

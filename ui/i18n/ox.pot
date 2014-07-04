@@ -272,8 +272,8 @@ msgstr ""
 #: apps/io.ox/mail/actions.js:874
 #: apps/io.ox/mail/actions/attachmentSave.js:66
 #: apps/io.ox/mail/folderview-extensions.js:106
-#: apps/io.ox/mail/mailfilter/settings/filter.js:91
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
+#: apps/io.ox/mail/mailfilter/settings/filter.js:92
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:457
 #: apps/io.ox/mail/main.js:256
 #: apps/io.ox/mail/main.js:967
 #: apps/io.ox/mail/write/inline-images.js:80
@@ -389,7 +389,7 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js:69
 #: apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:799
+#: apps/io.ox/contacts/actions.js:800
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:69
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:82
@@ -453,7 +453,7 @@ msgstr[1] ""
 #: apps/io.ox/calendar/toolbar.js:85
 #: apps/io.ox/contacts/actions.js:194
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:815
+#: apps/io.ox/contacts/actions.js:816
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:75
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:105
@@ -525,9 +525,9 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:677
 #: apps/io.ox/calendar/toolbar.js:78
 #: apps/io.ox/calendar/toolbar.js:152
-#: apps/io.ox/contacts/actions.js:317
+#: apps/io.ox/contacts/actions.js:318
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:771
+#: apps/io.ox/contacts/actions.js:772
 #: apps/io.ox/contacts/toolbar.js:98
 #: apps/io.ox/core/print.js:108
 #: module:io.ox/core
@@ -544,7 +544,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:641
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:56
-#: apps/io.ox/contacts/actions.js:789
+#: apps/io.ox/contacts/actions.js:790
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:350
 #: apps/io.ox/contacts/main.js:356
@@ -558,8 +558,8 @@ msgstr ""
 #: apps/io.ox/files/actions.js:879
 #: module:io.ox/files
 #: apps/io.ox/mail/actions.js:991
-#: apps/io.ox/mail/mailfilter/settings/filter.js:131
-#: apps/io.ox/mail/mailfilter/settings/filter.js:136
+#: apps/io.ox/mail/mailfilter/settings/filter.js:132
+#: apps/io.ox/mail/mailfilter/settings/filter.js:137
 #: apps/io.ox/mail/main.js:143
 #: apps/io.ox/mail/main.js:149
 #: apps/io.ox/mail/main.js:251
@@ -1059,7 +1059,7 @@ msgstr ""
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:65
 #: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:90
+#: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/settings/signatures/register.js:108
 #: apps/io.ox/mail/write/view-main.js:55
 #: apps/io.ox/oauth/settings.js:80
@@ -2282,7 +2282,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/actions.js:195
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:823
+#: apps/io.ox/contacts/actions.js:824
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:81
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:113
@@ -2303,12 +2303,12 @@ msgstr ""
 msgid "Contacts have been copied"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:471
+#: apps/io.ox/contacts/actions.js:472
 #: module:io.ox/contacts
 msgid "This distribution list has been added to the portal"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:577
+#: apps/io.ox/contacts/actions.js:578
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:509
 #: module:io.ox/core/tk/attachments
@@ -2317,7 +2317,7 @@ msgstr ""
 msgid "No preview available"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:620
+#: apps/io.ox/contacts/actions.js:621
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:573
 #: module:io.ox/core/tk/attachments
@@ -2326,19 +2326,19 @@ msgstr ""
 msgid "Attachments have been saved!"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:735
+#: apps/io.ox/contacts/actions.js:736
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js:105
 #: apps/io.ox/contacts/distrib/create-dist-view.js:107
 msgid "Add contact"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:742
+#: apps/io.ox/contacts/actions.js:743
 #: module:io.ox/contacts
 msgid "Add distribution list"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:755
+#: apps/io.ox/contacts/actions.js:756
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:41
 #: module:io.ox/mail
@@ -2346,7 +2346,7 @@ msgstr ""
 msgid "Send mail"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:764
+#: apps/io.ox/contacts/actions.js:765
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:48
 #: module:io.ox/mail
@@ -2354,7 +2354,7 @@ msgstr ""
 msgid "Send as vCard"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:780
+#: apps/io.ox/contacts/actions.js:781
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:55
 #: module:io.ox/mail
@@ -2363,7 +2363,7 @@ msgstr ""
 msgid "Invite to appointment"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:807
+#: apps/io.ox/contacts/actions.js:808
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:121
 #: apps/io.ox/files/actions.js:948
@@ -2376,14 +2376,14 @@ msgstr ""
 msgid "Add to portal"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:830
+#: apps/io.ox/contacts/actions.js:831
 #: module:io.ox/contacts
 #: apps/io.ox/mail/actions.js:1158
 #: module:io.ox/mail
 msgid "Add to address book"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:838
+#: apps/io.ox/contacts/actions.js:839
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:439
 #: module:io.ox/core/tk/attachments
@@ -2396,7 +2396,7 @@ msgstr ""
 msgid "Slideshow"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:845
+#: apps/io.ox/contacts/actions.js:846
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:446
 #: module:io.ox/core/tk/attachments
@@ -2408,7 +2408,7 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:852
+#: apps/io.ox/contacts/actions.js:853
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:453
 #: module:io.ox/core/tk/attachments
@@ -2419,7 +2419,7 @@ msgstr ""
 msgid "Open in browser"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:859
+#: apps/io.ox/contacts/actions.js:860
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:460
 #: module:io.ox/core/tk/attachments
@@ -2437,7 +2437,7 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:866
+#: apps/io.ox/contacts/actions.js:867
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:467
 #: module:io.ox/core/tk/attachments
@@ -2481,7 +2481,7 @@ msgstr ""
 #: apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:228
 #: module:io.ox/core/pubsub
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:531
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:561
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr ""
@@ -2665,7 +2665,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342
 #: apps/io.ox/mail/detail/view.js:88
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:733
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:763
 #: module:io.ox/settings/settings
 msgid "Actions"
 msgstr ""
@@ -4526,9 +4526,9 @@ msgstr ""
 #: apps/io.ox/core/pubsub/settings/pane.js:233
 #: module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:234
-#: apps/io.ox/mail/mailfilter/settings/filter.js:128
+#: apps/io.ox/mail/mailfilter/settings/filter.js:129
 #: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:252
+#: apps/io.ox/mail/mailfilter/settings/filter.js:253
 #: apps/io.ox/portal/settings/pane.js:331
 #: module:io.ox/portal
 msgid "Disable"
@@ -4537,9 +4537,9 @@ msgstr ""
 #: apps/io.ox/core/pubsub/settings/pane.js:233
 #: module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:234
-#: apps/io.ox/mail/mailfilter/settings/filter.js:128
+#: apps/io.ox/mail/mailfilter/settings/filter.js:129
 #: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:252
+#: apps/io.ox/mail/mailfilter/settings/filter.js:253
 #: apps/io.ox/portal/settings/pane.js:335
 #: module:io.ox/portal
 msgid "Enable"
@@ -6222,7 +6222,7 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js:341
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:58
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:423
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:453
 msgid "Select folder"
 msgstr ""
 
@@ -6702,44 +6702,49 @@ msgstr ""
 msgid "Drop EML file here for import"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:42
+#: apps/io.ox/mail/mailfilter/settings/filter.js:43
 #: module:io.ox/mail
 msgid "Create new rule"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:42
+#: apps/io.ox/mail/mailfilter/settings/filter.js:43
 #: module:io.ox/mail
 msgid "Edit rule"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:150
+#: apps/io.ox/mail/mailfilter/settings/filter.js:151
 #: module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:346
 #: module:io.ox/portal
 msgid "remove"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:220
+#: apps/io.ox/mail/mailfilter/settings/filter.js:221
 #: module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:254
 #: module:io.ox/portal
 msgid "Use cursor keys to change the item position"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:361
+#: apps/io.ox/mail/mailfilter/settings/filter.js:362
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 msgid "Mail Filter Rules"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:363
+#: apps/io.ox/mail/mailfilter/settings/filter.js:364
 #: module:io.ox/mail
 msgid "Add new rule"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:380
+#: apps/io.ox/mail/mailfilter/settings/filter.js:381
 #: module:io.ox/mail
 msgid "There is no rule defined"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:452
+#: module:io.ox/mail
+msgid "The positions of vacation notice and auto forward cannot be changed"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:152
@@ -6857,43 +6862,43 @@ msgstr ""
 msgid "Flag mail with"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:121
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:149
 #: module:io.ox/settings/settings
 msgid "This rule applies to all messages. Please add a condition to restrict this rule to specific messages."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:398
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:428
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:732
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:762
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:742
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:772
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:747
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:777
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:761
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:791
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:780
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:810
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:784
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:814
 msgid "Apply rule if all conditions are met"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:780
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:810
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr ""
