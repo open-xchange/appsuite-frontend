@@ -85,7 +85,7 @@ define('io.ox/core/folder/tree',
                         top = offset.top - 7,
                         left = offset.left + target.outerWidth() + 7;
 
-                    dropdown.find('.dropdown-menu').css({ top: top, left: left }).busy();
+                    dropdown.find('.dropdown-menu').css({ top: top, left: left, bottom: 'auto' }).busy();
                     dropdown.addClass('open').data('previous-focus', target); // helps to restore focus (see renderContextMenu)
 
                     // load relevant code on demand
@@ -124,6 +124,10 @@ define('io.ox/core/folder/tree',
             api.get({ folder: id }).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, options: { type: module } });
                 ext.point(point).invoke('draw', ul, baton);
+                // check if menu exceeds viewport
+                if (ul.offset().top + ul.outerHeight() > $(window).height()) {
+                    ul.css({ top: 'auto', bottom: '20px' });
+                }
             });
         },
 
