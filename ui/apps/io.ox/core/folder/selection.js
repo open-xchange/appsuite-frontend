@@ -46,6 +46,9 @@ define('io.ox/core/folder/selection', [], function () {
 
         onClick: function (e) {
 
+            // avoid double selections
+            if (e.isDefaultPrevented()) return; else e.preventDefault();
+
             var items = this.getItems(),
                 current = $(e.currentTarget),
                 index = items.index(current) || 0;

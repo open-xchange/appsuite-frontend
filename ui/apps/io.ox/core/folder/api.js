@@ -14,9 +14,8 @@
 define('io.ox/core/folder/api',
     ['io.ox/core/http',
      'io.ox/core/event',
-     'settings!io.ox/mail',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'], function (http, Events, mailSettings, coreSettings, gt) {
+     'io.ox/core/folder/util',
+     'gettext!io.ox/core'], function (http, Events, util, gt) {
 
     'use strict';
 
@@ -37,11 +36,6 @@ define('io.ox/core/folder/api',
     function onChangeModelId(model) {
         delete pool.models[model.previous('id')];
         pool.models[model.id] = model;
-    }
-
-    function getDefaultFolder(type) {
-        type = type || 'mail';
-        return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 
     //
@@ -176,9 +170,10 @@ define('io.ox/core/folder/api',
 
     function update(id, changes) {
 
-        // update model first
-        var model = pool.getModel(id);
-        model.set(changes);
+        if (!_.isObject(changes) || _.isEmpty(changes)) return;
+
+        // update model
+        var model = pool.getModel(id).set(changes);
 
         return http.PUT({
             module: 'folders',
@@ -193,14 +188,14 @@ define('io.ox/core/folder/api',
         })
         .then(
             function success(newId) {
-                // id change?
-                if (id !== newId) {
-                    model.set('id', newId);
-                    // fetch sub-folders of parent folder to ensure proper order after rename
-                    return list(model.get('folder_id'), { cache: false });
-                }
+                // id change? (caused by rename or move)
+                if (id !== newId) model.set('id', newId);
                 // trigger event
                 api.trigger('update', id, newId, model.toJSON());
+                // fetch subfolders of parent folder to ensure proper order after rename/move
+                if (id !== newId) return list(model.get('folder_id'), { cache: false }).then(function () {
+                    return newId;
+                });
             },
             function fail(error) {
                 if (error && error.code && error.code === 'FLD-0018')
@@ -208,6 +203,32 @@ define('io.ox/core/folder/api',
                 api.trigger('update:fail', error, id);
             }
         );
+    }
+
+    //
+    // Move folder
+    //
+
+    function move(id, target) {
+
+        if (id === target) return;
+
+        // prepare move
+        var model = pool.getModel(id),
+            parent = model.get('folder_id'),
+            collection = pool.getCollection(parent);
+
+        // remove model from parent collection
+        collection.remove(model);
+        // update parent folder; subfolders might have changed
+        pool.getModel(parent).set('subfolders', collection.length > 0);
+
+        return update(id, { folder_id: target }).done(function (newId) {
+            // update new parent folder
+            pool.getModel(target).set('subfolders', true);
+            // trigger event
+            api.trigger('move', id, newId);
+        });
     }
 
     //
@@ -323,10 +344,13 @@ define('io.ox/core/folder/api',
         get: get,
         list: list,
         update: update,
+        move: move,
         create: create,
         remove: remove,
         refresh: refresh,
-        getDefaultFolder: getDefaultFolder
+        is: util.is,
+        can: util.can,
+        getDefaultFolder: util.getDefaultFolder
     };
 
     // add event hub

@@ -256,6 +256,11 @@ define('io.ox/core/folder/view',
             tree.selection.set(id);
         });
 
+        // respond to folder move
+        api.on('move', function (e, id, newId) {
+            tree.selection.set(newId);
+        });
+
         // show
         if (options.visible) app.folderView.show();
     }

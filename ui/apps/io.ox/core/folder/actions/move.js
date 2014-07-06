@@ -12,65 +12,65 @@
  */
 
 define('io.ox/core/folder/actions/move',
-    ['io.ox/core/api/folder',
+    ['io.ox/core/folder/api',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (api, notifications, gt) {
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/tk/folderviews',
+     'gettext!io.ox/core'], function (api, notifications, dialogs, views, gt) {
 
     'use strict';
 
-    return function moveFolder(baton) {
+    return function (id) {
 
-        var id = baton.app.folder.get();
+        var model = api.pool.getModel(id), module = model.get('module');
 
-        api.get({ folder: id }).done(function (folder) {
-            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-                var title = gt('Move folder'),
-                    dialog = new dialogs.ModalDialog()
-                        .header(
-                            api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
-                        )
-                        .addPrimaryButton('ok', title)
-                        .addButton('cancel', gt('Cancel'));
-                dialog.getBody().css('height', '250px');
-                var type = baton.options.type,
-                    tree = new views.FolderTree(dialog.getBody(), {
-                        type: type,
-                        rootFolderId: type === 'infostore' ? '9' : '1',
-                        skipRoot: type === 'mail' ? false : true,
-                        tabindex: 0,
-                        cut: folder.id,
-                        customize: function (target) {
-                            if (type === 'mail' && target.module === 'system') {
-                                return;
-                            }
-                            if (!api.can('moveFolder', folder, target)) {
-                                this.removeClass('selectable').addClass('disabled');
-                            }
-                        }
-                    });
-                dialog.show(function () {
-                    tree.paint().done(function () {
-                        // open the foldertree to the current folder
-                        tree.select(folder.id).done(function () {
-                            // select first active element
-                            tree.selection.updateIndex().selectFirst();
-                            // focus
-                            dialog.getBody().focus();
-                        });
-                    });
-                })
-                .done(function (action) {
-                    if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
-                            // move action
-                            api.move(folder.id, selectedFolder[0]).fail(notifications.yell);
-                        }
-                    }
-                    tree.destroy().done(function () {
-                        tree = dialog = null;
-                    });
+        var dialog = new dialogs.ModalDialog({ async: true })
+            .header(
+                $('<h4>').append(
+                    $.txt(gt('Move folder')),
+                    $.txt(': '),
+                    $.txt(model.get('title'))
+                )
+            )
+            .addPrimaryButton('ok', gt('Ok'))
+            .addButton('cancel', gt('Cancel'));
+
+        dialog.getBody().css('height', '250px');
+
+        var tree = new views.FolderTree(dialog.getBody(), {
+            type: module,
+            rootFolderId: module === 'infostore' ? '9' : '1',
+            skipRoot: module !== 'mail', // skip root unless mail
+            tabindex: 0,
+            cut: id,
+            customize: function (target) {
+                if (module === 'mail' && target.module === 'system') return;
+                if (!api.can('move:folder', model.toJSON(), target)) {
+                    this.removeClass('selectable').addClass('disabled');
+                }
+            }
+        });
+
+        dialog.on('ok', function () {
+            var target = tree.selection.get();
+            if (target.length !== 1) return this.close();
+            // move action
+            api.move(id, target[0]).then(this.close, this.idle).fail(notifications.yell);
+        })
+        .show(function () {
+            tree.paint().done(function () {
+                // open the foldertree to the current folder
+                tree.select(id).done(function () {
+                    // select first active element
+                    tree.selection.updateIndex().selectFirst();
+                    // focus
+                    dialog.getBody().focus();
                 });
+            });
+        })
+        .done(function () {
+            tree.destroy().done(function () {
+                tree = dialog = null;
             });
         });
     };
