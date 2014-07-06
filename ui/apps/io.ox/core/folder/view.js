@@ -233,18 +233,27 @@ define('io.ox/core/folder/view',
 
         // respond to folder change events
 
-        tree.on('change', function (id) {
-            app.folder.set(id);
-        });
+        (function folderChangeEvents() {
 
-        app.on('folder:change', function (id) {
-            tree.selection.set(id);
-        });
+            var ignoreChangeEvent = false;
+
+            tree.on('change', function (id) {
+                ignoreChangeEvent = true;
+                app.folder.set(id);
+                ignoreChangeEvent = false;
+            });
+
+            app.on('folder:change', function (id) {
+                if (ignoreChangeEvent) return;
+                tree.selection.set(id);
+            });
+
+        }());
 
         // set initial folder
         var id = app.folder.get();
         if (id) {
-            tree.on('appear:' + id, function () {
+            tree.once('appear:' + id, function () {
                 tree.selection.preselect(id);
             });
         }

@@ -171,6 +171,17 @@ define('io.ox/core/folder/tree',
             }
         },
         {
+            id: 'duplicate-test',
+            index: INDEX += 100,
+            draw: function (tree) {
+                this.append(
+                    new TreeNodeView({ folder: 'default0/INBOX/D Wurst 3000', open: true, tree: tree, parent: tree })
+                    .render().$el,
+                    $('<hr style="border-color: #ccc; margin: 10px 0;">')
+                );
+            }
+        },
+        {
             id: 'standard-folders',
             index: INDEX += 100,
             draw: function (tree) {

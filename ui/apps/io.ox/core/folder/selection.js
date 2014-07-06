@@ -26,22 +26,31 @@ define('io.ox/core/folder/selection', [], function () {
 
     _.extend(Selection.prototype, {
 
+        byId: function (id, items) {
+            items = items || this.getItems();
+            return items.filter('[data-id="' + $.escape(id) + '"]').first(); // use first, we might have duplicates
+        },
+
         get: function () {
             return this.view.$el.find('.selectable.selected').attr('data-id');
         },
 
         set: function (id) {
             var items = this.getItems(),
-                node = items.filter('[data-id="' + $.escape(id) + '"]'),
+                node = this.byId(id),
                 index = items.index(node);
-            // check if already selected to avoid event loops
-            if (index === -1 || node.hasClass('selected')) return;
+            // not found?
+            if (index === -1) return;
+            // check if already selected to avoid event loops.
+            // just checking hasClass('selected') doesn't work.
+            // we use get() to support duplicates!
+            if (this.get() === id) return;
+            // go!
             this.pick(index, items, { focus: false });
         },
 
         preselect: function (id) {
-            var node = this.getItems().filter('[data-id="' + $.escape(id) + '"]');
-            this.check(node);
+            this.check(this.byId(id));
         },
 
         onClick: function (e) {
