@@ -17,6 +17,7 @@ define('io.ox/core/folder/tree',
      'io.ox/core/api/folder',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
+     'io.ox/core/folder/favorites',
      'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, account, ext) {
 
     'use strict';
@@ -47,7 +48,7 @@ define('io.ox/core/folder/tree',
 
         filter: function (folder, model) {
             // only standard folder on top level
-            if (folder === '1337') {
+            if (folder === '1') {
                 return account.isStandardFolder(model.id);
             }
             // other folders
@@ -167,17 +168,6 @@ define('io.ox/core/folder/tree',
                 this.append(
                     // headline
                     $('<h2>').text('New folder tree')
-                );
-            }
-        },
-        {
-            id: 'duplicate-test',
-            index: INDEX += 100,
-            draw: function (tree) {
-                this.append(
-                    new TreeNodeView({ folder: 'default0/INBOX/D Wurst 3000', open: true, tree: tree, parent: tree })
-                    .render().$el,
-                    $('<hr style="border-color: #ccc; margin: 10px 0;">')
                 );
             }
         },

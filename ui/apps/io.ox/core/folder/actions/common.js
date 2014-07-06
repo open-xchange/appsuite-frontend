@@ -23,12 +23,10 @@ define('io.ox/core/folder/actions/common',
     return {
 
         markFolderSeen: function (e) {
-            e.preventDefault();
             mailAPI.allSeen(e.data.folder);
         },
 
         expungeFolder: function (e) {
-            e.preventDefault();
             // get current folder id
             var folder = e.data.folder;
             notifications.yell('busy', gt('Cleaning up... This may take a few seconds.'));
@@ -38,9 +36,6 @@ define('io.ox/core/folder/actions/common',
         },
 
         clearFolder: function (e) {
-
-            e.preventDefault();
-
             var baton = e.data.baton,
             id = _(baton.app.folderView.selection.get()).first();
             folderAPI.get({ folder: id }).done(function (folder) {
