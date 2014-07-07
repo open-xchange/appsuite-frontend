@@ -254,8 +254,18 @@
 
             fileCache.cache = function (name, contents) {
                 fileToc.push(name);
-                storage.setItem(name, contents);
-                storage.setItem('file-toc', JSON.stringify(fileToc));
+                try {
+                    storage.setItem(name, contents);
+                    storage.setItem('file-toc', JSON.stringify(fileToc));
+                } catch (e) {
+                    // quota exceeded
+                    if (e.name === 'QUOTA_EXCEEDED_ERR') {
+                        console.warn('localStorage quota exceeded.');
+                    } else {
+                        console.warn('Failed writing to localStorage. ')
+                    }
+                    return;
+                }
             };
 
             fileCache.retrieve = function (name) {
