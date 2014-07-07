@@ -52,7 +52,6 @@ define('io.ox/core/session',
         set: set,
 
         autoLogin: function () {
-            var store = false;
             // GET request
             return http.GET({
                 module: 'login',
@@ -67,14 +66,14 @@ define('io.ox/core/session',
                     version: that.version()
                 }
             })
-            // If autologin fails, try the token login
             .then(
-                function (data) {
+                function success(data) {
                     ox.secretCookie = true;
                     ox.rampup = data.rampup || ox.rampup || {};
                     return data;
                 },
-                function (data) {
+                // If autologin fails, try token login
+                function fail(data) {
                     if (!_.url.hash('serverToken')) return data || {};
                     return http.POST({
                         module: 'login',
@@ -92,12 +91,14 @@ define('io.ox/core/session',
                         }
                     })
                     .then(function (response) {
-                        return response.data;
+                        // store cookie?
+                        (_.url.hash('store') ? that.store() : $.when()).then(function () {
+                            return response.data;
+                        });
                     });
                 }
             )
             .done(function () {
-                store = _.url.hash('store');
                 _.url.hash({
                     jsessionid: null,
                     serverToken: null,
