@@ -177,10 +177,14 @@ define('io.ox/mail/compose/model',
             );
 
             result.attachments = this.get('attachments').filter(function (a) {
-                return !a.needsUpload();
+                return !!a.get('content');
             }).map(function (m) {
                 return m.attributes;
             });
+
+            result.infostore_ids = this.get('attachments').filter(function (a) {
+                return a.get('group') === 'file' && !a.needsUpload();
+            }).pluck('id');
 
             result.files = this.get('attachments').filter(function (a) {
                 return a.needsUpload();

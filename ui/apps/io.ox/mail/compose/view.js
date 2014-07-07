@@ -85,8 +85,14 @@ define('io.ox/mail/compose/view',
                             multiselect: true
                         });
                         //FIXME: why must the model be binded, here?
-                        picker
-                            .then(baton.model.attachFiles.bind(baton.model));
+                        picker.then(function (files) {
+                            var list = [];
+                            //fileList to array of files
+                            _(files).each(function (file) {
+                                list.push(_.extend(file, {group: 'file'}));
+                            });
+                            baton.model.attachFiles.call(baton.model, list);
+                        });
                     });
                 });
             }).done(function ($el) {
