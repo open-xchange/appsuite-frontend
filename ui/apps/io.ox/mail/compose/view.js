@@ -190,7 +190,7 @@ define('io.ox/mail/compose/view',
         id: 'attachmentList',
         index: 200,
         draw: function (baton) {
-            var node = $('<div class="row attachments-list">');
+            var node = $('<div class="col-xs-12 attachments-list">');
             extensions.attachmentList.call(node, baton);
             node.appendTo(this);
         }
