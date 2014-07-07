@@ -23,7 +23,7 @@ define('io.ox/editor/main',
 
     var EditorView = Backbone.View.extend({
 
-        className: 'io-ox-editor container-fluid abs',
+        className: 'io-ox-editor container default-content-padding abs',
 
         events: {
             'submit form': 'onSubmit',
