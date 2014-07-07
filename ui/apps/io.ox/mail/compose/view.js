@@ -102,7 +102,7 @@ define('io.ox/mail/compose/view',
         }
     });
 
-    ext.point(POINT + '/composetoolbar').extend({
+    ext.point(POINT + '/signatures').extend({
         id: 'signature',
         index: INDEX += 100,
         draw: extensions.signature
@@ -146,13 +146,17 @@ define('io.ox/mail/compose/view',
         id: 'menu',
         index: INDEX += 100,
         draw: function (baton) {
-            var dropdown = new Dropdown({ label: gt('Options'), model: baton.model });
+            var optionDropdown    = new Dropdown({ model: baton.model, label: gt('Options') }),
+                signatureDropdown = new Dropdown({ model: baton.model, label: gt('Signature') })
+                .option('signature', '', gt('No signature'));
 
-            ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
+            ext.point(POINT + '/menuoptions').invoke('draw', optionDropdown.$el, baton);
+            ext.point(POINT + '/signatures').invoke('draw', signatureDropdown.$el, baton);
 
             this.append(
-                $('<div class="col-xs-6 col-md-3">').append(
-                    dropdown.render().$el.addClass('pull-right')
+                $('<div class="col-xs-6 col-md-3 pull-right">').append(
+                    optionDropdown.render().$el.addClass('pull-right'),
+                    signatureDropdown.render().$el.addClass('pull-right signatures')
                 )
             );
         }

@@ -197,8 +197,7 @@ define('io.ox/mail/compose/extensions',
         },
 
         signature: function (baton) {
-            var dropdown = new Dropdown({ model: baton.model, label: gt('Signature'), tagName: 'span' })
-                .option('signature', '', gt('No signature'));
+            var self = this;
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').done(function (signatures) {
                     baton.view.signatures = signatures;
@@ -208,18 +207,11 @@ define('io.ox/mail/compose/extensions',
 
                     if (sa.length >= 1) {
                         _.each(sa, function (item) {
-                            dropdown.option('signature', item.id, item.displayName);
+                            self.data('view').option('signature', item.id, item.displayName);
                         });
                     }
                 });
             });
-
-            this.append(
-                $('<div class="col-xs-6 col-md-3">').append(
-                    dropdown.render().$el
-                        .attr('data-dropdown', 'signature')
-                )
-            );
         },
 
         attachmentList: function (baton) {

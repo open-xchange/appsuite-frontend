@@ -25,17 +25,19 @@
                 margin-bottom: 0;
                 padding-top: 0;
             }
-
         }
 
         &.subject input {
             font-weight: bold;
         }
 
-        .dropdown a {
-            color: @mail-attachment-link-color;
-        }
+        .dropdown {
+            &.signatures { margin-right: 15px; }
 
+            a {
+                color: @mail-attachment-link-color;
+            }
+        }
     }
 
     .header {
@@ -50,7 +52,6 @@
         .btn {
             margin-left: 10px;
         }
-
     }
 
     .recipient-actions {
@@ -65,7 +66,6 @@
             padding-right: 7px;
             color: #055;
         }
-
     }
 
     .editable-toolbar {
@@ -75,7 +75,6 @@
         & > div {
             display: block !important;
         }
-
     }
 
     .editable {
@@ -102,11 +101,8 @@
                 margin: 2px;
                 .picture(16px, 16px);
             }
-
         }
-
     }
-
 }
 
 .io-ox-mail-compose-contact {
