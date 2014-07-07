@@ -148,7 +148,7 @@ define('io.ox/contacts/api',
                 sort: '607', // magic sort field - ignores asc/desc
                 getData: function (originalQuery, opt) {
                     var queryFields = {
-                            names: ('display_name first_name last_name yomiFirstName yomiLastName company yomiCompany ' +
+                            names: ('display_name first_name last_name yomiFirstName yomiLastName company department yomiCompany ' +
                             'email1 email2 email3').split(' '),
                             addresses: ('street_home postal_code_home city_home state_home country_home ' +
                             'street_business postal_code_business city_business state_business country_business ' +
