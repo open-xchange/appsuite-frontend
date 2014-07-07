@@ -275,7 +275,7 @@ define('io.ox/mail/compose/extensions',
             }, def.reject);
             return def;
         },
-        attachment: function () {
+        attachment: function (baton) {
             var $el = $('<div class="col-xs-12 col-md-6">'),
                 def = $.Deferred(),
                 dropdown = new Dropdown({ model: baton.model, label: gt('Attachments'), tagName: 'span' });
