@@ -15,15 +15,22 @@
 
     & > .row {
 
-        margin-bottom: 13px;
+        margin-bottom: 10px;
 
-        &.sender {
+        &.sender .dropdown {
+            padding-top: 8px;
+        }
 
-            margin-bottom: 8px;
+        div.dropdown {
 
-            label.maillabel {
-                margin-bottom: 0;
-                padding-top: 0;
+            margin-bottom: 5px;
+
+            &.signatures {
+                margin-right: 15px;
+            }
+
+            a {
+                color: @mail-attachment-link-color;
             }
         }
 
@@ -31,18 +38,11 @@
             font-weight: bold;
         }
 
-        .dropdown {
-            &.signatures { margin-right: 15px; }
-
-            a {
-                color: @mail-attachment-link-color;
-            }
-        }
     }
 
     .header {
 
-        margin-bottom: 20px;
+        margin-bottom: 5px;
 
         h1 {
             margin: 0;

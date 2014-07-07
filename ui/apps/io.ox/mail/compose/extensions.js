@@ -230,9 +230,9 @@ define('io.ox/mail/compose/extensions',
             return def;
         },
         attachment: function (baton) {
-            var $el = $('<div class="col-xs-12 col-md-6">'),
+            var $el = $('<div class="col-xs-12 col-md-5 col-md-offset-1">'),
                 def = $.Deferred(),
-                dropdown = new Dropdown({ model: baton.model, label: gt('Attachments'), tagName: 'span' });
+                dropdown = new Dropdown({ model: baton.model, label: gt('Attachments'), tagName: 'div' });
 
             dropdown.render();
             this.append(
