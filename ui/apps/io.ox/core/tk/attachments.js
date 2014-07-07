@@ -611,17 +611,24 @@ define('io.ox/core/tk/attachments',
     var Attachment = Backbone.Model.extend({
         defaults: {
             filename: '',
-            disp: 'attachment'
+            disp: 'attachment',
+            uploaded: 1
         },
-        initialize: function (attributes) {
-            if (attributes.name)
-                this.set('filename', attributes.name, {silent: true});
+        initialize: function (obj) {
+            if (obj instanceof window.File) {
+                this.fileObj = obj;
+                this.set('filename', obj.name, {silent: true});
+                this.set('uploaded', 0, {silent: true});
+            }
         },
         getTitle: function () {
             return this.get('filename');
         },
         isFileAttachment: function () {
             return this.get('disp') === 'attachment';
+        },
+        needsUpload: function () {
+            return this.get('uploaded') !== 1;
         }
     });
 

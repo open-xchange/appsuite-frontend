@@ -124,6 +124,7 @@ define('io.ox/mail/compose/model',
 
         getMail: function() {
 
+            var result;
             var convert = emoji.converterFor({to: emoji.sendEncoding()});
             var content = this.get('attachments').at(0).get('content');
             // get flat ids for data.infostore_ids
@@ -162,7 +163,7 @@ define('io.ox/mail/compose/model',
 
             this.get('attachments').at(0).set('content', content, {silent: true});
 
-            return _(this.toJSON()).pick(
+            result =  _(this.toJSON()).pick(
                 'from',
                 'to',
                 'cc',
@@ -172,9 +173,22 @@ define('io.ox/mail/compose/model',
                 'subject',
                 'priority',
                 'vcard',
-                'attachments',
                 'nested_msgs'
             );
+
+            result.attachments = this.get('attachments').filter(function (a) {
+                return !a.needsUpload();
+            }).map(function (m) {
+                return m.attributes;
+            });
+
+            result.files = this.get('attachments').filter(function (a) {
+                return a.needsUpload();
+            }).map(function (m) {
+                return m.fileObj;
+            });
+
+            return result;
         },
         convertAllToUnified: emoji.converterFor({
             from: 'all',
