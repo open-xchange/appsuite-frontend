@@ -15,10 +15,113 @@
 define('io.ox/core/tk/autocomplete',
     ['io.ox/core/util',
      'settings!io.ox/contacts',
-     'gettext!io.ox/mail'
+     'gettext!io.ox/mail',
+     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
+     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
     ], function (util, settings, gt) {
 
     'use strict';
+
+    $.fn.autocompleteNew = function (o) {
+        o = $.extend({
+            // use Math.max here to make sure we don't get a zero (strange behavior then & look-up is too expensive)
+            minLength: Math.max(1, settings.get('search/minimumQueryLength', 3)),
+            draw: null,
+            api: null,              // autocomplete API
+            tokenfield: false,
+            //get data
+            source: function (val) {
+                return this.api.search(val).then(function (data) {
+                    return o.placement === 'top' ? data.reverse() : data;
+                });
+            },
+            //remove untwanted items
+            reduce: function (data) {
+                return data;
+            },
+            name: function (data) {
+                return util.unescapeDisplayName(data.display_name);
+            },
+            // object related unique string
+            stringify: function (data) {
+                if (data.type === 2 || data.type === 3)
+                    return this.name(data.contact);
+
+                var name = this.name(data);
+                return name ? '"' + name + '" <' + data.email + '>' : data.email;
+            },
+
+
+
+
+            // TODO: not implemented for new autocomplete
+            maxResults: 25,
+            delay: 100,
+            blur: $.noop,
+            click: $.noop,
+            parentSelector: 'body',
+            autoselect: false,      // select first element on result callback
+            container: $('<div>').addClass('autocomplete-popup'),
+            mode: 'participant',
+            cbshow: null
+        }, o || {});
+
+        var typeaheadOptions = [{}, {
+                minLength: o.minLength,
+                source: function(query, callback) {
+                    o.source(query)
+                        .then(o.reduce)
+                        .then(function (data) {
+                            data =  _(data).map(function (data) {
+                                var stringResult = o.stringify(data);
+                                return {
+                                    value: stringResult.value || stringResult,
+                                    label: stringResult.label || stringResult,
+                                    data: data
+                                };
+                            });
+                            callback(data);
+                        });
+                },
+                templates: {
+                    suggestion: function (item) {
+                        var node = $('<div class="autocomplete-item">');
+                        o.draw.call(node, item.data);
+                        return node;
+                    }
+                }
+            }
+        ];
+
+        if (o.tokenfield) {
+            this.tokenfield({
+                createTokensOnBlur: true,
+                minLength: o.minLength,
+                typeahead: typeaheadOptions
+            }).on({
+                'tokenfield:createdtoken': function (e) {
+                    // A11y: set title
+                    var title = '',
+                        token = $(e.relatedTarget);
+                    if (e.attrs) {
+                        if (e.attrs.label !== e.attrs.value) {
+                            title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
+                        } else {
+                            title = e.attrs.label;
+                        }
+                    }
+                    token.attr({
+                        title: title
+                    });
+                }
+            });
+        } else {
+            this.typeahead.apply(this, typeaheadOptions);
+        }
+
+        return this;
+    };
 
     //returns the input elem
     $.fn.autocomplete = function (o) {
@@ -28,17 +131,14 @@ define('io.ox/core/tk/autocomplete',
             minLength: Math.max(1, settings.get('search/minimumQueryLength', 3)),
             maxResults: 25,
             delay: 100,
-            collection: null,
             draw: null,
             blur: $.noop,
             click: $.noop,
             parentSelector: 'body',
             autoselect: false,
             api: null,
-            node: null,
             container: $('<div>').addClass('autocomplete-popup'),
             mode: 'participant',
-            keyupRefocus: true,
 
             cbshow: null,
 
@@ -447,7 +547,6 @@ define('io.ox/core/tk/autocomplete',
             fnKeyUp = _.debounce(function (e, options) {
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
-                if (o.keyupRefocus) this.focus();
                 e.stopPropagation();
 
                 var opt = _.extend({}, (e.data || {}), options || {}),

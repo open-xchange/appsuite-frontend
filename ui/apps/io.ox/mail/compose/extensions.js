@@ -16,90 +16,12 @@ define('io.ox/mail/compose/extensions',
      'io.ox/backbone/mini-views/dropdown',
      'io.ox/core/extensions',
      'io.ox/core/api/autocomplete',
+     'io.ox/core/tk/autocomplete',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'settings!io.ox/mail',
-     'settings!io.ox/contacts',
-     'gettext!io.ox/mail',
-     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
-     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
-     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
-    ], function (sender, Dropdown, ext, AutocompleteAPI, contactsAPI, contactsUtil, settings, contactSettings, gt) {
-
-    $.fn.tokenize = function (o) {
-        // defaults
-        o = $.extend({
-            api: null,
-            model: null,
-            attr: 'to',
-            addClass: ''
-        }, o || {});
-
-        var input = $(this);
-
-        input.tokenfield({
-            createTokensOnBlur: true,
-            minLength: contactSettings.get('search/minimumQueryLength', 3),
-            typeahead: [{}, {
-                    source: function(query, callback) {
-                        autocompleteAPI.search(query).then(function (matches) {
-                            callback(_(matches).map(function (data) {
-                                return {
-                                    value: data.email || data.phone || '',
-                                    label: contactsUtil.getMailFullName(data),
-                                    data: data
-                                };
-                            }));
-                        });
-                    },
-                    templates: {
-                        suggestion: function (item) {
-                            var node = $('<div class="autocomplete-item">'),
-                                baton = ext.Baton({ data: item.data, autocomplete: true });
-                            ext.point('io.ox/mail/compose' + '/autoCompleteItem').invoke('draw', node, baton);
-                            return node;
-                        }
-                    }
-                }
-            ]
-        }).on({
-            'tokenfield:createdtoken': function (e) {
-                // A11y: set title
-                var title = '',
-                    token = $(e.relatedTarget);
-                if (e.attrs) {
-                    if (e.attrs.label !== e.attrs.value) {
-                        title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
-                    } else {
-                        title = e.attrs.label;
-                    }
-                }
-                token.attr({
-                    title: title
-                });
-                if (e.attrs) {
-                    var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
-                    token.prepend(
-                        contactsAPI.pictureHalo(
-                            $('<div class="contact-image">'),
-                            $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
-                        )
-                    );
-                }
-            },
-            'change': function () {
-                o.model.setTokens(o.attr, input.tokenfield('getTokens'));
-            }
-        });
-
-        // add class to tokenfield wrapper
-        input.parent().addClass(o.addClass);
-
-        // set initial values
-        input.tokenfield('setTokens', o.model.getTokens(o.attr) || [], true, false);
-
-        return input;
-    };
+     'gettext!io.ox/mail'
+    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, settings, gt) {
 
     var SenderDropdown = Dropdown.extend({
         update: function () {
@@ -131,6 +53,8 @@ define('io.ox/mail/compose/extensions',
             return this;
         }
     });
+
+    var POINT = 'io.ox/mail/compose';
 
     var autocompleteAPI = new AutocompleteAPI({
         id: 'mailwrite',
@@ -213,7 +137,45 @@ define('io.ox/mail/compose/extensions',
                             )
                         )
                     );
-                input.tokenize({ model: baton.model, api: autocompleteAPI, attr: attr, addClass: attr });
+
+                input.autocompleteNew({
+                    api: autocompleteAPI,
+                    tokenfield: true,
+                    reduce: function (data) {
+                        return data;
+                    },
+                    stringify: function (data) {
+                        return {
+                            value: data.email || data.phone || '',
+                            label: contactsUtil.getMailFullName(data)
+                        };
+                    },
+                    draw: function (data) {
+                        ext.point(POINT + '/autoCompleteItem').invoke('draw', this, ext.Baton({ data: data }));
+                    }
+                }).on({
+                    'tokenfield:createdtoken': function (e) {
+                        if (e.attrs) {
+                            var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value },
+                                token = $(e.relatedTarget);
+                            token.prepend(
+                                contactsAPI.pictureHalo(
+                                    $('<div class="contact-image">'),
+                                    $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
+                                )
+                            );
+                        }
+                    },
+                    'change': function () {
+                        baton.model.setTokens(attr, input.tokenfield('getTokens'));
+                    }
+                });
+
+                // add class to tokenfield wrapper
+                input.parent().addClass(attr);
+
+                // set initial values
+                input.tokenfield('setTokens', baton.model.getTokens(attr) || [], true, false);
             };
         },
 
