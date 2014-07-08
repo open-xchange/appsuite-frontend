@@ -756,7 +756,7 @@ define('io.ox/core/commons-folderview',
                     current = id;
 
                     api.get({ folder: id }).done(function (data) {
-                        if (_.device('small') && previous !== null) {
+                        if (_.device('smartphone') && previous !== null) {
                             // close tree
                             fnHideSml();
                         }
@@ -905,23 +905,20 @@ define('io.ox/core/commons-folderview',
             };
 
             fnHideSml = function () {
-
                 app.settings.set('folderview/visible/' + _.display(), visible = false).save();
                 top = container.scrollTop();
                 var nodes = app.getWindow().nodes;
                 $('.window-container-center', nodes.outer).removeClass('animate-moveright').addClass('animate-moveleft');
-                baton.$.spacer.hide();
                 app.trigger('folderview:close');
+                if (baton.$.spacer) baton.$.spacer.hide();
             };
 
             fnShowSml = function () {
-
                 app.settings.set('folderview/visible/' + _.display(), visible = true).save();
                 var nodes = app.getWindow().nodes;
                 $('.window-container-center', nodes.outer).removeClass('animate-moveleft').addClass('animate-moveright');
-                baton.$.spacer.show();
                 app.trigger('folderview:open');
-
+                if (baton.$.spacer) baton.$.spacer.show();
                 return $.when();
             };
 
