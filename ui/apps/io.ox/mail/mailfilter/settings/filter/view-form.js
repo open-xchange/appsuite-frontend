@@ -259,7 +259,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     return indicatorKey;
                 }
 
-                if (!this.model.has('position')) {
+                if (!this.model.has('id')) {
                     rulePosition = adjustRulePosition(self.options.listView.collection.models);
                     if (rulePosition !== undefined) {
                         this.model.set('position', rulePosition);
