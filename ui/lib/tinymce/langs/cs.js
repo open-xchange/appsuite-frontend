@@ -128,6 +128,7 @@ tinymce.addI18n('cs',{
 "Finish": "Ukon\u010dit",
 "Ignore all": "Ignorovat v\u0161e",
 "Ignore": "Ignorovat",
+"Add to Dictionary": "P\u0159idat do slovn\u00edku",
 "Insert row before": "Vlo\u017eit \u0159\u00e1dek nad",
 "Rows": "\u0158\u00e1dek",
 "Height": "V\u00fd\u0161ka",
