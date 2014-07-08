@@ -185,7 +185,7 @@ define('io.ox/mail/compose/model',
             result.infostore_ids = this.get('attachments').filter(function (a) {
                 return a.get('group') === 'file' && !a.needsUpload();
             }).map(function (m) {
-                m.pick('id');
+                return m.get('id');
             });
 
             result.files = this.get('attachments').filter(function (a) {
