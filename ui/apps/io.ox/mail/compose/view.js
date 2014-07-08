@@ -202,6 +202,16 @@ define('io.ox/mail/compose/view',
         }
     });
 
+    ext.point(POINT + '/attachments').extend({
+        id: 'attachmentPreviewList',
+        index: 200,
+        draw: function (baton) {
+            var node = $('<div class="col-xs-12 attachments-list">');
+            extensions.attachmentPreviewList.call(node, baton);
+            node.appendTo(this);
+        }
+    });
+
     /**
      * mapping for getFieldLabel()
      * @type {object}

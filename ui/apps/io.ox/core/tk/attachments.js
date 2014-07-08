@@ -608,11 +608,32 @@ define('io.ox/core/tk/attachments',
         return node;
     };
 
+    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
+        regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
+
+    var previewFetcher = {
+        file: function (model) {
+            var def = $.Deferred();
+            // consider retina displays
+            var size = _.device('retina') ? 240 : 120;
+            require(['io.ox/files/api'], function (filesAPI) {
+                var meta = _.clone(model.get('meta'));
+                // get URL of preview image
+                meta.previewUrl = filesAPI.getUrl(model.toJSON(), 'view')  + '&scaleType=cover&width=' + size + '&height=' + size;
+                if (!regIsImage.test(model.get('filename'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
+                def.resolve(meta.previewUrl);
+                model.set('meta', meta);
+            }, def.reject);
+            return def;
+        }
+    };
+
     var Attachment = Backbone.Model.extend({
         defaults: {
             filename: '',
             disp: 'attachment',
-            uploaded: 1
+            uploaded: 1,
+            meta: {}
         },
         initialize: function (obj) {
             if (obj instanceof window.File) {
@@ -630,6 +651,26 @@ define('io.ox/core/tk/attachments',
         },
         needsUpload: function () {
             return this.get('uploaded') !== 1;
+        },
+        previewUrl: function () {
+            var supportsDocumentPreview = capabilities.has('document_preview'),
+                filename = this.get('filename'),
+                url;
+            if (!(this.get('disp') === 'attachment' && (regIsImage.test(filename) ||
+                supportsDocumentPreview && regIsDocument.test(filename))))
+            {
+                return null;
+            }
+            url = this.get('meta').previewUrl;
+            if (url) {
+                return url;
+            }
+
+            var fetchPreview = previewFetcher[this.get('group')];
+            if (fetchPreview) {
+                return fetchPreview(this);
+            }
+            return null;
         }
     });
 
@@ -649,24 +690,67 @@ define('io.ox/core/tk/attachments',
             this.listenTo(this.collection, 'add', this.addAttachment);
             this.listenTo(this.collection, 'remove', this.removeAttachment);
 
+            this.preview = options && options.preview === true;
             this.editable = options && options.editable === true;
+            if (this.preview) {
+                this.$el.addClass('preview');
+            }
         },
         addAttachment: function (model) {
             if (!model.isFileAttachment()) return;
-            var isEditable = this.editable,
+            var addPreview = this.preview,
+                isEditable = this.editable,
                 view = new AttachmentView({
                     model: model,
+                    preview: addPreview,
                     editable: isEditable
                 });
+            if (view.preview) {
+                this.listenTo(view.preview, 'lazyload', function (el) {
+                    el.lazyload({
+                        container: this.$el,
+                        effect: 'fadeIn'
+                    });
+                });
+            }
             view.render();
             this.$el.append(view.$el);
+
+            this.$el.removeClass('empty');
             return this;
         },
         removeAttachment: function (model, collection, options) {
             this.$el.children()[options.index - 1].remove();
+            if (this.$el.children().length === 0) {
+                this.$el.addClass('empty');
+            }
         },
         render: function () {
+            this.$el.empty();
+            this.$el.addClass('empty');
             this.collection.forEach(this.addAttachment.bind(this));
+            return this;
+        }
+    });
+
+    var AttachmentPreview = Backbone.View.extend({
+        initialize: function () {
+            this.listenTo(this.model, 'change:meta', this.render);
+        },
+        className: 'preview',
+        render: function () {
+            var url = this.model.previewUrl();
+            this.$el.removeClass('lazy no-preview');
+            if (_.isString(url)) {
+                this.$el.addClass('lazy');
+                this.$el.attr('data-original', url);
+                _.defer(function () {
+                    this.trigger('lazyload', this.$el);
+                }.bind(this));
+            } else {
+                this.$el.addClass('no-preview');
+            }
+
             return this;
         }
     });
@@ -675,6 +759,11 @@ define('io.ox/core/tk/attachments',
         tagName: 'li',
         className: 'item',
         initialize: function (options) {
+            this.preview = options && options.preview === true &&
+                new AttachmentPreview({
+                    model: this.model,
+                    el: this.el
+                });
             this.editable = options && options.editable === true;
         },
         onRemove: function () {
@@ -688,6 +777,9 @@ define('io.ox/core/tk/attachments',
             var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el),
                 size;
 
+            if (this.preview) {
+                this.preview.render();
+            }
             widget.append(
                 $('<i class="fa fa-paperclip">'),
                 $('<div class="row-1">').append(this.model.getTitle()),

@@ -230,6 +230,23 @@ define('io.ox/mail/compose/extensions',
             }, def.reject);
             return def;
         },
+        attachmentPreviewList: function (baton) {
+            var $el = this,
+                def = $.Deferred();
+
+            require(['io.ox/core/tk/attachments'], function (attachments) {
+                var view = new attachments.view.AttachmentList({
+                    collection: baton.model.get('attachments'),
+                    editable: true,
+                    preview: true
+                });
+                view.render();
+                $el.append(view.$el);
+                view.$el.addClass('inline-items');
+                def.resolve(view);
+            }, def.reject);
+            return def;
+        },
         attachment: function (baton) {
             var $el = $('<div class="col-xs-12 col-md-5 col-md-offset-1">'),
                 def = $.Deferred(),
