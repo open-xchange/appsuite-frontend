@@ -20,12 +20,10 @@ define('io.ox/core/folder/blacklist',
 
     'use strict';
 
-    var hash = settings.get('folder/blacklist', {});
+    var hash = settings.get('folder/blacklist', {}),
+        ids = _(hash).keys().sort();
 
-    hash['default0/INBOX/1 Mailing Lists/RC'] = true;
-    hash['6'] = true;
-
-    if (ox.debug) console.info('Blacklisted folders:', _(hash).keys().sort());
+    if (ox.debug && ids.length > 0) console.info('Blacklisted folders:', ids);
 
     ext.point('io.ox/core/folder/filter').extend(
         {
