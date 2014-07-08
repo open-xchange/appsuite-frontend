@@ -926,8 +926,6 @@ define('io.ox/mail/write/view-main',
                     this.priorityOverlay = $('<div class="priority-overlay">')
                         .attr('title', 'Priority')
                         .append(
-                            $('<i class="fa fa-exclamation">'),
-                            $('<i class="fa fa-exclamation">'),
                             $('<i class="fa fa-exclamation">')
                         )
                         .on('click', $.proxy(togglePriority, this))
