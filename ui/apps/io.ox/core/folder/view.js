@@ -253,6 +253,9 @@ define('io.ox/core/folder/view',
         // set initial folder
         var id = app.folder.get();
         if (id) {
+            // try now
+            tree.selection.preselect(id);
+            // and on appear
             tree.once('appear:' + id, function () {
                 tree.selection.preselect(id);
             });
