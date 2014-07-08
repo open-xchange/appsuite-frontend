@@ -65,7 +65,7 @@ define('io.ox/contacts/edit/main',
                         app.contact = contact;
                         editView = new view.ContactEditView({ model: contact });
                         container.append(
-                            editView.render().$el.addClass('default-content-padding')
+                            editView.render().$el.addClass('default-content-padding container')
                         );
                         container.find('input[type=text]:visible').eq(0).focus();
 
