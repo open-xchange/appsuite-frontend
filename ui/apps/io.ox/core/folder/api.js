@@ -16,7 +16,8 @@ define('io.ox/core/folder/api',
      'io.ox/core/event',
      'io.ox/core/folder/util',
      'io.ox/core/folder/sort',
-     'gettext!io.ox/core'], function (http, Events, util, sort, gt) {
+     'io.ox/core/folder/blacklist',
+     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, gt) {
 
     'use strict';
 
@@ -81,6 +82,7 @@ define('io.ox/core/folder/api',
             var collection = this.getCollection(id),
                 type = collection.fetched ? 'set' : 'reset';
             collection[type](models);
+            collection.fetched = true;
         },
 
         getModel: function (id) {
@@ -93,6 +95,21 @@ define('io.ox/core/folder/api',
     });
 
     //
+    // Used by list() and ramp-up
+    //
+
+    function processListResponse(id, list) {
+        // 1. apply blacklist
+        list = blacklist.apply(list);
+        // 2. apply custom order
+        list = sort.apply(id, list);
+        // 3. inject index
+        _(list).each(injectIndex);
+        // done
+        return list;
+    }
+
+    //
     // Use ramp-up data
     //
 
@@ -100,13 +117,13 @@ define('io.ox/core/folder/api',
         pool.addModel(data);
     });
 
+    var rampup = {};
+
     _(ox.rampup.folderlist || {}).each(function (list, id) {
         // make objects
-        list = _(list).map(function (data) {
+        rampup[id] = _(list).map(function (data) {
             return _.isArray(data) ? http.makeObject(data, 'folders') : data;
         });
-        // add
-        pool.addCollection(id, list);
     });
 
     //
@@ -145,6 +162,14 @@ define('io.ox/core/folder/api',
         var collection = pool.getCollection(id);
         if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
 
+        // use rampup data?
+        if (rampup[id]) {
+            var array = processListResponse(id, rampup[id]);
+            pool.addCollection(id, array);
+            delete rampup[id];
+            return $.when(array);
+        }
+
         return http.GET({
             module: 'folders',
             params: {
@@ -157,14 +182,9 @@ define('io.ox/core/folder/api',
             },
             appendColumns: true
         })
-        .done(function (list) {
-            // 1. apply special sort
-            list = sort.apply(id, list);
-            // 2. inject index
-            _(list).each(injectIndex);
-            // then add to collection
-            pool.addCollection(id, list);
-            collection.fetched = true;
+        .done(function (array) {
+            array = processListResponse(id, array);
+            pool.addCollection(id, array);
         });
     }
 
@@ -354,7 +374,8 @@ define('io.ox/core/folder/api',
         refresh: refresh,
         is: util.is,
         can: util.can,
-        getDefaultFolder: util.getDefaultFolder
+        getDefaultFolder: util.getDefaultFolder,
+        processListResponse: processListResponse
     };
 
     // add event hub

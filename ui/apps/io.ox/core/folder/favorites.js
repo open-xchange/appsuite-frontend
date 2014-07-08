@@ -36,7 +36,7 @@ define('io.ox/core/folder/favorites',
 
         collection.on('add remove', store);
 
-        function initialize() {
+        function initialize(id) {
             http.pause();
             _(favorites).each(api.get, api);
             http.resume().done(function (response) {
@@ -44,6 +44,7 @@ define('io.ox/core/folder/favorites',
                 // compact() removes non-existent entries
                 var list = _(response).chain().pluck('data').compact().value();
                 // update collection
+                list = api.processListResponse(id, list);
                 collection.reset(list);
                 model.set('subfolders', true);
                 // if there was an error we update settings
@@ -67,7 +68,7 @@ define('io.ox/core/folder/favorites',
                     .render().$el.css('marginBottom', '14px')
                 );
 
-                if (favorites.length > 0) initialize();
+                if (favorites.length > 0) initialize(id);
             }
         });
     });
