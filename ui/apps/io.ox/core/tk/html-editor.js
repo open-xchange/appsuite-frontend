@@ -485,11 +485,14 @@ define.async('io.ox/core/tk/html-editor',
 
                 //suppress firefox dnd inline image support
                 var iframe = textarea.parent().find('iframe'),
-                    html = $(iframe[0].contentDocument).find('html');
+                    html = $(iframe[0].contentDocument).find('html'),
+                    smallPara = settings.get('features/mailComposeSmallParagraphs', 1);
 
                 // small paragraphs option
-                if (settings.get('features/mailComposeSmallParagraphs', false)) {
-                    html.find('head').append('<style type="text/css">body>p{margin:.5em 0;}</style>');
+                if (_.isBoolean(smallPara)) smallPara = smallPara ? 0.5 : 1;
+                smallPara = parseFloat(smallPara);
+                if (smallPara >= 0 && smallPara <= 1) {
+                    html.find('head').append('<style type="text/css">body>p{margin:' + smallPara + 'em 0;}</style>');
                 }
 
                 html.on('dragover drop', function (e) {
