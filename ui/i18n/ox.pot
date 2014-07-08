@@ -1046,7 +1046,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:356
 #: apps/io.ox/core/permissions/permissions.js:399
-#: apps/io.ox/core/settings/user.js:80
+#: apps/io.ox/core/settings/user.js:81
 #: apps/io.ox/core/tk/dialogs.js:558
 #: apps/io.ox/editor/main.js:132
 #: module:io.ox/editor
@@ -1089,7 +1089,7 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/create-dist-view.js:63
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:181
-#: apps/io.ox/core/settings/user.js:81
+#: apps/io.ox/core/settings/user.js:82
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:109
@@ -4939,7 +4939,7 @@ msgstr ""
 msgid "Off"
 msgstr ""
 
-#: apps/io.ox/core/settings/user.js:93
+#: apps/io.ox/core/settings/user.js:94
 #: module:io.ox/contacts
 #: apps/plugins/portal/userSettings/register.js:53
 #: module:io.ox/core

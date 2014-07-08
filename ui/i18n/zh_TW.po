@@ -1672,7 +1672,7 @@ msgstr "無法載入該工作。"
 msgid "Couldn't load your auto forward."
 msgstr "無法載入您的自動轉寄設定。"
 
-#: apps/io.ox/core/settings/user.js:93 module:io.ox/contacts
+#: apps/io.ox/core/settings/user.js:94 module:io.ox/contacts
 #: apps/plugins/portal/userSettings/register.js:53 module:io.ox/core
 msgid "Couldn't load your contact data."
 msgstr "無法載入您的聯絡人資料。"
@@ -1969,7 +1969,7 @@ msgstr "停用小工具"
 #: apps/io.ox/calendar/edit/template.js:96 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:63 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:181
-#: apps/io.ox/core/settings/user.js:81
+#: apps/io.ox/core/settings/user.js:82
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:109 module:io.ox/mail
@@ -5310,7 +5310,7 @@ msgstr "星期六"
 #: apps/io.ox/core/folder/imap-subscription.js:63 module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:356
 #: apps/io.ox/core/permissions/permissions.js:399
-#: apps/io.ox/core/settings/user.js:80 apps/io.ox/core/tk/dialogs.js:558
+#: apps/io.ox/core/settings/user.js:81 apps/io.ox/core/tk/dialogs.js:558
 #: apps/io.ox/editor/main.js:132 module:io.ox/editor
 #: apps/io.ox/editor/main.js:154 apps/io.ox/files/actions.js:585
 #: module:io.ox/files apps/io.ox/files/filepicker.js:31
