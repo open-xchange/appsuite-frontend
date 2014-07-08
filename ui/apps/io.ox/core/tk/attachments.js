@@ -643,32 +643,29 @@ define('io.ox/core/tk/attachments',
 
     var AttachmentList = Backbone.View.extend({
         tagName: 'ul',
-        className: 'io-ox-core-tk-attachment-list list-unstyled',
-        initialize: function () {
+        className: 'io-ox-core-tk-attachment-list',
+        initialize: function (options) {
             this.listenTo(this.collection, 'add', this.addAttachment);
             this.listenTo(this.collection, 'remove', this.removeAttachment);
+
+            this.editable = options && options.editable === true;
         },
         addAttachment: function (model) {
             if (!model.isFileAttachment()) return;
-
-            var view = new AttachmentView({
-                model: model
-            });
+            var isEditable = this.editable,
+                view = new AttachmentView({
+                    model: model,
+                    editable: isEditable
+                });
             view.render();
             this.$el.append(view.$el);
+            return this;
         },
         removeAttachment: function (model, collection, options) {
             this.$el.children()[options.index - 1].remove();
         },
         render: function () {
-            var $el = this.$el.empty();
-            this.collection.fileAttachments().forEach(function (attachment) {
-                var view = new AttachmentView({
-                    model: attachment
-                });
-                view.render();
-                $el.append(view.$el);
-            });
+            this.collection.forEach(this.addAttachment.bind(this));
             return this;
         }
     });
@@ -676,6 +673,9 @@ define('io.ox/core/tk/attachments',
     var AttachmentView = Backbone.View.extend({
         tagName: 'li',
         className: 'item',
+        initialize: function (options) {
+            this.editable = options && options.editable === true;
+        },
         onRemove: function () {
             var c = this.model.collection;
             c.remove(this.model);
@@ -684,13 +684,25 @@ define('io.ox/core/tk/attachments',
             'click a.remove': 'onRemove'
         },
         render: function () {
-            var widget = this.$el;
+            var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el),
+                size;
+
             widget.append(
-                this.model.getTitle(),
-                $('<a href="#" class="remove" tabindex="1">')
-                    .attr('title', gt('Remove attachment'))
-                    .append($('<i class="fa fa-trash-o">'))
+                $('<i class="fa fa-paperclip">'),
+                $('<div class="row-1">').append(this.model.getTitle()),
+                $('<div class="row-2">').append(
+                    size = $('<span class="filesize">').text(strings.fileSize(this.model.get('file_size')))
+                )
             );
+            if (size.text() === '0 B') { size.text(' '); }
+
+            if (this.editable) {
+                widget.append(
+                    $('<a href="#" class="remove" tabindex="1">')
+                        .attr('title', gt('Remove attachment'))
+                        .append($('<i class="fa fa-trash-o">'))
+                );
+            }
             return this;
         }
     });

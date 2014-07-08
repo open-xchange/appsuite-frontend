@@ -220,7 +220,8 @@ define('io.ox/mail/compose/extensions',
 
             require(['io.ox/core/tk/attachments'], function (attachments) {
                 var view = new attachments.view.AttachmentList({
-                    collection: baton.model.get('attachments')
+                    collection: baton.model.get('attachments'),
+                    editable: true
                 });
                 view.render();
                 $el.append(view.$el);
