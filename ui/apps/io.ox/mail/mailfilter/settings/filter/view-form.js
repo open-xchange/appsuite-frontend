@@ -197,6 +197,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 var self = this,
                     rulePosition,
                     testsPart = this.model.get('test'),
+                    actionArray = this.model.get('actioncmds'),
                     config = {
                         'header': ['headers', 'values'],
                         'envelope': ['headers', 'values'],
@@ -220,6 +221,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     return idArray;
                 }
 
+                function returnKeyForStop(actionsArray) {
+                    var indicatorKey;
+                    _.each(actionsArray, function (action, key) {
+                        if (_.isEqual(action, {id: 'stop'})) {
+                            indicatorKey = key;
+                        }
+                    });
+                    return indicatorKey;
+                }
+
                 if (!this.model.has('position')) {
                     rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
                     this.model.set('position', rulePosition);
@@ -239,6 +250,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     if (testsPart.id === 'size' && testsPart.size.trim() === '') {
                         this.model.set('test', { id: 'true' });
                     }
+                }
+
+                // if there is a stop action it should always be the last
+                if (returnKeyForStop(actionArray) !== undefined) {
+                    actionArray.splice(returnKeyForStop(actionArray), 1);
+                    actionArray.push({id: 'stop'});
+                    this.model.set('actioncmds', actionArray);
                 }
 
                 this.model.save().then(function (id) {
