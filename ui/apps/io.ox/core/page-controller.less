@@ -46,7 +46,20 @@
         -webkit-perspective: 1000;
                 backface-visibility: hidden;
                 perspective: 1000;
+    }
 
+    &.fade.in {
+        opacity: 1;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-duration: 150ms;
+        -webkit-animation-name: fadeIn;
+    }
+
+    &.fade.out {
+        opacity: 0;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-duration: 150ms;
+        -webkit-animation-name: fadeOut;
     }
 
     &.slideleft.in {
@@ -81,6 +94,25 @@
         -webkit-animation-name: slideDownOut;
     }
 
+
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 @-webkit-keyframes slideLeftIn {
