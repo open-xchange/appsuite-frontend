@@ -15,7 +15,8 @@ define('io.ox/core/folder/api',
     ['io.ox/core/http',
      'io.ox/core/event',
      'io.ox/core/folder/util',
-     'gettext!io.ox/core'], function (http, Events, util, gt) {
+     'io.ox/core/folder/sort',
+     'gettext!io.ox/core'], function (http, Events, util, sort, gt) {
 
     'use strict';
 
@@ -157,8 +158,11 @@ define('io.ox/core/folder/api',
             appendColumns: true
         })
         .done(function (list) {
-            // inject index
+            // 1. apply special sort
+            list = sort.apply(id, list);
+            // 2. inject index
             _(list).each(injectIndex);
+            // then add to collection
             pool.addCollection(id, list);
             collection.fetched = true;
         });
