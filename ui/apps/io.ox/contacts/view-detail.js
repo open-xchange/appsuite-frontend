@@ -751,7 +751,9 @@ define('io.ox/contacts/view-detail',
     });
 
     function redraw(e, data) {
-        $(this).replaceWith(e.data.view.draw(data));
+        var baton = e.data.baton;
+        baton.data = data;//use old baton with new data(keep disabled extensionpoints)
+        $(this).replaceWith(e.data.view.draw(baton));
     }
 
     return {
@@ -766,7 +768,7 @@ define('io.ox/contacts/view-detail',
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api)
-                    .on('redraw', { view: this, data: baton.data }, redraw)
+                    .on('redraw', { view: this, data: baton.data , baton: baton}, redraw)
                     .addClass('contact-detail view')
                     .attr({
                         'role': 'complementary',
