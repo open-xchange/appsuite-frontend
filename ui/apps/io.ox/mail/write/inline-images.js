@@ -82,6 +82,7 @@ define('io.ox/mail/write/inline-images',
     });
 
     return {
+        api: api,
         show: function () {
             var dialog = new dialogs.ModalDialog({async: true}),
                 baton =  new ext.Baton({$: {}}),
