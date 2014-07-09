@@ -619,6 +619,7 @@ define('io.ox/core/tk/attachments',
                 this.fileObj = obj;
                 this.set('filename', obj.name, {silent: true});
                 this.set('uploaded', 0, {silent: true});
+                this.set('file_size', obj.size, {silent: true});
             }
         },
         getTitle: function () {
