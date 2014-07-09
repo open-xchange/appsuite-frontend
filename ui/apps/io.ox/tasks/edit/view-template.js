@@ -323,6 +323,9 @@ define('io.ox/tasks/edit/view-template',
                 guid = _.uniqueId('form-control-label-');
             this.nodes = {};
             this.nodes.select = $('<select tabindex="1">').addClass('priority-selector form-control').attr('id', guid);
+            self.nodes.select.append(
+                    $('<option>', {value: 'null'}).text(gt('None'))
+                );
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -336,7 +339,6 @@ define('io.ox/tasks/edit/view-template',
         },
         attribute: 'priority',
         selectOptions: {
-            0: gt('None'),
             1: gt('Low'),
             2: gt('Medium'),
             3: gt('High')

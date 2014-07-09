@@ -367,6 +367,10 @@ define('io.ox/tasks/api',
             task.date_completed = null;
         }
 
+        if (task.priority === 0) {
+            task.priority = null;
+        }
+
         var key = useFolder + '.' + task.id;
         return http.PUT({
             module: 'tasks',
