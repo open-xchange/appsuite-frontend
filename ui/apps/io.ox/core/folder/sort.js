@@ -11,15 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/sort', ['io.ox/core/api/account'], function (account) {
+define('io.ox/core/folder/sort', ['io.ox/core/extensions', 'io.ox/core/api/account'], function (ext, account) {
 
     'use strict';
 
-    var handlers = {
+    var point = ext.point('io.ox/core/folder/sort');
 
-        '1': function (array) {
+    point.extend({
+        id: '1',
+        sort: function (baton) {
 
-            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+            if (baton.id !== '1') return;
+
+            var array = baton.data,
+                head = new Array(1 + 5),
+                types = 'inbox sent drafts trash spam'.split(' ');
 
             // get unified folder first
             _(array).find(function (folder) {
@@ -53,17 +59,16 @@ define('io.ox/core/folder/sort', ['io.ox/core/api/account'], function (account) 
             // combine
             array.unshift.apply(array, _(head).compact());
 
-            return array;
+            baton.data = array;
         }
-    };
-
-    function apply(id, array) {
-        return handlers[id] === undefined ? array : handlers[id](array);
-    }
+    });
 
     return {
-        apply: apply,
-        handlers: handlers
+        apply: function (id, array) {
+            var baton = ext.Baton({ id: id, data: array });
+            point.invoke('sort', null, baton);
+            return baton.data;
+        }
     };
 
 });

@@ -20,12 +20,13 @@ define('io.ox/core/folder/blacklist',
 
     'use strict';
 
-    var hash = settings.get('folder/blacklist', {}),
+    var point = ext.point('io.ox/core/folder/filter'),
+        hash = settings.get('folder/blacklist', {}),
         ids = _(hash).keys().sort();
 
     if (ox.debug && ids.length > 0) console.info('Blacklisted folders:', ids);
 
-    ext.point('io.ox/core/folder/filter').extend(
+    point.extend(
         {
             id: 'blacklist',
             index: 100,
@@ -48,6 +49,7 @@ define('io.ox/core/folder/blacklist',
         }
     );
 
+    // utility function
     function reduce(memo, visible) {
         return memo && !!visible;
     }
@@ -61,7 +63,7 @@ define('io.ox/core/folder/blacklist',
         // returns false if a folder is blacklisted
         filter: function (data) {
             var baton = ext.Baton({ data: data });
-            return ext.point('io.ox/core/folder/filter')
+            return point
                 .invoke('visible', null, baton)
                 .reduce(reduce, true)
                 .value();
