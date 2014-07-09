@@ -57,11 +57,13 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         onAdd: function (model) {
             this.$.subfolders.append(this.getTreeNode(model));
             this.options.tree.trigger('appear:' + model.id, model);
+            this.model.set('subfolders', true);
         },
 
         onRemove: function (model) {
             var node = this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]');
             node.remove();
+            if (this.$.subfolders.children().length === 0) this.model.set('subfolders', false);
         },
 
         // respond to changed id
@@ -126,6 +128,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             );
             // toggle subfolder node
             this.$.subfolders.toggle(hasSubFolders && isOpen);
+            // empty?
+            this.renderEmpty();
             // fetch sub-folders
             if (hasSubFolders && isOpen) { this.onReset(); api.list(o.model_id); }
         },
@@ -156,7 +160,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         // get a new TreeNode instance
         getTreeNode: function (model) {
             var o = this.options,
-                level = o.headless ? o.level : o.level + 1,
+                level = o.headless || o.indent === false ? o.level : o.level + 1,
                 options = o.tree.getTreeNodeOptions({ folder: model.id, level: level, tree: o.tree, parent: this }, model);
             return new TreeNodeView(options).render().$el;
         },
@@ -169,7 +173,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             var o = this.options = _.extend({
                 arrow: true,                    // show folder arrow
                 count: undefined,               // use custom counter
+                empty: true,                   // show if empty, i.e. no subfolders?
                 headless: false,                // show folder row? root folder usually hidden
+                indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
                 open: false,                    // state
@@ -269,10 +275,17 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             this.$.selectable.attr('data-id', this.folder);
         },
 
+        renderEmpty: function () {
+            if (this.options.empty !== false) return;
+            // only show if not empty, i.e. has subfolders
+            this.$el.toggleClass('empty', this.$.subfolders.children().length === 0);
+        },
+
         repaint: _.throttle(function () { if (this.model !== null) this.render(); }, 10),
 
         render: function () {
             this.renderAttributes();
+            this.renderEmpty();
             this.renderTitle();
             this.renderCounter();
             this.onChangeSubFolders();

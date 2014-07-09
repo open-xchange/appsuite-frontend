@@ -18,10 +18,11 @@ define('io.ox/files/main',
      'settings!io.ox/files',
      'io.ox/core/extensions',
      'io.ox/core/api/folder',
+     'io.ox/core/folder/tree',
+     'io.ox/core/folder/view',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
-     'io.ox/core/commons-folderview',
      'io.ox/core/capabilities',
      'io.ox/files/api',
      'io.ox/files/mobile-navbar-extensions',
@@ -30,7 +31,7 @@ define('io.ox/files/main',
      'io.ox/files/folderview-extensions',
      'less!io.ox/files/style',
      'io.ox/files/toolbar'
-    ], function (commons, gt, settings, ext, folderAPI, actions, Bars, PageController, FolderView, capabilities, API) {
+    ], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, actions, Bars, PageController, capabilities, api) {
 
     'use strict';
 
@@ -160,9 +161,14 @@ define('io.ox/files/main',
          */
         'folder-view': function (app) {
 
-            // folder tree
-            commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId', 9) });
-            app.getWindow().nodes.sidepanel.addClass('border-right');
+            if (_.device('small')) return;
+
+            // tree view
+            var tree = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            app.folderView.resize.enable();
         },
         /*
          * Folder view mobile support
@@ -218,7 +224,7 @@ define('io.ox/files/main',
          */
         'delete:file-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            API.on('delete', function () {
+            api.on('delete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
                     app.pages.goBack();
                 }
@@ -283,7 +289,7 @@ define('io.ox/files/main',
         'change:folderview': function (app) {
             if (_.device('small')) return;
             app.props.on('change:folderview', function (model, value) {
-                app.toggleFolderView(value);
+                app.folderView.toggle(value);
             });
             app.on('folderview:close', function () {
                 app.props.set('folderview', false);
@@ -345,7 +351,7 @@ define('io.ox/files/main',
 
             function toggleFolderView(e) {
                 e.preventDefault();
-                e.data.app.toggleFolderView(e.data.state);
+                app.folderView.toggle(e.data.state);
             }
 
             var side = app.getWindow().nodes.sidepanel;

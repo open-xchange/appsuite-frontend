@@ -14,14 +14,13 @@
 define('io.ox/core/folder/favorites',
     ['io.ox/core/folder/node',
      'io.ox/core/folder/api',
-     'io.ox/core/http',
      'io.ox/core/extensions',
      'settings!io.ox/core'
-     ], function (TreeNodeView, api, http, ext, settings) {
+     ], function (TreeNodeView, api, ext, settings) {
 
     'use strict';
 
-    _('mail files'.split(' ')).each(function (module) {
+    _('mail infostore'.split(' ')).each(function (module) {
 
         // register collection
         var id = 'virtual/favorites/' + module,
@@ -37,17 +36,14 @@ define('io.ox/core/folder/favorites',
         collection.on('add remove', store);
 
         function initialize(id) {
-            http.pause();
-            _(favorites).each(api.get, api);
-            http.resume().done(function (response) {
-                // if a folder no longer exists we get an undefined for data;
+            api.multiple(favorites).done(function (response) {
                 // compact() removes non-existent entries
-                var list = _(response).chain().pluck('data').compact().value();
+                var list = _(response).compact();
                 // update collection
                 list = api.processListResponse(id, list);
                 collection.reset(list);
                 model.set('subfolders', true);
-                // if there was an error we update settings
+                // // if there was an error we update settings
                 if (list.length !== response.length) store();
             });
         }
@@ -59,8 +55,9 @@ define('io.ox/core/folder/favorites',
 
                 this.append(
                     new TreeNodeView({
+                        empty: false,
                         folder: id,
-                        open: false,
+                        open: true,
                         parent: tree,
                         title: 'Favorites',
                         tree: tree

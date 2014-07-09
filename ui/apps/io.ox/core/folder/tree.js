@@ -222,5 +222,19 @@ define('io.ox/core/folder/tree',
         }
     );
 
+    ext.point('io.ox/core/foldertree/infostore').extend(
+        {
+            id: 'standard-folders',
+            index: 100,
+            draw: function (tree) {
+                this.append(
+                    // standard folders
+                    new TreeNodeView({ folder: tree.root, headless: true, open: true, tree: tree, parent: tree })
+                    .render().$el
+                );
+            }
+        }
+    );
+
     return TreeView;
 });

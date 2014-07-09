@@ -181,50 +181,65 @@ define('io.ox/core/desktop',
                         }
                     },
 
-                    set: function (id) {
-                        var def = $.Deferred();
-                        if (id !== undefined && id !== null && String(id) !== folder) {
+                    set: (function () {
 
-                            var activeApp = _.url.hash('app');
-                            var model = api.pool.getModel(id), data = model.toJSON();
-
-                            if (model.has('title')) {
-                                var appchange = _.url.hash('app') !== activeApp; //app has changed while folder was requested
-                                // remember
-                                folder = String(id);
-                                if (!appchange) {//only change if the app did not change
-                                    // update window title & toolbar?
-                                    if (win) {
-                                        win.setTitle(_.noI18n(data.title));
-                                        win.updateToolbar();
-                                    }
-                                    // update grid?
-                                    if (grid && grid.prop('folder') !== folder) {
-                                        grid.busy().prop('folder', folder);
-                                        if (win && win.search.active) {
-                                            win.search.close();
-                                        }
-                                        grid.refresh();
-                                        // load fresh folder & trigger update event
-                                        api.reload(id);
-                                    }
-                                    // update hash
-                                    _.url.hash('folder', folder);
-                                    self.trigger('folder:change', folder, data);
+                        function change(id, data, app, def) {
+                            var appchange = _.url.hash('app') !== app; //app has changed while folder was requested
+                            // remember
+                            folder = String(id);
+                            if (!appchange) {//only change if the app did not change
+                                // update window title & toolbar?
+                                if (win) {
+                                    win.setTitle(_.noI18n(data.title));
+                                    win.updateToolbar();
                                 }
-                                def.resolve(data, appchange);
+                                // update grid?
+                                if (grid && grid.prop('folder') !== folder) {
+                                    grid.busy().prop('folder', folder);
+                                    if (win && win.search.active) {
+                                        win.search.close();
+                                    }
+                                    grid.refresh();
+                                    // load fresh folder & trigger update event
+                                    api.reload(id);
+                                }
+                                // update hash
+                                _.url.hash('folder', folder);
+                                self.trigger('folder:change', folder, data);
+                            }
+                            def.resolve(data, appchange);
 
-                                if (initialized.state() !== 'resolved') {
-                                    initialized.resolve(folder, data);
+                            if (initialized.state() !== 'resolved') {
+                                initialized.resolve(folder, data);
+                            }
+                        }
+
+                        return function (id) {
+                            var def = $.Deferred();
+                            if (id !== undefined && id !== null && String(id) !== folder) {
+
+                                var app = _.url.hash('app');
+                                var model = api.pool.getModel(id), data = model.toJSON();
+
+                                if (model.has('title')) {
+                                    change(id, data, app, def);
+                                } else {
+                                    api.get(id).then(
+                                        function success(data) {
+                                            change(id, data, app, def);
+                                        },
+                                        function fail() {
+                                            console.warn('Failed to change folder', id);
+                                            def.reject();
+                                        }
+                                    );
                                 }
                             } else {
                                 def.reject();
                             }
-                        } else {
-                            def.reject();
-                        }
-                        return def;
-                    },
+                            return def;
+                        };
+                    }()),
 
                     setType: function (t) {
                         type = t;

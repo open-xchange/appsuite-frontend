@@ -145,9 +145,30 @@ define('io.ox/core/folder/api',
                 tree: '1'
             }
         })
-        .done(function (data) {
+        .then(function (data) {
             pool.addModel(data);
+            return data; // to make sure we always get the same result (just data; not timestamp)
         });
+    }
+
+    //
+    // Special case: Get multiple folders at once
+    //
+
+    function multiple(ids) {
+        try {
+            http.pause();
+            return $.when.apply($,
+                _(ids).map(function (id) {
+                    return get(id).then(null, function () { return $.when(undefined); });
+                })
+            )
+            .then(function () {
+                return _(arguments).toArray();
+            });
+        } finally {
+            http.resume();
+        }
     }
 
     //
@@ -367,6 +388,7 @@ define('io.ox/core/folder/api',
         pool: pool,
         get: get,
         list: list,
+        multiple: multiple,
         update: update,
         move: move,
         create: create,
