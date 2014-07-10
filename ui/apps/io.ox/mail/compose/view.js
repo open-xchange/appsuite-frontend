@@ -329,7 +329,8 @@ define('io.ox/mail/compose/view',
             this.messageFormat = settings.get('messageFormat', 'html');
             this.editor = null;
             this.composeMode = 'compose';
-            this.textarea = $('<textarea class="plain-text">');
+            this.editorId = _.uniqueId('editor-');
+            this.textarea = $('<div class="editable">').attr('data-editor-id', this.editorId);
             this.baton = ext.Baton({
                 // please don't use this data attribute - use model instead
                 data: this.model.toJSON(),
@@ -540,7 +541,7 @@ define('io.ox/mail/compose/view',
         loadEditor: function (content) {
 
             var self = this,
-                editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'html' ? 'html-editor' : 'text-editor');
+                editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'html' ? 'contenteditable-editor' : 'text-editor');
 
             return require([editorSrc]).then(function (Editor) {
                 return (self.editorHash[self.editorMode] = new Editor(self.textarea))
@@ -779,7 +780,10 @@ define('io.ox/mail/compose/view',
                 this.$el.find('.tokenfield:first .token-input').focus();
             }
 
-            this.$el.append(this.textarea);
+            this.$el.append(
+                $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
+                this.textarea
+            );
 
             return this;
         }
