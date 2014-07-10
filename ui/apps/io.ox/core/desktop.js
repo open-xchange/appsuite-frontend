@@ -736,6 +736,7 @@ define('io.ox/core/desktop',
             this.afterShow = $.noop;
             this.afterHide = $.noop;
 
+
             this.show = function (app, opt) {
 
                 var win = app.getWindow();
@@ -919,48 +920,6 @@ define('io.ox/core/desktop',
         var guid = 0,
 
             pane = $('#io-ox-windowmanager-pane'),
-            /*
-            getX = function (node) {
-                return node.data('x') || 0;
-            },
-            */
-            /*scrollTo = function (node, cont) {
-                if (true) {
-                    _.call(cont);
-                    return;
-                }
-                var index = node.data('index') || 0,
-                    left = (-index * 101),
-                    done = function () {
-                        // use timeout for smoother animations
-                        setTimeout(function () {
-                            _.call(cont);
-                        }, 10);
-                    };
-                // change?
-                if (left !== getX(pane)) {
-                    // remember position
-                    pane.data('x', left);
-                    // do motion TODO: clean up here!
-                    if (true) {
-                        pane.animate({ left: left + '%' }, 0, done);
-                    }
-                    // touch device?
-                    else if (Modernizr.touch) {
-                        pane.css('left', left + '%');
-                        done();
-                    }
-                    // use CSS transitions?
-                    else if (Modernizr.csstransforms3d) {
-                        pane.one(_.browser.WebKit ? 'webkitTransitionEnd' : 'transitionend', done);
-                        pane.css('left', left + '%');
-                    } else {
-                        pane.stop().animate({ left: left + '%' }, 250, done);
-                    }
-                } else {
-                    done();
-                }
-            },*/
 
             // window class
             Window = function (options) {
@@ -1052,11 +1011,6 @@ define('io.ox/core/desktop',
                     // if not current window or if detached (via funny race conditions)
                     if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
                         // show
-
-                        /*if (firstShow) {
-                            node.data('index', guid - 1).css('left', ((guid - 1) * 101) + '%');
-                        }*/
-
                         if (node.parent().length === 0) {
                             if (this.simple) {
                                 node.insertAfter('#io-ox-topbar');
@@ -1380,18 +1334,25 @@ define('io.ox/core/desktop',
 
                 this.addPerspective = function (pers) {
                     var id = pers.name, node;
-                    // remove default main node if empty
-                    if (this.nodes.main && this.nodes.main.not(':empty')) {
-                        this.nodes.main.remove();
-                    }
-                    if (this.nodes[id] === undefined) {
-                        this.nodes.body.append(
-                            node = $('<div class="abs window-content">').hide()
-                        );
-                        perspectives[id] = pers;
-                        return this.nodes[id] = node;
+                    if (this.options.usePageController) {
+                        // special mode for pagecontroller
+                        // we use special container node instead of using app standards
+                        return this.options.mainPage;
                     } else {
-                        return this.nodes[id];
+
+                        // remove default main node if empty
+                        if (this.nodes.main && this.nodes.main.not(':empty')) {
+                            this.nodes.main.remove();
+                        }
+                        if (this.nodes[id] === undefined) {
+                            this.nodes.body.append(
+                                node = $('<div class="abs window-content">').hide()
+                            );
+                            perspectives[id] = pers;
+                            return this.nodes[id] = node;
+                        } else {
+                            return this.nodes[id];
+                        }
                     }
                 };
 

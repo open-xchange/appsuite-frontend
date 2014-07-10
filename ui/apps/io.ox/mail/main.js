@@ -269,13 +269,14 @@ define('io.ox/mail/main',
             app.bindFolderChange = function () {
                 // always change folder on click
                 // No way to use tap here since folderselection really messes up the event chain
-                app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
+                app.pages.getPage('folderTree').on('tap', '.folder.selectable', function (e) {
                     if (app.props.get('mobileFolderSelectMode') === true) {
                         $(e.currentTarget).trigger('contextmenu'); // open menu
                         return; // do not change page in edit mode
                     }
                     if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
                     // go to listview
+
                     app.pages.changePage('listView');
                 });
             };

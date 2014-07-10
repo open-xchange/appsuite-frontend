@@ -19,11 +19,16 @@ define('io.ox/files/main',
      'io.ox/core/extensions',
      'io.ox/core/api/folder',
      'io.ox/core/extPatterns/actions',
+     'io.ox/core/toolbars-mobile',
+     'io.ox/core/page-controller',
+     'io.ox/core/commons-folderview',
+     'io.ox/files/mobile-navbar-extensions',
+     'io.ox/files/mobile-toolbar-actions',
      'io.ox/files/actions',
      'io.ox/files/folderview-extensions',
      'less!io.ox/files/style',
      'io.ox/files/toolbar'
-    ], function (commons, gt, settings, ext, folderAPI, actions) {
+    ], function (commons, gt, settings, ext, folderAPI, actions, Bars, PageController, FolderView) {
 
     'use strict';
 
@@ -33,16 +38,167 @@ define('io.ox/files/main',
         win;
 
     app.mediator({
+        /*
+         * Init pages for mobile use
+         * Each View will get a single page with own
+         * toolbars and navbars. A PageController instance
+         * will handle the page changes and also maintain
+         * the state of the toolbars and navbars
+         */
+        'pages-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+            var c = app.getWindow().nodes.main;
+            var navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">');
+
+            app.navbar = navbar;
+            app.toolbar = toolbar;
+
+            app.pages = new PageController(app);
+
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+
+            // create 3 pages with toolbars and navbars
+            app.pages.addPage({
+                name: 'folderTree',
+                container: c,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/files/mobile/navbar'
+                })
+            });
+
+            app.pages.addPage({
+                name: 'mainView',
+                container: c,
+                startPage: true,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/files/mobile/navbar'
+                }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'mainView',
+                    extension: 'io.ox/files/mobile/toolbar'
+                }),
+                secondaryToolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'mainView',
+                    extension: 'io.ox/files/mobile/toolbar'
+                })
+            });
+
+            app.pages.addPage({
+                name: 'detailView',
+                container: c,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/files/mobile/navbar'
+                }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'detailView',
+                    extension: 'io.ox/files/mobile/toolbar'
+
+                })
+            });
+
+            // important
+            // tell page controller about special navigation rules
+            app.pages.setBackbuttonRules({
+                'mainView': 'folderTree'
+            });
+        },
+
+        /*
+         * Init all nav- and toolbar labels for mobile
+         */
+        'navbars-mobile': function (app) {
+
+            if (!_.device('small')) return;
+
+            app.pages.getNavbar('mainView')
+                .setLeft(gt('Folders'))
+                .setRight(
+                    //#. Used as a button label to enter the "edit mode"
+                    gt('Edit')
+                );
+
+            app.pages.getNavbar('folderTree')
+                .setTitle(gt('Folders'))
+                .setLeft(false)
+                .setRight(gt('Edit'));
+
+            app.pages.getNavbar('detailView')
+                .setTitle('') // no title
+                .setLeft(
+                    //#. Used as button label for a navigation action, like the browser back button
+                    gt('Back')
+                );
+
+            // tell each page's back button what to do
+            app.pages.getNavbar('mainView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+
+            app.pages.getNavbar('detailView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+
+            // TODO restore last folder as starting point
+            app.pages.showPage('mainView');
+        },
 
         /*
          * Folder view support
          */
         'folder-view': function (app) {
+
             // folder tree
             commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId', 9) });
             app.getWindow().nodes.sidepanel.addClass('border-right');
         },
+        /*
+         * Folder view mobile support
+         */
+        'folder-view-mobile': function (app) {
 
+            if (_.device('!smartphone')) return;
+
+            var view = new FolderView(app, {
+                type: 'infostore',
+                container: app.pages.getPage('folderTree')
+            });
+            view.handleFolderChange();
+            view.load();
+        },
+        /*
+         * Folder change listener for mobile
+         */
+        'folder-view-mobile-listener': function () {
+            if (_.device('!smartphone')) return;
+            // always change folder on click
+            // No way to use tap here since folderselection really messes up the event chain
+            app.pages.getPage('folderTree').on('tap', '.folder.selectable', function (e) {
+                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
+                if (app.props.get('mobileFolderSelectMode') === true) {
+                    $(e.currentTarget).trigger('contextmenu'); // open menu
+                    return; // do not change page in edit mode
+                }
+                app.pages.changePage('mainView');
+            });
+        },
+        /*
+         * Folder change listener for mobile
+         */
+        'change:folder-mobile': function () {
+            if (_.device('!smartphone')) return;
+            app.on('folder:change', function () {
+                app.folder.getData().done(function (d) {
+                    app.pages.getNavbar('mainView').setTitle(d.title);
+                });
+            });
+        },
         /*
          * Default application properties
          */
@@ -96,7 +252,7 @@ define('io.ox/files/main',
                 ox.ui.Perspective.show(app, value);
             });
 
-            window.app = app;
+            window.driveapp = app;
         },
 
         /*
@@ -142,7 +298,8 @@ define('io.ox/files/main',
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
             title: 'Drive',
-            chromeless: _.device('!small')
+            chromeless: true,
+            usePageController: _.device('smartphone')
         }));
 
         win.addClass('io-ox-files-main');
@@ -178,6 +335,8 @@ define('io.ox/files/main',
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .always(function () {
                 app.mediate();
+                // prepare perspective for pagecontroller
+                if (win.options.usePageController) win.options.mainPage = app.pages.getPage('mainView');
                 win.show();
             })
             .done(function () {

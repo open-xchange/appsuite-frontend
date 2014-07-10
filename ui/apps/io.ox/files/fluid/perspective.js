@@ -148,16 +148,34 @@ define('io.ox/files/fluid/perspective',
             if (dropZone) {
                 dropZone.update();
             }
-            dialog.show(e, function (popup) {
-                popup
-                    .append(viewDetail.draw(file, app))
-                    .attr({
-                        'role': 'complementary',
-                        'aria-label': gt('File Details')
-                    });
-                el = popup.closest('.io-ox-sidepopup');
-            });
-            _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
+            if (_.device('smartphone')) {
+                // mobile mode, use detailView of Pagecontroller instead of Popup
+                var dView = app.pages.getPage('detailView');
+
+                // wait for transition to be done
+                dView.one('pageshow', function () {
+                    dView.idle();
+                    // append preview image
+                    $('.mobile-detail-view-wrap', dView).append(viewDetail.draw(file, app));
+                });
+
+                dView.empty()
+                    .append($('<div class="mobile-detail-view-wrap">')).busy();
+
+                app.pages.changePage('detailView');
+            } else {
+                dialog.show(e, function (popup) {
+                    popup
+                        .append(viewDetail.draw(file, app))
+                        .attr({
+                            'role': 'complementary',
+                            'aria-label': gt('File Details')
+                        });
+                    el = popup.closest('.io-ox-sidepopup');
+                });
+
+                _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
+            }
         });
     }
     // mobile multiselect helpers
@@ -639,9 +657,8 @@ define('io.ox/files/fluid/perspective',
                         preview.call(self, e, cid);
                 });
             } else {
-                scrollpane.on('click', '.file-cell', function (e, data) {
+                scrollpane.on('tap', '.file-cell', function (e, data) {
                     var cid = _.cid($(this).attr('data-obj-id')),
-                        //special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
                         valid = e.target.type !== 'checkbox' || data === 'automated';
                     if (valid)
                         preview.call(self, e, cid);
