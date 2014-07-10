@@ -122,7 +122,7 @@ define('io.ox/mail/compose/extensions',
                     $('<div data-extension-id="' + attr + '">')
                         .addClass(cls)
                         .append(
-                            $('<label class="maillabel col-xs-2 col-md-1">').text(gt(label)).attr({
+                            $('<label class="maillabel col-xs-2 col-md-1">').text(label).attr({
                                 'for': guid
                             }),
                             $('<div class="col-xs-10 col-md-11">').append(
