@@ -465,6 +465,8 @@ define.async('io.ox/core/tk/contenteditable-editor',
             // disable the auto generation of hidden input fields (we don't need them)
             hidden_input: false,
 
+            theme: 'unobtanium',
+
             /*
             TODO: needed for emoji ?
             object_resizing: 0,
@@ -806,17 +808,8 @@ define.async('io.ox/core/tk/contenteditable-editor',
             $(window).off('resize.tinymce');
         };
 
-        this.getContainer = function () {
-            return $('iframe', ed.getContentAreaContainer());
-        };
-
         this.destroy = function () {
             this.handleHide();
-            if (ed) {
-                // fix IE9/10 focus bug (see bug 29616); similar: http://bugs.jqueryui.com/ticket/9122
-                this.getContainer().attr('src', 'blank.html');
-                $(ed.getWin()).off('focus blur');
-            }
             if (textarea.tinymce()) {
                 textarea.tinymce().remove();
             }
