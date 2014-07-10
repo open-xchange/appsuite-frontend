@@ -301,8 +301,8 @@ define('io.ox/tasks/main',
                 //hasDeletePermission = undefined;
             });
 
-            updateGridOptions();
             commons.addGridToolbarFolder(app, grid);
+            updateGridOptions();
         },
 
         'show-task': function (app) {
@@ -497,7 +497,7 @@ define('io.ox/tasks/main',
     taskToolbarOptions = function (e) {
         e.preventDefault();
         var option = $(this).attr('data-option'),
-            grid = e.data.grid;
+            grid = app.grid;
         if (option === 'asc' || option === 'desc') {
             grid.prop('order', option).refresh();
         } else if (option !== 'done') {
