@@ -689,6 +689,9 @@ define('io.ox/mail/main',
                     resetRight('selection-one preview-visible');
                     app.showMail(list[0]);
                     return;
+                } else if (app.props.get('layout') === 'list' && type === 'one') {//don't call show mail (an in visible detailview would be drawn which marks it as read)
+                    resetRight('selection-one');
+                    return;
                 }
 
                 switch (type) {
@@ -767,6 +770,11 @@ define('io.ox/mail/main',
                 } else {
                     app.right.removeClass(className);
                     nodes.body.addClass(className).prepend(toolbar);
+                }
+
+                if(layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
+                    //listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
+                    app.listView.selection.triggerChange();
                 }
             };
 
