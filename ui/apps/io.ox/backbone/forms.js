@@ -864,7 +864,7 @@ define('io.ox/backbone/forms',
                         if (options.clearButton) {//add clear button
                             self.nodes.dayField.mobiscroll('option', 'button3Text', gt('clear'));
                             self.nodes.dayField.mobiscroll('option', 'button3', function () {
-                                self.model.set(self.attribute, null);
+                                self.model.set(self.attribute, null, { validate: true });
                                 self.nodes.dayField.mobiscroll('hide');
                             });
                         }
