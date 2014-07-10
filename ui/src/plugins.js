@@ -259,7 +259,7 @@
                     storage.setItem('file-toc', JSON.stringify(fileToc));
                 } catch (e) {
                     // quota exceeded
-                    if (e.name === 'QUOTA_EXCEEDED_ERR') {
+                    if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'QuotaExceededError') {
                         console.warn('localStorage quota exceeded.');
                     } else {
                         console.warn('Failed writing to localStorage. ')
