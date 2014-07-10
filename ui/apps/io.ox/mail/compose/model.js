@@ -163,7 +163,7 @@ define('io.ox/mail/compose/model',
 
             this.get('attachments').at(0).set('content', content, {silent: true});
 
-            result =  _(this.toJSON()).pick(
+            result = this.pick(
                 'from',
                 'to',
                 'cc',
