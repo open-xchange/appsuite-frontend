@@ -534,13 +534,13 @@ msgstr "已更新帳戶"
 msgid "Actions"
 msgstr "行為"
 
-#: apps/io.ox/tasks/edit/view-template.js:629 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:631 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:97 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:118
 msgid "Actual costs"
 msgstr "實際成本"
 
-#: apps/io.ox/tasks/edit/view-template.js:605 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:607 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:95 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:116
 msgid "Actual duration in minutes"
@@ -639,8 +639,8 @@ msgstr "添加參與者"
 #: apps/io.ox/calendar/edit/template.js:332 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/template.js:337
 #: apps/io.ox/calendar/edit/template.js:345
-#: apps/io.ox/tasks/edit/view-template.js:401 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:403
+#: apps/io.ox/tasks/edit/view-template.js:403 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:405
 msgid "Add participant/resource"
 msgstr "添加參與者/資源"
 
@@ -937,7 +937,7 @@ msgstr[1] "已儲存附件"
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
 #: apps/io.ox/mail/write/view-main.js:528 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:597
-#: apps/io.ox/tasks/edit/view-template.js:479 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:90 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:218
 msgid "Attachments"
@@ -1041,7 +1041,7 @@ msgstr "密件抄送"
 msgid "Below quoted text"
 msgstr "引用內容下方"
 
-#: apps/io.ox/tasks/edit/view-template.js:684 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:686 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:99 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:120
 msgid "Billing information"
@@ -1471,7 +1471,7 @@ msgstr "精簡"
 msgid "Compact view"
 msgstr "精簡型面板"
 
-#: apps/io.ox/tasks/edit/view-template.js:696 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:698 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:100 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:121
 msgid "Companies"
@@ -1527,7 +1527,7 @@ msgstr "Connector for Microsoft Outlook®"
 msgid "Contact"
 msgstr "聯繫人"
 
-#: apps/io.ox/contacts/view-detail.js:773 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:775 module:io.ox/contacts
 msgid "Contact Details"
 msgstr "聯絡人詳細資訊"
 
@@ -1601,13 +1601,13 @@ msgstr "副本 (CC) 致"
 msgid "Copy to description"
 msgstr "複製至描述"
 
-#: apps/io.ox/tasks/model.js:114 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:122
+#: apps/io.ox/tasks/model.js:112 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:120
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "成本必須在 -%1$d 到 %1$d 之間。"
 
-#: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:137
+#: apps/io.ox/tasks/model.js:132 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:135
 msgid "Costs must only have two decimal places."
 msgstr "成本最多只能到小數後兩位"
 
@@ -1752,7 +1752,7 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "建立檔案"
 
-#: apps/io.ox/tasks/edit/view-template.js:660 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:662 module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "幣值"
 
@@ -2021,7 +2021,7 @@ msgstr "顯示名"
 msgid "Display of names"
 msgstr "姓名顯示方式"
 
-#: apps/io.ox/tasks/edit/view-template.js:672 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:674 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:98 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:119
 msgid "Distance"
@@ -2219,7 +2219,7 @@ msgstr "放到這裡已匯入此郵件"
 
 #: apps/io.ox/calendar/edit/template.js:523 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:336 module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js:717 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:719 module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "放到此處以上傳 <b class='dndignore'>新附件</b>"
 
@@ -2526,13 +2526,13 @@ msgstr "錯誤:"
 msgid "Errors"
 msgstr "錯誤"
 
-#: apps/io.ox/tasks/edit/view-template.js:617 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:619 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:96 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:117
 msgid "Estimated costs"
 msgstr "預估成本"
 
-#: apps/io.ox/tasks/edit/view-template.js:593 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:595 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:115
 msgid "Estimated duration in minutes"
@@ -3095,8 +3095,8 @@ msgstr "隱藏 QR code"
 msgid "Hide comments"
 msgstr "隱藏注釋"
 
-#: apps/io.ox/tasks/edit/view-template.js:569 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:579
+#: apps/io.ox/tasks/edit/view-template.js:571 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:581
 msgid "Hide details"
 msgstr "隱藏詳情"
 
@@ -3109,7 +3109,7 @@ msgid "Hide stack trace"
 msgstr "隱藏堆疊追蹤內容"
 
 #: apps/io.ox/mail/write/view-main.js:701 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:344 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
 msgstr "高"
@@ -3528,7 +3528,7 @@ msgid "Loss: %1$s %"
 msgstr "失去 %1$s %"
 
 #: apps/io.ox/mail/write/view-main.js:703 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:340 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
 msgstr "低"
@@ -3762,7 +3762,7 @@ msgstr "符合"
 msgid "May"
 msgstr "五月"
 
-#: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Medium"
 msgstr "媒體"
@@ -4151,7 +4151,7 @@ msgstr "尚無塗鴉牆貼文。"
 #: apps/io.ox/core/tk/attachments.js:420 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:339
+#: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:327
 #: module:io.ox/tasks/edit
 msgid "None"
 msgstr "無"
@@ -4461,7 +4461,7 @@ msgstr "尋呼機"
 
 #: apps/io.ox/backbone/mini-views/participants.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:301 module:io.ox/calendar/edit/main
-#: apps/io.ox/tasks/edit/view-template.js:365 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:367 module:io.ox/tasks/edit
 msgid "Participants"
 msgstr "參與者"
 
@@ -4887,7 +4887,7 @@ msgid "Printout"
 msgstr "列印"
 
 #: apps/io.ox/mail/write/view-main.js:699 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:344 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:346 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:622 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
@@ -4902,7 +4902,7 @@ msgstr "隱私權公告"
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
-#: apps/io.ox/tasks/edit/view-template.js:355 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "私人"
 
@@ -4934,7 +4934,7 @@ msgstr "進度 %1$s %"
 msgid "Progress in %"
 msgstr "進度百分比"
 
-#: apps/io.ox/tasks/model.js:146 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:144 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "進度必須是從 0 到 100 內的數字"
 
@@ -5072,11 +5072,11 @@ msgstr "找回密碼"
 msgid "Recruiter"
 msgstr "招聘者"
 
-#: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:162 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
 msgstr "重複發生的任務需要有效到期日。"
 
-#: apps/io.ox/tasks/model.js:155 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:153 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "重複發生的任務需要有效開始日期。"
 
@@ -5685,8 +5685,8 @@ msgstr "顯示衝突"
 msgid "Show declined appointments"
 msgstr "顯示拒絕的約會"
 
-#: apps/io.ox/tasks/edit/view-template.js:571 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:579
+#: apps/io.ox/tasks/edit/view-template.js:573 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:581
 msgid "Show details"
 msgstr "顯示詳情"
 
@@ -6409,7 +6409,7 @@ msgid ""
 "consider, which data you want to share."
 msgstr "分享的資料夾將可被網路上的所有人存取。請注意您要發佈哪些資料。"
 
-#: apps/io.ox/tasks/model.js:103 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:101 module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr "起始日期必須在到期日前。"
 

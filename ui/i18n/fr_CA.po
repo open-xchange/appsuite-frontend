@@ -540,13 +540,13 @@ msgstr "Compte mis à jour"
 msgid "Actions"
 msgstr "Actions"
 
-#: apps/io.ox/tasks/edit/view-template.js:629 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:631 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:97 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:118
 msgid "Actual costs"
 msgstr "Coûts réels"
 
-#: apps/io.ox/tasks/edit/view-template.js:605 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:607 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:95 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:116
 msgid "Actual duration in minutes"
@@ -645,8 +645,8 @@ msgstr "Ajouter un participant"
 #: apps/io.ox/calendar/edit/template.js:332 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/template.js:337
 #: apps/io.ox/calendar/edit/template.js:345
-#: apps/io.ox/tasks/edit/view-template.js:401 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:403
+#: apps/io.ox/tasks/edit/view-template.js:403 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:405
 msgid "Add participant/resource"
 msgstr "Ajouter un participant ou une ressource"
 
@@ -948,7 +948,7 @@ msgstr[1] "Les pièces jointes ont été enregistrées"
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
 #: apps/io.ox/mail/write/view-main.js:528 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:597
-#: apps/io.ox/tasks/edit/view-template.js:479 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:90 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:218
 msgid "Attachments"
@@ -1058,7 +1058,7 @@ msgstr "CCI"
 msgid "Below quoted text"
 msgstr "Au-dessous du contenu cité"
 
-#: apps/io.ox/tasks/edit/view-template.js:684 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:686 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:99 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:120
 msgid "Billing information"
@@ -1492,7 +1492,7 @@ msgstr "Compacte"
 msgid "Compact view"
 msgstr "Vue compacte"
 
-#: apps/io.ox/tasks/edit/view-template.js:696 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:698 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:100 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:121
 msgid "Companies"
@@ -1548,7 +1548,7 @@ msgstr "Connecteur pour Microsoft Outlook®"
 msgid "Contact"
 msgstr "Contact"
 
-#: apps/io.ox/contacts/view-detail.js:773 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:775 module:io.ox/contacts
 msgid "Contact Details"
 msgstr "Détails sur le contact"
 
@@ -1622,13 +1622,13 @@ msgstr "Copie carbone (CC) à"
 msgid "Copy to description"
 msgstr "Copier dans la description"
 
-#: apps/io.ox/tasks/model.js:114 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:122
+#: apps/io.ox/tasks/model.js:112 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:120
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "Les coûts doivent se situer entre -%1$d et %1$d."
 
-#: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
-#: apps/io.ox/tasks/model.js:137
+#: apps/io.ox/tasks/model.js:132 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:135
 msgid "Costs must only have two decimal places."
 msgstr "Les coûts ne doivent avoir que deux décimales."
 
@@ -1775,7 +1775,7 @@ msgctxt "help"
 msgid "Creating Files"
 msgstr "Créer des fichiers"
 
-#: apps/io.ox/tasks/edit/view-template.js:660 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:662 module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Devise"
 
@@ -2049,7 +2049,7 @@ msgstr "Nom affiché"
 msgid "Display of names"
 msgstr "Affichage des noms"
 
-#: apps/io.ox/tasks/edit/view-template.js:672 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:674 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:98 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:119
 msgid "Distance"
@@ -2255,7 +2255,7 @@ msgstr "Déposer ici pour importer ce courriel"
 
 #: apps/io.ox/calendar/edit/template.js:523 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:336 module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js:717 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:719 module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 "Déposer ici pour téléverser une <b class=\"dndignore\">nouvelle pièce "
@@ -2570,13 +2570,13 @@ msgstr "Erreur :"
 msgid "Errors"
 msgstr "Erreurs"
 
-#: apps/io.ox/tasks/edit/view-template.js:617 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:619 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:96 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:117
 msgid "Estimated costs"
 msgstr "Coûts estimés"
 
-#: apps/io.ox/tasks/edit/view-template.js:593 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:595 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:115
 msgid "Estimated duration in minutes"
@@ -3155,8 +3155,8 @@ msgstr "Masquer le code QR"
 msgid "Hide comments"
 msgstr "Masquer les commentaires"
 
-#: apps/io.ox/tasks/edit/view-template.js:569 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:579
+#: apps/io.ox/tasks/edit/view-template.js:571 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:581
 msgid "Hide details"
 msgstr "Masquer les détails"
 
@@ -3169,7 +3169,7 @@ msgid "Hide stack trace"
 msgstr "Masquer la trace d'erreurs"
 
 #: apps/io.ox/mail/write/view-main.js:701 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:344 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "High"
 msgstr "Haute"
@@ -3598,7 +3598,7 @@ msgid "Loss: %1$s %"
 msgstr "Perte : %1$s %"
 
 #: apps/io.ox/mail/write/view-main.js:703 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:340 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Low"
 msgstr "Basse"
@@ -3833,7 +3833,7 @@ msgstr "Correspond à"
 msgid "May"
 msgstr "Mai"
 
-#: apps/io.ox/tasks/edit/view-template.js:341 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
 msgid "Medium"
 msgstr "Moyenne"
@@ -4226,7 +4226,7 @@ msgstr "Pas de messages sur le babillard pour le moment."
 #: apps/io.ox/core/tk/attachments.js:420 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:339
+#: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:327
 #: module:io.ox/tasks/edit
 msgid "None"
 msgstr "Aucun"
@@ -4546,7 +4546,7 @@ msgstr "Téléavertisseur"
 
 #: apps/io.ox/backbone/mini-views/participants.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:301 module:io.ox/calendar/edit/main
-#: apps/io.ox/tasks/edit/view-template.js:365 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:367 module:io.ox/tasks/edit
 msgid "Participants"
 msgstr "Participants"
 
@@ -4989,7 +4989,7 @@ msgid "Printout"
 msgstr "Impression"
 
 #: apps/io.ox/mail/write/view-main.js:699 module:io.ox/mail
-#: apps/io.ox/tasks/edit/view-template.js:344 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:346 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:622 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
@@ -5004,7 +5004,7 @@ msgstr "Mention de confidentialité"
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
-#: apps/io.ox/tasks/edit/view-template.js:355 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Privé"
 
@@ -5036,7 +5036,7 @@ msgstr "Avancement %1$s %"
 msgid "Progress in %"
 msgstr "Avancement en %"
 
-#: apps/io.ox/tasks/model.js:146 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:144 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "L'avancement doit être un nombre valide entre 0 et 100"
 
@@ -5178,11 +5178,11 @@ msgstr "Récupérer les mots de passe"
 msgid "Recruiter"
 msgstr "Recruteur"
 
-#: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:162 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
 msgstr "Les tâches répétitives ont besoin d'une date d'échéance valable."
 
-#: apps/io.ox/tasks/model.js:155 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:153 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "Les tâches répétitives ont besoin d'une date de début valide."
 
@@ -5791,8 +5791,8 @@ msgstr "Afficher les conflits"
 msgid "Show declined appointments"
 msgstr "Afficher les rendez-vous déclinés"
 
-#: apps/io.ox/tasks/edit/view-template.js:571 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view-template.js:579
+#: apps/io.ox/tasks/edit/view-template.js:573 module:io.ox/tasks/edit
+#: apps/io.ox/tasks/edit/view-template.js:581
 msgid "Show details"
 msgstr "Afficher les détails"
 
@@ -6538,7 +6538,7 @@ msgstr ""
 "Tout le monde sur Internet pourra accéder aux données partagées. Veuillez "
 "réfléchir aux données que vous voulez partager."
 
-#: apps/io.ox/tasks/model.js:103 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:101 module:io.ox/tasks
 msgid "The start date must be before the due date."
 msgstr "La date de début doit précéder la date d'échéance."
 
