@@ -110,7 +110,7 @@ define('io.ox/contacts/util',
 
         getFullName: function (obj) {
             var fmt = this.getFullNameFormat(obj);
-            return gt.format(fmt.format, fmt.params);
+            return _.escape(gt.format(fmt.format, fmt.params));
         },
 
         getDisplayName: function (obj) {
