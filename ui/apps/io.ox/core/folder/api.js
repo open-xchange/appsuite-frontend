@@ -364,6 +364,20 @@ define('io.ox/core/folder/api',
     }
 
     //
+    // Reload folder
+    //
+
+    function getId(arg) {
+        return _.isString(arg) ? arg : (arg ? arg.folder_id : null);
+    }
+
+    function reload() {
+        _.chain(arguments).flatten().map(getId).compact().uniq().each(function (id) {
+            get(id, { cache: false });
+        });
+    }
+
+    //
     // Refresh all folders
     //
 
@@ -393,6 +407,7 @@ define('io.ox/core/folder/api',
         move: move,
         create: create,
         remove: remove,
+        reload: reload,
         refresh: refresh,
         is: util.is,
         can: util.can,
