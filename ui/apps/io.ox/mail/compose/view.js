@@ -160,9 +160,9 @@ define('io.ox/mail/compose/view',
             ext.point(POINT + '/signatures').invoke('draw', signatureDropdown.$el, baton);
 
             this.append(
-                $('<div class="col-xs-6 col-md-3 pull-right">').append(
-                    optionDropdown.render().$el.addClass('pull-right'),
-                    signatureDropdown.render().$el.addClass('pull-right signatures')
+                $('<div class="col-xs-6 col-md-3 pull-right text-right">').append(
+                    signatureDropdown.render().$el.addClass('signatures'),
+                    optionDropdown.render().$el
                 )
             );
         }
@@ -330,7 +330,10 @@ define('io.ox/mail/compose/view',
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
-            this.textarea = $('<div class="editable">').attr('data-editor-id', this.editorId);
+            this.textarea = $('<div class="editable">').attr({
+                'data-editor-id': this.editorId,
+                'tabindex': 1
+            });
             this.baton = ext.Baton({
                 // please don't use this data attribute - use model instead
                 data: this.model.toJSON(),
