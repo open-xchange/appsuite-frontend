@@ -796,9 +796,17 @@ define('io.ox/mail/compose/view',
             }
 
             this.$el.append(
-                $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
+                this.mcetoolbar = $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
                 this.textarea
             );
+
+            var scrollPane = this.app.getWindowNode();
+            scrollPane.on('scroll', $.proxy(function () {
+                if (!this.toolbarpos) {
+                    this.toolbarpos = this.mcetoolbar.position().top;
+                }
+                this.mcetoolbar.toggleClass('fixed', this.toolbarpos < scrollPane.scrollTop());
+            }, this));
 
             return this;
         }

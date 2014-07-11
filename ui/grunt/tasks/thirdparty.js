@@ -47,7 +47,12 @@ module.exports = function (grunt) {
                 {
                     // static lib
                     expand: true,
-                    src: ['jquery-imageloader/jquery.imageloader.js', 'Chart.js/Chart.js', 'bootstrap-tokenfield/js/bootstrap-tokenfield.js', 'typeahead.js/dist/typeahead.jquery.js'],
+                    src: [
+                        'jquery-imageloader/jquery.imageloader.js',
+                        'Chart.js/Chart.js',
+                        'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+                        'typeahead.js/dist/typeahead.jquery.js'
+                    ],
                     cwd: 'bower_components',
                     dest: 'build/static/3rd.party/'
                 },
