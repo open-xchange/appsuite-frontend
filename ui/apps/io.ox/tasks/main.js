@@ -149,7 +149,7 @@ define('io.ox/tasks/main',
             app.pages.getNavbar('folderTree')
                 .setTitle(gt('Folders'))
                 .setLeft(false)
-                .setRight(gt('Cancel'));
+                .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
                 .setTitle('') // no title
@@ -184,8 +184,30 @@ define('io.ox/tasks/main',
             });
 
             app.pages.getNavbar('folderTree').on('rightAction', function () {
-                app.pages.goBack('left');
+                app.toggleFolders();
             });
+
+        },
+        'toggle-folder-editmode': function (app) {
+            if (_.device('!small')) return;
+            var toggleFolders =  function () {
+                var state = app.props.get('mobileFolderSelectMode'),
+                    page = app.pages.getPage('folderTree');
+
+                if (state) {
+                    app.props.set('mobileFolderSelectMode', false);
+                    app.pages.getNavbar('folderTree').setRight(gt('Edit'));
+                    page.removeClass('mobile-edit-mode');
+
+                } else {
+                    app.props.set('mobileFolderSelectMode', true);
+                    app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
+                    page.addClass('mobile-edit-mode');
+
+                }
+            };
+
+            app.toggleFolders = toggleFolders;
 
         },
         /*
