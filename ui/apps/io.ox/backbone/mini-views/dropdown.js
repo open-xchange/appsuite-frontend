@@ -34,6 +34,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         setup: function (options) {
             this.label = options.label;
+            this.labelNode = options.labelNode;
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
             this.$ul.on('click', 'a', this.onClick.bind(this));
             this.listenTo(this.model, 'change', this.update);
@@ -83,7 +84,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         render: function () {
             this.$el.append(
                 $('<a href="#" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').append(
-                    $.txt(this.label), $('<i class="fa fa-caret-down">')
+                    this.labelNode || $.txt(this.label), this.options.caret ? $('<i class="fa fa-caret-down">') : []
                 ),
                 this.$ul
             );
