@@ -63,7 +63,7 @@ define('io.ox/mail/compose/extensions',
     });
 
     //make strings accessible to translators
-    var tokenfieldTranslations: {
+    var tokenfieldTranslations = {
         To: gt('To'),
         CC: gt('CC'),
         BCC: gt('BCC')
