@@ -146,15 +146,17 @@ define('io.ox/core/page-controller',
             backButtonRules = rules;
         };
 
-        this.goBack = function () {
+        this.goBack = function (slideDirection) {
             var target = lastPage;
+
+            slideDirection = slideDirection || 'right';
 
             // if we do have a custom navigation for some pages
             // use this instead of the last page
             if (backButtonRules && backButtonRules[current]) {
                 target = backButtonRules[current];
             }
-            this.changePage(target, {animation: 'slideright'});
+            this.changePage(target, {animation: 'slide' + slideDirection});
         };
 
         /**
