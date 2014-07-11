@@ -62,6 +62,13 @@ define('io.ox/mail/compose/extensions',
         msisdn: true
     });
 
+    //make strings accessible to translators
+    var tokenfieldTranslations: {
+        To: gt('To'),
+        CC: gt('CC'),
+        BCC: gt('BCC')
+    };
+
     var extensions = {
 
         title: function () {
@@ -122,7 +129,7 @@ define('io.ox/mail/compose/extensions',
                     $('<div data-extension-id="' + attr + '">')
                         .addClass(cls)
                         .append(
-                            $('<label class="maillabel col-xs-2 col-md-1">').text(label).attr({
+                            $('<label class="maillabel col-xs-2 col-md-1">').text(tokenfieldTranslations[label]).attr({
                                 'for': guid
                             }),
                             $('<div class="col-xs-10 col-md-11">').append(
