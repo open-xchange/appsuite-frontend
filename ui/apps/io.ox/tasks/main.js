@@ -149,7 +149,7 @@ define('io.ox/tasks/main',
             app.pages.getNavbar('folderTree')
                 .setTitle(gt('Folders'))
                 .setLeft(false)
-                .setRight(gt('Edit'));
+                .setRight(gt('Cancel'));
 
             app.pages.getNavbar('detailView')
                 .setTitle('') // no title
@@ -184,7 +184,7 @@ define('io.ox/tasks/main',
             });
 
             app.pages.getNavbar('folderTree').on('rightAction', function () {
-                app.toggleFolders();
+                app.pages.goBack('left');
             });
 
         },
