@@ -601,7 +601,6 @@ define('io.ox/tasks/main',
             });
     });
 
-    // view dropdown
     //extension points
     ext.point('io.ox/tasks/vgrid/toolbar').extend({
         id: 'dropdown',
