@@ -26,10 +26,11 @@ define('io.ox/tasks/main',
      'io.ox/core/commons-folderview',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
+     'io.ox/backbone/mini-views/dropdown',
      'io.ox/tasks/toolbar',
      'io.ox/tasks/mobile-navbar-extensions',
      'io.ox/tasks/mobile-toolbar-actions'
-    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, FolderView, Bars, PageController) {
+    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, FolderView, Bars, PageController, Dropdown) {
 
     'use strict';
 
@@ -38,9 +39,6 @@ define('io.ox/tasks/main',
         name: 'io.ox/tasks',
         title: 'Tasks'
     });
-
-    // a bit too global vars
-    var grid, taskToolbarOptions;
 
     app.mediator({
         /*
@@ -179,8 +177,16 @@ define('io.ox/tasks/main',
                 if (app.props.get('checkboxes') === true) {
                     // leave multiselect? -> clear selection
                     app.grid.selection.clear();
+                    app.grid.showTopbar(false);
+                    app.grid.showToolbar(false);
+                } else {
+                     // also show sorting options
+                    app.grid.showTopbar(true);
+                    app.grid.showToolbar(true);
                 }
+
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
+
             });
 
             app.pages.getNavbar('folderTree').on('rightAction', function () {
@@ -292,18 +298,9 @@ define('io.ox/tasks/main',
             grid.prop('order', 'asc');
 
             function updateGridOptions() {
+
                 var dropdown = grid.getToolbar().find('.grid-options'),
-                    list = dropdown.find('ul'),
                     props = grid.prop();
-                // uncheck all
-                list.find('i').attr('class', 'fa fa-fw');
-                // check right options
-                list.find(
-                        '[data-option="' + props.sort + '"], ' +
-                        '[data-option="' + props.order + '"], ' +
-                        '[data-option="' + (props.done ? 'done' : '~done') + '"]'
-                    ).find('i').attr('class', 'fa fa-check');
-                // order
                 if (props.order === 'desc') {
                     dropdown.find('.fa-arrow-down').css('opacity', 1).end()
                         .find('.fa-arrow-up').css('opacity', 0.4);
@@ -394,13 +391,6 @@ define('io.ox/tasks/main',
             });
             view.handleFolderChange();
             view.load();
-
-            // bind action for edit button
-            //app.bindFolderChange();
-
-            // make folder visible by default
-            //app.toggleFolderView(true);
-
         },
 
         /*
@@ -513,21 +503,7 @@ define('io.ox/tasks/main',
     });
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' }),
-
-    // VGridToolbarOptions
-    taskToolbarOptions = function (e) {
-        e.preventDefault();
-        var option = $(this).attr('data-option'),
-            grid = app.grid;
-        if (option === 'asc' || option === 'desc') {
-            grid.prop('order', option).refresh();
-        } else if (option !== 'done') {
-            grid.prop('sort', option).refresh();
-        } else if (option === 'done') {
-            grid.prop(option, !grid.prop(option)).refresh();
-        }
-    };
+    var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' });
 
     // launcher
     app.setLauncher(function (options) {
@@ -606,7 +582,7 @@ define('io.ox/tasks/main',
             showToggle: _.device('small'),
             hideTopbar: _.device('small'),
             hideToolbar: _.device('small'),
-            toolbarPlacement: _.device('small') ? 'none' : 'top'
+            toolbarPlacement: 'top' // if it's shown, it should be on the top
         });
 
         app.grid = grid;
@@ -625,29 +601,35 @@ define('io.ox/tasks/main',
             });
     });
 
+    // view dropdown
     //extension points
     ext.point('io.ox/tasks/vgrid/toolbar').extend({
         id: 'dropdown',
         index: 'last',
         draw: function () {
-            this.append(
-                $('<div class="grid-options dropdown">')
-                .append(
-                    $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
-                    .append($('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">'))
-                    .dropdown(),
-                    $('<ul class="dropdown-menu" role="menu">')
-                    .append(
-                        $('<li>').append($('<a href="#" data-option="state">').text(gt('Status')).prepend($('<i>'))), // state becomes Bundesland :)
-                        $('<li>').append($('<a href="#" data-option="202">').text(gt('Due date')).prepend($('<i>'))),
-                        $('<li>').append($('<a href="#" data-option="200">').text(gt('Subject')).prepend($('<i>'))),
-                        $('<li>').append($('<a href="#" data-option="309">').text(gt('Priority')).prepend($('<i>'))),
-                        $('<li class="divider">'),
-                        $('<li>').append($('<a href="#" data-option="asc">').text(gt('Ascending')).prepend($('<i>'))),
-                        $('<li>').append($('<a href="#" data-option="desc">').text(gt('Descending')).prepend($('<i>'))),
-                        $('<li class="divider">'),
-                        $('<li>').append($('<a href="#" data-option="done">').text(gt('Show done tasks')).prepend($('<i>')))
-                    ).on('click', 'a', { grid: grid }, taskToolbarOptions)
+            var dropdown = new Dropdown({
+                    model: app.grid.props,
+                    tagName: 'div',
+                    caret: false,
+                    labelNode: [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')]
+                })
+                .header(gt('Sort options'))
+                .option('sort', 'state', gt('Status'))
+                .option('sort', '202', gt('Due date'))
+                .option('sort', '200', gt('Subject'))
+                .option('sort', '309', gt('Priority'))
+                .divider()
+                .header(gt('Order'))
+                .option('order', 'asc', gt('Ascending'))
+                .option('order', 'dsc', gt('Descending'))
+                .divider()
+                .option('done', true, gt('Show done tasks'))
+                .listenTo(app.grid.props, 'change:sort change:order change:done', function () {
+                    app.grid.refresh();
+                });
+
+            this.append($('<div class="grid-options dropdown">').append(
+                    dropdown.render().$el.attr('data-dropdown', 'sort')
                 )
             );
         }
