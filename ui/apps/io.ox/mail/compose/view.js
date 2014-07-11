@@ -70,7 +70,9 @@ define('io.ox/mail/compose/view',
         id: 'add_attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            extensions.attachment.call(this, baton).done(function ($el) {
+            var node = $('<div class="col-xs-12 col-md-5 col-md-offset-1">');
+            this.append(node);
+            extensions.attachment.call(node, baton).done(function ($el) {
                 $el.find('button[data-action="addinternal"]').click(function (e) {
                     e.preventDefault();
                     require(['io.ox/files/filepicker'], function (Picker) {
@@ -186,9 +188,8 @@ define('io.ox/mail/compose/view',
         id: 'attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var $el = $('<div class="col-xs-12 col-md-5 col-md-offset-1">'),
-                node = $('<div class="row attachments">').append($el);
-            ext.point(POINT + '/attachments').invoke('draw', $el, baton);
+            var node = $('<div class="row attachments">');
+            ext.point(POINT + '/attachments').invoke('draw', node, baton);
             this.append(node);
         }
     });
@@ -207,7 +208,7 @@ define('io.ox/mail/compose/view',
         id: 'attachmentPreviewList',
         index: 200,
         draw: function (baton) {
-            var node = $('<div class="col-xs-12 attachments-list">');
+            var node = $('<div class="col-xs-12 attachments-preview-list">');
             extensions.attachmentPreviewList.call(node, baton);
             node.appendTo(this);
         }
