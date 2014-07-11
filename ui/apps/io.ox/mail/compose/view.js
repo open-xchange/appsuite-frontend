@@ -186,8 +186,9 @@ define('io.ox/mail/compose/view',
         id: 'attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div class="row attachments">');
-            ext.point(POINT + '/attachments').invoke('draw', node, baton);
+            var $el = $('<div class="col-xs-12 col-md-5 col-md-offset-1">'),
+                node = $('<div class="row attachments">').append($el);
+            ext.point(POINT + '/attachments').invoke('draw', $el, baton);
             this.append(node);
         }
     });

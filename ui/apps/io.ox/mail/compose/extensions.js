@@ -255,13 +255,12 @@ define('io.ox/mail/compose/extensions',
             return def;
         },
         attachment: function (baton) {
-            var $el = $('<div class="col-xs-12 col-md-5 col-md-offset-1">'),
-                def = $.Deferred(),
+            var def = $.Deferred(),
                 dropdown = new Dropdown({ model: baton.model, label: gt('Attachments'), tagName: 'div' });
 
             dropdown.render();
             this.append(
-                $el.append(dropdown.$el)
+                dropdown.$el
             );
 
             require(['io.ox/core/tk/attachments'], function (attachments) {
