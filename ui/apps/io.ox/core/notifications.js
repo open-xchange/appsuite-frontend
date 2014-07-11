@@ -361,6 +361,10 @@ define('io.ox/core/notifications',
         },
         hideList: function () {
 
+            if(!this.nodes.main.hasClass('active')) {//if it's closed already we're done
+                return;
+            }
+
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
