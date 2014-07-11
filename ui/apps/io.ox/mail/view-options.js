@@ -71,7 +71,9 @@ define('io.ox/mail/view-options',
             });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right'));
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
+                e.stopPropagation();
+            }));
         }
     });
 
@@ -103,6 +105,9 @@ define('io.ox/mail/view-options',
                     $.txt(gt('Select all'))
                 )
                 .on('click', { baton: baton }, toggleSelection)
+                .on('dblclick', function (e) {
+                    e.stopPropagation();
+                })
             );
         }
     });
