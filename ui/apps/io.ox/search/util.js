@@ -13,7 +13,7 @@
 
 define('io.ox/search/util',
     ['io.ox/core/http',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/api/account',
     ], function (http, folderAPI, accountAPI) {
 
@@ -81,7 +81,7 @@ define('io.ox/search/util',
             _.each(Object.keys(mapping), function (id) {
                 if (id && !hash[id]) {
                     hash[id] = true;
-                    req.push(folderAPI.get({folder: id}));
+                    req.push(folderAPI.get(id));
                 }
             });
 
@@ -133,8 +133,7 @@ define('io.ox/search/util',
                 };
 
             // get folder title
-            folderAPI.get({folder: id})
-                    .always(value.bind(this, id));
+            folderAPI.get(id).always(value.bind(this, id));
 
             return def.promise();
         }

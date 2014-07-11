@@ -29,9 +29,8 @@ define('io.ox/files/settings/pane',
     });
 
     model.on('change:showHidden', function () {
-        require(['io.ox/core/api/folder'], function (folderAPI) {
-            folderAPI.clearCaches();
-            folderAPI.trigger('refresh');
+        require(['io.ox/core/folder/api'], function (folderAPI) {
+            folderAPI.refresh();
         });
     });
 

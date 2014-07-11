@@ -14,7 +14,7 @@
 define('io.ox/core/pubsub/util',
     ['io.ox/core/api/pubsub',
      'settings!io.ox/core',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/pubsub/model',
      'gettext!io.ox/mail'
     ], function (api, coreConfig, folderAPI, model, gt) {
@@ -101,13 +101,13 @@ define('io.ox/core/pubsub/util',
             var parent = coreConfig.get('folder/' + module),
                 folder = '';
             //create folder
-            return folderAPI.create({
-                folder: parent,
-                data: {
+            return folderAPI.create(
+                parent,
+                {
                     title: name || gt('New folder'),
                     module: module
                 }
-            })
+            )
             .pipe(function (data) {
                 //create and refresh subscription
                 folder = data.id;

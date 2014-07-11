@@ -18,7 +18,7 @@ define('io.ox/calendar/util',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/util'
     ], function (date, gt, settings, userAPI, contactAPI, groupAPI, folderAPI, util) {
 
@@ -74,7 +74,7 @@ define('io.ox/calendar/util',
                 if (opt.folderData) {
                     return $.Deferred().resolve(check(opt.folderData));
                 } else {
-                    return folderAPI.get({ folder: opt.app.folder_id }).then(function (data) {
+                    return folderAPI.get(opt.app.folder_id).then(function (data) {
                         return check(data);
                     });
                 }

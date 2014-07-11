@@ -125,13 +125,12 @@ define('io.ox/core/api/account',
      */
     api.getUnifiedMailboxName = function () {
         var def = $.Deferred();
-        require(['io.ox/core/api/folder'], function (folderAPI) {
+        require(['io.ox/core/folder/api'], function (folderAPI) {
             return $.when(
-                folderAPI.getSubFolders(),
+                folderAPI.list('1'),
                 api.all()
             ).then(function (folders, accounts) {
                 var mailFolders, mailAccounts, diff;
-
                 mailFolders = _(folders).chain()
                     .filter(function (folder) { return folder.id.match(/^default(\d+)/);  })
                     .map(function (folder) { return parseInt(folder.id.match(/^default(\d+)/)[1], 10); })
@@ -470,7 +469,7 @@ define('io.ox/core/api/account',
             api.cache = {};
             return api.all().then(function () {
                 api.trigger('create:account', { id: data.id, email: data.primary_address, name: data.name });
-                require(['io.ox/core/api/folder'], function (api) {
+                require(['io.ox/core/folder/api'], function (api) {
                     api.propagate('account:create');
                 });
                 return data;
@@ -498,7 +497,7 @@ define('io.ox/core/api/account',
             delete api.cache[data];
             api.trigger('refresh.all');
             api.trigger('delete');
-            require(['io.ox/core/api/folder'], function (api) {
+            require(['io.ox/core/folder/api'], function (api) {
                 api.propagate('account:delete');
             });
         });
@@ -556,7 +555,7 @@ define('io.ox/core/api/account',
             if (api.cache[id]) {
                 var enabled = result.unified_inbox_enabled;
                 if (api.cache[id].unified_inbox_enabled !== enabled) {
-                    require(['io.ox/core/api/folder'], function (api) {
+                    require(['io.ox/core/folder/api'], function (api) {
                         api.propagate(enabled ? 'account:unified-enable' : 'account:unified-disable');
                     });
                 }

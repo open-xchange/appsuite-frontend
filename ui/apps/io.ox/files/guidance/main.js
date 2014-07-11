@@ -6,7 +6,7 @@ define('io.ox/files/guidance/main',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/core',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/extPatterns/links',
      'io.ox/core/capabilities',
      'gettext!io.ox/files'
@@ -30,7 +30,7 @@ define('io.ox/files/guidance/main',
         //quota.quota = 1000000000000; //this is only for testing, due to unlimited disc space.
         //ext.point('io.ox/files/guidance').enable('guidance_files_reload');
 
-        folderAPI.get({ folder: folderID }).done(function (folderObj) {
+        folderAPI.get(folderID).done(function (folderObj) {
             folder = folderObj;
 
             var dialog = new dialogs.SidePopup({closely: true, tabTrap: true });

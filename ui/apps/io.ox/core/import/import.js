@@ -16,12 +16,13 @@ define('io.ox/core/import/import',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/core/tk/attachments',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/api/import',
      'io.ox/core/notifications',
      'gettext!io.ox/core',
      'less!io.ox/core/import/style'
-    ], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
+    ], function (ext, dialogs, attachments, folderAPI, getBreadcrumb, api, notifications, gt) {
 
     'use strict';
 
@@ -30,7 +31,7 @@ define('io.ox/core/import/import',
         id: 'default',
         draw: function (id, prefix) {
             this.append(
-                folderAPI.getBreadcrumb(id, { prefix: prefix || '' }),
+                getBreadcrumb(id, { prefix: prefix || '' }),
                 $('<input type="hidden" name="folder">').val(id)
             );
         }
@@ -139,7 +140,7 @@ define('io.ox/core/import/import',
                 form;
 
             //get folder and process
-            folderAPI.get({ folder: id }).done(function () {
+            folderAPI.get(id).done(function () {
                 dialog.build(function () {
                     form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                     this.getContentNode().append(form);

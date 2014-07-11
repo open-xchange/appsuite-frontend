@@ -15,7 +15,7 @@ define('io.ox/calendar/freebusy/controller',
     ['io.ox/core/tk/dialogs',
      'io.ox/calendar/week/view',
      'io.ox/calendar/freebusy/templates',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/participants/model',
      'io.ox/participants/views',
@@ -435,7 +435,7 @@ define('io.ox/calendar/freebusy/controller',
             var freebusy = new that.FreeBusy(options);
             options.$el.append(freebusy.$el);
 
-            folderAPI.get({ folder: options.folder }).always(function (data) {
+            folderAPI.get(options.folder).always(function (data) {
                 // pass folder data over to view (needs this for permission checks)
                 // use fallback data on error
                 var fallback = { folder_id: 1, id: settings.get('folder/calendar'), own_rights: 403710016 };

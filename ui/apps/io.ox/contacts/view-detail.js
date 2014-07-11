@@ -18,13 +18,13 @@ define('io.ox/contacts/view-detail',
      'io.ox/contacts/api',
      'io.ox/contacts/actions',
      'io.ox/contacts/model',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
      'less!io.ox/contacts/style'
-    ], function (ext, util, api, actions, model, folderAPI, links, date, gt, settings) {
+    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, gt, settings) {
 
     'use strict';
 
@@ -738,7 +738,7 @@ define('io.ox/contacts/view-detail',
                 }
                 this.append(
                     $('<div class="clearfix">'),
-                    folderAPI.getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
+                    getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
                 );
             }
         }

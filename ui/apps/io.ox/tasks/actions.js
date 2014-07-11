@@ -176,7 +176,7 @@ define('io.ox/tasks/actions',
             var task = baton.data,
                 numberOfTasks = task.length || 1,
                 vGrid = baton.grid || (baton.app && baton.app.getGrid());
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/api/folder'])
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/folder/api'])
                     .done(function (dialogs, views, api, folderAPI) {
 
                 function commit(target) {

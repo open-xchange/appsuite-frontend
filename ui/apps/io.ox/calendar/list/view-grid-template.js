@@ -14,7 +14,7 @@
 define('io.ox/calendar/list/view-grid-template',
     ['io.ox/calendar/util',
      'io.ox/core/extensions',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'gettext!io.ox/calendar',
      'less!io.ox/calendar/list/style'
     ], function (util, ext, folderAPI, gt) {
@@ -61,7 +61,7 @@ define('io.ox/calendar/list/view-grid-template',
                     timeSplits = util.getStartAndEndTime(data);
 
                 if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
-                    var folder = folderAPI.get({ folder: data.folder_id });
+                    var folder = folderAPI.get(data.folder_id);
                     folder.done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                         self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));

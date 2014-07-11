@@ -15,7 +15,7 @@ define('io.ox/calendar/week/view',
      'io.ox/core/date',
      'io.ox/core/extensions',
      'gettext!io.ox/calendar',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/calendar',
      'static/3rd.party/jquery-ui.min.js'
     ], function (util, date, ext, gt, folderAPI, settings) {

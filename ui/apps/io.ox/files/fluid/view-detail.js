@@ -21,12 +21,12 @@ define('io.ox/files/fluid/view-detail',
      'io.ox/files/api',
      'io.ox/preview/main',
      'io.ox/core/api/user',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/tk/attachments',
      'gettext!io.ox/files',
      'io.ox/files/util',
      'less!io.ox/files/style'
-    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt, util) {
+    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, getBreadcrumb, attachments, gt, util) {
 
     'use strict';
 
@@ -175,7 +175,7 @@ define('io.ox/files/fluid/view-detail',
                 folderSet = app.folder.set;
             }
             this.append(
-                folderAPI.getBreadcrumb(baton.data.folder_id, {
+                getBreadcrumb(baton.data.folder_id, {
                     exclude: ['9'],
                     handler: folderSet,
                     last: false,

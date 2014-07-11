@@ -17,8 +17,10 @@ define('io.ox/core/folder/api',
      'io.ox/core/folder/util',
      'io.ox/core/folder/sort',
      'io.ox/core/folder/blacklist',
+     'io.ox/core/folder/title',
+     'io.ox/core/folder/bitmask',
      'io.ox/core/api/account',
-     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, account, gt) {
+     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, gt) {
 
     'use strict';
 
@@ -104,6 +106,11 @@ define('io.ox/core/folder/api',
         },
 
         unfetch: function (id) {
+            if (id === '0') {
+                return _(this.collections).each(function (collection) {
+                    collection.fetched = false;
+                });
+            }
             var collection = this.collections[id];
             if (!collection) return;
             collection.fetched = false;
@@ -144,19 +151,38 @@ define('io.ox/core/folder/api',
     });
 
     //
-    // Propagate model changes
+    // Propagate
+    // central hub to coordinate events and caches
+    // (see files/api.js for a full implementation for files)
     //
 
-    function propagate(model) {
-        var data = model.toJSON(), id = data.id;
-        if (model.changed.total) {
-            api.trigger('update:total', id, data);
-            api.trigger('update:total:' + id, data);
+    var ready = $.when();
+
+    function propagate(arg) {
+
+        if (arg instanceof Backbone.Model) {
+
+            var model = arg, data = model.toJSON(), id = data.id;
+
+            if (model.changed.total) {
+                api.trigger('update:total', id, data);
+                api.trigger('update:total:' + id, data);
+            }
+            if (model.changed.unread) {
+                api.trigger('update:unread', id, data);
+                api.trigger('update:unread:' + id, data);
+            }
+            return;
         }
-        if (model.changed.unread) {
-            api.trigger('update:unread', id, data);
-            api.trigger('update:unread:' + id, data);
+
+        if (/^account:(create|delete|unified-enable|unified-disable)$/.test(arg)) {
+            // need to refresh subfolders of root folder 1
+            return list('1', { cache: false }).done(function () {
+                api.trigger('refresh');
+            });
         }
+
+        return ready;
     }
 
     //
@@ -245,6 +271,54 @@ define('io.ox/core/folder/api',
         .done(function (array) {
             array = processListResponse(id, array);
             pool.addCollection(id, array);
+        });
+    }
+
+    //
+    // Get folder path
+    //
+
+    function getPath() {
+        console.error('getPath() / Under construction');
+        return $.when();
+    }
+
+
+    //
+    // Flat list
+    //
+
+    function makeObject(array) {
+        return http.makeObject(array, 'folders');
+    }
+
+    function getVisible(options) {
+
+        options = _.extend({ type: 'contacts', cache: true }, options);
+
+        // already cached?
+        var collection = pool.getCollection('flat/' + options.type);
+        if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
+
+        return http.GET({
+            module: 'folders',
+            appendColumns: true,
+            params: {
+                action: 'allVisible',
+                content_type: options.type,
+                tree: '1',
+                altNames: true,
+                timezone: 'UTC'
+            }
+        })
+        .then(function (data) {
+            var sections = {};
+            _(data).each(function (section, id) {
+                var folders = _.chain(section).map(makeObject).value();
+                if (folders.length > 0) sections[id] = folders;
+            });
+            console.error('getVisible() / Under construction', sections);
+            return sections;
         });
     }
 
@@ -479,6 +553,8 @@ define('io.ox/core/folder/api',
         get: get,
         list: list,
         multiple: multiple,
+        getPath: getPath,
+        getVisible: getVisible,
         update: update,
         move: move,
         create: create,
@@ -490,8 +566,10 @@ define('io.ox/core/folder/api',
         can: util.can,
         getDefaultFolder: util.getDefaultFolder,
         getTextNode: getTextNode,
+        getFolderTitle: getFolderTitle,
         ignoreSentItems: ignoreSentItems,
-        processListResponse: processListResponse
+        processListResponse: processListResponse,
+        Bitmask: Bitmask
     });
 
     return api;

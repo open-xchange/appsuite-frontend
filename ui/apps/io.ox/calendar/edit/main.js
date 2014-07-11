@@ -225,7 +225,7 @@ define('io.ox/calendar/edit/main',
                     cont(data);
                 } else {
                     if (!data.folder_id) {
-                        require(['io.ox/core/api/folder']).done(function (api) {
+                        require(['io.ox/core/folder/api']).done(function (api) {
                             data.folder_id = api.getDefaultFolder('calendar');
                             cont(data);
                         });

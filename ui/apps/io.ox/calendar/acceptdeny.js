@@ -14,7 +14,7 @@
 define('io.ox/calendar/acceptdeny',
     ['io.ox/calendar/api',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/calendar/util',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
@@ -109,7 +109,7 @@ define('io.ox/calendar/acceptdeny',
                             confirmmessage: $.trim($(node).find('[data-property="comment"]').val())
                         };
 
-                        folderAPI.get({ folder: apiData.folder }).done(function (folder) {
+                        folderAPI.get(apiData.folder).done(function (folder) {
 
                             // add current user id in shared or public folder
                             if (folderAPI.is('shared', folder)) {

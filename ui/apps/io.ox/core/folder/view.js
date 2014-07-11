@@ -14,11 +14,6 @@
 define('io.ox/core/folder/view',
     ['io.ox/core/extensions',
      'io.ox/core/folder/api',
-     // 'io.ox/core/extPatterns/links',
-     // 'io.ox/core/notifications',
-     // 'io.ox/core/api/folder',
-     // 'settings!io.ox/core'
-     // 'io.ox/core/capabilities',
      'gettext!io.ox/core'
     ], function (ext, api, gt) {
 

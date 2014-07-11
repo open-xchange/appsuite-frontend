@@ -165,8 +165,8 @@ define('plugins/notifications/calendar/register',
         onClickAccept: function (e) {
             e.stopPropagation();
             var o = calAPI.reduce(this.model.get('data'));
-                require(['io.ox/core/api/folder', 'settings!io.ox/calendar'], function (folderAPI, settings) {
-                    folderAPI.get({ folder: o.folder }).done(function (folder) {
+                require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
+                    folderAPI.get(o.folder).done(function (folder) {
                     o.data = {
                         alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
                         confirmmessage: '',

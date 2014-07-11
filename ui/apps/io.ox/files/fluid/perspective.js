@@ -22,13 +22,12 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/extPatterns/actions',
-     'io.ox/core/api/folder',
      'io.ox/files/util',
      'gettext!io.ox/files',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'static/3rd.party/jquery-imageloader/jquery.imageloader.js'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, util, gt, Selection, notifications) {
+     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
 
     'use strict';
 

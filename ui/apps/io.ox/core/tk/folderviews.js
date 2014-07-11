@@ -14,7 +14,7 @@
 
 define('io.ox/core/tk/folderviews',
     ['io.ox/core/tk/selection',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/api/user',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
@@ -47,7 +47,7 @@ define('io.ox/core/tk/folderviews',
      */
     function TreeNode(tree, id, container, level, checkbox, all, storage) {
         // load folder data immediately
-        var ready = api.get({ folder: id, storage: storage }),
+        var ready = api.get(id, { storage: storage }),
             nodes = {},
             children = null,
             childrenLoaded,
@@ -259,7 +259,7 @@ define('io.ox/core/tk/folderviews',
             // might have a new id
             id = newId;
             return $.when(
-                ready = api.get({ folder: newId, storage: storage }),
+                ready = api.get(newId, { storage: storage }),
                 this.loadChildren(true)
             )
             .pipe(function (data) {
@@ -270,7 +270,7 @@ define('io.ox/core/tk/folderviews',
 
         // update promise
         this.reload = function () {
-            return (ready = api.get({ folder: id, storage: storage})).done(function (promise) {
+            return (ready = api.get(id, { storage: storage })).done(function (promise) {
                 data = promise;
                 children = _.isArray(children) && children.length === 0 ? null : children;
                 updateArrow();
@@ -302,7 +302,7 @@ define('io.ox/core/tk/folderviews',
                 childrenLoaded = false;
                 // we assume that folder API takes care of clearing caches for periodic refreshes
                 // get sub folders
-                return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function success(data) {
+                return api.list(id, { all: all, storage: storage }).then(function success(data) {
                     // create new children array
                     children = _.chain(data)
                         .filter(function (folder) {
@@ -608,7 +608,7 @@ define('io.ox/core/tk/folderviews',
         }
 
         this.removeProcess = function (folder) {
-            api.remove({ folder: folder.id })
+            api.remove(folder.id)
                .always(reloadTrash)
                .fail(notifications.yell);
         };
@@ -617,7 +617,7 @@ define('io.ox/core/tk/folderviews',
             var self = this, folder_id = String(this.selection.get());
             if (!folder_id) return;
             $.when(
-                api.get({ folder: folder_id }),
+                api.get(folder_id),
                 require(['io.ox/core/tk/dialogs'])
             ).done(function (folder, dialogs) {
                 new dialogs.ModalDialog()
@@ -647,7 +647,7 @@ define('io.ox/core/tk/folderviews',
 
             if (invalid) return $.Deferred().reject();
 
-            return api.update({ folder: folder, changes: changes });
+            return api.update(folder, changes);
         };
 
         this.rename = function () {
@@ -655,7 +655,7 @@ define('io.ox/core/tk/folderviews',
             folder_id = String(this.selection.get());
             if (folder_id) {
                 $.when(
-                    api.get({ folder: folder_id }),
+                    api.get(folder_id),
                     require(['io.ox/core/tk/dialogs'])
                 )
                 .done(function (folder, dialogs) {
@@ -819,7 +819,7 @@ define('io.ox/core/tk/folderviews',
                 data = _.isArray(data) ? data[0] : data;
                 data = _.isObject(data) ? String(data.id) : String(data);
                 // get path
-                return api.getPath({ folder: data }).pipe(function (list) {
+                return api.getPath(data).pipe(function (list) {
                     var def = $.Deferred();
                     deferredEach.call(self, _(list).pluck('id'), function () {
                         self.selection.set(data);

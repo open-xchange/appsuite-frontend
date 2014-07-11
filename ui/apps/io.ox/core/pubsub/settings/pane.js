@@ -15,14 +15,15 @@ define('io.ox/core/pubsub/settings/pane',
     ['io.ox/core/extensions',
      'io.ox/core/pubsub/model',
      'io.ox/backbone/views',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/tk/dialogs',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'settings!io.ox/core/pubsub',
      'gettext!io.ox/core/pubsub',
      'less!io.ox/core/pubsub/style'
-    ], function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
+    ], function (ext, model, views, folderAPI, getBreadcrumb, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';
 
@@ -59,7 +60,7 @@ define('io.ox/core/pubsub/settings/pane',
             view.render();
         }
 
-        folderAPI.getPath({folder: folder}).done(function (folder) {
+        folderAPI.getPath(folder).done(function (folder) {
 
             var folderPath = _(folder).pluck('title').join('/');
 
@@ -136,7 +137,7 @@ define('io.ox/core/pubsub/settings/pane',
             folder = entity.folder;
         }
 
-        return folderAPI.getBreadcrumb(folder, options);
+        return getBreadcrumb(folder, options);
     }
 
     var getSiteNameRegex = /^http[^?]+\/(\w+)\?/,

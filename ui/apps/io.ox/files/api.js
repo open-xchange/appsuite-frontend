@@ -17,7 +17,7 @@ define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/extensions',
      'io.ox/core/api/factory',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/core',
      'io.ox/core/cache',
      'io.ox/core/date',
@@ -1006,7 +1006,7 @@ define('io.ox/files/api',
         })
         .done(function () {
             folderAPI.reload(folder_id);
-            folderAPI.sync();
+            folderAPI.refresh();
             api.trigger('refresh.all');
         });
     };

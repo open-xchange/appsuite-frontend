@@ -15,7 +15,7 @@ define('io.ox/core/pubsub/subscriptions',
     ['io.ox/core/extensions',
      'io.ox/core/pubsub/model',
      'io.ox/core/api/pubsub',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
      'io.ox/keychain/api',
@@ -59,7 +59,7 @@ define('io.ox/core/pubsub/subscriptions',
                 var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
 
                 function removeFolder(id) {
-                    return folderAPI.remove({ folder: id });
+                    return folderAPI.remove(id);
                 }
 
                 function saveModel(newFolder) {
@@ -152,14 +152,14 @@ define('io.ox/core/pubsub/subscriptions',
 
                         var service = findId(baton.services, baton.model.get('source'));
 
-                        folderAPI.create({
-                            folder: folder,
-                            data: {
+                        folderAPI.create(
+                            folder,
+                            {
                                 title: service.displayName || gt('New Folder'),
                                 module: self.model.get('entityModule')
                             },
-                            silent: true
-                        })
+                            { silent: true }
+                        )
                         .then(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
                             saveModel(true);

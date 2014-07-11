@@ -22,7 +22,7 @@ define('io.ox/tasks/main',
      'io.ox/tasks/util',
      'io.ox/tasks/view-detail',
      'settings!io.ox/tasks',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/commons-folderview',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
@@ -590,7 +590,7 @@ define('io.ox/tasks/main',
         var swipeRightHandler = function (e, id, cell) {
             var obj = _.cid(id);
             if (hasDeletePermission === undefined) {
-                folderAPI.get({folder: obj.folder_id}).done(function (data) {
+                folderAPI.get(obj.folder_id).done(function (data) {
                     if (folderAPI.can('delete', data)) {
                         hasDeletePermission = true;
                         ext.point('io.ox/tasks/swipeDelete').invoke('draw', cell, obj);

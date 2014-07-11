@@ -397,7 +397,7 @@ define('io.ox/calendar/actions',
 
             var vGrid = baton.grid || (baton.app && baton.app.getGrid());
 
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder', 'settings!io.ox/contacts']).done(function (dialogs, views, folderAPI, contactSettings) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/folder/api', 'settings!io.ox/contacts']).done(function (dialogs, views, folderAPI, contactSettings) {
 
                 function commit(target) {
                     if (type === 'move' && vGrid) vGrid.busy();

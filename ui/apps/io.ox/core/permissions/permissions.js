@@ -14,7 +14,8 @@
 define('io.ox/core/permissions/permissions',
     ['io.ox/core/extensions',
      'io.ox/core/notifications',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
      'io.ox/core/tk/dialogs',
@@ -24,7 +25,7 @@ define('io.ox/core/permissions/permissions',
      'io.ox/core/http',
      'gettext!io.ox/core',
      'less!io.ox/core/permissions/style'
-    ], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+    ], function (ext, notifications, api, getBreadcrumb, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 
@@ -332,7 +333,7 @@ define('io.ox/core/permissions/permissions',
     return {
         show: function (folder) {
             folder_id = String(folder);
-            api.get({ folder: folder_id, cache: false }).done(function (data) {
+            api.get(folder_id, { cache: false }).done(function (data) {
                 try {
 
                     isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;
@@ -349,7 +350,7 @@ define('io.ox/core/permissions/permissions',
                     }
                     var dialog = new dialogs.ModalDialog(options);
                     dialog.getHeader().append(
-                        api.getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
+                        getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
                     );
                     if (_.device('!desktop')) {
                         dialog.getHeader().append(
@@ -463,7 +464,7 @@ define('io.ox/core/permissions/permissions',
                     })
                     .done(function (action) {
                         if (isFolderAdmin && action === 'save') {
-                            api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).always(function () {
+                            api.update(folder_id, { permissions: collection.toJSON() }).always(function () {
                                 //TODO: dialog should stay open if error occurs
                                 collection.off();
                             });

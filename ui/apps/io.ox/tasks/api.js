@@ -13,7 +13,7 @@
 define('io.ox/tasks/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/tasks/util'
     ], function (http, apiFactory, folderAPI, util) {
 

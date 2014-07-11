@@ -17,10 +17,10 @@ define('io.ox/files/carousel',
      'io.ox/core/capabilities',
      'gettext!io.ox/files',
      'io.ox/files/api',
-     'io.ox/core/api/folder',
      'io.ox/preview/main',
+     'io.ox/core/folder/breadcrumb',
      'less!io.ox/files/carousel'
-    ], function (commons, capabilities, gt, api, folderAPI, preview) {
+    ], function (commons, capabilities, gt, api, preview, getBreadcrumb) {
 
     'use strict';
 
@@ -306,7 +306,7 @@ define('io.ox/files/carousel',
                     item.append(
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
+                            file.folder_id ? getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {

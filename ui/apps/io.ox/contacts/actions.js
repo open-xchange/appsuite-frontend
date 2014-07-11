@@ -133,7 +133,7 @@ define('io.ox/contacts/actions',
 
                 var vGrid = baton.grid || (baton.app && baton.app.getGrid());
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/folder/api'], function (dialogs, views, folderAPI) {
 
                     function commit(target) {
                         if (type === 'move' && vGrid) vGrid.busy();

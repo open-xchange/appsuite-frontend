@@ -15,7 +15,7 @@
 define('io.ox/core/api/pubsub',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
     ], function (http, apiFactory, folderAPI) {
 
     'use strict';
@@ -100,7 +100,7 @@ define('io.ox/core/api/pubsub',
         })
         .on('delete', function () {
             //remove cloud icon
-            folderAPI.sync();
+            folderAPI.refresh();
         });
     }
 

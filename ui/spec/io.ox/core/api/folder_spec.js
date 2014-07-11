@@ -10,12 +10,13 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
+
 define(['shared/examples/for/api',
-       'io.ox/core/api/folder',
+       'io.ox/core/folder/api',
        'io.ox/core/http',
        'io.ox/core/extensions',
-       'io.ox/core/notifications'
-], function (sharedExamplesFor, api, http, ext, notifications) {
+       'io.ox/core/notifications'], function (sharedExamplesFor, api, http, ext, notifications) {
+
     var fakeFolders = {},
         setupFakeServer = function (server) {
         //sends a default folder for get calls
@@ -109,16 +110,15 @@ define(['shared/examples/for/api',
         describe('requests some folders from the server', function () {
             beforeEach(function (done) {
                 //TODO: clear global cache (must also be possible in phantomJS)
-                api.clearCaches().then(function () {
-                    //make fake server only respond on demand
-                    this.server.autoRespond = false;
-                    setupFakeServer(this.server);
-                    done();
-                }.bind(this));
+                api.unfetch('0');
+                //make fake server only respond on demand
+                this.server.autoRespond = false;
+                setupFakeServer(this.server);
+                done();
             });
 
             it('should return a folder with correct id', function (done) {
-                var result = api.get({folder: '2', cache: false});
+                var result = api.get('2', { cache: false });
 
                 result.done(function (data) {
                     expect(data.id).to.equal('2');
@@ -130,7 +130,7 @@ define(['shared/examples/for/api',
             });
 
             it('should return a list of subfolders with correct parent ids', function (done) {
-                var result = api.getSubFolders({folder: '2'});
+                var result = api.list('2');
 
                 result.done(function (data) {
                     _(data).each(function (folder) {
@@ -145,7 +145,7 @@ define(['shared/examples/for/api',
             });
 
             it('should return a path of a folder with getPath', function (done) {
-                var result = api.getPath({folder: '3', cache: true}),
+                var result = api.getPath('3', { cache: true }),
                     parentID = '1';
 
                 result.done(function (data) {
@@ -165,7 +165,7 @@ define(['shared/examples/for/api',
 
             it.skip('should trigger a create event', function () {
                 expect(api).toTrigger('create');
-                var result = api.create({folder: '2'});
+                var result = api.create('2');
 
                 //deferred should be pending
                 expect(result.state()).to.equal('pending');
@@ -175,7 +175,7 @@ define(['shared/examples/for/api',
 
             it('should create a folder', function (done) {
                 var spy = sinon.spy(http, 'PUT'),
-                    result = api.create({folder: '2'}),
+                    result = api.create('2'),
                     param;
 
                 //deferred should be pending
@@ -203,7 +203,7 @@ define(['shared/examples/for/api',
 
             it.skip('should trigger a delete event', function () {
                 expect(api).toTrigger('delete');
-                var result = api.remove({folder: '2'});
+                var result = api.remove('2');
 
                 //deferred should be pending
                 expect(result.state()).to.equal('pending');
@@ -213,7 +213,7 @@ define(['shared/examples/for/api',
 
             it('should remove a folder', function (done) {
                 var spy = sinon.spy(http, 'PUT'),
-                    result = api.remove({folder: '2'}),
+                    result = api.remove('2'),
                     param;
 
                 //deferred should be pending
@@ -329,9 +329,9 @@ define(['shared/examples/for/api',
                     ]).then(function (settings, fileSettings) {
                         settings.set('folder/blacklist');
                         fileSettings.set('showHidden', true);
-                        return api.clearCaches();
+                        return api.unfetch('0');
                     }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
+                        return api.list('hidden/test');
                     }).done(function (f) {
                         expect(_(f).pluck('title')).to.contain('.hidden');
                         expect(_(f).pluck('title')).to.contain('visible');
@@ -375,13 +375,10 @@ define(['shared/examples/for/api',
                         ]).then(function (settings, fileSettings) {
                             settings.set('folder/blacklist');
                             fileSettings.set('showHidden');
-                            return api.clearCaches();
+                            return api.unfetch('0');
                         }).then(function () {
                             expect(api).toTrigger('warn:hidden');
-                            return api.create({
-                                folder: '13',
-                                title: '.secret'
-                            });
+                            return api.create('13', { title: '.secret' });
                         }).done(function () {
                             done();
                         });
@@ -404,15 +401,10 @@ define(['shared/examples/for/api',
                         ]).then(function (settings, fileSettings) {
                             settings.set('folder/blacklist');
                             fileSettings.set('showHidden');
-                            return api.clearCaches();
+                            return api.unfetch('0');
                         }).then(function () {
                             expect(api).toTrigger('warn:hidden');
-                            return api.update({
-                                folder: '31337',
-                                changes: {
-                                    title: '.secret'
-                                }
-                            });
+                            return api.update('31337', { title: '.secret' });
                         }).done(function () {
                             done();
                         });
@@ -435,9 +427,9 @@ define(['shared/examples/for/api',
                     ]).then(function (settings, fileSettings) {
                         settings.set('folder/blacklist');
                         fileSettings.set('showHidden');
-                        return api.clearCaches();
+                        return api.unfetch('0');
                     }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
+                        return api.list('hidden/test');
                     }).then(function (f) {
                         expect(_(f).pluck('title')).not.to.contain('.hidden');
                         expect(_(f).pluck('title')).to.contain('visible');
@@ -458,9 +450,9 @@ define(['shared/examples/for/api',
                     ]).then(function (settings, fileSettings) {
                         settings.set('folder/blacklist');
                         fileSettings.set('showHidden', true);
-                        return api.clearCaches();
+                        return api.unfetch('0');
                     }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
+                        return api.list('hidden/test');
                     })
                     .done(function (f) {
                         expect(_(f).pluck('title')).to.contain('.hidden');
@@ -477,9 +469,9 @@ define(['shared/examples/for/api',
                     ]).then(function (settings, fileSettings) {
                         settings.set('folder/blacklist', {'4': true});
                         fileSettings.set('showHidden', false);
-                        return api.clearCaches();
+                        return api.unfetch('0');
                     }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
+                        return api.list('hidden/test');
                     })
                     .done(function (f) {
                         expect(_(f).pluck('title')).not.to.contain('.hidden');
@@ -496,9 +488,9 @@ define(['shared/examples/for/api',
                     ]).then(function (settings, fileSettings) {
                         settings.set('folder/blacklist', {'4': true});
                         fileSettings.set('showHidden', true);
-                        return api.clearCaches();
+                        return api.unfetch('0');
                     }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
+                        return api.list('hidden/test');
                     })
                     .done(function (f) {
                         expect(_(f).pluck('title')).to.contain('.hidden');
@@ -540,9 +532,9 @@ define(['shared/examples/for/api',
                     ]).then(function (settings, fileSettings) {
                         settings.set('folder/blacklist', {});
                         fileSettings.set('showHidden', true);
-                        return api.clearCaches();
+                        return api.unfetch('0');
                     }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
+                        return api.list('hidden/test');
                     })
                     .done(function (f) {
                         expect(_(f).pluck('title')).to.contain('.hidden');
@@ -570,9 +562,9 @@ define(['shared/examples/for/api',
                     ]).then(function (settings, fileSettings) {
                         settings.set('folder/blacklist', {});
                         fileSettings.set('showHidden', true);
-                        return api.clearCaches();
+                        return api.unfetch('0');
                     }).then(function () {
-                        return api.getSubFolders({folder: 'hidden/test'});
+                        return api.list('hidden/test');
                     })
                     .done(function (f) {
                         expect(_(f).pluck('title')).to.contain('.hidden');

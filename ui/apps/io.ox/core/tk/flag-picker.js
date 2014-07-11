@@ -13,7 +13,7 @@
 
 define('io.ox/core/tk/flag-picker',
     ['io.ox/mail/api',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'gettext!io.ox/mail'
     ], function (api, folderAPI, gt) {
 

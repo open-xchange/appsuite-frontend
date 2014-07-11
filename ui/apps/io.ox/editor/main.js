@@ -13,7 +13,7 @@
 
 define('io.ox/editor/main',
     ['io.ox/files/api',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'gettext!io.ox/editor',
      'less!io.ox/editor/style'
@@ -233,7 +233,7 @@ define('io.ox/editor/main',
         app.save = function () {
             var fixFolder = function () {
                 //switch to default folder on missing grants (or special folders)
-                return folderAPI.get({ folder: model.get('folder_id') })
+                return folderAPI.get(model.get('folder_id'))
                         .then(function (data) {
                             var required = (model.has('id') && !folderAPI.can('write', data)) ||
                                            (!model.has('id') && !folderAPI.can('create', data)) ||

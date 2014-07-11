@@ -13,7 +13,7 @@
 
 define('io.ox/core/folder/actions/common',
     ['io.ox/mail/api',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/tk/dialogs',
      'io.ox/core/notifications',
      'gettext!io.ox/core'], function (mailAPI, folderAPI, dialogs, notifications, gt) {
@@ -38,7 +38,7 @@ define('io.ox/core/folder/actions/common',
         clearFolder: function (e) {
             var baton = e.data.baton,
             id = _(baton.app.folderView.selection.get()).first();
-            folderAPI.get({ folder: id }).done(function (folder) {
+            folderAPI.get(id).done(function (folder) {
                 new dialogs.ModalDialog()
                     .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
                     .addPrimaryButton('delete', gt('Empty folder'), 'delete', {tabIndex: '1'})

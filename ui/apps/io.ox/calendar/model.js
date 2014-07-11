@@ -18,7 +18,7 @@ define('io.ox/calendar/model',
      'io.ox/backbone/validation',
      'io.ox/participants/model',
      'io.ox/core/date',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/calendar'
     ], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
@@ -143,7 +143,7 @@ define('io.ox/calendar/model',
 
     return {
         setDefaultParticipants: function (model, options) {
-            return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
+            return folderAPI.get(model.get('folder_id')).done(function (folder) {
                 var userID = ox.user_id;
                 if (folderAPI.is('private', folder)) {
                     if (options.create) {
