@@ -17,9 +17,15 @@ define('io.ox/core/folder/api',
      'io.ox/core/folder/util',
      'io.ox/core/folder/sort',
      'io.ox/core/folder/blacklist',
-     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, gt) {
+     'io.ox/core/api/account',
+     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, account, gt) {
 
     'use strict';
+
+    var api = {};
+
+    // add event hub
+    Events.extend(api);
 
     // collection pool
     var pool = {
@@ -38,6 +44,10 @@ define('io.ox/core/folder/api',
     function onChangeModelId(model) {
         delete pool.models[model.previous('id')];
         pool.models[model.id] = model;
+    }
+
+    function unfetch(model) {
+        pool.unfetch(model.id);
     }
 
     //
@@ -91,6 +101,13 @@ define('io.ox/core/folder/api',
 
         getCollection: function (id) {
             return this.collections[id] || (this.collections[id] = new FolderCollection());
+        },
+
+        unfetch: function (id) {
+            var collection = this.collections[id];
+            if (!collection) return;
+            collection.fetched = false;
+            collection.each(unfetch);
         }
     });
 
@@ -127,11 +144,28 @@ define('io.ox/core/folder/api',
     });
 
     //
+    // Propagate model changes
+    //
+
+    function propagate(model) {
+        var data = model.toJSON(), id = data.id;
+        if (model.changed.total) {
+            api.trigger('update:total', id, data);
+            api.trigger('update:total:' + id, data);
+        }
+        if (model.changed.unread) {
+            api.trigger('update:unread', id, data);
+            api.trigger('update:unread:' + id, data);
+        }
+    }
+
+    //
     // Get a single folder
     //
 
     function get(id) {
 
+        id = String(id);
         var model = pool.models[id];
         if (model !== undefined && model.has('title')) return $.Deferred().resolve(model.toJSON());
 
@@ -146,8 +180,12 @@ define('io.ox/core/folder/api',
             }
         })
         .then(function (data) {
-            pool.addModel(data);
-            return data; // to make sure we always get the same result (just data; not timestamp)
+            // update/add model
+            var model = pool.addModel(data);
+            // propagate changes via api events
+            propagate(model);
+            // to make sure we always get the same result (just data; not timestamp)
+            return data;
         });
     }
 
@@ -177,6 +215,7 @@ define('io.ox/core/folder/api',
 
     function list(id, options) {
 
+        id = String(id);
         options = _.extend({ all: false, cache: true }, options);
 
         // already cached?
@@ -364,6 +403,43 @@ define('io.ox/core/folder/api',
     }
 
     //
+    // Provide text node
+    //
+
+    function updateTextNode(data) {
+        this.nodeValue = _.noI18n(data.title || data.id);
+    }
+
+    function getTextNode(id) {
+        var node = document.createTextNode('');
+        get(id).done(updateTextNode.bind(node));
+        return node;
+    }
+
+    //
+    // ignoreSentItems()
+    // check a list of object if they originate from more than one folder
+    // if so remove items from "sent" folder; useful for delete/move actions and threads
+    //
+
+    function fromSameFolder(list) {
+        return _(list).chain().pluck('folder_id').uniq().value().length <= 1;
+    }
+
+    function isNotSentFolder(obj) {
+        return !account.is('sent', obj.folder_id);
+    }
+
+    function ignoreSentItems(list) {
+        // not array or just one?
+        if (!_.isArray(list) || list.length === 1) return list;
+        // all from same folder?
+        if (fromSameFolder(list)) return list;
+        // else: exclude sent items
+        return _(list).filter(isNotSentFolder);
+    }
+
+    //
     // Reload folder
     //
 
@@ -396,7 +472,7 @@ define('io.ox/core/folder/api',
     ox.on('please:refresh refresh^', refresh);
 
     // publish api
-    var api = {
+    _.extend(api, {
         FolderModel: FolderModel,
         FolderCollection: FolderCollection,
         pool: pool,
@@ -409,14 +485,14 @@ define('io.ox/core/folder/api',
         remove: remove,
         reload: reload,
         refresh: refresh,
+        bits: util.bits,
         is: util.is,
         can: util.can,
         getDefaultFolder: util.getDefaultFolder,
+        getTextNode: getTextNode,
+        ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse
-    };
-
-    // add event hub
-    Events.extend(api);
+    });
 
     return api;
 });

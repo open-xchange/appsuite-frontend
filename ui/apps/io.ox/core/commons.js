@@ -16,7 +16,7 @@ define('io.ox/core/commons',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
      'io.ox/core/commons-folderview',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/api/account'
     ], function (ext, links, gt, FolderView, folderAPI, accountAPI) {
 
@@ -350,7 +350,7 @@ define('io.ox/core/commons',
                     $('<span class="folder-count">')
                 );
 
-                folderAPI.get({ folder: folder_id }).then(function success(data) {
+                folderAPI.get(folder_id).done(function success(data) {
 
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');

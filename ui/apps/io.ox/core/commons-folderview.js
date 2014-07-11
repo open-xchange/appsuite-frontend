@@ -15,7 +15,7 @@ define('io.ox/core/commons-folderview',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/core',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'
@@ -257,7 +257,7 @@ define('io.ox/core/commons-folderview',
                 var node = $('<div>');
                 this.append(node);
 
-                api.get({ folder: 2 }).then(function (public_folder) {
+                api.get(2).done(function (public_folder) {
                     if (!api.can('create', public_folder)) return;
                     node.append(
                         $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
@@ -336,7 +336,8 @@ define('io.ox/core/commons-folderview',
 
                     current = id;
 
-                    api.get({ folder: id }).done(function (data) {
+                    api.get(id).done(function (data) {
+
                         if (_.device('smartphone') && previous !== null) {
                             // close tree
                             fnHideSml();
@@ -540,7 +541,7 @@ define('io.ox/core/commons-folderview',
             tree.selection.on('change', function (e, selection) {
                 if (selection.length) {
                     var id = selection[0];
-                    api.get({ folder: id }).done(function (data) {
+                    api.get(id).done(function (data) {
                         baton.data = data;
                         // update toolbar
                         ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links.empty(), baton);
@@ -590,7 +591,7 @@ define('io.ox/core/commons-folderview',
                         });
                     });
 
-                    api.on('delete:prepare', function (e, data) {
+                    api.on('remove:prepare', function (e, data) {
                         var folder = data.folder_id, id = data.id;
                         if (folder === '1') {
                             folder = api.getDefaultFolder(data.module) || '1';
@@ -599,7 +600,7 @@ define('io.ox/core/commons-folderview',
                         tree.removeNode(id);
                     });
 
-                    api.on('delete', _.throttle(function (e, id) {
+                    api.on('remove', _.throttle(function (e, id) {
                         app.trigger('folder:delete', id);
                     }, 100));
 
@@ -623,7 +624,7 @@ define('io.ox/core/commons-folderview',
                         }
                     });
 
-                    api.on('delete:fail update:fail create:fail', function (e, error) {
+                    api.on('remove:fail update:fail create:fail', function (e, error) {
                         notifications.yell(error);
                         tree.repaint();
                     });

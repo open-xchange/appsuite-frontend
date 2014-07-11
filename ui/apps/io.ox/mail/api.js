@@ -16,7 +16,7 @@ define('io.ox/mail/api',
      'io.ox/core/cache',
      'settings!io.ox/core',
      'io.ox/core/api/factory',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
      'io.ox/mail/util',
@@ -348,7 +348,6 @@ define('io.ox/mail/api',
                 // data might be plain string, e.g. for mail source
                 if (_.isObject(data)) {
                     data.view = options.view;
-                    if (data.unseen) folderAPI.decUnread(data);
                 }
                 return data;
             }
@@ -743,7 +742,6 @@ define('io.ox/mail/api',
         .then(function (data) {
             return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
                 api.trigger('refresh.all');
-                folderAPI.reload(folder_id);
                 return data;
             });
         })
@@ -752,8 +750,7 @@ define('io.ox/mail/api',
         })
         .done(function () {
             notifications.yell('success', gt('The folder has been emptied.'));
-            folderAPI.reload(folder_id);
-            folderAPI.sync();
+            folderAPI.refresh();
         });
     };
 
@@ -1311,7 +1308,7 @@ define('io.ox/mail/api',
                         $.when(accountAPI.getUnifiedMailboxName(), api.caches.list.add(data), api.caches.get.add(data))
                         .done(function (isUnified) {
                             if (isUnified !== null) {
-                                folderAPI.update();
+                                folderAPI.refresh();
                             } else {
                                 folderAPI.reload(folder);
                             }
@@ -1680,18 +1677,19 @@ define('io.ox/mail/api',
     var reSuffix = ')(?:/|' + _.escapeRegExp(DELIM) + ')';
 
     accountAPI.on('refresh.all create:account', function () {
-        folderAPI.getSubFolders().done(function (folders) {
-            var ids = [];
-            _.chain(folders).pluck('id')
-                .filter(accountAPI.isUnified)
-                .each(function (id) { ids.push(_.escapeRegExp(id)); });
+        folderAPI.list('1', { cache: false }).done(function (folders) {
+            var ids = _(folders)
+                .chain()
+                .filter(function (obj) {
+                    return /^default/.test(obj.id) && accountAPI.isUnified(obj.id);
+                })
+                .map(function (obj) {
+                    return _.escapeRegExp(obj.id);
+                })
+                .value();
             var re = new RegExp('(?:' + ids.join('|') + reSuffix);
-            $.when.apply($, _.map(
-                [api.caches.all].concat(_.toArray(folderAPI.caches)),
-                function (cache) { return cache.grepRemove(re); }
-            ));
-            // uncommented: triggers too many refresh.all
-            // .done(function () { api.trigger('refresh.all'); });
+            api.caches.all.grepRemove(re);
+            folderAPI.pool.unfetch();
         });
     });
 

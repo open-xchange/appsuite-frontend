@@ -14,7 +14,7 @@
 define('io.ox/core/folder/tree',
     ['io.ox/core/folder/node',
      'io.ox/core/folder/selection',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
      'io.ox/core/folder/favorites',
@@ -122,7 +122,7 @@ define('io.ox/core/folder/tree',
                 ul = this.$contextmenu.find('.dropdown-menu').empty(),
                 point = 'io.ox/core/foldertree/contextmenu';
             // get folder data and redraw
-            api.get({ folder: id }).done(function (data) {
+            api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, options: { type: module } });
                 ext.point(point).invoke('draw', ul, baton);
                 // check if menu exceeds viewport
@@ -188,7 +188,10 @@ define('io.ox/core/folder/tree',
             draw: function () {
                 this.append(
                     // example
-                    $('<section>').css('color', '#aaa').text('You can also place stuff between folders')
+                    $('<section>')
+                        .css('color', '#aaa')
+                        .css('margin-bottom', '14px')
+                        .text('You can also place stuff between folders')
                 );
             }
         },
@@ -206,8 +209,34 @@ define('io.ox/core/folder/tree',
                         title: 'My folders',
                         tree: tree
                     })
-                    .render().$el.css('margin-top', '14px')
+                    .render().$el
                 );
+            }
+        },
+        {
+            id: 'remote-accounts',
+            index: INDEX += 100,
+            draw: function (tree) {
+
+                var placeholder = $('<div>');
+                this.append(placeholder);
+
+                account.all().done(function (accounts) {
+                    accounts.shift();
+                    placeholder.replaceWith(
+                        _(accounts).map(function (account) {
+                            // remote account
+                            return new TreeNodeView({
+                                count: 0,
+                                folder: 'virtual/default' + account.id,
+                                model_id: 'default' + account.id,
+                                parent: tree,
+                                tree: tree
+                            })
+                            .render().$el;
+                        })
+                    );
+                });
             }
         },
         {

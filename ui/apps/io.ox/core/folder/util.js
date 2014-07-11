@@ -234,6 +234,7 @@ define('io.ox/core/folder/util',
     }
 
     return {
+        bits: bits,
         is: is,
         can: can,
         getDefaultFolder: getDefaultFolder

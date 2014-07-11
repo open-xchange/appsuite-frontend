@@ -88,7 +88,6 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.onCreate = function (e, data) {
-                console.log('huhu onCreate', data);
                 data = {
                     start_date: data.start_date,
                     end_date: data.end_date,

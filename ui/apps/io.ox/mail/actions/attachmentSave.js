@@ -16,7 +16,7 @@ define('io.ox/mail/actions/attachmentSave',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
      'io.ox/core/tk/folderviews',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/files', // yep, files not mail!
      'settings!io.ox/core',
      'gettext!io.ox/mail'], function (api, notifications, dialogs, views, folderAPI, settings, settingsCore, gt) {

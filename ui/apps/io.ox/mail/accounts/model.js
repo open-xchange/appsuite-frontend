@@ -15,7 +15,7 @@ define('io.ox/mail/accounts/model',
     ['io.ox/core/extensions',
      'io.ox/keychain/model',
      'io.ox/core/api/account',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/backbone/validation',
      'gettext!io.ox/mail/accounts/settings'
     ], function (ext, keychainModel, AccountAPI, folderAPI, validation, gt) {
@@ -151,28 +151,31 @@ define('io.ox/mail/accounts/model',
                             unified_inbox_enabled: that.attributes.unified_inbox_enabled
                         };
                 }
-                return AccountAPI.update(mods).done(function (response) {
-                    folderAPI.folderCache.remove('default' + that.attributes.id);
-                    return defered.resolve(response);
-                }).fail(function (response) {
-                    return defered.reject(response);
-                });
+                return AccountAPI.update(mods).then(
+                    function success(response) {
+                        folderAPI.unfetch('default' + that.attributes.id);
+                        return defered.resolve(response);
+                    },
+                    function fail(response) {
+                        return defered.reject(response);
+                    }
+                );
             } else {
                 if (obj) {
-
                     obj = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, obj);
                     obj.name = obj.personal = obj.primary_address;
-
                     this.attributes = obj;
                     this.attributes.spam_handler = 'NoSpamHandler';
                 }
-                return AccountAPI.create(this.attributes).done(function (response) {
-                    return defered.resolve(response);
-                }).fail(function (response) {
-                    return defered.reject(response);
-                });
+                return AccountAPI.create(this.attributes).then(
+                    function success(response) {
+                        return defered.resolve(response);
+                    },
+                    function fail(response) {
+                        return defered.reject(response);
+                    }
+                );
             }
-
         },
 
         destroy: function () {

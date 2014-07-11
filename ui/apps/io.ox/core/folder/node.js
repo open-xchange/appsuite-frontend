@@ -55,6 +55,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         }, 10),
 
         onAdd: function (model) {
+            // filter first
+            var o = this.options;
+            if (!o.tree.filter(o.model_id, model)) return;
+            // add
             this.$.subfolders.append(this.getTreeNode(model));
             this.options.tree.trigger('appear:' + model.id, model);
             this.model.set('subfolders', true);

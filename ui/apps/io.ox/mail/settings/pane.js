@@ -23,7 +23,7 @@ define('io.ox/mail/settings/pane',
      'gettext!io.ox/mail',
      'io.ox/core/api/account',
      'io.ox/backbone/mini-views',
-     'io.ox/core/api/folder'
+     'io.ox/core/folder/api'
     ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini, folderAPI) {
 
     'use strict';
@@ -321,7 +321,7 @@ define('io.ox/mail/settings/pane',
             var container;
             this.append(container = $('<fieldset>'));
 
-            folderAPI.get({folder: api.getFoldersByType('inbox')})
+            folderAPI.get(api.getFoldersByType('inbox'))
             .then(function (folders) {
                 return _(folders).values()
                 .map(function (folder) {
