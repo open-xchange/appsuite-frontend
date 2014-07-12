@@ -908,7 +908,7 @@ msgstr "您确定要删除此推吗？"
 
 #: apps/io.ox/calendar/list/perspective.js:201 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:45 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:624 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:646 module:io.ox/tasks
 msgid "Ascending"
 msgstr "升序"
 
@@ -1187,7 +1187,7 @@ msgstr "日历"
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:62
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:204
 #: apps/io.ox/tasks/common-extensions.js:95 apps/io.ox/tasks/edit/main.js:163
-#: apps/plugins/core/feedback/register.js:130
+#: apps/io.ox/tasks/main.js:204 apps/plugins/core/feedback/register.js:130
 #: apps/plugins/portal/flickr/register.js:235 module:plugins/portal
 #: apps/plugins/portal/rss/register.js:159
 #: apps/plugins/portal/tumblr/register.js:261
@@ -1407,7 +1407,7 @@ msgstr "关闭全部"
 
 #: apps/io.ox/core/commons.js:744 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:143 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:148 module:io.ox/mail
 msgid "Close folder view"
 msgstr "关闭文件夹视图"
 
@@ -1669,7 +1669,7 @@ msgstr "加载文件夹失败。"
 msgid "Couldn't load subfolders."
 msgstr "加载子文件夹失败。"
 
-#: apps/io.ox/tasks/main.js:335 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:357 module:io.ox/tasks
 msgid "Couldn't load that task."
 msgstr "加载该任务失败。"
 
@@ -1927,7 +1927,7 @@ msgstr "部门"
 
 #: apps/io.ox/calendar/list/perspective.js:202 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:625 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:647 module:io.ox/tasks
 msgid "Descending"
 msgstr "降序"
 
@@ -2255,7 +2255,7 @@ msgid "Due %1$s"
 msgstr "%1$s 到期"
 
 #: apps/io.ox/tasks/edit/view-template.js:181 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:620 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:642 module:io.ox/tasks
 msgid "Due date"
 msgstr "截止日"
 
@@ -2293,7 +2293,7 @@ msgstr "EB"
 #: apps/io.ox/settings/accounts/settings/pane.js:52
 #: apps/io.ox/tasks/actions.js:459 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:146 apps/io.ox/tasks/main.js:152
-#: apps/io.ox/tasks/mobile-toolbar-actions.js:41
+#: apps/io.ox/tasks/main.js:199 apps/io.ox/tasks/mobile-toolbar-actions.js:41
 #: apps/io.ox/tasks/toolbar.js:51
 msgid "Edit"
 msgstr "编辑"
@@ -2508,7 +2508,7 @@ msgstr "创业家"
 msgid "Envelope"
 msgstr "信封"
 
-#: apps/io.ox/core/notifications.js:465 module:io.ox/core
+#: apps/io.ox/core/notifications.js:469 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -4300,7 +4300,7 @@ msgid "Open external link"
 msgstr "打开外部链接"
 
 #: apps/io.ox/core/commons.js:731 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:132 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:137 module:io.ox/mail
 msgid "Open folder view"
 msgstr "打开文件夹视图"
 
@@ -4891,7 +4891,7 @@ msgstr "打印"
 
 #: apps/io.ox/mail/write/view-main.js:699 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:346 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:622 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:644 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
 msgstr "优先级"
@@ -5465,7 +5465,7 @@ msgstr "选择文件夹"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:103
+#: apps/io.ox/mail/view-options.js:105
 msgid "Select all"
 msgstr "选择所有"
 
@@ -5694,7 +5694,7 @@ msgstr "显示已拒绝约会"
 msgid "Show details"
 msgstr "显示详情"
 
-#: apps/io.ox/tasks/main.js:627 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:649 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "显示已完成任务"
 
@@ -5864,7 +5864,7 @@ msgid "Sort by"
 msgstr "依 .. 排序"
 
 #: apps/io.ox/calendar/list/perspective.js:193 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:614 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:636 module:io.ox/tasks
 msgid "Sort options"
 msgstr "排序选项"
 
@@ -5908,7 +5908,7 @@ msgstr "统计"
 
 #: apps/io.ox/calendar/toolbar.js:62 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:619 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:641 module:io.ox/tasks
 msgid "Status"
 msgstr "状态"
 
@@ -5932,7 +5932,7 @@ msgstr "学生"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
 #: apps/io.ox/mail/view-options.js:34 apps/io.ox/mail/write/view-main.js:873
 #: apps/io.ox/tasks/edit/view-template.js:105 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:621 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:643 module:io.ox/tasks
 msgid "Subject"
 msgstr "主题"
 
@@ -6019,7 +6019,7 @@ msgstr "标签邮件为"
 msgid "Task"
 msgstr "任务"
 
-#: apps/io.ox/tasks/main.js:205 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:227 module:io.ox/tasks
 msgid "Task Details"
 msgstr "任务详情"
 
