@@ -29,8 +29,13 @@ define('io.ox/core/tk/list-selection', [], function () {
             .on('focus', $.proxy(function () {
                 var items = this.getItems(),
                     first = items.filter('[tabindex="1"]'),
-                    index = items.index(first);
-                if (index > -1) this.select(index); else this.select(0);
+                    index = items.index(first),
+                    selectedItems = this.get();
+                if (selectedItems.length <= 1) {
+                    if (index > -1) this.select(index); else this.select(0);
+                } else {
+                    this.focus(index, items);
+                }
             }, this))
             .on(isTouch ? 'tap' : 'click', SELECTABLE, $.proxy(function (e) {
                 if (!this.isMultiple(e)) this.triggerAction(e);
