@@ -56,7 +56,6 @@ define('io.ox/core/commons-folderview',
                         )
                     )
                 );
-
                 ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links, baton);
             }
         });
@@ -75,7 +74,6 @@ define('io.ox/core/commons-folderview',
                         ul = $('<ul class="dropdown-menu" role="menu">')
                     )
                 );
-
                 ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul, baton);
 
                 function openContextMenu(e) {

@@ -179,21 +179,21 @@ define('io.ox/tasks/main',
                     app.grid.selection.clear();
                     app.grid.showTopbar(false);
                     app.grid.showToolbar(false);
+                    app.pages.getNavbar('listView').setRight(gt('Edit')).show('.left');
                 } else {
                      // also show sorting options
                     app.grid.showTopbar(true);
                     app.grid.showToolbar(true);
+                    app.pages.getNavbar('listView').setRight(gt('Cancel')).hide('.left');
                 }
-
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
-
             });
 
             app.pages.getNavbar('folderTree').on('rightAction', function () {
                 app.toggleFolders();
             });
-
         },
+
         'toggle-folder-editmode': function (app) {
             if (_.device('!small')) return;
             var toggleFolders =  function () {
@@ -212,10 +212,9 @@ define('io.ox/tasks/main',
 
                 }
             };
-
             app.toggleFolders = toggleFolders;
-
         },
+
         /*
          * Split into left and right pane
          */
@@ -247,44 +246,51 @@ define('io.ox/tasks/main',
             commons.wireGridAndWindow(grid, app.getWindow());
             commons.wireFirstRefresh(app, api);
             commons.wireGridAndRefresh(grid, api, app.getWindow());
+
+            if (_.device('smartphone')) {
+                // remove some stuff from toolbar once
+                app.grid.one('meta:update', function () {
+                    app.grid.getToolbar().find('.select-all-toggle, .grid-info').hide();
+                });
+            }
             //custom requests
             var allRequest = function () {
-                    var datacopy,
-                        done = grid.prop('done'),
-                        sort = grid.prop('sort'),
-                        order = grid.prop('order'),
-                        column;
+                var datacopy,
+                    done = grid.prop('done'),
+                    sort = grid.prop('sort'),
+                    order = grid.prop('order'),
+                    column;
+                if (sort !== 'state') {
+                    column = sort;
+                } else {
+                    column = 202;
+                }
+                return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
                     if (sort !== 'state') {
-                        column = sort;
+                        datacopy = _.copy(data, true);
                     } else {
-                        column = 202;
+                        datacopy = util.sortTasks(data, order);
                     }
-                    return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
-                        if (sort !== 'state') {
-                            datacopy = _.copy(data, true);
-                        } else {
-                            datacopy = util.sortTasks(data, order);
-                        }
 
-                        if (!done) {
-                            datacopy = _(datacopy).filter(function (obj) {
-                                return obj.status !== 3;
-                            });
-                        }
-                        return datacopy;
-                    });
-                },
-                listRequest = function (ids) {
-                    return api.getList(ids).pipe(function (list) {
-                        var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
-                            i = 0;
-                        for (; i < listcopy.length; i++) {
-                            listcopy[i] = util.interpretTask(listcopy[i]);
-                        }
+                    if (!done) {
+                        datacopy = _(datacopy).filter(function (obj) {
+                            return obj.status !== 3;
+                        });
+                    }
+                    return datacopy;
+                });
+            },
+            listRequest = function (ids) {
+                return api.getList(ids).pipe(function (list) {
+                    var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
+                        i = 0;
+                    for (; i < listcopy.length; i++) {
+                        listcopy[i] = util.interpretTask(listcopy[i]);
+                    }
 
-                        return listcopy;
-                    });
-                };
+                    return listcopy;
+                });
+            };
 
             grid.setAllRequest(allRequest);
             grid.setListRequest(listRequest);
@@ -331,7 +337,7 @@ define('io.ox/tasks/main',
             showTask = function (obj) {
                 // be busy
                 app.right.busy(true);
-                obj = {folder: obj.folder || obj.folder_id, id: obj.id};//remove unnecessary information
+                obj = {folder: obj.folder || obj.folder_id, id: obj.id}; //remove unnecessary information
                 api.get(obj)
                     .done(_.lfo(drawTask))
                     .fail(_.lfo(drawFail, obj));
@@ -365,7 +371,7 @@ define('io.ox/tasks/main',
          */
         'select:task-mobile': function (app) {
             if (_.device('!small')) return;
-            app.grid.getContainer().on('tap', '.vgrid-cell.selectable', function () {
+            app.grid.getContainer().on('click', '.vgrid-cell.selectable', function () {
                 if (app.props.get('checkboxes') === true) return;
                 // hijack selection event hub to trigger page-change event
                 app.grid.selection.trigger('pagechange:detailView');
@@ -447,22 +453,30 @@ define('io.ox/tasks/main',
 
         'change:folder-mobile': function () {
             if (_.device('!small')) return;
-            app.grid.on('change:ids', function () {
-                app.folder.getData().done(function (d) {
-                    app.pages.getNavbar('listView').setTitle(d.title);
-                });
+            var updateTitle = _.throttle(function () {
+                var title;
+                if (app.grid.meta.total !== 0) {
+                    title = app.grid.meta.title + ' (' + app.grid.meta.total + ')';
+                } else {
+                    title = app.grid.meta.title;
+                }
+                app.pages.getNavbar('listView').setTitle(title);
+            }, 500);
 
-            });
+            // set title and item amount in navbar
+            app.grid.on('meta:update', updateTitle);
+
         },
 
         'folder-view-mobile-listener': function () {
             if (_.device('!small')) return;
             // always change folder on click
-            app.pages.getPage('folderTree').on('tap', '.folder.selectable', function (e) {
+            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                 if (app.props.get('mobileFolderSelectMode') === true) {
                     $(e.currentTarget).trigger('contextmenu'); // open menu
                     return; // do not change page in edit mode
                 }
+
                 app.pages.changePage('listView');
             });
         },

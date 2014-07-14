@@ -1234,6 +1234,10 @@ define('io.ox/core/tk/vgrid',
             this.repaint();
         };
 
+        this.getToolbar = function () {
+            return toolbar;
+        };
+
         this.showToolbar = function (state) {
             if (state === true) {
                 toolbar.show();
