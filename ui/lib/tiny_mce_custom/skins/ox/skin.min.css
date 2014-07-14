@@ -6,7 +6,7 @@
 .mce-btn-group .mce-btn { border:0; background:transparent; padding-bottom:2px; padding-top:1px; }
 .mce-toolbar-grp .mce-btn.mce-active, .mce-toolbar-grp .mce-btn.mce-active:hover { background-color: #e6e6e6; }
 .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { border-width:0 !important; background-color: #fff;}
-.mce-panel.mce-edit-area { border:1px solid #ccc !important; }
+.mce-panel.mce-edit-area { border-color: #fff; }
 .mce-btn button { background:transparent; }
 
 /* Dialogue overrides */

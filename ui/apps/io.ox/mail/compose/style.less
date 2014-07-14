@@ -73,8 +73,10 @@
             position: fixed;
             width: auto;
             min-height: 31px;
+            height: 31px;
             top: 40px;
             z-index: 1;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.75);
         }
 
         .mceEmojiPane {
@@ -91,6 +93,7 @@
         padding: 13px;
 
         &.mce-edit-focus {
+            outline: none;
             .form-control-focus();
         }
 
