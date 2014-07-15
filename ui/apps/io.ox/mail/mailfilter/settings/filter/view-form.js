@@ -199,13 +199,31 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onSave: function () {
                 var self = this,
-                    rulePosition;
+                    rulePosition,
+                    actionArray = this.model.get('actioncmds');
 
-                if (!this.model.has('position')) {
+                function returnKeyForStop(actionsArray) {
+                    var indicatorKey;
+                    _.each(actionsArray, function (action, key) {
+                        if (_.isEqual(action, {id: 'stop'})) {
+                            indicatorKey = key;
+                        }
+                    });
+                    return indicatorKey;
+                }
+
+                if (!this.model.has('id')) {
                     rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
                     this.model.set('position', rulePosition);
                 }
-               
+
+                // if there is a stop action it should always be the last
+                if (returnKeyForStop(actionArray) !== undefined) {
+                    actionArray.splice(returnKeyForStop(actionArray), 1);
+                    actionArray.push({id: 'stop'});
+                    this.model.set('actioncmds', actionArray);
+                }
+
                 this.model.save().then(function (id) {
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id)) {
@@ -681,7 +699,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             function checkForStopAction(array) {
                 var stopAction;
-                if (!baton.model.id) { // default value
+                if (baton.model.id === undefined) { // default value
                     return true;
                 }
 
