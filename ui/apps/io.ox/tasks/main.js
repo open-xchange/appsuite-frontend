@@ -49,7 +49,7 @@ define('io.ox/tasks/main',
          * the state of the toolbars and navbars
          */
         'pages-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             var c = app.getWindow().nodes.main;
             var navbar = $('<div class="mobile-navbar">'),
                 toolbar = $('<div class="mobile-toolbar">');
@@ -110,7 +110,7 @@ define('io.ox/tasks/main',
         },
 
         'pages-desktop': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             // add page controller
             app.pages = new PageController(app);
@@ -135,7 +135,7 @@ define('io.ox/tasks/main',
          */
         'navbars-mobile': function (app) {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             app.pages.getNavbar('listView')
                 .setLeft(gt('Folders'))
@@ -161,7 +161,7 @@ define('io.ox/tasks/main',
         },
 
        'toolbars-mobile': function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             // tell each page's back button what to do
             app.pages.getNavbar('listView').on('leftAction', function () {
@@ -195,7 +195,7 @@ define('io.ox/tasks/main',
         },
 
         'toggle-folder-editmode': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             var toggleFolders =  function () {
                 var state = app.props.get('mobileFolderSelectMode'),
                     page = app.pages.getPage('folderTree');
@@ -350,7 +350,7 @@ define('io.ox/tasks/main',
 
             drawTask = function (data) {
                 var baton = ext.Baton({ data: data });
-                // since we use a classic toolbar on non-small devices, we disable inline links in this case
+                // since we use a classic toolbar on non-smartphone devices, we disable inline links in this case
                 baton.disable('io.ox/tasks/detail-inline', 'inline-links');
                 app.right.idle().empty().append(viewDetail.draw(baton));
             };
@@ -370,7 +370,7 @@ define('io.ox/tasks/main',
          * Always change pages on tap, don't wait for data to load
          */
         'select:task-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.grid.getContainer().on('click', '.vgrid-cell.selectable', function () {
                 if (app.props.get('checkboxes') === true) return;
                 // hijack selection event hub to trigger page-change event
@@ -389,7 +389,7 @@ define('io.ox/tasks/main',
 
         'folder-view-mobile': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             var view = new FolderView(app, {
                 type: 'tasks',
@@ -405,13 +405,14 @@ define('io.ox/tasks/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': _.device('small') ? false: app.settings.get('showCheckboxes', true)
+                'checkboxes': _.device('smartphone') ? false: app.settings.get('showCheckboxes', true),
+                'folderEditMode': false
             });
         },
 
         'vgrid-checkboxes': function (app) {
-            // always hide checkboxes on small devices initially
-            if (_.device('small')) return;
+            // always hide checkboxes on smartphone devices initially
+            if (_.device('smartphone')) return;
             var grid = app.getGrid();
             grid.setEditable(app.props.get('checkboxes'));
         },
@@ -420,7 +421,7 @@ define('io.ox/tasks/main',
          * Set folderview property
          */
         'prop-folderview': function (app) {
-            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+            app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
         },
 
         /*
@@ -439,7 +440,7 @@ define('io.ox/tasks/main',
          * Respond to folder view changes
          */
         'change:folderview': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:folderview', function (model, value) {
                 app.toggleFolderView(value);
             });
@@ -452,7 +453,7 @@ define('io.ox/tasks/main',
         },
 
         'change:folder-mobile': function () {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             var updateTitle = _.throttle(function () {
                 var title;
                 if (app.grid.meta.total !== 0) {
@@ -469,7 +470,7 @@ define('io.ox/tasks/main',
         },
 
         'folder-view-mobile-listener': function () {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             // always change folder on click
             app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                 if (app.props.get('mobileFolderSelectMode') === true) {
@@ -494,7 +495,7 @@ define('io.ox/tasks/main',
          * Folderview toolbar
          */
         'folderview-toolbar': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             commons.mediateFolderView(app);
         },
         /*
@@ -593,9 +594,9 @@ define('io.ox/tasks/main',
         var grid = new VGrid(app.gridContainer, {
             settings: settings,
             swipeLeftHandler: swipeRightHandler,
-            showToggle: _.device('small'),
-            hideTopbar: _.device('small'),
-            hideToolbar: _.device('small'),
+            showToggle: _.device('smartphone'),
+            hideTopbar: _.device('smartphone'),
+            hideToolbar: _.device('smartphone'),
             toolbarPlacement: 'top' // if it's shown, it should be on the top
         });
 
