@@ -945,7 +945,7 @@ define('io.ox/core/main',
             draw: function () {
                 if (capabilities.has('launchpad')) {
                     addLauncher('left', $('<i class="fa fa-th">').attr('aria-label', gt('Your Applications')), function () {
-                        return require(['io.ox/launchpad/main'], function (m) {
+                        require(['io.ox/launchpad/main'], function (m) {
                             launchers.children().removeClass('active-app');
                             launcherDropdown.children().removeClass('active-app');
                             launchers.children().first().addClass('active-app');
