@@ -809,7 +809,13 @@ define('io.ox/mail/compose/view',
                 if (!this.mcetoolbar.hasClass('fixed') && this.toolbarpos < scrollPane.scrollTop()) {
                      $(window).trigger('resize.tinymce');
                 }
-                this.mcetoolbar.toggleClass('fixed', this.toolbarpos < scrollPane.scrollTop());
+                if (this.toolbarpos < scrollPane.scrollTop()) {
+                    this.mcetoolbar.addClass('fixed');
+                    this.textarea.css('margin-top', this.mcetoolbar.height());
+                } else {
+                    this.mcetoolbar.removeClass('fixed');
+                    this.textarea.css('margin-top', 0);
+                }
             }, this));
 
             return this;
