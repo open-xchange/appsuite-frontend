@@ -611,9 +611,13 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=priority][value=' + prio + ']').prop('checked', true);
             // high or low priority?
             if (prio === 1) {
-                view.priorityOverlay.attr('class', 'priority-overlay high');
+                view.priorityOverlay
+                    .html('<i class="icon-exclamation"></i>')
+                    .attr('class', 'priority-overlay high');
             } else if (prio === 3) {
-                view.priorityOverlay.attr('class', 'priority-overlay');
+                view.priorityOverlay
+                    .html('<i class="icon-exclamation"></i>')
+                    .attr('class', 'priority-overlay');
                 if (prioActive) {
                     prioActive = false;
                     view.priorityOverlay.addClass('normal');
@@ -621,7 +625,9 @@ define('io.ox/mail/write/main',
                     prioActive = true;
                 }
             } else if (prio === 5) {
-                view.priorityOverlay.attr('class', 'priority-overlay low');
+                view.priorityOverlay
+                    .html('<i class="icon-minus"></i>')
+                    .attr('class', 'priority-overlay low');
             }
         };
 

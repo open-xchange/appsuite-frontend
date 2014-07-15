@@ -698,7 +698,9 @@ define('io.ox/core/commons',
     $.createViewContainer = function (baton, api, getter) {
 
         var data = baton instanceof ext.Baton ? baton.data : baton,
-            cid, ecid, pattern,
+            cid = _.cid(data),
+            ecid = _.ecid(data),
+            shortecid = 'recurrence_position' in data ? _.ecid({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {
@@ -751,42 +753,27 @@ define('io.ox/core/commons',
             // multiple items - just listen to generic events.
             // otherweise "select all" of some thousands items freezes browser
             folderAPI.on('update',  redraw);
-            api.on('delete', redraw);
-            api.on('update', redraw);
             // ignore move case for multiple
+            api.on('delete update', redraw);
         } else {
             // single item
-            cid = _.cid(data);
-            ecid = _.ecid(data);
             folderAPI.on('update',  { cid: cid, folder: data.folder_id }, checkFolder);
             api.on('delete:' + ecid, remove);
-            api.on('update:' + ecid, update);
+            api.on('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
             api.on('move:' + ecid, move);
-            api.on('create', update);
-            //calendar: update element of a series if master changes
-            if (data.recurrence_position && data.recurrence_position > 0 && (data.recurrence_id === data.id)) {
-                pattern = (data.folder || data.folder_id) + '.' + data.id + '.';
-                api.on('update:series:' + _.ecid(pattern), update);
-            }
         }
 
         return node.one('dispose', function () {
                 if (_.isArray(data)) {
                     folderAPI.off('update', redraw);
-                    api.off('delete', redraw);
-                    api.off('update', redraw);
+                    api.off('delete update', redraw);
                 } else {
-                    cid = _.cid(data);
-                    ecid = _.ecid(data);
                     folderAPI.off('update', checkFolder);
                     api.off('delete:' + ecid, remove);
-                    api.off('update:' + ecid, update);
+                    api.off('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
                     api.off('move:' + ecid, move);
-                    api.off('create', update);
-                    if (pattern)
-                        api.off('update:series:' + _.ecid(pattern));
                 }
-                api = update = data = node = getter = cid = ecid = pattern = null;
+                api = update = data = node = getter = cid = ecid = null;
             });
     };
 

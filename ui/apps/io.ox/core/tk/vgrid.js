@@ -511,7 +511,7 @@ define('io.ox/core/tk/vgrid',
             return $.when.apply($, defs).pipe(function () {
                 var i, obj, node, top,
                     //isVisible is only needed in for loop; visible selectors are slow, avoid them if possible
-                    isVisible = $i > 0 ? container.is(':visible') : undefined,
+                    isVisible = $i > 0 ? container.show().is(':visible') : undefined,
                     height;
                 for (i = 0; i < $i; i++) {
                     obj = labels.list[i];

@@ -32,23 +32,6 @@ define('io.ox/calendar/api',
         DAY = HOUR * 24;
     // object to store appointments, that have attachments uploading atm
     var uploadInProgress = {},
-        //grepRemove equivalent
-        grepRemove = function (pattern, cache) {
-            var keys = Object.keys(cache),
-                cache = cache || {};
-
-            if (typeof pattern === 'string') {
-                pattern = new RegExp(_.escapeRegExp(pattern));
-            }
-
-            if (_.isRegExp(pattern)) {
-                _.each(keys, function (key) {
-                    if (pattern.test(key)) {
-                        delete cache[key];
-                    }
-                });
-            }
-        },
 
         checkForNotification = function (obj, removeAction) {
             if (removeAction) {
@@ -222,7 +205,7 @@ define('io.ox/calendar/api',
          * @return {deferred} returns current appointment object
          */
         update: function (o) {
-            var folder_id = o.folder_id || o.folder, pattern,
+            var folder_id = o.folder_id || o.folder,
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
             delete o.tempAttachmentIndicator;
@@ -267,13 +250,6 @@ define('io.ox/calendar/api',
                             if (attachmentHandlingNeeded) {
                                 //to make the detailview show the busy animation
                                 api.addToUploadList(_.ecid(data));
-                            }
-                            //series master changed?
-                            if (data.recurrence_type > 0 && !data.recurrence_position) {
-                                //id without specified recurrence_position
-                                pattern = (o.folder || o.folder_id) + '.' + o.id + '.';
-                                grepRemove(pattern, get_cache);
-                                api.trigger('update:series:' + _.ecid(pattern), data);
                             }
                             api.trigger('update', data);
                             api.trigger('update:' + _.ecid(o), data);
@@ -446,8 +422,8 @@ define('io.ox/calendar/api',
             })
             .then(function () {
                 get_cache = {};
-                api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 all_cache = {};
+                api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 delete get_cache[key];
                 return api.get(o).then(function (data) {
                     api.trigger('update', data);
