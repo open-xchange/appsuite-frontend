@@ -730,6 +730,12 @@ define('io.ox/mail/compose/view',
 
             return this.changeEditorMode().done(function () {
                 if (data.replaceBody !== 'no') {
+                    // control focus in compose mode
+                    if (self.model.get('mode') === 'compose') {
+                        self.$el.find('.tokenfield:first .token-input').focus();
+                    } else {
+                        self.editor.focus();
+                    }
                     self.setBody(self.model.getContent());
                 }
             });
@@ -789,11 +795,6 @@ define('io.ox/mail/compose/view',
                     }
                 });
             });
-
-            // control focus in compose mode
-            if (this.model.get('mode') === 'compose') {
-                this.$el.find('.tokenfield:first .token-input').focus();
-            }
 
             this.$el.append(
                 this.mcetoolbar = $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
