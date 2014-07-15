@@ -1441,6 +1441,31 @@ define('io.ox/core/main',
         Stage.run('io.ox/core/stages', baton);
     }
 
+    (function ()  {
+
+        var hash = {
+            'mail/compose': 'io.ox/mail/write/main'
+        };
+
+        ox.registry = {
+            'add': function (id, path) {
+                hash[id] = path;
+            },
+            'call': function (id, name) {
+                var dep = settings.get(['registry', id], hash[id]),
+                    args = _(arguments).toArray().slice(2);
+                console.log('call', dep, name, args);
+                ox.load([dep]).done(function (m) {
+                    m.getApp().launch().done(function () {
+                        this[name].apply(this, args);
+                    });
+                });
+            }
+        };
+
+    }());
+
+
     return {
         logout: logout,
         launch: launch,

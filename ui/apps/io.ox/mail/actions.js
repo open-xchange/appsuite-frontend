@@ -55,11 +55,7 @@ define('io.ox/mail/actions',
             return true;
         },
         action: function (baton) {
-            require(['io.ox/mail/compose/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.compose({ folder_id: baton.app.folder.get() });
-                });
-            });
+            ox.registry.call('mail/compose', 'compose', { folder_id: baton.app.folder.get() });
         }
     });
 
