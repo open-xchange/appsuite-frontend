@@ -145,6 +145,9 @@ define('io.ox/files/main',
                 app.pages.goBack();
             });
 
+            app.pages.getNavbar('folderTree').on('rightAction', function () {
+                app.toggleFolders();
+            });
             // TODO restore last folder as starting point
             app.pages.showPage('mainView');
         },
@@ -179,7 +182,7 @@ define('io.ox/files/main',
             if (_.device('!smartphone')) return;
             // always change folder on click
             // No way to use tap here since folderselection really messes up the event chain
-            app.pages.getPage('folderTree').on('tap', '.folder.selectable', function (e) {
+            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                 if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
                 if (app.props.get('mobileFolderSelectMode') === true) {
                     $(e.currentTarget).trigger('contextmenu'); // open menu
@@ -205,7 +208,8 @@ define('io.ox/files/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': settings.get('view', 'fluid:list')
+                'layout': settings.get('view', 'fluid:list'),
+                'folderEditMode': false
             });
         },
 
@@ -277,7 +281,31 @@ define('io.ox/files/main',
                     .on('click', { app: app, state: false }, toggleFolderView)
                 )
             );
-        }
+        },
+
+        /*
+         * folder edit mode for mobile
+         */
+        'toggle-folder-editmode': function (app) {
+            if (_.device('!smartphone')) return;
+            var toggleFolders =  function () {
+                var state = app.props.get('mobileFolderSelectMode'),
+                    page = app.pages.getPage('folderTree');
+
+                if (state) {
+                    app.props.set('mobileFolderSelectMode', false);
+                    app.pages.getNavbar('folderTree').setRight(gt('Edit'));
+                    page.removeClass('mobile-edit-mode');
+
+                } else {
+                    app.props.set('mobileFolderSelectMode', true);
+                    app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
+                    page.addClass('mobile-edit-mode');
+
+                }
+            };
+            app.toggleFolders = toggleFolders;
+        },
     });
 
     //map old settings/links
