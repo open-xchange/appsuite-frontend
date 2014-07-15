@@ -78,21 +78,23 @@ define('io.ox/mail/view-options',
     });
 
     function toggleSelection(e) {
-        e.preventDefault();
-        var i = $(this).find('i'),
+        if (e.type === 'click' || e.keyCode === 32) {
+            e.preventDefault();
+            var i = $(this).find('i'),
             selection = e.data.baton.app.listView.selection;
-        if (i.hasClass('fa-check-square-o')) {
-            i.attr('class', 'fa fa-square-o');
-            selection.selectNone();
-        } else {
-            i.attr('class', 'fa fa-check-square-o');
-            selection.selectAll();
-        }
+            if (i.hasClass('fa-check-square-o')) {
+                i.attr('class', 'fa fa-square-o');
+                selection.selectNone();
+            } else {
+                i.attr('class', 'fa fa-check-square-o');
+                selection.selectAll();
+            }
 
-        e.data.baton.view.listView.on('selection:empty', function () {
-            i.removeClass('fa fa-check-square-o');
-            i.addClass('fa fa-square-o');
-        });
+             e.data.baton.view.listView.on('selection:empty', function () {
+                i.removeClass('fa fa-check-square-o');
+                i.addClass('fa fa-square-o');
+            });
+        }
     }
 
     ext.point('io.ox/mail/list-view/toolbar/top').extend({
@@ -108,6 +110,7 @@ define('io.ox/mail/view-options',
                 .on('dblclick', function (e) {
                     e.stopPropagation();
                 })
+                .on('keydown', { baton: baton }, toggleSelection)
             );
         }
     });
