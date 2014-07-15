@@ -932,7 +932,7 @@ msgstr "Vai tiešam vēlaties dzēst šo ziņu?"
 
 #: apps/io.ox/calendar/list/perspective.js:201 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:45 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:646 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:636 module:io.ox/tasks
 msgid "Ascending"
 msgstr "Augoši"
 
@@ -1049,9 +1049,9 @@ msgstr "B"
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:190 module:io.ox/calendar
 #: apps/io.ox/contacts/main.js:362 module:io.ox/contacts
-#: apps/io.ox/core/commons.js:698 module:io.ox/core
+#: apps/io.ox/core/commons.js:703 module:io.ox/core
 #: apps/io.ox/mail/main.js:155 module:io.ox/mail apps/io.ox/mail/main.js:160
-#: apps/io.ox/mail/threadview.js:39 apps/io.ox/tasks/main.js:158
+#: apps/io.ox/mail/threadview.js:39 apps/io.ox/tasks/main.js:156
 #: module:io.ox/tasks
 msgid "Back"
 msgstr "Atpakaļ"
@@ -1155,7 +1155,7 @@ msgstr "CSV"
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
-#: apps/io.ox/core/commons-folderview.js:531 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:529 module:io.ox/core
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1181,7 +1181,7 @@ msgstr "Kalendārs"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:695
-#: apps/io.ox/core/commons-folderview.js:587 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:585 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
@@ -1220,7 +1220,8 @@ msgstr "Kalendārs"
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:62
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:204
 #: apps/io.ox/tasks/common-extensions.js:95 apps/io.ox/tasks/edit/main.js:163
-#: apps/io.ox/tasks/main.js:204 apps/plugins/core/feedback/register.js:130
+#: apps/io.ox/tasks/main.js:187 apps/io.ox/tasks/main.js:210
+#: apps/plugins/core/feedback/register.js:130
 #: apps/plugins/portal/flickr/register.js:235 module:plugins/portal
 #: apps/plugins/portal/rss/register.js:159
 #: apps/plugins/portal/tumblr/register.js:261
@@ -1419,7 +1420,7 @@ msgid "Click to upload image"
 msgstr "Noklikšķiniet, lai ielādētu attēlu"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:544
+#: apps/io.ox/core/commons-folderview.js:542
 #: apps/io.ox/core/permissions/permissions.js:458
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
 #: apps/io.ox/core/tk/dialogs.js:558 apps/io.ox/core/wizard/registry.js:60
@@ -1439,7 +1440,7 @@ msgstr "Aizvērt"
 msgid "Close all"
 msgstr "Aizvērt visu"
 
-#: apps/io.ox/core/commons.js:744 module:io.ox/core
+#: apps/io.ox/core/commons.js:749 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:148 module:io.ox/mail
 msgid "Close folder view"
@@ -1668,7 +1669,7 @@ msgid "Could not load new Tweets."
 msgstr "Nevar ielādēt jaunas ziņas."
 
 #: apps/io.ox/core/tk/autocomplete.js:313 module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:831 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:844 module:io.ox/core
 msgid "Could not load this list"
 msgstr "Nevar ielādēt šo sarakstu"
 
@@ -1705,7 +1706,7 @@ msgstr "Nevar ielādēt mapes."
 msgid "Couldn't load subfolders."
 msgstr "Nevar ielādēt apakšmapes."
 
-#: apps/io.ox/tasks/main.js:357 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:360 module:io.ox/tasks
 msgid "Couldn't load that task."
 msgstr "Nevar ielādēt uzdevumu."
 
@@ -1904,7 +1905,7 @@ msgstr "Atlikts"
 #: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:800
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:69 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
+#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:411
 #: module:io.ox/core apps/io.ox/core/folder/contextmenu.js:173
 #: apps/io.ox/core/pubsub/settings/pane.js:239 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:241
@@ -1964,7 +1965,7 @@ msgstr "Nodaļa"
 
 #: apps/io.ox/calendar/list/perspective.js:202 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:647 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:637 module:io.ox/tasks
 msgid "Descending"
 msgstr "Dilstoši"
 
@@ -2309,7 +2310,7 @@ msgid "Due %1$s"
 msgstr "Termiņš %1$s; "
 
 #: apps/io.ox/tasks/edit/view-template.js:181 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:642 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:631 module:io.ox/tasks
 msgid "Due date"
 msgstr "Izpildes datums"
 
@@ -2346,8 +2347,9 @@ msgstr "EB"
 #: apps/io.ox/settings/accounts/settings/pane.js:50
 #: apps/io.ox/settings/accounts/settings/pane.js:52
 #: apps/io.ox/tasks/actions.js:459 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:146 apps/io.ox/tasks/main.js:152
-#: apps/io.ox/tasks/main.js:199 apps/io.ox/tasks/mobile-toolbar-actions.js:41
+#: apps/io.ox/tasks/main.js:144 apps/io.ox/tasks/main.js:150
+#: apps/io.ox/tasks/main.js:182 apps/io.ox/tasks/main.js:205
+#: apps/io.ox/tasks/mobile-toolbar-actions.js:41
 #: apps/io.ox/tasks/toolbar.js:51
 msgid "Edit"
 msgstr "Rediģēt"
@@ -2503,7 +2505,7 @@ msgid "Employment"
 msgstr "Nodarbinātība"
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:712 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:725 module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "Tukšs"
@@ -2690,7 +2692,7 @@ msgstr "Atritināt formu"
 msgid "Expand timeframe by one month"
 msgstr "Palielināt laika grafiku par vienu mēnesiP"
 
-#: apps/io.ox/core/commons-folderview.js:438 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:436 module:io.ox/core
 #: apps/io.ox/core/export/export.js:103
 #: apps/io.ox/core/folder/contextmenu.js:230
 msgid "Export"
@@ -2937,7 +2939,7 @@ msgstr "Mapes tiesības"
 msgid "Folder settings"
 msgstr "Mapes darbības"
 
-#: apps/io.ox/core/commons-folderview.js:519 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:517 module:io.ox/core
 msgid "Folder type"
 msgstr "Mapes tips"
 
@@ -2966,8 +2968,8 @@ msgstr "Mapes darbības"
 #: apps/io.ox/contacts/main.js:347 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:354 apps/io.ox/core/commons-folderview.js:49
 #: module:io.ox/core apps/io.ox/mail/main.js:140 module:io.ox/mail
-#: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:143 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:150
+#: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:141 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:148
 msgid "Folders"
 msgstr "Mapes"
 
@@ -3158,7 +3160,7 @@ msgstr "Sveicināti!<br><br>%1$s ir koplietojis ar jums publikāciju:<br>%2$s"
 msgid "Hidden folders"
 msgstr "Apslēptās mapes"
 
-#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:434
 #: apps/io.ox/mail/write/view-main.js:124 module:io.ox/mail
 msgid "Hide"
@@ -3291,7 +3293,7 @@ msgstr ""
 msgid "Image 1"
 msgstr "Attēls 1"
 
-#: apps/io.ox/core/commons-folderview.js:463 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:461 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:257
 #: apps/io.ox/core/import/import.js:128
 msgid "Import"
@@ -3431,7 +3433,7 @@ msgstr "Ir tieši"
 msgid "Is smaller than"
 msgstr "Ir mazāks par"
 
-#: apps/io.ox/core/commons.js:691 module:io.ox/core
+#: apps/io.ox/core/commons.js:696 module:io.ox/core
 msgid "Items"
 msgstr "Vienības"
 
@@ -3959,7 +3961,7 @@ msgstr ""
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:816
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:75 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:105
-#: apps/io.ox/core/commons-folderview.js:644 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:642 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:202 apps/io.ox/files/actions.js:675
 #: module:io.ox/files apps/io.ox/files/actions.js:974
 #: apps/io.ox/files/actions.js:1362 apps/io.ox/files/toolbar.js:143
@@ -3972,7 +3974,7 @@ msgstr ""
 msgid "Move"
 msgstr "Pārvietot"
 
-#: apps/io.ox/core/commons-folderview.js:581 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:579 module:io.ox/core
 msgid "Move folder"
 msgstr "Pārvietot mapi"
 
@@ -4059,7 +4061,7 @@ msgstr "Jauns kontaksts"
 msgid "New file"
 msgstr "Jauns fails"
 
-#: apps/io.ox/core/commons-folderview.js:211 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:209 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/add.js:90
 #: apps/io.ox/core/folder/add.js:102 apps/io.ox/core/pubsub/util.js:107
 #: module:io.ox/mail
@@ -4070,12 +4072,12 @@ msgstr "Jauna mape"
 msgid "New password"
 msgstr "Jaunā parole"
 
-#: apps/io.ox/core/commons-folderview.js:249 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:247 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:81
 msgid "New private folder"
 msgstr "Jauna privātā mape"
 
-#: apps/io.ox/core/commons-folderview.js:274 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:272 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:82
 msgid "New public folder"
 msgstr "Jauna publiskā mape"
@@ -4084,12 +4086,12 @@ msgstr "Jauna publiskā mape"
 msgid "New rule"
 msgstr "Jauns noteikums"
 
-#: apps/io.ox/core/commons-folderview.js:229 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:227 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/contextmenu.js:125
 msgid "New subfolder"
 msgstr "Jauna apakš-mape"
 
-#: apps/io.ox/core/commons-folderview.js:337 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:335 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:352
 msgid "New subscription"
 msgstr "Jauns abonements"
@@ -4395,7 +4397,7 @@ msgstr "Atvērt"
 msgid "Open external link"
 msgstr "Atvērt ārējo saiti"
 
-#: apps/io.ox/core/commons.js:731 module:io.ox/core
+#: apps/io.ox/core/commons.js:736 module:io.ox/core
 #: apps/io.ox/mail/view-options.js:137 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Atvērt mapes skatu"
@@ -4511,6 +4513,12 @@ msgstr "Opcijas"
 msgid "Orange"
 msgstr "Oranžs"
 
+#: apps/io.ox/tasks/main.js:635 module:io.ox/tasks
+#, fuzzy
+#| msgid "Order by:"
+msgid "Order"
+msgstr "Kārtot pēc:"
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/participants/views.js:106 module:io.ox/calendar/edit/main
 msgid "Organizer"
@@ -4619,7 +4627,7 @@ msgstr "Cilvēki"
 msgid "Permanently remove deleted emails"
 msgstr "Neatgriezeniski izmest izdzēsto e-pastu"
 
-#: apps/io.ox/core/commons-folderview.js:490 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:488 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:286
 msgid "Permissions"
 msgstr "Tiesības"
@@ -4990,7 +4998,7 @@ msgstr "Izdruka"
 
 #: apps/io.ox/mail/write/view-main.js:699 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:346 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:644 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:633 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
 msgstr "Prioritāte"
@@ -5040,8 +5048,8 @@ msgstr "Progresa %"
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "Progresam ir jābūt skaitlim robežās no 0 līdz 100"
 
-#: apps/io.ox/core/commons-folderview.js:507 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:564
+#: apps/io.ox/core/commons-folderview.js:505 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:562
 #: apps/io.ox/core/folder/contextmenu.js:398
 msgid "Properties"
 msgstr "Īpašibas"
@@ -5284,7 +5292,7 @@ msgstr "Noņemt kopiju no servera pēc ziņojuma nolasīšanas"
 msgid "Remove from recipient list"
 msgstr "Izņemt no saņēmēju saraksta"
 
-#: apps/io.ox/core/commons-folderview.js:390 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:388 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:149
 #: apps/io.ox/core/tk/folderviews.js:683 apps/io.ox/files/actions.js:526
 #: module:io.ox/files apps/io.ox/files/actions.js:531
@@ -5363,7 +5371,7 @@ msgstr "Atjaunot aplikācijas"
 msgid "Retired"
 msgstr "Atvaļināts"
 
-#: apps/io.ox/core/commons.js:874 module:io.ox/core
+#: apps/io.ox/core/commons.js:879 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:316 module:io.ox/mail
 msgid "Retry"
 msgstr "Vēlreiz"
@@ -5547,11 +5555,11 @@ msgid "Searched for: %1$s"
 msgstr "Meklējums pēc: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:386 module:io.ox/core
+#: apps/io.ox/core/commons.js:391 module:io.ox/core
 msgid "Searched in"
 msgstr "Meklēts iekš"
 
-#: apps/io.ox/core/commons.js:380 module:io.ox/core
+#: apps/io.ox/core/commons.js:385 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "Meklēt visās mapēs"
 
@@ -5730,7 +5738,7 @@ msgstr "Kopīgot saiti ar e-pastu"
 msgid "Share this file"
 msgstr "Koplietot šo failu"
 
-#: apps/io.ox/core/commons-folderview.js:297 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:295 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:310
 #: apps/io.ox/core/pubsub/publications.js:117 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:1274 module:io.ox/files
@@ -5754,7 +5762,7 @@ msgstr "Koplietojuma darbība"
 msgid "Shopping cart"
 msgstr "Iepirkumu grozs"
 
-#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:434
 msgid "Show"
 msgstr "Rādīt"
@@ -5799,7 +5807,7 @@ msgstr "Rādīt noraidītās tikšanās"
 msgid "Show details"
 msgstr "Rādīt detaļas"
 
-#: apps/io.ox/tasks/main.js:649 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:639 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "Rādīt pabeigtos uzdevumus"
 
@@ -5971,7 +5979,7 @@ msgid "Sort by"
 msgstr "Kārtot pēc"
 
 #: apps/io.ox/calendar/list/perspective.js:193 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:636 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:629 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Kārtošanas opcijas"
 
@@ -6017,7 +6025,7 @@ msgstr "Pārlādēt statistiku"
 
 #: apps/io.ox/calendar/toolbar.js:62 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:641 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:630 module:io.ox/tasks
 msgid "Status"
 msgstr "Statuss"
 
@@ -6041,7 +6049,7 @@ msgstr "Studnts"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
 #: apps/io.ox/mail/view-options.js:34 apps/io.ox/mail/write/view-main.js:873
 #: apps/io.ox/tasks/edit/view-template.js:105 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:643 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:632 module:io.ox/tasks
 msgid "Subject"
 msgstr "Tēma"
 
@@ -6128,7 +6136,7 @@ msgstr "Marķēt pastu ar"
 msgid "Task"
 msgstr "Uzdevums"
 
-#: apps/io.ox/tasks/main.js:227 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:232 module:io.ox/tasks
 msgid "Task Details"
 msgstr "Uzdevuma detaļas"
 
@@ -6906,8 +6914,8 @@ msgstr "Šodien"
 msgid "Toggle checkboxes"
 msgstr "Pārslēgt iezīmes"
 
-#: apps/io.ox/core/commons-folderview.js:1121 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1149
+#: apps/io.ox/core/commons-folderview.js:1119 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1147
 msgid "Toggle folder"
 msgstr "Pārslēgt mapi"
 
@@ -11366,9 +11374,6 @@ msgstr "ik-gada"
 
 #~ msgid "Optional Fields:"
 #~ msgstr "Papildus lauki:"
-
-#~ msgid "Order by:"
-#~ msgstr "Kārtot pēc:"
 
 #~ msgid "Organization"
 #~ msgstr "Organizācija"

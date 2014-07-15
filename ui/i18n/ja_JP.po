@@ -893,7 +893,7 @@ msgstr "このツイートを削除しますか？"
 
 #: apps/io.ox/calendar/list/perspective.js:201 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:45 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:646 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:636 module:io.ox/tasks
 msgid "Ascending"
 msgstr "昇順"
 
@@ -1002,9 +1002,9 @@ msgstr "B"
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:190 module:io.ox/calendar
 #: apps/io.ox/contacts/main.js:362 module:io.ox/contacts
-#: apps/io.ox/core/commons.js:698 module:io.ox/core
+#: apps/io.ox/core/commons.js:703 module:io.ox/core
 #: apps/io.ox/mail/main.js:155 module:io.ox/mail apps/io.ox/mail/main.js:160
-#: apps/io.ox/mail/threadview.js:39 apps/io.ox/tasks/main.js:158
+#: apps/io.ox/mail/threadview.js:39 apps/io.ox/tasks/main.js:156
 #: module:io.ox/tasks
 msgid "Back"
 msgstr "戻る"
@@ -1108,7 +1108,7 @@ msgstr "CSV"
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
-#: apps/io.ox/core/commons-folderview.js:531 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:529 module:io.ox/core
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1134,7 +1134,7 @@ msgstr "予定表"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:695
-#: apps/io.ox/core/commons-folderview.js:587 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:585 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
@@ -1173,7 +1173,8 @@ msgstr "予定表"
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:62
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:204
 #: apps/io.ox/tasks/common-extensions.js:95 apps/io.ox/tasks/edit/main.js:163
-#: apps/io.ox/tasks/main.js:204 apps/plugins/core/feedback/register.js:130
+#: apps/io.ox/tasks/main.js:187 apps/io.ox/tasks/main.js:210
+#: apps/plugins/core/feedback/register.js:130
 #: apps/plugins/portal/flickr/register.js:235 module:plugins/portal
 #: apps/plugins/portal/rss/register.js:159
 #: apps/plugins/portal/tumblr/register.js:261
@@ -1371,7 +1372,7 @@ msgid "Click to upload image"
 msgstr "クリックして画像をアップロード"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:544
+#: apps/io.ox/core/commons-folderview.js:542
 #: apps/io.ox/core/permissions/permissions.js:458
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
 #: apps/io.ox/core/tk/dialogs.js:558 apps/io.ox/core/wizard/registry.js:60
@@ -1391,7 +1392,7 @@ msgstr "閉じる"
 msgid "Close all"
 msgstr "すべて閉じる"
 
-#: apps/io.ox/core/commons.js:744 module:io.ox/core
+#: apps/io.ox/core/commons.js:749 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:148 module:io.ox/mail
 msgid "Close folder view"
@@ -1620,7 +1621,7 @@ msgid "Could not load new Tweets."
 msgstr "新規ツイートを読み込めませんでした。"
 
 #: apps/io.ox/core/tk/autocomplete.js:313 module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:831 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:844 module:io.ox/core
 msgid "Could not load this list"
 msgstr "このリストを読み込めませんでした。"
 
@@ -1656,7 +1657,7 @@ msgstr "フォルダを読み込めませんでした。"
 msgid "Couldn't load subfolders."
 msgstr "サブフォルダを読み込めませんでした。"
 
-#: apps/io.ox/tasks/main.js:357 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:360 module:io.ox/tasks
 msgid "Couldn't load that task."
 msgstr "その仕事を読み込めませんでした。"
 
@@ -1856,7 +1857,7 @@ msgstr "延期"
 #: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:800
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:69 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
+#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:411
 #: module:io.ox/core apps/io.ox/core/folder/contextmenu.js:173
 #: apps/io.ox/core/pubsub/settings/pane.js:239 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:241
@@ -1916,7 +1917,7 @@ msgstr "部署"
 
 #: apps/io.ox/calendar/list/perspective.js:202 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:647 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:637 module:io.ox/tasks
 msgid "Descending"
 msgstr "降順"
 
@@ -2256,7 +2257,7 @@ msgid "Due %1$s"
 msgstr "期限 %1$s"
 
 #: apps/io.ox/tasks/edit/view-template.js:181 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:642 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:631 module:io.ox/tasks
 msgid "Due date"
 msgstr "期限"
 
@@ -2293,8 +2294,9 @@ msgstr "EB"
 #: apps/io.ox/settings/accounts/settings/pane.js:50
 #: apps/io.ox/settings/accounts/settings/pane.js:52
 #: apps/io.ox/tasks/actions.js:459 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:146 apps/io.ox/tasks/main.js:152
-#: apps/io.ox/tasks/main.js:199 apps/io.ox/tasks/mobile-toolbar-actions.js:41
+#: apps/io.ox/tasks/main.js:144 apps/io.ox/tasks/main.js:150
+#: apps/io.ox/tasks/main.js:182 apps/io.ox/tasks/main.js:205
+#: apps/io.ox/tasks/mobile-toolbar-actions.js:41
 #: apps/io.ox/tasks/toolbar.js:51
 msgid "Edit"
 msgstr "編集"
@@ -2444,7 +2446,7 @@ msgid "Employment"
 msgstr "職業"
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:712 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:725 module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "何もありません。"
@@ -2629,7 +2631,7 @@ msgstr "フォームを展開"
 msgid "Expand timeframe by one month"
 msgstr "1 か月期間を拡大する"
 
-#: apps/io.ox/core/commons-folderview.js:438 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:436 module:io.ox/core
 #: apps/io.ox/core/export/export.js:103
 #: apps/io.ox/core/folder/contextmenu.js:230
 msgid "Export"
@@ -2872,7 +2874,7 @@ msgstr "フォルダ権限"
 msgid "Folder settings"
 msgstr "フォルダ設定"
 
-#: apps/io.ox/core/commons-folderview.js:519 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:517 module:io.ox/core
 msgid "Folder type"
 msgstr "フォルダ タイプ"
 
@@ -2901,8 +2903,8 @@ msgstr "フォルダ アクション"
 #: apps/io.ox/contacts/main.js:347 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:354 apps/io.ox/core/commons-folderview.js:49
 #: module:io.ox/core apps/io.ox/mail/main.js:140 module:io.ox/mail
-#: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:143 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:150
+#: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:141 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:148
 msgid "Folders"
 msgstr "フォルダ"
 
@@ -3093,7 +3095,7 @@ msgstr "お知らせ<br><br>あなたは %1$s と次の公開を共有してい�
 msgid "Hidden folders"
 msgstr "隠しフォルダ"
 
-#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:434
 #: apps/io.ox/mail/write/view-main.js:124 module:io.ox/mail
 msgid "Hide"
@@ -3224,7 +3226,7 @@ msgstr ""
 msgid "Image 1"
 msgstr "画像 1"
 
-#: apps/io.ox/core/commons-folderview.js:463 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:461 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:257
 #: apps/io.ox/core/import/import.js:128
 msgid "Import"
@@ -3363,7 +3365,7 @@ msgstr "次の文字列と完全に一致"
 msgid "Is smaller than"
 msgstr "次の数より小さい"
 
-#: apps/io.ox/core/commons.js:691 module:io.ox/core
+#: apps/io.ox/core/commons.js:696 module:io.ox/core
 msgid "Items"
 msgstr "アイテム"
 
@@ -3894,7 +3896,7 @@ msgstr ""
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:816
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:75 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:105
-#: apps/io.ox/core/commons-folderview.js:644 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:642 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:202 apps/io.ox/files/actions.js:675
 #: module:io.ox/files apps/io.ox/files/actions.js:974
 #: apps/io.ox/files/actions.js:1362 apps/io.ox/files/toolbar.js:143
@@ -3907,7 +3909,7 @@ msgstr ""
 msgid "Move"
 msgstr "移動"
 
-#: apps/io.ox/core/commons-folderview.js:581 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:579 module:io.ox/core
 msgid "Move folder"
 msgstr "フォルダを移動"
 
@@ -3994,7 +3996,7 @@ msgstr "新規連絡先"
 msgid "New file"
 msgstr "新規ファイル"
 
-#: apps/io.ox/core/commons-folderview.js:211 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:209 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/add.js:90
 #: apps/io.ox/core/folder/add.js:102 apps/io.ox/core/pubsub/util.js:107
 #: module:io.ox/mail
@@ -4005,12 +4007,12 @@ msgstr "新規フォルダ"
 msgid "New password"
 msgstr "新しいパスワード"
 
-#: apps/io.ox/core/commons-folderview.js:249 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:247 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:81
 msgid "New private folder"
 msgstr "新規プライベート フォルダ"
 
-#: apps/io.ox/core/commons-folderview.js:274 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:272 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:82
 msgid "New public folder"
 msgstr "新規パブリック フォルダ"
@@ -4019,12 +4021,12 @@ msgstr "新規パブリック フォルダ"
 msgid "New rule"
 msgstr "新しいルール"
 
-#: apps/io.ox/core/commons-folderview.js:229 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:227 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/contextmenu.js:125
 msgid "New subfolder"
 msgstr "新規サブフォルダ"
 
-#: apps/io.ox/core/commons-folderview.js:337 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:335 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:352
 msgid "New subscription"
 msgstr "新規の登録"
@@ -4320,7 +4322,7 @@ msgstr "開く"
 msgid "Open external link"
 msgstr "外部リンクを開く"
 
-#: apps/io.ox/core/commons.js:731 module:io.ox/core
+#: apps/io.ox/core/commons.js:736 module:io.ox/core
 #: apps/io.ox/mail/view-options.js:137 module:io.ox/mail
 msgid "Open folder view"
 msgstr "フォルダ ビューを開く"
@@ -4436,6 +4438,12 @@ msgstr "オプション"
 msgid "Orange"
 msgstr "オレンジ"
 
+#: apps/io.ox/tasks/main.js:635 module:io.ox/tasks
+#, fuzzy
+#| msgid "Order by:"
+msgid "Order"
+msgstr "並べ替え:"
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/participants/views.js:106 module:io.ox/calendar/edit/main
 msgid "Organizer"
@@ -4544,7 +4552,7 @@ msgstr "人物"
 msgid "Permanently remove deleted emails"
 msgstr "削除済みのメールを完全に削除"
 
-#: apps/io.ox/core/commons-folderview.js:490 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:488 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:286
 msgid "Permissions"
 msgstr "権限"
@@ -4915,7 +4923,7 @@ msgstr "印刷"
 
 #: apps/io.ox/mail/write/view-main.js:699 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:346 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:644 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:633 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
 msgstr "優先度"
@@ -4965,8 +4973,8 @@ msgstr "達成率 (%)"
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "達成率は 0 から 100 までの数字でなければなりません。"
 
-#: apps/io.ox/core/commons-folderview.js:507 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:564
+#: apps/io.ox/core/commons-folderview.js:505 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:562
 #: apps/io.ox/core/folder/contextmenu.js:398
 msgid "Properties"
 msgstr "プロパティ"
@@ -5208,7 +5216,7 @@ msgstr "メッセージの取得後にサーバからコピーを削除"
 msgid "Remove from recipient list"
 msgstr "宛先のリストから削除"
 
-#: apps/io.ox/core/commons-folderview.js:390 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:388 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:149
 #: apps/io.ox/core/tk/folderviews.js:683 apps/io.ox/files/actions.js:526
 #: module:io.ox/files apps/io.ox/files/actions.js:531
@@ -5287,7 +5295,7 @@ msgstr "アプリケーションを復元"
 msgid "Retired"
 msgstr "退職"
 
-#: apps/io.ox/core/commons.js:874 module:io.ox/core
+#: apps/io.ox/core/commons.js:879 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:316 module:io.ox/mail
 msgid "Retry"
 msgstr "再試行"
@@ -5469,11 +5477,11 @@ msgid "Searched for: %1$s"
 msgstr "次を検索: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:386 module:io.ox/core
+#: apps/io.ox/core/commons.js:391 module:io.ox/core
 msgid "Searched in"
 msgstr "検索先:"
 
-#: apps/io.ox/core/commons.js:380 module:io.ox/core
+#: apps/io.ox/core/commons.js:385 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "すべてのフォルダを検索しました。"
 
@@ -5650,7 +5658,7 @@ msgstr "メールでリンクを共有"
 msgid "Share this file"
 msgstr "このファイルを共有"
 
-#: apps/io.ox/core/commons-folderview.js:297 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:295 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:310
 #: apps/io.ox/core/pubsub/publications.js:117 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:1274 module:io.ox/files
@@ -5674,7 +5682,7 @@ msgstr "共有アクティビティ"
 msgid "Shopping cart"
 msgstr "ショッピング カート"
 
-#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:434
 msgid "Show"
 msgstr "表示"
@@ -5719,7 +5727,7 @@ msgstr "辞退したアポイントを表示"
 msgid "Show details"
 msgstr "詳細を表示"
 
-#: apps/io.ox/tasks/main.js:649 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:639 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "完了した仕事を表示"
 
@@ -5891,7 +5899,7 @@ msgid "Sort by"
 msgstr "ソート条件"
 
 #: apps/io.ox/calendar/list/perspective.js:193 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:636 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:629 module:io.ox/tasks
 msgid "Sort options"
 msgstr "ソート オプション"
 
@@ -5935,7 +5943,7 @@ msgstr "統計"
 
 #: apps/io.ox/calendar/toolbar.js:62 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:641 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:630 module:io.ox/tasks
 msgid "Status"
 msgstr "進捗状況"
 
@@ -5959,7 +5967,7 @@ msgstr "学生"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
 #: apps/io.ox/mail/view-options.js:34 apps/io.ox/mail/write/view-main.js:873
 #: apps/io.ox/tasks/edit/view-template.js:105 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:643 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:632 module:io.ox/tasks
 msgid "Subject"
 msgstr "件名"
 
@@ -6046,7 +6054,7 @@ msgstr "次のタグをメールに付ける"
 msgid "Task"
 msgstr "仕事"
 
-#: apps/io.ox/tasks/main.js:227 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:232 module:io.ox/tasks
 msgid "Task Details"
 msgstr "仕事の詳細"
 
@@ -6802,8 +6810,8 @@ msgstr "今日"
 msgid "Toggle checkboxes"
 msgstr "チェックボックスを表示"
 
-#: apps/io.ox/core/commons-folderview.js:1121 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1149
+#: apps/io.ox/core/commons-folderview.js:1119 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1147
 msgid "Toggle folder"
 msgstr "フォルダを表示"
 
@@ -12254,9 +12262,6 @@ msgstr "毎年"
 
 #~ msgid "Optional Fields:"
 #~ msgstr "オプション フィールド:"
-
-#~ msgid "Order by:"
-#~ msgstr "並べ替え:"
 
 #~ msgid "Organization"
 #~ msgstr "組織"

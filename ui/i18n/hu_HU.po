@@ -915,7 +915,7 @@ msgstr "Biztos, hogy törölni szeretné ezt a tweetet?"
 
 #: apps/io.ox/calendar/list/perspective.js:201 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:45 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:646 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:636 module:io.ox/tasks
 msgid "Ascending"
 msgstr "Növekvő"
 
@@ -1031,9 +1031,9 @@ msgstr "B"
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:190 module:io.ox/calendar
 #: apps/io.ox/contacts/main.js:362 module:io.ox/contacts
-#: apps/io.ox/core/commons.js:698 module:io.ox/core
+#: apps/io.ox/core/commons.js:703 module:io.ox/core
 #: apps/io.ox/mail/main.js:155 module:io.ox/mail apps/io.ox/mail/main.js:160
-#: apps/io.ox/mail/threadview.js:39 apps/io.ox/tasks/main.js:158
+#: apps/io.ox/mail/threadview.js:39 apps/io.ox/tasks/main.js:156
 #: module:io.ox/tasks
 msgid "Back"
 msgstr "Vissza"
@@ -1137,7 +1137,7 @@ msgstr "CSV"
 msgid "CW %1$d"
 msgstr "%1$d. hét"
 
-#: apps/io.ox/core/commons-folderview.js:531 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:529 module:io.ox/core
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1163,7 +1163,7 @@ msgstr "Naptár"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:695
-#: apps/io.ox/core/commons-folderview.js:587 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:585 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
@@ -1202,7 +1202,8 @@ msgstr "Naptár"
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:62
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:204
 #: apps/io.ox/tasks/common-extensions.js:95 apps/io.ox/tasks/edit/main.js:163
-#: apps/io.ox/tasks/main.js:204 apps/plugins/core/feedback/register.js:130
+#: apps/io.ox/tasks/main.js:187 apps/io.ox/tasks/main.js:210
+#: apps/plugins/core/feedback/register.js:130
 #: apps/plugins/portal/flickr/register.js:235 module:plugins/portal
 #: apps/plugins/portal/rss/register.js:159
 #: apps/plugins/portal/tumblr/register.js:261
@@ -1401,7 +1402,7 @@ msgid "Click to upload image"
 msgstr "Kattintson a képfeltöltéshez"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:544
+#: apps/io.ox/core/commons-folderview.js:542
 #: apps/io.ox/core/permissions/permissions.js:458
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
 #: apps/io.ox/core/tk/dialogs.js:558 apps/io.ox/core/wizard/registry.js:60
@@ -1421,7 +1422,7 @@ msgstr "Bezárás"
 msgid "Close all"
 msgstr "Minden bezárása"
 
-#: apps/io.ox/core/commons.js:744 module:io.ox/core
+#: apps/io.ox/core/commons.js:749 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:148 module:io.ox/mail
 msgid "Close folder view"
@@ -1650,7 +1651,7 @@ msgid "Could not load new Tweets."
 msgstr "Nem tölthetők be az új tweetek."
 
 #: apps/io.ox/core/tk/autocomplete.js:313 module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:831 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:844 module:io.ox/core
 msgid "Could not load this list"
 msgstr "A lista nem tölthető be"
 
@@ -1687,7 +1688,7 @@ msgstr "A mappák nem tölthetők be."
 msgid "Couldn't load subfolders."
 msgstr "Az almappák nem tölthetők be."
 
-#: apps/io.ox/tasks/main.js:357 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:360 module:io.ox/tasks
 msgid "Couldn't load that task."
 msgstr "Az a feladat nem tölthető be."
 
@@ -1886,7 +1887,7 @@ msgstr "Elhalasztott"
 #: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:800
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:69 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
+#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:411
 #: module:io.ox/core apps/io.ox/core/folder/contextmenu.js:173
 #: apps/io.ox/core/pubsub/settings/pane.js:239 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:241
@@ -1947,7 +1948,7 @@ msgstr "Osztály"
 
 #: apps/io.ox/calendar/list/perspective.js:202 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:647 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:637 module:io.ox/tasks
 msgid "Descending"
 msgstr "Csökkenő"
 
@@ -2283,7 +2284,7 @@ msgid "Due %1$s"
 msgstr "Határidő: %1$s"
 
 #: apps/io.ox/tasks/edit/view-template.js:181 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:642 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:631 module:io.ox/tasks
 msgid "Due date"
 msgstr "Lejárat"
 
@@ -2320,8 +2321,9 @@ msgstr "EB"
 #: apps/io.ox/settings/accounts/settings/pane.js:50
 #: apps/io.ox/settings/accounts/settings/pane.js:52
 #: apps/io.ox/tasks/actions.js:459 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:146 apps/io.ox/tasks/main.js:152
-#: apps/io.ox/tasks/main.js:199 apps/io.ox/tasks/mobile-toolbar-actions.js:41
+#: apps/io.ox/tasks/main.js:144 apps/io.ox/tasks/main.js:150
+#: apps/io.ox/tasks/main.js:182 apps/io.ox/tasks/main.js:205
+#: apps/io.ox/tasks/mobile-toolbar-actions.js:41
 #: apps/io.ox/tasks/toolbar.js:51
 msgid "Edit"
 msgstr "Szerkesztés"
@@ -2473,7 +2475,7 @@ msgid "Employment"
 msgstr "Munkaviszony"
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:712 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:725 module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "Üres"
@@ -2658,7 +2660,7 @@ msgstr "Űrlap kibontása"
 msgid "Expand timeframe by one month"
 msgstr "Időszak kibővítése egy hónappal"
 
-#: apps/io.ox/core/commons-folderview.js:438 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:436 module:io.ox/core
 #: apps/io.ox/core/export/export.js:103
 #: apps/io.ox/core/folder/contextmenu.js:230
 msgid "Export"
@@ -2900,7 +2902,7 @@ msgstr "Mappa jogosultságai"
 msgid "Folder settings"
 msgstr "Mappa beállításai"
 
-#: apps/io.ox/core/commons-folderview.js:519 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:517 module:io.ox/core
 msgid "Folder type"
 msgstr "Mappatípus"
 
@@ -2929,8 +2931,8 @@ msgstr "Mappaspecifikus műveletek"
 #: apps/io.ox/contacts/main.js:347 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:354 apps/io.ox/core/commons-folderview.js:49
 #: module:io.ox/core apps/io.ox/mail/main.js:140 module:io.ox/mail
-#: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:143 module:io.ox/tasks
-#: apps/io.ox/tasks/main.js:150
+#: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:141 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:148
 msgid "Folders"
 msgstr "Mappák"
 
@@ -3122,7 +3124,7 @@ msgstr "Üdv!<br><br>%1$s megosztott egy publikációt:<br>%2$s"
 msgid "Hidden folders"
 msgstr "Rejtett mappák"
 
-#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:434
 #: apps/io.ox/mail/write/view-main.js:124 module:io.ox/mail
 msgid "Hide"
@@ -3253,7 +3255,7 @@ msgstr ""
 msgid "Image 1"
 msgstr "1. kép"
 
-#: apps/io.ox/core/commons-folderview.js:463 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:461 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:257
 #: apps/io.ox/core/import/import.js:128
 msgid "Import"
@@ -3392,7 +3394,7 @@ msgstr "Pontosan"
 msgid "Is smaller than"
 msgstr "Kisebb, mint"
 
-#: apps/io.ox/core/commons.js:691 module:io.ox/core
+#: apps/io.ox/core/commons.js:696 module:io.ox/core
 msgid "Items"
 msgstr "Elemek"
 
@@ -3920,7 +3922,7 @@ msgstr "A megjelenített %1$s elemnél több is található"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:816
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:75 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:105
-#: apps/io.ox/core/commons-folderview.js:644 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:642 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:202 apps/io.ox/files/actions.js:675
 #: module:io.ox/files apps/io.ox/files/actions.js:974
 #: apps/io.ox/files/actions.js:1362 apps/io.ox/files/toolbar.js:143
@@ -3933,7 +3935,7 @@ msgstr "A megjelenített %1$s elemnél több is található"
 msgid "Move"
 msgstr "Mozgatás"
 
-#: apps/io.ox/core/commons-folderview.js:581 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:579 module:io.ox/core
 msgid "Move folder"
 msgstr "Mappa mozgatása"
 
@@ -4020,7 +4022,7 @@ msgstr "Új névjegy"
 msgid "New file"
 msgstr "Új fájl"
 
-#: apps/io.ox/core/commons-folderview.js:211 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:209 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/add.js:90
 #: apps/io.ox/core/folder/add.js:102 apps/io.ox/core/pubsub/util.js:107
 #: module:io.ox/mail
@@ -4031,12 +4033,12 @@ msgstr "Új mappa"
 msgid "New password"
 msgstr "Új jelszó"
 
-#: apps/io.ox/core/commons-folderview.js:249 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:247 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:81
 msgid "New private folder"
 msgstr "Új személyes mappa"
 
-#: apps/io.ox/core/commons-folderview.js:274 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:272 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:82
 msgid "New public folder"
 msgstr "Új nyilvános mappa"
@@ -4045,12 +4047,12 @@ msgstr "Új nyilvános mappa"
 msgid "New rule"
 msgstr "Új szabály"
 
-#: apps/io.ox/core/commons-folderview.js:229 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:227 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/contextmenu.js:125
 msgid "New subfolder"
 msgstr "Új almappa"
 
-#: apps/io.ox/core/commons-folderview.js:337 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:335 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:352
 msgid "New subscription"
 msgstr "Új feliratkozás"
@@ -4351,7 +4353,7 @@ msgstr "Megnyitás"
 msgid "Open external link"
 msgstr "Külső hivatkozás megnyitása"
 
-#: apps/io.ox/core/commons.js:731 module:io.ox/core
+#: apps/io.ox/core/commons.js:736 module:io.ox/core
 #: apps/io.ox/mail/view-options.js:137 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Mappanézet megnyitása"
@@ -4467,6 +4469,10 @@ msgstr "Beállítások"
 msgid "Orange"
 msgstr "Narancs"
 
+#: apps/io.ox/tasks/main.js:635 module:io.ox/tasks
+msgid "Order"
+msgstr ""
+
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/participants/views.js:106 module:io.ox/calendar/edit/main
 msgid "Organizer"
@@ -4575,7 +4581,7 @@ msgstr "Emberek"
 msgid "Permanently remove deleted emails"
 msgstr "Törölt levelek végleges eltávolítása"
 
-#: apps/io.ox/core/commons-folderview.js:490 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:488 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:286
 msgid "Permissions"
 msgstr "Jogosultságok"
@@ -4949,7 +4955,7 @@ msgstr "Nyomtatás"
 
 #: apps/io.ox/mail/write/view-main.js:699 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:346 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:644 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:633 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
 msgstr "Prioritás"
@@ -4999,8 +5005,8 @@ msgstr "Előrehaladás %-ban"
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "Az előrehaladásnak 0 és 100 közötti érvényes számnak kell lennie"
 
-#: apps/io.ox/core/commons-folderview.js:507 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:564
+#: apps/io.ox/core/commons-folderview.js:505 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:562
 #: apps/io.ox/core/folder/contextmenu.js:398
 msgid "Properties"
 msgstr "Tulajdonságok"
@@ -5243,7 +5249,7 @@ msgstr "Másolat eltávolítása a kiszolgálóról az üzenet lekérése után"
 msgid "Remove from recipient list"
 msgstr "Eltávolítás a címzettlistából"
 
-#: apps/io.ox/core/commons-folderview.js:390 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:388 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:149
 #: apps/io.ox/core/tk/folderviews.js:683 apps/io.ox/files/actions.js:526
 #: module:io.ox/files apps/io.ox/files/actions.js:531
@@ -5322,7 +5328,7 @@ msgstr "Alkalmazások visszaállítása"
 msgid "Retired"
 msgstr "Nyugdíjas"
 
-#: apps/io.ox/core/commons.js:874 module:io.ox/core
+#: apps/io.ox/core/commons.js:879 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:316 module:io.ox/mail
 msgid "Retry"
 msgstr "Újra"
@@ -5505,11 +5511,11 @@ msgid "Searched for: %1$s"
 msgstr "Keresve: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:386 module:io.ox/core
+#: apps/io.ox/core/commons.js:391 module:io.ox/core
 msgid "Searched in"
 msgstr "Keresve itt:"
 
-#: apps/io.ox/core/commons.js:380 module:io.ox/core
+#: apps/io.ox/core/commons.js:385 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "Keresve minden mappában"
 
@@ -5686,7 +5692,7 @@ msgstr "Hivatkozás megosztása e-mailben"
 msgid "Share this file"
 msgstr "Fájl megosztása"
 
-#: apps/io.ox/core/commons-folderview.js:297 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:295 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:310
 #: apps/io.ox/core/pubsub/publications.js:117 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:1274 module:io.ox/files
@@ -5710,7 +5716,7 @@ msgstr "Megosztott tevékenység"
 msgid "Shopping cart"
 msgstr "Bevásárlókosár"
 
-#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:434
 msgid "Show"
 msgstr "Megjelenítés"
@@ -5755,7 +5761,7 @@ msgstr "Elutasított találkozók megjelenítése"
 msgid "Show details"
 msgstr "Részletek megjelenítése"
 
-#: apps/io.ox/tasks/main.js:649 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:639 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "Kész feladatok megjelenítése"
 
@@ -5927,7 +5933,7 @@ msgid "Sort by"
 msgstr "Rendezés módja:"
 
 #: apps/io.ox/calendar/list/perspective.js:193 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:636 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:629 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Rendezési beállítások"
 
@@ -5971,7 +5977,7 @@ msgstr "Statisztika"
 
 #: apps/io.ox/calendar/toolbar.js:62 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:641 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:630 module:io.ox/tasks
 msgid "Status"
 msgstr "Állapot"
 
@@ -5995,7 +6001,7 @@ msgstr "Diák"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
 #: apps/io.ox/mail/view-options.js:34 apps/io.ox/mail/write/view-main.js:873
 #: apps/io.ox/tasks/edit/view-template.js:105 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:643 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:632 module:io.ox/tasks
 msgid "Subject"
 msgstr "Tárgy"
 
@@ -6082,7 +6088,7 @@ msgstr "Levél címkézése:"
 msgid "Task"
 msgstr "Feladat"
 
-#: apps/io.ox/tasks/main.js:227 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:232 module:io.ox/tasks
 msgid "Task Details"
 msgstr "Feladat részletei"
 
@@ -6850,8 +6856,8 @@ msgstr "Ma"
 msgid "Toggle checkboxes"
 msgstr "Kijelölések átváltása"
 
-#: apps/io.ox/core/commons-folderview.js:1121 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1149
+#: apps/io.ox/core/commons-folderview.js:1119 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1147
 msgid "Toggle folder"
 msgstr "Mappa átváltása"
 
