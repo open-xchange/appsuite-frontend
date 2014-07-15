@@ -33,6 +33,17 @@ define('io.ox/mail/common-extensions',
 
     var extensions = {
 
+        a11yLabel: function (baton) {
+            var data = baton.data,
+                fromlist = data.from || [['', '']],
+                subject = _.escape($.trim(data.subject)),
+                unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
+                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date);
+            this.parent().attr({
+                'aria-label': _.escape(a11yLabel)
+            });
+        },
+
         picture: function (baton) {
             var data = baton.data, from = data.from,
                 size = _.device('retina') ? 80 : 40;
