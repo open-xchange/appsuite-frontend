@@ -16,10 +16,11 @@ define('io.ox/mail/mailfilter/settings/filter',
      'io.ox/core/api/mailfilter',
      'io.ox/mail/mailfilter/settings/model',
      'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
      'io.ox/settings/util',
      'io.ox/mail/mailfilter/settings/filter/view-form',
      'gettext!io.ox/mail'
-    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt) {
+    ], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt) {
 
     'use strict';
 
@@ -398,16 +399,51 @@ define('io.ox/mail/mailfilter/settings/filter',
                                 ui.item.attr('aria-grabbed', 'true');
                             },
                             stop: function (e, ui) {
+                                var flagArray = ['vacation', 'autoforward'],
+                                    returnIdAndPosition = function (collection, flags) {
+                                    var idAndPosition = {};
+                                    _.each(flags, function (flag) {
+                                        _.each(collection.models, function (model) {
+                                            if (model.attributes.flags[0] === flag) {
+                                                idAndPosition[flag] = {
+                                                    id: model.attributes.id,
+                                                    position: model.attributes.position
+                                                };
+                                            }
+                                        });
+                                    });
+                                    return idAndPosition;
+                                },
+                                staticFilters = returnIdAndPosition(collection, flagArray),
+                                skipSort = function (newPositionArray, fixedFilters, flagArray) {
+                                    var skip = false;
+                                    _.each(flagArray, function (flag) {
+                                        if (fixedFilters[flag]) {
+                                            var position = fixedFilters[flag].position;
+                                            if (fixedFilters[flag].id != newPositionArray[position]) {
+                                                skip = true;
+                                            }
+                                        }
+                                    });
+                                    return skip;
+                                };
+
+
                                 ui.item.attr('aria-grabbed', 'false');
                                 var arrayOfFilters = $node.find('li[data-id]'),
                                 data = _.map(arrayOfFilters, function (single) {
                                     return parseInt($(single).attr('data-id'), 10);
                                 });
-                                 //yell on reject
-                                settingsUtil.yellOnReject(
-                                    api.reorder(data)
-                                );
-                                updatePositionInCollection(collection, data);
+                                if (skipSort(data, staticFilters, flagArray)) {
+                                    notifications.yell('warning', gt('The positions of vacation notice and auto forward cannot be changed'));
+                                    list.sortable('cancel');
+                                } else {
+                                    //yell on reject
+                                    settingsUtil.yellOnReject(
+                                        api.reorder(data)
+                                    );
+                                    updatePositionInCollection(collection, data);
+                                }
                             }
                         });
                     }
