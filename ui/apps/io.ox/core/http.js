@@ -705,7 +705,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             if (xhr.upload) {
                 ajaxOptions.xhr = function () { return xhr; };
                 xhr.upload.addEventListener('progress', function (e) {
-                    r.def.notify(e);
+                    if (r && r.def && r.def.notify) {
+                        r.def.notify(e);
+                    }
                 }, false);
             }
 
