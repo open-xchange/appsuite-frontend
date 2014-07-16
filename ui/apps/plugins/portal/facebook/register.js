@@ -49,16 +49,29 @@ define('plugins/portal/facebook/register',
         };
     };
     var addLikeInfo = function (likeInfo) {
-        if (likeInfo.like_count === 0) {
-            return '';
-        } else {
-            return $('<span class="likeinfo">').append(
-                       $('<span class="youlike">').text(likeInfo.user_likes ? gt('You like this') : ''),
-                       $('<i class="fa fa-thumbs-o-up">'),
-                       $('<span class="count">').text(likeInfo.like_count)
-                   );
-        }
-    };
+            if (likeInfo.like_count === 0) {
+                return '';
+            } else {
+                return $('<span class="likeinfo">').append(
+                           $('<span class="youlike">').text(likeInfo.user_likes ? gt('You like this') : ''),
+                           $('<i class="fa fa-thumbs-o-up">'),
+                           $('<span class="count">').text(likeInfo.like_count)
+                       );
+            }
+        },
+        generalRenderer = function (post) {//Renderer that should be able to draw most posts correctly
+            var media = post.attachment.media ? post.attachment.media[0] : false,
+                link = post.attachment.href;
+
+            return [
+                $('<div>').append(parseMessageText(post.description || post.message || '')),
+                media ? $('<a>', {href: media.href}).append(
+                    $('<img class="wall-img-left">').attr({src: media.src}),
+                    $('<span class="caption">').text(post.attachment.description)
+                ) : '',
+                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
+            ];
+        };
 
     var addCommentlink = function (postComments, nextIndex, profiles, wall_content) {
         var link = $('<button tabindex=1 class="comment-link btn-link", nextIndex=' + nextIndex + '>').text(gt('Show more comments')).hide().click(function () {
@@ -515,6 +528,26 @@ define('plugins/portal/facebook/register',
         }
     });
 
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({//special renderer for undocumented types
+        id: 'Undocumented',
+        index: 128,
+        accepts: function (post) {
+            return post.type === 55;//maybe an event
+        },
+        draw: function (post) {
+            $(this).append(
+                    $('<div>').text(post.description),
+                    $('<div class="message">').append(parseMessageText(post.message)));
+            var self = $(this);
+            _(post.attachment.media).each(function (media) {
+                $('<a class = facebook-image>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .append($('<div>').text(post.attachment.caption))
+                    .appendTo(self);
+            });
+        }
+    });
+
     /* index >= 196 for plugins handling generic stuff (like the common comment) */
 
     ext.point('io.ox/plugins/portal/facebook/renderer').extend({
@@ -526,16 +559,7 @@ define('plugins/portal/facebook/register',
                 ((post.attachment.media && post.attachment.media[0]) || post.attachment.href);
         },
         draw: function (post) {
-            var media = post.attachment.media ? post.attachment.media[0] : false,
-                link = post.attachment.href;
-            this.append(
-                $('<div>').append(parseMessageText(post.description || post.message || '')),
-                media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">').attr({src: media.src}),
-                    $('<span class="caption">').text(post.attachment.description)
-                ) : '',
-                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
-            );
+            this.append(generalRenderer(post));
         }
     });
 
@@ -583,16 +607,7 @@ define('plugins/portal/facebook/register',
             return post.type === 295;
         },
         draw: function (post) {
-            var media = post.attachment.media ? post.attachment.media[0] : false,
-                link = post.attachment.href;
-            this.append(
-                $('<div>').append(parseMessageText(post.description || post.message || '')),
-                media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">').attr({src: media.src}),
-                    $('<span class="caption">').text(post.attachment.description)
-                ) : '',
-                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
-            );
+            this.append(generalRenderer(post));
         }
     });
 
@@ -620,16 +635,7 @@ define('plugins/portal/facebook/register',
             return post.type === 308;
         },
         draw: function (post) {
-            var media = post.attachment.media ? post.attachment.media[0] : false,
-            link = post.attachment.href;
-            this.append(
-                $('<div>').append(parseMessageText(post.description || post.message || '')),
-                media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">').attr({src: media.src}),
-                    $('<span class="caption">').text(post.attachment.description)
-                ) : '',
-                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
-            );
+            this.append(generalRenderer(post));
         }
     });
 
@@ -642,7 +648,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', JSON.stringify(post));
-            this.append(parseMessageText(post.message));
+            this.append(generalRenderer(post));
         }
     });
 
