@@ -293,6 +293,8 @@ define('io.ox/core/notifications',
             var newMails = 0,
                 self = this;
 
+            this.notificationsView.render(this.notifications);
+
             var count = _.reduce(this.notifications, function (memo, module, key) {
                 if (key === 'io.ox/mail') { //mail is special when it comes to autoopen
                     newMails = module.collection.size() - self.oldMailCount;
@@ -319,7 +321,6 @@ define('io.ox/core/notifications',
                 }
             };
 
-            this.notificationsView.render(this.notifications);
             //clear last item reference
             if (this.lastItem) {
                 this.lastItem.off('keydown', focusBadge);
@@ -342,6 +343,11 @@ define('io.ox/core/notifications',
             }
         },
         showList: function () {
+
+            if(this.isOpen()) {//if it's open already we're done
+                return;
+            }
+
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
             }
@@ -358,10 +364,17 @@ define('io.ox/core/notifications',
                     this.hideList();
                 }
             }, this));
+            var firstItem = $('#io-ox-notifications .item').first();
+
+            if (firstItem.length > 0) {//try to focus first item
+                firstItem.focus();
+            } else {
+                this.badgeView.$el.focus();//focus badge instead
+            }
         },
         hideList: function () {
 
-            if(!this.nodes.main.hasClass('active')) {//if it's closed already we're done
+            if(!this.isOpen()) {//if it's closed already we're done
                 return;
             }
 
