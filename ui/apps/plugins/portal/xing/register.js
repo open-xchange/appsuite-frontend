@@ -280,6 +280,8 @@ define('plugins/portal/xing/register',
         },
 
         preview: function (baton) {
+            //remove setup that may not have been cleared correctly (may happen if an account was created successfully but callback function wasn't called)
+            this.find('.setup-questions').remove();
             this.append(
                 $('<div class="content preview io-ox-xing pointer">').append(
                     makeNewsfeed(baton.data.network_activities, MAX_ITEMS_PREVIEW)
