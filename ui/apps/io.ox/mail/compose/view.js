@@ -163,8 +163,8 @@ define('io.ox/mail/compose/view',
 
             this.append(
                 $('<div class="col-xs-6 col-md-3 pull-right text-right">').append(
-                    signatureDropdown.render().$el.addClass('signatures'),
-                    optionDropdown.render().$el
+                    signatureDropdown.render().$el.addClass('signatures text-left'),
+                    optionDropdown.render().$el.addClass('text-left')
                 )
             );
         }
