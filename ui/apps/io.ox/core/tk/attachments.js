@@ -628,6 +628,30 @@ define('io.ox/core/tk/attachments',
         }
     };
 
+    //TODO: remove me, again
+    var UploadSimulator = function () {
+        var loaded = 0,
+            total,
+            def = $.Deferred();
+        var wait = function () {
+            loaded = Math.floor(loaded + total / 10);
+            def.notify({
+                loaded: loaded,
+                total: total
+            });
+            if (loaded / total >= 1) {
+                def.resolve({data: ['133713371337']});
+            } else {
+                _.delay(wait, 1000);
+            }
+        };
+        this.upload = function (file) {
+            total = file.size;
+            wait();
+            return def;
+        };
+    };
+
     var Attachment = Backbone.Model.extend({
         defaults: {
             filename: '',
@@ -650,7 +674,7 @@ define('io.ox/core/tk/attachments',
             return this.get('disp') === 'attachment';
         },
         needsUpload: function () {
-            return this.get('uploaded') !== 1;
+            return this.get('uploaded') === 0;
         },
         previewUrl: function () {
             var supportsDocumentPreview = capabilities.has('document_preview'),
@@ -671,6 +695,25 @@ define('io.ox/core/tk/attachments',
                 return fetchPreview(this);
             }
             return null;
+        },
+        upload: function () {
+            if ('FormData' in window) {
+                var formData = new FormData();
+                formData.append('file', this.fileObj);
+                var def = new UploadSimulator().upload(this.fileObj);
+                var model = this;
+                def.then(function uploadDone() {
+                    var url = 'appsuite/v=7.6.0.20140716.154321/apps/themes/default/dummypicture.png';
+                    var meta = _.clone(model.get('meta'));
+                    meta.previewUrl = url;
+                    model.set('meta', meta);
+                    model.trigger('upload:complete');
+                }, function uploadFail() {
+
+                }, function uploadProgress(ev) {
+                    model.set('uploaded', ev.loaded / ev.total);
+                });
+            }
         }
     });
 
@@ -739,6 +782,11 @@ define('io.ox/core/tk/attachments',
         },
         className: 'preview',
         render: function () {
+            if (this.model.needsUpload()) {
+                //may be, try local preview or show some "pending" icon
+                this.$el.addClass('no-preview');
+                return this;
+            }
             var url = this.model.previewUrl();
             this.$el.removeClass('lazy no-preview');
             if (_.isString(url)) {
@@ -765,25 +813,45 @@ define('io.ox/core/tk/attachments',
                     el: this.el
                 });
             this.editable = options && options.editable === true;
+            this.listenTo(this.model, 'change:uploaded', function (model) {
+                var w = model.get('uploaded') * this.$el.width();
+                this.$('.progress').width(w);
+            });
+            this.listenTo(this.model, 'upload:complete', function () {
+                this.render();
+            });
         },
         onRemove: function () {
             var c = this.model.collection;
             c.remove(this.model);
         },
+        onUpload: function () {
+            this.model.upload();
+        },
         events: {
-            'click a.remove': 'onRemove'
+            'click a.remove': 'onRemove',
+            'click a.upload': 'onUpload'
         },
         render: function () {
+            this.$el.empty();
             var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el),
                 size;
 
             if (this.preview) {
                 this.preview.render();
             }
+            if (this.model.needsUpload()) {
+                this.$el.append(
+                    this.progress = $('<div class="progress">')
+                );
+            }
             widget.append(
                 $('<i class="fa fa-paperclip">'),
                 $('<div class="row-1">').append(this.model.getTitle()),
                 $('<div class="row-2">').append(
+                    this.model.needsUpload() && $('<a class="upload" href="#">').append(
+                        $('<i class="fa fa-upload">')
+                    ),
                     size = $('<span class="filesize">').text(strings.fileSize(this.model.get('file_size')))
                 )
             );
