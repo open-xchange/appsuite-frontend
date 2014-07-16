@@ -148,6 +148,21 @@
     }
 }
 
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
+    //proper overflow handling for facet name
+    .io-ox-search {
+        &.window-content {
+            .facets {
+                li.facet {
+                    label > span.name {
+                        max-width: 70%;
+                    }
+                }
+            }
+        }
+    }
+}
+
 //hide/adjust default window parts
 .io-ox-search-window {
     overflow: auto;
@@ -214,6 +229,7 @@
                 a[type="button"] {
                     background-color: #E6E6E6;
                     border: transparent;
+                    text-align: left;
                     //inherited from btn-group
                     -webkit-box-shadow: none;
                     box-shadow: none;
@@ -225,7 +241,7 @@
                 }
                 label>span {
                     display: inline-block;
-                    max-width: 94%;
+                    max-width: 80%;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
