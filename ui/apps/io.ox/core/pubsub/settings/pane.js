@@ -237,7 +237,7 @@ define('io.ox/core/pubsub/settings/pane',
                         tabindex: 1,
                         role: 'button',
                         title: gt('Delete'),
-                        'data-action': 'delete',
+                        'data-action': 'remove',
                         'aria-label': displayName + ', ' + gt('Delete')
                     })
                     .append($('<i class="fa fa-trash-o">'))
