@@ -72,16 +72,22 @@
         &.fixed{
             position: fixed;
             width: auto;
-            min-height: 31px;
-            height: 31px;
+            min-height: 34px;
+            height: 34px;
             top: 40px;
             z-index: 1;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.75);
+            //box-shadow: 0 1px 5px rgba(0,0,0,0.75);
+            border-bottom: 1px solid #ccc;
+            opacity: 0.9;
         }
 
         .mceEmojiPane {
             z-index:1;
             min-height:300px;
+            box-sizing: content-box;
+            div {
+                box-sizing: content-box;
+            }
         }
 
         input.file-input:hover { cursor: pointer; }

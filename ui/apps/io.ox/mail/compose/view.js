@@ -807,10 +807,11 @@ define('io.ox/mail/compose/view',
                     this.toolbarpos = this.mcetoolbar.position().top;
                 }
                 if (!this.mcetoolbar.hasClass('fixed') && this.toolbarpos < scrollPane.scrollTop()) {
+                    this.mcetoolbar.addClass('fixed').css('width', this.textarea.outerWidth());
                      $(window).trigger('resize.tinymce');
                 }
                 if (this.toolbarpos < scrollPane.scrollTop()) {
-                    this.mcetoolbar.addClass('fixed');
+                    this.mcetoolbar.addClass('fixed').css('width', this.textarea.outerWidth());
                     this.textarea.css('margin-top', this.mcetoolbar.height());
                 } else {
                     this.mcetoolbar.removeClass('fixed');
