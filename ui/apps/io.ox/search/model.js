@@ -137,6 +137,7 @@ define('io.ox/search/model',
                             //folder support via hidden flag
                             return data.id === value || !!item.custom;
                         });
+                        itemvalue = itemvalue || {};
 
                         //overwrite
                         if (!!item.custom) {
