@@ -807,7 +807,7 @@ define('io.ox/mail/compose/view',
                     this.toolbarpos = this.mcetoolbar.position().top;
                 }
                 if (!this.mcetoolbar.hasClass('fixed') && this.toolbarpos < scrollPane.scrollTop()) {
-                    this.mcetoolbar.addClass('fixed').css('width', this.textarea.outerWidth());
+                    this.mcetoolbar.css('width', this.textarea.outerWidth());
                      $(window).trigger('resize.tinymce');
                 }
                 if (this.toolbarpos < scrollPane.scrollTop()) {
