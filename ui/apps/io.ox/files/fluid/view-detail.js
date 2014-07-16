@@ -39,6 +39,10 @@ define('io.ox/files/fluid/view-detail',
         ref: 'io.ox/files/links/inline'
     }));
 
+    if (_.device('smartphone')) {
+        ext.point(POINT).disable('inline-links');
+    }
+
     // Title
     ext.point(POINT).extend({
         id: 'title',

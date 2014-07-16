@@ -22,14 +22,61 @@ define('io.ox/files/mobile-toolbar-actions',
 
     // define links for each page
 
-    var pointListView = ext.point('io.ox/files/mobile/toolbar/listView'),
+    var pointMainView = ext.point('io.ox/files/mobile/toolbar/mainView'),
         pointDetailView = ext.point('io.ox/files/mobile/toolbar/detailView'),
-        actions = ext.point('io.ox/files/mobile/actions'),
-        meta = {};
+        //actions = ext.point('io.ox/files/mobile/actions'),
+        meta = {
+            'add': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Add file'),
+                icon: 'fa fa-plus',
+                drawDisabled: true,
+                ref: 'io.ox/files/actions/upload',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'view-icon': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show icons'),
+                icon: 'fa fa-th',
+                drawDisabled: true,
+                ref: 'io.ox/files/actions/layout-icon',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'view-tile': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show tiles'),
+                icon: 'fa fa-th-large',
+                drawDisabled: true,
+                ref: 'io.ox/files/actions/layout-tile',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'view-list': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show list'),
+                icon: 'fa fa-align-justify',
+                drawDisabled: true,
+                ref: 'io.ox/files/actions/layout-list',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'actions': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Actions'),
+                drawDisabled: true,
+                ref: 'io.ox/files/links/inline',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
 
-    console.log(pointListView, pointDetailView, actions, meta);
+            }
+        };
 
-    /*function addAction(point, ids) {
+    //console.log(pointListView, pointDetailView, actions, meta);
+    /*io.ox/files/links/toolbar/view*/
+
+    function addAction(point, ids) {
         var index = 0;
         _(ids).each(function (id) {
             var extension = meta[id];
@@ -38,27 +85,28 @@ define('io.ox/files/mobile-toolbar-actions',
             point.extend(new links.Link(extension));
         });
         index = 0;
-    }*/
+    }
 
-    //addAction(pointListView, ['create']);
+    addAction(pointMainView, ['add', 'view-list', 'view-icon', 'view-tile']);
     //addAction(actions, ['send', 'invite', 'vcard', 'edit', 'delete', 'move', 'copy']);
 
     // add submenu as text link to toolbar in multiselect
     pointDetailView.extend(new links.Dropdown({
-        index: 50,
+        index: 300,
         label: $('<span>').text(
-            //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
+            //.# Will be used as button label in the toolbar, allowing the user to choose an alternative layout for the current view
             gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
         drawDisabled: true,
-        ref: 'io.ox/files/mobile/actions'
+        ref: 'io.ox/files/links/inline'
     }));
 
-    var updateToolbar = _.debounce(function (contact) {
+    var updateToolbar = _.debounce(function (file) {
         var self = this;
+        if (file.length === 0) return;
         //get full data, needed for require checks for example
-        api.get(contact).done(function (data) {
+        api.get(file).done(function (data) {
             if (!data) return;
             var baton = ext.Baton({ data: data, app: self });
             // handle updated baton to pageController
@@ -98,18 +146,22 @@ define('io.ox/files/mobile-toolbar-actions',
     ext.point('io.ox/files/mediator').extend({
         id: 'update-toolbar-mobile',
         index: 10300,
-        setup: function () {
+        setup: function (app) {
             if (!_.device('small')) return;
-            /*
             // folder change
-            app.grid.on('change:ids', function () {
+
+            function fnFolderChange() {
                 app.folder.getData().done(function (data) {
                     var baton = ext.Baton({ data: data, app: app });
                     // handle updated baton to pageController
-                    app.pages.getToolbar('listView').setBaton(baton);
+                    app.pages.getToolbar('mainView').setBaton(baton);
                 });
-            });
+            }
 
+            app.on('folder:change', fnFolderChange);
+            fnFolderChange();
+
+            /*
             // multiselect
             app.grid.selection.on('change', function  (e, list) {
                 if (app.props.get('checkboxes') !== true ) return;
@@ -126,14 +178,18 @@ define('io.ox/files/mobile-toolbar-actions',
                     app.pages.getSecondaryToolbar('listView').setBaton(baton);
                 });
             });
+            */
 
             // simple select
-            app.grid.selection.on('pagechange:detailView', function () {
-                // update toolbar on each pagechange
-                var data = app.grid.selection.get();
-                app.updateToolbar(data[0]);
+            app.on('selection:setup', function () {
+                app.selection.on('select', function (e, cid) {
+                    if (cid && cid.length === 0) return;
+                    // update toolbar on each pagechange
+                    app.updateToolbar(cid[0]);
+                });
             });
-        */
+
+
         }
     });
 

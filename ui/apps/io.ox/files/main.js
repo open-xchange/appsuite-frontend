@@ -22,13 +22,14 @@ define('io.ox/files/main',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
      'io.ox/core/commons-folderview',
+     'io.ox/files/api',
      'io.ox/files/mobile-navbar-extensions',
      'io.ox/files/mobile-toolbar-actions',
      'io.ox/files/actions',
      'io.ox/files/folderview-extensions',
      'less!io.ox/files/style',
      'io.ox/files/toolbar'
-    ], function (commons, gt, settings, ext, folderAPI, actions, Bars, PageController, FolderView) {
+    ], function (commons, gt, settings, ext, folderAPI, actions, Bars, PageController, FolderView, API) {
 
     'use strict';
 
@@ -137,9 +138,11 @@ define('io.ox/files/main',
                 );
 
             // tell each page's back button what to do
-            app.pages.getNavbar('mainView').on('leftAction', function () {
-                app.pages.goBack();
-            });
+            app.pages.getNavbar('mainView')
+                .on('leftAction', function () {
+                    app.pages.goBack();
+                })
+                .hide('.right');
 
             app.pages.getNavbar('detailView').on('leftAction', function () {
                 app.pages.goBack();
@@ -194,14 +197,34 @@ define('io.ox/files/main',
         /*
          * Folder change listener for mobile
          */
-        'change:folder-mobile': function () {
+        'change:folder-mobile': function (app) {
             if (_.device('!smartphone')) return;
-            app.on('folder:change', function () {
+
+
+            function update() {
                 app.folder.getData().done(function (d) {
                     app.pages.getNavbar('mainView').setTitle(d.title);
                 });
+            }
+
+            app.on('folder:change', update);
+
+            // do once on startup
+            update();
+        },
+        /*
+         * Delete file
+         * leave detailview if file is deleted
+         */
+        'delete:file-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+            API.on('delete', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
             });
         },
+
         /*
          * Default application properties
          */
@@ -213,6 +236,15 @@ define('io.ox/files/main',
             });
         },
 
+        'change:perspective': function (app) {
+            app.props.on('change:layout', function () {
+                if (app.props.get('layout') !== 'fluid:list') {
+                    app.pages.getNavbar('mainView').hide('.right');
+                } else {
+                     app.pages.getNavbar('mainView').show('.right');
+                }
+            });
+        },
         /*
          * Set folderview property
          */
@@ -256,7 +288,7 @@ define('io.ox/files/main',
                 ox.ui.Perspective.show(app, value);
             });
 
-            window.driveapp = app;
+            window.drive = app;
         },
 
         /*

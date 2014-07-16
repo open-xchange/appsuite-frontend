@@ -163,6 +163,8 @@ define('io.ox/files/fluid/perspective',
                     .append($('<div class="mobile-detail-view-wrap">')).busy();
 
                 app.pages.changePage('detailView');
+                app.selection.trigger('pagechange:detailView');
+
             } else {
                 dialog.show(e, function (popup) {
                     popup
@@ -236,6 +238,8 @@ define('io.ox/files/fluid/perspective',
             Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
             //selection accessible via app
             baton.app.selection = this.selection;
+
+            baton.app.trigger('selection:setup');
 
             // forward selection:change event
             this.selection.on('change', function (e, list) {
@@ -662,6 +666,7 @@ define('io.ox/files/fluid/perspective',
                         valid = e.target.type !== 'checkbox' || data === 'automated';
                     if (valid)
                         preview.call(self, e, cid);
+                        self.selection.trigger('select', [cid]);
                 });
             }
 
