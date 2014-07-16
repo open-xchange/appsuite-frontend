@@ -316,14 +316,8 @@ define('io.ox/contacts/view-detail',
 
     function clickMail(e) {
         e.preventDefault();
-        // set recipient
-        var data = { to: [[e.data.display_name, e.data.email]] };
-        // open compose
-        ox.load(['io.ox/mail/compose/main']).done(function (m) {
-            m.getApp().launch().done(function () {
-                this.compose(data);
-            });
-        });
+        // set recipient and open compose
+        ox.registry.call('mail/compose', 'compose', { to: [[e.data.display_name, e.data.email]] });
     }
 
     function mail(address, name, id) {

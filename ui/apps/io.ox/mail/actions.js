@@ -133,13 +133,7 @@ define('io.ox/mail/actions',
             return util.hasOtherRecipients(data) && !isDraftMail(data);
         },
         action: function (baton) {
-            var data = baton.first();
-            require(['io.ox/mail/compose/main'], function (m) {
-                if (m.reuse('replyall', data)) return;
-                m.getApp().launch().done(function () {
-                    this.replyall(data);
-                });
-            });
+            ox.registry.call('mail/compose', 'replyall', baton.first());
         }
     });
 
@@ -156,13 +150,7 @@ define('io.ox/mail/actions',
             return util.hasFrom(data) && !isDraftMail(data);
         },
         action: function (baton) {
-            var data = baton.first();
-            require(['io.ox/mail/compose/main'], function (m) {
-                if (m.reuse('reply', data)) return;
-                m.getApp().launch().done(function () {
-                    this.reply(data);
-                });
-            });
+            ox.registry.call('mail/compose', 'reply', baton.first());
         }
     });
 
@@ -172,15 +160,7 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
-
-            var data = baton.isThread ? baton.first() : baton.data;
-
-            require(['io.ox/mail/compose/main'], function (m) {
-                if (m.reuse('forward', data)) return;
-                m.getApp().launch().done(function () {
-                    this.forward(data);
-                });
-            });
+            ox.registry.call('mail/compose', 'forward', baton.isThread ? baton.first() : baton.data);
         }
     });
 
@@ -207,12 +187,7 @@ define('io.ox/mail/actions',
             });
             if (check === true) return;
 
-            require(['io.ox/mail/compose/main'], function (m) {
-                if (m.reuse('edit', data)) return;
-                m.getApp().launch().done(function () {
-                    this.edit(data);
-                });
-            });
+            ox.registry.call('mail/compose', 'edit', data);
         }
     });
 
@@ -702,13 +677,8 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/sendmail', {
         requires: 'some',
         action: function (baton) {
-            var data = baton.data,
-                recipients = data.to.concat(data.cc).concat(data.from);
-            require(['io.ox/mail/compose/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.compose({ folder_id: data.folder_id, to: recipients });
-                });
-            });
+            var data = baton.data;
+            ox.registry.call('mail/compose', 'compose', { folder_id: data.folder_id, to: data.to.concat(data.cc).concat(data.from) });
         }
     });
 

@@ -336,7 +336,7 @@ define('io.ox/core/pubsub/publications',
     });
 
     function sendInvitation(baton) {
-        return require(['io.ox/mail/compose/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
+        return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (util, userAPI) {
                 userAPI.getCurrentUser().then(function (user) {
                     //predefined data for mail
                     var url = baton.target.url,
@@ -358,9 +358,7 @@ define('io.ox/core/pubsub/publications',
                             }
                         } || {};
                     // use default email dialog
-                    return m.getApp().launch().then(function () {
-                        return this.compose(data);
-                    });
+                    return ox.registry.call('mail/compose', 'compose', data);
                 });
             });
     }

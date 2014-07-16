@@ -137,8 +137,7 @@ define('io.ox/mail/detail/content',
             email = node.attr('href').substr(7), // cut off leading "mailto:"
             text = node.text(),
             tmp,
-            params,
-            data;
+            params;
 
         //check for additional parameters
         tmp = email.split(/\?/, 2);
@@ -149,13 +148,10 @@ define('io.ox/mail/detail/content',
         }
         email = tmp[0];
         // save data
-        data = {
+        ox.registry.call('mail/compose', 'compose', {
             to: [[text, email]],
             subject: params.subject,
             attachments: [{ content: params.body || '' }]
-        };
-        ox.launch('io.ox/mail/compose/main').done(function () {
-            this.compose(data);
         });
     };
 

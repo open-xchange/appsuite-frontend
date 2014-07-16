@@ -235,20 +235,16 @@ define('io.ox/files/actions',
             }
         },
         multiple: function (list) {
-            require(['io.ox/mail/compose/main'], function (m) {
-                api.getList(list).done(function (list) {
-                    m.getApp().launch().done(function () {
-                        //generate text and html content
-                        var html = [], text = [];
-                        _(list).each(function (file) {
-                            var url = ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
-                            var label = gt('File: %1$s', file.filename || file.title);
-                            html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
-                            text.push(label + '\n' + gt('Direct link: %1$s', url));
-                        });
-                        this.compose({ attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
-                    });
+            api.getList(list).done(function (list) {
+                //generate text and html content
+                var html = [], text = [];
+                _(list).each(function (file) {
+                    var url = ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
+                    var label = gt('File: %1$s', file.filename || file.title);
+                    html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
+                    text.push(label + '\n' + gt('Direct link: %1$s', url));
                 });
+                ox.registry.call('mail/compose', 'compose', { attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
             });
         }
     });
@@ -273,15 +269,11 @@ define('io.ox/files/actions',
             }
         },
         multiple: function (list) {
-            require(['io.ox/mail/compose/main'], function (m) {
-                api.getList(list).done(function (list) {
-                    var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
-                    if (filtered_list.length > 0) {
-                        m.getApp().launch().done(function () {
-                            this.compose({ infostore_ids: filtered_list });
-                        });
-                    }
-                });
+            api.getList(list).done(function (list) {
+                var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
+                if (filtered_list.length > 0) {
+                    ox.registry.call('mail/compose', 'compose', { infostore_ids: filtered_list });
+                }
             });
         }
     });
