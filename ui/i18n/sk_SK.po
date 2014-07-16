@@ -445,7 +445,7 @@ msgstr ""
 "beží na pozadí. Je povolené iba jedno obnovenie na odber a na reláciu."
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:514 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:525 module:io.ox/mail
 msgid "A return receipt has been sent"
 msgstr "Bolo poslané potvrdenie o doručení"
 
@@ -1063,7 +1063,7 @@ msgstr "Späť na schôdzku"
 msgid "Basic settings"
 msgstr "Základné nastavenia"
 
-#: apps/io.ox/mail/common-extensions.js:238 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:249 module:io.ox/mail
 msgid "Bcc"
 msgstr "Skrytá kópia"
 
@@ -1439,7 +1439,7 @@ msgstr "Zatvoriť všetko"
 
 #: apps/io.ox/core/commons.js:749 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:148 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:151 module:io.ox/mail
 msgid "Close folder view"
 msgstr "Zavrieť zobrazenie priečinka"
 
@@ -1616,7 +1616,7 @@ msgstr "Konverzácie"
 msgid "Copy"
 msgstr "Kopírovať"
 
-#: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:238 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 #, fuzzy
 #| msgctxt "CC"
@@ -2693,7 +2693,7 @@ msgstr "Rozšírené zobrazenie"
 msgid "External contact"
 msgstr "Externý kontakt"
 
-#: apps/io.ox/mail/common-extensions.js:461 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:472 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -4374,7 +4374,7 @@ msgid "Open external link"
 msgstr "Otvoriť externý odkaz"
 
 #: apps/io.ox/core/commons.js:736 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:137 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:140 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Otvoriť zobrazenie priečinka"
 
@@ -5554,7 +5554,7 @@ msgstr "Vybrať priečinok"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:105
+#: apps/io.ox/mail/view-options.js:107
 msgid "Select all"
 msgstr "Vybrať všetko"
 
@@ -5574,7 +5574,7 @@ msgid "Send"
 msgstr "Poslať"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:544 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:555 module:io.ox/mail
 msgid "Send a return receipt"
 msgstr "Poslať potvrdenie o doručení"
 
@@ -5791,7 +5791,7 @@ msgstr "Zobraziť hotové úlohy"
 msgid "Show hidden files and folders"
 msgstr "Zobraziť skryté súbory a priečinky"
 
-#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid "Show images"
 msgstr "Zobraziť obrázky"
 
@@ -6456,7 +6456,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Poskytnutý názov súboru prekračuje povolenú dĺžku."
 
-#: apps/io.ox/mail/common-extensions.js:547 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:558 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Odosielateľ chce dostať oznámenie, keď si prečítate tento email"
 
@@ -6850,7 +6850,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Nadpis"
 
-#: apps/io.ox/mail/common-extensions.js:216 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:84
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7039,7 +7039,8 @@ msgstr "Neznámy odosielateľ"
 msgid "Unlock"
 msgstr "Odomknúť"
 
-#: apps/io.ox/mail/view-options.js:32 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:40 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:32
 msgid "Unread"
 msgstr "Neprečítané"
 
@@ -7220,7 +7221,7 @@ msgstr "Zobraziť zdroj"
 msgid "Waiting"
 msgstr "Čaká sa"
 
-#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:498 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Upozornenie: Táto správa môže byť podvodný email!"
 
@@ -7736,12 +7737,12 @@ msgid "and"
 msgstr "a"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:253 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:264 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "a %1$d ďalších"
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:347 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:358 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr "a %1$d ďalších ..."
 

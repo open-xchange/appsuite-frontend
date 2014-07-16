@@ -426,7 +426,7 @@ msgstr ""
 "重新整理需要在背景花一點時間進行，請稍待。每次登入僅允許重新整理一個訂閱。"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:514 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:525 module:io.ox/mail
 msgid "A return receipt has been sent"
 msgstr "已寄出送達回執"
 
@@ -1033,7 +1033,7 @@ msgstr "回到約會"
 msgid "Basic settings"
 msgstr "基礎設定"
 
-#: apps/io.ox/mail/common-extensions.js:238 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:249 module:io.ox/mail
 msgid "Bcc"
 msgstr "密件抄送"
 
@@ -1406,7 +1406,7 @@ msgstr "全部關閉"
 
 #: apps/io.ox/core/commons.js:749 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:148 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:151 module:io.ox/mail
 msgid "Close folder view"
 msgstr "關閉文件夾面板"
 
@@ -1583,7 +1583,7 @@ msgstr "談話"
 msgid "Copy"
 msgstr "複製"
 
-#: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:238 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 #, fuzzy
 #| msgctxt "CC"
@@ -2649,7 +2649,7 @@ msgstr "擴展面板"
 msgid "External contact"
 msgstr "外部聯絡人"
 
-#: apps/io.ox/mail/common-extensions.js:461 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:472 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "為保護您的隱私，已阻止預載外部圖片"
@@ -4299,7 +4299,7 @@ msgid "Open external link"
 msgstr "開啟外部連結"
 
 #: apps/io.ox/core/commons.js:736 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:137 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:140 module:io.ox/mail
 msgid "Open folder view"
 msgstr "開啟文件夾面板"
 
@@ -5467,7 +5467,7 @@ msgstr "選擇資料夾"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:105
+#: apps/io.ox/mail/view-options.js:107
 msgid "Select all"
 msgstr "選擇全部"
 
@@ -5487,7 +5487,7 @@ msgid "Send"
 msgstr "發送"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:544 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:555 module:io.ox/mail
 msgid "Send a return receipt"
 msgstr "傳送送達回執"
 
@@ -5704,7 +5704,7 @@ msgstr "顯示完成工作"
 msgid "Show hidden files and folders"
 msgstr "顯示隱藏檔案與資料夾"
 
-#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid "Show images"
 msgstr "顯示圖片"
 
@@ -6360,7 +6360,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "檔名超過允許的長度。"
 
-#: apps/io.ox/mail/common-extensions.js:547 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:558 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "寄件者想在您閱讀此郵件時收到通知"
 
@@ -6728,7 +6728,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "頭銜 [稱呼]"
 
-#: apps/io.ox/mail/common-extensions.js:216 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:84
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -6917,7 +6917,8 @@ msgstr "未知的寄件者"
 msgid "Unlock"
 msgstr "解鎖"
 
-#: apps/io.ox/mail/view-options.js:32 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:40 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:32
 msgid "Unread"
 msgstr "未讀"
 
@@ -7094,7 +7095,7 @@ msgstr "檢視原始碼"
 msgid "Waiting"
 msgstr "等待中"
 
-#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:498 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：該郵件可能存在郵件欺詐"
 
@@ -7581,12 +7582,12 @@ msgid "and"
 msgstr "與"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:253 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:264 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "及其他 %1$d 位"
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:347 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:358 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr "及其他 %1$d 個…"
 

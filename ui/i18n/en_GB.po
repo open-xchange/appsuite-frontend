@@ -426,7 +426,7 @@ msgstr ""
 "background. Only one refresh per subscription and per session is allowed."
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:514 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:525 module:io.ox/mail
 msgid "A return receipt has been sent"
 msgstr "A return receipt has been sent"
 
@@ -1042,7 +1042,7 @@ msgstr "Back to appointment"
 msgid "Basic settings"
 msgstr "Basic settings"
 
-#: apps/io.ox/mail/common-extensions.js:238 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:249 module:io.ox/mail
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -1417,7 +1417,7 @@ msgstr "Close all"
 
 #: apps/io.ox/core/commons.js:749 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:148 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:151 module:io.ox/mail
 msgid "Close folder view"
 msgstr "Close folder view"
 
@@ -1594,7 +1594,7 @@ msgstr "Conversations"
 msgid "Copy"
 msgstr "Copy"
 
-#: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:238 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 #, fuzzy
 #| msgctxt "CC"
@@ -2674,7 +2674,7 @@ msgstr "Extended view"
 msgid "External contact"
 msgstr "External contact"
 
-#: apps/io.ox/mail/common-extensions.js:461 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:472 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -4344,7 +4344,7 @@ msgid "Open external link"
 msgstr "Open external link"
 
 #: apps/io.ox/core/commons.js:736 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:137 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:140 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Open folder view"
 
@@ -5522,7 +5522,7 @@ msgstr "Select Folder"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:105
+#: apps/io.ox/mail/view-options.js:107
 msgid "Select all"
 msgstr "Select all"
 
@@ -5542,7 +5542,7 @@ msgid "Send"
 msgstr "Send"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:544 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:555 module:io.ox/mail
 msgid "Send a return receipt"
 msgstr "Send a return receipt"
 
@@ -5759,7 +5759,7 @@ msgstr "Show completed tasks"
 msgid "Show hidden files and folders"
 msgstr "Show hidden files and folders"
 
-#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid "Show images"
 msgstr "Show images"
 
@@ -6427,7 +6427,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "The provided filename exceeds the allowed length."
 
-#: apps/io.ox/mail/common-extensions.js:547 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:558 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "The sender would like to be notified when you have read this e-mail"
 
@@ -6813,7 +6813,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Title"
 
-#: apps/io.ox/mail/common-extensions.js:216 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:84
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7002,7 +7002,8 @@ msgstr "Unknown sender"
 msgid "Unlock"
 msgstr "Unlock"
 
-#: apps/io.ox/mail/view-options.js:32 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:40 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:32
 msgid "Unread"
 msgstr "Unread"
 
@@ -7182,7 +7183,7 @@ msgstr "View source"
 msgid "Waiting"
 msgstr "Waiting"
 
-#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:498 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Warning: This message might be a phishing or scam email"
 
@@ -7692,12 +7693,12 @@ msgid "and"
 msgstr "and"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:253 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:264 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "and %1$d others"
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:347 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:358 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr "and %1$d others ..."
 
