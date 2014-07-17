@@ -227,7 +227,14 @@ define('io.ox/mail/detail/view',
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                node = this.$el.find('section.body').empty();
+                node = this.$el.find('section.body');
+            if (this.el.getElementsByClassName && this.el.getElementsByClassName('body')[0]) {
+                //don't use jQuery to empty the element, because this is way faster
+                //for larger mails (see Bug #33308)
+                this.el.getElementsByClassName('body')[0].innerHTML = '';
+            } else {
+                node = node.empty();
+            }
             ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
         },
 
