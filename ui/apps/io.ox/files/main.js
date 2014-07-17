@@ -84,7 +84,7 @@ define('io.ox/files/main',
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'mainView',
+                    page: 'mainView/multiselect',
                     extension: 'io.ox/files/mobile/toolbar'
                 })
             });
@@ -141,8 +141,7 @@ define('io.ox/files/main',
             app.pages.getNavbar('mainView')
                 .on('leftAction', function () {
                     app.pages.goBack();
-                })
-                .hide('.right');
+                }).hide('.right');
 
             app.pages.getNavbar('detailView').on('leftAction', function () {
                 app.pages.goBack();
@@ -225,6 +224,24 @@ define('io.ox/files/main',
             });
         },
 
+        'change:perspective': function () {
+             //use last manually choosen perspective (mode) as default
+            win.on('change:perspective', function (e, name, id) {
+                app.props.set('layout', id);
+            });
+        },
+
+        'change:perspective-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+
+            win.on('change:perspective', function (e, name, id) {
+                if (id === 'fluid:list') {
+                    app.pages.getNavbar('mainView').show('.right');
+                } else {
+                    app.pages.getNavbar('mainView').hide('.right');
+                }
+            });
+        },
         /*
          * Default application properties
          */
@@ -232,19 +249,14 @@ define('io.ox/files/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': settings.get('view', 'fluid:list'),
-                'folderEditMode': false
+                'folderEditMode': false, // mobile only
+                'showCheckboxes': false  // mobile only
             });
+
+            win.trigger('change:perspective', 'fluid', app.props.get('layout'));
         },
 
-        'change:perspective': function (app) {
-            app.props.on('change:layout', function () {
-                if (app.props.get('layout') !== 'fluid:list') {
-                    app.pages.getNavbar('mainView').hide('.right');
-                } else {
-                     app.pages.getNavbar('mainView').show('.right');
-                }
-            });
-        },
+
         /*
          * Set folderview property
          */
@@ -292,6 +304,38 @@ define('io.ox/files/main',
         },
 
         /*
+         * mobile only
+         * toggle edit mode in listview on mobiles
+         */
+        'change:checkboxes': function (app) {
+            if (_.device('!smartphone')) return;
+            // bind action on button
+            app.pages.getNavbar('mainView').on('rightAction', function () {
+                app.props.set('showCheckboxes', !app.props.get('showCheckboxes'));
+            });
+
+            // listen to prop event
+            app.props.on('change:showCheckboxes', function () {
+                var $view = app.getWindow().nodes.main.find('.view-list');
+                app.selection.clear();
+                if (app.props.get('showCheckboxes')) {
+                    $view.removeClass('checkboxes-hidden');
+                    app.pages.getNavbar('mainView').setRight(gt('Cancel')).hide('.left');
+                } else {
+                    $view.addClass('checkboxes-hidden');
+                    app.pages.getNavbar('mainView').setRight(gt('Edit')).show('.left');
+
+                }
+            });
+
+        },
+
+        'toggle-secondary-toolbar': function (app) {
+            app.props.on('change:showCheckboxes', function (model, state) {
+                app.pages.toggleSecondaryToolbar('mainView', state);
+            });
+        },
+        /*
          * Folerview toolbar
          */
         'folderview-toolbar': function (app) {
@@ -337,7 +381,7 @@ define('io.ox/files/main',
                 }
             };
             app.toggleFolders = toggleFolders;
-        },
+        }
     });
 
     //map old settings/links
@@ -385,11 +429,6 @@ define('io.ox/files/main',
 
         // fix missing default folder
         options.folder = options.folder || folderAPI.getDefaultFolder('infostore') || 9;
-
-        //use last manually choosen perspective (mode) as default
-        win.on('change:perspective', function (e, name, id) {
-            app.props.set('layout', id);
-        });
 
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)

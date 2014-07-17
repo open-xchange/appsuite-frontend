@@ -149,6 +149,7 @@ define('io.ox/files/fluid/perspective',
                 dropZone.update();
             }
             if (_.device('smartphone')) {
+                if (app.props.get('showCheckboxes')) return;
                 // mobile mode, use detailView of Pagecontroller instead of Popup
                 var dView = app.pages.getPage('detailView');
 
@@ -180,47 +181,6 @@ define('io.ox/files/fluid/perspective',
             }
         });
     }
-    // mobile multiselect helpers
-    // Not DRYed, duplicated code from io.ox/core/commons because files modules
-    // does not use a Vgrid. So we have to rewrite some code here to be used without a
-    // vgrid.
-    function drawMobileMultiselect(id, selected, selection) {
-        var node = $('<div>'),
-            points = {};
-        ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, {count: selected.length});
-
-        (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
-            .invoke('draw', node, {data: selected, selection: selection});
-        return node;
-    }
-
-    function toggleToolbar(selected, selection, baton) {
-        var context = $(baton.app.getWindow().nodes.outer),  // get current app's window container as context
-            buttons = $('.window-toolbar .toolbar-button', context),
-            toolbar = $('.window-toolbar', context),
-            toolbarID = 'multi-select-toolbar',
-            container;
-
-        if ($('#' + toolbarID).length > 0) {
-            // reuse old toolbar
-            container = $('#' + toolbarID);
-        } else {
-            // or creaet a new one
-            container = $('<div>', {id: toolbarID});
-        }
-        _.defer(function () {
-            if (selected.length > 0) {
-                buttons.hide();
-                $('#' + toolbarID).remove();
-                toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
-            } else {
-                // selection empty
-                $('#' + toolbarID).remove();
-                buttons.show();
-            }
-        }, 10);
-    }
-    // END mobile multiselect helpers
 
     // *** ext points ***
 
@@ -259,7 +219,7 @@ define('io.ox/files/fluid/perspective',
 
                     if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
-                        toggleToolbar(selected, self, baton);
+                        //toggleToolbar(selected, self, baton);
                     }
 
                     // set url
@@ -371,30 +331,31 @@ define('io.ox/files/fluid/perspective',
                 };
             this.append(
                 filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
-                                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
-                                    .on('click', function () {
-                                        //force focus on container click
-                                        focus();
-                                    })
-                                    .on('data:loaded refresh:finished', function () {
-                                        //inital load and refresh
-                                        if (isFolderHidden()) {
-                                            focus();
-                                        }
-                                    })
-                                    .on('perspective:shown', function () {
-                                        //folder tree select vs. layout change action
-                                        if (isFolderHidden() || $(document.activeElement).is('a.btn.layout')) {
-                                            focus();
-                                        }
-                                    })
-                                    .on('dialog:closed', function () {
-                                        //sidepanel close button vs. folder change (that triggers dialog close)
-                                        if (!$(document.activeElement).hasClass('folder')) {
-                                            focus(true);
-                                        }
-                                    })
+                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
+                    .on('click', function () {
+                        //force focus on container click
+                        focus();
+                    })
+                    .on('data:loaded refresh:finished', function () {
+                        //inital load and refresh
+                        if (isFolderHidden()) {
+                            focus();
+                        }
+                    })
+                    .on('perspective:shown', function () {
+                        //folder tree select vs. layout change action
+                        if (isFolderHidden() || $(document.activeElement).is('a.btn.layout')) {
+                            focus();
+                        }
+                    })
+                    .on('dialog:closed', function () {
+                        //sidepanel close button vs. folder change (that triggers dialog close)
+                        if (!$(document.activeElement).hasClass('folder')) {
+                            focus(true);
+                        }
+                    })
             );
+            if (_.device('smartphone')) filesContainer.addClass('checkboxes-hidden');
         }
     });
 
@@ -469,67 +430,12 @@ define('io.ox/files/fluid/perspective',
                     )
                 );
             if (_.device('smartphone')) {
-                this.removeClass('selectable').find('.checkbox')
+                this.removeClass('selectable')
+
+                    .find('.checkbox')
                     .attr('data-obj-id', _.cid(file))
                     .addClass('selectable');
             }
-        }
-    });
-
-    // Mobile multi select extension points
-
-    // move
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'move',
-        index: 10,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data}),
-            var btn;
-            $(this).append($('<div class="toolbar-button">')
-                .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
-                    .append(
-                        $('<i class="fa fa-sign-in">')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data, {cssDisable: true, eventType: 'tap'});
-
-        }
-    });
-
-    // delete
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'delete',
-        index: 20,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data});
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#" data-action="io.ox/files/actions/delete">')
-                    .append(
-                        $('<i class="fa fa-trash-o">')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data,  {cssDisable: true, eventType: 'tap'});
-        }
-    });
-
-    // selection clear button
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'selectionclear',
-        index: 50,
-        draw: function (data) {
-            $(this).append($('<div class="toolbar-button" style="float:right">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-times">').on('tap', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            data.selection.clear();
-                        })
-                    )
-                )
-            );
         }
     });
 

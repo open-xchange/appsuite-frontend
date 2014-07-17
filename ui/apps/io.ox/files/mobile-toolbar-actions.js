@@ -23,8 +23,8 @@ define('io.ox/files/mobile-toolbar-actions',
     // define links for each page
 
     var pointMainView = ext.point('io.ox/files/mobile/toolbar/mainView'),
+        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/mainView/multiselect'),
         pointDetailView = ext.point('io.ox/files/mobile/toolbar/detailView'),
-        //actions = ext.point('io.ox/files/mobile/actions'),
         meta = {
             'add': {
                 prio: 'hi',
@@ -73,9 +73,6 @@ define('io.ox/files/mobile-toolbar-actions',
             }
         };
 
-    //console.log(pointListView, pointDetailView, actions, meta);
-    /*io.ox/files/links/toolbar/view*/
-
     function addAction(point, ids) {
         var index = 0;
         _(ids).each(function (id) {
@@ -88,7 +85,6 @@ define('io.ox/files/mobile-toolbar-actions',
     }
 
     addAction(pointMainView, ['add', 'view-list', 'view-icon', 'view-tile']);
-    //addAction(actions, ['send', 'invite', 'vcard', 'edit', 'delete', 'move', 'copy']);
 
     // add submenu as text link to toolbar in multiselect
     pointDetailView.extend(new links.Dropdown({
@@ -102,35 +98,35 @@ define('io.ox/files/mobile-toolbar-actions',
         ref: 'io.ox/files/links/inline'
     }));
 
-    var updateToolbar = _.debounce(function (file) {
-        var self = this;
-        if (file.length === 0) return;
-        //get full data, needed for require checks for example
-        api.get(file).done(function (data) {
-            if (!data) return;
-            var baton = ext.Baton({ data: data, app: self });
-            // handle updated baton to pageController
-            self.pages.getToolbar('detailView').setBaton(baton);
-        });
-    }, 50);
+    // add submenu as text link to toolbar in multiselect
+    pointMultiSelect.extend(new links.Dropdown({
+        index: 100,
+        label: $('<span>').text(
+            //.# Will be used as button label in the toolbar, allowing the user to choose an alternative layout for the current view
+            gt('Actions')
+        ),
+        noCaret: true, // don't draw the caret icon beside menu link
+        drawDisabled: true,
+        ref: 'io.ox/files/links/inline'
+    }));
 
-    // multi select toolbar links need some attention
-    // in case nothing is selected disabled buttons
-    // This should be done via our Link concept, but I
-    // didn't get it running. Feel free to refactor this
-    // to a nicer solutioun
-    /*pointListViewMultiSelect.extend({
-        id: 'update-button-states',
-        index: 10000,
-        draw: function (baton) {
-            // hmmmm, should work for this easy case
-            if (baton.data.length === 0) {
-                $('.mobile-toolbar-action', this).addClass('ui-disabled');
-            } else {
-                $('.mobile-toolbar-action', this).removeClass('ui-disabled');
-            }
-        }
-    });*/
+    var updateToolbar = _.debounce(function (list) {
+        if (!list) return;
+        var self = this,
+            ids = this.getIds ? this.getIds() : [];
+
+        //get full data, needed for require checks for example
+        api.getList(list).done(function (data) {
+            // extract single object if length === 1
+            data = data.length === 1 ? data[0] : data;
+            // draw toolbar
+            var baton = ext.Baton({data: data, app: self, allIds: ids});
+             // handle updated baton to pageController
+            self.pages.getToolbar('detailView').setBaton(baton);
+            self.pages.getSecondaryToolbar('mainView').setBaton(baton);
+        });
+
+    }, 10);
 
     // some mediator extensions
     // register update function and introduce toolbar updating
@@ -161,49 +157,17 @@ define('io.ox/files/mobile-toolbar-actions',
             app.on('folder:change', fnFolderChange);
             fnFolderChange();
 
-            /*
-            // multiselect
-            app.grid.selection.on('change', function  (e, list) {
-                if (app.props.get('checkboxes') !== true ) return;
-                if (list.length === 0) {
-                    // reset to remove old baton
-                     app.pages.getSecondaryToolbar('listView')
-                        .setBaton(ext.Baton({data: [], app: app}));
-                     return;
-                }
-                api.getList(list).done(function (data) {
-                    if (!data) return;
-                    var baton = ext.Baton({ data: data, app: app });
-                    // handle updated baton to pageController
-                    app.pages.getSecondaryToolbar('listView').setBaton(baton);
-                });
-            });
-            */
-
             // simple select
             app.on('selection:setup', function () {
-                app.selection.on('select', function (e, cid) {
-                    if (cid && cid.length === 0) return;
-                    // update toolbar on each pagechange
-                    app.updateToolbar(cid[0]);
+                app.selection.on('select', function (e, id) {
+                    app.updateToolbar(id);
                 });
             });
 
-
-        }
-    });
-
-    ext.point('io.ox/files/mediator').extend({
-        id: 'change-mode-toolbar-mobile',
-        index: 10400,
-        setup: function () {
-            if (!_.device('small')) return;
-            /*
-            // if multiselect is triggered, show secondary toolbar with other options based on selection
-            app.props.on('change:checkboxes', function (model, state) {
-                app.pages.toggleSecondaryToolbar('listView', state);
+            app.on('selection:change', function () {
+                if (!app.props.get('showCheckboxes')) return;
+                app.updateToolbar(app.selection.get());
             });
-            */
         }
     });
 

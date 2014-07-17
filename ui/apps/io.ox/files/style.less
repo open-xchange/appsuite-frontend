@@ -116,8 +116,24 @@
         &.fixed {
             position: fixed;
         };
+        &.checkboxes-hidden {
+            &.view-list {
+                .file-cell{
+                    .checkbox {
+                        display:none;
+                    }
+                    .preview-cover {
+                        margin-left: 10px;
+                    }
 
+                    .details {
+                        padding-left: 60px;
+                    }
+                }
+            }
+        }
         &.view-list {
+
             .file-cell {
                 width: 100%;
                 cursor: pointer;
