@@ -18,9 +18,10 @@ define('io.ox/search/main',
      'io.ox/search/model',
      'io.ox/search/view',
      'io.ox/search/api',
+     'io.ox/mail/api',
      'io.ox/core/notifications',
      'less!io.ox/search/style'
-    ], function (gt, settings, ext, SearchModel, SearchView, api, notifications) {
+    ], function (gt, settings, ext, SearchModel, SearchView, api, mailAPI, notifications) {
 
     'use strict';
 
@@ -130,7 +131,7 @@ define('io.ox/search/main',
         return model;
     };
 
-    //reduced version of app.quit to ensure app/window is reusable
+    // reduced version of app.quit to ensure app/window is reusable
     app.quit = function () {
         // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
         if ((app.getWindow() && app.getWindow().state.visible) && (!_.url.hash('app') || app.getName() === _.url.hash('app').split(':', 1)[0])) {
@@ -152,7 +153,8 @@ define('io.ox/search/main',
         //reset
         model.reset({silent: true});
     };
-    //define launcher callback
+
+    // define launcher callback
     app.setLauncher(function (options) {
         var opt = $.extend({}, options || {});
 
@@ -162,12 +164,19 @@ define('io.ox/search/main',
             'aria-label': gt('Search')
         });
 
-
         app.setWindow(win);
 
         //use application view
         app.view = SearchView.factory
                     .create(app, model, win.nodes.main);
+
+        //model-based events
+        model.on('query change:start change:size', app.apiproxy.query);
+        model.on('reset change', function () {
+                app.view.redraw()
+                         .focus();
+                app.view.trigger('redraw');
+        });
 
         //register model item
         model.get('items').on('needs-redraw', function () {
@@ -273,48 +282,45 @@ define('io.ox/search/main',
                     var start = Date.now();
                     if (result) {
                         model.setItems(result, start);
-                        run();
+                        app.view.trigger('query:result', result);
                     }
-                    app.idle();
+                    app.view.trigger('query:stop');
+                    return result;
                 }
 
                 function fail(result) {
                     yell(result);
-                    app.idle();
+                    app.view.trigger('query:stop');
+                    app.view.trigger('query:fail');
                 }
 
-                return function () {
+                return function (sync, params) {
                     var opt = {
-                        params: {
-                            //translate app to module param
-                            module: model.getModule()
-                        },
+                        params: _.extend({ module: model.getModule() }, params),
+
                         data: {
                             start: model.get('start'),
                             //workaround: more searchresults?
                             size: model.get('size') + model.get('extra')
                         }
                     };
-                    run();
-                    app.busy();
+                    app.view.trigger('query:start');
                     return model.getFacets()
                         .done(filterFacets.bind(this, opt))
                         .then(getResults.bind(this, opt))
-                        .then(_.lfo(drawResults), _.lfo(fail));
+                        .then(
+                            // success
+                            sync ? drawResults : _.lfo(drawResults),
+                            // fail
+                            sync ? fail : _.lfo(fail)
+                        );
                 };
             }())
         }
     });
 
     //init model and listeners
-    model = SearchModel.factory.create({mode: 'widget'})
-            .on('query change:start change:size', app.apiproxy.query)
-            .on('reset change', function () {
-                app.view.redraw()
-                         .focus()
-                         .idle();
-                app.view.trigger('redraw');
-            });
+    model = SearchModel.factory.create({ mode: 'widget' });
 
     //run app
     run = function (options) {
@@ -346,13 +352,43 @@ define('io.ox/search/main',
     };
 
     return {
+
         getApp: app.getInstance,
+
         run: run,
-        init: function () {
-            app.view = SearchView.factory
-                        .create(app, model)
-                        .render();
+
+        init: function (node) {
+            app.view = SearchView.factory.create(app, model, node).render();
+            // view-based events
+            app.view.on({
+                'query:start': function () {
+                    run();
+                    app.busy();
+                },
+                'query:stop': function () {
+                    app.idle();
+                },
+                'query:result': function () {
+                    run();
+                }
+            });
+            // model-based events
+            model.on('query change:start change:size', app.apiproxy.query);
+            model.on('reset change', function () {
+                app.view.redraw();
+                app.idle();
+            });
+            // return proper DOM node
             return model.get('mode') === 'widget' ? app.view.$el.find('.input-group') : app.view.$el;
-        }
+        },
+
+        getView: function () {
+            model.set({ mode: 'window' });
+            return app.view = SearchView.factory.create(app, model);
+        },
+
+        model: model,
+
+        apiproxy: app.apiproxy
     };
 });

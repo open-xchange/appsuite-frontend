@@ -22,6 +22,47 @@ define('io.ox/search/view-template',
 
     'use strict';
 
+    var extensions = {
+
+        facets: function (baton) {
+
+            // ensure folder facet is set
+            baton.model.ensure();
+
+            var list = baton.model.get('poollist'),
+                pool = baton.model.get('pool');
+
+            this.append(
+                _(list).map(function (item) {
+
+                    // get active value
+                    var facet = pool[item.facet], value, node, button;
+
+                    if (!facet) return $();
+
+                    value = facet.values[item.value];
+
+                    // create facet node
+                    node = $('<li role="presentation" class="facet btn-group">').append(
+                        // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
+                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
+                        .on('click', function (e) { e.preventDefault(); })
+                        .append($('<label>'))
+                    );
+
+                    // general stuff
+                    ext.point('io.ox/search/view/window/facet').invoke('draw', button, value, facet, baton);
+
+                    // additional actions per id/type
+                    ext.point('io.ox/search/view/window/facet/' + value.facet).invoke('draw', node, value, baton);
+
+                    return node;
+                })
+            );
+        }
+    };
+
+
     /**
      * widget:      io.ox/search/view/widget
      * fullscreen:  io.ox/search/view/window
@@ -239,54 +280,17 @@ define('io.ox/search/view-template',
         index: 250,
         row: '0',
         redraw: function (baton) {
-            $(baton.$).find('.facets').empty();
+            $(baton.$).find('.search-facets').empty();
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
 
-            //ensure folder facet is set
-            baton.model.ensure();
+            var node = $('<ul class="col-xs-12 list-unstyled search-facets">');
+            extensions.facets.call(node, baton);
 
-            var model = baton.model,
-                list = model.get('poollist'),
-                pool = model.get('pool'),
-                row, cell;
-
-            row = $('<div class="row facets">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled facets">')
+            this.append(
+                $('<div class="row">').append(node)
             );
-
-            _.each(list, function (item) {
-                //get active value
-                var facet = pool[item.facet],
-                    value, facetnode, button;
-
-                if (facet) {
-                    value = facet.values[item.value];
-
-
-                    //create facet node
-                    cell.append(
-                        facetnode = $('<li role="presentation" class="facet btn-group">')
-                                    .append(
-                                        // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
-                                            e.preventDefault();
-                                        }).append($('<label>'))
-                                    )
-                    );
-
-                    //general stuff
-                    ext.point('io.ox/search/view/window/facet')
-                        .invoke('draw', button, value, facet, baton);
-
-                    //additional actions per id/type
-                    ext.point('io.ox/search/view/window/facet/' + value.facet)
-                        .invoke('draw', facetnode, value, baton);
-                }
-            });
-
-            this.append(row);
         }
     });
 
@@ -750,5 +754,7 @@ define('io.ox/search/view-template',
             });
         }
     });
+
+    return extensions;
 
 });

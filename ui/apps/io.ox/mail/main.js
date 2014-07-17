@@ -1022,28 +1022,97 @@ define('io.ox/mail/main',
             });
         },
 
-        // 'inplace-search': function (app) {
+        'inplace-search': function (app) {
 
-        //     if (_.device('small')) return;
+            if (_.device('small')) return;
 
-        //     var side = app.getWindow().nodes.sidepanel;
+            var side = app.getWindow().nodes.sidepanel, tree, toolbar, container;
 
-        //     require(['io.ox/search/main'], function (search) {
+            side.find('.foldertree-sidepanel').append(
+                $('<div class="generic-toolbar top inplace-search io-ox-search">')
+            );
 
-        //         side.find('.foldertree-sidepanel').append(
-        //             $('<div class="generic-toolbar top inplace-search io-ox-search">').append(
-        //                 search.init()
-        //             )
-        //         );
+            side.append(
+                container = $('<div class="abs search-container">')
+                .append('<ul class="search-facets">')
+                .hide()
+            );
 
-        //         var container = side.find('.foldertree-container').addClass('top-toolbar');
+            tree = side.find('.foldertree-container').addClass('top-toolbar');
+            toolbar = side.find('.generic-toolbar.bottom');
 
-        //         side.find('.search-field').on('focus blur', function (e) {
-        //             // hide on focus, show on blur
-        //             container.toggle(e.type === 'blur');
-        //         });
-        //     });
-        // }
+            require(['io.ox/search/main', 'io.ox/search/view-template', 'io.ox/core/api/collection-loader'], function (search, view, CollectionLoader) {
+
+                // define collection loader for search results
+                var collectionLoader = new CollectionLoader({
+                    module: 'mail',
+                    fetch: function () {
+                        var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                        return search.apiproxy.query(true, params).then(function (response) {
+                            return response && response.results ? response.results : [];
+                        });
+                    },
+                    cid: function () {
+                        return 'search/' + search.model.getCompositeId() +
+                            '&sort=' + app.props.get('sort') +
+                            '&order=' + app.props.get('order');
+                    },
+                    each: function (obj) {
+                        api.processThreadMessage(obj);
+                    }
+                });
+
+                app.search = search.getView();
+
+                side.find('.io-ox-search').append(
+                    app.search.render().$el.find('.input-group')
+                );
+
+                side.find('.search-field').on({
+                    'focus': function () {
+                        tree.hide();
+                        toolbar.hide();
+                        container.show();
+                        view.facets.call(container.children('ul').empty(), app.search.baton);
+                        app.listView.connect(collectionLoader);
+                        app.listView.load();
+                    }
+                });
+
+                // events
+                app.search.model.on('query', _.debounce(function () {
+                    console.log('query ...');
+                    view.facets.call(container.children('ul').empty(), app.search.baton);
+                    app.listView.connect(collectionLoader);
+                    app.listView.load();
+                    app.search.focus();
+                }, 10));
+
+                // redefine focus
+                app.search.focus = function () {
+                    container.find('.facet > a').focus();
+                };
+
+                // redefine search button
+                side.find('.io-ox-search .btn-search')
+                    .find('i').attr('class', 'fa fa-times').end()
+                    .attr({
+                        'data-toggle': 'tooltip',
+                        'data-placement': 'right',
+                        'data-animation': 'false',
+                        'data-container': 'body',
+                        'title': gt('Close search')
+                    })
+                    .tooltip()
+                    .on('click', function () {
+                        tree.show();
+                        toolbar.show();
+                        container.hide();
+                        app.listView.connect(api.collectionLoader);
+                        app.listView.load();
+                    });
+            });
+        }
     });
 
     // launcher

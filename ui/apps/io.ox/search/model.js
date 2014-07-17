@@ -316,7 +316,20 @@ define('io.ox/search/model',
                             return self.fetch();
                         });
             },
+            getCompositeId: function () {
+                // TODO: We just need a "cid" attribute in the backend response
+                return _(this.fetch())
+                    .chain()
+                    .map(function (obj) {
+                        var filter = obj.filter,
+                            key = obj.facet + (filter && _.isArray(filter.fields) ? '(' + filter.fields.join(',') + ')' : ''),
+                            value = filter && _.isArray(filter.queries) ? filter.queries.join(',') : obj.value;
+                        return key + '=' + value;
+                    })
+                    .value().sort().join('&');
+            },
             isMandatory: function (key) {
+                if (options.mandatory === undefined) return false;
                 return (options.mandatory[key] || []).indexOf(this.getModule()) >= 0;
             },
             setItems: function (data, timestamp) {

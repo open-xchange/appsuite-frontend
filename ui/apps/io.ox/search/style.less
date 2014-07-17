@@ -152,7 +152,7 @@
     //proper overflow handling for facet name
     .io-ox-search {
         &.window-content {
-            .facets {
+            .search-facets {
                 li.facet {
                     label > span.name {
                         max-width: 70%;
@@ -219,93 +219,201 @@
             }
         }
 
-        .facets {
-            //6px + 8px facet (used when facets are stacked)
-            margin-bottom: 6px;
-            li.facet {
-                margin-right: 8px;
-                margin-bottom: 8px;
-                max-width: 470px;
-                a[type="button"] {
-                    background-color: #E6E6E6;
-                    border: transparent;
-                    text-align: left;
-                    //inherited from btn-group
-                    -webkit-box-shadow: none;
-                    box-shadow: none;
-                    max-height: 28px;
-                    max-width: 470px;
-                }
-                html.high-contrast & a {
-                    color: #333;
-                }
-                label>span {
-                    display: inline-block;
-                    max-width: 80%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-            }
-        }
+        // .facets {
+        //     //6px + 8px facet (used when facets are stacked)
+        //     margin-bottom: 6px;
+        //     li.facet {
+        //         margin-right: 8px;
+        //         margin-bottom: 8px;
+        //         max-width: 470px;
+        //         a[type="button"] {
+        //             background-color: #E6E6E6;
+        //             border: transparent;
+        //             text-align: left;
+        //             //inherited from btn-group
+        //             -webkit-box-shadow: none;
+        //             box-shadow: none;
+        //             max-height: 28px;
+        //             max-width: 470px;
+        //         }
+        //         html.high-contrast & a {
+        //             color: #333;
+        //         }
+        //         label>span {
+        //             display: inline-block;
+        //             max-width: 80%;
+        //             overflow: hidden;
+        //             text-overflow: ellipsis;
+        //         }
+        //     }
+        // }
 
         //app/facet dropdowns
-        .dropdown-toggle {
-            border-radius: 0;
-            .type {
-                color: rgba(0,0,0,.5);
-                &:after {
-                    //divider
-                    content: ':\00a0';
-                }
-            }
-            .name:after {
-                content: '\00a0';
-            }
-            //action icons
-            .caret-container {
-                float: right;
-                .caret {
-                    //10px minus caret border
-                    margin-left: 6px;
-                }
-            }
-            .remove {
-                margin-left: 10px;
-                float: right;
-            }
-            label {
-                font-weight: initial;
-                overflow: hidden;
-                display: inline;
-                text-overflow: ellipsis;
-                //overwrite bootstrap label defaults
-                padding-top: 0;
-                margin-bottom: 0;
-            }
-        }
+        // .dropdown-toggle {
+        //     border-radius: 0;
+        //     .type {
+        //         color: rgba(0,0,0,.5);
+        //         &:after {
+        //             //divider
+        //             content: ':\00a0';
+        //         }
+        //     }
+        //     .name:after {
+        //         content: '\00a0';
+        //     }
+        //     //action icons
+        //     .caret-container {
+        //         float: right;
+        //         .caret {
+        //             //10px minus caret border
+        //             margin-left: 6px;
+        //         }
+        //     }
+        //     .remove {
+        //         margin-left: 10px;
+        //         float: right;
+        //     }
+        //     label {
+        //         font-weight: initial;
+        //         overflow: hidden;
+        //         display: inline;
+        //         text-overflow: ellipsis;
+        //         //overwrite bootstrap label defaults
+        //         padding-top: 0;
+        //         margin-bottom: 0;
+        //     }
+        // }
 
-        //reduce space between button and dropdown
-        .dropdown-menu {
-            margin-top: 0;
-        }
+        // //reduce space between button and dropdown
+        // .dropdown-menu {
+        //     margin-top: 0;
+        // }
 
-        //section: info
-        .info {
-            clear: both;
-            font-style: italic;
-            margin: 0 15px 14px 0;
-            max-width: 470px;
-            background-color: #f4f8fa;
-            border-color: #5bc0de;
-            padding: 6px 10px;
-            border-left: 3px solid #428bca;
-        }
+        // //section: info
+        // .info {
+        //     clear: both;
+        //     font-style: italic;
+        //     margin: 0 15px 14px 0;
+        //     max-width: 470px;
+        //     background-color: #f4f8fa;
+        //     border-color: #5bc0de;
+        //     padding: 6px 10px;
+        //     border-left: 3px solid #428bca;
+        // }
 
-        .results {
-            //handled in /items/*
-        }
+        // .results {
+        //     //handled in /items/*
+        // }
     }
 }
+
+.search-facets {
+    //6px + 8px facet (used when facets are stacked)
+    margin-bottom: 6px;
+    li.facet {
+        margin-right: 8px;
+        margin-bottom: 8px;
+        max-width: 470px;
+        a[type="button"] {
+            background-color: #E6E6E6;
+            border: transparent;
+            text-align: left;
+            //inherited from btn-group
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            max-height: 28px;
+            max-width: 470px;
+        }
+        html.high-contrast & a {
+            color: #333;
+        }
+        label>span {
+            display: inline-block;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .dropdown-toggle {
+        border-radius: 0;
+        .type {
+            color: rgba(0,0,0,.5);
+            &:after {
+                //divider
+                content: ':\00a0';
+            }
+        }
+        .name:after {
+            content: '\00a0';
+        }
+        //action icons
+        .caret-container {
+            float: right;
+            .caret {
+                //10px minus caret border
+                margin-left: 6px;
+            }
+        }
+        .remove {
+            margin-left: 10px;
+            float: right;
+        }
+        label {
+            font-weight: initial;
+            overflow: hidden;
+            display: inline;
+            text-overflow: ellipsis;
+            //overwrite bootstrap label defaults
+            padding-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    //reduce space between button and dropdown
+    .dropdown-menu {
+        margin-top: 0;
+    }
+}
+
+.search-container {
+
+    top: 45px;
+    padding: 10px;
+    .overflow-x(visible);
+    .overflow-y(auto);
+
+    .search-facets {
+        padding-left: 0;
+        .facet {
+            width: 100%;
+            margin: 0 0 7px 0;
+            & > a {
+                width: 100%;
+                padding: 10px 13px; // 13px for a vertical alignment with search toolbar
+            }
+            label {
+                font-weight: bold;
+                display: block;
+                text-align: left;
+                i, .type {
+                    font-weight: normal;
+                    font-style: normal;
+                    color: rgba(0, 0, 0, 0.5);
+                }
+            }
+        }
+    }
+
+    .facet-dropdown {
+        width: 100%;
+        max-width: 300px;
+        right: 0;
+        left: auto;
+    }
+
+}
+
 
 //info currently disabled
 // .io-ox-search.info {
