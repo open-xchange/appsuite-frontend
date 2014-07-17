@@ -442,10 +442,10 @@ define('io.ox/mail/detail/content',
         return memo;
     }
 
-    function fixAbsolutePositions(content) {
+    function fixAbsolutePositions(content, isLarge) {
         var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight, found: false },
             width = content.width(), height = content.height();
-        if (!content.isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
+        if (!isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
             farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
         }
         // only do this for absolute elements
@@ -455,7 +455,7 @@ define('io.ox/mail/detail/content',
         }
         // look for resize event
         content.one('resize', function () {
-            fixAbsolutePositions($(this));
+            fixAbsolutePositions($(this), isLarge);
         });
     }
 
@@ -522,7 +522,7 @@ define('io.ox/mail/detail/content',
                 // process content unless too large
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
 
-                setTimeout(fixAbsolutePositions, 10, content);
+                setTimeout(fixAbsolutePositions, 10, content, baton.isLarge);
 
             } catch (e) {
                 console.error('mail.getContent', e.message, e, data);
