@@ -673,7 +673,7 @@ msgstr "新增至入口"
 msgid "Add widget"
 msgstr "新增小工具"
 
-#: apps/plugins/portal/facebook/register.js:336 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:349 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:344
 #: apps/plugins/portal/twitter/register.js:372
 msgid "Add your account"
@@ -1333,7 +1333,7 @@ msgid "Click here for free trial."
 msgstr "點選此處免費試用。"
 
 #: apps/io.ox/portal/main.js:298 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:353 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:366 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:388
 msgid "Click here to add your account"
 msgstr "點擊此處新增帳號"
@@ -1352,7 +1352,7 @@ msgstr "點下句子修改在何時重複約會。"
 msgid "Click on the links to change the values."
 msgstr "點下鏈結修改數值。"
 
-#: apps/plugins/portal/facebook/register.js:162 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:175 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -2508,7 +2508,7 @@ msgstr "創業者"
 msgid "Envelope"
 msgstr "信封"
 
-#: apps/io.ox/core/notifications.js:469 module:io.ox/core
+#: apps/io.ox/core/notifications.js:482 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2669,13 +2669,13 @@ msgstr "外部參與者"
 msgid "Face"
 msgstr "臉部"
 
-#: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:350
-#: apps/plugins/portal/facebook/register.js:650
+#: apps/plugins/portal/facebook/register.js:196 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:363
+#: apps/plugins/portal/facebook/register.js:656
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:171 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:184 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook 回報錯誤:"
 
@@ -3479,7 +3479,7 @@ msgstr "亮綠"
 msgid "Like"
 msgstr "讚"
 
-#: apps/plugins/portal/facebook/register.js:474 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:487 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "對連結說讚: %s"
 
@@ -4145,7 +4145,7 @@ msgstr "無主題"
 msgid "No title."
 msgstr "無標題。"
 
-#: apps/plugins/portal/facebook/register.js:143 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:156 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "尚無塗鴉牆貼文。"
 
@@ -4792,7 +4792,7 @@ msgstr "郵遞區號"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "按 [Enter] 以跳至完整生日清單"
 
-#: apps/plugins/portal/facebook/register.js:216 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:229 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "按 [Enter] 以跳至 Facebook 串流。"
 
@@ -5679,7 +5679,7 @@ msgid "Show appointment details"
 msgstr "顯示約會詳情"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:304
+#: apps/plugins/portal/facebook/register.js:317
 msgid "Show comments"
 msgstr "顯示注釋"
 
@@ -5721,7 +5721,7 @@ msgstr "顯示內部連結"
 msgid "Show legal information"
 msgstr "顯示法律資訊"
 
-#: apps/plugins/portal/facebook/register.js:64 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:77 module:plugins/portal
 msgid "Show more comments"
 msgstr "顯示更多註解"
 
@@ -5829,7 +5829,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "某些欄位包含無效資料"
 
-#: apps/plugins/portal/facebook/register.js:166 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -7447,7 +7447,7 @@ msgid ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
 msgstr "已建立您的 %s 帳號，等下可能會有來自 %s 的確認信。"
 
-#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:296 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "您的 %s 訊息清單"
 
@@ -7608,7 +7608,7 @@ msgstr "關閉"
 msgid "close for %1$s"
 msgstr "關閉 %1$s"
 
-#: apps/plugins/portal/facebook/register.js:276 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:289 module:plugins/portal
 msgid "collapse"
 msgstr "摺疊"
 
@@ -7753,8 +7753,8 @@ msgstr "每月"
 msgid "every week"
 msgstr "每周"
 
-#: apps/plugins/portal/facebook/register.js:272 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:279
+#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:292
 msgid "expand"
 msgstr "展開"
 

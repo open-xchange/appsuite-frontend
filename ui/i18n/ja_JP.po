@@ -659,7 +659,7 @@ msgstr "ポータルに追加"
 msgid "Add widget"
 msgstr "ウィジェットを追加"
 
-#: apps/plugins/portal/facebook/register.js:336 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:349 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:344
 #: apps/plugins/portal/twitter/register.js:372
 msgid "Add your account"
@@ -1320,7 +1320,7 @@ msgid "Click here for free trial."
 msgstr "無償トライアル版はここをクリック"
 
 #: apps/io.ox/portal/main.js:298 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:353 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:366 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:388
 msgid "Click here to add your account"
 msgstr "ここをクリックしてアカウントを追加"
@@ -1339,7 +1339,7 @@ msgstr "繰り返しのタイプを選択するには、文をクリックしま
 msgid "Click on the links to change the values."
 msgstr "値を変更するには、リンクをクリックします。"
 
-#: apps/plugins/portal/facebook/register.js:162 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:175 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -2511,7 +2511,7 @@ msgstr "起業家"
 msgid "Envelope"
 msgstr "エンベロープ"
 
-#: apps/io.ox/core/notifications.js:469 module:io.ox/core
+#: apps/io.ox/core/notifications.js:482 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2672,13 +2672,13 @@ msgstr "外部出席者"
 msgid "Face"
 msgstr "顔"
 
-#: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:350
-#: apps/plugins/portal/facebook/register.js:650
+#: apps/plugins/portal/facebook/register.js:196 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:363
+#: apps/plugins/portal/facebook/register.js:656
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:171 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:184 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook が次のエラーを報告しました:"
 
@@ -3500,7 +3500,7 @@ msgstr "薄い緑"
 msgid "Like"
 msgstr "いいね！"
 
-#: apps/plugins/portal/facebook/register.js:474 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:487 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "次のリンクは「いいね！」に登録されています: %s"
 
@@ -4170,7 +4170,7 @@ msgstr "件名なし"
 msgid "No title."
 msgstr "タイトルなし"
 
-#: apps/plugins/portal/facebook/register.js:143 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:156 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "ウォール ポストは今のところありません。"
 
@@ -4821,7 +4821,7 @@ msgstr "郵便番号"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "すべての誕生日のリストにアクセスするには、Enter キーを押してください。"
 
-#: apps/plugins/portal/facebook/register.js:216 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:229 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Facebook ストリームにアクセスするには、Enter キーを押してください。"
 
@@ -5710,7 +5710,7 @@ msgid "Show appointment details"
 msgstr "アポイントの詳細を表示"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:304
+#: apps/plugins/portal/facebook/register.js:317
 msgid "Show comments"
 msgstr "コメントを表示"
 
@@ -5752,7 +5752,7 @@ msgstr "内部リンクを表示"
 msgid "Show legal information"
 msgstr "法的情報を表示"
 
-#: apps/plugins/portal/facebook/register.js:64 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:77 module:plugins/portal
 msgid "Show more comments"
 msgstr "さらにコメントを表示"
 
@@ -5862,7 +5862,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "無効なデータが一部のフィールドに入力されています。"
 
-#: apps/plugins/portal/facebook/register.js:166 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -7522,7 +7522,7 @@ msgid ""
 msgstr ""
 "%s アカウントが作成されました。まもなく %s から確認メールが送信されます。"
 
-#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:296 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "%s のニュースフィード"
 
@@ -7689,7 +7689,7 @@ msgstr "閉じる"
 msgid "close for %1$s"
 msgstr "%1$s を閉じる"
 
-#: apps/plugins/portal/facebook/register.js:276 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:289 module:plugins/portal
 msgid "collapse"
 msgstr "折りたたむ"
 
@@ -7831,8 +7831,8 @@ msgstr "毎月"
 msgid "every week"
 msgstr "毎週"
 
-#: apps/plugins/portal/facebook/register.js:272 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:279
+#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:292
 msgid "expand"
 msgstr "展開"
 

@@ -675,7 +675,7 @@ msgstr "Add to portal"
 msgid "Add widget"
 msgstr "Add widget"
 
-#: apps/plugins/portal/facebook/register.js:336 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:349 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:344
 #: apps/plugins/portal/twitter/register.js:372
 msgid "Add your account"
@@ -1344,7 +1344,7 @@ msgid "Click here for free trial."
 msgstr "Click here for free trial."
 
 #: apps/io.ox/portal/main.js:298 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:353 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:366 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:388
 msgid "Click here to add your account"
 msgstr "Click here to add your account"
@@ -1363,7 +1363,7 @@ msgstr "Click on a sentence to choose when to repeat the appointment."
 msgid "Click on the links to change the values."
 msgstr "Click on the links to change the values."
 
-#: apps/plugins/portal/facebook/register.js:162 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:175 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -2533,7 +2533,7 @@ msgstr "Entrepreneur"
 msgid "Envelope"
 msgstr "Envelope"
 
-#: apps/io.ox/core/notifications.js:469 module:io.ox/core
+#: apps/io.ox/core/notifications.js:482 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2695,13 +2695,13 @@ msgstr "External participants"
 msgid "Face"
 msgstr "Face"
 
-#: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:350
-#: apps/plugins/portal/facebook/register.js:650
+#: apps/plugins/portal/facebook/register.js:196 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:363
+#: apps/plugins/portal/facebook/register.js:656
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:171 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:184 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook reported an error:"
 
@@ -3521,7 +3521,7 @@ msgstr "Light green"
 msgid "Like"
 msgstr "Like"
 
-#: apps/plugins/portal/facebook/register.js:474 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:487 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "Liked a link: %s"
 
@@ -4188,7 +4188,7 @@ msgstr "No subject"
 msgid "No title."
 msgstr "No title."
 
-#: apps/plugins/portal/facebook/register.js:143 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:156 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "No wall posts yet."
 
@@ -4843,7 +4843,7 @@ msgstr "Postcode"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "Press [Enter] to jump to complete list of Birthdays."
 
-#: apps/plugins/portal/facebook/register.js:216 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:229 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Press [Enter] to jump to the Facebook stream."
 
@@ -5734,7 +5734,7 @@ msgid "Show appointment details"
 msgstr "Show appointment details"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:304
+#: apps/plugins/portal/facebook/register.js:317
 msgid "Show comments"
 msgstr "Show comments"
 
@@ -5776,7 +5776,7 @@ msgstr "Show internal link"
 msgid "Show legal information"
 msgstr "Show legal information"
 
-#: apps/plugins/portal/facebook/register.js:64 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:77 module:plugins/portal
 msgid "Show more comments"
 msgstr "Show more comments"
 
@@ -5884,7 +5884,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "Some fields contain invalid data"
 
-#: apps/plugins/portal/facebook/register.js:166 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -7554,7 +7554,7 @@ msgid ""
 msgstr ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
 
-#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:296 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Your %s newsfeed"
 
@@ -7719,7 +7719,7 @@ msgstr "close"
 msgid "close for %1$s"
 msgstr "close for %1$s"
 
-#: apps/plugins/portal/facebook/register.js:276 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:289 module:plugins/portal
 msgid "collapse"
 msgstr "collapse"
 
@@ -7864,8 +7864,8 @@ msgstr "every month"
 msgid "every week"
 msgstr "every week"
 
-#: apps/plugins/portal/facebook/register.js:272 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:279
+#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:292
 msgid "expand"
 msgstr "expand"
 

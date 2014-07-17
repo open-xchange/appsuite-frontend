@@ -693,7 +693,7 @@ msgstr "Adaugă la portal"
 msgid "Add widget"
 msgstr "Adaugă o aplicație"
 
-#: apps/plugins/portal/facebook/register.js:336 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:349 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:344
 #: apps/plugins/portal/twitter/register.js:372
 msgid "Add your account"
@@ -1370,7 +1370,7 @@ msgid "Click here for free trial."
 msgstr "Apăsați aici pentru a ieși din centrul de asistență"
 
 #: apps/io.ox/portal/main.js:298 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:353 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:366 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:388
 msgid "Click here to add your account"
 msgstr "Apăsați aici pentru a adăuga contul dumneavoastră"
@@ -1390,7 +1390,7 @@ msgstr ""
 msgid "Click on the links to change the values."
 msgstr "Apăsați pe legături pentru a modifica valorile."
 
-#: apps/plugins/portal/facebook/register.js:162 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:175 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -2559,7 +2559,7 @@ msgstr "Antreprenor"
 msgid "Envelope"
 msgstr "Plic"
 
-#: apps/io.ox/core/notifications.js:469 module:io.ox/core
+#: apps/io.ox/core/notifications.js:482 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2722,13 +2722,13 @@ msgstr "Participanți externi"
 msgid "Face"
 msgstr "Față"
 
-#: apps/plugins/portal/facebook/register.js:183 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:350
-#: apps/plugins/portal/facebook/register.js:650
+#: apps/plugins/portal/facebook/register.js:196 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:363
+#: apps/plugins/portal/facebook/register.js:656
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:171 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:184 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook a returnat o eroare:"
 
@@ -3553,7 +3553,7 @@ msgstr "Verde deschis"
 msgid "Like"
 msgstr "Îmi place"
 
-#: apps/plugins/portal/facebook/register.js:474 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:487 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "Legătură apreciată: %s"
 
@@ -4221,7 +4221,7 @@ msgstr "Niciun subiect"
 msgid "No title."
 msgstr "Niciun titlu."
 
-#: apps/plugins/portal/facebook/register.js:143 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:156 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "Nicio postare pe perete."
 
@@ -4882,7 +4882,7 @@ msgstr "Cod poștal"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "Apăsați [Enter] pentru a ajunge la lista completă de aniversări."
 
-#: apps/plugins/portal/facebook/register.js:216 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:229 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Apăsați [Enter] pentru a ajunge la fluxul Facebook."
 
@@ -5778,7 +5778,7 @@ msgid "Show appointment details"
 msgstr "Afișează detaliile întâlnirii"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:304
+#: apps/plugins/portal/facebook/register.js:317
 msgid "Show comments"
 msgstr "Afișează comentariile"
 
@@ -5820,7 +5820,7 @@ msgstr "Afișează legătura internă"
 msgid "Show legal information"
 msgstr "Afișează informațiile legale"
 
-#: apps/plugins/portal/facebook/register.js:64 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:77 module:plugins/portal
 msgid "Show more comments"
 msgstr "Afișează mai multe comentarii"
 
@@ -5930,7 +5930,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "Anumite câmpuri conțin date incorecte"
 
-#: apps/plugins/portal/facebook/register.js:166 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -7631,7 +7631,7 @@ msgstr ""
 "Contul dumneavoastră %s a fost creat. Veți primi un mesaj de confirmare de "
 "la %s."
 
-#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:296 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Fluxul de știri %s "
 
@@ -7800,7 +7800,7 @@ msgstr "închide"
 msgid "close for %1$s"
 msgstr "închide pentru %1$s"
 
-#: apps/plugins/portal/facebook/register.js:276 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:289 module:plugins/portal
 msgid "collapse"
 msgstr "restrânge"
 
@@ -7948,8 +7948,8 @@ msgstr "în fiecare lună"
 msgid "every week"
 msgstr "în fiecare săptămână"
 
-#: apps/plugins/portal/facebook/register.js:272 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:279
+#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:292
 msgid "expand"
 msgstr "extinde"
 
