@@ -170,6 +170,19 @@ define('io.ox/search/main',
         app.view = SearchView.factory
                     .create(app, model, win.nodes.main);
 
+        app.view.on({
+            'query:start': function () {
+                run();
+                app.busy();
+            },
+            'query:stop': function () {
+                app.idle();
+            },
+            'query:result': function () {
+                run();
+            }
+        });
+
         //model-based events
         model.on('query change:start change:size', app.apiproxy.query);
         model.on('reset change', function () {
@@ -356,31 +369,6 @@ define('io.ox/search/main',
         getApp: app.getInstance,
 
         run: run,
-
-        init: function (node) {
-            app.view = SearchView.factory.create(app, model, node).render();
-            // view-based events
-            app.view.on({
-                'query:start': function () {
-                    run();
-                    app.busy();
-                },
-                'query:stop': function () {
-                    app.idle();
-                },
-                'query:result': function () {
-                    run();
-                }
-            });
-            // model-based events
-            model.on('query change:start change:size', app.apiproxy.query);
-            model.on('reset change', function () {
-                app.view.redraw();
-                app.idle();
-            });
-            // return proper DOM node
-            return model.get('mode') === 'widget' ? app.view.$el.find('.input-group') : app.view.$el;
-        },
 
         getView: function () {
             model.set({ mode: 'window' });
