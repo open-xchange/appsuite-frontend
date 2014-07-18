@@ -97,14 +97,14 @@ define('io.ox/search/view-template',
                             model: model,
                             container: container,
                             cbshow: function () {
-                                //reset autocomplete tk styles
+                                // reset autocomplete tk styles
                                 if (mode !== 'widget' && container)
                                     $(this).attr('style', '');
 
                             },
-                            //TODO: would be nice to move to control
+                            // TODO: would be nice to move to control
                             source: function (val) {
-                                //show dropdown immediately (busy by autocomplete tk)
+                                // show dropdown immediately (busy by autocomplete tk)
                                 ref.open();
                                 return app.apiproxy.search(val);
                             },
@@ -113,16 +113,16 @@ define('io.ox/search/view-template',
                                     .data(value)
                                     .html(value.display_name);
                                 if (container) {
-                                    //reset calculated style from autocomplete tk
+                                    // reset calculated style from autocomplete tk
                                     container.attr('style', 'width: 100%;');
                                 }
                             },
                             stringify: function () {
-                                //keep input value when item selected
+                                // keep input value when item selected
                                 return ref.val();
                             },
                             click: function (e) {
-                                //apply selected filter
+                                // apply selected filter
                                 var node = $(e.target).closest('.autocomplete-item'),
                                     value = node.data();
                                 if (mode === 'widget') {
@@ -130,7 +130,7 @@ define('io.ox/search/view-template',
                                 }
                                 ref.val('');
 
-                                //exclusive: define used option (type2 default is index 0 of options)
+                                // exclusive: define used option (type2 default is index 0 of options)
                                 var option = _.find(value.options, function (item) {
                                     return item.id === value.id;
                                 });
@@ -139,12 +139,12 @@ define('io.ox/search/view-template',
                             }
                         })
                         .on('focus focus:custom click', function (e, opt) {
-                            //hint: 'click' supports click on already focused
+                            // hint: 'click' supports click on already focused
 
-                            //keep dropdown closed on focus event
+                            // keep dropdown closed on focus event
                             opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
 
-                            //simulate tab keyup event
+                            // simulate tab keyup event
                             ref.trigger({
                                     type: 'keyup',
                                     which: 9
@@ -153,7 +153,7 @@ define('io.ox/search/view-template',
                         })
                         .on('keyup', function (e, options) {
                             var opt = _.extend({}, (e.data || {}), options || {}),
-                                //keys pressed
+                                // keys pressed
                                 down = e.which === 40 && !ref.isOpen(),
                                 tab = e.which === 9;
 
@@ -164,7 +164,7 @@ define('io.ox/search/view-template',
                             }
                         }),
                         $('<span class="input-group-btn">').append(
-                            //submit
+                            // submit
                             $('<button type="button" class="btn btn-default btn-search">')
                             .attr('aria-label', gt('Search'))
                             .append(
@@ -172,14 +172,14 @@ define('io.ox/search/view-template',
                             )
                             .on('click', function () {
                                 var dropdown = $('.autocomplete-search').length;
-                                //open full size search app 'shortcut'
+                                // open full size search app 'shortcut'
                                 if (!dropdown && mode === 'widget') {
-                                    //open search app
+                                    // open search app
                                     require(['io.ox/search/main'], function (searchapp) {
                                         searchapp.run();
                                     });
                                 } else {
-                                    //construct enter event to
+                                    // construct enter event to
                                     var e = $.Event('keydown');
                                     e.which = 13;
                                     $(ref).trigger(e);
@@ -192,7 +192,7 @@ define('io.ox/search/view-template',
             return this;
         };
 
-    //widget mode
+    // widget mode
     ext.point('io.ox/search/view/widget').extend({
         id: 'query',
         index: 200,
@@ -202,7 +202,7 @@ define('io.ox/search/view-template',
         }
     });
 
-    //window mode
+    // window mode
     point.extend({
         id: 'apps',
         index: 100,
@@ -213,18 +213,18 @@ define('io.ox/search/view-template',
                 row, cell,
                 apps = settings.get('search/modules', []);
 
-            //create container
+            // create container
             row = $('<div class="row applications">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
-            //apply mapping (infostore-files-drive chameleon)
+            // apply mapping (infostore-files-drive chameleon)
             apps = _.map(apps, function (module) {
                 var id = 'io.ox/' + module;
                 return opt.mapping[id] || id;
             });
 
-            //create menu entries
+            // create menu entries
             _(apps).each(function (id) {
                 var title = (ox.manifests.apps[id + '/main'] || {}).title;
                 if (title) {
@@ -243,13 +243,13 @@ define('io.ox/search/view-template',
                 }
             });
 
-            //mark as active
+            // mark as active
             if (id !== '') {
                 cell.find('[data-app="' + id + '"]')
                 .removeClass('btn-link')
                 .addClass('btn-primary');
             }
-            //register click handler
+            // register click handler
             cell.find('li').on('click', function (e) {
                 var node = $(e.target);
                 baton.model.setModule(node.attr('data-app'));
@@ -294,17 +294,17 @@ define('io.ox/search/view-template',
         }
     });
 
-    //register select handler for facet option click event
+    // register select handler for facet option click event
     point.extend({
         id: 'handler',
         index: 260,
         draw: function (baton) {
             $('body').delegate('.facet-dropdown .option', 'click tap', function (e) {
-                //TODO: remove hack
+                // TODO: remove hack
                 e.stopImmediatePropagation();
                 e.stopPropagation();
                 e.preventDefault();
-                //mobile
+                // mobile
                 $(this).closest('.custom-dropdown').toggle();
                 ox.idle();
 
@@ -316,17 +316,17 @@ define('io.ox/search/view-template',
                     facet = list.attr('data-facet'),
                     value = list.attr('data-value');
 
-                //select option
+                // select option
                 if (option === 'dialog') {
-                    //open folder dialog
+                    // open folder dialog
                     var facet = baton.model.get('folder');
                     folderDialog(facet, baton);
                 } else {
                     if (facet === 'folder') {
-                        //overwrite custom
+                        // overwrite custom
                         baton.model.update(facet, value, {display_name: link.attr('title'), custom: option });
                     } else {
-                        //use existing option
+                        // use existing option
                         baton.model.update(facet, value, {option: option });
                     }
                     baton.model.trigger('query');
@@ -377,7 +377,7 @@ define('io.ox/search/view-template',
         return (current || {}).display_name;
     }
 
-    //facet
+    // facet
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'type',
         index: 100,
@@ -385,18 +385,18 @@ define('io.ox/search/view-template',
             var options = value.options,
                 id = value._compact.option,
                 type;
-            //get type label
+            // get type label
             if (value.facet === 'folder')
                 type = gt('Folder');
             else if (options) {
                 type = getOptionLabel(options, id);
             }
-            //append type
+            // append type
             if (type) {
                 this.find('label').prepend(
                     $('<span>')
                         .addClass('type')
-                        //TYPE 3: use facet label instead of option label
+                        // TYPE 3: use facet label instead of option label
                         .html(facet.style === 'exclusive' ? facet.display_name : type)
                 );
             }
@@ -409,7 +409,7 @@ define('io.ox/search/view-template',
         draw: function (value, facet) {
             var type;
 
-            //TYPE 3: use option label instead of value label
+            // TYPE 3: use option label instead of value label
             if (facet.style === 'exclusive')
                 type = getOptionLabel(value.options, value._compact.option);
 
@@ -432,14 +432,14 @@ define('io.ox/search/view-template',
 
             if (options.length) {
                 this.attr('data-toggle', 'dropdown');
-                //add caret
+                // add caret
                 this.prepend(
                     $('<div class="caret-container">').append(
                         $('<span class="caret">')
                     )
                 );
 
-                //creste menu
+                // creste menu
                 menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
                         .attr({
                             'data-facet': facet.id,
@@ -460,7 +460,7 @@ define('io.ox/search/view-template',
                     if (current === item.id)
                         option.find('.fa').removeClass('fa-none').addClass('fa-check');
                 });
-                //add menu
+                // add menu
                 parent.append(menu);
             }
         }
@@ -471,7 +471,7 @@ define('io.ox/search/view-template',
         index: 400,
         draw: function (value, facet, baton) {
             var isMandatory = baton.model.isMandatory(value.facet);
-           //remove action for non mandatory facets
+           // remove action for non mandatory facets
             if (!isMandatory && value.facet !== 'folder') {
                 this.prepend(
                     $('<span class="remove">')
@@ -488,7 +488,7 @@ define('io.ox/search/view-template',
     });
 
 
-    //facet type: folder
+    // facet type: folder
     function folderDialog(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
             var id = facet.values[0].custom,
@@ -500,7 +500,7 @@ define('io.ox/search/view-template',
                 .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
             dialog.getBody().css({ height: '250px' });
 
-            //use foldertree or folderlist
+            // use foldertree or folderlist
             var TreeConstructor = ['mail', 'files'].indexOf(type) >= 0  ? views.FolderTree : views.FolderList,
                 tree = new TreeConstructor(dialog.getBody(), {
                     type: type === 'files' ? 'infostore' : type,
@@ -527,7 +527,7 @@ define('io.ox/search/view-template',
             .done(function (action) {
                 if (action === 'ok') {
                     var target = _(tree.selection.get()).first(),
-                        //TODO: better way tp get label?!
+                        // TODO: better way tp get label?!
                         label = $(arguments[2]).find('[data-obj-id="' + target + '"]').find('.short-title').text();
                     baton.model.update(facet.id, id, {custom: target, display_name: label});
                 }
@@ -560,31 +560,31 @@ define('io.ox/search/view-template',
                 )
             );
 
-            //add fodlers
+            // add fodlers
             util.getFolders(baton.model)
                 .then(function (accounts) {
 
-                    //handle each account
+                    // handle each account
                     _.each(accounts, function (account, key) {
 
-                        //reduce list for non primary accounts
+                        // reduce list for non primary accounts
                         if (key !== '0') {
                             account.list  = account.list.slice(0, 2);
                         }
 
-                        //sort by type
+                        // sort by type
                         account.list.sort(function (a, b) {
                             return SORT[a.type] - SORT[b.type];
                         });
 
 
-                        //account name as dropdown header
+                        // account name as dropdown header
                         if (Object.keys(accounts).length > 1) {
                             menu.append(
                                 $('<li role="presentation" class="dropdown-header">').append(account.name)
                             );
                         }
-                        //add option
+                        // add option
                         _.each(account.list, function (folder) {
                             menu.append(
                                 option = $('<li role="presentation">').append(
@@ -601,12 +601,12 @@ define('io.ox/search/view-template',
                                 option.find('.fa').removeClass('fa-none').addClass('fa-check');
                         });
 
-                        //add divider
+                        // add divider
                         menu.append(
                             $('<li role="presentation" class="divider">')
                         );
                     });
-                    //add option to open dialog
+                    // add option to open dialog
                     menu.append(
                         $('<li role="presentation">').append(
                              $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
@@ -619,7 +619,7 @@ define('io.ox/search/view-template',
                     );
                 });
 
-            //add to dom
+            // add to dom
             this.append(menu).appendTo(this);
         }
     });
@@ -629,10 +629,10 @@ define('io.ox/search/view-template',
         index: '400',
         draw: function (value, baton) {
             var link;
-            //dropdown entry
+            // dropdown entry
             if (!baton.model.isMandatory('folder')) {
 
-                //add dropdown entry
+                // add dropdown entry
                 this.find('ul.dropdown').prepend(
                     $('<li role="presentation">').append(
                          link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
@@ -644,12 +644,12 @@ define('io.ox/search/view-template',
                                     .attr('title', gt('All folders'))
                     )
                 );
-                //is active
+                // is active
                 if (!value.custom || value.custom === 'custom') {
-                    //set display name
+                    // set display name
                     this.find('.name')
                         .text(gt('All folders'));
-                    //set fa-check icon
+                    // set fa-check icon
                     link.find('i')
                         .addClass('fa-check');
                 }
@@ -662,7 +662,7 @@ define('io.ox/search/view-template',
         id: 'dropdown',
         index: 100,
         draw: function () {
-            //when exisiting autocomplete dropdown is rendered into this (autocompelte tk container)
+            // when exisiting autocomplete dropdown is rendered into this (autocompelte tk container)
             $('<div class="mobile-dropdown col-xs-12">')
                 .hide()
                 .appendTo(this);
@@ -673,7 +673,7 @@ define('io.ox/search/view-template',
         id: 'app',
         index: 100,
         draw: function () {
-            //overwirte app
+            // overwirte app
             point.replace({
                 id: 'apps',
                 index: 100,
@@ -687,18 +687,18 @@ define('io.ox/search/view-template',
                         titles = {},
                         apps = settings.get('search/modules', []);
 
-                    //create containers
+                    // create containers
                     row = $('<div class="row ">').append(
                         cell = $('<div class="btn-group col-xs-12">')
                     );
 
-                    //apply mapping (infostore-files-drive chameleon)
+                    // apply mapping (infostore-files-drive chameleon)
                     apps = _.map(apps, function (module) {
                         var id = 'io.ox/' + module;
                         return opt.mapping[id] || id;
                     });
 
-                    //create dropdown menu entries
+                    // create dropdown menu entries
                     _(apps).each(function (id) {
                         var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
                         items.push(
@@ -719,7 +719,7 @@ define('io.ox/search/view-template',
                         );
                     });
 
-                    //create button and append dropdown menue
+                    // create button and append dropdown menue
                     cell.append(
                         $('<a href="#" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">')
                             .append(
@@ -729,18 +729,18 @@ define('io.ox/search/view-template',
                         $('<ul class="dropdown dropdown-menu app-dropdown" role="menu">').append(items)
                     );
 
-                    //current app
+                    // current app
                     if (id !== '') {
-                        //add icon
+                        // add icon
                         cell.find('[data-app="' + id + '"]')
                             .find('.fa')
                             .removeClass('fa-none')
                             .addClass('fa-check');
-                        //add name
+                        // add name
                         cell.find('.name').text(titles[id]);
                     }
 
-                    //delegate handler
+                    // delegate handler
                     $('body').delegate('.app-dropdown a', 'click', function (e) {
                         var cell = $(e.target),
                             next = cell.closest('a').attr('data-app');

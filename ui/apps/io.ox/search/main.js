@@ -4,7 +4,7 @@
  * law. Any use of the work other than as authorized under this license
  * or copyright law is prohibited.
  *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * http:// creativecommons.org/licenses/by-nc-sa/2.5/
  *
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
@@ -46,9 +46,9 @@ define('io.ox/search/main',
         index: 400,
         id: 'mapping',
         config: function (data) {
-            //active app : app searched in
+            // active app : app searched in
             data.mapping = {
-                //name mapping
+                // name mapping
                 'io.ox/mail/write' : 'io.ox/mail',
                 'com.voiceworks/ox-messenger' : data.defaultApp,
                 'io.ox/drive' : 'io.ox/files',
@@ -77,8 +77,8 @@ define('io.ox/search/main',
         });
     }
 
-    //TODO: use custom node for autocomplete (autocomplete items appended here)
-        //init window
+    // TODO: use custom node for autocomplete (autocomplete items appended here)
+        // init window
     var win = ox.ui.createWindow({
             name: 'io.ox/search',
             title: 'Search',
@@ -92,14 +92,14 @@ define('io.ox/search/main',
             window: win
         }),
         yell = function (error) {
-            //add custom exception handling here
+            // add custom exception handling here
             notifications.yell(error);
         },
         sidepopup,
         win, model, run;
 
 
-    //hide/show topbar search field
+    // hide/show topbar search field
     win.on('show', function () {
         $('#io-ox-search-topbar')
             .addClass('hidden')
@@ -109,7 +109,7 @@ define('io.ox/search/main',
         $('#io-ox-search-topbar')
             .removeClass('hidden');
     });
-    //ensure launchbar entry
+    // ensure launchbar entry
     win.on('show', function () {
         if (!ox.ui.apps.get(app))
             ox.ui.apps.add(app);
@@ -135,7 +135,7 @@ define('io.ox/search/main',
     app.quit = function () {
         // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
         if ((app.getWindow() && app.getWindow().state.visible) && (!_.url.hash('app') || app.getName() === _.url.hash('app').split(':', 1)[0])) {
-            //we are still in the app to close so we can clear the URL
+            // we are still in the app to close so we can clear the URL
             _.url.hash({ app: null, folder: null, perspective: null, id: null });
         }
 
@@ -150,7 +150,7 @@ define('io.ox/search/main',
 
         // mark as not running
         app.trigger('quit');
-        //reset
+        // reset
         model.reset({silent: true});
     };
 
@@ -166,7 +166,7 @@ define('io.ox/search/main',
 
         app.setWindow(win);
 
-        //use application view
+        // use application view
         app.view = SearchView.factory
                     .create(app, model, win.nodes.main);
 
@@ -183,7 +183,7 @@ define('io.ox/search/main',
             }
         });
 
-        //model-based events
+        // model-based events
         model.on('query change:start change:size', app.apiproxy.query);
         model.on('reset change', function () {
                 app.view.redraw()
@@ -191,12 +191,12 @@ define('io.ox/search/main',
                 app.view.trigger('redraw');
         });
 
-        //register model item
+        // register model item
         model.get('items').on('needs-redraw', function () {
             this.render(app.view.getBaton());
         });
 
-        //update model
+        // update model
         model.set({
             mode: 'window',
             query: opt.query
@@ -206,7 +206,7 @@ define('io.ox/search/main',
 
         // return deferred
         win.show(function () {
-            //detail view sidepopo
+            // detail view sidepopo
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 sidepopup = new dialogs.SidePopup({tabTrap: true})
                             .delegate(app.view.$el, '.item', openSidePopup);
@@ -214,12 +214,12 @@ define('io.ox/search/main',
         });
     });
 
-    //extend app
+    // extend app
     app = $.extend(true, app, {
 
-        //use proxy for managing model (called via autocomplete)
+        // use proxy for managing model (called via autocomplete)
         apiproxy: {
-            //alias for autocomplete tk
+            // alias for autocomplete tk
             search: function (query, options) {
                 var standard = {
                     params: {
@@ -232,18 +232,18 @@ define('io.ox/search/main',
 
                 return model.getFacets()
                         .then(function (facets) {
-                            //extend standard options
+                            // extend standard options
                             standard.data.facets = facets;
                         })
                         .then(function () {
-                            //call server
+                            // call server
                             return api.autocomplete($.extend({}, standard, options));
                         })
                         .then(undefined, function (error) {
-                            //fallback when app doesn't support search
+                            // fallback when app doesn't support search
                             if (error.code === 'SVL-0010') {
                                 var app = model.getApp();
-                                //add temporary mapping (default app)
+                                // add temporary mapping (default app)
                                 model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
                                 return api.autocomplete($.extend(
                                                             standard, options, { params: {module: model.getModule()} }
@@ -252,15 +252,15 @@ define('io.ox/search/main',
                             return error;
                         })
                         .then(function (obj) {
-                            //TODO: remove when backend is ready
+                            // TODO: remove when backend is ready
                             _.each(obj.facets.values, function (value) {
-                                //multifilter facet
+                                // multifilter facet
                                 if (value.options)
                                     value.options = value.options[0];
 
                             });
 
-                            //match convention in autocomplete tk
+                            // match convention in autocomplete tk
                             var data = {
                                 list: obj.facets,
                                 hits: 0
@@ -287,7 +287,7 @@ define('io.ox/search/main',
                 function getResults(opt) {
                     // TODO: better solution needed
                     var folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
-                    //call server
+                    // call server
                     return folderOnly ? $.Deferred().resolve(undefined) : api.query(opt);
                 }
 
@@ -313,7 +313,7 @@ define('io.ox/search/main',
 
                         data: {
                             start: model.get('start'),
-                            //workaround: more searchresults?
+                            // workaround: more searchresults?
                             size: model.get('size') + model.get('extra')
                         }
                     };
@@ -332,28 +332,28 @@ define('io.ox/search/main',
         }
     });
 
-    //init model and listeners
+    // init model and listeners
     model = SearchModel.factory.create({ mode: 'widget' });
 
-    //run app
+    // run app
     run = function (options) {
         var current;
 
-        //ensure
+        // ensure
         options = options || {};
 
         if (app.is('ready')) {
-            //not started yet use app callback for inital stuff
+            // not started yet use app callback for inital stuff
             app.launch.call(app);
         } else if (options.reset) {
-            //reset model and update current app
+            // reset model and update current app
             model.reset({silent: true});
             current = ox.ui.App.getCurrentApp().get('name');
             if (current !== 'io.ox/search')
                 model.set('app', current, {silent: true});
-            //update state
+            // update state
             app.set('state', 'running');
-            //reset view
+            // reset view
             app.launch();
             app.view.redraw({closeSidepanel: true});
         } else if (app.is('running')) {

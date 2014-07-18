@@ -64,13 +64,13 @@ define('io.ox/search/items/view-template',
         }
     });
 
-    //fetch config
+    // fetch config
     ext.point('io.ox/search/main/items').invoke('config', $, config);
 
     var refresh = _.debounce(function (e) {
                     if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/search')
                         e.data.trigger('needs-refresh');
-                    //hide sidepanel
+                    // hide sidepanel
                     if (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0)
                         $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
                 }, 100);
@@ -88,16 +88,16 @@ define('io.ox/search/items/view-template',
                 nodes = [],
                 row, cell;
 
-            //create containers
+            // create containers
             row = $('<div class="row result">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled">') //list-view
+                cell = $('<ul class="col-xs-12 list-unstyled">') // list-view
             );
 
 
-            //require list view extensions points
+            // require list view extensions points
             var dep = [].concat(config.dependencies[module]).concat('less!io.ox/search/items/style');
             require(dep, function (view, api) {
-                //ignore last element when greater than 'size' (only used to determine if more results exists)
+                // ignore last element when greater than 'size' (only used to determine if more results exists)
                 var last = items.length > baton.model.get('size') ? items.length - baton.model.get('extra') : items.length;
                 if (api) {
                     api.off(events, refresh);
@@ -106,7 +106,7 @@ define('io.ox/search/items/view-template',
 
                 items.each(function (model, current) {
 
-                    //do not show last item
+                    // do not show last item
                     if (last !== current) {
                         var node = $('<li class="item">'),
                             item = model.get('data'),
@@ -118,17 +118,17 @@ define('io.ox/search/items/view-template',
                             'data-app': model.get('application'),
                         });
 
-                        //add app specific classes
+                        // add app specific classes
                         if (module === 'mail') cell.addClass('mail-item');
                         node.addClass(config.classes[module] || '');
 
-                        //draw item
+                        // draw item
                         ext.point(config.points[module]).invoke('draw', node, baton);
                         nodes.push(node);
                     }
                 });
 
-                //empty result
+                // empty result
                 if (items.timestamp && !items.length) {
                     nodes.push(
                         $('<list class="item">').append(
@@ -139,7 +139,7 @@ define('io.ox/search/items/view-template',
                     );
                 }
 
-                //append to dom
+                // append to dom
                 cell.append(nodes);
 
             });
@@ -150,10 +150,10 @@ define('io.ox/search/items/view-template',
     function draw(baton, detail, api, options) {
         var popup = this.busy();
         require([detail, api], function (view, api) {
-            //render data with available data
+            // render data with available data
             popup.idle().append(view.draw(baton.data, options));
             api.get(api.reduce(baton.data)).then(function (data) {
-                //render again with get response if needed
+                // render again with get response if needed
                 if (!_.isEqual(baton.data, data)) {
                     popup.empty().append(
                         view.draw(data, options)
@@ -163,7 +163,7 @@ define('io.ox/search/items/view-template',
         });
     }
 
-    //register sidepanel details views
+    // register sidepanel details views
     ext.point('io.ox/search/view/items').extend({
         id: 'sidepanel',
         index: 200,
@@ -194,18 +194,18 @@ define('io.ox/search/items/view-template',
                 }
             });
 
-            //special for mail
+            // special for mail
             ext.point('io.ox/search/items/mail').extend({
                 draw: function (baton) {
                     var popup = this.busy();
                     require(['io.ox/mail/detail/view', 'io.ox/mail/api'], function (detail, api) {
-                        //render data with available data
+                        // render data with available data
                         var view = new detail.View({ data: baton.data });
                         popup.idle().append(
                             view.render().expand().$el.addClass('no-padding')
                         );
                         api.get(api.reduce(baton.data)).then(function (data) {
-                            //render again with get response
+                            // render again with get response
                             if (!_.isEqual(baton.data, data)) {
                                 var view = new detail.View({ data: data }, {deeplink: true});
                                 popup.idle().empty().append(

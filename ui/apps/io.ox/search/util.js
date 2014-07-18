@@ -23,7 +23,7 @@ define('io.ox/search/util',
     // rejects only in case all deferreds failed
     // otherwise resolves only with deferreds succeeded
     var whenResolved = function (list, def) {
-        //remove failed deferreds until when resolves
+        // remove failed deferreds until when resolves
         def = def || $.Deferred();
         $.when.apply($, list)
             .then(
@@ -31,11 +31,11 @@ define('io.ox/search/util',
                     def.resolve.apply(this, arguments);
                 },
                 function () {
-                    //kick rejected
+                    // kick rejected
                     var valid = _.filter(list, function (item) {
                         return item.state() !== 'rejected';
                     });
-                    //when again
+                    // when again
                     whenResolved(valid, def);
                 }
             );
@@ -53,10 +53,10 @@ define('io.ox/search/util',
                 id,
                 accounts = {};
 
-            //infostore hack
+            // infostore hack
             module = module === 'files' ? 'infostore' : module;
 
-            //standard folders for mail
+            // standard folders for mail
             if (module === 'mail') {
                 _.each(accountAPI.getStandardFolders(), function (id) {
                     mapping[id] = 'standard';
@@ -64,12 +64,12 @@ define('io.ox/search/util',
                 req.push(accountAPI.all());
             }
 
-            //default folder
+            // default folder
             id = folderAPI.getDefaultFolder(module);
             if (id)
                 mapping[id] = 'default';
 
-            //current folder
+            // current folder
             app = model.getApp(true) + '/main';
             if (require.defined(app)) {
                 id = require(app).getApp().folder.get() || undefined;
@@ -77,7 +77,7 @@ define('io.ox/search/util',
                     mapping[id] = 'current';
             }
 
-            //request
+            // request
             _.each(Object.keys(mapping), function (id) {
                 if (id && !hash[id]) {
                     hash[id] = true;
@@ -89,7 +89,7 @@ define('io.ox/search/util',
                     .then(function () {
                         var args = Array.prototype.slice.apply(arguments);
 
-                        //store account data
+                        // store account data
                         if (_.isArray(args[0])) {
                             var list = args.shift();
                             _.each(list, function (account) {
@@ -97,11 +97,11 @@ define('io.ox/search/util',
                             });
                         }
 
-                        //simplifiy
+                        // simplifiy
                         return _.map(args, function (folder) {
                             return {
                                 id: folder.id,
-                                title: folder.title || folder.id, //folderAPI.getFolderTitle(folder.title, 15),
+                                title: folder.title || folder.id, // folderAPI.getFolderTitle(folder.title, 15),
                                 type: mapping[folder.id],
                                 data: folder
                             };
@@ -125,14 +125,14 @@ define('io.ox/search/util',
                 def = $.Deferred(),
                 value = function (id, folder) {
                     folder = folder || {};
-                    //use id as fallback
+                    // use id as fallback
                     def.resolve({
                         custom: folder.id || id,
                         display_name: folder.title || id
                     });
                 };
 
-            //get folder title
+            // get folder title
             folderAPI.get({folder: id})
                     .always(value.bind(this, id));
 

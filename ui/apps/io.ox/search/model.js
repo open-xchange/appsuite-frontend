@@ -4,7 +4,7 @@
  * law. Any use of the work other than as authorized under this license
  * or copyright law is prohibited.
  *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * http:// creativecommons.org/licenses/by-nc-sa/2.5/
  *
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
@@ -30,21 +30,21 @@ define('io.ox/search/model',
         items = collection.create(),
         defaults, factory, conflicts;
 
-    //fetch settings/options
+    // fetch settings/options
     ext.point('io.ox/search/main').invoke('config',  $(), options);
 
     defaults = {
-        //widget vs. application
+        // widget vs. application
         mode: '',
-        //ox app and request module
+        // ox app and request module
         app: '',
-        //search term
+        // search term
         query: '',
-        //autocomplete response
+        // autocomplete response
         autocomplete: [],
-        //query call result
+        // query call result
         items: items,
-        //active facets
+        // active facets
         active: [],
         pool: {},
         poollist: [],
@@ -64,24 +64,24 @@ define('io.ox/search/model',
             }]
         },
         options: options,
-        //current folder
+        // current folder
         start: 0,
         size: 100,
         extra: 1
     };
 
-    //resolve conflicting facets
+    // resolve conflicting facets
     conflicts = function () {
         var pool = _.extend({}, this.get('pool')),
             list = [].concat(this.get('poollist')),
             disabled = {};
 
-        //remove conflicting facets
+        // remove conflicting facets
         _.each(this.get('pool'), function (facet) {
             _.each(facet.flags, function (flag) {
                 if (flag.indexOf('conflicts:') === 0) {
                     var id = flag.split(':')[1];
-                    //remove from pool/list and mark disabled
+                    // remove from pool/list and mark disabled
                     delete pool[id];
                     disabled[id] = facet;
                     list = _.filter(list, function (compact) {
@@ -91,7 +91,7 @@ define('io.ox/search/model',
             });
         });
 
-        //update
+        // update
         this.set('pooldisabled', disabled, {silent: true});
         this.set('pool', pool);
         this.set('poollist', list);
@@ -107,16 +107,16 @@ define('io.ox/search/model',
                     ref = ox.ui.App.getCurrentApp(),
                     current = ref ? ref.get('name') : options.defaultApp;
 
-                //target app changed?
+                // target app changed?
                 if (current !== 'io.ox/search') {
                     this.setModule(current);
                 }
 
                 app = this.get('app');
-                //ensure options
+                // ensure options
                 if (!options.mapping)
                     ext.point('io.ox/search/main').invoke('config',  $(), options);
-                //return module param for api calls
+                // return module param for api calls
                 return (options.mapping[app] || options.mapping[app + '/edit'] || app);
             },
             getModule: function () {
@@ -126,40 +126,40 @@ define('io.ox/search/model',
                 var pool = this.get('pool'),
                     list = this.get('poollist');
 
-                //add facet to pool
+                // add facet to pool
                 _.each(this.get('autocomplete').concat(this.get('folder')), function (data) {
                     if (data.id === facet) {
                         var item = _.copy(data, true),
                             itemvalue;
 
-                        //get value object
+                        // get value object
                         itemvalue = _.find(item.values, function (data) {
-                            //folder support via hidden flag
+                            // folder support via hidden flag
                             return data.id === value || !!item.custom;
                         });
 
-                        //overwrite
+                        // overwrite
                         if (!!item.custom) {
                             itemvalue.custom = option.custom;
                             itemvalue.display_name = option.display_name;
-                            //update 'folder' value
+                            // update 'folder' value
                             _.extend(data.values[0], itemvalue);
                         }
 
-                        //empty values
+                        // empty values
                         item.values = {};
-                        //add facet
+                        // add facet
                         pool[facet] = pool[facet] || item;
-                        //add value
+                        // add value
 
-                        //we have to create custom ids here to support 'globals'
+                        // we have to create custom ids here to support 'globals'
                         if (facet === 'global' || facet === value) {
-                            //pseudo uuid
+                            // pseudo uuid
                             value = Date.now();
                             data.id = value;
                         }
 
-                        //add option to value
+                        // add option to value
                         var compact = {
                             facet: facet,
                             value: value,
@@ -170,7 +170,7 @@ define('io.ox/search/model',
                         (itemvalue || data)._compact = compact;
                         pool[facet].values[value] = (itemvalue || data);
 
-                        //append/prepend ids to pool list
+                        // append/prepend ids to pool list
                         if (facet === 'folder')
                             list.unshift(compact);
                         else
@@ -178,7 +178,7 @@ define('io.ox/search/model',
                     }
                 });
 
-                //resolve conflicts
+                // resolve conflicts
                 conflicts.call(this);
 
                 if (facet !== 'folder')
@@ -187,22 +187,22 @@ define('io.ox/search/model',
             remove: function (facet, value) {
                 var pool = this.get('pool'),
                     list = this.get('poollist'),
-                    //flag: remove all facets
+                    // flag: remove all facets
                     global = !facet && !value;
-                //remove from  pool list
+                // remove from  pool list
                 for (var i = list.length - 1; i >= 0; i--) {
                     var item = list[i];
                     if (global || (item.facet === facet && item.value === value)) {
-                        //remove from pool
+                        // remove from pool
                         delete pool[item.facet].values[item.value];
-                        //remove empty facet from pool
+                        // remove empty facet from pool
                         if (_.isEmpty(pool[item.facet].values))
                             delete pool[item.facet];
-                        //remove from list
+                        // remove from list
                         list.splice(i, 1);
                     }
                 }
-                //resolve conflicts
+                // resolve conflicts
                 conflicts.call(this);
 
                 items.empty();
@@ -213,17 +213,17 @@ define('io.ox/search/model',
                     isCustom = facetdata.custom,
                     list = this.get('poollist');
 
-                //update opt reference in pool list
+                // update opt reference in pool list
                 if (isCustom) {
-                    //update pool item itself
+                    // update pool item itself
                     if (!data.custom || data.custom === 'custom') {
-                        //reset to 'all folders' by removing facet again
+                        // reset to 'all folders' by removing facet again
                         this.remove('folder', 'custom');
                         return;
                     } else
                         $.extend(this.get('pool')[facet].values.custom, data);
                 } else {
-                    //update poollist
+                    // update poollist
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
@@ -232,12 +232,12 @@ define('io.ox/search/model',
                     }
                 }
 
-                //TODO: remove hack
+                // TODO: remove hack
                 if (facetdata.style === 'exclusive') {
                     facetdata.values = {};
-                    //get value object
+                    // get value object
                     _.each(facetdata.options, function (obj) {
-                        //folder support via hidden flag
+                        // folder support via hidden flag
                         if (obj.id === data.option) {
                             facetdata.values[obj.id] = _.extend(
                                                             {},
@@ -260,7 +260,7 @@ define('io.ox/search/model',
                 var pool = this.get('pool'),
                     list = this.get('poollist'),
                     active = [];
-                //update opt reference in pool list
+                // update opt reference in pool list
                 _.each(list, function (item) {
                     var facet = pool[item.facet],
                         value = facet.values[item.value],
@@ -312,7 +312,7 @@ define('io.ox/search/model',
             getFacets: function () {
                 var self = this;
                 return this.ensure().then(function () {
-                            //return active filters
+                            // return active filters
                             return self.fetch();
                         });
             },
@@ -339,13 +339,13 @@ define('io.ox/search/model',
                         return {
                             id: item.id,
                             folder: item.folder || item.folder_id,
-                            //in case we support multiapp results in future
+                            // in case we support multiapp results in future
                             application: application,
                             data: item
                         };
                     });
 
-                //set collection
+                // set collection
                 items.reset(list);
                 items.timestamp = timestamp || Date.now();
                 self.stopListening();

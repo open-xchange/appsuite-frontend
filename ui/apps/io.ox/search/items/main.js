@@ -18,12 +18,12 @@ define('io.ox/search/items/main',
     'use strict';
 
     return {
-        //init controller
+        // init controller
         create: function() {
             var collection = new Collection(),
                 view = new View({collection: collection});
 
-            //event listener
+            // event listener
             collection.on('reset set', function () {
                 collection.trigger('needs-redraw');
             });
