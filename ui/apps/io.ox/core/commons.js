@@ -899,18 +899,28 @@ define('io.ox/core/commons',
 
             var items = $('#io-ox-core .f6-target:visible'),
                 closest = $(document.activeElement).closest('.f6-target'),
-                index = (items.index(closest) || 0) + (e.shiftKey ? -1 : +1),
-                next;
+                oldIndex = items.index(closest) || 0,
+                newIndex = oldIndex,
+                nextItem;
 
-            if (index >= items.length) index = 0;
-            if (index < 0) index = items.length - 1;
-            next = items.eq(index);
+            // find next f6-target that is focusable or contains a focusable node
+            do {
+                newIndex += (e.shiftKey ? -1 : +1);
+                if (newIndex >= items.length) newIndex = 0;
+                if (newIndex < 0) newIndex = items.length - 1;
+                nextItem = items.eq(newIndex);
 
-            if (next.is(tabindexSelector)) {
-                next.focus();
-            } else {
-                next.find(tabindexSelector).first().focus();
-            }
+                if (nextItem.is(tabindexSelector)) {
+                    nextItem.focus();
+                    break;
+                }
+
+                nextItem = nextItem.find(tabindexSelector).first();
+                if (nextItem.length) {
+                    nextItem.focus();
+                    break;
+                }
+            } while (oldIndex !== newIndex);
         }
     });
 
