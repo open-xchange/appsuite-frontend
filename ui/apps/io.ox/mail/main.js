@@ -1082,36 +1082,46 @@ define('io.ox/mail/main',
 
                 // events
                 app.search.model.on('query', _.debounce(function () {
-                    console.log('query ...');
                     view.facets.call(container.children('ul').empty(), app.search.baton);
                     app.listView.connect(collectionLoader);
                     app.listView.load();
                     app.search.focus();
                 }, 10));
 
+                app.search.on('button:clear', function () {
+                    side.find('.search-field').val('');
+                    tree.show();
+                    toolbar.show();
+                    container.hide();
+                    app.listView.connect(api.collectionLoader);
+                    app.listView.load();
+                    app.search.model.reset();
+                });
+
                 // redefine focus
                 app.search.focus = function () {
                     container.find('.facet > a').focus();
                 };
 
-                // redefine search button
-                side.find('.io-ox-search .btn-search')
-                    .find('i').attr('class', 'fa fa-times').end()
+                // tooltips
+                side.find('.io-ox-search .input-group')
+                    //icond tooltips
+                    .find('i')
                     .attr({
                         'data-toggle': 'tooltip',
                         'data-placement': 'right',
                         'data-animation': 'false',
-                        'data-container': 'body',
-                        'title': gt('Close search')
+                        'data-container': 'body'
                     })
                     .tooltip()
-                    .on('click', function () {
-                        tree.show();
-                        toolbar.show();
-                        container.hide();
-                        app.listView.connect(api.collectionLoader);
-                        app.listView.load();
-                    });
+                    .end()
+                    //search
+                    .find('.btn-search>i')
+                    .attr('title', gt('Search'))
+                    .end()
+                    //clear
+                    .find('.btn-clear')
+                    .attr('title', gt('Close search'));
             });
         }
     });

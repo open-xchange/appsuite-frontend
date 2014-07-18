@@ -163,6 +163,10 @@ define('io.ox/search/view-template',
                                 e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
                             }
                         }),
+                        $('<i class="fa fa-times btn-clear"></i>')
+                            .on('click', function () {
+                                app.view.trigger('button:clear');
+                            }),
                         $('<span class="input-group-btn">').append(
                             // submit
                             $('<button type="button" class="btn btn-default btn-search">')

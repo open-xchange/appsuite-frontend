@@ -180,6 +180,9 @@ define('io.ox/search/main',
             },
             'query:result': function () {
                 run();
+            },
+            'button:clear': function () {
+                app.view.$('.search-field').val('');
             }
         });
 
