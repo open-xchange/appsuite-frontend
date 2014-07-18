@@ -17,7 +17,7 @@ define('io.ox/core/page-controller',
     'use strict';
 
     var PageController = function (app, o) {
-
+        if (!window.trappedTaps) window.trappedTaps = 0; // stats ;)
         var pages = {},
             current,
             order = [],
@@ -25,7 +25,10 @@ define('io.ox/core/page-controller',
             self = this,
             app = app,
             backButtonRules,
-            options = o || {};
+            options = o || {},
+            $taptrap = $('<div class="taptrap">').on('touchstart click mousedown', function () {
+                window.trappedTaps++;
+            });
 
         function createPage(opt) {
             var defaults = {
@@ -88,7 +91,6 @@ define('io.ox/core/page-controller',
                 $toPage = pages[to].$el,
                 $fromPage = pages[opt.from].$el;
 
-
             // Android's native UI standard is fade, so we use this too
             opt.animation = _.device('android') ? 'fade' : opt.animation;
 
@@ -106,18 +108,22 @@ define('io.ox/core/page-controller',
                     $('input:focus, textarea:focus, select:focus').blur();
                 }
             } catch (e) {
-
+                // nothing
             }
+
             // save for back-button
             lastPage = current;
             // start animation to-page in
             current = to;
-
+            var taptrap = $taptrap.clone(true);
             _.defer(function () {
-                $toPage.addClass('io-ox-core-animation in current ' + opt.animation)
+                $toPage
+                    .append(taptrap)
+                    .addClass('io-ox-core-animation in current ' + opt.animation)
                     .one('webkitAnimationEnd animationend', function () {
                         $(this).removeClass('io-ox-core-animation in ' + opt.animation);
                         $toPage.trigger('pageshow', {from: opt.from, to: opt.to});
+                        taptrap.remove();
                     });
             }, 1);
 

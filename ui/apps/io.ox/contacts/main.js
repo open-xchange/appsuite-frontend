@@ -148,12 +148,6 @@ define('io.ox/contacts/main',
             view.handleFolderChange();
             view.load();
 
-            // bind action for edit button
-            //app.bindFolderChange();
-
-            // make folder visible by default
-            //app.toggleFolderView(true);
-
         },
 
         /*
@@ -550,7 +544,7 @@ define('io.ox/contacts/main',
          */
         'select:contact-mobile': function (app) {
             if (_.device('!small')) return;
-            app.grid.getContainer().on('tap', '.vgrid-cell.selectable', function () {
+            app.grid.getContainer().on('click', '.vgrid-cell.selectable', function () {
                 if (app.props.get('checkboxes') === true) return;
                 // hijack selection event hub to trigger page-change event
                 app.grid.selection.trigger('pagechange:detailView');
@@ -659,7 +653,7 @@ define('io.ox/contacts/main',
             if (_.device('!small')) return;
             // always change folder on click
             // No way to use tap here since folderselection really messes up the event chain
-            app.pages.getPage('folderTree').on('tap', '.folder.selectable', function (e) {
+            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                 if (app.props.get('mobileFolderSelectMode') === true) {
                     $(e.currentTarget).trigger('contextmenu'); // open menu
                     return; // do not change page in edit mode
