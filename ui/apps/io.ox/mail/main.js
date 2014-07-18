@@ -26,6 +26,7 @@ define('io.ox/mail/main',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/commons-folderview',
      'io.ox/core/page-controller',
+     'io.ox/core/capabilities',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
@@ -34,7 +35,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, PageController, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, PageController, capabilities, gt, settings) {
 
     'use strict';
 
@@ -1024,7 +1025,7 @@ define('io.ox/mail/main',
 
         'inplace-search': function (app) {
 
-            if (_.device('small')) return;
+            if (_.device('small') || !(capabilities.has('search'))) return;
 
             var side = app.getWindow().nodes.sidepanel, tree, toolbar, container;
 
