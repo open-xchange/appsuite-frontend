@@ -78,32 +78,39 @@ define('io.ox/mail/compose/main',
             return def;
         };
 
-        function compose(data) {
-            data = _.extend(data, { mode: 'compose'});
+        function compose(type) {
+            return function (data) {
+                data = _.extend({mode: type}, data);
 
-            var def = $.Deferred(),
-                model = new MailModel(data);
+                if (type === 'edit') {
+                    app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
+                    data.msgref = data.folder_id + '/' + data.id;
+                }
 
-            app.view = new MailComposeView({ model: model, app: app });
+                var def = $.Deferred(),
+                    model = new MailModel(data);
 
-            _.url.hash('app', 'io.ox/mail/compose:compose');
+                app.view = new MailComposeView({ model: model, app: app });
 
-            win.busy().show(function () {
-                win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                app.view.setMail()
-                .done(function () {
-                    win.idle();
-                     // render view and append
-                    def.resolve({app: app});
-                })
-                .fail(function (e) {
-                    notifications.yell(e);
-                    app.dirty(false).quit();
-                    def.reject();
+                _.url.hash('app', 'io.ox/mail/compose:compose');
+
+                win.busy().show(function () {
+                    win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                    app.view.setMail()
+                    .done(function () {
+                        win.idle();
+                         // render view and append
+                        def.resolve({app: app});
+                    })
+                    .fail(function (e) {
+                        notifications.yell(e);
+                        app.dirty(false).quit();
+                        def.reject();
+                    });
                 });
-            });
 
-            return def;
+                return def;
+            };
         }
 
         function reply(type) {
@@ -145,10 +152,11 @@ define('io.ox/mail/compose/main',
             };
         }
 
-        app.compose  = compose;
+        app.compose  = compose('compose');
         app.forward  = reply('forward');
         app.reply    = reply('reply');
         app.replyall = reply('replyall');
+        app.edit     = compose('edit');
 
         return app;
     }

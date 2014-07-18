@@ -336,6 +336,7 @@ define('io.ox/mail/compose/view',
         initialize: function (options) {
             this.app = options.app;
             this.editorHash = {};
+            this.autosave = {};
             this.blocked = [];
             this.editorMode = settings.get('messageFormat', 'html');
             this.messageFormat = settings.get('messageFormat', 'html');
@@ -378,6 +379,99 @@ define('io.ox/mail/compose/view',
         onSend: function (e) {
             e.preventDefault();
             this.send();
+        },
+
+        autoSaveDraft: function () {
+
+            this.syncMail();
+
+            var mail = this.model.getMail(),
+                def = new $.Deferred(),
+                self = this;
+
+            mailAPI.autosave(mail, mail.files).always(function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    def.reject(result);
+                } else {
+                    self.dirty(false);
+                    notifications.yell('success', gt('Mail saved as draft'));
+                    def.resolve(result);
+                }
+            });
+
+            this.initAutoSaveAsDraft();
+
+            return def;
+        },
+
+        stopAutoSave: function() {
+            if (this.autosave) {
+                window.clearTimeout(this.autosave.timer);
+            }
+        },
+
+        initAutoSaveAsDraft: function () {
+
+            var timeout = settings.get('autoSaveDraftsAfter', false),
+                timerScale = {
+                    minute: 6000, //60s
+                    minutes: 6000
+                },
+                scale,
+                delay,
+                timer,
+                self = this;
+
+            if (!timeout) return;
+
+            timeout = timeout.split('_');
+            scale = timerScale[timeout[1]];
+            timeout = timeout[0];
+
+            if (!timeout || !scale) return; // settings not parsable
+
+            this.stopAutoSave();
+
+            delay = function () {
+                self.autosave.timer = _.delay(timer, timeout * scale);
+            };
+
+            timer = function () {
+                // only auto-save if something changed (see Bug #26927)
+                if (self.dirty()) {
+                    self.autoSaveDraft();
+                } else {
+                    delay();
+                }
+            };
+
+            this.autosave = {};
+            delay();
+        },
+
+        clean: function () {
+            // mark as not dirty
+            this.dirty(false);
+            // clean up editors
+            for (var id in this.editorHash) {
+                this.editorHash[id].destroy();
+            }
+            // clear timer for autosave
+            this.stopAutoSave();
+        },
+
+        dirty: function (flag) {
+            console.log('dirty', flag);
+            if (flag === true) {
+                this.previous = null; // always dirty this way
+                return this;
+            } else if (flag === false) {
+                this.previous = this.model.getMail();
+                return this;
+            } else {
+                return !_.isEqual(this.previous, this.model.getMail());
+            }
         },
 
         send: function () {
@@ -468,7 +562,7 @@ define('io.ox/mail/compose/view',
                             });
                         });
                     }
-                    //app.dirty(false);
+                    self.dirty(false);
                     self.app.quit();
                 })
                 .always(function (result) {
@@ -818,6 +912,8 @@ define('io.ox/mail/compose/view',
                     this.textarea.css('margin-top', 0);
                 }
             }, this));
+
+            this.initAutoSaveAsDraft();
 
             return this;
         }
