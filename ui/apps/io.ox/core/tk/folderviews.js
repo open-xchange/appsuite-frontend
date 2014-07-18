@@ -1058,7 +1058,7 @@ define('io.ox/core/tk/folderviews',
 
             self.busy();
 
-            return api.getVisible(options).done(function (data) {
+            return api.flat(options).done(function (data) {
                 var id,
                     section,
                     baton,

@@ -292,7 +292,7 @@ define('io.ox/core/folder/api',
         return http.makeObject(array, 'folders');
     }
 
-    function getVisible(options) {
+    function flat(options) {
 
         options = _.extend({ type: 'contacts', cache: true }, options);
 
@@ -317,7 +317,7 @@ define('io.ox/core/folder/api',
                 var folders = _.chain(section).map(makeObject).value();
                 if (folders.length > 0) sections[id] = folders;
             });
-            console.error('getVisible() / Under construction', sections);
+            console.error('flat() / Under construction', sections);
             return sections;
         });
     }
@@ -554,7 +554,7 @@ define('io.ox/core/folder/api',
         list: list,
         multiple: multiple,
         getPath: getPath,
-        getVisible: getVisible,
+        flat: flat,
         update: update,
         move: move,
         create: create,
