@@ -227,15 +227,16 @@ define('io.ox/mail/detail/view',
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                node = this.$el.find('section.body');
-            if (this.el.getElementsByClassName && this.el.getElementsByClassName('body')[0]) {
-                //don't use jQuery to empty the element, because this is way faster
-                //for larger mails (see Bug #33308)
-                this.el.getElementsByClassName('body')[0].innerHTML = '';
-            } else {
-                node = node.empty();
+                node = this.$el.find('section.body'),
+                $content = node.find('.content');
+
+            if ($content[0] && $content[0].children.length > 0) {
+                //cleanup content manually, since this subtree might get very large
+                //content only contains the mail and should not have any handlers assigned
+                //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
+                $content[0].innerHTML = '';
             }
-            ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
+            ext.point('io.ox/mail/detail/body').invoke('draw', node.empty(), baton);
         },
 
         onToggle: function (e) {
