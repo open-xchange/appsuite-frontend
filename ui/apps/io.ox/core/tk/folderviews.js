@@ -871,13 +871,12 @@ define('io.ox/core/tk/folderviews',
 
             // set counter (mail only)
             if (options.type === 'mail') {
-                if (_.device('!small') && data.id === 'default0/INBOX' && (!data.unread  || data.unread === 0)) {//remove new mail title if inbox new-mail counter is 0
-                    document.fixedtitle = false;
-                    document.title = document.temptitle;
+                if (_.device('!small') && data.id === 'default0/INBOX' && (!data.unread  || data.unread === 0)) {
+                    // remove new mail title if inbox new-mail counter is 0
+                    require('io.ox/mail/api').newMailTitle(false);
                 }
                 if (data.unread && !options.checkbox) {
                     this.addClass('show-counter');
-
                     counter.find('span').text(gt.noI18n(data.unread || ''));
                 } else {
                     this.removeClass('show-counter');
