@@ -243,6 +243,9 @@ define('io.ox/mail/settings/signatures/register',
                         module: 'io.ox/mail',
                         displayname: classicSignature.signature_name,
                         content: classicSignature.signature_text,
+                        misc: {
+                            insertion: classicSignature.position
+                        },
                         meta: {
                             imported: classicSignature
                         }
