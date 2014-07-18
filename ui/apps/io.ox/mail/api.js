@@ -917,6 +917,16 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markSpam = function (list) {
+
+        var collection = pool.get('detail');
+
+        api.trigger('beforedelete', list);
+
+        _(list).each(function (item) {
+            var cid = _.cid(item), model = collection.get(cid);
+            if (model) collection.remove(model);
+        });
+
         this.trigger('refresh.pending');
         tracker.clear();
         return update(list, { flags: api.FLAGS.SPAM, value: true })
