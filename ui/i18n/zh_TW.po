@@ -288,8 +288,8 @@ msgid_plural "%d weeks"
 msgstr[0] "%d 周"
 msgstr[1] "%d 周"
 
-#: apps/io.ox/mail/settings/signatures/register.js:276 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:354
+#: apps/io.ox/mail/settings/signatures/register.js:279 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:357
 msgid "(Default)"
 msgstr "(預設)"
 
@@ -626,7 +626,7 @@ msgstr "添加參與者"
 msgid "Add new rule"
 msgstr "新增規則"
 
-#: apps/io.ox/mail/settings/signatures/register.js:367 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:370 module:io.ox/mail
 msgid "Add new signature"
 msgstr "新增簽名"
 
@@ -1025,7 +1025,7 @@ msgstr "B"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:190 module:io.ox/calendar
-#: apps/io.ox/contacts/main.js:362 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:356 module:io.ox/contacts
 #: apps/io.ox/core/commons.js:703 module:io.ox/core
 #: apps/io.ox/files/main.js:137 module:io.ox/files apps/io.ox/mail/main.js:155
 #: module:io.ox/mail apps/io.ox/mail/main.js:160
@@ -1156,7 +1156,7 @@ msgstr "日曆"
 #: apps/io.ox/calendar/week/perspective.js:137
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
-#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:695
+#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:689
 #: apps/io.ox/core/commons-folderview.js:585 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1638 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
@@ -1667,8 +1667,8 @@ msgstr "無法儲存設定，必須有最少一個擁有管理員權力的使用
 msgid "Couldn't load appointment data."
 msgstr "無法載入約會資料。"
 
-#: apps/io.ox/contacts/main.js:496 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:539
+#: apps/io.ox/contacts/main.js:490 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:533
 msgid "Couldn't load contact data."
 msgstr "無法載入聯絡人資料。"
 
@@ -1888,7 +1888,7 @@ msgstr "延遲"
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
 #: apps/io.ox/mail/actions.js:112 apps/io.ox/mail/actions.js:1001
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:280
+#: apps/io.ox/mail/settings/signatures/register.js:283
 #: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:507
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -2046,7 +2046,7 @@ msgid "Distribution List"
 msgstr "通訊組列表"
 
 #: apps/io.ox/contacts/common-extensions.js:41 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:198 apps/io.ox/contacts/model.js:314
+#: apps/io.ox/contacts/main.js:192 apps/io.ox/contacts/model.js:314
 #: apps/io.ox/contacts/view-detail.js:49 apps/io.ox/participants/views.js:176
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
@@ -2284,8 +2284,8 @@ msgstr "EB"
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:790
-#: module:io.ox/contacts apps/io.ox/contacts/main.js:350
-#: apps/io.ox/contacts/main.js:356 apps/io.ox/contacts/main.js:690
+#: module:io.ox/contacts apps/io.ox/contacts/main.js:344
+#: apps/io.ox/contacts/main.js:350 apps/io.ox/contacts/main.js:684
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:62 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:75
 #: apps/io.ox/core/pubsub/settings/pane.js:219 module:io.ox/core/pubsub
@@ -2297,7 +2297,7 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:137
 #: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
 #: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:980
-#: apps/io.ox/mail/settings/signatures/register.js:277
+#: apps/io.ox/mail/settings/signatures/register.js:280
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
 #: apps/io.ox/settings/accounts/settings/pane.js:46
@@ -2357,7 +2357,7 @@ msgstr "編輯簽名"
 msgid "Edit task"
 msgstr "編輯任務"
 
-#: apps/io.ox/contacts/main.js:216 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:210 module:io.ox/contacts
 msgid "Edit to set a name."
 msgstr "編輯以設定名稱。"
 
@@ -2397,7 +2397,7 @@ msgstr "電子郵件位址"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:359
+#: apps/io.ox/mail/detail/view.js:360
 msgid "Email from %1$s: %2$s"
 msgstr "來自 %1$s 的郵件: %2$d"
 
@@ -2470,7 +2470,7 @@ msgstr "空"
 msgid "Empty folder"
 msgstr "空文件夾"
 
-#: apps/io.ox/contacts/main.js:215 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:209 module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "找到空白的名稱與描述。"
 
@@ -2904,8 +2904,8 @@ msgstr ""
 msgid "Folder-specific actions"
 msgstr "資料夾行為"
 
-#: apps/io.ox/contacts/main.js:347 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:354 apps/io.ox/core/commons-folderview.js:49
+#: apps/io.ox/contacts/main.js:341 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:348 apps/io.ox/core/commons-folderview.js:49
 #: module:io.ox/core apps/io.ox/files/main.js:122 module:io.ox/files
 #: apps/io.ox/files/main.js:129 apps/io.ox/mail/main.js:140 module:io.ox/mail
 #: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:141 module:io.ox/tasks
@@ -3235,7 +3235,7 @@ msgid "Import into"
 msgstr "匯入至"
 
 #: apps/io.ox/mail/settings/signatures/register.js:230 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:384
+#: apps/io.ox/mail/settings/signatures/register.js:387
 msgid "Import signatures"
 msgstr "匯入簽名"
 
@@ -3960,7 +3960,7 @@ msgstr "新增"
 msgid "New Folder"
 msgstr "新資料夾"
 
-#: apps/io.ox/mail/api.js:1708 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1718 module:io.ox/mail
 msgid "New Mail"
 msgstr "新增郵件"
 
@@ -4135,7 +4135,7 @@ msgstr "無收件人"
 msgid "No reminder"
 msgstr "無提醒"
 
-#: apps/io.ox/mail/settings/signatures/register.js:302 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:305 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:973
 msgid "No signature"
 msgstr "無簽名"
@@ -5408,7 +5408,7 @@ msgstr "儲存郵件附件"
 msgid "Saved in"
 msgstr "保存於"
 
-#: apps/io.ox/mail/api.js:1372 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1382 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "儲存郵件附件"
 
@@ -5608,8 +5608,8 @@ msgstr "無法連線到伺服器"
 msgid "Server version"
 msgstr "伺服器版本"
 
-#: apps/io.ox/mail/settings/signatures/register.js:276 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:352
+#: apps/io.ox/mail/settings/signatures/register.js:279 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:355
 msgid "Set as default"
 msgstr "設為預設值"
 
@@ -5800,7 +5800,7 @@ msgid "Sign out now"
 msgstr "立刻登出"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:303 module:io.ox/mail
 msgid "Signature"
 msgstr "簽名"
 
@@ -5816,7 +5816,7 @@ msgstr "簽名位置"
 msgid "Signature text"
 msgstr "簽名文字"
 
-#: apps/io.ox/mail/settings/signatures/register.js:314 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:317 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:623
 #: apps/io.ox/mail/write/view-main.js:625
 msgid "Signatures"
@@ -6959,7 +6959,7 @@ msgstr "未讀"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "將失去未儲存的文件，您要登出嗎？"
 
-#: apps/io.ox/mail/settings/signatures/register.js:373 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:376 module:io.ox/mail
 msgid "Unset default signature"
 msgstr "取消預設簽名"
 

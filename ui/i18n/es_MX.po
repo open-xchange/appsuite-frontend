@@ -287,8 +287,8 @@ msgid_plural "%d weeks"
 msgstr[0] "%d semana"
 msgstr[1] "%d semanas"
 
-#: apps/io.ox/mail/settings/signatures/register.js:276 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:354
+#: apps/io.ox/mail/settings/signatures/register.js:279 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:357
 msgid "(Default)"
 msgstr "(Predeterminada)"
 
@@ -629,7 +629,7 @@ msgstr "Añadir nuevo participante"
 msgid "Add new rule"
 msgstr "Añadir nueva regla"
 
-#: apps/io.ox/mail/settings/signatures/register.js:367 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:370 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Añadir nueva firma"
 
@@ -1037,7 +1037,7 @@ msgstr "B"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:190 module:io.ox/calendar
-#: apps/io.ox/contacts/main.js:362 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:356 module:io.ox/contacts
 #: apps/io.ox/core/commons.js:703 module:io.ox/core
 #: apps/io.ox/files/main.js:137 module:io.ox/files apps/io.ox/mail/main.js:155
 #: module:io.ox/mail apps/io.ox/mail/main.js:160
@@ -1170,7 +1170,7 @@ msgstr "Calendario"
 #: apps/io.ox/calendar/week/perspective.js:137
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
-#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:695
+#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:689
 #: apps/io.ox/core/commons-folderview.js:585 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1638 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
@@ -1683,8 +1683,8 @@ msgstr ""
 msgid "Couldn't load appointment data."
 msgstr "No se pudieron cargar los datos de la cita."
 
-#: apps/io.ox/contacts/main.js:496 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:539
+#: apps/io.ox/contacts/main.js:490 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:533
 msgid "Couldn't load contact data."
 msgstr "No se pudieron cargar los datos de contacto."
 
@@ -1905,7 +1905,7 @@ msgstr "Retrasada"
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
 #: apps/io.ox/mail/actions.js:112 apps/io.ox/mail/actions.js:1001
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:280
+#: apps/io.ox/mail/settings/signatures/register.js:283
 #: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:507
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -2064,7 +2064,7 @@ msgid "Distribution List"
 msgstr "Lista de distribución"
 
 #: apps/io.ox/contacts/common-extensions.js:41 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:198 apps/io.ox/contacts/model.js:314
+#: apps/io.ox/contacts/main.js:192 apps/io.ox/contacts/model.js:314
 #: apps/io.ox/contacts/view-detail.js:49 apps/io.ox/participants/views.js:176
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
@@ -2308,8 +2308,8 @@ msgstr "EB"
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:790
-#: module:io.ox/contacts apps/io.ox/contacts/main.js:350
-#: apps/io.ox/contacts/main.js:356 apps/io.ox/contacts/main.js:690
+#: module:io.ox/contacts apps/io.ox/contacts/main.js:344
+#: apps/io.ox/contacts/main.js:350 apps/io.ox/contacts/main.js:684
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:62 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:75
 #: apps/io.ox/core/pubsub/settings/pane.js:219 module:io.ox/core/pubsub
@@ -2321,7 +2321,7 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:137
 #: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
 #: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:980
-#: apps/io.ox/mail/settings/signatures/register.js:277
+#: apps/io.ox/mail/settings/signatures/register.js:280
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
 #: apps/io.ox/settings/accounts/settings/pane.js:46
@@ -2381,7 +2381,7 @@ msgstr "Editar firma"
 msgid "Edit task"
 msgstr "Editar tarea"
 
-#: apps/io.ox/contacts/main.js:216 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:210 module:io.ox/contacts
 msgid "Edit to set a name."
 msgstr "Editar para definir un nombre."
 
@@ -2421,7 +2421,7 @@ msgstr "Direcciones de correo"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:359
+#: apps/io.ox/mail/detail/view.js:360
 msgid "Email from %1$s: %2$s"
 msgstr "Correo de %1$s: %2$s"
 
@@ -2496,7 +2496,7 @@ msgstr "Vacío"
 msgid "Empty folder"
 msgstr "Vaciar Carpeta"
 
-#: apps/io.ox/contacts/main.js:215 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:209 module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "Se encontraron un nombre y descripción vacíos."
 
@@ -2940,8 +2940,8 @@ msgstr ""
 msgid "Folder-specific actions"
 msgstr "Acciones específicas de carpeta"
 
-#: apps/io.ox/contacts/main.js:347 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:354 apps/io.ox/core/commons-folderview.js:49
+#: apps/io.ox/contacts/main.js:341 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:348 apps/io.ox/core/commons-folderview.js:49
 #: module:io.ox/core apps/io.ox/files/main.js:122 module:io.ox/files
 #: apps/io.ox/files/main.js:129 apps/io.ox/mail/main.js:140 module:io.ox/mail
 #: apps/io.ox/mail/main.js:147 apps/io.ox/tasks/main.js:141 module:io.ox/tasks
@@ -3279,7 +3279,7 @@ msgid "Import into"
 msgstr "Importar a"
 
 #: apps/io.ox/mail/settings/signatures/register.js:230 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:384
+#: apps/io.ox/mail/settings/signatures/register.js:387
 msgid "Import signatures"
 msgstr "Importar firmas"
 
@@ -4008,7 +4008,7 @@ msgstr "Nuevo"
 msgid "New Folder"
 msgstr "Nueva carpeta"
 
-#: apps/io.ox/mail/api.js:1708 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1718 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nuevo correo"
 
@@ -4185,7 +4185,7 @@ msgstr "Sin destinatarios"
 msgid "No reminder"
 msgstr "Sin recordatorio"
 
-#: apps/io.ox/mail/settings/signatures/register.js:302 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:305 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:973
 msgid "No signature"
 msgstr "Sin firma"
@@ -5484,7 +5484,7 @@ msgstr "Adjunto de correo guardado"
 msgid "Saved in"
 msgstr "Guardado en"
 
-#: apps/io.ox/mail/api.js:1372 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1382 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Adjunto de correo guardado"
 
@@ -5684,8 +5684,8 @@ msgstr "Servidor no alcanzable"
 msgid "Server version"
 msgstr "Versión del servidor"
 
-#: apps/io.ox/mail/settings/signatures/register.js:276 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:352
+#: apps/io.ox/mail/settings/signatures/register.js:279 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:355
 msgid "Set as default"
 msgstr "Establecer como predeterminada"
 
@@ -5876,7 +5876,7 @@ msgid "Sign out now"
 msgstr "Cerrar sesión ahora"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:300 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:303 module:io.ox/mail
 msgid "Signature"
 msgstr "Firma"
 
@@ -5892,7 +5892,7 @@ msgstr "Posición de la firma"
 msgid "Signature text"
 msgstr "Texto de la firma"
 
-#: apps/io.ox/mail/settings/signatures/register.js:314 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:317 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:623
 #: apps/io.ox/mail/write/view-main.js:625
 msgid "Signatures"
@@ -7077,7 +7077,7 @@ msgstr "No leido"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Los documentos no guardados se perderán. ¿Desea salir ahora?"
 
-#: apps/io.ox/mail/settings/signatures/register.js:373 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:376 module:io.ox/mail
 msgid "Unset default signature"
 msgstr "Firma predeterminada no definida"
 
