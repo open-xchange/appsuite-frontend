@@ -143,6 +143,13 @@ define('io.ox/core/tk/upload',
                     return false; // Prevent regular event handling
                 },
                 dragover: function (e) {
+                    var origEvt = e.originalEvent,
+                        effectAllowed;
+                    try {
+                        effectAllowed = origEvt.dataTransfer.effectAllowed;
+                    } catch (err) {}
+                    origEvt.dataTransfer.dropEffect = 'move' === effectAllowed || 'linkMove' === effectAllowed ? 'move' : 'copy';
+
                     clearTimeout(dragLeaveTimer);
                     e.preventDefault();
                     return false; // Prevent regular event handling
