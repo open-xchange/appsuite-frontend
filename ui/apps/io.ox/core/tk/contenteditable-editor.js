@@ -554,7 +554,10 @@ define.async('io.ox/core/tk/contenteditable-editor',
             top = textarea.offset().top;
 
             textarea.css('min-height', (h - top - 40));
-            $(fixed_toolbar).css('height', $(fixed_toolbar + ' > div').height() + 1);
+            var th = $(fixed_toolbar + ' > div').height();
+            if (th) {
+                $(fixed_toolbar).css('height', th + 1);
+            }
             $(fixed_toolbar).css('width', $(fixed_toolbar).next().outerWidth());
             return;
 
