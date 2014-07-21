@@ -81,7 +81,7 @@ define('plugins/portal/rss/register',
                                     return '';
                                 }
                             },
-                            $('<span class="bold">').html(_.noI18n(entry.subject)), $.txt('')
+                            $('<span class="bold">').text(_.noI18n(entry.subject)), $.txt('')
                         )
                     );
                 });
@@ -104,7 +104,7 @@ define('plugins/portal/rss/register',
 
                 this.append(
                     $('<div class="text">').append(
-                        $('<h4>').html(_.noI18n(item.subject)),
+                        $('<h4>').text(_.noI18n(item.subject)),
                         $('<div class="text-body noI18n">').append($body),
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
