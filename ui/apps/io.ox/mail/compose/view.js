@@ -415,8 +415,8 @@ define('io.ox/mail/compose/view',
 
             var timeout = settings.get('autoSaveDraftsAfter', false),
                 timerScale = {
-                    minute: 6000, //60s
-                    minutes: 6000
+                    minute: 60000, //60s
+                    minutes: 60000
                 },
                 scale,
                 delay,
@@ -462,7 +462,7 @@ define('io.ox/mail/compose/view',
         },
 
         dirty: function (flag) {
-            console.log('dirty', flag);
+            //console.log('dirty', flag);
             if (flag === true) {
                 this.previous = null; // always dirty this way
                 return this;
