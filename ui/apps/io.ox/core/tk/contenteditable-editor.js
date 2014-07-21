@@ -476,37 +476,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
             //content_element: textarea.get(0),
 
             init_instance_callback: function (editor) {
-
                 ed = editor;
-
-                if ($('#' + ed.id + '_ifr')) {
-                    $('#' + ed.id + '_ifr').attr('tabindex', '5');
-                }
-                // add handler for focus/blur
-                $(ed.getWin())
-                    .on('focus', function () {
-                        $('#' + ed.id + '_tbl').addClass('focused');
-                        ed.getBody().focus();
-                    })
-                    .on('blur', function () {
-                        $('#' + ed.id + '_tbl').removeClass('focused');
-                    });
-                // done!
-
-                //suppress firefox dnd inline image support
-                /*var iframe = textarea.parent().find('iframe'),
-                    html = $(iframe[0].contentDocument).find('html');
-
-                // small paragraphs option
-                if (settings.get('features/mailComposeSmallParagraphs', false)) {
-                    html.find('head').append('<style type="text/css">body>p{margin:.5em 0;}</style>');
-                }
-
-                html.on('dragover drop', function (e) {
-                    if (_.browser.Firefox && _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'))
-                        e.preventDefault();
-                });*/
-
                 def.resolve();
             },
 

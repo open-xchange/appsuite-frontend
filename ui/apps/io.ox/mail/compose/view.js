@@ -462,13 +462,13 @@ define('io.ox/mail/compose/view',
         },
 
         dirty: function (flag) {
-            //console.log('dirty', flag);
+            // console.log('dirty', flag);
+            // sync mail editor content to model
+            this.syncMail();
             if (flag === true) {
                 this.previous = null; // always dirty this way
-                return this;
             } else if (flag === false) {
                 this.previous = this.model.getMail();
-                return this;
             } else {
                 return !_.isEqual(this.previous, this.model.getMail());
             }
