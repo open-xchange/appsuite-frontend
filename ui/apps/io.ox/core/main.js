@@ -1444,21 +1444,23 @@ define('io.ox/core/main',
     (function ()  {
 
         var hash = {
-            'mail/compose': 'io.ox/mail/compose/main'
+            'mail/compose': 'io.ox/mail/write/main'
         };
 
         ox.registry = {
             'add': function (id, path) {
                 hash[id] = path;
             },
+            'get': function (id) {
+                return hash[id] || id;
+            },
             'call': function (id, name) {
                 var dep = settings.get(['registry', id], hash[id]),
                     args = _(arguments).toArray().slice(2);
-                //console.log('call', dep, name, args);
-                ox.load([dep]).done(function (m) {
+                return ox.load([dep]).then(function (m) {
                     if (m.reuse(name, args[0])) return;
-                    m.getApp().launch().done(function () {
-                        this[name].apply(this, args);
+                    return m.getApp().launch().then(function () {
+                        return this[name].apply(this, args);
                     });
                 });
             }
