@@ -1448,7 +1448,7 @@ define('io.ox/core/main',
         };
 
         ox.registry = {
-            'add': function (id, path) {
+            'set': function (id, path) {
                 hash[id] = path;
             },
             'get': function (id) {
