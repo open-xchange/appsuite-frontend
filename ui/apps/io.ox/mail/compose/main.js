@@ -9,6 +9,9 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
+ *
+ * Use this to try the new mail compose:
+ * require(['settings!io.ox/core'], function (o) { o.set('registry', {'mail/compose': 'io.ox/mail/compose/main'}).save(); });
  */
 
 define('io.ox/mail/compose/main',
