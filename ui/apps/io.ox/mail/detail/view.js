@@ -165,10 +165,20 @@ define('io.ox/mail/detail/view',
         id: 'body',
         index: INDEX += 100,
         draw: function () {
+            var $body;
             this.append(
                 $('<section class="attachments">'),
-                $('<section class="body user-select-text">')
+                $body = $('<section class="body user-select-text">')
             );
+            $body.on('dispose', function () {
+                var $content = $(this).find('.content');
+                if ($content[0] && $content[0].children.length > 0) {
+                    //cleanup content manually, since this subtree might get very large
+                    //content only contains the mail and should not have any handlers assigned
+                    //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
+                    $content[0].innerHTML = '';
+                }
+            });
         }
     });
 
@@ -227,16 +237,9 @@ define('io.ox/mail/detail/view',
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                node = this.$el.find('section.body'),
-                $content = node.find('.content');
+                node = this.$el.find('section.body').empty();
 
-            if ($content[0] && $content[0].children.length > 0) {
-                //cleanup content manually, since this subtree might get very large
-                //content only contains the mail and should not have any handlers assigned
-                //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
-                $content[0].innerHTML = '';
-            }
-            ext.point('io.ox/mail/detail/body').invoke('draw', node.empty(), baton);
+            ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
         },
 
         onToggle: function (e) {
