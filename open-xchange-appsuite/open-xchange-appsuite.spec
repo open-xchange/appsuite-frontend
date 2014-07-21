@@ -5,7 +5,7 @@ BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
 Version:        7.6.0
-%define         ox_release 7
+%define         ox_release 8
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -269,6 +269,7 @@ done
 mv "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp" | sed -e "s:## cd ##:cd %{docroot}:" > \
     "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
+chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 
 %clean
@@ -534,6 +535,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Mon Jul 21 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-07-21
 * Wed Jun 25 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Seventh candidate for 7.6.0 release
 * Fri Jun 20 2014 Markus Wagner <markus.wagner@open-xchange.com>

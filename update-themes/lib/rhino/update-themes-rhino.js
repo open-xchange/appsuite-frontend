@@ -48,8 +48,15 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     var data = '';
     paths.forEach(function (path) {
         try {
-            data += readFile(less.modules.path.join(path, less.modules.path.basename(href)));
+            //first, try to load directly
+            //see bug 33460
+            data += readFile(less.modules.path.join(path, href));
         } catch (e) {
+            try {
+                // alternatively, try to load only the basename part in path
+                data += readFile(less.modules.path.join(path, less.modules.path.basename(href)));
+            } catch (e) {
+            }
         }
     });
     if (!data) {

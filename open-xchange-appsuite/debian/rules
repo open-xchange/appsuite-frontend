@@ -22,6 +22,7 @@ override_dh_auto_install:
 	mkdir -p $(ROOT)/opt/open-xchange/sbin
 	cat $(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite | sed -e "s:## cd ##:cd /var/www/appsuite:" > \
 		$(ROOT)/opt/open-xchange/sbin/touch-appsuite
+	chmod +x $(ROOT)/opt/open-xchange/sbin/touch-appsuite
 	rm -r $(ROOT)-manifest/opt/open-xchange/sbin/
 
 override_dh_auto_clean:

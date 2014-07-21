@@ -90,6 +90,44 @@
             </div>
         </script>
 
+        <script type="text/template" class="contacts">
+            <div class="phonelist">
+                <table border="0">
+                    <thead>
+                        <tr>
+                            <th><%= i18n.name %></th>
+                            <th><%= i18n.cellphone %></th>
+                            <th><%= i18n.phone %></th>
+                            <th><%= i18n.email %></th>
+                        </tr>
+                    </thead>
+                <% _.each(data, function(element) { %>
+                    <tbody class="no-break">
+                        <% if (length >= 30 && element.thumbIndex(element.original.last_name)) { %>
+                        <tr>
+                            <td colspan="4" class="thumb-index"><%= element.thumbIndex.get() %></td>
+                        </tr>
+                        <% } %>
+                        <tr>
+                            <td><b><%= element.name %></b><br><%= element.where %></td>
+                            <td><%= element.cellphone1 || '-' %><br><%= element.cellphone2 %></td>
+                            <td><%= element.phone1 || '-' %><br><%= element.phone2 %></td>
+                            <% if (element.isDistributionList === false) { %>
+                            <td><%= element.email1 %><% if (element.email2 !== '') { %><br><%= element.email2 %> <% } %><% if (element.email3 !== '') { %><br><%= element.email3 %> <% } %>
+                            <% } %>
+                            <% if (element.isDistributionList === true) { %>
+                            <td><%= element.distributionList %></td>
+                            <% } %>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="spacer">&nbsp;</td>
+                        </tr>
+                    </tbody>
+                <% }); %>
+                </table>
+            </div>
+        </script>
+
         <script type="text/template" class="appointment">
         <% _.each(data, function(element) { %>
             <section class="item">
