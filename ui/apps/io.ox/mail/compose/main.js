@@ -172,13 +172,13 @@ define('io.ox/mail/compose/main',
                             if (action === 'delete') {
                                 app.view.clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
                                 def.resolve();
-                            // } else if (action === 'savedraft') {
-                            //     app.saveDraft().done(function () {
-                            //         clean();
-                            //         def.resolve();
-                            //     }).fail(function (e) {
-                            //         def.reject(e);
-                            //     });
+                            } else if (action === 'savedraft') {
+                                 app.view.saveDraft().done(function () {
+                                    //clean();
+                                    def.resolve();
+                                }).fail(function (e) {
+                                    def.reject(e);
+                                });
                             } else {
                                 def.reject();
                             }

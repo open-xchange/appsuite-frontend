@@ -379,12 +379,52 @@ define('io.ox/mail/compose/view',
 
         onSave: function (e) {
             e.preventDefault();
-            this.app.save();
+            this.saveDraft();
         },
 
         onSend: function (e) {
             e.preventDefault();
             this.send();
+        },
+
+        saveDraft: function () {
+            // get mail
+            var self = this,
+                mail = this.model.getMail(),
+                def = new $.Deferred(),
+                old_vcard_flag;
+
+            //prepareMailForSending(mail);
+
+            if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+            }
+
+            if (_(mail.flags).isUndefined()) {
+                mail.flags = mailAPI.FLAGS.DRAFT;
+            } else if (mail.data.flags & 4 === 0) {
+                mail.flags += mailAPI.FLAGS.DRAFT;
+            }
+
+            // never append vcard when saving as draft
+            // backend will append vcard for every send operation (which save as draft is)
+            old_vcard_flag = mail.vcard;
+            delete mail.vcard;
+
+            // fix inline images
+            //mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
+
+            mailAPI.send(mail, mail.files).always(function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    def.reject(result);
+                } else {
+                    // self.model.set('msgref', result.data, { silent: true });
+                    self.model.dirty(false);
+                    notifications.yell('success', gt('Mail saved as draft'));
+                    def.resolve(result);
+                }
+            });
         },
 
         autoSaveDraft: function () {
