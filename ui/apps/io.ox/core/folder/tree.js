@@ -279,79 +279,86 @@ define('io.ox/core/folder/tree',
         });
     }
 
-    ext.point('io.ox/core/foldertree/contacts/links').extend(
-        {
-            index: 100,
-            id: 'private',
-            draw: function (baton) {
+    _('contacts calendar'.split(' ')).each(function (module) {
 
-                var module = baton.module, folder = api.getDefaultFolder(module);
+        ext.point('io.ox/core/foldertree/' + module + '/links').extend(
+            {
+                index: 200,
+                id: 'private',
+                draw: function (baton) {
 
-                this.append($('<div>').append(
-                    $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                    .text(
-                        module === 'calendar' ? gt('New private calendar') : gt('New private folder')
-                    )
-                    .on('click', { folder: folder, module: module }, addFolder)
-                ));
-            }
-        },
-        {
-            index: 200,
-            id: 'public',
-            draw: function (baton) {
+                    var module = baton.module, folder = api.getDefaultFolder(module);
 
-                // yep, show this below private section.
-                // cause there might be no public folders, and in this case
-                // the section would be hidden
-                if (!capabilities.has('edit_public_folders')) return;
-
-                var node = $('<div>'), module = baton.module;
-                this.append(node);
-
-                api.get('2').done(function (public_folder) {
-                    if (!api.can('create', public_folder)) return;
-                    node.append(
+                    this.append($('<div>').append(
                         $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
                         .text(
-                            module === 'calendar' ? gt('New public calendar') : gt('New public folder')
+                            module === 'calendar' ? gt('New private calendar') : gt('New private folder')
                         )
-                        .on('click', { folder: '2', module: module }, addFolder)
+                        .on('click', { folder: folder, module: module }, addFolder)
+                    ));
+                }
+            },
+            {
+                index: 300,
+                id: 'public',
+                draw: function (baton) {
+
+                    // yep, show this below private section.
+                    // cause there might be no public folders, and in this case
+                    // the section would be hidden
+                    if (!capabilities.has('edit_public_folders')) return;
+
+                    var node = $('<div>'), module = baton.module;
+                    this.append(node);
+
+                    api.get('2').done(function (public_folder) {
+                        if (!api.can('create', public_folder)) return;
+                        node.append(
+                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                            .text(
+                                module === 'calendar' ? gt('New public calendar') : gt('New public folder')
+                            )
+                            .on('click', { folder: '2', module: module }, addFolder)
+                        );
+                    });
+                }
+            }
+        );
+
+        ext.point('io.ox/core/foldertree/' + module).extend(
+            {
+                id: 'standard-folders',
+                index: 100,
+                draw: function (tree) {
+
+                    var links = $('<div class="links">'),
+                        baton = ext.Baton({ module: module, view: tree }),
+                        folder = 'virtual/flat/' + module,
+                        model_id = 'flat/' + module,
+                        defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree };
+
+                    ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
+
+                    this.append(
+                        // private folders
+                        new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }))
+                        .render().$el.addClass('section'),
+                        // links
+                        links,
+                        // public folders
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public', model_id: model_id + '/public', title: gt('Public') }))
+                        .render().$el.addClass('section'),
+                        // shared folders
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared', model_id: model_id + '/shared', title: gt('Shared') }))
+                        .render().$el.addClass('section'),
+                        // hidden folders
+                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden', model_id: model_id + '/hidden', title: gt('Hidden') }))
+                        .render().$el.addClass('section')
                     );
-                });
+                }
             }
-        }
-    );
-
-    ext.point('io.ox/core/foldertree/contacts').extend(
-        {
-            id: 'standard-folders',
-            index: 100,
-            draw: function (tree) {
-
-                var links = $('<div class="links">'),
-                    baton = ext.Baton({ module: 'contacts' });
-                ext.point('io.ox/core/foldertree/contacts/links').invoke('draw', links, baton);
-
-                this.append(
-                    // private folders
-                    new TreeNodeView({ count: 0, empty: true, folder: 'virtual/flat/contacts/private', indent: false, model_id: 'flat/contacts/private', open: false, tree: tree, title: gt('Private'), parent: tree })
-                    .render().$el.addClass('section'),
-                    // links
-                    links,
-                    // public folders
-                    new TreeNodeView({ count: 0, empty: false, folder: 'virtual/flat/contacts/public', indent: false, model_id: 'flat/contacts/public', open: false, tree: tree, title: gt('Public'), parent: tree })
-                    .render().$el.addClass('section'),
-                    // shared folders
-                    new TreeNodeView({ count: 0, empty: false, folder: 'virtual/flat/contacts/shared', indent: false, model_id: 'flat/contacts/shared', open: false, tree: tree, title: gt('Shared'), parent: tree })
-                    .render().$el.addClass('section'),
-                    // hidden folders
-                    new TreeNodeView({ count: 0, empty: false, folder: 'virtual/flat/contacts/hidden', indent: false, model_id: 'flat/contacts/hidden', open: false, tree: tree, title: gt('Hidden'), parent: tree })
-                    .render().$el.addClass('section')
-                );
-            }
-        }
-    );
+        );
+    });
 
     return TreeView;
 });

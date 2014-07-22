@@ -17,13 +17,16 @@ define('io.ox/calendar/main',
      'io.ox/core/commons',
      'io.ox/core/extensions',
      'io.ox/core/capabilities',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/tree',
+     'io.ox/core/folder/view',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar',
      'io.ox/core/tk/vgrid',
      'io.ox/calendar/toolbar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
-    ], function (date, coreConfig, commons, ext, capabilities, settings, gt, VGrid) {
+    ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid) {
 
     'use strict';
 
@@ -77,9 +80,13 @@ define('io.ox/calendar/main',
          * Folder view support
          */
         'folder-view': function (app) {
-            // folder tree
-            commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
-            app.getWindow().nodes.sidepanel.addClass('border-right');
+
+            // tree view
+            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar' });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            app.folderView.resize.enable();
         },
 
         /*
@@ -129,7 +136,7 @@ define('io.ox/calendar/main',
         'change:folderview': function (app) {
             if (_.device('small')) return;
             app.props.on('change:folderview', function (model, value) {
-                app.toggleFolderView(value);
+                app.folderView.toggle(value);
             });
             app.on('folderview:close', function () {
                 app.props.set('folderview', false);
@@ -166,7 +173,7 @@ define('io.ox/calendar/main',
          */
         'folderview-toolbar': function (app) {
             if (_.device('small')) return;
-            commons.mediateFolderView(app);
+            commons.mediateFolderView(app, true);
         },
 
         /*
@@ -233,22 +240,13 @@ define('io.ox/calendar/main',
             win.getPerspective().refresh();
         }
 
-        ext.point('io.ox/foldertree/section/links').extend({
+        ext.point('io.ox/core/foldertree/calendar/links').extend({
             index: 100,
             id: 'show-all',
             draw: function (baton) {
 
-                if (baton.id !== 'private') return;
                 if (!baton.data || !baton.options) return;
-                if (baton.options.type !== 'calendar') return;
                 if (baton.options.dialogmode) return;
-
-                // hide "show all" checkbox when only one calendar is available
-                var count =
-                    (_.isArray(baton.data['private']) ? baton.data['private'].length : 0) +
-                    (_.isArray(baton.data['public']) ? baton.data['public'].length : 0);
-
-                if (count <= 1) return;
 
                 this.append(
                     $('<div class="show-all-checkbox">').append(
@@ -260,6 +258,17 @@ define('io.ox/calendar/main',
                         )
                     )
                 );
+
+                // hide "show all" checkbox when only one calendar is available
+                function toggle() {
+                    var count = folderAPI.getFlatCollection('calendar', 'private').length + folderAPI.getFlatCollection('calendar', 'public').length;
+                    this.$el.find('.show-all-checkbox').toggle(count > 0);
+                }
+
+                baton.view.listenTo(folderAPI.getFlatCollection('calendar', 'private'), 'add remove reset', toggle);
+                baton.view.listenTo(folderAPI.getFlatCollection('calendar', 'public'), 'add remove reset', toggle);
+
+                toggle.call(baton.view);
             }
         });
 

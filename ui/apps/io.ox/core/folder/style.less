@@ -32,7 +32,6 @@
             background-color: @foldertree-selected-background;
             * {
                 color: @foldertree-selected-label-color;
-                font-weight: 500;
             }
             .folder-options {
                 display: inline-block;
@@ -48,7 +47,7 @@
             background-color: @foldertree-selected-focus-background;
             * {
                 color: @foldertree-focused-label-color;
-                font-weight: 500; // need both! applies before .selected is set
+                font-weight: normal;
             }
             .folder-counter {
                 color: rgba(255, 255, 255, 0.50);
@@ -151,6 +150,7 @@
     // sections links
     .links {
 
+        font-weight: 300;
         margin: 14px 0 20px 40px;
 
         &:empty {

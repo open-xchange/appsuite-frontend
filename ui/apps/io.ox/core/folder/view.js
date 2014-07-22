@@ -26,6 +26,7 @@ define('io.ox/core/folder/view',
 
         var app = options.app,
             tree = options.tree,
+            module = tree.options.module,
             POINT = app.get('name') + '/folderview',
             visible = false,
             open = app.settings.get('folderview/open', {}),
@@ -206,10 +207,12 @@ define('io.ox/core/folder/view',
         //
 
         // migrate hidden folders
-        var hidden = settings.get(['folder/hidden']); // yep, folder/hidden is one key
-        if (hidden === undefined) {
-            hidden = app.settings.get('folderview/blacklist', {});
-            if (_.isObject(hidden)) settings.set(['folder/hidden'], hidden).save();
+        if (module) {
+            var hidden = settings.get(['folder/hidden', module]); // yep, folder/hidden is one key
+            if (hidden === undefined) {
+                hidden = app.settings.get('folderview/blacklist', {});
+                if (_.isObject(hidden)) settings.set(['folder/hidden', module], hidden).save();
+            }
         }
 
         // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
