@@ -20,7 +20,7 @@ define('io.ox/core/folder/favorites',
 
     'use strict';
 
-    _('mail infostore'.split(' ')).each(function (module) {
+    _('mail contacts infostore'.split(' ')).each(function (module) {
 
         // register collection
         var id = 'virtual/favorites/' + module,
@@ -57,12 +57,12 @@ define('io.ox/core/folder/favorites',
                     new TreeNodeView({
                         empty: false,
                         folder: id,
-                        open: true,
+                        open: false,
                         parent: tree,
                         title: 'Favorites',
                         tree: tree
                     })
-                    .render().$el.css('marginBottom', '14px')
+                    .render().$el.addClass('favorites')
                 );
 
                 if (favorites.length > 0) initialize(id);

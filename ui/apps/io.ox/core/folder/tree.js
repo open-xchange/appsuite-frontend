@@ -17,8 +17,10 @@ define('io.ox/core/folder/tree',
      'io.ox/core/folder/api',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
+     'io.ox/core/capabilities',
+     'gettext!io.ox/core',
      'io.ox/core/folder/favorites',
-     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, account, ext) {
+     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, account, ext, capabilities, gt) {
 
     'use strict';
 
@@ -36,8 +38,10 @@ define('io.ox/core/folder/tree',
             options = _.extend({ contextmenu: false }, options);
 
             this.app = options.app;
-            this.root = options.root;
+            this.root = options.root || '1';
             this.module = options.module;
+            this.open = options.open;
+            this.flat = !!options.flat;
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
             this.$contextmenu = $();
@@ -58,6 +62,9 @@ define('io.ox/core/folder/tree',
 
         getTreeNodeOptions: function (options, model) {
             if (model.get('id') === 'default0/INBOX') {
+                options.subfolders = false;
+            }
+            if (this.flat && options.parent !== this) {
                 options.subfolders = false;
             }
             return options;
@@ -102,7 +109,7 @@ define('io.ox/core/folder/tree',
             if (!dropdown.hasClass('open')) return; // done if not open
             if (e.shiftKey && e.which === 9) return; // shift-tab
 
-            switch (e.whxich) {
+            switch (e.which) {
             case 9:  // tab
             case 40: // cursor down
                 e.preventDefault();
@@ -120,10 +127,11 @@ define('io.ox/core/folder/tree',
                 app = this.app,
                 module = this.module,
                 ul = this.$contextmenu.find('.dropdown-menu').empty(),
-                point = 'io.ox/core/foldertree/contextmenu';
+                point = 'io.ox/core/foldertree/contextmenu',
+                view = this;
             // get folder data and redraw
             api.get(id).done(function (data) {
-                var baton = new ext.Baton({ app: app, data: data, options: { type: module } });
+                var baton = new ext.Baton({ app: app, data: data, view: view, options: { type: module } });
                 ext.point(point).invoke('draw', ul, baton);
                 // check if menu exceeds viewport
                 if (ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
@@ -260,6 +268,86 @@ define('io.ox/core/folder/tree',
                     // standard folders
                     new TreeNodeView({ folder: tree.root, headless: true, open: true, tree: tree, parent: tree })
                     .render().$el
+                );
+            }
+        }
+    );
+
+    function addFolder(e) {
+        ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
+            add(e.data.folder, { module: e.data.module });
+        });
+    }
+
+    ext.point('io.ox/core/foldertree/contacts/links').extend(
+        {
+            index: 100,
+            id: 'private',
+            draw: function (baton) {
+
+                var module = baton.module, folder = api.getDefaultFolder(module);
+
+                this.append($('<div>').append(
+                    $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                    .text(
+                        module === 'calendar' ? gt('New private calendar') : gt('New private folder')
+                    )
+                    .on('click', { folder: folder, module: module }, addFolder)
+                ));
+            }
+        },
+        {
+            index: 200,
+            id: 'public',
+            draw: function (baton) {
+
+                // yep, show this below private section.
+                // cause there might be no public folders, and in this case
+                // the section would be hidden
+                if (!capabilities.has('edit_public_folders')) return;
+
+                var node = $('<div>'), module = baton.module;
+                this.append(node);
+
+                api.get('2').done(function (public_folder) {
+                    if (!api.can('create', public_folder)) return;
+                    node.append(
+                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                        .text(
+                            module === 'calendar' ? gt('New public calendar') : gt('New public folder')
+                        )
+                        .on('click', { folder: '2', module: module }, addFolder)
+                    );
+                });
+            }
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/contacts').extend(
+        {
+            id: 'standard-folders',
+            index: 100,
+            draw: function (tree) {
+
+                var links = $('<div class="links">'),
+                    baton = ext.Baton({ module: 'contacts' });
+                ext.point('io.ox/core/foldertree/contacts/links').invoke('draw', links, baton);
+
+                this.append(
+                    // private folders
+                    new TreeNodeView({ count: 0, empty: true, folder: 'virtual/flat/contacts/private', indent: false, model_id: 'flat/contacts/private', open: false, tree: tree, title: gt('Private'), parent: tree })
+                    .render().$el.addClass('section'),
+                    // links
+                    links,
+                    // public folders
+                    new TreeNodeView({ count: 0, empty: false, folder: 'virtual/flat/contacts/public', indent: false, model_id: 'flat/contacts/public', open: false, tree: tree, title: gt('Public'), parent: tree })
+                    .render().$el.addClass('section'),
+                    // shared folders
+                    new TreeNodeView({ count: 0, empty: false, folder: 'virtual/flat/contacts/shared', indent: false, model_id: 'flat/contacts/shared', open: false, tree: tree, title: gt('Shared'), parent: tree })
+                    .render().$el.addClass('section'),
+                    // hidden folders
+                    new TreeNodeView({ count: 0, empty: false, folder: 'virtual/flat/contacts/hidden', indent: false, model_id: 'flat/contacts/hidden', open: false, tree: tree, title: gt('Hidden'), parent: tree })
+                    .render().$el.addClass('section')
                 );
             }
         }

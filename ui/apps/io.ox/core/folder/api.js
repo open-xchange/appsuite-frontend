@@ -20,7 +20,8 @@ define('io.ox/core/folder/api',
      'io.ox/core/folder/title',
      'io.ox/core/folder/bitmask',
      'io.ox/core/api/account',
-     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, gt) {
+     'settings!io.ox/core',
+     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, settings, gt) {
 
     'use strict';
 
@@ -50,6 +51,10 @@ define('io.ox/core/folder/api',
 
     function unfetch(model) {
         pool.unfetch(model.id);
+    }
+
+    function isFlat(id) {
+        return /^flat\/([^/]+)\/([^/]+)$/.exec(id);
     }
 
     //
@@ -256,6 +261,16 @@ define('io.ox/core/folder/api',
             return $.when(array);
         }
 
+        // flat?
+        var data = isFlat(id), type, section;
+        if (data) {
+            type = data[1];
+            section = data[2];
+            return flat({ type: type, cache: options.cache }).then(function (sections) {
+                return sections[section];
+            });
+        }
+
         return http.GET({
             module: 'folders',
             params: {
@@ -292,32 +307,70 @@ define('io.ox/core/folder/api',
         return http.makeObject(array, 'folders');
     }
 
+    var sections = { 1: 'private', 2: 'public', 3: 'shared' };
+
+    function getSection(id) {
+        var model = pool.getModel(id),
+            prefix = 'flat/' + model.get('module'),
+            section = util.is('hidden', id) ? 'hidden' : sections[model.get('type')],
+            collection = pool.getCollection(prefix + '/' + section);
+        console.log('AHA!', id, prefix, section, collection, model);
+        return collection;
+    }
+
     function flat(options) {
 
-        options = _.extend({ type: 'contacts', cache: true }, options);
+        options = _.extend({ module: 'contacts', cache: true }, options);
 
         // already cached?
-        var collection = pool.getCollection('flat/' + options.type);
-        if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
+        var prefix = 'flat/' + options.module,
+            collection = pool.getCollection(prefix + '/private');
+
+        if (collection.fetched && options.cache === true) {
+            return $.when({
+                'private' : collection.toJSON(),
+                'public'  : pool.getCollection(prefix + '/public').toJSON(),
+                'shared'  : pool.getCollection(prefix + '/shared').toJSON(),
+                'hidden'  : pool.getCollection(prefix + '/hidden').toJSON()
+            });
+        }
 
         return http.GET({
             module: 'folders',
             appendColumns: true,
             params: {
                 action: 'allVisible',
-                content_type: options.type,
+                content_type: options.module,
                 tree: '1',
                 altNames: true,
                 timezone: 'UTC'
             }
         })
         .then(function (data) {
-            var sections = {};
+            var sections = {},
+                hidden = [],
+                hash = settings.get(['folder/hidden'], {});
+            // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
-                var folders = _.chain(section).map(makeObject).value();
-                if (folders.length > 0) sections[id] = folders;
+                sections[id] = _(section)
+                    .chain()
+                    .map(makeObject)
+                    .filter(function (folder) {
+                        // store section / easier than type=1,2,3
+                        if (hash[folder.id]) {
+
+                            hidden.push(folder);
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    })
+                    .value();
+                pool.addCollection(prefix + '/' + id, sections[id]);
             });
-            console.error('flat() / Under construction', sections);
+            // add collection for hidden folders
+            pool.addCollection(prefix + '/hidden', sections.hidden = hidden);
+            // done
             return sections;
         });
     }
@@ -528,6 +581,32 @@ define('io.ox/core/folder/api',
     }
 
     //
+    // Hide/show (flat) folder
+    //
+
+    function hide(id) {
+        // change state
+        settings.set(['folder/hidden', id], true).save();
+        // reload sections; we could handle this locally
+        // but this is a dead-end when it comes to sorting
+        var model = pool.getModel(id);
+        flat({ module: model.get('module'), cache: false });
+    }
+
+    function show(id) {
+        // change state
+        settings.remove(['folder/hidden', id]).save();
+        // reload sections; we could handle this locally
+        // but this is a dead-end when it comes to sorting
+        var model = pool.getModel(id);
+        flat({ module: model.get('module'), cache: false });
+    }
+
+    function toggle(id, state) {
+        if (state === true) show(id); else hide(id);
+    }
+
+    //
     // Refresh all folders
     //
 
@@ -560,6 +639,9 @@ define('io.ox/core/folder/api',
         create: create,
         remove: remove,
         reload: reload,
+        hide: hide,
+        show: show,
+        toggle: toggle,
         refresh: refresh,
         bits: util.bits,
         is: util.is,
@@ -569,7 +651,8 @@ define('io.ox/core/folder/api',
         getFolderTitle: getFolderTitle,
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,
-        Bitmask: Bitmask
+        Bitmask: Bitmask,
+        getSection: getSection
     });
 
     return api;

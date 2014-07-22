@@ -30,11 +30,12 @@ define('io.ox/contacts/main',
      'io.ox/core/folder/api',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
-     'io.ox/core/commons-folderview',
+     'io.ox/core/folder/tree',
+     'io.ox/core/folder/view',
      'io.ox/contacts/mobile-navbar-extensions',
      'io.ox/contacts/mobile-toolbar-actions',
      'less!io.ox/contacts/style'
-    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, FolderView) {
+    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
     'use strict';
 
@@ -143,7 +144,7 @@ define('io.ox/contacts/main',
             if (_.device('!small')) return;
 
             var view = new FolderView(app, {
-                type: 'contacts',
+                module: 'contacts',
                 container: app.pages.getPage('folderTree')
             });
             view.handleFolderChange();
@@ -573,9 +574,13 @@ define('io.ox/contacts/main',
          * Folder view support
          */
         'folder-view': function (app) {
-            // folder tree
-            commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
-            app.getWindow().nodes.sidepanel.addClass('border-right');
+
+            // tree view
+            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'contacts' });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            app.folderView.resize.enable();
         },
 
         /*
@@ -632,7 +637,7 @@ define('io.ox/contacts/main',
         'change:folderview': function (app) {
             if (_.device('small')) return;
             app.props.on('change:folderview', function (model, value) {
-                app.toggleFolderView(value);
+                app.folderView.toggle(value);
             });
             app.on('folderview:close', function () {
                 app.props.set('folderview', false);
@@ -711,7 +716,7 @@ define('io.ox/contacts/main',
          */
         'folderview-toolbar': function (app) {
             if (_.device('small')) return;
-            commons.mediateFolderView(app);
+            commons.mediateFolderView(app, true);
         },
 
         'api-events': function (app) {

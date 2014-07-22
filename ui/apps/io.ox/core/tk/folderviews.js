@@ -1053,7 +1053,8 @@ define('io.ox/core/tk/folderviews',
         function paint(options) {
 
             options = $.extend({
-                type: opt.type
+                type: opt.type,
+                module: opt.type
             }, options || {});
 
             self.busy();

@@ -113,6 +113,10 @@ define('io.ox/core/folder/util',
             // only shared BY me, not TO me
             return data.type === 1 || data.type === 7 ||
                 (data.module === 'infostore' && data.created_by === ox.user_id);
+        case 'hidden':
+            var hash = coreSettings.get(['folder/hidden'], {}),
+                id = _.isObject(data) ? data.id : data;
+            return hash[id] === true;
         default:
             return false;
         }

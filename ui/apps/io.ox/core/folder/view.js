@@ -14,8 +14,9 @@
 define('io.ox/core/folder/view',
     ['io.ox/core/extensions',
      'io.ox/core/folder/api',
+     'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (ext, api, gt) {
+    ], function (ext, api, settings, gt) {
 
     'use strict';
 
@@ -204,6 +205,20 @@ define('io.ox/core/folder/view',
         // Initialize
         //
 
+        // migrate hidden folders
+        var hidden = settings.get(['folder/hidden']); // yep, folder/hidden is one key
+        if (hidden === undefined) {
+            hidden = app.settings.get('folderview/blacklist', {});
+            if (_.isObject(hidden)) settings.set(['folder/hidden'], hidden).save();
+        }
+
+        // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
+        if (open && open[_.display()]) open = open[_.display()];
+        open = _.isArray(open) ? open : [];
+
+        // apply
+        tree.options.open = open;
+
         // add border
         sidepanel.addClass('border-right');
 
@@ -211,15 +226,9 @@ define('io.ox/core/folder/view',
         sidepanel.append(tree.render().$el);
 
         // a11y adjustments
-        // TODO: clarify role. tree? navigation?
         tree.$el.attr({
-            // 'role': 'navigation',
             'aria-label': gt('Folders')
         });
-
-        // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
-        if (open && open[_.display()]) open = open[_.display()];
-        open = _.isArray(open) ? open : [];
 
         // apply all options
         _(ext.point(POINT + '/options').all()).each(function (obj) {
@@ -266,6 +275,21 @@ define('io.ox/core/folder/view',
         // respond to folder move
         api.on('move', function (e, id, newId) {
             tree.selection.set(newId);
+        });
+
+        // respond to open/close
+
+        function getOpenFolders() {
+            return _(tree.$el.find('.folder.open'))
+                .map(function (node) {
+                    return $(node).attr('data-id');
+                })
+                .sort();
+        }
+
+        tree.on('open close', function () {
+            var open = getOpenFolders();
+            app.settings.set('folderview/open/' + _.display(), open).save();
         });
 
         // show

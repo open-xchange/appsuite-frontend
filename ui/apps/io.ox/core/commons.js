@@ -707,11 +707,15 @@ define('io.ox/core/commons',
             };
         }()),
 
-        mediateFolderView: function (app) {
+        mediateFolderView: function (app, flat) {
 
             function toggleFolderView(e) {
                 e.preventDefault();
-                e.data.app.toggleFolderView(e.data.state);
+                if (e.data.app.folderView) {
+                    e.data.app.folderView.toggle(e.data.state);
+                } else {
+                    e.data.app.toggleFolderView(e.data.state);
+                }
             }
 
             function onFolderViewOpen(app) {
@@ -736,10 +740,17 @@ define('io.ox/core/commons',
                 }
             });
 
-            var side = app.getWindow().nodes.sidepanel;
+            var side = app.getWindow().nodes.sidepanel, target;
 
-            side.find('.foldertree-container').addClass('bottom-toolbar');
-            side.find('.foldertree-sidepanel').append(
+            if (flat) {
+                side.addClass('bottom-toolbar');
+                target = side;
+            } else {
+                side.find('.foldertree-container').addClass('bottom-toolbar');
+                target = side.find('.foldertree-sidepanel');
+            }
+
+            target.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
                     .attr('title', gt('Close folder view'))

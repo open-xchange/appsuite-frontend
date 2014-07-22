@@ -79,6 +79,7 @@
     .folder-label, .folder-counter, .folder-options {
         font-weight: 300;
         display: inline-block;
+        -webkit-font-smoothing: antialiased;
         margin: 0 14px 0 0;
         &:empty { margin: 0; }
     }
@@ -117,6 +118,48 @@
         padding: 0;
         list-style-type: none;
         min-height: 30px;
+        display: none;
+    }
+
+    .folder.open > .subfolders {
+        display: block;
+    }
+
+    .favorites {
+        margin-bottom: 14px;
+        & > .selectable > .folder-label {
+            font-weight: 500;
+        }
+    }
+
+    // sections in flat folder views
+    .folder.section {
+
+        &.open {
+            margin-bottom: 20px;
+        }
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        & > .selectable > .folder-label {
+            font-weight: 500;
+        }
+    }
+
+    // sections links
+    .links {
+
+        margin: 14px 0 20px 40px;
+
+        &:empty {
+            margin: 0;
+        }
+
+        & > div {
+            margin-bottom: 7px;
+        }
     }
 
     h2 {

@@ -37,6 +37,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
                 .empty()
                 .append(models.map(this.getTreeNode, this));
 
+            this.renderEmpty();
+
             // trigger events
             models.each(function (model) {
                 o.tree.trigger('appear:' + model.id, model);
@@ -62,6 +64,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             this.$.subfolders.append(this.getTreeNode(model));
             this.options.tree.trigger('appear:' + model.id, model);
             this.model.set('subfolders', true);
+            this.renderEmpty();
         },
 
         onRemove: function (model) {
@@ -110,20 +113,28 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         onToggle: function (e) {
             if (e.isDefaultPrevented()) return;
             e.preventDefault();
-            this.options.open = !this.options.open;
+            var o = this.options;
+            o.open = !o.open;
             this.onChangeSubFolders();
+            o.tree.trigger(o.open ? 'open' : 'close', this.folder);
         },
 
         onOptions: function (e) {
             e.preventDefault();
         },
 
+        // utility functions
+        hasSubFolders: function () {
+            var isFlat = /^virtual\/flat/.test(this.folder);
+            return this.options.subfolders && (isFlat || this.model.get('subfolders') === true);
+        },
+
         // respond to new sub-folders
         onChangeSubFolders: function () {
             // has subfolders?
             var o = this.options,
-                hasSubFolders = o.subfolders && this.model.get('subfolders') === true,
-                isOpen = o.open;
+                isOpen = o.open,
+                hasSubFolders = this.hasSubFolders();
             // update arrow
             this.$.arrow.html(
                 hasSubFolders ?
@@ -131,7 +142,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
                     '<i class="fa fa-fw">'
             );
             // toggle subfolder node
-            this.$.subfolders.toggle(hasSubFolders && isOpen);
+            this.$el.toggleClass('open', hasSubFolders && isOpen);
             // empty?
             this.renderEmpty();
             // fetch sub-folders
@@ -147,7 +158,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             // avoid further processing
             e.preventDefault();
             // skip unless folder has subfolders
-            if (!this.model.get('subfolders')) return;
+            if (!this.hasSubFolders()) return;
             // cursor right?
             var o = this.options;
             if (e.which === 39 && !o.open) {
@@ -177,7 +188,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             var o = this.options = _.extend({
                 arrow: true,                    // show folder arrow
                 count: undefined,               // use custom counter
-                empty: true,                   // show if empty, i.e. no subfolders?
+                empty: true,                    // show if empty, i.e. no subfolders?
                 headless: false,                // show folder row? root folder usually hidden
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
@@ -193,6 +204,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             this.model = api.pool.getModel(o.model_id);
             this.collection = api.pool.getCollection(o.model_id);
             this.$ = {};
+
+            // inherit "open"
+            if (_(o.tree.options.open).contains(this.folder)) o.open = true;
 
             // collection changes
             if (o.subfolders) {
@@ -224,7 +238,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
                         this.$.counter = $('<div class="folder-counter">')
                     ),
                     // subfolders
-                    this.$.subfolders = $('<ul class="subfolders" role="group" style="display: none;">')
+                    this.$.subfolders = $('<ul class="subfolders" role="group">')
                 );
 
             // headless?
@@ -236,10 +250,13 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             if (this.isVirtual) this.$.selectable.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if (o.tree.options.contextmenu && this.options.tree.app && !this.isVirtual) this.renderContextControl();
+            if (o.tree.options.contextmenu && o.tree.app && !this.isVirtual) this.renderContextControl();
 
             // get data
             api.get(o.model_id);
+
+            // fetch subfolders if not open but "empty" is false
+            if (o.empty === false && o.open === false) api.list(o.model_id);
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', this.remove.bind(this));
@@ -279,10 +296,14 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             this.$.selectable.attr('data-id', this.folder);
         },
 
+        isEmpty: function () {
+            return this.$.subfolders.children().length === 0;
+        },
+
         renderEmpty: function () {
             if (this.options.empty !== false) return;
             // only show if not empty, i.e. has subfolders
-            this.$el.toggleClass('empty', this.$.subfolders.children().length === 0);
+            this.$el.toggleClass('empty', this.isEmpty());
         },
 
         repaint: _.throttle(function () { if (this.model !== null) this.render(); }, 10),
