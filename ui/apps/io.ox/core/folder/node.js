@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core'], function (api, gt) {
+define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extensions', 'gettext!io.ox/core'], function (api, ext, gt) {
 
     'use strict';
 
@@ -258,6 +258,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             // fetch subfolders if not open but "empty" is false
             if (o.empty === false && o.open === false) api.list(o.model_id);
 
+            // allow extensions
+            ext.point('io.ox/core/foldertree/node').invoke('scaffold', this.$el, ext.Baton({ view: this }));
+
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', this.remove.bind(this));
         },
@@ -314,6 +317,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             this.renderTitle();
             this.renderCounter();
             this.onChangeSubFolders();
+            ext.point('io.ox/core/foldertree/node').invoke('render', this.$el, ext.Baton({ view: this }));
             return this;
         },
 

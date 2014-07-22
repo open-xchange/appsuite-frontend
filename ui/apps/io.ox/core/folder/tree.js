@@ -18,9 +18,10 @@ define('io.ox/core/folder/tree',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
      'io.ox/core/capabilities',
+     'io.ox/core/api/user',
      'gettext!io.ox/core',
      'io.ox/core/folder/favorites',
-     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, account, ext, capabilities, gt) {
+     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, account, ext, capabilities, userAPI, gt) {
 
     'use strict';
 
@@ -358,6 +359,23 @@ define('io.ox/core/folder/tree',
                 }
             }
         );
+
+        ext.point('io.ox/core/foldertree/node').extend({
+            id: 'scaffold-shared',
+            index: 100,
+            scaffold: function (baton) {
+
+                var model = baton.view.model, data = model.toJSON();
+                if (!api.is('shared', data)) return;
+
+                this.find('.selectable').append(
+                    $('<div class="shared-by">').append(
+                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
+                    )
+                );
+            }
+        });
+
     });
 
     return TreeView;
