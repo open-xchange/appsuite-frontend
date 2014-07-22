@@ -343,10 +343,15 @@ define('io.ox/mail/compose/view',
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
-            this.textarea = $('<div class="editable">').attr({
+            this.contentEditable = $('<div class="editable">').attr({
                 'data-editor-id': this.editorId,
                 'tabindex': 1
             });
+            this.textarea = $('<textarea class="plain-text">').attr({
+                'data-editor-id': this.editorId,
+                'tabindex': 1
+            });
+
             this.baton = ext.Baton({
                 // please don't use this data attribute - use model instead
                 data: this.model.toJSON(),
@@ -637,7 +642,7 @@ define('io.ox/mail/compose/view',
                 editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'html' ? 'contenteditable-editor' : 'text-editor');
 
             return require([editorSrc]).then(function (Editor) {
-                return (self.editorHash[self.editorMode] = new Editor(self.textarea))
+                return (self.editorHash[self.editorMode] = new Editor(self.editorMode === 'html' ? self.contentEditable : self.textarea))
                     .done(function () {
                         self.editor = self.editorHash[self.editorMode];
                         self.editor.setPlainText(content);
@@ -668,7 +673,9 @@ define('io.ox/mail/compose/view',
 
         changeEditorMode: function () {
             // be busy
+            this.contentEditable.busy();
             this.textarea.prop('disabled', true).busy();
+
             if (this.editor) {
                 var content = this.editor.getPlainText();
                 this.editor.clear();
@@ -877,6 +884,7 @@ define('io.ox/mail/compose/view',
 
             this.$el.append(
                 this.mcetoolbar = $('<div class="editable-toolbar">').attr('data-editor-id', this.editorId),
+                this.contentEditable,
                 this.textarea
             );
 
@@ -886,15 +894,15 @@ define('io.ox/mail/compose/view',
                     this.toolbarpos = this.mcetoolbar.position().top;
                 }
                 if (!this.mcetoolbar.hasClass('fixed') && this.toolbarpos < scrollPane.scrollTop()) {
-                    this.mcetoolbar.css('width', this.textarea.outerWidth());
+                    this.mcetoolbar.css('width', this.contentEditable.outerWidth());
                      $(window).trigger('resize.tinymce');
                 }
                 if (this.toolbarpos < scrollPane.scrollTop()) {
-                    this.mcetoolbar.addClass('fixed').css('width', this.textarea.outerWidth());
-                    this.textarea.css('margin-top', this.mcetoolbar.height());
+                    this.mcetoolbar.addClass('fixed').css('width', this.contentEditable.outerWidth());
+                    this.contentEditable.css('margin-top', this.mcetoolbar.height());
                 } else {
                     this.mcetoolbar.removeClass('fixed');
-                    this.textarea.css('margin-top', 0);
+                    this.contentEditable.css('margin-top', 0);
                 }
             }, this));
 

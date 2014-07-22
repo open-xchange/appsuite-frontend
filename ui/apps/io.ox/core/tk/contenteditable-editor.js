@@ -401,7 +401,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
         }
     }
 
-    function Editor(textarea) {
+    function Editor(el) {
 
         var def = $.Deferred(), ed,
             toolbar1, toolbar2, toolbar3, advanced;
@@ -426,10 +426,10 @@ define.async('io.ox/core/tk/contenteditable-editor',
             toolbar3 = toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
         }
 
-        var fixed_toolbar = '[data-editor-id="' + textarea.attr('data-editor-id') + '"].editable-toolbar';
+        var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
 
-        textarea = $(textarea);
-        textarea.tinymce({
+        el = $(el);
+        el.tinymce({
 
             script_url: ox.base + '/apps/3rd.party/tinymce/tinymce.min.js',
 
@@ -517,13 +517,13 @@ define.async('io.ox/core/tk/contenteditable-editor',
         }
 
         var resizeEditor = _.debounce(function () {
-          if (textarea === null) return;
+          if (el === null) return;
 
-            var p = textarea.parent(),
+            var p = el.parent(),
             h = $(window).height(),
-            top = textarea.offset().top;
+            top = el.offset().top;
 
-            textarea.css('min-height', (h - top - 40));
+            el.css('min-height', (h - top - 40));
             var th = $(fixed_toolbar + ' > div').height();
             if (th) {
                 $(fixed_toolbar).css('height', th + 1);
@@ -768,13 +768,12 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
         // convenience access
         this.tinymce = function () {
-            return textarea.tinymce ? textarea.tinymce() : {};
+            return el.tinymce ? el.tinymce() : {};
         };
 
         this.handleShow = function () {
-            textarea.parents('.window-content').find('.editor-print-margin').hide();
-            textarea.prop('disabled', false).idle();
-            textarea.show();
+            el.parents('.window-content').find('textarea').hide();
+            el.idle().show();
             $(fixed_toolbar).show();
             resizeEditor();
             $(window).on('resize.tinymce', resizeEditor);
@@ -786,10 +785,10 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
         this.destroy = function () {
             this.handleHide();
-            if (textarea.tinymce()) {
-                textarea.tinymce().remove();
+            if (el.tinymce()) {
+                el.tinymce().remove();
             }
-            textarea = textarea.tinymce = def = ed = null;
+            el = el.tinymce = def = ed = null;
         };
     }
 
