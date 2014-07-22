@@ -64,7 +64,6 @@ define('io.ox/search/view-template',
 
 
     /**
-     * widget:      io.ox/search/view/widget
      * fullscreen:  io.ox/search/view/window
      * mobile:      io.ox/search/view/window/mobile
      */
@@ -78,8 +77,7 @@ define('io.ox/search/view-template',
         dropdown = function (baton, container) {
             var ref,
                 app = baton.app,
-                model = baton.model,
-                mode = model.get('mode');
+                model = baton.model;
 
             this.append(
                 $('<div class="input-group">')
@@ -98,7 +96,7 @@ define('io.ox/search/view-template',
                             container: container,
                             cbshow: function () {
                                 // reset autocomplete tk styles
-                                if (mode !== 'widget' && container)
+                                if (container)
                                     $(this).attr('style', '');
 
                             },
@@ -125,9 +123,6 @@ define('io.ox/search/view-template',
                                 // apply selected filter
                                 var node = $(e.target).closest('.autocomplete-item'),
                                     value = node.data();
-                                if (mode === 'widget') {
-                                    model.remove();
-                                }
                                 ref.val('');
 
                                 // exclusive: define used option (type2 default is index 0 of options)
@@ -175,19 +170,9 @@ define('io.ox/search/view-template',
                                 $('<i class="fa fa-search"></i>')
                             )
                             .on('click', function () {
-                                var dropdown = $('.autocomplete-search').length;
-                                // open full size search app 'shortcut'
-                                if (!dropdown && mode === 'widget') {
-                                    // open search app
-                                    require(['io.ox/search/main'], function (searchapp) {
-                                        searchapp.run();
-                                    });
-                                } else {
-                                    // construct enter event to
-                                    var e = $.Event('keydown');
-                                    e.which = 13;
-                                    $(ref).trigger(e);
-                                }
+                                var e = $.Event('keydown');
+                                e.which = 13;
+                                $(ref).trigger(e);
                             })
                         )
                     )
@@ -195,16 +180,6 @@ define('io.ox/search/view-template',
 
             return this;
         };
-
-    // widget mode
-    ext.point('io.ox/search/view/widget').extend({
-        id: 'query',
-        index: 200,
-        row: '0',
-        draw: function (baton) {
-            dropdown.call(this, baton);
-        }
-    });
 
     // window mode
     point.extend({

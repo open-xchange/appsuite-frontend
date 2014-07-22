@@ -356,7 +356,7 @@ define('io.ox/search/main',
     });
 
     // init model and listeners
-    model = SearchModel.factory.create({ mode: 'widget' });
+    model = SearchModel.factory.create();
 
     // run app
     run = function () {
@@ -389,7 +389,6 @@ define('io.ox/search/main',
         run: run,
 
         getView: function () {
-            model.set({ mode: 'window' });
             return app.view = SearchView.factory.create(app, model);
         },
 

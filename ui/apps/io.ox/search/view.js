@@ -29,8 +29,6 @@ define('io.ox/search/view',
             render: function (node) {
 
                 var self = this,
-                    model = this.baton.model,
-                    mode = model.get('mode'),
                     node = node || self.$el;
 
                 if (_.device('smartphone')) {
@@ -39,7 +37,7 @@ define('io.ox/search/view',
                 }
 
                 //invoke extensions defined by io.ox/search/view-template
-                ext.point('io.ox/search/view/' + mode).invoke('draw', node, self.baton);
+                ext.point('io.ox/search/view/window').invoke('draw', node, self.baton);
 
                 return this;
             },
@@ -82,19 +80,17 @@ define('io.ox/search/view',
             redraw: function (options) {
                 options = options || {};
 
-                var mode = this.baton.model.get('mode'),
-                    node = $('<span>');
-                if (mode !== 'widget') {
-                    //draw into dummy node
-                    this.render(node);
-                    //TODO: keep search string the ugly way
-                    node.find('.search-field').val(
-                        this.$el.find('.search-field').val()
-                    );
-                    //replace
-                    this.$el.empty();
-                    this.$el.append(node.children());
-                }
+                var node = $('<span>');
+
+                //draw into dummy node
+                this.render(node);
+                //TODO: keep search string the ugly way
+                node.find('.search-field').val(
+                    this.$el.find('.search-field').val()
+                );
+                //replace
+                this.$el.empty();
+                this.$el.append(node.children());
 
                 if (options.closeSidepanel)
                     $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
