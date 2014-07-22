@@ -257,6 +257,7 @@ define('io.ox/search/view-template',
             cell.find('li').on('click', function (e) {
                 var node = $(e.target);
                 baton.model.setModule(node.attr('data-app'));
+                baton.app.view.trigger('change:app');
             });
 
             var elem = this.find('.row.applications');

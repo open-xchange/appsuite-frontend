@@ -156,7 +156,8 @@ define('io.ox/search/main',
 
     // define launcher callback
     app.setLauncher(function (options) {
-        var opt = $.extend({}, options || {});
+        var opt = $.extend({}, options || {}),
+            current = ox.ui.App.getCurrentApp();
 
         win.nodes.main.addClass('io-ox-search f6-target').attr({
             'tabindex': '1',
@@ -170,39 +171,55 @@ define('io.ox/search/main',
         app.view = SearchView.factory
                     .create(app, model, win.nodes.main);
 
+        // mediator: view
         app.view.on({
             'query:start': function () {
-                run();
+                app.view.repaint('facets');
                 app.busy();
             },
             'query:stop': function () {
                 app.idle();
             },
             'query:result': function () {
-                run();
+                app.view.repaint('info items');
+                app.idle();
+            },
+            'button:app': function () {
+                app.view.repaint('apps');
+                app.idle();
             },
             'button:clear': function () {
                 app.view.$('.search-field').val('');
             }
         });
 
-        // model-based events
-        model.on('query change:start change:size', app.apiproxy.query);
-        model.on('reset change', function () {
-                app.view.redraw()
-                         .focus();
-                app.view.trigger('redraw');
+        // mediator: model
+        model.on({
+            'query': function () {
+                app.apiproxy.query();
+            },
+            'change:start': function () {
+                app.apiproxy.query();
+            },
+            'change:size': function () {
+                app.apiproxy.query();
+            },
+            'reset': function () {
+                app.view.repaint('facets info items');
+            }
         });
 
-        // register model item
-        model.get('items').on('needs-redraw', function () {
-            this.render(app.view.getBaton());
+        // mediator: submodel
+        model.get('items').on({
+            'needs-redraw': function () {
+                this.render(app.view.getBaton());
+            }
         });
 
-        // update model
+        // init model
         model.set({
-            mode: 'window',
-            query: opt.query
+            query: opt.query,
+            app: current ? current.get('name') : model.defaults.options.defaultApp
         });
 
         app.setTitle(gt('Search'));
@@ -215,6 +232,9 @@ define('io.ox/search/main',
                             .delegate(app.view.$el, '.item', openSidePopup);
             });
         });
+
+        //draw
+        app.view.redraw().focus();
     });
 
     // extend app
@@ -339,16 +359,13 @@ define('io.ox/search/main',
     model = SearchModel.factory.create({ mode: 'widget' });
 
     // run app
-    run = function (options) {
+    run = function () {
         var current;
-
-        // ensure
-        options = options || {};
 
         if (app.is('ready')) {
             // not started yet use app callback for inital stuff
             app.launch.call(app);
-        } else if (options.reset) {
+        } else  {
             // reset model and update current app
             model.reset({silent: true});
             current = ox.ui.App.getCurrentApp().get('name');
@@ -359,8 +376,6 @@ define('io.ox/search/main',
             // reset view
             app.launch();
             app.view.redraw({closeSidepanel: true});
-        } else if (app.is('running')) {
-            app.view.redraw();
         }
         app.view.focus();
         app.idle();
