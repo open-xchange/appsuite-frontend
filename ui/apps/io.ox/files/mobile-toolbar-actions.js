@@ -26,14 +26,31 @@ define('io.ox/files/mobile-toolbar-actions',
         pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/mainView/multiselect'),
         pointDetailView = ext.point('io.ox/files/mobile/toolbar/detailView'),
         meta = {
-            'add': {
+            'create': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('Add file'),
-                icon: 'fa fa-plus',
                 drawDisabled: true,
-                ref: 'io.ox/files/actions/upload',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+                icon: 'fa fa-plus',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action',
+                ref: 'io.ox/files/dropdown/new',
+                customize: function (baton) {
+                    var self = this;
+
+                    this.after(
+                        links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default',
+                            wrap: false,
+                            emptyCallback: function () {//function to call when dropdown is empty
+                                self.addClass('disabled')
+                                    .attr({ 'aria-disabled': true })
+                                    .removeAttr('href');
+                            }}, baton)
+                    );
+
+                    this.addClass('dropdown-toggle').attr({
+                        'data-toggle': 'dropdown'
+                    });
+
+                }
             },
             'view-icon': {
                 prio: 'hi',
@@ -73,6 +90,7 @@ define('io.ox/files/mobile-toolbar-actions',
             }
         };
 
+    // helper for extending
     function addAction(point, ids) {
         var index = 0;
         _(ids).each(function (id) {
@@ -83,14 +101,26 @@ define('io.ox/files/mobile-toolbar-actions',
         });
         index = 0;
     }
+    // add default actions to toolbar which might be extended by 3rd party apps
+    /*pointMainView.extend(new links.Dropdown({
+        index: 100,
+        label: $('<span>').text(
+            //.# Will be used as button label in the toolbar, allowing the user to create new documents or upload files
+            gt('New')
+        ),
+        noCaret: true, // don't draw the caret icon beside menu link
+        drawDisabled: true,
+        ref: 'io.ox/files/links/toolbar/default'
+    }));*/
 
-    addAction(pointMainView, ['add', 'view-list', 'view-icon', 'view-tile']);
+    // add other actions
+    //addAction(pointMainView, ['create', 'view-list', 'view-icon', 'view-tile']);
 
     // add submenu as text link to toolbar in multiselect
     pointDetailView.extend(new links.Dropdown({
         index: 300,
         label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to choose an alternative layout for the current view
+            //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
             gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
@@ -102,7 +132,7 @@ define('io.ox/files/mobile-toolbar-actions',
     pointMultiSelect.extend(new links.Dropdown({
         index: 100,
         label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to choose an alternative layout for the current view
+            //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
             gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
@@ -134,7 +164,7 @@ define('io.ox/files/mobile-toolbar-actions',
         id: 'toolbar-mobile',
         index: 10100,
         setup: function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.updateToolbar = updateToolbar;
         }
     });
@@ -143,7 +173,7 @@ define('io.ox/files/mobile-toolbar-actions',
         id: 'update-toolbar-mobile',
         index: 10300,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             // folder change
 
             function fnFolderChange() {
@@ -168,6 +198,15 @@ define('io.ox/files/mobile-toolbar-actions',
                 if (!app.props.get('showCheckboxes')) return;
                 app.updateToolbar(app.selection.get());
             });
+        }
+    });
+
+    ext.point('io.ox/files/mediator').extend({
+        id: 'toolbar-mobile-defaultactions',
+        index: 10500,
+        setup: function () {
+            if (_.device('!smartphone')) return;
+            addAction(pointMainView, ['create', 'view-list', 'view-icon', 'view-tile']);
         }
     });
 
