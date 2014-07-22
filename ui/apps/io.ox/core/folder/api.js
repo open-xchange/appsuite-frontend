@@ -360,13 +360,12 @@ define('io.ox/core/folder/api',
                     .chain()
                     .map(makeObject)
                     .filter(function (folder) {
+                        // read access?
+                        if (!util.can('read', folder)) return false;
                         // store section / easier than type=1,2,3
-                        if (hash[folder.id]) {
-                            hidden.push(folder);
-                            return false;
-                        } else {
-                            return true;
-                        }
+                        if (hash[folder.id]) { hidden.push(folder); return false; }
+                        // otherwise
+                        return true;
                     })
                     .value();
                 pool.addCollection(getFlatCollectionId(module, id), sections[id]);
