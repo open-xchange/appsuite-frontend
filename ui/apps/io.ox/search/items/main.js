@@ -19,7 +19,7 @@ define('io.ox/search/items/main',
 
     return {
         // init controller
-        create: function() {
+        create: function () {
             var collection = new Collection(),
                 view = new View({collection: collection});
 

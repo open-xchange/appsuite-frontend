@@ -143,6 +143,13 @@ define('io.ox/search/items/view-template',
                 cell.append(nodes);
 
             });
+
+            var elem = self.find('.row.result');
+            if (elem.length)
+                elem.replaceWith(row);
+            else
+                self.append(row);
+
             self.append(row);
         }
     });

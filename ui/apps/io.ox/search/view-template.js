@@ -214,7 +214,7 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
-                row, cell,
+                row, cell, elem,
                 apps = settings.get('search/modules', []);
 
             // create container
@@ -259,7 +259,11 @@ define('io.ox/search/view-template',
                 baton.model.setModule(node.attr('data-app'));
             });
 
-            this.append(row);
+            var elem = this.find('.row.applications');
+            if (elem.length)
+                elem.replaceWith(row);
+            else
+                this.append(row);
         }
     });
 
@@ -283,18 +287,18 @@ define('io.ox/search/view-template',
         id: 'facets',
         index: 250,
         row: '0',
-        redraw: function (baton) {
-            $(baton.$).find('.search-facets').empty();
-            this.draw.call(baton.$, baton);
-        },
         draw: function (baton) {
+            var node = $('<ul class="col-xs-12 list-unstyled search-facets">'),
+                row = $('<div class="row facets">').append(node),
+                elem;
 
-            var node = $('<ul class="col-xs-12 list-unstyled search-facets">');
             extensions.facets.call(node, baton);
 
-            this.append(
-                $('<div class="row">').append(node)
-            );
+            var elem = this.find('.row.facets');
+            if (elem.length)
+                elem.replaceWith(row);
+            else
+                this.append(row);
         }
     });
 
@@ -344,19 +348,22 @@ define('io.ox/search/view-template',
         index: 300,
         draw: function (baton) {
             var items = baton.model.get('items'),
-                count = items.length - baton.model.get('extra');
-            if (items.length > baton.model.get('size')) {
-                this.append(
+                count = items.length - baton.model.get('extra'),
+                row = items.length <= baton.model.get('size') ?
+                    $('<div class="info">').hide() :
                     $('<div class="info">')
-                    .append(
+                        .append(
                             $('<span>')
                             .addClass('info-item')
                             .append(
                                 gt('More than the currently displayed %1$s items were found', count)
                             )
-                        )
-                );
-            }
+                        );
+            var elem = this.find('.info');
+            if (elem.length)
+                elem.replaceWith(row);
+            else
+                this.append(row);
         }
     });
 
