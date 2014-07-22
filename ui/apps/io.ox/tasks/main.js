@@ -23,7 +23,8 @@ define('io.ox/tasks/main',
      'io.ox/tasks/view-detail',
      'settings!io.ox/tasks',
      'io.ox/core/folder/api',
-     'io.ox/core/commons-folderview',
+     'io.ox/core/folder/tree',
+     'io.ox/core/folder/view',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
      'io.ox/core/capabilities',
@@ -31,7 +32,7 @@ define('io.ox/tasks/main',
      'io.ox/tasks/toolbar',
      'io.ox/tasks/mobile-navbar-extensions',
      'io.ox/tasks/mobile-toolbar-actions'
-    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, FolderView, Bars, PageController, capabilities, Dropdown) {
+    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, Dropdown) {
 
     'use strict';
 
@@ -383,9 +384,13 @@ define('io.ox/tasks/main',
          * Folder view support
          */
         'folder-view': function (app) {
-            // folder tree
-            commons.addFolderView(app, { type: 'tasks', view: 'FolderList' });
-            app.getWindow().nodes.sidepanel.addClass('border-right');
+
+            // tree view
+            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'tasks' });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            app.folderView.resize.enable();
         },
 
         'folder-view-mobile': function (app) {
@@ -443,7 +448,7 @@ define('io.ox/tasks/main',
         'change:folderview': function (app) {
             if (_.device('smartphone')) return;
             app.props.on('change:folderview', function (model, value) {
-                app.toggleFolderView(value);
+                app.folderView.toggle(value);
             });
             app.on('folderview:close', function () {
                 app.props.set('folderview', false);
@@ -497,8 +502,9 @@ define('io.ox/tasks/main',
          */
         'folderview-toolbar': function (app) {
             if (_.device('smartphone')) return;
-            commons.mediateFolderView(app);
+            commons.mediateFolderView(app, true);
         },
+
         /*
          * Drag and Drop support
          */

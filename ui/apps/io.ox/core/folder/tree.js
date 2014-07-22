@@ -169,6 +169,10 @@ define('io.ox/core/folder/tree',
 
     var INDEX = 100;
 
+    //
+    // Mail
+    //
+
     ext.point('io.ox/core/foldertree/mail').extend(
         {
             id: 'headline',
@@ -260,6 +264,10 @@ define('io.ox/core/folder/tree',
         }
     );
 
+    //
+    // Files / Drive
+    //
+
     ext.point('io.ox/core/foldertree/infostore').extend(
         {
             id: 'standard-folders',
@@ -280,7 +288,49 @@ define('io.ox/core/folder/tree',
         });
     }
 
-    _('contacts calendar'.split(' ')).each(function (module) {
+
+
+    _('contacts calendar tasks'.split(' ')).each(function (module) {
+
+        //
+        // Flat trees
+        //
+
+        ext.point('io.ox/core/foldertree/' + module).extend({
+            id: 'standard-folders',
+            index: 100,
+            draw: function (tree) {
+
+                var links = $('<div class="links">'),
+                    baton = ext.Baton({ module: module, view: tree }),
+                    folder = 'virtual/flat/' + module,
+                    model_id = 'flat/' + module,
+                    defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree };
+
+                ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
+
+                this.append(
+                    // private folders
+                    new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }))
+                    .render().$el.addClass('section'),
+                    // links
+                    links,
+                    // public folders
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public', model_id: model_id + '/public', title: gt('Public') }))
+                    .render().$el.addClass('section'),
+                    // shared folders
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared', model_id: model_id + '/shared', title: gt('Shared') }))
+                    .render().$el.addClass('section'),
+                    // hidden folders
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden', model_id: model_id + '/hidden', title: gt('Hidden') }))
+                    .render().$el.addClass('section')
+                );
+            }
+        });
+
+        //
+        // Links
+        //
 
         ext.point('io.ox/core/foldertree/' + module + '/links').extend(
             {
@@ -326,39 +376,9 @@ define('io.ox/core/folder/tree',
             }
         );
 
-        ext.point('io.ox/core/foldertree/' + module).extend(
-            {
-                id: 'standard-folders',
-                index: 100,
-                draw: function (tree) {
-
-                    var links = $('<div class="links">'),
-                        baton = ext.Baton({ module: module, view: tree }),
-                        folder = 'virtual/flat/' + module,
-                        model_id = 'flat/' + module,
-                        defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree };
-
-                    ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
-
-                    this.append(
-                        // private folders
-                        new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }))
-                        .render().$el.addClass('section'),
-                        // links
-                        links,
-                        // public folders
-                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public', model_id: model_id + '/public', title: gt('Public') }))
-                        .render().$el.addClass('section'),
-                        // shared folders
-                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared', model_id: model_id + '/shared', title: gt('Shared') }))
-                        .render().$el.addClass('section'),
-                        // hidden folders
-                        new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden', model_id: model_id + '/hidden', title: gt('Hidden') }))
-                        .render().$el.addClass('section')
-                    );
-                }
-            }
-        );
+        //
+        // Shared folders
+        //
 
         ext.point('io.ox/core/foldertree/node').extend({
             id: 'scaffold-shared',
@@ -375,7 +395,6 @@ define('io.ox/core/folder/tree',
                 );
             }
         });
-
     });
 
     return TreeView;
