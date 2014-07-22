@@ -2415,7 +2415,7 @@ msgstr "A-mailadresser"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:360
+#: apps/io.ox/mail/detail/view.js:363
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail fra %1$s: %2$s"
 
@@ -6376,7 +6376,7 @@ msgid "The email has been sent"
 msgstr "E-mailen er sendt"
 
 #: apps/io.ox/core/tk/attachments.js:343 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/upload.js:249 module:io.ox/core
+#: apps/io.ox/core/tk/upload.js:256 module:io.ox/core
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
@@ -6384,7 +6384,7 @@ msgstr ""
 "Filen \"%1$s\" kan ikke overføres, da dens størrelse er over loftet på %2$s"
 
 #: apps/io.ox/core/tk/attachments.js:348 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/upload.js:256 module:io.ox/core
+#: apps/io.ox/core/tk/upload.js:263 module:io.ox/core
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
 "%2$s"

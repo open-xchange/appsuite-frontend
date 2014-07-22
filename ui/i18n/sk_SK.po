@@ -2440,7 +2440,7 @@ msgstr "Emailové adresy"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:360
+#: apps/io.ox/mail/detail/view.js:363
 msgid "Email from %1$s: %2$s"
 msgstr "Email od %1$s: %2$s"
 
@@ -6414,7 +6414,7 @@ msgid "The email has been sent"
 msgstr "Email bol odoslaný"
 
 #: apps/io.ox/core/tk/attachments.js:343 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/upload.js:249 module:io.ox/core
+#: apps/io.ox/core/tk/upload.js:256 module:io.ox/core
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
@@ -6423,7 +6423,7 @@ msgstr ""
 "súboru %2$s"
 
 #: apps/io.ox/core/tk/attachments.js:348 module:io.ox/core/tk/attachments
-#: apps/io.ox/core/tk/upload.js:256 module:io.ox/core
+#: apps/io.ox/core/tk/upload.js:263 module:io.ox/core
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit of "
 "%2$s"
