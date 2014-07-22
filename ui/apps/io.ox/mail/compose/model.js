@@ -150,7 +150,7 @@ define('io.ox/mail/compose/model',
         },
 
         getMail: function() {
-
+            this.trigger('needsync');
             var result;
             var convert = emoji.converterFor({to: emoji.sendEncoding()});
             var content = this.get('attachments').at(0).get('content');

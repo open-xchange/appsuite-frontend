@@ -552,6 +552,7 @@ define('io.ox/mail/compose/view',
                             });
                         });
                     }
+                    self.model.dirty(false);
                     self.app.quit();
                 })
                 .always(function (result) {
