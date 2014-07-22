@@ -51,7 +51,6 @@ define('io.ox/mail/compose/main',
         });
 
         app.failSave = function () {
-            app.view.syncMail();
             var mail = app.view.model.toJSON();
             delete mail.files;
             return {
@@ -72,7 +71,7 @@ define('io.ox/mail/compose/main',
             win.busy().show(function () {
                 win.nodes.main.addClass('scrollable').append(app.view.render().$el);
                 app.view.setMail(point.data).done(function () {
-                    app.view.dirty(true);
+                    model.dirty(true);
                     win.idle();
                     def.resolve({app: app});
                 });
@@ -100,14 +99,12 @@ define('io.ox/mail/compose/main',
                     win.nodes.main.addClass('scrollable').append(app.view.render().$el);
                     app.view.setMail()
                     .done(function () {
-                        app.view.dirty(false);
                         win.idle();
                          // render view and append
                         def.resolve({app: app});
                     })
                     .fail(function (e) {
                         notifications.yell(e);
-                        app.view.dirty(false);
                         app.quit();
                         def.reject();
                     });
@@ -138,14 +135,12 @@ define('io.ox/mail/compose/main',
 
                             app.view.setMail()
                             .done(function () {
-                                app.view.dirty(false);
                                 win.idle();
                                 def.resolve({app: app});
                             });
                         })
                         .fail(function (e) {
                             notifications.yell(e);
-                            app.view.dirty(false);
                             app.quit();
                             def.reject();
                         });
@@ -163,7 +158,7 @@ define('io.ox/mail/compose/main',
 
             var def = $.Deferred();
 
-            if (app.view.dirty()) {
+            if (app.view.model.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your message?'))

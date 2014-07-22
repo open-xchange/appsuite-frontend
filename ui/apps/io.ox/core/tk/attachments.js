@@ -653,11 +653,13 @@ define('io.ox/core/tk/attachments',
     };
 
     var Attachment = Backbone.Model.extend({
-        defaults: {
-            filename: '',
-            disp: 'attachment',
-            uploaded: 1,
-            meta: {}
+        defaults: function () {
+            return {
+                filename: '',
+                disp: 'attachment',
+                uploaded: 1,
+                meta: {}
+            };
         },
         initialize: function (obj) {
             if (obj instanceof window.File) {

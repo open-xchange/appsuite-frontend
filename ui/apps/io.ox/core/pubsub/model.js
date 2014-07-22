@@ -47,11 +47,14 @@ define('io.ox/core/pubsub/model',
 
     var Publication = BasicModel.extend({
             ref: 'io.ox/core/pubsub/publication/',
-            defaults: {
-                entity: {},
-                entityModule: '',
-                target: ''
+            defaults: function () {
+                return {
+                    entity: {},
+                    entityModule: '',
+                    target: ''
+                };
             },
+
             url: function () {
                 return this.attributes[this.attributes.target].url;
             },

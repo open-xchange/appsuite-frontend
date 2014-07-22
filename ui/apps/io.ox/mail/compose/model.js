@@ -23,47 +23,51 @@ define('io.ox/mail/compose/model',
     'use strict';
 
     var MailModel = Backbone.Model.extend({
-        defaults: {
-            editorMode: settings.get('messageFormat', 'html'),
-            account_name: '',
-            attachment: '',
-            attachments: new attachments.model.Attachments(),
-            bcc: [],
-            cc: [],
-            color_label: '',
-            contacts_ids: [],
-            content_type: '',
-            disp_notification_to: false,
-            flag_seen: '',
-            flags: '',
-            folder_id: 'default0/INBOX',
-            from: '',
-            headers: {},
-            infostore_ids: [],
-            initial: true,
-            level: '',
-            modified: '',
-            msgref: '',
-            nested_msgs: [],
-            priority: 3,
-            received_date: '',
-            reply_to: '',
-            sendtype: mailAPI.SENDTYPE.NORMAL,
-            sent_date: '',
-            signature: _.device('smartphone') ? (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) : settings.get('defaultSignature'),
-            currentSignature: '',
-            size: '',
-            subject: '',
-            to: [],
-            unread: '',
-            user: [],
-            vcard: 0
+
+        defaults: function () {
+            return {
+                editorMode: settings.get('messageFormat', 'html'),
+                account_name: '',
+                attachment: '',
+                attachments: [],
+                bcc: [],
+                cc: [],
+                color_label: '',
+                contacts_ids: [],
+                content_type: '',
+                disp_notification_to: false,
+                flag_seen: '',
+                flags: '',
+                folder_id: 'default0/INBOX',
+                from: '',
+                headers: {},
+                infostore_ids: [],
+                initial: true,
+                level: '',
+                modified: '',
+                msgref: '',
+                nested_msgs: [],
+                priority: 3,
+                received_date: '',
+                reply_to: '',
+                sendtype: mailAPI.SENDTYPE.NORMAL,
+                sent_date: '',
+                signature: _.device('smartphone') ? (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) : settings.get('defaultSignature'),
+                currentSignature: '',
+                size: '',
+                subject: '',
+                to: [],
+                unread: '',
+                user: [],
+                vcard: 0
+            };
         },
 
         initialize: function () {
             var list = this.get('attachments');
             if (_.isArray(list)) {
-                list = this.set('attachments', new attachments.model.Attachments(list), {silent: true});
+                this.set('attachments', new attachments.model.Attachments(list), {silent: true});
+                list = this.get('attachments');
             }
             if (list.length === 0) {
                 list.add({
@@ -71,6 +75,29 @@ define('io.ox/mail/compose/model',
                     content_type: this.getContentType(),
                     disp: 'inline'
                 }, {silent: true});
+            }
+            this.updateShadow();
+        },
+
+        getCopy: function () {
+            var ret = _.clone(this.attributes);
+            ret.attachments = _.clone(this.attributes.attachments.toJSON());
+            return ret;
+        },
+
+        updateShadow: function () {
+            this._shadowAttributes = this.getCopy();
+        },
+
+        dirty: function (flag) {
+            // sync mail editor content to model
+            this.trigger('needsync');
+            if (flag === true) {
+                this._shadowAttributes = {}; // always dirty this way
+            } else if (flag === false) {
+                this.updateShadow();
+            } else {
+                return !_.isEqual(this._shadowAttributes, this.getCopy());
             }
         },
 

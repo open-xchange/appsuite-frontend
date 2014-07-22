@@ -356,7 +356,8 @@ define('io.ox/mail/compose/view',
 
             this.model.on({
                 'change:editorMode': this.changeEditorMode.bind(this),
-                'change:signature': this.setSelectedSignature.bind(this)
+                'change:signature': this.setSelectedSignature.bind(this),
+                'needsync': this.syncMail.bind(this)
             });
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
         },
@@ -383,8 +384,6 @@ define('io.ox/mail/compose/view',
 
         autoSaveDraft: function () {
 
-            this.syncMail();
-
             var mail = this.model.getMail(),
                 def = new $.Deferred(),
                 self = this;
@@ -394,7 +393,7 @@ define('io.ox/mail/compose/view',
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    self.dirty(false);
+                    self.model.dirty(false);
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
@@ -439,7 +438,7 @@ define('io.ox/mail/compose/view',
 
             timer = function () {
                 // only auto-save if something changed (see Bug #26927)
-                if (self.dirty()) {
+                if (self.model.dirty()) {
                     self.autoSaveDraft();
                 } else {
                     delay();
@@ -452,7 +451,7 @@ define('io.ox/mail/compose/view',
 
         clean: function () {
             // mark as not dirty
-            this.dirty(false);
+            this.model.dirty(false);
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].destroy();
@@ -461,21 +460,7 @@ define('io.ox/mail/compose/view',
             this.stopAutoSave();
         },
 
-        dirty: function (flag) {
-            // console.log('dirty', flag);
-            // sync mail editor content to model
-            this.syncMail();
-            if (flag === true) {
-                this.previous = null; // always dirty this way
-            } else if (flag === false) {
-                this.previous = this.model.getMail();
-            } else {
-                return !_.isEqual(this.previous, this.model.getMail());
-            }
-        },
-
         send: function () {
-            this.syncMail();
             // get mail
             var self = this,
                 mail = this.model.getMail(),
@@ -562,7 +547,6 @@ define('io.ox/mail/compose/view',
                             });
                         });
                     }
-                    self.dirty(false);
                     self.app.quit();
                 })
                 .always(function (result) {
@@ -831,6 +815,7 @@ define('io.ox/mail/compose/view',
                         self.editor.focus();
                     }
                     self.setBody(self.model.getContent());
+                    self.model.dirty(false);
                 }
             });
         },
