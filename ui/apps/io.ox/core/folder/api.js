@@ -293,9 +293,40 @@ define('io.ox/core/folder/api',
     // Get folder path
     //
 
-    function getPath() {
-        console.error('getPath() / Under construction');
-        return $.when();
+    function getPath(id) {
+
+        var result = [], data, done = false;
+
+        // try to resolve via pool
+        do {
+            data = pool.getModel(id).toJSON();
+            id = data.folder_id;
+            done = String(data.folder_id) === '1';
+            result.push(data);
+        } while (id && !done);
+
+        // resolve in reverse order (root > folder)
+        if (done) return $.when(result.reverse());
+
+        http.GET({
+            module: 'folders',
+            params: {
+                action: 'path',
+                id: id,
+                tree: '1',
+                altNames: true
+            },
+            appendColumns: true
+        })
+        .then(function (data) {
+            // loop over folders to remove root and add to pool
+            return _(data)
+                .filter(function (folder) {
+                    pool.addModel(folder);
+                    return folder.id !== '1';
+                })
+                .reverse();
+        });
     }
 
 
