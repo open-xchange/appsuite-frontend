@@ -55,13 +55,27 @@ define('io.ox/core/event', function () {
         // trigger event
         this.trigger = function () {
 
-            var args = $.makeArray(arguments), types = args.shift();
-            var myHub = hub; // Keep reference in case a handler cleans up the event dispatcher
-            _(types.split(/\s+/)).each(function (type) {
+            var args = $.makeArray(arguments),
+                types = args.shift(),
+                myHub = hub; // Keep reference in case a handler cleans up the event dispatcher
+
+            function trigger(type) {
+
+                // trigger single event
                 myHub.triggerHandler.call(hub, type, args);
 
+                // trigger generic 'triggered' event (convert event object to event name before)
+                if (_.isObject(type)) { type = type.type; }
                 myHub.triggerHandler.call(hub, 'triggered', _([type, args]).flatten(true)); // Allow stringing event hubs together
-            });
+            }
+
+            if (_.isString(types)) {
+                // "types" may contain multiple space-separated event types
+                _(types.split(/\s+/)).each(trigger);
+            } else if (_.isObject(types) && _.isString(types.type)) {
+                // support to trigger with an explicit Event or $.Event object
+                trigger(types);
+            }
             return this;
         };
 
