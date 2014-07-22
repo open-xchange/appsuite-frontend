@@ -153,12 +153,16 @@ define('io.ox/core/tk/text-editor', function () {
             }, 100);
         }());
 
-        this.handleShow = function () {
-            textarea.prop('disabled', false).idle().show()
+        this.handleShow = function (compose) {
+            if (!compose) {
+                textarea.prop('disabled', false).idle().show()
                 .next().hide();
-            textarea.parents('.window-content').find('.mce-tinymce').hide();
-            resizeEditorMargin();
-            $(window).on('resize.text-editor', resizeEditorMargin);
+                textarea.parents('.window-content').find('.mce-tinymce').hide();
+                resizeEditorMargin();
+                $(window).on('resize.text-editor', resizeEditorMargin);
+            } else {
+                textarea.parents('.window-content').find('.editable, .editable-toolbar').hide();
+            }
 
         };
 

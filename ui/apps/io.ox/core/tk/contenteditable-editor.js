@@ -775,6 +775,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
             textarea.parents('.window-content').find('.editor-print-margin').hide();
             textarea.prop('disabled', false).idle();
             textarea.show();
+            $(fixed_toolbar).show();
             resizeEditor();
             $(window).on('resize.tinymce', resizeEditor);
         };

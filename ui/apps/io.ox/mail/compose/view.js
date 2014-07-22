@@ -641,7 +641,7 @@ define('io.ox/mail/compose/view',
                     .done(function () {
                         self.editor = self.editorHash[self.editorMode];
                         self.editor.setPlainText(content);
-                        self.editor.handleShow();
+                        self.editor.handleShow(true);
                         if (self.model.get('mode') !== 'compose') {
                             self.editor.focus();
                         }
@@ -652,7 +652,7 @@ define('io.ox/mail/compose/view',
         reuseEditor: function (content) {
             this.editor = this.editorHash[this.editorMode];
             this.editor.setPlainText(content);
-            this.editor.handleShow();
+            this.editor.handleShow(true);
             return $.when();
         },
 
