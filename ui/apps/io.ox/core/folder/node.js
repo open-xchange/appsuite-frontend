@@ -200,7 +200,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
             // also set: folder, parent, tree
 
-            this.isVirtual = /^virtual/.test(this.folder);
+            this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.model = api.pool.getModel(o.model_id);
             this.collection = api.pool.getCollection(o.model_id);
             this.$ = {};
@@ -250,10 +250,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             if (this.isVirtual) this.$.selectable.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if (o.tree.options.contextmenu && o.tree.app && !this.isVirtual) this.renderContextControl();
+            if (!this.isVirtual && o.tree.options.contextmenu && o.tree.app) this.renderContextControl();
 
             // get data
-            api.get(o.model_id);
+            if (!this.isVirtual) api.get(o.model_id);
 
             // fetch subfolders if not open but "empty" is false
             if (o.empty === false && o.open === false) api.list(o.model_id);
@@ -286,7 +286,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.$.selectable.append(
                 $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
                 .attr('title', gt('Folder-specific actions'))
-                .append($('<i class="fa fa-cog">'))
+                .append($('<i class="fa fa-bars">'))
             );
         },
 

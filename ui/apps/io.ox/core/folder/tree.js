@@ -311,7 +311,7 @@ define('io.ox/core/folder/tree',
 
                 this.append(
                     // private folders
-                    new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }))
+                    new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private'), virtual: true }))
                     .render().$el.addClass('section'),
                     // links
                     links,

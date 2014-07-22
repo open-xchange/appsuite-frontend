@@ -23,6 +23,8 @@ define('io.ox/core/commons-folderview',
 
     'use strict';
 
+    console.warn('Module "io.ox/core/commons-folderview" is deprecated.');
+
     function initExtensions(POINT, app) {
 
         // default options

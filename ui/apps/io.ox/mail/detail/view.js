@@ -89,7 +89,9 @@ define('io.ox/mail/detail/view',
         index: INDEX_header += 100,
         classes: 'actions pull-right',
         label: gt('Actions'),
-        ref: 'io.ox/mail/links/inline'
+        icon: 'fa fa-bars',
+        noCaret: true,
+        ref: 'io.ox/mail/links/inline',
     }));
 
     ext.point('io.ox/mail/detail/header').extend({

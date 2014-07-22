@@ -15,10 +15,10 @@ define('io.ox/core/commons',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
-     'io.ox/core/commons-folderview',
+     // 'io.ox/core/commons-folderview',
      'io.ox/core/folder/api',
      'io.ox/core/api/account'
-    ], function (ext, links, gt, FolderView, folderAPI, accountAPI) {
+    ], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI) {
 
     'use strict';
 
@@ -644,13 +644,14 @@ define('io.ox/core/commons',
         },
 
         addFolderView: function (app, options) {
-            var view = new FolderView(app, options);
-            view.handleFolderChange();
-            view.resizable();
-            view.actionLink();
-            view.handleDrag();
-            view.start();
-            return view;
+            if (ox.debug) console.warn('Deprecated: common.addFolderView()', app, options);
+            // var view = new FolderView(app, options);
+            // view.handleFolderChange();
+            // view.resizable();
+            // view.actionLink();
+            // view.handleDrag();
+            // view.start();
+            // return view;
         },
 
         vsplit: (function () {
@@ -711,11 +712,7 @@ define('io.ox/core/commons',
 
             function toggleFolderView(e) {
                 e.preventDefault();
-                if (e.data.app.folderView) {
-                    e.data.app.folderView.toggle(e.data.state);
-                } else {
-                    e.data.app.toggleFolderView(e.data.state);
-                }
+                e.data.app.folderView.toggle(e.data.state);
             }
 
             function onFolderViewOpen(app) {

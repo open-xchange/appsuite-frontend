@@ -104,10 +104,20 @@ module.exports = function (grunt) {
                              // 3rd wave
                              'apps/io.ox/core/extPatterns/links.js',
                              'apps/io.ox/core/adaptiveLoader.js',
-                             'apps/io.ox/core/commons-folderview.js',
-                             'apps/io.ox/core/api/folder.js',
                              'apps/io.ox/core/tk/dialogs.js',
                              'apps/io.ox/core/tk/draghelper.js',
+                             // folder support
+                             'apps/io.ox/core/folder/util.js',
+                             'apps/io.ox/core/folder/sort.js',
+                             'apps/io.ox/core/folder/blacklist.js',
+                             'apps/io.ox/core/folder/title.js',
+                             'apps/io.ox/core/folder/bitmask.js',
+                             'apps/io.ox/core/folder/api.js',
+                             'apps/io.ox/core/folder/node.js',
+                             'apps/io.ox/core/folder/selection.js',
+                             'apps/io.ox/core/folder/tree.js',
+                             'apps/io.ox/core/folder/favorites.js',
+                             'apps/io.ox/core/folder/view.js',
                              // 4th wave
                              'apps/io.ox/core/collection.js',
                              'apps/io.ox/core/extPatterns/actions.js',

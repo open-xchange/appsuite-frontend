@@ -330,7 +330,7 @@ define('io.ox/core/extPatterns/links',
                     $('<li class="dropdown">').append(
                         $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
                         .append(
-                            $.txt(isSmall ? gt('Actions') : gt('More')),
+                            isSmall ? $.txt(gt('Actions')) : $('<i class="fa fa-bars">'),
                             $('<i class="fa fa-caret-down">')
                         )
                         .on(Modernizr.touch ? 'touchstart' : 'click', function () {
@@ -416,7 +416,10 @@ define('io.ox/core/extPatterns/links',
         this.append(
             node.addClass('dropdown').append(
                 $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
-                .append(label, options.noCaret ? $() : $('<i class="fa fa-caret-down">')),
+                .append(
+                    options.icon ? $('<i>').addClass(options.icon).attr('title', label) : label,
+                    options.noCaret ? $() : $('<i class="fa fa-caret-down">')
+                ),
                 ul = $('<ul class="dropdown-menu" role="menu">')
             )
         );

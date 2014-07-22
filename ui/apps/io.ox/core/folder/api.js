@@ -299,10 +299,9 @@ define('io.ox/core/folder/api',
 
         // try to resolve via pool
         do {
-            data = pool.getModel(id).toJSON();
+            result.push(data = pool.getModel(id).toJSON());
             id = data.folder_id;
-            done = String(data.folder_id) === '1';
-            result.push(data);
+            done = String(id) === '1';
         } while (id && !done);
 
         // resolve in reverse order (root > folder)
