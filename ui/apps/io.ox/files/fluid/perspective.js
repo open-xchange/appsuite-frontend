@@ -93,12 +93,21 @@ define('io.ox/files/fluid/perspective',
     }
 
     function loadFiles(app) {
-        var def = $.Deferred();
-        if (!app.getWindow().search.active || app.getWindow().search.query === '') {//empty search query shows folder again
+        var def = $.Deferred(),
+            search = app.getWindow().nodes.sidepanel.find('.search-container').is(':visible');
+        if (!search) {
+            //empty search query shows folder again
             api.getAll({ folder: app.folder.get() }, false).done(def.resolve).fail(def.reject);
         } else {
-            _.url.hash('id', null);//remove selection to prevent errors (file might not be in our search results)
-            api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
+            //remove selection to prevent errors (file might not be in our search results)
+            _.url.hash('id', null);
+            var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+            app.searchapi.query(true, params)
+                .then(function (response) {
+                    return response && response.results ? response.results : [];
+                })
+                .then(def.resolve, def.reject);
+            //api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
         }
         return def;
     }
@@ -808,9 +817,7 @@ define('io.ox/files/fluid/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search search:clear', function (e) {
-                //only reload when search was executed
-                if (e.type === 'cancel-search' && !filesContainer.hasClass('searchresult')) return;
+            win.on('search cancel-search', function () {
                 breadcrumb = undefined;
                 allIds = [];
                 drawFirst();
