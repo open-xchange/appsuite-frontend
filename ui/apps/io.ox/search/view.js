@@ -69,6 +69,16 @@ define('io.ox/search/view',
                 busy.show();
                 return this;
             },
+            repaint: function (ids) {
+                var self = this;
+                ext.point('io.ox/search/view/window').each(function (p) {
+                    var list = ids.split(' ');
+                    list.forEach(function (id) {
+                        if (id === p.id)
+                            p.invoke('draw', self.$el, self.baton);
+                    });
+                });
+            },
             redraw: function (options) {
                 options = options || {};
 
