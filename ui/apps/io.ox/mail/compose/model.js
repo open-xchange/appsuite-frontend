@@ -173,9 +173,7 @@ define('io.ox/mail/compose/model',
             });
             delete mail.data.nested_msgs;
             */
-            if (this.get('sendtype') === mailAPI.SENDTYPE.EDIT_DRAFT) {
-                this.set('sendtype', mailAPI.SENDTYPE.DRAFT, {silent: true});
-            }
+
 
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
@@ -202,6 +200,10 @@ define('io.ox/mail/compose/model',
                 'vcard',
                 'nested_msgs'
             );
+
+            if (this.get('msgref')) {
+                result.msgref = this.get('msgref');
+            }
 
             result.attachments = this.get('attachments').filter(function (a) {
                 return !!a.get('content');
