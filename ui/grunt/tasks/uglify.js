@@ -15,17 +15,18 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('uglify', {
-
-        bootjs: {
-            options: {
-                sourceMap: 'build/maps/boot.js.map',
-                sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
-                sourceMappingURL: '/appsuite/<%= assemble.options.base %>/maps/boot.js.map',
-                sourceMapPrefix: 1
-            },
-            files: {
-                'dist/appsuite/boot.js': ['build/boot.js']
+    grunt.config.merge({
+        uglify: {
+            bootjs: {
+                options: {
+                    sourceMap: 'build/maps/boot.js.map',
+                    sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
+                    sourceMappingURL: '/appsuite/<%= assemble.options.base %>/maps/boot.js.map',
+                    sourceMapPrefix: 1
+                },
+                files: {
+                    'dist/appsuite/boot.js': ['build/boot.js']
+                }
             }
         }
     });

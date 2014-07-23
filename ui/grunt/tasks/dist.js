@@ -30,47 +30,51 @@ module.exports = function (grunt) {
         return file.match(/\.([a-zA-Z]+_[a-zA-Z]+)\.js$/) && grunt.file.isFile(file);
     }
 
-    grunt.config.extend('copy', {
-        dist_custom: {
-            files: [
-                {
-                    src: ['readme.txt', 'apps/themes/.htaccess'],
-                    dest: 'dist/appsuite/'
-                },
-                {
-                    expand: true,
-                    src: ['.htaccess'],
-                    cwd: 'html/',
-                    dest: 'dist/appsuite/'
-                }
-            ]
-        },
-        dist_touchAppsuite: {
-            options: {
-                mode: parseInt('755', 8) //0755 is not allowed in strict mode o.O
+    grunt.config.merge({
+        copy: {
+            dist_custom: {
+                files: [
+                    {
+                        src: ['readme.txt', 'apps/themes/.htaccess'],
+                        dest: 'dist/appsuite/'
+                    },
+                    {
+                        expand: true,
+                        src: ['.htaccess'],
+                        cwd: 'html/',
+                        dest: 'dist/appsuite/'
+                    }
+                ]
             },
-            files: [
-                {
-                    expand: true,
-                    src: ['touch-appsuite'],
-                    cwd: 'bin/',
-                    dest: 'dist/sbin/'
-                }
-            ]
+            dist_touchAppsuite: {
+                options: {
+                    mode: parseInt('755', 8) //0755 is not allowed in strict mode o.O
+                },
+                files: [
+                    {
+                        expand: true,
+                        src: ['touch-appsuite'],
+                        cwd: 'bin/',
+                        dest: 'dist/sbin/'
+                    }
+                ]
+            }
         }
     });
 
-    grunt.config.extend('uglify', {
-        dist_rootfolder: {
-            files: [{
-                src: ['*.js', 'static/**/*.js'],
-                cwd: 'build/',
-                dest: 'dist/appsuite/',
-                filter: function (f) {
-                    return !isTranslationModule(f) && grunt.file.isFile(f);
-                },
-                expand: true
-            }]
+    grunt.config.merge({
+        uglify: {
+            dist_rootfolder: {
+                files: [{
+                    src: ['*.js', 'static/**/*.js'],
+                    cwd: 'build/',
+                    dest: 'dist/appsuite/',
+                    filter: function (f) {
+                        return !isTranslationModule(f) && grunt.file.isFile(f);
+                    },
+                    expand: true
+                }]
+            }
         }
     });
 

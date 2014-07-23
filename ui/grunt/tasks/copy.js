@@ -15,37 +15,39 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('copy', {
-        build_static: {
-            files: [
-                {
-                    src: ['.*', '*', '!*.hbs', '!{core_*,index,signin}.html'],
-                    expand: true,
-                    cwd: 'html/',
-                    dest: 'build/'
-                },
-                {
-                    src: ['o{n,ff}line.js'],
-                    expand: true,
-                    cwd: 'src/',
-                    dest: 'build/'
-                },
-                {
-                    expand: true,
-                    src: ['apps/**/*.{json,yml,tmpl}', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
-                    dest: 'build/'
-                }
-            ]
-        },
-        build_dateData: {
-            files: [
-                {
-                    src: ['apps/io.ox/core/date/*.json'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/'
-                }
-            ]
+    grunt.config.merge({
+        copy: {
+            build_static: {
+                files: [
+                    {
+                        src: ['.*', '*', '!*.hbs', '!{core_*,index,signin}.html'],
+                        expand: true,
+                        cwd: 'html/',
+                        dest: 'build/'
+                    },
+                    {
+                        src: ['o{n,ff}line.js'],
+                        expand: true,
+                        cwd: 'src/',
+                        dest: 'build/'
+                    },
+                    {
+                        expand: true,
+                        src: ['apps/**/*.{json,yml,tmpl}', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
+                        dest: 'build/'
+                    }
+                ]
+            },
+            build_dateData: {
+                files: [
+                    {
+                        src: ['apps/io.ox/core/date/*.json'],
+                        expand: true,
+                        filter: 'isFile',
+                        dest: 'build/'
+                    }
+                ]
+            }
         }
     });
 

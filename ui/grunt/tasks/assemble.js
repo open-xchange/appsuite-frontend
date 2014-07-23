@@ -15,50 +15,51 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('assemble', {
-
-        options: {
-            version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
-            revision: '<%= String(pkg.version.slice(pkg.version.indexOf("-") + 1)) %>',
-            enable_debug: '<%= String(local.debug) %>',
-            base: 'v=<%= assemble.options.version %>',
-            cap: '<%= String(local.cap || "") %>',
-        },
-        base: {
+    grunt.config.merge({
+        assemble: {
             options: {
-                layout: false,
-                ext: '',
-                partials: ['html/core_*.html']
+                version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
+                revision: '<%= String(pkg.version.slice(pkg.version.indexOf("-") + 1)) %>',
+                enable_debug: '<%= String(local.debug) %>',
+                base: 'v=<%= assemble.options.version %>',
+                cap: '<%= String(local.cap || "") %>',
             },
-            files: [
-                {
-                    src: ['index.html', 'signin.html'],
-                    expand: true,
-                    cwd: 'html/',
-                    rename: function (dest, matchedSrcPath) {
-                        var map = {
-                            'index.html': 'core',
-                            'signin.html': 'signin'
-                        };
-                        return dest + map[matchedSrcPath];
-                    },
-                    dest: 'build/'
-                }
-            ]
-        },
-        ox: {
-            options: {
-                layout: false,
-                ext: ''
+            base: {
+                options: {
+                    layout: false,
+                    ext: '',
+                    partials: ['html/core_*.html']
+                },
+                files: [
+                    {
+                        src: ['index.html', 'signin.html'],
+                        expand: true,
+                        cwd: 'html/',
+                        rename: function (dest, matchedSrcPath) {
+                            var map = {
+                                'index.html': 'core',
+                                'signin.html': 'signin'
+                            };
+                            return dest + map[matchedSrcPath];
+                        },
+                        dest: 'build/'
+                    }
+                ]
             },
-            files: [
-                {
-                    src: ['ox.js.hbs'],
-                    expand: true,
-                    cwd: 'src/',
-                    dest: 'build/'
-                }
-            ]
+            ox: {
+                options: {
+                    layout: false,
+                    ext: ''
+                },
+                files: [
+                    {
+                        src: ['ox.js.hbs'],
+                        expand: true,
+                        cwd: 'src/',
+                        dest: 'build/'
+                    }
+                ]
+            }
         }
     });
 

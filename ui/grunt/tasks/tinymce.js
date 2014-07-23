@@ -14,22 +14,24 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('copy', {
-        build_tinymce: {
-            files: [
-                {
-                    expand: true,
-                    src: ['**/*'],
-                    cwd: 'lib/tinymce/',
-                    dest: 'build/apps/3rd.party/tinymce/'
-                },
-                {
-                    expand: true,
-                    src: ['**/*'],
-                    cwd: 'lib/tiny_mce_custom/',
-                    dest: 'build/apps/3rd.party/tinymce/'
-                }
-            ]
+    grunt.config.merge({
+        copy: {
+            build_tinymce: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['**/*'],
+                        cwd: 'lib/tinymce/',
+                        dest: 'build/apps/3rd.party/tinymce/'
+                    },
+                    {
+                        expand: true,
+                        src: ['**/*'],
+                        cwd: 'lib/tiny_mce_custom/',
+                        dest: 'build/apps/3rd.party/tinymce/'
+                    }
+                ]
+            }
         }
     });
 
@@ -68,39 +70,42 @@ module.exports = function (grunt) {
             }
         };
 
-    grunt.config.extend('curl', {
-
-        tinymceMain: {
-            src: 'http://download.moxiecode.com/tinymce/tinymce_' + version + '_jquery.zip',
-            dest: 'tmp/tinymce.zip'
-        },
-
-        tinymceLanguagePack: {
-            src: {
-                url: 'http://www.tinymce.com/i18n/download.php',
-                method: 'POST',
-                form: {
-                    'download': languages,
-                }
+    grunt.config.merge({
+        curl: {
+            tinymceMain: {
+                src: 'http://download.moxiecode.com/tinymce/tinymce_' + version + '_jquery.zip',
+                dest: 'tmp/tinymce.zip'
             },
-            dest: 'tmp/tinymce_language_pack.zip'
+
+            tinymceLanguagePack: {
+                src: {
+                    url: 'http://www.tinymce.com/i18n/download.php',
+                    method: 'POST',
+                    form: {
+                        'download': languages,
+                    }
+                },
+                dest: 'tmp/tinymce_language_pack.zip'
+            }
         }
     });
 
-    grunt.config.extend('unzip', {
-        tinymceMain: {
-            router: function (filepath) {
-                return extractPart(filepath, 'tinymce/js/tinymce');
+    grunt.config.merge({
+        unzip: {
+            tinymceMain: {
+                router: function (filepath) {
+                    return extractPart(filepath, 'tinymce/js/tinymce');
+                },
+                src: 'tmp/tinymce.zip',
+                dest: 'lib/tinymce/'
             },
-            src: 'tmp/tinymce.zip',
-            dest: 'lib/tinymce/'
-        },
-        tinymceLanguagePack: {
-            router: function (filepath) {
-                return extractPart(filepath, 'langs');
-            },
-            src: 'tmp/tinymce_language_pack.zip',
-            dest: 'lib/tinymce/langs/'
+            tinymceLanguagePack: {
+                router: function (filepath) {
+                    return extractPart(filepath, 'langs');
+                },
+                src: 'tmp/tinymce_language_pack.zip',
+                dest: 'lib/tinymce/langs/'
+            }
         }
     });
 
