@@ -278,7 +278,7 @@ define('io.ox/tasks/util',
                     dateArray = [],
                     emptyDateArray = [],
                     alphabetSort = function (a, b) {//sort by alphabet
-                            if (a.title > b.title) {
+                            if (a.title.toLowerCase() > b.title.toLowerCase()) {
                                 return 1;
                             } else {
                                 return -1;

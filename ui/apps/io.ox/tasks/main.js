@@ -635,7 +635,7 @@ define('io.ox/tasks/main',
                 .divider()
                 .header(gt('Order'))
                 .option('order', 'asc', gt('Ascending'))
-                .option('order', 'dsc', gt('Descending'))
+                .option('order', 'desc', gt('Descending'))
                 .divider()
                 .option('done', true, gt('Show done tasks'))
                 .listenTo(app.grid.props, 'change:sort change:order change:done', function () {
