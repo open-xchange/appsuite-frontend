@@ -23,6 +23,7 @@ define('io.ox/contacts/main',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/commons',
+     'io.ox/core/capabilities',
      'io.ox/contacts/toolbar',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
@@ -33,7 +34,7 @@ define('io.ox/contacts/main',
      'io.ox/contacts/mobile-navbar-extensions',
      'io.ox/contacts/mobile-toolbar-actions',
      'less!io.ox/contacts/style'
-    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, toolbar, gt, settings, folderAPI, Bars, PageController, FolderView) {
+    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, FolderView) {
 
     'use strict';
 
@@ -723,6 +724,94 @@ define('io.ox/contacts/main',
             // drag & drop
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
                 actions.invoke('io.ox/contacts/actions/move', null, baton);
+            });
+        },
+
+        'inplace-search': function (app) {
+           if (_.device('small') || !(capabilities.has('search'))) return;
+
+            var side = app.getWindow().nodes.sidepanel, tree, toolbar, container;
+
+            side.find('.foldertree-sidepanel').append(
+                $('<div class="generic-toolbar top inplace-search io-ox-search">')
+            );
+
+            side.append(
+                container = $('<div class="abs search-container">')
+                .append('<ul class="search-facets">')
+                .hide()
+            );
+
+            tree = side.find('.foldertree-container').addClass('top-toolbar');
+            toolbar = side.find('.generic-toolbar.bottom');
+
+            require(['io.ox/search/main', 'io.ox/search/view-template'], function (search, view) {
+
+                //register
+                commons.wireGridAndSearch(app.grid, app.getWindow(), api);
+                app.grid.setAllRequest('search', function () {
+                    var params = { sort: app.grid.prop('sort'), order: app.grid.prop('order') };
+                    return search.apiproxy.query(true, params)
+                        .then(function (response) {
+                            return response && response.results ? response.results : [];
+                        });
+                });
+
+                app.search = search.getView();
+
+                side.find('.io-ox-search').append(
+                    app.search.render().$el.find('.input-group')
+                );
+
+                side.find('.search-field').on({
+                    'focus': function () {
+                        tree.hide();
+                        toolbar.hide();
+                        container.show();
+                        view.facets.call(container.children('ul').empty(), app.search.baton);
+                    }
+                });
+
+                // events
+                app.search.model.on('query', _.debounce(function () {
+                    view.facets.call(container.children('ul').empty(), app.search.baton);
+                    app.getWindow().trigger('search');
+                    app.search.focus();
+                }, 10));
+
+                app.search.on('button:clear', function () {
+                    side.find('.search-field').val('');
+                    tree.show();
+                    toolbar.show();
+                    container.hide();
+                    app.getWindow().trigger('search:clear');
+                    app.search.model.reset();
+                });
+
+                // redefine focus
+                app.search.focus = function () {
+                    container.find('.facet > a').focus();
+                };
+
+                // tooltips
+                side.find('.io-ox-search .input-group')
+                    //icond tooltips
+                    .find('i')
+                    .attr({
+                        'data-toggle': 'tooltip',
+                        'data-placement': 'right',
+                        'data-animation': 'false',
+                        'data-container': 'body'
+                    })
+                    .tooltip()
+                    .end()
+                    //search
+                    .find('.btn-search>i')
+                    .attr('title', gt('Search'))
+                    .end()
+                    //clear
+                    .find('.btn-clear')
+                    .attr('title', gt('Close search'));
             });
         }
     });
