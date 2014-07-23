@@ -546,9 +546,9 @@ msgstr "Учетная запись обновлена"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:106 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342
-#: apps/io.ox/files/mobile-toolbar-actions.js:68
-#: apps/io.ox/files/mobile-toolbar-actions.js:94
-#: apps/io.ox/files/mobile-toolbar-actions.js:106
+#: apps/io.ox/files/mobile-toolbar-actions.js:85
+#: apps/io.ox/files/mobile-toolbar-actions.js:124
+#: apps/io.ox/files/mobile-toolbar-actions.js:136
 #: apps/io.ox/mail/detail/view.js:88
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
@@ -606,12 +606,6 @@ msgstr "Добавить участника"
 #: apps/io.ox/contacts/actions.js:743 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "Добавить список рассылки"
-
-#: apps/io.ox/files/mobile-toolbar-actions.js:32 module:io.ox/mail
-#, fuzzy
-#| msgid "Add files"
-msgid "Add file"
-msgstr "Добавить файлы"
 
 #: apps/io.ox/files/filepicker.js:30 module:io.ox/files
 #: apps/io.ox/mail/write/view-main.js:586 module:io.ox/mail
@@ -5785,7 +5779,7 @@ msgstr "Показать выполненные задачи"
 msgid "Show hidden files and folders"
 msgstr "Показать скрытые файлы и папки"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:41 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:58 module:io.ox/mail
 #, fuzzy
 #| msgid "Show comments"
 msgid "Show icons"
@@ -5808,7 +5802,7 @@ msgstr "Показать внутреннюю ссылку"
 msgid "Show legal information"
 msgstr "Показать юридическое уведомление"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:59 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:76 module:io.ox/mail
 #, fuzzy
 #| msgid "Show less"
 msgid "Show list"
@@ -5836,7 +5830,7 @@ msgstr "Показать трассировку стека"
 msgid "Show task details"
 msgstr "Показать данные встречи"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:50 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:67 module:io.ox/mail
 #, fuzzy
 #| msgid "Show file"
 msgid "Show tiles"
@@ -8236,6 +8230,11 @@ msgstr "каждый год"
 
 #~ msgid "Account settings could not be saved."
 #~ msgstr "Не удалось сохранить настройки учетной записи."
+
+#, fuzzy
+#~| msgid "Add files"
+#~ msgid "Add file"
+#~ msgstr "Добавить файлы"
 
 #~ msgid "Add folder menu"
 #~ msgstr "Добавить папку меню"

@@ -548,9 +548,9 @@ msgstr "Cont actualizat"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:106 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342
-#: apps/io.ox/files/mobile-toolbar-actions.js:68
-#: apps/io.ox/files/mobile-toolbar-actions.js:94
-#: apps/io.ox/files/mobile-toolbar-actions.js:106
+#: apps/io.ox/files/mobile-toolbar-actions.js:85
+#: apps/io.ox/files/mobile-toolbar-actions.js:124
+#: apps/io.ox/files/mobile-toolbar-actions.js:136
 #: apps/io.ox/mail/detail/view.js:88
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
@@ -608,12 +608,6 @@ msgstr "Adaugă contact"
 #: apps/io.ox/contacts/actions.js:743 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "Adaugă listă de distribuție"
-
-#: apps/io.ox/files/mobile-toolbar-actions.js:32 module:io.ox/mail
-#, fuzzy
-#| msgid "Add files"
-msgid "Add file"
-msgstr "Adaugă fișiere"
 
 #: apps/io.ox/files/filepicker.js:30 module:io.ox/files
 #: apps/io.ox/mail/write/view-main.js:586 module:io.ox/mail
@@ -5818,7 +5812,7 @@ msgstr "Afișează sarcinile efectuate"
 msgid "Show hidden files and folders"
 msgstr "Afișează fișierele și dosarele ascunse"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:41 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:58 module:io.ox/mail
 #, fuzzy
 #| msgid "Show comments"
 msgid "Show icons"
@@ -5841,7 +5835,7 @@ msgstr "Afișează legătura internă"
 msgid "Show legal information"
 msgstr "Afișează informațiile legale"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:59 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:76 module:io.ox/mail
 #, fuzzy
 #| msgid "Show less"
 msgid "Show list"
@@ -5869,7 +5863,7 @@ msgstr "Afișează trasarea erorilor"
 msgid "Show task details"
 msgstr "Afișează detaliile sarcinii"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:50 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:67 module:io.ox/mail
 #, fuzzy
 #| msgid "Show file"
 msgid "Show tiles"
@@ -8506,6 +8500,11 @@ msgstr "anual"
 
 #~ msgid "Add feed"
 #~ msgstr "Adaugă flux"
+
+#, fuzzy
+#~| msgid "Add files"
+#~ msgid "Add file"
+#~ msgstr "Adaugă fișiere"
 
 #~ msgid "Add folder menu"
 #~ msgstr "Adaugă meniu dosare"

@@ -530,9 +530,9 @@ msgstr "户口已更新"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:106 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342
-#: apps/io.ox/files/mobile-toolbar-actions.js:68
-#: apps/io.ox/files/mobile-toolbar-actions.js:94
-#: apps/io.ox/files/mobile-toolbar-actions.js:106
+#: apps/io.ox/files/mobile-toolbar-actions.js:85
+#: apps/io.ox/files/mobile-toolbar-actions.js:124
+#: apps/io.ox/files/mobile-toolbar-actions.js:136
 #: apps/io.ox/mail/detail/view.js:88
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
@@ -590,12 +590,6 @@ msgstr "添加联系人"
 #: apps/io.ox/contacts/actions.js:743 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "添加通讯组列表"
-
-#: apps/io.ox/files/mobile-toolbar-actions.js:32 module:io.ox/mail
-#, fuzzy
-#| msgid "Add files"
-msgid "Add file"
-msgstr "添加文件"
 
 #: apps/io.ox/files/filepicker.js:30 module:io.ox/files
 #: apps/io.ox/mail/write/view-main.js:586 module:io.ox/mail
@@ -5723,7 +5717,7 @@ msgstr "显示已完成任务"
 msgid "Show hidden files and folders"
 msgstr "显示隐藏文件和文件夹"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:41 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:58 module:io.ox/mail
 #, fuzzy
 #| msgid "Show comments"
 msgid "Show icons"
@@ -5746,7 +5740,7 @@ msgstr "显示内部链接"
 msgid "Show legal information"
 msgstr "显示法律信息"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:59 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:76 module:io.ox/mail
 #, fuzzy
 #| msgid "Show less"
 msgid "Show list"
@@ -5774,7 +5768,7 @@ msgstr "显示堆叠痕迹"
 msgid "Show task details"
 msgstr "显示任务详情"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:50 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:67 module:io.ox/mail
 #, fuzzy
 #| msgid "Show file"
 msgid "Show tiles"
@@ -8290,6 +8284,11 @@ msgstr "每年"
 
 #~ msgid "Add feed"
 #~ msgstr "添加 feed"
+
+#, fuzzy
+#~| msgid "Add files"
+#~ msgid "Add file"
+#~ msgstr "添加文件"
 
 #~ msgid "Add folder menu"
 #~ msgstr "添加文件夹菜单"

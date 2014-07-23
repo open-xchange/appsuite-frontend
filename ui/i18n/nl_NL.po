@@ -538,9 +538,9 @@ msgstr "Account bijgewerkt"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:106 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342
-#: apps/io.ox/files/mobile-toolbar-actions.js:68
-#: apps/io.ox/files/mobile-toolbar-actions.js:94
-#: apps/io.ox/files/mobile-toolbar-actions.js:106
+#: apps/io.ox/files/mobile-toolbar-actions.js:85
+#: apps/io.ox/files/mobile-toolbar-actions.js:124
+#: apps/io.ox/files/mobile-toolbar-actions.js:136
 #: apps/io.ox/mail/detail/view.js:88
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
@@ -598,12 +598,6 @@ msgstr "Contactpersoon toevoegen"
 #: apps/io.ox/contacts/actions.js:743 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "Distributielijst toevoegen"
-
-#: apps/io.ox/files/mobile-toolbar-actions.js:32 module:io.ox/mail
-#, fuzzy
-#| msgid "Add files"
-msgid "Add file"
-msgstr "Bestanden toevoegen"
 
 #: apps/io.ox/files/filepicker.js:30 module:io.ox/files
 #: apps/io.ox/mail/write/view-main.js:586 module:io.ox/mail
@@ -5816,7 +5810,7 @@ msgstr "Toon voltooide taken"
 msgid "Show hidden files and folders"
 msgstr "Verborgen bestanden en mappen tonen"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:41 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:58 module:io.ox/mail
 #, fuzzy
 #| msgid "Show comments"
 msgid "Show icons"
@@ -5840,7 +5834,7 @@ msgstr "Toon interne link"
 msgid "Show legal information"
 msgstr "Toon juridische informatie"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:59 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:76 module:io.ox/mail
 #, fuzzy
 #| msgid "Show less"
 msgid "Show list"
@@ -5868,7 +5862,7 @@ msgstr "Toon stack trace"
 msgid "Show task details"
 msgstr "Taakdetails tonen"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:50 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:67 module:io.ox/mail
 #, fuzzy
 #| msgid "Show file"
 msgid "Show tiles"
@@ -8258,6 +8252,11 @@ msgstr "jaarlijks"
 
 #~ msgid "Account settings could not be saved."
 #~ msgstr "Accountinstellingen kunnen niet opgeslagen worden."
+
+#, fuzzy
+#~| msgid "Add files"
+#~ msgid "Add file"
+#~ msgstr "Bestanden toevoegen"
 
 #~ msgid "Adding attachments"
 #~ msgstr "Bijlagen toevoegen"

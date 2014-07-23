@@ -528,9 +528,9 @@ msgstr "已更新帳戶"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:106 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342
-#: apps/io.ox/files/mobile-toolbar-actions.js:68
-#: apps/io.ox/files/mobile-toolbar-actions.js:94
-#: apps/io.ox/files/mobile-toolbar-actions.js:106
+#: apps/io.ox/files/mobile-toolbar-actions.js:85
+#: apps/io.ox/files/mobile-toolbar-actions.js:124
+#: apps/io.ox/files/mobile-toolbar-actions.js:136
 #: apps/io.ox/mail/detail/view.js:88
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
@@ -588,12 +588,6 @@ msgstr "新增號碼..."
 #: apps/io.ox/contacts/actions.js:743 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "新增通訊組列表"
-
-#: apps/io.ox/files/mobile-toolbar-actions.js:32 module:io.ox/mail
-#, fuzzy
-#| msgid "Add files"
-msgid "Add file"
-msgstr "新增檔案"
 
 #: apps/io.ox/files/filepicker.js:30 module:io.ox/files
 #: apps/io.ox/mail/write/view-main.js:586 module:io.ox/mail
@@ -5719,7 +5713,7 @@ msgstr "顯示完成工作"
 msgid "Show hidden files and folders"
 msgstr "顯示隱藏檔案與資料夾"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:41 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:58 module:io.ox/mail
 #, fuzzy
 #| msgid "Show comments"
 msgid "Show icons"
@@ -5742,7 +5736,7 @@ msgstr "顯示內部連結"
 msgid "Show legal information"
 msgstr "顯示法律資訊"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:59 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:76 module:io.ox/mail
 #, fuzzy
 #| msgid "Show less"
 msgid "Show list"
@@ -5770,7 +5764,7 @@ msgstr "顯示堆疊追蹤"
 msgid "Show task details"
 msgstr "顯示任務詳情"
 
-#: apps/io.ox/files/mobile-toolbar-actions.js:50 module:io.ox/mail
+#: apps/io.ox/files/mobile-toolbar-actions.js:67 module:io.ox/mail
 #, fuzzy
 #| msgid "Show file"
 msgid "Show tiles"
@@ -8288,6 +8282,11 @@ msgstr "每年"
 
 #~ msgid "Add feed"
 #~ msgstr "新增資訊來源"
+
+#, fuzzy
+#~| msgid "Add files"
+#~ msgid "Add file"
+#~ msgstr "新增檔案"
 
 #~ msgid "Add folder menu"
 #~ msgstr "新增資料夾選單"
