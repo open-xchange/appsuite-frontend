@@ -205,6 +205,11 @@ define('io.ox/mail/compose/model',
                 result.msgref = this.get('msgref');
             }
 
+            if (this.get('contacts_ids')) {
+                // get flat cids for data.contacts_ids
+                result.contacts_ids = _(this.get('contacts_ids')).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
+            }
+
             result.attachments = this.get('attachments').filter(function (a) {
                 return !!a.get('content');
             }).map(function (m) {
