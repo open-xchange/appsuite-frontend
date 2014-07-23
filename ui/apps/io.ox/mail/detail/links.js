@@ -33,11 +33,15 @@ define('io.ox/mail/detail/links',
         var data = $(this).data();
         if (data.id) {
             // open file in side-popup
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail']).done(function (dialogs, api, view) {
-                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
-                    popup.busy();
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail','io.ox/core/notifications']).done(function (dialogs, api, view, notifications) {
+                var sidePopup = new dialogs.SidePopup({ tabTrap: true });
+                sidePopup.show(e, function (popupNode) {
+                    popupNode.busy();
                     api.get(_.cid(data.id)).done(function (data) {
-                        popup.idle().append(view.draw(data));
+                        popupNode.idle().append(view.draw(data));
+                    }).fail(function (e) {
+                        sidePopup.close();
+                        notifications.yell(e);
                     });
                 });
             });
