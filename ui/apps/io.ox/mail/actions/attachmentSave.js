@@ -15,11 +15,11 @@ define('io.ox/mail/actions/attachmentSave',
     ['io.ox/mail/api',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/tk/folderviews',
+     'io.ox/core/folder/tree',
      'io.ox/core/folder/api',
      'settings!io.ox/files', // yep, files not mail!
      'settings!io.ox/core',
-     'gettext!io.ox/mail'], function (api, notifications, dialogs, views, folderAPI, settings, settingsCore, gt) {
+     'gettext!io.ox/mail'], function (api, notifications, dialogs, TreeView, folderAPI, settings, settingsCore, gt) {
 
     'use strict';
 
@@ -60,43 +60,47 @@ define('io.ox/mail/actions/attachmentSave',
     return {
 
         multiple: function (list) {
-            var dialog = new dialogs.ModalDialog()
+
+            var dialog = new dialogs.ModalDialog({ addClass: 'zero-padding' })
                 .header($('<h4>').text(gt('Save attachment')))
-                .addPrimaryButton('ok', gt('Save'), 'ok', {tabIndex: '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+                .addPrimaryButton('ok', gt('Save'), 'ok', { tabindex: '1' })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: '1' });
 
             dialog.getBody().css({ height: '250px' });
 
             var folderId = settingsCore.get('folder/infostore'),
-                id = settings.get('folderpopup/last') || folderId,
-                tree = new views.FolderTree(dialog.getBody(), {
-                    type: 'infostore',
-                    rootFolderId: '9',
-                    open: settings.get('folderpopup/open', []),
-                    tabindex: 0,
-                    toggle: function (open) {
-                        settings.set('folderpopup/open', open).save();
-                    },
-                    select: function (id) {
-                        settings.set('folderpopup/last', id).save();
-                    }
-                });
+                id = settings.get('folderpopup/last') || folderId;
 
-            dialog.show(function () {
-                tree.paint().done(function () {
-                    tree.select(id).done(function () {
-                        dialog.getBody().focus();
-                    });
-                });
-            })
-            .done(function (action) {
-                if (action === 'ok') {
-                    var target = _(tree.selection.get()).first();
-                    if (target) commit(list, target);
+            var tree = new TreeView({
+                context: 'popup',
+                module: 'infostore',
+                open: settings.get('folderpopup/open', []),
+                root: '9',
+                customize: function (baton) {
+                    var data = baton.data, create = folderAPI.can('create', data);
+                    if (!create) this.addClass('disabled');
                 }
-                tree.destroy().done(function () {
-                    tree = dialog = null;
-                });
+            });
+
+            tree.on('open close', function () {
+                var open = this.getOpenFolders();
+                settings.set('folderpopup/open', open).save();
+            });
+
+            tree.on('change', function (id) {
+                settings.set('folderpopup/last', id).save();
+            });
+
+            dialog.on('ok', function () {
+                var target = tree.selection.get();
+                if (target) commit(list, target);
+            })
+            .show(function () {
+                tree.preselect(id);
+                dialog.getBody().focus().append(tree.render().$el);
+            })
+            .done(function () {
+                tree = dialog = null;
             });
         }
     };
