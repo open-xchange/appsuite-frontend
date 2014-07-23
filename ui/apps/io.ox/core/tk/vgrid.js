@@ -376,10 +376,10 @@ define('io.ox/core/tk/vgrid',
                 key = _.keys(changed)[0],
                 value = _.values(changed)[0];
             // be compatible to old school events without backbone
-            this.trigger('beforechange:prop', key, model.previousAttributes()[key], value);
-            this.trigger('beforechange:prop:' + key, model.previousAttributes()[key], value);
-            this.trigger('change:prop', key, value, model.previousAttributes()[key]);
-            this.trigger('change:prop:' + key, value, model.previousAttributes()[key]);
+            self.trigger('beforechange:prop', key, model.previousAttributes()[key], value);
+            self.trigger('beforechange:prop:' + key, model.previousAttributes()[key], value);
+            self.trigger('change:prop', key, value, model.previousAttributes()[key]);
+            self.trigger('change:prop:' + key, value, model.previousAttributes()[key]);
             responsiveChange = true;
         });
 
