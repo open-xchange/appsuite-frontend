@@ -60,7 +60,7 @@ define('io.ox/core/pubsub/settings/pane',
             view.render();
         }
 
-        folderAPI.getPath(folder).done(function (folder) {
+        folderAPI.path(folder).done(function (folder) {
 
             var folderPath = _(folder).pluck('title').join('/');
 

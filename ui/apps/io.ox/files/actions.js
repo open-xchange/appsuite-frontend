@@ -616,7 +616,7 @@ define('io.ox/files/actions',
             },
             multiple: function (list, baton) {
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/folder/tree'], function (dialogs, TreeView) {
 
                     function commit(target) {
                         api[type](list, target).then(
@@ -635,47 +635,49 @@ define('io.ox/files/actions',
                     if (baton.target) {
                         commit(baton.target);
                     } else {
-                        var dialog = new dialogs.ModalDialog()
+
+                        var dialog = new dialogs.ModalDialog({ addClass: 'zero-padding' })
                             .header($('<h4>').text(label))
-                            .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
+                            .addPrimaryButton('ok', label, 'ok', { tabIndex: '1' })
+                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' });
+
                         dialog.getBody().css({ height: '250px' });
+
                         var folderId = String(list[0].folder_id),
-                            id = settings.get('folderpopup/last') || folderId,
-                            tree = new views.FolderTree(dialog.getBody(), {
-                                type: 'infostore',
-                                rootFolderId: '9',
-                                open: settings.get('folderpopup/open', []),
-                                tabindex: 0,
-                                customize: function (data) {
-                                    if (type === 'move' && data.id === folderId) {
-                                        this.removeClass('selectable').addClass('disabled');
-                                    }
-                                },
-                                toggle: function (open) {
-                                    settings.set('folderpopup/open', open).save();
-                                },
-                                select: function (id) {
-                                    settings.set('folderpopup/last', id).save();
-                                },
-                                targetmode: true
-                            });
+                            id = settings.get('folderpopup/last') || folderId;
+
+                        var tree = new TreeView({
+                            context: 'popup',
+                            module: 'infostore',
+                            open: settings.get('folderpopup/open', []),
+                            root: '9',
+                            customize: function (baton) {
+                                var data = baton.data,
+                                    same = type === 'move' && data.id === folderId,
+                                    create = folderAPI.can('create', data);
+                                if (same || !create) this.addClass('disabled');
+                            }
+                        });
+
+                        tree.on('open close', function () {
+                            var open = this.getOpenFolders();
+                            settings.set('folderpopup/open', open).save();
+                        });
+
+                        tree.on('change', function (id) {
+                            settings.set('folderpopup/last', id).save();
+                        });
 
                         dialog.show(function () {
-                            tree.paint().done(function () {
-                                tree.select(id).done(function () {
-                                    dialog.getBody().focus();
-                                });
-                            });
+                            tree.preselect(id);
+                            dialog.getBody().focus().append(tree.render().$el);
                         })
                         .done(function (action) {
                             if (action === 'ok') {
-                                var target = _(tree.selection.get()).first();
-                                commit(target);
+                                var target = tree.selection.get();
+                                if (target) commit(target);
                             }
-                            tree.destroy().done(function () {
-                                tree = dialog = null;
-                            });
+                            tree = dialog = null;
                         });
                     }
                 });

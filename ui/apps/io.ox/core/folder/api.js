@@ -293,21 +293,21 @@ define('io.ox/core/folder/api',
     // Get folder path
     //
 
-    function getPath(id) {
+    function path(id) {
 
-        var result = [], data, done = false;
+        var result = [], current = id, data, done = false;
 
         // try to resolve via pool
         do {
-            result.push(data = pool.getModel(id).toJSON());
-            id = data.folder_id;
-            done = String(id) === '1';
-        } while (id && !done);
+            result.push(data = pool.getModel(current).toJSON());
+            current = data.folder_id;
+            done = String(current) === '1';
+        } while (current && !done);
 
         // resolve in reverse order (root > folder)
         if (done) return $.when(result.reverse());
 
-        http.GET({
+        return http.GET({
             module: 'folders',
             params: {
                 action: 'path',
@@ -667,7 +667,7 @@ define('io.ox/core/folder/api',
         get: get,
         list: list,
         multiple: multiple,
-        getPath: getPath,
+        path: path,
         flat: flat,
         update: update,
         move: move,

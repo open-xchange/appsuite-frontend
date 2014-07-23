@@ -50,7 +50,7 @@ define('io.ox/core/folder/actions/imap-subscription',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var pane = new dialogs.ModalDialog({
                     width: 500,
-                    addclass: 'subscribe-imap-folder'
+                    addClass: 'subscribe-imap-folder'
                 });
                 var changesArray = [];
 

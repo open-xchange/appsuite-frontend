@@ -50,7 +50,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         preselect: function (id) {
-            this.check(this.byId(id));
+            return this.check(this.byId(id)).length > 0;
         },
 
         onClick: function (e) {
@@ -124,7 +124,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         check: function (nodes) {
-            nodes.addClass('selected').attr('aria-selected', true);
+            return nodes.addClass('selected').attr('aria-selected', true);
         },
 
         uncheck: function (nodes) {

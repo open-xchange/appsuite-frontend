@@ -226,7 +226,7 @@ define('io.ox/core/folder/view',
         sidepanel.addClass('border-right');
 
         // render tree and add to DOM
-        sidepanel.append(tree.render().$el);
+        sidepanel.append(tree.render().$el.addClass('abs bottom-toolbar'));
 
         // a11y adjustments
         tree.$el.attr({
@@ -281,17 +281,8 @@ define('io.ox/core/folder/view',
         });
 
         // respond to open/close
-
-        function getOpenFolders() {
-            return _(tree.$el.find('.folder.open'))
-                .map(function (node) {
-                    return $(node).attr('data-id');
-                })
-                .sort();
-        }
-
         tree.on('open close', function () {
-            var open = getOpenFolders();
+            var open = this.getOpenFolders();
             app.settings.set('folderview/open/' + _.display(), open).save();
         });
 

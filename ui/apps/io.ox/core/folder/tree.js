@@ -27,7 +27,7 @@ define('io.ox/core/folder/tree',
 
     var TreeView = Backbone.View.extend({
 
-        className: 'folder-tree bottom-toolbar abs',
+        className: 'folder-tree',
 
         events: {
             'click .contextmenu-control': 'onToggleContextMenu',
@@ -43,12 +43,36 @@ define('io.ox/core/folder/tree',
             this.module = options.module;
             this.open = options.open;
             this.flat = !!options.flat;
+            this.context = options.context || 'app';
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
             this.$contextmenu = $();
 
             // add contextmenu?
             if (this.options.contextmenu) _.defer(this.renderContextMenu.bind(this));
+        },
+
+        // convenience function
+        // to avoid evil trap: path might contains spaces
+        appear: function (node) {
+            var id = node.folder.replace(/\s/g, '_');
+            this.trigger('appear:' + id, node);
+        },
+
+        // counter-part
+        onAppear: function (id, handler) {
+            id = String(id).replace(/\s/g, '_');
+            this.once('appear:' + id, handler);
+        },
+
+        preselect: function (id) {
+            // wait for node to appear
+            this.onAppear(id, function () {
+                // defer selection; might be too fast otherwise
+                _.defer(function () {
+                    this.selection.set(id);
+                }.bind(this));
+            });
         },
 
         filter: function (folder, model) {
@@ -59,6 +83,12 @@ define('io.ox/core/folder/tree',
             // other folders
             var module = model.get('module');
             return module === this.module || (module === 'mail' && (/^default\d+(\W|$)/i).test(model.id));
+        },
+
+        getOpenFolders: function () {
+            return _(this.$el.find('.folder.open'))
+                .map(function (node) { return $(node).attr('data-id'); })
+                .sort();
         },
 
         getTreeNodeOptions: function (options, model) {
@@ -212,11 +242,11 @@ define('io.ox/core/folder/tree',
             id: 'local-folders',
             index: INDEX += 100,
             draw: function (tree) {
+                // local folders
                 this.append(
-                    // local folders
                     new TreeNodeView({
                         count: 0,
-                        folder: 'virtual/folders', // convention! virtual folders are identified by their id starting with "virtual"
+                        folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
                         model_id: 'default0/INBOX',
                         parent: tree,
                         title: 'My folders',

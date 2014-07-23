@@ -153,7 +153,7 @@ define('io.ox/core/folder/breadcrumb',
             return ul;
         }
         finally {
-            api.getPath(id).then(
+            api.path(id).then(
                 function success(list) {
                     draw(list, ul, options);
                 },

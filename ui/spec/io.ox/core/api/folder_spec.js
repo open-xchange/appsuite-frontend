@@ -145,7 +145,7 @@ define(['shared/examples/for/api',
             });
 
             it('should return a path of a folder with getPath', function (done) {
-                var result = api.getPath('3', { cache: true }),
+                var result = api.path('3', { cache: true }),
                     parentID = '1';
 
                 result.done(function (data) {

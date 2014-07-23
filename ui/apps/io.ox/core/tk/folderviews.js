@@ -821,7 +821,7 @@ define('io.ox/core/tk/folderviews',
                 data = _.isArray(data) ? data[0] : data;
                 data = _.isObject(data) ? String(data.id) : String(data);
                 // get path
-                return api.getPath(data).pipe(function (list) {
+                return api.path(data).pipe(function (list) {
                     var def = $.Deferred();
                     deferredEach.call(self, _(list).pluck('id'), function () {
                         self.selection.set(data);

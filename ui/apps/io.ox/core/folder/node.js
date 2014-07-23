@@ -28,21 +28,39 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             'keydown': 'onKeydown'
         },
 
+        reset: function () {
+            if (this.isReset) return;
+            if (this.collection.fetched) this.onReset(); else api.list(this.options.model_id);
+        },
+
         onReset: function () {
 
             var o = this.options,
-                models = _(this.collection.filter(o.tree.filter.bind(o.tree, o.model_id)));
+                models = _(this.collection.filter(o.tree.filter.bind(o.tree, o.model_id))),
+                exists = {};
 
-            this.$.subfolders
-                .empty()
-                .append(models.map(this.getTreeNode, this));
+            // recycle existing nodes
+            this.$.subfolders.children().each(function () {
+                exists[$(this).attr('data-id')] = $(this).data('view');
+            });
+
+            // empty & append nodes
+            this.$.subfolders.empty().append(
+                models.map(function (model) {
+                    return (exists[model.id] || this.getTreeNode(model).render()).$el;
+                }, this)
+            );
 
             this.renderEmpty();
 
             // trigger events
-            models.each(function (model) {
-                o.tree.trigger('appear:' + model.id, model);
+            this.$.subfolders.children().each(function () {
+                var view = $(this).data('view');
+                if (!view || exists[view.folder]) return;
+                o.tree.appear(view);
             });
+
+            this.isReset = true;
         },
 
         onSort: _.debounce(function () {
@@ -58,11 +76,12 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
         onAdd: function (model) {
             // filter first
-            var o = this.options;
+            var o = this.options, node;
             if (!o.tree.filter(o.model_id, model)) return;
             // add
-            this.$.subfolders.append(this.getTreeNode(model));
-            this.options.tree.trigger('appear:' + model.id, model);
+            node = this.getTreeNode(model);
+            this.$.subfolders.append(node.render().$el);
+            this.options.tree.appear(node);
             this.model.set('subfolders', true);
             this.renderEmpty();
         },
@@ -109,14 +128,17 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.repaint();
         },
 
+        toggle: function (state) {
+            this.options.open = state;
+            this.onChangeSubFolders();
+            this.options.tree.trigger(state ? 'open' : 'close', this.folder);
+        },
+
         // open/close folder
         onToggle: function (e) {
             if (e.isDefaultPrevented()) return;
             e.preventDefault();
-            var o = this.options;
-            o.open = !o.open;
-            this.onChangeSubFolders();
-            o.tree.trigger(o.open ? 'open' : 'close', this.folder);
+            this.toggle(!this.options.open);
         },
 
         onOptions: function (e) {
@@ -146,7 +168,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             // empty?
             this.renderEmpty();
             // fetch sub-folders
-            if (hasSubFolders && isOpen) { this.onReset(); api.list(o.model_id); }
+            if (hasSubFolders && isOpen) this.reset();
         },
 
         // respond to cursor left/right
@@ -177,7 +199,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
                 options = o.tree.getTreeNodeOptions({ folder: model.id, level: level, tree: o.tree, parent: this }, model);
-            return new TreeNodeView(options).render().$el;
+            return new TreeNodeView(options);
         },
 
         initialize: function (options) {
@@ -203,7 +225,11 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.model = api.pool.getModel(o.model_id);
             this.collection = api.pool.getCollection(o.model_id);
+            this.isReset = false;
             this.$ = {};
+
+            // make accessible via DOM
+            this.$el.data('view', this);
 
             // inherit "open"
             if (_(o.tree.options.open).contains(this.folder)) o.open = true;
@@ -256,10 +282,13 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             if (!this.isVirtual) api.get(o.model_id);
 
             // fetch subfolders if not open but "empty" is false
-            if (o.empty === false && o.open === false) api.list(o.model_id);
+            if (o.empty === false && o.open === false) this.reset();
 
             // allow extensions
-            ext.point('io.ox/core/foldertree/node').invoke('scaffold', this.$el, ext.Baton({ view: this }));
+            ext.point('io.ox/core/foldertree/node').invoke('scaffold', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+
+            // simple tree-based customize callback
+            if (_.isFunction(o.tree.options.customize)) o.tree.options.customize.call(this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', this.remove.bind(this));

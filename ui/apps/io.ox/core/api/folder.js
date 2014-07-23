@@ -1233,7 +1233,7 @@ define('io.ox/core/api/folder',
                 return ul;
             }
             finally {
-                api.getPath({ folder: id }).then(
+                api.path({ folder: id }).then(
                     function success(list) {
                         draw(list, ul, options);
                     },

@@ -223,8 +223,8 @@ define('io.ox/core/tk/dialogs',
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
 
-        if (o.addclass) {
-            nodes.popup.addClass(o.addclass);
+        if (o.addClass) {
+            nodes.popup.addClass(o.addClass);
         }
         // add event hub
         Events.extend(this);

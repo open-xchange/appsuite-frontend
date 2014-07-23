@@ -51,7 +51,7 @@ define('io.ox/files/filepicker',
             pane = new dialogs.ModalDialog({
                 width: options.width,
                 height: 350,
-                addclass: 'add-infostore-file'
+                addClass: 'add-infostore-file'
             }),
             self = this,
             pickerDef = $.Deferred();
