@@ -432,7 +432,7 @@ define('io.ox/files/main',
                     tree.show();
                     toolbar.show();
                     container.hide();
-                    app.getWindow().trigger('cancel-search');
+                    app.getWindow().trigger('search:cancel');
                     app.search.model.reset();
                 });
 

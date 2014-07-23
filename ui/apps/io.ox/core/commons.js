@@ -482,7 +482,7 @@ define('io.ox/core/commons',
                 grid.setMode('search');
             });
             // on cancel search
-            win.on('search:clear cancel-search', function () {
+            win.on('search:clear search:cancel', function () {
                 if (grid.getMode() !== 'all') grid.setMode('all');
             });
         },
