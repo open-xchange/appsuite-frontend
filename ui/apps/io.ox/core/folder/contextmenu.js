@@ -57,7 +57,7 @@ define('io.ox/core/folder/contextmenu',
         //
         markFolderSeen: function (baton) {
 
-            if (baton.options.type !== 'mail') return;
+            if (baton.module !== 'mail') return;
 
             addLink(this, {
                 action: 'markfolderread',
@@ -73,7 +73,7 @@ define('io.ox/core/folder/contextmenu',
         //
         expunge: function (baton) {
 
-            if (baton.options.type !== 'mail') return;
+            if (baton.module !== 'mail') return;
 
             addLink(this, {
                 action: 'expunge',
@@ -89,7 +89,7 @@ define('io.ox/core/folder/contextmenu',
         //
         empty: function (baton) {
 
-            if (baton.options.type !== 'mail') return;
+            if (baton.module !== 'mail') return;
 
             addLink(this, {
                 action: 'clearfolder',
@@ -114,12 +114,12 @@ define('io.ox/core/folder/contextmenu',
             return function (baton) {
 
                 // only mail and infostore show hierarchies
-                if (/^(contacts|calendar|tasks)$/.test(baton.options.type)) return;
+                if (/^(contacts|calendar|tasks)$/.test(baton.module)) return;
                 if (!api.can('create', baton.data)) return;
 
                 addLink(this, {
                     action: 'add-subfolder',
-                    data: { app: baton.app, folder: baton.data.id, module: baton.options.type },
+                    data: { app: baton.app, folder: baton.data.id, module: baton.module },
                     enabled: true,
                     handler: handler,
                     text: gt('New subfolder')
@@ -153,9 +153,9 @@ define('io.ox/core/folder/contextmenu',
         }()),
 
         //
-        // Delete folder
+        // Remove folder
         //
-        deleteFolder: (function () {
+        removeFolder: (function () {
 
             function handler(e) {
                 ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
@@ -165,7 +165,7 @@ define('io.ox/core/folder/contextmenu',
 
             return function (baton) {
 
-                if (!api.can('deleteFolder', baton.data)) return;
+                if (!api.can('remove:folder', baton.data)) return;
 
                 addLink(this, {
                     action: 'delete',
@@ -184,15 +184,15 @@ define('io.ox/core/folder/contextmenu',
 
             function handler(e) {
                 require(['io.ox/core/folder/actions/move'], function (move) {
-                    move(e.data.id);
+                    move.folder(e.data.id);
                 });
             }
 
             return function (baton) {
 
-                if (!/^(mail|infostore)$/.test(baton.options.type)) return;
+                if (!/^(mail|infostore)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
-                if (!api.can('deleteFolder', baton.data)) return;
+                if (!api.can('remove:folder', baton.data)) return;
 
                 addLink(this, {
                     action: 'move',
@@ -415,14 +415,12 @@ define('io.ox/core/folder/contextmenu',
 
             return function (baton) {
 
-                if (baton.options.type !== 'contacts') return;
-                if (_.device('smartphone')) return;
                 if (!baton.data.id) return; // if data is empty we have nothing to do here
+                if (!/^(contacts|calendar|tasks)$/.test(baton.module)) return;
+                if (_.device('smartphone')) return;
                 if (baton.data.standard_folder) return;
 
                 var hidden = api.is('hidden', baton.data);
-
-                console.log('show/hide?', baton.data.id, hidden);
 
                 addLink(this, {
                     action: 'hide',
@@ -532,7 +530,7 @@ define('io.ox/core/folder/contextmenu',
         {
             id: 'delete',
             index: 4300,
-            draw: extensions.deleteFolder
+            draw: extensions.removeFolder
         }
     );
 

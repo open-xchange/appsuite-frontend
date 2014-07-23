@@ -16,8 +16,7 @@ define('io.ox/core/folder/actions/move',
      'io.ox/core/folder/tree',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/tk/folderviews',
-     'gettext!io.ox/core'], function (api, TreeView, notifications, dialogs, views, gt) {
+     'gettext!io.ox/core'], function (api, TreeView, notifications, dialogs, gt) {
 
     'use strict';
 
@@ -132,9 +131,11 @@ define('io.ox/core/folder/actions/move',
 
         folder: function (id) {
 
-            var model = api.pool.getModel(id), module = model.get('module');
+            var model = api.pool.getModel(id),
+                module = model.get('module'),
+                flat = /^(contacts|calendar|infostore)$/.test(module);
 
-            var dialog = new dialogs.ModalDialog({ async: true })
+            var dialog = new dialogs.ModalDialog({ async: true, addClass: 'zero-padding' })
                 .header(
                     $('<h4>').append(
                         $.txt(gt('Move folder')),
@@ -147,41 +148,33 @@ define('io.ox/core/folder/actions/move',
 
             dialog.getBody().css('height', '250px');
 
-            var tree = new views.FolderTree(dialog.getBody(), {
-                type: module,
-                rootFolderId: module === 'infostore' ? '9' : '1',
-                skipRoot: module !== 'mail', // skip root unless mail
-                tabindex: 0,
-                cut: id,
-                customize: function (target) {
-                    if (module === 'mail' && target.module === 'system') return;
-                    if (!api.can('move:folder', model.toJSON(), target)) {
-                        this.removeClass('selectable').addClass('disabled');
-                    }
+            var tree = new TreeView({
+                context: 'popup',
+                flat: flat,
+                indent: !flat,
+                module: module,
+                root: module === 'infostore' ? '9' : '1',
+                customize: function (baton) {
+
+                    var data = baton.data,
+                        same = data.id === id,
+                        move = api.can('move:folder', model.toJSON(), data);
+
+                    if (module === 'mail' && data.module === 'system') return;
+                    if (same || !move) this.addClass('disabled');
                 }
             });
 
             dialog.on('ok', function () {
                 var target = tree.selection.get();
-                if (target.length !== 1) return this.close();
-                // move action
-                api.move(id, target[0]).then(this.close, this.idle).fail(notifications.yell);
+                if (target) api.move(id, target).then(this.close, this.idle).fail(notifications.yell);
             })
             .show(function () {
-                tree.paint().done(function () {
-                    // open the foldertree to the current folder
-                    tree.select(id).done(function () {
-                        // select first active element
-                        tree.selection.updateIndex().selectFirst();
-                        // focus
-                        dialog.getBody().focus();
-                    });
-                });
+                tree.preselect(id);
+                dialog.getBody().focus().append(tree.render().$el);
             })
             .done(function () {
-                tree.destroy().done(function () {
-                    tree = dialog = null;
-                });
+                tree = dialog = null;
             });
         }
     };

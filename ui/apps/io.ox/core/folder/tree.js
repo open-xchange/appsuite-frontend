@@ -162,7 +162,7 @@ define('io.ox/core/folder/tree',
                 view = this;
             // get folder data and redraw
             api.get(id).done(function (data) {
-                var baton = new ext.Baton({ app: app, data: data, view: view, options: { type: module } });
+                var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
                 ext.point(point).invoke('draw', ul, baton);
                 // check if menu exceeds viewport
                 if (ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
