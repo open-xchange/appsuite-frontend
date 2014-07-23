@@ -12,7 +12,7 @@
  */
 
 .io-ox-core-tk-attachment-list {
-    margin-top: 13px;
+
     padding: 0;
 
     &.empty {
@@ -20,6 +20,7 @@
     }
 
     &.inline-items {
+
         li.item {
             display: inline-block;
             padding: 4px 0.5em 4px 5px;
@@ -30,55 +31,7 @@
             padding: 0;
             width: 120px;
         }
-    }
 
-    &.preview {
-        margin: 14px 0 0 0;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding: 0;
-        white-space: nowrap;
-    }
-
-    &.preview .item {
-
-        position: relative;
-        height: 120px;
-        width: 120px;
-
-        &:hover {
-            .io-ox-core-tk-attachment {
-                height: 3em;
-                -webkit-transition: height 200ms;
-                transition: height 200ms;
-            }
-        }
-        &.no-preview {
-            background-color: #f5f5f5;
-        }
-
-        .io-ox-core-tk-attachment {
-            bottom: 0;
-            height: 0;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            width: 100%;
-
-            > i.fa-paperclip {
-                display: none;
-            }
-            > .row-1 {
-                left: 3px;
-            }
-            > .row-2 {
-                left: 3px;
-            }
-            .remove {
-                top: 0;
-                right: 0;
-            }
-        }
     }
 
     /* SimpleEditableList */
@@ -99,7 +52,6 @@
         }
 
         /* depending on pane background*/
-
         &.background {
             background-color: #f5f5f5;
         }
@@ -203,7 +155,9 @@
 
     }
 
-    .col-md-6:nth-child(odd) { margin-left: 0; }
+    .col-md-6:nth-child(odd) {
+        margin-left: 0;
+    }
 
     /* EditableAttachmentList */
     .io-ox-core-tk-attachment {
@@ -230,11 +184,11 @@
 
             &.row-2 {
                 top: 23px;
-                span.filesize { color: #aaa; }
             }
         }
 
         .remove {
+
             display: inline-block;
             position: absolute;
             top: 1px;
@@ -259,6 +213,68 @@
                 margin-top: -0.5em;
                 text-align: center;
             }
+
         }
+
     }
+
+    /* Preview mode */
+    &.preview {
+
+        margin: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+
+        .item {
+
+            position: relative;
+            height: 120px;
+            width: 120px;
+            background-color: #f5f5f5;
+
+            &:hover .io-ox-core-tk-attachment {
+                height: 100%;
+            }
+
+            .io-ox-core-tk-attachment {
+                bottom: 0;
+                height: 0;
+                margin: 0;
+                padding: 0;
+                position: absolute;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.6);
+                color: @white;
+
+                > i.fa-paperclip {
+                    display: none;
+                }
+
+                > .row-1 {
+                    left: 3px;
+                    right: 3px;
+                    top: 60%;
+                }
+
+                > .row-2 {
+                    left: 3px;
+                    right: 3px;
+                    top: 77%;
+                }
+
+                .remove {
+                    bottom: initial;
+                    background-color: initial;
+                    top: 0;
+                    right: 0;
+                    height: 2em;
+                }
+
+            }
+
+        }
+
+    }
+
 }

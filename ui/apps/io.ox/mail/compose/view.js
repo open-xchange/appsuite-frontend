@@ -198,7 +198,7 @@ define('io.ox/mail/compose/view',
         id: 'attachmentList',
         index: 200,
         draw: function (baton) {
-            var node = $('<div class="col-xs-12 attachments-list">');
+            var node = $('<div class="col-xs-12">');
             extensions.attachmentList.call(node, baton);
             node.appendTo(this);
         }
@@ -208,11 +208,14 @@ define('io.ox/mail/compose/view',
         id: 'attachmentPreviewList',
         index: 200,
         draw: function (baton) {
-            var node = $('<div class="col-xs-12 attachments-preview-list">');
+            var node = $('<div class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
             node.appendTo(this);
         }
     });
+
+    // disable attachmentList by default
+    ext.point(POINT + '/attachments').disable('attachmentList');
 
     /**
      * mapping for getFieldLabel()
