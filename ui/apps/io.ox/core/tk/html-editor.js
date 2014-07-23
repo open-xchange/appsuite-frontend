@@ -541,72 +541,65 @@ define.async('io.ox/core/tk/html-editor',
 
         var resizeEditor = _.debounce(function () {
             if (textarea === null) return;
+                var p = textarea.parent(),
+                    h = p.height(),
+                    toolbar = p.find('.mce-toolbar-grp').outerHeight(),
+                    iframeHeight = h - toolbar - 2;
+                p.find('.mce-tinymce.mce-container.mce-panel').css({ height: iframeHeight });
+                p.find('iframe').css('height', iframeHeight);
 
-            var p = textarea.parent(),
-            h = $(window).height(),
-            top = p.find('iframe').offset().top;
+                return;
+            }, 50),
 
-            p.find('.mce-tinymce.mce-container.mce-panel').css('height', (h - top - 40));
-            p.find('iframe').css('height', (h - top - 40));
+            trimIn = function (str) {
+                return trimEnd(str);
+            },
 
-            return;
-        }, 50),
+            trimOut = function (str) {
+                return trimEnd(str).replace(/[\r\n]+/g, '');
+            },
 
-        trimIn = function (str) {
-            return trimEnd(str);
-        },
+            quote = function (str) {
+                return '> ' + $.trim(str).replace(/\n/g, '\n> ');
+            },
 
-        trimOut = function (str) {
-            return trimEnd(str).replace(/[\r\n]+/g, '');
-        },
-
-        quote = function (str) {
-            return '> ' + $.trim(str).replace(/\n/g, '\n> ');
-        },
-
-        set = function (str) {
-            var text = emoji.processEmoji(str, function (text, lib) {
-                if (!lib.loaded) return;
+            set = function (str) {
+                var text = emoji.processEmoji(str, function (text, lib) {
+                    if (!lib.loaded) return;
+                    ed.setContent(text);
+                });
                 ed.setContent(text);
-            });
-            ed.setContent(text);
-        },
+            },
 
-        clear = function () {
-            set('');
-        },
+            clear = function () {
+                set('');
+            },
 
-        ln2br = function (str) {
-            return String(str || '').replace(/\r/g, '')
-                .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
-        },
+            ln2br = function (str) {
+                return String(str || '').replace(/\r/g, '')
+                    .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
+            },
 
-        // get editor content
-        // trim white-space and clean up pseudo XHTML
-        // remove empty paragraphs at the end
-        get = function () {
-            // remove tinyMCE resizeHandles
-            $(ed.getBody()).find('.mce-resizehandle').remove();
+            // get editor content
+            // trim white-space and clean up pseudo XHTML
+            // remove empty paragraphs at the end
+            get = function () {
+                // remove tinyMCE resizeHandles
+                $(ed.getBody()).find('.mce-resizehandle').remove();
 
-            // get raw content
-            var content = ed.getContent({ format: 'raw' });
-            // convert emojies
-            content = emoji.imageTagsToUnified(content);
-            // clean up
-            content = content
-                // remove custom attributes (incl. bogus attribute)
-                .replace(/\sdata-[^=]+="[^"]*"/g, '')
-                .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                .replace(/(<p>(<br>)?<\/p>)+$/, '');
-
-            // remove trailing white-space, line-breaks, and empty paragraphs
-            content = content.replace(
-                /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
-            );
-
-            // remove trailing white-space
-            return trimOut(content);
-        };
+                // get raw content
+                var content = ed.getContent({ format: 'raw' });
+                // convert emojies
+                content = emoji.imageTagsToUnified(content);
+                // clean up
+                content = content
+                    // remove custom attributes (incl. bogus attribute)
+                    .replace(/\sdata-[^=]+="[^"]*"/g, '')
+                    .replace(/<(\w+)[ ]?\/>/g, '<$1>')
+                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
+                // remove trailing white-space
+                return trimOut(content);
+            };
 
         // publish internal 'done'
         this.done = function (fn) {
@@ -800,7 +793,7 @@ define.async('io.ox/core/tk/html-editor',
         };
 
         this.handleHide = function () {
-            $(window).off('resize.tinymce');
+            $(window).off('resize.tinymce', resizeEditor);
         };
 
         this.getContainer = function () {
