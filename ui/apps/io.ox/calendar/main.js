@@ -245,8 +245,8 @@ define('io.ox/calendar/main',
             id: 'show-all',
             draw: function (baton) {
 
+                if (baton.context !== 'app') return;
                 if (!baton.data || !baton.options) return;
-                if (baton.options.dialogmode) return;
 
                 this.append(
                     $('<div class="show-all-checkbox">').append(

@@ -226,7 +226,7 @@ define('io.ox/core/folder/view',
         sidepanel.addClass('border-right');
 
         // render tree and add to DOM
-        sidepanel.append(tree.render().$el.addClass('abs bottom-toolbar'));
+        sidepanel.append(tree.render().$el.addClass('bottom-toolbar'));
 
         // a11y adjustments
         tree.$el.attr({

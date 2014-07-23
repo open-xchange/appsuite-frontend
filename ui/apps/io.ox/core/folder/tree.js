@@ -27,7 +27,7 @@ define('io.ox/core/folder/tree',
 
     var TreeView = Backbone.View.extend({
 
-        className: 'folder-tree',
+        className: 'folder-tree abs',
 
         events: {
             'click .contextmenu-control': 'onToggleContextMenu',
@@ -332,7 +332,7 @@ define('io.ox/core/folder/tree',
             draw: function (tree) {
 
                 var links = $('<div class="links">'),
-                    baton = ext.Baton({ module: module, view: tree }),
+                    baton = ext.Baton({ module: module, view: tree, context: tree.context }),
                     folder = 'virtual/flat/' + module,
                     model_id = 'flat/' + module,
                     defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree };
@@ -368,15 +368,19 @@ define('io.ox/core/folder/tree',
                 id: 'private',
                 draw: function (baton) {
 
+                    if (baton.context !== 'app') return;
+
                     var module = baton.module, folder = api.getDefaultFolder(module);
 
-                    this.append($('<div>').append(
-                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
-                        .text(
-                            module === 'calendar' ? gt('New private calendar') : gt('New private folder')
+                    this.append(
+                        $('<div>').append(
+                            $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                            .text(
+                                module === 'calendar' ? gt('New private calendar') : gt('New private folder')
+                            )
+                            .on('click', { folder: folder, module: module }, addFolder)
                         )
-                        .on('click', { folder: folder, module: module }, addFolder)
-                    ));
+                    );
                 }
             },
             {
@@ -384,9 +388,7 @@ define('io.ox/core/folder/tree',
                 id: 'public',
                 draw: function (baton) {
 
-                    // yep, show this below private section.
-                    // cause there might be no public folders, and in this case
-                    // the section would be hidden
+                    if (baton.context !== 'app') return;
                     if (!capabilities.has('edit_public_folders')) return;
 
                     var node = $('<div>'), module = baton.module;

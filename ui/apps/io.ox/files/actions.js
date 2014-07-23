@@ -616,77 +616,26 @@ define('io.ox/files/actions',
             },
             multiple: function (list, baton) {
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/folder/tree'], function (dialogs, TreeView) {
-
-                    function commit(target) {
-                        api[type](list, target).then(
-                            function (errors) {
-                                if (errors.length > 0) {
-                                    notifications.yell('error', errors[0].error);//show only the first one, to prevent notification stacking
-                                } else {
-                                    notifications.yell('success', success);
-                                }
-                                folderAPI.reload(target, list);
-                            },
-                            notifications.yell
-                        );
-                    }
-
-                    if (baton.target) {
-                        commit(baton.target);
-                    } else {
-
-                        var dialog = new dialogs.ModalDialog({ addClass: 'zero-padding' })
-                            .header($('<h4>').text(label))
-                            .addPrimaryButton('ok', label, 'ok', { tabIndex: '1' })
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' });
-
-                        dialog.getBody().css({ height: '250px' });
-
-                        var folderId = String(list[0].folder_id),
-                            id = settings.get('folderpopup/last') || folderId;
-
-                        var tree = new TreeView({
-                            context: 'popup',
-                            module: 'infostore',
-                            open: settings.get('folderpopup/open', []),
-                            root: '9',
-                            customize: function (baton) {
-                                var data = baton.data,
-                                    same = type === 'move' && data.id === folderId,
-                                    create = folderAPI.can('create', data);
-                                if (same || !create) this.addClass('disabled');
-                            }
-                        });
-
-                        tree.on('open close', function () {
-                            var open = this.getOpenFolders();
-                            settings.set('folderpopup/open', open).save();
-                        });
-
-                        tree.on('change', function (id) {
-                            settings.set('folderpopup/last', id).save();
-                        });
-
-                        dialog.show(function () {
-                            tree.preselect(id);
-                            dialog.getBody().focus().append(tree.render().$el);
-                        })
-                        .done(function (action) {
-                            if (action === 'ok') {
-                                var target = tree.selection.get();
-                                if (target) commit(target);
-                            }
-                            tree = dialog = null;
-                        });
-                    }
+                require(['io.ox/core/folder/actions/move'], function (move) {
+                    move.item({
+                        api: api,
+                        button: label,
+                        list: list,
+                        module: 'infostore',
+                        root: '9',
+                        settings: settings,
+                        success: success,
+                        target: baton.target,
+                        title: label,
+                        type: type
+                    });
                 });
             }
         });
     }
 
-    moveAndCopy('move', gt('Move'), gt('Files have been moved'));
-    moveAndCopy('copy', gt('Copy'), gt('Files have been copied'));
+    moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
+    moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',

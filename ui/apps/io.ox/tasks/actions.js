@@ -13,14 +13,16 @@
 
 define('io.ox/tasks/actions',
     ['io.ox/core/extensions',
+     'io.ox/tasks/api',
      'io.ox/tasks/util',
      'io.ox/core/extPatterns/links',
+     'settings!io.ox/tasks',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'io.ox/core/extPatterns/actions',
      'io.ox/tasks/common-extensions'
-    ], function (ext, util, links, gt, notifications, print, actions, extensions) {
+    ], function (ext, api, util, links, settings, gt, notifications, print, actions, extensions) {
 
     'use strict';
 
@@ -173,76 +175,28 @@ define('io.ox/tasks/actions',
     new Action('io.ox/tasks/actions/move', {
         requires: 'some delete',
         multiple: function (list, baton) {
-            var task = baton.data,
-                numberOfTasks = task.length || 1,
-                vGrid = baton.grid || (baton.app && baton.app.getGrid());
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/folder/api'])
-                    .done(function (dialogs, views, api, folderAPI) {
 
-                function commit(target) {
-                    if (vGrid) vGrid.busy();
-                    api.move(list, target).then(
-                        function () {
-                            notifications.yell('success', gt('Tasks have been moved'));
-                            folderAPI.reload(target, list);
-                            if (vGrid) vGrid.idle();
-                        },
-                        notifications.yell
-                    );
-                }
+            var vgrid = baton.grid || (baton.app && baton.app.getGrid());
 
-                if (baton.target) {
-                    commit(baton.target);
-                } else {
-
-                    //build popup
-                    var popup = new dialogs.ModalDialog()
-                        .header($('<h4>').text(gt('Move')))
-                        .addPrimaryButton('ok', gt('Move'), 'ok', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
-                    popup.getBody().css({ height: '250px' });
-                    var tree = new views.FolderList(popup.getBody(), {
-                            type: 'tasks',
-                            tabindex: 0,
-                            targetmode: true,
-                            dialogmode: true
-                        }),
-                        id = String(task.folder || task.folder_id);
-
-                    popup.show(function () {
-                        tree.paint().done(function () {
-                            tree.select(id).done(function () {
-                                popup.getBody().focus();
-                            });
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'ok') {
-                            var node = $('.io-ox-multi-selection');
-                            node.hide();
-                            node.parent().busy();
-                            var target = _(tree.selection.get()).first();
-                            // move only if folder differs from old folder
-                            if (target && target !== id) {
-                                // move action
-                                api.move(task, target)
-                                .done(function () {
-                                    node.show();
-                                    node.parent().idle();
-                                    notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
-                                })
-                                .fail(function () {
-                                    node.show();
-                                    node.parent().idle();
-                                    notifications.yell('error', gt('A severe error occurred!'));
-                                });
-                            }
-                        }
-                        tree.destroy().done(function () {
-                            tree = popup = null;
-                        });
-                    });
-                }
+            require(['io.ox/core/folder/actions/move'], function (move) {
+                move.item({
+                    api: api,
+                    button: gt('Move'),
+                    flat: true,
+                    indent: false,
+                    list: list,
+                    module: 'tasks',
+                    root: '1',
+                    settings: settings,
+                    success: {
+                        single: 'Task has been moved',
+                        multiple: 'Tasks have been moved'
+                    },
+                    target: baton.target,
+                    title: gt('Move'),
+                    type: 'move',
+                    vgrid: vgrid
+                });
             });
         }
     });

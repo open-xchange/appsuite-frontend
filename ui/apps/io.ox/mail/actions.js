@@ -248,83 +248,26 @@ define('io.ox/mail/actions',
             requires: 'toplevel some',
             multiple: function (list, baton) {
 
-                list = folderAPI.ignoreSentItems(list);
-
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/folder/tree'], function (dialogs, TreeView) {
-
-                    function commit(target) {
-
-                        api[type](list, target).then(
-                            function (resp) {
-                                if (resp) {
-                                    notifications.yell('error', resp);
-                                } else {
-                                    if (type === 'copy') notifications.yell('success', list.length > 1 ? success.multi : success.single);
-                                    api.refresh();
-                                }
-                                folderAPI.reload(target, list);
-                            },
-                            notifications.yell
-                        );
-                    }
-
-                    if (baton.target) {
-
-                        if (list[0].folder_id !== baton.target) commit(baton.target);
-
-                    } else {
-
-                        var dialog = new dialogs.ModalDialog({ addClass: 'zero-padding' })
-                            .header($('<h4>').text(label))
-                            .addPrimaryButton('ok', label, 'ok', { tabIndex: '1' })
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' });
-
-                        dialog.getBody().css({ height: '250px' });
-
-                        var folderId = String(list[0].folder_id),
-                            id = settings.get('folderpopup/last') || folderId;
-
-                        var tree = new TreeView({
-                            context: 'popup',
-                            module: 'mail',
-                            open: settings.get('folderpopup/open', []),
-                            root: '1',
-                            customize: function (baton) {
-                                var data = baton.data,
-                                    same = type === 'move' && data.id === folderId,
-                                    create = folderAPI.can('create', data);
-                                if (same || !create) this.addClass('disabled');
-                            }
-                        });
-
-                        tree.on('open close', function () {
-                            var open = this.getOpenFolders();
-                            settings.set('folderpopup/open', open).save();
-                        });
-
-                        tree.on('change', function (id) {
-                            settings.set('folderpopup/last', id).save();
-                        });
-
-                        dialog.show(function () {
-                            tree.preselect(id);
-                            dialog.getBody().focus().append(tree.render().$el);
-                        })
-                        .done(function (action) {
-                            if (action === 'ok') {
-                                var target = tree.selection.get();
-                                if (target && (type === 'copy' || target !== folderId)) commit(target);
-                            }
-                            tree = dialog = null;
-                        });
-                    }
+                require(['io.ox/core/folder/actions/move'], function (move) {
+                    move.item({
+                        api: api,
+                        button: label,
+                        list: folderAPI.ignoreSentItems(list),
+                        module: 'mail',
+                        root: '1',
+                        settings: settings,
+                        success: success,
+                        target: baton.target,
+                        title: label,
+                        type: type
+                    });
                 });
             }
         });
     }
 
-    generate('move', gt('Move'), { multi: gt('Mails have been moved'), single: gt('Mail has been moved') });
-    generate('copy', gt('Copy'), { multi: gt('Mails have been copied'), single: gt('Mail has been copied') });
+    generate('move', gt('Move'), { multiple: gt('Mails have been moved'), single: gt('Mail has been moved') });
+    generate('copy', gt('Copy'), { multiple: gt('Mails have been copied'), single: gt('Mail has been copied') });
 
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
