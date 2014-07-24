@@ -329,9 +329,7 @@ define('io.ox/core/commons',
 
             var name = app.get('name'),
                 // right now, only mail folders supports "total" properly
-                countGridData = name !== 'io.ox/mail',
-                // only mail searches not across all folders
-                searchAcrossFolders = name !== 'io.ox/mail';
+                countGridData = name !== 'io.ox/mail';
 
             function getInfoNode() {
                 var visible = app.getWindow && app.getWindow().state.visible;
@@ -370,29 +368,20 @@ define('io.ox/core/commons',
                 });
             }
 
-            grid.on('change:prop:folder change:mode change:ids', function () {
+            grid.on({
+                'change:prop:folder change:mode change:ids': function () {
 
-                var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
-                if (mode === 'all') {
-                    // non-search; show foldername
-                    drawFolderInfo(folder_id);
-                }
-                else if (mode === 'search') {
-                    node = getInfoNode().empty();
-                    // search across all folders
-                    if (searchAcrossFolders) {
-                        node.append(
-                            $.txt(gt('Searched in all folders'))
-                        );
-                    } else {
-                        node.append(
-                            $.txt(
-                                //#. Searched in: <folder name>
-                                gt('Searched in')
-                            ),
-                            $.txt(': '),
-                            folderAPI.getTextNode(folder_id)
-                        );
+                    var folder_id = grid.prop('folder'), mode = grid.getMode();
+                    if (mode === 'all') {
+                        // non-search; show foldername
+                        drawFolderInfo(folder_id);
+                    }
+                    else if (mode === 'search') {
+                        var node = getInfoNode();
+                        node.find('.folder-name')
+                            .text(gt('Results'));
+                        node.find('.folder-count')
+                            .text('(' + grid.getIds().length + ')');
                     }
                 }
             });
