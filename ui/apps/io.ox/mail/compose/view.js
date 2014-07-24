@@ -439,6 +439,7 @@ define('io.ox/mail/compose/view',
                     notifications.yell(result);
                     def.reject(result);
                 } else {
+                    self.model.set('msgref', result, { silent: true });
                     self.model.dirty(false);
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
