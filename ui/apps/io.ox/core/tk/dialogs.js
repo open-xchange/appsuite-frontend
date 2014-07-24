@@ -448,8 +448,7 @@ define('io.ox/core/tk/dialogs',
                 }
             }
 
-            if (_.device('small')) {
-
+            if (_.device('smartphone')) {
                 // rebuild button section for mobile devices
                 nodes.popup.addClass('mobile-dialog');
                 nodes.footer.rowfluid = $('<div class="row">');
