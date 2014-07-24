@@ -330,46 +330,45 @@ define.async('io.ox/mail/accounts/view-form',
 
             onFolderSelect: function (e) {
 
-                var self = this;
-                self.dialog.getPopup().hide();
+                if (this.model.get('id') === 0) return;
 
-                if (self.model.get('id') !== 0) {
-                    var property = $(e.currentTarget).prev().attr('name'),
-                        id = self.model.get(property);
-                    require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                this.dialog.getPopup().hide();
 
-                        var label = gt('Select folder'),
-                            dialog = new dialogs.ModalDialog()
-                            .header($('<h4>').text(label))
-                            .addPrimaryButton('select', label, 'select', {'tabIndex': '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
-                        dialog.getBody().css({ height: '250px' });
-                        var tree = new views.FolderTree(dialog.getBody(), {
-                                type: 'mail',
-                                tabindex: 1,
-                                rootFolderId: 'default' + self.model.get('id')
-                            });
-                        dialog.show(function () {
-                            tree.paint().done(function () {
-                                tree.select(id).done(function () {
-                                    tree.selection.updateIndex();
-                                    dialog.getBody().focus();
-                                });
-                            });
-                        })
-                        .done(function (action) {
-                            if (action === 'select') {
-                                var target = _(tree.selection.get()).first();
-                                self.model.set(property, target, {validate: true});
-                                self.$el.find('input[name="' + property + '"]').val(target);
-                            }
-                            tree.destroy().done(function () {
-                                tree = dialog = null;
-                            });
-                            self.dialog.getPopup().show();
-                        });
+                var self = this,
+                    property = $(e.currentTarget).prev().attr('name'),
+                    id = self.model.get(property);
+
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/folder/tree'], function (dialogs, TreeView) {
+
+                    var label = gt('Select folder');
+
+                    var dialog = new dialogs.ModalDialog({ addClass: 'zero-padding' })
+                        .header($('<h4>').text(label))
+                        .addPrimaryButton('select', label, 'select', { tabindex: '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: '1' });
+
+                    dialog.getBody().css({ height: '250px' });
+
+                    var tree = new TreeView({
+                        context: 'popup',
+                        module: 'mail',
+                        root: '1' // default' + self.model.get('id')
                     });
-                }
+
+                    dialog.on('select', function () {
+                        var target = tree.selection.get();
+                        self.model.set(property, target, {validate: true});
+                        self.$el.find('input[name="' + property + '"]').val(target);
+                    })
+                    .show(function () {
+                        tree.preselect(id);
+                        dialog.getBody().focus().append(tree.render().$el);
+                    })
+                    .done(function () {
+                        tree = dialog = null;
+                        self.dialog.getPopup().show();
+                    });
+                });
             }
         });
 
