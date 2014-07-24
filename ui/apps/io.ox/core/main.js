@@ -1444,7 +1444,7 @@ define('io.ox/core/main',
     (function ()  {
 
         var hash = {
-            'mail/compose': 'io.ox/mail/write/main'
+            'mail': { 'compose': 'io.ox/mail/write/main' }
         };
 
         ox.registry = {
@@ -1455,7 +1455,7 @@ define('io.ox/core/main',
                 return hash[id] || id;
             },
             'call': function (id, name) {
-                var dep = settings.get(['registry', id], hash[id]),
+                var dep = settings.get(('registry/' + id).split('/'), hash[id]),
                     args = _(arguments).toArray().slice(2);
                 return ox.load([dep]).then(function (m) {
                     if (m.reuse(name, args[0])) return;
