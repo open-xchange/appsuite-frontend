@@ -229,7 +229,7 @@ define('io.ox/core/folder/util',
             if (_(data.supported_capabilities).indexOf('subscription') === -1) return false;
             // check rights
             return (/^(contacts|calendar|infostore)$/).test(data.module) && can('write', data);
-        case 'imap-subscribe':
+        case 'subscribe:imap':
             // can subscribe
             return isMail && Boolean(data.capabilities & Math.pow(2, 4));
         default:

@@ -318,30 +318,32 @@ define('io.ox/mail/settings/pane',
         index: 500,
         id: 'imap-subscription',
         draw: function () {
-            var container;
-            this.append(container = $('<fieldset>'));
 
-            folderAPI.get(api.getFoldersByType('inbox'))
-            .then(function (folders) {
-                return _(folders).values()
-                .map(function (folder) {
-                    return folderAPI.can('imap-subscribe', folder);
-                })
-                .reduce(function (acc, value) {
-                    // enough if one of the folders can subscribe
-                    return acc || value;
-                }, false);
-            }).then(function (subscriptionPossible) {
+            if (_.device('smartphone')) return;
+
+            var container = $('<fieldset>');
+            this.append(container );
+
+            folderAPI.multiple(api.getFoldersByType('inbox')).then(function (folders) {
+
+                var subscriptionPossible = _(folders)
+                    .chain()
+                    .map(function (folder) {
+                        return folderAPI.can('subscribe:imap', folder);
+                    })
+                    .reduce(function (acc, value) {
+                        return acc || value; // enough if one of the folders can subscribe
+                    }, false)
+                    .value();
+
                 if (!subscriptionPossible) return;
-
-                var button = $('<button type="button" class="btn btn-primary" tabindex="1">').on('click', changeIMAPSubscription);
-
-                if (_.device('smartphone')) return;
 
                 container.append(
                     $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
                     $('<div class="sectioncontent">').append(
-                        button.text(gt('Change subscription'))
+                        $('<button type="button" class="btn btn-primary" tabindex="1">')
+                        .on('click', changeIMAPSubscription)
+                        .text(gt('Change subscription'))
                     )
                 );
             });
