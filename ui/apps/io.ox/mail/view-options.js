@@ -14,8 +14,9 @@
 define('io.ox/mail/view-options',
     ['io.ox/core/extensions',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/core/api/account',
      'gettext!io.ox/mail'
-    ], function (ext, Dropdown, gt) {
+    ], function (ext, Dropdown, account, gt) {
 
     'use strict';
 
@@ -25,10 +26,10 @@ define('io.ox/mail/view-options',
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',
         index: 100,
-        draw: function () {
+        draw: function (batton) {
             this.data('view')
                 .option('sort', 610, gt('Date'))
-                .option('sort', 'from-to', gt('From'))
+                .option('sort', 'from-to', account.is('sent|drafts', batton.app.folder.get()) ? gt('To') : gt('From'))
                 .option('sort', 651, gt('Unread'))
                 .option('sort', 608, gt('Size'))
                 .option('sort', 607, gt('Subject'))

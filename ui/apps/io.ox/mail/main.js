@@ -533,11 +533,22 @@ define('io.ox/mail/main',
          */
         'folder:change': function (app) {
             app.on('folder:change', function (id) {
-                var options = app.getViewOptions(id);
+                var options = app.getViewOptions(id),
+                    fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
+                    showFrom = account.is('sent|drafts', id);
+
                 app.props.set(options);
                 app.listView.model.set('folder', id);
                 app.folder.getData();
+
+                if (showFrom) {
+                    fromTo.text(gt('To'));
+                } else {
+                    fromTo.text(gt('From'));
+                }
+
             });
+
         },
 
 
