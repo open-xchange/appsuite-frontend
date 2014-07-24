@@ -467,23 +467,30 @@ define('io.ox/core/commons',
         wireGridAndSearch: function (grid, win, api) {
             // search: all request
             grid.setAllRequest('search', function () {
-                var options = win.search.getOptions();
-                options.folder = grid.prop('folder');
-                options.sort = grid.prop('sort');
-                options.order = grid.prop('order');
-                return api.search(win.search.query, options);
+                // result: contains a amount of data somewhere between the usual all and list responses
+                var params = { sort: grid.prop('sort'), order: grid.prop('order') };
+                return api.query(true, params)
+                    .then(function (response) {
+                        var data = response && response.results ? response.results : [];
+                        return data;
+                    });
             });
+
             // search: list request
+            // forward ids (no explicit all/list request in find/search api)
             grid.setListRequest('search', function (ids) {
-                return api.getList(ids);
+                var args = [ ids ];
+                return $.Deferred().resolveWith(this, args);
             });
-            // on search
-            win.on('search', function () {
-                grid.setMode('search');
-            });
-            // on cancel search
-            win.on('search:clear search:cancel', function () {
-                if (grid.getMode() !== 'all') grid.setMode('all');
+
+            // events
+            win.on({
+                'search': function () {
+                    grid.setMode('search');
+                },
+                'search:clear search:cancel': function () {
+                    if (grid.getMode() !== 'all') grid.setMode('all');
+                }
             });
         },
 

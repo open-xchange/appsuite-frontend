@@ -538,14 +538,7 @@ define('io.ox/tasks/main',
             require(['io.ox/search/main', 'io.ox/search/view-template'], function (search, view) {
 
                 //register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), api);
-                app.grid.setAllRequest('search', function () {
-                    var params = { sort: app.grid.prop('sort'), order: app.grid.prop('order') };
-                    return search.apiproxy.query(true, params)
-                        .then(function (response) {
-                            return response && response.results ? response.results : [];
-                        });
-                });
+                commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
 
                 app.search = search.getView();
 

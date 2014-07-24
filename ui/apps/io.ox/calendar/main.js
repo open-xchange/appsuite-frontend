@@ -20,11 +20,10 @@ define('io.ox/calendar/main',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar',
      'io.ox/core/tk/vgrid',
-     'io.ox/calendar/api',
      'io.ox/calendar/toolbar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
-    ], function (date, coreConfig, commons, ext, capabilities, settings, gt, VGrid, api) {
+    ], function (date, coreConfig, commons, ext, capabilities, settings, gt, VGrid) {
 
     'use strict';
 
@@ -224,14 +223,7 @@ define('io.ox/calendar/main',
                     SEARCH_PERSPECTIVE = 'list';
 
                 //register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), api);
-                app.grid.setAllRequest('search', function () {
-                    var params = { sort: app.grid.prop('sort'), order: app.grid.prop('order') };
-                    return search.apiproxy.query(true, params)
-                        .then(function (response) {
-                            return response && response.results ? response.results : [];
-                        });
-                });
+                commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
 
                 app.search = search.getView();
 
