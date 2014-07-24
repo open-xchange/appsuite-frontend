@@ -300,9 +300,6 @@ define('io.ox/mail/compose/view',
         }
     });
 
-    // drawAutoCompleteItem and drawContact
-    // are slightly different. it's easier just having two functions.
-
     /*
      * extension point for autocomplete item
      */
@@ -320,7 +317,6 @@ define('io.ox/mail/compose/view',
             ext.point(POINT + '/emailAddress').invoke('draw', this, baton);
         }
     });
-
 
     var MailComposeView = Backbone.View.extend({
 
@@ -396,8 +392,6 @@ define('io.ox/mail/compose/view',
                 mail = this.model.getMail(),
                 def = new $.Deferred(),
                 old_vcard_flag;
-
-            //prepareMailForSending(mail);
 
             if (mail.msgref) {
                 mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
@@ -947,7 +941,7 @@ define('io.ox/mail/compose/view',
                 }
                 if (!this.mcetoolbar.hasClass('fixed') && this.toolbarpos < scrollPane.scrollTop()) {
                     this.mcetoolbar.css('width', this.contentEditable.outerWidth());
-                     $(window).trigger('resize.tinymce');
+                    $(window).trigger('resize.tinymce');
                 }
                 if (this.toolbarpos < scrollPane.scrollTop()) {
                     this.mcetoolbar.addClass('fixed').css('width', this.contentEditable.outerWidth());

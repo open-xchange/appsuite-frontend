@@ -237,6 +237,7 @@ define('io.ox/mail/compose/extensions',
             }, def.reject);
             return def;
         },
+
         attachmentPreviewList: function (baton) {
             var $el = this,
                 def = $.Deferred();
@@ -254,6 +255,7 @@ define('io.ox/mail/compose/extensions',
             }, def.reject);
             return def;
         },
+
         attachment: function (baton) {
             var def = $.Deferred(),
                 dropdown = new Dropdown({ model: baton.model, label: gt('Attachments'), tagName: 'div' });
@@ -303,7 +305,6 @@ define('io.ox/mail/compose/extensions',
                 }
             }
         }
-
     };
 
     return extensions;

@@ -192,7 +192,6 @@ define('io.ox/mail/compose/main',
             return def;
         });
 
-
         app.compose  = compose('compose');
         app.forward  = reply('forward');
         app.reply    = reply('reply');

@@ -11,7 +11,6 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-
 define('io.ox/mail/compose/model',
     ['io.ox/mail/api',
      'io.ox/mail/util',
@@ -173,7 +172,6 @@ define('io.ox/mail/compose/model',
             });
             delete mail.data.nested_msgs;
             */
-
 
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
