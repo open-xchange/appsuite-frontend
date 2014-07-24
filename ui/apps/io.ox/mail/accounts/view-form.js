@@ -192,6 +192,7 @@ define.async('io.ox/mail/accounts/view-form',
 
                 return self;
             },
+
             events: {
                 'save': 'onSave',
                 'click .folderselect': 'onFolderSelect',
@@ -334,11 +335,12 @@ define.async('io.ox/mail/accounts/view-form',
 
                 this.dialog.getPopup().hide();
 
-                var self = this,
-                    property = $(e.currentTarget).prev().attr('name'),
-                    id = self.model.get(property);
+                var accountId = 'default' + this.model.get('id'),
+                    property = $(e.target).attr('data-property'),
+                    id = this.model.get(property),
+                    self = this;
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/folder/tree'], function (dialogs, TreeView) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/folder/api', 'io.ox/core/folder/tree'], function (dialogs, api, TreeView) {
 
                     var label = gt('Select folder');
 
@@ -350,9 +352,9 @@ define.async('io.ox/mail/accounts/view-form',
                     dialog.getBody().css({ height: '250px' });
 
                     var tree = new TreeView({
-                        context: 'popup',
+                        context: 'account',
                         module: 'mail',
-                        root: '1' // default' + self.model.get('id')
+                        root: accountId
                     });
 
                     dialog.on('select', function () {
@@ -361,8 +363,11 @@ define.async('io.ox/mail/accounts/view-form',
                         self.$el.find('input[name="' + property + '"]').val(target);
                     })
                     .show(function () {
-                        tree.preselect(id);
-                        dialog.getBody().focus().append(tree.render().$el);
+                        api.path(id).done(function (path) {
+                            tree.open = _(path).pluck('id');
+                            tree.preselect(id);
+                            dialog.getBody().focus().append(tree.render().$el);
+                        });
                     })
                     .done(function () {
                         tree = dialog = null;
@@ -488,46 +493,27 @@ define.async('io.ox/mail/accounts/view-form',
                     )
                 ),
 
-                serverSettingsFolder = $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Folder settings')),
-                    $('<form>').addClass('form-horizontal').attr({ role: 'form' }).append(
-                        $('<div>').addClass('form-group').append(
+                folderLabels = { sent: gt('Sent folder'), trash: gt('Trash folder'), drafts: gt('Drafts folder'), spam: gt('Spam folder') },
 
-                            $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label col-sm-3').text(gt('Sent folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'sent_fullname', model: model, id: 'sent_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label col-sm-3').text(gt('Trash folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'trash_fullname', model: model, id: 'trash_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label col-sm-3').text(gt('Drafts folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'drafts_fullname', model: model, id: 'drafts_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label col-sm-3').text(gt('Spam folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'spam_fullname', model: model, id: 'spam_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        )
+                serverSettingsFolder = $('<fieldset>').append(
+                    $('<legend class="sectiontitle">').text(gt('Folder settings')),
+                    $('<form class="form-horizontal" role="form">').append(
+                        // add four input fields
+                        _('sent trash drafts spam'.split(' ')).map(function (id) {
+
+                            var label = folderLabels[id];
+                            id = id + '_fullname';
+
+                            return $('<div class="form-group">').append(
+                                $('<label class="control-label col-sm-3">').attr({ 'for': id }).text(label),
+                                $('<div class="col-sm-6 variable_size">').append(
+                                    new InputView({ name: id, model: model, id: id }).render().$el.prop('disabled', true)
+                                ),
+                                $('<div class="col-sm-1">').append(
+                                    $('<button type="button" class="btn btn-default folderselect" tabindex="1" data-property="sent_fullname">').text(gt('Select'))
+                                )
+                            );
+                        })
                     )
                 );
 

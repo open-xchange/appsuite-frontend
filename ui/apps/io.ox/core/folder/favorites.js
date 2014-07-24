@@ -53,6 +53,8 @@ define('io.ox/core/folder/favorites',
             before: 'standard-folders',
             draw: function (tree) {
 
+                if (tree.context !== 'app' && tree.context !== 'popup') return;
+
                 this.append(
                     new TreeNodeView({
                         empty: false,

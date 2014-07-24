@@ -47,9 +47,10 @@ define('io.ox/core/folder/tree',
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
             this.$contextmenu = $();
+            this.options = options;
 
             // add contextmenu?
-            if (this.options.contextmenu) _.defer(this.renderContextMenu.bind(this));
+            if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));
         },
 
         // convenience function
@@ -207,7 +208,10 @@ define('io.ox/core/folder/tree',
         {
             id: 'headline',
             index: INDEX += 100,
-            draw: function () {
+            draw: function (tree) {
+
+                if (tree.context !== 'app') return;
+
                 this.append(
                     // headline
                     $('<h2>').text('New folder tree')
@@ -228,7 +232,10 @@ define('io.ox/core/folder/tree',
         {
             id: 'between',
             index: INDEX += 100,
-            draw: function () {
+            draw: function (tree) {
+
+                if (tree.context !== 'app') return;
+
                 this.append(
                     // example
                     $('<section>')
@@ -242,6 +249,9 @@ define('io.ox/core/folder/tree',
             id: 'local-folders',
             index: INDEX += 100,
             draw: function (tree) {
+
+                if (tree.context !== 'app') return;
+
                 // local folders
                 this.append(
                     new TreeNodeView({
@@ -260,6 +270,8 @@ define('io.ox/core/folder/tree',
             id: 'remote-accounts',
             index: INDEX += 100,
             draw: function (tree) {
+
+                if (tree.context !== 'app') return;
 
                 var placeholder = $('<div>');
                 this.append(placeholder);
@@ -285,7 +297,10 @@ define('io.ox/core/folder/tree',
         {
             id: 'below',
             index: INDEX += 100,
-            draw: function () {
+            draw: function (tree) {
+
+                if (tree.context !== 'app') return;
+
                 this.append(
                     // example
                     $('<section>').css('color', '#aaa').text('Or below of course')

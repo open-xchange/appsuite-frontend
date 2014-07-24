@@ -232,7 +232,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.$el.data('view', this);
 
             // inherit "open"
-            if (_(o.tree.options.open).contains(this.folder)) o.open = true;
+            if (_(o.tree.open).contains(this.folder)) o.open = true;
 
             // collection changes
             if (o.subfolders) {
