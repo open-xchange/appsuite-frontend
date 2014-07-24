@@ -612,6 +612,26 @@ define('io.ox/core/tk/attachments',
         regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
 
     var previewFetcher = {
+        localFile: function (model) {
+            var def = $.Deferred();
+            // consider retina displays
+            var size = _.device('retina') ? 240 : 120;
+            require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
+                canvasResize(model.fileObj, {
+                    width: size,
+                    height: size,
+                    crop: true,
+                    quality: 80,
+                    callback: function (data) {
+                        var meta = _.clone(model.get('meta'));
+                        meta.previewUrl = data;
+                        def.resolve(meta.previewUrl);
+                        model.set('meta', meta);
+                    }
+                });
+            });
+            return def;
+        },
         file: function (model) {
             var def = $.Deferred();
             // consider retina displays
@@ -707,7 +727,7 @@ define('io.ox/core/tk/attachments',
                 def.then(function uploadDone() {
                     var url = 'appsuite/v=7.6.0.20140716.154321/apps/themes/default/dummypicture.png';
                     var meta = _.clone(model.get('meta'));
-                    meta.previewUrl = url;
+                    meta.previewUrl = meta.previewUrl || url;
                     model.set('meta', meta);
                     model.trigger('upload:complete');
                 }, function uploadFail() {
@@ -784,11 +804,6 @@ define('io.ox/core/tk/attachments',
         },
         className: 'preview',
         render: function () {
-            if (this.model.needsUpload()) {
-                //may be, try local preview or show some "pending" icon
-                this.$el.addClass('no-preview');
-                return this;
-            }
             var url = this.model.previewUrl();
             this.$el.removeClass('lazy no-preview');
             if (_.isString(url)) {

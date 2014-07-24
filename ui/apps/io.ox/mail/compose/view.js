@@ -102,7 +102,7 @@ define('io.ox/mail/compose/view',
                     var list = [];
                     //fileList to array of files
                     _(e.target.files).each(function (file) {
-                        list.push(_.extend(file, {group: 'file'}));
+                        list.push(_.extend(file, {group: 'localFile'}));
                     });
                     baton.model.attachFiles.call(baton.model, list);
                 });
