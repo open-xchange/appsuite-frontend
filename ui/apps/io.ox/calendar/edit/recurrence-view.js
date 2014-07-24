@@ -11,17 +11,81 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/calendar/edit/recurrence-view',
-    ['io.ox/calendar/model',
-     'io.ox/core/tk/config-sentence',
+    ['io.ox/core/tk/config-sentence',
      'io.ox/core/date',
      'gettext!io.ox/calendar/edit/main',
      'less!io.ox/calendar/edit/recurrence-view-style'
-    ], function (model, ConfigSentence, dateAPI, gt) {
+    ], function (ConfigSentence, dateAPI, gt) {
 
     'use strict';
 
-    var DAYS = model.DAYS,
-        RECURRENCE_TYPES = model.RECURRENCE_TYPES;
+    // First, some constants
+    // A series is of a certain recurrence type
+    // daily, weekly, monhtly, yearly, no_recurrence
+    var RECURRENCE_TYPES = {
+        NO_RECURRENCE: 0,
+        DAILY: 1,
+        WEEKLY: 2,
+        MONTHLY: 3,
+        YEARLY: 4
+    };
+
+    // Sometimes we need to reference a certain day, so
+    // here are the weekdays, bitmap-style
+    var DAYS = {
+        SUNDAY: 1,
+        MONDAY: 2,
+        TUESDAY: 4,
+        WEDNESDAY: 8,
+        THURSDAY: 16,
+        FRIDAY: 32,
+        SATURDAY: 64,
+        i18n: {
+            SUNDAY: gt('Sunday'),
+            MONDAY: gt('Monday'),
+            TUESDAY: gt('Tuesday'),
+            WEDNESDAY: gt('Wednesday'),
+            THURSDAY: gt('Thursday'),
+            FRIDAY: gt('Friday'),
+            SATURDAY: gt('Saturday')
+        },
+        values: [
+            'SUNDAY',
+            'MONDAY',
+            'TUESDAY',
+            'WEDNESDAY',
+            'THURSDAY',
+            'FRIDAY',
+            'SATURDAY'
+        ],
+        // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask
+        pack: function () {
+            var result = 0;
+            _(arguments).each(function (day) {
+                var dayConst = DAYS[day.toUpperCase()];
+
+                if (_.isUndefined(dayConst)) {
+                    throw 'Invalid day: ' + day;
+                }
+                result = result | dayConst;
+            });
+            return result;
+        },
+        // Usage: DAYS.unpack(bitmask) -> {'MONDAY': 1, 'WEDNESDAY': 1, 'FRIDAY': 1}
+        unpack: function (bitmask) {
+            var days = {};
+            _(DAYS.values).each(function (day) {
+                var dayConst = DAYS[day];
+                if (bitmask & dayConst) {
+                    days[day] = 1;
+                } else {
+                    days[day] = 0;
+                }
+            });
+
+            return days;
+        }
+    };
 
     var CalendarWidgets = {
         days: function ($anchor, attribute) {
