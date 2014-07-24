@@ -1452,10 +1452,12 @@ define('io.ox/core/main',
                 hash[id] = path;
             },
             'get': function (id) {
-                return hash[id] || id;
+                return id.split('/').reduce(function (prev, cur) {
+                    return prev[cur];
+                }, hash) || id;
             },
             'call': function (id, name) {
-                var dep = settings.get(('registry/' + id).split('/'), hash[id]),
+                var dep = settings.get(('registry/' + id).split('/'), this.get(id)),
                     args = _(arguments).toArray().slice(2);
                 return ox.load([dep]).then(function (m) {
                     if (m.reuse(name, args[0])) return;
