@@ -18,8 +18,9 @@ define.async('io.ox/mail/accounts/view-form',
      'settings!io.ox/mail',
      'gettext!io.ox/settings/settings',
      'io.ox/core/extensions',
-     'io.ox/backbone/mini-views'
-    ], function (notifications, accountAPI, settings, gt, ext, mini) {
+     'io.ox/backbone/mini-views',
+     'io.ox/core/folder/picker'
+    ], function (notifications, accountAPI, settings, gt, ext, mini, picker) {
 
     'use strict';
 
@@ -340,39 +341,19 @@ define.async('io.ox/mail/accounts/view-form',
                     id = this.model.get(property),
                     self = this;
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/folder/api', 'io.ox/core/folder/tree'], function (dialogs, api, TreeView) {
-
-                    var label = gt('Select folder');
-
-                    var dialog = new dialogs.ModalDialog({ addClass: 'zero-padding' })
-                        .header($('<h4>').text(label))
-                        .addPrimaryButton('select', label, 'select', { tabindex: '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: '1' });
-
-                    dialog.getBody().css({ height: '250px' });
-
-                    var tree = new TreeView({
-                        context: 'account',
-                        module: 'mail',
-                        root: accountId
-                    });
-
-                    dialog.on('select', function () {
-                        var target = tree.selection.get();
-                        self.model.set(property, target, {validate: true});
+                picker({
+                    context: 'account',
+                    commit: function (target) {
+                        self.model.set(property, target, { validate: true });
                         self.$el.find('input[name="' + property + '"]').val(target);
-                    })
-                    .show(function () {
-                        api.path(id).done(function (path) {
-                            tree.open = _(path).pluck('id');
-                            tree.preselect(id);
-                            dialog.getBody().focus().append(tree.render().$el);
-                        });
-                    })
-                    .done(function () {
-                        tree = dialog = null;
+                    },
+                    close: function () {
                         self.dialog.getPopup().show();
-                    });
+                    },
+                    folder: id,
+                    module: 'mail',
+                    root: accountId,
+                    tr: { 'default0/INBOX': 'virtual/default0' }
                 });
             }
         });
@@ -510,7 +491,8 @@ define.async('io.ox/mail/accounts/view-form',
                                     new InputView({ name: id, model: model, id: id }).render().$el.prop('disabled', true)
                                 ),
                                 $('<div class="col-sm-1">').append(
-                                    $('<button type="button" class="btn btn-default folderselect" tabindex="1" data-property="sent_fullname">').text(gt('Select'))
+                                    $('<button type="button" class="btn btn-default folderselect" tabindex="1">')
+                                    .attr('data-property', id).text(gt('Select'))
                                 )
                             );
                         })

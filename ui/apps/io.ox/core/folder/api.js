@@ -297,6 +297,9 @@ define('io.ox/core/folder/api',
 
         var result = [], current = id, data, done = false;
 
+        // be robust
+        if (id === undefined) return $.when([]);
+
         // try to resolve via pool
         do {
             result.push(data = pool.getModel(current).toJSON());

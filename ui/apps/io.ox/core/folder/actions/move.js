@@ -13,10 +13,10 @@
 
 define('io.ox/core/folder/actions/move',
     ['io.ox/core/folder/api',
-     'io.ox/core/folder/tree',
+     'io.ox/core/folder/picker',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core'], function (api, TreeView, notifications, dialogs, gt) {
+     'gettext!io.ox/core'], function (api, picker, notifications, dialogs, gt) {
 
     'use strict';
 
@@ -82,50 +82,27 @@ define('io.ox/core/folder/actions/move',
                 return;
             }
 
-            var dialog = new dialogs.ModalDialog({ addClass: 'zero-padding' })
-                .header($('<h4>').text(options.title))
-                .addPrimaryButton('ok', options.button || gt('Ok'), 'ok', { tabIndex: '1' })
-                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' });
+            var current = options.list[0].folder_id;
 
-            dialog.getBody().css({ height: options.height || 250 });
-
-            var folderId = String(options.list[0].folder_id),
-                id = settings.get('folderpopup/last') || folderId;
-
-            var tree = new TreeView({
-                context: 'popup',
-                flat: !!options.flat,
-                indent: options.indent !== undefined ? options.indent : true,
-                module: options.module,
-                open: options.settings.get('folderpopup/open', []),
-                root: options.root || '1',
+            picker({
+                button: options.button,
+                commit: function (id) {
+                    if (type === 'copy' || id !== current) commit(id);
+                },
                 customize: function (baton) {
                     var data = baton.data,
-                        same = type === 'move' && data.id === folderId,
+                        same = type === 'move' && data.id === current,
                         create = api.can('create', data);
                     if (same || !create) this.addClass('disabled');
-                }
-            });
-
-            tree.on('open close', function () {
-                var open = this.getOpenFolders();
-                settings.set('folderpopup/open', open).save();
-            });
-
-            tree.on('change', function (id) {
-                settings.set('folderpopup/last', id).save();
-            });
-
-            dialog.on('ok', function () {
-                var target = tree.selection.get();
-                if (target && (type === 'copy' || target !== folderId)) commit(target);
-            })
-            .show(function () {
-                tree.preselect(id);
-                dialog.getBody().focus().append(tree.render().$el);
-            })
-            .done(function () {
-                tree = dialog = null;
+                },
+                flat: !!options.flat,
+                indent: options.indent !== undefined ? options.indent : true,
+                list: options.list,
+                module: options.module,
+                persistent: 'folderpopup',
+                root: options.root,
+                settings: settings,
+                title: options.title,
             });
         },
 
@@ -135,25 +112,12 @@ define('io.ox/core/folder/actions/move',
                 module = model.get('module'),
                 flat = /^(contacts|calendar|infostore)$/.test(module);
 
-            var dialog = new dialogs.ModalDialog({ async: true, addClass: 'zero-padding' })
-                .header(
-                    $('<h4>').append(
-                        $.txt(gt('Move folder')),
-                        $.txt(': '),
-                        $.txt(model.get('title'))
-                    )
-                )
-                .addPrimaryButton('ok', gt('Ok'))
-                .addButton('cancel', gt('Cancel'));
-
-            dialog.getBody().css('height', '250px');
-
-            var tree = new TreeView({
-                context: 'popup',
-                flat: flat,
-                indent: !flat,
-                module: module,
-                root: module === 'infostore' ? '9' : '1',
+            picker({
+                async: true,
+                addClass: 'zero-padding',
+                commit: function (target) {
+                    api.move(id, target).then(this.close, this.idle).fail(notifications.yell);
+                },
                 customize: function (baton) {
 
                     var data = baton.data,
@@ -162,19 +126,12 @@ define('io.ox/core/folder/actions/move',
 
                     if (module === 'mail' && data.module === 'system') return;
                     if (same || !move) this.addClass('disabled');
-                }
-            });
-
-            dialog.on('ok', function () {
-                var target = tree.selection.get();
-                if (target) api.move(id, target).then(this.close, this.idle).fail(notifications.yell);
-            })
-            .show(function () {
-                tree.preselect(id);
-                dialog.getBody().focus().append(tree.render().$el);
-            })
-            .done(function () {
-                tree = dialog = null;
+                },
+                flat: flat,
+                indent: !flat,
+                module: module,
+                root: module === 'infostore' ? '9' : '1',
+                title: gt('Move folder') + ': ' + model.get('title')
             });
         }
     };

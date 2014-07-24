@@ -48,12 +48,10 @@ define('io.ox/core/folder/favorites',
             });
         }
 
-        ext.point('io.ox/core/foldertree/' + module).extend({
+        var extension = {
             id: 'favorites',
             before: 'standard-folders',
             draw: function (tree) {
-
-                if (tree.context !== 'app' && tree.context !== 'popup') return;
 
                 this.append(
                     new TreeNodeView({
@@ -69,7 +67,10 @@ define('io.ox/core/folder/favorites',
 
                 if (favorites.length > 0) initialize(id);
             }
-        });
+        };
+
+        ext.point('io.ox/core/foldertree/' + module + '/app').extend(_.extend({}, extension));
+        ext.point('io.ox/core/foldertree/' + module + '/popup').extend(_.extend({}, extension));
     });
 
     //

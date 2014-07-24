@@ -17,8 +17,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
      'io.ox/core/extensions',
      'io.ox/mail/mailfilter/settings/filter/form-elements',
      'io.ox/mail/mailfilter/settings/filter/defaults',
-     'io.ox/backbone/mini-views'
-    ], function (notifications, gt, ext, elements, DEFAULTS, mini) {
+     'io.ox/backbone/mini-views',
+     'io.ox/core/folder/picker'
+    ], function (notifications, gt, ext, elements, DEFAULTS, mini, picker) {
 
     'use strict';
 
@@ -455,52 +456,38 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onFolderSelect: function (e) {
+
                 e.preventDefault();
+
                 var self = this,
                     list = $(e.currentTarget).closest('li'),
                     type = list.attr('data-type'),
                     actionID = list.attr('data-action-id'),
                     inputField = list.find('input'),
-                    currentFolder =  self.model.get('actioncmds')[actionID].into,
+                    currentFolder =  this.model.get('actioncmds')[actionID].into,
                     actionArray =  this.model.get('actioncmds');
 
-                self.dialog.getPopup().hide();
+                this.dialog.getPopup().hide();
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                picker({
+                    context: 'account',
+                    commit: function (id) {
 
-                    var label = gt('Select folder'),
-                        dialog = new dialogs.ModalDialog()
-                        .header($('<h4>').text(label))
-                        .addPrimaryButton('select', label, 'select', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
-                    dialog.getBody().css({ height: '250px' });
-                    var tree = new views.FolderTree(dialog.getBody(), {
-                            type: 'mail'
-                                // can a mail be moved to any folder?
-//                            rootFolderId: 'default0'
-                        });
-                    dialog.show(function () {
-                        tree.paint().done(function () {
-                            tree.select(currentFolder);
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'select') {
-                            var value = _(tree.selection.get()).first(),
-                                prepared = prepareFolderForDisplay(value);
+                        var prepared = prepareFolderForDisplay(id);
 
-                            actionArray[actionID][type] = value;
-                            self.model.set('actioncmds', actionArray);
+                        actionArray[actionID][type] = id;
+                        self.model.set('actioncmds', actionArray);
 
-                            inputField.val(prepared);
-                            inputField.attr('title', value);
-                        }
-                        tree.destroy().done(function () {
-                            tree = dialog = null;
-                        });
+                        inputField.val(prepared);
+                        inputField.attr('title', id);
+                    },
+                    close: function () {
                         self.dialog.getPopup().show();
                         self.$el.find('[data-action-id="' + actionID + '"] .folderselect').focus();
-                    });
+                    },
+                    folder: currentFolder,
+                    module: 'mail',
+                    root: '1'
                 });
             },
 

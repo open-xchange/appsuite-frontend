@@ -507,50 +507,28 @@ define('io.ox/search/view-template',
 
     // facet type: folder
     function folderDialog(facet, baton) {
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+
+        require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
+
             var id = facet.values[0].custom,
                 type = baton.model.getModule();
 
-            var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(gt('Folder')))
-                .addPrimaryButton('ok', gt('Select Folder'), 'ok', {'tabIndex': '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
-            dialog.getBody().css({ height: '250px' });
-
-            // use foldertree or folderlist
-            var TreeConstructor = ['mail', 'files'].indexOf(type) >= 0  ? views.FolderTree : views.FolderList,
-                tree = new TreeConstructor(dialog.getBody(), {
-                    type: type === 'files' ? 'infostore' : type,
-                    tabindex: 0,
-                    rootFolderId: type === 'files' ? '9' : '1',
-                    dialogmode: true,
-                    targetmode: true,
-                    customize: function (data) {
-                        if (data.id === id) {
-                            this.removeClass('selectable').addClass('disabled');
-                        }
-                    }
-                });
-
-            dialog.show(function () {
-                tree.paint().done(function () {
-                    if (id) {
-                        tree.select(id).done(function () {
-                            dialog.getBody().focus();
-                        });
-                    }
-                });
-            })
-            .done(function (action) {
-                if (action === 'ok') {
-                    var target = _(tree.selection.get()).first(),
-                        // TODO: better way tp get label?!
-                        label = $(arguments[2]).find('[data-obj-id="' + target + '"]').find('.short-title').text();
-                    baton.model.update(facet.id, id, {custom: target, display_name: label});
+            picker({
+                folder: id,
+                module: type === 'files' ? 'infostore' : type,
+                root: type === 'files' ? '9' : '1',
+                commit: function (target) {
+                    // TODO: better way tp get label?!
+                    // Hääää? Was soll das?
+                    var label = 'Please fix'; // var label = $(arguments[2]).find('[data-obj-id="' + target + '"]').find('.short-title').text();
+                    baton.model.update(facet.id, id, { custom: target, display_name: label });
+                },
+                customize: function (baton) {
+                    var data = baton.data,
+                        same = type === 'move' && data.id === id,
+                        create = api.can('create', data);
+                    if (same || !create) this.addClass('disabled');
                 }
-                tree.destroy().done(function () {
-                    tree = dialog = null;
-                });
             });
         });
     }
