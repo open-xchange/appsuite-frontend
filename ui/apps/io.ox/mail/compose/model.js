@@ -84,6 +84,13 @@ define('io.ox/mail/compose/model',
                 }), {silent: true});
             }
 
+            if (this.get('infostore_ids')) {
+                list.add(this.get('infostore_ids').map(function (o) {
+                    o.group = 'file';
+                    return o;
+                }), {silent: true});
+            }
+
             this.updateShadow();
         },
 
