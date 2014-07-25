@@ -182,7 +182,6 @@ define('io.ox/mail/detail/content',
         id: 'emoji',
         index: 300,
         process: function (baton) {
-            if (!baton.isHTML || baton.isLarge) return;
             baton.processedEmoji = false;
             baton.source = emoji.processEmoji(baton.source, function (text, lib) {
                 baton.processedEmoji = !lib.loaded;

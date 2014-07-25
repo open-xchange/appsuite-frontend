@@ -20,11 +20,12 @@ define('io.ox/mail/threadview',
      'io.ox/mail/detail/view',
      'io.ox/mail/detail/mobileView',
      'io.ox/core/tk/list-dnd',
+     'io.ox/core/emoji/util',
      'io.ox/core/http',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'io.ox/mail/listview'
-     ], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, http, gt) {
+     ], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
 
     'use strict';
 
@@ -87,10 +88,11 @@ define('io.ox/mail/threadview',
         index: 200,
         draw: function (baton) {
             var keepFirstPrefix = baton.view.collection.length === 1,
-                subject = util.getSubject(baton.view.collection.at(0).toJSON(), keepFirstPrefix);
-            this.append(
-                $('<div class="subject">').text(subject)
-            );
+                subject = util.getSubject(baton.view.collection.at(0).toJSON(), keepFirstPrefix),
+                node = this.append($('<div class="subject">'));
+            emoji.processEmoji(subject, function (text) {
+                node.append(text);
+            });
         }
     });
 

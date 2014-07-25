@@ -15,6 +15,7 @@ define('io.ox/mail/common-extensions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
+     'io.ox/core/emoji/util',
      'io.ox/mail/util',
      'io.ox/mail/api',
      'io.ox/core/api/account',
@@ -27,7 +28,7 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+    ], function (ext, links, actions, emoji, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -166,14 +167,19 @@ define('io.ox/mail/common-extensions',
 
             var data = baton.data,
                 keepFirstPrefix = baton.data.threadSize === 1,
-                subject = util.getSubject(data, keepFirstPrefix);
+                subject = util.getSubject(data, keepFirstPrefix),
+                node;
 
             this.append(
                 $('<div class="subject">').append(
                     $('<span class="flags">'),
-                    $('<span class="drag-title">').text(subject)
+                    node = $('<span class="drag-title">').text(subject)
                 )
             );
+
+            emoji.processEmoji(subject, function (text) {
+                node.html(text);
+            });
         },
 
         // a11y: set title attribute on outer list item

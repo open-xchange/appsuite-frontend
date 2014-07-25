@@ -39,10 +39,11 @@ define('io.ox/mail/detail/view',
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
-            var subject = util.getSubject(baton.data);
-            this.append(
-                $('<h1 class="subject">').text(subject)
-            );
+            var subject = util.getSubject(baton.data),
+                node = this.append($('<h1 class="subject">'));
+            emoji.processEmoji(subject, function (text) {
+                node.append(text);
+            });
         }
     });
 
