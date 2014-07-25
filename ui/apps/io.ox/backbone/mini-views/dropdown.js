@@ -44,8 +44,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var $ul = this.$ul;
             _(this.model.changed).each(function (value, name) {
                 var li = $ul.find('[data-name="' + name + '"]');
-                li.children('i').attr('class', 'fa fa-fw fa-none');
-                li.filter('[data-value="' + value + '"]').children('i').attr('class', 'fa fa-fw fa-check');
+                if (li.length > 0) {
+                    li.children('i').attr('class', 'fa fa-fw fa-none');
+                    li.filter('[data-value="' + value + '"]').children('i').attr('class', 'fa fa-fw fa-check');
+                }
             }, this);
         },
 
