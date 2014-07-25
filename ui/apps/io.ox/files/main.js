@@ -41,6 +41,25 @@ define('io.ox/files/main',
         win;
 
     app.mediator({
+
+        /*
+         * Pages for desktop
+         * As this module uses only one perspective, we only need one page
+         */
+        'pages-desktop': function (app) {
+            if (_.device('smartphone')) return;
+            var c = app.getWindow().nodes.main;
+
+            app.pages = new PageController(app);
+
+            // create 3 pages with toolbars and navbars
+            app.pages.addPage({
+                name: 'fluid',
+                container: c,
+                startPage: true
+            });
+        },
+
         /*
          * Init pages for mobile use
          * Each View will get a single page with own

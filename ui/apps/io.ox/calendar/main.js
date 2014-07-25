@@ -23,10 +23,12 @@ define('io.ox/calendar/main',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar',
      'io.ox/core/tk/vgrid',
+     'io.ox/core/page-controller',
      'io.ox/calendar/toolbar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
     ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid) {
+
 
     'use strict';
 
@@ -37,6 +39,33 @@ define('io.ox/calendar/main',
     }), win;
 
     app.mediator({
+
+        /*
+         * Pagecontroller
+         */
+        'pages-desktop': function (app) {
+            if _.device('smartphone') return;
+            var c = app.getWindow().nodes.main;
+
+            app.pages = new PageController(app);
+
+            // create 3 pages with toolbars and navbars
+            app.pages.addPage({
+                name: 'month',
+                container: c,
+                startPage: true
+            });
+
+            app.pages.addPage({
+                name: 'week',
+                container: c
+            });
+
+            app.pages.addPage({
+                name: 'list',
+                container: c
+            });
+        },
 
         /*
          * Early List view vsplit - we need that to get a Vgrid instance
