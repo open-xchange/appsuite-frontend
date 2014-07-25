@@ -144,7 +144,8 @@ define('io.ox/mail/mobile-toolbar-actions',
     }));
 
     var updateToolbar = _.debounce(function (list) {
-         if (!list) return;
+
+        if (!list) return;
         // remember if this list is based on a single thread
         var isThread = list.length === 1 && /^thread\./.test(list[0]);
         // resolve thread
@@ -156,9 +157,12 @@ define('io.ox/mail/mobile-toolbar-actions',
         var baton = ext.Baton({data: list, isThread: isThread, app: this });
 
         // handle updated baton to pageController
-        this.pages.getCurrentPage().toolbar.setBaton(baton);
-        if (this.pages.getCurrentPage().secondaryToolbar) {
-            this.pages.getCurrentPage().secondaryToolbar.setBaton(baton);
+        var current = this.pages.getCurrentPage();
+        if (current.toolbar) {
+            current.toolbar.setBaton(baton);
+        }
+        if (current.secondaryToolbar) {
+            current.secondaryToolbar.setBaton(baton);
         }
 
     }, 10);

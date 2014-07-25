@@ -22,7 +22,9 @@ define('io.ox/core/folder/view',
 
     function initialize(options) {
 
-        options = options || {};
+        options = _.extend({
+            append: true
+        }, options);
 
         var app = options.app,
             tree = options.tree,
@@ -178,29 +180,29 @@ define('io.ox/core/folder/view',
         });
 
         // draw container
-        ext.point(POINT + '/sidepanel').extend({
-            index: 100,
-            draw: function (baton) {
+        // ext.point(POINT + '/sidepanel').extend({
+        //     index: 100,
+        //     draw: function (baton) {
 
-                this.prepend(
-                    // sidepanel
-                    baton.$.sidepanel = $('<div class="abs foldertree-sidepanel">')
-                    .attr({
-                        'role': 'navigation',
-                        'aria-label': gt('Folders')
-                    })
-                    .append(
-                        // container
-                        $('<div class="abs foldertree-container">').append(
-                            baton.$.container = $('<div class="foldertree">'),
-                            baton.$.links = $('<div class="foldertree-links">')
-                        )
-                    )
-                );
+        //         this.prepend(
+        //             // sidepanel
+        //             baton.$.sidepanel = $('<div class="abs foldertree-sidepanel">')
+        //             .attr({
+        //                 'role': 'navigation',
+        //                 'aria-label': gt('Folders')
+        //             })
+        //             .append(
+        //                 // container
+        //                 $('<div class="abs foldertree-container">').append(
+        //                     baton.$.container = $('<div class="foldertree">'),
+        //                     baton.$.links = $('<div class="foldertree-links">')
+        //                 )
+        //             )
+        //         );
 
-                ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links, baton);
-            }
-        });
+        //         ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links, baton);
+        //     }
+        // });
 
         //
         // Initialize
@@ -222,11 +224,12 @@ define('io.ox/core/folder/view',
         // apply
         tree.options.open = open;
 
-        // add border
-        sidepanel.addClass('border-right');
-
-        // render tree and add to DOM
-        sidepanel.append(tree.render().$el.addClass('bottom-toolbar'));
+        if (options.append) {
+            // add border & render tree and add to DOM
+            sidepanel.addClass('border-right').append(
+                tree.render().$el.addClass('bottom-toolbar')
+            );
+        }
 
         // a11y adjustments
         tree.$el.attr({

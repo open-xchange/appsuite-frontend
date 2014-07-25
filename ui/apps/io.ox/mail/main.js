@@ -295,25 +295,32 @@ define('io.ox/mail/main',
 
             if (_.device('!small')) return app;
 
-            // TODO: fix folder tree for mobile
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
 
-            // app.pages.getNavbar('folderTree')
-            //     .on('rightAction', function () {
-            //         app.toggleFolders();
-            //     });
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
 
-            // var view = new FolderView(app, {
-            //     type: 'mail',
-            //     container: app.pages.getPage('folderTree')
-            // });
+            var tree = new TreeView({ app: app, module: 'mail', root: '1' });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree, append: false });
+            console.log('mmmh', page);
+            page.append(tree.render().$el);
+
+            tree.$el.on('tap', '.folder', function () {
+                app.pages.changePage('listView');
+            });
+
             // view.handleFolderChange();
             // view.load();
 
-            // // bind action for edit button
-            // app.bindFolderChange();
+            // bind action for edit button
+            app.bindFolderChange();
 
-            // // make folder visible by default
-            // app.toggleFolderView(true);
+            // make folder visible by default
+            // app.folderView.toggle(true);
         },
 
         /*
