@@ -76,6 +76,14 @@ define('io.ox/mail/compose/model',
                     disp: 'inline'
                 }, {at: 0, silent: true});
             }
+
+            if (this.get('contacts_ids')) {
+                list.add(this.get('contacts_ids').map(function (o) {
+                    o.group = 'contact';
+                    return o;
+                }), {silent: true});
+            }
+
             this.updateShadow();
         },
 
@@ -204,10 +212,12 @@ define('io.ox/mail/compose/model',
                 result.msgref = this.get('msgref');
             }
 
-            if (this.get('contacts_ids')) {
-                // get flat cids for data.contacts_ids
-                result.contacts_ids = _(this.get('contacts_ids')).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
-            }
+            // get flat cids for data.contacts_ids
+            result.contacts_ids = this.get('attachments').filter(function (a) {
+                return a.get('group') === 'contact';
+            }).map(function (o) {
+                return o.pick('folder_id', 'id');
+            });
 
             result.attachments = this.get('attachments').filter(function (a) {
                 return !!a.get('content');
