@@ -264,10 +264,12 @@ define('io.ox/contacts/actions',
         // don't even need an email address
 
         multiple: function (list) {
-            tentativeLoad(list).done(function (list) {
-                api.getList(list).done(function (list) {
-                    ox.registry.call('mail/compose', 'compose', { contacts_ids: list });
-                });
+            tentativeLoad(list).then(function (list) {
+                return api.getList(list);
+            }).then(function (list) {
+                return {contacts_ids: list};
+            }).done(function(data) {
+                ox.registry.call('mail/compose', 'compose', data);
             });
         }
     });
