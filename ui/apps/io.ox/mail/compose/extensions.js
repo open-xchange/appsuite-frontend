@@ -159,10 +159,14 @@ define('io.ox/mail/compose/extensions',
                         };
                     },
                     draw: function (data) {
-                        ext.point(POINT + '/autoCompleteItem').invoke('draw', this, ext.Baton({ data: data }));
+                        ext.point(POINT + '/autoCompleteItem').invoke('draw', this, _.extend(baton, { data: data }));
                     }
                 }).on({
                     'tokenfield:createdtoken': function (e) {
+
+                        // for validation etc.
+                        ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
+
                         if (e.attrs) {
                             var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
                             _.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true });
