@@ -295,7 +295,9 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
-        requires: 'create',
+        requires: function (e) {
+            return e.baton.app.folder.can('create');
+        },
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
             // arguments are the same (the app)

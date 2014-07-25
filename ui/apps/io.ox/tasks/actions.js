@@ -29,7 +29,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
-            return e.collection.has('create');
+            return e.baton.app.folder.can('create');
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (edit) {

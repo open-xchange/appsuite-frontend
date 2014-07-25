@@ -261,6 +261,21 @@ define('io.ox/core/desktop',
                         });
                     },
 
+                    can: function (action)
+                    {
+                        var  def = new $.Deferred();
+                        if (folder === null) {
+                            return def.resolve(false);
+                        }
+                        require(['io.ox/core/api/folder']).pipe(function (api) {
+                            api.get({ folder: folder }).done(function (data) {
+                                def.resolve(api.can(action, data));
+                            });
+                        });
+
+                        return def;
+                    },
+
                     updateTitle: function (w) {
                         win = w;
                         return this;

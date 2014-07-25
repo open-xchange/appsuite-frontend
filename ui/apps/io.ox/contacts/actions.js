@@ -92,7 +92,7 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'create',
         requires:  function (e) {
-            return e.collection.has('create');
+            return e.baton.app.folder.can('create');
         },
         action: function (baton) {
             var folder = baton.folder || baton.app.folder.get();
@@ -109,7 +109,11 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'create-dist',
         requires: function (e) {
-            return e.collection.has('create') && _.device('!small');
+            if (_.device('small')) {
+                return false;
+            } else {
+                return e.baton.app.folder.can('create');
+            }
         },
         action: function (baton) {
             require(['io.ox/contacts/distrib/main'], function (m) {
