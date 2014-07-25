@@ -20,7 +20,8 @@ define('io.ox/mail/compose/extensions',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail'
+     'gettext!io.ox/mail',
+     'static/3rd.party/jquery-ui.min.js'
     ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, settings, gt) {
 
     var SenderDropdown = Dropdown.extend({
@@ -163,26 +164,60 @@ define('io.ox/mail/compose/extensions',
                 }).on({
                     'tokenfield:createdtoken': function (e) {
                         if (e.attrs) {
-                            var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value },
-                                token = $(e.relatedTarget);
-                            token.prepend(
-                                contactsAPI.pictureHalo(
-                                    $('<div class="contact-image">'),
-                                    $.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true })
-                                )
+                            var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
+                            _.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true });
+                            $(e.relatedTarget).prepend(
+                                contactsAPI.pictureHalo($('<div class="contact-image">'), data)
                             );
                         }
                     },
                     'change': function () {
                         baton.model.setTokens(attr, input.tokenfield('getTokens'));
+                        initDnD();
                     }
                 });
+
+                function initDnD () {
+                    input.closest('div.tokenfield')
+                        .droppable({
+                            accept: '.token',
+                            hoverClass: 'drophover',
+                            drop: function (e, ui) {
+                                var token = ui.draggable,
+                                    parent = token.closest('div.tokenfield').find('input.tokenfield'),
+                                    data = token.data('attrs');
+                                // prevent drop on closest tokenfield
+                                if ($.contains(this, token[0])) return;
+                                // update target tokenfield and add dragged token
+                                input.tokenfield('setTokens', [data], true, true);
+                                // remove dragged token
+                                var found = false,
+                                    newTokenSet = _(parent.tokenfield('getTokens')).filter(function (item) {
+                                        if (_.isEqual(item, data) && !found) {
+                                            found = true;
+                                            return false;
+                                        }
+                                        return true;
+                                    });
+                                parent.tokenfield('setTokens', newTokenSet, false, true);
+                            }
+                        })
+                        .find('.token')
+                        .draggable({
+                            revert: true,
+                            revertDuration: 200,
+                            zIndex: 1
+                        });
+                }
 
                 // add class to tokenfield wrapper
                 input.parent().addClass(attr);
 
                 // set initial values
                 input.tokenfield('setTokens', baton.model.getTokens(attr) || [], true, false);
+
+                // init drag 'n' drop support
+                initDnD();
             };
         },
 
