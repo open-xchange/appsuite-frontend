@@ -44,16 +44,27 @@ define('io.ox/calendar/week/perspective',
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
+            if (_.device('smartphone')) {
+                self.app.pages.changePage('detailView');
+                self.app.pages.getPage('detailView').busy();
+            }
             api.get(obj).then(
                 function success(data) {
-                    self.dialog.show(e, function (popup) {
-                        popup
-                        .append(detailView.draw(data))
-                        .attr({
-                            'role': 'complementary',
-                            'aria-label': gt('Appointment Details')
+
+                    if (_.device('smartphone')) {
+                        var p = self.app.pages.getPage('detailView');
+                        p.idle().empty().append(detailView.draw(data));
+
+                    } else {
+                        self.dialog.show(e, function (popup) {
+                            popup
+                            .append(detailView.draw(data))
+                            .attr({
+                                'role': 'complementary',
+                                'aria-label': gt('Appointment Details')
+                            });
                         });
-                    });
+                    }
                     if (self.setNewStart) {//if view should change week to the start of this appointment(used by deeplinks)
                         self.setNewStart = false;//one time only
                         self.app.refDate.setTime(data.start_date);
@@ -61,10 +72,15 @@ define('io.ox/calendar/week/perspective',
                             self.view.setStartDate(data.start_date);
                         }
                     }
+
                 },
                 function fail() {
                     notifications.yell('error', gt('An error occurred. Please try again.'));
                     $('.appointment', self.main).removeClass('opac current');
+                    if (_.device('smartphone')) {
+                        self.app.pages.getPage('detailView').idle();
+                        self.app.pages.goBack();
+                    }
                 }
             );
         },

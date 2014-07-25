@@ -91,7 +91,7 @@ define('io.ox/files/main',
             });
 
             app.pages.addPage({
-                name: 'mainView',
+                name: 'fluid',
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
@@ -100,12 +100,12 @@ define('io.ox/files/main',
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'mainView',
+                    page: 'fluid',
                     extension: 'io.ox/files/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'mainView/multiselect',
+                    page: 'fluid/multiselect',
                     extension: 'io.ox/files/mobile/toolbar'
                 })
             });
@@ -128,7 +128,7 @@ define('io.ox/files/main',
             // important
             // tell page controller about special navigation rules
             app.pages.setBackbuttonRules({
-                'mainView': 'folderTree'
+                'fluid': 'folderTree'
             });
         },
 
@@ -139,7 +139,7 @@ define('io.ox/files/main',
 
             if (!_.device('small')) return;
 
-            app.pages.getNavbar('mainView')
+            app.pages.getNavbar('fluid')
                 .setLeft(gt('Folders'))
                 .setRight(
                     //#. Used as a button label to enter the "edit mode"
@@ -159,7 +159,7 @@ define('io.ox/files/main',
                 );
 
             // tell each page's back button what to do
-            app.pages.getNavbar('mainView')
+            app.pages.getNavbar('fluid')
                 .on('leftAction', function () {
                     app.pages.goBack();
                 }).hide('.right');
@@ -169,7 +169,7 @@ define('io.ox/files/main',
             });
 
             // TODO restore last folder as starting point
-            app.pages.showPage('mainView');
+            app.pages.showPage('fluid');
         },
 
         /*
@@ -219,7 +219,7 @@ define('io.ox/files/main',
                     $(e.currentTarget).trigger('contextmenu'); // open menu
                     return; // do not change page in edit mode
                 }
-                app.pages.changePage('mainView');
+                app.pages.changePage('fluid');
             });
         },
         /*
@@ -231,7 +231,7 @@ define('io.ox/files/main',
 
             function update() {
                 app.folder.getData().done(function (d) {
-                    app.pages.getNavbar('mainView').setTitle(d.title);
+                    app.pages.getNavbar('fluid').setTitle(d.title);
                 });
             }
 
@@ -265,9 +265,9 @@ define('io.ox/files/main',
 
             win.on('change:perspective', function (e, name, id) {
                 if (id === 'fluid:list') {
-                    app.pages.getNavbar('mainView').show('.right');
+                    app.pages.getNavbar('fluid').show('.right');
                 } else {
-                    app.pages.getNavbar('mainView').hide('.right');
+                    app.pages.getNavbar('fluid').hide('.right');
                 }
             });
         },
@@ -339,7 +339,7 @@ define('io.ox/files/main',
         'change:checkboxes': function (app) {
             if (_.device('!smartphone')) return;
             // bind action on button
-            app.pages.getNavbar('mainView').on('rightAction', function () {
+            app.pages.getNavbar('fluid').on('rightAction', function () {
                 app.props.set('showCheckboxes', !app.props.get('showCheckboxes'));
             });
 
@@ -349,10 +349,10 @@ define('io.ox/files/main',
                 app.selection.clear();
                 if (app.props.get('showCheckboxes')) {
                     $view.removeClass('checkboxes-hidden');
-                    app.pages.getNavbar('mainView').setRight(gt('Cancel')).hide('.left');
+                    app.pages.getNavbar('fluid').setRight(gt('Cancel')).hide('.left');
                 } else {
                     $view.addClass('checkboxes-hidden');
-                    app.pages.getNavbar('mainView').setRight(gt('Edit')).show('.left');
+                    app.pages.getNavbar('fluid').setRight(gt('Edit')).show('.left');
 
                 }
             });
@@ -361,7 +361,7 @@ define('io.ox/files/main',
 
         'toggle-secondary-toolbar': function (app) {
             app.props.on('change:showCheckboxes', function (model, state) {
-                app.pages.toggleSecondaryToolbar('mainView', state);
+                app.pages.toggleSecondaryToolbar('fluid', state);
             });
         },
         /*
@@ -476,11 +476,13 @@ define('io.ox/files/main',
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .always(function () {
                 app.mediate();
-                // prepare perspective for pagecontroller
-                if (win.options.usePageController) win.options.mainPage = app.pages.getPage('mainView');
+
                 win.show();
             })
             .done(function () {
+                 // prepare perspective for pagecontroller
+                if (win.options.usePageController) win.options.mainPage = app.pages.getPage('fluid');
+
                 var pers = map(options.perspective || _.url.hash('perspective') || app.props.get('layout'));
                 ox.ui.Perspective.show(app, pers);
             });

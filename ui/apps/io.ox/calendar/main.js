@@ -23,7 +23,11 @@ define('io.ox/calendar/main',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar',
      'io.ox/core/tk/vgrid',
+     'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
+     'io.ox/core/commons-folderview',
+     'io.ox/calendar/mobile-navbar-extensions',
+     'io.ox/calendar/mobile-toolbar-actions',
      'io.ox/calendar/toolbar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
@@ -39,12 +43,93 @@ define('io.ox/calendar/main',
     }), win;
 
     app.mediator({
+        /*
+         * Init pages for mobile use
+         * Each View will get a single page with own
+         * toolbars and navbars. A PageController instance
+         * will handle the page changes and also maintain
+         * the state of the toolbars and navbars
+         */
+        'pages-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+            var c = app.getWindow().nodes.main;
+            var navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">');
 
+            app.navbar = navbar;
+            app.toolbar = toolbar;
+
+            app.pages = new PageController(app);
+
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+
+            // create 3 pages with toolbars and navbars
+            app.pages.addPage({
+                name: 'folderTree',
+                container: c,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/calendar/mobile/navbar'
+                })
+            });
+
+            // create 3 pages with toolbars and navbars
+            app.pages.addPage({
+                name: 'month',
+                container: c,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/calendar/mobile/navbar'
+                }),
+                startPage: true
+            });
+
+            app.pages.addPage({
+                name: 'week',
+                container: c,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/calendar/mobile/navbar'
+                }),
+            });
+
+            app.pages.addPage({
+                name: 'list',
+                container: c,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/calendar/mobile/navbar'
+                }),
+            });
+
+            app.pages.addPage({
+                name: 'detailView',
+                container: c,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/calendar/mobile/navbar'
+                }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'detailView',
+                    extension: 'io.ox/calendar/mobile/toolbar'
+
+                })
+            });
+
+            // important
+            // tell page controller about special navigation rules
+            app.pages.setBackbuttonRules({
+                'month': 'folderTree',
+                'week': 'month',
+                'list': 'folderTree'
+            });
+        },
         /*
          * Pagecontroller
          */
         'pages-desktop': function (app) {
-            if _.device('smartphone') return;
+            if (_.device('smartphone')) return;
             var c = app.getWindow().nodes.main;
 
             app.pages = new PageController(app);
@@ -69,13 +154,78 @@ define('io.ox/calendar/main',
 
         /*
          * Early List view vsplit - we need that to get a Vgrid instance
+         * Vsplit compatibilty
          */
         'list-vsplit': function (app) {
-            // this causes problems on mobile, the dummy div down here will never be appended
+            if (_.device('smartphone')) return;
             var vsplit = commons.vsplit($('<div>'), app);
             app.left = vsplit.left;
             app.right = vsplit.right;
         },
+
+        /*
+         * Early List view vsplit - we need that to get a Vgrid instance
+         * Vsplit compatibilty
+         */
+        'list-vsplit-mobile': function (app) {
+            if (_.device('!smartphone')) return;
+            app.left = app.pages.getPage('list');
+            app.right = app.pages.getPage('detailView');
+        },
+
+        /*
+         * Init all nav- and toolbar labels for mobile
+         */
+        'navbars-mobile': function (app) {
+
+            if (_.device('!smartphone')) return;
+
+            app.pages.getNavbar('month')
+                .on('leftAction', function () {
+                    app.pages.goBack();
+                })
+                .setLeft(gt('Folders'));
+
+            app.pages.getNavbar('week')
+                .on('leftAction', function () {
+                    ox.ui.Perspective.show(app, 'month', {animation: 'slideright'});
+                })
+                .setLeft(gt('Back'));
+
+            app.pages.getNavbar('list')
+                .on('leftAction', function () {
+                    app.pages.goBack();
+                })
+                .setLeft(gt('Folders'))
+                .setRight(
+                    //#. Used as a button label to enter the "edit mode"
+                    gt('Edit')
+                );
+
+            app.pages.getNavbar('folderTree')
+                .setTitle(gt('Folders'))
+                .setLeft(false)
+                .setRight(gt('Edit'));
+
+            app.pages.getNavbar('detailView')
+                .setTitle('') // no title
+                .setLeft(
+                    //#. Used as button label for a navigation action, like the browser back button
+                    gt('Back')
+                );
+
+
+            app.pages.getNavbar('detailView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+
+            app.pages.getNavbar('folderTree').on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+
+        },
+
 
         /*
          * VGrid
@@ -119,6 +269,38 @@ define('io.ox/calendar/main',
         },
 
         /*
+         * Folder view mobile support
+         */
+        'folder-view-mobile': function (app) {
+
+            if (_.device('!smartphone')) return;
+
+            var view = new FolderView(app, {
+                type: 'calendar',
+                container: app.pages.getPage('folderTree')
+            });
+            view.handleFolderChange();
+            view.load();
+        },
+
+        /*
+         * Folder change listener for mobile
+         */
+        'folder-view-mobile-listener': function () {
+            if (_.device('!smartphone')) return;
+            // always change folder on click
+            // No way to use tap here since folderselection really messes up the event chain
+            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
+                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
+                if (app.props.get('mobileFolderSelectMode') === true) {
+                    $(e.currentTarget).trigger('contextmenu'); // open menu
+                    return; // do not change page in edit mode
+                }
+                app.pages.changePage('month');
+            });
+        },
+
+        /*
          * Default application properties
          */
         'props': function (app) {
@@ -133,7 +315,7 @@ define('io.ox/calendar/main',
 
         'vgrid-checkboxes': function (app) {
             // always hide checkboxes on small devices initially
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             var grid = app.getGrid();
             grid.setEditable(app.props.get('checkboxes'));
         },
@@ -142,7 +324,15 @@ define('io.ox/calendar/main',
          * Set folderview property
          */
         'prop-folderview': function (app) {
-            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+            if (_.device('smartphone')) return;
+            app.props.set('folderview', app.settings.get('folderview/visible/' + _.display(), true));
+        },
+
+         /*
+         * Set folderview property
+         */
+        'prop-folderview-mobile': function (app) {
+            app.props.set('folderview', false);
         },
 
         /*
@@ -163,7 +353,7 @@ define('io.ox/calendar/main',
          * Respond to folder view changes
          */
         'change:folderview': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:folderview', function (model, value) {
                 app.folderView.toggle(value);
             });
@@ -179,7 +369,7 @@ define('io.ox/calendar/main',
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:checkboxes', function (model, value) {
                 var grid = app.getGrid();
                 grid.setEditable(value);
@@ -190,7 +380,7 @@ define('io.ox/calendar/main',
          * Respond to change:darkColors
          */
         'change:darkColors': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:darkColors', function (model, value) {
                 app.getWindow().nodes.outer.toggleClass('dark-colors', value);
             });
@@ -201,8 +391,8 @@ define('io.ox/calendar/main',
          * Folerview toolbar
          */
         'folderview-toolbar': function (app) {
-            if (_.device('small')) return;
-            commons.mediateFolderView(app, true);
+            if (_.device('smartphone')) return;
+            commons.mediateFolderView(app);
         },
 
         /*
@@ -210,6 +400,7 @@ define('io.ox/calendar/main',
          */
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
+                console.log('show perspective', value);
                 ox.ui.Perspective.show(app, value);
             });
         },
@@ -219,6 +410,7 @@ define('io.ox/calendar/main',
          */
         'mobile-compatibility': function (app) {
             if (!_.device('smartphone')) return;
+
             app.left.one('select', function () {
                 var content = app.getWindow().nodes.body.find('.window-content');
                 $(content).append(app.navbar = $('<div class="rightside-navbar">'));
@@ -254,8 +446,8 @@ define('io.ox/calendar/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            chromeless: _.device('!small'),
             facetedsearch: capabilities.has('search')
+            chromeless: true
         }));
 
         app.settings = settings;
@@ -309,6 +501,8 @@ define('io.ox/calendar/main',
         commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
             .always(function () {
                 app.mediate();
+                // prepare perspective for pagecontroller
+                if (win.options.usePageController) win.options.mainPage = app.pages.getPage('mainView');
                 win.show();
             })
             .done(function () {
@@ -322,15 +516,9 @@ define('io.ox/calendar/main',
                     // corrupt data fix
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
-
                 ox.ui.Perspective.show(app, lastPerspective);
+
             });
-
-        win.on('change:perspective', function (e, name, id) {
-            // save current perspective to settings
-            app.props.set('layout', id);
-        });
-
     });
 
     return {

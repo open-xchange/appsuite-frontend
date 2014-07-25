@@ -1182,6 +1182,7 @@ define('io.ox/core/tk/vgrid',
                 if (value !== undefined) {
                     var previous = props.get(key);
                     if (value !== previous) {
+
                         this.trigger('beforechange:prop', key, value, previous);
                         this.trigger('beforechange:prop:' + key, value, previous);
                         props.set(key, value, {silent: true});

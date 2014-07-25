@@ -763,11 +763,13 @@ define('io.ox/core/desktop',
 
 
             this.show = function (app, opt) {
-
                 var win = app.getWindow();
                 if (opt.perspective === win.currentPerspective) return;
 
                 this.main = app.pages.getPage(opt.perspective.split(':')[0]);
+
+                // add to stack
+                //win.addPerspective(this);
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
@@ -788,7 +790,7 @@ define('io.ox/core/desktop',
                 }
 
                 app.pages.changePage(opt.perspective.split(':')[0], {
-                    animation: 'fade' // no transition
+                    animation: opt.animation || 'fade'
                 });
 
                 win.currentPerspective = opt.perspective;
@@ -801,8 +803,7 @@ define('io.ox/core/desktop',
             };
         };
 
-        function handlePerspectiveChange(app, p, newPers) {
-
+        function handlePerspectiveChange(app, p, newPers, opt) {
             var oldPers = app.getWindow().getPerspective();
 
             if (oldPers && _.isFunction(oldPers.save)) {
@@ -810,14 +811,15 @@ define('io.ox/core/desktop',
             }
 
             if (newPers) {
-                newPers.show(app, { perspective: p });
+                newPers.show(app, _.extend({ perspective: p }, opt));
                 if (_.isFunction(newPers.restore)) {
                     newPers.restore();
                 }
             }
         }
 
-        Perspective.show = function (app, p) {
+        Perspective.show = function (app, p, opt) {
+
 
             /*if (p === 'main') {
                 var win = app.getWindow(),
@@ -831,7 +833,7 @@ define('io.ox/core/desktop',
             }*/
 
             return require([app.get('name') + '/' + p.split(':')[0] + '/perspective'], function (newPers) {
-                handlePerspectiveChange(app, p, newPers);
+                handlePerspectiveChange(app, p, newPers, opt);
             });
         };
 
@@ -1431,7 +1433,14 @@ define('io.ox/core/desktop',
                         .appendTo(this.nodes.toolbar);
                 };
 
+                this.addPerspective = function (p) {
+                    if (!perspectives[p.name]) {
+                        perspectives[p.name] = p;
+                    }
+                };
+
                 this.getPerspective = function () {
+                    console.log(perspectives);
                     var cur = this.currentPerspective.split(':')[0];
                     return perspectives[cur];
                 };

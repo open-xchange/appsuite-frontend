@@ -11,19 +11,20 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/files/mobile-toolbar-actions',
+define('io.ox/calendar/mobile-toolbar-actions',
    ['io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/files/api',
+    'io.ox/calendar/api',
     'gettext!io.ox/mail'],
     function (ext, links, api, gt) {
 
     'use strict';
-
+    console.log(ext, links, api, gt);
+    /*
     // define links for each page
 
-    var pointMainView = ext.point('io.ox/files/mobile/toolbar/fluid'),
-        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/fluid/multiselect'),
+    var pointMainView = ext.point('io.ox/files/mobile/toolbar/mainView'),
+        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/mainView/multiselect'),
         pointDetailView = ext.point('io.ox/files/mobile/toolbar/detailView'),
         meta = {
             'create': {
@@ -102,7 +103,7 @@ define('io.ox/files/mobile-toolbar-actions',
         index = 0;
     }
     // add default actions to toolbar which might be extended by 3rd party apps
-    /*pointMainView.extend(new links.Dropdown({
+    pointMainView.extend(new links.Dropdown({
         index: 100,
         label: $('<span>').text(
             //.# Will be used as button label in the toolbar, allowing the user to create new documents or upload files
@@ -111,7 +112,7 @@ define('io.ox/files/mobile-toolbar-actions',
         noCaret: true, // don't draw the caret icon beside menu link
         drawDisabled: true,
         ref: 'io.ox/files/links/toolbar/default'
-    }));*/
+    }));
 
     // add other actions
     //addAction(pointMainView, ['create', 'view-list', 'view-icon', 'view-tile']);
@@ -153,34 +154,34 @@ define('io.ox/files/mobile-toolbar-actions',
             var baton = ext.Baton({data: data, app: self, allIds: ids});
              // handle updated baton to pageController
             self.pages.getToolbar('detailView').setBaton(baton);
-            self.pages.getSecondaryToolbar('fluid').setBaton(baton);
+            self.pages.getSecondaryToolbar('mainView').setBaton(baton);
         });
 
     }, 10);
-
+    */
     // some mediator extensions
     // register update function and introduce toolbar updating
-    ext.point('io.ox/files/mediator').extend({
+    ext.point('io.ox/calendar/mediator').extend({
         id: 'toolbar-mobile',
         index: 10100,
-        setup: function (app) {
+        setup: function () {
             if (_.device('!smartphone')) return;
-            app.updateToolbar = updateToolbar;
+            //app.updateToolbar = updateToolbar;
         }
     });
 
-    ext.point('io.ox/files/mediator').extend({
+    ext.point('io.ox/calendar/mediator').extend({
         id: 'update-toolbar-mobile',
         index: 10300,
-        setup: function (app) {
+        setup: function () {
             if (!_.device('smartphone')) return;
             // folder change
-
+            /*
             function fnFolderChange() {
                 app.folder.getData().done(function (data) {
                     var baton = ext.Baton({ data: data, app: app });
                     // handle updated baton to pageController
-                    app.pages.getToolbar('fluid').setBaton(baton);
+                    app.pages.getToolbar('mainView').setBaton(baton);
                 });
             }
 
@@ -197,16 +198,16 @@ define('io.ox/files/mobile-toolbar-actions',
             app.on('selection:change', function () {
                 if (!app.props.get('showCheckboxes')) return;
                 app.updateToolbar(app.selection.get());
-            });
+            });*/
         }
     });
 
-    ext.point('io.ox/files/mediator').extend({
+    ext.point('io.ox/calendar/mediator').extend({
         id: 'toolbar-mobile-defaultactions',
         index: 10500,
         setup: function () {
             if (_.device('!smartphone')) return;
-            addAction(pointMainView, ['create', 'view-list', 'view-icon', 'view-tile']);
+            //addAction(pointMainView, ['create', 'view-list', 'view-icon', 'view-tile']);
         }
     });
 
