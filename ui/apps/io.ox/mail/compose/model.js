@@ -68,12 +68,13 @@ define('io.ox/mail/compose/model',
                 this.set('attachments', new attachments.model.Attachments(list), {silent: true});
                 list = this.get('attachments');
             }
-            if (list.length === 0) {
+            var content = list.at(0);
+            if (!content || content.get('disp') !== 'inline' || !_.isString(content.get('content'))) {
                 list.add({
                     content: '',
                     content_type: this.getContentType(),
                     disp: 'inline'
-                }, {silent: true});
+                }, {at: 0, silent: true});
             }
             this.updateShadow();
         },
@@ -114,7 +115,7 @@ define('io.ox/mail/compose/model',
         },
 
         getContent: function () {
-            var content = this.get('attachments').at(0).get('content'),
+            var content = this.get('attachments').at(0).get('content') || '',
                 mode = this.get('editorMode');
 
             if (mode === 'text') {
