@@ -343,7 +343,7 @@ define.async('io.ox/mail/accounts/view-form',
 
                 picker({
                     context: 'account',
-                    commit: function (target) {
+                    done: function (target) {
                         self.model.set(property, target, { validate: true });
                         self.$el.find('input[name="' + property + '"]').val(target);
                     },

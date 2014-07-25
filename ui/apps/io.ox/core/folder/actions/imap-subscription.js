@@ -6,94 +6,95 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/core/folder/actions/imap-subscription',
-    ['io.ox/core/api/folder',
-     'io.ox/core/cache',
-     'io.ox/core/tk/folderviews',
+    ['io.ox/core/folder/api',
+     'io.ox/core/folder/picker',
+     'io.ox/core/http',
      'gettext!io.ox/core'
-    ], function (api, cache, folderviews, gt) {
+    ], function (api, picker, http, gt) {
 
     'use strict';
 
-    var that = {
+    return function () {
 
-        show: function () {
+        var previous = {}, changes = {};
 
-            var folderCache = new cache.SimpleCache('folder-all'),
-                subFolderCache = new cache.SimpleCache('subfolder-all'),
-                storage = {
-                    folderCache: folderCache,
-                    subFolderCache: subFolderCache
-                };
-
-            var container = $('<div>'),
-                tree = new folderviews.ApplicationFolderTree(container, {
-                    type: 'mail',
-                    tabindex: 0,
-                    rootFolderId: '1',
-                    checkbox: true,
-                    all: true,
-                    storage: storage,
-                    filter: function (folder) {
-                        // also allow top-level mailfolders
-                        // top-level folder of external accounts don’t have imap-subscribe capability :\
-                        return (/^default\d+(\W|$)$/i).test(folder.id) || api.can('imap-subscribe', folder);
-                    }
-                });
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var pane = new dialogs.ModalDialog({
-                    width: 500,
-                    addClass: 'subscribe-imap-folder'
-                });
-                var changesArray = [];
-
-                pane.header(
-                    $('<h4>').text(gt('Subscribe IMAP folders'))
-                )
-                .build(function () {
-                    this.getContentNode().addClass('max-height-300').append(container);
-                })
-                .addPrimaryButton('save', gt('Save'))
-                .addButton('cancel', gt('Cancel'))
-                .show(function () {
-                    tree.paint().done(function () {
-                        tree.selection.updateIndex().selectFirst();
-                        pane.getBody().find('.io-ox-foldertree').focus();
-                    });
-                })
-                .done(function (action) {
-                    if (action === 'save') {
-                        _(changesArray).each(function (change) {
-                            api.update(change, storage);
-                        });
-                        tree.destroy().done(function () {
-                            tree = pane = null;
-                        });
-                    }
-                    if (action === 'cancel') {
-                        tree.destroy().done(function () {
-                            tree = pane = null;
-                        });
-                    }
-                });
-
-                tree.container.on('change', 'input[type="checkbox"]', function () {
-                    var folder = $(this).val(),
-                        checkboxStatus = $(this).is(':checked'),
-                        changes = { subscribed: checkboxStatus },
-                        tobBePushed = { folder: folder, changes: changes};
-                    changesArray.push(tobBePushed);
-                });
-            });
+        function check(id, state) {
+            if (state !== previous[id]) changes[id] = state; else delete changes[id];
         }
-    };
 
-    return that;
+        function change() {
+            check($(this).val(), $(this).prop('checked'));
+        }
+
+        function keypress(e) {
+            if (e.which !== 32 || e.isDefaultPrevented()) return;
+            e.preventDefault();
+            var node = $(this).find('input:checkbox').first(), state = node.prop('checked');
+            // skip if checkbox is disabled
+            if (node.prop('disabled')) return;
+            node.prop('checked', !state);
+        }
+
+        picker({
+
+            all: true,
+            addClass: 'zero-padding subscribe-imap-folder',
+            button: gt('Save'),
+            context: 'subscribe',
+            height: 300,
+            module: 'mail',
+            title: gt('Subscribe IMAP folders'),
+
+            always: function () {
+
+                http.pause();
+
+                var affectedFolders = _(changes).map(function (state, id) {
+                    // update flag
+                    api.update(id, { subscribed: state }, { silent: true });
+                    // get parent folder id
+                    var model = api.pool.getModel(id);
+                    return model.get('folder_id');
+                });
+
+                // reload affected folders
+                _(affectedFolders).chain().uniq().each(function (id) {
+                    api.list(id, { cache: false });
+                });
+
+                http.resume();
+            },
+
+            customize: function (baton) {
+
+                var data = baton.data,
+                    virtual = /^virtual/.test(data.id),
+                    // top-level folder of external accounts don’t have imap-subscribe capability :\
+                    disabled = virtual || !api.can('subscribe:imap', data);
+
+                previous[data.id] = data.subscribed;
+
+                this.find('.folder-label').before(
+                    $('<label class="folder-checkbox">').append(
+                        $('<input type="checkbox">')
+                            .prop({ checked: data.subscribed, disabled: disabled })
+                            .on('change', change).val(data.id)
+                    )
+                );
+
+                this.on('keypress', keypress);
+            },
+
+            close: function () {
+                previous = changes = null;
+            }
+        });
+    };
 });

@@ -42,6 +42,7 @@ define('io.ox/core/folder/tree',
             this.open = options.open;
             this.flat = !!options.flat;
             this.context = options.context || 'app';
+            this.all = !!options.all;
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
             this.$contextmenu = $();

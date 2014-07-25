@@ -471,7 +471,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 picker({
                     context: 'account',
-                    commit: function (id) {
+                    done: function (id) {
 
                         var prepared = prepareFolderForDisplay(id);
 

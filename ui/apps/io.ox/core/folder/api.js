@@ -25,16 +25,10 @@ define('io.ox/core/folder/api',
 
     'use strict';
 
-    var api = {};
+    var api = {}, pool;
 
     // add event hub
     Events.extend(api);
-
-    // collection pool
-    var pool = {
-        models: {},
-        collections: {}
-    };
 
     //
     // Utility functions
@@ -55,6 +49,10 @@ define('io.ox/core/folder/api',
 
     function isFlat(id) {
         return /^flat\/([^/]+)\/([^/]+)$/.exec(id);
+    }
+
+    function getCollectionId(id, all) {
+        return (all ? 'all/' : '') + String(id);
     }
 
     //
@@ -78,7 +76,13 @@ define('io.ox/core/folder/api',
     });
 
     // collection pool
-    _.extend(pool, {
+    function Pool() {
+
+        this.models = {};
+        this.collections = {};
+    }
+
+    _.extend(Pool.prototype, {
 
         addModel: function (data) {
             var id = data.id;
@@ -106,7 +110,8 @@ define('io.ox/core/folder/api',
             return this.models[id] || (this.models[id] = new FolderModel({ id: id }));
         },
 
-        getCollection: function (id) {
+        getCollection: function (id, all) {
+            id = getCollectionId(id, all);
             return this.collections[id] || (this.collections[id] = new FolderCollection());
         },
 
@@ -122,6 +127,9 @@ define('io.ox/core/folder/api',
             collection.each(unfetch);
         }
     });
+
+    // get instance
+    pool = new Pool();
 
     //
     // Used by list() and ramp-up
@@ -250,7 +258,8 @@ define('io.ox/core/folder/api',
         options = _.extend({ all: false, cache: true }, options);
 
         // already cached?
-        var collection = pool.getCollection(id);
+        var collectionId = getCollectionId(id, options.all),
+            collection = pool.getCollection(collectionId);
         if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
 
         // use rampup data?
@@ -285,7 +294,7 @@ define('io.ox/core/folder/api',
         })
         .done(function (array) {
             array = processListResponse(id, array);
-            pool.addCollection(id, array);
+            pool.addCollection(collectionId, array);
         });
     }
 
@@ -354,7 +363,6 @@ define('io.ox/core/folder/api',
 
         // missing module?
         if (ox.debug && !options.module) {
-            debugger;
             console.warn('Folder API > flat() - Missing module', options);
             return $.Deferred().reject();
         }
@@ -414,12 +422,13 @@ define('io.ox/core/folder/api',
     // Update folder
     //
 
-    function update(id, changes) {
+    function update(id, changes, options) {
 
         if (!_.isObject(changes) || _.isEmpty(changes)) return;
 
         // update model
-        var model = pool.getModel(id).set(changes);
+        options = _.extend({ silent: false }, options);
+        var model = pool.getModel(id).set(changes, { silent: options.silent });
 
         return http.PUT({
             module: 'folders',
@@ -437,7 +446,7 @@ define('io.ox/core/folder/api',
                 // id change? (caused by rename or move)
                 if (id !== newId) model.set('id', newId);
                 // trigger event
-                api.trigger('update', id, newId, model.toJSON());
+                if (!options.silent) api.trigger('update', id, newId, model.toJSON());
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId) return list(model.get('folder_id'), { cache: false }).then(function () {
                     return newId;
@@ -446,7 +455,7 @@ define('io.ox/core/folder/api',
             function fail(error) {
                 if (error && error.code && error.code === 'FLD-0018')
                     error.error = gt('Could not save settings. There have to be at least one user with administration rights.');
-                api.trigger('update:fail', error, id);
+                if (!options.silent) api.trigger('update:fail', error, id);
             }
         );
     }
@@ -605,12 +614,12 @@ define('io.ox/core/folder/api',
     // Reload folder
     //
 
-    function getId(arg) {
+    function getFolderId(arg) {
         return _.isString(arg) ? arg : (arg ? arg.folder_id : null);
     }
 
     function reload() {
-        _.chain(arguments).flatten().map(getId).compact().uniq().each(function (id) {
+        _.chain(arguments).flatten().map(getFolderId).compact().uniq().each(function (id) {
             get(id, { cache: false });
         });
     }
@@ -666,6 +675,7 @@ define('io.ox/core/folder/api',
     _.extend(api, {
         FolderModel: FolderModel,
         FolderCollection: FolderCollection,
+        Pool: Pool,
         pool: pool,
         get: get,
         list: list,

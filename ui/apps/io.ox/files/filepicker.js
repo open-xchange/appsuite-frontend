@@ -30,7 +30,7 @@ define('io.ox/files/filepicker',
             filter: function () { return true; },
             header: gt('Add files'),
             primaryButtonText: gt('Save'),
-            cancelButtonText: gt('Cancel'),
+            // cancelButtonText: gt('Cancel'), // really?
             multiselect: true,
             width: window.innerWidth * 0.8
         }, options);
@@ -88,7 +88,6 @@ define('io.ox/files/filepicker',
             addClass: 'zero-padding add-infostore-file',
             button: options.primaryButtonText,
             height: 350,
-            last: true,
             module: 'infostore',
             persistent: 'folderpopup/filepicker',
             root: '9',
@@ -96,7 +95,7 @@ define('io.ox/files/filepicker',
             title: options.header,
             width: options.width,
 
-            commit: function () {
+            done: function () {
                 def.resolve(
                     _(filesPane.find('input:checked')).map(function (node) {
                         return $(node).data('file');
@@ -116,10 +115,6 @@ define('io.ox/files/filepicker',
                 });
 
                 tree.on('change', onFolderChange);
-            },
-
-            show: function (dialog) {
-                dialog.getBody().find('.io-ox-foldertree').focus();
             }
         });
 

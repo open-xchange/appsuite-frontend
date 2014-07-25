@@ -26,6 +26,7 @@ define('io.ox/core/folder/picker',
     // options          {object}    Picker options (see below)
     //
     //   Attributes:
+    //     all          {bool}      Load all folders; special case for IMAP subscription
     //     async        {bool}      dialog in async mode
     //     addClass     {string}    dialog classes
     //     button       {string}    primary button label
@@ -44,9 +45,10 @@ define('io.ox/core/folder/picker',
     //     width        {number}    dialog width in px
     //
     //   Callbacks:
-    //     commit       {function}  Called on "ok" (and a folder is selected)
+    //     always       {function}  Called on "ok" / no matter if a folder is selected
     //     close        {function}  Called on close
     //     customize    {function}  Customize function used for tree nodes
+    //     done         {function}  Called on "ok" (and a folder is selected)
     //     initialize   {function}  Called to have access to dialog and tree
     //     show         {function}  Called on show
 
@@ -54,6 +56,7 @@ define('io.ox/core/folder/picker',
 
         var o = _.extend({
             // attributes
+            all: false,
             async: false,
             addClass: 'zero-padding',
             button: gt('Ok'),
@@ -61,14 +64,14 @@ define('io.ox/core/folder/picker',
             flat: false,
             height: 250,
             indent: true,
-            last: false,
             module: 'mail',
             persistent: false,
             root: '1',
             title: gt('Select folder'),
             width: 500,
             // callbacks
-            commit: $.noop,
+            always: $.noop,
+            done: $.noop,
             customize: $.noop,
             initialize: $.noop,
             close: $.noop,
@@ -88,15 +91,15 @@ define('io.ox/core/folder/picker',
 
         var id = o.folder;
 
-        // use last folder?
-        if (o.last && o.settings && _.isString(o.persistent)) {
-            id = o.settings.get(o.persistent + '/last') || o.folder;
+        if (id === undefined && o.settings && _.isString(o.persistent)) {
+            id = o.settings.get(o.persistent + '/last');
         }
 
         // get open nodes
         var open = o.settings && _.isString(o.persistent) ? o.settings.get(o.persistent + '/open', []) : [];
 
         var tree = new TreeView({
+            all: o.all,
             context: o.context,
             flat: !!o.flat,
             indent: o.indent,
@@ -121,14 +124,16 @@ define('io.ox/core/folder/picker',
         return dialog
             .on('ok', function () {
                 var id = tree.selection.get();
-                if (id) o.commit(id);
+                if (id) o.done(id);
+                o.always(dialog, tree);
             })
             .show(function () {
                 dialog.getBody().busy();
                 api.path(id).done(function (path) {
                     tree.open = _.union(tree.open, _(path).pluck('id'));
                     if (id) tree.preselect(id);
-                    dialog.getBody().idle().focus().append(tree.render().$el);
+                    dialog.getBody().idle().append(tree.render().$el);
+                    tree.$el.focus();
                     o.show(dialog, tree);
                 });
             })

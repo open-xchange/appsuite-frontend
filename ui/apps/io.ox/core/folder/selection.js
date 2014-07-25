@@ -55,6 +55,9 @@ define('io.ox/core/folder/selection', [], function () {
 
         onClick: function (e) {
 
+            // ignore native checkbox
+            if ($(e.target).is(':checkbox')) return;
+
             // avoid double selections
             if (e.isDefaultPrevented()) return; else e.preventDefault();
 

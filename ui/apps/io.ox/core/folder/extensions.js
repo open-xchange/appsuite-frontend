@@ -141,6 +141,18 @@ define('io.ox/core/folder/extensions',
         }
     );
 
+    // looks identical to popup but has no favorites
+    ext.point('io.ox/core/foldertree/mail/subscribe').extend(
+        {
+            id: 'standard-folders',
+            draw: extensions.standardFolders
+        },
+        {
+            id: 'remote-accounts',
+            draw: extensions.remoteAccounts
+        }
+    );
+
     ext.point('io.ox/core/foldertree/mail/account').extend(
         {
             id: 'standard-folders',

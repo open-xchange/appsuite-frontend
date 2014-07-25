@@ -517,7 +517,7 @@ define('io.ox/search/view-template',
                 folder: id,
                 module: type === 'files' ? 'infostore' : type,
                 root: type === 'files' ? '9' : '1',
-                commit: function (target) {
+                done: function (target) {
                     // TODO: better way tp get label?!
                     // Hääää? Was soll das?
                     var label = 'Please fix'; // var label = $(arguments[2]).find('[data-obj-id="' + target + '"]').find('.short-title').text();

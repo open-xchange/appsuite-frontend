@@ -28,9 +28,14 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             'keydown': 'onKeydown'
         },
 
+        list: function () {
+            var o = this.options;
+            return api.list(o.model_id, { all: o.tree.all });
+        },
+
         reset: function () {
             if (this.isReset) return;
-            if (this.collection.fetched) this.onReset(); else api.list(this.options.model_id);
+            if (this.collection.fetched) this.onReset(); else this.list();
         },
 
         onReset: function () {
@@ -224,7 +229,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
             this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.model = api.pool.getModel(o.model_id);
-            this.collection = api.pool.getCollection(o.model_id);
+            this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
             this.$ = {};
 

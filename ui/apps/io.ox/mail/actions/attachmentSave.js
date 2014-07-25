@@ -73,7 +73,7 @@ define('io.ox/mail/actions/attachmentSave',
                 settings: settings,
                 title: gt('Save attachment'),
 
-                commit: function (target) {
+                done: function (target) {
                     commit(list, target);
                 },
 

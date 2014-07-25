@@ -95,7 +95,7 @@ define('io.ox/core/folder/actions/move',
                 settings: settings,
                 title: options.title,
 
-                commit: function (id) {
+                done: function (id) {
                     if (type === 'copy' || id !== current) commit(id);
                 },
 
@@ -117,7 +117,7 @@ define('io.ox/core/folder/actions/move',
             picker({
                 async: true,
                 addClass: 'zero-padding',
-                commit: function (target) {
+                done: function (target) {
                     api.move(id, target).then(this.close, this.idle).fail(notifications.yell);
                 },
                 customize: function (baton) {
