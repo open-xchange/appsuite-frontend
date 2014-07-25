@@ -265,26 +265,6 @@ define('io.ox/calendar/main',
                 app.search.focus = function () {
                     container.find('.facet > a').focus();
                 };
-
-                // tooltips
-                side.find('.io-ox-search .input-group')
-                    //icond tooltips
-                    .find('i')
-                    .attr({
-                        'data-toggle': 'tooltip',
-                        'data-placement': 'right',
-                        'data-animation': 'false',
-                        'data-container': 'body'
-                    })
-                    .tooltip()
-                    .end()
-                    //search
-                    .find('.btn-search>i')
-                    .attr('title', gt('Search'))
-                    .end()
-                    //clear
-                    .find('.btn-clear')
-                    .attr('title', gt('Close search'));
             });
         }
     });

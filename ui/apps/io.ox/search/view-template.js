@@ -77,8 +77,52 @@ define('io.ox/search/view-template',
         dropdown = function (baton, container) {
             var ref,
                 app = baton.app,
-                model = baton.model;
+                model = baton.model,
+                cancelbtn, searchbtn;
 
+            // buttons
+            cancelbtn =  $('<a href="#">')
+                            .attr({
+                                'tabindex': '1',
+                                'class': 'btn-clear',
+                                'data-toggle': 'tooltip',
+                                'data-placement': 'bottom',
+                                'data-animation': 'false',
+                                'data-container': 'body',
+                                'data-original-title': gt('Close Search')
+                            }).append(
+                                $('<i class="fa fa-times"></i>')
+                            )
+                            .tooltip()
+                            .on('click', function () {
+                                app.view.trigger('button:clear');
+                            });
+
+            searchbtn = $('<span class="input-group-btn">').append(
+                            // submit
+                            $('<button type="button">')
+                            .attr({
+                                'tabindex': '1',
+                                'class': 'btn btn-default btn-search',
+                                'data-toggle': 'tooltip',
+                                'data-placement': 'bottom',
+                                'data-animation': 'false',
+                                'data-container': 'body',
+                                'data-original-title': gt('Search'),
+                                'aria-label': gt('Search')
+                            })
+                            .append(
+                                $('<i class="fa fa-search"></i>')
+                            )
+                            .tooltip()
+                            .on('click', function () {
+                                debugger;
+                                var e = $.Event('keydown');
+                                e.which = 13;
+                                $(ref).trigger(e);
+                            })
+                        );
+            // input group and dropdown
             this.append(
                 $('<div class="input-group">')
                     .append(
@@ -158,23 +202,8 @@ define('io.ox/search/view-template',
                                 e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
                             }
                         }),
-                        $('<i class="fa fa-times btn-clear"></i>')
-                            .on('click', function () {
-                                app.view.trigger('button:clear');
-                            }),
-                        $('<span class="input-group-btn">').append(
-                            // submit
-                            $('<button type="button" class="btn btn-default btn-search">')
-                            .attr('aria-label', gt('Search'))
-                            .append(
-                                $('<i class="fa fa-search"></i>')
-                            )
-                            .on('click', function () {
-                                var e = $.Event('keydown');
-                                e.which = 13;
-                                $(ref).trigger(e);
-                            })
-                        )
+                        cancelbtn,
+                        searchbtn
                     )
             );
 
