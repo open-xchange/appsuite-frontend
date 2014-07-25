@@ -163,6 +163,22 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        ext.point(POINT + '/sidepanel').extend({
+            id: 'inplace-search',
+            index: 300,
+            draw: function (baton) {
+                if (!capabilities.has('search')) return;
+
+                baton.$.sidepanel
+                    .append(
+                        $('<div class="generic-toolbar top inplace-search io-ox-search">')
+                    )
+                    .find('foldertree-container')
+                    .addClass('top-toolbar');
+
+            }
+        });
+
         // draw click intercept-div which intercepts
         // clicks on the visible rest of the grids on mobile
         // when folder tree is expanded

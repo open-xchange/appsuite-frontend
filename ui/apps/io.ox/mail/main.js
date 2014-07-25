@@ -1029,17 +1029,12 @@ define('io.ox/mail/main',
 
             var side = app.getWindow().nodes.sidepanel, tree, toolbar, container;
 
-            side.find('.foldertree-sidepanel').append(
-                $('<div class="generic-toolbar top inplace-search io-ox-search">')
-            );
-
             side.append(
                 container = $('<div class="abs search-container">')
                 .append('<ul class="search-facets">')
                 .hide()
             );
 
-            tree = side.find('.foldertree-container').addClass('top-toolbar');
             toolbar = side.find('.generic-toolbar.bottom');
 
             require(['io.ox/search/main', 'io.ox/search/view-template', 'io.ox/core/api/collection-loader'], function (search, view, CollectionLoader) {
