@@ -14,13 +14,13 @@
 define('io.ox/files/filepicker',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/folder/tree',
+     'io.ox/core/folder/picker',
      'io.ox/core/cache',
      'io.ox/files/api',
      'io.ox/core/tk/selection',
      'settings!io.ox/core',
      'gettext!io.ox/files'
-    ], function (ext, dialogs, TreeView, cache, filesAPI, Selection, settings, gt) {
+    ], function (ext, dialogs, picker, cache, filesAPI, Selection, settings, gt) {
 
     'use strict';
 
@@ -37,28 +37,8 @@ define('io.ox/files/filepicker',
 
         var container = $('<div>'),
             filesPane = $('<ul class="io-ox-fileselection list-unstyled" tabindex="0">'),
-            tree = new TreeView({
-                module: 'infostore',
-                open: settings.get('folderpopup/filepicker/open', []),
-                root: '9'
-            }),
-            dialog = new dialogs.ModalDialog({
-                width: options.width,
-                height: 350,
-                addClass: 'add-infostore-file'
-            }),
-            id = settings.get('folderpopup/filepicker/last'),
-            self = this,
-            pickerDef = $.Deferred();
-
-        tree.on('open close', function () {
-            var open = this.getOpenFolders();
-            settings.set('folderpopup/filepicker/open', open).save();
-        });
-
-        tree.on('change', function (id) {
-            settings.set('folderpopup/filepicker/last', id).save();
-        });
+            def = $.Deferred(),
+            self = this;
 
         Selection.extend(this, filesPane, {});
 
@@ -72,41 +52,7 @@ define('io.ox/files/filepicker',
             filesPane.addClass('singleselect');
         }
 
-        dialog
-            .header($('<h4>').text(options.header))
-            .build(function () {
-                this.getContentNode().append(container, filesPane);
-            })
-            .addPrimaryButton('save', options.primaryButtonText, 'save', {tabIndex: '1'})
-            .addButton('cancel', options.cancelButtonText, 'cancel', {tabIndex: '1'})
-            .on('save', function () {
-                var files = [];
-                filesPane.find('input:checked').each(function (index, el) {
-                    files.push($(el).data('fileData'));
-                });
-                pickerDef.resolve(files);
-            })
-            .show(function () {
-                if (id) tree.preselect(id);
-                dialog.getBody()
-                    .append(tree.render().$el)
-                    .find('.io-ox-foldertree').focus();
-            })
-            .done(function () {
-                tree = dialog = null;
-            });
-
-        // add dbl-click option like native file-chooser
-        filesPane.on('dblclick', '.file', function () {
-            var file = $('input', this).data('fileData');
-            if (file) {
-                pickerDef.resolve([file]);
-                dialog.close();
-            }
-        });
-
-        // on foldertree change update file selection
-        tree.on('change', function (id) {
+        function onFolderChange(id) {
             filesPane.empty();
             filesAPI.getAll({ folder: id }, false).then(function (files) {
                 filesPane.append(
@@ -120,7 +66,7 @@ define('io.ox/files/filepicker',
                                     .attr('title', title)
                                     .append(
                                         $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
-                                            .val(file.id).data('fileData', file)
+                                            .val(file.id).data('file', file)
                                     ),
                                 $('<div class="name">').text(title)
                             );
@@ -135,9 +81,49 @@ define('io.ox/files/filepicker',
                 self.selection.init(files);
                 self.selection.selectFirst();
             });
+        }
+
+        picker({
+
+            addClass: 'zero-padding add-infostore-file',
+            button: options.primaryButtonText,
+            height: 350,
+            last: true,
+            module: 'infostore',
+            persistent: 'folderpopup/filepicker',
+            root: '9',
+            settings: settings,
+            title: options.header,
+            width: options.width,
+
+            commit: function () {
+                def.resolve(
+                    _(filesPane.find('input:checked')).map(function (node) {
+                        return $(node).data('file');
+                    })
+                );
+            },
+
+            initialize: function (dialog, tree) {
+
+                dialog.getContentNode().append(container, filesPane);
+
+                filesPane.on('dblclick', '.file', function () {
+                    var file = $('input', this).data('file');
+                    if (!file) return;
+                    def.resolve([file]);
+                    dialog.close();
+                });
+
+                tree.on('change', onFolderChange);
+            },
+
+            show: function (dialog) {
+                dialog.getBody().find('.io-ox-foldertree').focus();
+            }
         });
 
-        return pickerDef.promise();
+        return def.promise();
     };
 
     return FilePicker;

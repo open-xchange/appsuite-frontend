@@ -85,24 +85,26 @@ define('io.ox/core/folder/actions/move',
             var current = options.list[0].folder_id;
 
             picker({
+
                 button: options.button,
-                commit: function (id) {
-                    if (type === 'copy' || id !== current) commit(id);
-                },
-                customize: function (baton) {
-                    var data = baton.data,
-                        same = type === 'move' && data.id === current,
-                        create = api.can('create', data);
-                    if (same || !create) this.addClass('disabled');
-                },
                 flat: !!options.flat,
                 indent: options.indent !== undefined ? options.indent : true,
-                list: options.list,
                 module: options.module,
                 persistent: 'folderpopup',
                 root: options.root,
                 settings: settings,
                 title: options.title,
+
+                commit: function (id) {
+                    if (type === 'copy' || id !== current) commit(id);
+                },
+
+                customize: function (baton) {
+                    var data = baton.data,
+                        same = type === 'move' && data.id === current,
+                        create = api.can('create', data);
+                    if (same || !create) this.addClass('disabled');
+                }
             });
         },
 

@@ -28,63 +28,69 @@ define('io.ox/core/folder/picker',
     //   Attributes:
     //     async        {bool}      dialog in async mode
     //     addClass     {string}    dialog classes
-    //     context      {string}    tree context, e.g. 'app' or 'popup'
     //     button       {string}    primary button label
+    //     context      {string}    tree context, e.g. 'app' or 'popup'
     //     flat         {bool}      use flat tree (e.g. for contacts)
-    //     height       {number}    height in px
+    //     folder       {string}    Current folder (for preselection)
+    //     height       {number}    dialog height in px
     //     indent       {bool}      indent first level (default is true; also needed for flat trees)
-    //     list         {array}     list of items
+    //     last         {bool}      Prefer last folder used (needs settings and persistent)
+    //     list         {array}     list of items, use first to determine first folder
     //     module       {string}    module, e.g. 'mail'
     //     persistent   {string}    If string, this path is used to store open and last nodes; needs settings
     //     root         {string}    tree root id, e.g. '1'
     //     settings     {object}    app-specific settings
-    //     title        {string}    dialog title
+    //     title        {string}    dialog title / can also be DOM element(s)
+    //     width        {number}    dialog width in px
     //
     //   Callbacks:
     //     commit       {function}  Called on "ok" (and a folder is selected)
     //     close        {function}  Called on close
     //     customize    {function}  Customize function used for tree nodes
+    //     initialize   {function}  Called to have access to dialog and tree
     //     show         {function}  Called on show
 
-    return function (options, callback) {
+    return function (options) {
 
         var o = _.extend({
+            // attributes
             async: false,
             addClass: 'zero-padding',
             button: gt('Ok'),
-            commit: $.noop,
             context: 'popup',
-            customize: $.noop,
             flat: false,
             height: 250,
             indent: true,
+            last: false,
             module: 'mail',
-            title: gt('Select folder'),
             persistent: false,
-            root: '1'
+            root: '1',
+            title: gt('Select folder'),
+            width: 500,
+            // callbacks
+            commit: $.noop,
+            customize: $.noop,
+            initialize: $.noop,
+            close: $.noop,
+            show: $.noop
         }, options);
 
-        var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass })
+        var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
             .header(
                 $('<h4>').append(
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
-            .addPrimaryButton('ok', o.button, 'ok', { tabIndex: '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' });
+            .addPrimaryButton('ok', o.button, 'ok', { tabindex: '1' })
+            .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: '1' });
 
         dialog.getBody().css({ height: o.height });
 
-        var id;
+        var id = o.folder;
 
-        // determine initial folder
-        if (o.folder) {
-            id = o.folder;
-        } else if (o.list) {
-            id = String(o.list[0].folder_id);
-            if (o.settings && _.isString(o.persistent)) {
-                id = o.settings.get(o.persistent + '/last') || id;
-            }
+        // use last folder?
+        if (o.last && o.settings && _.isString(o.persistent)) {
+            id = o.settings.get(o.persistent + '/last') || o.folder;
         }
 
         // get open nodes
@@ -100,8 +106,6 @@ define('io.ox/core/folder/picker',
             customize: o.customize
         });
 
-        if (_.isFunction(callback)) callback(dialog, tree);
-
         if (o.settings && _.isString(o.persistent)) {
             tree.on('open close', function () {
                 var open = this.getOpenFolders();
@@ -111,6 +115,8 @@ define('io.ox/core/folder/picker',
                 o.settings.set(o.persistent + '/last', id).save();
             });
         }
+
+        o.initialize(dialog, tree);
 
         return dialog
             .on('ok', function () {
@@ -123,12 +129,12 @@ define('io.ox/core/folder/picker',
                     tree.open = _.union(tree.open, _(path).pluck('id'));
                     if (id) tree.preselect(id);
                     dialog.getBody().idle().focus().append(tree.render().$el);
-                    if (_.isFunction(o.show)) o.show();
+                    o.show(dialog, tree);
                 });
             })
             .done(function () {
-                if (_.isFunction(o.close)) o.close();
-                tree = dialog = null;
+                o.close(dialog, tree);
+                tree = dialog = o = null;
             });
     };
 });
