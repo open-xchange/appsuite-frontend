@@ -767,7 +767,7 @@ define('io.ox/core/desktop',
                 var win = app.getWindow();
                 if (opt.perspective === win.currentPerspective) return;
 
-                this.main = win.addPerspective(this);
+                this.main = app.pages.getPage(opt.perspective.split(':')[0]);
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
@@ -787,13 +787,16 @@ define('io.ox/core/desktop',
                     this.rendered = true;
                 }
 
+                app.pages.changePage(opt.perspective.split(':')[0], {
+                    animation: 'fade' // no transition
+                });
+
                 win.currentPerspective = opt.perspective;
                 win.updateToolbar();
                 this.afterShow(app, opt);
             };
 
             this.hide = function () {
-                this.main.hide();
                 this.afterHide();
             };
         };
@@ -816,7 +819,7 @@ define('io.ox/core/desktop',
 
         Perspective.show = function (app, p) {
 
-            if (p === 'main') {
+            /*if (p === 'main') {
                 var win = app.getWindow(),
                     perspective = win.getPerspective();
                 if (perspective) {
@@ -825,7 +828,7 @@ define('io.ox/core/desktop',
                 win.currentPerspective = 'main';
                 win.nodes.main.show();
                 return $.when();
-            }
+            }*/
 
             return require([app.get('name') + '/' + p.split(':')[0] + '/perspective'], function (newPers) {
                 handlePerspectiveChange(app, p, newPers);
@@ -1426,30 +1429,6 @@ define('io.ox/core/desktop',
                         .text(String(o.label))
                         .on('click', o.action)
                         .appendTo(this.nodes.toolbar);
-                };
-
-                this.addPerspective = function (pers) {
-                    var id = pers.name, node;
-                    if (this.options.usePageController) {
-                        // special mode for pagecontroller
-                        // we use special container node instead of using app standards
-                        return this.options.mainPage;
-                    } else {
-
-                        // remove default main node if empty
-                        if (this.nodes.main && this.nodes.main.not(':empty')) {
-                            this.nodes.main.remove();
-                        }
-                        if (this.nodes[id] === undefined) {
-                            this.nodes.body.append(
-                                node = $('<div class="abs window-content">').hide()
-                            );
-                            perspectives[id] = pers;
-                            return this.nodes[id] = node;
-                        } else {
-                            return this.nodes[id];
-                        }
-                    }
                 };
 
                 this.getPerspective = function () {
