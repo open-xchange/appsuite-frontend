@@ -306,7 +306,6 @@ define('io.ox/mail/main',
 
             // initialize folder view
             FolderView.initialize({ app: app, tree: tree, append: false });
-            console.log('mmmh', page);
             page.append(tree.render().$el);
 
             tree.$el.on('tap', '.folder', function () {

@@ -179,31 +179,6 @@ define('io.ox/core/folder/view',
             visible: _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true)
         });
 
-        // draw container
-        // ext.point(POINT + '/sidepanel').extend({
-        //     index: 100,
-        //     draw: function (baton) {
-
-        //         this.prepend(
-        //             // sidepanel
-        //             baton.$.sidepanel = $('<div class="abs foldertree-sidepanel">')
-        //             .attr({
-        //                 'role': 'navigation',
-        //                 'aria-label': gt('Folders')
-        //             })
-        //             .append(
-        //                 // container
-        //                 $('<div class="abs foldertree-container">').append(
-        //                     baton.$.container = $('<div class="foldertree">'),
-        //                     baton.$.links = $('<div class="foldertree-links">')
-        //                 )
-        //             )
-        //         );
-
-        //         ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links, baton);
-        //     }
-        // });
-
         //
         // Initialize
         //
