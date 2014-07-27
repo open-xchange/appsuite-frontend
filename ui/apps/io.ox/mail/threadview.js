@@ -89,9 +89,11 @@ define('io.ox/mail/threadview',
         draw: function (baton) {
             var keepFirstPrefix = baton.view.collection.length === 1,
                 subject = util.getSubject(baton.view.collection.at(0).toJSON(), keepFirstPrefix),
-                node = this.append($('<div class="subject">'));
-            emoji.processEmoji(subject, function (text) {
-                node.append(text);
+                node = $('<div class="subject">').text(subject);
+
+            this.append(node);
+            emoji.processEmoji(node.html(), function (text) {
+                node.html(text);
             });
         }
     });

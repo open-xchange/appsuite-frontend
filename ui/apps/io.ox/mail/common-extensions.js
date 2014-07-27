@@ -177,7 +177,7 @@ define('io.ox/mail/common-extensions',
                 )
             );
 
-            emoji.processEmoji(subject, function (text) {
+            emoji.processEmoji(node.html(), function (text) {
                 node.html(text);
             });
         },
