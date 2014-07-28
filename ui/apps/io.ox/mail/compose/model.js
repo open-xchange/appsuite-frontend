@@ -91,7 +91,7 @@ define('io.ox/mail/compose/model',
                 }), {silent: true});
             }
             if (settings.get('messageFormat', 'html') === 'alternative') {
-                if (content.get('content_type') === 'text/plain') {
+                if (content && content.get('content_type') === 'text/plain') {
                     this.set('editorMode', 'text', { silent: true });
                 } else {
                     this.set('editorMode', 'html', { silent: true });
