@@ -146,11 +146,7 @@ define('io.ox/mail/compose/extensions',
                         )
                     );
 
-                input.on({
-                    'blur': function () {
-                        debugger;
-                    }
-                }).autocompleteNew({
+                input.autocompleteNew({
                     api: autocompleteAPI,
                     tokenfield: true,
                     reduce: function (data) {
