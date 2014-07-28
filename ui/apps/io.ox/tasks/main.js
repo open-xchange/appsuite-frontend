@@ -163,6 +163,7 @@ define('io.ox/tasks/main',
         },
 
        'toolbars-mobile': function (app) {
+
             if (!_.device('smartphone')) return;
 
             // tell each page's back button what to do
@@ -190,31 +191,24 @@ define('io.ox/tasks/main',
                 }
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
-
-            app.pages.getNavbar('folderTree').on('rightAction', function () {
-                app.toggleFolders();
-            });
         },
 
         'toggle-folder-editmode': function (app) {
+
             if (_.device('!smartphone')) return;
-            var toggleFolders =  function () {
-                var state = app.props.get('mobileFolderSelectMode'),
-                    page = app.pages.getPage('folderTree');
 
-                if (state) {
-                    app.props.set('mobileFolderSelectMode', false);
-                    app.pages.getNavbar('folderTree').setRight(gt('Edit'));
-                    page.removeClass('mobile-edit-mode');
+            var toggle =  function () {
 
-                } else {
-                    app.props.set('mobileFolderSelectMode', true);
-                    app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
-                    page.addClass('mobile-edit-mode');
+                var page = app.pages.getPage('folderTree'),
+                    state = app.props.get('mobileFolderSelectMode'),
+                    right = state ? gt('Edit') : gt('Cancel');
 
-                }
+                app.props.set('mobileFolderSelectMode', !state);
+                app.pages.getNavbar('folderTree').setRight(right);
+                page.toggleClass('mobile-edit-mode', !state);
             };
-            app.toggleFolders = toggleFolders;
+
+            app.toggleFolders = toggle;
         },
 
         /*
@@ -385,6 +379,8 @@ define('io.ox/tasks/main',
          */
         'folder-view': function (app) {
 
+            if (_.device('smartphone')) return;
+
             // tree view
             var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'tasks' });
 
@@ -397,12 +393,18 @@ define('io.ox/tasks/main',
 
             if (_.device('!smartphone')) return;
 
-            var view = new FolderView(app, {
-                type: 'tasks',
-                container: app.pages.getPage('folderTree')
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
+
+            nav.on('rightAction', function () {
+                app.toggleFolders();
             });
-            view.handleFolderChange();
-            view.load();
+
+            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'tasks' });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            page.append(tree.render().$el);
         },
 
         /*

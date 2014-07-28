@@ -203,7 +203,7 @@ define('io.ox/core/folder/view',
             // respond to tab event for better responsiveness
             tree.$el.on('tap', '.folder', _.debounce(function (e) {
                 // use default behavior for arrow
-                if ($(e.target).closest('.folder-arrow').length) return;
+                if ($(e.target).is('.folder-arrow, .fa')) return;
                 // edit mode?
                 if (app.props.get('mobileFolderSelectMode') === true) {
                     return tree.$dropdown.find('.dropdown-toggle').click();

@@ -682,7 +682,7 @@ define('io.ox/contacts/main',
 
         'toggle-folder-editmode': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             var toggle =  function () {
 
