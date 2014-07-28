@@ -143,13 +143,18 @@ define('io.ox/contacts/main',
 
             if (_.device('!small')) return;
 
-            var view = new FolderView(app, {
-                module: 'contacts',
-                container: app.pages.getPage('folderTree')
-            });
-            view.handleFolderChange();
-            view.load();
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
 
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+            var tree = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'contacts' });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            page.append(tree.render().$el);
         },
 
         /*
@@ -363,6 +368,7 @@ define('io.ox/contacts/main',
         },
 
         'toolbars-mobile': function () {
+
             if (!_.device('small')) return;
 
             // tell each page's back button what to do
@@ -382,11 +388,6 @@ define('io.ox/contacts/main',
                 }
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
-
-            app.pages.getNavbar('folderTree').on('rightAction', function () {
-                app.toggleFolders();
-            });
-
         },
 
         'swipe-mobile': function () {
@@ -680,24 +681,21 @@ define('io.ox/contacts/main',
         },
 
         'toggle-folder-editmode': function (app) {
+
             if (_.device('!small')) return;
-            var toggleFolders =  function () {
-                var state = app.props.get('mobileFolderSelectMode'),
-                    page = app.pages.getPage('folderTree');
 
-                if (state) {
-                    app.props.set('mobileFolderSelectMode', false);
-                    app.pages.getNavbar('folderTree').setRight(gt('Edit'));
-                    page.removeClass('mobile-edit-mode');
+            var toggle =  function () {
 
-                } else {
-                    app.props.set('mobileFolderSelectMode', true);
-                    app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
-                    page.addClass('mobile-edit-mode');
+                var page = app.pages.getPage('folderTree'),
+                    state = app.props.get('mobileFolderSelectMode'),
+                    right = state ? gt('Edit') : gt('Cancel');
 
-                }
+                app.props.set('mobileFolderSelectMode', !state);
+                app.pages.getNavbar('folderTree').setRight(right);
+                page.toggleClass('mobile-edit-mode', !state);
             };
-            app.toggleFolders = toggleFolders;
+
+            app.toggleFolders = toggle;
         },
 
         /*
