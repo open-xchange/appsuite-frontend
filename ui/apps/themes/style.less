@@ -18,7 +18,13 @@ html.high-contrast {
     a:not(.btn) {
         color: @hc-link-color;
     }
+}
 
+body {
+    // add a bit of perfection
+    -webkit-font-smoothing: antialiased;
+    -webkit-font-feature-settings: "liga", "kern";
+    font-feature-settings: "liga", "kern";
 }
 
 /* OpenSans Font Face */
