@@ -123,7 +123,7 @@ define('io.ox/mail/compose/view',
             this.data('view')
                 .header(gt('Editor'))
                 .option('editorMode', 'text', gt('Plain Text'))
-                .option('editorMode', 'html', gt('Rich Text'));
+                .option('editorMode', 'html', gt('HTML'));
         }
     });
 
