@@ -90,6 +90,13 @@ define('io.ox/mail/compose/model',
                     return o;
                 }), {silent: true});
             }
+            if (settings.get('messageFormat', 'html') === 'alternative') {
+                if (content.get('content_type') === 'text/plain') {
+                    this.set('editorMode', 'text', { silent: true });
+                } else {
+                    this.set('editorMode', 'html', { silent: true });
+                }
+            }
 
             this.updateShadow();
         },
@@ -121,6 +128,17 @@ define('io.ox/mail/compose/model',
                 return 'text/plain';
             } else {
                 return this.get('editorMode') === 'html' ? 'text/html' : 'alternative';
+            }
+        },
+
+        setInitialMailContentType: function () {
+            if (this.get('editorMode') === 'alternative') {
+                var content_type = this.get('attachments').at(0).get('content_type'),
+                    ret = 'html';
+                if (content_type === 'text/plain') {
+                    ret = 'text';
+                }
+                this.set('editorMode', ret, { silent: true });
             }
         },
 

@@ -340,7 +340,7 @@ define('io.ox/mail/compose/view',
             this.editorHash = {};
             this.autosave = {};
             this.blocked = [];
-            this.editorMode = settings.get('messageFormat', 'html');
+            this.editorMode = this.model.get('editorMode');
             this.messageFormat = settings.get('messageFormat', 'html');
             this.editor = null;
             this.composeMode = 'compose';
@@ -708,10 +708,10 @@ define('io.ox/mail/compose/view',
         loadEditor: function (content) {
 
             var self = this,
-                editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'html' ? 'contenteditable-editor' : 'text-editor');
+                editorSrc = 'io.ox/core/tk/' + (this.editorMode === 'text' ? 'text-editor' : 'contenteditable-editor');
 
             return require([editorSrc]).then(function (Editor) {
-                return (self.editorHash[self.editorMode] = new Editor(self.editorMode === 'html' ? self.contentEditable : self.textarea))
+                return (self.editorHash[self.editorMode] = new Editor(self.editorMode === 'text' ? self.textarea : self.contentEditable))
                     .done(function () {
                         self.editor = self.editorHash[self.editorMode];
                         self.editor.setPlainText(content);
@@ -881,6 +881,8 @@ define('io.ox/mail/compose/view',
 
             var self = this,
                 data = this.model.toJSON();
+
+            this.model.setInitialMailContentType();
 
             return this.changeEditorMode().done(function () {
                 if (data.replaceBody !== 'no') {
