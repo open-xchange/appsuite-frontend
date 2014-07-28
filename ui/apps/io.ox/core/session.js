@@ -51,6 +51,7 @@ define('io.ox/core/session',
         set: set,
 
         autoLogin: function () {
+            // store
             var store = false;
             // GET request
             return http.GET({
@@ -89,12 +90,12 @@ define('io.ox/core/session',
                         }
                     })
                     .then(function (response) {
+                        store = _.url.hash('store');
                         return response.data;
                     });
                 }
             )
             .done(function () {
-                store = _.url.hash('store');
                 _.url.hash({
                     jsessionid: null,
                     serverToken: null,
@@ -102,9 +103,10 @@ define('io.ox/core/session',
                     store: null
                 });
             })
-            .done(function (data) {
+            .then(function (data) {
                 set(data);
-                // no "store" request here; just auto-login
+                // call store for token-based login / not for pure auto-login
+                return store ? that.store().then(function () { return data; }) : data;
             });
         },
 

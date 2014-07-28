@@ -93,20 +93,48 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             '$cl_10': '10'
         },
 
-        adjustRulePosition = function (models, flags) {
-            var position,
-                indicator = false;
-            _(models).each(function (model) {
-
-                if (_.isEqual(model.attributes.flags, flags)) {
-                    position = model.attributes.position;
-                    indicator = true;
+        adjustRulePosition = function (models) {
+            var position, firstPos, secondPos,
+                posibleStaticFilters = _.last(models, 2),
+                getStaticFilterStatus =  function (model) {
+                if (model.length === 0) {
+                    return '0';
+                } else if (model.length === 1) {
+                    firstPos = _.isEqual(model[0].get('flags'), ['vacation']) ? _.isEqual(model[0].get('flags'), ['vacation']) : _.isEqual(model[0].get('flags'), ['autoforward']);
+                } else {
+                    firstPos = _.isEqual(model[0].get('flags'), ['vacation']) ? _.isEqual(model[0].get('flags'), ['vacation']) : _.isEqual(model[0].get('flags'), ['autoforward']);
+                    secondPos = _.isEqual(model[1].get('flags'), ['vacation']) ? _.isEqual(model[1].get('flags'), ['vacation']) : _.isEqual(model[1].get('flags'), ['autoforward']);
                 }
-
-                if (indicator === true) {
-                    model.attributes.position = model.attributes.position + 1;
+                if (firstPos && secondPos === undefined) {
+                    return '3';
+                } else if (firstPos && secondPos) {
+                    return '2';
+                } else if (!firstPos && secondPos) {
+                    return '1';
+                } else if (!firstPos && !secondPos) {
+                    return '0';
                 }
-            });
+            };
+
+            switch (getStaticFilterStatus(posibleStaticFilters)) {
+            case '0':
+                break;
+            case '1':
+                position = posibleStaticFilters[1].attributes.position;
+                posibleStaticFilters[1].attributes.position = posibleStaticFilters[1].attributes.position + 1;
+                break;
+            case '2':
+                position = posibleStaticFilters[0].get('position');
+                posibleStaticFilters[0].set('position', posibleStaticFilters[0].attributes.position + 1);
+                posibleStaticFilters[1].set('position', posibleStaticFilters[1].attributes.position + 1);
+                break;
+            case '3':
+                position = posibleStaticFilters[0].attributes.position;
+                posibleStaticFilters[0].attributes.position = posibleStaticFilters[0].attributes.position + 1;
+                break;
+            default:
+                break;
+            }
 
             return position;
         },
@@ -199,13 +227,33 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onSave: function () {
                 var self = this,
-                    rulePosition;
+                    rulePosition,
+                    actionArray = this.model.get('actioncmds');
 
-                if (!this.model.has('position')) {
-                    rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
-                    this.model.set('position', rulePosition);
+                function returnKeyForStop(actionsArray) {
+                    var indicatorKey;
+                    _.each(actionsArray, function (action, key) {
+                        if (_.isEqual(action, {id: 'stop'})) {
+                            indicatorKey = key;
+                        }
+                    });
+                    return indicatorKey;
                 }
-               
+
+                if (!this.model.has('id')) {
+                    rulePosition = adjustRulePosition(self.options.listView.collection.models);
+                    if (rulePosition !== undefined) {
+                        this.model.set('position', rulePosition);
+                    }
+                }
+
+                // if there is a stop action it should always be the last
+                if (returnKeyForStop(actionArray) !== undefined) {
+                    actionArray.splice(returnKeyForStop(actionArray), 1);
+                    actionArray.push({id: 'stop'});
+                    this.model.set('actioncmds', actionArray);
+                }
+
                 this.model.save().then(function (id) {
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id)) {
@@ -681,7 +729,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             function checkForStopAction(array) {
                 var stopAction;
-                if (!baton.model.id) { // default value
+                if (baton.model.id === undefined) { // default value
                     return true;
                 }
 

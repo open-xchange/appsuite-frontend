@@ -31,6 +31,9 @@ define('io.ox/mail/settings/signatures/migration/register', ['io.ox/core/extensi
                         module: 'io.ox/mail',
                         displayname: classicSignature.signature_name,
                         content: classicSignature.signature_text,
+                        misc: {
+                            insertion: classicSignature.position
+                        },
                         meta: {
                             imported: classicSignature
                         }
