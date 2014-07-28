@@ -248,46 +248,23 @@ define('io.ox/mail/main',
         },
 
         'toggle-folder-editmode': function (app) {
-            if (_.device('!small')) return;
-            var toggleFolders =  function () {
-                var state = app.props.get('mobileFolderSelectMode'),
-                    page = app.pages.getPage('folderTree');
 
-                if (state) {
-                    app.props.set('mobileFolderSelectMode', false);
-                    app.pages.getNavbar('folderTree').setRight(gt('Edit'));
-                    page.removeClass('mobile-edit-mode');
-
-                } else {
-                    app.props.set('mobileFolderSelectMode', true);
-                    app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
-                    page.addClass('mobile-edit-mode');
-
-                }
-            };
-
-            app.toggleFolders = toggleFolders;
-
-        },
-
-        'folder-view-mobile-listener': function () {
             if (_.device('!small')) return;
 
-            app.bindFolderChange = function () {
-                // always change folder on click
-                // No way to use tap here since folderselection really messes up the event chain
-                app.pages.getPage('folderTree').on('tap', '.folder.selectable', function (e) {
-                    if (app.props.get('mobileFolderSelectMode') === true) {
-                        $(e.currentTarget).trigger('contextmenu'); // open menu
-                        return; // do not change page in edit mode
-                    }
-                    if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
-                    // go to listview
+            var toggle =  function () {
 
-                    app.pages.changePage('listView');
-                });
+                var page = app.pages.getPage('folderTree'),
+                    state = app.props.get('mobileFolderSelectMode'),
+                    right = state ? gt('Edit') : gt('Cancel');
+
+                app.props.set('mobileFolderSelectMode', !state);
+                app.pages.getNavbar('folderTree').setRight(right);
+                page.toggleClass('mobile-edit-mode', !state);
             };
+
+            app.toggleFolders = toggle;
         },
+
         /*
          * Folder view support
          */
@@ -302,24 +279,11 @@ define('io.ox/mail/main',
                 app.toggleFolders();
             });
 
-            var tree = new TreeView({ app: app, module: 'mail', root: '1' });
+            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
 
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, append: false });
+            FolderView.initialize({ app: app, tree: tree });
             page.append(tree.render().$el);
-
-            tree.$el.on('tap', '.folder', function () {
-                app.pages.changePage('listView');
-            });
-
-            // view.handleFolderChange();
-            // view.load();
-
-            // bind action for edit button
-            app.bindFolderChange();
-
-            // make folder visible by default
-            // app.folderView.toggle(true);
         },
 
         /*
@@ -549,7 +513,11 @@ define('io.ox/mail/main',
          * Respond to folder change
          */
         'folder:change': function (app) {
+
             app.on('folder:change', function (id) {
+
+                if (app.props.get('mobileFolderSelectMode')) return;
+
                 var options = app.getViewOptions(id),
                     fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
                     showFrom = account.is('sent|drafts', id);
@@ -563,9 +531,7 @@ define('io.ox/mail/main',
                 } else {
                     fromTo.text(gt('From'));
                 }
-
             });
-
         },
 
 

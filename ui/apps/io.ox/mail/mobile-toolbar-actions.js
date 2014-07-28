@@ -158,12 +158,8 @@ define('io.ox/mail/mobile-toolbar-actions',
 
         // handle updated baton to pageController
         var current = this.pages.getCurrentPage();
-        if (current.toolbar) {
-            current.toolbar.setBaton(baton);
-        }
-        if (current.secondaryToolbar) {
-            current.secondaryToolbar.setBaton(baton);
-        }
+        if (current.toolbar) current.toolbar.setBaton(baton);
+        if (current.secondaryToolbar) current.secondaryToolbar.setBaton(baton);
 
     }, 10);
 

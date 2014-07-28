@@ -45,8 +45,11 @@ define('io.ox/core/folder/tree',
             this.all = !!options.all;
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
-            this.$contextmenu = $();
+            this.$dropdown = $();
+            this.$dropdownMenu = $();
             this.options = options;
+
+            this.$el.toggleClass('visible-selection', _.device('!smartphone'));
 
             // add contextmenu?
             if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));
@@ -104,19 +107,18 @@ define('io.ox/core/folder/tree',
 
         onToggleContextMenu: (function () {
 
-            function renderItems(dropdown, continuation) {
-                dropdown.find('.dropdown-menu').idle();
-                continuation();
+            function renderItems() {
+                this.$dropdownMenu.idle();
+                this.renderContextMenuItems();
             }
 
             return function (e) {
 
-                var dropdown = this.$contextmenu,
-                    isOpen = dropdown.hasClass('open'),
+                var isOpen = this.$dropdown.hasClass('open'),
                     target = $(e.currentTarget);
 
                 // return early on close
-                if (isOpen) return;
+                if (isOpen || _.device('smartphone')) return;
 
                 _.defer(function () {
 
@@ -125,11 +127,11 @@ define('io.ox/core/folder/tree',
                         top = offset.top - 7,
                         left = offset.left + target.outerWidth() + 7;
 
-                    dropdown.find('.dropdown-menu').css({ top: top, left: left, bottom: 'auto' }).busy();
-                    dropdown.addClass('open').data('previous-focus', target); // helps to restore focus (see renderContextMenu)
+                    this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).busy();
+                    this.$dropdown.addClass('open').data('previous-focus', target); // helps to restore focus (see renderContextMenu)
 
                     // load relevant code on demand
-                    require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems, dropdown, this.renderContextMenuItems.bind(this)));
+                    require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this)));
 
                 }.bind(this));
             };
@@ -137,7 +139,7 @@ define('io.ox/core/folder/tree',
 
         onKeydown: function (e) {
 
-            var dropdown = this.$contextmenu;
+            var dropdown = this.$dropdown;
             if (!dropdown.hasClass('open')) return; // done if not open
             if (e.shiftKey && e.which === 9) return; // shift-tab
 
@@ -158,34 +160,54 @@ define('io.ox/core/folder/tree',
             var id = this.selection.get(),
                 app = this.app,
                 module = this.module,
-                ul = this.$contextmenu.find('.dropdown-menu').empty(),
+                ul = this.$dropdownMenu.empty(),
                 point = 'io.ox/core/foldertree/contextmenu',
                 view = this;
             // get folder data and redraw
             api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
+                if (_.device('smartphone')) {
+                    ul.append('<li><a class="io-ox-action-link" data-action="close-menu"><i class="fa fa-chevron-down"></i></a></li>');
+                }
                 ext.point(point).invoke('draw', ul, baton);
                 // check if menu exceeds viewport
-                if (ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
+                if (!_.device('smartphone') && ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
                     ul.css({ top: 'auto', bottom: '20px' });
                 }
             });
         },
 
-        renderContextMenu: function () {
-            this.$el.after(
-                this.$contextmenu = $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
-                    $('<div class="abs context-dropdown-overlay">'),
-                    $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
-                    $('<ul class="dropdown-menu" role="menu">')
-                )
-                .on('hidden.bs.dropdown', function () {
-                    // restore focus
-                    var node = $(this).data('previous-focus');
-                    if (node) node.parent().focus();
-                })
-            );
-        },
+        renderContextMenu: (function () {
+
+            function renderItems() {
+                this.$dropdownMenu.idle();
+                this.renderContextMenuItems();
+            }
+
+            function show() {
+                // load relevant code on demand
+                require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this)));
+            }
+
+            function hide() {
+                // restore focus
+                var node = $(this).data('previous-focus');
+                if (node) node.parent().focus();
+            }
+
+            return function () {
+
+                this.$el.after(
+                    this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
+                        $('<div class="abs context-dropdown-overlay">'),
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
+                        this.$dropdownMenu = $('<ul class="dropdown-menu" role="menu">')
+                    )
+                    .on('show.bs.dropdown', show.bind(this))
+                    .on('hidden.bs.dropdown', hide)
+                );
+            };
+        }()),
 
         render: function () {
             ext.point('io.ox/core/foldertree/' + this.module + '/' + this.context).invoke('draw', this.$el, this);

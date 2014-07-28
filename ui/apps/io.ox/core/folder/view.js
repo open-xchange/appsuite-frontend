@@ -23,7 +23,7 @@ define('io.ox/core/folder/view',
     function initialize(options) {
 
         options = _.extend({
-            append: true
+            firstResponder: 'listView'
         }, options);
 
         var app = options.app,
@@ -199,7 +199,19 @@ define('io.ox/core/folder/view',
         // apply
         tree.options.open = open;
 
-        if (options.append) {
+        if (_.device('smartphone')) {
+            // respond to tab event for better responsiveness
+            tree.$el.on('tap', '.folder', _.debounce(function (e) {
+                // use default behavior for arrow
+                if ($(e.target).closest('.folder-arrow').length) return;
+                // edit mode?
+                if (app.props.get('mobileFolderSelectMode') === true) {
+                    return tree.$dropdown.find('.dropdown-toggle').click();
+                }
+                // otherwise
+                app.pages.changePage(options.firstResponder); // default 'listView'
+            }, 10));
+        } else {
             // add border & render tree and add to DOM
             sidepanel.addClass('border-right').append(
                 tree.render().$el.addClass('bottom-toolbar')

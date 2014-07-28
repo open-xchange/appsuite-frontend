@@ -33,31 +33,13 @@
         cursor: pointer;
 
         .selected {
-            background-color: @foldertree-selected-background;
-            * {
-                color: @foldertree-selected-label-color;
-            }
             .folder-options {
                 display: inline-block;
             }
         }
 
-        .selectable:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
         .selectable:focus {
             outline: 0;
-            background-color: @foldertree-selected-focus-background;
-            * {
-                color: @foldertree-focused-label-color;
-            }
-            .folder-counter {
-                color: rgba(255, 255, 255, 0.50);
-            }
-            .folder-options {
-                background-color: rgba(0, 0, 0, 0.20);
-            }
         }
 
         &.empty {
@@ -73,6 +55,32 @@
         // .selectable.virtual:focus {
         //     background-color: rgba(0, 0, 0, 0.50);
         // }
+    }
+
+    &.visible-selection .selected {
+
+        background-color: @foldertree-selected-background;
+        * {
+            color: @foldertree-selected-label-color;
+        }
+
+        .selectable:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .selectable:focus {
+
+            background-color: @foldertree-selected-focus-background;
+            * {
+                color: @foldertree-focused-label-color;
+            }
+            .folder-counter {
+                color: rgba(255, 255, 255, 0.50);
+            }
+            .folder-options {
+                background-color: rgba(0, 0, 0, 0.20);
+            }
+        }
     }
 
     .folder-arrow {
@@ -187,6 +195,17 @@
             margin-bottom: 7px;
         }
     }
+
+    .mobile-edit-mode & {
+        .selectable:not(.virtual) {
+            .folder-label {
+                color: @link-color;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    // demo stuff
 
     h2 {
         font-size: 14px;
