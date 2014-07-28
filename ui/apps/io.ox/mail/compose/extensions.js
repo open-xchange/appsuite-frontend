@@ -93,7 +93,7 @@ define('io.ox/mail/compose/extensions',
 
                 baton.model.set('from', defaultSender);
 
-                var dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>' }),
+                var dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>', caret: true }),
                     guid = _.uniqueId('form-control-label-');
 
                 sender.drawDropdown().done(function (list) {
@@ -308,7 +308,7 @@ define('io.ox/mail/compose/extensions',
                 var $widget = attachments.fileUploadWidget({
                     drive: true,
                     tabindex: 7,
-                    buttontext: gt('Add Attachment')
+                    buttontext: gt('Add local file')
                 });
                 $widget.addClass('dropdown-menu');
                 $widget.find('.btn').addClass('btn-link');
