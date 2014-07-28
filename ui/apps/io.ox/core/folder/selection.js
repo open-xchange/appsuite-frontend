@@ -22,6 +22,13 @@ define('io.ox/core/folder/selection', [], function () {
         this.view.$el
             .on('click', '.selectable', $.proxy(this.onClick, this))
             .on('keydown', '.selectable', $.proxy(this.onKeydown, this));
+
+        this.view.$el.addClass('dropzone')
+            .attr('data-dropzones', '.selectable')
+            .on('drop', function (e, baton) {
+                baton.dropType = view.module;
+                view.selection.trigger('selection:drop', baton);
+            });
     }
 
     _.extend(Selection.prototype, {

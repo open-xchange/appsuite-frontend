@@ -57,11 +57,13 @@
         // }
     }
 
-    &.visible-selection .selected {
+    &.visible-selection {
 
-        background-color: @foldertree-selected-background;
-        * {
-            color: @foldertree-selected-label-color;
+        .selected {
+            background-color: @foldertree-selected-background;
+            * {
+                color: @foldertree-selected-label-color;
+            }
         }
 
         .selectable:hover {

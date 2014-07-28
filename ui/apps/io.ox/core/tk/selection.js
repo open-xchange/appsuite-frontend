@@ -1090,7 +1090,7 @@ define('io.ox/core/tk/selection',
 
             function drop() {
                 clearTimeout(expandTimer);
-                var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
+                var target = $(this).attr('data-obj-id') || $(this).attr('data-cid') || $(this).attr('data-id'),
                     baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
                 $(this).trigger('selection:drop', [baton]);
             }
