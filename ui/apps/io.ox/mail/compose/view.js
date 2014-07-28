@@ -680,9 +680,29 @@ define('io.ox/mail/compose/view',
         },
 
         toggleInput: function (type, show) {
-            var input = this.$el.find('[data-extension-id="' + type + '"]').toggleClass('hidden', show);
-            $(window).trigger('resize.tinymce');
+            var input = this.$el.find('[data-extension-id="' + type + '"]');
+            if (input.hasClass('hidden') || show) {
+                this.showInput(type, input);
+
+            } else {
+                this.closeInput(type, input);
+            }
             return input;
+        },
+
+        showInput: function (type, input) {
+            var type = type || 'cc',
+                input = input || this.$el.find('[data-extension-id="' + type + '"]');
+            input.removeClass('hidden');
+        },
+
+        closeInput: function (type, input) {
+            var type = type || 'cc',
+                input = input || this.$el.find('[data-extension-id="' + type + '"]');
+
+            this.model.set(type, []);
+            input.addClass('hidden');
+            $(window).trigger('resize.tinymce');
         },
 
         loadEditor: function (content) {

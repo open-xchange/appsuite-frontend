@@ -146,7 +146,11 @@ define('io.ox/mail/compose/extensions',
                         )
                     );
 
-                input.autocompleteNew({
+                input.on({
+                    'blur': function () {
+                        debugger;
+                    }
+                }).autocompleteNew({
                     api: autocompleteAPI,
                     tokenfield: true,
                     reduce: function (data) {
@@ -179,6 +183,10 @@ define('io.ox/mail/compose/extensions',
                         baton.model.setTokens(attr, input.tokenfield('getTokens'));
                         initDnD();
                     }
+                });
+
+                baton.model.on('change:' + attr, function () {
+                    input.tokenfield('setTokens', baton.model.getTokens(attr), false, false);
                 });
 
                 function initDnD () {
