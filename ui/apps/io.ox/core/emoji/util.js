@@ -30,34 +30,33 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
     return {
 
-        processEmoji: function (text, cb) {
+        processEmoji: function (text, callback) {
 
-            if (text.length > (1024 * (_.device('chrome >= 30') ? 64 : 32))) {
-                //text is large
+            var tooLarge = text.length > (1024 * (_.device('chrome >= 30') ? 64 : 32)),
+                // check if there might be any emojis; pure ascii cannot contain them (except 0xA9 and 0xAE)
+                // using a regex is 50-100 times faster than looping over the characters
+                hasEmoji = /[\xa9\xae\u0100-\uffff]/.test(text);
+
+            function cont(text) {
+                if (callback) callback(text, { loaded: !!emoji });
                 return text;
             }
 
-            // check if there might be any emojis; pure ascii cannot contain them (except 0xA9 and 0xAE)
-            // using a regex is 50-100 times faster than looping over the characters
-            if (!/[\xa9\xae\u0100-\uffff]/.test(text)) {
-                return text;
+            if (tooLarge || !hasEmoji) {
+                return cont(text);
             }
-
-            if (emoji && !cb) {
-                text = convert(text);
-            } else if (emoji && cb) {
-                cb(text = convert(text), {loaded: false});
-            } else {
+            else if (emoji) {
+                return cont(convert(text));
+            }
+            else {
                 require(['io.ox/emoji/main'], function (code) {
                     emoji = code;
-                    if (cb) {
-                        cb(convert(text), {loaded: true});
-                    }
+                    cont(convert(text));
                 });
+                return text;
             }
-
-            return text;
         },
+
         imageTagsToUnified: function (html) {
             var node = $('<div>').append(html);
 
