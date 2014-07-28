@@ -99,7 +99,7 @@ msgstr[0] "%1$d час %2$s"
 msgstr[1] "%1$d часа %2$s"
 msgstr[2] "%1$d часов %2$s"
 
-#: apps/io.ox/mail/threadview.js:106 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr "сообщений в обсуждении: %1$d"
 
@@ -555,7 +555,7 @@ msgstr "Учетная запись обновлена"
 #: apps/io.ox/files/mobile-toolbar-actions.js:85
 #: apps/io.ox/files/mobile-toolbar-actions.js:124
 #: apps/io.ox/files/mobile-toolbar-actions.js:136
-#: apps/io.ox/mail/detail/view.js:89
+#: apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:100 module:io.ox/tasks
@@ -2467,7 +2467,7 @@ msgstr "Электронные адреса"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:364
+#: apps/io.ox/mail/detail/view.js:366
 msgid "Email from %1$s: %2$s"
 msgstr "Сообщение от %1$s: %2$s"
 

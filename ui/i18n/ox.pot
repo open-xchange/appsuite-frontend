@@ -2703,7 +2703,7 @@ msgstr ""
 #: apps/io.ox/files/mobile-toolbar-actions.js:85
 #: apps/io.ox/files/mobile-toolbar-actions.js:124
 #: apps/io.ox/files/mobile-toolbar-actions.js:136
-#: apps/io.ox/mail/detail/view.js:89
+#: apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:100
@@ -6960,7 +6960,7 @@ msgstr ""
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235
 #: module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:364
+#: apps/io.ox/mail/detail/view.js:366
 msgid "Email from %1$s: %2$s"
 msgstr ""
 
@@ -7497,7 +7497,7 @@ msgstr ""
 msgid "Open/close all messages"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js:106
+#: apps/io.ox/mail/threadview.js:108
 #: module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr ""

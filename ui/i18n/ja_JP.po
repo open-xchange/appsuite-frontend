@@ -84,7 +84,7 @@ msgid "%1$d hour and %2$s"
 msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d 時間 %2$s"
 
-#: apps/io.ox/mail/threadview.js:106 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr "このスレッドに %1$d 件のメッセージが含まれています。"
 
@@ -523,7 +523,7 @@ msgstr "アカウントが更新されました。"
 #: apps/io.ox/files/mobile-toolbar-actions.js:85
 #: apps/io.ox/files/mobile-toolbar-actions.js:124
 #: apps/io.ox/files/mobile-toolbar-actions.js:136
-#: apps/io.ox/mail/detail/view.js:89
+#: apps/io.ox/mail/detail/view.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:781
 #: module:io.ox/settings/settings
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:100 module:io.ox/tasks
@@ -2430,7 +2430,7 @@ msgstr "メール アドレス"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:364
+#: apps/io.ox/mail/detail/view.js:366
 msgid "Email from %1$s: %2$s"
 msgstr "%1$s からのメール: %2$s"
 
