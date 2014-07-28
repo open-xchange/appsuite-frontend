@@ -941,13 +941,13 @@ define('io.ox/mail/compose/view',
                         // look for special prefixes
                         var val = $(this).val();
                         if ((/^to:?\s/i).test(val)) {
-                            $(this).val('');
+                            $(this).typeahead('val', '');
                         } else if ((/^cc:?\s/i).test(val)) {
-                            $(this).val('');
-                            self.toggleInput('cc', false).find('.token-input').focus();
+                            $(this).typeahead('val', '');
+                            self.toggleInput('cc', true).find('.token-input').focus();
                         } else if ((/^bcc:?\s/i).test(val)) {
-                            $(this).val('');
-                            self.toggleInput('bcc', false).find('.token-input').focus();
+                            $(this).typeahead('val', '');
+                            self.toggleInput('bcc', true).find('.token-input').focus();
                         }
                     }
                 });
