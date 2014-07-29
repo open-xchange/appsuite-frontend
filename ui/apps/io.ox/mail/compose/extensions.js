@@ -163,6 +163,7 @@ define('io.ox/mail/compose/extensions',
 
                 input.autocompleteNew({
                     api: autocompleteAPI,
+                    maxResults: 20,
                     tokenfield: true,
                     reduce: function (data) {
                         return data;

@@ -30,6 +30,7 @@ define('io.ox/core/tk/autocomplete',
             draw: null,
             api: null,              // autocomplete API
             tokenfield: false,
+            maxResults: 25,
             //get data
             source: function (val) {
                 return this.api.search(val).then(function (data) {
@@ -56,7 +57,6 @@ define('io.ox/core/tk/autocomplete',
 
 
             // TODO: not implemented for new autocomplete
-            maxResults: 25,
             delay: 100,
             blur: $.noop,
             click: $.noop,
@@ -72,6 +72,12 @@ define('io.ox/core/tk/autocomplete',
                 source: function(query, callback) {
                     o.source(query)
                         .then(o.reduce)
+                        .then(function (data) {
+                            if (o.maxResults) {
+                                return data.slice(0, o.maxResults);
+                            }
+                            return data;
+                        })
                         .then(function (data) {
                             data =  _(data).map(function (data) {
                                 var stringResult = o.stringify(data);
