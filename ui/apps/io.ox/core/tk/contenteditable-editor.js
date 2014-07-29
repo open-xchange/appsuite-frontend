@@ -243,41 +243,6 @@ define.async('io.ox/core/tk/contenteditable-editor',
         return is;
     }
 
-    function splitContent_IE(ed) {
-        // get current range
-        var range = ed.selection.getRng(),
-            // get body
-            body = ed.getBody(),
-            // get two text ranges
-            before = body.createTextRange(),
-            after = body.createTextRange(),
-            mark, markHTML;
-        // initialize first range & get its content
-        before.setEndPoint('EndToStart', range);
-        before = before.htmlText;
-        // initialize second range & get its content
-        after.setEndPoint('StartToEnd', range);
-        // BR fix (remove unwanted newline)
-        // leading white space in regexp is necessary (don't ask)
-        after = after.htmlText.replace(/^(\s*<[^>]+>\s*)<BR\s*\/?>(.*)$/im, '$1$2');
-        // create a unique mark
-        mark = '#cursor~mark^';
-        // check uniqueness
-        while (before.indexOf(mark) >= 0 || after.indexOf(mark) >= 0) {
-            // add random characters until its unique
-            mark += String.fromCharCode(64 + Math.random() * 63);
-        }
-        // replace editor content
-        markHTML = '<p>' + mark + '</p>';
-        body.innerHTML = before + markHTML + after;
-        // select mark
-        range.findText(mark);
-        range.select();
-        // delete mark (this way!)
-        range.pasteHTML('');
-        range.collapse(true);
-    }
-
     function splitContent_W3C(ed) {
         // get current range
         var range = ed.selection.getRng();
@@ -314,7 +279,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
                 }
             }
         };
-        while (container && container.nodeName !== 'BODY') {
+        while (container && !/mce-content-body/.test(container.className)) {
             // set range to end of container
             range.setEndAfter(container);
             // get parent node
@@ -366,17 +331,12 @@ define.async('io.ox/core/tk/contenteditable-editor',
         // get current range
         var range = ed.selection.getRng();
         // inside blockquote?
-        if (isInsideBlockquote(range)) {
-            // W3C or IE?
-            if (range.startContainer) {
-                // strategy #1 (W3C compliant)
-                splitContent_W3C(ed);
-            } else {
-                // strategy #2 (IE-specific / IE7 & IE8)
-                splitContent_IE(ed);
-            }
-            ed.dom.events.cancel(e);
-        }
+        if (!isInsideBlockquote(range)) return;
+        if (!range.startContainer) return;
+        if (_.device('IE')) return;
+        // split; W3C-compliant strategy; older IEs needed a different strategy
+        splitContent_W3C(ed);
+        ed.dom.events.cancel(e);
     }
 
     function lookupTinyMCELanguage() {
