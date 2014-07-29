@@ -116,10 +116,11 @@ define('io.ox/search/view-template',
                             )
                             .tooltip()
                             .on('click', function () {
-                                debugger;
                                 var e = $.Event('keydown');
                                 e.which = 13;
                                 $(ref).trigger(e);
+                                //app.view.trigger('button:search'); //unused
+                                app.view.trigger('button:search');
                             })
                         );
             // input group and dropdown

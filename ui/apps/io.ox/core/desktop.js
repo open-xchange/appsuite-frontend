@@ -1476,8 +1476,7 @@ define('io.ox/core/desktop',
             // add event hub
             Events.extend(win);
 
-            // search?
-            // deprecatd: enable search via io.ox/find application extension points instead
+            // deprecatd: enable search via io.ox/find application extension points instead ()
             if (opt.search) {
                 // search
                 var triggerSearch = function (query) {
@@ -1560,7 +1559,7 @@ define('io.ox/core/desktop',
                 }));
 
                 // add search
-                // deprecatd: enable search via io.ox/find application extension points instead
+                // deprecated: enable search via io.ox/find application extension points instead
                 if (opt.search === true) {
 
                     new links.Action(opt.name + '/actions/search', {
