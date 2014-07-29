@@ -415,19 +415,19 @@ define('io.ox/mail/mailfilter/settings/filter',
                             stop: function (e, ui) {
                                 var flagArray = ['vacation', 'autoforward'],
                                     returnIdAndPosition = function (collection, flags) {
-                                    var idAndPosition = {};
-                                    _.each(flags, function (flag) {
-                                        _.each(collection.models, function (model) {
-                                            if (model.attributes.flags[0] === flag) {
-                                                idAndPosition[flag] = {
-                                                    id: model.attributes.id,
-                                                    position: model.attributes.position
-                                                };
-                                            }
+                                        var idAndPosition = {};
+                                        _.each(flags, function (flag) {
+                                            _.each(collection.models, function (model) {
+                                                if (model.attributes.flags[0] === flag) {
+                                                    idAndPosition[flag] = {
+                                                        id: model.attributes.id,
+                                                        position: model.attributes.position
+                                                    };
+                                                }
+                                            });
                                         });
-                                    });
-                                    return idAndPosition;
-                                },
+                                        return idAndPosition;
+                                    },
                                     staticFilters = returnIdAndPosition(collection, flagArray),
                                     skipSort = function (newPositionArray, fixedFilters, flagArray) {
                                         var skip = false;

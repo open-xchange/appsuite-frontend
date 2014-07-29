@@ -1711,17 +1711,30 @@ define('io.ox/mail/api',
      * @param  {boolean} state
      * @return {undefined}
      */
-    api.newMailTitle = function (state) {
-        if (_.device('!small')) {
-            if (state === true) {//show new mail title
-                document.fixedtitle = true;
-                document.title = gt('New Mail');
-            } else {//stop showing new mail title
-                document.fixedtitle = false;
-                document.title = document.temptitle;
-            }
+    api.newMailTitle = (function () {
+
+        var interval = null, alt = false;
+
+        function tick() {
+            document.title = (alt = !alt) ? gt('New Mail') : document.customTitle;
         }
-    };
+
+        function blink() {
+            if (interval) return;
+            interval = setInterval(tick, 1500); // 1s is fast, 2s feels slow, 1.5 is compromise
+        }
+
+        function original() {
+            document.title = document.customTitle;
+            if (interval) { clearInterval(interval); interval = null; }
+        }
+
+        return function (state) {
+            if (_.device('small')) return;
+            if (state === true) blink(); else original();
+        };
+
+    }());
 
     // publish pool
     api.pool = pool;
