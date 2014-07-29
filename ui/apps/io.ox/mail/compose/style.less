@@ -150,18 +150,34 @@
     // Bootstrap Tokenfield overrides
     .tokenfield {
 
+        // background color if dropable widget is active
         &.drophover {
             background-color: #eee;
         }
 
+        // space for cc/bcc toggle
         &.to {
             padding-right: 65px;
         }
 
-        .token .contact-image {
-            display: inline-block;
-            margin: 2px;
-            .picture(16px, 16px);
+        &.form-control {
+            padding-top: 3px;
+        }
+
+        .token {
+
+            margin: 0 5px 3px 0;
+
+            .contact-image {
+                display: inline-block;
+                margin: 2px;
+                .picture(16px, 16px);
+            }
+
+        }
+
+        .token-input {
+            margin-bottom: 4px;
         }
     }
 
