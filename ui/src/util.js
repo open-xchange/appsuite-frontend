@@ -721,9 +721,8 @@
     };
 
     window.assert = function (value, message) {
-        if (ox.debug || value) return;
+        if (!ox.debug || value) return;
         console.error(message || 'Assertion failed!');
-        if (console.trace) console.trace();
     };
 
     /**
