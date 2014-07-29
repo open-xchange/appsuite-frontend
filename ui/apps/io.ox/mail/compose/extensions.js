@@ -72,15 +72,30 @@ define('io.ox/mail/compose/extensions',
 
     var extensions = {
 
+        header: function (baton) {
+            var header = $('<div class="row" data-extension-id="header">');
+            ext.point(POINT + '/header').invoke('draw', header, baton);
+            baton.view.app.getWindow().setHeader(header).addClass('container default-header-padding');
+        },
+
         title: function () {
             this.append(
-                $('<div class="row header" data-extension-id="title">').append(
-                    $('<h1 class="col-md-6 hidden-xs clear-title title">').text(gt('Compose new mail')),
-                    $('<div class="col-xs-12 col-sm-6 text-right">').append(
-                        $('<button type="button" class="btn btn-default" data-action="discard">').text(gt('Discard')),
-                        $('<button type="button" class="btn btn-default" data-action="save">').text(gt('Save')),
-                        $('<button type="button" class="btn btn-primary" data-action="send">').text(gt('Send'))
-                    )
+                $('<h1 class="col-md-6 hidden-xs clear-title title">').text(gt('Compose new mail'))
+            );
+        },
+
+        buttons: function (baton) {
+            this.append(
+                $('<div class="col-xs-12 col-sm-6 text-right">').append(
+                    $('<button type="button" class="btn btn-default" data-action="discard">')
+                        .on('click', function () { baton.view.app.quit(); })
+                        .text(gt('Discard')),
+                    $('<button type="button" class="btn btn-default" data-action="save">')
+                        .on('click', function () { baton.view.saveDraft(); })
+                        .text(gt('Save')),
+                    $('<button type="button" class="btn btn-primary" data-action="send">')
+                        .on('click', function () { baton.view.send(); })
+                        .text(gt('Send'))
                 )
             );
         },

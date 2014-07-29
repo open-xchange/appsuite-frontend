@@ -1072,11 +1072,24 @@ div.hopscotch-bubble {
 }
 
 .window-container {
+
     position: absolute;
     top: 0;
     width: 100%;
     bottom: 0;
     left: 0;
+
+    &.header-top {
+
+        .window-body{
+            top: 50px;
+        }
+
+        .window-header {
+            height: 50px;
+        }
+
+    }
 
     &.classic {
 
@@ -2277,6 +2290,10 @@ a.button {
 
 .default-content-padding {
     padding: 20px 30px;
+}
+
+.default-header-padding {
+    padding: 10px 30px;
 }
 
 .attachment-list {

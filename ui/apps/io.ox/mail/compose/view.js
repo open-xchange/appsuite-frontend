@@ -31,9 +31,9 @@ define('io.ox/mail/compose/view',
         POINT = 'io.ox/mail/compose';
 
     ext.point(POINT + '/fields').extend({
-        id: 'title',
+        id: 'header',
         index: INDEX += 100,
-        draw: extensions.title
+        draw: extensions.header
     });
 
     ext.point(POINT + '/fields').extend({
@@ -64,6 +64,25 @@ define('io.ox/mail/compose/view',
         id: 'subject',
         index: INDEX += 100,
         draw: extensions.subject
+    });
+
+    ext.point(POINT + '/header').extend({
+        draw: function (baton) {
+            ext.point(POINT + '/header/title').invoke('draw', this, baton);
+            ext.point(POINT + '/header/buttons').invoke('draw', this, baton);
+        }
+    });
+
+    ext.point(POINT + '/header/title').extend({
+        index: 100,
+        id: 'title',
+        draw: extensions.title
+    });
+
+    ext.point(POINT + '/header/buttons').extend({
+        index: 200,
+        id: 'buttons',
+        draw: extensions.buttons
     });
 
     ext.point(POINT + '/composetoolbar').extend({
@@ -292,12 +311,8 @@ define('io.ox/mail/compose/view',
         className: 'io-ox-mail-compose container default-content-padding',
 
         events: {
-            'click [data-action="save"]':       'onSave',
-            'click [data-action="send"]':       'onSend',
-            'click [data-action="discard"]':    'onDiscard',
             'click [data-action="add-cc"]':     'toggleCC',
             'click [data-action="add-bcc"]':    'toggleBCC',
-            'change [data-action="from"]':      'setFrom',
             'keyup [data-extension-id="subject"] input': 'setSubject'
         },
 
@@ -343,16 +358,6 @@ define('io.ox/mail/compose/view',
 
         setTitle: function () {
             this.app.setTitle(this.model.get('subject') || gt('Compose'));
-        },
-
-        onSave: function (e) {
-            e.preventDefault();
-            this.saveDraft();
-        },
-
-        onSend: function (e) {
-            e.preventDefault();
-            this.send();
         },
 
         saveDraft: function () {
@@ -628,11 +633,6 @@ define('io.ox/mail/compose/view',
                     }, false);
 
             return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
-        },
-
-        onDiscard: function (e) {
-            e.preventDefault();
-            this.app.quit();
         },
 
         toggleCC: function (e) {
@@ -935,7 +935,9 @@ define('io.ox/mail/compose/view',
                     $(window).trigger('resize.tinymce');
                 }
                 if (this.toolbarpos < scrollPane.scrollTop()) {
-                    this.mcetoolbar.addClass('fixed').css('width', this.contentEditable.outerWidth());
+                    this.mcetoolbar.addClass('fixed').css({
+                        width: this.contentEditable.outerWidth()
+                    });
                     this.contentEditable.css('margin-top', this.mcetoolbar.height());
                 } else {
                     this.mcetoolbar.removeClass('fixed');

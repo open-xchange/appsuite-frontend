@@ -1015,6 +1015,12 @@ define('io.ox/core/desktop',
 
                 this.shown = shown.promise();
 
+                this.setHeader = function (node) {
+                    this.nodes.header.append(node);
+                    this.nodes.outer.addClass('header-top');
+                    return this.nodes.header;
+                };
+
                 this.show = function (cont) {
                     var appchange = false;
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
@@ -1453,7 +1459,10 @@ define('io.ox/core/desktop',
                             $('<div class="abs footer">')
                         ),
                         // window HEAD
+                        // @deprecated
                         win.nodes.head = $('<div class="window-head">'),
+                        // window HEADER
+                        win.nodes.header = $('<div class="window-header">'),
                         // window SIDEPANEL
                         win.nodes.sidepanel = $('<div class="window-sidepanel collapsed">'),
                         // window BODY
