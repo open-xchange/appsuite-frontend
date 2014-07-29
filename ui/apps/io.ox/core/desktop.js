@@ -1059,18 +1059,16 @@ define('io.ox/core/desktop',
                         self.state.open = true;
                         self.trigger('show');
                         if (_.device('!small')) {
-                            document.temptitle = gt.format(
+                            document.title = document.customTitle = gt.format(
                                 //#. Title of the browser window
                                 //#. %1$s is the name of the page, e.g. OX App Suite
                                 //#. %2$s is the title of the active app, e.g. Calendar
                                 gt.pgettext('window title', '%1$s %2$s'),
                                 _.noI18n(ox.serverConfig.pageTitle),
-                                self.getTitle());
-                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
-                                document.title = document.temptitle;
-                            }
+                                self.getTitle()
+                            );
                         } else {
-                            document.title = _.noI18n(ox.serverConfig.pageTitle);
+                            document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
                         }
 
                         if (firstShow) {
