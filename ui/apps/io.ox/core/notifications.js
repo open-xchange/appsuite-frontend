@@ -420,17 +420,18 @@ define('io.ox/core/notifications',
 
                 remove = function (immediately) {
 
+                    var nodes = $('.io-ox-alert');
+
                     active = false;
                     clearTimeout(timer);
 
+                    nodes.trigger('notification:removed');
                     if (immediately) {
-                        $('.io-ox-alert').remove();
+                        nodes.remove();
                         return;
                     }
 
-                    var nodes =  $('.io-ox-alert')
-                        .trigger('notification:removed')
-                        .removeClass('appear');
+                    nodes.removeClass('appear');
 
                     // has been event-based (transitionend webkitTransitionEnd) but sometimes
                     // such events are not triggered causing invisible but blocking overlays
