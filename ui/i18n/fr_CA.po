@@ -568,8 +568,7 @@ msgstr "Durée réelle en minutes"
 msgid "Add"
 msgstr "Ajouter"
 
-#: apps/io.ox/mail/compose/extensions.js:311 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:534
+#: apps/io.ox/mail/write/view-main.js:534 module:io.ox/mail
 msgid "Add Attachment"
 msgstr "Joindre une pièce"
 
@@ -611,6 +610,18 @@ msgstr "Ajouter des fichiers"
 #: apps/io.ox/core/folder/add.js:95 module:io.ox/core
 msgid "Add folder"
 msgstr "Ajouter un dossier"
+
+#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
+#, fuzzy
+#| msgid "Add files"
+msgid "Add from Drive"
+msgstr "Ajouter des fichiers"
+
+#: apps/io.ox/mail/compose/extensions.js:315 module:io.ox/mail
+#, fuzzy
+#| msgid "Add files"
+msgid "Add local file"
+msgstr "Ajouter des fichiers"
 
 #: apps/io.ox/mail/accounts/settings.js:273
 #: module:io.ox/mail/accounts/settings
@@ -666,7 +677,7 @@ msgstr "Ajouter un participant ou une ressource"
 msgid "Add signature"
 msgstr "Ajouter une signature"
 
-#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:625 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1233
 msgid "Add subject"
 msgstr "Ajouter un sujet"
@@ -965,7 +976,7 @@ msgstr[1] "Les pièces jointes ont été enregistrées"
 #: apps/io.ox/calendar/edit/template.js:452 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:300 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:304 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
 #: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
@@ -1536,7 +1547,7 @@ msgid "Company"
 msgstr "Entreprise"
 
 #: apps/io.ox/mail/compose/main.js:38 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:372 apps/io.ox/mail/compose/view.js:376
+#: apps/io.ox/mail/compose/view.js:375 apps/io.ox/mail/compose/view.js:379
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
 #: apps/io.ox/mail/write/main.js:204
@@ -2897,10 +2908,6 @@ msgstr "Quota de fichiers"
 msgid "File: %1$s"
 msgstr "Fichier : %1$s"
 
-#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
-msgid "Files"
-msgstr "Fichiers"
-
 #: apps/io.ox/files/fluid/perspective.js:490 module:io.ox/files
 msgid "Files View"
 msgstr "Vue sur les fichiers"
@@ -3154,8 +3161,8 @@ msgstr "Invité"
 msgid "Guidance"
 msgstr "Guide"
 
-#: apps/io.ox/mail/settings/pane.js:44 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:724
+#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:44 apps/io.ox/mail/write/view-main.js:724
 msgid "HTML"
 msgstr "en HTML"
 
@@ -3723,12 +3730,12 @@ msgstr "Le courrier électronique a été importé"
 msgid "Mail has been moved"
 msgstr "Le courriel a été déplacé"
 
-#: apps/io.ox/mail/compose/view.js:621 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1231
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Le message a un sujet vide. L'envoyer quand même ?"
 
-#: apps/io.ox/mail/compose/view.js:614 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:616 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1224
 msgid "Mail has no recipient."
 msgstr "Le message n'a pas de destinataire."
@@ -3749,8 +3756,8 @@ msgstr "Rappel par courriel"
 msgid "Mail reminder for"
 msgstr "Rappel par courriel de"
 
-#: apps/io.ox/mail/compose/view.js:425 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:444 apps/io.ox/mail/write/main.js:1272
+#: apps/io.ox/mail/compose/view.js:428 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:446 apps/io.ox/mail/write/main.js:1272
 #: apps/io.ox/mail/write/main.js:1317
 msgid "Mail saved as draft"
 msgstr "Message enregistré en tant que brouillon"
@@ -3929,8 +3936,8 @@ msgstr "Minutes"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: apps/io.ox/mail/compose/view.js:229 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:230 apps/io.ox/mail/write/view-main.js:1094
+#: apps/io.ox/mail/compose/view.js:232 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:233 apps/io.ox/mail/write/view-main.js:1094
 #: apps/io.ox/mail/write/view-main.js:1095
 msgid "Mobile"
 msgstr "Tél. mobile"
@@ -4702,8 +4709,8 @@ msgid "Phone (business alt)"
 msgstr "Tél. (professionnel autre)"
 
 #: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
-#: apps/io.ox/mail/compose/view.js:225 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:226 apps/io.ox/mail/write/view-main.js:1090
+#: apps/io.ox/mail/compose/view.js:228 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:229 apps/io.ox/mail/write/view-main.js:1090
 #: apps/io.ox/mail/write/view-main.js:1091
 msgid "Phone (business)"
 msgstr "Tél. (professionnel)"
@@ -4728,8 +4735,8 @@ msgstr "Tél. (privé)"
 msgid "Phone (other)"
 msgstr "Tél. (autre)"
 
-#: apps/io.ox/mail/compose/view.js:227 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:228 apps/io.ox/mail/write/view-main.js:1092
+#: apps/io.ox/mail/compose/view.js:230 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:231 apps/io.ox/mail/write/view-main.js:1092
 #: apps/io.ox/mail/write/view-main.js:1093
 msgid "Phone (private)"
 msgstr "Tél. (privé)"
@@ -5470,12 +5477,6 @@ msgstr "Microblogue Tweeter renvoyé par %s"
 msgid "Review your purchases"
 msgstr "Passer en revue vos achats"
 
-#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
-#, fuzzy
-#| msgid "Text"
-msgid "Rich Text"
-msgstr "Texte"
-
 #: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
 msgid "Room number"
 msgstr "Numéro de salle"
@@ -5728,7 +5729,7 @@ msgid "Sent folder"
 msgstr "Dossier Envoyés"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:769 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:791 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:225
 msgid "Sent from %s via mobile"
 msgstr "Envoyé depuis %s sur un mobile"
@@ -5970,8 +5971,7 @@ msgid "Sign out now"
 msgstr "Se déconnecter maintenant"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:303
+#: apps/io.ox/mail/settings/signatures/register.js:303 module:io.ox/mail
 msgid "Signature"
 msgstr "Signature"
 
@@ -5987,7 +5987,8 @@ msgstr "Emplacement de la signature"
 msgid "Signature text"
 msgstr "Texte de la signature"
 
-#: apps/io.ox/mail/settings/signatures/register.js:317 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:317
 #: apps/io.ox/mail/write/view-main.js:623
 #: apps/io.ox/mail/write/view-main.js:625
 msgid "Signatures"
@@ -6136,7 +6137,7 @@ msgstr "Étudiant"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:850 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:232
+#: apps/io.ox/mail/compose/extensions.js:236
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
@@ -6500,7 +6501,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "L'adresse électronique %1$s figure déjà dans la liste"
 
-#: apps/io.ox/mail/compose/view.js:556 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:558 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1166
 msgid "The email has been sent"
 msgstr "Le courriel a été envoyé"
@@ -7525,7 +7526,7 @@ msgstr "Jaune"
 msgid "Yes"
 msgstr "Oui"
 
-#: apps/io.ox/mail/compose/view.js:622 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:624 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1232
 msgid "Yes, send without subject"
 msgstr "Oui, envoyer sans sujet"
@@ -8450,11 +8451,6 @@ msgstr "annuel"
 #~ msgid "Add feed"
 #~ msgstr "Ajouter un flux"
 
-#, fuzzy
-#~| msgid "Add files"
-#~ msgid "Add file"
-#~ msgstr "Ajouter des fichiers"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Ajouter le menu des dossiers"
 
@@ -8985,6 +8981,9 @@ msgstr "annuel"
 #~ msgid "File versions"
 #~ msgstr "Versions de fichier"
 
+#~ msgid "Files"
+#~ msgstr "Fichiers"
+
 #~ msgctxt "app"
 #~ msgid "Files"
 #~ msgstr "Fichiers"
@@ -9420,6 +9419,11 @@ msgstr "annuel"
 
 #~ msgid "Remind me again "
 #~ msgstr "Me rappeler à nouveau "
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "Rich Text"
+#~ msgstr "Texte"
 
 #, fuzzy
 #~ msgid "Right"

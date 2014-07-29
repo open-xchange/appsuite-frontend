@@ -1127,7 +1127,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:850
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:232
+#: apps/io.ox/mail/compose/extensions.js:236
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
@@ -1275,7 +1275,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112
 #: module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:300
+#: apps/io.ox/mail/compose/extensions.js:304
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
@@ -2890,9 +2890,9 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:264
 #: module:io.ox/contacts
-#: apps/io.ox/mail/compose/view.js:225
+#: apps/io.ox/mail/compose/view.js:228
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:226
+#: apps/io.ox/mail/compose/view.js:229
 #: apps/io.ox/mail/write/view-main.js:1090
 #: apps/io.ox/mail/write/view-main.js:1091
 msgid "Phone (business)"
@@ -5074,7 +5074,7 @@ msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js:592
 #: module:io.ox/core/tk/attachments
-msgid "Files"
+msgid "Add from Drive"
 msgstr ""
 
 #: apps/io.ox/core/tk/autocomplete.js:414
@@ -6740,16 +6740,15 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-#: apps/io.ox/mail/compose/extensions.js:311
+#: apps/io.ox/mail/compose/extensions.js:315
 #: module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:534
-msgid "Add Attachment"
+msgid "Add local file"
 msgstr ""
 
 #: apps/io.ox/mail/compose/main.js:38
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:372
-#: apps/io.ox/mail/compose/view.js:376
+#: apps/io.ox/mail/compose/view.js:375
+#: apps/io.ox/mail/compose/view.js:379
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213
 #: apps/io.ox/mail/toolbar.js:42
@@ -6801,7 +6800,9 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/view.js:126
 #: module:io.ox/mail
-msgid "Rich Text"
+#: apps/io.ox/mail/settings/pane.js:44
+#: apps/io.ox/mail/write/view-main.js:724
+msgid "HTML"
 msgstr ""
 
 #: apps/io.ox/mail/compose/view.js:135
@@ -6851,11 +6852,12 @@ msgstr ""
 msgid "Delivery Receipt"
 msgstr ""
 
-#. Section title for the mobile signature
 #: apps/io.ox/mail/compose/view.js:158
 #: module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:303
-msgid "Signature"
+#: apps/io.ox/mail/settings/signatures/register.js:317
+#: apps/io.ox/mail/write/view-main.js:623
+#: apps/io.ox/mail/write/view-main.js:625
+msgid "Signatures"
 msgstr ""
 
 #: apps/io.ox/mail/compose/view.js:159
@@ -6865,62 +6867,62 @@ msgstr ""
 msgid "No signature"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:227
+#: apps/io.ox/mail/compose/view.js:230
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:228
+#: apps/io.ox/mail/compose/view.js:231
 #: apps/io.ox/mail/write/view-main.js:1092
 #: apps/io.ox/mail/write/view-main.js:1093
 msgid "Phone (private)"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:229
+#: apps/io.ox/mail/compose/view.js:232
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:230
+#: apps/io.ox/mail/compose/view.js:233
 #: apps/io.ox/mail/write/view-main.js:1094
 #: apps/io.ox/mail/write/view-main.js:1095
 msgid "Mobile"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:425
+#: apps/io.ox/mail/compose/view.js:428
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:444
+#: apps/io.ox/mail/compose/view.js:446
 #: apps/io.ox/mail/write/main.js:1272
 #: apps/io.ox/mail/write/main.js:1317
 msgid "Mail saved as draft"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:556
+#: apps/io.ox/mail/compose/view.js:558
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1166
 msgid "The email has been sent"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:614
+#: apps/io.ox/mail/compose/view.js:616
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1224
 msgid "Mail has no recipient."
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:621
+#: apps/io.ox/mail/compose/view.js:623
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1231
 msgid "Mail has empty subject. Send it anyway?"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:622
+#: apps/io.ox/mail/compose/view.js:624
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1232
 msgid "Yes, send without subject"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:623
+#: apps/io.ox/mail/compose/view.js:625
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1233
 msgid "Add subject"
 msgstr ""
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:769
+#: apps/io.ox/mail/compose/view.js:791
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:225
 msgid "Sent from %s via mobile"
@@ -7260,12 +7262,6 @@ msgstr ""
 msgid "Attachment"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:44
-#: module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:724
-msgid "HTML"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js:45
 #: module:io.ox/mail
 msgid "Plain text"
@@ -7455,11 +7451,10 @@ msgstr ""
 msgid "Set as default"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:317
+#. Section title for the mobile signature
+#: apps/io.ox/mail/settings/signatures/register.js:303
 #: module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:623
-#: apps/io.ox/mail/write/view-main.js:625
-msgid "Signatures"
+msgid "Signature"
 msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/register.js:370
@@ -7726,6 +7721,11 @@ msgstr ""
 #: apps/io.ox/mail/write/view-main.js:529
 #: module:io.ox/mail
 msgid "You can drag and drop files from your computer here to add as attachment."
+msgstr ""
+
+#: apps/io.ox/mail/write/view-main.js:534
+#: module:io.ox/mail
+msgid "Add Attachment"
 msgstr ""
 
 #: apps/io.ox/mail/write/view-main.js:677

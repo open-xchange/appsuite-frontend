@@ -582,8 +582,7 @@ msgstr "Skutočné trvanie v minútach"
 msgid "Add"
 msgstr "Pridať"
 
-#: apps/io.ox/mail/compose/extensions.js:311 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:534
+#: apps/io.ox/mail/write/view-main.js:534 module:io.ox/mail
 msgid "Add Attachment"
 msgstr "Pridať prílohu"
 
@@ -625,6 +624,18 @@ msgstr "Pridať súbory"
 #: apps/io.ox/core/folder/add.js:95 module:io.ox/core
 msgid "Add folder"
 msgstr "Pridať priečinok"
+
+#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
+#, fuzzy
+#| msgid "Add from addressbook"
+msgid "Add from Drive"
+msgstr "Pridať z adresára"
+
+#: apps/io.ox/mail/compose/extensions.js:315 module:io.ox/mail
+#, fuzzy
+#| msgid "Attach local file"
+msgid "Add local file"
+msgstr "Priložiť lokálny súbor"
 
 #: apps/io.ox/mail/accounts/settings.js:273
 #: module:io.ox/mail/accounts/settings
@@ -680,7 +691,7 @@ msgstr "Pridať účastníkov/zdroje"
 msgid "Add signature"
 msgstr "Pridať podpis"
 
-#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:625 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1233
 msgid "Add subject"
 msgstr "Pridať predmet"
@@ -979,7 +990,7 @@ msgstr[2] "Prílohy boli uložené"
 #: apps/io.ox/calendar/edit/template.js:452 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:300 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:304 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
 #: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
@@ -1546,7 +1557,7 @@ msgid "Company"
 msgstr "Spoločnosť"
 
 #: apps/io.ox/mail/compose/main.js:38 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:372 apps/io.ox/mail/compose/view.js:376
+#: apps/io.ox/mail/compose/view.js:375 apps/io.ox/mail/compose/view.js:379
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
 #: apps/io.ox/mail/write/main.js:204
@@ -2893,10 +2904,6 @@ msgstr "Kvóta súborov"
 msgid "File: %1$s"
 msgstr "Súbor: %1$s"
 
-#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
-msgid "Files"
-msgstr "Súbory"
-
 #: apps/io.ox/files/fluid/perspective.js:490 module:io.ox/files
 msgid "Files View"
 msgstr "Zobrazenie súborov"
@@ -3148,8 +3155,8 @@ msgstr "Hosť"
 msgid "Guidance"
 msgstr "Pokyny"
 
-#: apps/io.ox/mail/settings/pane.js:44 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:724
+#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:44 apps/io.ox/mail/write/view-main.js:724
 msgid "HTML"
 msgstr "HTML"
 
@@ -3717,12 +3724,12 @@ msgstr "Pošta bola importovaná"
 msgid "Mail has been moved"
 msgstr "Poštové správy boli presunuté"
 
-#: apps/io.ox/mail/compose/view.js:621 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1231
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Predmet emailu bol prázdny. Poslať napriek tomu?"
 
-#: apps/io.ox/mail/compose/view.js:614 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:616 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1224
 msgid "Mail has no recipient."
 msgstr "Správa nemá žiadneho príjemcu."
@@ -3743,8 +3750,8 @@ msgstr "Pripomienka pošty"
 msgid "Mail reminder for"
 msgstr "Pripomienka pošty pre"
 
-#: apps/io.ox/mail/compose/view.js:425 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:444 apps/io.ox/mail/write/main.js:1272
+#: apps/io.ox/mail/compose/view.js:428 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:446 apps/io.ox/mail/write/main.js:1272
 #: apps/io.ox/mail/write/main.js:1317
 msgid "Mail saved as draft"
 msgstr "Správa bola uložená ako rozpísaná"
@@ -3922,8 +3929,8 @@ msgstr "Minúty"
 msgid "Miscellaneous"
 msgstr "Rozličné"
 
-#: apps/io.ox/mail/compose/view.js:229 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:230 apps/io.ox/mail/write/view-main.js:1094
+#: apps/io.ox/mail/compose/view.js:232 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:233 apps/io.ox/mail/write/view-main.js:1094
 #: apps/io.ox/mail/write/view-main.js:1095
 msgid "Mobile"
 msgstr "Mobil"
@@ -4690,8 +4697,8 @@ msgid "Phone (business alt)"
 msgstr "Telefón (obchodný alt.)"
 
 #: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
-#: apps/io.ox/mail/compose/view.js:225 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:226 apps/io.ox/mail/write/view-main.js:1090
+#: apps/io.ox/mail/compose/view.js:228 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:229 apps/io.ox/mail/write/view-main.js:1090
 #: apps/io.ox/mail/write/view-main.js:1091
 msgid "Phone (business)"
 msgstr "Telefón (obchodný)"
@@ -4716,8 +4723,8 @@ msgstr "Telefón (domov)"
 msgid "Phone (other)"
 msgstr "Telefón (iný)"
 
-#: apps/io.ox/mail/compose/view.js:227 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:228 apps/io.ox/mail/write/view-main.js:1092
+#: apps/io.ox/mail/compose/view.js:230 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:231 apps/io.ox/mail/write/view-main.js:1092
 #: apps/io.ox/mail/write/view-main.js:1093
 msgid "Phone (private)"
 msgstr "Telefón (súkromný)"
@@ -5448,12 +5455,6 @@ msgstr "Retweetoval %s"
 msgid "Review your purchases"
 msgstr "Skontrolovať vaše nákupy"
 
-#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
-#, fuzzy
-#| msgid "Text"
-msgid "Rich Text"
-msgstr "Text"
-
 #: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
 msgid "Room number"
 msgstr "Číslo izby"
@@ -5707,7 +5708,7 @@ msgid "Sent folder"
 msgstr "Priečinok Odoslané"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:769 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:791 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:225
 msgid "Sent from %s via mobile"
 msgstr "Odoslané prostredníctvom %s z mobilu"
@@ -5949,8 +5950,7 @@ msgid "Sign out now"
 msgstr "Odhlásiť sa teraz"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:303
+#: apps/io.ox/mail/settings/signatures/register.js:303 module:io.ox/mail
 msgid "Signature"
 msgstr "Podpis"
 
@@ -5966,7 +5966,8 @@ msgstr "Umiestnenie podpisu"
 msgid "Signature text"
 msgstr "Text podpisu"
 
-#: apps/io.ox/mail/settings/signatures/register.js:317 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:317
 #: apps/io.ox/mail/write/view-main.js:623
 #: apps/io.ox/mail/write/view-main.js:625
 msgid "Signatures"
@@ -6114,7 +6115,7 @@ msgstr "Študent"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:850 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:232
+#: apps/io.ox/mail/compose/extensions.js:236
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
@@ -6473,7 +6474,7 @@ msgstr "Termín nemôže byť pred dátumom začiatku. Zmeniť dátum začiatku?
 msgid "The email address %1$s is already in the list"
 msgstr "E-mailová adresa %1$s sa už v zozname nachádza"
 
-#: apps/io.ox/mail/compose/view.js:556 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:558 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1166
 msgid "The email has been sent"
 msgstr "Email bol odoslaný"
@@ -7473,7 +7474,7 @@ msgstr "Žltá"
 msgid "Yes"
 msgstr "Áno"
 
-#: apps/io.ox/mail/compose/view.js:622 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:624 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1232
 msgid "Yes, send without subject"
 msgstr "Áno, poslať bez predmetu"
@@ -8535,9 +8536,6 @@ msgstr "ročne"
 #~ msgid "Add folder menu"
 #~ msgstr "Pridať menu priečinka"
 
-#~ msgid "Add from addressbook"
-#~ msgstr "Pridať z adresára"
-
 #~ msgid "Add group"
 #~ msgstr "Pridať skupinu"
 
@@ -8776,9 +8774,6 @@ msgstr "ročne"
 
 #~ msgid "Attach InfoItem"
 #~ msgstr "Priložiť InfoPoložku"
-
-#~ msgid "Attach local file"
-#~ msgstr "Priložiť lokálny súbor"
 
 #~ msgctxt "plural"
 #~ msgid "Attachment"
@@ -10128,6 +10123,9 @@ msgstr "ročne"
 
 #~ msgid "File..."
 #~ msgstr "Súbor..."
+
+#~ msgid "Files"
+#~ msgstr "Súbory"
 
 #~ msgctxt "app"
 #~ msgid "Files"
@@ -11888,6 +11886,11 @@ msgstr "ročne"
 
 #~ msgid "Revert Last Operation"
 #~ msgstr "Vrátiť späť poslednú operáciu"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "Rich Text"
+#~ msgstr "Text"
 
 #~ msgid "Right"
 #~ msgstr "Vpravo"

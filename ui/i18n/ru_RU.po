@@ -580,8 +580,7 @@ msgstr "Действительная продолжительность (мин.
 msgid "Add"
 msgstr "Добавить"
 
-#: apps/io.ox/mail/compose/extensions.js:311 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:534
+#: apps/io.ox/mail/write/view-main.js:534 module:io.ox/mail
 msgid "Add Attachment"
 msgstr "Добавить вложение"
 
@@ -623,6 +622,18 @@ msgstr "Добавить файлы"
 #: apps/io.ox/core/folder/add.js:95 module:io.ox/core
 msgid "Add folder"
 msgstr "Добавить папку"
+
+#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
+#, fuzzy
+#| msgid "Add files"
+msgid "Add from Drive"
+msgstr "Добавить файлы"
+
+#: apps/io.ox/mail/compose/extensions.js:315 module:io.ox/mail
+#, fuzzy
+#| msgid "Add files"
+msgid "Add local file"
+msgstr "Добавить файлы"
 
 #: apps/io.ox/mail/accounts/settings.js:273
 #: module:io.ox/mail/accounts/settings
@@ -678,7 +689,7 @@ msgstr "Добавить участника или ресурс"
 msgid "Add signature"
 msgstr "Добавить подпись"
 
-#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:625 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1233
 msgid "Add subject"
 msgstr "Добавить тему"
@@ -978,7 +989,7 @@ msgstr[2] "Вложения сохранены"
 #: apps/io.ox/calendar/edit/template.js:452 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:300 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:304 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
 #: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
@@ -1543,7 +1554,7 @@ msgid "Company"
 msgstr "Компания"
 
 #: apps/io.ox/mail/compose/main.js:38 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:372 apps/io.ox/mail/compose/view.js:376
+#: apps/io.ox/mail/compose/view.js:375 apps/io.ox/mail/compose/view.js:379
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
 #: apps/io.ox/mail/write/main.js:204
@@ -2884,10 +2895,6 @@ msgstr "Квота файлов"
 msgid "File: %1$s"
 msgstr "Файл: %1$s"
 
-#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
-msgid "Files"
-msgstr "Файлы"
-
 #: apps/io.ox/files/fluid/perspective.js:490 module:io.ox/files
 msgid "Files View"
 msgstr "Файлы"
@@ -3139,8 +3146,8 @@ msgstr "Гость"
 msgid "Guidance"
 msgstr "Правила"
 
-#: apps/io.ox/mail/settings/pane.js:44 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:724
+#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:44 apps/io.ox/mail/write/view-main.js:724
 msgid "HTML"
 msgstr "HTML"
 
@@ -3705,12 +3712,12 @@ msgstr "Импорт почты выполнен"
 msgid "Mail has been moved"
 msgstr "Почта перенесена"
 
-#: apps/io.ox/mail/compose/view.js:621 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1231
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Пустая тема сообщения. Отправить?"
 
-#: apps/io.ox/mail/compose/view.js:614 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:616 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1224
 msgid "Mail has no recipient."
 msgstr "Не указан получатель."
@@ -3731,8 +3738,8 @@ msgstr "Напоминание по почте"
 msgid "Mail reminder for"
 msgstr "Напоминание для "
 
-#: apps/io.ox/mail/compose/view.js:425 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:444 apps/io.ox/mail/write/main.js:1272
+#: apps/io.ox/mail/compose/view.js:428 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:446 apps/io.ox/mail/write/main.js:1272
 #: apps/io.ox/mail/write/main.js:1317
 msgid "Mail saved as draft"
 msgstr "Черновик сохранен"
@@ -3910,8 +3917,8 @@ msgstr "Минуты"
 msgid "Miscellaneous"
 msgstr "Другое"
 
-#: apps/io.ox/mail/compose/view.js:229 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:230 apps/io.ox/mail/write/view-main.js:1094
+#: apps/io.ox/mail/compose/view.js:232 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:233 apps/io.ox/mail/write/view-main.js:1094
 #: apps/io.ox/mail/write/view-main.js:1095
 msgid "Mobile"
 msgstr "Мобильный"
@@ -4675,8 +4682,8 @@ msgid "Phone (business alt)"
 msgstr "Телефон (доп. рабочий)"
 
 #: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
-#: apps/io.ox/mail/compose/view.js:225 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:226 apps/io.ox/mail/write/view-main.js:1090
+#: apps/io.ox/mail/compose/view.js:228 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:229 apps/io.ox/mail/write/view-main.js:1090
 #: apps/io.ox/mail/write/view-main.js:1091
 msgid "Phone (business)"
 msgstr "Телефон (рабочий)"
@@ -4701,8 +4708,8 @@ msgstr "Телефон (домашний)"
 msgid "Phone (other)"
 msgstr "Телефон (другой)"
 
-#: apps/io.ox/mail/compose/view.js:227 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:228 apps/io.ox/mail/write/view-main.js:1092
+#: apps/io.ox/mail/compose/view.js:230 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:231 apps/io.ox/mail/write/view-main.js:1092
 #: apps/io.ox/mail/write/view-main.js:1093
 msgid "Phone (private)"
 msgstr "Телефон (личный)"
@@ -5429,12 +5436,6 @@ msgstr "Ретвит сделал: %s"
 msgid "Review your purchases"
 msgstr "Просмотр покупок"
 
-#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
-#, fuzzy
-#| msgid "Text"
-msgid "Rich Text"
-msgstr "Текст"
-
 #: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
 msgid "Room number"
 msgstr "Кабинет"
@@ -5688,7 +5689,7 @@ msgid "Sent folder"
 msgstr "Папка отправленных"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:769 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:791 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:225
 msgid "Sent from %s via mobile"
 msgstr "Отправлено с мобильного из %s"
@@ -5930,8 +5931,7 @@ msgid "Sign out now"
 msgstr "Выход"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:303
+#: apps/io.ox/mail/settings/signatures/register.js:303 module:io.ox/mail
 msgid "Signature"
 msgstr "Подпись"
 
@@ -5947,7 +5947,8 @@ msgstr "Расположение подписи"
 msgid "Signature text"
 msgstr "Текст подписи"
 
-#: apps/io.ox/mail/settings/signatures/register.js:317 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:317
 #: apps/io.ox/mail/write/view-main.js:623
 #: apps/io.ox/mail/write/view-main.js:625
 msgid "Signatures"
@@ -6093,7 +6094,7 @@ msgstr "Студент"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:850 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:232
+#: apps/io.ox/mail/compose/extensions.js:236
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
@@ -6454,7 +6455,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "%1$s уже в списке"
 
-#: apps/io.ox/mail/compose/view.js:556 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:558 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1166
 msgid "The email has been sent"
 msgstr "Сообщение отправлено"
@@ -7445,7 +7446,7 @@ msgstr "Желтый"
 msgid "Yes"
 msgstr "Да"
 
-#: apps/io.ox/mail/compose/view.js:622 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:624 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1232
 msgid "Yes, send without subject"
 msgstr "Да, отправить без темы"
@@ -8307,11 +8308,6 @@ msgstr "каждый год"
 #~ msgid "Account settings could not be saved."
 #~ msgstr "Не удалось сохранить настройки учетной записи."
 
-#, fuzzy
-#~| msgid "Add files"
-#~ msgid "Add file"
-#~ msgstr "Добавить файлы"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Добавить папку меню"
 
@@ -8685,6 +8681,9 @@ msgstr "каждый год"
 #~ msgid "File name"
 #~ msgstr "Файл"
 
+#~ msgid "Files"
+#~ msgstr "Файлы"
+
 #~ msgctxt "app"
 #~ msgid "Files"
 #~ msgstr "Файлы"
@@ -9026,6 +9025,11 @@ msgstr "каждый год"
 
 #~ msgid "Remind me again "
 #~ msgstr "Напомнить еще раз"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "Rich Text"
+#~ msgstr "Текст"
 
 #, fuzzy
 #~ msgid "Right"

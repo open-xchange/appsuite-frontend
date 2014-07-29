@@ -568,8 +568,7 @@ msgstr "Faktisk varighed i minutter"
 msgid "Add"
 msgstr "Tilføj"
 
-#: apps/io.ox/mail/compose/extensions.js:311 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:534
+#: apps/io.ox/mail/write/view-main.js:534 module:io.ox/mail
 msgid "Add Attachment"
 msgstr "Tilføj vedhæftning"
 
@@ -611,6 +610,18 @@ msgstr "Tilføj filer"
 #: apps/io.ox/core/folder/add.js:95 module:io.ox/core
 msgid "Add folder"
 msgstr "Tilføj mappe"
+
+#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
+#, fuzzy
+#| msgid "Add files"
+msgid "Add from Drive"
+msgstr "Tilføj filer"
+
+#: apps/io.ox/mail/compose/extensions.js:315 module:io.ox/mail
+#, fuzzy
+#| msgid "Add files"
+msgid "Add local file"
+msgstr "Tilføj filer"
 
 #: apps/io.ox/mail/accounts/settings.js:273
 #: module:io.ox/mail/accounts/settings
@@ -666,7 +677,7 @@ msgstr "Tilføj deltager/ressource"
 msgid "Add signature"
 msgstr "Tilføj signatur"
 
-#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:625 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1233
 msgid "Add subject"
 msgstr "Tilføj emne"
@@ -962,7 +973,7 @@ msgstr[1] "Vedhæftninger blev gemt"
 #: apps/io.ox/calendar/edit/template.js:452 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:300 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:304 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
 #: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
@@ -1529,7 +1540,7 @@ msgid "Company"
 msgstr "Virksomhed"
 
 #: apps/io.ox/mail/compose/main.js:38 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:372 apps/io.ox/mail/compose/view.js:376
+#: apps/io.ox/mail/compose/view.js:375 apps/io.ox/mail/compose/view.js:379
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
 #: apps/io.ox/mail/write/main.js:204
@@ -2868,10 +2879,6 @@ msgstr "Filkvote"
 msgid "File: %1$s"
 msgstr "Fil: %1$s"
 
-#: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
-msgid "Files"
-msgstr "Filer"
-
 #: apps/io.ox/files/fluid/perspective.js:490 module:io.ox/files
 msgid "Files View"
 msgstr "Filvisning"
@@ -3123,8 +3130,8 @@ msgstr "Gæst"
 msgid "Guidance"
 msgstr "Vejledning"
 
-#: apps/io.ox/mail/settings/pane.js:44 module:io.ox/mail
-#: apps/io.ox/mail/write/view-main.js:724
+#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:44 apps/io.ox/mail/write/view-main.js:724
 msgid "HTML"
 msgstr "HTML"
 
@@ -3690,12 +3697,12 @@ msgstr "E-mail er blevet importeret"
 msgid "Mail has been moved"
 msgstr "E-mail blev flyttet"
 
-#: apps/io.ox/mail/compose/view.js:621 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:623 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1231
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "E-mail'ens emne er tomt. Send alligevel?"
 
-#: apps/io.ox/mail/compose/view.js:614 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:616 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1224
 msgid "Mail has no recipient."
 msgstr "E-mail'en har ingen modtager."
@@ -3716,8 +3723,8 @@ msgstr "E-mail påmindelse"
 msgid "Mail reminder for"
 msgstr "E-mail påmindelse for"
 
-#: apps/io.ox/mail/compose/view.js:425 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:444 apps/io.ox/mail/write/main.js:1272
+#: apps/io.ox/mail/compose/view.js:428 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:446 apps/io.ox/mail/write/main.js:1272
 #: apps/io.ox/mail/write/main.js:1317
 msgid "Mail saved as draft"
 msgstr "E-mail gemt som kladde"
@@ -3895,8 +3902,8 @@ msgstr "Minutter"
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: apps/io.ox/mail/compose/view.js:229 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:230 apps/io.ox/mail/write/view-main.js:1094
+#: apps/io.ox/mail/compose/view.js:232 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:233 apps/io.ox/mail/write/view-main.js:1094
 #: apps/io.ox/mail/write/view-main.js:1095
 msgid "Mobile"
 msgstr "Mobil"
@@ -4658,8 +4665,8 @@ msgid "Phone (business alt)"
 msgstr "Telefon (arbejde, alternativt)"
 
 #: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
-#: apps/io.ox/mail/compose/view.js:225 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:226 apps/io.ox/mail/write/view-main.js:1090
+#: apps/io.ox/mail/compose/view.js:228 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:229 apps/io.ox/mail/write/view-main.js:1090
 #: apps/io.ox/mail/write/view-main.js:1091
 msgid "Phone (business)"
 msgstr "Telefon (arbejde)"
@@ -4684,8 +4691,8 @@ msgstr "Telefon (hjemme)"
 msgid "Phone (other)"
 msgstr "Telefon (anden)"
 
-#: apps/io.ox/mail/compose/view.js:227 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:228 apps/io.ox/mail/write/view-main.js:1092
+#: apps/io.ox/mail/compose/view.js:230 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:231 apps/io.ox/mail/write/view-main.js:1092
 #: apps/io.ox/mail/write/view-main.js:1093
 msgid "Phone (private)"
 msgstr "Telefon (privat)"
@@ -5416,12 +5423,6 @@ msgstr "Retweeted af %s"
 msgid "Review your purchases"
 msgstr "Se dine indkøb igennem"
 
-#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
-#, fuzzy
-#| msgid "Text"
-msgid "Rich Text"
-msgstr "Tekst"
-
 #: apps/io.ox/contacts/model.js:245 module:io.ox/contacts
 msgid "Room number"
 msgstr "Værelsesnummer"
@@ -5674,7 +5675,7 @@ msgid "Sent folder"
 msgstr "Sendt mappe"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:769 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:791 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:225
 msgid "Sent from %s via mobile"
 msgstr "Sendt fra %s via mobil"
@@ -5916,8 +5917,7 @@ msgid "Sign out now"
 msgstr "Log ud nu"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:303
+#: apps/io.ox/mail/settings/signatures/register.js:303 module:io.ox/mail
 msgid "Signature"
 msgstr "Signature"
 
@@ -5933,7 +5933,8 @@ msgstr "Siganturs position"
 msgid "Signature text"
 msgstr "Siganturs tekst"
 
-#: apps/io.ox/mail/settings/signatures/register.js:317 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:158 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:317
 #: apps/io.ox/mail/write/view-main.js:623
 #: apps/io.ox/mail/write/view-main.js:625
 msgid "Signatures"
@@ -6079,7 +6080,7 @@ msgstr "Studerende"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:850 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:232
+#: apps/io.ox/mail/compose/extensions.js:236
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
@@ -6437,7 +6438,7 @@ msgstr "Afleveringsdato kan ikke være før startdato. Justér startdato?"
 msgid "The email address %1$s is already in the list"
 msgstr "E-mail-adressen %1$s er allerede på listen"
 
-#: apps/io.ox/mail/compose/view.js:556 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:558 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1166
 msgid "The email has been sent"
 msgstr "E-mailen er sendt"
@@ -7432,7 +7433,7 @@ msgstr "Gul"
 msgid "Yes"
 msgstr "Ja"
 
-#: apps/io.ox/mail/compose/view.js:622 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:624 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1232
 msgid "Yes, send without subject"
 msgstr "Ja, send uden emne"
@@ -8268,11 +8269,6 @@ msgstr "årsligt"
 #~ msgid "Account settings could not be saved."
 #~ msgstr "Kontoens opsætning kunne ikke gemmes."
 
-#, fuzzy
-#~| msgid "Add files"
-#~ msgid "Add file"
-#~ msgstr "Tilføj filer"
-
 #~ msgid "Add folder menu"
 #~ msgstr "Tilføj mappemnu"
 
@@ -8605,6 +8601,9 @@ msgstr "årsligt"
 #~ msgid "File name"
 #~ msgstr "Filnavn"
 
+#~ msgid "Files"
+#~ msgstr "Filer"
+
 #~ msgctxt "app"
 #~ msgid "Files"
 #~ msgstr "Filer"
@@ -8911,6 +8910,11 @@ msgstr "årsligt"
 
 #~ msgid "Remind me again "
 #~ msgstr "Påmind mig igen"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgid "Rich Text"
+#~ msgstr "Tekst"
 
 #, fuzzy
 #~ msgid "Right"
