@@ -31,6 +31,7 @@ define('io.ox/core/tk/autocomplete',
             api: null,              // autocomplete API
             tokenfield: false,
             maxResults: 25,
+            autoselect: false,      // select first element on result callback
             //get data
             source: function (val) {
                 return this.api.search(val).then(function (data) {
@@ -61,14 +62,15 @@ define('io.ox/core/tk/autocomplete',
             blur: $.noop,
             click: $.noop,
             parentSelector: 'body',
-            autoselect: false,      // select first element on result callback
             container: $('<div>').addClass('autocomplete-popup'),
             mode: 'participant',
             cbshow: null
         }, o || {});
 
-        var typeaheadOptions = [{}, {
-                minLength: o.minLength,
+        var typeaheadOptions = [{
+                autoselect: o.autoselect,
+                minLength: o.minLength
+            }, {
                 source: function(query, callback) {
                     o.source(query)
                         .then(o.reduce)
