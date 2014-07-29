@@ -167,11 +167,13 @@ define('io.ox/core/commons-folderview',
             id: 'inplace-search',
             index: 300,
             draw: function (baton) {
-                if (!capabilities.has('search')) return;
+                // enabled for app?
+                if (!baton.app.getWindow().options.facetedsearch) return;
 
+                // add container (referenced by win.nodes.facetedsearch.toolbar)
                 baton.$.sidepanel
                     .append(
-                        $('<div class="generic-toolbar top inplace-search io-ox-search">')
+                        baton.app.getWindow().nodes.facetedsearch.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">')
                     )
                     .find('foldertree-container')
                     .addClass('top-toolbar');

@@ -180,6 +180,7 @@ define('io.ox/search/view-template',
                         })
                         .on('focus focus:custom click', function (e, opt) {
                             // hint: 'click' supports click on already focused
+                            app.view.trigger('field:focus'); //unused
 
                             // keep dropdown closed on focus event
                             opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});

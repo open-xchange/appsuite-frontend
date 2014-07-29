@@ -1401,6 +1401,7 @@ define('io.ox/core/desktop',
                 id: 'window-' + guid,
                 name: '',
                 search: false,
+                facetedsearch: true,
                 searchShortcut: false,
                 title: '',
                 toolbar: false,
@@ -1429,6 +1430,7 @@ define('io.ox/core/desktop',
                 win.nodes.head = $();
                 win.nodes.body = $();
                 win.nodes.search = $();
+                win.nodes.facetedsearch = $();
 
             } else {
 
