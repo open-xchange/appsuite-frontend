@@ -842,7 +842,7 @@ define('io.ox/files/fluid/perspective',
             });
 
             api.on('refresh.all', function () {
-                if (!app.getWindow().search.active) {
+                if (!app.getWindow().facetedsearch.active) {
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},

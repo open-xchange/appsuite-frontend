@@ -1027,76 +1027,47 @@ define('io.ox/mail/main',
 
             if (_.device('small') || !(capabilities.has('search'))) return;
 
-            var side = app.getWindow().nodes.sidepanel, tree, toolbar, container;
-
-            side.append(
-                container = $('<div class="abs search-container">')
-                .append('<ul class="search-facets">')
-                .hide()
-            );
-
-            toolbar = side.find('.generic-toolbar.bottom');
-
-            require(['io.ox/search/main', 'io.ox/search/view-template', 'io.ox/core/api/collection-loader'], function (search, view, CollectionLoader) {
-
+            require(['io.ox/search/main',  'io.ox/core/api/collection-loader'], function (search, CollectionLoader) {
                 // define collection loader for search results
-                var collectionLoader = new CollectionLoader({
-                    module: 'mail',
-                    fetch: function () {
-                        var params = { sort: app.props.get('sort'), order: app.props.get('order') };
-                        return search.apiproxy.query(true, params).then(function (response) {
-                            return response && response.results ? response.results : [];
-                        });
-                    },
-                    cid: function () {
-                        return 'search/' + search.model.getCompositeId() +
-                            '&sort=' + app.props.get('sort') +
-                            '&order=' + app.props.get('order');
-                    },
-                    each: function (obj) {
-                        api.processThreadMessage(obj);
-                    }
-                });
-
-                app.search = search.getView();
-
-                side.find('.io-ox-search').append(
-                    app.search.render().$el.find('.input-group')
-                );
+                var win = app.getWindow(),
+                    side = win.nodes.sidepanel,
+                    collectionLoader = new CollectionLoader({
+                        module: 'mail',
+                        fetch: function () {
+                            var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                            return search.apiproxy.query(true, params).then(function (response) {
+                                return response && response.results ? response.results : [];
+                            });
+                        },
+                        cid: function () {
+                            return 'search/' + search.model.getCompositeId() +
+                                '&sort=' + app.props.get('sort') +
+                                '&order=' + app.props.get('order');
+                        },
+                        each: function (obj) {
+                            api.processThreadMessage(obj);
+                        }
+                    });
 
                 side.find('.search-field').on({
                     'focus': function () {
-                        tree.hide();
-                        toolbar.hide();
-                        container.show();
-                        view.facets.call(container.children('ul').empty(), app.search.baton);
                         app.listView.connect(collectionLoader);
                         app.listView.load();
                     }
                 });
 
                 // events
-                app.search.model.on('query', _.debounce(function () {
-                    view.facets.call(container.children('ul').empty(), app.search.baton);
+                win.facetedsearch.view.on('query', _.debounce(function () {
                     app.listView.connect(collectionLoader);
                     app.listView.load();
                     app.search.focus();
                 }, 10));
 
-                app.search.on('button:clear', function () {
-                    side.find('.search-field').val('');
-                    tree.show();
-                    toolbar.show();
-                    container.hide();
+                win.facetedsearch.view.on('button:clear', function () {
                     app.listView.connect(api.collectionLoader);
                     app.listView.load();
                     app.search.model.reset();
                 });
-
-                // redefine focus
-                app.search.focus = function () {
-                    container.find('.facet > a').focus();
-                };
 
             });
         }

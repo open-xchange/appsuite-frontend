@@ -387,54 +387,11 @@ define('io.ox/files/main',
         'inplace-search': function (app) {
             if (_.device('small') || !(capabilities.has('search'))) return;
 
-            var side = app.getWindow().nodes.sidepanel, tree, toolbar, container;
-
-            side.append(
-                container = $('<div class="abs search-container">')
-                .append('<ul class="search-facets">')
-                .hide()
-            );
-
-            toolbar = side.find('.generic-toolbar.bottom');
-
-            require(['io.ox/search/main', 'io.ox/search/view-template'], function (search, view) {
-
-                app.search = search.getView();
-                app.searchapi = search.apiproxy;
-
-                side.find('.io-ox-search').append(
-                    app.search.render().$el.find('.input-group')
-                );
-
-                side.find('.search-field').on({
-                    'focus': function () {
-                        tree.hide();
-                        toolbar.hide();
-                        container.show();
-                        view.facets.call(container.children('ul').empty(), app.search.baton);
-                    }
-                });
-
-                // events
-                app.search.model.on('query', _.debounce(function () {
-                    view.facets.call(container.children('ul').empty(), app.search.baton);
-                    app.getWindow().trigger('search');
-                    app.search.focus();
-                }, 10));
-
-                app.search.on('button:clear', function () {
-                    side.find('.search-field').val('');
-                    tree.show();
-                    toolbar.show();
-                    container.hide();
-                    app.getWindow().trigger('search:cancel');
-                    app.search.model.reset();
-                });
-
-                // redefine focus
-                app.search.focus = function () {
-                    container.find('.facet > a').focus();
-                };
+            require(['io.ox/search/main'], function (facetedsearch) {
+                //add reference: used in perspective
+                app.searchapi = facetedsearch.apiproxy;
+                //register
+                commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
             });
         }
     });

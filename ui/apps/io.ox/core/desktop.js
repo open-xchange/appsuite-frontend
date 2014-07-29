@@ -942,7 +942,7 @@ define('io.ox/core/desktop',
                 this.options = options || {};
                 this.id = options.id;
                 this.name = options.name || 'generic';
-                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() , facetedsearch: {}};
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
@@ -1320,6 +1320,65 @@ define('io.ox/core/desktop',
                     }
                 };
 
+                this.facetedsearch = {
+                    active: false,
+                    lastFocus: '',
+                    init: function () {
+                        var side = self.nodes.sidepanel,
+                            nodes = self.nodes.facetedsearch = {};
+
+                        // search field
+                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">')
+                                        .addClass('io-ox-busy');
+
+                        //facets container
+                        nodes.container = $('<div class="abs search-container">')
+                                        .append('<ul class="search-facets">')
+                                        .hide();
+                        //add nodes
+                        side.append(nodes.toolbar, nodes.container);
+                    },
+
+                    toggle: function () {
+                        // show: search container
+                        // hide: tree, tree bottom toolbar
+                        var selector = '.foldertree-container, .generic-toolbar.bottom, .search-container',
+                            nodes = self.nodes.sidepanel.find(selector);
+                        nodes.toggle();
+                        this.active = !this.active;
+                    },
+
+                    open: function () {
+                        if (!this.active) {
+                            this.toggle();
+                        }
+                        var facets = self.nodes.facetedsearch.container.children('ul');
+                        require(['io.ox/search/view-template'], function (template) {
+                            template.facets.call(facets.empty(), self.facetedsearch.view.baton);
+                        });
+                        return this;
+                    },
+
+                    close: function () {
+                        if (this.active) {
+                            this.toggle();
+                        }
+                        return this;
+                    },
+
+                    focus: function () {
+                        self.nodes.facetedsearch.container
+                            .find('.facet > a')
+                            .focus();
+                    },
+
+                    clear: function () {
+                        self.nodes.facetedsearch.toolbar
+                            .find('.search-field')
+                            .val('');
+                    }
+                };
+
                 this.addClass = function () {
                     var o = this.nodes.outer;
                     return o.addClass.apply(o, arguments);
@@ -1546,6 +1605,50 @@ define('io.ox/core/desktop',
                 .on('submit', false)
                 .appendTo(win.nodes.search);
             }
+
+            if (opt.facetedsearch) {
+
+                //add container nodes
+                win.facetedsearch.init();
+
+                require(['io.ox/search/main'], function (search) {
+
+                    // overwrite views focus method
+                    var view = win.facetedsearch.view = _.extend(
+                                              search.getView(), //app.view
+                                              { focus: win.facetedsearch.focus }
+                                          );
+
+                    // render search app view and add search field
+                    win.nodes.sidepanel.find('.io-ox-search')
+                        .removeClass('io-ox-busy')
+                        .append(
+                            view.render().$el.find('.input-group')
+                        );
+
+                    // events: internal
+                    view.on({
+                        'search:open field:focus query':
+                            _.debounce(function (e) {
+                                win.facetedsearch.open();
+                                if (e.type === 'query') win.trigger('search:query');
+                            }, 10
+                        ),
+                        'search:close button:clear': function () {
+                            win.facetedsearch.clear();
+                            win.facetedsearch.close();
+                        }
+                    });
+
+                    // events: redirect
+                    view.model.on({
+                        'query': function () {
+                            view.trigger('query');
+                        }
+                    });
+                });
+            }
+
 
             // fix height/position/appearance
             if (opt.chromeless) {

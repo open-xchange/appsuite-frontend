@@ -169,15 +169,10 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 // enabled for app?
                 if (!baton.app.getWindow().options.facetedsearch) return;
-
-                // add container (referenced by win.nodes.facetedsearch.toolbar)
+                // add space
                 baton.$.sidepanel
-                    .append(
-                        baton.app.getWindow().nodes.facetedsearch.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">')
-                    )
                     .find('foldertree-container')
                     .addClass('top-toolbar');
-
             }
         });
 

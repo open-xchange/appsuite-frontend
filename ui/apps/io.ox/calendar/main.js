@@ -201,65 +201,9 @@ define('io.ox/calendar/main',
         'inplace-search': function (app) {
             if (_.device('small') || !(capabilities.has('search'))) return;
 
-            var side = app.getWindow().nodes.sidepanel, tree, toolbar, container;
-
-            side.append(
-                container = $('<div class="abs search-container">')
-                .append('<ul class="search-facets">')
-                .hide()
-            );
-
-            toolbar = side.find('.generic-toolbar.bottom');
-
-            require(['io.ox/search/main', 'io.ox/search/view-template'], function (search, view) {
-
-                // app perspective
-                var lastPerspective,
-                    SEARCH_PERSPECTIVE = 'list';
-
+            require(['io.ox/search/main'], function (facetedsearch) {
                 //register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
-
-                app.search = search.getView();
-
-                side.find('.io-ox-search').append(
-                    app.search.render().$el.find('.input-group')
-                );
-
-                side.find('.search-field').on({
-                    'focus': function () {
-                        tree.hide();
-                        toolbar.hide();
-                        container.show();
-                        view.facets.call(container.children('ul').empty(), app.search.baton);
-                    }
-                });
-
-                // events
-                app.search.model.on('query', _.debounce(function () {
-                    view.facets.call(container.children('ul').empty(), app.search.baton);
-                    lastPerspective = _.url.hash('perspective') || app.props.get('layout');
-                    if (lastPerspective !== SEARCH_PERSPECTIVE)
-                        ox.ui.Perspective.show(app, SEARCH_PERSPECTIVE);
-                    app.getWindow().trigger('search');
-                    app.search.focus();
-                }, 10));
-
-                app.search.on('button:clear', function () {
-                    side.find('.search-field').val('');
-                    tree.show();
-                    toolbar.show();
-                    container.hide();
-                    app.getWindow().trigger('search:clear');
-                    if (lastPerspective !== SEARCH_PERSPECTIVE)
-                        ox.ui.Perspective.show(app, lastPerspective);
-                    app.search.model.reset();
-                });
-
-                // redefine focus
-                app.search.focus = function () {
-                    container.find('.facet > a').focus();
-                };
+                commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
             });
         }
     });
