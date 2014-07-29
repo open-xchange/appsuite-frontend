@@ -474,7 +474,7 @@ define('io.ox/core/commons',
 
             // events
             win.on({
-                'search': function () {
+                'search:query': function () {
                     grid.setMode('search');
                 },
                 'search:clear search:cancel': function () {

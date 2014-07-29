@@ -817,7 +817,7 @@ define('io.ox/files/fluid/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search search:cancel', function () {
+            win.on('search:query search:cancel', function () {
                 breadcrumb = undefined;
                 allIds = [];
                 drawFirst();
