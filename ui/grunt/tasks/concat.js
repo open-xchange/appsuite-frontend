@@ -85,6 +85,9 @@ module.exports = function (grunt) {
             ]
         },
         precore: {
+            options: {
+                footer: 'define(ox.base + \'/precore.js\', {});\n'
+            },
             files: [
                 {
                     src: [
