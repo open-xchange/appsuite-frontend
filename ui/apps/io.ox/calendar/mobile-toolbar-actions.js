@@ -15,79 +15,44 @@ define('io.ox/calendar/mobile-toolbar-actions',
    ['io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/calendar/api',
-    'gettext!io.ox/mail'],
+    'gettext!io.ox/calendar'],
     function (ext, links, api, gt) {
 
     'use strict';
-    console.log(ext, links, api, gt);
-    /*
+
     // define links for each page
 
-    var pointMainView = ext.point('io.ox/files/mobile/toolbar/mainView'),
-        pointMultiSelect = ext.point('io.ox/files/mobile/toolbar/mainView/multiselect'),
-        pointDetailView = ext.point('io.ox/files/mobile/toolbar/detailView'),
+    var pMonth = ext.point('io.ox/calendar/mobile/toolbar/month'),
+        pWeek = ext.point('io.ox/calendar/mobile/toolbar/week'), // actually a single day as we use week:day
+        pList = ext.point('io.ox/calendar/mobile/toolbar/list'),
+        pDetail = ext.point('io.ox/calendar/mobile/toolbar/detailView'),
         meta = {
             'create': {
                 prio: 'hi',
                 mobile: 'hi',
-                drawDisabled: true,
+                label: gt('Create'),
                 icon: 'fa fa-plus',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action',
-                ref: 'io.ox/files/dropdown/new',
-                customize: function (baton) {
-                    var self = this;
-
-                    this.after(
-                        links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default',
-                            wrap: false,
-                            emptyCallback: function () {//function to call when dropdown is empty
-                                self.addClass('disabled')
-                                    .attr({ 'aria-disabled': true })
-                                    .removeAttr('href');
-                            }}, baton)
-                    );
-
-                    this.addClass('dropdown-toggle').attr({
-                        'data-toggle': 'dropdown'
-                    });
-
-                }
-            },
-            'view-icon': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show icons'),
-                icon: 'fa fa-th',
                 drawDisabled: true,
-                ref: 'io.ox/files/actions/layout-icon',
+                ref: 'io.ox/calendar/detail/actions/create',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
-            'view-tile': {
+            'listView': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('Show tiles'),
-                icon: 'fa fa-th-large',
+                label: gt('Listview'),
+                icon: 'fa fa-list',
                 drawDisabled: true,
-                ref: 'io.ox/files/actions/layout-tile',
+                ref: 'io.ox/calendar/actions/switch-to-list-view',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
-            'view-list': {
+            'calendarView': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('Show list'),
-                icon: 'fa fa-align-justify',
+                label: gt('Calendar view'),
+                icon: 'fa fa-table',
                 drawDisabled: true,
-                ref: 'io.ox/files/actions/layout-list',
+                ref: 'io.ox/calendar/actions/switch-to-month-view',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
-            },
-            'actions': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Actions'),
-                drawDisabled: true,
-                ref: 'io.ox/files/links/inline',
-                cssClasses: 'io-ox-action-link mobile-toolbar-action'
-
             }
         };
 
@@ -103,111 +68,66 @@ define('io.ox/calendar/mobile-toolbar-actions',
         index = 0;
     }
     // add default actions to toolbar which might be extended by 3rd party apps
-    pointMainView.extend(new links.Dropdown({
+    pDetail.extend(new links.Dropdown({
         index: 100,
         label: $('<span>').text(
             //.# Will be used as button label in the toolbar, allowing the user to create new documents or upload files
-            gt('New')
+            gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
         drawDisabled: true,
-        ref: 'io.ox/files/links/toolbar/default'
+        ref: 'io.ox/calendar/links/inline'
     }));
 
     // add other actions
-    //addAction(pointMainView, ['create', 'view-list', 'view-icon', 'view-tile']);
-
-    // add submenu as text link to toolbar in multiselect
-    pointDetailView.extend(new links.Dropdown({
-        index: 300,
-        label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
-            gt('Actions')
-        ),
-        noCaret: true, // don't draw the caret icon beside menu link
-        drawDisabled: true,
-        ref: 'io.ox/files/links/inline'
-    }));
-
-    // add submenu as text link to toolbar in multiselect
-    pointMultiSelect.extend(new links.Dropdown({
-        index: 100,
-        label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
-            gt('Actions')
-        ),
-        noCaret: true, // don't draw the caret icon beside menu link
-        drawDisabled: true,
-        ref: 'io.ox/files/links/inline'
-    }));
-
+    addAction(pMonth, ['create', 'listView']);
+    addAction(pWeek, ['create', 'listView']);
+    addAction(pList, ['calendarView']);
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;
-        var self = this,
-            ids = this.getIds ? this.getIds() : [];
-
-        //get full data, needed for require checks for example
-        api.getList(list).done(function (data) {
-            // extract single object if length === 1
-            data = data.length === 1 ? data[0] : data;
-            // draw toolbar
-            var baton = ext.Baton({data: data, app: self, allIds: ids});
-             // handle updated baton to pageController
-            self.pages.getToolbar('detailView').setBaton(baton);
-            self.pages.getSecondaryToolbar('mainView').setBaton(baton);
-        });
+        // extract single object if length === 1
+        list = list.length === 1 ? list[0] : list;
+        // draw toolbar
+        var baton = ext.Baton({data: list, app: this });
+        this.pages.getToolbar('month').setBaton(baton);
+        this.pages.getToolbar('week').setBaton(baton);
+        this.pages.getToolbar('list').setBaton(baton);
 
     }, 10);
-    */
+
+    function prepareUpdateToolbar(app) {
+        var list = app.pages.getCurrentPage().name === 'list' ? app.getGrid().selection.get() : {};
+        app.updateToolbar(list);
+    }
+
     // some mediator extensions
     // register update function and introduce toolbar updating
     ext.point('io.ox/calendar/mediator').extend({
         id: 'toolbar-mobile',
         index: 10100,
-        setup: function () {
+        setup: function (app) {
             if (_.device('!smartphone')) return;
-            //app.updateToolbar = updateToolbar;
+            app.updateToolbar = updateToolbar;
         }
     });
 
     ext.point('io.ox/calendar/mediator').extend({
         id: 'update-toolbar-mobile',
         index: 10300,
-        setup: function () {
-            if (!_.device('smartphone')) return;
-            // folder change
-            /*
-            function fnFolderChange() {
-                app.folder.getData().done(function (data) {
-                    var baton = ext.Baton({ data: data, app: app });
-                    // handle updated baton to pageController
-                    app.pages.getToolbar('mainView').setBaton(baton);
-                });
-            }
-
-            app.on('folder:change', fnFolderChange);
-            fnFolderChange();
-
-            // simple select
-            app.on('selection:setup', function () {
-                app.selection.on('select', function (e, id) {
-                    app.updateToolbar(id);
-                });
-            });
-
-            app.on('selection:change', function () {
-                if (!app.props.get('showCheckboxes')) return;
-                app.updateToolbar(app.selection.get());
-            });*/
-        }
-    });
-
-    ext.point('io.ox/calendar/mediator').extend({
-        id: 'toolbar-mobile-defaultactions',
-        index: 10500,
-        setup: function () {
+        setup: function (app) {
             if (_.device('!smartphone')) return;
-            //addAction(pointMainView, ['create', 'view-list', 'view-icon', 'view-tile']);
+            app.updateToolbar();
+            // update toolbar on selection change
+            app.getGrid().selection.on('change', function () {
+                prepareUpdateToolbar(app);
+            });
+            // folder change
+            app.on('folder:change', function () {
+                prepareUpdateToolbar(app);
+            });
+            app.getWindow().on('change:perspective change:initialPerspective', function () {
+                _.defer(prepareUpdateToolbar, app);
+            });
         }
     });
 

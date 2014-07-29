@@ -81,6 +81,11 @@ define('io.ox/calendar/main',
                     app: app,
                     extension: 'io.ox/calendar/mobile/navbar'
                 }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'month',
+                    extension: 'io.ox/calendar/mobile/toolbar'
+                }),
                 startPage: true
             });
 
@@ -91,6 +96,11 @@ define('io.ox/calendar/main',
                     app: app,
                     extension: 'io.ox/calendar/mobile/navbar'
                 }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'week',
+                    extension: 'io.ox/calendar/mobile/toolbar'
+                })
             });
 
             app.pages.addPage({
@@ -100,6 +110,11 @@ define('io.ox/calendar/main',
                     app: app,
                     extension: 'io.ox/calendar/mobile/navbar'
                 }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'list',
+                    extension: 'io.ox/calendar/mobile/toolbar'
+                })
             });
 
             app.pages.addPage({
@@ -402,27 +417,6 @@ define('io.ox/calendar/main',
             app.props.on('change:layout', function (model, value) {
                 console.log('show perspective', value);
                 ox.ui.Perspective.show(app, value);
-            });
-        },
-        /*
-         * This fixes the missing back button for listview's detailview
-         * Can be removed until this App is converted to the Pagecontroller
-         */
-        'mobile-compatibility': function (app) {
-            if (!_.device('smartphone')) return;
-
-            app.left.one('select', function () {
-                var content = app.getWindow().nodes.body.find('.window-content');
-                $(content).append(app.navbar = $('<div class="rightside-navbar">'));
-                app.navbar.append(
-                    $('<a href="#" tabindex="-1">').append(
-                        $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
-                    ).on('tap', function (e) {
-                        e.preventDefault();
-                        app.getGrid().selection.clear();
-                        $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
-                    })
-                );
             });
         },
 

@@ -45,18 +45,30 @@ define('io.ox/calendar/list/perspective',
             optDropdown = null,
             months = 1; // how many months do we display
 
-        this.main.addClass('calendar-list-view vsplit').append(
-            app.left.addClass('border-right'),
+        if (_.device('smartphone')) {
+            app.left.addClass('calendar-list-view vsplit');
             app.right.addClass('default-content-padding calendar-detail-pane f6-target')
-            .attr({
-                'tabindex': 1,
-                'role': 'complementary',
-                'aria-label': gt('Appointment Details')
-            })
-        );
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Appointment Details')
+                });
+            left = app.left;
+            right = app.right;
+        } else {
+            this.main.addClass('calendar-list-view vsplit').append(
+                app.left.addClass('border-right'),
+                app.right.addClass('default-content-padding calendar-detail-pane f6-target')
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Appointment Details')
+                })
+            );
+            left = app.left;
+            right = app.right.scrollable();
+        }
 
-        left = app.left;
-        right = app.right.scrollable();
         this.grid = grid = app.getGrid();
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
@@ -144,8 +156,19 @@ define('io.ox/calendar/list/perspective',
 
         function drawAppointment(data) {
             var baton = ext.Baton({ data: data });
-            if (_.device('!small')) baton.disable('io.ox/calendar/detail', 'inline-actions');
-            right.idle().empty().append(viewDetail.draw(baton));
+            if (_.device('smartphone')) {
+                app.pages.changePage('detailView');
+                var p = app.pages.getPage('detailView');
+                // draw details to page
+
+                p.idle().empty().append(viewDetail.draw(data));
+                // update toolbar with new baton
+                app.pages.getToolbar('detailView').setBaton(baton);
+
+
+            } else {
+                right.idle().empty().append(viewDetail.draw(baton));
+            }
         }
 
         function drawFail(obj) {

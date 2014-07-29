@@ -35,7 +35,7 @@ define('io.ox/calendar/view-detail',
         index: 100,
         id: 'inline-actions',
         draw: function (baton) {
-            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, baton);
+            if (_.device('!smartphone')) ext.point('io.ox/calendar/detail/actions').invoke('draw', this, baton);
         }
     });
 
@@ -346,6 +346,7 @@ define('io.ox/calendar/view-detail',
             try {
                 var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
                 node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(baton.data)));
+
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 
                 return node;

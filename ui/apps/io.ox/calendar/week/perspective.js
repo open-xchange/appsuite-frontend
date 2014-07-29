@@ -52,8 +52,12 @@ define('io.ox/calendar/week/perspective',
                 function success(data) {
 
                     if (_.device('smartphone')) {
-                        var p = self.app.pages.getPage('detailView');
+                        var p = self.app.pages.getPage('detailView'),
+                            b = new ext.Baton({data: data});
+                        // draw details to page
                         p.idle().empty().append(detailView.draw(data));
+                        // update toolbar with new baton
+                        self.app.pages.getToolbar('detailView').setBaton(b);
 
                     } else {
                         self.dialog.show(e, function (popup) {

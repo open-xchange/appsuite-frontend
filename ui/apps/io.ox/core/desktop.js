@@ -769,7 +769,7 @@ define('io.ox/core/desktop',
                 this.main = app.pages.getPage(opt.perspective.split(':')[0]);
 
                 // add to stack
-                //win.addPerspective(this);
+                win.addPerspective(this);
 
                 // trigger change event
                 if (win.currentPerspective !== 'main') {
@@ -779,7 +779,7 @@ define('io.ox/core/desktop',
                 }
 
                 // set perspective (show)
-                win.setPerspective(this);
+                //win.setPerspective(this);
 
                 _.url.hash('perspective', opt.perspective);
 
@@ -1440,19 +1440,18 @@ define('io.ox/core/desktop',
                 };
 
                 this.getPerspective = function () {
-                    console.log(perspectives);
                     var cur = this.currentPerspective.split(':')[0];
                     return perspectives[cur];
                 };
 
-                this.setPerspective = function (pers) {
+                /*this.setPerspective = function (pers) {
                     var id = pers.name, current = this.currentPerspective.split(':')[0];
                     if (id !== current && id in perspectives) {
                         if (current in perspectives) perspectives[current].hide();
                         this.nodes[this.currentPerspective = id].show();
                     }
                     return this;
-                };
+                };*/
 
                 this.currentPerspective = 'main';
 
