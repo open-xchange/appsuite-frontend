@@ -150,6 +150,47 @@
             .picture(16px, 16px);
         }
     }
+
+    .hidden-file-picker {
+
+        // same as .dropdown-menu > li > a
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: normal;
+        line-height: @line-height-base;
+        color: @dropdown-link-color;
+        white-space: nowrap;
+
+        &:hover, &:focus {
+            text-decoration: none;
+            color: @dropdown-link-hover-color;
+            background-color: @dropdown-link-hover-bg;
+        }
+
+        // behave like a link
+        cursor: pointer;
+
+        // support for absolute input[file]
+        position: relative;
+        overflow: hidden;
+
+        input[type="file"] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 999px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            background: #F00;
+            cursor: inherit;
+            display: block;
+            outline: 0;
+        }
+    }
 }
 
 @media (min-width: 1200px) {

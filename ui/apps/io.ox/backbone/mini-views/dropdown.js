@@ -37,11 +37,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.labelNode = options.labelNode;
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
             this.$ul.on('click', 'a', this.onClick.bind(this));
-            this.listenTo(this.model, 'change', this.update);
+            if (this.model) this.listenTo(this.model, 'change', this.update);
         },
 
         update: function () {
             var $ul = this.$ul;
+            if (!this.model) return;
             _(this.model.changed).each(function (value, name) {
                 var li = $ul.find('[data-name="' + name + '"]');
                 if (li.length > 0) {
@@ -51,26 +52,25 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             }, this);
         },
 
-        option: function (name, value, text) {
-            this.$ul.append(
-                $('<li>').append(
-                    $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
-                        $('<i class="fa fa-fw">').addClass(this.model.get(name) === value ? 'fa-check' : 'fa-none'),
-                        $('<span>').text(text)
-                    )
-                )
-            );
+        append: function (fn) {
+            this.$ul.append($('<li>').append(fn));
             return this;
         },
 
-        link: function (name, text, callback) {
-            this.$ul.append(
-                $('<li>').append(
-                    $('<a href="#">', { href: '#', 'data-name': name })
-                    .text(text).on('click', callback)
+        option: function (name, value, text) {
+            return this.append(
+                $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
+                    $('<i class="fa fa-fw">').addClass(this.model.get(name) === value ? 'fa-check' : 'fa-none'),
+                    $('<span>').text(text)
                 )
             );
-            return this;
+        },
+
+        link: function (name, text, callback) {
+            return this.append(
+                $('<a href="#">', { href: '#', 'data-name': name })
+                .text(text).on('click', callback)
+            );
         },
 
         header: function (text) {

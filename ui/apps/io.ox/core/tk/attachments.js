@@ -615,12 +615,13 @@ define('io.ox/core/tk/attachments',
         localFile: function (model) {
             var def = $.Deferred();
             // consider retina displays
-            var size = _.device('retina') ? 240 : 120;
+            // use double size in combination with background-size: cover
+            var size = 2 * (_.device('retina') ? 240 : 120);
             require(['io.ox/contacts/widgets/canvasresize'], function (canvasResize) {
                 canvasResize(model.fileObj, {
                     width: size,
                     height: size,
-                    crop: true,
+                    crop: false,
                     quality: 80,
                     callback: function (data) {
                         var meta = _.clone(model.get('meta'));

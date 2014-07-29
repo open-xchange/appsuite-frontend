@@ -71,42 +71,8 @@ define('io.ox/mail/compose/view',
         index: INDEX += 100,
         draw: function (baton) {
             var node = $('<div class="col-xs-12 col-md-5 col-md-offset-1">');
+            extensions.attachment.call(node, baton);
             this.append(node);
-            extensions.attachment.call(node, baton).done(function ($el) {
-                $el.find('button[data-action="addinternal"]').click(function (e) {
-                    e.preventDefault();
-                    require(['io.ox/files/filepicker'], function (Picker) {
-                        var picker = new Picker({
-                            point: POINT,                   // prefix for custom ext. point
-                            filter: function () {           // filter function
-                                return true;
-                            },
-                            primaryButtonText: gt('Add'),
-                            cancelButtonText: gt('Cancel'),
-                            header: gt('Add files'),
-                            multiselect: true
-                        });
-                        //FIXME: why must the model be binded, here?
-                        picker.then(function (files) {
-                            var list = [];
-                            //fileList to array of files
-                            _(files).each(function (file) {
-                                list.push(_.extend(file, {group: 'file'}));
-                            });
-                            baton.model.attachFiles.call(baton.model, list);
-                        });
-                    });
-                });
-            }).done(function ($el) {
-                $el.find('input[type="file"]').on('change', function (e) {
-                    var list = [];
-                    //fileList to array of files
-                    _(e.target.files).each(function (file) {
-                        list.push(_.extend(file, {group: 'localFile'}));
-                    });
-                    baton.model.attachFiles.call(baton.model, list);
-                });
-            });
         }
     });
 

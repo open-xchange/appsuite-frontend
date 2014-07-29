@@ -299,31 +299,58 @@ define('io.ox/mail/compose/extensions',
             return def;
         },
 
-        attachment: function (baton) {
-            var def = $.Deferred(),
-                dropdown = new Dropdown({ model: baton.model, label: gt('Attachments'), tagName: 'div' });
+        attachment: (function () {
 
-            dropdown.render();
-            this.append(
-                dropdown.$el
-            );
+            function addLocalFile(model, e) {
+                model.attachFiles(
+                    _(e.target.files).map(function (file) {
+                        return _.extend(file, { group: 'localFile' });
+                    })
+                );
+            }
 
-            require(['io.ox/core/tk/attachments'], function (attachments) {
-                var $widget = attachments.fileUploadWidget({
-                    drive: true,
-                    tabindex: 7,
-                    buttontext: gt('Add local file')
+            function openFilePicker(model) {
+                require(['io.ox/files/filepicker'], function (Picker) {
+                    new Picker({
+                        primaryButtonText: gt('Add'),
+                        cancelButtonText: gt('Cancel'),
+                        header: gt('Add attachments'),
+                        multiselect: true,
+                    })
+                    .done(function (files) {
+                        model.attachFiles(
+                            _(files).map(function (file) {
+                                return _.extend(file, { group: 'file' });
+                            })
+                        );
+                    });
                 });
-                $widget.addClass('dropdown-menu');
-                $widget.find('.btn').addClass('btn-link');
-                dropdown.$('ul').remove();
-                dropdown.$el.append($widget);
-                def.resolve($widget);
-            }, def.reject);
-            return def;
-        },
+            }
+
+            return function (baton) {
+
+                var dropdown = new Dropdown({ label: gt('Attachments'), caret: true });
+
+                this.append(
+                    dropdown.append(
+                        // must be <span>; <a href> doesn't work
+                        $('<span role="button" class="hidden-file-picker">').append(
+                            $.txt(gt('Add local file')),
+                            // file input
+                            $('<input type="file" name="file" tabindex="1">')
+                                .on('change', addLocalFile.bind(this, baton.model))
+                                .prop('multiple', true)
+                        )
+                    )
+                    .link('add-file', gt('Add from Drive'), openFilePicker.bind(this, baton.model))
+                    .render().$el
+                );
+            };
+
+        }()),
 
         body: function () {
+
             var self = this,
                 editorId = _.uniqueId('tmce-'),
                 editorToolbarId = _.uniqueId('tmcetoolbar-');
