@@ -263,7 +263,7 @@ define('io.ox/core/page-controller',
                 if (!secondary) {
                     bar.render();
                 }
-            } else {
+            } else if (app.toolbar) {
                 // if there is no toolbar defined for the current page, hide the whole container
                 app.toolbar.children().detach();
                 app.toolbar.hide();
