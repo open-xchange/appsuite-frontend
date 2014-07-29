@@ -165,7 +165,7 @@ define('io.ox/mail/compose/view',
             signatureDropdown.$ul.addClass('pull-right');
 
             this.append(
-                $('<div class="col-xs-6 col-md-3 pull-right text-right">').append(
+                $('<div class="col-xs-12 col-md-6 pull-right text-right">').append(
                     signatureDropdown.render().$el.addClass('signatures text-left'),
                     optionDropdown.render().$el.addClass('text-left')
                 )

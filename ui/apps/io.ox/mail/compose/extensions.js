@@ -75,8 +75,8 @@ define('io.ox/mail/compose/extensions',
         title: function () {
             this.append(
                 $('<div class="row header" data-extension-id="title">').append(
-                    $('<h1 class="col-md-6 clear-title title">').text(gt('Compose new mail')),
-                    $('<div class="col-md-6 text-right">').append(
+                    $('<h1 class="col-md-6 hidden-xs clear-title title">').text(gt('Compose new mail')),
+                    $('<div class="col-xs-12 col-sm-6 text-right">').append(
                         $('<button type="button" class="btn btn-default" data-action="discard">').text(gt('Discard')),
                         $('<button type="button" class="btn btn-default" data-action="save">').text(gt('Save')),
                         $('<button type="button" class="btn btn-primary" data-action="send">').text(gt('Send'))
