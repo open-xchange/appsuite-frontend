@@ -1049,30 +1049,6 @@ define('io.ox/core/desktop',
                         }
                         node.show();
 
-                        scrollTo(node, function () {
-                            if (self === null) return;
-                            if (currentWindow && currentWindow !== self) {
-                                currentWindow.hide();
-                            }
-                            currentWindow = self;
-                            _.call(cont);
-                            self.state.visible = true;
-                            self.state.open = true;
-                            self.trigger('show');
-                            if (_.device('!small')) {
-                                document.title = document.customTitle = gt.format(
-                                    //#. Title of the browser window
-                                    //#. %1$s is the name of the page, e.g. OX App Suite
-                                    //#. %2$s is the title of the active app, e.g. Calendar
-                                    gt.pgettext('window title', '%1$s %2$s'),
-                                    _.noI18n(ox.serverConfig.pageTitle),
-                                    self.getTitle()
-                                );
-                            } else {
-                                document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
-                            }
-
-                        //scrollTo(node, function () {
                         if (self === null) return;
                         if (currentWindow && currentWindow !== self) {
                             currentWindow.hide();
@@ -1108,7 +1084,6 @@ define('io.ox/core/desktop',
                         ox.ui.windowManager.trigger('window.show', self);
                         ox.ui.apps.trigger('resume', self.app);
 
-                        //});
                     } else {
                         _.call(cont);
                     }
