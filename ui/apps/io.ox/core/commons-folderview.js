@@ -168,7 +168,7 @@ define('io.ox/core/commons-folderview',
             index: 300,
             draw: function (baton) {
                 // enabled for app?
-                if (!baton.app.getWindow().options.facetedsearch) return;
+                if (!baton.app.getWindow().options.facetedsearch || _.device('small')) return;
                 // add space
                 this.find('.foldertree-container')
                     .addClass('top-toolbar');
