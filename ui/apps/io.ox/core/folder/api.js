@@ -48,7 +48,7 @@ define('io.ox/core/folder/api',
     }
 
     function isFlat(id) {
-        return /^flat\/([^/]+)\/([^/]+)$/.exec(id);
+        return /^(contacts|calendar|tasks)$/.test(id);
     }
 
     function getCollectionId(id, all) {
@@ -96,12 +96,14 @@ define('io.ox/core/folder/api',
             return this.models[id];
         },
 
-        addCollection: function (id, list) {
+        addCollection: function (id, list, options) {
             // transform list to models
             var models = _(list).map(this.addModel, this);
+            // options
+            options = options || {};
             // update collection
             var collection = this.getCollection(id),
-                type = collection.fetched ? 'set' : 'reset';
+                type = options.reset || !collection.fetched ? 'reset' : 'set';
             collection[type](models);
             collection.fetched = true;
         },
@@ -271,7 +273,7 @@ define('io.ox/core/folder/api',
         }
 
         // flat?
-        var data = isFlat(id), module, section;
+        var data = /^flat\/([^/]+)\/([^/]+)$/.exec(id), module, section;
         if (data) {
             module = data[1];
             section = data[2];
@@ -349,7 +351,14 @@ define('io.ox/core/folder/api',
         return http.makeObject(array, 'folders');
     }
 
+    function getSection(type) {
+        if (type === 3) return 'shared';
+        if (type === 2) return 'public';
+        return 'private';
+    }
+
     function getFlatCollectionId(module, section) {
+
         return 'flat/' + module + '/' + section;
     }
 
@@ -394,10 +403,11 @@ define('io.ox/core/folder/api',
         .then(function (data) {
             var sections = {},
                 hidden = [],
-                hash = settings.get(['folder/hidden'], {});
+                hash = settings.get(['folder/hidden'], {}),
+                collectionId;
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
-                sections[id] = _(section)
+                var array = _(section)
                     .chain()
                     .map(makeObject)
                     .filter(function (folder) {
@@ -409,10 +419,15 @@ define('io.ox/core/folder/api',
                         return true;
                     })
                     .value();
-                pool.addCollection(getFlatCollectionId(module, id), sections[id]);
+                // process response and add to pool
+                collectionId = getFlatCollectionId(module, id);
+                array = processListResponse(collectionId, array);
+                pool.addCollection(collectionId, sections[id] = array, { reset: true });
             });
             // add collection for hidden folders
-            pool.addCollection(getFlatCollectionId(module, 'hidden'), sections.hidden = hidden);
+            collectionId = getFlatCollectionId(module, 'hidden');
+            hidden = processListResponse(collectionId, hidden);
+            pool.addCollection(collectionId, sections.hidden = hidden, { reset: true });
             // done
             return sections;
         });
@@ -500,6 +515,8 @@ define('io.ox/core/folder/api',
 
         // get parent folder first - actually just to inherit 'module';
         return get(id).then(function (parent) {
+            // get module
+            var module = parent.module;
             // go!
             return http.PUT({
                 module: 'folders',
@@ -507,7 +524,7 @@ define('io.ox/core/folder/api',
                     action: 'new',
                     autorename: true,
                     folder_id: id,
-                    module: data.module || parent.module,
+                    module: module,
                     tree: '1'
                 },
                 data: data,
@@ -515,7 +532,7 @@ define('io.ox/core/folder/api',
             })
             .then(function () {
                 // reload parent folder's sub-folders
-                return list(id, { cache: false });
+                return isFlat(module) ? flat({ module: module, cache: false }) : list(id, { cache: false });
             })
             .done(function () {
                 // update parent folder
@@ -536,19 +553,34 @@ define('io.ox/core/folder/api',
     // Remove folder
     //
 
+    function removeFromCollection(model) {
+        // flat folders are different
+        var module = model.get('module'), section, parent, collection;
+        if (isFlat(module)) {
+            // contacts, calendar, tasks
+            section = getSection(model.get('type'));
+            collection = getFlatCollection(module, section);
+            collection.remove(model);
+        } else {
+            // mail and drive
+            parent = model.get('folder_id');
+            collection = pool.getCollection(parent);
+            collection.remove(model);
+            // update parent folder; subfolders might have changed
+            pool.getModel(parent).set('subfolders', collection.length > 0);
+        }
+    }
+
     function remove(id) {
 
         // get model
-        var model = pool.getModel(id),
-            data = model.toJSON(),
-            parent = model.get('folder_id'),
-            collection = pool.getCollection(parent);
+        var model = pool.getModel(id), data = model.toJSON();
+
         // trigger event
         api.trigger('remove:prepare', data);
-        // remove model from collection
-        collection.remove(model);
-        // update parent folder; subfolders might have changed
-        pool.getModel(parent).set('subfolders', collection.length > 0);
+
+        // update collection
+        removeFromCollection(model);
 
         // delete on server
         return http.PUT({
@@ -710,6 +742,7 @@ define('io.ox/core/folder/api',
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,
         changeUnseenCounter: changeUnseenCounter,
+        getSection: getSection,
         Bitmask: Bitmask
     });
 
