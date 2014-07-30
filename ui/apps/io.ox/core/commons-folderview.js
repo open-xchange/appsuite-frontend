@@ -170,8 +170,7 @@ define('io.ox/core/commons-folderview',
                 // enabled for app?
                 if (!baton.app.getWindow().options.facetedsearch) return;
                 // add space
-                baton.$.sidepanel
-                    .find('foldertree-container')
+                this.find('.foldertree-container')
                     .addClass('top-toolbar');
             }
         });

@@ -1333,11 +1333,11 @@ define('io.ox/core/desktop',
                         nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">')
                                         .addClass('io-ox-busy');
 
-                        //facets container
+                        // facets container
                         nodes.container = $('<div class="abs search-container">')
                                         .append('<ul class="search-facets">')
                                         .hide();
-                        //add nodes
+                        // add nodes
                         side.append(nodes.toolbar, nodes.container);
                     },
 
