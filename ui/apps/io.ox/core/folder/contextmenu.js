@@ -89,11 +89,11 @@ define('io.ox/core/folder/contextmenu',
         //
         empty: function (baton) {
 
-            if (baton.module !== 'mail') return;
+            if (baton.module !== 'mail' && baton.module !== 'infostore') return;
 
             addLink(this, {
                 action: 'clearfolder',
-                data: { id: baton.data.id },
+                data: { id: baton.data.id, module: baton.module },
                 enabled: api.can('delete', baton.data),
                 handler: actions.clearFolder,
                 text: gt('Empty folder')
