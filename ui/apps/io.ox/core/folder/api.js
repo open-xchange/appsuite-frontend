@@ -654,6 +654,15 @@ define('io.ox/core/folder/api',
     }
 
     //
+    // Change unseen count
+    //
+
+    function changeUnseenCounter(id, delta) {
+        var model = pool.getModel(id);
+        model.set('unread', Math.max(0, model.get('unread') + delta));
+    }
+
+    //
     // Refresh all folders
     //
 
@@ -700,6 +709,7 @@ define('io.ox/core/folder/api',
         getFolderTitle: getFolderTitle,
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,
+        changeUnseenCounter: changeUnseenCounter,
         Bitmask: Bitmask
     });
 

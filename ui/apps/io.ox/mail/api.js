@@ -414,6 +414,16 @@ define('io.ox/mail/api',
         GRAY:        4
     };
 
+    // respond to change:flags
+    pool.get('detail').on('change:flags', function (model) {
+        // get previous and current flags to determine if unseen bit has changed
+        var previous = util.isUnseen(model.previous('flags')),
+            current = util.isUnseen(model.get('flags'));
+        if (previous === current) return;
+        // update folder
+        folderAPI.changeUnseenCounter(model.get('folder_id'), current ? +1 : -1);
+    });
+
     // control for each folder:
     // undefined -> first fetch
     // true -> has been fetched in this session
