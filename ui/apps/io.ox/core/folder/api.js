@@ -394,7 +394,7 @@ define('io.ox/core/folder/api',
         .then(function (data) {
             var sections = {},
                 hidden = [],
-                hash = settings.get(['folder/hidden', module], {});
+                hash = settings.get(['folder/hidden'], {});
             // loop over results to get proper objects and sort out hidden folders
             _(data).each(function (section, id) {
                 sections[id] = _(section)
@@ -632,7 +632,7 @@ define('io.ox/core/folder/api',
         // get model & module
         var model = pool.getModel(id), module = model.get('module');
         // change state
-        settings.set(['folder/hidden', module, id], true).save();
+        settings.set(['folder/hidden', id], true).save();
         // reload sections; we could handle this locally
         // but this is a dead-end when it comes to sorting
 
@@ -643,7 +643,7 @@ define('io.ox/core/folder/api',
         // get model & module
         var model = pool.getModel(id), module = model.get('module');
         // change state
-        settings.remove(['folder/hidden', module, id]).save();
+        settings.remove(['folder/hidden', id]).save();
         // reload sections; we could handle this locally
         // but this is a dead-end when it comes to sorting
         flat({ module: module, cache: false });

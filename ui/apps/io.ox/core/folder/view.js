@@ -185,10 +185,10 @@ define('io.ox/core/folder/view',
 
         // migrate hidden folders
         if (module) {
-            var hidden = settings.get(['folder/hidden', module]); // yep, folder/hidden is one key
+            var hidden = settings.get(['folder/hidden']); // yep, folder/hidden is one key
             if (hidden === undefined) {
                 hidden = app.settings.get('folderview/blacklist', {});
-                if (_.isObject(hidden)) settings.set(['folder/hidden', module], hidden).save();
+                if (_.isObject(hidden)) settings.set(['folder/hidden'], hidden).save();
             }
         }
 
