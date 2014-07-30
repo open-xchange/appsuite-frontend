@@ -37,6 +37,9 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
                 // using a regex is 50-100 times faster than looping over the characters
                 hasEmoji = /[\xa9\xae\u0100-\uffff]/.test(text);
 
+            // need to escape text because the return value is html and it might be used by $().html(...)
+            text = _.escape(text);
+
             function cont(text) {
                 if (callback) callback(text, { loaded: !!emoji });
                 return text;

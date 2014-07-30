@@ -110,8 +110,6 @@ define('io.ox/mail/threadview',
         }
     });
 
-
-
     var ThreadView = Backbone.View.extend({
 
         tagName: 'div',
