@@ -266,8 +266,7 @@ define('io.ox/calendar/freebusy/controller',
                     keyboard: false,
                     mode: mode,
                     refDate: refDate,
-                    showFulltime: false,
-                    todayClass: ''
+                    showFulltime: false
                 });
 
                 currentMode = mode;
