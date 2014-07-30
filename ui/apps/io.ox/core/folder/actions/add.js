@@ -17,9 +17,8 @@ define('io.ox/core/folder/actions/add',
      'io.ox/core/tk/dialogs',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
-     'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (api, dialogs, ext, notifications, settings, gt) {
+    ], function (api, dialogs, ext, notifications, gt) {
 
     'use strict';
 
@@ -52,6 +51,22 @@ define('io.ox/core/folder/actions/add',
         });
     }
 
+    function getTitle(folder, module) {
+        if (module === 'mail' || module === 'infostore') {
+            return gt('New subfolder');
+        }
+        else if (folder === '2') {
+            return module === 'calendar' ? gt('New public calendar') : gt('New public folder');
+        }
+        else {
+            return module === 'calendar' ? gt('New private calendar') : gt('New private folder');
+        }
+    }
+
+    function getName(module) {
+        return module === 'calendar' ? gt('New calendar') : gt('New folder');
+    }
+
     /**
      * @param folder {string} (optional) folder id
      * @param opt {object} (optional) options object - will be forwarded
@@ -60,13 +75,9 @@ define('io.ox/core/folder/actions/add',
     return function (folder, opt) {
 
         if (!folder) return;
-        opt = opt || {};
-        folder = String(folder);
 
-        var isContacts = String(settings.get('folder/contacts')) === folder,
-            isCalendar = String(settings.get('folder/calendar')) === folder,
-            isTasks =  String(settings.get('folder/tasks')) === folder,
-            isPrivate = isContacts || isCalendar || isTasks;
+        folder = String(folder);
+        opt = opt || {};
 
         new dialogs.ModalDialog({
             async: true,
@@ -74,30 +85,25 @@ define('io.ox/core/folder/actions/add',
             enter: 'add'
         })
         .header(
-            $('<h4>').text(
-                isPrivate ? gt('New private folder') :
-                folder === '2' ? gt('New public folder') :
-                folder === '1' ? gt('New folder') : gt('New subfolder')
-            )
+            $('<h4>').text(getTitle(folder, opt.module))
         )
         .build(function () {
             var guid = _.uniqueId('label_');
             this.getContentNode().append(
                 $('<div class="form-group">').append(
-                    $('<label class="sr-only">').text(gt('New folder')).attr('for', guid),
-                    $('<input type="text" class="form-control">').attr({'id': guid, 'placeholder': gt('Folder name')})
+                    $('<label class="sr-only">').text(gt('Folder name')).attr('for', guid),
+                    $('<input type="text" class="form-control">').attr({ id: guid, placeholder: gt('Folder name') })
                 )
             );
         })
-        .addPrimaryButton('add', gt('Add folder'))
+        .addPrimaryButton('add', gt('Add'))
         .addButton('cancel', gt('Cancel'))
         .on('add', function () {
             add(folder, this.getContentNode().find('input').val(), opt)
                 .then(this.close, this.idle);
         })
         .show(function () {
-            this.find('input').val(gt('New folder')).focus().select();
+            this.find('input').val(getName(opt.module)).focus().select();
         });
     };
-
 });
