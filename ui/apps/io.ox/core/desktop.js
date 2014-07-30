@@ -275,19 +275,15 @@ define('io.ox/core/desktop',
                         return $.Deferred().resolve(model.toJSON());
                     },
 
-                    can: function (action)
-                    {
-                        var  def = new $.Deferred();
-                        if (folder === null) {
-                            return def.resolve(false);
-                        }
-                        require(['io.ox/core/api/folder']).pipe(function (api) {
-                            api.get({ folder: folder }).done(function (data) {
-                                def.resolve(api.can(action, data));
+                    can: function (action) {
+
+                        if (folder === null) return $.when(false);
+
+                        return require(['io.ox/core/folder/api']).then(function (api) {
+                            return api.get({ folder: folder }).then(function (data) {
+                                return api.can(action, data);
                             });
                         });
-
-                        return def;
                     },
 
                     updateTitle: function (w) {
