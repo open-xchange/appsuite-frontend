@@ -10,8 +10,10 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  *
- * Use this to try the new mail compose:
- * require(['settings!io.ox/core'], function (o) { o.set(['registry', 'mail', 'compose'], 'io.ox/mail/compose/main').save(); });
+ * To try new mail compose:
+ * require('settings!io.ox/core').set(['registry', 'mail', 'compose'], 'io.ox/mail/compose/main').save();
+ * To use old mail compose:
+ * require('settings!io.ox/core').set(['registry', 'mail', 'compose'], undefined).save();
  */
 
 define('io.ox/mail/compose/main',

@@ -1478,20 +1478,22 @@ define('io.ox/core/main',
     (function ()  {
 
         var hash = {
-            'mail': { 'compose': 'io.ox/mail/write/main' }
+            mail: {
+                compose: 'io.ox/mail/write/main'
+            }
         };
 
         ox.registry = {
-            'set': function (id, path) {
+            set: function (id, path) {
                 hash[id] = path;
             },
-            'get': function (id) {
-                return id.split('/').reduce(function (prev, cur) {
-                    return prev[cur];
+            get: function (id) {
+                return _(id.split('/')).reduce(function (current, key) {
+                    return current[key] || {};
                 }, hash) || id;
             },
-            'call': function (id, name) {
-                var dep = settings.get(('registry/' + id).split('/'), this.get(id)),
+            call: function (id, name) {
+                var dep = settings.get(('registry/' + id).split('/')) || this.get(id),
                     args = _(arguments).toArray().slice(2);
                 return ox.load([dep]).then(function (m) {
                     if (m.reuse(name, args[0])) return;
