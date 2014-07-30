@@ -1086,7 +1086,8 @@ define('io.ox/mail/main',
         var win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: 'Inbox',
-            chromeless: true
+            chromeless: true,
+            facetedsearch: true
         });
 
         app.setWindow(win);

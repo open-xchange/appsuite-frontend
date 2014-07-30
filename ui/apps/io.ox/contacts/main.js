@@ -743,7 +743,8 @@ define('io.ox/contacts/main',
         // get window
         var win = ox.ui.createWindow({
             name: 'io.ox/contacts',
-            chromeless: true
+            chromeless: true,
+            facetedsearch: true
         });
 
         app.setWindow(win);

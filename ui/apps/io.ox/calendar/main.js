@@ -214,7 +214,8 @@ define('io.ox/calendar/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            chromeless: _.device('!small')
+            chromeless: _.device('!small'),
+            facetedsearch: true
         }));
 
         app.settings = settings;

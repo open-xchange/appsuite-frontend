@@ -415,6 +415,7 @@ define('io.ox/files/main',
             name: 'io.ox/files',
             title: 'Drive',
             chromeless: true,
+            facetedsearch: true,
             usePageController: _.device('smartphone')
         }));
 

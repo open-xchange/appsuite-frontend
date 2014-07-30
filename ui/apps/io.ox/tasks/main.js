@@ -543,7 +543,8 @@ define('io.ox/tasks/main',
         win = ox.ui.createWindow({
             name: 'io.ox/tasks',
             title: 'Tasks',
-            chromeless: true
+            chromeless: true,
+            facetedsearch: true
         });
 
         win.addClass('io-ox-tasks-main');
