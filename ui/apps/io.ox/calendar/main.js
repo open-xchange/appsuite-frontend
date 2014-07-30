@@ -206,7 +206,11 @@ define('io.ox/calendar/main',
         },
 
         'inplace-search': function (app) {
-            if (_.device('small') || !(capabilities.has('search'))) return;
+
+            if (_.device('small') || !capabilities.has('search')) return;
+
+            var win = app.getWindow(), side = win.nodes.sidepanel;
+            side.addClass('top-toolbar');
 
             require(['io.ox/search/main'], function (facetedsearch) {
                 //register
@@ -222,7 +226,7 @@ define('io.ox/calendar/main',
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
             chromeless: _.device('!small'),
-            facetedsearch: true
+            facetedsearch: capabilities.has('search')
         }));
 
         app.settings = settings;

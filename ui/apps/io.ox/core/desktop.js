@@ -1336,32 +1336,30 @@ define('io.ox/core/desktop',
                     active: false,
                     lastFocus: '',
                     init: function () {
+
                         var side = self.nodes.sidepanel,
                             nodes = self.nodes.facetedsearch = {};
 
                         // search field
-                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">')
-                                        .addClass('io-ox-busy');
+                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search io-ox-busy">');
 
                         // facets container
-                        nodes.container = $('<div class="abs search-container">')
-                                        .append(
-                                            // active facets
-                                            $('<ul class="search-facets">'),
-                                            // cancel button
-                                            $('<button type="button" class="btn btn-default">')
-                                                .text(gt('Cancel'))
-                                                .css({
-                                                    position: 'absolute',
-                                                    bottom: '13px',
-                                                    right: '13px'
-                                                })
-                                                .on('click', function (e) {
-                                                    e.preventDefault();
-                                                    self.facetedsearch.view.trigger('button:clear');
-                                                })
-                                        )
-                                        .hide();
+                        nodes.container = $('<div class="abs search-container">').hide().append(
+                            // active facets
+                            $('<ul class="search-facets">'),
+                            // cancel button
+                            $('<button type="button" class="btn btn-primary">')
+                                .text(gt('Close search'))
+                                .css({
+                                    position: 'absolute',
+                                    bottom: '13px',
+                                    right: '13px'
+                                })
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    self.facetedsearch.view.trigger('button:clear');
+                                })
+                        );
                         // add nodes
                         side.append(nodes.toolbar, nodes.container);
                     },
@@ -1369,7 +1367,7 @@ define('io.ox/core/desktop',
                     toggle: function () {
                         // show: search container
                         // hide: tree, tree bottom toolbar
-                        var selector = '.foldertree-container, .generic-toolbar.bottom, .search-container',
+                        var selector = '.folder-tree, .generic-toolbar.bottom, .search-container',
                             nodes = self.nodes.sidepanel.find(selector);
                         nodes.toggle();
                         this.active = !this.active;

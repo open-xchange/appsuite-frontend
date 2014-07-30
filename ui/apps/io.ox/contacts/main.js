@@ -731,7 +731,11 @@ define('io.ox/contacts/main',
         },
 
         'inplace-search': function (app) {
-            if (_.device('small') || !(capabilities.has('search'))) return;
+
+            if (_.device('small') || !capabilities.has('search')) return;
+
+            var win = app.getWindow(), side = win.nodes.sidepanel;
+            side.addClass('top-toolbar');
 
             require(['io.ox/search/main'], function (facetedsearch) {
                 //register
@@ -747,7 +751,7 @@ define('io.ox/contacts/main',
         var win = ox.ui.createWindow({
             name: 'io.ox/contacts',
             chromeless: true,
-            facetedsearch: true
+            facetedsearch: capabilities.has('search')
         });
 
         app.setWindow(win);

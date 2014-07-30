@@ -36,7 +36,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, FolderView, TreeView, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
 
     'use strict';
 
@@ -1004,13 +1004,15 @@ define('io.ox/mail/main',
 
         'inplace-search': function (app) {
 
-            if (_.device('small') || !(capabilities.has('search'))) return;
+            if (_.device('small') || !capabilities.has('search')) return;
+
+            var win = app.getWindow(), side = win.nodes.sidepanel;
+            side.addClass('top-toolbar');
 
             require(['io.ox/search/main',  'io.ox/core/api/collection-loader'], function (search, CollectionLoader) {
+
                 // define collection loader for search results
-                var win = app.getWindow(),
-                    side = win.nodes.sidepanel,
-                    collectionLoader = new CollectionLoader({
+                var collectionLoader = new CollectionLoader({
                         module: 'mail',
                         fetch: function () {
                             var params = { sort: app.props.get('sort'), order: app.props.get('order') };
@@ -1053,7 +1055,6 @@ define('io.ox/mail/main',
                     app.listView.load();
                     //win.facetedsearch.view.model.reset();
                 });
-
             });
         }
     });
@@ -1066,7 +1067,7 @@ define('io.ox/mail/main',
             name: 'io.ox/mail',
             title: 'Inbox',
             chromeless: true,
-            facetedsearch: true
+            facetedsearch: capabilities.has('search')
         });
 
         app.setWindow(win);

@@ -44,12 +44,14 @@ define('io.ox/core/folder/tree',
             this.context = options.context || 'app';
             this.all = !!options.all;
             this.selection = new Selection(this);
-            this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
+            this.$el.data('view', this);
+            this.$container = $('<div class="tree-container" role="tree" tabindex="1">');
             this.$dropdown = $();
             this.$dropdownMenu = $();
             this.options = options;
 
             this.$el.toggleClass('visible-selection', _.device('!smartphone'));
+            this.$el.append(this.$container);
 
             // add contextmenu?
             if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));
@@ -210,7 +212,7 @@ define('io.ox/core/folder/tree',
         }()),
 
         render: function () {
-            ext.point('io.ox/core/foldertree/' + this.module + '/' + this.context).invoke('draw', this.$el, this);
+            ext.point('io.ox/core/foldertree/' + this.module + '/' + this.context).invoke('draw', this.$container, this);
             return this;
         }
     });

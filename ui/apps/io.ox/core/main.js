@@ -721,39 +721,39 @@ define('io.ox/core/main',
             }
         });
 
-        ext.point('io.ox/core/topbar/right').extend({
-            id: 'search',
-            index: 150,
-            draw: function () {
-                if (capabilities.has('search') && !(_.device('small'))) {
-                    this.append(
-                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
-                                        var app = ox.ui.App.getCurrentApp();
+        // ext.point('io.ox/core/topbar/right').extend({
+        //     id: 'search',
+        //     index: 150,
+        //     draw: function () {
+        //         if (capabilities.has('search') && !(_.device('small'))) {
+        //             this.append(
+        //                 addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+        //                                 var app = ox.ui.App.getCurrentApp();
 
-                                        // TODO: remove temporary evil hack
-                                        if (!app.getWindow().options.facetedsearch) {
-                                            // load search default app
-                                            var e = $.Event('click');
-                                            $('.launcher[data-app-name="io.ox/mail"]')
-                                                .find('a')
-                                                .trigger(e);
-                                            app = ox.ui.App.getCurrentApp();
-                                        }
+        //                                 // TODO: remove temporary evil hack
+        //                                 if (!app.getWindow().options.facetedsearch) {
+        //                                     // load search default app
+        //                                     var e = $.Event('click');
+        //                                     $('.launcher[data-app-name="io.ox/mail"]')
+        //                                         .find('a')
+        //                                         .trigger(e);
+        //                                     app = ox.ui.App.getCurrentApp();
+        //                                 }
 
-                                        if (app.props) {
-                                            // active app suppors search
-                                            if (!app.props.get('folderview'))
-                                                app.props.set('folderview', true);
-                                            app.getWindow().nodes.facetedsearch.toolbar.find('.search-field').focus();
-                                        }
+        //                                 if (app.props) {
+        //                                     // active app suppors search
+        //                                     if (!app.props.get('folderview'))
+        //                                         app.props.set('folderview', true);
+        //                                     app.getWindow().nodes.facetedsearch.toolbar.find('.search-field').focus();
+        //                                 }
 
-                            },  gt('Search'))
-                        .attr('id', 'io-ox-search-topbar-icon')
-                        .addClass('io-ox-search')
-                    );
-                }
-            }
-        });
+        //                     },  gt('Search'))
+        //                 .attr('id', 'io-ox-search-topbar-icon')
+        //                 .addClass('io-ox-search')
+        //             );
+        //         }
+        //     }
+        // });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'search-mobile',

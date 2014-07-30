@@ -526,7 +526,11 @@ define('io.ox/tasks/main',
         },
 
         'inplace-search': function (app) {
-           if (_.device('small') || !(capabilities.has('search'))) return;
+
+            if (_.device('small') || !capabilities.has('search')) return;
+
+            var win = app.getWindow(), side = win.nodes.sidepanel;
+            side.addClass('top-toolbar');
 
             require(['io.ox/search/main'], function (facetedsearch) {
                 //register
@@ -552,7 +556,7 @@ define('io.ox/tasks/main',
             name: 'io.ox/tasks',
             title: 'Tasks',
             chromeless: true,
-            facetedsearch: true
+            facetedsearch: capabilities.has('search')
         });
 
         win.addClass('io-ox-tasks-main');

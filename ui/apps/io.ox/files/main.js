@@ -391,7 +391,11 @@ define('io.ox/files/main',
         },
 
         'inplace-search': function (app) {
-            if (_.device('small') || !(capabilities.has('search'))) return;
+
+            if (_.device('small') || !capabilities.has('search')) return;
+
+            var win = app.getWindow(), side = win.nodes.sidepanel;
+            side.addClass('top-toolbar');
 
             require(['io.ox/search/main'], function (facetedsearch) {
                 //add reference: used in perspective
@@ -421,7 +425,7 @@ define('io.ox/files/main',
             name: 'io.ox/files',
             title: 'Drive',
             chromeless: true,
-            facetedsearch: true,
+            facetedsearch: capabilities.has('search'),
             usePageController: _.device('smartphone')
         }));
 

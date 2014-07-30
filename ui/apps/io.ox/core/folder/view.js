@@ -213,9 +213,7 @@ define('io.ox/core/folder/view',
             }, 10));
         } else {
             // add border & render tree and add to DOM
-            sidepanel.addClass('border-right').append(
-                tree.render().$el.addClass('bottom-toolbar')
-            );
+            sidepanel.addClass('border-right').append(tree.render().$el);
         }
 
         // a11y adjustments

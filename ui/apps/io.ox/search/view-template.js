@@ -89,7 +89,7 @@ define('io.ox/search/view-template',
                                 'data-placement': 'bottom',
                                 'data-animation': 'false',
                                 'data-container': 'body',
-                                'data-original-title': gt('Close Search')
+                                'data-original-title': gt('Close search')
                             }).append(
                                 $('<i class="fa fa-times"></i>')
                             )
