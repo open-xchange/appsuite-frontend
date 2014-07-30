@@ -180,32 +180,29 @@ define('io.ox/mail/compose/extensions',
                     }
                 }).on({
                     'tokenfield:createdtoken': function (e) {
-
                         // for validation etc.
                         ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
-
+                        // add contact picture
                         if (e.attrs) {
                             var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
-                            _.extend(data, { width: 16, height: 16, scaleType: 'contain', hideOnFallback: true });
+                            _.extend(data, { width: 16, height: 16, scaleType: 'contain' });
                             $(e.relatedTarget).prepend(
                                 contactsAPI.pictureHalo($('<div class="contact-image">'), data)
                             );
                         }
                     },
                     'change': function () {
-                        baton.model.setTokens(attr, input.tokenfield('getTokens'));
+                        baton.model.setTokens(attr, $(this).tokenfield('getTokens'));
                     }
                 });
 
+                // bind tokeninput to model and set initial values
                 baton.model.on('change:' + attr, function () {
-                    input.tokenfield('setTokens', baton.model.getTokens(attr), false, false);
-                });
+                    input.tokenfield('setTokens', this.getTokens(attr), false, false);
+                }).trigger('change:' + attr);
 
                 // add class to tokenfield wrapper
                 input.parent().addClass(attr);
-
-                // set initial values
-                input.tokenfield('setTokens', baton.model.getTokens(attr) || [], true, false);
 
                 // init drag 'n' drop sort
                 input.closest('div.tokenfield').sortable({
@@ -216,7 +213,7 @@ define('io.ox/mail/compose/extensions',
                     revert: 50,
                     forcePlaceholderSize: true,
                     update: function () {
-                        baton.model.setTokens(attr, input.tokenfield('getTokens'));
+                        input.change();
                     }
                 });
             };
