@@ -112,7 +112,7 @@ define('io.ox/core/folder/actions/move',
 
             var model = api.pool.getModel(id),
                 module = model.get('module'),
-                flat = /^(contacts|calendar|infostore)$/.test(module);
+                flat = api.isFlat(module);
 
             picker({
                 async: true,
