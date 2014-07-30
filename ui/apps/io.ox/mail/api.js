@@ -733,12 +733,18 @@ define('io.ox/mail/api',
 
     /**
      * deletes all mails from a specific folder
-     * @param  {string} folder_id
+     * @param  {string} id
      * @fires  api#refresh.all
      * @return {deferred}
      */
-    api.clear = function (folder_id) {
-        notifications.yell('info', gt('Emptying folder... This may take a few seconds.'));
+    api.clear = function (id) {
+
+        // clear target folder
+        _(pool.getByFolder(id)).each(function (collection) {
+            collection.expired = true;
+            collection.reset();
+        });
+
         // new clear
         return http.PUT({
             module: 'folders',
@@ -747,20 +753,16 @@ define('io.ox/mail/api',
                 action: 'clear',
                 tree: '1'
             },
-            data: [folder_id]
+            data: [id]
         })
         .then(function (data) {
-            return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
+            return api.caches.all.grepRemove(id + DELIM).pipe(function () {
                 api.trigger('refresh.all');
                 return data;
             });
         })
         .then(function () {
             return resetTrashFolders();
-        })
-        .done(function () {
-            notifications.yell('success', gt('The folder has been emptied.'));
-            folderAPI.refresh();
         });
     };
 

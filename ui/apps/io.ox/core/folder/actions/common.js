@@ -36,19 +36,19 @@ define('io.ox/core/folder/actions/common',
         },
 
         clearFolder: function (e) {
-            var baton = e.data.baton,
-            id = _(baton.app.folderView.selection.get()).first();
+            var id = e.data.id;
             folderAPI.get(id).done(function (folder) {
                 new dialogs.ModalDialog()
                     .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
-                    .addPrimaryButton('delete', gt('Empty folder'), 'delete', {tabIndex: '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            mailAPI.clear(id);
-                        }
-                    });
+                    .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: '1' })
+                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
+                    .on('delete', function () {
+                        notifications.yell('info', gt('Emptying folder... This may take a few seconds.'));
+                        mailAPI.clear(id).done(function () {
+                            notifications.yell('success', gt('The folder has been emptied.'));
+                        });
+                    })
+                    .show();
             });
         }
     };
