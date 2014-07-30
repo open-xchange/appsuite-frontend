@@ -30,30 +30,33 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
     return {
 
-        processEmoji: function (text, callback) {
+        // please mind that this functions returns HTML!
+        // if source is regarded as plain text you needs to escape it via _.escape()
 
-            var tooLarge = text.length > (1024 * (_.device('chrome >= 30') ? 64 : 32)),
+        processEmoji: function (str, callback) {
+
+            var tooLarge = str.length > (1024 * (_.device('chrome >= 30') ? 64 : 32)),
                 // check if there might be any emojis; pure ascii cannot contain them (except 0xA9 and 0xAE)
                 // using a regex is 50-100 times faster than looping over the characters
-                hasEmoji = /[\xa9\xae\u0100-\uffff]/.test(text);
+                hasEmoji = /[\xa9\xae\u0100-\uffff]/.test(str);
 
-            function cont(text) {
-                if (callback) callback(text, { loaded: !!emoji });
-                return text;
+            function cont(str) {
+                if (callback) callback(str, { loaded: !!emoji });
+                return str;
             }
 
             if (tooLarge || !hasEmoji) {
-                return cont(text);
+                return cont(str);
             }
             else if (emoji) {
-                return cont(convert(text));
+                return cont(convert(str));
             }
             else {
                 require(['io.ox/emoji/main'], function (code) {
                     emoji = code;
-                    cont(convert(text));
+                    cont(convert(str));
                 });
-                return text;
+                return str;
             }
         },
 
