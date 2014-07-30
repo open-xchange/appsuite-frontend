@@ -166,6 +166,7 @@ define('io.ox/mail/compose/extensions',
                     maxResults: 20,
                     autoselect: true,
                     tokenfield: true,
+                    highlight: true,
                     reduce: function (data) {
                         return data;
                     },

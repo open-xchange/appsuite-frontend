@@ -32,6 +32,8 @@ define('io.ox/core/tk/autocomplete',
             tokenfield: false,
             maxResults: 25,
             autoselect: false,      // select first element on result callback
+            highlight: false,
+            hint: true,
             //get data
             source: function (val) {
                 return this.api.search(val).then(function (data) {
@@ -69,7 +71,9 @@ define('io.ox/core/tk/autocomplete',
 
         var typeaheadOptions = [{
                 autoselect: o.autoselect,
-                minLength: o.minLength
+                minLength: o.minLength,
+                highlight: o.highlight,
+                hint: o.hint
             }, {
                 source: function(query, callback) {
                     o.source(query)
