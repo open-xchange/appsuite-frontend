@@ -94,7 +94,8 @@ define('io.ox/search/view-template',
                                 $('<i class="fa fa-times"></i>')
                             )
                             .tooltip()
-                            .on('click', function () {
+                            .on('click', function (e) {
+                                e.preventDefault();
                                 app.view.trigger('button:clear');
                             });
 
