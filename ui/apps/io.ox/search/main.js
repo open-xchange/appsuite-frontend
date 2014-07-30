@@ -84,6 +84,7 @@ define('io.ox/search/main',
             title: 'Search',
             toolbar: true,
             search: false,
+            // important
             facetedsearch: false
         }),
         app = ox.ui.createApp({

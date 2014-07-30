@@ -1006,6 +1006,7 @@ define('io.ox/core/desktop',
                     draw: function () {
                         return this.body.append(
                             // search area
+                            // deprecated: old search will be removed after 7.6.1
                             this.search = $('<div class="window-search">'),
                             // default perspective
                             this.main = $('<div class="abs window-content">')
@@ -1244,6 +1245,7 @@ define('io.ox/core/desktop',
                     return this;
                 };
 
+                // deprecated: old search will be removed after 7.6.1
                 this.search = {
 
                     active: false,
@@ -1373,9 +1375,14 @@ define('io.ox/core/desktop',
                     },
 
                     clear: function () {
+                        // empty input
                         self.nodes.facetedsearch.toolbar
                             .find('.search-field')
                             .val('');
+                        // apps switch from 'search mode' to 'all mode'
+                        self.trigger('search:cancel');
+                        // reset model
+                        self.facetedsearch.view.model.reset();
                     }
                 };
 
@@ -1537,7 +1544,7 @@ define('io.ox/core/desktop',
             // add event hub
             Events.extend(win);
 
-            // deprecatd: enable search via io.ox/find application extension points instead ()
+            // deprecated: old search will be removed after 7.6.1
             if (opt.search) {
                 // search
                 var triggerSearch = function (query) {

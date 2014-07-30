@@ -391,7 +391,7 @@ define('io.ox/files/main',
                 //add reference: used in perspective
                 app.searchapi = facetedsearch.apiproxy;
                 //register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
+                //commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
             });
         }
     });
