@@ -35,7 +35,7 @@ define('io.ox/tasks/main',
     });
 
     // a bit too global vars
-    var grid, taskToolbarOptions;
+    var taskToolbarOptions;
 
     app.mediator({
 
@@ -127,7 +127,7 @@ define('io.ox/tasks/main',
     taskToolbarOptions = function (e) {
         e.preventDefault();
         var option = $(this).attr('data-option'),
-            grid = e.data.grid;
+            grid = app.getGrid();
         if (option === 'asc' || option === 'desc') {
             grid.prop('order', option).refresh();
         } else if (option !== 'done') {
@@ -395,7 +395,7 @@ define('io.ox/tasks/main',
                         $('<li>').append($('<a href="#" data-option="desc">').text(gt('Descending')).prepend($('<i>'))),
                         $('<li class="divider">'),
                         $('<li>').append($('<a href="#" data-option="done">').text(gt('Show done tasks')).prepend($('<i>')))
-                    ).on('click', 'a', { grid: grid }, taskToolbarOptions)
+                    ).on('click', 'a', taskToolbarOptions)
                 )
             );
         }
