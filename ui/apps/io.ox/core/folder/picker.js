@@ -129,13 +129,23 @@ define('io.ox/core/folder/picker',
             })
             .show(function () {
                 dialog.getBody().busy();
-                api.path(id).done(function (path) {
-                    tree.open = _.union(tree.open, _(path).pluck('id'));
-                    if (id) tree.preselect(id);
-                    dialog.getBody().idle().append(tree.render().$el);
-                    tree.$el.focus();
-                    o.show(dialog, tree);
-                });
+                api.path(id)
+                    .then(
+                        function success(path) {
+                            tree.open = _.union(tree.open, _(path).pluck('id'));
+                            if (id) tree.preselect(id);
+                        },
+                        function fail() {
+                            if (!o.settings || !_.isString(o.persistent)) return;
+                            o.settings.set(o.persistent + '/last', undefined).save();
+                        }
+                    )
+                    // path might fail so we use always to con
+                    .always(function () {
+                        dialog.getBody().idle().append(tree.render().$el);
+                        tree.$el.focus();
+                        o.show(dialog, tree);
+                    });
             })
             .done(function () {
                 o.close(dialog, tree);
