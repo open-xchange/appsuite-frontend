@@ -220,7 +220,7 @@ define('io.ox/preview/main',
                 $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
                     // plain text preview with emoji support
                     // need to escape here; plain text might surprise with bad HTML
-                    var html = emoji.processEmoji(text);
+                    var html = emoji.processEmoji(_.escape(text));
                     node.addClass('preview-plaintext').html(html);
                 });
             });
