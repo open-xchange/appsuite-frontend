@@ -280,7 +280,7 @@ define('io.ox/core/desktop',
                         if (folder === null) return $.when(false);
 
                         return require(['io.ox/core/folder/api']).then(function (api) {
-                            return api.get({ folder: folder }).then(function (data) {
+                            return api.get(folder).then(function (data) {
                                 return api.can(action, data);
                             });
                         });
