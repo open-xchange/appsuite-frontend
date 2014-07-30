@@ -197,7 +197,7 @@ define('io.ox/core/folder/view',
         open = _.isArray(open) ? open : [];
 
         // apply
-        tree.options.open = open;
+        tree.open = open;
 
         if (_.device('smartphone')) {
             // respond to tab event for better responsiveness
