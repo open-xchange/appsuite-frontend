@@ -80,7 +80,7 @@ define('io.ox/mail/compose/extensions',
 
         title: function () {
             this.append(
-                $('<h1 class="col-md-6 hidden-xs clear-title title">').text(gt('Compose new mail'))
+                $('<h1 class="col-sm-6 hidden-xs clear-title title">').text(gt('Compose new mail'))
             );
         },
 
@@ -194,7 +194,6 @@ define('io.ox/mail/compose/extensions',
                     },
                     'change': function () {
                         baton.model.setTokens(attr, input.tokenfield('getTokens'));
-                        initDnD();
                     }
                 });
 
@@ -202,47 +201,24 @@ define('io.ox/mail/compose/extensions',
                     input.tokenfield('setTokens', baton.model.getTokens(attr), false, false);
                 });
 
-                function initDnD () {
-                    input.closest('div.tokenfield')
-                        .droppable({
-                            accept: '.token',
-                            hoverClass: 'drophover',
-                            drop: function (e, ui) {
-                                var token = ui.draggable,
-                                    parent = token.closest('div.tokenfield').find('input.tokenfield'),
-                                    data = token.data('attrs');
-                                // prevent drop on closest tokenfield
-                                if ($.contains(this, token[0])) return;
-                                // update target tokenfield and add dragged token
-                                input.tokenfield('setTokens', [data], true, true);
-                                // remove dragged token
-                                var found = false,
-                                    newTokenSet = _(parent.tokenfield('getTokens')).filter(function (item) {
-                                        if (_.isEqual(item, data) && !found) {
-                                            found = true;
-                                            return false;
-                                        }
-                                        return true;
-                                    });
-                                parent.tokenfield('setTokens', newTokenSet, false, true);
-                            }
-                        })
-                        .find('.token')
-                        .draggable({
-                            revert: true,
-                            revertDuration: 200,
-                            zIndex: 1
-                        });
-                }
-
                 // add class to tokenfield wrapper
                 input.parent().addClass(attr);
 
                 // set initial values
                 input.tokenfield('setTokens', baton.model.getTokens(attr) || [], true, false);
 
-                // init drag 'n' drop support
-                initDnD();
+                // init drag 'n' drop sort
+                input.closest('div.tokenfield').sortable({
+                    items: '> .token',
+                    connectWith: 'div.tokenfield',
+                    cancel: 'a.close',
+                    placeholder: 'token placeholder',
+                    revert: 50,
+                    forcePlaceholderSize: true,
+                    update: function () {
+                        baton.model.setTokens(attr, input.tokenfield('getTokens'));
+                    }
+                });
             };
         },
 
