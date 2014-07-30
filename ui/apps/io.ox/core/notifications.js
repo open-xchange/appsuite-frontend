@@ -549,6 +549,8 @@ define('io.ox/core/notifications',
                         active = true;
                         if (!reuse) node.addClass('appear');
                     }, _.device('touch') ? 300 : 0);
+
+                    return node;
                 }
             };
         }())
