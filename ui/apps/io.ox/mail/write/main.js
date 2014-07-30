@@ -51,7 +51,7 @@ define('io.ox/mail/write/main',
             self.busy();
             baton.app.saveDraft()
                 .done(function (data) {
-                    baton.app.refId = data.id;
+                    baton.app.refId = data.msgref;
                     self.idle();
                 });
         }
@@ -1267,7 +1267,6 @@ define('io.ox/mail/write/main',
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    app.setMsgRef(result);
                     app.dirty(false);
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
