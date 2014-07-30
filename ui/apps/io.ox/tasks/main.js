@@ -36,6 +36,7 @@ define('io.ox/tasks/main',
         // nodes
         left,
         right,
+        dropdownNode,
         //VGridToolbarOptions
         taskToolbarOptions = function (e) {
             e.preventDefault();
@@ -268,13 +269,16 @@ define('io.ox/tasks/main',
         grid.prop('order', 'asc');
 
         function updateGridOptions() {
+            if (!dropdownNode) {
+                return;
+            }
             var dropdown = grid.getToolbar().find('.grid-options'),
-                list = dropdown.find('ul'),
                 props = grid.prop();
+
             // uncheck all
-            list.find('i').attr('class', 'icon-none');
+            dropdownNode.find('i').removeClass('icon-ok');
             // check right options
-            list.find(
+            dropdownNode.find(
                     '[data-option="' + props.sort + '"], ' +
                     '[data-option="' + props.order + '"], ' +
                     '[data-option="' + (props.done ? 'done' : '~done') + '"]'
@@ -328,7 +332,7 @@ define('io.ox/tasks/main',
                     $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
                     .append($('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">'))
                     .dropdown(),
-                    $('<ul class="dropdown-menu" role="menu">')
+                    dropdownNode = $('<ul class="dropdown-menu" role="menu">')
                     .append(
                         $('<li>').append($('<a href="#" data-option="state">').text(gt('Status')).prepend($('<i>'))), // state becomes Bundesland :)
                         $('<li>').append($('<a href="#" data-option="202">').text(gt('Due date')).prepend($('<i>'))),
