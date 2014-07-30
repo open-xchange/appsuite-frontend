@@ -45,6 +45,7 @@ define('io.ox/search/util',
     return {
 
         getFolders: function (model) {
+
             var hash = {},
                 req = [],
                 mapping = {},
@@ -56,6 +57,8 @@ define('io.ox/search/util',
             // infostore hack
             module = module === 'files' ? 'infostore' : module;
 
+            http.pause();
+
             // standard folders for mail
             if (module === 'mail') {
                 _.each(accountAPI.getStandardFolders(), function (id) {
@@ -66,24 +69,24 @@ define('io.ox/search/util',
 
             // default folder
             id = folderAPI.getDefaultFolder(module);
-            if (id)
-                mapping[id] = 'default';
+            if (id) mapping[id] = 'default';
 
             // current folder
             app = model.getApp(true) + '/main';
             if (require.defined(app)) {
                 id = require(app).getApp().folder.get() || undefined;
-                if (id)
-                    mapping[id] = 'current';
+                if (id) mapping[id] = 'current';
             }
 
             // request
-            _.each(Object.keys(mapping), function (id) {
+            _(mapping).chain().keys().each(function (id) {
                 if (id && !hash[id]) {
                     hash[id] = true;
                     req.push(folderAPI.get(id));
                 }
             });
+
+            http.resume();
 
             return whenResolved(req)
                     .then(function () {
@@ -117,8 +120,8 @@ define('io.ox/search/util',
                         });
                         return qualified;
                     });
-
         },
+
         getFirstChoice: function (model) {
             var module = model.getModule(),
                 id = model.getFolder() || folderAPI.getDefaultFolder(module),
