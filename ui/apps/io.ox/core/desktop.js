@@ -1335,7 +1335,22 @@ define('io.ox/core/desktop',
 
                         // facets container
                         nodes.container = $('<div class="abs search-container">')
-                                        .append('<ul class="search-facets">')
+                                        .append(
+                                            // active facets
+                                            $('<ul class="search-facets">'),
+                                            // cancel button
+                                            $('<button type="button" class="btn btn-default">')
+                                                .text(gt('Cancel'))
+                                                .css({
+                                                    position: 'absolute',
+                                                    bottom: '13px',
+                                                    right: '13px'
+                                                })
+                                                .on('click', function (e) {
+                                                    e.preventDefault();
+                                                    self.facetedsearch.view.trigger('button:clear');
+                                                })
+                                        )
                                         .hide();
                         // add nodes
                         side.append(nodes.toolbar, nodes.container);
