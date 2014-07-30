@@ -116,7 +116,8 @@ define('io.ox/search/view-template',
                                 $('<i class="fa fa-search"></i>')
                             )
                             .tooltip()
-                            .on('click', function () {
+                            .on('click', function (e) {
+                                e.preventDefault();
                                 var e = $.Event('keydown');
                                 e.which = 13;
                                 $(ref).trigger(e);
