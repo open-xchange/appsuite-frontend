@@ -117,7 +117,7 @@ define('io.ox/core/folder/favorites',
         draw: function (baton) {
 
             var id = baton.data.id,
-                module = baton.options.type,
+                module = baton.module,
                 favorites = settings.get('favorites/' + module, []),
                 isFavorite = _(favorites).indexOf(id) > -1;
 
