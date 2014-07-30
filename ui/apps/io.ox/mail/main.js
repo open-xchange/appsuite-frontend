@@ -1060,13 +1060,13 @@ define('io.ox/mail/main',
                 win.facetedsearch.view.on('query', _.debounce(function () {
                     app.listView.connect(collectionLoader);
                     app.listView.load();
-                    app.search.focus();
+                    win.facetedsearch.focus();
                 }, 10));
 
                 win.facetedsearch.view.on('button:clear', function () {
                     app.listView.connect(api.collectionLoader);
                     app.listView.load();
-                    app.search.model.reset();
+                    win.facetedsearch.view.model.reset();
                 });
 
             });

@@ -1620,7 +1620,7 @@ define('io.ox/core/desktop',
                                           );
 
                     // render search app view and add search field
-                    win.nodes.sidepanel.find('.io-ox-search')
+                    win.nodes.facetedsearch.toolbar
                         .removeClass('io-ox-busy')
                         .append(
                             view.render().$el.find('.input-group')
