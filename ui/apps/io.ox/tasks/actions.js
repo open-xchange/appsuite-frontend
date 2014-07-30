@@ -38,9 +38,7 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        requires: function (e) {
-            return e.collection.has('one');
-        },
+        requires: 'one modify',
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (m) {
                 if (m.reuse('edit', baton.data)) return;
@@ -99,7 +97,10 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
-            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
+            if (!(e.collection.has('some') && e.collection.has('modify'))) {
+                return false;
+            }
+            return (e.baton.data.status !== 3);
         },
         action: function (baton) {
             changeState(baton, 1);
@@ -108,6 +109,9 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
+            if (!(e.collection.has('some') && e.collection.has('modify'))) {
+                return false;
+            }
             return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
@@ -225,10 +229,10 @@ define('io.ox/tasks/actions',
                                     node.parent().idle();
                                     notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
                                 })
-                                .fail(function () {
+                                .fail(function (e) {
                                     node.show();
                                     node.parent().idle();
-                                    notifications.yell('error', gt('A severe error occurred!'));
+                                    notifications.yell(e);
                                 });
                             }
                         }
@@ -486,6 +490,7 @@ define('io.ox/tasks/actions',
 
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
+        requires: 'one modify',
         action: $.noop
     });
 

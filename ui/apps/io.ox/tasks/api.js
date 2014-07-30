@@ -263,7 +263,7 @@ define('io.ox/tasks/api',
             },
             list: {
                 action: 'list',
-                columns: '1,20,101,200,202,203,220,300,301,309',
+                columns: '1,2,20,101,200,202,203,220,300,301,309',
                 extendColumns: 'io.ox/tasks/api/list',
                 timezone: 'UTC'
             },
