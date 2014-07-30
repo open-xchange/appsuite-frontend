@@ -925,25 +925,37 @@ define('io.ox/mail/compose/view',
                 this.textarea
             );
 
-            var scrollPane = this.app.getWindowNode();
-            scrollPane.on('scroll', $.proxy(function () {
-                if (!this.toolbarpos) {
-                    this.toolbarpos = this.mcetoolbar.position().top;
+            var scrollPane = this.app.getWindowNode(),
+                toolbar = this.mcetoolbar,
+                editor = this.contentEditable,
+                fixed = false,
+                top = 0;
+
+            // get top position
+            scrollPane.on('scroll', _.debounce(function () {
+                // could also use: toolbar.get(0).offsetTop (need to check all browsers)
+                if (!fixed) top = toolbar.position().top + scrollPane.scrollTop();
+            }, 50, true));
+
+            scrollPane.on('scroll', function () {
+
+                if (top < scrollPane.scrollTop()) {
+                    // toolbar leaves viewport
+                    if (!fixed) {
+                        console.log('LEFT VIEWPORT');
+                        toolbar.addClass('fixed').css('width', editor.outerWidth());
+                        editor.css('margin-top', toolbar.height());
+                        $(window).trigger('resize.tinymce');
+                        fixed = true;
+                    }
                 }
-                if (!this.mcetoolbar.hasClass('fixed') && this.toolbarpos < scrollPane.scrollTop()) {
-                    this.mcetoolbar.css('width', this.contentEditable.outerWidth());
-                    $(window).trigger('resize.tinymce');
+                else if (fixed) {
+                    console.log('ENTER VIEWPORT');
+                    toolbar.removeClass('fixed');
+                    editor.css('margin-top', 0);
+                    fixed = false;
                 }
-                if (this.toolbarpos < scrollPane.scrollTop()) {
-                    this.mcetoolbar.addClass('fixed').css({
-                        width: this.contentEditable.outerWidth()
-                    });
-                    this.contentEditable.css('margin-top', this.mcetoolbar.height());
-                } else {
-                    this.mcetoolbar.removeClass('fixed');
-                    this.contentEditable.css('margin-top', 0);
-                }
-            }, this));
+            });
 
             this.initAutoSaveAsDraft();
 
