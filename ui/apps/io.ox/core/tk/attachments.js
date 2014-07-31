@@ -870,7 +870,7 @@ define('io.ox/core/tk/attachments',
                     this.model.needsUpload() && $('<a class="upload" href="#">').append(
                         $('<i class="fa fa-upload">')
                     ),
-                    size = $('<span class="filesize">').text(strings.fileSize(this.model.get('file_size')))
+                    size = $('<span class="filesize">').text(strings.fileSize(this.model.get('file_size') || this.model.get('size')))
                 )
             );
             if (size.text() === '0 B') { size.text(' '); }
