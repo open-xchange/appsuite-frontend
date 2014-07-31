@@ -942,7 +942,6 @@ define('io.ox/mail/compose/view',
                 if (top < scrollPane.scrollTop()) {
                     // toolbar leaves viewport
                     if (!fixed) {
-                        console.log('LEFT VIEWPORT');
                         toolbar.addClass('fixed').css('width', editor.outerWidth());
                         editor.css('margin-top', toolbar.height());
                         $(window).trigger('resize.tinymce');
@@ -950,7 +949,6 @@ define('io.ox/mail/compose/view',
                     }
                 }
                 else if (fixed) {
-                    console.log('ENTER VIEWPORT');
                     toolbar.removeClass('fixed');
                     editor.css('margin-top', 0);
                     fixed = false;
