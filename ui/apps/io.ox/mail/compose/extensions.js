@@ -211,11 +211,13 @@ define('io.ox/mail/compose/extensions',
                     connectWith: 'div.tokenfield',
                     cancel: 'a.close',
                     placeholder: 'token placeholder',
-                    revert: 50,
+                    revert: 0,
                     forcePlaceholderSize: true,
                     update: function () {
                         baton.model.setTokens(attr, input.tokenfield('getTokens'));
                     }
+                }).droppable({
+                    hoverClass: 'drophover'
                 });
             };
         },
