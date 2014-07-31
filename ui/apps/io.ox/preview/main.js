@@ -262,9 +262,13 @@ define('io.ox/preview/main',
         }());
 
         // get matching renderer
-        if (this.extension || this.file.mimetype) {
-            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype, this.file);
-        }
+        this.renderer =
+            // try by extension first
+            (this.extension && Renderer.getByExtension(this.extension, this.file)) ||
+            // try by mime type
+            (this.file.mimetype && Renderer.getByExtension(this.file.mimetype, this.file)) ||
+            // otherwise
+            undefined;
     };
 
     Preview.prototype = {
