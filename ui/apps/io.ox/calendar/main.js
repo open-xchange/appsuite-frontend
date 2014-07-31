@@ -285,7 +285,7 @@ define('io.ox/calendar/main',
          * Folder view mobile support
          */
         'folder-view-mobile': function (app) {
-
+            /*
             if (_.device('!smartphone')) return;
 
             var view = new FolderView(app, {
@@ -293,7 +293,28 @@ define('io.ox/calendar/main',
                 container: app.pages.getPage('folderTree')
             });
             view.handleFolderChange();
-            view.load();
+            view.load();*/
+
+            if (_.device('!smartphone')) return;
+
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
+
+            nav.on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+            var tree = new TreeView({
+                app: app,
+                contextmenu: true,
+                flat: true,
+                indent: false,
+                module: 'calendar'
+            });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', });
+            page.append(tree.render().$el);
         },
 
         /*
@@ -468,7 +489,7 @@ define('io.ox/calendar/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            facetedsearch: capabilities.has('search')
+            facetedsearch: capabilities.has('search'),
             chromeless: true
         }));
 
