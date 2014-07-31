@@ -24,34 +24,19 @@ define('io.ox/mail/compose/extensions',
      'static/3rd.party/jquery-ui.min.js'
     ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, settings, gt) {
 
+    function renderFrom(array) {
+        var name = array[0], address = array[1];
+        return [
+            $('<span class="name">').text(name ? name + ' ' : ''),
+            $('<span class="address">').text('<' + address + '>')
+        ];
+    }
+
     var SenderDropdown = Dropdown.extend({
-        update: function () {
-            var $ul = this.$ul,
-                self = this;
-            _(this.model.changed).each(function (value, name) {
-                var li = $ul.find('[data-name="' + name + '"]');
-                li.children('i').attr('class', 'fa fa-fw fa-none');
-                li.each(function() {
-                    if ($(this).attr('data-value') ===  JSON.stringify(value)) {
-                        $(this).children('i').attr('class', 'fa fa-fw fa-check');
-                        self.label = $(this).children('span').text();
-                        self.$el.find('a[data-toggle="dropdown"]').empty().append(
-                            $.txt(self.label), $('<i class="fa fa-caret-down">')
-                        );
-                    }
-                });
-            }, this);
-        },
-        option: function (name, value, text) {
-            this.$ul.append(
-                $('<li>').append(
-                    $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
-                        $('<i class="fa fa-fw">').addClass(JSON.stringify(this.model.get(name)) === value ? 'fa-check' : 'fa-none'),
-                        $('<span>').text(text)
-                    )
-                )
-            );
-            return this;
+
+        label: function () {
+            var from = _(this.model.get('from')).first();
+            this.$('.dropdown-label').empty().append(renderFrom(from));
         }
     });
 
@@ -115,7 +100,9 @@ define('io.ox/mail/compose/extensions',
 
                     if (list.sortedAddresses.length >= 1) {
                         _.each(_(list.sortedAddresses).pluck('option'), function (item) {
-                            dropdown.option('from', JSON.stringify([item]), item[0] + ' <' + item[1] + '>');
+                            dropdown.option('from', [item], function () {
+                                return renderFrom(item);
+                            });
                         });
                     }
 

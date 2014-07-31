@@ -22,6 +22,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         tagName: 'div',
         className: 'dropdown',
 
+        events: {
+            'click .dropdown-menu a': 'onClick'
+        },
+
         onClick: function (e) {
             e.preventDefault();
             var node = $(e.currentTarget),
@@ -33,10 +37,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         setup: function (options) {
-            this.label = options.label;
-            this.labelNode = options.labelNode;
+            this.options = options;
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
-            this.$ul.on('click', 'a', this.onClick.bind(this));
             if (this.model) this.listenTo(this.model, 'change', this.update);
         },
 
@@ -45,11 +47,24 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (!this.model) return;
             _(this.model.changed).each(function (value, name) {
                 var li = $ul.find('[data-name="' + name + '"]');
-                if (li.length > 0) {
-                    li.children('i').attr('class', 'fa fa-fw fa-none');
-                    li.filter('[data-value="' + value + '"]').children('i').attr('class', 'fa fa-fw fa-check');
-                }
+                // clear check marks
+                li.children('i').attr('class', 'fa fa-fw fa-none');
+                // loop over list items also allow compare non-primitive values
+                li.each(function () {
+                    var node = $(this);
+                    if (_.isEqual(node.data('value'), value)) node.children('i').attr('class', 'fa fa-fw fa-check');
+                });
             }, this);
+            // update drop-down toggle
+            this.label();
+        },
+
+        label: function () {
+            // extend this class for a custom implementation
+        },
+
+        stringify: function (value) {
+            return _.isObject(value) ? JSON.stringify(value) : value;
         },
 
         append: function (fn) {
@@ -59,9 +74,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         option: function (name, value, text) {
             return this.append(
-                $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
-                    $('<i class="fa fa-fw">').addClass(this.model.get(name) === value ? 'fa-check' : 'fa-none'),
-                    $('<span>').text(text)
+                $('<a href="#">')
+                .attr({
+                    'data-name': name,
+                    'data-value': this.stringify(value),
+                    'data-toggle': _.isBoolean(value)
+                })
+                .data('value', value) // store original value
+                .append(
+                    $('<i class="fa fa-fw">').addClass(_.isEqual(this.model.get(name), value) ? 'fa-check' : 'fa-none'),
+                    _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
         },
@@ -86,10 +108,17 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         render: function () {
             this.$el.append(
                 $('<a href="#" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').append(
-                    this.labelNode || $.txt(this.label), this.options.caret ? $('<i class="fa fa-caret-down">') : []
+                    // label
+                    $('<span class="dropdown-label">').append(
+                        _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label)
+                    ),
+                    // caret
+                    this.options.caret ? $('<i class="fa fa-caret-down">') : []
                 ),
                 this.$ul
             );
+            // update custom label
+            this.label();
             return this;
         }
     });

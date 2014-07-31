@@ -648,7 +648,9 @@ define('io.ox/tasks/main',
                     model: app.grid.props,
                     tagName: 'div',
                     caret: false,
-                    labelNode: [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')]
+                    label: function () {
+                        return [$('<i class="fa fa-arrow-down">'), $('<i class="fa fa-arrow-up">')];
+                    }
                 })
                 .header(gt('Sort options'))
                 .option('sort', 'state', gt('Status'))
