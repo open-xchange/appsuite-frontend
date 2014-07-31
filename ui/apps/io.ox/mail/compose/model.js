@@ -90,6 +90,14 @@ define('io.ox/mail/compose/model',
                     return o;
                 }), {silent: true});
             }
+
+            if (this.get('nested_msgs')) {
+                list.add(this.get('nested_msgs').map(function (o) {
+                    o.group = 'nested';
+                    return o;
+                }), {silent: true});
+            }
+
             if (settings.get('messageFormat', 'html') === 'alternative') {
                 if (content && content.get('content_type') === 'text/plain') {
                     this.set('editorMode', 'text', { silent: true });
