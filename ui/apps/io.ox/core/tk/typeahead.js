@@ -90,6 +90,23 @@ define('io.ox/core/tk/typeahead',
                         .then(function (data) {
                             data =  _(data).map(function (data) {
                                 var stringResult = o.stringify(data);
+                                if (o.mode === 'participant') {
+                                    data = {
+                                        // index: index,
+                                        contact: data.data,
+                                        email: data.email,
+                                        field: data.field || '',
+                                        phone: data.phone || '',
+                                        type: data.type,
+                                        distlistarray: data.data.distribution_list,
+                                        id: data.data.id,
+                                        folder_id: data.data.folder_id,
+                                        image1_url: data.data.image1_url,
+                                        first_name: data.data.first_name,
+                                        last_name: data.data.last_name,
+                                        display_name: data.data.display_name
+                                    };
+                                }
                                 return {
                                     value: stringResult.value || stringResult,
                                     label: stringResult.label || stringResult,
@@ -101,26 +118,8 @@ define('io.ox/core/tk/typeahead',
                 },
                 templates: {
                     suggestion: function (tokenData) {
-                        var node = $('<div class="autocomplete-item">'),
-                            data = tokenData.data;
-                        if (o.mode === 'participant') {
-                            data = {
-                                // index: index,
-                                contact: data.data,
-                                email: data.email,
-                                field: data.field || '',
-                                phone: data.phone || '',
-                                type: data.type,
-                                distlistarray: data.data.distribution_list,
-                                id: data.data.id,
-                                folder_id: data.data.folder_id,
-                                image1_url: data.data.image1_url,
-                                first_name: data.data.first_name,
-                                last_name: data.data.last_name,
-                                display_name: data.data.display_name
-                            };
-                        }
-                        o.draw.call(node, data);
+                        var node = $('<div class="autocomplete-item">');
+                        o.draw.call(node, tokenData.data);
                         return node;
                     }
                 }

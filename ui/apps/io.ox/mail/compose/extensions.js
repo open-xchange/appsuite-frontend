@@ -174,7 +174,7 @@ define('io.ox/mail/compose/extensions',
                         ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                         // add contact picture
                         if (e.attrs) {
-                            var data = e.attrs.data ? e.attrs.data.data : { email: e.attrs.value };
+                            var data = e.attrs.data ? e.attrs.data : { email: e.attrs.value };
                             _.extend(data, { width: 16, height: 16, scaleType: 'contain' });
                             $(e.relatedTarget).prepend(
                                 contactsAPI.pictureHalo($('<div class="contact-image">'), data)
