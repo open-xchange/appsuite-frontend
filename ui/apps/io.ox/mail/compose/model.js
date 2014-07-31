@@ -174,8 +174,8 @@ define('io.ox/mail/compose/model',
                 });
         },
 
-        setTokens: function (type, tokens) {
-            this.set(type, _.map(tokens, function (o) { return [o.label, o.value]; }));
+        setTokens: function (type, tokens, opt) {
+            this.set(type, _.map(tokens, function (o) { return [o.label, o.value]; }), opt);
         },
 
         getTokens: function (type) {

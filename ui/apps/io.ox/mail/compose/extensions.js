@@ -214,7 +214,7 @@ define('io.ox/mail/compose/extensions',
                     revert: 50,
                     forcePlaceholderSize: true,
                     update: function () {
-                        input.change();
+                        baton.model.setTokens(attr, input.tokenfield('getTokens'));
                     }
                 });
             };
