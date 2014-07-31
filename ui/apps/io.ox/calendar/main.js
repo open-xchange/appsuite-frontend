@@ -25,14 +25,12 @@ define('io.ox/calendar/main',
      'io.ox/core/tk/vgrid',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
-     'io.ox/core/commons-folderview',
      'io.ox/calendar/mobile-navbar-extensions',
      'io.ox/calendar/mobile-toolbar-actions',
      'io.ox/calendar/toolbar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
-    ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid) {
-
+    ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController) {
 
     'use strict';
 
@@ -418,7 +416,6 @@ define('io.ox/calendar/main',
                 ox.ui.Perspective.show(app, value);
             });
         },
-<<<<<<< HEAD
 
         'inplace-search': function (app) {
 
@@ -430,12 +427,14 @@ define('io.ox/calendar/main',
             require(['io.ox/search/main'], function (facetedsearch) {
                 //register
                 commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
-=======
+            });
+        },
         /*
          * mobile only
          * change current month label in navbar
          */
         'change:navbar:month': function (app) {
+            if (_.device('!smartphone')) return;
             app.on('change:navbar:month', function (title) {
                 app.pages.getNavbar('month').setTitle(title);
             });
@@ -444,19 +443,20 @@ define('io.ox/calendar/main',
          * mobile only
          * change current date label in navbar
          */
-        'change:navbar:date': function (app) {
+        'change:navbar:date-mobile': function (app) {
+            if (_.device('!smartphone')) return;
             app.pages.getPage('week').on('change:navbar:date', function (e, dates) {
                 app.pages.getNavbar('week').setTitle(dates.date);
             });
         },
         /*
-         * blub
+         * mobile only
+         *
          */
         'show-weekview-mobile': function (app) {
+            if (_.device('!smartphone')) return;
             app.pages.getPage('week').on('pageshow', function () {
-                console.log('bäm');
                 app.pages.getPageObject('week').perspective.view.setScrollPos();
->>>>>>> Pagecontroller Calendar: #3 Almost done, fixed a lot of things, moved dates and labels to Navbar, moved pagination to toolbar
             });
         }
 
