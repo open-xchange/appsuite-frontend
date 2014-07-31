@@ -153,7 +153,7 @@ define('io.ox/mail/accounts/model',
                 }
                 return AccountAPI.update(mods).then(
                     function success(response) {
-                        folderAPI.unfetch('default' + that.attributes.id);
+                        folderAPI.pool.unfetch('default' + that.attributes.id);
                         return defered.resolve(response);
                     },
                     function fail(response) {
