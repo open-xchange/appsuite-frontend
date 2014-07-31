@@ -36,6 +36,7 @@ define('io.ox/core/tk/dialogs',
                 easyOut: true,
                 center: true,
                 async: false,
+                noBusy: false,//prevents busy function even in asyncmode (needed for IE9 uploads)
                 maximize: false,
                 top: '50%',
                 container: $('body'),
@@ -142,7 +143,7 @@ define('io.ox/core/tk/dialogs',
                 var action = e.data ? e.data.action : e,
                     async = o.async && action !== 'cancel';
                 // be busy?
-                if (async) {
+                if (async && !o.noBusy) {
                     busy();
                 }
                 // trigger action event

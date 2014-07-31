@@ -37,7 +37,7 @@ define('io.ox/mail/write/inline-images',
                 return http.FORM({
                     module: 'file',
                     form: data.form,
-                    params: { action: 'new', module: 'mail', type: 'image' }
+                    params: { module: 'mail', type: 'image' }
                 });
             }
         },
@@ -84,7 +84,8 @@ define('io.ox/mail/write/inline-images',
     return {
         show: function () {
 
-            var dialog = new dialogs.ModalDialog({async: true}),
+            var noBusy = (_.browser.IE && _.browser.IE < 10),//IE9 upload fails if window becomes busy
+                dialog = new dialogs.ModalDialog({async: true, noBusy: noBusy}),
                 iframe = $(document).find('iframe'),
                 tinymce_input_src = $(iframe[1].contentDocument).find('input#src'),
                 baton =  new ext.Baton({$: {}}),
@@ -112,7 +113,9 @@ define('io.ox/mail/write/inline-images',
                         }
                         popup.idle();
                     };
-                popup.busy();
+                if (!noBusy) {
+                    popup.busy();
+                }
                 if (file.val() === '') {
                     notifications.yell('error', gt('Please select a file to insert'));
                     popup.idle();
