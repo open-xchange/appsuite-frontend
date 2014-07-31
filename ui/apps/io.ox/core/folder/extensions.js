@@ -56,6 +56,9 @@ define('io.ox/core/folder/extensions',
 
             account.all().done(function (accounts) {
                 accounts.shift();
+                accounts.sort(function (a, b) {
+                    return a.name.toLowerCase() > b.name.toLowerCase() ? +1 : -1;
+                });
                 placeholder.replaceWith(
                     _(accounts).map(function (account) {
                         // remote account
