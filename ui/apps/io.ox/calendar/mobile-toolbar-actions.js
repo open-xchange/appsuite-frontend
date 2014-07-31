@@ -53,6 +53,33 @@ define('io.ox/calendar/mobile-toolbar-actions',
                 drawDisabled: true,
                 ref: 'io.ox/calendar/actions/switch-to-month-view',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'nextDay': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show next day'),
+                icon: 'fa fa-chevron-right',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/dayview/showNext',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+
+            },
+            'prevDay': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Show chevron day'),
+                icon: 'fa fa-chevron-left',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/dayview/showPrevious',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'today': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Today'),
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/dayview/showToday',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             }
         };
 
@@ -81,7 +108,7 @@ define('io.ox/calendar/mobile-toolbar-actions',
 
     // add other actions
     addAction(pMonth, ['create', 'listView']);
-    addAction(pWeek, ['create', 'listView']);
+    addAction(pWeek, ['create', 'listView', 'prevDay', 'today', 'nextDay']);
     addAction(pList, ['calendarView']);
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;

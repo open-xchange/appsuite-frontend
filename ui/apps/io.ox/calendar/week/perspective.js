@@ -31,7 +31,7 @@ define('io.ox/calendar/week/perspective',
 
         collection:     {},     // collection of all appointments
         dialog:         null,   // sidepopup
-        app:            null,   // the app
+        app:            null,   // the appf
         view:           null,   // the current view obj
         views:          {},     // containing all views
         activeElement:  null,   // current focus in perspektive
@@ -261,6 +261,14 @@ define('io.ox/calendar/week/perspective',
                 });
             });
         },
+        /**
+         * receives an event from the nested Backbone view
+         * and passes it up to the page controller for mobile use
+         * @param  {Object} d some data
+         */
+        changeNavbarDate: function (d) {
+            $(this.main).trigger('change:navbar:date', d);
+        },
 
         /**
          * handle different views in this perspective
@@ -307,7 +315,8 @@ define('io.ox/calendar/week/perspective',
                     .on('openCreateAppointment', this.openCreateAppointment, this)
                     .on('openEditAppointment', this.openEditAppointment, this)
                     .on('updateAppointment', this.updateAppointment, this)
-                    .on('onRefresh', this.refresh, this);
+                    .on('onRefresh', this.refresh, this)
+                    .on('change:navbar:date', this.changeNavbarDate, this);
 
                 this.views[opt.perspective] = this.view.render();
                 this.main.append(this.view.$el.show());

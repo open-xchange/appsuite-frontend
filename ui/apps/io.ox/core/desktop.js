@@ -768,6 +768,10 @@ define('io.ox/core/desktop',
 
                 this.main = app.pages.getPage(opt.perspective.split(':')[0]);
 
+                if (!app.pages.getPageObject(opt.perspective.split(':')[0]).perspective) {
+                    app.pages.getPageObject(opt.perspective.split(':')[0]).perspective = this;
+                }
+
                 // add to stack
                 win.addPerspective(this);
 

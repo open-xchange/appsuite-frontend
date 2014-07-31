@@ -442,6 +442,41 @@ define('io.ox/calendar/actions',
     });
 
 
+    /* new actions for mobile */
+
+    // Actions
+    new Action('io.ox/calendar/actions/dayview/showNext', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.view.setStartDate('next');
+            p.view.trigger('onRefresh');
+        }
+    });
+
+     // Actions
+    new Action('io.ox/calendar/actions/dayview/showPrevious', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.view.setStartDate('prev');
+            p.view.trigger('onRefresh');
+        }
+    });
+
+     // Actions
+    new Action('io.ox/calendar/actions/dayview/showToday', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.view.setStartDate();
+            p.view.trigger('onRefresh');
+        }
+    });
+
     // Mobile multi select extension points
     // delete appointment(s)
     ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({

@@ -415,10 +415,10 @@ define('io.ox/calendar/main',
          */
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
-                console.log('show perspective', value);
                 ox.ui.Perspective.show(app, value);
             });
         },
+<<<<<<< HEAD
 
         'inplace-search': function (app) {
 
@@ -430,8 +430,36 @@ define('io.ox/calendar/main',
             require(['io.ox/search/main'], function (facetedsearch) {
                 //register
                 commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
+=======
+        /*
+         * mobile only
+         * change current month label in navbar
+         */
+        'change:navbar:month': function (app) {
+            app.on('change:navbar:month', function (title) {
+                app.pages.getNavbar('month').setTitle(title);
+            });
+        },
+        /*
+         * mobile only
+         * change current date label in navbar
+         */
+        'change:navbar:date': function (app) {
+            app.pages.getPage('week').on('change:navbar:date', function (e, dates) {
+                app.pages.getNavbar('week').setTitle(dates.date);
+            });
+        },
+        /*
+         * blub
+         */
+        'show-weekview-mobile': function (app) {
+            app.pages.getPage('week').on('pageshow', function () {
+                console.log('bäm');
+                app.pages.getPageObject('week').perspective.view.setScrollPos();
+>>>>>>> Pagecontroller Calendar: #3 Almost done, fixed a lot of things, moved dates and labels to Navbar, moved pagination to toolbar
             });
         }
+
     });
 
     // launcher
@@ -511,6 +539,7 @@ define('io.ox/calendar/main',
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
                 ox.ui.Perspective.show(app, lastPerspective);
+
 
             });
     });

@@ -180,6 +180,12 @@ define('io.ox/core/page-controller',
             return this;
         };
 
+        /**
+         * getPage
+         * return the main DOM node of the page
+         * @param  {string} page pagename to return
+         * @return {jQuery object} jQuery node
+         */
         this.getPage = function (page) {
             if (!pages[page]) {
                 console.error('PageController: Page ' + page + ' does not exist.');
@@ -187,6 +193,15 @@ define('io.ox/core/page-controller',
                 return;
             }
             return pages[page].$el;
+        };
+
+        this.getPageObject = function (page) {
+             if (!pages[page]) {
+                console.error('PageController: Page ' + page + ' does not exist.');
+                console.error('PageController: Available pages are ' + order.join());
+                return;
+            }
+            return pages[page];
         };
 
         this.getNavbar = function (page) {

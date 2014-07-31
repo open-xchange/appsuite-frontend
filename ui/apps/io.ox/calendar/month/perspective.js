@@ -401,8 +401,9 @@ define('io.ox/calendar/month/perspective',
             };
 
             this.pane = $('.scrollpane', this.scaffold);
-            this.scaffold.prepend(
-                $('<div>')
+
+            if (_.device('!smartphone')) {
+                var toolbarNode = $('<div>')
                     .addClass('toolbar')
                     .append(
                         this.monthInfo = $('<div>').addClass('info').text(gt.noI18n(this.current.format('MMMM y'))),
@@ -441,8 +442,15 @@ define('io.ox/calendar/month/perspective',
                                             }, this))
                                     )
                             )
-                    )
-            );
+                    );
+
+                // prepend toolbar to month veu
+                this.scaffold.prepend(toolbarNode);
+            } else {
+                // for mobile use
+                this.monthInfo = gt.noI18n(this.current.format('MMMM y'));
+                this.app.trigger('change:navbar:month', this.monthInfo);
+            }
 
             this.pane
                 .on('scroll', $.proxy(function (e) {
@@ -474,7 +482,13 @@ define('io.ox/calendar/month/perspective',
                         $('.day:not(.out)', this.pane)
                             .add($('[id^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane))
                             .toggleClass('out');
-                        self.monthInfo.text(gt.noI18n(this.current.format('MMMM y')));
+
+                        if (_.device('smartphone')) {
+                            self.monthInfo = gt.noI18n(this.current.format('MMMM y'));
+                            self.app.trigger('change:navbar:month', self.monthInfo);
+                        } else {
+                            self.monthInfo.text(gt.noI18n(this.current.format('MMMM y')));
+                        }
                     }
                 }, this));
 
