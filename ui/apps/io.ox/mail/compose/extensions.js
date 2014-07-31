@@ -119,9 +119,11 @@ define('io.ox/mail/compose/extensions',
         },
 
         tokenfield: function (label, addActions) {
+
             addActions = addActions || false;
             label = String(label);
             var attr = label.toLowerCase();
+
             return function (baton) {
                 var guid = _.uniqueId('form-control-label-'),
                     value = baton.model.get(attr) || [],
@@ -191,6 +193,12 @@ define('io.ox/mail/compose/extensions',
 
                 // add class to tokenfield wrapper
                 input.parent().addClass(attr);
+
+                input.getOriginalInput().data('ttTypeahead').dropdown. onAsync('datasetRendered', function() {
+                    $('div.contact-image').lazyload({
+                        container: this.$menu
+                    });
+                });
 
                 // init drag 'n' drop sort
                 input.closest('div.tokenfield').sortable({

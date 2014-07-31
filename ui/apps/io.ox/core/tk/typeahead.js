@@ -41,6 +41,8 @@ define('io.ox/core/tk/typeahead',
             highlight: false,
             // Typeahead will not show a hint
             hint: true,
+            // mode: participant or search
+            mode: 'participant',
             // Get data
             source: function (val) {
                 return this.api.search(val).then(function (data) {
@@ -66,8 +68,7 @@ define('io.ox/core/tk/typeahead',
             // TODO: not implemented for new autocomplete
             delay: 100,
             parentSelector: 'body',
-            container: $('<div>').addClass('autocomplete-popup'),
-            mode: 'participant'
+            container: $('<div>').addClass('autocomplete-popup')
         }, o || {});
 
         var typeaheadInput,
@@ -99,9 +100,27 @@ define('io.ox/core/tk/typeahead',
                         });
                 },
                 templates: {
-                    suggestion: function (item) {
-                        var node = $('<div class="autocomplete-item">');
-                        o.draw.call(node, item.data);
+                    suggestion: function (tokenData) {
+                        var node = $('<div class="autocomplete-item">'),
+                            data = tokenData.data;
+                        if (o.mode === 'participant') {
+                            data = {
+                                // index: index,
+                                contact: data.data,
+                                email: data.email,
+                                field: data.field || '',
+                                phone: data.phone || '',
+                                type: data.type,
+                                distlistarray: data.data.distribution_list,
+                                id: data.data.id,
+                                folder_id: data.data.folder_id,
+                                image1_url: data.data.image1_url,
+                                first_name: data.data.first_name,
+                                last_name: data.data.last_name,
+                                display_name: data.data.display_name
+                            };
+                        }
+                        o.draw.call(node, data);
                         return node;
                     }
                 }
@@ -146,6 +165,10 @@ define('io.ox/core/tk/typeahead',
             },
             'blur': o.blur
         });
+
+        this.getOriginalInput = function () {
+            return typeaheadInput;
+        };
 
         return this;
     };

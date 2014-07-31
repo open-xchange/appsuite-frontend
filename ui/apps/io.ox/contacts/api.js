@@ -590,8 +590,7 @@ define('io.ox/contacts/api',
 
     // node is optional. if missing function returns just the URL
     api.pictureHalo = function (/* [node], options */) {
-
-        var args = _(arguments).toArray(), node, options, params, fallback, url;
+        var args = _(arguments).toArray(), node, options, params, fallback = ox.base + '/apps/themes/default/dummypicture.png', url;
 
         // use copy of data object because of delete-statements
         if (args.length === 1) {
@@ -620,11 +619,9 @@ define('io.ox/contacts/api',
             });
             url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
-        }
-        else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
+        } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
             url = fallback;
-        }
-        else if (_.device('phantomjs')) {
+        } else if (_.device('phantomjs')) {
             url = fallback;
         }
 
@@ -664,7 +661,6 @@ define('io.ox/contacts/api',
             }
         }
 
-        fallback = ox.base + '/apps/themes/default/dummypicture.png';
         url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
 
         // just return URL

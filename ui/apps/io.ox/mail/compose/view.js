@@ -235,10 +235,13 @@ define('io.ox/mail/compose/view',
         index: 100,
         draw: function (baton) {
             this.append(
-                contactsAPI.pictureHalo(
-                    $('<div class="contact-image">'),
-                    $.extend(baton.data, { width: 42, height: 42, scaleType: 'contain' })
-                )
+                $('<div class="contact-image">')
+                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data , { width: 42, height: 42, scaleType: 'contain' })))
+                    .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
+                    .lazyload({
+                        effect: 'fadeIn',
+                        container: this
+                    })
             );
         }
     });
