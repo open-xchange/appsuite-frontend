@@ -219,7 +219,7 @@ define('io.ox/core/tk/autocomplete',
                                 last_name: data.data.last_name,
                                 display_name: data.data.display_name
                             })
-                            .on('click', fnSelectItem);
+                            .on('click mousedown', fnSelectItem);
                         o.draw.call(node, data, query);
                         node.appendTo(scrollpane);
                     });
