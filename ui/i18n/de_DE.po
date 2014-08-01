@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-24 11:43+0100\n"
+"PO-Revision-Date: 2014-08-01 11:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -116,14 +116,17 @@ msgstr "%1$d markiert"
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:401
 #: apps/plugins/halo/xing/register.js:68 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s%2$s %3$s%4$s%5$s"
 msgid ""
 "%1$s\n"
 "%2$s %3$s\n"
 "%4$s\n"
 "%5$s"
-msgstr "%1$s%2$s %3$s%4$s%5$s"
+msgstr ""
+"%1$s\n"
+"%2$s %3$s\n"
+"%4$s\n"
+"%5$s"
 
 #. Name in mail addresses
 #. %1$s is the first name
@@ -583,7 +586,6 @@ msgid "Add action"
 msgstr "Aktion hinzufügen"
 
 #: apps/io.ox/mail/compose/extensions.js:305 module:io.ox/mail
-#, fuzzy
 #| msgid "Adding attachments"
 msgid "Add attachments"
 msgstr "Anlagen hinzufügen"
@@ -617,13 +619,12 @@ msgstr "Dateien hinzufügen"
 #, fuzzy
 #| msgid "Add files"
 msgid "Add from Drive"
-msgstr "Dateien hinzufügen"
+msgstr "Von Drive "
 
 #: apps/io.ox/mail/compose/extensions.js:326 module:io.ox/mail
-#, fuzzy
 #| msgid "Add files"
 msgid "Add local file"
-msgstr "Dateien hinzufügen"
+msgstr "Lokale Datei hinzufügen"
 
 #: apps/io.ox/mail/accounts/settings.js:273
 #: module:io.ox/mail/accounts/settings
@@ -946,10 +947,9 @@ msgid "Assistant"
 msgstr "Assistent"
 
 #: apps/io.ox/mail/compose/view.js:133 module:io.ox/mail
-#, fuzzy
 #| msgid "Attach my vCard"
 msgid "Attach Vcard"
-msgstr "Meine Visitenkarte anhängen"
+msgstr "Visitenkarte anhängen"
 
 #: apps/io.ox/mail/write/view-main.js:711 module:io.ox/mail
 msgid "Attach my vCard"
@@ -1052,10 +1052,9 @@ msgstr "B"
 
 #: apps/io.ox/mail/compose/extensions.js:55 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:147
-#, fuzzy
 #| msgid "CC"
 msgid "BCC"
-msgstr "CC"
+msgstr "BCC"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:206 module:io.ox/calendar
@@ -1185,10 +1184,9 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:51 module:io.ox/calendar
-#, fuzzy
 #| msgid "The calendar views"
 msgid "Calendar view"
-msgstr "Die Kalenderansichten"
+msgstr "Kalenderansicht"
 
 #: apps/io.ox/calendar/acceptdeny.js:96 module:io.ox/calendar
 #: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:162
@@ -1468,10 +1466,9 @@ msgstr "Ordneransicht schließen"
 
 #: apps/io.ox/core/desktop.js:1361 module:io.ox/core
 #: apps/io.ox/search/view-template.js:92
-#, fuzzy
 #| msgid "Close all"
 msgid "Close search"
-msgstr "Alle schließen"
+msgstr "Suche schließen"
 
 #: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:57
@@ -1650,7 +1647,6 @@ msgstr "Kopieren"
 
 #: apps/io.ox/mail/common-extensions.js:244 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
-#, fuzzy
 #| msgctxt "CC"
 #| msgid "Copy"
 #| msgid_plural "Copy"
@@ -1750,10 +1746,9 @@ msgid "Couldn't load your contact data."
 msgstr "Ihre Kontaktdaten konnten nicht geladen werden"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:46 module:io.ox/mail
-#, fuzzy
 #| msgid "Couldn't load your mail filters."
 msgid "Couldn't load your mail filter rules."
-msgstr "Ihre Mailfilter konnten nicht geladen werden."
+msgstr "Ihre Mailfilterregeln konnten nicht geladen werden."
 
 #: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
 msgid "Couldn't load your vacation notice."
@@ -1991,10 +1986,9 @@ msgstr ""
 "dem Server gelöscht"
 
 #: apps/io.ox/mail/compose/view.js:134 module:io.ox/mail
-#, fuzzy
 #| msgid "Return Receipt"
 msgid "Delivery Receipt"
-msgstr "Lesebestätigung"
+msgstr "Empfangsbestätigung"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109
@@ -2892,16 +2886,14 @@ msgid "File Details"
 msgstr "Datei-Details"
 
 #: apps/io.ox/files/actions.js:638 module:io.ox/files
-#, fuzzy
 #| msgid "Files have been copied"
 msgid "File has been copied"
-msgstr "Dateien wurden kopiert"
+msgstr "Datei wurde kopiert"
 
 #: apps/io.ox/files/actions.js:637 module:io.ox/files
-#, fuzzy
 #| msgid "Files have been moved"
 msgid "File has been moved"
-msgstr "Dateien wurden verschoben"
+msgstr "Datei wurde verschoben"
 
 #: apps/io.ox/core/api/folder.js:1316 module:io.ox/core
 msgid "File names must not be empty"
@@ -3211,10 +3203,9 @@ msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "<br><br>%1$s hat eine Veröffentlichung für Sie freigegeben:<br>%2$s"
 
 #: apps/io.ox/core/folder/extensions.js:222 module:io.ox/core
-#, fuzzy
 #| msgid "Hidden folders"
 msgid "Hidden"
-msgstr "Versteckte Ordner"
+msgstr "Versteckt"
 
 #: apps/io.ox/core/tk/folderviews.js:986 module:io.ox/core
 msgid "Hidden folders"
@@ -3717,10 +3708,9 @@ msgstr "E-Mail-Details"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:362 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
-#, fuzzy
 #| msgid "Mail Filter"
 msgid "Mail Filter Rules"
-msgstr "Mailfilter"
+msgstr "Mailfilterregeln"
 
 #: apps/io.ox/mail/accounts/keychain.js:98 module:io.ox/core
 msgid "Mail account"
@@ -4124,10 +4114,9 @@ msgid "New appointment"
 msgstr "Neuer Termin"
 
 #: apps/io.ox/core/folder/actions/add.js:67 module:io.ox/core
-#, fuzzy
 #| msgid "Calendar"
 msgid "New calendar"
-msgstr "Kalender"
+msgstr "Neuer Kalender"
 
 #: apps/io.ox/contacts/edit/main.js:204 module:io.ox/contacts
 msgid "New contact"
@@ -4149,10 +4138,9 @@ msgstr "Neues Passwort"
 
 #: apps/io.ox/core/folder/actions/add.js:62 module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js:249
-#, fuzzy
 #| msgid "New private folder"
 msgid "New private calendar"
-msgstr "Neuer privater Ordner"
+msgstr "Neuer privater Kalender"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:62
@@ -4162,10 +4150,9 @@ msgstr "Neuer privater Ordner"
 
 #: apps/io.ox/core/folder/actions/add.js:59 module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js:272
-#, fuzzy
 #| msgid "New public folder"
 msgid "New public calendar"
-msgstr "Neuer öffentlicher Ordner"
+msgstr "Neuer öffentlicher Kalender"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:59
@@ -4609,7 +4596,7 @@ msgstr "Orange"
 
 #: apps/io.ox/tasks/main.js:661 module:io.ox/tasks
 msgid "Order"
-msgstr ""
+msgstr "Reihenfolge"
 
 #: apps/io.ox/calendar/view-detail.js:174 module:io.ox/calendar
 #: apps/io.ox/participants/views.js:106 module:io.ox/calendar/edit/main
@@ -4805,7 +4792,6 @@ msgid "Places"
 msgstr "Orte"
 
 #: apps/io.ox/mail/compose/view.js:110 module:io.ox/mail
-#, fuzzy
 #| msgid "Plain text"
 msgid "Plain Text"
 msgstr "Nur Text"
@@ -5485,7 +5471,7 @@ msgstr "Applikationen wiederherstellen"
 
 #: apps/io.ox/core/commons.js:382 module:io.ox/core
 msgid "Results"
-msgstr ""
+msgstr "Ergebnisse"
 
 #: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
@@ -5601,22 +5587,19 @@ msgid "Save to Drive"
 msgstr "In Drive-App speichern"
 
 #: apps/io.ox/core/api/attachment.js:203 module:io.ox/core
-#, fuzzy
 #| msgid "Saved mail attachment"
 msgid "Saved appointment attachment"
-msgstr "E-Mail-Anlage gespeichert"
+msgstr "Termin-Anlage wurde gespeichert"
 
 #: apps/io.ox/core/api/attachment.js:220 module:io.ox/core
-#, fuzzy
 #| msgid "Save attachment"
 msgid "Saved attachment"
-msgstr "Anlage speichern"
+msgstr "Anlage wurde gespeichert"
 
 #: apps/io.ox/core/api/attachment.js:205 module:io.ox/core
-#, fuzzy
 #| msgid "Saved mail attachment"
 msgid "Saved contact attachment"
-msgstr "E-Mail-Anlage gespeichert"
+msgstr "Kontakt-Anlage wurde gespeichert"
 
 #: apps/io.ox/contacts/view-detail.js:731 module:io.ox/contacts
 #: apps/io.ox/files/fluid/view-detail.js:182 module:io.ox/files
@@ -5628,10 +5611,9 @@ msgid "Saved mail attachment"
 msgstr "E-Mail-Anlage gespeichert"
 
 #: apps/io.ox/core/api/attachment.js:204 module:io.ox/core
-#, fuzzy
 #| msgid "Saved mail attachment"
 msgid "Saved task attachment"
-msgstr "E-Mail-Anlage gespeichert"
+msgstr "Aufgaben-Anlage wurde gespeichert"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:29 module:io.ox/mail
 msgid "Saving attachment to Drive"
@@ -5927,10 +5909,9 @@ msgid "Show hidden files and folders"
 msgstr "Versteckte Dateien und Ordner anzeigen"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js:58 module:io.ox/mail
-#, fuzzy
 #| msgid "Show comments"
 msgid "Show icons"
-msgstr "Kommentar anzeigen"
+msgstr "Symbole anzeigen"
 
 #: apps/io.ox/mail/common-extensions.js:477 module:io.ox/mail
 msgid "Show images"
@@ -5950,20 +5931,18 @@ msgid "Show legal information"
 msgstr "Rechtliche Informationen anzeigen"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js:76 module:io.ox/mail
-#, fuzzy
 #| msgid "Show less"
 msgid "Show list"
-msgstr "Weniger anzeigen"
+msgstr "Liste anzeigen"
 
 #: apps/plugins/portal/facebook/register.js:77 module:plugins/portal
 msgid "Show more comments"
 msgstr "Weitere Kommentare anzeigen"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:60 module:io.ox/calendar
-#, fuzzy
 #| msgid "Show next page"
 msgid "Show next day"
-msgstr "Nächste Seite anzeigen"
+msgstr "Nächsten Tag anzeigen"
 
 #: apps/io.ox/mail/detail/content.js:416 module:io.ox/mail
 msgid "Show quoted text"
@@ -5984,10 +5963,9 @@ msgid "Show task details"
 msgstr "Aufgabendetails anzeigen"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js:67 module:io.ox/mail
-#, fuzzy
 #| msgid "Show file"
 msgid "Show tiles"
-msgstr "Datei anzeigen"
+msgstr "Kacheln anzeigen"
 
 #: apps/io.ox/files/fluid/view-detail.js:353 module:io.ox/files
 msgid "Show version history"
@@ -6610,8 +6588,11 @@ msgid "The person %1$s is already in the list"
 msgstr "Die Person %1$s befindet sich bereits in der Liste."
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:452 module:io.ox/mail
+#, fuzzy
 msgid "The positions of vacation notice and auto forward cannot be changed"
 msgstr ""
+"Die Abwesenheitsbenachrichtigung und die automatische Weiterleitung können "
+"nicht verschoben werden."
 
 #: apps/io.ox/files/api.js:354 module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -7153,10 +7134,9 @@ msgid "Un-liked comment"
 msgstr "Kommentar gefällt nicht mehr"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43 module:io.ox/mail
-#, fuzzy
 #| msgid "Unable to load mail filter settings."
 msgid "Unable to load mail filter rules settings."
-msgstr "Auf Mailfilter-Backend konnte nicht zugegriffen werden"
+msgstr "Einstellungen für Mailfilterregeln konnten nicht geladen werden."
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
