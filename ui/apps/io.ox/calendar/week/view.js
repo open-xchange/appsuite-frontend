@@ -1681,13 +1681,20 @@ define('io.ox/calendar/week/view',
                 data = {folder_id: folder.id || folder.folder};
             }
             ox.load(['io.ox/core/print']).done(function (print) {
-                print.open('printCalendar', data, {
+                var win = print.open('printCalendar', data, {
                     template: tmpl.name,
                     start: start,
                     end: end,
                     work_day_start_time: self.workStart * date.HOUR,
                     work_day_end_time: self.workEnd * date.HOUR
-                }).print();
+                });
+                if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                    win.onload = function () {
+                        win.print();
+                    };
+                } else {
+                    win.print();
+                }
             });
         }
     });
