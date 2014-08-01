@@ -285,16 +285,6 @@ define('io.ox/calendar/main',
          * Folder view mobile support
          */
         'folder-view-mobile': function (app) {
-            /*
-            if (_.device('!smartphone')) return;
-
-            var view = new FolderView(app, {
-                type: 'calendar',
-                container: app.pages.getPage('folderTree')
-            });
-            view.handleFolderChange();
-            view.load();*/
-
             if (_.device('!smartphone')) return;
 
             var nav = app.pages.getNavbar('folderTree'),
@@ -315,23 +305,6 @@ define('io.ox/calendar/main',
             // initialize folder view
             FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', });
             page.append(tree.render().$el);
-        },
-
-        /*
-         * Folder change listener for mobile
-         */
-        'folder-view-mobile-listener': function () {
-            if (_.device('!smartphone')) return;
-            // always change folder on click
-            // No way to use tap here since folderselection really messes up the event chain
-            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
-                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
-                if (app.props.get('mobileFolderSelectMode') === true) {
-                    $(e.currentTarget).trigger('contextmenu'); // open menu
-                    return; // do not change page in edit mode
-                }
-                app.pages.changePage('month');
-            });
         },
 
         /*

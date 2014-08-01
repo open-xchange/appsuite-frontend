@@ -200,28 +200,13 @@ define('io.ox/files/main',
                 app.toggleFolders();
             });
 
-            var tree = new TreeView({ app: app, contextmenu: true, module: 'infostore' });
+            var tree = new TreeView({ app: app, contextmenu: true, module: 'infostore', root: settings.get('rootFolderId', 9) });
 
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'mainView' });
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'fluid' });
             page.append(tree.render().$el);
         },
-        /*
-         * Folder change listener for mobile
-         */
-        'folder-view-mobile-listener': function () {
-            if (_.device('!smartphone')) return;
-            // always change folder on click
-            // No way to use tap here since folderselection really messes up the event chain
-            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
-                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
-                if (app.props.get('mobileFolderSelectMode') === true) {
-                    $(e.currentTarget).trigger('contextmenu'); // open menu
-                    return; // do not change page in edit mode
-                }
-                app.pages.changePage('fluid');
-            });
-        },
+
         /*
          * Folder change listener for mobile
          */
