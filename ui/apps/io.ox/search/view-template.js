@@ -496,6 +496,7 @@ define('io.ox/search/view-template',
                         $('<i class="fa fa-times action">')
                     )
                     .on('click', function (e) {
+                        e.preventDefault();
                         e.stopPropagation();
                         baton.model.remove(value.facet || value._compact.facet, value.id);
                     })
