@@ -92,7 +92,7 @@ define('io.ox/core/page-controller',
                 $fromPage = pages[opt.from].$el;
 
             // Android's native UI standard is fade, so we use this too
-            opt.animation = _.device('android') ? 'fade' : opt.animation;
+            opt.animation = _.device('android') ? 'pop' : opt.animation;
 
             // trigger 'before' events
             $toPage.trigger('pagebeforeshow', {frompage: opt.from});
