@@ -28,16 +28,14 @@ define('io.ox/core/notifications',
             this.nodes = {};
         },
         onChange: function () {
-            var count = this.model.get('count');
+            var count = this.model.get('count'),
+                //#. %1$d number of notifications
+                //#, c-format
+                a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count);
             this.nodes.badge.toggleClass('empty', count === 0);
+            this.$el.attr('aria-label', a11y);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
-
-            new NotificationController().yell('screenreader',
-                    //#. %1$d number of notifications
-                    //#, c-format
-                    gt.format(gt.ngettext('You have %1$d notification.',
-                            'You have %1$d notifications.', this.model.get('count')), this.model.get('count')));
-
+            new NotificationController().yell('screenreader', a11y);
         },
         onToggle: function (open) {
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
