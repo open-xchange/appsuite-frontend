@@ -144,7 +144,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:368 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1717
+#: apps/io.ox/calendar/week/view.js:1724
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (暫定)"
@@ -766,9 +766,9 @@ msgstr "所有附件"
 msgid "All day"
 msgstr "整天"
 
-#: apps/io.ox/search/view-template.js:636 module:io.ox/core
-#: apps/io.ox/search/view-template.js:639
-#: apps/io.ox/search/view-template.js:646
+#: apps/io.ox/search/view-template.js:637 module:io.ox/core
+#: apps/io.ox/search/view-template.js:640
+#: apps/io.ox/search/view-template.js:647
 msgid "All folders"
 msgstr "所有資料夾"
 
@@ -1203,7 +1203,7 @@ msgstr "日曆日視圖"
 #: apps/io.ox/files/actions.js:543 apps/io.ox/files/actions.js:597
 #: apps/io.ox/files/actions.js:703 apps/io.ox/files/fluid/view-detail.js:217
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
-#: apps/io.ox/files/main.js:352 apps/io.ox/files/main.js:402
+#: apps/io.ox/files/main.js:337 apps/io.ox/files/main.js:387
 #: apps/io.ox/files/views/create.js:114
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
@@ -1423,7 +1423,7 @@ msgstr "單點上傳圖像。"
 #: apps/io.ox/core/folder/actions/properties.js:64
 #: apps/io.ox/core/permissions/permissions.js:459
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
-#: apps/io.ox/core/tk/dialogs.js:557 apps/io.ox/core/wizard/registry.js:60
+#: apps/io.ox/core/tk/dialogs.js:558 apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard apps/io.ox/editor/main.js:157 module:io.ox/editor
 #: apps/io.ox/files/actions.js:341 module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:295
@@ -1436,12 +1436,12 @@ msgstr "單點上傳圖像。"
 msgid "Close"
 msgstr "關閉"
 
-#: apps/io.ox/core/tk/dialogs.js:750 module:io.ox/core
+#: apps/io.ox/core/tk/dialogs.js:751 module:io.ox/core
 msgid "Close all"
 msgstr "全部關閉"
 
 #: apps/io.ox/core/commons.js:753 module:io.ox/core
-#: apps/io.ox/files/main.js:384 module:io.ox/files
+#: apps/io.ox/files/main.js:369 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:152 module:io.ox/mail
 msgid "Close folder view"
 msgstr "關閉文件夾面板"
@@ -2338,8 +2338,8 @@ msgstr "EB"
 #: apps/io.ox/core/pubsub/settings/pane.js:220 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:221 apps/io.ox/files/actions.js:841
 #: module:io.ox/files apps/io.ox/files/main.js:146
-#: apps/io.ox/files/main.js:152 apps/io.ox/files/main.js:355
-#: apps/io.ox/files/main.js:402 apps/io.ox/mail/actions.js:907
+#: apps/io.ox/files/main.js:152 apps/io.ox/files/main.js:340
+#: apps/io.ox/files/main.js:387 apps/io.ox/mail/actions.js:907
 #: apps/io.ox/mail/mailfilter/settings/filter.js:132
 #: apps/io.ox/mail/mailfilter/settings/filter.js:137
 #: apps/io.ox/mail/main.js:145 apps/io.ox/mail/main.js:151
@@ -2569,7 +2569,7 @@ msgstr "創業者"
 msgid "Envelope"
 msgstr "信封"
 
-#: apps/io.ox/core/notifications.js:483 module:io.ox/core
+#: apps/io.ox/core/notifications.js:481 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -3926,7 +3926,7 @@ msgstr "星期一"
 msgid "Month"
 msgstr "月"
 
-#: apps/io.ox/calendar/month/perspective.js:389 module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js:397 module:io.ox/calendar
 msgid "Month View"
 msgstr "月視圖"
 
@@ -3949,7 +3949,7 @@ msgstr "月"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:610
+#: apps/io.ox/search/view-template.js:611
 msgid "More"
 msgstr "更多"
 
@@ -4208,7 +4208,7 @@ msgstr "伺服器上沒有符合的範本"
 msgid "No message selected"
 msgstr "未選擇訊息"
 
-#: apps/io.ox/core/notifications.js:138 module:io.ox/core
+#: apps/io.ox/core/notifications.js:136 module:io.ox/core
 msgid "No notifications"
 msgstr "無通知"
 
@@ -4861,7 +4861,7 @@ msgstr "請選擇要匯入的檔案"
 msgid "Please select a valid iCal File to import"
 msgstr "請選擇有效的 iCal 檔案匯入"
 
-#: apps/io.ox/mail/write/inline-images.js:118 module:io.ox/mail
+#: apps/io.ox/mail/write/inline-images.js:121 module:io.ox/mail
 msgid "Please select a valid image File to insert"
 msgstr "請選擇有效的圖片檔案以匯入"
 
@@ -5457,7 +5457,7 @@ msgstr "星期六"
 #: apps/io.ox/core/folder/actions/imap-subscription.js:49 module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:400
-#: apps/io.ox/core/settings/user.js:80 apps/io.ox/core/tk/dialogs.js:557
+#: apps/io.ox/core/settings/user.js:80 apps/io.ox/core/tk/dialogs.js:558
 #: apps/io.ox/editor/main.js:132 module:io.ox/editor
 #: apps/io.ox/editor/main.js:154 apps/io.ox/files/actions.js:596
 #: module:io.ox/files apps/io.ox/files/filepicker.js:32
@@ -5789,7 +5789,7 @@ msgstr "顯示收件匣中全部 %1$d 封訊息"
 msgid "Show all items"
 msgstr "顯示所有項目"
 
-#: apps/io.ox/calendar/main.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:498 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "自所有行事曆顯示我所有的約會"
 
@@ -6891,7 +6891,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/forms.js:491 module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:79 module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js:425
+#: apps/io.ox/calendar/month/perspective.js:433
 #: apps/io.ox/calendar/util.js:160 apps/io.ox/calendar/util.js:197
 #: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
@@ -7485,7 +7485,7 @@ msgid "You don't have any tasks that are either due soon or overdue."
 msgstr "您沒有快要到期或已過期的任務。"
 
 #. %1$d number of notifications
-#: apps/io.ox/core/notifications.js:38 module:io.ox/core
+#: apps/io.ox/core/notifications.js:34 module:io.ox/core
 #, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."

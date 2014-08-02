@@ -143,7 +143,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:368 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1717
+#: apps/io.ox/calendar/week/view.js:1724
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Provisional)"
@@ -769,9 +769,9 @@ msgstr "Todos los adjuntos"
 msgid "All day"
 msgstr "Todo el día"
 
-#: apps/io.ox/search/view-template.js:636 module:io.ox/core
-#: apps/io.ox/search/view-template.js:639
-#: apps/io.ox/search/view-template.js:646
+#: apps/io.ox/search/view-template.js:637 module:io.ox/core
+#: apps/io.ox/search/view-template.js:640
+#: apps/io.ox/search/view-template.js:647
 msgid "All folders"
 msgstr "Todas las carpetas"
 
@@ -1217,7 +1217,7 @@ msgstr "Vista del día del calendario"
 #: apps/io.ox/files/actions.js:543 apps/io.ox/files/actions.js:597
 #: apps/io.ox/files/actions.js:703 apps/io.ox/files/fluid/view-detail.js:217
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
-#: apps/io.ox/files/main.js:352 apps/io.ox/files/main.js:402
+#: apps/io.ox/files/main.js:337 apps/io.ox/files/main.js:387
 #: apps/io.ox/files/views/create.js:114
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
@@ -1437,7 +1437,7 @@ msgstr "Presione para subir una imagen"
 #: apps/io.ox/core/folder/actions/properties.js:64
 #: apps/io.ox/core/permissions/permissions.js:459
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
-#: apps/io.ox/core/tk/dialogs.js:557 apps/io.ox/core/wizard/registry.js:60
+#: apps/io.ox/core/tk/dialogs.js:558 apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard apps/io.ox/editor/main.js:157 module:io.ox/editor
 #: apps/io.ox/files/actions.js:341 module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:295
@@ -1450,12 +1450,12 @@ msgstr "Presione para subir una imagen"
 msgid "Close"
 msgstr "Cerrar"
 
-#: apps/io.ox/core/tk/dialogs.js:750 module:io.ox/core
+#: apps/io.ox/core/tk/dialogs.js:751 module:io.ox/core
 msgid "Close all"
 msgstr "Cerrar todo"
 
 #: apps/io.ox/core/commons.js:753 module:io.ox/core
-#: apps/io.ox/files/main.js:384 module:io.ox/files
+#: apps/io.ox/files/main.js:369 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:152 module:io.ox/mail
 msgid "Close folder view"
 msgstr "Cerrar la vista de carpeta"
@@ -2362,8 +2362,8 @@ msgstr "EB"
 #: apps/io.ox/core/pubsub/settings/pane.js:220 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/settings/pane.js:221 apps/io.ox/files/actions.js:841
 #: module:io.ox/files apps/io.ox/files/main.js:146
-#: apps/io.ox/files/main.js:152 apps/io.ox/files/main.js:355
-#: apps/io.ox/files/main.js:402 apps/io.ox/mail/actions.js:907
+#: apps/io.ox/files/main.js:152 apps/io.ox/files/main.js:340
+#: apps/io.ox/files/main.js:387 apps/io.ox/mail/actions.js:907
 #: apps/io.ox/mail/mailfilter/settings/filter.js:132
 #: apps/io.ox/mail/mailfilter/settings/filter.js:137
 #: apps/io.ox/mail/main.js:145 apps/io.ox/mail/main.js:151
@@ -2595,7 +2595,7 @@ msgstr "Empresario"
 msgid "Envelope"
 msgstr "Sobre"
 
-#: apps/io.ox/core/notifications.js:483 module:io.ox/core
+#: apps/io.ox/core/notifications.js:481 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -3974,7 +3974,7 @@ msgstr "lunes"
 msgid "Month"
 msgstr "Mes"
 
-#: apps/io.ox/calendar/month/perspective.js:389 module:io.ox/calendar
+#: apps/io.ox/calendar/month/perspective.js:397 module:io.ox/calendar
 msgid "Month View"
 msgstr "Vista de mes"
 
@@ -3997,7 +3997,7 @@ msgstr "Meses"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:610
+#: apps/io.ox/search/view-template.js:611
 msgid "More"
 msgstr "Más"
 
@@ -4258,7 +4258,7 @@ msgstr "No hay plantillas coincidentes en este servidor"
 msgid "No message selected"
 msgstr "No hay mensajes seleccionados"
 
-#: apps/io.ox/core/notifications.js:138 module:io.ox/core
+#: apps/io.ox/core/notifications.js:136 module:io.ox/core
 msgid "No notifications"
 msgstr "No hay notificaciones"
 
@@ -4928,7 +4928,7 @@ msgstr "Por favor, seleccione un archivo a importar"
 msgid "Please select a valid iCal File to import"
 msgstr "Por favor, seleccione un archivo iCal válido para importar"
 
-#: apps/io.ox/mail/write/inline-images.js:118 module:io.ox/mail
+#: apps/io.ox/mail/write/inline-images.js:121 module:io.ox/mail
 msgid "Please select a valid image File to insert"
 msgstr "Por favor, seleccione un archivo de imagen válido para insertar"
 
@@ -5535,7 +5535,7 @@ msgstr "sábado"
 #: apps/io.ox/core/folder/actions/imap-subscription.js:49 module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:400
-#: apps/io.ox/core/settings/user.js:80 apps/io.ox/core/tk/dialogs.js:557
+#: apps/io.ox/core/settings/user.js:80 apps/io.ox/core/tk/dialogs.js:558
 #: apps/io.ox/editor/main.js:132 module:io.ox/editor
 #: apps/io.ox/editor/main.js:154 apps/io.ox/files/actions.js:596
 #: module:io.ox/files apps/io.ox/files/filepicker.js:32
@@ -5867,7 +5867,7 @@ msgstr "Mostrar todos los mensajes %1$d en la bandeja de entrada"
 msgid "Show all items"
 msgstr "Mostrar todos los elementos"
 
-#: apps/io.ox/calendar/main.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:498 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Mostrar todas mis citas de todos los calendarios"
 
@@ -7011,7 +7011,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/forms.js:491 module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:79 module:io.ox/calendar
-#: apps/io.ox/calendar/month/perspective.js:425
+#: apps/io.ox/calendar/month/perspective.js:433
 #: apps/io.ox/calendar/util.js:160 apps/io.ox/calendar/util.js:197
 #: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
@@ -7631,7 +7631,7 @@ msgid "You don't have any tasks that are either due soon or overdue."
 msgstr "Usted no tiene ninguna tarea vencida o próxima a hacerlo."
 
 #. %1$d number of notifications
-#: apps/io.ox/core/notifications.js:38 module:io.ox/core
+#: apps/io.ox/core/notifications.js:34 module:io.ox/core
 #, c-format
 msgid "You have %1$d notification."
 msgid_plural "You have %1$d notifications."
