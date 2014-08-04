@@ -335,7 +335,8 @@ define('io.ox/calendar/util',
                         $(tip).addClass('timezones');
                         // get placement
                         return 'left';
-                    }
+                    },
+                    container: '#io-ox-core'
                 }).on('blur', function () {
                     $(this).popover('hide');
                 })
