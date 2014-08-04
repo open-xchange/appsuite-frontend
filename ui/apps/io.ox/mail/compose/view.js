@@ -720,7 +720,9 @@ define('io.ox/mail/compose/view',
                 this.editor.handleHide();
 
                 // toggle editor
-                this.editorMode = this.editor.tinymce ? 'text' : 'html';
+                this.editorMode = this.editorMode === 'html' ? 'text' : 'html';
+
+                this.model.setMailContentType(this.editorMode);
 
                 // load TEXT/HTML editor for the first time or reuse TEXT/HTML editor
                 return !this.editorHash[this.editorMode] ? this.loadEditor(content) : this.reuseEditor(content);
