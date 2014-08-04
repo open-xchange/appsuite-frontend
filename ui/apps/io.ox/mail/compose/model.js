@@ -245,6 +245,10 @@ define('io.ox/mail/compose/model',
                 result.msgref = this.get('msgref');
             }
 
+            if (this.get('disp_notification_to')) {
+                result.disp_notification_to = this.get('disp_notification_to');
+            }
+
             // get flat cids for data.contacts_ids
             result.contacts_ids = this.get('attachments').filter(function (a) {
                 return a.get('group') === 'contact';
