@@ -87,28 +87,32 @@ define('io.ox/core/page-controller',
             // check if same page
             if (to === current) return;
 
-            var opt = _.extend({ from: current, animation: 'slideleft' }, options || {}),
+            var opt = _.extend({ from: current, animation: _.device('smartphone') ? 'slideleft': 'pop', disableAnimations: false}, options || {}),
                 $toPage = pages[to].$el,
                 $fromPage = pages[opt.from].$el;
 
-            // Android's native UI standard is fade, so we use this too
+            // Android's native UI standard is pop, so we use this too
             opt.animation = _.device('android') ? 'pop' : opt.animation;
 
             // trigger 'before' events
             $toPage.trigger('pagebeforeshow', {frompage: opt.from});
             $fromPage.trigger('pagebeforehide', {topage: opt.to});
 
-            // page blur, dismiss keyboard
-            try {
-                if (document.activeElement &&
-                    document.activeElement.nodeName.toLowerCase() !== 'body') {
+            // since the pagecontroller is also used on desktop
+            // we have to dismiss this part on dekstop to prevent focus and a11y trouble
+            if (_.device('smartphone')) {
+                // page blur, dismiss keyboard
+                try {
+                    if (document.activeElement &&
+                        document.activeElement.nodeName.toLowerCase() !== 'body') {
 
-                    $(document.activeElement).blur();
-                } else {
-                    $('input:focus, textarea:focus, select:focus').blur();
+                        $(document.activeElement).blur();
+                    } else {
+                        $('input:focus, textarea:focus, select:focus').blur();
+                    }
+                } catch (e) {
+                    // nothing
                 }
-            } catch (e) {
-                // nothing
             }
 
             // save for back-button
@@ -116,26 +120,38 @@ define('io.ox/core/page-controller',
             // start animation to-page in
             current = to;
             var taptrap = $taptrap.clone(true);
-            _.defer(function () {
-                $toPage
-                    .append(taptrap)
-                    .addClass('io-ox-core-animation in current ' + opt.animation)
-                    .one('webkitAnimationEnd animationend', function () {
-                        $(this).removeClass('io-ox-core-animation in ' + opt.animation);
-                        $toPage.trigger('pageshow', {from: opt.from, to: opt.to});
-                        taptrap.remove();
-                    });
-            }, 1);
+            if (_.device('!smartphone')) {
+                // taptrap is not needed on desktop, use empty node
+                taptrap = $();
+            }
 
-            // start animation "from" page out
-            _.defer(function () {
-                $fromPage.removeClass('current')
-                    .addClass('io-ox-core-animation out inmotion ' + opt.animation)
-                    .one('webkitAnimationEnd animationend', function () {
-                        $(this).removeClass('io-ox-core-animation out inmotion ' + opt.animation);
-                        $fromPage.trigger('pagehide', {from: opt.from, to: opt.to});
-                    });
-            }, 1);
+            // only animate if possible
+            if (Modernizr.cssanimations && !opt.disableAnimations) {
+                _.defer(function () {
+                    $toPage
+                        .append(taptrap)
+                        .addClass('io-ox-core-animation in current ' + opt.animation)
+                        .one('webkitAnimationEnd mozAnimationEnd animationend', function () {
+                            $(this).removeClass('io-ox-core-animation in ' + opt.animation);
+                            $toPage.trigger('pageshow', {from: opt.from, to: opt.to});
+                            taptrap.remove();
+                        });
+                }, 1);
+
+                // start animation "from" page out
+                _.defer(function () {
+                    $fromPage.removeClass('current')
+                        .addClass('io-ox-core-animation out inmotion ' + opt.animation)
+                        .one('webkitAnimationEnd mozAnimationEnd animationend', function () {
+                            $(this).removeClass('io-ox-core-animation out inmotion ' + opt.animation);
+                            $fromPage.trigger('pagehide', {from: opt.from, to: opt.to});
+                        });
+                }, 1);
+            } else {
+                // no animations, direct page change
+                $toPage.addClass('current').trigger('pageshow', {from: opt.from, to: opt.to});
+                $fromPage.removeClass('current').trigger('pagehide', {from: opt.from, to: opt.to});
+            }
 
             showNavbar(to);
             showToolbar(to);
@@ -194,7 +210,11 @@ define('io.ox/core/page-controller',
             }
             return pages[page].$el;
         };
-
+        /**
+         * returns the whole page object
+         * @param  {string} page identifier of the page
+         * @return {Object} the page object
+         */
         this.getPageObject = function (page) {
              if (!pages[page]) {
                 console.error('PageController: Page ' + page + ' does not exist.');
@@ -255,11 +275,34 @@ define('io.ox/core/page-controller',
             showToolbar(page, state);
         };
 
-        var showNavbar = function (page) {
+        var showNavbar = function (page, opt) {
             var bar = pages[page].navbar;
             if (bar) {
-                app.navbar.find('.toolbar-content').detach();
-                app.navbar.append(bar.$el);
+                if (opt.animate) {
+                    _.defer(function () {
+                        app.navbar.append(bar.$el.addClass('io-ox-core-animation in current ' + opt.transition)
+                            .one('animationend webkitAnimationEnd', function () {
+                                $(this).removeClass('io-ox-core-animation in ' + opt.transition);
+                                //$toPage.trigger('toolbarshow');
+
+                            })
+                        );
+                    }, 1);
+
+                    _.defer(function () {
+                        app.navbar.find('.toolbar-content').addClass('io-ox-core-animation out current ' + opt.transition)
+                            .one('animationend webkitAnimationEnd', function () {
+                                $(this).removeClass('io-ox-core-animation out ' + opt.transition);
+                                //$toPage.trigger('toolbarshow');
+                                app.navbar.find('.toolbar-content').detach();
+                            });
+                    }, 1);
+
+                } else {
+                    app.navbar.find('.toolbar-content').detach();
+                    app.navbar.append(bar.$el);
+                }
+
             }
         };
 

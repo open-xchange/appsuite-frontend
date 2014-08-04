@@ -763,7 +763,8 @@ define('io.ox/core/desktop',
 
 
             this.show = function (app, opt) {
-                var win = app.getWindow();
+                var win = app.getWindow(),
+                    pcOpt = opt.animation ? {animation: opt.animation} : {};
                 if (opt.perspective === win.currentPerspective) return;
 
                 this.main = app.pages.getPage(opt.perspective.split(':')[0]);
@@ -793,9 +794,7 @@ define('io.ox/core/desktop',
                     this.rendered = true;
                 }
 
-                app.pages.changePage(opt.perspective.split(':')[0], {
-                    animation: opt.animation || 'fade'
-                });
+                app.pages.changePage(opt.perspective.split(':')[0], pcOpt);
 
                 win.currentPerspective = opt.perspective;
                 win.updateToolbar();
@@ -823,19 +822,6 @@ define('io.ox/core/desktop',
         }
 
         Perspective.show = function (app, p, opt) {
-
-
-            /*if (p === 'main') {
-                var win = app.getWindow(),
-                    perspective = win.getPerspective();
-                if (perspective) {
-                    perspective.hide();
-                }
-                win.currentPerspective = 'main';
-                win.nodes.main.show();
-                return $.when();
-            }*/
-
             return require([app.get('name') + '/' + p.split(':')[0] + '/perspective'], function (newPers) {
                 handlePerspectiveChange(app, p, newPers, opt);
             });
@@ -1447,15 +1433,6 @@ define('io.ox/core/desktop',
                     var cur = this.currentPerspective.split(':')[0];
                     return perspectives[cur];
                 };
-
-                /*this.setPerspective = function (pers) {
-                    var id = pers.name, current = this.currentPerspective.split(':')[0];
-                    if (id !== current && id in perspectives) {
-                        if (current in perspectives) perspectives[current].hide();
-                        this.nodes[this.currentPerspective = id].show();
-                    }
-                    return this;
-                };*/
 
                 this.currentPerspective = 'main';
 
