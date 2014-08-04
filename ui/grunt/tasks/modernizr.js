@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                 uglify : true,
 
                 // Define any tests you want to implicitly include.
-                tests : ['audio', 'video', 'file_api', 'json', 'emoji', 'unicode', 'draganddrop', 'touch', 'indexeddb', 'indexedDB', 'localstorage', 'websqldatabase', 'applicationcache', 'canvas', 'csstransforms3d', 'inputtypes'],
+                tests : ['audio', 'video', 'file_api', 'json', 'emoji', 'unicode', 'draganddrop', 'touch', 'indexeddb', 'indexedDB', 'localstorage', 'websqldatabase', 'applicationcache', 'canvas', 'csstransforms3d', 'inputtypes', 'cssanimations'],
 
                 // By default, this task will crawl your project for references to Modernizr tests.
                 // Set to false to disable.
