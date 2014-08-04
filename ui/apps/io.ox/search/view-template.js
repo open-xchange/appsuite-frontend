@@ -71,7 +71,7 @@ define('io.ox/search/view-template',
     var point = ext.point('io.ox/search/view/window'),
         SORT = {
             current: 1,
-            default: 2,
+            'default': 2,
             standard: 3
         },
         dropdown = function (baton, container) {
@@ -94,7 +94,7 @@ define('io.ox/search/view-template',
                                 $('<i class="fa fa-times"></i>')
                             )
                             .tooltip()
-                            .on('click', function (e) {
+                            .on('click', function (e) {
                                 e.preventDefault();
                                 app.view.trigger('button:clear');
                             });
