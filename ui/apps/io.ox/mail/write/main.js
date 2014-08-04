@@ -823,9 +823,11 @@ define('io.ox/mail/write/main',
                     // drawn, when setMail is called
                     app.setFrom(data || {});
                     // set to idle now; otherwise firefox doesn't set the focus
+                    var ed = app.getEditor();
                     win.idle();
+                    ed.setCaretPosition(0);
                     if (mailto) {
-                        app.getEditor().focus();
+                        ed.focus();
                     } else if (data && data.to) {
                         focus('subject');
                     } else {
