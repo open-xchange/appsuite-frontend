@@ -533,8 +533,7 @@ define('io.ox/calendar/main',
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
                 ox.ui.Perspective.show(app, lastPerspective);
-
-
+                app.props.set('layout', lastPerspective);
             });
     });
 

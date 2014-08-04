@@ -67,7 +67,7 @@ define('io.ox/calendar/mobile-toolbar-actions',
             'prevDay': {
                 prio: 'hi',
                 mobile: 'hi',
-                label: gt('Show chevron day'),
+                label: gt('Show previous day'),
                 icon: 'fa fa-chevron-left',
                 drawDisabled: true,
                 ref: 'io.ox/calendar/actions/dayview/showPrevious',
@@ -98,7 +98,7 @@ define('io.ox/calendar/mobile-toolbar-actions',
     pDetail.extend(new links.Dropdown({
         index: 100,
         label: $('<span>').text(
-            //.# Will be used as button label in the toolbar, allowing the user to create new documents or upload files
+            //.# Will be used as button label in the toolbar, allowing the user to peform actions for the current appointment
             gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
