@@ -417,7 +417,7 @@ define('io.ox/core/extPatterns/links',
             node.addClass('dropdown').append(
                 $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .append(
-                    options.icon ? $('<i>').addClass(options.icon).attr('title', label) : label,
+                    options.icon ? $('<i>').addClass(options.icon).attr('title', label.textContent) : label,
                     options.noCaret ? $() : $('<i class="fa fa-caret-down">')
                 ),
                 ul = $('<ul class="dropdown-menu" role="menu">')
