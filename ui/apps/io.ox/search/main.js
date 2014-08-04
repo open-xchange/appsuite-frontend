@@ -207,7 +207,7 @@ define('io.ox/search/main',
                 app.apiproxy.query();
             },
             'reset': function () {
-                app.view.repaint('facets info items');
+                app.view.repaint('facets info items apps');
             }
         });
 

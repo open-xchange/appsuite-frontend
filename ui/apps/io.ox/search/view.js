@@ -76,6 +76,15 @@ define('io.ox/search/view',
                             p.invoke('draw', self.$el, self.baton);
                     });
                 });
+                if (_.device('smartphone')) {
+                    ext.point('io.ox/search/view/window/mobile').each(function (p) {
+                        var list = ids.split(' ');
+                        list.forEach(function (id) {
+                            if (id === p.id)
+                                p.invoke('draw', self.$el, self.baton);
+                        });
+                    });
+                }
             },
             redraw: function (options) {
                 options = options || {};

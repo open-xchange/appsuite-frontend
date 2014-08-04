@@ -676,17 +676,15 @@ define('io.ox/search/view-template',
                 row: '0',
                 draw: function (baton) {
 
-                    var id = baton.model.getApp(),
+                    var cell = $('<div class="btn-group col-xs-12">'),
+                        row = $('<div class="row applications">').append(cell),
+                        id = baton.model.getApp(),
                         opt = baton.model.getOptions(),
                         row, cell,
                         items = [],
                         titles = {},
-                        apps = settings.get('search/modules', []);
-
-                    // create containers
-                    row = $('<div class="row ">').append(
-                        cell = $('<div class="btn-group col-xs-12">')
-                    );
+                        apps = settings.get('search/modules', []),
+                        elem;
 
                     // apply mapping (infostore-files-drive chameleon)
                     apps = _.map(apps, function (module) {
@@ -745,7 +743,12 @@ define('io.ox/search/view-template',
                             baton.model.setModule(next);
                     });
 
-                    this.append(row);
+                    //append or replace
+                    elem = this.find('.row.applications');
+                    if (elem.length)
+                        elem.replaceWith(row);
+                    else
+                        this.append(row);
                 }
             });
         }
