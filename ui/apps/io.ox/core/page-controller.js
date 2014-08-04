@@ -275,34 +275,12 @@ define('io.ox/core/page-controller',
             showToolbar(page, state);
         };
 
-        var showNavbar = function (page, opt) {
+        var showNavbar = function (page) {
             var bar = pages[page].navbar;
+
             if (bar) {
-                if (opt.animate) {
-                    _.defer(function () {
-                        app.navbar.append(bar.$el.addClass('io-ox-core-animation in current ' + opt.transition)
-                            .one('animationend webkitAnimationEnd', function () {
-                                $(this).removeClass('io-ox-core-animation in ' + opt.transition);
-                                //$toPage.trigger('toolbarshow');
-
-                            })
-                        );
-                    }, 1);
-
-                    _.defer(function () {
-                        app.navbar.find('.toolbar-content').addClass('io-ox-core-animation out current ' + opt.transition)
-                            .one('animationend webkitAnimationEnd', function () {
-                                $(this).removeClass('io-ox-core-animation out ' + opt.transition);
-                                //$toPage.trigger('toolbarshow');
-                                app.navbar.find('.toolbar-content').detach();
-                            });
-                    }, 1);
-
-                } else {
                     app.navbar.find('.toolbar-content').detach();
                     app.navbar.append(bar.$el);
-                }
-
             }
         };
 
