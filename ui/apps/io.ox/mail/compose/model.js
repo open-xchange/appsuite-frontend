@@ -14,10 +14,11 @@
 define('io.ox/mail/compose/model',
     ['io.ox/mail/api',
      'io.ox/mail/util',
+     'io.ox/core/api/account',
      'io.ox/emoji/main',
      'io.ox/core/tk/attachments',
      'settings!io.ox/mail'
-    ], function (mailAPI, mailUtil, emoji, attachments, settings) {
+    ], function (mailAPI, mailUtil, accountAPI, emoji, attachments, settings) {
 
     'use strict';
 
@@ -104,6 +105,12 @@ define('io.ox/mail/compose/model',
                 } else {
                     this.set('editorMode', 'html', { silent: true });
                 }
+            }
+
+            if (!this.get('from')) {
+                accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
+                    this.set('from', [address]);
+                }.bind(this));
             }
 
             this.updateShadow();

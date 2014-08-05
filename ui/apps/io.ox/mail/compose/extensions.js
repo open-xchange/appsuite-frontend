@@ -87,33 +87,38 @@ define('io.ox/mail/compose/extensions',
 
         sender: function (baton) {
 
-            var node = $('<div class="row sender" data-extension-id="sender">');
+            var node = $('<div class="row sender" data-extension-id="sender">'),
+                render = function () {
+                    var defaultSender = baton.model.get('from'),
+                        dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>', caret: true }),
+                        guid = _.uniqueId('form-control-label-');
 
-            sender.getDefaultSendAddressWithDisplayname().done(function (defaultSender) {
+                    sender.drawDropdown().done(function (list) {
 
-                baton.model.set('from', defaultSender);
-
-                var dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>', caret: true }),
-                    guid = _.uniqueId('form-control-label-');
-
-                sender.drawDropdown().done(function (list) {
-
-                    if (list.sortedAddresses.length >= 1) {
-                        _.each(_(list.sortedAddresses).pluck('option'), function (item) {
-                            dropdown.option('from', [item], function () {
-                                return renderFrom(item);
+                        if (list.sortedAddresses.length >= 1) {
+                            _.each(_(list.sortedAddresses).pluck('option'), function (item) {
+                                dropdown.option('from', [item], function () {
+                                    return renderFrom(item);
+                                });
                             });
-                        });
-                    }
+                        }
 
-                    node.append(
-                        $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')).attr({
-                            'for': guid
-                        }),
-                        $('<div class="col-xs-10 col-md-11">').append(dropdown.render().$el.attr('data-dropdown', 'from'))
-                    );
+                        node.append(
+                            $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')).attr({
+                                'for': guid
+                            }),
+                            $('<div class="col-xs-10 col-md-11">').append(dropdown.render().$el.attr('data-dropdown', 'from'))
+                        );
+                    });
+                };
+
+            if (!baton.model.get('from')) {
+                baton.model.once('change:from', function () {
+                    render();
                 });
-            });
+            } else {
+                render();
+            }
 
             this.append(node);
         },
