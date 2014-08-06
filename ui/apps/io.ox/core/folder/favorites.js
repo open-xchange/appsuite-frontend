@@ -15,8 +15,9 @@ define('io.ox/core/folder/favorites',
     ['io.ox/core/folder/node',
      'io.ox/core/folder/api',
      'io.ox/core/extensions',
-     'settings!io.ox/core'
-     ], function (TreeNodeView, api, ext, settings) {
+     'settings!io.ox/core',
+     'gettext!io.ox/core'
+     ], function (TreeNodeView, api, ext, settings, gt) {
 
     'use strict';
 
@@ -126,7 +127,7 @@ define('io.ox/core/folder/favorites',
                 data: { id: id, module: module },
                 enabled: true,
                 handler: isFavorite ? remove : add,
-                text: isFavorite ? 'Remove from favorites' : 'Add to favorites'
+                text: isFavorite ? gt('Remove from favorites') : gt('Add to favorites')
             });
         }
     });
