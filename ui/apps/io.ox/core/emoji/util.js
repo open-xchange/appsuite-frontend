@@ -30,9 +30,19 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
     return {
 
-        // please mind that this functions returns HTML!
-        // if source is regarded as plain text you needs to escape it via _.escape()
-
+        /** process a string and replace emoji characters with img tags
+         *
+         *
+         * @param str - the string to be processed
+         * @param callback - a callback method that gets called with 2 parameters:
+         *      @param result - the processed text
+         *      @param object - an object containing a key 'loaded', a boolean to indicate wether
+         *                      the emoji lib has just been loaded or had been loaded before
+         * @returns the processed or unprocessed string
+         *
+         * please mind that this functions returns HTML!
+         * if source is regarded as plain text you needs to escape it via _.escape()
+        */
         processEmoji: function (str, callback) {
 
             var tooLarge = str.length > (1024 * (_.device('chrome >= 30') ? 64 : 32)),
@@ -40,8 +50,8 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
                 // using a regex is 50-100 times faster than looping over the characters
                 hasEmoji = /[\xa9\xae\u0100-\uffff]/.test(str);
 
-            function cont(str) {
-                if (callback) callback(str, { loaded: !!emoji });
+            function cont(str, libJustLoaded) {
+                if (callback) callback(str, { loaded: !!libJustLoaded });
                 return str;
             }
 
@@ -54,7 +64,7 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
             else {
                 require(['io.ox/emoji/main'], function (code) {
                     emoji = code;
-                    cont(convert(str));
+                    cont(convert(str), true);
                 });
                 return str;
             }

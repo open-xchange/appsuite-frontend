@@ -121,7 +121,6 @@ define('io.ox/mail/detail/content',
                 if (isURL.test(line)) return line;
                 // process plain text
                 line = insertEmoticons(line);
-                line = emoji.processEmoji(line);
                 return line;
             })
             .join('');
@@ -185,6 +184,7 @@ define('io.ox/mail/detail/content',
             baton.processedEmoji = false;
             baton.source = emoji.processEmoji(baton.source, function (text, lib) {
                 baton.processedEmoji = !lib.loaded;
+                baton.source = text;
             });
         }
     });
@@ -507,11 +507,12 @@ define('io.ox/mail/detail/content',
                     // plain TEXT
                     content = $('<div class="content plain-text noI18n">');
                     content.html(beautifyText(baton.source));
-                    emoji.processEmoji(baton.source, function (text, lib) {
-                        baton.processedEmoji = !lib.loaded;
-                        if (baton.processedEmoji) return;
-                        content.html(beautifyText(text));
-                    });
+                    if (!baton.processedEmoji) {
+                        emoji.processEmoji(baton.source, function (text, lib) {
+                            baton.processedEmoji = !lib.loaded;
+                            content.html(beautifyText(text));
+                        });
+                    }
                 }
 
                 // process content unless too large
