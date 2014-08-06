@@ -17,10 +17,9 @@ define('io.ox/search/main',
      'io.ox/core/extensions',
      'io.ox/search/model',
      'io.ox/search/view',
-     'io.ox/mail/api',
      'io.ox/search/apiproxy',
      'less!io.ox/search/style'
-    ], function (gt, settings, ext, SearchModel, SearchView, mailAPI, apiproxy) {
+    ], function (gt, settings, ext, SearchModel, SearchView, apiproxy) {
 
     'use strict';
 
