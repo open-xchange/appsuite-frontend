@@ -22,10 +22,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         tagName: 'div',
         className: 'dropdown',
 
-        events: {
-            'click .dropdown-menu a': 'onClick'
-        },
-
         onClick: function (e) {
             e.preventDefault();
             var node = $(e.currentTarget),
@@ -39,6 +35,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         setup: function (options) {
             this.options = options;
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
+            this.$ul.on('click', 'a', $.proxy(this.onClick, this)); // not so nice but we need this for mobile support
             if (this.model) this.listenTo(this.model, 'change', this.update);
         },
 
