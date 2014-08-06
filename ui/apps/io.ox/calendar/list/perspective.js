@@ -93,13 +93,7 @@ define('io.ox/calendar/list/perspective',
         grid.addLabelTemplate(tmpl.label);
 
         // requires new label?
-        grid.requiresLabel = function (i, data, current) {
-            // disable labels in search mode
-            if (grid.getMode() === 'search') {
-                return false;
-            }
-            return tmpl.requiresLabel(i, data, current);
-        };
+        grid.requiresLabel = tmpl.requiresLabel;
 
         api.on('create', function (e, data) {
             if (app.folder.get() === data.folder) {
