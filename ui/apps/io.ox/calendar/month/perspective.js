@@ -363,9 +363,16 @@ define('io.ox/calendar/month/perspective',
                 end: end.local
             });
             if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
-                win.onload = function () {
-                    win.print();
-                };
+                var limit = 50,
+                counter = 0,
+                interval;
+                interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
+                    counter++;
+                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                        win.print();
+                        clearInterval(interval);
+                    }
+                }, 100);
             } else {
                 win.print();
             }
