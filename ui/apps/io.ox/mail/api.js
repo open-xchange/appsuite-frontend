@@ -977,12 +977,11 @@ define('io.ox/mail/api',
 
         var collection = pool.get('detail');
 
-        api.trigger('beforedelete', list);
-
         _(list).each(function (item) {
             var cid = _.cid(item), model = collection.get(cid);
             if (model) collection.remove(model);
         });
+        api.trigger('beforedelete', list);
 
         // mark target folder as expired
         _(pool.getByFolder(targetFolderId)).each(function (collection) {
