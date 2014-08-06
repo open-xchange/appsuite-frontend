@@ -55,7 +55,7 @@ define('io.ox/mail/detail/content',
     };
 
     var regHTML = /^text\/html$/i,
-        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
+        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var insertEmoticons = (function () {
