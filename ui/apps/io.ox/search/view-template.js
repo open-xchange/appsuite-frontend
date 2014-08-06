@@ -519,10 +519,13 @@ define('io.ox/search/view-template',
                 module: type === 'files' ? 'infostore' : type,
                 root: type === 'files' ? '9' : '1',
                 done: function (target) {
-                    // TODO: better way tp get label?!
-                    // Hääää? Was soll das?
-                    var label = 'Please fix'; // var label = $(arguments[2]).find('[data-obj-id="' + target + '"]').find('.short-title').text();
-                    baton.model.update(facet.id, id, { custom: target, display_name: label });
+                    //get folder data
+                    api.get(target)
+                        .always(function (data) {
+                            //use id as fallback label
+                            var label = (data || {}).title || target;
+                            baton.model.update(facet.id, id, { custom: target, display_name: label });
+                        });
                 },
                 customize: function (baton) {
                     var data = baton.data,
