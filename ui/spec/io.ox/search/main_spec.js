@@ -61,7 +61,7 @@ define(['fixture!io.ox/core/settings.json',
     }
 
 
-    describe.only('Search app:', function () {
+    describe.skip('Search app:', function () {
         //ensure setup is finished
         beforeEachEnsure(setup);
 

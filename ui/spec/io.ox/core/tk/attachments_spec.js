@@ -87,12 +87,11 @@ define(['io.ox/core/extensions',
             });
 
             afterEach(function (done) {
-                def.done(function (result) {
-                    expect(result).to.equal('done');
-                    done();
-                }).always(function () {
+                def.always(function (result) {
                     def = null;
                     baton = null;
+                    expect(result).to.equal('done');
+                    done();
                 });
             });
 
