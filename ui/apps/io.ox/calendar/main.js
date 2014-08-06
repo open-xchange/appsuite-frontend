@@ -419,8 +419,20 @@ define('io.ox/calendar/main',
             side.addClass('top-toolbar');
 
             require(['io.ox/search/main'], function (facetedsearch) {
+                var lastPerspective,
+                    SEARCH_PERSPECTIVE = 'list';
                 //register
                 commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
+
+                //additional handler: switch to list mode
+                win.on({
+                    'search:query': function () {
+                        lastPerspective = _.url.hash('perspective') || app.props.get('layout');
+                        if (lastPerspective !== SEARCH_PERSPECTIVE)
+                            ox.ui.Perspective.show(app, SEARCH_PERSPECTIVE);
+                    }
+                });
+
             });
         },
         /*
