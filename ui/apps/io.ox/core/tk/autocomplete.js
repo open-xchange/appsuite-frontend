@@ -443,7 +443,7 @@ define('io.ox/core/tk/autocomplete',
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, options) {
                 //TODO: element destroyed before debounce resolved
-                if (!document.body.contains(this)) return;
+                if (!document.body.contains(this) || e.which === 13) return;
                 e.stopPropagation();
 
                 var opt = _.extend({}, (e.data || {}), options || {}),
