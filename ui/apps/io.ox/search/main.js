@@ -17,11 +17,10 @@ define('io.ox/search/main',
      'io.ox/core/extensions',
      'io.ox/search/model',
      'io.ox/search/view',
-     'io.ox/search/api',
      'io.ox/mail/api',
-     'io.ox/core/notifications',
+     'io.ox/search/apiproxy',
      'less!io.ox/search/style'
-    ], function (gt, settings, ext, SearchModel, SearchView, api, mailAPI, notifications) {
+    ], function (gt, settings, ext, SearchModel, SearchView, mailAPI, apiproxy) {
 
     'use strict';
 
@@ -93,10 +92,6 @@ define('io.ox/search/main',
             closable: true,
             window: win
         }),
-        yell = function (error) {
-            // add custom exception handling here
-            notifications.yell(error);
-        },
         sidepopup,
         win, model, run;
 
@@ -239,126 +234,11 @@ define('io.ox/search/main',
         app.view.redraw().focus();
     });
 
-    // extend app
-    app = $.extend(true, app, {
-
-        // use proxy for managing model (called via autocomplete)
-        apiproxy: {
-            // alias for autocomplete tk
-            search: function (query, options) {
-                var standard = {
-                    params: {
-                        module: model.getModule()
-                    },
-                    data: {
-                        prefix: query
-                    }
-                };
-
-                return model.getFacets()
-                        .then(function (facets) {
-                            // extend standard options
-                            standard.data.facets = facets;
-                        })
-                        .then(function () {
-                            // call server
-                            return api.autocomplete($.extend({}, standard, options));
-                        })
-                        .then(undefined, function (error) {
-                            // fallback when app doesn't support search
-                            if (error.code === 'SVL-0010') {
-                                var app = model.getApp();
-                                // add temporary mapping (default app)
-                                model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
-                                return api.autocomplete($.extend(
-                                                            standard, options, { params: {module: model.getModule()} }
-                                                        ));
-                            }
-                            return error;
-                        })
-                        .then(function (obj) {
-                            // TODO: remove when backend is ready
-                            _.each(obj.facets.values, function (value) {
-                                // multifilter facet
-                                if (value.options)
-                                    value.options = value.options[0];
-
-                            });
-
-                            // match convention in autocomplete tk
-                            var data = {
-                                list: obj.facets,
-                                hits: 0
-                            };
-                            model.set({
-                                query: query,
-                                autocomplete: data.list
-                            }, {
-                                silent: true
-                            });
-                            return data;
-                        }, yell);
-            },
-            query: (function () {
-
-                function filterFacets(opt, facets) {
-                    // extend options
-                    opt.data.facets = _.filter(facets, function (facet) {
-                        // TODO: remove hack to ingore folder facet when empty
-                        return !('value' in facet) || (facet.value !== 'custom');
-                    });
-                }
-
-                function getResults(opt) {
-                    // TODO: better solution needed
-                    var folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
-                    // call server
-                    return folderOnly ? $.Deferred().resolve(undefined) : api.query(opt);
-                }
-
-                function drawResults(result) {
-                    var start = Date.now();
-                    if (result) {
-                        model.setItems(result, start);
-                        app.view.trigger('query:result', result);
-                    }
-                    app.view.trigger('query:stop');
-                    return result;
-                }
-
-                function fail(result) {
-                    yell(result);
-                    app.view.trigger('query:stop');
-                    app.view.trigger('query:fail');
-                }
-
-                return function (sync, params) {
-                    var opt = {
-                        params: _.extend({ module: model.getModule() }, params),
-
-                        data: {
-                            start: model.get('start'),
-                            // workaround: more searchresults?
-                            size: model.get('size') + model.get('extra')
-                        }
-                    };
-                    app.view.trigger('query:start');
-                    return model.getFacets()
-                        .done(filterFacets.bind(this, opt))
-                        .then(getResults.bind(this, opt))
-                        .then(
-                            // success
-                            sync ? drawResults : _.lfo(drawResults),
-                            // fail
-                            sync ? fail : _.lfo(fail)
-                        );
-                };
-            }())
-        }
-    });
-
     // init model and listeners
     model = SearchModel.factory.create();
+
+    // extend app
+    app.apiproxy = apiproxy.init(app);
 
     // run app
     run = function () {
