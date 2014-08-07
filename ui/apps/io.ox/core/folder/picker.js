@@ -124,7 +124,7 @@ define('io.ox/core/folder/picker',
         return dialog
             .on('ok', function () {
                 var id = tree.selection.get();
-                if (id) o.done(id);
+                if (id) o.done(id, dialog, tree);
                 o.always(dialog, tree);
             })
             .show(function () {

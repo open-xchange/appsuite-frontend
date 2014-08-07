@@ -117,8 +117,8 @@ define('io.ox/core/folder/actions/move',
             picker({
                 async: true,
                 addClass: 'zero-padding',
-                done: function (target) {
-                    api.move(id, target).then(this.close, this.idle).fail(notifications.yell);
+                done: function (target, dialog) {
+                    api.move(id, target).then(dialog.close, dialog.idle).fail(notifications.yell);
                 },
                 customize: function (baton) {
 
