@@ -173,31 +173,67 @@ define('io.ox/tasks/actions',
     }
 
     new Action('io.ox/tasks/actions/move', {
-        requires: 'some delete',
+        requires: function (e) {
+            if (!(e.collection.has('some') && e.collection.has('delete'))) {
+                return false;
+            } else {
+                var def = $.Deferred();
+                ox.load(['io.ox/core/api/folder'])
+                    .done(function (folderApi) {
+                        e.baton.app.folder.getData().done(function (folder) {
+                            if (folderApi.is('shared', folder)) {//no move in shared folders see Bug 33706
+                                def.resolve(false);
+                            } else {
+                                def.resolve(true);
+                            }
+                        }).fail(function () {
+                            def.resolve(false);
+                        });
+                    });
+                return def;
+            }
+        },
         multiple: function (list, baton) {
 
             var vgrid = baton.grid || (baton.app && baton.app.getGrid());
 
-            require(['io.ox/core/folder/actions/move'], function (move) {
-                move.item({
-                    api: api,
-                    button: gt('Move'),
-                    flat: true,
-                    indent: false,
-                    list: list,
-                    module: 'tasks',
-                    root: '1',
-                    settings: settings,
-                    success: {
-                        single: 'Task has been moved',
-                        multiple: 'Tasks have been moved'
-                    },
-                    target: baton.target,
-                    title: gt('Move'),
-                    type: 'move',
-                    vgrid: vgrid
+            function commit() {
+                require(['io.ox/core/folder/actions/move'], function (move) {
+
+                    move.item({
+                        api: api,
+                        button: gt('Move'),
+                        flat: true,
+                        indent: false,
+                        list: list,
+                        module: 'tasks',
+                        root: '1',
+                        settings: settings,
+                        success: {
+                            single: 'Task has been moved',
+                            multiple: 'Tasks have been moved'
+                        },
+                        target: baton.target,
+                        title: gt('Move'),
+                        type: 'move',
+                        vgrid: vgrid
+                    });
                 });
-            });
+            }
+
+            if (baton.target){
+                ox.load(['io.ox/core/api/folder']).done(function (folderAPI)  {
+                    $.when(baton.app.folder.get(), folderAPI.get({folder: baton.target})).done(function (currentFolder, targetFolder) {
+                        if (folderAPI.is('shared', currentFolder) || folderAPI.is('shared', targetFolder)) {//no move in shared folders see Bug 33706
+                            notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
+                        } else {
+                            commit();
+                        }
+                    });
+                });
+            } else {
+                commit();
+            }
         }
     });
 
