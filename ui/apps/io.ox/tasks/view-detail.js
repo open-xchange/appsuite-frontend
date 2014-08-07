@@ -100,7 +100,7 @@ define('io.ox/tasks/view-detail',
         draw: function (baton) {
             this.append(
                 $('<div class="note">').html(
-                    gt.noI18n(_.escape($.trim(baton.interpretedData.note)).replace(/\n/g, '<br>'))
+                    calendarUtil.getNote(baton.interpretedData)
                 )
             );
         }
