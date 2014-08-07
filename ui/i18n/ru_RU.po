@@ -707,6 +707,12 @@ msgstr "Добавить в адресную книгу"
 msgid "Add to calendar"
 msgstr "Добавить в календарь"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Add to portal"
+msgid "Add to favorites"
+msgstr "Добавить в портал"
+
 #: apps/io.ox/contacts/actions.js:765 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:910
 #: module:io.ox/files apps/io.ox/files/actions.js:1316
@@ -784,9 +790,9 @@ msgstr "Все вложения"
 msgid "All day"
 msgstr "Весь день"
 
-#: apps/io.ox/search/view-template.js:637 module:io.ox/core
-#: apps/io.ox/search/view-template.js:640
-#: apps/io.ox/search/view-template.js:647
+#: apps/io.ox/search/view-template.js:640 module:io.ox/core
+#: apps/io.ox/search/view-template.js:643
+#: apps/io.ox/search/view-template.js:650
 msgid "All folders"
 msgstr "Все папки"
 
@@ -942,7 +948,7 @@ msgstr "Апрель"
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Вы действительно хотите удалить твит?"
 
-#: apps/io.ox/calendar/list/perspective.js:224 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:218 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:662 module:io.ox/tasks
 msgid "Ascending"
@@ -1211,7 +1217,7 @@ msgstr "Календарь"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:691
-#: apps/io.ox/core/desktop.js:1750 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1755 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:100
 #: apps/io.ox/core/folder/actions/common.js:44
@@ -1727,7 +1733,7 @@ msgstr ""
 "Не удалось сохранить настройки. Как минимум один пользователь должен "
 "обладать правами администратора."
 
-#: apps/io.ox/calendar/list/perspective.js:176 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:170 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "Не удалось загрузить информацию о встрече."
 
@@ -2009,7 +2015,7 @@ msgstr "Уведомление о доставке"
 msgid "Department"
 msgstr "Отдел"
 
-#: apps/io.ox/calendar/list/perspective.js:225 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:219 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:663 module:io.ox/tasks
 msgid "Descending"
@@ -2806,7 +2812,7 @@ msgstr "Не удалось сохранить список рассылки"
 msgid "Failed to sign in"
 msgstr "Ошибка входа"
 
-#: apps/io.ox/core/desktop.js:1850 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1855 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -4001,7 +4007,7 @@ msgstr "Месяцы"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:611
+#: apps/io.ox/search/view-template.js:614
 msgid "More"
 msgstr "Больше"
 
@@ -4088,7 +4094,7 @@ msgstr "Создать"
 msgid "New Folder"
 msgstr "Создать папку"
 
-#: apps/io.ox/mail/api.js:1729 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1728 module:io.ox/mail
 msgid "New Mail"
 msgstr "Новые"
 
@@ -4208,7 +4214,7 @@ msgstr "RSS-каналы не найдены."
 msgid "No Tweets yet."
 msgstr "Нет твитов."
 
-#: apps/io.ox/calendar/list/perspective.js:250 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:244 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "Нет встреч до %s"
 
@@ -5371,6 +5377,12 @@ msgstr "Удалить вложение"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Удалить копию с сервера после получения сообщения"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Remove from recipient list"
+msgid "Remove from favorites"
+msgstr "Удалить из списка получателей"
+
 #: apps/io.ox/mail/write/view-main.js:1226 module:io.ox/mail
 msgid "Remove from recipient list"
 msgstr "Удалить из списка получателей"
@@ -5591,7 +5603,7 @@ msgstr "Вложение сохранено"
 msgid "Saved in"
 msgstr "Сохранено в"
 
-#: apps/io.ox/mail/api.js:1391 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1390 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Вложение сохранено"
 
@@ -5621,9 +5633,9 @@ msgid "Scheduling"
 msgstr "Планирование"
 
 #: apps/io.ox/core/desktop.js:1584 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1687
-#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:167
-#: module:io.ox/search apps/io.ox/search/main.js:227
+#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
+#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:161
+#: module:io.ox/search apps/io.ox/search/main.js:221
 #: apps/io.ox/search/view-template.js:112
 #: apps/io.ox/search/view-template.js:113
 #: apps/io.ox/search/view-template.js:133
@@ -5855,7 +5867,7 @@ msgstr "Показать все сообщения (%1$d) во входящих"
 msgid "Show all items"
 msgstr "Показать все"
 
-#: apps/io.ox/calendar/main.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:510 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Показать встречи из всех календарей"
 
@@ -6081,7 +6093,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Упорядочить"
 
-#: apps/io.ox/calendar/list/perspective.js:216 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:210 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:655 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Параметры сортировки"
@@ -6895,7 +6907,7 @@ msgstr "В списке нет участников"
 msgid "This mail has been added to the portal"
 msgstr "Это сообщение добавлено в портал"
 
-#: apps/io.ox/mail/detail/content.js:168 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:167 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Пустое сообщение"
 
@@ -7004,7 +7016,7 @@ msgstr "Переключить флажки"
 msgid "Toggle folder"
 msgstr "Перейти в папку"
 
-#: apps/io.ox/core/desktop.js:1679 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1684 module:io.ox/core
 msgid "Toggle search"
 msgstr "Включить режим поиска"
 

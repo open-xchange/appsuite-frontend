@@ -226,7 +226,7 @@ msgstr ""
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251
 #: apps/io.ox/contacts/main.js:691
-#: apps/io.ox/core/desktop.js:1750
+#: apps/io.ox/core/desktop.js:1755
 #: module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:100
@@ -1508,19 +1508,19 @@ msgstr ""
 msgid "Appointment Details"
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:176
+#: apps/io.ox/calendar/list/perspective.js:170
 #: module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:216
+#: apps/io.ox/calendar/list/perspective.js:210
 #: module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:655
 #: module:io.ox/tasks
 msgid "Sort options"
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:224
+#: apps/io.ox/calendar/list/perspective.js:218
 #: module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46
 #: module:io.ox/mail
@@ -1529,7 +1529,7 @@ msgstr ""
 msgid "Ascending"
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:225
+#: apps/io.ox/calendar/list/perspective.js:219
 #: module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47
 #: module:io.ox/mail
@@ -1538,7 +1538,7 @@ msgstr ""
 msgid "Descending"
 msgstr ""
 
-#: apps/io.ox/calendar/list/perspective.js:250
+#: apps/io.ox/calendar/list/perspective.js:244
 #: module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr ""
@@ -1592,7 +1592,7 @@ msgstr ""
 msgid "Expand timeframe by one month"
 msgstr ""
 
-#: apps/io.ox/calendar/main.js:498
+#: apps/io.ox/calendar/main.js:510
 #: module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr ""
@@ -3757,11 +3757,11 @@ msgstr ""
 #: apps/io.ox/core/desktop.js:1584
 #: module:io.ox/core
 #: apps/io.ox/core/desktop.js:1585
-#: apps/io.ox/core/desktop.js:1687
+#: apps/io.ox/core/desktop.js:1692
 #: apps/io.ox/core/main.js:768
-#: apps/io.ox/search/main.js:167
+#: apps/io.ox/search/main.js:161
 #: module:io.ox/search
-#: apps/io.ox/search/main.js:227
+#: apps/io.ox/search/main.js:221
 #: apps/io.ox/search/view-template.js:112
 #: apps/io.ox/search/view-template.js:113
 #: apps/io.ox/search/view-template.js:133
@@ -3770,12 +3770,12 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1679
+#: apps/io.ox/core/desktop.js:1684
 #: module:io.ox/core
 msgid "Toggle search"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1850
+#: apps/io.ox/core/desktop.js:1855
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
@@ -3828,7 +3828,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:611
+#: apps/io.ox/search/view-template.js:614
 msgid "More"
 msgstr ""
 
@@ -4031,6 +4031,16 @@ msgstr ""
 #: apps/io.ox/core/folder/extensions.js:222
 #: module:io.ox/core
 msgid "Hidden"
+msgstr ""
+
+#: apps/io.ox/core/folder/favorites.js:130
+#: module:io.ox/core
+msgid "Remove from favorites"
+msgstr ""
+
+#: apps/io.ox/core/folder/favorites.js:130
+#: module:io.ox/core
+msgid "Add to favorites"
 msgstr ""
 
 #: apps/io.ox/core/folder/node.js:322
@@ -6649,12 +6659,12 @@ msgstr[1] ""
 msgid "Save attachment"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1391
+#: apps/io.ox/mail/api.js:1390
 #: module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1729
+#: apps/io.ox/mail/api.js:1728
 #: module:io.ox/mail
 msgid "New Mail"
 msgstr ""
@@ -6982,7 +6992,7 @@ msgstr ""
 msgid "Sent from %s via mobile"
 msgstr ""
 
-#: apps/io.ox/mail/detail/content.js:168
+#: apps/io.ox/mail/detail/content.js:167
 #: module:io.ox/mail
 msgid "This mail has no content"
 msgstr ""
@@ -7979,10 +7989,10 @@ msgstr ""
 msgid "More than the currently displayed %1$s items were found"
 msgstr ""
 
-#: apps/io.ox/search/view-template.js:637
-#: module:io.ox/core
 #: apps/io.ox/search/view-template.js:640
-#: apps/io.ox/search/view-template.js:647
+#: module:io.ox/core
+#: apps/io.ox/search/view-template.js:643
+#: apps/io.ox/search/view-template.js:650
 msgid "All folders"
 msgstr ""
 

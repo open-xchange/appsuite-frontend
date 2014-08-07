@@ -709,6 +709,12 @@ msgstr "Pievienot adrešu grāmatai"
 msgid "Add to calendar"
 msgstr "Pievienot kalendāram"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Add to portal"
+msgid "Add to favorites"
+msgstr "Pievienot portālam"
+
 #: apps/io.ox/contacts/actions.js:765 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:910
 #: module:io.ox/files apps/io.ox/files/actions.js:1316
@@ -786,9 +792,9 @@ msgstr "Visi pievienojumi"
 msgid "All day"
 msgstr "Visa diena"
 
-#: apps/io.ox/search/view-template.js:637 module:io.ox/core
-#: apps/io.ox/search/view-template.js:640
-#: apps/io.ox/search/view-template.js:647
+#: apps/io.ox/search/view-template.js:640 module:io.ox/core
+#: apps/io.ox/search/view-template.js:643
+#: apps/io.ox/search/view-template.js:650
 msgid "All folders"
 msgstr "Visas mapes"
 
@@ -945,7 +951,7 @@ msgstr "Aprīlis"
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Vai tiešam vēlaties dzēst šo ziņu?"
 
-#: apps/io.ox/calendar/list/perspective.js:224 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:218 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:662 module:io.ox/tasks
 msgid "Ascending"
@@ -1217,7 +1223,7 @@ msgstr "Kalndāra dienas skats"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:691
-#: apps/io.ox/core/desktop.js:1750 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1755 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:100
 #: apps/io.ox/core/folder/actions/common.js:44
@@ -1733,7 +1739,7 @@ msgstr ""
 "Nevar saglabāt iestatījumus. Sistēmā ir jābūt vismaz vienam lietotājam ar "
 "administrēšanas tiesībām."
 
-#: apps/io.ox/calendar/list/perspective.js:176 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:170 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "Nevar ielādēt tikšanās datus."
 
@@ -2015,7 +2021,7 @@ msgstr "Piegādes apstiprinājums"
 msgid "Department"
 msgstr "Nodaļa"
 
-#: apps/io.ox/calendar/list/perspective.js:225 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:219 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:663 module:io.ox/tasks
 msgid "Descending"
@@ -2832,7 +2838,7 @@ msgstr "Kļūda pie izplatīšanas saraksta saglabāšanas."
 msgid "Failed to sign in"
 msgstr "Kļūda pieslēdzoties"
 
-#: apps/io.ox/core/desktop.js:1850 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1855 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -4035,7 +4041,7 @@ msgstr "Mēneši"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:611
+#: apps/io.ox/search/view-template.js:614
 msgid "More"
 msgstr "Vairāk"
 
@@ -4122,7 +4128,7 @@ msgstr "Jauns"
 msgid "New Folder"
 msgstr "Jauna mape"
 
-#: apps/io.ox/mail/api.js:1729 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1728 module:io.ox/mail
 msgid "New Mail"
 msgstr "Jaunais pasts"
 
@@ -4242,7 +4248,7 @@ msgstr "Nav atrasta neviena RSS ziņapmaiņa."
 msgid "No Tweets yet."
 msgstr "Nav nevienas ziņas."
 
-#: apps/io.ox/calendar/list/perspective.js:250 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:244 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "Līdz %s nav atrasta neviena tikšanās"
 
@@ -5412,6 +5418,12 @@ msgstr "Noņemt pievienojumu"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Noņemt kopiju no servera pēc ziņojuma nolasīšanas"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Remove from recipient list"
+msgid "Remove from favorites"
+msgstr "Izņemt no saņēmēju saraksta"
+
 #: apps/io.ox/mail/write/view-main.js:1226 module:io.ox/mail
 msgid "Remove from recipient list"
 msgstr "Izņemt no saņēmēju saraksta"
@@ -5634,7 +5646,7 @@ msgstr "Pievienojums saglabāts"
 msgid "Saved in"
 msgstr "Saglabāt iekš"
 
-#: apps/io.ox/mail/api.js:1391 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1390 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Pievienojums saglabāts"
 
@@ -5664,9 +5676,9 @@ msgid "Scheduling"
 msgstr "Plānošana"
 
 #: apps/io.ox/core/desktop.js:1584 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1687
-#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:167
-#: module:io.ox/search apps/io.ox/search/main.js:227
+#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
+#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:161
+#: module:io.ox/search apps/io.ox/search/main.js:221
 #: apps/io.ox/search/view-template.js:112
 #: apps/io.ox/search/view-template.js:113
 #: apps/io.ox/search/view-template.js:133
@@ -5898,7 +5910,7 @@ msgstr "Rādīt visas %1$d vēstules iesūtnē"
 msgid "Show all items"
 msgstr "Rādīt visu"
 
-#: apps/io.ox/calendar/main.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:510 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Rādīt visas manas tikšanās no visiem kalendāriem"
 
@@ -6126,7 +6138,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Kārtot pēc"
 
-#: apps/io.ox/calendar/list/perspective.js:216 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:210 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:655 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Kārtošanas opcijas"
@@ -6955,7 +6967,7 @@ msgstr "Šai sarakstā pagaidām nav neviena kontakta"
 msgid "This mail has been added to the portal"
 msgstr "Šī vēstule ir pievienota portālam"
 
-#: apps/io.ox/mail/detail/content.js:168 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:167 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Šai vēstulei nav satura"
 
@@ -7062,7 +7074,7 @@ msgstr "Pārslēgt iezīmes"
 msgid "Toggle folder"
 msgstr "Pārslēgt mapi"
 
-#: apps/io.ox/core/desktop.js:1679 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1684 module:io.ox/core
 msgid "Toggle search"
 msgstr "Pārslēgt meklēšanu"
 

@@ -695,6 +695,12 @@ msgstr "Aggiungi alla rubrica"
 msgid "Add to calendar"
 msgstr "Aggiungi al calendario"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Add to portal"
+msgid "Add to favorites"
+msgstr "Aggiungi al portale"
+
 #: apps/io.ox/contacts/actions.js:765 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:910
 #: module:io.ox/files apps/io.ox/files/actions.js:1316
@@ -772,9 +778,9 @@ msgstr "Tutti gli allegati"
 msgid "All day"
 msgstr "Tutto il giorno"
 
-#: apps/io.ox/search/view-template.js:637 module:io.ox/core
-#: apps/io.ox/search/view-template.js:640
-#: apps/io.ox/search/view-template.js:647
+#: apps/io.ox/search/view-template.js:640 module:io.ox/core
+#: apps/io.ox/search/view-template.js:643
+#: apps/io.ox/search/view-template.js:650
 msgid "All folders"
 msgstr "Tutte le cartelle"
 
@@ -931,7 +937,7 @@ msgstr "Aprile"
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Sei sicuro di voler eliminare questo tweet?"
 
-#: apps/io.ox/calendar/list/perspective.js:224 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:218 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:662 module:io.ox/tasks
 msgid "Ascending"
@@ -1202,7 +1208,7 @@ msgstr "Vista calendario per giorni"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:691
-#: apps/io.ox/core/desktop.js:1750 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1755 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:100
 #: apps/io.ox/core/folder/actions/common.js:44
@@ -1717,7 +1723,7 @@ msgstr ""
 "Impossibile salvare le impostazioni. Ci deve essere almeno un utente con "
 "privilegi di amministrazione."
 
-#: apps/io.ox/calendar/list/perspective.js:176 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:170 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "Impossibile caricare i dati dell'appuntamento."
 
@@ -2000,7 +2006,7 @@ msgstr "Conferma di lettura"
 msgid "Department"
 msgstr "Reparto"
 
-#: apps/io.ox/calendar/list/perspective.js:225 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:219 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:663 module:io.ox/tasks
 msgid "Descending"
@@ -2798,7 +2804,7 @@ msgstr "Salvataggio della lista di distribuzione non riuscito."
 msgid "Failed to sign in"
 msgstr "Accesso non riuscito"
 
-#: apps/io.ox/core/desktop.js:1850 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1855 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3998,7 +4004,7 @@ msgstr "Mesi"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:611
+#: apps/io.ox/search/view-template.js:614
 msgid "More"
 msgstr "Altro"
 
@@ -4085,7 +4091,7 @@ msgstr "Nuovo"
 msgid "New Folder"
 msgstr "Nuova cartella"
 
-#: apps/io.ox/mail/api.js:1729 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1728 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nuovo messaggio"
 
@@ -4205,7 +4211,7 @@ msgstr "Nessuna fonte RSS trovata."
 msgid "No Tweets yet."
 msgstr "Ancora nessun tweet."
 
-#: apps/io.ox/calendar/list/perspective.js:250 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:244 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "Nessun appuntamento trovato fino al %s"
 
@@ -5372,6 +5378,12 @@ msgstr "Rimuovi allegato "
 msgid "Remove copy from server after retrieving a message"
 msgstr "Rimuovi la copia dal server dopo il recupero del messaggio"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Remove from recipient list"
+msgid "Remove from favorites"
+msgstr "Rimuovi dall'elenco dei destinatari"
+
 #: apps/io.ox/mail/write/view-main.js:1226 module:io.ox/mail
 msgid "Remove from recipient list"
 msgstr "Rimuovi dall'elenco dei destinatari"
@@ -5592,7 +5604,7 @@ msgstr "Allegato di posta salvato"
 msgid "Saved in"
 msgstr "Salvato in"
 
-#: apps/io.ox/mail/api.js:1391 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1390 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Allegato di posta salvato"
 
@@ -5621,9 +5633,9 @@ msgid "Scheduling"
 msgstr "Pianificazione"
 
 #: apps/io.ox/core/desktop.js:1584 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1687
-#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:167
-#: module:io.ox/search apps/io.ox/search/main.js:227
+#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
+#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:161
+#: module:io.ox/search apps/io.ox/search/main.js:221
 #: apps/io.ox/search/view-template.js:112
 #: apps/io.ox/search/view-template.js:113
 #: apps/io.ox/search/view-template.js:133
@@ -5855,7 +5867,7 @@ msgstr "Mostra tutti i %1$d messaggio in posta in arrivo"
 msgid "Show all items"
 msgstr "Mostra tutti gli elementi"
 
-#: apps/io.ox/calendar/main.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:510 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Mostra i miei appuntamenti da tutti i calendari"
 
@@ -6085,7 +6097,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Ordina per"
 
-#: apps/io.ox/calendar/list/perspective.js:216 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:210 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:655 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Opzioni di ordinamento"
@@ -6916,7 +6928,7 @@ msgstr "Questa lista non contiene alcun contatto"
 msgid "This mail has been added to the portal"
 msgstr "Questo messaggio è stato aggiunto al portale"
 
-#: apps/io.ox/mail/detail/content.js:168 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:167 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Questo messaggio non ha contenuto"
 
@@ -7025,7 +7037,7 @@ msgstr "Commuta le caselle di selezione"
 msgid "Toggle folder"
 msgstr "Cartella"
 
-#: apps/io.ox/core/desktop.js:1679 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1684 module:io.ox/core
 msgid "Toggle search"
 msgstr "Ricerca"
 

@@ -695,6 +695,12 @@ msgstr "Tilføj til adressebog"
 msgid "Add to calendar"
 msgstr "Tilføj til kalender"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Add to portal"
+msgid "Add to favorites"
+msgstr "Tilføj til portal"
+
 #: apps/io.ox/contacts/actions.js:765 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:910
 #: module:io.ox/files apps/io.ox/files/actions.js:1316
@@ -772,9 +778,9 @@ msgstr "Alle vedhæftninger"
 msgid "All day"
 msgstr "Hele dagen"
 
-#: apps/io.ox/search/view-template.js:637 module:io.ox/core
-#: apps/io.ox/search/view-template.js:640
-#: apps/io.ox/search/view-template.js:647
+#: apps/io.ox/search/view-template.js:640 module:io.ox/core
+#: apps/io.ox/search/view-template.js:643
+#: apps/io.ox/search/view-template.js:650
 msgid "All folders"
 msgstr "Alle mapper"
 
@@ -929,7 +935,7 @@ msgstr "April"
 msgid "Are you sure you want to delete this Tweet?"
 msgstr "Er du sikker på du vil slette denne tweet?"
 
-#: apps/io.ox/calendar/list/perspective.js:224 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:218 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:662 module:io.ox/tasks
 msgid "Ascending"
@@ -1200,7 +1206,7 @@ msgstr "Kalendervisningerne"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:691
-#: apps/io.ox/core/desktop.js:1750 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1755 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:100
 #: apps/io.ox/core/folder/actions/common.js:44
@@ -1715,7 +1721,7 @@ msgstr ""
 "Indstillingerne kunne ikke gemmes. Der skal mindst være én bruger med "
 "administratorrettigheder."
 
-#: apps/io.ox/calendar/list/perspective.js:176 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:170 module:io.ox/calendar
 msgid "Couldn't load appointment data."
 msgstr "Kunne ikke indlæse aftalens data."
 
@@ -1997,7 +2003,7 @@ msgstr "Leveringskvittering"
 msgid "Department"
 msgstr "Afdeling"
 
-#: apps/io.ox/calendar/list/perspective.js:225 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:219 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:47 module:io.ox/mail
 #: apps/io.ox/tasks/main.js:663 module:io.ox/tasks
 msgid "Descending"
@@ -2790,7 +2796,7 @@ msgstr "Kunne ikke gemme distributionsliste."
 msgid "Failed to sign in"
 msgstr "Kunne ikke logge ind"
 
-#: apps/io.ox/core/desktop.js:1850 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1855 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -3988,7 +3994,7 @@ msgstr "Måneder"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:611
+#: apps/io.ox/search/view-template.js:614
 msgid "More"
 msgstr "Mere"
 
@@ -4075,7 +4081,7 @@ msgstr "Ny"
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: apps/io.ox/mail/api.js:1729 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1728 module:io.ox/mail
 msgid "New Mail"
 msgstr "Ny e-email"
 
@@ -4195,7 +4201,7 @@ msgstr "Ingen RSS-kilder fundet."
 msgid "No Tweets yet."
 msgstr "Endnu ingen tweets."
 
-#: apps/io.ox/calendar/list/perspective.js:250 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:244 module:io.ox/calendar
 msgid "No appointments found until %s"
 msgstr "Ingen aftaler fundet indtil %s"
 
@@ -5360,6 +5366,12 @@ msgstr "Fjern vedhæftning"
 msgid "Remove copy from server after retrieving a message"
 msgstr "Fjern serverens kopi efter en besked er blevet hentet"
 
+#: apps/io.ox/core/folder/favorites.js:130 module:io.ox/core
+#, fuzzy
+#| msgid "Remove from recipient list"
+msgid "Remove from favorites"
+msgstr "Fjern fra modtagerliste"
+
 #: apps/io.ox/mail/write/view-main.js:1226 module:io.ox/mail
 msgid "Remove from recipient list"
 msgstr "Fjern fra modtagerliste"
@@ -5580,7 +5592,7 @@ msgstr "Gemt e-mail-vedhæftning"
 msgid "Saved in"
 msgstr "Gemt i"
 
-#: apps/io.ox/mail/api.js:1391 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1390 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Gemt e-mail-vedhæftning"
 
@@ -5609,9 +5621,9 @@ msgid "Scheduling"
 msgstr "Planlægning"
 
 #: apps/io.ox/core/desktop.js:1584 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1687
-#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:167
-#: module:io.ox/search apps/io.ox/search/main.js:227
+#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
+#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:161
+#: module:io.ox/search apps/io.ox/search/main.js:221
 #: apps/io.ox/search/view-template.js:112
 #: apps/io.ox/search/view-template.js:113
 #: apps/io.ox/search/view-template.js:133
@@ -5843,7 +5855,7 @@ msgstr "Vis alle %1$d beskeder i indbakke"
 msgid "Show all items"
 msgstr "Vis alle elementer"
 
-#: apps/io.ox/calendar/main.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:510 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Vis alle mine aftaler fra alle kalendere"
 
@@ -6069,7 +6081,7 @@ msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Sortér efter"
 
-#: apps/io.ox/calendar/list/perspective.js:216 module:io.ox/calendar
+#: apps/io.ox/calendar/list/perspective.js:210 module:io.ox/calendar
 #: apps/io.ox/tasks/main.js:655 module:io.ox/tasks
 msgid "Sort options"
 msgstr "Indstillinger for sortering"
@@ -6882,7 +6894,7 @@ msgstr "Denne liste har endnu ikke nogen kontakter"
 msgid "This mail has been added to the portal"
 msgstr "Denne e-mail er blevet tilføjet portalen"
 
-#: apps/io.ox/mail/detail/content.js:168 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:167 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Denne e-mail har ikke noget indhold"
 
@@ -6990,7 +7002,7 @@ msgstr "Skift afkrydsningsfelter"
 msgid "Toggle folder"
 msgstr "Vælg mappe til/fra"
 
-#: apps/io.ox/core/desktop.js:1679 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1684 module:io.ox/core
 msgid "Toggle search"
 msgstr "Slå søgning til/fra"
 
