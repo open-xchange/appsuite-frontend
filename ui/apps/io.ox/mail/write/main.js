@@ -47,12 +47,14 @@ define('io.ox/mail/write/main',
     // actions (define outside of multi-instance app)
     ext.point(ACTIONS + '/draft').extend({
         action: function (baton) {
-            var self = this;
-            self.busy();
+            if (baton.app.isSaving === true) return;
+            baton.app.isSaving = true;
             baton.app.saveDraft()
                 .done(function (data) {
-                    baton.app.refId = data.id;
-                    self.idle();
+                    baton.app.refId = data.msgref;
+                    baton.app.isSaving = false;
+                }).fail(function () {
+                    baton.app.isSaving = false;
                 });
         }
     });
@@ -1294,7 +1296,7 @@ define('io.ox/mail/write/main',
             // fix inline images
             mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
-            mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
+            var defSend = mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
                     if (result.error) {
                         notifications.yell(result);
@@ -1309,7 +1311,7 @@ define('io.ox/mail/write/main',
 
             _.defer(initAutoSaveAsDraft, this);
 
-            return def.then(function (result) {
+            def.then(function (result) {
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
@@ -1331,6 +1333,9 @@ define('io.ox/mail/write/main',
                     });
                 return def;
             });
+
+            return $.when.apply($, [def, defSend]);
+
         };
 
         /**
