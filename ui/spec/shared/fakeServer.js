@@ -23,8 +23,5 @@
         this.server.autoRespond = true;
     });
 
-    afterEach(function () {
-        this.server.restore();
-    });
 
 }());
