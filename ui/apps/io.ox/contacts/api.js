@@ -621,8 +621,6 @@ define('io.ox/contacts/api',
 
         } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
             url = fallback;
-        } else if (_.device('phantomjs')) {
-            url = fallback;
         }
 
         // already done?
