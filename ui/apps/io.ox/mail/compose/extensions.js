@@ -76,7 +76,15 @@ define('io.ox/mail/compose/extensions',
                         .on('click', function () { baton.view.app.quit(); })
                         .text(gt('Discard')),
                     $('<button type="button" class="btn btn-default" data-action="save">')
-                        .on('click', function () { baton.view.saveDraft(); })
+                        .on('click', function () {
+                            if (baton.view.isSaving === true) return false;
+                            baton.view.isSaving = true;
+                            baton.view.saveDraft().done(function () {
+                                baton.view.isSaving = false;
+                            }).fail(function () {
+                                baton.view.isSaving = false;
+                            });
+                        })
                         .text(gt('Save')),
                     $('<button type="button" class="btn btn-primary" data-action="send">')
                         .on('click', function () { baton.view.send(); })

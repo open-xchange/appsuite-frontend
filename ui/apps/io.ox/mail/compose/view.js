@@ -392,7 +392,7 @@ define('io.ox/mail/compose/view',
             // fix inline images
             //mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
-            mailAPI.send(mail, mail.files).always(function (result) {
+            var defSend = mailAPI.send(mail, mail.files).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     def.reject(result);
@@ -403,6 +403,8 @@ define('io.ox/mail/compose/view',
                     def.resolve(result);
                 }
             });
+            return $.when.apply($, [def, defSend]);
+
         },
 
         autoSaveDraft: function () {
