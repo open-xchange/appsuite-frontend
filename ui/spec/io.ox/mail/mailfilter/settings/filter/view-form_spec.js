@@ -60,11 +60,11 @@ define([
 
         it('should draw all initial ui components', function () {
 
-            expect($popup.find('[name="rulename"]')).to.have.length(1);
-            expect($popup.find('.alert.alert-warning')).to.have.length(1);
-            expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add condition') + ')')).to.have.length(1);
-            expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add action') + ')')).to.have.length(1);
-            expect($popup.find('[data-action="check-for-stop"]')).to.have.length(1);
+            expect($popup.find('[name="rulename"]'), 'rulename element').to.have.length(1);
+            expect($popup.find('.alert.alert-info'), 'alert info element').to.have.length(1);
+            expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add condition') + ')'), 'Add condition element').to.have.length(1);
+            expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add action') + ')'), 'Add action element').to.have.length(1);
+            expect($popup.find('[data-action="check-for-stop"]'), 'check for stop action element').to.have.length(1);
 
         });
 
