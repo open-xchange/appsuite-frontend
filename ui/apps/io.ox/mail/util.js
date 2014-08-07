@@ -317,7 +317,7 @@ define('io.ox/mail/util',
                 display_name += ' <' + email + '>';
             }
 
-            return _.escape(display_name || email);
+            return display_name || email;
         },
 
         // takes care of special edge-case: no from address
