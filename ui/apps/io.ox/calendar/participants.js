@@ -12,7 +12,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/participants',
+define('io.ox/calendar/participants',
         ['io.ox/calendar/util',
          'gettext!io.ox/calendar',
          'io.ox/core/api/user',
