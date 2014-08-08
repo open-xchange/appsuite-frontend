@@ -43,7 +43,12 @@ define('io.ox/search/util',
     };
 
     return {
-
+        getOptionLabel: function (options, id) {
+            var current = _.find(options, function (item) {
+                    return item.id === id;
+                });
+            return (current || {}).display_name;
+        },
         getFolders: function (model) {
 
             var hash = {},

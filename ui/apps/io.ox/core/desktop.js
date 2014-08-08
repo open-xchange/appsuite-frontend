@@ -1373,8 +1373,8 @@ define('io.ox/core/desktop',
                             this.toggle();
                         }
                         var facets = self.nodes.facetedsearch.container.children('ul');
-                        require(['io.ox/search/view-template'], function (template) {
-                            template.facets.call(facets.empty(), self.facetedsearch.view.baton);
+                        require(['io.ox/search/facets/extensions'], function (extensions) {
+                            extensions.facets.call(facets.empty(), self.facetedsearch.view.baton);
                         });
                         return this;
                     },
