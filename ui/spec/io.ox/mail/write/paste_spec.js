@@ -25,7 +25,7 @@ define(
         return $.trim((String(str)).replace(/[\r\n]+/g, ''));
     }
 
-    describe('Paste HTML contents', function () {
+    describe.skip('Paste HTML contents', function () {
 
         var app, ed, form = $();
 

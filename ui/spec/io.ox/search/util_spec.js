@@ -55,7 +55,7 @@ define(['io.ox/search/util',
         return def;
     }
 
-    describe('Utilities for search:', function () {
+    describe.skip('Utilities for search:', function () {
         beforeEachEnsure(setup);
 
         describe('getFolders', function () {

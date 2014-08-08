@@ -22,7 +22,7 @@ define(
 
     'use strict';
 
-    describe('Mail compose dialog', function () {
+    describe.skip('Mail compose dialog', function () {
 
         var app, ed, form = $();
 

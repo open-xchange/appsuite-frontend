@@ -84,7 +84,7 @@ define(['shared/examples/for/api',
         });
     };
 
-    return describe('folder API', function () {
+    return xdescribe('folder API', function () {
         var options = {
                 markedPending: {
                     'folder API a basic API class has some get methods should define a getAll method.': true,

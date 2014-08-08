@@ -44,30 +44,31 @@ define(['io.ox/core/extensions',
         });
 
         it('should draw the form', function () {
-            $popup.find('.io-ox-account-settings').length.should.be.equal(1);
-            $popup.find('input[name="name"]').length.should.be.equal(1);
-            $popup.find('input[name="personal"]').length.should.be.equal(1);
-            $popup.find('input[name="primary_address"]').length.should.be.equal(1);
-            $popup.find('input[name="unified_inbox_enabled"]').length.should.be.equal(1);
+            expect($popup.find('.io-ox-account-settings'), 'account settings container').to.have.length(1);
+            expect($popup.find('input[name="name"]'), 'name field').to.have.length(1);
+            expect($popup.find('input[name="personal"]'), 'personal field').to.have.length(1);
+            expect($popup.find('input[name="primary_address"]'), 'primary address field').to.have.length(1);
+            expect($popup.find('input[name="unified_inbox_enabled"]'), 'unified inbox field').to.have.length(1);
 
-            $popup.find('select[id="mail_protocol"]').length.should.be.equal(1);
-            $popup.find('input[name="mail_secure"]').length.should.be.equal(1);
-            $popup.find('input[name="mail_server"]').length.should.be.equal(1);
-            $popup.find('input[name="mail_port"]').length.should.be.equal(1);
-            $popup.find('input[name="login"]').length.should.be.equal(1);
-            $popup.find('input[name="password"]').length.should.be.equal(1);
+            expect($popup.find('select[id="mail_protocol"]'), 'mail protocol field').to.have.length(1);
+            expect($popup.find('input[name="mail_secure"]'), 'mail secure field').to.have.length(1);
+            expect($popup.find('input[name="mail_server"]'), 'mail server field').to.have.length(1);
+            expect($popup.find('input[name="mail_port"]'), 'mail port field').to.have.length(1);
+            expect($popup.find('input[name="login"]'), 'login field').to.have.length(1);
+            expect($popup.find('input[name="password"]'), 'password field').to.have.length(1);
 
-            $popup.find('input[name="transport_secure"]').length.should.be.equal(1);
-            $popup.find('input[name="transport_server"]').length.should.be.equal(1);
-            $popup.find('input[name="transport_port"]').length.should.be.equal(1);
+            expect($popup.find('input[name="transport_secure"]'), 'transport secure field').to.have.length(1);
+            expect($popup.find('input[name="transport_server"]'), 'transport server field').to.have.length(1);
+            expect($popup.find('input[name="transport_port"]'), 'transport port field').to.have.length(1);
             // $popup.find('input[name="mail-common-selectfirst"]').length.should.be.equal(1);
-            $popup.find('input[name="transport_login"]').length.should.be.equal(1);
-            $popup.find('input[name="transport_password"]').length.should.be.equal(1);
+            expect($popup.find('input[name="transport_login"]'), 'transport login field').to.have.length(1);
+            expect($popup.find('input[name="transport_password"]'), 'transport password field').to.have.length(1);
 
-            $popup.find('input[name="sent_fullname"]').length.should.be.equal(1);
-            $popup.find('input[name="trash_fullname"]').length.should.be.equal(1);
-            $popup.find('input[name="drafts_fullname"]').length.should.be.equal(1);
-            $popup.find('input[name="spam_fullname"]').length.should.be.equal(1);
+            //folder stuff has been removed/changed
+//             expect($popup.find('input[name="sent_fullname"]'), 'sent folder field').to.have.length(1);
+//             expect($popup.find('input[name="trash_fullname"]'), 'trash folder field').to.have.length(1);
+//             expect($popup.find('input[name="drafts_fullname"]'), 'drafts folder field').to.have.length(1);
+//             expect($popup.find('input[name="spam_fullname"]'), 'spam folder field').to.have.length(1);
 
         });
 
