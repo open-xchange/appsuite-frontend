@@ -500,7 +500,12 @@ define.async('io.ox/mail/accounts/view-form',
                 );
 
             if (!model.isHidden()) {
-                formBlocks.push(serverSettingsIn, serverSettingsOut, serverSettingsFolder);
+                formBlocks.push(serverSettingsIn, serverSettingsOut);
+            }
+
+            // don't show folder settings if this is a new account
+            if (model.get('id') !== undefined) {
+                formBlocks.push(serverSettingsFolder);
             }
 
             this.append(
