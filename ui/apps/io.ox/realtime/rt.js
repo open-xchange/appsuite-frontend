@@ -204,8 +204,35 @@ define.async('io.ox/realtime/rt',
         }
     };
 
+    function someoneIsListeningForRemoveEvents() {
+        if (!api.events) {
+            return;
+        }
+        var listeners = api.events.list();
+        if (!listeners) {
+            return false;
+        }
+
+        var found = false;
+        _(listeners).each(function (listeners, evt) {
+            if (found) {
+                return;
+            }
+            if (/^receive/.test(evt) && listeners.length > 0) {
+                found = true;
+            }
+        });
+
+        return found;
+    }
+
     // Periodically poll
     actions.poll = function () {
+        // no need to poll if no one is listening for events
+        if (! someoneIsListeningForRemoveEvents()) {   
+            return;
+        }
+
         var lastFetchInterval = _.now() - lastCheck;
         var interval = _.now() - lastDelivery;
         if (lastFetchInterval >= intervals[mode] && !purging && !transmitting) {
