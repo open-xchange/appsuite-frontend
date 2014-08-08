@@ -1002,6 +1002,14 @@ define('io.ox/mail/main',
             });
         },
 
+        'fix-mobile-lazyload': function (app) {
+            if (_.device('!smartphone')) return;
+            // force lazyload to load, otherwise the whole pane will stay empty...
+            app.pages.getPage('detailView').on('pageshow', function () {
+                $(this).find('li.lazy').trigger('scroll');
+            });
+        },
+
         'inplace-search': function (app) {
 
             if (_.device('small') || !capabilities.has('search')) return;
