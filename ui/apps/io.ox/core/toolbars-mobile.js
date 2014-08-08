@@ -45,9 +45,16 @@ define('io.ox/core/toolbars-mobile',
 
         className: 'toolbar-content',
 
+        /*
+         * only buttons which do NOT include the .custom class
+         * will trigger the navbars onLeft and onRight events
+         * For custom actions and links in navbar one must include
+         * the .custom class to prevent the view to kill the clickevent
+         * early and spawn a onLeft or onRight action
+         */
         events: {
-            'tap .navbar-action.right': 'onRightAction',
-            'tap .navbar-action.left': 'onLeftAction'
+            'tap .navbar-action.right:not(.custom)': 'onRightAction',
+            'tap .navbar-action.left:not(.custom)': 'onLeftAction'
         },
 
         initialize: function (opt) {
@@ -55,6 +62,7 @@ define('io.ox/core/toolbars-mobile',
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
+            this.baton = opt.baton || ext.Baton({});
             this.extension = opt.extension;
             this.hiddenElements = [];
         },
@@ -66,7 +74,8 @@ define('io.ox/core/toolbars-mobile',
             ext.point(this.extension).invoke('draw', this, {
                 left: this.left,
                 right: this.right,
-                title: this.title
+                title: this.title,
+                baton: this.baton
             });
 
             // hide all hidden elements
@@ -104,14 +113,22 @@ define('io.ox/core/toolbars-mobile',
             e.stopImmediatePropagation();
             this.trigger('leftAction');
         },
+
         hide: function (elem) {
             this.hiddenElements.push(elem);
             this.hiddenElements = _.uniq(this.hiddenElements);
             this.render();
             return this;
         },
+
         show: function (elem) {
             this.hiddenElements = _.without(this.hiddenElements, elem);
+            this.render();
+            return this;
+        },
+
+        setBaton: function (baton) {
+            this.baton = baton;
             this.render();
             return this;
         }

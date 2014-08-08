@@ -143,6 +143,22 @@ define('io.ox/mail/mobile-toolbar-actions',
         ref: 'io.ox/mail/mobile/toolbar/submenuActions'
     }));
 
+    // special "edit draft button"
+    ext.point('io.ox/mail/mobile/navbar/links').extend(new links.Link({
+        prio: 'hi',
+        mobile: 'hi',
+        label: gt('Edit draft'),
+
+        ref: 'io.ox/mail/actions/edit'
+    }));
+
+    ext.point('io.ox/mail/mobile/navbar/links/action').extend(new links.ToolbarLinks({
+        classes: 'navbar-action right',
+        index: 100,
+        id: 'edit-draft-button',
+        ref: 'io.ox/mail/mobile/navbar/links'
+    }));
+
     var updateToolbar = _.debounce(function (list) {
 
         if (!list) return;
@@ -158,6 +174,11 @@ define('io.ox/mail/mobile-toolbar-actions',
 
         // handle updated baton to pageController
         var current = this.pages.getCurrentPage();
+
+        // handle baton to navbar
+        // this is special for mail as we might show the "edit draft" action in the upper right corner
+        // for draft mails
+        current.navbar.setBaton(baton);
         if (current.toolbar) current.toolbar.setBaton(baton);
         if (current.secondaryToolbar) current.secondaryToolbar.setBaton(baton);
 
