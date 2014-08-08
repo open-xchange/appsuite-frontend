@@ -4,7 +4,7 @@
  * law. Any use of the work other than as authorized under this license
  * or copyright law is prohibited.
  *
- * http:// creativecommons.org/licenses/by-nc-sa/2.5/
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *

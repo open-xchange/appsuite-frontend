@@ -17,6 +17,7 @@ define('io.ox/search/view-template',
      'io.ox/core/api/apps',
      'settings!io.ox/core',
      'io.ox/search/util',
+     'io.ox/search/autocomplete/view',
      'io.ox/core/tk/autocomplete'
     ], function (gt, ext, appAPI, settings, util) {
 
@@ -73,142 +74,6 @@ define('io.ox/search/view-template',
             current: 1,
             'default': 2,
             standard: 3
-        },
-        dropdown = function (baton, container) {
-            var ref,
-                app = baton.app,
-                model = baton.model,
-                cancelbtn, searchbtn;
-
-            // buttons
-            cancelbtn =  $('<a href="#">')
-                            .attr({
-                                'tabindex': '1',
-                                'class': 'btn-clear',
-                                'data-toggle': 'tooltip',
-                                'data-placement': 'bottom',
-                                'data-animation': 'false',
-                                'data-container': 'body',
-                                'data-original-title': gt('Close search')
-                            }).append(
-                                $('<i class="fa fa-times"></i>')
-                            )
-                            .tooltip()
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                app.view.trigger('button:clear');
-                            });
-
-            searchbtn = $('<span class="input-group-btn">').append(
-                            // submit
-                            $('<button type="button">')
-                            .attr({
-                                'tabindex': '1',
-                                'class': 'btn btn-default btn-search',
-                                'data-toggle': 'tooltip',
-                                'data-placement': 'bottom',
-                                'data-animation': 'false',
-                                'data-container': 'body',
-                                'data-original-title': gt('Search'),
-                                'aria-label': gt('Search')
-                            })
-                            .append(
-                                $('<i class="fa fa-search"></i>')
-                            )
-                            .tooltip()
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                var e = $.Event('keydown');
-                                e.which = 13;
-                                $(ref).trigger(e);
-                                app.view.trigger('button:search');
-                            })
-                        );
-            // input group and dropdown
-            this.append(
-                $('<div class="input-group">')
-                    .append(
-                        ref = $('<input type="text" class="form-control search-field" tabindex="1">')
-                        .attr({
-                            placeholder: gt('Search') + ' ...'
-                        })
-                        .autocomplete({
-                            api: app.apiproxy,
-                            minLength: 0,
-                            mode: 'search',
-                            delay: 100,
-                            parentSelector: container  ? '.query' : '.io-ox-search',
-                            model: model,
-                            container: container,
-                            cbshow: function () {
-                                // reset autocomplete tk styles
-                                if (container)
-                                    $(this).attr('style', '');
-
-                            },
-                            // TODO: would be nice to move to control
-                            source: function (val) {
-                                // show dropdown immediately (busy by autocomplete tk)
-                                ref.open();
-                                return app.apiproxy.search(val);
-                            },
-                            draw: function (value) {
-                                $(this)
-                                    .data(value)
-                                    .html(value.display_name);
-                                if (container) {
-                                    // reset calculated style from autocomplete tk
-                                    container.attr('style', 'width: 100%;');
-                                }
-                            },
-                            stringify: function () {
-                                // keep input value when item selected
-                                return ref.val();
-                            },
-                            click: function (e) {
-                                // apply selected filter
-                                var node = $(e.target).closest('.autocomplete-item'),
-                                    value = node.data();
-                                ref.val('');
-
-                                // exclusive: define used option (type2 default is index 0 of options)
-                                var option = _.find(value.options, function (item) {
-                                    return item.id === value.id;
-                                });
-
-                                model.add(value.facet, value.id, (option || {}).id);
-                            }
-                        })
-                        .on('focus focus:custom click', function (e, opt) {
-                            // hint: 'click' supports click on already focused
-                            // keep dropdown closed on focus event
-                            opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
-
-                            // simulate tab keyup event
-                            ref.trigger({
-                                    type: 'keyup',
-                                    which: 9
-                                }, opt);
-
-                        })
-                        .on('keyup', function (e, options) {
-                            var opt = _.extend({}, (e.data || {}), options || {}),
-                                // keys pressed
-                                down = e.which === 40 && !ref.isOpen(),
-                                tab = e.which === 9;
-
-                            // adjust original event instead of throwing a new one
-                            // cause handler (fnKeyUp) is debounced and we might set some options
-                            if (_.isUndefined(opt.isRetry) && (down || tab)) {
-                                e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
-                            }
-                        }),
-                        cancelbtn,
-                        searchbtn
-                    )
-            );
-
-            return this;
         };
 
     // window mode
@@ -281,11 +146,14 @@ define('io.ox/search/view-template',
             var row,
                 mobile = this.find('.mobile-dropdown');
 
+            //add mobile container
+            baton.$.container = mobile.length ? mobile : undefined;
+
             $('<div class="row query">').append(
                 row = $('<div class="col-xs-12">')
             ).appendTo(this);
 
-            dropdown.call(row, baton, mobile.length ? mobile : undefined);
+            ext.point('io.ox/search/autocomplete/searchfield').invoke('draw', row, baton);
         }
     });
 

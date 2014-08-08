@@ -54,6 +54,22 @@
         &.unselectable {
             color: rgba(128, 128, 128, 0.71);
         }
+
+        &.contacts, &.contact, &.participant, &.task_participants {
+            .image {
+                margin-right: 14px;
+                display: inline-block;
+                float: left;
+                .picture(42px, 42px);
+            }
+            .name {
+                .ellipsis();
+            }
+            .email {
+                color: rgba(0, 0, 0, 0.5);
+                .ellipsis();
+            }
+        }
     }
 }
 
