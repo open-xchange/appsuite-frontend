@@ -184,12 +184,16 @@ define('io.ox/core/tk/list',
 
         onSort: function () {
             // sort all nodes by index
-            var nodes = _(this.getItems()).sortBy(function (node) {
+            var nodes = $(_(this.getItems()).sortBy(function (node) {
                 var index = $(node).attr('data-index'); // don't use data() here
                 return parseInt(index, 10);
-            });
+            }));
+            // store focus
+            var active = nodes.index(document.activeElement);
             // re-append to apply sorting
             this.$el.append(nodes);
+            // restore focus
+            if (active > -1) nodes.eq(active).focus();
         },
 
         // called whenever a model inside the collection changes
