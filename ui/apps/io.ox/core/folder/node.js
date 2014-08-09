@@ -35,7 +35,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
         reset: function () {
             if (this.isReset) return;
-            if (this.isVirtual || this.collection.fetched) this.onReset(); else this.list();
+            if (this.collection.fetched) this.onReset(); else this.list();
         },
 
         getFilter: function () {
@@ -322,6 +322,15 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.$.label.text(this.getTitle());
         },
 
+        renderTooltip: function () {
+            var data = this.model.toJSON(), summary = [];
+            if (_.isNumber(data.total)) summary.push(gt('Total: %1$d', data.total));
+            if (_.isNumber(data.unread)) summary.push(gt('Unread: %1$d', data.unread));
+            summary = summary.join(', ');
+            if (summary) summary = ' (' + summary + ')';
+            this.$.selectable.attr('title', this.model.get('title') + summary);
+        },
+
         renderContextControl: function () {
             this.$.selectable.append(
                 $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
@@ -355,6 +364,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.renderAttributes();
             this.renderEmpty();
             this.renderTitle();
+            this.renderTooltip();
             this.renderCounter();
             this.onChangeSubFolders();
             ext.point('io.ox/core/foldertree/node').invoke('render', this.$el, ext.Baton({ view: this }));

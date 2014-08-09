@@ -282,6 +282,9 @@ define('io.ox/core/folder/api',
             });
         }
 
+        // avoid loading virtual folders
+        if (/^virtual/.test(id)) return $.when([]);
+
         return http.GET({
             module: 'folders',
             params: {

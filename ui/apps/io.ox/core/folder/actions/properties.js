@@ -13,56 +13,61 @@
 
 define('io.ox/core/folder/actions/properties',
     ['io.ox/core/folder/api',
-     'io.ox/core/folder/breadcrumb',
      'io.ox/core/capabilities',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/caldav',
-     'gettext!io.ox/core'], function (api, getBreadcrumb, capabilities, dialogs, caldavConfig, gt) {
+     'gettext!io.ox/core'], function (api, capabilities, dialogs, caldavConfig, gt) {
 
     'use strict';
 
+    function ucfirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function group(label, value) {
+        return $('<div class="form-group">').append(
+            // label
+            $('<label class="control-label">').text(label),
+            // value
+            $('<input type="text" class="form-control">')
+                .prop('readonly', true)
+                .val(value)
+        );
+    }
+
     return function folderProperties(id) {
 
-        api.get(id).done(function (folder) {
-            var title = gt('Properties');
-            var dialog = new dialogs.ModalDialog()
+        var model = api.pool.getModel(id),
+            module = model.get('module');
+
+        new dialogs.ModalDialog()
             .header(
-                getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
+                $('<h4>').text(gt('Properties') + ': ' + model.get('title'))
             )
             .build(function () {
-                function ucfirst(str) {
-                    return str.charAt(0).toUpperCase() + str.slice(1);
-                }
+
                 var node = this.getContentNode().append(
-                    $('<div class="form-group">').append(
-                        $('<label class="control-label">')
-                            .text(gt('Folder type')),
-                        $('<input class="form-control">', { type: 'text' })
-                            .prop('readonly', true)
-                            .val(ucfirst(folder.module))
+                    group(
+                        gt('Folder type'), ucfirst(module)
+                    ),
+                    group(
+                        //#. number of items in a folder
+                        gt('Number of items'), model.get('total')
                     )
                 );
                 // show CalDAV URL for calendar folders
                 // users requires "caldav" capability
-                if (folder.module === 'calendar' && capabilities.has('caldav')) {
+                if (module === 'calendar' && capabilities.has('caldav')) {
                     node.append(
-                        $('<div class="form-group">').append(
-                            $('<label class="control-label">')
-                                .text(gt('CalDAV URL')),
-                            $('<input class="form-control">', { type: 'text' })
-                                .prop('readonly', true)
-                                .val(
-                                    _.noI18n(caldavConfig.get('url')
-                                        .replace('[hostname]', location.host)
-                                        .replace('[folderId]', id)
-                                )
-                            )
-                        )
+                        group(gt('CalDAV URL'), _.noI18n(
+                            caldavConfig.get('url')
+                                .replace('[hostname]', location.host)
+                                .replace('[folderId]', id)
+                        ))
                     );
                 }
             })
             .addPrimaryButton('ok', gt('Close'))
-            .show().done(function () { dialog = null; });
-        });
+            .show();
     };
 });
