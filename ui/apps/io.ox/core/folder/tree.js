@@ -172,7 +172,7 @@ define('io.ox/core/folder/tree',
             // get folder data and redraw
             api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
-                if (_.device('smartphone')) {
+                if (_.device('smartphone')) {
                     ul.append('<li><a class="io-ox-action-link" data-action="close-menu"><i class="fa fa-chevron-down"></i></a></li>');
                 }
                 ext.point(point).invoke('draw', ul, baton);
@@ -180,8 +180,6 @@ define('io.ox/core/folder/tree',
                 if (!_.device('smartphone') && ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
                     ul.css({ top: 'auto', bottom: '20px' });
                 }
-                //focus first item
-                ul.find('a[data-action="close-menu"],a[role="menuitem"]').first().focus();
             });
         },
 
