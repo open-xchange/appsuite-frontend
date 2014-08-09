@@ -301,7 +301,7 @@
         .ellipsis();
         span.person {
             color: inherit;
-            .fontWeight(bold);
+            .fontWeight(500);
         }
     }
 
@@ -335,7 +335,6 @@
 
     .list-item-content {
 
-        .fontWeight(300);
         line-height: 20px; // need that to avoid flicker base on icon height
         .ellipsis();
 
@@ -352,8 +351,13 @@
         i.icon-forwarded { color: #888; }
 
         .subject {
-        	overflow: hidden;
+            .fontWeight(300);
+            overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .drag-title {
+            opacity: 0.70;
         }
     }
 
