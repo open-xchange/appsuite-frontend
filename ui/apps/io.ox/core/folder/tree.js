@@ -82,6 +82,10 @@ define('io.ox/core/folder/tree',
         },
 
         filter: function (folder, model) {
+            // custom filter?
+            var filter = this.options.filter,
+                result = _.isFunction(filter) ? filter.apply(this, arguments) : undefined;
+            if (result !== undefined) return result;
             // only standard folder on top level
             if (this.module === 'mail' && folder === '1') {
                 return account.isStandardFolder(model.id);

@@ -32,7 +32,11 @@ define('io.ox/files/filepicker',
             primaryButtonText: gt('Save'),
             // cancelButtonText: gt('Cancel'), // really?
             multiselect: true,
-            width: window.innerWidth * 0.8
+            width: window.innerWidth * 0.8,
+            tree: {
+                // must be noop (must return undefined!)
+                filter: $.noop
+            }
         }, options);
 
         var container = $('<div>'),
@@ -102,6 +106,8 @@ define('io.ox/files/filepicker',
                     })
                 );
             },
+
+            filter: options.tree.filter,
 
             initialize: function (dialog, tree) {
 
