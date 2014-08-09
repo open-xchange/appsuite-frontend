@@ -21,8 +21,9 @@ define('io.ox/tasks/actions',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'io.ox/core/extPatterns/actions',
-     'io.ox/tasks/common-extensions'
-    ], function (ext, api, util, links, settings, gt, notifications, print, actions, extensions) {
+     'io.ox/tasks/common-extensions',
+     'io.ox/core/folder/api'
+    ], function (ext, api, util, links, settings, gt, notifications, print, actions, extensions, folderAPI) {
 
     'use strict';
 
@@ -172,68 +173,49 @@ define('io.ox/tasks/actions',
         });
     }
 
+    // helper
+    function isShared(id) {
+        var data = folderAPI.pool.getModel(id);
+        return folderAPI.is('shared', data);
+    }
+
     new Action('io.ox/tasks/actions/move', {
         requires: function (e) {
-            if (!(e.collection.has('some') && e.collection.has('delete'))) {
-                return false;
-            } else {
-                var def = $.Deferred();
-                ox.load(['io.ox/core/api/folder'])
-                    .done(function (folderApi) {
-                        e.baton.app.folder.getData().done(function (folder) {
-                            if (folderApi.is('shared', folder)) {//no move in shared folders see Bug 33706
-                                def.resolve(false);
-                            } else {
-                                def.resolve(true);
-                            }
-                        }).fail(function () {
-                            def.resolve(false);
-                        });
-                    });
-                return def;
-            }
+            if (!e.collection.has('some')) return false;
+            if (!e.collection.has('delete')) return false;
+            if (isShared(e.baton.app.folder.get())) return false;
+            return true;
         },
         multiple: function (list, baton) {
 
             var vgrid = baton.grid || (baton.app && baton.app.getGrid());
 
-            function commit() {
-                require(['io.ox/core/folder/actions/move'], function (move) {
-
-                    move.item({
-                        api: api,
-                        button: gt('Move'),
-                        flat: true,
-                        indent: false,
-                        list: list,
-                        module: 'tasks',
-                        root: '1',
-                        settings: settings,
-                        success: {
-                            single: 'Task has been moved',
-                            multiple: 'Tasks have been moved'
-                        },
-                        target: baton.target,
-                        title: gt('Move'),
-                        type: 'move',
-                        vgrid: vgrid
-                    });
-                });
+            // shared?
+            if (isShared(baton.app.folder.get()) || (baton.target && isShared(baton.target))) {
+                return notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
             }
 
-            if (baton.target){
-                ox.load(['io.ox/core/api/folder']).done(function (folderAPI)  {
-                    $.when(baton.app.folder.get(), folderAPI.get({folder: baton.target})).done(function (currentFolder, targetFolder) {
-                        if (folderAPI.is('shared', currentFolder) || folderAPI.is('shared', targetFolder)) {//no move in shared folders see Bug 33706
-                            notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
-                        } else {
-                            commit();
-                        }
-                    });
+            require(['io.ox/core/folder/actions/move'], function (move) {
+
+                move.item({
+                    api: api,
+                    button: gt('Move'),
+                    flat: true,
+                    indent: false,
+                    list: list,
+                    module: 'tasks',
+                    root: '1',
+                    settings: settings,
+                    success: {
+                        single: 'Task has been moved',
+                        multiple: 'Tasks have been moved'
+                    },
+                    target: baton.target,
+                    title: gt('Move'),
+                    type: 'move',
+                    vgrid: vgrid
                 });
-            } else {
-                commit();
-            }
+            });
         }
     });
 
