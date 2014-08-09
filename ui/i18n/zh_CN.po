@@ -514,11 +514,11 @@ msgstr "账户设置"
 msgid "Account added successfully"
 msgstr "户口添加成功"
 
-#: apps/io.ox/mail/accounts/view-form.js:511 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:516 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "账户名称"
 
-#: apps/io.ox/mail/accounts/view-form.js:508 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:513 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "账户设定"
 
@@ -774,9 +774,9 @@ msgstr "所有附件"
 msgid "All day"
 msgstr "整天"
 
-#: apps/io.ox/search/view-template.js:640 module:io.ox/core
-#: apps/io.ox/search/view-template.js:643
-#: apps/io.ox/search/view-template.js:650
+#: apps/io.ox/search/view-template.js:199 module:io.ox/core
+#: apps/io.ox/search/view-template.js:202
+#: apps/io.ox/search/view-template.js:209
 msgid "All folders"
 msgstr "所有文件夹"
 
@@ -841,7 +841,7 @@ msgstr "追加 vcard"
 msgid "Application Toolbar"
 msgstr "应用程序工具条"
 
-#: apps/io.ox/mail/main.js:1084 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1092 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 
@@ -1455,7 +1455,7 @@ msgid "Close folder view"
 msgstr "关闭文件夹视图"
 
 #: apps/io.ox/core/desktop.js:1347 module:io.ox/core
-#: apps/io.ox/search/view-template.js:92
+#: apps/io.ox/search/autocomplete/extensions.js:125
 #, fuzzy
 #| msgid "Close all"
 msgid "Close search"
@@ -2393,7 +2393,8 @@ msgstr "编辑描述"
 msgid "Edit distribution list"
 msgstr "编辑通讯组列表"
 
-#: apps/io.ox/mail/toolbar.js:93 module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js:150 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:93
 msgid "Edit draft"
 msgstr "编辑草稿"
 
@@ -2442,7 +2443,7 @@ msgstr "电子邮件 2"
 msgid "Email 3"
 msgstr "电子邮件 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:523 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:528 module:io.ox/settings/settings
 msgid "Email address"
 msgstr "电子邮件地址"
 
@@ -2914,7 +2915,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:143 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:407 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Folder"
 msgstr "文件夹"
 
@@ -3959,11 +3960,11 @@ msgstr "月"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:614
+#: apps/io.ox/search/facets/extensions.js:342
 msgid "More"
 msgstr "更多"
 
-#: apps/io.ox/search/view-template.js:365 module:io.ox/core
+#: apps/io.ox/search/view-template.js:119 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "找到当前显示以外的 %1$s 个项目"
 
@@ -5572,12 +5573,12 @@ msgstr "排程"
 
 #: apps/io.ox/core/desktop.js:1584 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
-#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:161
-#: module:io.ox/search apps/io.ox/search/main.js:221
-#: apps/io.ox/search/view-template.js:112
-#: apps/io.ox/search/view-template.js:113
-#: apps/io.ox/search/view-template.js:133
-#: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
+#: apps/io.ox/core/main.js:768 apps/io.ox/search/autocomplete/extensions.js:34
+#: apps/io.ox/search/autocomplete/extensions.js:152
+#: apps/io.ox/search/autocomplete/extensions.js:153
+#: apps/io.ox/search/main.js:161 module:io.ox/search
+#: apps/io.ox/search/main.js:221 apps/plugins/portal/flickr/register.js:215
+#: module:plugins/portal
 msgid "Search"
 msgstr "搜索"
 
@@ -7188,7 +7189,7 @@ msgstr "使用方向键以更改项目位置"
 msgid "Use fixed-width font for text mails"
 msgstr "文本邮件使用固定宽度"
 
-#: apps/io.ox/mail/accounts/view-form.js:531 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:536 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "该户口使用统一邮件"
 
@@ -7675,7 +7676,7 @@ msgstr "您的电子邮件地址"
 msgid "Your messages"
 msgstr "您的信息"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:522 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "您的名字"

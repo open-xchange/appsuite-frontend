@@ -531,11 +531,11 @@ msgstr "Setări cont"
 msgid "Account added successfully"
 msgstr "Contul a fost adăugat cu succes"
 
-#: apps/io.ox/mail/accounts/view-form.js:511 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:516 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "Nume cont"
 
-#: apps/io.ox/mail/accounts/view-form.js:508 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:513 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "Setări cont"
 
@@ -792,9 +792,9 @@ msgstr "Toate fișierele atașate"
 msgid "All day"
 msgstr "Toată ziua"
 
-#: apps/io.ox/search/view-template.js:640 module:io.ox/core
-#: apps/io.ox/search/view-template.js:643
-#: apps/io.ox/search/view-template.js:650
+#: apps/io.ox/search/view-template.js:199 module:io.ox/core
+#: apps/io.ox/search/view-template.js:202
+#: apps/io.ox/search/view-template.js:209
 msgid "All folders"
 msgstr "Toate dosarele"
 
@@ -859,7 +859,7 @@ msgstr "Adaugă un vCard"
 msgid "Application Toolbar"
 msgstr "Bară de unelte pentru aplicații"
 
-#: apps/io.ox/mail/main.js:1084 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1092 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "S-ar putea ca aplicația să nu funcționeze conform așteptărilor până când "
@@ -1489,7 +1489,7 @@ msgid "Close folder view"
 msgstr "Închide vederea dosar"
 
 #: apps/io.ox/core/desktop.js:1347 module:io.ox/core
-#: apps/io.ox/search/view-template.js:92
+#: apps/io.ox/search/autocomplete/extensions.js:125
 #, fuzzy
 #| msgid "Close all"
 msgid "Close search"
@@ -2438,7 +2438,8 @@ msgstr "Editează descrierea"
 msgid "Edit distribution list"
 msgstr "Editează lista de distribuție"
 
-#: apps/io.ox/mail/toolbar.js:93 module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js:150 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:93
 msgid "Edit draft"
 msgstr "Editează ciorna"
 
@@ -2487,7 +2488,7 @@ msgstr "E-mail 2"
 msgid "Email 3"
 msgstr "E-mail 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:523 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:528 module:io.ox/settings/settings
 msgid "Email address"
 msgstr "Adresă de e-mail"
 
@@ -2969,7 +2970,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:143 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:407 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Folder"
 msgstr "Dosar"
 
@@ -4027,11 +4028,11 @@ msgstr "Luni"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:614
+#: apps/io.ox/search/facets/extensions.js:342
 msgid "More"
 msgstr "Mai multe"
 
-#: apps/io.ox/search/view-template.js:365 module:io.ox/core
+#: apps/io.ox/search/view-template.js:119 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "S-au găsit mai multe elemente decât cele %1$s afișate momentan."
 
@@ -5667,12 +5668,12 @@ msgstr "Programare"
 
 #: apps/io.ox/core/desktop.js:1584 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
-#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:161
-#: module:io.ox/search apps/io.ox/search/main.js:221
-#: apps/io.ox/search/view-template.js:112
-#: apps/io.ox/search/view-template.js:113
-#: apps/io.ox/search/view-template.js:133
-#: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
+#: apps/io.ox/core/main.js:768 apps/io.ox/search/autocomplete/extensions.js:34
+#: apps/io.ox/search/autocomplete/extensions.js:152
+#: apps/io.ox/search/autocomplete/extensions.js:153
+#: apps/io.ox/search/main.js:161 module:io.ox/search
+#: apps/io.ox/search/main.js:221 apps/plugins/portal/flickr/register.js:215
+#: module:plugins/portal
 msgid "Search"
 msgstr "Caută"
 
@@ -7338,7 +7339,7 @@ msgstr "Utilizați tastele cursor pentru a schimba poziția elementului"
 msgid "Use fixed-width font for text mails"
 msgstr "Utilizează un font de lățime fixă pentru mesajele text"
 
-#: apps/io.ox/mail/accounts/view-form.js:531 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:536 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "Folosește mesageria unificată pentru acest cont"
 
@@ -7859,7 +7860,7 @@ msgstr "Adresa dumneavoastră de mail"
 msgid "Your messages"
 msgstr "Mesajele dumneavoastră"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:522 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Numele dumneavoastră"

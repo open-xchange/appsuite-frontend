@@ -510,11 +510,11 @@ msgstr "Tilin asetukset"
 msgid "Account added successfully"
 msgstr "Tili onnistuneesti päivitetty"
 
-#: apps/io.ox/mail/accounts/view-form.js:511 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:516 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "Tilin nimi"
 
-#: apps/io.ox/mail/accounts/view-form.js:508 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:513 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "Tilin asetukset"
 
@@ -771,9 +771,9 @@ msgstr "Kaikki liitteet"
 msgid "All day"
 msgstr "Koko päivän"
 
-#: apps/io.ox/search/view-template.js:640 module:io.ox/core
-#: apps/io.ox/search/view-template.js:643
-#: apps/io.ox/search/view-template.js:650
+#: apps/io.ox/search/view-template.js:199 module:io.ox/core
+#: apps/io.ox/search/view-template.js:202
+#: apps/io.ox/search/view-template.js:209
 msgid "All folders"
 msgstr "Kaikki kansiot"
 
@@ -838,7 +838,7 @@ msgstr "Lisää vCard käyntikorttini"
 msgid "Application Toolbar"
 msgstr "Sovellustyökalupalkki"
 
-#: apps/io.ox/mail/main.js:1084 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1092 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Sovellus ei välttämättä toimi odotetusti ennnen tämän ongelman korjaamista."
@@ -1462,7 +1462,7 @@ msgid "Close folder view"
 msgstr "Sulje kansionäkymä"
 
 #: apps/io.ox/core/desktop.js:1347 module:io.ox/core
-#: apps/io.ox/search/view-template.js:92
+#: apps/io.ox/search/autocomplete/extensions.js:125
 #, fuzzy
 #| msgid "Close all"
 msgid "Close search"
@@ -2403,7 +2403,8 @@ msgstr "Muokkaa kuvausta"
 msgid "Edit distribution list"
 msgstr "Muokkaa jakelulistaa"
 
-#: apps/io.ox/mail/toolbar.js:93 module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js:150 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:93
 msgid "Edit draft"
 msgstr "Muokkaa luonnosta"
 
@@ -2452,7 +2453,7 @@ msgstr "Sähköposti 2"
 msgid "Email 3"
 msgstr "Sähköposti 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:523 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:528 module:io.ox/settings/settings
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
@@ -2930,7 +2931,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:143 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:407 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:185 module:io.ox/core
 msgid "Folder"
 msgstr "Kansio"
 
@@ -3983,11 +3984,11 @@ msgstr "Kuukautta"
 
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:614
+#: apps/io.ox/search/facets/extensions.js:342
 msgid "More"
 msgstr "Lisää"
 
-#: apps/io.ox/search/view-template.js:365 module:io.ox/core
+#: apps/io.ox/search/view-template.js:119 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Löytyi enemmän kuin nyt näytettävät %1$s kohdetta"
 
@@ -5609,12 +5610,12 @@ msgstr "Suunnittelu"
 
 #: apps/io.ox/core/desktop.js:1584 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
-#: apps/io.ox/core/main.js:768 apps/io.ox/search/main.js:161
-#: module:io.ox/search apps/io.ox/search/main.js:221
-#: apps/io.ox/search/view-template.js:112
-#: apps/io.ox/search/view-template.js:113
-#: apps/io.ox/search/view-template.js:133
-#: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
+#: apps/io.ox/core/main.js:768 apps/io.ox/search/autocomplete/extensions.js:34
+#: apps/io.ox/search/autocomplete/extensions.js:152
+#: apps/io.ox/search/autocomplete/extensions.js:153
+#: apps/io.ox/search/main.js:161 module:io.ox/search
+#: apps/io.ox/search/main.js:221 apps/plugins/portal/flickr/register.js:215
+#: module:plugins/portal
 msgid "Search"
 msgstr "Etsi"
 
@@ -7258,7 +7259,7 @@ msgstr "Käytä nuolinäppäimiä muuttaaksesi kohdan sijaintia"
 msgid "Use fixed-width font for text mails"
 msgstr "Näytä tekstimuotoiset postit vakiolevyisellä kirjasimella"
 
-#: apps/io.ox/mail/accounts/view-form.js:531 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:536 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "Käytä tälle tilille yhtenäistä postia"
 
@@ -7764,7 +7765,7 @@ msgstr "Postiosoitteesi"
 msgid "Your messages"
 msgstr "Viestisi"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:522 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Nimesi"

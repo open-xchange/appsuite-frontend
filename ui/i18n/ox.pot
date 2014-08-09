@@ -2258,7 +2258,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:143
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:407
+#: apps/io.ox/search/facets/extensions.js:185
 #: module:io.ox/core
 msgid "Folder"
 msgstr ""
@@ -3745,7 +3745,7 @@ msgstr ""
 
 #: apps/io.ox/core/desktop.js:1347
 #: module:io.ox/core
-#: apps/io.ox/search/view-template.js:92
+#: apps/io.ox/search/autocomplete/extensions.js:125
 msgid "Close search"
 msgstr ""
 
@@ -3759,12 +3759,12 @@ msgstr ""
 #: apps/io.ox/core/desktop.js:1585
 #: apps/io.ox/core/desktop.js:1692
 #: apps/io.ox/core/main.js:768
+#: apps/io.ox/search/autocomplete/extensions.js:34
+#: apps/io.ox/search/autocomplete/extensions.js:152
+#: apps/io.ox/search/autocomplete/extensions.js:153
 #: apps/io.ox/search/main.js:161
 #: module:io.ox/search
 #: apps/io.ox/search/main.js:221
-#: apps/io.ox/search/view-template.js:112
-#: apps/io.ox/search/view-template.js:113
-#: apps/io.ox/search/view-template.js:133
 #: apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
@@ -3828,7 +3828,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:693
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:614
+#: apps/io.ox/search/facets/extensions.js:342
 msgid "More"
 msgstr ""
 
@@ -6435,29 +6435,29 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:508
+#: apps/io.ox/mail/accounts/view-form.js:513
 #: module:io.ox/settings/settings
 msgid "Account settings"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:516
 #: module:io.ox/settings/settings
 msgid "Account name"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:517
+#: apps/io.ox/mail/accounts/view-form.js:522
 #: module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43
 #: module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:523
+#: apps/io.ox/mail/accounts/view-form.js:528
 #: module:io.ox/settings/settings
 msgid "Email address"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:531
+#: apps/io.ox/mail/accounts/view-form.js:536
 #: module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr ""
@@ -7272,7 +7272,7 @@ msgstr ""
 msgid "%1$d selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:1084
+#: apps/io.ox/mail/main.js:1092
 #: module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -7304,6 +7304,12 @@ msgstr ""
 #: apps/io.ox/mail/mobile-toolbar-actions.js:140
 #: module:io.ox/mail
 msgid "Mark as"
+msgstr ""
+
+#: apps/io.ox/mail/mobile-toolbar-actions.js:150
+#: module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:93
+msgid "Edit draft"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js:39
@@ -7559,11 +7565,6 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js:83
 #: module:io.ox/mail
 msgid "Set color"
-msgstr ""
-
-#: apps/io.ox/mail/toolbar.js:93
-#: module:io.ox/mail
-msgid "Edit draft"
 msgstr ""
 
 #: apps/io.ox/mail/toolbar.js:217
@@ -7984,15 +7985,15 @@ msgstr ""
 msgid "No items found"
 msgstr ""
 
-#: apps/io.ox/search/view-template.js:365
+#: apps/io.ox/search/view-template.js:119
 #: module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr ""
 
-#: apps/io.ox/search/view-template.js:640
+#: apps/io.ox/search/view-template.js:199
 #: module:io.ox/core
-#: apps/io.ox/search/view-template.js:643
-#: apps/io.ox/search/view-template.js:650
+#: apps/io.ox/search/view-template.js:202
+#: apps/io.ox/search/view-template.js:209
 msgid "All folders"
 msgstr ""
 
