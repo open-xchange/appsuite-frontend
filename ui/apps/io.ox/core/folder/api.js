@@ -530,22 +530,25 @@ define('io.ox/core/folder/api',
                 data: data,
                 appendColumns: false
             })
-            .then(function () {
-                // reload parent folder's sub-folders
-                return isFlat(module) ? flat({ module: module, cache: false }) : list(id, { cache: false });
+            .then(function getNewFolder(newId) {
+                return get(newId);
             })
-            .done(function () {
-                // update parent folder
+            .then(function reloadSubFolders(data) {
+                return (
+                    isFlat(module) ? flat({ module: module, cache: false }) : list(id, { cache: false })
+                )
+                .then(function () {
+                    // make sure to return new folder data
+                    return data;
+                });
+            })
+            .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
+                api.trigger('create', data);
             })
-            .then(
-                function success(data) {
-                    api.trigger('create', data);
-                },
-                function fail(error) {
-                    api.trigger('create:fail', error, id);
-                }
-            );
+            .fail(function fail(error) {
+                api.trigger('create:fail', error, id);
+            });
         });
     }
 

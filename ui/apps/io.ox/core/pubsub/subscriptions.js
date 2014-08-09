@@ -87,15 +87,16 @@ define('io.ox/core/pubsub/subscriptions',
                                         removeFolder(folder);
                                     }
                                 }
-                            ).then(function (model) {
+                            )
+                            .then(function (model) {
                                 return model.fetch();
-                            }).then(function (model) {
+                            })
+                            .then(function (model) {
                                 var subscriptions = pubsub.subscriptions();
                                 //update the model-(collection)
                                 subscriptions.add(model, {merge: true});
-                            }).then(function () {
-                                return app.folderView.idle().repaint();
-                            }).done(function () {
+                            })
+                            .done(function () {
                                 app.folder.set(folder);
                             });
                         },
@@ -146,21 +147,16 @@ define('io.ox/core/pubsub/subscriptions',
                     folder = require('settings!io.ox/core').get('folder/' + module);
 
                     //...but drive uses current selected folder instead
-                    if (module === 'infostore')
-                        folder = app.folder.get() || folder;
+                    if (module === 'infostore') folder = app.folder.get() || folder;
+
                     if (baton.newFolder) {
 
                         var service = findId(baton.services, baton.model.get('source'));
 
-                        folderAPI.create(
-                            folder,
-                            {
-                                title: service.displayName || gt('New Folder'),
-                                module: self.model.get('entityModule')
-                            },
-                            { silent: true }
-                        )
-                        .then(function (folder) {
+                        folderAPI.create(folder, {
+                            title: service.displayName || gt('New Folder')
+                        })
+                        .done(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
                             saveModel(true);
                         });
