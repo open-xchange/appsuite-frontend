@@ -35,7 +35,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
         reset: function () {
             if (this.isReset) return;
-            if (this.collection.fetched) this.onReset(); else this.list();
+            if (this.isVirtual || this.collection.fetched) this.onReset(); else this.list();
         },
 
         getFilter: function () {
