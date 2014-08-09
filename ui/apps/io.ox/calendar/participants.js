@@ -13,13 +13,13 @@
  */
 
 define('io.ox/calendar/participants',
-        ['io.ox/calendar/util',
-         'gettext!io.ox/calendar',
-         'io.ox/core/api/user',
-         'io.ox/core/api/group',
-         'io.ox/core/api/resource',
-         'io.ox/core/extensions',
-         'less!io.ox/backbone/mini-views/style'], function (util, gt, userAPI, groupAPI, resourceAPI, ext) {
+    ['io.ox/calendar/util',
+     'gettext!io.ox/calendar',
+     'io.ox/core/api/user',
+     'io.ox/core/api/group',
+     'io.ox/core/api/resource',
+     'io.ox/core/extensions',
+     'io.ox/contacts/util'], function (util, gt, userAPI, groupAPI, resourceAPI, ext, contactsUtil) {
 
     'use strict';
 
@@ -38,7 +38,7 @@ define('io.ox/calendar/participants',
             statusClass = util.getConfirmationClass(conf.status),
             isPerson = hash[key] || obj.folder_id,
             personClass = isPerson ? 'person' : '',
-            display_name, name, node, name_lc,
+            text, display_name, name, node, name_lc,
             comment = conf.comment || conf.message || '',
             mail_lc = String(obj.mail || obj.mailaddress || '').toLowerCase();
         // external participant?
@@ -54,14 +54,16 @@ define('io.ox/calendar/participants',
                 name = obj.display_name ? obj.display_name + ' <' + mail_lc + '>' : mail_lc;
                 display_name = obj.display_name || mail_lc;
             }
+            text= $.txt(name);
         } else {
-            name = display_name = obj.display_name || mail_lc;
+            name = display_name = obj.full_name || obj.display_name || mail_lc;
+            text = obj.full_name || $.txt(name);
         }
 
         node = $('<li class="participant">')
             .addClass(looksLikeResource(obj) ? 'halo-resource-link' : 'halo-link')
             .append(
-                $('<a href="#">').addClass(personClass + ' ' + statusClass).text(gt.noI18n(name)),
+                $('<a href="#">').addClass(personClass + ' ' + statusClass).append(text),
                 // has confirmation icon?
                 confirm !== '' ? $('<span>').addClass('status ' + statusClass).append(confirm) : '',
                 // has confirmation comment?
@@ -93,13 +95,13 @@ define('io.ox/calendar/participants',
             var list = baton.data.participants || {},
                 $i = list.length,
                 MIN = 0,
-                participants = $i > MIN ? $('<div>').addClass('participants-mini-view') : $(),
+                participants = $i > MIN ? $('<div>').addClass('participants-view') : $(),
                 confirmations = {};
-        
+
             // has participants? should always be true for appointments. Was $i > 1 (see bug #23295).
             if ($i > MIN) {
                 participants.busy();
-        
+
                 // get internal users
                 var users = _(list)
                     .chain()
@@ -146,7 +148,7 @@ define('io.ox/calendar/participants',
                 } else {
                     confirmations = util.getConfirmations(baton.data);
                 }
-        
+
                 $.when(userAPI.getList(users), groupAPI.getList(groups), resourceAPI.getList(resources))
                 .done(function (userList, groupList, resourceList) {
                     // loop over internal users
@@ -161,8 +163,13 @@ define('io.ox/calendar/participants',
                     }
                     _(userList)
                         .chain()
+                        .map(function (obj) {
+                            obj.full_name = contactsUtil.getFullName(obj, true);
+                            obj.sort_name = obj.last_name || obj.first_name || obj.display_name || '';
+                            return obj;
+                        })
                         .sortBy(function (obj) {
-                            return obj.display_name;
+                            return obj.sort_name;
                         })
                         .each(function (obj) {
                             intList.append(drawParticipant(obj, confirmations));
@@ -182,7 +189,7 @@ define('io.ox/calendar/participants',
                     _(external).each(function (obj) {
                         extList.append(drawParticipant(obj, confirmations));
                     });
-        
+
                     // loop over groups
                     _(groupList)
                         .chain()
@@ -201,14 +208,19 @@ define('io.ox/calendar/participants',
                                         glist = $('<ul>').addClass('participant-list list-inline')
                                     )
                                 );
-        
+
                                 userAPI.getList(memberList)
                                     .done(function (members) {
                                         // loop members
                                         _(members)
                                             .chain()
+                                            .map(function (obj) {
+                                                obj.full_name = contactsUtil.getFullName(obj, true);
+                                                obj.sort_name = obj.last_name || obj.first_name || obj.display_name || '';
+                                                return obj;
+                                            })
                                             .sortBy(function (obj) {
-                                                return obj.display_name;
+                                                return obj.sort_name;
                                             })
                                             .each(function (obj) {
                                                 glist.append(drawParticipant(obj, confirmations));
@@ -292,6 +304,6 @@ define('io.ox/calendar/participants',
             return participants;
         };
     }
-    
+
     return ParticipantsView;
 });
