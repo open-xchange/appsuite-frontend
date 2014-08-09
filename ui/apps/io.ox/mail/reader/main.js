@@ -13,8 +13,10 @@
 
 define('io.ox/mail/reader/main',
     ['io.ox/mail/threadview',
-     'io.ox/mail/util'
-    ], function (threadView, util) {
+     'io.ox/mail/api',
+     'io.ox/mail/util',
+     'io.ox/core/notifications'
+    ], function (threadView, api, util, notifications) {
 
     'use strict';
 
@@ -71,10 +73,30 @@ define('io.ox/mail/reader/main',
 
             app.setWindow(win);
             app.mediate();
-
-            if (options.cid) app.showMail(options.cid);
-
             win.show();
+
+            var cid = options.cid, obj;
+
+            if (cid !== undefined) {
+                // called from mail app
+                obj = _.cid(String(cid).replace(/^thread\./, ''));
+                app.setState({ folder: obj.folder_id, id: obj.id });
+                app.showMail(cid);
+                return;
+            }
+
+            // deep-link
+            obj = app.getState();
+            cid = _.cid(obj);
+
+            if (obj.folder && obj.id) {
+                api.get(obj).then(
+                    function success() {
+                        app.showMail(cid);
+                    },
+                    notifications.yell
+                );
+            }
         });
     }
 
