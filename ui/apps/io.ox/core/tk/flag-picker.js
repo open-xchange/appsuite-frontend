@@ -76,8 +76,10 @@ define('io.ox/core/tk/flag-picker',
             node.append(
                 $('<div>').append(
                     link = $('<a href="#" tabindex="1">').append(
-                        $('<i class="flag-dropdown-icon">')
-                        .attr('data-color', color)
+                        $('<i class="flag-dropdown-icon">').attr({
+                            'data-color': color,
+                            'title': gt('Set color')
+                        })
                         .addClass('flag_' + color + ' ' + (color ? colorLabelIcon : colorLabelIconEmpty))
                     )
                 )
