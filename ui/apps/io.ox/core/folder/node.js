@@ -38,10 +38,17 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             if (this.collection.fetched) this.onReset(); else this.list();
         },
 
+        getFilter: function () {
+            var o = this.options,
+                context = o.filter ? this : o.tree,
+                fn = o.filter || o.tree.filter;
+            return fn.bind(context, o.model_id);
+        },
+
         onReset: function () {
 
             var o = this.options,
-                models = _(this.collection.filter(o.tree.filter.bind(o.tree, o.model_id))),
+                models = _(this.collection.filter(this.getFilter())),
                 exists = {};
 
             // recycle existing nodes
@@ -81,10 +88,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
         onAdd: function (model) {
             // filter first
-            var o = this.options, node;
-            if (!o.tree.filter(o.model_id, model)) return;
+            if (!this.getFilter()(model)) return;
             // add
-            node = this.getTreeNode(model);
+            var node = this.getTreeNode(model);
             this.$.subfolders.append(node.render().$el);
             this.options.tree.appear(node);
             this.model.set('subfolders', true);

@@ -73,6 +73,23 @@ define('io.ox/core/folder/extensions',
                     })
                 );
             });
+        },
+
+        publicFolders: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    filter: function (id, model) {
+                        return model.get('id') === 'default0/Public';
+                    },
+                    folder: '1',
+                    headless: true,
+                    open: true,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el
+            );
         }
     };
 
@@ -120,6 +137,11 @@ define('io.ox/core/folder/extensions',
             id: 'remote-accounts',
             index: INDEX += 100,
             draw: extensions.remoteAccounts
+        },
+        {
+            id: 'public',
+            index: INDEX += 100,
+            draw: extensions.publicFolders
         },
         {
             id: 'below',
