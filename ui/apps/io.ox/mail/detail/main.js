@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/reader/main',
+define('io.ox/mail/detail/main',
     ['io.ox/mail/threadview',
      'io.ox/mail/api',
      'io.ox/mail/util',
@@ -20,7 +20,7 @@ define('io.ox/mail/reader/main',
 
     'use strict';
 
-    var NAME = 'io.ox/mail/reader';
+    var NAME = 'io.ox/mail/detail';
 
     ox.ui.App.mediator(NAME, {
         /*
@@ -41,7 +41,7 @@ define('io.ox/mail/reader/main',
                 if (app.threadView.model) {
                     var subject = app.threadView.model.get('subject');
                     app.setTitle(util.getSubject(subject));
-                    // respond to 'remove' event to close the reader
+                    // respond to 'remove' event to close the detail view
                     app.threadView.listenTo(app.threadView.model, 'remove', function () {
                         app.threadView.remove();
                         app.quit();

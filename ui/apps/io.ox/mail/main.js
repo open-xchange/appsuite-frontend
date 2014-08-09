@@ -917,11 +917,11 @@ define('io.ox/mail/main',
          * Add support for selection:
          */
         'selection-doubleclick': function (app) {
-            // reader does not make sense on small devices
+            // detail app does not make sense on small devices
             // they already see emails in full screen
             if (_.device('small')) return;
             app.listView.on('selection:doubleclick', function (list) {
-                ox.launch('io.ox/mail/reader/main', { cid: list[0] });
+                ox.launch('io.ox/mail/detail/main', { cid: list[0] });
             });
         },
 
