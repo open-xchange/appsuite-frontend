@@ -4237,7 +4237,7 @@ input.flat-input {
 
         .divider {
             margin: 0;
-            height: @marginLarge;
+            height: @marginLarge - 2 * @marginSmall; // because the siblings still have margins
             visibility: hidden;
         }
 
