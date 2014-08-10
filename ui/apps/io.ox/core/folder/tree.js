@@ -134,7 +134,9 @@ define('io.ox/core/folder/tree',
                         left = offset.left + target.outerWidth() + 7;
 
                     this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).busy();
-                    this.$dropdown.addClass('open').data('previous-focus', target); // helps to restore focus (see renderContextMenu)
+                    this.$dropdown
+                        .data('previous-focus', target) // helps to restore focus (see renderContextMenu)
+                        .find('.dropdown-toggle').dropdown('toggle'); // use official method
 
                     // load relevant code on demand
                     require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this)));

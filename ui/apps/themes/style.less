@@ -3502,7 +3502,6 @@ a.toolbar-action, .toolbar-action > a {
 }
 
 /* context menu */
-.context-dropdown.dropdown { position: fixed; }
 .context-dropdown {
 
     position: fixed;
@@ -3514,8 +3513,13 @@ a.toolbar-action, .toolbar-action > a {
     background-color: rgba(255, 255, 255, 0.01);
     display: none;
 
+    &.dropdown {
+        position: fixed;
+    }
+
     .dropdown-toggle {
-        display: none;
+        // must be visible in order to receive the focus
+        outline: 0;
     }
 
     &.open {
