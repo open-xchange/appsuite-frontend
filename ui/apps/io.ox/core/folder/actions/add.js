@@ -48,7 +48,8 @@ define('io.ox/core/folder/actions/add',
         return api.create(folder, {
             title: $.trim(title),
             module: opt.module
-        });
+        })
+        .fail(notifications.yell);
     }
 
     function getTitle(folder, module) {
