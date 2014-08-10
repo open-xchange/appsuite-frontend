@@ -50,6 +50,7 @@ define('io.ox/core/tk/list',
         events: {
             'focus .list-item': 'onItemFocus',
             'blur .list-item': 'onItemBlur',
+            'click': 'onKeepFocus',
             'keydown .list-item': 'onItemKeydown',
             'scroll': 'onScroll'
         },
@@ -62,6 +63,11 @@ define('io.ox/core/tk/list',
         onItemBlur: function () {
             this.$el.attr('tabindex', 1);
             this.$el.removeClass('has-focus');
+        },
+
+        onKeepFocus: function (e) {
+            if (e.target !== this.el) return;
+            this.getItems().filter('.selected').focus();
         },
 
         onItemKeydown: function (e) {
