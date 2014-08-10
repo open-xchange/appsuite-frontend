@@ -88,7 +88,9 @@ define('io.ox/calendar/edit/recurrence-view',
     };
 
     var CalendarWidgets = {
+
         days: function ($anchor, attribute) {
+
             var self = this,
                 nodes = {},
                 now = new dateAPI.Local(),
@@ -103,12 +105,11 @@ define('io.ox/calendar/edit/recurrence-view',
                     selectedDays = [];
 
                 _(nodes).each(function (node, day) {
-                    node.find('span').removeClass('fa-check fa-times');
                     if (value[day]) {
                         selectedDays.push(DAYS.i18n[day]);
-                        node.find('span').addClass('fa fa-check');
+                        node.find('i').attr('class', 'fa fa-check');
                     } else {
-                        node.find('span').addClass('fa fa-times');
+                        node.find('i').attr('class', 'fa fa-fw');
                     }
                 });
 
@@ -116,20 +117,23 @@ define('io.ox/calendar/edit/recurrence-view',
                 self.trigger('redraw', self);
             }
 
-            // Now build the menu
-            var $menu = $('<ul class="dropdown-menu no-clone" role="menu">');
+            // rotate on a copy
+            var array = DAYS.values.slice();
 
             for (var i = 0; i < dateAPI.locale.weekStart; i++) {
-                DAYS.values.push(DAYS.values.shift());
+                array.push(array.shift());
             }
 
-            _(DAYS.values).each(function (day) {
-                $menu.append(
-                     nodes[day] = $('<li>')
-                        .append($('<a href="#">')
-                            .attr({ tabindex: $anchor.attr('tabindex') })
-                            .text(DAYS.i18n[day])
-                            .append('<span class="fa fa-check pull-left"></span>')
+            // Now build the menu
+            $container.append(
+                $('<ul class="dropdown-menu no-clone" role="menu">').append(
+                    _(array).map(function (day) {
+                        return (nodes[day] = $('<li>').append(
+                            $('<a href="#">')
+                            .attr({ tabindex: $anchor.attr('tabindex') }).append(
+                                $('<i class="fa fa-check">'),
+                                $.txt(DAYS.i18n[day])
+                            )
                             .on('click', function (e) {
                                 e.preventDefault();
                                 var bitmask = self[attribute];
@@ -142,10 +146,10 @@ define('io.ox/calendar/edit/recurrence-view',
                                 }
                                 return false;
                             })
-                    )
-                );
-            });
-            $container.append($menu);
+                        ));
+                    })
+                )
+            );
 
             // Tell the anchor that it triggers the dropdown
             $anchor.attr({
