@@ -2561,7 +2561,7 @@ span.hint {
 .io-ox-inline-links {
 
     font-size: @inline-link-font-size;
-    font-weight: 300;
+    font-weight: normal;
     margin: @inline-links-margin;
     clear: both;
     .user-select(none);
@@ -2569,14 +2569,11 @@ span.hint {
 
     a {
 
-        &:hover {
-            text-decoration: underline;
-        }
+        &:hover { text-decoration: none; } // changed to none with 7.6.1
 
-        &.no-underline:hover {
-            text-decoration: none;
-        }
-
+        // &.no-underline:hover {
+        //     text-decoration: none;
+        // }
     }
 
     & > li {
