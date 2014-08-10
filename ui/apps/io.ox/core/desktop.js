@@ -447,7 +447,12 @@ define('io.ox/core/desktop',
                     if (name) {
                         ext.point(name + '/main').invoke('launch', this, this.options);
                     }
-                    deferred = this.get('launch').call(this, this.options) || $.when();
+                    try {
+                        var fn = this.get('launch');
+                        deferred = fn.call(this, this.options) || $.when();
+                    } catch (e) {
+                        console.error('Error while launching application:', e.message, e, this);
+                    }
                 }
                 deferred.then(
                     function success() {
