@@ -30,6 +30,7 @@ define('io.ox/core/folder/tree',
         events: {
             'click .contextmenu-control': 'onToggleContextMenu',
             'keydown .contextmenu-control': 'onKeydown',
+            'contextmenu .selectable': 'onContextMenu'
         },
 
         initialize: function (options) {
@@ -111,27 +112,20 @@ define('io.ox/core/folder/tree',
             return options;
         },
 
-        onToggleContextMenu: (function () {
+        toggleContextMenu: (function () {
 
             function renderItems() {
                 this.$dropdownMenu.idle();
                 this.renderContextMenuItems();
             }
 
-            return function (e) {
-
-                var isOpen = this.$dropdown.hasClass('open'),
-                    target = $(e.currentTarget);
+            return function (target, top, left) {
 
                 // return early on close
+                var isOpen = this.$dropdown.hasClass('open');
                 if (isOpen || _.device('smartphone')) return;
 
                 _.defer(function () {
-
-                    // calculate proper position
-                    var offset = target.offset(),
-                        top = offset.top - 7,
-                        left = offset.left + target.outerWidth() + 7;
 
                     this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).busy();
                     this.$dropdown
@@ -144,6 +138,29 @@ define('io.ox/core/folder/tree',
                 }.bind(this));
             };
         }()),
+
+        onToggleContextMenu: function (e) {
+
+            var target = $(e.currentTarget),
+                // calculate proper position
+                offset = target.offset(),
+                top = offset.top - 7,
+                left = offset.left + target.outerWidth() + 7;
+
+            this.toggleContextMenu(target, top, left);
+        },
+
+        onContextMenu: function (e) {
+            e.preventDefault();
+            var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
+            this.toggleContextMenu(target, top, left);
+        },
+
+        onCloseContextMenu: function (e) {
+            e.preventDefault();
+            if (!this.$dropdown.hasClass('open')) return;
+            this.$dropdown.find('.dropdown-toggle').dropdown('toggle');
+        },
 
         onKeydown: function (e) {
 
@@ -207,7 +224,7 @@ define('io.ox/core/folder/tree',
 
                 this.$el.after(
                     this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
-                        $('<div class="abs context-dropdown-overlay">'),
+                        $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
                         this.$dropdownMenu = $('<ul class="dropdown-menu" role="menu">')
                     )
