@@ -4231,12 +4231,14 @@ input.flat-input {
             }
         }
 
+        @marginSmall  : 1px;
+        @marginLarge  : 5px;
+        @extraPadding : 5px;
+
         .divider {
-            height: 3px;
-            display: block;
-            background-color: #858585;
-            border-radius: 1px;
-            border-color: transparent;
+            margin: 0;
+            height: @marginLarge;
+            visibility: hidden;
         }
 
         .divider + .divider {
@@ -4250,20 +4252,27 @@ input.flat-input {
         li {
 
             background-color: #fff;
-            margin: 5px;
-            .border-radius(2px);
+            margin: @marginSmall 5px;
             text-align: center;
 
-            &:last-child {
-                border-bottom-width: 0;
+            a {
+                padding: (3px + @extraPadding) 20px;
             }
 
             .fa {
                 line-height: inherit;
                 width: 30px;
             }
-
         }
+
+        // close
+        li:first-child {
+            margin-bottom: @marginLarge;
+        }
+
+        // no clue why but there are empty <li> in system drop-down, for example
+        li:empty { padding: 0; }
+
         li > a, li > span {
             .ellipsis();
             -webkit-tap-highlight-color: transparent;
