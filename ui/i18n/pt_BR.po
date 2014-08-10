@@ -438,7 +438,7 @@ msgstr ""
 msgid "A return receipt has been sent"
 msgstr "Uma confirmação de recebimento foi enviada"
 
-#: apps/io.ox/tasks/actions.js:165 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:166 module:io.ox/tasks
 msgid "A severe error occurred!"
 msgstr "Ocorreu um erro grave!"
 
@@ -500,7 +500,7 @@ msgstr "Acessando arquivos com o WebDAV"
 msgid "Accessing global address book is not permitted"
 msgstr "Acesso ao catálogo de endereços global não é permitido"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:241 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:237 module:io.ox/core/pubsub
 msgid "Account"
 msgstr "Conta"
 
@@ -631,11 +631,11 @@ msgstr "Anexar arquivo local"
 msgid "Add mail account"
 msgstr "Adicionar conta de e-mail"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:228 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:224 module:io.ox/core/pubsub
 msgid "Add new account"
 msgstr "Adicionar nova conta"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:301 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:297 module:io.ox/core/pubsub
 msgid "Add new folder for this subscription"
 msgstr "Adicionar nova pasta para essa inscrição"
 
@@ -921,8 +921,8 @@ msgstr "Lembretes de compromisso"
 msgid "Appointments"
 msgstr "Compromissos"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:331 module:io.ox/core/pubsub
-#: apps/io.ox/core/pubsub/subscriptions.js:334
+#: apps/io.ox/core/pubsub/subscriptions.js:327 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:330
 msgid "Approximate Duration for Subscriptions"
 msgstr "Duração aproximada para inscrições"
 
@@ -984,7 +984,7 @@ msgstr "Anexos"
 
 #: apps/io.ox/contacts/actions.js:578 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:573 module:io.ox/core/tk/attachments
-#: apps/io.ox/tasks/actions.js:419 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:401 module:io.ox/tasks
 msgid "Attachments have been saved!"
 msgstr "Os anexos foram salvos!"
 
@@ -1173,7 +1173,7 @@ msgstr "CSV"
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
-#: apps/io.ox/core/folder/actions/properties.js:51 module:io.ox/core
+#: apps/io.ox/core/folder/actions/properties.js:62 module:io.ox/core
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1211,7 +1211,7 @@ msgstr "Visualização diária do calendário"
 #: apps/io.ox/core/folder/actions/common.js:44
 #: apps/io.ox/core/folder/actions/remove.js:33
 #: apps/io.ox/core/folder/actions/rename.js:65
-#: apps/io.ox/core/folder/picker.js:88 apps/io.ox/core/import/import.js:130
+#: apps/io.ox/core/folder/picker.js:89 apps/io.ox/core/import/import.js:130
 #: apps/io.ox/core/main.js:464 apps/io.ox/core/main.js:1300
 #: apps/io.ox/core/permissions/permissions.js:358
 #: apps/io.ox/core/permissions/permissions.js:400 apps/io.ox/core/print.js:113
@@ -1241,7 +1241,7 @@ msgstr "Visualização diária do calendário"
 #: apps/io.ox/portal/main.js:509 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
-#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:62
+#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:63
 #: module:io.ox/tasks apps/io.ox/tasks/common-extensions.js:95
 #: apps/io.ox/tasks/edit/main.js:163 apps/io.ox/tasks/main.js:190
 #: apps/io.ox/tasks/main.js:204 apps/plugins/core/feedback/register.js:130
@@ -1302,13 +1302,13 @@ msgid "Change View"
 msgstr "Alterar visualização"
 
 #: apps/io.ox/calendar/acceptdeny.js:80 module:io.ox/calendar
-#: apps/io.ox/tasks/actions.js:606 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:588 module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:69
 #: apps/io.ox/tasks/toolbar.js:92 module:io.ox/mail
 msgid "Change confirmation status"
 msgstr "Alterar status de confirmação"
 
-#: apps/io.ox/tasks/actions.js:465 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:447 module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:60 module:io.ox/mail
 msgid "Change due date"
 msgstr "Alterar data de vencimento"
@@ -1443,7 +1443,7 @@ msgid "Click to upload image"
 msgstr "Clique para enviar imagem"
 
 #: apps/io.ox/core/about/about.js:66 module:io.ox/core
-#: apps/io.ox/core/folder/actions/properties.js:64
+#: apps/io.ox/core/folder/actions/properties.js:70
 #: apps/io.ox/core/permissions/permissions.js:459
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
 #: apps/io.ox/core/tk/dialogs.js:558 apps/io.ox/core/wizard/registry.js:60
@@ -1714,7 +1714,7 @@ msgid "Could not save settings."
 msgstr "Não foi possível salvar as configurações."
 
 #: apps/io.ox/core/api/folder.js:684 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:472
+#: apps/io.ox/core/folder/api.js:475
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -1802,7 +1802,7 @@ msgstr "Criar lista"
 msgid "Create new rule"
 msgstr "Criar nova regra"
 
-#: apps/io.ox/tasks/actions.js:437 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:419 module:io.ox/tasks
 msgid "Create new task"
 msgstr "Criar nova tarefa"
 
@@ -1958,8 +1958,8 @@ msgstr "Adiado"
 #: apps/io.ox/settings/accounts/settings/pane.js:63
 #: apps/io.ox/settings/accounts/settings/pane.js:71
 #: apps/io.ox/settings/accounts/settings/pane.js:72
-#: apps/io.ox/tasks/actions.js:61 module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:588
+#: apps/io.ox/tasks/actions.js:62 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:570
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:48
 #: apps/io.ox/tasks/toolbar.js:83 apps/plugins/portal/twitter/util.js:318
 #: module:plugins/portal apps/plugins/portal/twitter/util.js:451
@@ -2167,7 +2167,7 @@ msgid_plural "Do you really want to delete these files?"
 msgstr[0] "Deseja realmente excluir este arquivo?"
 msgstr[1] "Deseja realmente excluir estes arquivos?"
 
-#: apps/io.ox/tasks/actions.js:66 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:67 module:io.ox/tasks
 msgid "Do you really want to delete this task?"
 msgid_plural "Do you really want to delete this tasks?"
 msgstr[0] "Você realmente deseja excluir essa tarefa?"
@@ -2244,7 +2244,7 @@ msgstr "Documentos"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/tasks/actions.js:136 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:137 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:268 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:31 apps/io.ox/tasks/toolbar.js:68
 #: module:io.ox/mail apps/io.ox/tasks/util.js:207
@@ -2262,7 +2262,7 @@ msgstr "Clique duas vezes nesta linha para compromisso de dia inteiro"
 #: apps/io.ox/files/actions.js:850 module:io.ox/files
 #: apps/io.ox/files/actions.js:999 apps/io.ox/files/actions.js:1268
 #: apps/io.ox/files/toolbar.js:101 apps/io.ox/mail/actions.js:1109
-#: module:io.ox/mail apps/io.ox/tasks/actions.js:644 module:io.ox/tasks
+#: module:io.ox/mail apps/io.ox/tasks/actions.js:626 module:io.ox/tasks
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
 msgstr "Baixar"
@@ -2384,7 +2384,7 @@ msgstr "EB"
 #: module:io.ox/settings/accounts
 #: apps/io.ox/settings/accounts/settings/pane.js:50
 #: apps/io.ox/settings/accounts/settings/pane.js:52
-#: apps/io.ox/tasks/actions.js:447 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:429 module:io.ox/tasks
 #: apps/io.ox/tasks/main.js:146 apps/io.ox/tasks/main.js:152
 #: apps/io.ox/tasks/main.js:185 apps/io.ox/tasks/main.js:204
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:41
@@ -2606,18 +2606,18 @@ msgid "Envelope"
 msgstr "Envelope"
 
 #: apps/io.ox/core/notifications.js:481 module:io.ox/core
-#: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
+#: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:111
 #: module:io.ox/core/pubsub
 msgid "Error"
 msgstr "Erro"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:27 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:347
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:349
 msgid "Error log"
 msgstr "Registro de erros"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:83 module:io.ox/core/pubsub
-#: apps/io.ox/core/pubsub/subscriptions.js:106
+#: apps/io.ox/core/pubsub/subscriptions.js:107
 msgid "Error:"
 msgstr "Erro:"
 
@@ -2756,7 +2756,7 @@ msgstr ""
 msgid "External link"
 msgstr "Link externo"
 
-#: apps/io.ox/calendar/participants.js:176 module:io.ox/calendar
+#: apps/io.ox/calendar/participants.js:183 module:io.ox/calendar
 msgid "External participants"
 msgstr "Participantes externos"
 
@@ -2979,7 +2979,7 @@ msgstr "Permissões da pasta"
 msgid "Folder settings"
 msgstr "Configurações da pasta"
 
-#: apps/io.ox/core/folder/actions/properties.js:39 module:io.ox/core
+#: apps/io.ox/core/folder/actions/properties.js:51 module:io.ox/core
 msgid "Folder type"
 msgstr "Tipo de pasta"
 
@@ -3001,7 +3001,7 @@ msgstr ""
 "A pasta com nome \"%1$s\" será oculta. Ative a configuração \" Exibir pastas "
 "e arquivos ocultos\" para acessar essa pasta novamente."
 
-#: apps/io.ox/core/folder/node.js:322 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:337 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "Ações específicas de pasta"
@@ -3202,7 +3202,7 @@ msgstr "Ajuda"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Oi!<br><br>%1$s compartilha uma publicação com você:<br>%2$s"
 
-#: apps/io.ox/core/folder/extensions.js:222 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:244 module:io.ox/core
 #, fuzzy
 #| msgid "Hidden folders"
 msgid "Hidden"
@@ -3857,7 +3857,7 @@ msgstr "Marcar como"
 msgid "Mark as distributionlist"
 msgstr "Marque como lista de distribuição"
 
-#: apps/io.ox/tasks/actions.js:569 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:551 module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:55
 #: apps/io.ox/tasks/toolbar.js:69 module:io.ox/mail
 msgid "Mark as done"
@@ -4026,8 +4026,8 @@ msgstr "Foram encontrados mais itens que os atualmente exibidos %1$s"
 #: apps/io.ox/files/toolbar.js:143 apps/io.ox/mail/actions.js:269
 #: apps/io.ox/mail/actions.js:1009
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:116
-#: apps/io.ox/tasks/actions.js:205 module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:217 apps/io.ox/tasks/actions.js:597
+#: apps/io.ox/tasks/actions.js:202 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:214 apps/io.ox/tasks/actions.js:579
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:76
 #: apps/io.ox/tasks/toolbar.js:105
 msgid "Move"
@@ -4088,8 +4088,8 @@ msgid "New"
 msgstr "Novo"
 
 #: apps/io.ox/core/api/folder.js:547 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:512
-#: apps/io.ox/core/pubsub/subscriptions.js:158 module:io.ox/core/pubsub
+#: apps/io.ox/core/folder/api.js:515
+#: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Nova pasta"
 
@@ -4138,7 +4138,7 @@ msgid "New password"
 msgstr "Nova senha"
 
 #: apps/io.ox/core/folder/actions/add.js:62 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:249
+#: apps/io.ox/core/folder/extensions.js:271
 #, fuzzy
 #| msgid "New private folder"
 msgid "New private calendar"
@@ -4146,12 +4146,12 @@ msgstr "Nova pasta privada"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:62
-#: apps/io.ox/core/folder/extensions.js:249
+#: apps/io.ox/core/folder/extensions.js:271
 msgid "New private folder"
 msgstr "Nova pasta privada"
 
 #: apps/io.ox/core/folder/actions/add.js:59 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:272
+#: apps/io.ox/core/folder/extensions.js:294
 #, fuzzy
 #| msgid "Public calendars"
 msgid "New public calendar"
@@ -4159,7 +4159,7 @@ msgstr "Calendários públicos"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:59
-#: apps/io.ox/core/folder/extensions.js:272
+#: apps/io.ox/core/folder/extensions.js:294
 msgid "New public folder"
 msgstr "Nova pasta pública"
 
@@ -4273,7 +4273,7 @@ msgstr "Sem notificações"
 
 #: apps/io.ox/contacts/actions.js:535 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:509 module:io.ox/core/tk/attachments
-#: apps/io.ox/tasks/actions.js:376 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:358 module:io.ox/tasks
 msgid "No preview available"
 msgstr "Nenhuma pré-visualização disponível"
 
@@ -4373,7 +4373,7 @@ msgstr ""
 msgid "Note: The vCard format cannot contain distribution lists"
 msgstr "Note: O formato vCard não pode conter listas de distribuição"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:321 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:317 module:io.ox/core/pubsub
 msgid ""
 "Note: This subscription will replace the calendar content with the external "
 "content. Therefore you must create a new folder for this subscription."
@@ -4399,6 +4399,13 @@ msgstr "Novembro"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:133 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Número de dias entre avisos de férias para o mesmo remetente"
+
+#. number of items in a folder
+#: apps/io.ox/core/folder/actions/properties.js:55 module:io.ox/core
+#, fuzzy
+#| msgid "Search for items"
+msgid "Number of items"
+msgstr "Pesquisar por itens"
 
 #: apps/io.ox/core/tk/reminder-util.js:34 module:io.ox/core
 #: apps/io.ox/core/tk/reminder-util.js:56
@@ -4485,7 +4492,7 @@ msgstr "Abrir visualização de pasta"
 #: apps/io.ox/contacts/actions.js:810 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:453 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1102 module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:637 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:619 module:io.ox/tasks
 msgid "Open in browser"
 msgstr "Abrir no navegador"
 
@@ -4648,7 +4655,7 @@ msgid "Pager"
 msgstr "Pager"
 
 #: apps/io.ox/calendar/edit/template.js:301 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/participants.js:157 module:io.ox/calendar
+#: apps/io.ox/calendar/participants.js:159 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:367 module:io.ox/tasks/edit
 msgid "Participants"
 msgstr "Participantes"
@@ -5053,7 +5060,7 @@ msgstr "Pressione para ocultar todos os lembretes de tarefa."
 #: apps/io.ox/contacts/actions.js:803 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:446 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/attachmentsUtil.js:93 apps/io.ox/mail/actions.js:1095
-#: module:io.ox/mail apps/io.ox/tasks/actions.js:630 module:io.ox/tasks
+#: module:io.ox/mail apps/io.ox/tasks/actions.js:612 module:io.ox/tasks
 msgid "Preview"
 msgstr "Visualização"
 
@@ -5079,12 +5086,12 @@ msgstr "Conta primária"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:729
 #: apps/io.ox/contacts/toolbar.js:98 apps/io.ox/core/print.js:108
 #: module:io.ox/core apps/io.ox/mail/actions.js:1027 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:130 apps/io.ox/tasks/actions.js:615
+#: apps/io.ox/mail/toolbar.js:130 apps/io.ox/tasks/actions.js:597
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:98
 msgid "Print"
 msgstr "Imprimir"
 
-#: apps/io.ox/tasks/actions.js:290 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:272 module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Imprimir tarefas"
 
@@ -5108,7 +5115,7 @@ msgstr "Política de privacidade"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:211 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:233 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 #: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
@@ -5146,12 +5153,12 @@ msgstr "Progresso em %"
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "O progresso deve ser um número válido entre 0 e 100"
 
-#: apps/io.ox/core/folder/actions/properties.js:27 module:io.ox/core
+#: apps/io.ox/core/folder/actions/properties.js:45 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:397
 msgid "Properties"
 msgstr "Propriedades"
 
-#: apps/io.ox/core/folder/extensions.js:216 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:238 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Public"
 msgstr "Pública"
@@ -5465,7 +5472,7 @@ msgstr "Recurso"
 msgid "Resource group"
 msgstr "Grupo de recurso"
 
-#: apps/io.ox/calendar/participants.js:224 module:io.ox/calendar
+#: apps/io.ox/calendar/participants.js:236 module:io.ox/calendar
 msgid "Resources"
 msgstr "Recursos"
 
@@ -5588,7 +5595,7 @@ msgstr "Salvar anexo"
 #: apps/io.ox/contacts/actions.js:824 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:467 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1116 module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:651 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:633 module:io.ox/tasks
 msgid "Save to Drive"
 msgstr "Salvar para Drive"
 
@@ -5807,7 +5814,8 @@ msgstr "Versão do servidor"
 msgid "Set as default"
 msgstr "Definir como padrão"
 
-#: apps/io.ox/mail/toolbar.js:83 module:io.ox/mail
+#: apps/io.ox/core/tk/flag-picker.js:81 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:83
 msgid "Set color"
 msgstr "Definir cor"
 
@@ -5843,7 +5851,7 @@ msgstr "Compartilhar este arquivo"
 msgid "Share this folder"
 msgstr "Compartilhar esta pasta"
 
-#: apps/io.ox/core/folder/extensions.js:219 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:241 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Shared"
 msgstr "Compartilhada"
@@ -5962,12 +5970,12 @@ msgid "Show quoted text"
 msgstr "Exibir texto citado"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:69 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:325
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:327
 msgid "Show request body"
 msgstr "Exibir corpo da requisição"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:79 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:331
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:333
 msgid "Show stack trace"
 msgstr "Exibir rastreamento de pilha"
 
@@ -6046,7 +6054,7 @@ msgstr "Tamanho (bytes)"
 #: apps/io.ox/core/tk/attachments.js:439 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/toolbar.js:79 module:io.ox/files
 #: apps/io.ox/mail/actions.js:1088 module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:623 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:605 module:io.ox/tasks
 msgid "Slideshow"
 msgstr "Apresentação de slides"
 
@@ -6110,7 +6118,7 @@ msgstr "Ordenar por"
 msgid "Sort options"
 msgstr "Opções de classificação"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:266 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:262 module:io.ox/core/pubsub
 msgid "Source"
 msgstr "Origem"
 
@@ -6266,7 +6274,7 @@ msgstr "Tarefa"
 msgid "Task Details"
 msgstr "Detalhes da tarefa"
 
-#: apps/io.ox/tasks/actions.js:74 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:75 module:io.ox/tasks
 msgid "Task has been deleted!"
 msgid_plural "Tasks have been deleted!"
 msgstr[0] "A tarefa foi excluída!"
@@ -6298,11 +6306,11 @@ msgstr "Lembrete de tarefa. %1$s %2$s %3$s. Pressione [Enter] para abrir"
 msgid "Task reminders"
 msgstr "Lembretes de tarefa"
 
-#: apps/io.ox/tasks/actions.js:79 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:80 module:io.ox/tasks
 msgid "Task was already deleted!"
 msgstr "A tarefa já foi excluída!"
 
-#: apps/io.ox/tasks/actions.js:167 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:168 module:io.ox/tasks
 msgid "Task was modified before, please reload"
 msgstr "A tarefa foi modificada antes, por favor, recarregue"
 
@@ -6319,7 +6327,7 @@ msgctxt "app"
 msgid "Tasks"
 msgstr "Tarefas"
 
-#: apps/io.ox/tasks/actions.js:228 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:195 module:io.ox/tasks
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr ""
 
@@ -6685,11 +6693,11 @@ msgstr "A data de início deve ser anterior à data de término."
 msgid "The start date must be before the end date."
 msgstr "A data de início deve ser anterior à data de término."
 
-#: apps/io.ox/core/pubsub/subscriptions.js:111 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:112 module:io.ox/core/pubsub
 msgid "The subscription could not be created."
 msgstr "Não foi possível criar a inscrição."
 
-#: apps/io.ox/tasks/actions.js:89 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:90 module:io.ox/tasks
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
 msgstr[0] "A tarefa não pôde ser excluída."
@@ -7080,6 +7088,12 @@ msgstr "Top 10 para quem você envia e-mail"
 msgid "Total cost"
 msgstr "Custo total"
 
+#: apps/io.ox/core/folder/node.js:327 module:io.ox/core
+#, fuzzy
+#| msgid "Total: %1$s requests"
+msgid "Total: %1$d"
+msgstr "Total: %1$s requisições"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132 module:io.ox/core
 msgid "Total: %1$s requests"
 msgstr "Total: %1$s requisições"
@@ -7162,8 +7176,8 @@ msgid "Unconfirmed"
 msgstr "Não confirmado"
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/actions.js:129 module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:578
+#: apps/io.ox/tasks/actions.js:130 module:io.ox/tasks
+#: apps/io.ox/tasks/actions.js:560
 #: apps/io.ox/tasks/mobile-toolbar-actions.js:62
 #: apps/io.ox/tasks/toolbar.js:76 module:io.ox/mail
 msgid "Undone"
@@ -7202,6 +7216,12 @@ msgstr "Desbloquear"
 msgid "Unread"
 msgstr "Não lido"
 
+#: apps/io.ox/core/folder/node.js:328 module:io.ox/core
+#, fuzzy
+#| msgid "Unread"
+msgid "Unread: %1$d"
+msgstr "Não lido"
+
 #: apps/io.ox/core/main.js:116 module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr "Documentos não salvos serão perdidos. Você deseja sair agora?"
@@ -7224,7 +7244,7 @@ msgstr ""
 msgid "Updater"
 msgstr "Atualizador"
 
-#: apps/io.ox/core/pubsub/subscriptions.js:333 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/subscriptions.js:329 module:io.ox/core/pubsub
 msgid ""
 "Updating subscribed data takes time. Importing 100 contacts for example, may "
 "take up to 5 minutes. Please have some patience."
