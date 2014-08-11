@@ -80,9 +80,7 @@ define('io.ox/calendar/edit/template',
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                     }
-                    baton.model.save().done(function () {
-                        baton.app.onSave();
-                    });
+                    baton.model.save().then(_.bind(baton.app.onSave, baton.app));
                 })
             );
 
@@ -118,7 +116,7 @@ define('io.ox/calendar/edit/template',
             if (response.conflicts) {
                 return false;
             }
-            if (xhr.status === 404 || xhr.status === 0) {
+            if (xhr && (xhr.status === 404 || xhr.status === 0)) {
                 notifications.yell(response);
                 return false;
             }
