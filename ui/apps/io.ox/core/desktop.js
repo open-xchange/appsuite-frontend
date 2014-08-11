@@ -770,7 +770,8 @@ define('io.ox/core/desktop',
             this.show = function (app, opt) {
                 var win = app.getWindow(),
                     pcOpt = opt.animation ? {animation: opt.animation} : {},
-                    self = this;
+                    self = this,
+                    newPerspecive = opt.perspective.split(':')[0];
 
                 if (opt.disableAnimations) {
                     pcOpt.disableAnimations = true;
@@ -778,10 +779,10 @@ define('io.ox/core/desktop',
 
                 if (opt.perspective === win.currentPerspective) return;
 
-                this.main = app.pages.getPage(opt.perspective.split(':')[0]);
+                this.main = app.pages.getPage(newPerspecive);
 
-                if (!app.pages.getPageObject(opt.perspective.split(':')[0]).perspective) {
-                    app.pages.getPageObject(opt.perspective.split(':')[0]).perspective = this;
+                if (!app.pages.getPageObject(newPerspecive).perspective) {
+                    app.pages.getPageObject(newPerspecive).perspective = this;
                 }
 
                 // add to stack
@@ -802,24 +803,21 @@ define('io.ox/core/desktop',
                     this.rendered = true;
                 }
 
-                app.pages.getPage(opt.perspective.split(':')[0]).one('pageshow', function () {
+                app.pages.getPage(newPerspecive).one('pageshow', function () {
                     // wait for page to show
                     self.afterShow(app, opt);
                     win.currentPerspective = opt.perspective;
                     win.updateToolbar();
                 });
 
-                if (app.pages.getCurrentPage().name === opt.perspective.split(':')[0]) {
+                if (app.pages.getCurrentPage().name === newPerspecive) {
                     // trigger also here, not every perspective change is also an page change
                     this.afterShow(app, opt);
                     win.currentPerspective = opt.perspective;
                     win.updateToolbar();
                 }
 
-                app.pages.changePage(opt.perspective.split(':')[0], pcOpt);
-                //win.currentPerspective = opt.perspective;
-                //win.updateToolbar();
-
+                app.pages.changePage(newPerspecive, pcOpt);
             };
 
             this.hide = function () {
