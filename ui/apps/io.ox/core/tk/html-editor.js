@@ -488,6 +488,10 @@ define.async('io.ox/core/tk/html-editor',
                     html = $(iframe[0].contentDocument).find('html'),
                     smallPara = settings.get('features/mailComposeSmallParagraphs', 1);
 
+                //UGLY: work around issue with scrolling not working after switching
+                //to another app and back to editor in chrome
+                iframe.on('mousewheel', function () { return true; });
+
                 // small paragraphs option
                 if (_.isBoolean(smallPara)) smallPara = smallPara ? 0.5 : 1;
                 smallPara = parseFloat(smallPara);
