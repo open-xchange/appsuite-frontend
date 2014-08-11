@@ -1689,6 +1689,9 @@ define('io.ox/mail/api',
     // change API's default options if allowHtmlMessages changes
     settings.on('change:allowHtmlMessages', function (e, value) {
         api.options.requests.get.view = value ? 'noimg' : 'text';
+        pool.get('detail').each(function (model) {
+            model.unset('attachments', { silent: true });
+        });
     });
 
     // RegExp suffix for recursive grepRemove:
