@@ -75,17 +75,6 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.isReset = true;
         },
 
-        onSort: _.debounce(function () {
-            // check
-            if (!this.$) return;
-            // re-append to apply sorting
-            var nodes = _(this.$.subfolders.children()).sortBy(function (node) {
-                var index = $(node).attr('data-index'); // don't use data() here
-                return parseInt(index, 10);
-            });
-            this.$.subfolders.append(nodes);
-        }, 10),
-
         onAdd: function (model) {
             // filter first
             if (!this.getFilter()(model)) return;
@@ -213,7 +202,31 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             return new TreeNodeView(options);
         },
 
+        functions: function () {
+
+            // functions that use debounce or throttle must be defined
+            // per instance, not on prototype level. otherwise all instances
+            // share the inner timers (side-effects and evil debugging)
+
+            this.onSort = _.debounce(function () {
+                // check
+                if (!this.$) return;
+                // re-append to apply sorting
+                var nodes = _(this.$.subfolders.children()).sortBy(function (node) {
+                    var index = $(node).attr('data-index'); // don't use data() here
+                    return parseInt(index, 10);
+                });
+                this.$.subfolders.append(nodes);
+            }, 10);
+
+            this.repaint = _.throttle(function () {
+                if (this.model !== null) this.render();
+            }, 10);
+        },
+
         initialize: function (options) {
+
+            this.functions();
 
             // make sure we work with strings
             this.folder = String(options.folder);
@@ -357,8 +370,6 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             // only show if not empty, i.e. has subfolders
             this.$el.toggleClass('empty', this.isEmpty());
         },
-
-        repaint: _.throttle(function () { if (this.model !== null) this.render(); }, 10),
 
         render: function () {
             this.renderAttributes();

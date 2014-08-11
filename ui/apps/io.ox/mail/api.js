@@ -424,6 +424,15 @@ define('io.ox/mail/api',
         folderAPI.changeUnseenCounter(model.get('folder_id'), current ? +1 : -1);
     });
 
+    // respond to removing unseen messages
+    pool.get('detail').on('remove', function (model) {
+        // check if removed message was unseen
+        var unseen = util.isUnseen(model.get('flags'));
+        if (!unseen) return;
+        // update folder
+        folderAPI.changeUnseenCounter(model.get('folder_id'), -1);
+    });
+
     // control for each folder:
     // undefined -> first fetch
     // true -> has been fetched in this session
@@ -527,9 +536,9 @@ define('io.ox/mail/api',
         })
         .done(function () {
             // update unread counter and folder item counter
-            folderAPI.reload(ids);
+            folderAPI.reload(ids, accountAPI.getFoldersByType('trash'));
+            // trigger delete to update notification area
             api.trigger('delete');
-            //trigger delete to update notification area
             api.trigger('deleted-mails', ids);
         });
     };
@@ -720,13 +729,12 @@ define('io.ox/mail/api',
             data: [folder_id]
         })
         .then(function (data) {
-            return api.caches.all.grepRemove(folder_id + DELIM).pipe(function () {
-                api.trigger('refresh.all');
-                folderAPI.reload(folder_id);
+            return api.caches.all.grepRemove(folder_id + DELIM).then(function () {
                 return data;
             });
         })
         .done(function () {
+            api.trigger('refresh.all');
             folderAPI.reload(folder_id);
         });
     };

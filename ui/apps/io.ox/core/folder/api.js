@@ -204,11 +204,13 @@ define('io.ox/core/folder/api',
     // Get a single folder
     //
 
-    function get(id) {
+    function get(id, options) {
 
         id = String(id);
+        options = _.extend({ cache: true }, options);
+
         var model = pool.models[id];
-        if (model !== undefined && model.has('title')) return $.Deferred().resolve(model.toJSON());
+        if (options.cache === true && model !== undefined && model.has('title')) return $.Deferred().resolve(model.toJSON());
 
         return http.GET({
             module: 'folders',
