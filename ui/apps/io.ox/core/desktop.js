@@ -1643,11 +1643,6 @@ define('io.ox/core/desktop',
                         }
                     });
 
-                    //force clear on app switch
-                    ox.on('app:start app:resume', function () {
-                        view.trigger('button:clear');
-                    });
-
                     // events: redirect
                     view.model.on({
                         'query': function () {
