@@ -135,8 +135,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1072 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1238
+#: apps/io.ox/core/desktop.js:1077 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1243
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -559,7 +559,7 @@ msgstr "Tényleges költségek"
 msgid "Actual duration in minutes"
 msgstr "Tényleges időtartam percben"
 
-#: apps/io.ox/core/folder/actions/add.js:99 module:io.ox/core
+#: apps/io.ox/core/folder/actions/add.js:100 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:279
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/compose/extensions.js:316 module:io.ox/mail
@@ -838,7 +838,7 @@ msgstr "Bármely címzett"
 msgid "Append vCard"
 msgstr "vCard hozzáadása"
 
-#: apps/io.ox/core/desktop.js:994 module:io.ox/core
+#: apps/io.ox/core/desktop.js:999 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
@@ -926,9 +926,9 @@ msgstr "Találkozók"
 msgid "Approximate Duration for Subscriptions"
 msgstr "Feliratkozások hozzávetőleges időtartama"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:464
+#: apps/io.ox/calendar/edit/recurrence-view.js:468
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:513
+#: apps/io.ox/calendar/edit/recurrence-view.js:517
 msgid "April"
 msgstr "Április"
 
@@ -992,9 +992,9 @@ msgstr "Mellékletei mentésre kerültek!"
 msgid "Attention"
 msgstr "Figyelem"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:468
+#: apps/io.ox/calendar/edit/recurrence-view.js:472
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:517
+#: apps/io.ox/calendar/edit/recurrence-view.js:521
 msgid "August"
 msgstr "Augusztus"
 
@@ -1209,9 +1209,9 @@ msgstr "Naptárnézetek"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:691
-#: apps/io.ox/core/desktop.js:1755 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1760 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
-#: apps/io.ox/core/folder/actions/add.js:100
+#: apps/io.ox/core/folder/actions/add.js:101
 #: apps/io.ox/core/folder/actions/common.js:44
 #: apps/io.ox/core/folder/actions/remove.js:33
 #: apps/io.ox/core/folder/actions/rename.js:65
@@ -1403,13 +1403,13 @@ msgstr "A fiók felvételéhez kattintson ide"
 msgid "Click here to quit the help center"
 msgstr "Kattintson ide a súgóközpontból kilépéshez"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:311
+#: apps/io.ox/calendar/edit/recurrence-view.js:315
 #: module:io.ox/calendar/edit/main
 msgid "Click on a sentence to choose when to repeat the appointment."
 msgstr ""
 "Kattintson egy mondatra a találkozó megismétlési idejének kiválasztásához."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:310
+#: apps/io.ox/calendar/edit/recurrence-view.js:314
 #: module:io.ox/calendar/edit/main
 msgid "Click on the links to change the values."
 msgstr "Kattintson a hivatkozásokra az értékek megváltoztatásához."
@@ -1472,7 +1472,7 @@ msgstr "Minden bezárása"
 msgid "Close folder view"
 msgstr "Mappanézet bezárása"
 
-#: apps/io.ox/core/desktop.js:1347 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1352 module:io.ox/core
 #: apps/io.ox/search/autocomplete/extensions.js:125
 #, fuzzy
 #| msgid "Close all"
@@ -1889,9 +1889,9 @@ msgstr "Napnézet"
 msgid "Days"
 msgstr "Nap"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:472
+#: apps/io.ox/calendar/edit/recurrence-view.js:476
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:521
+#: apps/io.ox/calendar/edit/recurrence-view.js:525
 msgid "December"
 msgstr "December"
 
@@ -2810,7 +2810,7 @@ msgstr "A disztribúciós lista mentése sikertelen."
 msgid "Failed to sign in"
 msgstr "A bejelentkezés meghiúsult"
 
-#: apps/io.ox/core/desktop.js:1855 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1860 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -2854,9 +2854,9 @@ msgstr "Fax (otthoni)"
 msgid "Fax (alt)"
 msgstr "Fax (másik)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:462
+#: apps/io.ox/calendar/edit/recurrence-view.js:466
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:511
+#: apps/io.ox/calendar/edit/recurrence-view.js:515
 msgid "February"
 msgstr "Február"
 
@@ -2956,8 +2956,8 @@ msgstr "Flickr"
 msgid "Folder"
 msgstr "Mappa"
 
-#: apps/io.ox/core/folder/actions/add.js:94 module:io.ox/core
-#: apps/io.ox/core/folder/actions/add.js:95
+#: apps/io.ox/core/folder/actions/add.js:95 module:io.ox/core
+#: apps/io.ox/core/folder/actions/add.js:96
 #: apps/io.ox/core/folder/actions/rename.js:60
 #: apps/io.ox/core/tk/folderviews.js:680
 msgid "Folder name"
@@ -3092,8 +3092,8 @@ msgstr "Szabadúszó"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:49
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:430
-#: apps/io.ox/calendar/edit/recurrence-view.js:501
+#: apps/io.ox/calendar/edit/recurrence-view.js:434
+#: apps/io.ox/calendar/edit/recurrence-view.js:505
 #: apps/io.ox/calendar/util.js:415 module:io.ox/calendar
 msgid "Friday"
 msgstr "péntek"
@@ -3495,9 +3495,9 @@ msgstr "Fájl nélküli elemek nem tölthetők le."
 msgid "Items without a file can not be opened."
 msgstr "Fájl nélküli elemek nem nyithatók meg."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:461
+#: apps/io.ox/calendar/edit/recurrence-view.js:465
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:510
+#: apps/io.ox/calendar/edit/recurrence-view.js:514
 msgid "January"
 msgstr "Január"
 
@@ -3514,15 +3514,15 @@ msgstr "Munka"
 msgid "Job description"
 msgstr "Munkaköri leírás"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:467
+#: apps/io.ox/calendar/edit/recurrence-view.js:471
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:516
+#: apps/io.ox/calendar/edit/recurrence-view.js:520
 msgid "July"
 msgstr "Július"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:466
+#: apps/io.ox/calendar/edit/recurrence-view.js:470
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:515
+#: apps/io.ox/calendar/edit/recurrence-view.js:519
 msgid "June"
 msgstr "Június"
 
@@ -3832,9 +3832,9 @@ msgstr "Fájlkezelés"
 msgid "Manual"
 msgstr "Kézi"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:463
+#: apps/io.ox/calendar/edit/recurrence-view.js:467
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:512
+#: apps/io.ox/calendar/edit/recurrence-view.js:516
 msgid "March"
 msgstr "Március"
 
@@ -3906,9 +3906,9 @@ msgstr "Megjelölés olvasottként"
 msgid "Matches"
 msgstr "Megegyezik"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:465
+#: apps/io.ox/calendar/edit/recurrence-view.js:469
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:514
+#: apps/io.ox/calendar/edit/recurrence-view.js:518
 msgid "May"
 msgstr "Május"
 
@@ -3972,8 +3972,8 @@ msgstr "Módosítva"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:45
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:426
-#: apps/io.ox/calendar/edit/recurrence-view.js:497
+#: apps/io.ox/calendar/edit/recurrence-view.js:430
+#: apps/io.ox/calendar/edit/recurrence-view.js:501
 #: apps/io.ox/calendar/util.js:411 module:io.ox/calendar
 msgid "Monday"
 msgstr "hétfő"
@@ -4114,7 +4114,7 @@ msgstr "Új levelek"
 msgid "New appointment"
 msgstr "Új találkozó"
 
-#: apps/io.ox/core/folder/actions/add.js:67 module:io.ox/core
+#: apps/io.ox/core/folder/actions/add.js:68 module:io.ox/core
 #, fuzzy
 #| msgid "Calendar"
 msgid "New calendar"
@@ -4129,7 +4129,7 @@ msgid "New file"
 msgstr "Új fájl"
 
 #: apps/io.ox/core/commons-folderview.js:223 module:io.ox/core
-#: apps/io.ox/core/folder/actions/add.js:67 apps/io.ox/core/pubsub/util.js:107
+#: apps/io.ox/core/folder/actions/add.js:68 apps/io.ox/core/pubsub/util.js:107
 #: module:io.ox/mail
 msgid "New folder"
 msgstr "Új mappa"
@@ -4138,7 +4138,7 @@ msgstr "Új mappa"
 msgid "New password"
 msgstr "Új jelszó"
 
-#: apps/io.ox/core/folder/actions/add.js:62 module:io.ox/core
+#: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js:271
 #, fuzzy
 #| msgid "New private folder"
@@ -4146,12 +4146,12 @@ msgid "New private calendar"
 msgstr "Új személyes mappa"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
-#: apps/io.ox/core/folder/actions/add.js:62
+#: apps/io.ox/core/folder/actions/add.js:63
 #: apps/io.ox/core/folder/extensions.js:271
 msgid "New private folder"
 msgstr "Új személyes mappa"
 
-#: apps/io.ox/core/folder/actions/add.js:59 module:io.ox/core
+#: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js:294
 #, fuzzy
 #| msgid "New public folder"
@@ -4159,7 +4159,7 @@ msgid "New public calendar"
 msgstr "Új nyilvános mappa"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
-#: apps/io.ox/core/folder/actions/add.js:59
+#: apps/io.ox/core/folder/actions/add.js:60
 #: apps/io.ox/core/folder/extensions.js:294
 msgid "New public folder"
 msgstr "Új nyilvános mappa"
@@ -4168,7 +4168,7 @@ msgstr "Új nyilvános mappa"
 msgid "New rule"
 msgstr "Új szabály"
 
-#: apps/io.ox/core/folder/actions/add.js:56 module:io.ox/core
+#: apps/io.ox/core/folder/actions/add.js:57 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:125
 msgid "New subfolder"
 msgstr "Új almappa"
@@ -4389,9 +4389,9 @@ msgstr "Értesítő"
 msgid "Notify all participants by email."
 msgstr "Minden résztvevő értesítése e-mailben."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:471
+#: apps/io.ox/calendar/edit/recurrence-view.js:475
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:520
+#: apps/io.ox/calendar/edit/recurrence-view.js:524
 msgid "November"
 msgstr "November"
 
@@ -4421,9 +4421,9 @@ msgstr "Elemek jogosultságai"
 msgid "Objects"
 msgstr "Tárgyak"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:470
+#: apps/io.ox/calendar/edit/recurrence-view.js:474
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:519
+#: apps/io.ox/calendar/edit/recurrence-view.js:523
 msgid "October"
 msgstr "Október"
 
@@ -4818,7 +4818,7 @@ msgstr "Hangfájlok lejátszása"
 msgid "Play video files"
 msgstr "Videofájlok lejátszása"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:912
+#: apps/io.ox/calendar/edit/recurrence-view.js:916
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
 msgstr "Válasszon egy mondatot alább."
@@ -5410,7 +5410,7 @@ msgstr "Átnevezés"
 msgid "Rename folder"
 msgstr "Mappa átnevezése"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1032
+#: apps/io.ox/calendar/edit/recurrence-view.js:1036
 #: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Ismétlés"
@@ -5532,8 +5532,8 @@ msgstr "Értékesítési mennyiség"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:50
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:431
-#: apps/io.ox/calendar/edit/recurrence-view.js:502
+#: apps/io.ox/calendar/edit/recurrence-view.js:435
+#: apps/io.ox/calendar/edit/recurrence-view.js:506
 #: apps/io.ox/calendar/util.js:416 module:io.ox/calendar
 msgid "Saturday"
 msgstr "szombat"
@@ -5641,8 +5641,8 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Ütemezés"
 
-#: apps/io.ox/core/desktop.js:1584 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1585 apps/io.ox/core/desktop.js:1692
+#: apps/io.ox/core/desktop.js:1589 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1590 apps/io.ox/core/desktop.js:1697
 #: apps/io.ox/core/main.js:768 apps/io.ox/search/autocomplete/extensions.js:34
 #: apps/io.ox/search/autocomplete/extensions.js:152
 #: apps/io.ox/search/autocomplete/extensions.js:153
@@ -5652,7 +5652,7 @@ msgstr "Ütemezés"
 msgid "Search"
 msgstr "Keresés"
 
-#: apps/io.ox/core/desktop.js:1576 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1581 module:io.ox/core
 msgid "Search for items"
 msgstr "Elemek keresése"
 
@@ -5759,9 +5759,9 @@ msgstr "Küldve erről: %s mobilon"
 msgid "Sent mails"
 msgstr "Elküldött levelek"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:469
+#: apps/io.ox/calendar/edit/recurrence-view.js:473
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:518
+#: apps/io.ox/calendar/edit/recurrence-view.js:522
 msgid "September"
 msgstr "Szeptember"
 
@@ -6220,8 +6220,8 @@ msgstr "Utótag"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:44
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:425
-#: apps/io.ox/calendar/edit/recurrence-view.js:496
+#: apps/io.ox/calendar/edit/recurrence-view.js:429
+#: apps/io.ox/calendar/edit/recurrence-view.js:500
 #: apps/io.ox/calendar/util.js:410 module:io.ox/calendar
 msgid "Sunday"
 msgstr "vasárnap"
@@ -6407,7 +6407,7 @@ msgstr "A találkozó törölve"
 msgid "The appointment has been updated"
 msgstr "A találkozó frissítve"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:326
+#: apps/io.ox/calendar/edit/recurrence-view.js:330
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -6417,7 +6417,7 @@ msgstr ""
 "A találkozó minden <a href=\"#\"  data-widget=\"number\" data-attribute="
 "\"interval\"><span class=\"number-control\">2</span>. nap</a> ismétlődik."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:347
+#: apps/io.ox/calendar/edit/recurrence-view.js:351
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -6429,7 +6429,7 @@ msgstr ""
 "\"interval\"><span class=\"number-control\">2</span>. héten</a> <a href=\"#"
 "\"  data-widget=\"custom\" data-attribute=\"days\">hétfőn ismétlődik</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:312
+#: apps/io.ox/calendar/edit/recurrence-view.js:316
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
@@ -6438,7 +6438,7 @@ msgstr ""
 "A találkozó <a href=\"#\" data-attribute=\"recurrenceType\" data-widget="
 "\"options\">hetente</a> ismétlődik."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:477
+#: apps/io.ox/calendar/edit/recurrence-view.js:481
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
@@ -6451,7 +6451,7 @@ msgstr ""
 "\"ordinal\">első</a> <a href=\"#\" data-widget=\"options\" data-attribute="
 "\"day\">szerdai</a> napján ismétlődik."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:449
+#: apps/io.ox/calendar/edit/recurrence-view.js:453
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
@@ -6464,7 +6464,7 @@ msgstr ""
 "\"dayInMonth\"><span class=\"number-control\">10</span></a>. napján "
 "ismétlődik."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:370
+#: apps/io.ox/calendar/edit/recurrence-view.js:374
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
@@ -6477,7 +6477,7 @@ msgstr ""
 "data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-"
 "control\">10</span></a>. napján ismétlődik."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:399
+#: apps/io.ox/calendar/edit/recurrence-view.js:403
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
@@ -6615,7 +6615,7 @@ msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "A feladó értesítést szeretne kapni arról, hogy elolvasta ezt az e-mailt"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:561
+#: apps/io.ox/calendar/edit/recurrence-view.js:565
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6626,7 +6626,7 @@ msgstr ""
 "\">befejeződik</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
 "\"number\"><span class=\"number-control\">2</span> találkozó után</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:550
+#: apps/io.ox/calendar/edit/recurrence-view.js:554
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6637,7 +6637,7 @@ msgstr ""
 "\">befejeződik</a> ekkor: <a href=\"#\" data-attribute=\"until\" data-widget="
 "\"custom\">11/03/2013</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:541
+#: apps/io.ox/calendar/edit/recurrence-view.js:545
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6713,7 +6713,7 @@ msgstr "A felhasználó rendelkezik adminisztrációs jogosultságokkal"
 msgid "Theme"
 msgstr "Téma"
 
-#: apps/io.ox/core/desktop.js:696 module:io.ox/core
+#: apps/io.ox/core/desktop.js:701 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Mentetlen beállítások vannak."
 
@@ -6962,8 +6962,8 @@ msgstr "Szál"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:48
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:429
-#: apps/io.ox/calendar/edit/recurrence-view.js:500
+#: apps/io.ox/calendar/edit/recurrence-view.js:433
+#: apps/io.ox/calendar/edit/recurrence-view.js:504
 #: apps/io.ox/calendar/util.js:414 module:io.ox/calendar
 msgid "Thursday"
 msgstr "csütörtök"
@@ -7036,7 +7036,7 @@ msgstr "Kijelölések átváltása"
 msgid "Toggle folder"
 msgstr "Mappa átváltása"
 
-#: apps/io.ox/core/desktop.js:1684 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1689 module:io.ox/core
 msgid "Toggle search"
 msgstr "Keresés ki/be"
 
@@ -7100,8 +7100,8 @@ msgstr "Kísérlet a postafiók automatikus beállítására"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:46
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:427
-#: apps/io.ox/calendar/edit/recurrence-view.js:498
+#: apps/io.ox/calendar/edit/recurrence-view.js:431
+#: apps/io.ox/calendar/edit/recurrence-view.js:502
 #: apps/io.ox/calendar/util.js:412 module:io.ox/calendar
 msgid "Tuesday"
 msgstr "kedd"
@@ -7404,8 +7404,8 @@ msgstr "Időjárás • Évszak"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:47
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:428
-#: apps/io.ox/calendar/edit/recurrence-view.js:499
+#: apps/io.ox/calendar/edit/recurrence-view.js:432
+#: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: apps/io.ox/calendar/util.js:413 module:io.ox/calendar
 msgid "Wednesday"
 msgstr "szerda"
@@ -7880,9 +7880,9 @@ msgstr "ZB"
 msgid "accepted"
 msgstr "elfogadva"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:274
+#: apps/io.ox/calendar/edit/recurrence-view.js:278
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:568
+#: apps/io.ox/calendar/edit/recurrence-view.js:572
 msgid "after %1$d appointment"
 msgid_plural "after %1$d appointments"
 msgstr[0] "%1$d találkozó után"
@@ -7936,20 +7936,20 @@ msgstr "elemek létrehozása"
 msgid "create objects and subfolders"
 msgstr "elemek és almappák létrehozása"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:317
+#: apps/io.ox/calendar/edit/recurrence-view.js:321
 #: module:io.ox/calendar/edit/main
 msgid "daily"
 msgstr "naponta"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:432
+#: apps/io.ox/calendar/edit/recurrence-view.js:436
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:503
+#: apps/io.ox/calendar/edit/recurrence-view.js:507
 msgid "day of the week"
 msgstr "nap a héten"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:433
+#: apps/io.ox/calendar/edit/recurrence-view.js:437
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:504
+#: apps/io.ox/calendar/edit/recurrence-view.js:508
 msgid "day of the weekend"
 msgstr "nap a hétvégén"
 
@@ -7995,27 +7995,27 @@ msgstr "saját elemek szerkesztése"
 msgid "end date"
 msgstr "befejező dátum"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:537
+#: apps/io.ox/calendar/edit/recurrence-view.js:541
 #: module:io.ox/calendar/edit/main
 msgid "ends"
 msgstr "befejeződik"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:534
+#: apps/io.ox/calendar/edit/recurrence-view.js:538
 #: module:io.ox/calendar/edit/main
 msgid "ends after a certain number of appointments"
 msgstr "adott számú találkozó után fejeződik be"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:533
+#: apps/io.ox/calendar/edit/recurrence-view.js:537
 #: module:io.ox/calendar/edit/main
 msgid "ends on a specific date"
 msgstr "adott dátumon fejeződik be"
 
 #. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:271
+#: apps/io.ox/calendar/edit/recurrence-view.js:275
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:338
-#: apps/io.ox/calendar/edit/recurrence-view.js:341
+#: apps/io.ox/calendar/edit/recurrence-view.js:342
+#: apps/io.ox/calendar/edit/recurrence-view.js:345
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
 msgstr[0] "minden nap"
@@ -8023,11 +8023,11 @@ msgstr[1] "minden %1$d. nap"
 
 #. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:273
+#: apps/io.ox/calendar/edit/recurrence-view.js:277
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:383
-#: apps/io.ox/calendar/edit/recurrence-view.js:385
-#: apps/io.ox/calendar/edit/recurrence-view.js:443
+#: apps/io.ox/calendar/edit/recurrence-view.js:387
+#: apps/io.ox/calendar/edit/recurrence-view.js:389
+#: apps/io.ox/calendar/edit/recurrence-view.js:447
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "minden hónap"
@@ -8035,10 +8035,10 @@ msgstr[1] "minden %1$d. hónapban"
 
 #. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:272
+#: apps/io.ox/calendar/edit/recurrence-view.js:276
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:359
-#: apps/io.ox/calendar/edit/recurrence-view.js:362
+#: apps/io.ox/calendar/edit/recurrence-view.js:363
+#: apps/io.ox/calendar/edit/recurrence-view.js:366
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "minden héten"
@@ -8046,22 +8046,22 @@ msgstr[1] "minden %1$d. héten"
 
 #. as in: The appointment is repeated every day
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:333
+#: apps/io.ox/calendar/edit/recurrence-view.js:337
 #: module:io.ox/calendar/edit/main
 msgid "every day"
 msgstr "minden nap"
 
 #. as in: The appointment is repeated every month
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:379
+#: apps/io.ox/calendar/edit/recurrence-view.js:383
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:441
+#: apps/io.ox/calendar/edit/recurrence-view.js:445
 msgid "every month"
 msgstr "minden hónap"
 
 #. as in: The appointment is repeated every week
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:355
+#: apps/io.ox/calendar/edit/recurrence-view.js:359
 #: module:io.ox/calendar/edit/main
 msgid "every week"
 msgstr "minden héten"
@@ -8073,9 +8073,9 @@ msgstr "kibont"
 
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:408
+#: apps/io.ox/calendar/edit/recurrence-view.js:412
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:483
+#: apps/io.ox/calendar/edit/recurrence-view.js:487
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "first"
 msgstr "első"
@@ -8090,9 +8090,9 @@ msgstr "flickr.photos.search"
 
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:417
+#: apps/io.ox/calendar/edit/recurrence-view.js:421
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:489
+#: apps/io.ox/calendar/edit/recurrence-view.js:493
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "fourth"
 msgstr "negyedik"
@@ -8143,9 +8143,9 @@ msgstr "nem érvényes felhasználó vagy csoport."
 
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:405
+#: apps/io.ox/calendar/edit/recurrence-view.js:409
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:491
+#: apps/io.ox/calendar/edit/recurrence-view.js:495
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "last"
 msgstr "utolsó"
@@ -8154,14 +8154,14 @@ msgstr "utolsó"
 msgid "late in the evening"
 msgstr "késő este"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:319
+#: apps/io.ox/calendar/edit/recurrence-view.js:323
 #: module:io.ox/calendar/edit/main
 msgid "monthly"
 msgstr "havonta"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:532
+#: apps/io.ox/calendar/edit/recurrence-view.js:536
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:546
+#: apps/io.ox/calendar/edit/recurrence-view.js:550
 msgid "never ends"
 msgstr "soha nem fejeződik be"
 
@@ -8226,9 +8226,9 @@ msgstr "eltávolítás"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:411
+#: apps/io.ox/calendar/edit/recurrence-view.js:415
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:485
+#: apps/io.ox/calendar/edit/recurrence-view.js:489
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "second"
 msgstr "második"
@@ -8262,9 +8262,9 @@ msgstr "feltételes"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:414
+#: apps/io.ox/calendar/edit/recurrence-view.js:418
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:487
+#: apps/io.ox/calendar/edit/recurrence-view.js:491
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "third"
 msgstr "harmadik"
@@ -8325,7 +8325,7 @@ msgstr "megbízó:"
 msgid "view the folder"
 msgstr "mappa megjelenítése"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:318
+#: apps/io.ox/calendar/edit/recurrence-view.js:322
 #: module:io.ox/calendar/edit/main
 msgid "weekly"
 msgstr "hetente"
@@ -8335,7 +8335,7 @@ msgstr "hetente"
 msgid "work days"
 msgstr "munkanapok"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:320
+#: apps/io.ox/calendar/edit/recurrence-view.js:324
 #: module:io.ox/calendar/edit/main
 msgid "yearly"
 msgstr "évente"
