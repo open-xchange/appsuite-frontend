@@ -71,7 +71,7 @@ define('io.ox/core/folder/extensions',
                 new TreeNodeView({
                     //empty: false,
                     filter: function (id, model) {
-                        return model.get('id') === 'default0/Public';
+                        return /^default0\/(Public|Shared)$/.test(model.get('id'));
                     },
                     folder: '1',
                     headless: true,
