@@ -13,7 +13,7 @@
 define(['io.ox/mail/compose/main'], function (compose) {
     'use strict';
 
-    describe.only('Mail Compose', function () {
+    describe('Mail Compose', function () {
 
         describe('main app', function () {
             var app;
