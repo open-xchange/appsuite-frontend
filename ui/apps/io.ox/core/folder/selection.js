@@ -56,6 +56,7 @@ define('io.ox/core/folder/selection', [], function () {
             this.pick(index, items, { focus: false });
         },
 
+        // returns true if successful
         preselect: function (id) {
             return this.check(this.byId(id)).length > 0;
         },

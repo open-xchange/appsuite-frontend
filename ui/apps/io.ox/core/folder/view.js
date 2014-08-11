@@ -251,11 +251,14 @@ define('io.ox/core/folder/view',
         // set initial folder
         var id = app.folder.get();
         if (id) {
-            // try now
-            tree.selection.preselect(id);
-            // and on appear
-            tree.once('appear:' + id, function () {
-                tree.selection.preselect(id);
+            // defer so that favorite folders are drawn already
+            _.defer(function () {
+                // try now
+                if (tree.selection.preselect(id)) return;
+                // and on appear
+                tree.once('appear:' + id, function () {
+                    tree.selection.preselect(id);
+                });
             });
         }
 
