@@ -1037,16 +1037,15 @@ define('io.ox/calendar/week/view',
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
                         left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
                         border = (left > 0 || (left === 0 && width < self.appWidth)),
-                        height = Math.max(pos.height, self.minCellHeight - 1),
-                        lineHeight = self.minCellHeight;
+                        height = Math.max(pos.height, self.minCellHeight - 1) - (border ? 1 : 0);
 
                     app.css({
                         top: pos.top,
                         left: left + '%',
-                        height: (height + 1) + 'px',
-                        lineHeight: lineHeight + 'px',
+                        height: height + 'px',
+                        lineHeight: self.minCellHeight + 'px',
                         width: width + '%',
-                        minHeight: (self.minCellHeight) + 'px',
+                        minHeight: (self.minCellHeight - (border ? 2 : 1)) + 'px',
                         maxWidth: self.appWidth + '%'
                         // zIndex: j
                     })
@@ -1068,7 +1067,7 @@ define('io.ox/calendar/week/view',
                 .resizable({
                     handles: 'n, s',
                     grid: [0, self.gridHeight()],
-                    minHeight: self.gridHeight() - 1,
+                    minHeight: self.gridHeight() - 2, // bug #32753
                     containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('ui-resizable');

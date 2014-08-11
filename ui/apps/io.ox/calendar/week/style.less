@@ -225,6 +225,7 @@
         opacity: 1;
         .transition(~"opacity 0.2s, background-color 0.3s, color 0.3s");
         .backface-visibility(hidden);
+        box-sizing: content-box; // bug #32753
 
         &.modify {
             cursor: pointer;
