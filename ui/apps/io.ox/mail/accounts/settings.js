@@ -192,6 +192,9 @@ define('io.ox/mail/accounts/settings',
                                 successDialog();
                                 def.resolve(response);
                             }
+                        }).fail(function (response) {
+                            popup.close();
+                            failDialog(response.error);
                         });
                     }
                 },

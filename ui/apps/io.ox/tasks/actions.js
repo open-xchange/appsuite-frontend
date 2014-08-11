@@ -38,9 +38,7 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        requires: function (e) {
-            return e.collection.has('one');
-        },
+        requires: 'one modify',
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (m) {
                 if (m.reuse('edit', baton.data)) return;
@@ -99,7 +97,10 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
-            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
+            if (!(e.collection.has('some') && e.collection.has('modify'))) {
+                return false;
+            }
+            return (e.baton.data.status !== 3);
         },
         action: function (baton) {
             changeState(baton, 1);
@@ -108,6 +109,9 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
+            if (!(e.collection.has('some') && e.collection.has('modify'))) {
+                return false;
+            }
             return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
@@ -166,7 +170,30 @@ define('io.ox/tasks/actions',
     }
 
     new Action('io.ox/tasks/actions/move', {
-        requires: 'some delete',
+        requires: function (e) {
+            if (!(e.collection.has('some') && e.collection.has('delete'))) {
+                return false;
+            } else {
+                var def = $.Deferred();
+                ox.load(['io.ox/core/api/folder'])
+                    .done(function (folderApi) {
+                        var data = e.baton.data;
+                        if (data.length) {//multiselection
+                            data = data[0];
+                        }
+                        folderApi.get({folder: data.folder_id}).done(function (folder) {
+                            if (folderApi.is('shared', folder)) {//no move in shared folders see Bug 33706
+                                def.resolve(false);
+                            } else {
+                                def.resolve(true);
+                            }
+                        }).fail(function () {
+                            def.resolve(false);
+                        });
+                    });
+                return def;
+            }
+        },
         multiple: function (list, baton) {
             var task = baton.data,
                 numberOfTasks = task.length || 1,
@@ -187,7 +214,20 @@ define('io.ox/tasks/actions',
                 }
 
                 if (baton.target) {
-                    commit(baton.target);
+                    var curFolder;
+
+                    if (task.length) {//multiselection
+                        curFolder = task[0].folder_id;
+                    } else {
+                        curFolder = task.folder_id;
+                    }
+                    $.when(folderAPI.get({folder: curFolder}), folderAPI.get({folder: baton.target})).done(function (currentFolder, targetFolder) {
+                        if (folderAPI.is('shared', currentFolder) || folderAPI.is('shared', targetFolder)) {//no move in shared folders see Bug 33706
+                            notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
+                        } else {
+                            commit(baton.target);
+                        }
+                    });
                 } else {
 
                     //build popup
@@ -225,10 +265,10 @@ define('io.ox/tasks/actions',
                                     node.parent().idle();
                                     notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
                                 })
-                                .fail(function () {
+                                .fail(function (e) {
                                     node.show();
                                     node.parent().idle();
-                                    notifications.yell('error', gt('A severe error occurred!'));
+                                    notifications.yell(e);
                                 });
                             }
                         }
@@ -486,6 +526,7 @@ define('io.ox/tasks/actions',
 
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
+        requires: 'one modify',
         action: $.noop
     });
 

@@ -352,15 +352,30 @@ define('io.ox/calendar/month/perspective',
         print: function () {
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
                 data = null,
+                win,
                 self = this;
             if (self.folder.id || self.folder.folder) {
                 data = {folder_id: self.folder.id || self.folder.folder};
             }
-            print.open('printCalendar', data, {
+            win = print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',
                 start: self.current.local,
                 end: end.local
-            }).print();
+            });
+            if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                var limit = 50,
+                counter = 0,
+                interval;
+                interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
+                    counter++;
+                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                        win.print();
+                        clearInterval(interval);
+                    }
+                }, 100);
+            } else {
+                win.print();
+            }
         },
 
         refresh: function () {
