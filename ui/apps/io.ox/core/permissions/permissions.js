@@ -75,7 +75,7 @@ define('io.ox/core/permissions/permissions',
             events: {
                 'click a.bit': 'updateDropdown',
                 'click a.role': 'applyRole',
-                'click a.close': 'removeEntity'
+                'click a[data-action="remove"]': 'removeEntity'
             },
 
             render: function () {
@@ -265,7 +265,7 @@ define('io.ox/core/permissions/permissions',
 
     addRemoveButton = function (entity) {
         if (isFolderAdmin && entity !== ox.user_id) {
-            return $('<a href="# "class="close">').append($('<i class="fa fa-trash-o">'));
+            return $('<a href="# "data-action="remove">').append($('<i class="fa fa-trash-o">'));
         } else {
             return $();
         }
