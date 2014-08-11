@@ -444,6 +444,7 @@ define('io.ox/core/tk/autocomplete',
             fnKeyUp = _.debounce(function (e, options) {
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this) || e.which === 13) return;
+                this.focus();
                 e.stopPropagation();
 
                 var opt = _.extend({}, (e.data || {}), options || {}),
