@@ -81,7 +81,7 @@ define('io.ox/search/view-template',
             var row, cell, elem;
 
             row = $('<div class="row facets">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled dearch-facets">')
+                cell = $('<ul class="col-xs-12 list-unstyled search-facets">')
             );
 
             ext.point('io.ox/search/facets/facets').invoke('draw', cell, baton);

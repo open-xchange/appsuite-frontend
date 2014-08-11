@@ -220,7 +220,7 @@ define('io.ox/search/main',
 
         app.setTitle(gt('Search'));
 
-        // return deferred
+        // returns deferred
         win.show(function () {
             // detail view sidepopo
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
