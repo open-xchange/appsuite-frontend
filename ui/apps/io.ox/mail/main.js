@@ -868,8 +868,16 @@ define('io.ox/mail/main',
          */
         'before-delete': function (app) {
             if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
+
+            function isSingleThreadMessage(list) {
+                if (list.length !== 1) return false;
+                var cid = String(list[0]).replace(/^thread\./, '');
+                return api.threads.contains(cid) && api.threads.hash[cid] !== api.threads.reverse[cid];
+            }
+
             api.on('beforedelete', function () {
-                app.listView.selection.dodge();
+                var list = app.listView.selection.get();
+                if (!isSingleThreadMessage(list)) app.listView.selection.dodge();
             });
         },
 
