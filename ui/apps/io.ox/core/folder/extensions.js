@@ -30,7 +30,7 @@ define('io.ox/core/folder/extensions',
             this.append(
                 // standard folders
                 new TreeNodeView({ folder: tree.root, headless: true, open: true, tree: tree, parent: tree })
-                .render().$el
+                .render().$el.addClass('standard-folders')
             );
         },
 
@@ -50,29 +50,20 @@ define('io.ox/core/folder/extensions',
         },
 
         remoteAccounts: function (tree) {
-
-            var placeholder = $('<div>');
-            this.append(placeholder);
-
-            account.all().done(function (accounts) {
-                accounts.shift();
-                accounts.sort(function (a, b) {
-                    return a.name.toLowerCase() > b.name.toLowerCase() ? +1 : -1;
-                });
-                placeholder.replaceWith(
-                    _(accounts).map(function (account) {
-                        // remote account
-                        return new TreeNodeView({
-                            count: 0,
-                            folder: 'virtual/default' + account.id,
-                            model_id: 'default' + account.id,
-                            parent: tree,
-                            tree: tree
-                        })
-                        .render().$el;
-                    })
-                );
-            });
+            this.append(
+                new TreeNodeView({
+                    //empty: false,
+                    filter: function (id, model) {
+                        return account.isExternal(model.get('id'));
+                    },
+                    folder: '1',
+                    headless: true,
+                    open: true,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('remote-accounts')
+            );
         },
 
         publicFolders: function (tree) {
@@ -101,32 +92,9 @@ define('io.ox/core/folder/extensions',
 
     ext.point('io.ox/core/foldertree/mail/app').extend(
         {
-            id: 'headline',
-            index: INDEX += 100,
-            draw: function () {
-                this.append(
-                    // headline
-                    $('<h2>').text('New folder tree')
-                );
-            }
-        },
-        {
             id: 'standard-folders',
             index: INDEX += 100,
             draw: extensions.standardFolders
-        },
-        {
-            id: 'between',
-            index: INDEX += 100,
-            draw: function () {
-                this.append(
-                    // example
-                    $('<section>')
-                        .css('color', '#aaa')
-                        .css('margin-bottom', '14px')
-                        .text('You can also place stuff between folders')
-                );
-            }
         },
         {
             id: 'local-folders',
@@ -142,16 +110,6 @@ define('io.ox/core/folder/extensions',
             id: 'public',
             index: INDEX += 100,
             draw: extensions.publicFolders
-        },
-        {
-            id: 'below',
-            index: INDEX += 100,
-            draw: function () {
-                this.append(
-                    // example
-                    $('<section>').css('color', '#aaa').text('Or below of course')
-                );
-            }
         }
     );
 

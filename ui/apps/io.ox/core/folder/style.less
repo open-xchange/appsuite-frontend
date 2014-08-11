@@ -166,11 +166,12 @@
         display: block;
     }
 
-    .favorites {
+    .standard-folders, .favorites, .remote-accounts {
         margin-bottom: 14px;
-        & > .selectable > .folder-label {
-            font-weight: @bold;
-        }
+    }
+
+    .favorites > .selectable > .folder-label {
+        font-weight: 500;
     }
 
     // sections in flat folder views

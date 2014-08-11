@@ -97,9 +97,9 @@ define('io.ox/core/folder/tree',
         },
 
         getOpenFolders: function () {
-            return _(this.$el.find('.folder.open'))
+            return _(this.$el.find('.folder.open')).chain()
                 .map(function (node) { return $(node).attr('data-id'); })
-                .sort();
+                .uniq().value().sort();
         },
 
         getTreeNodeOptions: function (options, model) {
