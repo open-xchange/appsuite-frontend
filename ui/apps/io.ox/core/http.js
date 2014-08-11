@@ -396,7 +396,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         data: options.data,
                         index: log.collection.length,
                         timestamp: _.now(),
-                        url: options.url
+                        url: options._url
                     })
                 );
             }
@@ -513,8 +513,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // store type for retry
         o.type = type;
         // prepend root
-        o.url = o.url || (ox.apiRoot + '/' + o.module);
-        if (o.jsessionid) o.url += ';jsessionid=' + o.jsessionid;
+        o._url = o.url || (ox.apiRoot + '/' + o.module);
+        if (o.jsessionid) o._url += ';jsessionid=' + o.jsessionid;
         // add session
         if (o.appendSession === true) {
             o.params.session = ox.session || 'unset';
@@ -537,14 +537,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         }
         else if (type === 'PUT' || type === 'DELETE') {
             // PUT & DELETE
-            o.url += '?' + _.serialize(o.params);
+            o._url += '?' + _.serialize(o.params);
             o.original = o.data;
             o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
             o.contentType = 'text/javascript; charset=UTF-8';
         }
         else if (type === 'UPLOAD') {
             // POST with FormData object
-            o.url += '?' + _.serialize(o.params);
+            o._url += '?' + _.serialize(o.params);
             o.contentType = false;
             o.processData = false;
             o.processResponse = false;
@@ -889,7 +889,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     // type (GET, POST, PUT, ...)
                     type: type === 'UPLOAD' ? 'POST' : type,
                     // url
-                    url: o.url,
+                    url: o._url,
                     // data
                     data: o.data,
                     dataType: o.dataType,
@@ -906,7 +906,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             function cont() {
                 if ((ox.fail || fail) && o.module !== 'login' && Math.random() < Number(ox.fail || _.url.hash('fail') || 0)) {
                     // simulate broken connection
-                    console.error('HTTP fail', r.o.url, r.xhr);
+                    console.error('HTTP fail', r.o._url, r.xhr);
                     r.def.reject({ error: '0 simulated fail' });
                     that.trigger('stop fail', r.xhr);
                 } else {
