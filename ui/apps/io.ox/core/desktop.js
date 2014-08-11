@@ -771,7 +771,7 @@ define('io.ox/core/desktop',
                 var win = app.getWindow(),
                     pcOpt = opt.animation ? {animation: opt.animation} : {},
                     self = this,
-                    newPerspecive = opt.perspective.split(':')[0];
+                    newPerspective = opt.perspective.split(':')[0];
 
                 if (opt.disableAnimations) {
                     pcOpt.disableAnimations = true;
@@ -779,10 +779,10 @@ define('io.ox/core/desktop',
 
                 if (opt.perspective === win.currentPerspective) return;
 
-                this.main = app.pages.getPage(newPerspecive);
+                this.main = app.pages.getPage(newPerspective);
 
-                if (!app.pages.getPageObject(newPerspecive).perspective) {
-                    app.pages.getPageObject(newPerspecive).perspective = this;
+                if (!app.pages.getPageObject(newPerspective).perspective) {
+                    app.pages.getPageObject(newPerspective).perspective = this;
                 }
 
                 // add to stack
@@ -803,21 +803,21 @@ define('io.ox/core/desktop',
                     this.rendered = true;
                 }
 
-                app.pages.getPage(newPerspecive).one('pageshow', function () {
+                app.pages.getPage(newPerspective).one('pageshow', function () {
                     // wait for page to show
                     self.afterShow(app, opt);
                     win.currentPerspective = opt.perspective;
                     win.updateToolbar();
                 });
 
-                if (app.pages.getCurrentPage().name === newPerspecive) {
+                if (app.pages.getCurrentPage().name === newPerspective) {
                     // trigger also here, not every perspective change is also an page change
                     this.afterShow(app, opt);
                     win.currentPerspective = opt.perspective;
                     win.updateToolbar();
                 }
 
-                app.pages.changePage(newPerspecive, pcOpt);
+                app.pages.changePage(newPerspective, pcOpt);
             };
 
             this.hide = function () {
