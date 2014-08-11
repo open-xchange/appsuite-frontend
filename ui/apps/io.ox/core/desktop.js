@@ -769,7 +769,13 @@ define('io.ox/core/desktop',
 
             this.show = function (app, opt) {
                 var win = app.getWindow(),
-                    pcOpt = opt.animation ? {animation: opt.animation} : {};
+                    pcOpt = opt.animation ? {animation: opt.animation} : {},
+                    self = this;
+
+                if (opt.disableAnimations) {
+                    pcOpt.disableAnimations = true;
+                }
+
                 if (opt.perspective === win.currentPerspective) return;
 
                 this.main = app.pages.getPage(opt.perspective.split(':')[0]);
@@ -788,9 +794,6 @@ define('io.ox/core/desktop',
                     win.trigger('change:initialPerspective', name);
                 }
 
-                // set perspective (show)
-                //win.setPerspective(this);
-
                 _.url.hash('perspective', opt.perspective);
 
                 // render?
@@ -799,11 +802,24 @@ define('io.ox/core/desktop',
                     this.rendered = true;
                 }
 
-                app.pages.changePage(opt.perspective.split(':')[0], pcOpt);
+                app.pages.getPage(opt.perspective.split(':')[0]).one('pageshow', function () {
+                    // wait for page to show
+                    self.afterShow(app, opt);
+                    win.currentPerspective = opt.perspective;
+                    win.updateToolbar();
+                });
 
-                win.currentPerspective = opt.perspective;
-                win.updateToolbar();
-                this.afterShow(app, opt);
+                if (app.pages.getCurrentPage().name === opt.perspective.split(':')[0]) {
+                    // trigger also here, not every perspective change is also an page change
+                    this.afterShow(app, opt);
+                    win.currentPerspective = opt.perspective;
+                    win.updateToolbar();
+                }
+
+                app.pages.changePage(opt.perspective.split(':')[0], pcOpt);
+                //win.currentPerspective = opt.perspective;
+                //win.updateToolbar();
+
             };
 
             this.hide = function () {
