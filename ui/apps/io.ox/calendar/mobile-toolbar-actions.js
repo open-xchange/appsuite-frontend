@@ -25,6 +25,8 @@ define('io.ox/calendar/mobile-toolbar-actions',
     var pMonth = ext.point('io.ox/calendar/mobile/toolbar/month'),
         pWeek = ext.point('io.ox/calendar/mobile/toolbar/week'), // actually a single day as we use week:day
         pList = ext.point('io.ox/calendar/mobile/toolbar/list'),
+        pListMulti = ext.point('io.ox/calendar/mobile/toolbar/list/multiselect'),
+        multiInlineActions = ext.point('io.ox/calendar/mobile/toolbar/list/multiselectactions'),
         pDetail = ext.point('io.ox/calendar/mobile/toolbar/detailView'),
         meta = {
             'create': {
@@ -80,6 +82,32 @@ define('io.ox/calendar/mobile-toolbar-actions',
                 drawDisabled: true,
                 ref: 'io.ox/calendar/actions/dayview/showToday',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'today-month': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Today'),
+                drawDisabled: true,
+                ref: 'io.ox/calendar/actions/month/showToday',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'move': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Move'),
+                icon: 'fa fa-sign-in',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/detail/actions/move',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'delete': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Delete'),
+                icon: 'fa fa-trash-o',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/detail/actions/delete',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             }
         };
 
@@ -107,9 +135,20 @@ define('io.ox/calendar/mobile-toolbar-actions',
     }));
 
     // add other actions
-    addAction(pMonth, ['create', 'listView']);
+    addAction(pMonth, ['create', 'listView', 'today-month']);
     addAction(pWeek, ['create', 'listView', 'prevDay', 'today', 'nextDay']);
     addAction(pList, ['calendarView']);
+    addAction(multiInlineActions, ['move', 'delete']);
+
+    // have to use inline actions to process actions the right way
+    pListMulti.extend(new links.InlineLinks({
+        attributes: {},
+        classes: '',
+        index: 100,
+        id: 'toolbar-links',
+        ref: 'io.ox/calendar/mobile/toolbar/list/multiselectactions'
+    }));
+
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;
         // extract single object if length === 1
@@ -119,6 +158,7 @@ define('io.ox/calendar/mobile-toolbar-actions',
         this.pages.getToolbar('month').setBaton(baton);
         this.pages.getToolbar('week').setBaton(baton);
         this.pages.getToolbar('list').setBaton(baton);
+        this.pages.getSecondaryToolbar('list').setBaton(baton);
 
     }, 10);
 
@@ -154,6 +194,18 @@ define('io.ox/calendar/mobile-toolbar-actions',
             });
             app.getWindow().on('change:perspective change:initialPerspective', function () {
                 _.defer(prepareUpdateToolbar, app);
+            });
+        }
+    });
+
+     ext.point('io.ox/calendar/mediator').extend({
+        id: 'change-mode-toolbar-mobile',
+        index: 10400,
+        setup: function (app) {
+            if (!_.device('smartphone')) return;
+            // if multiselect is triggered, show secondary toolbar with other options based on selection
+            app.props.on('change:checkboxes', function (model, state) {
+                app.pages.toggleSecondaryToolbar('list', state);
             });
         }
     });

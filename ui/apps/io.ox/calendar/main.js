@@ -112,6 +112,11 @@ define('io.ox/calendar/main',
                     app: app,
                     page: 'list',
                     extension: 'io.ox/calendar/mobile/toolbar'
+                }),
+                secondaryToolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'list/multiselect',
+                    extension: 'io.ox/calendar/mobile/toolbar'
                 })
             });
 
@@ -232,11 +237,22 @@ define('io.ox/calendar/main',
                 app.pages.goBack();
             });
 
-            app.pages.getNavbar('folderTree').on('rightAction', function () {
-                app.toggleFolders();
+           // checkbox toggle
+            app.pages.getNavbar('list').on('rightAction', function () {
+                if (app.props.get('checkboxes') === true) {
+                    // leave multiselect? -> clear selection
+                    app.grid.selection.clear();
+                    app.grid.showTopbar(false);
+                    app.grid.showToolbar(false);
+                    app.pages.getNavbar('list').setRight(gt('Edit')).show('.left');
+                } else {
+                     // also show sorting options
+                    app.grid.showTopbar(true);
+                    app.grid.showToolbar(true);
+                    app.pages.getNavbar('list').setRight(gt('Cancel')).hide('.left');
+                }
+                app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
-
-
         },
 
 
@@ -247,7 +263,10 @@ define('io.ox/calendar/main',
 
             var gridOptions = {
                 settings: settings,
-                showToggle: _.device('small')
+                showToggle: _.device('smartphone'),
+                hideTopbar: _.device('smartphone'),
+                hideToolbar: _.device('smartphone'),
+                toolbarPlacement: 'top' // if it's shown, it should be on the top
             };
 
             // show "load more" link
@@ -266,6 +285,13 @@ define('io.ox/calendar/main',
             app.getGrid = function () {
                 return this.grid;
             };
+
+            if (_.device('smartphone')) {
+                // remove some stuff from toolbar once
+                app.grid.one('meta:update', function () {
+                    app.grid.getToolbar().find('.select-all-toggle, .grid-info').hide();
+                });
+            }
         },
 
         /*
@@ -279,6 +305,23 @@ define('io.ox/calendar/main',
             // initialize folder view
             FolderView.initialize({ app: app, tree: tree });
             app.folderView.resize.enable();
+        },
+
+         'toggle-folder-editmode': function (app) {
+
+            if (_.device('!smartphone')) return;
+
+            var toggle =  function () {
+
+                var page = app.pages.getPage('folderTree'),
+                    state = app.props.get('mobileFolderSelectMode'),
+                    right = state ? gt('Edit') : gt('Cancel');
+                app.props.set('mobileFolderSelectMode', !state);
+                app.pages.getNavbar('folderTree').setRight(right);
+                page.toggleClass('mobile-edit-mode', !state);
+            };
+
+            app.toggleFolders = toggle;
         },
 
         /*
@@ -303,7 +346,7 @@ define('io.ox/calendar/main',
             });
 
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', });
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month'});
             page.append(tree.render().$el);
         },
 
@@ -315,8 +358,9 @@ define('io.ox/calendar/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': view,
-                'checkboxes': app.settings.get('showCheckboxes', true),
-                'darkColors': app.settings.get('darkColors', false)
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
+                'darkColors': app.settings.get('darkColors', false),
+                'mobileFolderSelectMode': false
             });
         },
 
@@ -346,6 +390,7 @@ define('io.ox/calendar/main',
          * Store view options
          */
         'store-view-options': function (app) {
+            if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function () {
                 var data = app.props.toJSON();
                 app.settings
@@ -376,10 +421,9 @@ define('io.ox/calendar/main',
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
-            if (_.device('smartphone')) return;
+            //if (_.device('smartphone')) return;
             app.props.on('change:checkboxes', function (model, value) {
-                var grid = app.getGrid();
-                grid.setEditable(value);
+                app.grid.setEditable(value);
             });
         },
 
@@ -407,7 +451,8 @@ define('io.ox/calendar/main',
          */
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
-                ox.ui.Perspective.show(app, value);
+                // no animations on desktop
+                ox.ui.Perspective.show(app, value, {disableAnimations: true});
             });
         },
 
@@ -429,7 +474,7 @@ define('io.ox/calendar/main',
                     'search:query': function () {
                         lastPerspective = _.url.hash('perspective') || app.props.get('layout');
                         if (lastPerspective !== SEARCH_PERSPECTIVE)
-                            ox.ui.Perspective.show(app, SEARCH_PERSPECTIVE);
+                            ox.ui.Perspective.show(app, SEARCH_PERSPECTIVE, {disableAnimations: true});
                     }
                 });
 
@@ -462,7 +507,7 @@ define('io.ox/calendar/main',
         'show-weekview-mobile': function (app) {
             if (_.device('!smartphone')) return;
             app.pages.getPage('week').on('pageshow', function () {
-                app.pages.getPageObject('week').perspective.view.setScrollPos();
+                //app.pages.getPageObject('week').perspective.view.setScrollPos();
             });
         }
 
@@ -544,7 +589,7 @@ define('io.ox/calendar/main',
                     // corrupt data fix
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
-                ox.ui.Perspective.show(app, lastPerspective);
+                ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
                 app.props.set('layout', lastPerspective);
             });
     });

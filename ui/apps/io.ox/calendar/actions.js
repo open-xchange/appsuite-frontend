@@ -477,6 +477,20 @@ define('io.ox/calendar/actions',
         }
     });
 
+   // Actions
+    new Action('io.ox/calendar/actions/month/showToday', {
+        requires: true,
+        action: function (baton) {
+            var p = baton.app.getWindow().getPerspective();
+            if (!p) return;
+            p.gotoMonth({
+                duration: 0,
+                date: 'today'
+            });
+        }
+    });
+
+
     // Mobile multi select extension points
     // delete appointment(s)
     ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({

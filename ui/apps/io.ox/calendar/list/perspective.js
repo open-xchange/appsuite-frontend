@@ -116,6 +116,7 @@ define('io.ox/calendar/list/perspective',
             }
         }
         function showAppointment(obj, directlink) {
+            if (_.device('smartphone') && app.props.get('checkboxes') === true) return;
             // be busy
             right.busy(true);
 

@@ -436,6 +436,7 @@ define('io.ox/tasks/main',
          * Store view options
          */
         'store-view-options': function (app) {
+            if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function () {
                 var data = app.props.toJSON();
                 app.settings
@@ -477,18 +478,6 @@ define('io.ox/tasks/main',
 
         },
 
-        'folder-view-mobile-listener': function () {
-            if (_.device('!smartphone')) return;
-            // always change folder on click
-            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
-                if (app.props.get('mobileFolderSelectMode') === true) {
-                    $(e.currentTarget).trigger('contextmenu'); // open menu
-                    return; // do not change page in edit mode
-                }
-
-                app.pages.changePage('listView');
-            });
-        },
         /*
          * Respond to change:checkboxes
          */
