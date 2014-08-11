@@ -15,7 +15,7 @@ define(['io.ox/calendar/main',
     'fixture!io.ox/calendar/list/calendar-list.json',
     'waitsFor'], function (main, fixture, waitsFor) {
 
-    describe('calendar app and the corresponding listview ', function () {
+    describe('calendar app and the corresponding listview', function () {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
@@ -35,16 +35,16 @@ define(['io.ox/calendar/main',
             });
         });
 
-        it('should provide a getApp function ', function () {
+        it('should provide a getApp function', function () {
             expect(main.getApp).to.exist;
         });
 
-        it('should provide a launch function ', function () {
+        it('should provide a launch function', function () {
             var app = main.getApp();
             expect(app.launch).to.be.a('function');
         });
 
-        it('should open the calendar app ', function (done) {
+        it('should open the calendar app', function (done) {
             main.getApp().launch().done(function () {
                 var app = this;
                 expect(app.get('state')).to.equal('running');
@@ -147,14 +147,14 @@ define(['io.ox/calendar/main',
                 expect($(timebars[1]).hasClass('free')).to.be.true;
             });
 
-            describe(' should show the right data in detailview ', function () {
+            describe('should show the right data in detailview', function () {
                 beforeEach(function () {
                     this.gc = this.grid.getContainer();
                     this.nodes = this.app.getWindow().nodes;
                     this.grid.selection.selectFirst();
                 });
 
-                it(' and should show an appointment in detail view if something is selected in list', function () {
+                it('and should show an appointment in detail view if something is selected in list', function () {
                     var right = this.nodes.body.find('.rightside');
 
                     expect(right.length).to.be.above(0);
@@ -190,8 +190,8 @@ define(['io.ox/calendar/main',
                 it('and it should show the participants of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
 
-                    expect($(right.find('.person')[0]).text()).to.equal('Horst Hrubesch');
-                    expect($(right.find('.person')[1]).text()).to.equal('Karl Napp');
+                    expect($(right.find('.person')[0]).text()).to.equal('Hrubesch, Horst');
+                    expect($(right.find('.person')[1]).text()).to.equal('Napp, Karl');
                 });
                 it('and it should show the participants confirm message for the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
