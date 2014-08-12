@@ -13,7 +13,8 @@
 
 define('io.ox/search/autocomplete/extensions',
     ['io.ox/core/extensions',
-     'gettext!io.ox/core'], function (ext, gt) {
+     'settings!io.ox/contacts',
+     'gettext!io.ox/core'], function (ext, settings, gt) {
 
     var POINT = 'io.ox/search/autocomplete';
 
@@ -35,7 +36,7 @@ define('io.ox/search/autocomplete/extensions',
                         })
                         .autocomplete({
                             api: app.apiproxy,
-                            minLength: 0,
+                            minLength: settings.get('search/minimumQueryLength', 0),
                             mode: 'search',
                             delay: 100,
                             parentSelector: container  ? '.query' : '.io-ox-search',
