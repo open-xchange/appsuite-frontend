@@ -189,7 +189,7 @@ define('io.ox/files/toolbar',
     ext.point('io.ox/files/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        forcelimit: true, // always use drop-down
+        dropdown: true, // always use drop-down
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/files/classic-toolbar/links'

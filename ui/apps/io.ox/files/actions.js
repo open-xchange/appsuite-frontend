@@ -1215,7 +1215,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/icons/actions').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
-        forcelimit: true,
+        dropdown: true,
         ref: 'io.ox/files/icons/inline'
     }));
 

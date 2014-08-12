@@ -211,25 +211,26 @@ define('io.ox/core/extPatterns/actions',
                 var links = ext.point(ref).map(function (link) {
                     // defer decision
                     var def = $.Deferred();
-                    // store capabilities
-                    var capabilities = ext.point(link.ref).pluck('capabilities');
+                    // plain link without action?
+                    if (!link.ref) {
+                        return def.resolve({ link: link, state: true });
+                    }
                     // process actions
                     if (link.isEnabled && !link.isEnabled.apply(link, args)) {
                         // link is disabled
-                        def.resolve({ link: link, state: false });
+                        return def.resolve({ link: link, state: false });
                     }
-                    else if (!upsell.visible(capabilities)) {
+                    // store capabilities
+                    var capabilities = ext.point(link.ref).pluck('capabilities');
+                    if (!upsell.visible(capabilities)) {
                         // no capabilities match AND no upsell available
-                        def.resolve({ link: link, state: false });
+                        return def.resolve({ link: link, state: false });
                     }
-                    else {
-                        // combine actions
-                        processActions(link.ref, collection, baton).done(function () {
-                            var state = _(arguments).any(function (bool) { return bool === true; });
-                            def.resolve({ link: link, state: state });
-                        });
-                    }
-                    return def;
+                    // combine actions
+                    return processActions(link.ref, collection, baton).then(function () {
+                        var state = _(arguments).any(function (bool) { return bool === true; });
+                        return { link: link, state: state };
+                    });
                 });
                 // wait for all links
                 $.when.apply($, links.value()).done(function () {

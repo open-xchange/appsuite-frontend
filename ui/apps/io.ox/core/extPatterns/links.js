@@ -178,8 +178,8 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
-    var getLinks = function (self, collection, baton, args) {
-        return actions.applyCollection(self.ref, collection, baton, args);
+    var getLinks = function (extension, collection, baton, args) {
+        return actions.applyCollection(extension.ref, collection, baton, args);
     };
 
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
@@ -299,11 +299,12 @@ define('io.ox/core/extPatterns/links',
 
     /**
      * @param {object}  options
-     * @param {boolean} options.forcelimit force usage of 'more...'
+     * @param {boolean} options.dropdown force usage of 'more...'
      * @param {string} add options.title for better accessibility (add context to 'Inline menu')
      */
     var InlineLinks = function (options) {
 
+        // don't use options inside this class; only "this" gets replaced properties
         var extension = _.extend(this, {
             classes: 'io-ox-inline-links',
             attributes: {
@@ -325,7 +326,7 @@ define('io.ox/core/extPatterns/links',
             // remove unimportant links on smartphone (prio='none')
             if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
 
-            if (lo.length > 1 && !allDisabled && (!multiple || options.forcelimit)) {
+            if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
                 nav.append(
                     $('<li class="dropdown">').append(
                         $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
@@ -348,7 +349,8 @@ define('io.ox/core/extPatterns/links',
 
             // hide if all links are disabled
             if (allDisabled) lo.hide();
-            if (options.customizeNode) options.customizeNode(nav);
+            if (extension.customizeNode) extension.customizeNode(nav); // deprecated!
+            if (extension.customize) extension.customize.call(nav, baton);
 
             // move to real target node
             if (baton.$.target) baton.$.target.append(nav.children());

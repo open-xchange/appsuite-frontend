@@ -327,6 +327,8 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                             if (baton.isPropagationStopped()) return;
                             // prevent default?
                             if (ext.id === 'default' && baton.isDefaultPrevented()) return;
+                            // inject current extension
+                            baton.extension = ext;
                             // call
                             return ext[name].apply(context, args.slice(3));
                         } catch (e) {

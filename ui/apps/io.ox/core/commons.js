@@ -61,7 +61,7 @@ define('io.ox/core/commons',
                 draw: function (baton) {
                     // inline links
                     var node = $('<div>'), id = baton.id, opt = baton.opt || {};
-                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', forcelimit: opt.forcelimit})))
+                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', dropdown: opt.dropdown })))
                         .draw.call(node, { data: baton.selection, grid: baton.grid }); // needs grid to add busy animations without using global selectors
                     this.append(
                         node.children().first()

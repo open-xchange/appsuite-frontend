@@ -146,7 +146,7 @@ define('io.ox/contacts/toolbar',
     ext.point('io.ox/contacts/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        forcelimit: true, // always use drop-down
+        dropdown: true, // always use drop-down
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/contacts/classic-toolbar/links'
@@ -184,7 +184,7 @@ define('io.ox/contacts/toolbar',
             var baton = ext.Baton({ $el: toolbar, data: data, app: self });
             ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.empty(), baton);
         });
-        
+
     }, 10);
 
     ext.point('io.ox/contacts/mediator').extend({
