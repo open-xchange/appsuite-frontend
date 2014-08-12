@@ -230,6 +230,25 @@ define('io.ox/core/tk/dialogs',
         // add event hub
         Events.extend(this);
 
+        this.resizeBody = function () {
+            var topSpace = self.getPopup().position().top,
+                docHeight = $(document).height(),
+                bodyHeight = self.getBody().height(),
+                popupHeight = self.getPopup().height(),
+                bottomSpace = 30,
+                cellHeight = self.getBody().find('.vgrid-cell').eq(0).outerHeight(),
+                neededHeight = popupHeight + topSpace + bottomSpace;
+            if (neededHeight >= docHeight) {
+                var overSize = docHeight - neededHeight,
+                    heightVal = bodyHeight + overSize;
+                if (heightVal >= cellHeight) {
+                    self.getBody().css('height', heightVal +'px');
+                } else {
+                    self.getBody().css('height', cellHeight +'px');
+                }
+            }
+        };
+
         this.data = function (d) {
             data = d !== undefined ? d : {};
             return this;

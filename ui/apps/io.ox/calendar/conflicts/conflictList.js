@@ -21,12 +21,13 @@ define('io.ox/calendar/conflicts/conflictList', ['gettext!io.ox/calendar/conflic
             return $('<h4 class="text-error">').text(gt('Conflicts detected'));
         },
 
-        drawList: function (conflicts) {
+        drawList: function (conflicts, dialog) {
             var conflictList = $('<div>');
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-grid-template', 'io.ox/calendar/api']).done(
                 function (dialogs, viewGrid, calAPI) {
                     _.map(conflicts, function (c) { c.conflict = true; });
                     conflictList.append(viewGrid.drawSimpleGrid(conflicts));
+                    dialog.resizeBody();
                     $('.vgrid-cell', conflictList).on('click', function (e) {
                         if ($(this).data('appointment').folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
                             calAPI.get($(this).data('appointment')).done(function (data) {

@@ -111,8 +111,9 @@ define('io.ox/calendar/edit/main',
                                             center: false,
                                             container: self.getWindowNode()
                                         })
-                                        .header(conflictView.drawHeader())
-                                        .append(conflictView.drawList(con).addClass('additional-info'));
+                                        .header(conflictView.drawHeader());
+
+                                        dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
                                     if (hardConflict) {
                                         dialog.prepend(
                                             $('<div class="alert alert-info hard-conflict">')
