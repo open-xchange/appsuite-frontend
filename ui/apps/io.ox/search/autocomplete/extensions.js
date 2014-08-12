@@ -78,8 +78,13 @@ define('io.ox/search/autocomplete/extensions',
                             }
                         })
                         .on('focus focus:custom click', function (e, opt) {
+
+                            //search mode: not when enterin input with tab key
+                            if (ref.data('byclick')) {
+                                ref.removeData('byclick');
+                                app.view.trigger('focus');
+                            }
                             // hint: 'click' supports click on already focused
-                            app.view.trigger('focus');
                             // keep dropdown closed on focus event
                             opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
 
@@ -88,6 +93,11 @@ define('io.ox/search/autocomplete/extensions',
                                     type: 'keyup',
                                     which: 9
                                 }, opt);
+
+                        })
+                        .on('mousedown', function () {
+                            if(!ref.is(':focus'))
+                                ref.data('byclick', true);
 
                         })
                         .on('keyup', function (e, options) {
