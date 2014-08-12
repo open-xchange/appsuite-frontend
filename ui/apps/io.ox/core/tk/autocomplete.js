@@ -237,17 +237,17 @@ define('io.ox/core/tk/autocomplete',
                     });
 
                     _(list).each(function (facet) {
-                        regular = facet.style !== 'simple' && !!facet.display_name;
+                        regular = facet.style !== 'simple' && !!facet.name;
                         childs = facet.values && facet.values.length > 0;
                         //facet
                         count++;
-                        if (facet.display_name && childs && regular) {
+                        if (facet.name && childs && regular) {
                             $('<div class="autocomplete-item unselectable dropdown-header">')
-                                .html(facet.display_name)
+                                .html(facet.name)
                                 .data({
                                     index: count,
                                     id: facet.id,
-                                    label: facet.display_name,
+                                    label: facet.name,
                                     type: 'group'
                                 })
                                 //delimiter

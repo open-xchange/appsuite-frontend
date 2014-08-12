@@ -136,7 +136,7 @@ define('io.ox/search/facets/extensions',
                     } else {
                         if (facet === 'folder') {
                             // overwrite custom
-                            baton.model.update(facet, value, {display_name: link.attr('title'), custom: option });
+                            baton.model.update(facet, value, {name: link.attr('title'), custom: option });
                         } else {
                             // use existing option
                             baton.model.update(facet, value, {option: option });
@@ -149,7 +149,6 @@ define('io.ox/search/facets/extensions',
 
             folderDialog: function (facet, baton) {
                 require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
-                    debugger;
                     var id = facet.values[0].custom,
                         type = baton.model.getModule();
 
@@ -163,7 +162,7 @@ define('io.ox/search/facets/extensions',
                                 .always(function (data) {
                                     //use id as fallback label
                                     var label = (data || {}).title || target;
-                                    baton.model.update(facet.id, id, { custom: target, display_name: label });
+                                    baton.model.update(facet.id, id, { custom: target, name: label });
                                 });
                         },
                         customize: function (baton) {
@@ -192,7 +191,7 @@ define('io.ox/search/facets/extensions',
                         $('<span>')
                             .addClass('type')
                             // TYPE 3: use facet label instead of option label
-                            .html(facet.style === 'exclusive' ? facet.display_name : type)
+                            .html(facet.style === 'exclusive' ? facet.name : type)
                     );
                 }
             },
@@ -207,7 +206,7 @@ define('io.ox/search/facets/extensions',
                 this.find('label').append(
                     $('<span>')
                         .addClass('name')
-                        .html(type || value.display_name)
+                        .html(type || value.name || (value.item || {}).name)
                 );
             },
 
@@ -256,7 +255,7 @@ define('io.ox/search/facets/extensions',
                                          $('<a role="menuitem" tabindex="-1" href="#">')
                                             .append(
                                                 $('<i class="fa fa-fw fa-none">'),
-                                                $('<span>').html(item.display_name)
+                                                $('<span>').html(item.name || item.item.name)
                                             )
                                             .addClass('option')
                                             .attr('data-option', item.id)

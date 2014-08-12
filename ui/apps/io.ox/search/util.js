@@ -47,7 +47,7 @@ define('io.ox/search/util',
             var current = _.find(options, function (item) {
                     return item.id === id;
                 });
-            return (current || {}).display_name;
+            return (current || {}).name;
         },
         getFolders: function (model) {
 
@@ -136,7 +136,7 @@ define('io.ox/search/util',
                     // use id as fallback
                     def.resolve({
                         custom: folder.id || id,
-                        display_name: folder.title || id
+                        name: folder.title || id
                     });
                 };
 

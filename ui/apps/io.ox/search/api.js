@@ -125,13 +125,59 @@ define('io.ox/search/api',
                 return data;
             }
 
+            //TODO: remove when backend is ready
+            function fixbackend (data) {
+               function adjust (obj) {
+                    if (obj.display_name) {
+                        obj.name = obj.name ||obj.display_name;
+                        delete obj.display_name;
+                    }
+                    if (obj.display_item) {
+                        obj.item = {
+                            name: obj.display_item[0],
+                            detail: obj.display_item[1]
+                        };
+                    }
+                    if (obj.image_url) {
+                        obj.item = {
+                            name: obj.name,
+                            detail: '&nbsp;',
+                            image_url: obj.image_url
+                        };
+                        delete obj.image_url;
+                        if (obj.item && obj.item.name.split('(').length > 1) {
+                            obj.item.detail = obj.item.name.split('(')[1].replace(')', '');
+                            obj.item.name = obj.item.name.split('(')[0].replace(')', '');
+                        }
+                    }
+                }
+
+                _.each(data.facets, function (facet) {
+                    //facet itself
+                    adjust(facet);
+                    //values
+                    _.each(facet.values, function (value) {
+                        adjust(value);
+                        _.each(value.options, function (option) {
+                           adjust(option);
+                        });
+                    });
+                    // options
+                    _.each(facet.options, function (option) {
+                        adjust(option);
+                    });
+                });
+                return data;
+            }
+
             // call server
             return http[opt.method](opt)
+                .then(fixbackend)
                 .then(function (data) {
                     // process data
                     _.each(data.facets, function (facet) {
                         // add surrounding <i> tag
-                        facet.display_name = facet.display_name || [facet.display_item[0], ' <i>', facet.display_item[1], '</i>'].join('');
+                        facet.name = facet.name || [facet.item.name, ' ', '<i>', facet.item.detail, '</i>'].join('');
 
                         // handle 'exclusive' facets (use options as values also)
                         if (facet.style === 'exclusive' && !facet.values) {

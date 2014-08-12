@@ -195,7 +195,7 @@ define('io.ox/search/autocomplete/extensions',
             this.removeClass('indent');
 
             // construct url
-            image = (baton.data.image_url ? baton.data.image_url + '&height=42&scaleType=contain' : image)
+            image = (baton.data.item && baton.data.item.image_url ? baton.data.item.image_url + '&height=42&scaleType=contain' : image)
                 .replace(/^https?\:\/\/[^\/]+/i, '')
                 .replace(/^\/ajax/, ox.apiRoot);
 
@@ -207,31 +207,31 @@ define('io.ox/search/autocomplete/extensions',
         },
 
         name: function (baton) {
-            var name = baton.data.display_name;
-
-            if (this.is('.contacts, .contact, .participant, .task_participants'))
-                name = baton.data.display_name.split('(')[0];
+            var name = (baton.data.item && baton.data.item.name ? baton.data.item.name : baton.data.name) || '&nbsp;';
 
             this
                 .data(baton.data)
                 .append(
-                    $('<div class="name">').html(name)
+                    $('<div class="name">').text(name)
                 );
 
         },
 
         detail: function (baton) {
-            var detail = '&nbsp;';
-            if (!this.is('.contacts, .contact, .participant, .task_participants')) return;
+            var detail = baton.data.item  && baton.data.item.detail.length ? baton.data.item.detail : undefined,
+                isContact = this.is('.contacts, .contact, .participant, .task_participants');
 
-            this.removeClass('indent');
+            // contact
+            if (isContact) {
+                this.removeClass('indent');
+                this.append(
+                    $('<div class="detail">').html(detail || '&nbsp;')
+                );
+            } else if (detail) {
+                var node = this.find('.name');
+                node.html(node.text() + ' <i>' + detail + '</i>');
 
-            if (baton.data.display_name.split('(').length > 1)
-                detail = baton.data.display_name.split('(')[1].replace(')', '');
-
-            this.append(
-                $('<div class="email">').html(detail)
-            );
+            }
 
         }
 

@@ -58,7 +58,7 @@ define('io.ox/search/model',
             values: [{
                 facet: 'folder',
                 id: 'custom',
-                display_name: '',
+                name: '',
                 custom: '',
                 filter: {}
             }]
@@ -141,7 +141,7 @@ define('io.ox/search/model',
                         // overwrite
                         if (!!item.custom) {
                             itemvalue.custom = option.custom;
-                            itemvalue.display_name = option.display_name;
+                            itemvalue.name = option.name;
                             // update 'folder' value
                             _.extend(data.values[0], itemvalue);
                         }
