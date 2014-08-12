@@ -505,7 +505,8 @@ define('io.ox/contacts/actions',
                     return e.collection.has('some') && _(list).reduce(function (memo, obj) {
                         return memo || new p.Preview({
                             filename: obj.filename,
-                            mimetype: obj.content_type
+                            mimetype: obj.content_type,
+                            pim: true
                         })
                         .supportsPreview();
                     }, false);

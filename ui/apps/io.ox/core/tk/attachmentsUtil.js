@@ -140,10 +140,12 @@ define('io.ox/core/tk/attachmentsUtil',
          * @return {boolean}
          */
         hasPreview : function (file) {
+
             var data = self.get(file),
                 isImage = (/^image\/(png|gif|jpe?g|bmp)$/i).test(data.type),
                 isText = (/^text\/(plain)$/i).test(data.type),
                 isOffice = false;
+
             if (capabilities.has('text')) {//if we have office support let's check those files too
                 if (file.file) {
                     isOffice = new pre.Preview({mimetype: file.file.content_type, filename: file.file.filename}).supportsPreview();
@@ -235,7 +237,7 @@ define('io.ox/core/tk/attachmentsUtil',
                             })
                     )
             );
-            
+
             if (options.ref) {
                 var fileObj = JSON.parse(JSON.stringify(obj));
                 fileObj.name = name;
