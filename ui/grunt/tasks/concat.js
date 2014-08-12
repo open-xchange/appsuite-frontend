@@ -101,6 +101,7 @@ module.exports = function (grunt) {
                              'apps/io.ox/core/upsell.js',
                              'apps/io.ox/core/ping.js',
                              'apps/io.ox/core/relogin.js',
+                             'apps/io.ox/core/uuids.js',
                              // 3rd wave
                              'apps/io.ox/core/extPatterns/links.js',
                              'apps/io.ox/core/adaptiveLoader.js',
@@ -118,6 +119,15 @@ module.exports = function (grunt) {
                              'apps/io.ox/core/folder/tree.js',
                              'apps/io.ox/core/folder/favorites.js',
                              'apps/io.ox/core/folder/view.js',
+                             'apps/io.ox/core/folder/extensions.js',
+                             // defaults
+                             'apps/io.ox/core/settings/defaults.js',
+                             'apps/io.ox/core/settingOptions/settings/defaults.js',
+                             'apps/io.ox/mail/settings/defaults.js',
+                             'apps/io.ox/contacts/settings/defaults.js',
+                             'apps/io.ox/calendar/settings/defaults.js',
+                             'apps/io.ox/tasks/settings/defaults.js',
+                             'apps/io.ox/files/settings/defaults.js',
                              // 4th wave
                              'apps/io.ox/core/collection.js',
                              'apps/io.ox/core/extPatterns/actions.js',
