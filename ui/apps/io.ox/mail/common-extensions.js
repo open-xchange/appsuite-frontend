@@ -115,13 +115,12 @@ define('io.ox/mail/common-extensions',
 
         threadSize: function (baton) {
 
-            var data = baton.data;
-            if (!_.isNumber(data.threadSize)) return;
-            if (data.threadSize <= 1) return;
+            var size = api.threads.size(baton.data);
+            if (size <= 1) return;
 
             this.append(
                 $('<div class="thread-size" aria-hidden="true">').append(
-                    $('<span class="number drag-count">').text(_.noI18n(data.threadSize))
+                    $('<span class="number drag-count">').text(_.noI18n(size))
                 )
             );
         },

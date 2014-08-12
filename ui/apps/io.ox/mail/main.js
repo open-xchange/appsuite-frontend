@@ -867,17 +867,19 @@ define('io.ox/mail/main',
          * Select next item in list view if current item gets deleted
          */
         'before-delete': function (app) {
+
             if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
 
-            function isSingleThreadMessage(list) {
-                if (list.length !== 1) return false;
-                var cid = String(list[0]).replace(/^thread\./, '');
-                return api.threads.contains(cid) && api.threads.hash[cid] !== api.threads.reverse[cid];
+            function isSingleThreadMessage(ids, selection) {
+                if (ids.length !== 1) return false;
+                if (selection.length !== 1) return false;
+                var a = _.cid(ids[0]), b = String(selection[0]).replace(/^thread\./, '');
+                return a !== b;
             }
 
-            api.on('beforedelete', function () {
-                var list = app.listView.selection.get();
-                if (!isSingleThreadMessage(list)) app.listView.selection.dodge();
+            api.on('beforedelete', function (e, ids) {
+                if (isSingleThreadMessage(ids, app.listView.selection.get())) return;
+                app.listView.selection.dodge();
             });
         },
 

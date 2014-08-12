@@ -519,6 +519,11 @@ define('io.ox/mail/api',
         // fallback
         all = all || ids;
 
+        if (all.length === 1) {
+            api.threads.remove(all[0]);
+            api.threads.touch(all[0]);
+        }
+
         // we need the original list of ids "all" to also catch threads
         // that start with an email from the sent folder
         api.trigger('beforedelete', all);
@@ -535,8 +540,13 @@ define('io.ox/mail/api',
             appendColumns: false
         })
         .done(function () {
+            // reset trash folder
+            var trashId = accountAPI.getFoldersByType('trash');
+            _(pool.getByFolder(trashId)).each(function (collection) {
+                collection.expired = true;
+            });
             // update unread counter and folder item counter
-            folderAPI.reload(ids, accountAPI.getFoldersByType('trash'));
+            folderAPI.reload(ids, trashId);
             // trigger delete to update notification area
             api.trigger('delete');
             api.trigger('deleted-mails', ids);
@@ -1722,10 +1732,6 @@ define('io.ox/mail/api',
         }
     });
 
-    api.on('delete', function () {
-        api.refresh();
-    });
-
     /**
      * sets title to 'New Mail' or default
      * @param  {boolean} state
@@ -1828,6 +1834,20 @@ define('io.ox/mail/api',
             _(this.hash[cid]).each(function (thread_cid) {
                 this.reverse[thread_cid] = cid;
             }, this);
+        },
+
+        remove: function (cid) {
+            cid = _.isString(cid) ? cid : _.cid(cid);
+            var top = this.reverse[cid];
+            if (!top || !this.hash[top]) return;
+            this.hash[top] = _(this.hash[top]).without(cid);
+        },
+
+        size: function (cid) {
+            cid = _.isString(cid) ? cid : _.cid(cid);
+            var top = this.reverse[cid];
+            if (!top) return 1;
+            return (this.hash[top] || [cid]).length;
         }
     };
 
