@@ -79,6 +79,7 @@ define('io.ox/search/autocomplete/extensions',
                         })
                         .on('focus focus:custom click', function (e, opt) {
                             // hint: 'click' supports click on already focused
+                            app.view.trigger('focus');
                             // keep dropdown closed on focus event
                             opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
 

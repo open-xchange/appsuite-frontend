@@ -1651,7 +1651,7 @@ define('io.ox/core/desktop',
 
                     // events: internal
                     view.on({
-                        'query':
+                        'query focus':
                             _.debounce(function (e) {
                                 win.facetedsearch.open();
                                 if (e.type === 'query') win.trigger('search:query');
