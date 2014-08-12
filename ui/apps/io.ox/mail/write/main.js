@@ -793,20 +793,20 @@ define('io.ox/mail/write/main',
                 }
             }
 
-            var mailto, tmp, params, def = $.Deferred();
+            var mailto, params, def = $.Deferred();
             // triggerd by mailto?
             if (data === undefined && (mailto = _.url.hash('mailto'))) {
-                tmp = mailto.split(/\?/, 2);
-                params = _.deserialize(tmp[1]);
+                // remove 'mailto:'' prefix and split at '?''
+                var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
+                var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
                 // Bug: 31345
-                for (var key in params) {
-                    params[key.toLowerCase()] = params[key];
-                }
-                tmp = tmp[0].split(/\:/, 2);
+                for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
                 data = {
-                    to: mailUtil.parseRecipients(tmp[1]) || [['', tmp[1]]],
-                    subject: params.subject,
+                    to: mailUtil.parseRecipients(to) || [['', to]],
+                    cc: mailUtil.parseRecipients(params.cc) || [],
+                    bcc: mailUtil.parseRecipients(params.bcc) || [],
+                    subject: params.subject || '',
                     attachments: [{ content: params.body || '' }]
                 };
                 // clear hash

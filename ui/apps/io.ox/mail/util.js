@@ -214,6 +214,7 @@ define('io.ox/mail/util',
          */
         parseRecipients: function (s) {
             var list = [], match, recipient;
+            if (!s) return list;
             while ((match = s.match(rRecipientList)) !== null) {
                 // look ahead for next round
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
