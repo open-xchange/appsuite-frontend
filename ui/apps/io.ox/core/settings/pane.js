@@ -29,7 +29,7 @@ define('io.ox/core/settings/pane',
 
     var point = views.point('io.ox/core/settings/entry'),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language', 'timezone', 'theme', 'autoOpenNotification'];
+        reloadMe = ['language', 'timezone', 'theme'];
 
     ext.point('io.ox/core/settings/detail').extend({
         index: 50,
