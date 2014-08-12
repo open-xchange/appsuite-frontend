@@ -519,6 +519,8 @@ define.async('io.ox/core/tk/html-editor',
             // post processing (DOM-based)
             paste_postprocess: paste_postprocess,
 
+            paste_data_images: true,
+
             setup: function (ed) {
                 ed.on('keydown', function (e) {
                     // pressed enter?
