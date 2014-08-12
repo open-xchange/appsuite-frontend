@@ -366,8 +366,7 @@ define('io.ox/core/main',
 
     (function () {
 
-        var interval = parseInt(settings.get('refreshInterval', 300000), 10),
-            next = _.now() + interval,
+        var next = _.now(),
             REFRESH_THROTTLE = 10000; // only trigger every 10 seconds
 
         ext.point('io.ox/core/refresh').extend({
@@ -380,20 +379,25 @@ define('io.ox/core/main',
                         console.error('io.ox/core/refresh:default', e.message, e);
                     }
                 }
-            }, REFRESH_THROTTLE)
+            }, REFRESH_THROTTLE),
+            reset: function () {
+                next = _.now() + parseInt(settings.get('refreshInterval', 300000), 10);
+            }
         });
 
-        refresh = function () {
-            next = _.now() + interval;
-            ext.point('io.ox/core/refresh').invoke('action');
-        };
-
         function check() {
-            if (_.now() > next) { refresh(); }
+            if (_.now() > next) {
+                ext.point('io.ox/core/refresh').invoke('action');
+                ext.point('io.ox/core/refresh').invoke('reset');
+            }
         }
 
-        setInterval(check, 10000); // check every 10 seconds
+        settings.on('change:refreshInterval', function () {
+            ext.point('io.ox/core/refresh').invoke('reset');
+        });
 
+        ext.point('io.ox/core/refresh').invoke('reset');
+        setInterval(check, 10000); // check every 10 seconds
     }());
 
     (function () {
