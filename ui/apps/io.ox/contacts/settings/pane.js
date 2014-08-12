@@ -81,29 +81,4 @@ define('io.ox/contacts/settings/pane',
             );
         }
     });
-
-    ext.point(POINT + '/pane').extend({
-        index: 300,
-        id: 'myaccount',
-        draw: function () {
-
-            var button = $('<button type="button" class="btn btn-primary" data-action="add">')
-                    .text(gt('My contact data'));
-
-            button.on('click', function () {
-                require(['io.ox/core/settings/user'], function (userSettings) {
-                    userSettings.openModalDialog();
-                });
-            });
-
-            this.append(
-                $('<div class="settings sectiondelimiter">'),
-                $('<div class="section">').append(
-                    $('<div id="controls">').append(
-                        $('<div class="btn-group pull-left">').append(button)
-                    )
-                )
-            );
-        }
-    });
 });
