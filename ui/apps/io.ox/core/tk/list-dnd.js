@@ -89,6 +89,7 @@ define('io.ox/core/tk/list-dnd', [
                 scale = MAX / RANGE,
                 nodeOffsetTop = 0;
 
+            // css hover doesn't work!
             $(this).addClass('dnd-over');
 
             if ($(this).hasClass('expandable')) {
