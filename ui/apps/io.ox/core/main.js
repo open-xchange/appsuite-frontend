@@ -1140,7 +1140,7 @@ define('io.ox/core/main',
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
-                mailto = _.url.hash('mailto') !== undefined && appURL === 'io.ox/mail/compose:compose';
+                mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose' || appURL === 'io.ox/mail/write:compose');
 
             if (manifest && (manifest.refreshable || mailto)) {
                 return appURL.split(/,/);
