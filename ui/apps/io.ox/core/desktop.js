@@ -1371,7 +1371,7 @@ define('io.ox/core/desktop',
                                 })
                                 .on('click', function (e) {
                                     e.preventDefault();
-                                    self.facetedsearch.view.trigger('button:clear');
+                                    self.facetedsearch.view.trigger('button:cancel');
                                 })
                         );
                         // add nodes
@@ -1416,10 +1416,16 @@ define('io.ox/core/desktop',
                         self.nodes.facetedsearch.toolbar
                             .find('.search-field')
                             .val('');
+                    },
+
+                    cancel: function () {
+                        // empty input
+                        self.facetedsearch.clear();
                         // apps switch from 'search mode' to 'all mode'
                         self.trigger('search:cancel');
                         // reset model
                         self.facetedsearch.view.model.reset();
+                        self.facetedsearch.close();
                     }
                 };
 
@@ -1651,9 +1657,11 @@ define('io.ox/core/desktop',
                                 if (e.type === 'query') win.trigger('search:query');
                             }, 10
                         ),
-                        'search:close button:clear': function () {
+                        'button:clear': function () {
                             win.facetedsearch.clear();
-                            win.facetedsearch.close();
+                        },
+                        'button:cancel': function () {
+                            win.facetedsearch.cancel();
                         }
                     });
 
