@@ -125,6 +125,7 @@ $(window).load(function () {
     }
 
     if (_.device('Android')) {
+        $('html').addClass('android');
         if (_.browser.chrome === 18 || !_.browser.chrome) {
              $('html').addClass('legacy-chrome');
         }
