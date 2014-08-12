@@ -50,7 +50,7 @@ define('io.ox/core/settings/pane',
                         if (showNotice) {
                             notifications.yell(
                                 'success',
-                                gt('The setting has been saved and will become active when you enter the application the next time.')
+                                gt('The setting requires a reload or relogin to take effect.')
                             );
                         }
                     }
