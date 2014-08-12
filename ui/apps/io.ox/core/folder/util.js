@@ -53,9 +53,12 @@ define('io.ox/core/folder/util',
         if (type.search(/\|/) > -1) {
             var types = type.split(/\|/);
             for ($i = types.length, result = false; i < $i; i++) {
-                if (is(types[i], data)) result = true;
+                if (is(types[i], data)) {
+                    result = true;
+                    break;
+                }
             }
-            return false;
+            return result;
         }
 
         // is?
