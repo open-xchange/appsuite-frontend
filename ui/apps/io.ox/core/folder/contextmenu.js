@@ -212,7 +212,7 @@ define('io.ox/core/folder/contextmenu',
             function handler(e) {
                 require(['io.ox/core/export/export'], function (exporter) {
                     //module,folderid
-                    exporter.show(e.data.baton.data.module, String(e.data.baton.app.folderView.selection.get()));
+                    exporter.show(e.data.baton.data.module, e.data.baton.data.id);
                 });
             }
 
@@ -239,7 +239,7 @@ define('io.ox/core/folder/contextmenu',
             function handler(e) {
                 e.preventDefault();
                 require(['io.ox/core/import/import'], function (importer) {
-                    importer.show(e.data.baton.data.module, String(e.data.baton.app.folderView.selection.get()));
+                    importer.show(e.data.baton.data.module, e.data.baton.data.id);
                 });
             }
 
