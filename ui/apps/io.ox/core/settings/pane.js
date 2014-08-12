@@ -36,30 +36,16 @@ define('io.ox/core/settings/pane',
         id: 'extensions',
         draw: function () {
             var model = settings.createModel(BasicModel);
+            model.on('change:highcontrast', function (m, value) {
+                $('html').toggleClass('high-contrast', value);
+            });
             model.on('change', function (model) {
-
-                if ('highcontrast' in model.changed) {
-                    $('html').toggleClass('high-contrast', model.changed.highcontrast);
-                }
-
                 settings.saveAndYell().then(
                     function success() {
 
                         var showNotice = _(reloadMe).any(function (attr) {
                             return model.changed[attr];
                         });
-
-                        // if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
-                        //     notifications.yell(
-                        //         'success',
-                        //         gt('The setting has been saved.')
-                        //     );
-                        // } else if (showNotice) {
-                        //     notifications.yell(
-                        //         'success',
-                        //         gt('The setting has been saved and will become active when you enter the application the next time.')
-                        //     );
-                        // }
 
                         if (showNotice) {
                             notifications.yell(
