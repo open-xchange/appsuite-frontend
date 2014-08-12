@@ -55,14 +55,6 @@ define('io.ox/search/apiproxy',
                                 return error;
                             })
                             .then(function (obj) {
-                                // TODO: remove when backend is ready
-                                _.each(obj.facets.values, function (value) {
-                                    // multifilter facet
-                                    if (value.options)
-                                        value.options = value.options[0];
-
-                                });
-
                                 // match convention in autocomplete tk
                                 var data = {
                                     list: obj.facets,
