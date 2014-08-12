@@ -67,6 +67,9 @@ define('io.ox/core/tk/list',
 
         onKeepFocus: function (e) {
             if (e.target !== this.el) return;
+            // ignore fake clicks
+            if (!e.pageX) return;
+            // restore focus
             this.getItems().filter('.selected').focus();
         },
 
