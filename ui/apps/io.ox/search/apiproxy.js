@@ -24,58 +24,58 @@ define('io.ox/search/apiproxy',
             proxy = {
                 // alias for autocomplete tk
                 search: function (query, options) {
-                var standard = {
-                    params: {
-                        module: model.getModule()
-                    },
-                    data: {
-                        prefix: query
-                    }
-                };
-
-                return model.getFacets()
-                        .then(function (facets) {
-                            // extend standard options
-                            standard.data.facets = facets;
-                        })
-                        .then(function () {
-                            // call server
-                            return api.autocomplete($.extend({}, standard, options));
-                        })
-                        .then(undefined, function (error) {
-                            // fallback when app doesn't support search
-                            if (error.code === 'SVL-0010') {
-                                var app = model.getApp();
-                                // add temporary mapping (default app)
-                                model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
-                                return api.autocomplete($.extend(
-                                                            standard, options, { params: {module: model.getModule()} }
-                                                        ));
+                    var standard = {
+                            params: {
+                                module: model.getModule()
+                            },
+                            data: {
+                                prefix: query
                             }
-                            return error;
-                        })
-                        .then(function (obj) {
-                            // TODO: remove when backend is ready
-                            _.each(obj.facets.values, function (value) {
-                                // multifilter facet
-                                if (value.options)
-                                    value.options = value.options[0];
+                        };
 
-                            });
+                    return model.getFacets()
+                            .then(function (facets) {
+                                // extend standard options
+                                standard.data.facets = facets;
+                            })
+                            .then(function () {
+                                // call server
+                                return api.autocomplete($.extend({}, standard, options));
+                            })
+                            .then(undefined, function (error) {
+                                // fallback when app doesn't support search
+                                if (error.code === 'SVL-0010') {
+                                    var app = model.getApp();
+                                    // add temporary mapping (default app)
+                                    model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
+                                    return api.autocomplete($.extend(
+                                                                standard, options, { params: {module: model.getModule()} }
+                                                            ));
+                                }
+                                return error;
+                            })
+                            .then(function (obj) {
+                                // TODO: remove when backend is ready
+                                _.each(obj.facets.values, function (value) {
+                                    // multifilter facet
+                                    if (value.options)
+                                        value.options = value.options[0];
 
-                            // match convention in autocomplete tk
-                            var data = {
-                                list: obj.facets,
-                                hits: 0
-                            };
-                            model.set({
-                                query: query,
-                                autocomplete: data.list
-                            }, {
-                                silent: true
-                            });
-                            return data;
-                        }, notifications.yell);
+                                });
+
+                                // match convention in autocomplete tk
+                                var data = {
+                                    list: obj.facets,
+                                    hits: 0
+                                };
+                                model.set({
+                                    query: query,
+                                    autocomplete: data.list
+                                }, {
+                                    silent: true
+                                });
+                                return data;
+                            }, notifications.yell);
                 },
                 query: (function () {
 
