@@ -392,6 +392,10 @@ define('io.ox/core/main',
             }
         }
 
+        refresh = function () {
+            ext.point('io.ox/core/refresh').invoke('action');
+            ext.point('io.ox/core/refresh').invoke('reset');
+        };
         settings.on('change:refreshInterval', function () {
             ext.point('io.ox/core/refresh').invoke('reset');
         });
