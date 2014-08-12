@@ -712,7 +712,7 @@ define('io.ox/mail/write/view-main',
                 // Attach vCard
                 $('<div>').addClass('section-item')
                 .css({ paddingTop: '1em', paddingBottom: '1em' })
-                .append(createCheckbox('disp_notification_to', gt('Return Receipt')))
+                .append(createCheckbox('disp_notification_to', gt('Request read receipt')))
             );
 
             if (!Modernizr.touch) {

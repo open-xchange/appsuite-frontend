@@ -85,7 +85,7 @@ define(['io.ox/core/extensions',
             this.node.find('input[name="isColorQuoted"]').parent().text().should.be.equal(gt('Color quoted lines'));
 
             this.node.find('input[name="sendDispositionNotification"]').length.should.be.equal(1);
-            this.node.find('input[name="sendDispositionNotification"]').parent().text().should.be.equal(gt('Ask for return receipt'));
+            this.node.find('input[name="sendDispositionNotification"]').parent().text().should.be.equal(gt('Show requests for read receipts'));
 
         });
 

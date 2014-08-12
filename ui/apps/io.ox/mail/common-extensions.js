@@ -526,8 +526,8 @@ define('io.ox/mail/common-extensions',
                 api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
                     notifications.yell(
                         'success',
-                        //#. delivery receipt; German "Lesebestätigung"
-                        gt('A return receipt has been sent')
+                        //#. read receipt; German "Lesebestätigung"
+                        gt('A read receipt has been sent')
                     );
                 });
             }
@@ -556,8 +556,8 @@ define('io.ox/mail/common-extensions',
                     $('<div class="alert alert-info disposition-notification">').append(
                         $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
                         $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(
-                            //#. Respond to delivery receipt; German "Lesebestätigung senden"
-                            gt('Send a return receipt')
+                            //#. Respond to a read receipt request; German "Lesebestätigung senden"
+                            gt('Send a read receipt')
                         ),
                         $('<div class="comment">').text(
                             gt('The sender wants to get notified when you have read this email')

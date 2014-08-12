@@ -131,7 +131,7 @@ define('io.ox/mail/compose/view',
             this.data('view')
                 .header(gt('Options'))
                 .option('vcard', 1, gt('Attach Vcard'))
-                .option('disp_notification_to', true, gt('Delivery Receipt'));
+                .option('disp_notification_to', true, gt('Request read receipt'));
         }
     });
 
