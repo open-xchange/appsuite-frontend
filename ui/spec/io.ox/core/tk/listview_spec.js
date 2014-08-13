@@ -597,6 +597,10 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 item.thread = _.range(N + 1, 1, -1).map(function (index) {
                     return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
                 });
+                item.thread.forEach(function (m) {
+                    api.threads.add(m);
+                });
+                api.threads.add(item);
                 this.collection.reset([createItem(12, 0), item, createItem(1, 2)]);
             });
 
@@ -625,6 +629,11 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 // update thread
                 var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
                 tmp[1].thread = tmp[1].thread.slice(2);
+                api.threads.clear();
+                tmp[1].thread.forEach(function (m) {
+                    api.threads.add(m);
+                });
+                api.threads.add(tmp[1]);
                 // update via set() - not reset()!
                 this.collection.set(tmp);
                 // check
