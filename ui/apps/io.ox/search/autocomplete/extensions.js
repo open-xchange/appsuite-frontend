@@ -223,7 +223,8 @@ define('io.ox/search/autocomplete/extensions',
             this
                 .data(baton.data)
                 .append(
-                    $('<div class="name">').text(name)
+                    //use html for the umlauts
+                    $('<div class="name">').html(name)
                 );
 
         },
