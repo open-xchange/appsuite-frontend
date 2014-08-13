@@ -213,6 +213,7 @@ define('io.ox/core/folder/view',
                 }
                 // otherwise
                 app.pages.changePage(options.firstResponder); // default 'listView'
+                if (options.respondCallback) options.respondCallback(); // callback for custom actions after pagechange
             }, 10));
         } else {
             // add border & render tree and add to DOM

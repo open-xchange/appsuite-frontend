@@ -344,9 +344,14 @@ define('io.ox/calendar/main',
                 indent: false,
                 module: 'calendar'
             });
-
+            // always change to month view after folder change
+            var cb = function () {
+                if (app.getWindow().currentPerspective !== 'month') {
+                    ox.ui.Perspective.show(app, 'month');
+                }
+            };
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month'});
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb});
             page.append(tree.render().$el);
         },
 
@@ -583,7 +588,7 @@ define('io.ox/calendar/main',
                 // app perspective
                 var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
 
-                if (_.device('small') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
+                if (_.device('smartphone') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
                     lastPerspective = 'week:day';
                 } else {
                     // corrupt data fix
