@@ -82,7 +82,7 @@ define('io.ox/search/autocomplete/extensions',
                             //search mode: not when enterin input with tab key
                             if (ref.data('byclick')) {
                                 ref.removeData('byclick');
-                                app.view.trigger('focus');
+                                app.view.trigger('focus', model.getApp());
                             }
                             // hint: 'click' supports click on already focused
                             // keep dropdown closed on focus event

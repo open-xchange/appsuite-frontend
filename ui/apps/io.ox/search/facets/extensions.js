@@ -141,7 +141,7 @@ define('io.ox/search/facets/extensions',
                             // use existing option
                             baton.model.update(facet, value, {option: option });
                         }
-                        baton.model.trigger('query');
+                        baton.model.trigger('query', baton.model.getApp(), 'select option');
                     }
                 });
             },

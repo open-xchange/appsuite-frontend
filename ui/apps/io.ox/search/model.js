@@ -182,7 +182,7 @@ define('io.ox/search/model',
                 conflicts.call(this);
 
                 if (facet !== 'folder')
-                    this.trigger('query');
+                    this.trigger('query', this.getApp());
             },
             remove: function (facet, value) {
                 var pool = this.get('pool'),
@@ -206,7 +206,7 @@ define('io.ox/search/model',
                 conflicts.call(this);
 
                 items.empty();
-                this.trigger('query');
+                this.trigger('query', this.getApp());
             },
             update: function (facet, value, data) {
                 var facetdata = this.get('pool')[facet],
@@ -254,7 +254,8 @@ define('io.ox/search/model',
                         }
                     });
                 }
-                this.trigger('query');
+                debugger;
+                this.trigger('query', this.getApp());
             },
             fetch: function () {
                 var pool = this.get('pool'),
@@ -350,7 +351,7 @@ define('io.ox/search/model',
                 items.timestamp = timestamp || Date.now();
                 self.stopListening();
                 self.listenTo(items, 'needs-refresh', function () {
-                    self.trigger('query');
+                    self.trigger('query', this.getApp());
                 });
             },
             getOptions: function () {
