@@ -79,6 +79,9 @@ define('plugins/portal/userSettings/register',
             var oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
                 minLength = settings.get('password/minLength', 4),
                 maxLength = settings.get('password/maxLength', 0),
+                showStrength = settings.get('password/showStrength', true),
+                pwRegex = settings.get('password/regexp', '[^a-z0-9]'),
+                regexText = settings.get('password/special', '$, _, %'),
                 pwStrengths = [
                     {label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%'},//red
                     {label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%'},//red
@@ -93,7 +96,9 @@ define('plugins/portal/userSettings/register',
             new dialogs.ModalDialog({ async: true, width: 500 })
             .header($('<h4>').text(gt('Change password')))
             .build(function () {
-                var hintText = gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %');
+                               //#. %1$s are some example characters
+                               //#, c-format
+                var hintText = gt('Your password is more secure if it also contains capital letters, numbers, and special characters like %1$s', regexText);
                 if (maxLength) {
                                //#. %1$s is the minimum password length
                                //#. %2$s is the maximum password length
@@ -102,26 +107,33 @@ define('plugins/portal/userSettings/register',
                 } else {
                     //#. %1$s is the minimum password length
                     //#, c-format
-         hintText = gt('Minimum password length is %1$d.', minLength) + '<br>' + hintText;
+                    hintText = gt('Minimum password length is %1$d.', minLength) + '<br>' + hintText;
+                    }
+                var pwContainer = [];
+                if (showStrength) {
+                    strengthBarWrapper = $('<div>').append(
+                            strengthLabel = $('<label class="password-change-label">'),
+                            $('<div class="progress">').append(
+                                strengthBar = $('<div class="progress-bar password-strength-bar">')).hide());//hide till new pw is inserted
+                    pwContainer = [strengthBarWrapper, $('<div class=password-hint-container>').append(hintText)];
                 }
                 this.getContentNode().append(
                     $('<label class="password-change-label">').text(gt('Your current password')),
                     oldPass = $('<input type="password" class="form-control current-password">'),
                     $('<label class="password-change-label">').text(gt('New password')),
-                    newPass = $('<input type="password" class="form-control new-password">').on('keyup', updateStrength),
+                    newPass = $('<input type="password" class="form-control new-password">'),
                     $('<label class="password-change-label">').text(gt('Repeat new password')),
                     newPass2 = $('<input type="password" class="form-control repeat-new-password">'),
-                    strengthBarWrapper = $('<div>').append(
-                            strengthLabel = $('<label class="password-change-label">'),
-                            $('<div class="progress">').append(
-                                    strengthBar = $('<div class="progress-bar password-strength-bar">'))).hide(),//hide till new pw is inserted
-                    $('<div class=password-hint-container>').append(hintText),
+                    pwContainer,
                     $('<div class="alert alert-info">')
-                    .css('margin', '14px 0')
-                    .text(
-                        gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
-                    )
-                ).css('max-height', '500px');
+                        .css('margin', '14px 0')
+                        .text(
+                            gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
+                        )
+                    ).css('max-height', '500px');
+                if (showStrength) {
+                    newPass.on('keyup', updateStrength);
+                } 
             })
             .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
@@ -164,8 +176,8 @@ define('plugins/portal/userSettings/register',
             function strengthtest(pw) {//returns the strength of a password
                 //length test
                 if (pw.length >= minLength && (pw.length <= maxLength || maxLength === 0)) {// between min and max length
-                    // lower case; +1 upper case +1; numbers +1; special chars +1
-                    var score = 2 + /[a-z]/.test(pw) + /[A-Z]/.test(pw) + /[0-9]/.test(pw) + (new RegExp('[^a-z0-9]', 'i')).test(pw),
+                    // lower case +1; upper case +1; numbers +1; special chars +1
+                    var score = 2 + /[a-z]/.test(pw) + /[A-Z]/.test(pw) + /[0-9]/.test(pw) + (new RegExp(pwRegex, 'i')).test(pw),
                         // (>6)-->2, (6-7)-->4,(8-9)-->5, (>10)-->6 or more
                         maxScore = 2 + Math.floor((Math.max(0, pw.length - 4) / 2)) + (pw.length >= 6 ? 1 : 0);
                     //legendary test for truly awesome passwords
