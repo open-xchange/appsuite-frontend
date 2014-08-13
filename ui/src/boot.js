@@ -857,7 +857,7 @@ $(window).load(function () {
                 if (langCount < maxLang && !_.url.hash('language-select')) {
                     for (id in langSorted) {
                         i++;
-                        node.attr({'role': 'menu', 'aria-labeledby': 'io-ox-languages-label'}).append(
+                        node.attr({'role': 'menu', 'aria-labelledby': 'io-ox-languages-label'}).append(
                             $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
                                 .on('click', { id: langSorted[id] }, fnChangeLanguage)
                                 .text(lang[langSorted[id]])

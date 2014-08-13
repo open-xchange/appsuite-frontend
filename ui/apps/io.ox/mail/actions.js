@@ -798,17 +798,17 @@ define('io.ox/mail/actions',
                 popupBody.append(
                     $('<div class="form-group">').append(
                         $('<label>').text(gt('Subject')),
-                        titleInput = $('<input class="form-control">', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, tabindex: '1', 'aria-labeledby': 'subject' })
+                        titleInput = $('<input class="form-control">', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, tabindex: '1', 'aria-labelledby': 'subject' })
                             .focus(function () { this.select(); })
                     ),
                     $('<div class="form-group">').append(
                         $('<label>').text(gt('Note')),
-                        noteInput = $('<textarea class="form-control">', { rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' + gt('From') + ': ' + util.formatSender(data.from[0]), tabindex: '1', 'aria-labeledby': 'note' })
+                        noteInput = $('<textarea class="form-control">', { rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' + gt('From') + ': ' + util.formatSender(data.from[0]), tabindex: '1', 'aria-labelledby': 'note' })
                             .focus(function () { this.select(); })
                     ),
                     $('<div class="form-group">').append(
                         $('<label id="remindme">').text(gt('Remind me')),
-                        dateSelector = $('<select class="form-control">', { name: 'dateselect', tabindex: '1', 'aria-labeledby': 'remindme' }).append(tasksUtil.buildDropdownMenu({time: endDate}))
+                        dateSelector = $('<select class="form-control">', { name: 'dateselect', tabindex: '1', 'aria-labelledby': 'remindme' }).append(tasksUtil.buildDropdownMenu({time: endDate}))
                     )
                 );
 
