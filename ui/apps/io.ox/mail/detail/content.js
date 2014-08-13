@@ -279,6 +279,8 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    var regRemoveExistingPadding = /padding:\s?\w+px;?\s*/ig;
+
     ext.point('io.ox/mail/detail/content').extend({
         id: 'tables',
         index: 400,
@@ -295,10 +297,15 @@ define('io.ox/mail/detail/content',
                     node.css('border-collapse', 'collapse');
                 }
                 node.find('th, td').each(function () {
-                    var node = $(this), style = node.attr('style');
+                    var node = $(this), style = node.attr('style') || '';
                     // style might already contain padding or padding-top/right/bottom/left.
                     // So we add the cellpadding at the beginning so that it doesn't overwrite existing paddings
-                    node.attr('style', 'padding: ' + cellpadding + 'px; ' + style);
+                    if (style.indexOf('padding: ' + cellpadding + 'px') === -1) {
+                        // but remove existing 'padding: **px'
+                        style = style.replace(regRemoveExistingPadding, '');
+                        if (style) style = ' ' + style;
+                        node.attr('style', 'padding: ' + cellpadding + 'px;' + style);
+                    }
                 });
             });
         }
