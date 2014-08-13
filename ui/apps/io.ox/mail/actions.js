@@ -250,6 +250,7 @@ define('io.ox/mail/actions',
 
                 require(['io.ox/core/folder/actions/move'], function (move) {
                     move.item({
+                        all: list,
                         api: api,
                         button: label,
                         list: folderAPI.ignoreSentItems(list),

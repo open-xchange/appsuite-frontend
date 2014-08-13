@@ -506,13 +506,7 @@ define('io.ox/mail/api',
         return search.call(this, query, options);
     };
 
-    /**
-     * wrapper for factories remove to update counters
-     * @param  {array} ids
-     * @param  {object} options [see api factory]
-     * @return {deferred} resolves as array
-     */
-    api.remove = function (ids, all) {
+    function prepareRemove(ids, all) {
 
         var collection = pool.get('detail');
 
@@ -532,6 +526,17 @@ define('io.ox/mail/api',
             var cid = _.cid(item), model = collection.get(cid);
             if (model) collection.remove(model);
         });
+    }
+
+    /**
+     * wrapper for factories remove to update counters
+     * @param  {array} ids
+     * @param  {object} options [see api factory]
+     * @return {deferred} resolves as array
+     */
+    api.remove = function (ids, all) {
+
+        prepareRemove(ids, all);
 
         return http.PUT({
             module: 'mail',
@@ -991,15 +996,9 @@ define('io.ox/mail/api',
      * @fires  api#move (list, targetFolderId)
      * @return {deferred}
      */
-    api.move = function (list, targetFolderId) {
+    api.move = function (list, targetFolderId, all) {
 
-        var collection = pool.get('detail');
-
-        _(list).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
-        });
-        api.trigger('beforedelete', list);
+        prepareRemove(list, all);
 
         // mark target folder as expired
         _(pool.getByFolder(targetFolderId)).each(function (collection) {

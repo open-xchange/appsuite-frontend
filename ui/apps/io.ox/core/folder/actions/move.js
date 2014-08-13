@@ -54,7 +54,7 @@ define('io.ox/core/folder/actions/move',
 
                 if (type === 'move' && options.vgrid) options.vgrid.busy();
 
-                options.api[type](options.list, target).then(
+                options.api[type](options.list, target, options.all).then(
                     function (response) {
                         // files API returns array on error; mail just a single object
                         // contacts a double array of undefined; tasks the new object.
