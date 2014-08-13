@@ -26,15 +26,15 @@ define('io.ox/core/tk/vgrid',
      * Template class
      * @returns {Template}
      */
-    function Template() {
+    function Template(o) {
+
+        // default options
+        o = _.extend({
+            tagName: 'div',
+            defaultClassName: 'vgrid-cell'
+        }, o);
 
         var template = [],
-
-            // default options
-            o = _.extend({
-                tagName: 'div',
-                defaultClassName: 'vgrid-cell'
-            }),
 
             getHeight = function (node) {
                 node.css('visibility', 'hidden').show()

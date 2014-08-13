@@ -168,8 +168,11 @@ define('io.ox/calendar/view-grid-template',
         drawSimpleGrid: function (list) {
 
             // use template
-            var tmpl = new VGrid.Template(),
-                $div = $('<div>');
+            var tmpl = new VGrid.Template({
+                    tagName: 'li',
+                    defaultClassName: 'vgrid-cell list-unstyled'
+                }),
+                $ul = $('<ul>');
 
             // add template
             tmpl.add(that.main);
@@ -177,13 +180,13 @@ define('io.ox/calendar/view-grid-template',
             _(list).each(function (data, i) {
                 var clone = tmpl.getClone();
                 clone.update(data, i);
-                clone.appendTo($div).node
+                clone.appendTo($ul).node
                     .css('position', 'relative')
                     .data('appointment', data)
                     .addClass('hover');
             });
 
-            return $div;
+            return $ul;
         }
 
     };
