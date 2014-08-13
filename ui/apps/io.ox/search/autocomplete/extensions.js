@@ -130,15 +130,15 @@ define('io.ox/search/autocomplete/extensions',
                     .attr({
                         'tabindex': '1',
                         'class': 'btn-clear',
-                        'data-toggle': 'tooltip',
-                        'data-placement': 'bottom',
-                        'data-animation': 'false',
-                        'data-container': 'body',
-                        'data-original-title': gt('Close search')
+                        // 'data-toggle': 'tooltip',
+                        // 'data-placement': 'bottom',
+                        // 'data-animation': 'false',
+                        // 'data-container': 'body',
+                        // 'data-original-title': gt('Clear field')
                     }).append(
                         $('<i class="fa fa-times"></i>')
                     )
-                    .tooltip()
+                    // .tooltip()
                     .on('click', function (e) {
                         e.preventDefault();
                         view.trigger('button:clear');
