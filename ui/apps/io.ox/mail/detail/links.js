@@ -212,11 +212,10 @@ define('io.ox/mail/detail/links',
         else if (regUrl.test(text) && node.closest('a').length === 0) {
             // links
             // escape first
-            text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            text = _.escape(text);
             node.replaceWith(
                 $('<div>')
                 .html(text.replace(regUrl, function (all, href) {
-                    href = _.escape(href);
                     return '<a href="' + _.escape(href) + '" target="_blank">' + href + '</a>';
                 }))
                 .contents()
