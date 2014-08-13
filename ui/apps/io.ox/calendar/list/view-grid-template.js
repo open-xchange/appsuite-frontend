@@ -33,7 +33,7 @@ define('io.ox/calendar/list/view-grid-template',
             build: function () {
                 var title, location, time, date, shown_as, conflicts, isPrivate, contentContainer;
                 this.addClass('calendar').append(
-                    time = $('<div class="time">'),
+                    time = $('<div class="time">').attr('aria-hidden', true),
                     contentContainer = $('<div class="contentContainer">').append(
                         date = $('<div class="date">'),
                         isPrivate = $('<i class="fa fa-lock private-flag">').hide(),
@@ -41,7 +41,7 @@ define('io.ox/calendar/list/view-grid-template',
                         $('<div class="location-row">').append(
                             location = $('<span class="location">')
                         )
-                    )
+                    ).attr('aria-hidden', true)
                 );
 
                 return {
