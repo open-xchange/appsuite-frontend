@@ -34,8 +34,6 @@ define(['io.ox/core/extensions',
             this.node.find('input[name="fullNameFormat"]:eq(0)').parent().text().should.be.equal(gt('Language-specific default'));
             this.node.find('input[name="fullNameFormat"]:eq(1)').parent().text().should.be.equal(gt('First name Last name'));
             this.node.find('input[name="fullNameFormat"]:eq(2)').parent().text().should.be.equal(gt('Last name, First name'));
-
-            this.node.find('button').length.should.be.equal(1);
         });
 
     });
