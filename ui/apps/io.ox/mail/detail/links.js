@@ -212,9 +212,14 @@ define('io.ox/mail/detail/links',
         else if (regUrl.test(text) && node.closest('a').length === 0) {
             // links
             // escape first
-            text = _.escape(text);
+            text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
             node.replaceWith(
-                $('<div>').append($('<a target="_blank">').attr('href', text).text(text))
+                $('<div>')
+                .html(text.replace(regUrl, function (all, href) {
+                    href = _.escape(href);
+                    return '<a href="' + _.escape(href) + '" target="_blank">' + href + '</a>';
+                }))
+                .contents()
             );
         }
         else if (length >= 30 && /\S{30}/.test(text)) {
