@@ -50,10 +50,6 @@ define('io.ox/core/folder/actions/move',
                 options.api.refresh();
             }
 
-            function fail(error) {
-                if (error) notifications.yell(error); // error might still be undefined
-            }
-
             function commit(target) {
 
                 if (type === 'move' && options.vgrid) options.vgrid.busy();
@@ -63,10 +59,10 @@ define('io.ox/core/folder/actions/move',
                         // files API returns array on error; mail just a single object
                         // contacts a double array of undefined; tasks the new object.
                         // so every API seems to behave differently.
-                        if (_.isArray(response) && response.length > 0) {
-                            fail(response[0]);
-                        } else if (_.isObject(response) && response.error) {
-                            fail(response);
+                        if (_.isArray(response)) response = _(response).compact()[0];
+                        // fail?
+                        if (_.isObject(response) && response.error) {
+                            notifications.yell(response);
                         } else {
                             if (type === 'copy') success();
                             api.reload(target, options.list);

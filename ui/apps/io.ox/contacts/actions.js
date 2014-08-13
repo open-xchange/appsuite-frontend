@@ -124,11 +124,11 @@ define('io.ox/contacts/actions',
         }
     });
 
-    function moveAndCopy(type, label, success, requires) {
+    function moveAndCopy(type, label, success) {
 
         new Action('io.ox/contacts/actions/' + type, {
             id: type,
-            requires: requires,
+            requires: type === 'move' ? 'some read delete' : 'some read',
             multiple: function (list, baton) {
 
                 var vgrid = baton.grid || (baton.app && baton.app.getGrid());
@@ -154,8 +154,8 @@ define('io.ox/contacts/actions',
         });
     }
 
-    moveAndCopy('move', gt('Move'), gt('Contacts have been moved'), 'some delete');
-    moveAndCopy('copy', gt('Copy'), gt('Contacts have been copied'), 'some read');
+    moveAndCopy('move', gt('Move'), { multiple: gt('Contacts have been moved'), single: gt('Contact has been moved') });
+    moveAndCopy('copy', gt('Copy'), { multiple: gt('Contacts have been copied'), single: gt('Contact has been copied') });
 
     function tentativeLoad(list, options) {
         var load = false;
