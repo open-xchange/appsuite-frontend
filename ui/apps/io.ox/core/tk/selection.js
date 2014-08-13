@@ -47,7 +47,7 @@ define('io.ox/core/tk/selection',
             dropType: '',
             scrollpane: container,
             focus: '[tabindex]',
-            tabFix: false
+            tabFix: 1
         }, options);
 
         this.classFocus = 'focussed';
@@ -495,7 +495,7 @@ define('io.ox/core/tk/selection',
                 } else {
                     $('input.reflect-selection', node).prop('checked', false);
                     node.removeClass(self.classSelected).attr({
-                        'aria-selected': 'true',
+                        'aria-selected': 'false',
                         'tabindex': options.tabFix !== false ? -1 : null
                     });
                 }

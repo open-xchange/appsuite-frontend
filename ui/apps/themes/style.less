@@ -1995,7 +1995,11 @@ a.button {
 
             outline: none;
 
-            &:focus .vgrid-cell.selected {
+            & .vgrid-cell:focus {
+                outline: none;
+            }
+
+            & .vgrid-cell.selected:focus {
 
                 background-color: @selected-background;
 
