@@ -35,7 +35,7 @@ define('io.ox/tasks/view-detail',
 
             if (!data) return $('<div>');
 
-            var task = util.interpretTask(data, true), self = this;
+            var task = util.interpretTask(data, {detail: true}), self = this;
 
             var node = $.createViewContainer(data, api)
                 .on('redraw', function (e, tmp) {

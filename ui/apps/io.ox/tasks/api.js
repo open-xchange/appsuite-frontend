@@ -13,9 +13,8 @@
 define('io.ox/tasks/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/folder/api',
-     'io.ox/tasks/util'
-    ], function (http, apiFactory, folderAPI, util) {
+     'io.ox/core/folder/api'
+    ], function (http, apiFactory, folderAPI) {
 
     'use strict';
 
@@ -295,7 +294,6 @@ define('io.ox/tasks/api',
             return api.caches.all.get(cacheKey).then(function (cachevalue) {
                 if (cachevalue) {//only add if the key is there
                     cachevalue = cachevalue.concat(cacheObj);
-                    cachevalue = util.sortTasks(cachevalue);
                     return api.caches.all.add(cacheKey, cachevalue);
                 } else {//just leave it to the next all request, no need to do it here
                     return $.when();
@@ -384,10 +382,14 @@ define('io.ox/tasks/api',
             appendColumns: false
         }).pipe(function () {
             // update cache
+            var sortChanged = false;
+            if (task.title || task.end_date || task.status) { //data that is important for sorting changed, so clear the all cache
+                sortChanged = true;
+            }
             return $.when(
                     api.removeFromCache(key)
                         .then(function () {return api.get({id: task.id, folder_id: newFolder || useFolder}); }),//api.get updates list and get caches
-                        updateAllCache([task], useFolder, task));
+                        sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
         }).pipe(function (data) {
             //return object with id and folder id needed to save the attachments correctly
             obj = {folder_id: useFolder, id: task.id};

@@ -256,13 +256,13 @@ define('io.ox/tasks/main',
                     sort = grid.prop('sort'),
                     order = grid.prop('order'),
                     column;
-                if (sort !== 'state') {
+                if (sort !== 'urgency') {
                     column = sort;
                 } else {
                     column = 202;
                 }
                 return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
-                    if (sort !== 'state') {
+                    if (sort !== 'urgency') {
                         datacopy = _.copy(data, true);
                     } else {
                         datacopy = util.sortTasks(data, order);
@@ -281,7 +281,7 @@ define('io.ox/tasks/main',
                     var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
                         i = 0;
                     for (; i < listcopy.length; i++) {
-                        listcopy[i] = util.interpretTask(listcopy[i]);
+                        listcopy[i] = util.interpretTask(listcopy[i], {noOverdue: grid.prop('sort') !== 'urgency'});
                     }
 
                     return listcopy;
@@ -296,7 +296,7 @@ define('io.ox/tasks/main',
             var grid = app.grid;
             // add grid options
             grid.prop('done', true);
-            grid.prop('sort', 'state');
+            grid.prop('sort', 'urgency');
             grid.prop('order', 'asc');
 
             function updateGridOptions() {
@@ -311,7 +311,7 @@ define('io.ox/tasks/main',
                         .find('.fa-arrow-down').css('opacity', 0.4);
                 }
                 //update api property (used cid in api.updateAllCache, api.create)
-                api.options.requests.all.sort = props.sort !== 'state' ? props.sort : 202;
+                api.options.requests.all.sort = props.sort !== 'urgency' ? props.sort : 202;
                 api.options.requests.all.order = props.order;
             }
 
@@ -642,7 +642,8 @@ define('io.ox/tasks/main',
                     }
                 })
                 .header(gt('Sort options'))
-                .option('sort', 'state', gt('Status'))
+                .option('sort', 'urgency', gt('Urgency'))
+                .option('sort', '300', gt('Status'))
                 .option('sort', '202', gt('Due date'))
                 .option('sort', '200', gt('Subject'))
                 .option('sort', '309', gt('Priority'))
