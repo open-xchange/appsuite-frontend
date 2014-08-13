@@ -13,9 +13,10 @@
 
 define('io.ox/core/tk/list-dnd', [
     'io.ox/core/extensions',
+    'io.ox/core/collection',
     'gettext!io.ox/core',
     'io.ox/core/tk/draghelper'
-], function (ext, gt) {
+], function (ext, Collection, gt) {
 
     'use strict';
 
@@ -50,6 +51,7 @@ define('io.ox/core/tk/list-dnd', [
         var container = options.container || $(),
             data,
             source,
+            selected,
             helper = null,
             fast,
             expandTimer,
@@ -162,14 +164,6 @@ define('io.ox/core/tk/list-dnd', [
         function drag(e) {
             // unbind
             $(document).off('mousemove.dnd', drag);
-            // get selected items
-            var selected = _(container.find('.selected'));
-            // get data now
-            data = source.attr('data-drag-data') ?
-                [source.attr('data-drag-data')] :
-                selected.map(function (node) {
-                    return $(node).attr('data-cid');
-                });
             // get counter
             var counter = selected.reduce(function (sum, node) {
                 var count = $(node).find('.drag-count');
@@ -235,9 +229,23 @@ define('io.ox/core/tk/list-dnd', [
             }
         }
 
+        function getObjects(cid) {
+            return _.cid(cid.replace(/^thread./, ''));
+        }
+
         function start(e) {
+            // get source, selected items, and data
             source = $(this);
-            data = [];
+            selected = _(container.find('.selected'));
+            data = source.attr('data-drag-data') ?
+                [source.attr('data-drag-data')] :
+                selected.map(function (node) {
+                    return $(node).attr('data-cid');
+                });
+            // check permissions - need 'delete' access for a move
+            var collection = new Collection(_(data).map(getObjects));
+            collection.getProperties();
+            if (collection.isResolved() && !collection.has('delete')) return;
             // bind events
             $('.dropzone').each(function () {
                 var node = $(this), selector = node.attr('data-dropzones');

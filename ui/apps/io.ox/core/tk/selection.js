@@ -15,10 +15,11 @@
 define('io.ox/core/tk/selection',
     ['io.ox/core/event',
      'io.ox/core/extensions',
+     'io.ox/core/collection',
      'io.ox/core/notifications',
      'gettext!io.ox/core',
      'io.ox/core/tk/draghelper'
-    ], function (Events, ext, notifications, gt) {
+    ], function (Events, ext, Collection, notifications, gt) {
 
     'use strict';
 
@@ -1035,13 +1036,6 @@ define('io.ox/core/tk/selection',
             function drag(e) {
                 // unbind
                 $(document).off('mousemove.dnd', drag);
-                // get data now
-                data = self.unique(self.unfold());
-                // empty?
-                if (data.length === 0) {
-                    var cid = source.attr('data-obj-id');
-                    data = cid ? [_.cid(cid)] : [];
-                }
                 // create helper
                 helper = $('<div class="drag-helper">');
                 ext.point('io.ox/core/tk/draghelper').invoke('draw', helper,
@@ -1105,7 +1099,17 @@ define('io.ox/core/tk/selection',
 
             function start(e) {
                 source = $(this);
-                data = [];
+                // get data now
+                data = self.unique(self.unfold());
+                // empty?
+                if (data.length === 0) {
+                    var cid = source.attr('data-obj-id');
+                    data = cid ? [_.cid(cid)] : [];
+                }
+                // check permissions - need 'delete' access for a move
+                var collection = new Collection(data);
+                collection.getProperties();
+                if (collection.isResolved() && !collection.has('delete')) return;
                 // bind events
                 $('.dropzone').each(function () {
                     var node = $(this), selector = node.attr('data-dropzones');
