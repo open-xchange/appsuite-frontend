@@ -290,7 +290,9 @@ define('io.ox/core/tk/list-selection', [], function () {
                 current = $(document.activeElement),
                 index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
 
-            if (index >= items.length || index < 0) return;
+            if (index < 0) return;
+            // scroll to very bottom if at end of list (to keep a11y support)
+            if (index >= items.length) return this.view.$el.scrollTop(0xFFFFFF);
 
             // prevent default to avoid unwanted scrolling
             e.preventDefault();
