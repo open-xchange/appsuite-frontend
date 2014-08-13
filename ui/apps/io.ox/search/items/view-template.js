@@ -55,6 +55,7 @@ define('io.ox/search/items/view-template',
         id: 'classes',
         config: function (config) {
             var defaults = {
+                mail: 'list-item-content',
                 tasks: 'task-item',
                 contacts: 'contact-item',
                 calendar: 'calendar-item',
