@@ -1222,7 +1222,7 @@ define('io.ox/mail/write/view-main',
                 ext.point(POINT + '/emailAddress').invoke('draw', this, baton);
                 this.append(
                     // remove
-                    $('<a href="#" class="remove">')
+                    $('<a role="button" href="#" class="remove">')
                         .attr('title', gt('Remove from recipient list'))
                         .append(
                             $('<i class="fa fa-trash-o">')
