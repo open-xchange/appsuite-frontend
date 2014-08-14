@@ -62,7 +62,7 @@ define('io.ox/core/toolbars-mobile',
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
-            this.baton = opt.baton || ext.Baton({});
+            this.baton = opt.baton || ext.Baton({app: opt.app});
             this.extension = opt.extension;
             this.hiddenElements = [];
         },
@@ -145,7 +145,7 @@ define('io.ox/core/toolbars-mobile',
         initialize: function (opt) {
             this.app = opt.app;
             this.page = opt.page;
-            this.baton = opt.baton || ext.Baton({});
+            this.baton = opt.baton || ext.Baton({app: opt.app});
             this.extension = opt.extension;
         },
         render: function () {

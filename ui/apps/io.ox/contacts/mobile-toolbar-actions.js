@@ -22,9 +22,10 @@ define('io.ox/contacts/mobile-toolbar-actions',
 
     // define links for each page
 
-    var pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
+    var pointListViewActions = ext.point('io.ox/contacts/mobile/toolbar/actions'),
         pointDetailView = ext.point('io.ox/contacts/mobile/toolbar/detailView'),
         actions = ext.point('io.ox/contacts/mobile/actions'),
+        pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
         meta = {
         'create': {
             prio: 'hi',
@@ -95,7 +96,16 @@ define('io.ox/contacts/mobile-toolbar-actions',
         index = 0;
     }
 
-    addAction(pointListView, ['create']);
+    addAction(pointListViewActions, ['create']);
+
+    pointListView.extend(new links.InlineLinks({
+        attributes: {},
+        classes: '',
+        index: 100,
+        id: 'toolbar-links',
+        ref: 'io.ox/contacts/mobile/toolbar/actions'
+    }));
+
     addAction(actions, ['send', 'invite', 'vcard', 'edit', 'delete', 'move', 'copy']);
 
     // add submenu as text link to toolbar in multiselect
