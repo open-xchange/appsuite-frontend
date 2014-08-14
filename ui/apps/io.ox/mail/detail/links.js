@@ -22,12 +22,6 @@ define('io.ox/mail/detail/links',
 
     'use strict';
 
-    var regMail = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
-        regUrl = /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/i,
-        regMailReplace = /([^\s<;\(\)\[\]\|\"]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
-        regMailComplex = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/, /* "name" <address> */
-        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g; /* "name" <address> */
-
     $(document).on('click', '.deep-link-files', function (e) {
         e.preventDefault();
         var data = $(this).data();
@@ -128,12 +122,28 @@ define('io.ox/mail/detail/links',
     // fix hosts (still need a configurable list on the backend)
     // ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
 
-    var isValidHost = function (url) {
+    function isValidHost(url) {
         var match = url.match(/^https?:\/\/([^\/#]+)/i);
         if (match === null || match.length === 0) return false;
         if (match[1] === 'test') return true;
         return _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
-    };
+    }
+
+    function replace(node, prefix, link, suffix) {
+
+        // replace
+        var replacement = $()
+            .add(processTextNode(prefix))
+            .add(link)
+            .add(processTextNode(suffix));
+
+        $(node).replaceWith(replacement);
+        return replacement;
+    }
+
+    //
+    // Deep links
+    //
 
     var isDeepLink, parseDeepLink, processDeepLink;
 
@@ -163,10 +173,6 @@ define('io.ox/mail/detail/links',
         // node must be a plain text node or a string
         processDeepLink = function (node) {
 
-            if (_.isString(node)) node = $.txt(node);
-            if (node.nodeType !== 3) return node;
-            if (!isDeepLink(node.nodeValue)) return node; // to be sure
-
             var data = parseDeepLink(node.nodeValue),
                 link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
                     .attr('href', data.link)
@@ -177,68 +183,105 @@ define('io.ox/mail/detail/links',
                 link.addClass('deep-link-' + data.app).data(data);
             }
 
-            node = $(node);
-
             // move up?
-            if (node.parent().attr('href') === data.link) node = node.parent();
+            if ($(node).parent().attr('href') === data.link) node = $(node).parent();
 
-            // replace
-            var replacement = $()
-                .add(processDeepLink($.txt(data.prefix)))
-                .add(link)
-                .add(processDeepLink($.txt(data.suffix)));
-
-            node.replaceWith(replacement);
-            return replacement;
+            return replace(node, data.prefix, link, data.suffix);
         };
 
     }());
 
-    function processTextNode(baton) {
+    //
+    // URL
+    //
 
-        if (this.nodeType !== 3) return;
+    var regUrl = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/i,
+        regUrlMatch = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/i; /* dedicated one to avoid strange side effects */
 
-        var node = $(this), text = this.nodeValue, length = text.length;
+    function processUrl(node) {
+
+        var matches = node.nodeValue.match(regUrlMatch);
+        if (matches === null || matches.length === 0) return node;
+        var prefix = matches[1], url = matches[2], suffix = matches[4];
+
+        // fix punctuation marks
+        url = url.replace(/([.,;!?]+)$/, function (all, marks) {
+            suffix = marks + suffix;
+            return '';
+        });
+
+        var link = $('<a href="#" target="_blank">').attr('href', _.escape(url)).text(url);
+
+        return replace(node, prefix, link, suffix);
+    }
+
+    //
+    // Mail Address
+    //
+
+    var regMail = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/i,
+        regMailMatch = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/i; /* dedicated one to avoid strange side effects */
+
+    function processMailAddress(node) {
+
+        var matches = node.nodeValue.match(regMailMatch);
+        if (matches === null || matches.length === 0) return node;
+        var prefix = matches[1], address = matches[2], suffix = matches[4];
+
+        var link = $('<a href="#" target="_blank">').attr('href', 'mailto:' + address).text(address);
+
+        return replace(node, prefix, link, suffix);
+    }
+
+    //
+    // Complex Mail Address: "name" <address>
+    //
+
+    var regMailComplex = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/,
+        regMailComplexMatch = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/;
+
+    function processComplexMailAddress(node) {
+
+        var matches = node.nodeValue.match(regMailComplexMatch);
+        if (matches === null || matches.length === 0) return node;
+        var prefix = matches[1], name = matches[4], address = matches[7], suffix = matches[8];
+
+        var link = $('<a href="#" target="_blank">').attr('href', 'mailto:' + address).text(name);
+
+        return replace(node, prefix, link, suffix);
+    }
+
+    //
+    // Text nodes
+    //
+
+    function processTextNode(node) {
+
+        if (_.isString(node)) node = $.txt(node);
+        if (node.nodeType !== 3) return;
+
+        var text = node.nodeValue, length = text.length, $node = $(node);
 
         if (isDeepLink(text)) {
             return processDeepLink(node);
         }
-        else if (regMail.test(text) && node.closest('a').length === 0) {
-            // links
-            // escape first
-            text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            // try the "NAME" <ADDRESS> pattern
-            if (baton.isHTML && regMailComplex.test(text)) {
-                node.replaceWith(
-                    $('<div>')
-                    .html(text.replace(regMailComplexReplace, '<a href="mailto:$6" target="_blank">$2$3</a>'))
-                    .contents()
-                );
-            } else {
-                node.replaceWith(
-                    $('<div>')
-                    .html(text.replace(regMailReplace, '<a href="mailto:$1" target="_blank">$1</a>'))
-                    .contents()
-                );
-            }
+        else if (regMailComplex.test(text) && $node.closest('a').length === 0) {
+            return processComplexMailAddress(node);
         }
-        else if (regUrl.test(text) && node.closest('a').length === 0) {
-            // links
-            // escape first
-            text = _.escape(text);
-            node.replaceWith(
-                $('<div>')
-                .html(text.replace(regUrl, function (all, href) {
-                    return '<a href="' + _.escape(href) + '" target="_blank">' + href + '</a>';
-                }))
-                .contents()
-            );
+        else if (regMail.test(text) && $node.closest('a').length === 0) {
+            return processMailAddress(node);
+        }
+        else if (regUrl.test(text) && $node.closest('a').length === 0) {
+            return processUrl(node);
         }
         else if (length >= 30 && /\S{30}/.test(text)) {
             // split long character sequences for better wrapping
-            node.replaceWith(
+            $node.replaceWith(
                 $.parseHTML(coreUtil.breakableHTML(text))
             );
+        }
+        else {
+            return node;
         }
     }
 
@@ -250,10 +293,10 @@ define('io.ox/mail/detail/links',
             if (baton.isLarge) return;
             // don't combine these two lines via add() - very slow!
             this.contents().each(function () {
-                processTextNode.call(this, baton);
+                processTextNode(this);
             });
             this.find('*').not('style').contents().each(function () {
-                processTextNode.call(this, baton);
+                processTextNode(this);
             });
         }
     });
