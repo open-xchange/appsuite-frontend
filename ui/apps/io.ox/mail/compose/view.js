@@ -485,7 +485,7 @@ define('io.ox/mail/compose/view',
         },
 
         addKeepalive: function (id) {
-            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 2000) * 0.9);
+            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
             this.intervals.push(setInterval(mailAPI.keepalive, timeout, id));
         },
 

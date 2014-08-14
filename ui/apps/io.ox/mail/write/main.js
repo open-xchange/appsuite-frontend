@@ -169,7 +169,8 @@ define('io.ox/mail/write/main',
             prioActive = false,
             view,
             model,
-            previous;
+            previous,
+            intervals = [];
 
         // don’t force text on phantomjs, because phantomjs reports as a touch device
         // see https://github.com/ariya/phantomjs/issues/10375
@@ -215,6 +216,15 @@ define('io.ox/mail/write/main',
 
         app.getView = function () {
             return view;
+        };
+
+        app.addKeepalive = function (id) {
+            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
+            intervals.push(setInterval(mailAPI.keepalive, timeout, id));
+        };
+
+        app.clearKeepalive = function () {
+            _(intervals).each(clearInterval);
         };
 
         window.newmailapp = function () { return app; };
@@ -376,6 +386,9 @@ define('io.ox/mail/write/main',
                             app.setEditor(editorHash[mode]);
                             app.getEditor().setPlainText(content);
                             app.getEditor().handleShow();
+                            app.getEditor().getContainer().parent().on('addInlineImage', function (e, id) {
+                                app.addKeepalive(id);
+                            });
                         });
                 });
             }
@@ -1380,6 +1393,7 @@ define('io.ox/mail/write/main',
                 }
                 // clear timer for autosave
                 stopAutoSave(app);
+                app.clearKeepalive();
                 // clear all private vars
                 app = win = editor = currentSignature = editorHash = null;
             };
