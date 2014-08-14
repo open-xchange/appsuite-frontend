@@ -130,10 +130,12 @@ define('io.ox/mail/detail/links',
 
     var isValidHost = function (url) {
         var match = url.match(/^https?:\/\/([^\/#]+)/i);
-        return match && match.length && _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
+        if (match === null || match.length === 0) return false;
+        if (match[1] === 'test') return true;
+        return _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     };
 
-    var isDeepLink, processDeepLink;
+    var isDeepLink, parseDeepLink, processDeepLink;
 
     (function () {
 
@@ -141,10 +143,14 @@ define('io.ox/mail/detail/links',
             app = { contacts: 'contacts', calendar: 'calendar', task: 'tasks', infostore: 'files' },
             items = { contacts: gt('Contact'), calendar: gt('Appointment'), tasks: gt('Task'), files: gt('File') },
             folders = { contacts: gt('Address Book'), calendar: gt('Calendar'), tasks: gt('Tasks'), files: gt('Folder') },
-            regDeepLink = /^(\s*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))(\s*)$/i,
-            regDeepLinkAlt = /^(\s*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))(\s*)$/i;
+            regDeepLink = /^(.*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))(.*)$/i,
+            regDeepLinkAlt = /^(.*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))(.*)$/i;
 
-        function parse(str) {
+        isDeepLink = function (str) {
+            return regDeepLink.test(str) || regDeepLinkAlt.test(str);
+        };
+
+        parseDeepLink = function (str) {
             var matches = String(str).match(regDeepLink.test(str) ? regDeepLink : regDeepLinkAlt),
                 data = _.object(keys, matches),
                 params = _.deserialize(data.params, '&');
@@ -152,15 +158,16 @@ define('io.ox/mail/detail/links',
             data.app = app[data.app] || data.app;
             // add folder, id, perspective (jQuery's extend to skip undefined)
             return $.extend(data, { folder: params.f, id: params.i }, { folder: params.folder, id: params.id, perspective: params.perspective });
-        }
-
-        isDeepLink = function (str) {
-            return regDeepLink.test(str) || regDeepLinkAlt.test(str);
         };
 
-        processDeepLink = function (text, node) {
+        // node must be a plain text node or a string
+        processDeepLink = function (node) {
 
-            var data = parse(text),
+            if (_.isString(node)) node = $.txt(node);
+            if (node.nodeType !== 3) return node;
+            if (!isDeepLink(node.nodeValue)) return node; // to be sure
+
+            var data = parseDeepLink(node.nodeValue),
                 link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
                     .attr('href', data.link)
                     .text('id' in data ? items[data.app] : folders[data.app]);
@@ -170,13 +177,19 @@ define('io.ox/mail/detail/links',
                 link.addClass('deep-link-' + data.app).data(data);
             }
 
+            node = $(node);
+
             // move up?
             if (node.parent().attr('href') === data.link) node = node.parent();
 
             // replace
-            node.replaceWith(
-                $($.txt(data.prefix)).add(link).add($.txt(data.suffix))
-            );
+            var replacement = $()
+                .add(processDeepLink($.txt(data.prefix)))
+                .add(link)
+                .add(processDeepLink($.txt(data.suffix)));
+
+            node.replaceWith(replacement);
+            return replacement;
         };
 
     }());
@@ -188,7 +201,7 @@ define('io.ox/mail/detail/links',
         var node = $(this), text = this.nodeValue, length = text.length;
 
         if (isDeepLink(text)) {
-            return processDeepLink(text, node);
+            return processDeepLink(node);
         }
         else if (regMail.test(text) && node.closest('a').length === 0) {
             // links
@@ -247,6 +260,7 @@ define('io.ox/mail/detail/links',
 
     return {
         isDeepLink: isDeepLink,
+        parseDeepLink: parseDeepLink,
         processDeepLink: processDeepLink,
         processTextNode: processTextNode
     };
