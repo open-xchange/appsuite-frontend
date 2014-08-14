@@ -1262,6 +1262,10 @@ define('io.ox/mail/write/main',
             // fix inline images
             mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
+            if (app.refId) {
+                mail.data.msgref = app.refId;
+            }
+
             mailAPI.autosave(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
