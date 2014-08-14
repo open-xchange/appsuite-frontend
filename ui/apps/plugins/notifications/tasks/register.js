@@ -64,7 +64,7 @@ define('plugins/notifications/tasks/register',
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="done">')
+                    $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="done">')
                     .attr('focus-id', 'task-overdue-notification-button-' + model.get('cid'))
                     .text(gt('Done'))
                 )
@@ -501,7 +501,7 @@ define('plugins/notifications/tasks/register',
                         $('<span class="end_date">').text(_.noI18n(task.end_date)),
                         $('<span class="status">').text(task.status).addClass(task.badge)),
                     $('<div class="actions">').append(
-                        $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
+                        $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-default" data-action="change_state">')
                         .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
                         .text(gt('Accept/Decline')),
                         $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
