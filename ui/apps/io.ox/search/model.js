@@ -302,7 +302,7 @@ define('io.ox/search/model',
             ensure: function () {
                 var self = this,
                     missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
-                    def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
+                    def = missingFolder ? util.getFirstChoice(this) : $.Deferred().resolve({});
                 return def
                         .then(function (data) {
                             data = data || {};

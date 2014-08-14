@@ -129,7 +129,7 @@ define('io.ox/search/util',
 
         getFirstChoice: function (model) {
             var module = model.getModule(),
-                id = model.getFolder() || folderAPI.getDefaultFolder(module),
+                id = model.getFolder(),
                 def = $.Deferred(),
                 value = function (id, folder) {
                     folder = folder || {};
@@ -139,11 +139,15 @@ define('io.ox/search/util',
                         name: folder.title || id
                     });
                 };
-
-            // get folder title
-            folderAPI.get(id).always(value.bind(this, id));
-
-            return def.promise();
+            //'all folders' when not mandatory and not default folder
+            if (model.isMandatory('folder') || id !== folderAPI.getDefaultFolder(module)) {
+                // 'preselected folder'
+                folderAPI.get(id).always(value.bind(this, id));
+                return def.promise();
+            } else {
+                // 'all folders'
+                return $.Deferred().resolve({});
+            }
         }
 
     };
