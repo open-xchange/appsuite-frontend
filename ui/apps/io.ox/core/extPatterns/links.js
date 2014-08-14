@@ -406,18 +406,23 @@ define('io.ox/core/extPatterns/links',
 
     var drawDropDown = function (options, baton) {
 
-        var label = options.label, args = $.makeArray(arguments), node, ul;
+        var label = options.label, args = $.makeArray(arguments), node, ul, ariaLabel = '';
 
         // label: Use baton or String or DOM node
         label = baton.label || label;
         label = _.isString(label) ? $.txt(label) : label;
+        
+        //if aria label is given, use it
+        if (options.ariaLabel) {
+            ariaLabel = 'aria-label="' + options.ariaLabel + '"';
+        }
 
         node = baton.$el || $('<div>');
 
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
+                $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1" ' + ariaLabel + '>')
                 .append(
                     options.icon ? $('<i>').addClass(options.icon).attr('title', label.textContent) : label,
                     options.noCaret ? $() : $('<i class="fa fa-caret-down">')
