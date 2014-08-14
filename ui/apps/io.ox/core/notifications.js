@@ -24,6 +24,7 @@ define('io.ox/core/notifications',
         tagName: 'a',
         className: 'notifications-icon',
         initialize: function () {
+            this.model.set('a11y', '');
             this.model.on('change', _.bind(this.onChange, this));
             this.nodes = {};
         },
@@ -31,20 +32,26 @@ define('io.ox/core/notifications',
             var count = this.model.get('count'),
                 //#. %1$d number of notifications
                 //#, c-format
-                a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count);
+                a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count),
+                a11yState = this.$el.attr('aria-pressed') ? gt('The notification area is open') : gt('The notification area is closed');
+            this.model.set('a11y', a11y, {silent: true});//don't create a loop here
             this.nodes.badge.toggleClass('empty', count === 0);
-            this.$el.attr('aria-label', a11y);
+            this.$el.attr('aria-label', a11y + ' ' + a11yState);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
             new NotificationController().yell('screenreader', a11y);
         },
         onToggle: function (open) {
+            var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
+            this.$el.attr({'aria-pressed': open ? true : false,
+                           'aria-label': this.model.get('a11y') + ' ' + a11yState});
         },
         render: function () {
             this.$el.attr({
                     href: '#',
                     tabindex: '1',
-                    role: 'button'
+                    role: 'button',
+                    'aria-pressed': false
                 })
                 .append(
                     this.nodes.badge = $('<span class="badge">').append(
@@ -188,9 +195,9 @@ define('io.ox/core/notifications',
             $(document).on('keydown.notification', $.proxy(function (e) {
                 if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
                     $(document).off('keydown.notification');
+                    this.hideList();
                     //focus badge when closing
                     this.badgeView.$el.focus();
-                    this.hideList();
                 }
             }, this));
 
