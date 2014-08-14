@@ -40,7 +40,9 @@ define('io.ox/mail/common-extensions',
                 subject = _.escape($.trim(data.subject)),
                 unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
                 a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date);
-            this.parent().attr({
+            this.attr({
+                'aria-hidden': true
+            }).parent().attr({
                 'aria-label': _.escape(a11yLabel)
             });
         },
