@@ -579,8 +579,6 @@ define('io.ox/calendar/main',
         commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
             .always(function () {
                 app.mediate();
-                // prepare perspective for pagecontroller
-                if (win.options.usePageController) win.options.mainPage = app.pages.getPage('mainView');
                 win.show();
             })
             .done(function () {

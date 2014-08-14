@@ -429,8 +429,7 @@ define('io.ox/files/main',
             name: 'io.ox/files',
             title: 'Drive',
             chromeless: true,
-            facetedsearch: capabilities.has('search'),
-            usePageController: _.device('smartphone')
+            facetedsearch: capabilities.has('search')
         }));
 
         win.addClass('io-ox-files-main');
@@ -465,9 +464,6 @@ define('io.ox/files/main',
                 win.show();
             })
             .done(function () {
-                 // prepare perspective for pagecontroller
-                if (win.options.usePageController) win.options.mainPage = app.pages.getPage('fluid');
-
                 var pers = map(options.perspective || _.url.hash('perspective') || app.props.get('layout'));
                 ox.ui.Perspective.show(app, pers);
             });

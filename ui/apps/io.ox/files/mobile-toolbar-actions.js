@@ -203,6 +203,10 @@ define('io.ox/files/mobile-toolbar-actions',
                 if (!app.props.get('showCheckboxes')) return;
                 app.updateToolbar(app.selection.get());
             });
+
+            app.pages.getPage('fluid').on('pageshow', function () {
+                app.pages.getToolbar('fluid').setBaton(new ext.Baton({app: app}));
+            });
         }
     });
 
