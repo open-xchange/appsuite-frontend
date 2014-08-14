@@ -204,7 +204,7 @@ define('io.ox/tasks/util',
             interpretTask: function (task, options) {
                 options = options || {};
                 task = _.copy(task, true);
-                if (!options.noOverdue && (task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {//no state for task over time, so manual check is needed
+                if (!options.noOverdue && (task.status !== 3 && task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {//no state for task over time, so manual check is needed
                         task.status = gt('Overdue');
                         task.badge = 'badge badge-important';
                 } else if (task.status) {
