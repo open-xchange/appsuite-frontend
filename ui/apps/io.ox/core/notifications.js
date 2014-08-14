@@ -161,14 +161,6 @@ define('io.ox/core/notifications',
 
         // add event supports
         _.extend(this, Backbone.Events);
-
-        this.on('show', function () {
-            console.log('show!');
-        });
-
-        this.on('hide', function () {
-            console.log('hide!');
-        });
     };
 
     NotificationController.prototype = {
