@@ -54,7 +54,7 @@ define('io.ox/core/tk/list-dnd', [
             selected,
             helper = null,
             fast,
-            expandTimer,
+            toggleTimer,
             deltaLeft = 15,
             deltaTop = 15,
             // move helper
@@ -78,10 +78,14 @@ define('io.ox/core/tk/list-dnd', [
             container.trigger('selection:dragstart');
         }
 
+        function toggle() {
+            this.trigger('click');
+        }
+
         function over() {
 
-            var self = this,
-                ft = $(this).closest('.foldertree-container'),
+            var ft = $(this).closest('.folder-tree'),
+                arrow = $(this).find('.folder-arrow'),
                 node = ft[0],
                 interval,
                 scrollSpeed = 0,
@@ -94,11 +98,9 @@ define('io.ox/core/tk/list-dnd', [
             // css hover doesn't work!
             $(this).addClass('dnd-over');
 
-            if ($(this).hasClass('expandable')) {
-                clearTimeout(expandTimer);
-                expandTimer = setTimeout(function () {
-                    $(self).find('.folder-arrow').trigger('mousedown');
-                }, 1500);
+            if (arrow.length) {
+                clearTimeout(toggleTimer);
+                toggleTimer = setTimeout(toggle.bind(arrow), 1500);
             }
 
             function canScroll() {
@@ -157,7 +159,7 @@ define('io.ox/core/tk/list-dnd', [
         }
 
         function out() {
-            clearTimeout(expandTimer);
+            clearTimeout(toggleTimer);
             $(this).removeClass('dnd-over');
         }
 
@@ -215,7 +217,7 @@ define('io.ox/core/tk/list-dnd', [
         }
 
         function drop() {
-            clearTimeout(expandTimer);
+            clearTimeout(toggleTimer);
             var target = $(this).attr('data-obj-id') || $(this).attr('data-cid') || $(this).attr('data-id'),
                 baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
             $(this).trigger('selection:drop', [baton]);
