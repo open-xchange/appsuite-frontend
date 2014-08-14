@@ -437,18 +437,25 @@ define('io.ox/mail/common-extensions',
 
             function toggle(e) {
                 e.preventDefault();
-                var view = e.data.view, data = view.model.toJSON();
+                var view = e.data.view, data = view.model.toJSON(), node = e.data.node;
                 // toggle 'unseen' bit
-                if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
+
+                if (util.isUnseen(data)) {
+                    api.markRead(data);
+                    node.attr('aria-label', gt('This E-mail is read, press to mark it as unread.'));
+                } else {
+                    api.markUnread(data);
+                    node.attr('aria-label', gt('This E-mail is unread, press to mark it as read.'));
+                }
             }
 
             return function (baton) {
 
                 if (util.isEmbedded(baton.data)) return;
 
-                this.append(
-                    $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa"/></a>')
-                    .on('click', { view: baton.view }, toggle)
+                var a11y = util.isUnseen(baton.data) ? gt('This E-mail is unread, press to mark it as read.') : gt('This E-mail is read, press to mark it as unread.'),
+                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa"/></a>');
+                this.append(button.on('click', { view: baton.view, node: button }, toggle)
                 );
             };
         }()),
