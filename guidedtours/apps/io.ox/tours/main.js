@@ -294,7 +294,9 @@ define('io.ox/tours/main',
                 placement: 'bottom', /* Check target */
                 target: function () { return $('.dropdown.grid-options.toolbar-item.pull-right:visible')[0]; },
                 content: gt('To sort the E-Mails, click on Sort by. Select a sort criteria.'),
-                xOffset: -15
+                xOffset: -230, // see bug #34010
+                arrowOffset: 230,
+                width: 260
             },
             {
                 title: gt('Selecting a view'),
@@ -302,14 +304,14 @@ define('io.ox/tours/main',
                 target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
                 content: gt('To choose between the different views. click on View in the toolbar. Select a menu entry in the layout.'),
                 xOffset: -15
-            }, 
+            },
             {
                 title: gt('Opening an E-Mail in a separate window'),
                 placement: 'right',
                 target: function () { return $('.list-view:visible')[0]; },
                 content: gt('If double-clicking on an E-Mail in the list, the E-Mail is opened in a separate window.'),
                 xOffset: -15
-            }, 
+            },
             {
                 title: gt('Reading E-Mail conversations'),
                 placement: 'left',
