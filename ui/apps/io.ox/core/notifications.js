@@ -154,87 +154,12 @@ define('io.ox/core/notifications',
     });
 
     var NotificationController = function () {
-
         this.notifications = {};
-        this.oldMailCount = 0; // special variable needed to check for autoopen on new mail
+        this.oldMailCount = 0;//special variable needed to check for autoopen on new mail
         this.badges = [];
-
-        // add event supports
-        _.extend(this, Backbone.Events);
-
-        this.on('show', function () {
-            console.log('show!');
-        });
-
-        this.on('hide', function () {
-            console.log('hide!');
-        });
     };
 
     NotificationController.prototype = {
-
-        isOpen: function () {
-            return this.nodes.main.hasClass('active');
-        },
-
-        toggle: function () {
-            if (this.isOpen()) this.hide(); else this.show();
-        },
-
-        show: function () {
-
-            if (this.isOpen()) return; // if it's open already we're done
-
-            if (_.device('smartphone')) {
-                $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
-            }
-
-            this.nodes.main.addClass('active');
-            this.nodes.overlay.addClass('active');
-            this.badgeView.onToggle(true);
-
-            $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
-                    $(document).off('keydown.notification');
-                    //focus badge when closing
-                    this.badgeView.$el.focus();
-                    this.hideList();
-                }
-            }, this));
-
-            // try to focus first item; focus badge otherwise
-            var firstItem = $('#io-ox-notifications .item').first();
-            if (firstItem.length > 0) firstItem.focus(); else this.badgeView.$el.focus();
-
-            this.trigger('show');
-        },
-
-        hide: function () {
-
-            if (!this.isOpen()) return; // if it's closed already we're done
-
-            _.each(this.badges, function (badgeView) {
-                badgeView.setNotifier(false);
-            });
-
-            this.nodes.main.removeClass('active');
-            this.nodes.overlay.empty().removeClass('active');
-            this.badgeView.onToggle(false);
-
-            if (_.device('smartphone')) {
-                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
-                this.nodes.overlay.empty().removeClass('active');
-            }
-
-            this.badgeView.$el.focus();
-
-            this.trigger('hide');
-        },
-
-        // deprecated
-        toggleList : function () { this.toggle(); },
-        showList   : function () { this.show(); },
-        hideList   : function () { this.hide(); },
 
         nodes: {
             main: $('<div>').attr({
@@ -328,7 +253,9 @@ define('io.ox/core/notifications',
                 $.proxy(this.toggleList, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
-
+        isOpen: function () {
+            return this.nodes.main.hasClass('active');
+        },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};
@@ -400,6 +327,66 @@ define('io.ox/core/notifications',
             //jump back to first item if tab is pressed on last item
             this.lastItem = this.notificationsView.$el.find('[tabindex="1"]').last();
             this.lastItem.on('keydown', focusBadge);
+        },
+        toggleList: function () {
+            //create nice listing view of all notifications grouped by
+            //their app
+            if (this.nodes.main.hasClass('active')) {
+                this.hideList();
+                if (_.device('smartphone')) {
+                    this.nodes.overlay.empty().removeClass('active');
+                }
+            } else {
+                this.showList();
+            }
+        },
+        showList: function () {
+
+            if(this.isOpen()) {//if it's open already we're done
+                return;
+            }
+
+            if (_.device('smartphone')) {
+                $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
+            }
+
+            this.nodes.main.addClass('active');
+            this.nodes.overlay.addClass('active');
+
+            this.badgeView.onToggle(true);
+            $(document).on('keydown.notification', $.proxy(function (e) {
+                if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
+                    $(document).off('keydown.notification');
+                    //focus badge when closing
+                    this.badgeView.$el.focus();
+                    this.hideList();
+                }
+            }, this));
+            var firstItem = $('#io-ox-notifications .item').first();
+
+            if (firstItem.length > 0) {//try to focus first item
+                firstItem.focus();
+            } else {
+                this.badgeView.$el.focus();//focus badge instead
+            }
+        },
+        hideList: function () {
+
+            if(!this.isOpen()) {//if it's closed already we're done
+                return;
+            }
+
+            _.each(this.badges, function (badgeView) {
+                badgeView.setNotifier(false);
+            });
+            this.badgeView.onToggle(false);
+            this.nodes.main.removeClass('active');
+            this.nodes.overlay.empty().removeClass('active');
+            if (_.device('smartphone')) {
+                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+            }
+            this.badgeView.$el.focus();
+
         },
 
         // type = info | warning | error | success | screenreader
