@@ -61,7 +61,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             });
 
             it('should add badges if detail parameter is set', function () {
-                var result = util.interpretTask(options.testData, true);
+                var result = util.interpretTask(options.testData, {detail: true});
                 expect(result.badge).to.equal('badge');
             });
         });
