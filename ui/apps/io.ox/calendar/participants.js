@@ -252,38 +252,42 @@ define('io.ox/calendar/participants',
                     // add summary
                     var sumData = util.getConfirmationSummary(confirmations);
                     if (options.summary && sumData.count > 3) {
-                        var sum = $('<div>').addClass('summary');
+                        var sum = $('<ul>').attr('aria-label', gt('Summary')).addClass('summary list-inline');
                         _.each(sumData, function (res) {
                             if (res.count > 0) {
                                 sum.append(
-                                    $('<a>')
-                                        .attr({
-                                            href: '#',
-                                            title: res.title
-                                        })
-                                        .addClass('countgroup')
-                                        .text(res.count)
-                                        .prepend(
-                                            $('<span>')
-                                                .addClass('status ' + res.css)
-                                                .append(res.icon)
-                                        )
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            if ($(this).hasClass('badge')) {
-                                                $(this).removeClass('badge');
-                                                $('.participant', participants)
-                                                    .show();
-                                            } else {
-                                                $('.participant', participants)
-                                                    .show()
-                                                    .find('a.person:not(.' + res.css + ')')
-                                                    .parent()
-                                                    .toggle();
-                                                $('.countgroup', participants).removeClass('badge');
-                                                $(this).addClass('badge');
-                                            }
-                                        })
+                                    $('<li>').append(
+                                        $('<a>')
+                                            .attr({
+                                                href: '#',
+                                                'aria-label': res.title + ' ' + res.count,
+                                                role: 'button',
+                                                'aria-pressed': false
+                                            })
+                                            .addClass('countgroup')
+                                            .text(res.count)
+                                            .prepend(
+                                                $('<span>')
+                                                    .addClass('status ' + res.css)
+                                                    .append(res.icon)
+                                            )
+                                            .on('click', function (e) {
+                                                e.preventDefault();
+                                                if ($(this).hasClass('badge')) {
+                                                    $(this).removeClass('badge').attr('aria-pressed', false);
+                                                    $('.participant', participants)
+                                                        .show();
+                                                } else {
+                                                    $('.participant', participants)
+                                                        .show()
+                                                        .find('a.person:not(.' + res.css + ')')
+                                                        .parent()
+                                                        .toggle();
+                                                    $('.countgroup', participants).removeClass('badge');
+                                                    $(this).addClass('badge').attr('aria-pressed', true);
+                                                }
+                                            })
+                                    )
                                 );
                             }
                         });
