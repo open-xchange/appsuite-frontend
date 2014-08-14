@@ -22,7 +22,8 @@ define('io.ox/tasks/mobile-toolbar-actions',
 
     // define links for each page
 
-    var pointListView = ext.point('io.ox/tasks/mobile/toolbar/listView'),
+    var pointListViewActions = ext.point('io.ox/tasks/mobile/toolbar/actions'),
+        pointListView = ext.point('io.ox/tasks/mobile/toolbar/listView'),
         pointDetailView = ext.point('io.ox/tasks/mobile/toolbar/detailView'),
         actions = ext.point('io.ox/tasks/mobile/actions'),
         meta = {
@@ -89,7 +90,16 @@ define('io.ox/tasks/mobile-toolbar-actions',
         index = 0;
     }
 
-    addAction(pointListView, ['create']);
+    addAction(pointListViewActions, ['create']);
+
+    pointListView.extend(new links.InlineLinks({
+        attributes: {},
+        classes: '',
+        index: 100,
+        id: 'toolbar-links',
+        ref: 'io.ox/tasks/mobile/toolbar/actions'
+    }));
+
     addAction(actions, ['done', 'undone', 'confirm', 'edit', 'delete', 'confirm', 'move']);
 
     // add submenu as text link to toolbar in multiselect
