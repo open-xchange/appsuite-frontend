@@ -183,8 +183,6 @@ define('io.ox/files/mobile-toolbar-actions',
 
             function fnFolderChange() {
                 app.folder.getData().done(function (data) {
-                    console.log('folder ', data);
-
                     var baton = ext.Baton({ data: data, app: app });
                     // handle updated baton to pageController
                     app.pages.getToolbar('fluid').setBaton(baton);
