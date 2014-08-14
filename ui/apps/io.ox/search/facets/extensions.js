@@ -19,6 +19,34 @@ define('io.ox/search/facets/extensions',
 
     //var POINT = 'io.ox/search/facets';
 
+    function folderDialog(facet, baton) {
+        require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
+            var id = facet.values[0].custom,
+                type = baton.model.getModule();
+
+            picker({
+                folder: id,
+                module: type === 'files' ? 'infostore' : type,
+                root: type === 'files' ? '9' : '1',
+                done: function (target) {
+                    //get folder data
+                    api.get(target)
+                        .always(function (data) {
+                            //use id as fallback label
+                            var label = (data || {}).title || target;
+                            baton.model.update(facet.id, id, { custom: target, name: label });
+                        });
+                },
+                customize: function (baton) {
+                    var data = baton.data,
+                        same = type === 'move' && data.id === id,
+                        create = api.can('create', data);
+                    if (same || !create) this.addClass('disabled');
+                }
+            });
+        });
+    }
+
     var SORT = {
             current: 1,
             'default': 2,
@@ -110,7 +138,7 @@ define('io.ox/search/facets/extensions',
             },
 
             optionsHandler: function (baton) {
-                var self = this;
+
                 $('body').delegate('.facet-dropdown .option', 'click tap', function (e) {
                     // TODO: remove hack
                     e.stopImmediatePropagation();
@@ -132,7 +160,7 @@ define('io.ox/search/facets/extensions',
                     if (option === 'dialog') {
                         // open folder dialog
                         var facet = baton.model.get('folder');
-                        self.folderDialog(facet, baton);
+                        folderDialog(facet, baton);
                     } else {
                         if (facet === 'folder') {
                             // overwrite custom
@@ -146,35 +174,6 @@ define('io.ox/search/facets/extensions',
                 });
             },
 
-
-            folderDialog: function (facet, baton) {
-                require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
-                    var id = facet.values[0].custom,
-                        type = baton.model.getModule();
-
-                    picker({
-                        folder: id,
-                        module: type === 'files' ? 'infostore' : type,
-                        root: type === 'files' ? '9' : '1',
-                        done: function (target) {
-                            //get folder data
-                            api.get(target)
-                                .always(function (data) {
-                                    //use id as fallback label
-                                    var label = (data || {}).title || target;
-                                    baton.model.update(facet.id, id, { custom: target, name: label });
-                                });
-                        },
-                        customize: function (baton) {
-                            var data = baton.data,
-                                same = type === 'move' && data.id === id,
-                                create = api.can('create', data);
-                            if (same || !create) this.addClass('disabled');
-                        }
-                    });
-                });
-
-            },
             facetType: function (baton, value, facet) {
                 var options = value.options,
                     id = value._compact.option,
