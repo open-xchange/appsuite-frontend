@@ -1151,6 +1151,18 @@ define('io.ox/mail/api',
             });
     };
 
+
+    /**
+     * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
+     * Needed for inline images
+     */
+    api.keepalive = function (id) {
+        return http.GET({
+            module: 'file',
+            params: { action: 'keepalive', id: id }
+        });
+    };
+
     /**
      * get mail object with unmodified content (in case externalresources warning message was ignored)
      * @param  {object]} obj (mail object)

@@ -323,6 +323,7 @@ define('io.ox/mail/compose/view',
             this.app = options.app;
             this.editorHash = {};
             this.autosave = {};
+            this.intervals = [];
             this.blocked = [];
             this.editorMode = this.model.get('editorMode');
             this.messageFormat = settings.get('messageFormat', 'html');
@@ -472,6 +473,22 @@ define('io.ox/mail/compose/view',
 
             this.autosave = {};
             delay();
+        },
+
+        addKeepaliveInterval: function (id) {
+            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 2000) * 0.9),
+                interval = setInterval(function () {
+                mailAPI.keepalive(id);
+            }, timeout);
+            console.log('keepalive', timeout);
+            this.intervals.push(interval);
+            timeout = interval = null;
+        },
+
+        clearKeepaliveIntervals: function () {
+            for (var i=0; i < this.intervals.length; i++) {
+                clearInterval(this.intervals[i]);
+            }
         },
 
         clean: function () {
