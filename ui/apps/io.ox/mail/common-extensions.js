@@ -36,10 +36,13 @@ define('io.ox/mail/common-extensions',
 
         a11yLabel: function (baton) {
             var data = baton.data,
+                size = api.threads.size(data),
+                threadSize = size <= 1 ? '' :  ', ' + gt.format('Thread contains %1$d messages', gt.noI18n(size)),
                 fromlist = data.from || [['', '']],
                 subject = _.escape($.trim(data.subject)),
                 unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
-                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date);
+                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize;
+
             this.attr({
                 'aria-hidden': true
             }).parent().attr({
