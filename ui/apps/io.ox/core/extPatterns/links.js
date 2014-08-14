@@ -352,8 +352,11 @@ define('io.ox/core/extPatterns/links',
             if (extension.customizeNode) extension.customizeNode(nav); // deprecated!
             if (extension.customize) extension.customize.call(nav, baton);
 
-            // move to real target node
-            if (baton.$.target) baton.$.target.append(nav.children());
+            // move to real target node at dummy's position
+            if (baton.$.positionDummy) {
+                baton.$.positionDummy.before(nav.children());
+                baton.$.positionDummy.remove();//remove dummy
+            }
 
             // clear
             all = lo = null;
@@ -366,7 +369,8 @@ define('io.ox/core/extPatterns/links',
             // use temporary container and remember real target node
             if (baton.$el) {
                 baton.$.temp = $('<div>');
-                baton.$.target = baton.$el;
+                baton.$.positionDummy = $('<div class="position-dummy">').hide();//needed to keep the position or extensionpoint index would be ignored
+                baton.$el.append(baton.$.positionDummy);
                 baton.$el = null;
             }
 
