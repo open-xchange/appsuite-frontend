@@ -21,7 +21,7 @@ define('io.ox/core/folder/favorites',
 
     'use strict';
 
-    _('mail contacts infostore'.split(' ')).each(function (module) {
+    _('mail contacts calendar tasks infostore'.split(' ')).each(function (module) {
 
         // register collection
         var id = 'virtual/favorites/' + module,
