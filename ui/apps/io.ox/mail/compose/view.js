@@ -320,6 +320,7 @@ define('io.ox/mail/compose/view',
         },
 
         initialize: function (options) {
+            var self = this;
             this.app = options.app;
             this.editorHash = {};
             this.autosave = {};
@@ -344,6 +345,14 @@ define('io.ox/mail/compose/view',
                 data: this.model.toJSON(),
                 model: this.model,
                 view: this
+            });
+
+            this.contentEditable.on('addInlineImage', function (e, id) {
+                self.addKeepalive(id);
+            });
+
+            this.$el.on('dispose', function () {
+                self.clearKeepalive();
             });
 
             this.model.on({
@@ -475,20 +484,13 @@ define('io.ox/mail/compose/view',
             delay();
         },
 
-        addKeepaliveInterval: function (id) {
-            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 2000) * 0.9),
-                interval = setInterval(function () {
-                mailAPI.keepalive(id);
-            }, timeout);
-            console.log('keepalive', timeout);
-            this.intervals.push(interval);
-            timeout = interval = null;
+        addKeepalive: function (id) {
+            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 2000) * 0.9);
+            this.intervals.push(setInterval(mailAPI.keepalive, timeout, id));
         },
 
-        clearKeepaliveIntervals: function () {
-            for (var i=0; i < this.intervals.length; i++) {
-                clearInterval(this.intervals[i]);
-            }
+        clearKeepalive: function () {
+            _(this.intervals).each(clearInterval);
         },
 
         clean: function () {
