@@ -1050,10 +1050,12 @@ define('io.ox/mail/main',
 
                 // events
                 win.facetedsearch.view.on({
-                    'query': _.debounce(function () {
-                        app.listView.connect(collectionLoader);
-                        app.listView.load();
-                        win.facetedsearch.focus();
+                    'query': _.debounce(function (e, appname) {
+                        if (appname === app.get('name')) {
+                            app.listView.connect(collectionLoader);
+                            app.listView.load();
+                            win.facetedsearch.focus();
+                        }
                     }, 10),
                     'focus': function () {
                         app.listView.connect(collectionLoader);

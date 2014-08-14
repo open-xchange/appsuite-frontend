@@ -1649,12 +1649,22 @@ define('io.ox/core/desktop',
                             view.render().$el.find('.input-group')
                         );
 
+                    //events: app resume cancels search mode
+                    win.app.on('resume', function () {
+                        if (win.facetedsearch.active) {
+                            view.trigger('button:cancel');
+                        }
+                    });
+
                     // events: internal
                     view.on({
                         'query focus':
-                            _.debounce(function (e) {
-                                win.facetedsearch.open();
-                                if (e.type === 'query') win.trigger('search:query');
+                            _.debounce(function (e, appname) {
+                                // one search app, one model but multiple views
+                                if (win.app.get('name') === appname) {
+                                    win.facetedsearch.open();
+                                    if (e.type === 'query') win.trigger('search:query');
+                                }
                             }, 10
                         ),
                         'button:clear': function () {
@@ -1667,8 +1677,8 @@ define('io.ox/core/desktop',
 
                     // events: redirect
                     view.model.on({
-                        'query': function () {
-                            view.trigger('query');
+                        'query': function (appname) {
+                            view.trigger('query', appname);
                         }
                     });
                 });
