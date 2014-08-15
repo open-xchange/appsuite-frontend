@@ -21,12 +21,25 @@ define('io.ox/mail/autoforward/settings/model',
 
     'use strict';
 
+    // function calculatePosition() {
+    //     api.getRules('vacation').done(function (data) {
+    //         debugger;
+    //         if (_.isEmpty(data)) {
+    //             return 0;
+    //         } else {
+    //             return 1;
+    //         }
+    //     });
+    // }
+
     function providePreparedData(attributes) {
         if (!attributes.forwardmail) {
             return {};
         } else {
             var preparedData = {
                     'rulename': 'autoforward',
+
+                    'position': attributes.position,
 
                     'test': {
                         'id': 'true'
@@ -72,6 +85,7 @@ define('io.ox/mail/autoforward/settings/model',
             },
             create: function (model) {
                 $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
+
                 return settingsUtil.yellOnReject(
                     api.create(providePreparedData(model.attributes))
                 );

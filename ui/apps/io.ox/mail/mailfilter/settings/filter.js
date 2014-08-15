@@ -31,6 +31,16 @@ define('io.ox/mail/mailfilter/settings/filter',
         collection,
         grid;
 
+    function containsStop(actioncmds) {
+        var stop = false;
+        _.each(actioncmds, function (action) {
+            if (_.contains(['stop'], action.id)) {
+                stop = true;
+            }
+        });
+        return stop;
+    }
+
     function updatePositionInCollection(collection, positionArray) {
         _.each(positionArray, function (key, val) {
             collection.get(key).set('position', val);
@@ -126,7 +136,16 @@ define('io.ox/mail/mailfilter/settings/filter',
         draw: function (model) {
             var flag = (model.get('flags') || [])[0];
             var title = model.get('rulename'),
-                texttoggle = model.get('active') ? gt('Disable') : gt('Enable');
+                texttoggle = model.get('active') ? gt('Disable') : gt('Enable'),
+                actioncmds = model.get('actioncmds'),
+                faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
+                processSub = flag !== 'vacation' ? [$('<a>').append($('<i/>').addClass('fa ' + faClass)).attr({
+                    href: '#',
+                    role: 'button',
+                    'data-action': 'toogleProcessSub',
+                    tabindex: 1,
+                    'aria-label': title + ', ' + gt('process subsequent rules')
+                })] : [];
 
             $(this).append(
                 $('<a>').addClass('action').text(gt('Edit')).attr({
@@ -143,6 +162,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                     tabindex: 1,
                     'aria-label': title + ', ' + (texttoggle)
                 }),
+                processSub,
                 $('<a>').append($('<i/>').addClass('fa fa-trash-o')).attr({
                     href: '#',
                     role: 'button',
@@ -230,6 +250,16 @@ define('io.ox/mail/mailfilter/settings/filter',
                         self.model.on('change:rulename', function (el, val) {
                             titleNode.text(val);
                         });
+
+                        self.model.on('ChangeProcessSub', function (status) {
+                            var target = self.$el.find('[data-action="toogleProcessSub"] i');
+                            if (status) {
+                                target.removeClass('fa-ban').addClass('fa-arrow-down');
+                            } else {
+                                target.removeClass('fa-arrow-down').addClass('fa-ban');
+                            }
+
+                        });
                         return self;
                     },
 
@@ -237,6 +267,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                         'click [data-action="toggle"]': 'onToggle',
                         'click [data-action="delete"]': 'onDelete',
                         'click [data-action="edit"]': 'onEdit',
+                        'click [data-action="toogleProcessSub"]': 'onToggleProcessSub',
                         'click [data-action="edit-vacation"]': 'onEditVacation',
                         'keydown .drag-handle': 'dragViaKeyboard'
                     },
@@ -251,6 +282,34 @@ define('io.ox/mail/mailfilter/settings/filter',
                             api.update(self.model).done(function () {
                                 self.$el.toggleClass('active disabled');
                                 $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
+                            })
+                        );
+                    },
+
+                    onToggleProcessSub: function (e) {
+                        e.preventDefault();
+                        var self = this,
+                            actioncmds = this.model.get('actioncmds'),
+                            stop = containsStop(actioncmds);
+
+                        if (stop) {
+                            actioncmds.pop();
+                        } else {
+                            actioncmds.push({id: 'stop'});
+                        }
+
+                        this.model.set('actioncmds', actioncmds);
+
+
+                        //yell on reject
+                        settingsUtil.yellOnReject(
+                            api.update(self.model).done(function () {
+                                var target = $(e.target).closest('.widget-controls').find('[data-action="toogleProcessSub"] i');
+                                if (containsStop(actioncmds)) {
+                                    target.removeClass('fa-arrow-down').addClass('fa-ban');
+                                } else {
+                                    target.removeClass('fa-ban').addClass('fa-arrow-down');
+                                }
                             })
                         );
                     },
