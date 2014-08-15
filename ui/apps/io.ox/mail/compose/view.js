@@ -358,13 +358,6 @@ define('io.ox/mail/compose/view',
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
         },
 
-        dispose: function () {
-            this.clean();
-            this.clearKeepalive();
-            this.stopListening();
-            this.model = null;
-        },
-
         setSubject: function (e) {
             var value = e.target ? $(e.target).val() : e;
             this.model.set('subject', value);
@@ -504,6 +497,50 @@ define('io.ox/mail/compose/view',
             }
             // clear timer for autosave
             this.stopAutoSave();
+        },
+
+        dispose: function () {
+            this.clearKeepalive();
+            this.stopListening();
+            this.model = null;
+        },
+
+        discard: function () {
+            var self = this,
+                def = $.Deferred();
+
+            if (this.model.dirty()) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt('Do you really want to discard your message?'))
+                        //#. "Discard message" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', {tabIndex: '1'})
+                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                self.clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                def.resolve();
+                            } else if (action === 'savedraft') {
+                                self.saveDraft().done(function () {
+                                    //clean();
+                                    def.resolve();
+                                }).fail(function (e) {
+                                    def.reject(e);
+                                });
+                            } else {
+                                def.reject();
+                            }
+                        });
+                });
+            } else {
+                this.clean();
+                def.resolve();
+            }
+
+            return def;
         },
 
         send: function () {

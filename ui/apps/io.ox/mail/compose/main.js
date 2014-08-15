@@ -156,43 +156,7 @@ define('io.ox/mail/compose/main',
         }
 
         // destroy
-        app.setQuit(function () {
-
-            var def = $.Deferred();
-
-            if (app.view.model.dirty()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to discard your message?'))
-                        //#. "Discard message" appears in combination with "Cancel" (this action)
-                        //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', {tabIndex: '1'})
-                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                app.view.clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
-                                def.resolve();
-                            } else if (action === 'savedraft') {
-                                 app.view.saveDraft().done(function () {
-                                    //clean();
-                                    def.resolve();
-                                }).fail(function (e) {
-                                    def.reject(e);
-                                });
-                            } else {
-                                def.reject();
-                            }
-                        });
-                });
-            } else {
-                app.view.clean();
-                def.resolve();
-            }
-
-            return def;
-        });
+        app.setQuit(function () { return app.view.discard(); });
 
         app.compose  = compose('compose');
         app.forward  = reply('forward');
