@@ -184,8 +184,8 @@ define('io.ox/contacts/main',
                     var name, description, private_flag;
                     this.addClass('contact').append(
                         private_flag = $('<i class="fa fa-lock private_flag">').hide(),
-                        name = $('<div class="fullname">'),
-                        description = $('<div class="bright-text">')
+                        name = $('<div class="fullname">').attr('aria-hidden', true),
+                        description = $('<div class="bright-text">').attr('aria-hidden', true)
                     );
                     return { name: name, private_flag: private_flag, description: description };
                 },

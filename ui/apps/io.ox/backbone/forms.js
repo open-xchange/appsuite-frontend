@@ -365,17 +365,6 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
-    function Header(options) {
-        _.extend(this, {
-            tagName: 'div',
-            render: function () {
-                this.$el.append($('<div>').append(
-                      $('<h1>').text(options.label)
-                  ));
-            }
-        }, options);
-    }
-
     function DatePicker(options) {
         options = _.extend({
             required: true,
@@ -690,7 +679,6 @@ define('io.ox/backbone/forms',
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
         SelectControlGroup: SelectControlGroup,
-        Header: Header,
         InputField: InputField,
         CheckBoxField: CheckBoxField,
         CheckControlGroup: CheckControlGroup,
