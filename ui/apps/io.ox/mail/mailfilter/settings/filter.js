@@ -139,31 +139,43 @@ define('io.ox/mail/mailfilter/settings/filter',
                 texttoggle = model.get('active') ? gt('Disable') : gt('Enable'),
                 actioncmds = model.get('actioncmds'),
                 faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
-                processSub = flag !== 'vacation' ? [$('<a>').append($('<i/>').addClass('fa ' + faClass)).attr({
-                    href: '#',
-                    role: 'button',
-                    'data-action': 'toogleProcessSub',
-                    tabindex: 1,
-                    'aria-label': title + ', ' + gt('process subsequent rules')
-                })] : [];
+                actionValue;
+
+            if (flag === 'vacation') {
+                actionValue = 'edit-vacation';
+            } else if (flag === 'autoforward') {
+                actionValue = 'edit-autoforward';
+            } else {
+                actionValue = 'edit';
+            }
 
             $(this).append(
                 $('<a>').addClass('action').text(gt('Edit')).attr({
+                    title: gt('Edit'),
                     href: '#',
                     role: 'button',
-                    'data-action': flag === 'vacation' ? 'edit-vacation' : 'edit',
+                    'data-action': actionValue,
                     tabindex: 1,
                     'aria-label': title + ', ' + gt('Edit')
                 }),
                 $('<a>').addClass('action').text(texttoggle).attr({
+                    title: texttoggle,
                     href: '#',
                     role: 'button',
                     'data-action': 'toggle',
                     tabindex: 1,
                     'aria-label': title + ', ' + (texttoggle)
                 }),
-                processSub,
+                $('<a>').append($('<i/>').addClass('fa ' + faClass)).attr({
+                    title: gt('process subsequent rules'),
+                    href: '#',
+                    role: 'button',
+                    'data-action': 'toogleProcessSub',
+                    tabindex: 1,
+                    'aria-label': title + ', ' + gt('process subsequent rules')
+                }),
                 $('<a>').append($('<i/>').addClass('fa fa-trash-o')).attr({
+                    title: gt('remove'),
                     href: '#',
                     role: 'button',
                     'data-action': 'delete',
@@ -175,6 +187,16 @@ define('io.ox/mail/mailfilter/settings/filter',
     });
 
     ext.point('io.ox/settings/mailfilter/filter/settings/actions/vacation').extend({
+        index: 200,
+        id: 'actions',
+        draw: function (model) {
+            //redirect
+            ext.point('io.ox/settings/mailfilter/filter/settings/actions/common')
+                            .invoke('draw', this, model);
+        }
+    });
+
+    ext.point('io.ox/settings/mailfilter/filter/settings/actions/autoforward').extend({
         index: 200,
         id: 'actions',
         draw: function (model) {
@@ -269,6 +291,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                         'click [data-action="edit"]': 'onEdit',
                         'click [data-action="toogleProcessSub"]': 'onToggleProcessSub',
                         'click [data-action="edit-vacation"]': 'onEditVacation',
+                        'click [data-action="edit-autoforward"]': 'onEditAutoforward',
                         'keydown .drag-handle': 'dragViaKeyboard'
                     },
 
@@ -357,6 +380,17 @@ define('io.ox/mail/mailfilter/settings/filter',
                         e.preventDefault();
                         var elem = _.find(grid.getIds(), function (item) {
                                 return item.id === 'io.ox/vacation';
+                            });
+
+                        if (elem) {
+                            grid.selection.set(elem);
+                        }
+                    },
+
+                    onEditAutoforward: function (e) {
+                        e.preventDefault();
+                        var elem = _.find(grid.getIds(), function (item) {
+                                return item.id === 'io.ox/autoforward';
                             });
 
                         if (elem) {
