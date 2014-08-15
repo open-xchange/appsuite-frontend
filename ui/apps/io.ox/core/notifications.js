@@ -474,7 +474,7 @@ define('io.ox/core/notifications',
 
             $(document).on(_.device('touch') ? 'tap' : 'click', click);
 
-            return function (type, message) {
+            return function (type, message, focus) {
 
                 if (type === 'destroy') return remove(true);
                 if (type === 'close') return remove();
@@ -482,7 +482,8 @@ define('io.ox/core/notifications',
                 var o = {
                     duration: 0,
                     html: false,
-                    type: 'info'
+                    type: 'info',
+                    focus: false
                 };
 
                 if (_.isObject(type)) {
@@ -497,6 +498,7 @@ define('io.ox/core/notifications',
                 } else {
                     o.type = type || 'info';
                     o.message = message;
+                    o.focus = focus;
                 }
 
                 // add message
@@ -541,7 +543,7 @@ define('io.ox/core/notifications',
                                 o.headline ? $('<h2 class="headline">').text(o.headline) : [],
                                 $('<div>').css('word-break', wordbreak).html(html)
                             ),
-                            $('<a href="#" class="close" tabindex="1">').html('&times')
+                            $('<a href="#" role="button" class="close" tabindex="1">').attr('aria-label', gt('Click to close this notification')).html('&times')
                         );
                     } else {
                         node.append(
@@ -557,7 +559,17 @@ define('io.ox/core/notifications',
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
                         active = true;
-                        if (!reuse) node.addClass('appear');
+                        if (!reuse) {
+                            node.addClass('appear');
+                        }
+
+                        if (o.focus) {
+                            node.attr('tabindex', 1);
+                            node.focus();
+                        } else {
+                            node.attr('tabindex', -1);
+                        }
+
                     }, _.device('touch') ? 300 : 0);
 
                     return node;
