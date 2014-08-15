@@ -254,7 +254,6 @@ define('io.ox/search/model',
                         }
                     });
                 }
-                debugger;
                 this.trigger('query', this.getApp());
             },
             fetch: function () {
