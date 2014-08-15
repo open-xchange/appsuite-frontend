@@ -129,16 +129,19 @@ define('io.ox/mail/detail/links',
         return _(ox.serverConfig.hosts).indexOf(match[1]) > -1;
     }
 
-    function replace(node, prefix, link, suffix) {
+    //
+    // Handle replacement
+    //
 
-        // replace
-        var replacement = $()
-            .add(processTextNode(prefix))
-            .add(link)
-            .add(processTextNode(suffix));
-
-        $(node).replaceWith(replacement);
-        return replacement;
+    function replace(result) {
+        // get replacement
+        var set = $();
+        if (result.prefix) set = set.add(processTextNode(result.prefix));
+        set = set.add(result.replacement.get(0));
+        if (result.suffix) set = set.add(processTextNode(result.suffix));
+        // now replace
+        $(result.node).replaceWith(set);
+        return set;
     }
 
     //
@@ -184,9 +187,9 @@ define('io.ox/mail/detail/links',
             }
 
             // move up?
-            if ($(node).parent().attr('href') === data.link) node = $(node).parent();
+            if ($(node).parent().attr('href') === data.link) node = $(node).parent().get(0);
 
-            return replace(node, data.prefix, link, data.suffix);
+            return { node: node, prefix: data.prefix, replacement: link, suffix: data.suffix };
         };
 
     }());
@@ -212,7 +215,7 @@ define('io.ox/mail/detail/links',
 
         var link = $('<a href="#" target="_blank">').attr('href', _.escape(url)).text(url);
 
-        return replace(node, prefix, link, suffix);
+        return { node: node, prefix: prefix, replacement: link, suffix: suffix };
     }
 
     //
@@ -230,7 +233,7 @@ define('io.ox/mail/detail/links',
 
         var link = $('<a href="#" target="_blank">').attr('href', 'mailto:' + address).text(address);
 
-        return replace(node, prefix, link, suffix);
+        return { node: node, prefix: prefix, replacement: link, suffix: suffix };
     }
 
     //
@@ -248,8 +251,60 @@ define('io.ox/mail/detail/links',
 
         var link = $('<a href="#" target="_blank">').attr('href', 'mailto:' + address).text(name);
 
-        return replace(node, prefix, link, suffix);
+        return { node: node, prefix: prefix, replacement: link, suffix: suffix };
     }
+
+    //
+    // Handlers
+    //
+
+    // A handler must implement test() and process().
+    // test() gets the current text node and returns true/false.
+    // process() gets current text node and returns an object
+    // that contains node, prefix, replacement, suffix.
+    // prefix and suffix are the text parts before and after the
+    // replacement that might be need further processing
+
+    var handlers = {
+
+        'deeplink': {
+            test: function (node) {
+                return isDeepLink(node.nodeValue);
+            },
+            process: processDeepLink
+        },
+
+        'mail-address-complex': {
+            test: function (node) {
+                return regMailComplex.test(node.nodeValue) && $(node).closest('a').length === 0;
+            },
+            process: processComplexMailAddress
+        },
+
+        'mail-address': {
+            test: function (node) {
+                return regMail.test(node.nodeValue) && $(node).closest('a').length === 0;
+            },
+            process: processMailAddress
+        },
+
+        'url': {
+            test: function (node) {
+                return regUrl.test(node.nodeValue) && $(node).closest('a').length === 0;
+            },
+            process: processUrl
+        },
+
+        'long-character-sequences': {
+            test: function (node) {
+                var text = node.nodeValue;
+                return text.length >= 30 && /\S{30}/.test(text);
+            },
+            process: function (node) {
+                return { node: node, replacement: $.parseHTML(coreUtil.breakableHTML(node.nodeValue)) };
+            }
+        }
+    };
 
     //
     // Text nodes
@@ -260,29 +315,14 @@ define('io.ox/mail/detail/links',
         if (_.isString(node)) node = $.txt(node);
         if (node.nodeType !== 3) return;
 
-        var text = node.nodeValue, length = text.length, $node = $(node);
+        for (var id in handlers) {
+            var handler = handlers[id];
+            if (handler.test(node)) {
+                return replace(handler.process(node));
+            }
+        }
 
-        if (isDeepLink(text)) {
-            return processDeepLink(node);
-        }
-        else if (regMailComplex.test(text) && $node.closest('a').length === 0) {
-            return processComplexMailAddress(node);
-        }
-        else if (regMail.test(text) && $node.closest('a').length === 0) {
-            return processMailAddress(node);
-        }
-        else if (regUrl.test(text) && $node.closest('a').length === 0) {
-            return processUrl(node);
-        }
-        else if (length >= 30 && /\S{30}/.test(text)) {
-            // split long character sequences for better wrapping
-            $node.replaceWith(
-                $.parseHTML(coreUtil.breakableHTML(text))
-            );
-        }
-        else {
-            return node;
-        }
+        return node;
     }
 
     ext.point('io.ox/mail/detail/content').extend({
@@ -302,6 +342,7 @@ define('io.ox/mail/detail/links',
     });
 
     return {
+        handlers: handlers,
         isDeepLink: isDeepLink,
         parseDeepLink: parseDeepLink,
         processDeepLink: processDeepLink,
