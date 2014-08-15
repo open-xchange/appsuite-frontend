@@ -477,12 +477,18 @@ define('io.ox/calendar/main',
                 //additional handler: switch to list mode
                 win.on({
                     'search:query': function () {
+                        // switch to supported perspective
                         lastPerspective = _.url.hash('perspective') || app.props.get('layout');
                         if (lastPerspective !== SEARCH_PERSPECTIVE)
                             ox.ui.Perspective.show(app, SEARCH_PERSPECTIVE, {disableAnimations: true});
+                    },
+                    'search:cancel': function () {
+                        // switch back to perspective used before
+                        var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                        if (lastPerspective && lastPerspective !== currentPerspective)
+                            ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
                     }
                 });
-
             });
         },
         /*
