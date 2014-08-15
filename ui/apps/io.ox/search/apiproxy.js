@@ -13,8 +13,9 @@
 
 define('io.ox/search/apiproxy',
     ['io.ox/core/extensions',
+     'gettext!io.ox/core',
      'io.ox/search/api',
-     'io.ox/core/notifications'], function (ext, api, notifications) {
+     'io.ox/core/notifications'], function (ext, gt, api, notifications) {
 
     'use strict';
 
@@ -43,6 +44,26 @@ define('io.ox/search/apiproxy',
                 });
             }
         });
+
+        POINT.extend({
+            id: 'custom-facet-timespan',
+            index: 200,
+            customize: function (baton) {
+                _.each(baton.data, function (facet) {
+                    // hack to add custom timespan value
+                    if (facet.id === 'time') {
+                        var tmp = _.copy(facet.options[0]);
+                        delete tmp.filter;
+                        tmp.facet = 'time';
+                        tmp.name = gt('date range');
+                        tmp.id = 'daterange';
+                        tmp.point = 'daterange';
+                        facet.options.push(tmp);
+                    }
+                });
+            }
+        });
+
         /**
          * success handler to pass data through extension point
          * @param  {[type]} data [description]

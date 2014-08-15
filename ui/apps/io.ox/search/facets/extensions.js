@@ -47,6 +47,90 @@ define('io.ox/search/facets/extensions',
         });
     }
 
+    /**
+     * custom facet: datepicker
+     */
+    ext.point('io.ox/search/facets/custom/daterange').extend({
+        id: 'datarange',
+        index: 100,
+        draw: function (baton, facet, value, option) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/core/date'], function (dialogs, date) {
+                var dialog = new dialogs.ModalDialog({ width: 450 }),
+                    node;
+
+                function addDatepicker (node) {
+                    var tmp;
+                    node.css('height', '300px')
+                        .append(
+                            $('<div class="input-daterange input-group" id="datepicker">')
+                            .css('margin', 'auto')
+                            .append(
+                                $('<input type="text" class="input-sm form-control" name="start" />'),
+                                $('<span class="input-group-addon">to</span>'),
+                                $('<input type="text" class="input-sm form-control" name="end" />'),
+                                tmp = $('<div>')
+                            )
+                            .datepicker({
+                                format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
+                                parentEl: tmp,
+                                orientation: 'top left auto',
+                                autoclose: true,
+                                todayHighlight: true
+                            })
+                        );
+                }
+
+                function setRange (action) {
+                    if (action === 'cancel') {
+                            return;
+                        } else {
+                            var values = node.find('input'),
+                                list = [], id, options,
+                                display = [];
+
+                            // construct facet custom value
+                            _.each(values, function (n) {
+                                var value = $(n).val(),
+                                    parts = value.split('/');
+                                display.push(value.toLocaleString().split(',')[0]);
+                                list.push(
+                                    new Date(parts[2], parts[1]-1, parts[0])
+                                );
+                            });
+                            id = '['+ list[0].valueOf() + ' TO ' + list[1].valueOf() + ']';
+
+                            // adjust id that is used as value
+                            options = baton.model.get('pool').time.options;
+                            _.each(options, function (o) {
+                                if (o.point === option.option) {
+                                    o.id = id;
+                                    o.name = display.join(' - ');
+                                }
+
+                            });
+                            // update model
+                            baton.model.update(facet, value, {option: id });
+                            baton.model.trigger('query', baton.model.getApp());
+                        }
+                }
+
+                dialog.build(function () {
+                        this.header($('<h4>').text(gt('date range')));
+                        node = this.getContentNode();
+                    })
+                    .addButton('cancel', gt('Close'), 'cancel', {'tabIndex': '1'})
+                    .addPrimaryButton('appointment', gt('Apply'), 'apply', {tabIndex: '1'})
+                    .show(function () {
+                        this.css('top', '30%');
+                        this.find('input').focus();
+                    })
+                    .then(setRange);
+
+                addDatepicker(node);
+            });
+        }
+    });
+
     var SORT = {
             current: 1,
             'default': 2,
@@ -152,7 +236,7 @@ define('io.ox/search/facets/extensions',
 
                     var link = $(e.target).closest('a'),
                         list = link.closest('ul'),
-                        option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
+                        option = link.attr('data-action') || link.attr('data-point') || link.attr('data-option'),
                         facet = list.attr('data-facet'),
                         value = list.attr('data-value');
 
@@ -161,6 +245,8 @@ define('io.ox/search/facets/extensions',
                         // open folder dialog
                         var facet = baton.model.get('folder');
                         folderDialog(facet, baton);
+                    } else if (link.attr('data-point') !== '') {
+                        ext.point('io.ox/search/facets/custom/' + link.attr('data-point')).invoke('draw', this, baton, facet, value, {option: option });
                     } else {
                         if (facet === 'folder') {
                             // overwrite custom
@@ -257,7 +343,11 @@ define('io.ox/search/facets/extensions',
                                                 $('<span>').html(item.name || item.item.name)
                                             )
                                             .addClass('option')
-                                            .attr('data-option', item.id)
+                                            .attr({
+                                                'data-option': item.id,
+                                                // used to handle custom facets via extension points
+                                                'data-point': item.point || ''
+                                            })
                                     )
                         );
                         if (current === item.id)
@@ -318,7 +408,7 @@ define('io.ox/search/facets/extensions',
                                                 $('<i class="fa fa-fw fa-none">'),
                                                 $('<span>').text(folder.title)
                                             )
-                                            .attr('data-custom', folder.id)
+                                            .attr('data-point', folder.id)
                                             .attr('title', folder.title)
                                     )
                                 );
