@@ -119,6 +119,38 @@ define('io.ox/mail/detail/links',
         });
     });
 
+    $(document).on('click', '.mailto-link', function (e) {
+
+        e.preventDefault();
+
+        var node = $(this), data = node.data(), address, name, tmp, params = {};
+
+        // has data?
+        if (data.address) {
+            // use existing address and name
+            address = data.address;
+            name = data.name || data.address;
+        } else {
+            // parse mailto string
+            // cut off leading "mailto:" and split at "?"
+            tmp = node.attr('href').substr(7).split(/\?/, 2);
+            // address
+            address = tmp[0];
+            // use link text as display name
+            name = node.text();
+            // process additional parameters; all lower-case (see bug #31345)
+            params = _.deserialize(tmp[1]);
+            for (var key in params) params[key.toLowerCase()] = params[key];
+        }
+
+        // go!
+        ox.registry.call('mail/compose', 'compose', {
+            to: [[name, address]],
+            subject: params.subject || '',
+            attachments: [{ content: params.body || '' }]
+        });
+    });
+
     // fix hosts (still need a configurable list on the backend)
     // ox.serverConfig.hosts = (ox.serverConfig.hosts || []).concat('localhost', 'appsuite-dev.open-xchange.com', 'ui-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com');
 
@@ -137,7 +169,7 @@ define('io.ox/mail/detail/links',
         // get replacement
         var set = $();
         if (result.prefix) set = set.add(processTextNode(result.prefix));
-        set = set.add(result.replacement.get(0));
+        set = set.add(result.replacement);
         if (result.suffix) set = set.add(processTextNode(result.suffix));
         // now replace
         $(result.node).replaceWith(set);
@@ -156,8 +188,8 @@ define('io.ox/mail/detail/links',
             app = { contacts: 'contacts', calendar: 'calendar', task: 'tasks', infostore: 'files' },
             items = { contacts: gt('Contact'), calendar: gt('Appointment'), tasks: gt('Task'), files: gt('File') },
             folders = { contacts: gt('Address Book'), calendar: gt('Calendar'), tasks: gt('Tasks'), files: gt('Folder') },
-            regDeepLink = /^(.*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))(.*)$/i,
-            regDeepLinkAlt = /^(.*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))(.*)$/i;
+            regDeepLink = /^(.*)(http[^#]+#!?&?app=io\.ox\/(contacts|calendar|tasks|files)((&(folder|id|perspective)=[^&\s]+)+))(.*)$/im,
+            regDeepLinkAlt = /^(.*)(http[^#]+#m=(contacts|calendar|tasks|infostore)((&(f|i)=[^&\s]+)+))(.*)$/im;
 
         isDeepLink = function (str) {
             return regDeepLink.test(str) || regDeepLinkAlt.test(str);
@@ -198,8 +230,8 @@ define('io.ox/mail/detail/links',
     // URL
     //
 
-    var regUrl = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/i,
-        regUrlMatch = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/i; /* dedicated one to avoid strange side effects */
+    var regUrl = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/im,
+        regUrlMatch = /^(.*)((http|https|ftp|ftps)\:\/\/\S+)(.*)$/im; /* dedicated one to avoid strange side effects */
 
     function processUrl(node) {
 
@@ -222,8 +254,8 @@ define('io.ox/mail/detail/links',
     // Mail Address
     //
 
-    var regMail = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/i,
-        regMailMatch = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/i; /* dedicated one to avoid strange side effects */
+    var regMail = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im,
+        regMailMatch = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im; /* dedicated one to avoid strange side effects */
 
     function processMailAddress(node) {
 
@@ -231,7 +263,9 @@ define('io.ox/mail/detail/links',
         if (matches === null || matches.length === 0) return node;
         var prefix = matches[1], address = matches[2], suffix = matches[4];
 
-        var link = $('<a href="#" target="_blank">').attr('href', 'mailto:' + address).text(address);
+        var link = $('<a href="#" class="mailto-link" target="_blank">').attr('href', 'mailto:' + address)
+            .data({ address: address })
+            .text(address);
 
         return { node: node, prefix: prefix, replacement: link, suffix: suffix };
     }
@@ -240,8 +274,8 @@ define('io.ox/mail/detail/links',
     // Complex Mail Address: "name" <address>
     //
 
-    var regMailComplex = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/,
-        regMailComplexMatch = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/;
+    var regMailComplex = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/m,
+        regMailComplexMatch = /^(.*?)(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+<([^@]+@[^&]+)>(.*)$/m;
 
     function processComplexMailAddress(node) {
 
@@ -249,7 +283,9 @@ define('io.ox/mail/detail/links',
         if (matches === null || matches.length === 0) return node;
         var prefix = matches[1], name = matches[4], address = matches[7], suffix = matches[8];
 
-        var link = $('<a href="#" target="_blank">').attr('href', 'mailto:' + address).text(name);
+        var link = $('<a href="#" class="mailto-link" target="_blank">').attr('href', 'mailto:' + address)
+            .data({ address: address, name: name })
+            .text(name);
 
         return { node: node, prefix: prefix, replacement: link, suffix: suffix };
     }

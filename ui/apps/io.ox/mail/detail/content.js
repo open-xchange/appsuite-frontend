@@ -130,30 +130,6 @@ define('io.ox/mail/detail/content',
         return text;
     };
 
-    var mailTo = function (e) {
-        e.preventDefault();
-        var node = $(this),
-            email = node.attr('href').substr(7), // cut off leading "mailto:"
-            text = node.text(),
-            tmp,
-            params;
-
-        //check for additional parameters
-        tmp = email.split(/\?/, 2);
-        params = _.deserialize(tmp[1]);
-        // Bug: 31345
-        for (var key in params) {
-            params[key.toLowerCase()] = params[key];
-        }
-        email = tmp[0];
-        // save data
-        ox.registry.call('mail/compose', 'compose', {
-            to: [[text, email]],
-            subject: params.subject,
-            attachments: [{ content: params.body || '' }]
-        });
-    };
-
     // source
 
     ext.point('io.ox/mail/detail/source').extend({
@@ -372,7 +348,7 @@ define('io.ox/mail/detail/content',
             _(this.get(0).getElementsByTagName('A')).each(function (node) {
                 var link = $(node)
                         .filter('[href^="mailto:"]')
-                        .on('click', mailTo)
+                        .addClass('mailto-link')
                         .attr('target', '_blank'), // to be safe
                     text = link.text();
                 // trim text if it contains mailto:...
