@@ -919,7 +919,17 @@ define('io.ox/core/tk/selection',
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
             .on('click', '.selectable', clickHandler)
-            .on('tap', '.selectable', touchHandler);
+            .on('tap', '.selectable', touchHandler)
+            .on('focus', '.selectable', function () {
+                container.addClass('has-focus');
+            })
+            .on('blur', '.selectable', function () {
+                _.delay(function () {
+                    if (container.find(':focus').length === 0) {
+                        container.removeClass('has-focus');
+                    }
+                }, 10);
+            });
 
         /*
         * DND

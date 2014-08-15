@@ -1991,15 +1991,29 @@ a.button {
         -webkit-tap-highlight-color: transparent;
         z-index: 1;
 
-        & > div {
+        &.has-focus > div {
 
             outline: none;
 
-            & .vgrid-cell:focus {
+            & .vgrid-cell{
                 outline: none;
             }
 
-            & .vgrid-cell.selected:focus {
+            & .vgrid-cell.selected {
+
+                background-color: @selected-background;
+
+                * {
+                    color: #fff !important;
+                }
+
+            }
+
+        }
+
+        > div:focus {
+
+            & .vgrid-cell.selected {
 
                 background-color: @selected-background;
 
