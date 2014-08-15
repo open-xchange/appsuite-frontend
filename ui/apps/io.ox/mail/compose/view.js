@@ -320,7 +320,6 @@ define('io.ox/mail/compose/view',
         },
 
         initialize: function (options) {
-            var self = this;
             this.app = options.app;
             this.editorHash = {};
             this.autosave = {};
@@ -347,20 +346,23 @@ define('io.ox/mail/compose/view',
                 view: this
             });
 
-            this.contentEditable.on('addInlineImage', function (e, id) {
-                self.addKeepalive(id);
-            });
+            this.contentEditable.on('addInlineImage', function (e, id) { this.addKeepalive(id); }.bind(this));
 
-            this.$el.on('dispose', function () {
-                self.clearKeepalive();
-            });
+            // register for 'dispose' event (using inline function to make this testable via spyOn)
+            this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
-            this.model.on({
-                'change:editorMode': this.changeEditorMode.bind(this),
-                'change:signature': this.setSelectedSignature.bind(this),
-                'needsync': this.syncMail.bind(this)
-            });
+            this.listenTo(this.model, 'change:editorMode', this.changeEditorMode);
+            this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
+            this.listenTo(this.model, 'needsync', this.syncMail);
+
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+        },
+
+        dispose: function () {
+            this.clean();
+            this.clearKeepalive();
+            this.stopListening();
+            this.model = null;
         },
 
         setSubject: function (e) {
