@@ -12,13 +12,60 @@
  */
 
 define('io.ox/search/apiproxy',
-    ['io.ox/search/api',
-     'io.ox/core/notifications'   ], function (api, notifications) {
+    ['io.ox/core/extensions',
+     'io.ox/search/api',
+     'io.ox/core/notifications'], function (ext, api, notifications) {
 
     'use strict';
 
     // use proxy as managing wrapper for the model matching autocompletes naming conventions
     var init = function (app) {
+
+        /**
+         * allows manipulating facet data returned by apis autocomplete action
+         */
+        var POINT = ext.point('io.ox/search/api/autocomplete');
+
+        POINT.extend({
+            id: 'exclusive',
+            index: 100,
+            customize: function (baton) {
+                _.each(baton.data, function (facet) {
+                    // handle 'exclusive' facets (use options as values also)
+                    if (facet.style === 'exclusive' && !facet.values) {
+                        facet.values = [];
+                        _.each(facet.options, function (option) {
+                            var value = _.extend({}, option, {options: facet.options});
+                            delete value.filter;
+                            facet.values.push(value);
+                        });
+                    }
+                });
+            }
+        });
+        /**
+         * success handler to pass data through extension point
+         * @param  {[type]} data [description]
+         * @return {deferred} returns available facets
+         */
+        function extend (data) {
+            var baton = ext.Baton.ensure({data: data.facets});
+            POINT.invoke('customize', this, baton);
+            return data;
+        }
+
+        /**
+         * calls api and pass the response through an extension point
+         * @param {object} any number of objects that will be
+         * @return {deferred} returns available facets
+         * extended into one new options object
+         */
+        function autocomplete () {
+            var args = [{}].concat(Array.prototype.slice.call(arguments)),
+                opt = $.extend.apply(undefined, args);
+            // call api
+            return api.autocomplete(opt).then(extend);
+        }
 
         var model = app.getModel(),
             proxy = {
@@ -40,7 +87,7 @@ define('io.ox/search/apiproxy',
                             })
                             .then(function () {
                                 // call server
-                                return api.autocomplete($.extend({}, standard, options));
+                                return autocomplete(standard, options);
                             })
                             .then(undefined, function (error) {
                                 // fallback when app doesn't support search
@@ -48,9 +95,7 @@ define('io.ox/search/apiproxy',
                                     var app = model.getApp();
                                     // add temporary mapping (default app)
                                     model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
-                                    return api.autocomplete($.extend(
-                                                                standard, options, { params: {module: model.getModule()} }
-                                                            ));
+                                    return autocomplete(standard, options, { params: {module: model.getModule()} });
                                 }
                                 return error;
                             })

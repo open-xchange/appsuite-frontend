@@ -127,22 +127,7 @@ define('io.ox/search/api',
 
             // call server
             return http[opt.method](opt)
-                .then(function (data) {
-                    // process data
-                    _.each(data.facets, function (facet) {
-                        // handle 'exclusive' facets (use options as values also)
-                        if (facet.style === 'exclusive' && !facet.values) {
-                            facet.values = [];
-                            _.each(facet.options, function (option) {
-                                var value = _.extend({}, option, {options: facet.options});
-                                delete value.filter;
-                                facet.values.push(value);
-                            });
-                        }
-                    });
-                    // add to cache and return data
-                    return simpleCache.add(key, data);
-                });
+                    .then(simpleCache.add.bind(this, key));
         });
     };
 

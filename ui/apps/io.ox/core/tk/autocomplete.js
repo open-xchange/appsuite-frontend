@@ -254,7 +254,7 @@ define('io.ox/core/tk/autocomplete',
                                 .appendTo(scrollpane);
                         }
                         //values
-                        _([].concat(facet.style === 'simple' ? facet : facet.values)).each(function (value) {
+                        _([].concat(facet.values || facet)).each(function (value) {
                             value.facet = facet.id;
                             var node = $('<div class="autocomplete-item">')
                                 .on('click', fnSelectItem);
