@@ -81,16 +81,13 @@ define('io.ox/mail/actions',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .append(
-                            $('<div role="document" tabindex="0">').text(question)
+                            $('<h4>').text(question)
                         )
                         .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .on('delete', function () {
                             api.remove(list, all).fail(notifications.yell);
-                        })
-                        .show(function () {
-                            this.find('[role="document"]').focus();
-                        });
+                        }).show();
                 });
             } else {
                 api.remove(list, all).fail(function (e) {
