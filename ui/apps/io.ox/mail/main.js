@@ -1052,14 +1052,16 @@ define('io.ox/mail/main',
                 win.facetedsearch.view.on({
                     'query': _.debounce(function (e, appname) {
                         if (appname === app.get('name')) {
-                            app.listView.connect(collectionLoader);
                             app.listView.load();
                             win.facetedsearch.focus();
                         }
                     }, 10),
                     'focus': function () {
-                        app.listView.connect(collectionLoader);
-                        app.listView.load();
+                        // register collection loader
+                        if (!win.facetedsearch.active) {
+                            app.listView.connect(collectionLoader);
+                            app.listView.load();
+                        }
                     }
 
                 });
@@ -1067,7 +1069,6 @@ define('io.ox/mail/main',
                 win.on('search:cancel', function () {
                     app.listView.connect(api.collectionLoader);
                     app.listView.load();
-                    //win.facetedsearch.view.model.reset();
                 });
             });
         }
