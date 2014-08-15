@@ -19,10 +19,11 @@ define('io.ox/mail/compose/extensions',
      'io.ox/core/tk/typeahead',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
+     'io.ox/core/dropzone',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'static/3rd.party/jquery-ui.min.js'
-    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, settings, gt) {
+    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, settings, gt) {
 
     function renderFrom(array) {
         var name = array[0], address = array[1];
@@ -292,11 +293,37 @@ define('io.ox/mail/compose/extensions',
                     editable: true,
                     preview: true
                 });
+
+                // dropzone
+                var zone = new dropzone.Inplace({
+                    caption: gt('Drop attachments here')
+                });
+
+                zone.on({
+                    'show': function () {
+                        $el.css('minHeight', '100px');
+                    },
+                    'hide': function () {
+                        $el.css('minHeight', 0);
+                    },
+                    'drop': function (files) {
+                        baton.model.attachFiles(
+                            _(files).map(function (file) {
+                                return _.extend(file, { group: 'localFile' });
+                            })
+                        );
+                    }
+                });
+
                 view.render();
-                $el.append(view.$el);
-                view.$el.addClass('inline-items');
+                $el.append(
+                    zone.render().$el.addClass('abs'),
+                    view.$el.addClass('inline-items')
+                );
+
                 def.resolve(view);
             }, def.reject);
+
             return def;
         },
 
