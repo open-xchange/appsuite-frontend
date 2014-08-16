@@ -305,6 +305,9 @@ define('io.ox/mail/detail/links',
 
         'deeplink': {
             test: function (node) {
+                // quick check
+                if (node.nodeValue.indexOf('http') === -1) return false;
+                // precise check
                 return isDeepLink(node.nodeValue);
             },
             process: processDeepLink
@@ -312,6 +315,9 @@ define('io.ox/mail/detail/links',
 
         'mail-address-complex': {
             test: function (node) {
+                // quick check
+                if (node.nodeValue.indexOf('@') === -1) return false;
+                // precise check
                 return regMailComplex.test(node.nodeValue) && $(node).closest('a').length === 0;
             },
             process: processComplexMailAddress
@@ -319,6 +325,9 @@ define('io.ox/mail/detail/links',
 
         'mail-address': {
             test: function (node) {
+                // quick check
+                if (node.nodeValue.indexOf('@') === -1) return false;
+                // precise check
                 return regMail.test(node.nodeValue) && $(node).closest('a').length === 0;
             },
             process: processMailAddress
@@ -326,6 +335,9 @@ define('io.ox/mail/detail/links',
 
         'url': {
             test: function (node) {
+                // quick check
+                if (node.nodeValue.indexOf('http') === -1) return false;
+                // precise check
                 return regUrl.test(node.nodeValue) && $(node).closest('a').length === 0;
             },
             process: processUrl
