@@ -70,7 +70,7 @@ define('io.ox/search/apiproxy',
          * @return {deferred} returns available facets
          */
         function extend (data) {
-            var baton = ext.Baton.ensure({data: data.facets});
+            var baton = ext.Baton.ensure({app: app, data: data.facets});
             POINT.invoke('customize', this, baton);
             return data;
         }

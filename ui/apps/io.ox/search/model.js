@@ -31,7 +31,7 @@ define('io.ox/search/model',
         defaults, factory, conflicts;
 
     // fetch settings/options
-    ext.point('io.ox/search/main').invoke('config',  $(), options);
+    ext.point('io.ox/search/main').invoke('config', $(), options);
 
     defaults = {
         // widget vs. application
@@ -67,7 +67,11 @@ define('io.ox/search/model',
         // current folder
         start: 0,
         size: 100,
-        extra: 1
+        extra: 1,
+        // data container for extensions/plugins
+        extensions: {
+            history: []
+        }
     };
 
     // resolve conflicting facets
@@ -181,6 +185,8 @@ define('io.ox/search/model',
                 // resolve conflicts
                 conflicts.call(this);
 
+                this.trigger('facet:add', facet, value, option);
+
                 if (facet !== 'folder')
                     this.trigger('query', this.getApp());
             },
@@ -277,7 +283,8 @@ define('io.ox/search/model',
 
                     if (value && (value.custom || value.id !== 'custom')) {
                         active.push({
-                            facet: facet.id,
+                            //remove temporary suffix
+                            facet: facet.id.split('.')[0],
                             value: value.custom || value.id,
                             filter: facet.custom ? null : simple.filter
                         });

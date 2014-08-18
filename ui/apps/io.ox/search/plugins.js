@@ -1,0 +1,71 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+define('io.ox/search/plugins',
+    ['io.ox/core/extensions'], function (ext) {
+
+    'use strict';
+
+    ext.point('io.ox/search/api/autocomplete').extend({
+        id: 'custom-facet-history',
+        index: 300,
+        customize: function (baton) {
+            var model = baton.app.getModel(),
+                facet = _.copy(baton.data[0]),
+                history = model.get('extensions').history;
+
+            if (!facet || facet.id !== 'global') return;
+            // add last three machting history entries (substring compare)
+            var query = model.get('query'),
+                //global = data.list.shift(),
+                entries = _.chain(history)
+                    .filter(function (h) {
+                        return h.name.indexOf(query) >= 0;
+                    })
+                    .last(3)
+                    .value()
+                    .reverse();
+            // add entries right after index 0
+            baton.data.splice.apply(
+                baton.data,
+                [1, 0].concat(
+                    _.copy(entries)
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/search').extend({
+        index: 100,
+        id: 'custom-facet-history',
+        config: function () {
+            var model = this;
+            // listener that adds new history entries
+            model.on({
+               'facet:add': function (facet, value) {
+                    var history = model.get('extensions').history;
+                    // handle search history
+                    if (facet === 'global') {
+                        // copy global facet, manipulate and store as history entry
+                        var entry = _.copy(model.get('pool')[facet].values[value]);
+                        entry.name = 'History: ' + entry.name;
+                        entry.id = facet + '.history' + history.length;
+                        entry.flags.push('history');
+                        history.push(entry);
+                    }
+                }
+            });
+        }
+    });
+
+});
