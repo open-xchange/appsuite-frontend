@@ -221,7 +221,7 @@ define('io.ox/core/folder/view',
         }
 
         // a11y adjustments
-        tree.$el.attr({
+        tree.$('.tree-container').attr({
             'aria-label': gt('Folders')
         });
 

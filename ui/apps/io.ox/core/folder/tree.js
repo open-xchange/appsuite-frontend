@@ -44,15 +44,16 @@ define('io.ox/core/folder/tree',
             this.flat = !!options.flat;
             this.context = options.context || 'app';
             this.all = !!options.all;
-            this.selection = new Selection(this);
             this.$el.data('view', this);
-            this.$container = $('<div class="tree-container" role="tree" tabindex="1">');
+            this.$container = $('<ul class="tree-container" role="tree">');
             this.$dropdown = $();
             this.$dropdownMenu = $();
             this.options = options;
 
             this.$el.toggleClass('visible-selection', _.device('!smartphone'));
             this.$el.append(this.$container);
+
+            this.selection = new Selection(this);
 
             // add contextmenu?
             if (options.contextmenu) _.defer(this.renderContextMenu.bind(this));

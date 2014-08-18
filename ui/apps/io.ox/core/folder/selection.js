@@ -147,11 +147,11 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         triggerChange: _.debounce(function (items) {
-            var id = (items || this.getItems()).filter('.selected').attr('data-id');
+            var item = (items || this.getItems()).filter('.selected').first(), id = item.attr('data-id');
             // ignore virtual folders
             if (/^virtual/.test(id)) return;
             // trigger change event on view
-            this.view.trigger('change', id);
+            this.view.trigger('change', id, item);
         }, 300)
     });
 

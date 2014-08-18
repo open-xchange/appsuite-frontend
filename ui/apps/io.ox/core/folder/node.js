@@ -155,20 +155,22 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         onChangeSubFolders: function () {
             // has subfolders?
             var o = this.options,
-                isOpen = o.open,
-                hasSubFolders = this.hasSubFolders();
+                hasSubFolders = this.hasSubFolders(),
+                isOpen = o.open && hasSubFolders;
             // update arrow
             this.$.arrow.html(
                 hasSubFolders ?
                     (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
                     '<i class="fa fa-fw">'
             );
+            // a11y
+            if (hasSubFolders) this.$.selectable.attr('aria-expanded', isOpen); else this.$.selectable.removeAttr('aria-expanded');
             // toggle subfolder node
-            this.$el.toggleClass('open', hasSubFolders && isOpen);
+            this.$el.toggleClass('open', isOpen);
             // empty?
             this.renderEmpty();
             // fetch sub-folders
-            if (hasSubFolders && isOpen) this.reset();
+            if (isOpen) this.reset();
         },
 
         // respond to cursor left/right
@@ -275,21 +277,19 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             });
 
             // draw scaffold
-            this.$el
-                .attr('role', 'treeitem')
+            this.$el.attr('role', 'presentation').append(
+                // folder
+                this.$.selectable = $('<div class="selectable" tabindex="-1" role="treeitem" aria-selected="false">')
+                .attr({ 'data-id': this.folder, 'arial-level': o.level + 1, id: _.uniqueId('treeitem') })
+                .css('padding-left', o.level * 30)
                 .append(
-                    // folder
-                    this.$.selectable = $('<div class="selectable" tabindex="-1">')
-                    .attr('data-id', this.folder)
-                    .css('padding-left', o.level * 30)
-                    .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow" role="presentation"><i class="fa fa-fw"></i></div>') : $(),
-                        this.$.label = $('<div class="folder-label">'),
-                        this.$.counter = $('<div class="folder-counter">')
-                    ),
-                    // subfolders
-                    this.$.subfolders = $('<ul class="subfolders" role="group">')
-                );
+                    this.$.arrow = o.arrow ? $('<div class="folder-arrow" role="presentation"><i class="fa fa-fw"></i></div>') : $(),
+                    this.$.label = $('<div class="folder-label">'),
+                    this.$.counter = $('<div class="folder-counter" role="presentation">')
+                ),
+                // subfolders
+                this.$.subfolders = $('<ul class="subfolders" role="group">')
+            );
 
             // headless?
             if (o.headless) {
@@ -332,7 +332,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         },
 
         renderTitle: function () {
-            this.$.label.text(this.getTitle());
+            var title = this.getTitle();
+            this.$.label.text(title);
+            this.$.selectable.attr('aria-label', title);
         },
 
         renderTooltip: function () {
