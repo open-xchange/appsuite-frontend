@@ -208,8 +208,8 @@ define('io.ox/mail/compose/extensions',
                 // add class to tokenfield wrapper
                 input.parent().addClass(attr);
 
-                input.getOriginalInput().data('ttTypeahead').dropdown. onAsync('datasetRendered', function() {
-                    $('div.contact-image').lazyload({
+                input.getOriginalInput().data('ttTypeahead').dropdown.onAsync('datasetRendered', function() {
+                    $('div.contact-image', this.$menu).lazyload({
                         container: this.$menu
                     });
                 });
