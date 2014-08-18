@@ -864,6 +864,11 @@ define('io.ox/core/tk/attachments',
             'click a.remove': 'onRemove',
             'click a.upload': 'onUpload'
         },
+        attributes: function () {
+            return {
+                'data-id': this.model.get('id')
+            };
+        },
         render: function () {
             this.$el.empty();
             var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el),
