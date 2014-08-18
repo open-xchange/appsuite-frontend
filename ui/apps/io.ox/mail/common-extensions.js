@@ -380,54 +380,47 @@ define('io.ox/mail/common-extensions',
             };
         }()),
 
-        attachmentPreview: (function () {
+        attachmentPreview: function (baton) {
 
-            var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
-                regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
+            var $el = this,
+            def = $.Deferred();
 
-            return function (baton) {
-
-                var attachments = baton.attachments,
-                    supportsDocumentPreview = capabilities.has('document_preview'),
-                    list = _(attachments).filter(function (attachment) {
-                        if (attachment.disp !== 'attachment') return false;
-                        if (regIsImage.test(attachment.filename)) return true;
-                        if (supportsDocumentPreview && regIsDocument.test(attachment.filename)) return true;
-                        return false;
+            require(['io.ox/core/tk/attachments'], function (attachments) {
+                var list = baton.data.attachments.filter(function (m) {
+                        return m.disp === 'attachment';
+                    }).map(function (m) {
+                        m.group = 'mail';
+                        return m;
                     }),
-                    $ul;
+                    collection = new attachments.model.Attachments(list),
+                    view = new attachments.view.AttachmentList({
+                        collection: collection,
+                        editable: false,
+                        preview: true
+                    });
 
-                if (!list.length) return;
-
-                this.append(
-                    $ul = $('<ul class="attachment-preview" role="presentation" aria-hidden="true">').append(
-                        _(list).map(function (attachment) {
-                            // consider retina displays
-                            var size = _.device('retina') ? 240 : 120,
-                                // get URL of preview image
-                                url = api.getUrl(attachment, 'view') + '&scaleType=cover&width=' + size + '&height=' + size;
-                            // non-image files need special format parameter
-                            if (!regIsImage.test(attachment.filename)) url += '&format=preview_image&session=' + ox.session;
-                            // create list item
-                            return $('<li class="lazy">').attr('data-original', url).data(attachment);
-                        })
-                    )
+                view.render();
+                $el.append(
+                    view.$el.addClass('inline-items')
                 );
 
-                $ul.on('click', 'li', function () {
-                    var baton = ext.Baton({ startItem: $(this).data(), data: list });
-                    actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
-                });
+                view.delegateEvents({
+                    'click li.item': function (ev) {
+                        //skip attachments without preview
+                        if (!$(ev.currentTarget).data().original) return;
 
-                _.defer(function () {
-                    $ul.find('li.lazy').lazyload({
-                        container: $ul,
-                        effect : 'fadeIn'
-                    });
-                    $ul = null;
+                        var id = $(ev.currentTarget).data().id,
+                            data = collection.get(id).toJSON(),
+                            b = ext.Baton({ startItem: data, data: list });
+
+                        actions.invoke('io.ox/mail/actions/slideshow-attachment', null, b);
+                    }
                 });
-            };
-        }()),
+                def.resolve(view);
+            }, def.reject);
+
+            return def;
+        },
 
         flagPicker: function (baton) {
             flagPicker.draw(this, baton);
