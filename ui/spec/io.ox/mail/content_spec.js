@@ -79,18 +79,18 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
 
         it('should detect email addresses (text/plain)', function () {
             var result = process('test<br>otto.xantner@open-xchange.com<br>test', 'text/plain');
-            expect(result.content.html()).to.equal('test<br><a href="mailto:otto.xantner@open-xchange.com" target="_blank">otto.xantner@open-xchange.com</a><br>test');
+            expect(result.content.html()).to.equal('test<br><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a><br>test');
         });
 
         it('should detect email addresses (text/html; @)', function () {
             var result = process('<p><a href="mailto:otto.xantner@open-xchange.com">otto.xantner@open-xchange.com</a></p>');
-            expect(result.content.html()).to.equal('<p><a href="mailto:otto.xantner@open-xchange.com" target="_blank">otto.xantner@open-xchange.com</a></p>');
+            expect(result.content.html()).to.equal('<p><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a></p>');
         });
 
         it('should detect email addresses (text/html; &#64;)', function () {
             // https://bugs.open-xchange.com/show_bug.cgi?id=29892
             var result = process('<p><a href="mailto:otto.xantner&#64;open-xchange.com">Otto Xantner</a></p>');
-            expect(result.content.html()).to.equal('<p><a href="mailto:otto.xantner@open-xchange.com" target="_blank">Otto Xantner</a></p>');
+            expect(result.content.html()).to.equal('<p><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">Otto Xantner</a></p>');
         });
 
         // Folder
