@@ -646,6 +646,20 @@ define('io.ox/core/tk/attachments',
                 model.set('meta', meta);
             }, def.reject);
             return def;
+        },
+        mail: function (model) {
+            var def = $.Deferred();
+            var size = _.device('retina') ? 240 : 120;
+            require(['io.ox/mail/api'], function (mailAPI) {
+                var meta = _.clone(model.get('meta'));
+                // get URL of preview image
+                meta.previewUrl = mailAPI.getUrl(model.toJSON(), 'view') + '&scaleType=cover&width=' + size + '&height=' + size;
+                // non-image files need special format parameter
+                if (!regIsImage.test(model.get('filename'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
+                def.resolve(meta.previewUrl);
+                model.set('meta', meta);
+            }, def.reject);
+            return def;
         }
     };
 
