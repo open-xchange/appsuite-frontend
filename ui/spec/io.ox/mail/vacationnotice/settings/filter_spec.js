@@ -125,6 +125,9 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlagTwoMails));
             });
+            this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify([]));
+            });
             $('body', document).append(node = $('<div id="vacationnoticetestNode">'));
 
         });

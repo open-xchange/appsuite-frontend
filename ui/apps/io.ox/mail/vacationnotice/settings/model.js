@@ -86,7 +86,9 @@ define('io.ox/mail/vacationnotice/settings/model',
 
         preparedData.test = testForTimeframe;
 
-        preparedData.position = attributes.position;
+        if (attributes.position !== undefined) {
+            preparedData.position = attributes.position;
+        }
 
         return preparedData;
     }
