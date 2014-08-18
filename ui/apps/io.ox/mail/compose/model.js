@@ -158,6 +158,7 @@ define('io.ox/mail/compose/model',
         },
 
         setMailContentType: function (type) {
+            type = (type === 'text' ? 'plain' : type);
             this.get('attachments').at(0).set('content_type', 'text/' + type, { silent: true });
         },
 
