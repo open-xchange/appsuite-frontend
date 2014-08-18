@@ -54,7 +54,7 @@ define('io.ox/search/autocomplete/extensions',
                                 ref.open();
                                 return app.apiproxy.search(val);
                             },
-                            draw: function (value)  {
+                            draw: function (value) {
                                 baton.data = value;
                                 ext.point(POINT + '/item').invoke('draw', this, baton);
                             },
@@ -80,7 +80,7 @@ define('io.ox/search/autocomplete/extensions',
                         .on('focus focus:custom click', function (e, opt) {
 
                             //search mode: not when enterin input with tab key
-                            if (ref.data('byclick')) {
+                            if (ref.data('byclick')) {
                                 ref.removeData('byclick');
                                 app.view.trigger('focus', model.getApp());
                             }
@@ -206,7 +206,7 @@ define('io.ox/search/autocomplete/extensions',
             this.removeClass('indent');
 
             // construct url
-            image = (baton.data.item && baton.data.item.image_url ? baton.data.item.image_url + '&height=42&scaleType=contain' : image)
+            image = (baton.data.item && baton.data.item.image_url ? baton.data.item.image_url + '&height=42&scaleType=contain' : image)
                 .replace(/^https?\:\/\/[^\/]+/i, '')
                 .replace(/^\/ajax/, ox.apiRoot);
 
@@ -218,7 +218,7 @@ define('io.ox/search/autocomplete/extensions',
         },
 
         name: function (baton) {
-            var name = (baton.data.item && baton.data.item.name ? baton.data.item.name : baton.data.name) || '&nbsp;';
+            var name = (baton.data.item && baton.data.item.name ? baton.data.item.name : baton.data.name) || '&nbsp;';
 
             this
                 .data(baton.data)
@@ -237,7 +237,7 @@ define('io.ox/search/autocomplete/extensions',
             if (isContact) {
                 this.removeClass('indent');
                 this.append(
-                    $('<div class="detail">').html(detail || '&nbsp;')
+                    $('<div class="detail">').html(detail || '&nbsp;')
                 );
             } else if (detail) {
                 var node = this.find('.name');
