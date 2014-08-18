@@ -698,23 +698,23 @@ define('io.ox/mail/compose/view',
             return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
         },
 
-        toggleCC: function (e) {
-            $(e.target).toggleClass('active');
+        toggleCC: function () {
             return this.toggleInput('cc');
         },
 
-        toggleBCC: function (e) {
-            $(e.target).toggleClass('active');
+        toggleBCC: function () {
             return this.toggleInput('bcc');
         },
 
         toggleInput: function (type, show) {
-            var input = this.$el.find('[data-extension-id="' + type + '"]');
+            var button = $('[data-action="add-' + type + '"]'),
+                input = this.$el.find('[data-extension-id="' + type + '"]');
             if (input.hasClass('hidden') || show) {
                 this.showInput(type, input);
-
+                button.addClass('active').attr('aria-checked', true);
             } else {
                 this.closeInput(type, input);
+                button.removeClass('active').attr('aria-checked', false);
             }
             return input;
         },

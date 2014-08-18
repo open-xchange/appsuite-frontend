@@ -157,8 +157,22 @@ define('io.ox/mail/compose/extensions',
                                     tabindex: 1
                                 }),
                                 addActions ? $('<div class="recipient-actions">').append(
-                                    $('<a href="#" data-action="add-cc" tabindex="1">').text(gt('CC')),
-                                    $('<a href="#" data-action="add-bcc" tabindex="1">').text(gt('BCC'))
+                                    $('<a>').attr({
+                                        href: '#',
+                                        tabindex: 1,
+                                        'data-action': 'add-cc',
+                                        role: 'checkbox',
+                                        'aria-checked': false,
+                                        'aria-label': gt('Show carbon copy input field')
+                                    }).text(gt('CC')),
+                                    $('<a>').attr({
+                                        href: '#',
+                                        tabindex: 1,
+                                        'data-action': 'add-bcc',
+                                        role: 'checkbox',
+                                        'aria-checked': false,
+                                        'aria-label': gt('Show blind carbon copy input field')
+                                    }).text(gt('BCC'))
                                 ) : $()
                             )
                         )
