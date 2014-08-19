@@ -103,19 +103,23 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         render: function () {
-            var label = _.isFunction(this.options.label) ? this.options.label() : this.options.label;
+            var label = _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label),
+                ariaLabel = this.options.aria ? this.options.aria : '';
+            if (_.isString(label)) {
+                ariaLabel += (' ' + label);
+            }
             this.$el.append(
                 $('<a>').attr({
                     href: '#',
                     tabindex: 1,
                     role: 'menuitem',
                     'aria-haspopup': true,
-                    'aria-label': this.options.aria ? this.options.aria + ' ' + label : label,
+                    'aria-label': ariaLabel,
                     'data-toggle': 'dropdown'
                 }).append(
                     // label
                     $('<span class="dropdown-label">').append(
-                        $.txt(label)
+                        label
                     ),
                     // caret
                     this.options.caret ? $('<i class="fa fa-caret-down">') : []
