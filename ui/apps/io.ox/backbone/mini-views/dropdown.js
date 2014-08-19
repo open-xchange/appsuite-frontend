@@ -32,8 +32,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
-        setup: function (options) {
-            this.options = options;
+        setup: function () {
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
             this.$ul.on('click', 'a', $.proxy(this.onClick, this)); // not so nice but we need this for mobile support
             if (this.model) this.listenTo(this.model, 'change', this.update);
@@ -65,7 +64,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         append: function (fn) {
-            this.$ul.append($('<li>').append(fn));
+            this.$ul.append($('<li>').attr({ role: 'presentation' }).append(fn));
             return this;
         },
 
@@ -73,13 +72,14 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             return this.append(
                 $('<a href="#">')
                 .attr({
+                    role: 'menuitem',
                     'data-name': name,
                     'data-value': this.stringify(value),
                     'data-toggle': _.isBoolean(value)
                 })
                 .data('value', value) // store original value
                 .append(
-                    $('<i class="fa fa-fw">').addClass(_.isEqual(this.model.get(name), value) ? 'fa-check' : 'fa-none'),
+                    $('<i class="fa fa-fw">').attr('aria-hidden', true).addClass(_.isEqual(this.model.get(name), value) ? 'fa-check' : 'fa-none'),
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
@@ -103,11 +103,19 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         render: function () {
+            var label = _.isFunction(this.options.label) ? this.options.label() : this.options.label;
             this.$el.append(
-                $('<a href="#" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').append(
+                $('<a>').attr({
+                    href: '#',
+                    tabindex: 1,
+                    role: 'menuitem',
+                    'aria-haspopup': true,
+                    'aria-label': this.options.aria ? this.options.aria + ' ' + label : label,
+                    'data-toggle': 'dropdown'
+                }).append(
                     // label
                     $('<span class="dropdown-label">').append(
-                        _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label)
+                        $.txt(label)
                     ),
                     // caret
                     this.options.caret ? $('<i class="fa fa-caret-down">') : []
