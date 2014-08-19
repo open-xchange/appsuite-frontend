@@ -54,7 +54,17 @@ define('io.ox/search/autocomplete/extensions',
                                 return app.apiproxy.search(val);
                             },
                             draw: function (value) {
+                                var individual = ext.point(POINT + '/item/' + baton.data.facet);
                                 baton.data = value;
+
+                                // use special draw handler
+                                if (individual.list().length) {
+                                    // special
+                                    individual.invoke('draw', this, baton);
+                                } else {
+                                    // default
+                                    ext.point(POINT + '/item').invoke('draw', this, baton);
+                                }
                             },
                             stringify: function () {
                                 // keep input value when item selected
