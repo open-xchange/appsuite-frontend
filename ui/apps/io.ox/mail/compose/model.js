@@ -75,28 +75,28 @@ define('io.ox/mail/compose/model',
                     content: '',
                     content_type: this.getContentType(),
                     disp: 'inline'
-                }, {at: 0, silent: true});
+                }, { at: 0, silent: true });
             }
 
             if (this.get('contacts_ids')) {
                 list.add(this.get('contacts_ids').map(function (o) {
                     o.group = 'contact';
                     return o;
-                }), {silent: true});
+                }), { silent: true });
             }
 
             if (this.get('infostore_ids')) {
                 list.add(this.get('infostore_ids').map(function (o) {
                     o.group = 'file';
                     return o;
-                }), {silent: true});
+                }), { silent: true });
             }
 
             if (this.get('nested_msgs')) {
                 list.add(this.get('nested_msgs').map(function (o) {
                     o.group = 'nested';
                     return o;
-                }), {silent: true});
+                }), { silent: true });
             }
 
             if (settings.get('messageFormat', 'html') === 'alternative') {

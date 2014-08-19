@@ -99,8 +99,12 @@ define('io.ox/mail/compose/extensions',
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
                     var defaultSender = baton.model.get('from'),
-                        dropdown = new SenderDropdown({ model: baton.model, label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>', caret: true }),
-                        guid = _.uniqueId('form-control-label-');
+                        dropdown = new SenderDropdown({
+                            model: baton.model,
+                            label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>',
+                            aria: gt('From'),
+                            caret: true
+                        });
 
                     sender.drawDropdown().done(function (list) {
 
@@ -113,10 +117,10 @@ define('io.ox/mail/compose/extensions',
                         }
 
                         node.append(
-                            $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')).attr({
-                                'for': guid
-                            }),
-                            $('<div class="col-xs-10 col-md-11">').append(dropdown.render().$el.attr('data-dropdown', 'from'))
+                            $('<label class="maillabel col-xs-2 col-md-1">').text(gt('From')),
+                            $('<div class="col-xs-10 col-md-11">').append(
+                                dropdown.render().$el.attr({ 'data-dropdown': 'from' })
+                            )
                         );
                     });
                 };
