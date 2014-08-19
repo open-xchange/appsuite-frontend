@@ -425,7 +425,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "已選擇 <b>%1$d</b> 個元素"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -561,7 +561,7 @@ msgstr "實際持續分鐘數"
 #: apps/io.ox/core/folder/actions/add.js:100 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:279
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:343 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:357 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:584
 msgid "Add"
 msgstr "新增"
@@ -580,7 +580,7 @@ msgstr "新增帳號"
 msgid "Add action"
 msgstr "新增行為"
 
-#: apps/io.ox/mail/compose/extensions.js:345 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:359 module:io.ox/mail
 #, fuzzy
 #| msgid "Adding attachments"
 msgid "Add attachments"
@@ -611,13 +611,13 @@ msgid "Add files"
 msgstr "新增檔案"
 
 #: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:373 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:387 module:io.ox/mail
 #, fuzzy
 #| msgid "Add from addressbook"
 msgid "Add from Drive"
 msgstr "自通訊錄新增"
 
-#: apps/io.ox/mail/compose/extensions.js:366 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:380 module:io.ox/mail
 #, fuzzy
 #| msgid "Attach local file"
 msgid "Add local file"
@@ -968,7 +968,7 @@ msgstr[1] "已儲存附件"
 #: apps/io.ox/calendar/edit/template.js:450 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:360 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:374 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
 #: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
@@ -1048,7 +1048,7 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/mail/compose/extensions.js:56 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:161
+#: apps/io.ox/mail/compose/extensions.js:175
 msgid "BCC"
 msgstr "密件抄送"
 
@@ -1146,7 +1146,7 @@ msgid ""
 msgstr "更改此約會日期可建立一個系列約會的例外情況。是否繼續？"
 
 #: apps/io.ox/mail/compose/extensions.js:55 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:160
+#: apps/io.ox/mail/compose/extensions.js:167
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1221,7 +1221,7 @@ msgstr "日曆日視圖"
 #: apps/io.ox/mail/accounts/settings.js:280
 #: apps/io.ox/mail/accounts/view-form.js:312 module:io.ox/settings/settings
 #: apps/io.ox/mail/actions.js:87 apps/io.ox/mail/actions.js:106
-#: apps/io.ox/mail/actions.js:788 apps/io.ox/mail/compose/extensions.js:344
+#: apps/io.ox/mail/actions.js:788 apps/io.ox/mail/compose/extensions.js:358
 #: apps/io.ox/mail/compose/view.js:520
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
 #: apps/io.ox/mail/main.js:258 apps/io.ox/mail/main.js:980
@@ -2294,7 +2294,7 @@ msgstr "Drive 設定"
 msgid "Drop EML file here for import"
 msgstr "將 EML 檔案放到這裡以匯入"
 
-#: apps/io.ox/mail/compose/extensions.js:299 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:313 module:io.ox/mail
 #, fuzzy
 #| msgid "Adding attachments"
 msgid "Drop attachments here"
@@ -2469,7 +2469,7 @@ msgstr "電子郵件 3"
 msgid "Email address"
 msgstr "電子郵件地址"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:137 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:139 module:io.ox/mail
 msgid "Email addresses"
 msgstr "電子郵件位址"
 
@@ -2569,11 +2569,11 @@ msgstr "啟用"
 msgid "Enabled"
 msgstr "啟用"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:136 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:138 module:io.ox/mail
 msgid "Enabled for the following addresses"
 msgstr "對下列地址啟用"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:139 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:141 module:io.ox/mail
 msgid "End"
 msgstr "結束"
 
@@ -2740,7 +2740,7 @@ msgstr "擴展面板"
 msgid "External contact"
 msgstr "外部聯絡人"
 
-#: apps/io.ox/mail/common-extensions.js:489 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "為保護您的隱私，已阻止預載外部圖片"
@@ -2986,7 +2986,7 @@ msgstr ""
 "資料夾「%1$S」將會被隱藏，請啟用「顯示隱藏檔案與資料夾」選項以再次存取此資料"
 "夾。"
 
-#: apps/io.ox/core/folder/node.js:350 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:352 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "資料夾行為"
@@ -3081,7 +3081,7 @@ msgstr "星期五"
 
 #: apps/io.ox/mail/actions.js:804 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:116 apps/io.ox/mail/main.js:532
-#: apps/io.ox/mail/vacationnotice/settings/model.js:138
+#: apps/io.ox/mail/vacationnotice/settings/model.js:140
 #: apps/io.ox/mail/view-options.js:32 apps/io.ox/mail/write/view-main.js:269
 msgid "From"
 msgstr "從"
@@ -4365,7 +4365,7 @@ msgstr "透過電子郵件通知所有參與者。"
 msgid "November"
 msgstr "十一月"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:135 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:137 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "傳送假期通知給寄件者的間隔日期"
 
@@ -5336,7 +5336,7 @@ msgstr "已建立提醒"
 
 #: apps/io.ox/backbone/mini-views/attachments.js:87
 #: module:io.ox/core/tk/attachments apps/io.ox/core/tk/attachments.js:88
-#: apps/io.ox/core/tk/attachments.js:881
+#: apps/io.ox/core/tk/attachments.js:900
 #: apps/io.ox/core/tk/attachmentsUtil.js:228
 msgid "Remove attachment"
 msgstr "移除附件"
@@ -5654,7 +5654,7 @@ msgid "Send"
 msgstr "發送"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:572 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:565 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5694,7 +5694,7 @@ msgstr "傳送郵件給所有參與者"
 msgid "Send new mail"
 msgstr "寄送新郵件"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:140 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:142 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "只在此時間傳送假期通知"
 
@@ -5848,6 +5848,14 @@ msgstr "自所有行事曆顯示我所有的約會"
 msgid "Show appointment details"
 msgstr "顯示約會詳情"
 
+#: apps/io.ox/mail/compose/extensions.js:174 module:io.ox/mail
+msgid "Show blind carbon copy input field"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:166 module:io.ox/mail
+msgid "Show carbon copy input field"
+msgstr ""
+
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:317
 msgid "Show comments"
@@ -5880,7 +5888,7 @@ msgstr "顯示隱藏檔案與資料夾"
 msgid "Show icons"
 msgstr "顯示注釋"
 
-#: apps/io.ox/mail/common-extensions.js:488 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:481 module:io.ox/mail
 msgid "Show images"
 msgstr "顯示圖片"
 
@@ -6135,10 +6143,10 @@ msgstr "學生"
 
 #: apps/io.ox/calendar/edit/template.js:135 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:798 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:238
+#: apps/io.ox/mail/compose/extensions.js:252
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/vacationnotice/settings/model.js:133
+#: apps/io.ox/mail/vacationnotice/settings/model.js:135
 #: apps/io.ox/mail/view-options.js:35 apps/io.ox/mail/write/view-main.js:873
 #: apps/io.ox/tasks/edit/view-template.js:105 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:648 module:io.ox/tasks
@@ -6334,7 +6342,7 @@ msgstr "暫定"
 msgid "Tentatively accepted"
 msgstr "暫時接受"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:136 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:723
 msgid "Text"
 msgstr "文本"
@@ -6583,7 +6591,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "檔名超過允許的長度。"
 
-#: apps/io.ox/mail/common-extensions.js:575 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:568 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "寄件者想在您閱讀此郵件時收到通知"
 
@@ -6734,13 +6742,13 @@ msgid ""
 "the folder structure from the folder \"%1$s\"."
 msgstr "這些統計只包含資料夾，自「%1$s」資料夾開始以下小於四層深度的結構。"
 
-#: apps/io.ox/mail/common-extensions.js:445 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:456
+#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:449
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:456
+#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:449
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7041,7 +7049,7 @@ msgstr "前十名收件者"
 msgid "Total cost"
 msgstr "總成本"
 
-#: apps/io.ox/core/folder/node.js:340 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:342 module:io.ox/core
 #, fuzzy
 #| msgid "Contact: %1$s"
 msgid "Total: %1$d"
@@ -7169,7 +7177,7 @@ msgstr "解鎖"
 msgid "Unread"
 msgstr "未讀"
 
-#: apps/io.ox/core/folder/node.js:341 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:343 module:io.ox/core
 #, fuzzy
 #| msgid "Unread"
 msgid "Unread: %1$d"
@@ -7311,7 +7319,7 @@ msgstr "用戶名"
 msgid "Username must not be empty."
 msgstr "使用者名稱不能為空。"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:132 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js:41
 msgid "Vacation Notice"
 msgstr "假期通知"
@@ -7354,7 +7362,7 @@ msgstr "檢視原始碼"
 msgid "Waiting"
 msgstr "等待中"
 
-#: apps/io.ox/mail/common-extensions.js:515 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：該郵件可能存在郵件欺詐"
 
@@ -8278,7 +8286,7 @@ msgstr "未讀"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:107 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:109 module:io.ox/mail
 msgid "vacation notice"
 msgstr "假期通知"
 

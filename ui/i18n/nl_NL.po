@@ -432,7 +432,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elementen geselecteerd"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -571,7 +571,7 @@ msgstr "Werkelijke duur in minuten"
 #: apps/io.ox/core/folder/actions/add.js:100 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:279
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:343 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:357 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:584
 msgid "Add"
 msgstr "Toevoegen"
@@ -590,7 +590,7 @@ msgstr "Account toevoegen"
 msgid "Add action"
 msgstr "Actie toevoegen"
 
-#: apps/io.ox/mail/compose/extensions.js:345 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:359 module:io.ox/mail
 #, fuzzy
 #| msgid "Adding attachments"
 msgid "Add attachments"
@@ -621,13 +621,13 @@ msgid "Add files"
 msgstr "Bestanden toevoegen"
 
 #: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:373 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:387 module:io.ox/mail
 #, fuzzy
 #| msgid "Add files"
 msgid "Add from Drive"
 msgstr "Bestanden toevoegen"
 
-#: apps/io.ox/mail/compose/extensions.js:366 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:380 module:io.ox/mail
 #, fuzzy
 #| msgid "Add files"
 msgid "Add local file"
@@ -982,7 +982,7 @@ msgstr[1] "Bijlagen zijn opgeslagen"
 #: apps/io.ox/calendar/edit/template.js:450 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:360 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:374 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
 #: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
@@ -1068,7 +1068,7 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/mail/compose/extensions.js:56 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:161
+#: apps/io.ox/mail/compose/extensions.js:175
 #, fuzzy
 #| msgid "CC"
 msgid "BCC"
@@ -1170,7 +1170,7 @@ msgstr ""
 "reeks. Wilt u doorgaan?"
 
 #: apps/io.ox/mail/compose/extensions.js:55 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:160
+#: apps/io.ox/mail/compose/extensions.js:167
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1245,7 +1245,7 @@ msgstr "De agendaoverzichten"
 #: apps/io.ox/mail/accounts/settings.js:280
 #: apps/io.ox/mail/accounts/view-form.js:312 module:io.ox/settings/settings
 #: apps/io.ox/mail/actions.js:87 apps/io.ox/mail/actions.js:106
-#: apps/io.ox/mail/actions.js:788 apps/io.ox/mail/compose/extensions.js:344
+#: apps/io.ox/mail/actions.js:788 apps/io.ox/mail/compose/extensions.js:358
 #: apps/io.ox/mail/compose/view.js:520
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
 #: apps/io.ox/mail/main.js:258 apps/io.ox/mail/main.js:980
@@ -2331,7 +2331,7 @@ msgstr "Drive instellingen"
 msgid "Drop EML file here for import"
 msgstr "Sleep het EML bestand hiernaartoe om deze te importeren"
 
-#: apps/io.ox/mail/compose/extensions.js:299 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:313 module:io.ox/mail
 #, fuzzy
 #| msgid "Adding attachments"
 msgid "Drop attachments here"
@@ -2514,7 +2514,7 @@ msgstr "E-mail 3"
 msgid "Email address"
 msgstr "E-mailadres"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:137 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:139 module:io.ox/mail
 msgid "Email addresses"
 msgstr "E-mailadressen"
 
@@ -2617,11 +2617,11 @@ msgid "Enabled"
 msgstr "Activeren"
 
 # (Reinout) Portal = portaal, niet portable
-#: apps/io.ox/mail/vacationnotice/settings/model.js:136 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:138 module:io.ox/mail
 msgid "Enabled for the following addresses"
 msgstr "Ingeschakeld voor de volgende e-mailadressen"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:139 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:141 module:io.ox/mail
 msgid "End"
 msgstr "Einde"
 
@@ -2788,7 +2788,7 @@ msgstr "Uitgebreid overzicht"
 msgid "External contact"
 msgstr "Extern contact"
 
-#: apps/io.ox/mail/common-extensions.js:489 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3044,7 +3044,7 @@ msgstr ""
 "Mappen met de naam \"%1$s\" worden verborgen. Schakel de instelling \"Toon "
 "verborgen bestanden en mappen\" in om deze mappen opnieuw te zien."
 
-#: apps/io.ox/core/folder/node.js:350 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:352 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "Mapspecifieke acties"
@@ -3142,7 +3142,7 @@ msgstr "Vrijdag"
 
 #: apps/io.ox/mail/actions.js:804 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:116 apps/io.ox/mail/main.js:532
-#: apps/io.ox/mail/vacationnotice/settings/model.js:138
+#: apps/io.ox/mail/vacationnotice/settings/model.js:140
 #: apps/io.ox/mail/view-options.js:32 apps/io.ox/mail/write/view-main.js:269
 msgid "From"
 msgstr "Van"
@@ -4444,7 +4444,7 @@ msgstr "Alle deelnemers informeren via e-mail."
 msgid "November"
 msgstr "november"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:135 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:137 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Aantal dagen tussen afwezigheidsmeldingen naar dezelfde afzender"
 
@@ -5434,7 +5434,7 @@ msgstr "Herinnering is aangemaakt"
 
 #: apps/io.ox/backbone/mini-views/attachments.js:87
 #: module:io.ox/core/tk/attachments apps/io.ox/core/tk/attachments.js:88
-#: apps/io.ox/core/tk/attachments.js:881
+#: apps/io.ox/core/tk/attachments.js:900
 #: apps/io.ox/core/tk/attachmentsUtil.js:228
 msgid "Remove attachment"
 msgstr "Bijlage verwijderen"
@@ -5752,7 +5752,7 @@ msgid "Send"
 msgstr "Verzenden"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:572 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:565 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5792,7 +5792,7 @@ msgstr "Verstuur een e-mail naar alle deelnemers"
 msgid "Send new mail"
 msgstr "Verzend nieuw e-mailbericht"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:140 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:142 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Stuur alleen een afwezigheidsmelding gedurende deze tijd"
 
@@ -5947,6 +5947,14 @@ msgstr "Toon al mijn afspraken uit alle agenda's"
 msgid "Show appointment details"
 msgstr "Toon afspraakdetails"
 
+#: apps/io.ox/mail/compose/extensions.js:174 module:io.ox/mail
+msgid "Show blind carbon copy input field"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:166 module:io.ox/mail
+msgid "Show carbon copy input field"
+msgstr ""
+
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:317
 msgid "Show comments"
@@ -5979,7 +5987,7 @@ msgstr "Verborgen bestanden en mappen tonen"
 msgid "Show icons"
 msgstr "Toon commentaar"
 
-#: apps/io.ox/mail/common-extensions.js:488 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:481 module:io.ox/mail
 msgid "Show images"
 msgstr "Afbeeldingen tonen"
 
@@ -6238,10 +6246,10 @@ msgstr "Student"
 
 #: apps/io.ox/calendar/edit/template.js:135 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:798 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:238
+#: apps/io.ox/mail/compose/extensions.js:252
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/vacationnotice/settings/model.js:133
+#: apps/io.ox/mail/vacationnotice/settings/model.js:135
 #: apps/io.ox/mail/view-options.js:35 apps/io.ox/mail/write/view-main.js:873
 #: apps/io.ox/tasks/edit/view-template.js:105 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:648 module:io.ox/tasks
@@ -6439,7 +6447,7 @@ msgstr "Voorlopig"
 msgid "Tentatively accepted"
 msgstr "Voorlopig geaccepteerd"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:136 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:723
 msgid "Text"
 msgstr "Tekst"
@@ -6700,7 +6708,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "De gegeven bestandsnaam is langer dan de toegestane lengte."
 
-#: apps/io.ox/mail/common-extensions.js:575 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:568 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "De verzender wil een bevestiging ontvangen als u dit e-mailbericht heeft "
@@ -6864,13 +6872,13 @@ msgstr ""
 "Deze statistieken bevatten alleen mappen welke minder dan vier niveaus "
 "hebben in de mappenboom onder de map \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:445 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:456
+#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:449
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:456
+#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:449
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7185,7 +7193,7 @@ msgstr "Top 10 verzendlijst"
 msgid "Total cost"
 msgstr "Totale kosten"
 
-#: apps/io.ox/core/folder/node.js:340 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:342 module:io.ox/core
 #, fuzzy
 #| msgid "Total: %1$s requests"
 msgid "Total: %1$d"
@@ -7313,7 +7321,7 @@ msgstr "Deblokkeren"
 msgid "Unread"
 msgstr "Ongelezen"
 
-#: apps/io.ox/core/folder/node.js:341 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:343 module:io.ox/core
 #, fuzzy
 #| msgid "Unread"
 msgid "Unread: %1$d"
@@ -7460,7 +7468,7 @@ msgstr "Gebruikersnaam"
 msgid "Username must not be empty."
 msgstr "Gebruikersnaam mag niet leeg zijn."
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:132 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js:41
 msgid "Vacation Notice"
 msgstr "Afwezigheidsmelding"
@@ -7503,7 +7511,7 @@ msgstr "Bron tonen"
 msgid "Waiting"
 msgstr "Wachten"
 
-#: apps/io.ox/mail/common-extensions.js:515 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn!"
 
@@ -8457,7 +8465,7 @@ msgstr "ongelezen"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:107 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:109 module:io.ox/mail
 msgid "vacation notice"
 msgstr "afwezigheidsmelding"
 
