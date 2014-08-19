@@ -331,8 +331,15 @@ define('io.ox/core/extPatterns/links',
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
                 nav.append(
                     $('<li class="dropdown">').append(
-                        $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
-                        .append(
+                        $('<a>').addClass('actionlink').attr({
+                            href: '#',
+                            tabindex: 1,
+                            role: 'menuitem',
+                            'data-toggle': 'dropdown',
+                            'data-action': 'more',
+                            'aria-haspopup': true,
+                            'aria-label': isSmall ? gt('Actions') : gt('More')
+                        }).append(
                             isSmall ? $.txt(gt('Actions')) : $('<i class="fa fa-bars">'),
                             $('<i class="fa fa-caret-down">')
                         )
