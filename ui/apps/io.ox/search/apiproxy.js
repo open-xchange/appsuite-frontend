@@ -72,7 +72,7 @@ define('io.ox/search/apiproxy',
         function extend (data) {
             var baton = ext.Baton.ensure({app: app, data: data.facets});
             POINT.invoke('customize', this, baton);
-            return data;
+            return baton.data;
         }
 
         /**
@@ -120,10 +120,10 @@ define('io.ox/search/apiproxy',
                                 }
                                 return error;
                             })
-                            .then(function (obj) {
+                            .then(function (data) {
                                 // match convention in autocomplete tk
                                 var data = {
-                                    list: obj.facets,
+                                    list: data,
                                     hits: 0
                                 };
                                 model.set({

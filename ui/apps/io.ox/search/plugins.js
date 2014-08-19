@@ -16,6 +16,24 @@ define('io.ox/search/plugins',
 
     'use strict';
 
+
+    // field facet 'subject' only once
+    ext.point('io.ox/search/api/autocomplete').extend({
+        id: 'only-once',
+        index: 300,
+        customize: function (baton) {
+            var model = baton.app.getModel(),
+                subject = _.where(model.get('poollist'), {facet: 'subject'});
+
+            if (subject.length === 0) return;
+
+            //filter subject facet
+            baton.data = _.filter(baton.data, function (facet) {
+                return facet.id !== 'subject';
+            });
+        }
+    });
+
     // add history entries to autocomplete response
     ext.point('io.ox/search/api/autocomplete').extend({
         id: 'custom-facet-history',
@@ -78,7 +96,6 @@ define('io.ox/search/plugins',
             ext.point('io.ox/search/autocomplete/item').invoke('draw', this, baton);
             //add icon
             if (_.contains(baton.data.flags, 'history')) {
-                debugger;
                 this.find('.name').prepend(
                     $('<i>')
                         .addClass('fa fa-clock-o')
