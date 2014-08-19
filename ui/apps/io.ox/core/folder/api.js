@@ -27,6 +27,9 @@ define('io.ox/core/folder/api',
 
     var api = {}, pool;
 
+    // tree type (classic: 0 vs new: 1)
+    var TREE = 0;
+
     // add event hub
     Events.extend(api);
 
@@ -36,6 +39,7 @@ define('io.ox/core/folder/api',
 
     function injectIndex(item, index) {
         item.index = index;
+        return item;
     }
 
     function onChangeModelId(model) {
@@ -160,6 +164,7 @@ define('io.ox/core/folder/api',
 
     _(ox.rampup.folderlist || {}).each(function (list, id) {
         // make objects
+        if (2 > 1) return;
         rampup[id] = _(list).map(function (data) {
             return _.isArray(data) ? http.makeObject(data, 'folders') : data;
         });
@@ -201,6 +206,31 @@ define('io.ox/core/folder/api',
     }
 
     //
+    // Define a virtual collection
+    //
+
+    var virtual = {
+
+        hash: {},
+
+        get: function (id) {
+            var getter = this.hash[id];
+            return getter === undefined ? $.when([]) : getter();
+        },
+
+        add: function (id, getter) {
+            this.hash[id] = getter;
+            pool.getModel(id).set('subfolders', true);
+        },
+
+        concat: function () {
+            return $.when.apply($, arguments).then(function () {
+                return _(arguments).chain().flatten().map(injectIndex).value();
+            });
+        }
+    };
+
+    //
     // Get a single folder
     //
 
@@ -219,7 +249,7 @@ define('io.ox/core/folder/api',
                 altNames: true,
                 id: id,
                 timezone: 'UTC',
-                tree: '1'
+                tree: TREE
             }
         })
         .then(function (data) {
@@ -284,8 +314,10 @@ define('io.ox/core/folder/api',
             });
         }
 
-        // avoid loading virtual folders
-        if (/^virtual/.test(id)) return $.when([]);
+        // special handling for virtual folders
+        if (/^virtual/.test(id)) return virtual.get(id).done(function (array) {
+            pool.addCollection(collectionId, array);
+        });
 
         return http.GET({
             module: 'folders',
@@ -295,13 +327,15 @@ define('io.ox/core/folder/api',
                 altNames: true,
                 parent: id,
                 timezone: 'UTC',
-                tree: '1'
+                tree: TREE
             },
             appendColumns: true
         })
-        .done(function (array) {
+        .then(function (array) {
             array = processListResponse(id, array);
             pool.addCollection(collectionId, array);
+            // to make sure we always get the same result (just data; not timestamp)
+            return array;
         });
     }
 
@@ -330,9 +364,9 @@ define('io.ox/core/folder/api',
             module: 'folders',
             params: {
                 action: 'path',
+                altNames: true,
                 id: id,
-                tree: '1',
-                altNames: true
+                tree: TREE
             },
             appendColumns: true
         })
@@ -399,10 +433,10 @@ define('io.ox/core/folder/api',
             appendColumns: true,
             params: {
                 action: 'allVisible',
-                content_type: module,
-                tree: '1',
                 altNames: true,
-                timezone: 'UTC'
+                content_type: module,
+                timezone: 'UTC',
+                tree: TREE
             }
         })
         .then(function (data) {
@@ -455,8 +489,8 @@ define('io.ox/core/folder/api',
             params: {
                 action: 'update',
                 id: id,
-                tree: '1',
-                timezone: 'UTC'
+                timezone: 'UTC',
+                tree: TREE
             },
             data: changes,
             appendColumns: false
@@ -530,7 +564,7 @@ define('io.ox/core/folder/api',
                     autorename: true,
                     folder_id: id,
                     module: module,
-                    tree: '1'
+                    tree: TREE
                 },
                 data: data,
                 appendColumns: false
@@ -595,8 +629,8 @@ define('io.ox/core/folder/api',
             module: 'folders',
             params: {
                 action: 'delete',
-                tree: '1',
-                failOnError: true
+                failOnError: true,
+                tree: TREE
             },
             data: [id],
             appendColumns: false
@@ -743,6 +777,7 @@ define('io.ox/core/folder/api',
         bits: util.bits,
         is: util.is,
         can: util.can,
+        virtual: virtual,
         isFlat: isFlat,
         getFlatCollection: getFlatCollection,
         getDefaultFolder: util.getDefaultFolder,

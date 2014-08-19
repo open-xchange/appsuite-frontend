@@ -216,7 +216,7 @@ define('io.ox/mail/main',
             if (_.device('small')) return;
 
             // tree view
-            var tree = new TreeView({ app: app, module: 'mail', root: 1, contextmenu: true });
+            var tree = new TreeView({ app: app, module: 'mail', contextmenu: true });
 
             // initialize folder view
             FolderView.initialize({ app: app, tree: tree });

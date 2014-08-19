@@ -349,6 +349,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
         renderTooltip: function () {
             if (this.options.title) return; // don't overwrite custom title
+            if (!this.model.has('title')) return;
             var data = this.model.toJSON(), summary = [];
             if (_.isNumber(data.total)) summary.push(gt('Total: %1$d', data.total));
             if (_.isNumber(data.unread)) summary.push(gt('Unread: %1$d', data.unread));

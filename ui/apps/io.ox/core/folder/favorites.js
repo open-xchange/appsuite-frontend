@@ -51,7 +51,7 @@ define('io.ox/core/folder/favorites',
 
         var extension = {
             id: 'favorites',
-            before: 'standard-folders',
+            before: 'unified-folders',
             draw: function (tree) {
 
                 this.append(

@@ -77,8 +77,11 @@ define('io.ox/core/api/account',
      * @return {boolean}
      */
     api.isUnified = function (id) {
-        // is account? (unified inbox is not a usual account)
-        return !api.isAccount(id);
+        // extend if number
+        if (/^\d+$/.test(id)) id = 'default' + id;
+        // compare against unifiedInboxIdentifier (having just a number would be smarter)
+        var match = String(id).match(/^(default\d+)/);
+        return !!match && settings.get('unifiedInboxIdentifier') === (match[1] + separator + 'INBOX');
     };
 
     /**
@@ -116,7 +119,7 @@ define('io.ox/core/api/account',
      * @return {boolean}
      */
     api.isExternal = function (id) {
-        return !api.isPrimary(id) && !api.isUnified(id);
+        return api.isAccount(id) && !api.isPrimary(id);
     };
 
     /**

@@ -24,12 +24,49 @@ define('io.ox/core/folder/extensions',
 
     'use strict';
 
+    // define virtual/standard
+    api.virtual.add('virtual/standard', function () {
+        return api.virtual.concat(
+            // inbox
+            api.get('default0/INBOX'),
+            // sent, drafts, spam, trash
+            api.list('default0/INBOX')
+        );
+    });
+
     var extensions = {
+
+        unifiedFolders: function (tree) {
+            this.append(
+                // standard folders
+                new TreeNodeView({
+                    empty: false,
+                    filter: function (id, model) {
+                        return account.isUnified(model.id);
+                    },
+                    folder: '1',
+                    headless: true,
+                    open: true,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el.addClass('unified-folders')
+            );
+        },
 
         standardFolders: function (tree) {
             this.append(
                 // standard folders
-                new TreeNodeView({ folder: tree.root, headless: true, open: true, tree: tree, parent: tree })
+                new TreeNodeView({
+                    filter: function (id, model) {
+                        return account.isStandardFolder(model.id);
+                    },
+                    folder: 'virtual/standard',
+                    headless: true,
+                    open: true,
+                    tree: tree,
+                    parent: tree
+                })
                 .render().$el.addClass('standard-folders')
             );
         },
@@ -39,6 +76,9 @@ define('io.ox/core/folder/extensions',
                 // local folders
                 new TreeNodeView({
                     count: 0,
+                    filter: function (id, model) {
+                        return !account.isStandardFolder(model.id);
+                    },
                     folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
                     model_id: 'default0/INBOX',
                     parent: tree,
@@ -66,14 +106,15 @@ define('io.ox/core/folder/extensions',
             );
         },
 
-        publicFolders: function (tree) {
+        otherFolders: function (tree) {
             this.append(
                 new TreeNodeView({
                     //empty: false,
                     filter: function (id, model) {
-                        return /^default0\/(Public|Shared)$/.test(model.get('id'));
+                        // exclude INBOX
+                        return model.get('id') !== 'default0/INBOX';
                     },
-                    folder: '1',
+                    folder: 'default0',
                     headless: true,
                     open: true,
                     tree: tree,
@@ -92,6 +133,11 @@ define('io.ox/core/folder/extensions',
 
     ext.point('io.ox/core/foldertree/mail/app').extend(
         {
+            id: 'unified-folders',
+            index: INDEX += 100,
+            draw: extensions.unifiedFolders
+        },
+        {
             id: 'standard-folders',
             index: INDEX += 100,
             draw: extensions.standardFolders
@@ -107,9 +153,9 @@ define('io.ox/core/folder/extensions',
             draw: extensions.remoteAccounts
         },
         {
-            id: 'public',
+            id: 'other',
             index: INDEX += 100,
-            draw: extensions.publicFolders
+            draw: extensions.otherFolders
         }
     );
 
@@ -121,6 +167,11 @@ define('io.ox/core/folder/extensions',
         {
             id: 'remote-accounts',
             draw: extensions.remoteAccounts
+        },
+        {
+            id: 'other',
+            index: INDEX += 100,
+            draw: extensions.otherFolders
         }
     );
 

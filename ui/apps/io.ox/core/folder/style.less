@@ -88,53 +88,56 @@
         }
     }
 
-    .folder-arrow {
+    .folder-node {
 
-        color: #777;
-        display: inline-block;
-        padding-left: 14px;
-        width: 40px;
-    }
+        .folder-arrow {
 
-    .folder-label, .folder-counter, .folder-options {
-        font-weight: @normal;
-        display: inline-block;
-        -webkit-font-smoothing: antialiased;
-        margin: 0 14px 0 0;
-        &:empty { margin: 0; }
-    }
-
-    .folder-label {
-
-        &:first-child { // needed when arrows are hidden
-            margin-left: 14px;
+            color: #777;
+            display: inline-block;
+            padding-left: 14px;
+            width: 40px;
         }
-    }
 
-    .folder-counter {
-        color: #08c;
-        font-weight: @bold;
-    }
-
-    .folder-options {
-
-        padding: 0 12px;
-        line-height: 30px;
-        background-color: rgba(0, 0, 0, 0.05);
-        outline: 0;
-        display: none;
-
-        i { line-height: inherit; }
-
-        &:focus {
-            i { color: white; }
-            background-color: @foldertree-selected-focus-background;
+        .folder-label, .folder-counter, .folder-options {
+            font-weight: @normal;
+            display: inline-block;
+            -webkit-font-smoothing: antialiased;
+            margin: 0 14px 0 0;
+            &:empty { margin: 0; }
         }
-    }
 
-    .folder-checkbox {
-        display: inline-block;
-        margin: 0 14px 0 0;
+        .folder-label {
+
+            &:first-child { // needed when arrows are hidden
+                margin-left: 14px;
+            }
+        }
+
+        .folder-counter {
+            color: #08c;
+            font-weight: @bold;
+        }
+
+        .folder-options {
+
+            padding: 0 12px;
+            line-height: 30px;
+            background-color: rgba(0, 0, 0, 0.05);
+            outline: 0;
+            display: none;
+
+            i { line-height: inherit; }
+
+            &:focus {
+                i { color: white; }
+                background-color: @foldertree-selected-focus-background;
+            }
+        }
+
+        .folder-checkbox {
+            display: inline-block;
+            margin: 0 14px 0 0;
+        }
     }
 
     .shared {
@@ -163,7 +166,7 @@
         display: block;
     }
 
-    .standard-folders, .favorites, .remote-accounts {
+    .unified-folders, .standard-folders, .favorites, .remote-accounts {
         margin-bottom: 14px;
     }
 

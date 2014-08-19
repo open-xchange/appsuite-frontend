@@ -15,11 +15,10 @@ define('io.ox/core/folder/tree',
     ['io.ox/core/folder/node',
      'io.ox/core/folder/selection',
      'io.ox/core/folder/api',
-     'io.ox/core/api/account',
      'io.ox/core/extensions',
      'io.ox/core/folder/favorites',
      'io.ox/core/folder/extensions',
-     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, account, ext) {
+     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, ext) {
 
     'use strict';
 
@@ -38,7 +37,7 @@ define('io.ox/core/folder/tree',
             options = _.extend({ contextmenu: false }, options);
 
             this.app = options.app;
-            this.root = options.root || '1';
+            this.root = options.root || 'default0/INBOX';
             this.module = options.module;
             this.open = options.open;
             this.flat = !!options.flat;
@@ -88,10 +87,6 @@ define('io.ox/core/folder/tree',
             var filter = this.options.filter,
                 result = _.isFunction(filter) ? filter.apply(this, arguments) : undefined;
             if (result !== undefined) return result;
-            // only standard folder on top level
-            if (this.module === 'mail' && folder === '1') {
-                return account.isStandardFolder(model.id);
-            }
             // other folders
             var module = model.get('module');
             return module === this.module || (module === 'mail' && (/^default\d+(\W|$)/i).test(model.id));
@@ -104,7 +99,7 @@ define('io.ox/core/folder/tree',
         },
 
         getTreeNodeOptions: function (options, model) {
-            if (this.context === 'app' && model.get('id') === 'default0/INBOX') {
+            if (this.context === 'app' && model.get('id') === 'default0/INBOX' && options.parent.folder === 'virtual/standard') {
                 options.subfolders = false;
             }
             if (this.flat && options.parent !== this) {
