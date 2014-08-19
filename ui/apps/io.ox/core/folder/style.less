@@ -39,15 +39,10 @@
         width: 100%;
         display: block;
         cursor: pointer;
+        outline: 0;
 
-        .selected {
-            .folder-options {
-                display: inline-block;
-            }
-        }
-
-        .selectable:focus {
-            outline: 0;
+        .selected > .folder-node > .folder-options {
+            display: inline-block;
         }
 
         &.empty {
@@ -67,18 +62,18 @@
 
     &.visible-selection {
 
-        .selected {
+        .selected > .folder-node {
             background-color: @foldertree-selected-background;
             * {
                 color: @foldertree-selected-label-color;
             }
         }
 
-        .selectable:hover, .selectable.dnd-over {
+        .selectable > .folder-node:hover, .selectable.dnd-over > .folder-node {
             background-color: rgba(0, 0, 0, 0.05);
         }
 
-        .selectable:focus {
+        .selectable:focus > .folder-node {
 
             background-color: @foldertree-selected-focus-background;
             * {

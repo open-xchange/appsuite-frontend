@@ -82,7 +82,10 @@ define('io.ox/core/tk/list-dnd', [
             this.trigger('click');
         }
 
-        function over() {
+        function over(e) {
+
+            // avoid handling bubbling events
+            if (e.isDefaultPrevented()) return; else e.preventDefault();
 
             var ft = $(this).closest('.folder-tree'),
                 arrow = $(this).find('.folder-arrow'),

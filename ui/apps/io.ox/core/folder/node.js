@@ -20,7 +20,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
     var TreeNodeView = Backbone.View.extend({
 
         tagName: 'li',
-        className: 'folder',
+        className: 'folder selectable',
 
         events: {
             'click .folder-arrow': 'onToggle',
@@ -164,7 +164,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                     '<i class="fa fa-fw">'
             );
             // a11y
-            if (hasSubFolders) this.$.selectable.attr('aria-expanded', isOpen); else this.$.selectable.removeAttr('aria-expanded');
+            if (hasSubFolders) this.$el.attr('aria-expanded', isOpen); else this.$el.removeAttr('aria-expanded');
             // toggle subfolder node
             this.$el.toggleClass('open', isOpen);
             // empty?
@@ -277,27 +277,37 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             });
 
             // draw scaffold
-            this.$el.attr('role', 'presentation').append(
-                // folder
-                this.$.selectable = $('<div class="selectable" tabindex="-1" role="treeitem" aria-selected="false">')
-                .attr({ 'data-id': this.folder, 'arial-level': o.level + 1, id: _.uniqueId('treeitem') })
-                .css('padding-left', o.level * 30)
+            this.$el
+                .attr({
+                    'aria-label'    : '',
+                    'aria-level'    : o.level + 1,
+                    'aria-selected' : false,
+                    'data-index'    : this.model.get('index'),
+                    'data-id'       : this.folder,
+                    'role'          : 'treeitem',
+                    'tabindex'      : '-1'
+                })
                 .append(
-                    this.$.arrow = o.arrow ? $('<div class="folder-arrow" role="presentation"><i class="fa fa-fw"></i></div>') : $(),
-                    this.$.label = $('<div class="folder-label">'),
-                    this.$.counter = $('<div class="folder-counter" role="presentation">')
-                ),
-                // subfolders
-                this.$.subfolders = $('<ul class="subfolders" role="group">')
-            );
+                    // folder
+                    this.$.selectable = $('<div class="folder-node" role="presentation">')
+                    .css('padding-left', o.level * 30)
+                    .append(
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : $(),
+                        this.$.label = $('<div class="folder-label">'),
+                        this.$.counter = $('<div class="folder-counter">')
+                    ),
+                    // subfolders
+                    this.$.subfolders = $('<ul class="subfolders" role="group">')
+                );
 
             // headless?
             if (o.headless) {
-                this.$.selectable.removeClass('selectable').removeAttr('tabindex').hide();
+                this.$el.removeClass('selectable').removeAttr('tabindex');
+                this.$.selectable.hide();
             }
 
             // virtual?
-            if (this.isVirtual) this.$.selectable.addClass('virtual');
+            if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
             if (!this.isVirtual && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
@@ -334,16 +344,17 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         renderTitle: function () {
             var title = this.getTitle();
             this.$.label.text(title);
-            this.$.selectable.attr('aria-label', title);
+            this.$el.attr('aria-label', title);
         },
 
         renderTooltip: function () {
+            if (this.options.title) return; // don't overwrite custom title
             var data = this.model.toJSON(), summary = [];
             if (_.isNumber(data.total)) summary.push(gt('Total: %1$d', data.total));
             if (_.isNumber(data.unread)) summary.push(gt('Unread: %1$d', data.unread));
             summary = summary.join(', ');
             if (summary) summary = ' (' + summary + ')';
-            this.$.selectable.attr('title', this.model.get('title') + summary);
+            this.$el.attr('title', this.model.get('title') + summary);
         },
 
         renderContextControl: function () {
@@ -359,8 +370,6 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                 'data-id': this.folder,
                 'data-index': this.model.get('index')
             });
-            // and again for selectable
-            this.$.selectable.attr('data-id', this.folder);
         },
 
         isEmpty: function () {

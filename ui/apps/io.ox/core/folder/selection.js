@@ -101,8 +101,8 @@ define('io.ox/core/folder/selection', [], function () {
 
             if (index >= items.length || index < 0) return;
 
-            // prevent default to avoid unwanted scrolling
-            e.preventDefault();
+            // avoid duplicates and unwanted scrolling
+            if (e.isDefaultPrevented()) return; else e.preventDefault();
 
             this.resetTabIndex(items, items.eq(index));
             this.resetSelected(items);
