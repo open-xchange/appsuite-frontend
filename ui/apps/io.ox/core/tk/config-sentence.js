@@ -57,6 +57,7 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
                 var value = self[attribute];
                 $anchor.text(options.phrase(value)).focus();
                 self.trigger('redraw', self);
+                $anchor.attr('aria-label', self.ghost());
             }
 
             $anchor.on('click', function (e) {
@@ -115,6 +116,7 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
                 });
             });
 
+            $anchor.attr('aria-label', self.ghost());
             this.on('change:' + attribute, drawState);
         },
         options: function ($anchor, attribute, options) {
@@ -139,6 +141,7 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
                 }
                 $anchor.text(label).focus();
                 self.trigger('redraw', self);
+                $anchor.attr('aria-label', self.ghost());
             }
 
             // Now build the menu
@@ -146,7 +149,7 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
             _(options.options).each(function (label, value) {
                 $menu.append(
                     $('<li>')
-                        .append($('<a href="#">').attr({ tabindex: $anchor.attr('tabindex') }).text(label).on('click', function (e) {
+                        .append($('<a href="#">').attr({ tabindex: $anchor.attr('tabindex'), 'role': 'menuitem' }).text(label).on('click', function (e) {
                             e.preventDefault();
                             self[attribute] = value;
                             self.trigger('change', self);
@@ -161,11 +164,11 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
             // Tell the anchor that it triggers the dropdown
             $anchor.attr({
                 'data-toggle': 'dropdown',
-                'aria-haspopup': true,
-                role: 'menuitem'
+                'aria-haspopup': true
             });
 
             $anchor.dropdown();
+            $anchor.attr('aria-label', self.ghost());
 
             this.on('change:' + attribute, drawState);
         },
@@ -177,21 +180,6 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
     function ConfigSentence(sentence, options) {
         options = options || {};
         var self = this;
-        _.extend(this, Backbone.Events);
-        this.$el = $('<span>').html(sentence);
-        this.$el.find('a').each(function () {
-            var $anchor = $(this),
-                attribute = $anchor.data('attribute') || 'value',
-                widget = $anchor.data('widget'),
-                opts = options[attribute] || options;
-            if (options.tabindex) {
-                $anchor.attr({ tabindex: options.tabindex});
-            }
-            // TODO: Use ExtensionPoints here
-            if (Widgets[widget]) {
-                Widgets[widget].call(self, $anchor, attribute, opts, options);
-            }
-        });
 
         this.set = function (key, value) {
             this[key] = value;
@@ -211,6 +199,23 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
             return $ghost.text();
         };
 
+        _.extend(this, Backbone.Events);
+        this.$el = $('<span>').html(sentence);
+        this.$el.find('a').each(function () {
+            var $anchor = $(this),
+                attribute = $anchor.data('attribute') || 'value',
+                widget = $anchor.data('widget'),
+                opts = options[attribute] || options;
+            if (options.tabindex) {
+                $anchor.attr({ tabindex: options.tabindex});
+            }
+            // TODO: Use ExtensionPoints here
+            if (Widgets[widget]) {
+                Widgets[widget].call(self, $anchor, attribute, opts, options);
+            }
+        });
+
+        
         this.id = options.id;
 
     }

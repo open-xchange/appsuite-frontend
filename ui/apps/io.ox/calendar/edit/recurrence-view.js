@@ -159,7 +159,7 @@ define('io.ox/calendar/edit/recurrence-view',
             });
 
             $anchor.dropdown();
-
+            $anchor.attr('aria-label', self.ghost());
             this.on('change:' + attribute, drawState);
         },
 
@@ -201,6 +201,8 @@ define('io.ox/calendar/edit/recurrence-view',
                 var value = renderDate();
                 $anchor.text(value).focus();
                 self.trigger('redraw', self);
+                $anchor.attr('aria-label', self.ghost());
+                $anchor.parent().find('.dropdown a[data-toggle="dropdown"]').attr('aria-label', self.ghost());
             }
 
             $anchor.on('click', function (e) {
@@ -267,6 +269,9 @@ define('io.ox/calendar/edit/recurrence-view',
                 });
             });
 
+            $anchor.attr('aria-label', self.ghost());
+            $anchor.parent().find('.dropdown a[data-toggle="dropdown"]').attr('aria-label', self.ghost());
+
             this.on('change:' + attribute, drawState);
         }
     };
@@ -286,7 +291,10 @@ define('io.ox/calendar/edit/recurrence-view',
                 this.controls = {
                     checkbox: $('<input tabindex="1" type="checkbox">'),
                     checkboxLabel: $('<label class="checkbox control-label">'),
-                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').css({'float': 'right'}).append($('<i class="fa fa-times">'))
+                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
+                        'role': 'button',
+                        'aria-label': gt('Click to close the recurrence view')
+                    }).css({'float': 'right'}).append($('<i class="fa fa-times">'))
                 };
 
                 // add tabindex to all control elements
