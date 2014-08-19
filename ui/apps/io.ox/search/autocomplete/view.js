@@ -39,6 +39,12 @@ define('io.ox/search/autocomplete/view',
         draw: extensions.searchButton
     });
 
+    ext.point(POINT +  '/style-container').extend({
+        id: 'style-container',
+        index: INDEX += 100,
+        draw: extensions.styleContainer
+    });
+
     ext.point(POINT +  '/item').extend({
         id: 'item',
         index: INDEX += 100,

@@ -43,9 +43,8 @@ define('io.ox/search/autocomplete/extensions',
                             model: model,
                             container: container,
                             cbshow: function () {
-                                // reset autocomplete tk styles
-                                if (container)
-                                    $(this).attr('style', '');
+                                // reset autocomplete tk styles (currently only mobile)
+                                ext.point(POINT + '/style-container').invoke('draw', this, baton);
 
                             },
                             // TODO: would be nice to move to control
@@ -56,7 +55,6 @@ define('io.ox/search/autocomplete/extensions',
                             },
                             draw: function (value) {
                                 baton.data = value;
-                                ext.point(POINT + '/item').invoke('draw', this, baton);
                             },
                             stringify: function () {
                                 // keep input value when item selected
@@ -179,14 +177,17 @@ define('io.ox/search/autocomplete/extensions',
             );
         },
 
+        styleContainer: function (baton) {
+            var value = 'width: 100%;';
+            //custom dropdown container?
+            if (baton.$.container && baton.$.container.attr('style') !== value) {
+                // reset calculated style from autocomplete tk
+                baton.$.container.attr('style', value);
+            }
+        },
+
         item: function (baton) {
             this.addClass(baton.data.facet);
-            //custom dropdown container?
-            if (baton.$.container) {
-                // reset calculated style from autocomplete tk
-                baton.$.container.attr('style', 'width: 100%;');
-            }
-
             // contact picture
             ext.point(POINT + '/image').invoke('draw', this, baton);
             // display name
