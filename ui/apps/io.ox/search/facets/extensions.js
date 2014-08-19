@@ -236,7 +236,7 @@ define('io.ox/search/facets/extensions',
 
                     var link = $(e.target).closest('a'),
                         list = link.closest('ul'),
-                        option = link.attr('data-action') || link.attr('data-point') || link.attr('data-option'),
+                        option = link.attr('data-action') || link.attr('data-custom') ||  link.attr('data-option'),
                         facet = list.attr('data-facet'),
                         value = list.attr('data-value');
 
@@ -245,8 +245,8 @@ define('io.ox/search/facets/extensions',
                         // open folder dialog
                         var facet = baton.model.get('folder');
                         folderDialog(facet, baton);
-                    } else if (link.attr('data-point') !== '') {
-                        ext.point('io.ox/search/facets/custom/' + link.attr('data-point')).invoke('draw', this, baton, facet, value, {option: option });
+                    } else if (link.attr('data-point')) {
+                        ext.point('io.ox/search/facets/custom/' + link.attr('data-point')).invoke('draw', this, baton, facet, value, {option: link.attr('data-point') });
                     } else {
                         if (facet === 'folder') {
                             // overwrite custom
@@ -349,7 +349,7 @@ define('io.ox/search/facets/extensions',
                                             .attr({
                                                 'data-option': item.id,
                                                 // used to handle custom facets via extension points
-                                                'data-point': item.point || ''
+                                                'data-point': item.point
                                             })
                                     )
                         );
@@ -411,7 +411,7 @@ define('io.ox/search/facets/extensions',
                                                 $('<i class="fa fa-fw fa-none">'),
                                                 $('<span>').text(folder.title)
                                             )
-                                            .attr('data-point', folder.id)
+                                            .attr('data-custom', folder.id)
                                             .attr('title', folder.title)
                                     )
                                 );
