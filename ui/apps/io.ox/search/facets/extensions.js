@@ -288,6 +288,9 @@ define('io.ox/search/facets/extensions',
                 if (facet.style === 'exclusive')
                     type = util.getOptionLabel(value.options, value._compact.option);
 
+                if ((value.item || {}).detail)
+                    type = value.item.name +  ' <i>' + value.item.detail + '</i>';
+
                 this.find('label').append(
                     $('<span>')
                         .addClass('name')
