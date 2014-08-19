@@ -93,12 +93,12 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         header: function (text) {
-            this.$ul.append($('<li class="dropdown-header">').text(text));
+            this.$ul.append($('<li class="dropdown-header" role="sectionhead">').text(text).attr('aria-hidden', true));
             return this;
         },
 
         divider: function () {
-            this.$ul.append('<li class="divider">');
+            this.$ul.append('<li class="divider" role="separator">');
             return this;
         },
 
