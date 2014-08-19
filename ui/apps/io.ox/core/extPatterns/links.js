@@ -65,7 +65,9 @@ define('io.ox/core/extPatterns/links',
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
-                        'data-container': 'body'
+                        'data-container': 'body',
+                        // tooltip removes title attribute
+                        'aria-label': self.title || self.label || ''
                     })
                     .tooltip()
                     .on('dispose', function () {
@@ -410,26 +412,25 @@ define('io.ox/core/extPatterns/links',
 
     var drawDropDown = function (options, baton) {
 
-        var label = options.label, args = $.makeArray(arguments), node, ul, ariaLabel = '';
+        var label = baton.label || options.label,
+            args = $.makeArray(arguments),
+            node = baton.$el || $('<div>'),
+            ul;
 
         // label: Use baton or String or DOM node
-        label = baton.label || label;
         label = _.isString(label) ? $.txt(label) : label;
-        
-        //if aria label is given, use it
-        if (options.ariaLabel) {
-            ariaLabel = 'aria-label="' + options.ariaLabel + '"';
-        }
-
-        node = baton.$el || $('<div>');
-
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1" ' + ariaLabel + '>')
-                .append(
-                    options.icon ? $('<i>').addClass(options.icon).attr('title', label.textContent) : label,
-                    options.noCaret ? $() : $('<i class="fa fa-caret-down">')
+                $('<a>').attr({
+                    href: '#',
+                    tabindex: 1,
+                    'data-toggle': 'dropdown',
+                    'aria-haspopup': true,
+                    'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
+                }).append(
+                    options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
+                    options.noCaret ? $() : $('<i class="fa fa-caret-down">').attr({ 'aria-hidden': true })
                 ),
                 ul = $('<ul class="dropdown-menu" role="menu">')
             )
