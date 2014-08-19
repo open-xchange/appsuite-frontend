@@ -16,6 +16,7 @@ define('io.ox/search/plugins',
 
     'use strict';
 
+    // add history entries to autocomplete response
     ext.point('io.ox/search/api/autocomplete').extend({
         id: 'custom-facet-history',
         index: 300,
@@ -45,6 +46,7 @@ define('io.ox/search/plugins',
         }
     });
 
+    // register listerner to add history entries
     ext.point('io.ox/search').extend({
         index: 100,
         id: 'custom-facet-history',
@@ -58,7 +60,6 @@ define('io.ox/search/plugins',
                     if (facet === 'global') {
                         // copy global facet, manipulate and store as history entry
                         var entry = _.copy(model.get('pool')[facet].values[value]);
-                        entry.name = 'History: ' + entry.name;
                         entry.id = facet + '.history' + history.length;
                         entry.flags.push('history');
                         history.push(entry);
@@ -68,4 +69,24 @@ define('io.ox/search/plugins',
         }
     });
 
+    // add history icon to history entries
+    ext.point('io.ox/search/autocomplete/item/global').extend({
+        index: 100,
+        id: 'custom-facet-history',
+        draw: function (baton) {
+            //default
+            ext.point('io.ox/search/autocomplete/item').invoke('draw', this, baton);
+            //add icon
+            if (_.contains(baton.data.flags, 'history')) {
+                debugger;
+                this.find('.name').prepend(
+                    $('<i>')
+                        .addClass('fa fa-clock-o')
+                        .css({
+                            'margin-right': '6px'
+                        })
+                );
+            }
+        }
+    });
 });
