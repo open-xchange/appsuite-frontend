@@ -197,12 +197,12 @@ define('io.ox/core/tk/list',
                 var index = $(node).attr('data-index'); // don't use data() here
                 return parseInt(index, 10);
             }));
-            // store focus
-            var active = nodes.index(document.activeElement);
+            // store focus & scroll position
+            var active = nodes.index(document.activeElement), top = this.$el.scrollTop();
             // re-append to apply sorting
             this.$el.append(nodes);
             // restore focus
-            if (active > -1) nodes.eq(active).focus();
+            if (active > -1) { nodes.eq(active).focus(); this.$el.scrollTop(top); }
         },
 
         // called whenever a model inside the collection changes
