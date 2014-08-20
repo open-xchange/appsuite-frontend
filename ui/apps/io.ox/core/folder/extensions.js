@@ -122,6 +122,19 @@ define('io.ox/core/folder/extensions',
                 })
                 .render().$el
             );
+        },
+
+        rootFolders: function (tree) {
+            this.append(
+                new TreeNodeView({
+                    folder: tree.root,
+                    headless: true,
+                    open: true,
+                    tree: tree,
+                    parent: tree
+                })
+                .render().$el
+            );
         }
     };
 
@@ -201,13 +214,13 @@ define('io.ox/core/folder/extensions',
     ext.point('io.ox/core/foldertree/infostore/app').extend({
         id: 'standard-folders',
         index: 100,
-        draw: extensions.standardFolders
+        draw: extensions.rootFolders
     });
 
     ext.point('io.ox/core/foldertree/infostore/popup').extend({
         id: 'standard-folders',
         index: 100,
-        draw: extensions.standardFolders
+        draw: extensions.rootFolders
     });
 
     // helper
