@@ -1038,6 +1038,11 @@ define('io.ox/mail/main',
                                 return response && response.results ? response.results : [];
                             });
                         },
+                        getQueryParams: function (params) {
+                            // paging support
+                            search.model.set('start', params.offset || 0, {silent: true});
+                            return {};
+                        },
                         cid: function () {
                             return 'search/' + search.model.getCompositeId() +
                                 '&sort=' + app.props.get('sort') +
