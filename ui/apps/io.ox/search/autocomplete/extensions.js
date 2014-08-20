@@ -36,7 +36,7 @@ define('io.ox/search/autocomplete/extensions',
                         })
                         .autocomplete({
                             api: app.apiproxy,
-                            minLength: settings.get('search/minimumQueryLength', 0),
+                            minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
                             mode: 'search',
                             delay: 100,
                             parentSelector: container  ? '.query' : '.io-ox-search',

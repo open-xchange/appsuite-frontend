@@ -1658,7 +1658,7 @@ define('io.ox/core/desktop',
 
                     // events: internal
                     view.on({
-                        'query focus':
+                        'query':
                             _.debounce(function (e, appname) {
                                 // one search app, one model but multiple views
                                 if (win.app.get('name') === appname) {

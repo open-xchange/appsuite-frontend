@@ -1031,6 +1031,7 @@ define('io.ox/mail/main',
                 // define collection loader for search results
                 var collectionLoader = new CollectionLoader({
                         module: 'mail',
+                        mode: 'search',
                         fetch: function () {
                             var params = { sort: app.props.get('sort'), order: app.props.get('order') };
                             return search.apiproxy.query(true, params).then(function (response) {
@@ -1056,16 +1057,16 @@ define('io.ox/mail/main',
                 win.facetedsearch.view.on({
                     'query': _.debounce(function (e, appname) {
                         if (appname === app.get('name')) {
+                            // connect
+                            if (app.listView.loader.mode !== 'search') {
+                                app.listView.connect(collectionLoader);
+                            }
                             app.listView.load();
                             win.facetedsearch.focus();
                         }
                     }, 10),
                     'focus': function () {
                         // register collection loader
-                        if (!win.facetedsearch.active) {
-                            app.listView.connect(collectionLoader);
-                            app.listView.load();
-                        }
                     }
 
                 });
