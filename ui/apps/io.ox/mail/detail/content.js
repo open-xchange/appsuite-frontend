@@ -255,8 +255,6 @@ define('io.ox/mail/detail/content',
         }
     });
 
-    var regRemoveExistingPadding = /padding:\s?\w+px;?\s*/ig;
-
     ext.point('io.ox/mail/detail/content').extend({
         id: 'tables',
         index: 400,
@@ -267,7 +265,9 @@ define('io.ox/mail/detail/content',
                 var node = $(this), bgcolor = node.attr('bgcolor');
                 node.css('background-color', bgcolor);
             });
-            this.find('table[cellpadding]').each(function () {
+            // loop over tables in reverse order
+            // so that tables are processed inside-out
+            $.each(this.find('table[cellpadding]').get().reverse(), function () {
                 var node = $(this), cellpadding = node.attr('cellpadding');
                 if (node.attr('cellspacing') === '0') {
                     node.css('border-collapse', 'collapse');
@@ -275,13 +275,10 @@ define('io.ox/mail/detail/content',
                 node.find('th, td').each(function () {
                     var node = $(this), style = node.attr('style') || '';
                     // style might already contain padding or padding-top/right/bottom/left.
+                    if (style.indexOf('padding:') > -1) return;
                     // So we add the cellpadding at the beginning so that it doesn't overwrite existing paddings
-                    if (style.indexOf('padding: ' + cellpadding + 'px') === -1) {
-                        // but remove existing 'padding: **px'
-                        style = style.replace(regRemoveExistingPadding, '');
-                        if (style) style = ' ' + style;
-                        node.attr('style', 'padding: ' + cellpadding + 'px;' + style);
-                    }
+                    if (style) style = ' ' + style;
+                    node.attr('style', 'padding: ' + cellpadding + 'px;' + style);
                 });
             });
         }
