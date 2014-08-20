@@ -55,7 +55,7 @@ define('io.ox/mail/actions',
             return true;
         },
         action: function (baton) {
-            ox.registry.call('mail/compose', 'compose', { folder_id: baton.app.folder.get() });
+            ox.registry.call('mail-compose', 'compose', { folder_id: baton.app.folder.get() });
         }
     });
 
@@ -130,7 +130,7 @@ define('io.ox/mail/actions',
             return util.hasOtherRecipients(data) && !isDraftMail(data);
         },
         action: function (baton) {
-            ox.registry.call('mail/compose', 'replyall', baton.first());
+            ox.registry.call('mail-compose', 'replyall', baton.first());
         }
     });
 
@@ -147,7 +147,7 @@ define('io.ox/mail/actions',
             return util.hasFrom(data) && !isDraftMail(data);
         },
         action: function (baton) {
-            ox.registry.call('mail/compose', 'reply', baton.first());
+            ox.registry.call('mail-compose', 'reply', baton.first());
         }
     });
 
@@ -157,7 +157,7 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
-            ox.registry.call('mail/compose', 'forward', baton.isThread ? baton.first() : baton.data);
+            ox.registry.call('mail-compose', 'forward', baton.isThread ? baton.first() : baton.data);
         }
     });
 
@@ -184,7 +184,7 @@ define('io.ox/mail/actions',
             });
             if (check === true) return;
 
-            ox.registry.call('mail/compose', 'edit', data);
+            ox.registry.call('mail-compose', 'edit', data);
         }
     });
 
@@ -626,7 +626,7 @@ define('io.ox/mail/actions',
         requires: 'some',
         action: function (baton) {
             var data = baton.data;
-            ox.registry.call('mail/compose', 'compose', { folder_id: data.folder_id, to: data.to.concat(data.cc).concat(data.from) });
+            ox.registry.call('mail-compose', 'compose', { folder_id: data.folder_id, to: data.to.concat(data.cc).concat(data.from) });
         }
     });
 

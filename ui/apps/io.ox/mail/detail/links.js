@@ -144,7 +144,7 @@ define('io.ox/mail/detail/links',
         }
 
         // go!
-        ox.registry.call('mail/compose', 'compose', {
+        ox.registry.call('mail-compose', 'compose', {
             to: [[name, address]],
             subject: params.subject || '',
             attachments: [{ content: params.body || '' }]

@@ -251,7 +251,7 @@ define('io.ox/files/actions',
                     html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
                     text.push(label + '\n' + gt('Direct link: %1$s', url));
                 });
-                ox.registry.call('mail/compose', 'compose', { attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
+                ox.registry.call('mail-compose', 'compose', { attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
             });
         }
     });
@@ -283,7 +283,7 @@ define('io.ox/files/actions',
             api.getList(list).done(function (list) {
                 var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
                 if (filtered_list.length > 0) {
-                    ox.registry.call('mail/compose', 'compose', { infostore_ids: filtered_list });
+                    ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
                 }
             });
         }

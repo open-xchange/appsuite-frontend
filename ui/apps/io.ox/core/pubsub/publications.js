@@ -358,7 +358,7 @@ define('io.ox/core/pubsub/publications',
                             }
                         } || {};
                     // use default email dialog
-                    return ox.registry.call('mail/compose', 'compose', data);
+                    return ox.registry.call('mail-compose', 'compose', data);
                 });
             });
     }

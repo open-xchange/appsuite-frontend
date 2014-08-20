@@ -214,7 +214,7 @@ define('io.ox/contacts/actions',
                 // set recipient
                 var data = { to: _.chain(list).map(mapContact).flatten(true).filter(filterContact).value() };
                 // open compose
-                ox.registry.call('mail/compose', 'compose', data);
+                ox.registry.call('mail-compose', 'compose', data);
             });
         }
     });
@@ -232,7 +232,7 @@ define('io.ox/contacts/actions',
             }).then(function (list) {
                 return {contacts_ids: list};
             }).done(function(data) {
-                ox.registry.call('mail/compose', 'compose', data);
+                ox.registry.call('mail-compose', 'compose', data);
             });
         }
     });

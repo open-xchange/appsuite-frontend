@@ -317,7 +317,7 @@ define('io.ox/contacts/view-detail',
     function clickMail(e) {
         e.preventDefault();
         // set recipient and open compose
-        ox.registry.call('mail/compose', 'compose', { to: [[e.data.display_name, e.data.email]] });
+        ox.registry.call('mail-compose', 'compose', { to: [[e.data.display_name, e.data.email]] });
     }
 
     function mail(address, name, id) {

@@ -78,7 +78,7 @@ define('io.ox/calendar/actions',
         capabilities: 'webmail',
         action: function (baton) {
             util.createRecipientsArray(baton.data).done(function (recipients) {
-                ox.registry.call('mail/compose', 'compose', {to: recipients, subject: baton.data.title});
+                ox.registry.call('mail-compose', 'compose', {to: recipients, subject: baton.data.title});
             });
         }
     });
