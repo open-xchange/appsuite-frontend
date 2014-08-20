@@ -382,6 +382,8 @@ define('io.ox/mail/common-extensions',
 
         attachmentPreview: function (baton) {
 
+            if (baton.attachments.length === 0) return $.when();
+
             var $el = this,
             def = $.Deferred();
 
