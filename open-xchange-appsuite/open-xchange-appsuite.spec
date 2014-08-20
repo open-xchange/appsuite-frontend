@@ -267,7 +267,7 @@ for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it
     ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build
 done
 mv "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
-cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp" | sed -e "s:## cd ##:cd %{docroot}:" > \
+cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp" | sed -e "s:## cd ##:cd %{docroot}appsuite:" > \
     "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
