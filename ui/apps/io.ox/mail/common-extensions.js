@@ -283,43 +283,6 @@ define('io.ox/mail/common-extensions',
 
         attachmentList: (function () {
 
-            var getContentType = function (type) {
-                // might be: image/jpeg; name=Foto.JPG", so ...
-                var split = (type || 'unknown').split(/;/);
-                return split[0];
-            };
-
-            var drawAttachmentDropDown = function (node, label, data) {
-                // use extension pattern
-                var dd = new links.Dropdown({
-                        label: label,
-                        classes: 'attachment-link',
-                        ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(node, ext.Baton({ data: data, $el: $('<span>') })),
-                    contentType = getContentType(data.content_type),
-                    url,
-                    filename;
-                // make draggable (drag-out)
-                if (_.isArray(data)) {
-                    url = api.getUrl(data, 'zip');
-                    filename = (data.subject || 'mail') + '.zip'; // yep, array prop
-                } else {
-                    url = api.getUrl(data, 'download');
-                    filename = String(data.filename || '');
-                }
-                dd.find('a')
-                    .attr({
-                        title: data.title,
-                        draggable: true,
-                        'data-downloadurl': contentType + ':' + filename.replace(/:/g, '') + ':' + ox.abs + url
-                    })
-                    .on('dragstart', function (e) {
-                        $(this).css({ display: 'inline-block' });
-                        e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
-                    });
-                return dd;
-            };
-
             function drawInlineLinks(node, data) {
                 var extension = new links.InlineLinks({
                     ref: 'io.ox/mail/attachment/links'
@@ -327,31 +290,12 @@ define('io.ox/mail/common-extensions',
                 return extension.draw.call(node, ext.Baton({ data: data }));
             }
 
-            function renderAttachments(list, attachments) {
-                _(attachments).each(function (a, i) {
-                    try {
-                        var label = (a.filename || ('Attachment #' + i))
-                            // lower case file extensions for better readability
-                            .replace(/\.(\w+)$/, function (match) {
-                                return match.toLowerCase();
-                            });
-                        // draw
-                        var dd = drawAttachmentDropDown(list, _.noI18n(label), a);
-                        dd.find('a').first().addClass('attachment-link').prepend(
-                            $('<i class="fa fa-paperclip">'),
-                            $.txt('\u00A0')
-                        );
-                    } catch (e) {
-                        console.error('mail.drawAttachment', e.message);
-                    }
-                });
-            }
-
             return function (baton) {
 
                 var attachments = baton.attachments,
                     length = attachments.length,
                     list,
+                    previewToggle = $('<i class="fa fa-th-large preview-toggle">'),
                     $el = this;
 
                 if (!length) return;
@@ -368,20 +312,14 @@ define('io.ox/mail/common-extensions',
                         )
                     )
                     .click(function () {
-                        var previewList = $el.find('ul.preview');
                         //toggle attachment links
                         if (list.children().length === 0) {
-                            renderAttachments(list, attachments);
-                            extensions.attachmentPreview.call($el, baton);
+                            baton.preview = previewToggle.hasClass('fa-list');
+                            extensions.attachmentPreview.call(list, baton);
                             $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
                         } else if (list.is(':visible')) {
-                            list.hide();
-                            previewList.hide();
+                            list.empty();
                             $(this).find('i').removeClass('fa-caret-down').addClass('fa-caret-right');
-                        } else {
-                            list.show();
-                            previewList.show();
-                            $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
                         }
                     })
                 );
@@ -389,6 +327,21 @@ define('io.ox/mail/common-extensions',
                 // show actions for 'all' attachments
                 attachments.subject = baton.data.subject;
                 drawInlineLinks($el, attachments);
+                $el.append(
+                    $('<a href="#" class="pull-right">')
+                        .append(previewToggle)
+                        .on('click', function () {
+                            if (previewToggle.hasClass('fa-th-large')) {
+                                previewToggle.removeClass('fa-th-large').addClass('fa-list');
+                            } else {
+                                previewToggle.removeClass('fa-list').addClass('fa-th-large');
+                            }
+                            $el.children('a.n-more').find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
+                            list.empty();
+                            baton.preview = previewToggle.hasClass('fa-list');
+                            extensions.attachmentPreview.call(list, baton);
+                        })
+                );
 
                 $el.append(list);
             };
@@ -412,7 +365,7 @@ define('io.ox/mail/common-extensions',
                     view = new attachments.view.AttachmentList({
                         collection: collection,
                         editable: false,
-                        preview: true
+                        preview: baton.preview
                     });
 
                 view.render();
