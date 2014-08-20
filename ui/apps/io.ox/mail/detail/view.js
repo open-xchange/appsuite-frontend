@@ -196,12 +196,6 @@ define('io.ox/mail/detail/view',
         draw: extensions.attachmentList
     });
 
-    ext.point('io.ox/mail/detail/attachments').extend({
-        id: 'attachment-preview',
-        index: 200,
-        draw: extensions.attachmentPreview
-    });
-
     ext.point('io.ox/mail/detail/body').extend({
         id: 'content',
         index: 1000,

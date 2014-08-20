@@ -324,21 +324,7 @@ define('io.ox/mail/common-extensions',
                 return extension.draw.call(node, ext.Baton({ data: data }));
             }
 
-            function showAllAttachments() {
-                $(this).closest('.attachment-list').children().css('display', 'inline-block');
-                $(this).remove();
-            }
-
-            return function (baton) {
-
-                var attachments = baton.attachments,
-                    length = attachments.length,
-                    list;
-
-                if (!length) return;
-
-                list = $('<div class="attachment-list">');
-
+            function renderAttachments(list, attachments) {
                 _(attachments).each(function (a, i) {
                     try {
                         var label = (a.filename || ('Attachment #' + i))
@@ -352,35 +338,60 @@ define('io.ox/mail/common-extensions',
                             $('<i class="fa fa-paperclip">'),
                             $.txt('\u00A0')
                         );
-                        // cut off long lists?
-                        if (i > 1 && length > 3) dd.hide();
-
                     } catch (e) {
                         console.error('mail.drawAttachment', e.message);
                     }
                 });
+            }
 
-                // add "[n] more ..."
-                if (length > 3) {
-                    list.append(
-                        $('<a href="#" class="n-more">').text(
-                            //#. %1$d - number of attachments not shown (will be shown when string is clicked)
-                            gt('and %1$d others ...', length - 2)
+            return function (baton) {
+
+                var attachments = baton.attachments,
+                    length = attachments.length,
+                    list,
+                    $el = this;
+
+                if (!length) return;
+
+                list = $('<div class="attachment-list">');
+
+                $el.append(
+                    $('<a href="#" class="n-more">').append(
+                        '<i class="fa fa-caret-right">&nbsp;',
+                        gt.format(
+                            //#. %1$d - number of attachments
+                            gt.ngettext('%1$d Attachment', '%1$d Attachments', length),
+                            length
                         )
-                        .click(showAllAttachments)
-                    );
-                }
+                    )
+                    .click(function () {
+                        var previewList = $el.find('ul.preview');
+                        //toggle attachment links
+                        if (list.children().length === 0) {
+                            renderAttachments(list, attachments);
+                            extensions.attachmentPreview.call($el, baton);
+                            $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
+                        } else if (list.is(':visible')) {
+                            list.hide();
+                            previewList.hide();
+                            $(this).find('i').removeClass('fa-caret-down').addClass('fa-caret-right');
+                        } else {
+                            list.show();
+                            previewList.show();
+                            $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
+                        }
+                    })
+                );
 
                 // show actions for 'all' attachments
                 attachments.subject = baton.data.subject;
-                list.append('<br>');
-                drawInlineLinks(list, attachments);
+                drawInlineLinks($el, attachments);
 
-                this.append(list);
+                $el.append(list);
             };
         }()),
 
-        attachmentPreview: function (baton) {
+        attachmentPreview: function attachmentPreview(baton) {
 
             if (baton.attachments.length === 0) return $.when();
 
