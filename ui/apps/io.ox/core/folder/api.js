@@ -27,15 +27,19 @@ define('io.ox/core/folder/api',
 
     var api = {}, pool;
 
-    // tree type (classic: 0 vs new: 1)
-    var TREE = 0;
-
     // add event hub
     Events.extend(api);
 
     //
     // Utility functions
     //
+
+    function tree(id) {
+        id = String(id);
+        // use tree 0 for mail, use tree 1 for all other modules.
+        // we need tree 1 for files so that 'altNames' works.
+        return id === '1' || /^default\d+/.test(id) ? 0 : 1;
+    }
 
     function injectIndex(item, index) {
         item.index = index;
@@ -249,7 +253,7 @@ define('io.ox/core/folder/api',
                 altNames: true,
                 id: id,
                 timezone: 'UTC',
-                tree: TREE
+                tree: tree(id)
             }
         })
         .then(function (data) {
@@ -327,7 +331,7 @@ define('io.ox/core/folder/api',
                 altNames: true,
                 parent: id,
                 timezone: 'UTC',
-                tree: TREE
+                tree: tree(id)
             },
             appendColumns: true
         })
@@ -366,7 +370,7 @@ define('io.ox/core/folder/api',
                 action: 'path',
                 altNames: true,
                 id: id,
-                tree: TREE
+                tree: tree(id)
             },
             appendColumns: true
         })
@@ -436,7 +440,7 @@ define('io.ox/core/folder/api',
                 altNames: true,
                 content_type: module,
                 timezone: 'UTC',
-                tree: TREE
+                tree: 1
             }
         })
         .then(function (data) {
@@ -490,7 +494,7 @@ define('io.ox/core/folder/api',
                 action: 'update',
                 id: id,
                 timezone: 'UTC',
-                tree: TREE
+                tree: tree(id)
             },
             data: changes,
             appendColumns: false
@@ -564,7 +568,7 @@ define('io.ox/core/folder/api',
                     autorename: true,
                     folder_id: id,
                     module: module,
-                    tree: TREE
+                    tree: tree(id)
                 },
                 data: data,
                 appendColumns: false
@@ -630,7 +634,7 @@ define('io.ox/core/folder/api',
             params: {
                 action: 'delete',
                 failOnError: true,
-                tree: TREE
+                tree: tree(id)
             },
             data: [id],
             appendColumns: false
