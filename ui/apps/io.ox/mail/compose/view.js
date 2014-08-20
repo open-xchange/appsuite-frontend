@@ -13,6 +13,7 @@
 
 define('io.ox/mail/compose/view',
     ['io.ox/mail/compose/extensions',
+     'io.ox/mail/compose/model',
      'io.ox/backbone/mini-views/dropdown',
      'io.ox/core/extensions',
      'io.ox/mail/api',
@@ -23,7 +24,7 @@ define('io.ox/mail/compose/view',
      'io.ox/core/notifications',
      'io.ox/core/api/snippets',
      'gettext!io.ox/mail'
-    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, settings, coreSettings, notifications, snippetAPI, gt) {
+    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, settings, coreSettings, notifications, snippetAPI, gt) {
 
     'use strict';
 
@@ -321,6 +322,7 @@ define('io.ox/mail/compose/view',
 
         initialize: function (options) {
             this.app = options.app;
+            this.model = new MailModel(options.data);
             this.editorHash = {};
             this.autosave = {};
             this.intervals = [];
@@ -356,6 +358,21 @@ define('io.ox/mail/compose/view',
             this.listenTo(this.model, 'needsync', this.syncMail);
 
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+        },
+
+        fetchMail: function (obj) {
+            var self = this;
+            if (/(compose|edit)/.test(obj.mode)) {
+                return $.when();
+            } else {
+                obj = _.pick(obj, 'id', 'folder_id', 'mode');
+            }
+            return mailAPI[obj.mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
+                data.sendtype = obj.mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                data.mode = obj.mode;
+                self.model.set(data);
+                self.model.initialize();
+            });
         },
 
         setSubject: function (e) {

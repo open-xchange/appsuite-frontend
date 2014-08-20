@@ -26,7 +26,10 @@ define('io.ox/mail/compose/extensions',
     ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, settings, gt) {
 
     function renderFrom(array) {
-        var name = array[0], address = array[1];
+        //console.log('renderFrom', array);
+        if (!array) return;
+        var name = _(array).first(),
+            address = _(array).last();
         return [
             $('<span class="name">').text(name ? name + ' ' : ''),
             $('<span class="address">').text('<' + address + '>')
@@ -98,6 +101,7 @@ define('io.ox/mail/compose/extensions',
 
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
+                    //console.log('defaultSender', _(baton.model.get('from')).compact());
                     var defaultSender = baton.model.get('from'),
                         dropdown = new SenderDropdown({
                             model: baton.model,

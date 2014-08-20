@@ -72,47 +72,30 @@ define('io.ox/mail/compose/main',
         };
 
         app.failRestore = function (point) {
-            var def = $.Deferred(),
-                model = new MailModel(point);
-
-            app.view = new MailComposeView({ model: model, app: app });
-
-            _.url.hash('app', 'io.ox/mail/compose:' + point.mode);
-
-            win.busy().show(function () {
-                win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                app.view.setMail(point.data).done(function () {
-                    model.dirty(true);
-                    win.idle();
-                    def.resolve({app: app});
-                });
-            });
-            return def;
+            return compose(point.mode)(point);
         };
 
         function compose(type) {
-            return function (data) {
-                data = _.extend({mode: type}, data);
 
-                if (type === 'edit') {
-                    app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
-                    data.msgref = data.folder_id + '/' + data.id;
-                }
+            return function (obj) {
 
-                var def = $.Deferred(),
-                    model = new MailModel(data);
+                var def = $.Deferred();
+                _.url.hash('app', 'io.ox/mail/compose:' + type);
 
-                app.view = new MailComposeView({ model: model, app: app });
+                obj = _.extend({mode: type}, obj);
 
-                _.url.hash('app', 'io.ox/mail/compose:compose');
+                app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
+
+                app.view = new MailComposeView({ data: obj, app: app });
 
                 win.busy().show(function () {
                     win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                    app.view.setMail()
-                    .done(function () {
-                        win.idle();
-                         // render view and append
-                        def.resolve({app: app});
+                    app.view.fetchMail(obj).done(function () {
+                        app.view.setMail()
+                        .done(function () {
+                            win.idle();
+                            def.resolve({app: app});
+                        });
                     })
                     .fail(function (e) {
                         notifications.yell(e);
@@ -125,52 +108,13 @@ define('io.ox/mail/compose/main',
             };
         }
 
-        function reply(type) {
-
-            return function (obj) {
-
-                var def = $.Deferred();
-                _.url.hash('app', 'io.ox/mail/compose:' + type);
-
-                app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
-
-                function cont(obj) {
-                    win.busy().show(function () {
-                        mailAPI[type](obj, settings.get('messageFormat', 'html'))
-                        .done(function (data) {
-                            data.sendtype = type === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
-                            data.mode = type;
-                            var model = new MailModel(data);
-                            app.view = new MailComposeView({ model: model, app: app });
-                            win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-
-                            app.view.setMail()
-                            .done(function () {
-                                win.idle();
-                                def.resolve({app: app});
-                            });
-                        })
-                        .fail(function (e) {
-                            notifications.yell(e);
-                            app.quit();
-                            def.reject();
-                        });
-                    });
-                }
-
-                cont(obj || { folder: _.url.hash('folder'), id: _.url.hash('id') });
-
-                return def;
-            };
-        }
-
         // destroy
         app.setQuit(function () { return app.view.discard(); });
 
         app.compose  = compose('compose');
-        app.forward  = reply('forward');
-        app.reply    = reply('reply');
-        app.replyall = reply('replyall');
+        app.forward  = compose('forward');
+        app.reply    = compose('reply');
+        app.replyall = compose('replyall');
         app.edit     = compose('edit');
 
         return app;
