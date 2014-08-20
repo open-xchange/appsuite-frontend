@@ -23,9 +23,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         className: 'folder selectable',
 
         events: {
-            'click .folder-arrow': 'onToggle',
-            'click .folder-options': 'onOptions',
-            'keydown': 'onKeydown'
+            'click .folder-options'     : 'onOptions',
+            'click .folder-arrow'       : 'onToggle',
+            'dblclick .folder-label'    : 'onToggle',
+            'keydown'                   : 'onKeydown'
         },
 
         list: function () {
