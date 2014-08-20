@@ -346,7 +346,7 @@ define('io.ox/core/extPatterns/links',
                         .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
                             var left = $(this).parent().position().left;
-                            $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' pull-right'));
+                            $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
                         }),
                         $('<ul class="dropdown-menu pull-right" role="menu">')
                         .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
