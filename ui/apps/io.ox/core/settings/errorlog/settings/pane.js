@@ -248,7 +248,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
         getUrl: function (model) {
             return model.get('url')
                 // obscure password parameters (see bug #27250)
-                .replace(/(password\w*)=[^&#]+/g, '$1=****')
+                .replace(/(password\w*)=[^&#]+/ig, '$1=****')
                 // make slahes and commas readable
                 .replace(/%2F/g, '/').replace(/%2C/g, ',');
         },
@@ -273,7 +273,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
                     // obscure password properties (at least top-level; see bug #27250)
                     if (_.isObject(data)) {
                         _(data).each(function (value, key) {
-                            if (/password/.test(key)) data[key] = '****';
+                            if ((/password/i).test(key)) data[key] = '****';
                         });
                     }
                     return JSON.stringify(data, null, '  ');
@@ -341,13 +341,11 @@ define('io.ox/core/settings/errorlog/settings/pane',
         }
     });
 
-    var log = new ErrorLogView();
-
     ext.point('io.ox/core/settings/errorlog/settings/detail').extend({
         draw: function () {
             this.append(
                 $('<h1>').text(gt('Error log')),
-                log.render().$el
+                (new ErrorLogView()).render().$el
             );
         }
     });
