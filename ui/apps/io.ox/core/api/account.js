@@ -176,16 +176,26 @@ define('io.ox/core/api/account',
                 var re = unifiedFolders[type];
                 return Boolean(re && re.test(id));
             } else {
-                return typeHash[id] === type;
+                // loop of all types to also check if a subfolder is of a type
+                return _(typeHash).some(function (defaultType, defaultId) {
+                    return defaultType === type && id.indexOf(defaultId) === 0;
+                });
             }
         }
 
-        return function (type, id) {
-            type = String(type || '').split('|');
-            return _(type).reduce(function (memo, type) {
-                return memo || is(type, id);
-            }, false);
-        };
+        // use memoize to speed things up (yep, no reset if someone changes default folders)
+        return _.memoize(
+            function (type, id) {
+                type = String(type || '').split('|');
+                id = String(id || '');
+                return _(type).reduce(function (memo, type) {
+                    return memo || is(type, id);
+                }, false);
+            },
+            function hash(type, id) {
+                return type + ':' + id;
+            }
+        );
     }());
 
     /**
@@ -205,6 +215,10 @@ define('io.ox/core/api/account',
 
     api.isStandardFolder = function (id) {
         return typeHash[id] !== undefined;
+    };
+
+    api.inspect = function () {
+        return { accounts: idHash, types: typeHash };
     };
 
     /**
