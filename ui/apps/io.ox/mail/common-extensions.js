@@ -324,9 +324,11 @@ define('io.ox/mail/common-extensions',
                     })
                 );
 
-                // show actions for 'all' attachments
-                attachments.subject = baton.data.subject;
-                drawInlineLinks($el, attachments);
+                if (attachments.length > 1) {
+                    // show actions for 'all' attachments
+                    attachments.subject = baton.data.subject;
+                    drawInlineLinks($el, attachments);
+                }
                 $el.append(
                     $('<a href="#" class="pull-right">')
                         .append(previewToggle)
