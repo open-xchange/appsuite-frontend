@@ -239,9 +239,9 @@ define('io.ox/mail/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': app.settings.get('layout', 'vertical'),
+                'layout': _.device('smartphone') ? 'vertical' : app.settings.get('layout', 'vertical'),
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
-                'contactPictures': app.settings.get('showContactPictures', false),
+                'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
                 'mobileFolderSelectMode': false
             });
@@ -727,7 +727,6 @@ define('io.ox/mail/main',
          * Thread view navigation must respond to changing layout
          */
         'change:layout': function (app) {
-
             app.props.on('change:layout', function (model, value) {
                 app.threadView.toggleNavigation(value === 'list');
             });
@@ -739,7 +738,7 @@ define('io.ox/mail/main',
          * Respond to changing layout
          */
         'apply-layout': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.applyLayout = function () {
 
                 var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className;
