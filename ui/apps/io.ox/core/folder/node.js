@@ -316,7 +316,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if ((!this.isVirtual || o.contextmenu !== 'default') && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
+            if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
 
             // get data
             if (!this.isVirtual) api.get(o.model_id);
