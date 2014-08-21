@@ -101,7 +101,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             var pNode = $('<div class="col-xs-12 col-md-6">').append(
                     $('<div class="autocomplete-controls input-group">').append(
-                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr('placeholder', gt('Add contact') + ' ...'),
+                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr({'placeholder': gt('Add contact') + ' ...', 'aria-label': gt('Add contact')}),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" aria-label="' + gt('Add contact') + '" data-action="add" tabindex="1">')
                                 .append($('<i class="fa fa-plus">'))
@@ -263,7 +263,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                             .text(o.mail)
                     ),
                     // remove icon
-                    $('<a href="#" class="remove" tabindex="1">').append(
+                    $('<a href="#" class="remove" role="button" aria-label="' + gt('Remove contact') + '" tabindex="1">').append(
                         $('<div class="icon">').append(
                             $('<i class="fa fa-trash-o">')
                         )

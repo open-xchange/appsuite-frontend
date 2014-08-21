@@ -258,7 +258,7 @@ define('io.ox/contacts/edit/view-form',
 
             node.find('.toggle-compact')
                 .find('i').attr('class', icon).end()
-                .find('a').text(label);
+                .find('a').attr('role', 'button').text(label);
         }
 
         var FullnameView = mini.AbstractView.extend({
@@ -314,7 +314,7 @@ define('io.ox/contacts/edit/view-form',
                 var link;
                 this.append(
                     $('<nav class="toggle-compact clear">').append(
-                        link = $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
+                        link = $('<a href="#" tabindex="1" role="button">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
                         $('<i class="fa fa-plus-square-o">')
                     )
