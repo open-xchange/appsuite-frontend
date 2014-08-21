@@ -108,7 +108,7 @@ define('io.ox/mail/compose/model',
                 }
             }
 
-            if (!this.get('from')) {
+            if (!this.get('from') || this.get('from').length === 0) {
                 accountAPI.getPrimaryAddressFromFolder(this.get('folder_id')).then(function (address) {
                     this.set('from', [address]);
                 }.bind(this));

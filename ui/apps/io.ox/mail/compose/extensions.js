@@ -26,7 +26,6 @@ define('io.ox/mail/compose/extensions',
     ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, settings, gt) {
 
     function renderFrom(array) {
-        //console.log('renderFrom', array);
         if (!array) return;
         var name = _(array).first(),
             address = _(array).last();
@@ -101,11 +100,10 @@ define('io.ox/mail/compose/extensions',
 
             var node = $('<div class="row sender" data-extension-id="sender">'),
                 render = function () {
-                    //console.log('defaultSender', _(baton.model.get('from')).compact());
-                    var defaultSender = baton.model.get('from'),
+                    var defaultSender = _(baton.model.get('from')).first(),
                         dropdown = new SenderDropdown({
                             model: baton.model,
-                            label: defaultSender[0][0] + ' <' + defaultSender[0][1] + '>',
+                            label: _(defaultSender).first() + ' <' + _(defaultSender).last() + '>',
                             aria: gt('From'),
                             caret: true
                         });
@@ -254,20 +252,24 @@ define('io.ox/mail/compose/extensions',
         },
 
         subject: function (baton) {
-            var guid = _.uniqueId('form-control-label-');
+            var guid = _.uniqueId('form-control-label-'),
+                input;
             this.append(
                 $('<div class="row subject" data-extension-id="subject">').append(
                     $('<label class="maillabel col-xs-2 col-md-1">').text(gt('Subject')).attr({
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input class="form-control">').val(baton.model.get('subject')).attr({
+                        input = $('<input class="form-control">').val(baton.model.get('subject')).attr({
                             id: guid,
                             tabindex: 1
                         })
                     )
                 )
             );
+            baton.view.listenTo(baton.model, 'change:subject', function() {
+                input.val(baton.model.get('subject'));
+            });
         },
 
         signature: function (baton) {
