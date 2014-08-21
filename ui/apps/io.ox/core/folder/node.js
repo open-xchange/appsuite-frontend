@@ -243,6 +243,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
                 open: false,                    // state
+                sortable: false,                // sortable via alt-cursor-up/down
                 subfolders: true,               // load/avoid subfolders
                 title: ''                       // custom title
             }, options);
@@ -306,6 +307,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                 this.$el.removeClass('selectable').removeAttr('tabindex');
                 this.$.selectable.hide();
             }
+
+            // sortable
+            if (o.sortable) this.$el.attr('data-sortable', true);
 
             // virtual?
             if (this.isVirtual) this.$el.addClass('virtual');

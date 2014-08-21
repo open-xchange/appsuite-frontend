@@ -29,12 +29,15 @@ define('io.ox/core/folder/favorites',
             collection = api.pool.getCollection(id),
             favorites = settings.get('favorites/' + module, []);
 
-        function store() {
-            var ids = collection.pluck('id').sort();
+        function store(ids) {
             settings.set('favorites/' + module, ids).save();
         }
 
-        collection.on('add remove', store);
+        function storeCollection() {
+            store(collection.pluck('id'));
+        }
+
+        collection.on('add remove', storeCollection);
 
         function initialize(id) {
             api.multiple(favorites).done(function (response) {
@@ -45,7 +48,7 @@ define('io.ox/core/folder/favorites',
                 collection.reset(list);
                 model.set('subfolders', true);
                 // // if there was an error we update settings
-                if (list.length !== response.length) store();
+                if (list.length !== response.length) storeCollection();
             });
         }
 
@@ -60,11 +63,15 @@ define('io.ox/core/folder/favorites',
                         folder: id,
                         open: false,
                         parent: tree,
+                        sortable: true,
                         title: 'Favorites',
                         tree: tree
                     })
                     .render().$el.addClass('favorites')
                 );
+
+                // store new order
+                tree.on('sort:' + id, store);
 
                 if (favorites.length > 0) initialize(id);
             }

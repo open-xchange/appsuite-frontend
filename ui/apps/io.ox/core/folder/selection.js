@@ -97,16 +97,36 @@ define('io.ox/core/folder/selection', [], function () {
 
             var items = this.getItems().filter(':visible'),
                 current = $(document.activeElement),
-                index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
+                up = e.which === 38,
+                index = (items.index(current) || 0) + (up ? -1 : +1);
 
             if (index >= items.length || index < 0) return;
 
             // avoid duplicates and unwanted scrolling
             if (e.isDefaultPrevented()) return; else e.preventDefault();
 
+            // sort?
+            if (e.altKey && current.parent().parent().attr('data-sortable') === 'true') {
+                return this.move(current, up);
+            }
+
             this.resetTabIndex(items, items.eq(index));
             this.resetSelected(items);
             this.pick(index, items);
+        },
+
+        move: function (item, up) {
+            // move element
+            if (up) item.insertBefore(item.prev()); else item.insertAfter(item.next());
+            // refocus
+            item.focus();
+            // get folder and ids
+            var folder = item.parent().parent().attr('data-id'),
+                ids = _(item.parent().children('.selectable')).map(function (node) {
+                    return $(node).attr('data-id');
+                });
+            // trigger proper event
+            this.view.trigger('sort sort:' + folder, ids);
         },
 
         pick: function (index, items) {
