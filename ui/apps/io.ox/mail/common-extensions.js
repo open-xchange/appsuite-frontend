@@ -295,6 +295,7 @@ define('io.ox/mail/common-extensions',
                 var attachments = baton.attachments,
                     length = attachments.length,
                     list,
+                    view,
                     previewToggle = $('<i class="fa fa-th-large preview-toggle">'),
                     $el = this;
 
@@ -313,13 +314,18 @@ define('io.ox/mail/common-extensions',
                     )
                     .click(function () {
                         //toggle attachment links
-                        if (list.children().length === 0) {
+                        if (!view) {
                             baton.preview = previewToggle.hasClass('fa-list');
-                            extensions.attachmentPreview.call(list, baton);
+                            extensions.attachmentPreview.call(list, baton).then(function (attachmentList) {
+                                view = attachmentList;
+                            });
                             $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
-                        } else if (list.is(':visible')) {
-                            list.empty();
+                        } else if (view.$el.is(':visible')) {
+                            view.$el.hide();
                             $(this).find('i').removeClass('fa-caret-down').addClass('fa-caret-right');
+                        } else {
+                            view.$el.show();
+                            $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
                         }
                     })
                 );
@@ -339,9 +345,15 @@ define('io.ox/mail/common-extensions',
                                 previewToggle.removeClass('fa-list').addClass('fa-th-large');
                             }
                             $el.children('a.n-more').find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
-                            list.empty();
-                            baton.preview = previewToggle.hasClass('fa-list');
-                            extensions.attachmentPreview.call(list, baton);
+                            if (!view) {
+                                baton.preview = previewToggle.hasClass('fa-list');
+                                extensions.attachmentPreview.call(list, baton).then(function (attachmentList) {
+                                    view = attachmentList;
+                                });
+                            } else {
+                                view.togglePreview();
+                                view.$el.show();
+                            }
                         })
                 );
 

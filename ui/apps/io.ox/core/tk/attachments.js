@@ -776,6 +776,15 @@ define('io.ox/core/tk/attachments',
                 this.$el.addClass('preview');
             }
         },
+        togglePreview: function () {
+            this.preview = !this.preview;
+            if (this.preview) {
+                this.$el.addClass('preview');
+            } else {
+                this.$el.removeClass('preview');
+            }
+            return this.render();
+        },
         addAttachment: function (model) {
             if (!model.isFileAttachment()) return;
             var addPreview = this.preview,
