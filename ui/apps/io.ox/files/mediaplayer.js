@@ -328,8 +328,8 @@ define('io.ox/files/mediaplayer',
             var minimizedPlayerLauncher;
             $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
             $('#io-ox-topbar > div.launchers-secondary').prepend(
-                minimizedPlayerLauncher = $('<div class="launcher minimizedmediaplayer" tabindex="1">').append(
-                    $('<i>').addClass('fa fa-play icon-white')
+                minimizedPlayerLauncher = $('<li class="launcher minimizedmediaplayer">').append(
+                    $('<a href="#" tabindex="1">').append($('<i>').addClass('fa fa-play'))
                 ).one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();

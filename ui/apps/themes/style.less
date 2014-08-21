@@ -780,26 +780,8 @@ div.hopscotch-bubble {
 
     }
 
-    .launcher.minimizedmediaplayer {
-
-        height: 40px;
-        display: inline-block;
-        padding: 0 12px;
-
-        &:focus {
-            i { color: white; }
-            background-color: @link-color;
-            outline-style: none;
-        }
-
-        &.active {
-            color: white;
-            background-color: @topbar-launcher-background-hover;
-        }
-
-        &.active:hover, &.active:focus {
-            background-color: @topbar-launcher-background-hover;
-        }
+    .launcher.minimizedmediaplayer:focus {
+        outline-style: none;
     }
 }
 
