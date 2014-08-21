@@ -22,6 +22,16 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
+#. %1$d - number of attachments
+#: apps/io.ox/mail/common-extensions.js:363 module:io.ox/mail
+#, fuzzy
+#| msgid "(%1$s) Attachments"
+msgid "%1$d Attachment"
+msgid_plural "%1$d Attachments"
+msgstr[0] "(%1$s) Přílohy"
+msgstr[1] "(%1$s) Přílohy"
+msgstr[2] "(%1$s) Přílohy"
+
 #: apps/io.ox/calendar/util.js:272 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
@@ -442,7 +452,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> prvků vybráno"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:548 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -863,7 +873,7 @@ msgstr "Připojit vCard"
 msgid "Application Toolbar"
 msgstr "Nástrojová lišta aplikace"
 
-#: apps/io.ox/mail/main.js:1099 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1104 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikace nemusí pracovat podle očekávání, dokud nebude tento problém vyřešen."
@@ -1572,7 +1582,7 @@ msgstr "Firmy"
 msgid "Company"
 msgstr "Firma"
 
-#: apps/io.ox/mail/compose/main.js:40 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:45 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:364 apps/io.ox/mail/compose/view.js:368
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
@@ -1750,7 +1760,7 @@ msgid "Could not save settings."
 msgstr "Nepodařilo se uložit nastavení."
 
 #: apps/io.ox/core/api/folder.js:684 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:511
+#: apps/io.ox/core/folder/api.js:515
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2514,7 +2524,7 @@ msgstr "E-mailové adresy"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:371
+#: apps/io.ox/mail/detail/view.js:365
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail od %1$s: %2$s"
 
@@ -2646,7 +2656,7 @@ msgid "Error"
 msgstr "Chyba"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:27 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:349
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:347
 msgid "Error log"
 msgstr "Záznam o chybách"
 
@@ -2779,7 +2789,7 @@ msgstr "Rozšířený pohled"
 msgid "External contact"
 msgstr "Externí kontakt"
 
-#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:495 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Obrázky z externích zdrojů byly zablokovány kvůli ochraně před spamem."
@@ -3028,7 +3038,7 @@ msgstr ""
 "Složka s názvem „%1$s“ bude skryta. Pro pozdější přístup k této složce "
 "povolte možnost „Zobrazit skryté soubory a složky“."
 
-#: apps/io.ox/core/folder/node.js:364 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:365 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "Činnosti týkající se složky"
@@ -3230,7 +3240,7 @@ msgstr "Nápověda"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Dobrý den,<br><br>%1$s s vámi sdílel(a) publikaci:<br>%2$s"
 
-#: apps/io.ox/core/folder/extensions.js:253 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Hidden folders"
 msgid "Hidden"
@@ -3717,7 +3727,7 @@ msgid "MB"
 msgstr "MB"
 
 #: apps/io.ox/core/tk/folderviews.js:889 module:io.ox/core
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:774
 msgid "Mail"
 msgstr "Pošta"
@@ -4117,7 +4127,7 @@ msgid "New"
 msgstr "Nový"
 
 #: apps/io.ox/core/api/folder.js:547 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:551
+#: apps/io.ox/core/folder/api.js:555
 #: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Nová složka"
@@ -4167,7 +4177,7 @@ msgid "New password"
 msgstr "Nové heslo"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 #, fuzzy
 #| msgid "New private folder"
 msgid "New private calendar"
@@ -4175,12 +4185,12 @@ msgstr "Nová soukromá složka"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 msgid "New private folder"
 msgstr "Nová soukromá složka"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 #, fuzzy
 #| msgid "Public calendars"
 msgid "New public calendar"
@@ -4188,7 +4198,7 @@ msgstr "Veřejné kalendáře"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 msgid "New public folder"
 msgstr "Nová veřejná složka"
 
@@ -4331,7 +4341,7 @@ msgstr "Žádné pomalé požadavky"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/util.js:374 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:774
@@ -5140,7 +5150,7 @@ msgstr "Oznámení o soukromí"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:242 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:255 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 #: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
@@ -5183,7 +5193,7 @@ msgstr "Postup musí být číslo od 0 do 100"
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: apps/io.ox/core/folder/extensions.js:247 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:260 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Public"
 msgstr "Veřejné"
@@ -5731,7 +5741,7 @@ msgid "Send"
 msgstr "Poslat"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:565 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:578 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5882,7 +5892,7 @@ msgstr "Sdílet tento soubor"
 msgid "Share this folder"
 msgstr "Sdílet tuto složku"
 
-#: apps/io.ox/core/folder/extensions.js:250 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:263 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Shared"
 msgstr "Sdílené"
@@ -5917,7 +5927,7 @@ msgstr "Ukázat všech %1$d zpráv ve schránce"
 msgid "Show all items"
 msgstr "Zobrazit všechny položky"
 
-#: apps/io.ox/calendar/main.js:566 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:578 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Zobrazit všechny mé schůzky ze všech kalendářů"
 
@@ -5965,7 +5975,7 @@ msgstr "Zobrazit skryté soubory a složky"
 msgid "Show icons"
 msgstr "Zobrazit komentáře"
 
-#: apps/io.ox/mail/common-extensions.js:481 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:494 module:io.ox/mail
 msgid "Show images"
 msgstr "Zobrazit obrázky"
 
@@ -6004,7 +6014,7 @@ msgstr "Zobrazit další stranu"
 msgid "Show previous day"
 msgstr "Zobrazit předchozí stranu"
 
-#: apps/io.ox/mail/detail/content.js:399 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:396 module:io.ox/mail
 msgid "Show quoted text"
 msgstr "Zobrazit citovaný text"
 
@@ -6678,7 +6688,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Zadaný název souboru překračuje povolenou délku."
 
-#: apps/io.ox/mail/common-extensions.js:568 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Odesílatel si přeje dostat potvrzení, když si zprávu přečtete"
 
@@ -6840,15 +6850,15 @@ msgstr ""
 "Tyto statistiky zahrnují pouze složky, které mají méně než čtyři podúrovně "
 "ve struktuře složek počínající složkou „%1$s“."
 
-#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:451 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 #, fuzzy
 #| msgid "This mail contains a reply to an invitation."
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Tato zpráva obsahuje odpověď na pozvánku."
 
-#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:454 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7167,7 +7177,7 @@ msgstr "10 nejčastějších adresátů"
 msgid "Total cost"
 msgstr "Celková cena"
 
-#: apps/io.ox/core/folder/node.js:354 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
 #, fuzzy
 #| msgid "Contact: %1$s"
 msgid "Total: %1$d"
@@ -7295,7 +7305,7 @@ msgstr "Odemknout"
 msgid "Unread"
 msgstr "Nepřečtené"
 
-#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:356 module:io.ox/core
 #, fuzzy
 #| msgid "Unread"
 msgid "Unread: %1$d"
@@ -7483,7 +7493,7 @@ msgstr "Zobrazit zdroj"
 msgid "Waiting"
 msgstr "Čekám"
 
-#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:521 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varování: Tato zpráva je možná e-mailový podvod"
 
@@ -8002,11 +8012,6 @@ msgstr "a"
 #: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "a %1$d dalších"
-
-#. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:368 module:io.ox/mail
-msgid "and %1$d others ..."
-msgstr "a %1$d dalších..."
 
 #: apps/io.ox/tasks/util.js:22 module:io.ox/tasks
 msgid "by noon"
@@ -8662,9 +8667,6 @@ msgstr "ročně"
 
 #~ msgid "&Social"
 #~ msgstr "&Sociální"
-
-#~ msgid "(%1$s) Attachments"
-#~ msgstr "(%1$s) Přílohy"
 
 #~ msgid "(32-bit only)"
 #~ msgstr "(pouze 32bitové)"
@@ -16824,6 +16826,9 @@ msgstr "ročně"
 
 #~ msgid "all"
 #~ msgstr "všem"
+
+#~ msgid "and %1$d others ..."
+#~ msgstr "a %1$d dalších..."
 
 #~ msgid "any"
 #~ msgstr "jakékoliv"

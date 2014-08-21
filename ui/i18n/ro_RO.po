@@ -22,6 +22,16 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
+#. %1$d - number of attachments
+#: apps/io.ox/mail/common-extensions.js:363 module:io.ox/mail
+#, fuzzy
+#| msgid "(%1$s) Attachments"
+msgid "%1$d Attachment"
+msgid_plural "%1$d Attachments"
+msgstr[0] "(%1$s) Fișiere atașate"
+msgstr[1] "(%1$s) Fișiere atașate"
+msgstr[2] "(%1$s) Fișiere atașate"
+
 #: apps/io.ox/calendar/util.js:272 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
@@ -442,7 +452,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elemente selectate"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:548 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -862,7 +872,7 @@ msgstr "Adaugă un vCard"
 msgid "Application Toolbar"
 msgstr "Bară de unelte pentru aplicații"
 
-#: apps/io.ox/mail/main.js:1099 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1104 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "S-ar putea ca aplicația să nu funcționeze conform așteptărilor până când "
@@ -1582,7 +1592,7 @@ msgstr "Firme"
 msgid "Company"
 msgstr "Firmă"
 
-#: apps/io.ox/mail/compose/main.js:40 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:45 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:364 apps/io.ox/mail/compose/view.js:368
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
@@ -1760,7 +1770,7 @@ msgid "Could not save settings."
 msgstr "Nu s-au putut salva setările."
 
 #: apps/io.ox/core/api/folder.js:684 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:511
+#: apps/io.ox/core/folder/api.js:515
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2529,7 +2539,7 @@ msgstr "Adrese de e-mail"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:371
+#: apps/io.ox/mail/detail/view.js:365
 msgid "Email from %1$s: %2$s"
 msgstr "Mesaj de la %1$s: %2$s"
 
@@ -2662,7 +2672,7 @@ msgid "Error"
 msgstr "Eroare"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:27 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:349
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:347
 msgid "Error log"
 msgstr "Jurnal erori"
 
@@ -2795,7 +2805,7 @@ msgstr "Vedere extinsă"
 msgid "External contact"
 msgstr "Contact extern"
 
-#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:495 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3050,7 +3060,7 @@ msgstr ""
 "Dosarul denumit \"%1$s\" va fi ascuns. Activați setarea \"Afișează fișierele "
 "și dosarele ascunse\" pentru a avea din nou acces la acest dosar."
 
-#: apps/io.ox/core/folder/node.js:364 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:365 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "Acțiuni specifice dosarului"
@@ -3254,7 +3264,7 @@ msgstr ""
 "Bună ziua!<br><br>%1$s dorește să partajeze o publicație cu dumneavoastră:"
 "<br>%2$s"
 
-#: apps/io.ox/core/folder/extensions.js:253 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Hidden folders"
 msgid "Hidden"
@@ -3743,7 +3753,7 @@ msgid "MB"
 msgstr "MB"
 
 #: apps/io.ox/core/tk/folderviews.js:889 module:io.ox/core
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:774
 msgid "Mail"
 msgstr "Mail"
@@ -4143,7 +4153,7 @@ msgid "New"
 msgstr "Nou"
 
 #: apps/io.ox/core/api/folder.js:547 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:551
+#: apps/io.ox/core/folder/api.js:555
 #: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Dosar nou"
@@ -4193,7 +4203,7 @@ msgid "New password"
 msgstr "Noua parolă"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 #, fuzzy
 #| msgid "New private folder"
 msgid "New private calendar"
@@ -4201,12 +4211,12 @@ msgstr "Dosar personal nou"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 msgid "New private folder"
 msgstr "Dosar personal nou"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 #, fuzzy
 #| msgid "Public calendars"
 msgid "New public calendar"
@@ -4214,7 +4224,7 @@ msgstr "Calendare publice"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 msgid "New public folder"
 msgstr "Dosar public nou"
 
@@ -4357,7 +4367,7 @@ msgstr "Nicio cerere lentă"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/util.js:374 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:774
@@ -5168,7 +5178,7 @@ msgstr "Declarație de confidențialitate"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:242 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:255 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 #: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
@@ -5211,7 +5221,7 @@ msgstr "Progresul trebuie să fie un număr corect cuprins între 0 și 100"
 msgid "Properties"
 msgstr "Proprietăți"
 
-#: apps/io.ox/core/folder/extensions.js:247 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:260 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Public"
 msgstr "Public"
@@ -5761,7 +5771,7 @@ msgid "Send"
 msgstr "Trimite"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:565 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:578 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5912,7 +5922,7 @@ msgstr "Partajează fișierul curent"
 msgid "Share this folder"
 msgstr "Partajează dosarul curent"
 
-#: apps/io.ox/core/folder/extensions.js:250 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:263 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Shared"
 msgstr "Partajat"
@@ -5947,7 +5957,7 @@ msgstr "Afișează toate cele %1$d mesaje primite"
 msgid "Show all items"
 msgstr "Afișează mai puține"
 
-#: apps/io.ox/calendar/main.js:566 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:578 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Afișează toate întâlnirile mele din toate calendarele"
 
@@ -5995,7 +6005,7 @@ msgstr "Afișează fișierele și dosarele ascunse"
 msgid "Show icons"
 msgstr "Afișează comentariile"
 
-#: apps/io.ox/mail/common-extensions.js:481 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:494 module:io.ox/mail
 msgid "Show images"
 msgstr "Afișează imaginile"
 
@@ -6034,7 +6044,7 @@ msgstr "Afișează pagina următoare"
 msgid "Show previous day"
 msgstr "Afișează pagina precedentă"
 
-#: apps/io.ox/mail/detail/content.js:399 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:396 module:io.ox/mail
 msgid "Show quoted text"
 msgstr "Afișează textul între ghilimele"
 
@@ -6714,7 +6724,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Numele fișierului depășește lungimea permisă."
 
-#: apps/io.ox/mail/common-extensions.js:568 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Expeditorul dorește să primească o notificare când citiți acest e-mail"
 
@@ -6877,13 +6887,13 @@ msgstr ""
 "Aceste statistici includ doar dosare aflate la nivel cel mult patru în "
 "structura dosarului \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:451 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:454 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7207,7 +7217,7 @@ msgstr "Primii 10 destinatari cărora le-ați trimis mesaje"
 msgid "Total cost"
 msgstr "Cost total"
 
-#: apps/io.ox/core/folder/node.js:354 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
 #, fuzzy
 #| msgid "Contact: %1$s"
 msgid "Total: %1$d"
@@ -7335,7 +7345,7 @@ msgstr "Deblochează"
 msgid "Unread"
 msgstr "Necitite"
 
-#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:356 module:io.ox/core
 #, fuzzy
 #| msgid "Unread"
 msgid "Unread: %1$d"
@@ -7525,7 +7535,7 @@ msgstr "Afișează sursa"
 msgid "Waiting"
 msgstr "Așteptare"
 
-#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:521 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Avertisment: Este posibil ca acest mesaj să fie o escrocherie"
 
@@ -8057,11 +8067,6 @@ msgstr "și"
 #: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "și %1$d alții"
-
-#. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:368 module:io.ox/mail
-msgid "and %1$d others ..."
-msgstr "și %1$d alții ..."
 
 #: apps/io.ox/tasks/util.js:22 module:io.ox/tasks
 msgid "by noon"
@@ -8632,9 +8637,6 @@ msgstr "anual"
 
 #~ msgid "&Social"
 #~ msgstr "&Social"
-
-#~ msgid "(%1$s) Attachments"
-#~ msgstr "(%1$s) Fișiere atașate"
 
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "(poate funcționa încet pe calculatoare vechi)"
@@ -13875,6 +13877,9 @@ msgstr "anual"
 
 #~ msgid "all"
 #~ msgstr "tot"
+
+#~ msgid "and %1$d others ..."
+#~ msgstr "și %1$d alții ..."
 
 #~ msgid "any"
 #~ msgstr "oricare"

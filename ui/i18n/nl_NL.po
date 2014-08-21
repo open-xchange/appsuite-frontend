@@ -22,6 +22,15 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
+#. %1$d - number of attachments
+#: apps/io.ox/mail/common-extensions.js:363 module:io.ox/mail
+#, fuzzy
+#| msgid "(%1$s) Attachments"
+msgid "%1$d Attachment"
+msgid_plural "%1$d Attachments"
+msgstr[0] "(%1$s) Bijlagen"
+msgstr[1] "(%1$s) Bijlagen"
+
 #: apps/io.ox/calendar/util.js:272 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
@@ -432,7 +441,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elementen geselecteerd"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:548 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -853,7 +862,7 @@ msgstr "vCard toevoegen"
 msgid "Application Toolbar"
 msgstr "Applicaties Werkbalk"
 
-#: apps/io.ox/mail/main.js:1099 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1104 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "De applicatie werkt waarschijnlijk niet als u verwacht voordat dit probleem "
@@ -1574,7 +1583,7 @@ msgstr "Bedrijven"
 msgid "Company"
 msgstr "Bedrijf"
 
-#: apps/io.ox/mail/compose/main.js:40 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:45 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:364 apps/io.ox/mail/compose/view.js:368
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
@@ -1752,7 +1761,7 @@ msgid "Could not save settings."
 msgstr "Kan instellingen niet opslaan."
 
 #: apps/io.ox/core/api/folder.js:684 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:511
+#: apps/io.ox/core/folder/api.js:515
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2527,7 +2536,7 @@ msgstr "E-mailadressen"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:371
+#: apps/io.ox/mail/detail/view.js:365
 msgid "Email from %1$s: %2$s"
 msgstr "E-mail van %1$s: %2$s"
 
@@ -2661,7 +2670,7 @@ msgid "Error"
 msgstr "Fout"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:27 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:349
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:347
 msgid "Error log"
 msgstr "Foutenlogboek"
 
@@ -2794,7 +2803,7 @@ msgstr "Uitgebreid overzicht"
 msgid "External contact"
 msgstr "Extern contact"
 
-#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:495 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3050,7 +3059,7 @@ msgstr ""
 "Mappen met de naam \"%1$s\" worden verborgen. Schakel de instelling \"Toon "
 "verborgen bestanden en mappen\" in om deze mappen opnieuw te zien."
 
-#: apps/io.ox/core/folder/node.js:364 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:365 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "Mapspecifieke acties"
@@ -3253,7 +3262,7 @@ msgstr "Hulp"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Hallo!<br><br>%1$s deelt een publicatie met u:<br>%2$s"
 
-#: apps/io.ox/core/folder/extensions.js:253 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Hidden folders"
 msgid "Hidden"
@@ -3740,7 +3749,7 @@ msgid "MB"
 msgstr "MB"
 
 #: apps/io.ox/core/tk/folderviews.js:889 module:io.ox/core
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:774
 msgid "Mail"
 msgstr "E-mail"
@@ -4141,7 +4150,7 @@ msgid "New"
 msgstr "Nieuw"
 
 #: apps/io.ox/core/api/folder.js:547 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:551
+#: apps/io.ox/core/folder/api.js:555
 #: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Nieuwe Map"
@@ -4191,7 +4200,7 @@ msgid "New password"
 msgstr "Nieuw wachtwoord"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 #, fuzzy
 #| msgid "New private folder"
 msgid "New private calendar"
@@ -4199,12 +4208,12 @@ msgstr "Nieuwe privé map"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 msgid "New private folder"
 msgstr "Nieuwe privé map"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 #, fuzzy
 #| msgid "New public folder"
 msgid "New public calendar"
@@ -4212,7 +4221,7 @@ msgstr "Nieuwe publieke map"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 msgid "New public folder"
 msgstr "Nieuwe publieke map"
 
@@ -4357,7 +4366,7 @@ msgstr "Geen langzame verzoeken"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/util.js:374 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:774
@@ -5170,7 +5179,7 @@ msgstr "Privacy-verklaring"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:242 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:255 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 #: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
@@ -5213,7 +5222,7 @@ msgstr "Voortgang moet een getal tussen 0 en 100 zijn"
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: apps/io.ox/core/folder/extensions.js:247 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:260 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Public"
 msgstr "Publiek"
@@ -5760,7 +5769,7 @@ msgid "Send"
 msgstr "Verzenden"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:565 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:578 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5911,7 +5920,7 @@ msgstr "Deel dit bestand"
 msgid "Share this folder"
 msgstr "Deel deze map"
 
-#: apps/io.ox/core/folder/extensions.js:250 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:263 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Shared"
 msgstr "Gedeeld"
@@ -5947,7 +5956,7 @@ msgid "Show all items"
 msgstr "Toon meer items"
 
 # Reinout: kalenders => agenda's
-#: apps/io.ox/calendar/main.js:566 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:578 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Toon al mijn afspraken uit alle agenda's"
 
@@ -5995,7 +6004,7 @@ msgstr "Verborgen bestanden en mappen tonen"
 msgid "Show icons"
 msgstr "Toon commentaar"
 
-#: apps/io.ox/mail/common-extensions.js:481 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:494 module:io.ox/mail
 msgid "Show images"
 msgstr "Afbeeldingen tonen"
 
@@ -6035,7 +6044,7 @@ msgstr "Toon aanvraag tekst"
 msgid "Show previous day"
 msgstr "Toon commentaar"
 
-#: apps/io.ox/mail/detail/content.js:399 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:396 module:io.ox/mail
 msgid "Show quoted text"
 msgstr "Toon geciteerde tekst"
 
@@ -6716,7 +6725,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "De gegeven bestandsnaam is langer dan de toegestane lengte."
 
-#: apps/io.ox/mail/common-extensions.js:568 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "De verzender wil een bevestiging ontvangen als u dit e-mailbericht heeft "
@@ -6880,13 +6889,13 @@ msgstr ""
 "Deze statistieken bevatten alleen mappen welke minder dan vier niveaus "
 "hebben in de mappenboom onder de map \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:451 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:454 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7201,7 +7210,7 @@ msgstr "Top 10 verzendlijst"
 msgid "Total cost"
 msgstr "Totale kosten"
 
-#: apps/io.ox/core/folder/node.js:354 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
 #, fuzzy
 #| msgid "Total: %1$s requests"
 msgid "Total: %1$d"
@@ -7329,7 +7338,7 @@ msgstr "Deblokkeren"
 msgid "Unread"
 msgstr "Ongelezen"
 
-#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:356 module:io.ox/core
 #, fuzzy
 #| msgid "Unread"
 msgid "Unread: %1$d"
@@ -7519,7 +7528,7 @@ msgstr "Bron tonen"
 msgid "Waiting"
 msgstr "Wachten"
 
-#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:521 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn!"
 
@@ -8044,11 +8053,6 @@ msgstr "en"
 msgid "and %1$d others"
 msgstr "en %1$d anderen"
 
-#. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:368 module:io.ox/mail
-msgid "and %1$d others ..."
-msgstr "en %1$d anderen ..."
-
 #: apps/io.ox/tasks/util.js:22 module:io.ox/tasks
 msgid "by noon"
 msgstr "voor de middag"
@@ -8516,9 +8520,6 @@ msgstr "jaarlijks"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s e-mailbericht, %2$s ongelezen"
 #~ msgstr[1] "%1$s e-mailberichten, %2$s ongelezen"
-
-#~ msgid "(%1$s) Attachments"
-#~ msgstr "(%1$s) Bijlagen"
 
 #~ msgid "Account settings could not be saved."
 #~ msgstr "Accountinstellingen kunnen niet opgeslagen worden."
@@ -9456,6 +9457,9 @@ msgstr "jaarlijks"
 #~ msgstr[1] ""
 #~ "U heeft %1$d meldingen. Toets [enter] om naar het meldingengebied te "
 #~ "springen en [escape] om deze te sluiten. "
+
+#~ msgid "and %1$d others ..."
+#~ msgstr "en %1$d anderen ..."
 
 #, fuzzy
 #~ msgid "characters"

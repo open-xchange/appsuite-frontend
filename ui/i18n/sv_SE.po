@@ -23,6 +23,15 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
+#. %1$d - number of attachments
+#: apps/io.ox/mail/common-extensions.js:363 module:io.ox/mail
+#, fuzzy
+#| msgid "(%1$s) Attachments"
+msgid "%1$d Attachment"
+msgid_plural "%1$d Attachments"
+msgstr[0] "(%1$s) Bilagor"
+msgstr[1] "(%1$s) Bilagor"
+
 #: apps/io.ox/calendar/util.js:272 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
@@ -426,7 +435,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> element valda"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:548 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -846,7 +855,7 @@ msgstr "Lägg till vCard"
 msgid "Application Toolbar"
 msgstr "Programmets verktygsrad"
 
-#: apps/io.ox/mail/main.js:1099 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1104 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Programmet kanske inte fungerar som väntat tills problemet är löst."
 
@@ -1561,7 +1570,7 @@ msgstr "Företag"
 msgid "Company"
 msgstr "Företag"
 
-#: apps/io.ox/mail/compose/main.js:40 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:45 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:364 apps/io.ox/mail/compose/view.js:368
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
@@ -1739,7 +1748,7 @@ msgid "Could not save settings."
 msgstr "Kunde inte spara inställningarna."
 
 #: apps/io.ox/core/api/folder.js:684 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:511
+#: apps/io.ox/core/folder/api.js:515
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2502,7 +2511,7 @@ msgstr "E-postadresser"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:371
+#: apps/io.ox/mail/detail/view.js:365
 msgid "Email from %1$s: %2$s"
 msgstr "E-post från %1$s: %2$s"
 
@@ -2634,7 +2643,7 @@ msgid "Error"
 msgstr "Fel"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:27 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:349
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:347
 msgid "Error log"
 msgstr "Fel-logg"
 
@@ -2767,7 +2776,7 @@ msgstr "Utökad vy"
 msgid "External contact"
 msgstr "Extern kontakt"
 
-#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:495 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3021,7 +3030,7 @@ msgstr ""
 "Mapp med namnet \"%1$s\" kommer döljas. Aktivera inställningen \"Visa dolda "
 "filer och mappar\" för att komma åt mappen igen."
 
-#: apps/io.ox/core/folder/node.js:364 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:365 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "Mappspecifika åtgärder"
@@ -3223,7 +3232,7 @@ msgstr "Hjälp"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Hej!<br><br>%1$s delar en publikation med dig:<br>%2$s"
 
-#: apps/io.ox/core/folder/extensions.js:253 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Hidden folders"
 msgid "Hidden"
@@ -3710,7 +3719,7 @@ msgid "MB"
 msgstr "Mb"
 
 #: apps/io.ox/core/tk/folderviews.js:889 module:io.ox/core
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:774
 msgid "Mail"
 msgstr "E-post"
@@ -4110,7 +4119,7 @@ msgid "New"
 msgstr "Nytt"
 
 #: apps/io.ox/core/api/folder.js:547 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:551
+#: apps/io.ox/core/folder/api.js:555
 #: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Ny mapp"
@@ -4160,7 +4169,7 @@ msgid "New password"
 msgstr "Nytt lösenord"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 #, fuzzy
 #| msgid "New private folder"
 msgid "New private calendar"
@@ -4168,12 +4177,12 @@ msgstr "Ny privat mapp"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 msgid "New private folder"
 msgstr "Ny privat mapp"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 #, fuzzy
 #| msgid "New public folder"
 msgid "New public calendar"
@@ -4181,7 +4190,7 @@ msgstr "Ny offentlig mapp"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 msgid "New public folder"
 msgstr "Ny offentlig mapp"
 
@@ -4324,7 +4333,7 @@ msgstr "Inga långsamma sökningar"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/util.js:374 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:774
@@ -5125,7 +5134,7 @@ msgstr "Integritetsnotis"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:242 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:255 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 #: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
@@ -5168,7 +5177,7 @@ msgstr "Förloppet måste vara ett giltig nummer mellan 0 och 100"
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: apps/io.ox/core/folder/extensions.js:247 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:260 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Public"
 msgstr "Offentlig"
@@ -5713,7 +5722,7 @@ msgid "Send"
 msgstr "Skicka"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:565 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:578 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5864,7 +5873,7 @@ msgstr "Dela ut filen"
 msgid "Share this folder"
 msgstr "Dela ut mappen"
 
-#: apps/io.ox/core/folder/extensions.js:250 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:263 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Shared"
 msgstr "Delad"
@@ -5899,7 +5908,7 @@ msgstr "Visa alla %1$d meddelanden i inkorgen"
 msgid "Show all items"
 msgstr "Visa alla objekt"
 
-#: apps/io.ox/calendar/main.js:566 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:578 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "Visa alla mina möten från alla kalendrar"
 
@@ -5947,7 +5956,7 @@ msgstr "Visa dolda filer och mappar"
 msgid "Show icons"
 msgstr "Visa kommentarer"
 
-#: apps/io.ox/mail/common-extensions.js:481 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:494 module:io.ox/mail
 msgid "Show images"
 msgstr "Visa bilder"
 
@@ -5986,7 +5995,7 @@ msgstr "Visa nästa sida"
 msgid "Show previous day"
 msgstr "Visa kommentarer"
 
-#: apps/io.ox/mail/detail/content.js:399 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:396 module:io.ox/mail
 msgid "Show quoted text"
 msgstr "Visa citerad text"
 
@@ -6658,7 +6667,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Angivet filnamn överskrider tillåten längd."
 
-#: apps/io.ox/mail/common-extensions.js:568 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Avsändaren vill bli informerad när du har läst e-brevet"
 
@@ -6820,13 +6829,13 @@ msgstr ""
 "Denna statistik inkluderar bara mappar med en struktur som inte går djupare "
 "än fyra nivåer från mappen \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:451 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:454 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7138,7 +7147,7 @@ msgstr "De 10 du oftast skickar e-post till"
 msgid "Total cost"
 msgstr "Total kostnad"
 
-#: apps/io.ox/core/folder/node.js:354 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
 #, fuzzy
 #| msgid "Total: %1$s requests"
 msgid "Total: %1$d"
@@ -7266,7 +7275,7 @@ msgstr "Lås upp"
 msgid "Unread"
 msgstr "Oläst"
 
-#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:356 module:io.ox/core
 #, fuzzy
 #| msgid "Unread"
 msgid "Unread: %1$d"
@@ -7455,7 +7464,7 @@ msgstr "Visa källa"
 msgid "Waiting"
 msgstr "Väntar"
 
-#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:521 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varning: Meddelandet kan vara phishing eller bluffpost"
 
@@ -7977,11 +7986,6 @@ msgstr "och"
 msgid "and %1$d others"
 msgstr "och %1$d andra"
 
-#. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:368 module:io.ox/mail
-msgid "and %1$d others ..."
-msgstr "och %1$d till ..."
-
 #: apps/io.ox/tasks/util.js:22 module:io.ox/tasks
 msgid "by noon"
 msgstr "till lunch"
@@ -8462,9 +8466,6 @@ msgstr "varje år"
 
 #~ msgid "'Entries' must be >= 1 but is %1$d."
 #~ msgstr "'Entries' måste vara >= 1 men är %1$d."
-
-#~ msgid "(%1$s) Attachments"
-#~ msgstr "(%1$s) Bilagor"
 
 #~ msgid ", ends after %1$s occurrence(s)"
 #~ msgstr ", slutar efter %1$s händelse(r)"
@@ -13577,6 +13578,9 @@ msgstr "varje år"
 
 #~ msgid "all"
 #~ msgstr "alla"
+
+#~ msgid "and %1$d others ..."
+#~ msgstr "och %1$d till ..."
 
 #, fuzzy
 #~ msgid "characters"

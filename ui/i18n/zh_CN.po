@@ -20,6 +20,15 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
+#. %1$d - number of attachments
+#: apps/io.ox/mail/common-extensions.js:363 module:io.ox/mail
+#, fuzzy
+#| msgid "(%1$s) Attachments"
+msgid "%1$d Attachment"
+msgid_plural "%1$d Attachments"
+msgstr[0] "(%1$s) 个附件"
+msgstr[1] "(%1$s) 个附件"
+
 #: apps/io.ox/calendar/util.js:272 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
@@ -427,7 +436,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "已选定 <b>%1$d</b> 个元素"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:548 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -844,7 +853,7 @@ msgstr "追加 vcard"
 msgid "Application Toolbar"
 msgstr "应用程序工具条"
 
-#: apps/io.ox/mail/main.js:1099 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1104 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此问题被修复前，应用程序可能未能如常工作。"
 
@@ -1548,7 +1557,7 @@ msgstr "公司"
 msgid "Company"
 msgstr "公司"
 
-#: apps/io.ox/mail/compose/main.js:40 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:45 module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js:364 apps/io.ox/mail/compose/view.js:368
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
@@ -1726,7 +1735,7 @@ msgid "Could not save settings."
 msgstr "不能保存设定。"
 
 #: apps/io.ox/core/api/folder.js:684 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:511
+#: apps/io.ox/core/folder/api.js:515
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -2484,7 +2493,7 @@ msgstr "电子邮件地址"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:371
+#: apps/io.ox/mail/detail/view.js:365
 msgid "Email from %1$s: %2$s"
 msgstr "来自 %1$s 的电子邮件：%2$d"
 
@@ -2615,7 +2624,7 @@ msgid "Error"
 msgstr "错误"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:27 module:io.ox/core
-#: apps/io.ox/core/settings/errorlog/settings/pane.js:349
+#: apps/io.ox/core/settings/errorlog/settings/pane.js:347
 msgid "Error log"
 msgstr "错误记录"
 
@@ -2748,7 +2757,7 @@ msgstr "扩展视图"
 msgid "External contact"
 msgstr "外部联系人"
 
-#: apps/io.ox/mail/common-extensions.js:482 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:495 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "为保护您的隐私，从外部链接的图像的预加载已被阻止！"
@@ -2995,7 +3004,7 @@ msgstr ""
 "名称为 \"%1$s\" 的文件夹将会被隐藏。启用 \"显示隐藏文件和文件夹\" 以再次访问"
 "这些文件夹。"
 
-#: apps/io.ox/core/folder/node.js:364 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:365 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:872
 msgid "Folder-specific actions"
 msgstr "文件夹指定动作"
@@ -3195,7 +3204,7 @@ msgstr "帮助"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "您好！<br><br>%1$s 和您分享一个出版：<br>%2$s"
 
-#: apps/io.ox/core/folder/extensions.js:253 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:266 module:io.ox/core
 #, fuzzy
 #| msgid "Hidden folders"
 msgid "Hidden"
@@ -3675,7 +3684,7 @@ msgid "MB"
 msgstr "MB"
 
 #: apps/io.ox/core/tk/folderviews.js:889 module:io.ox/core
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:774
 msgid "Mail"
 msgstr "邮件"
@@ -4075,7 +4084,7 @@ msgid "New"
 msgstr "新建"
 
 #: apps/io.ox/core/api/folder.js:547 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:551
+#: apps/io.ox/core/folder/api.js:555
 #: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "新文件夹"
@@ -4125,7 +4134,7 @@ msgid "New password"
 msgstr "新密码"
 
 #: apps/io.ox/core/folder/actions/add.js:63 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 #, fuzzy
 #| msgid "New private folder"
 msgid "New private calendar"
@@ -4133,12 +4142,12 @@ msgstr "新私人文件夹"
 
 #: apps/io.ox/core/commons-folderview.js:241 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:63
-#: apps/io.ox/core/folder/extensions.js:280
+#: apps/io.ox/core/folder/extensions.js:293
 msgid "New private folder"
 msgstr "新私人文件夹"
 
 #: apps/io.ox/core/folder/actions/add.js:60 module:io.ox/core
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 #, fuzzy
 #| msgid "New public folder"
 msgid "New public calendar"
@@ -4146,7 +4155,7 @@ msgstr "新公共文件夹"
 
 #: apps/io.ox/core/commons-folderview.js:266 module:io.ox/core
 #: apps/io.ox/core/folder/actions/add.js:60
-#: apps/io.ox/core/folder/extensions.js:303
+#: apps/io.ox/core/folder/extensions.js:316
 msgid "New public folder"
 msgstr "新公共文件夹"
 
@@ -4287,7 +4296,7 @@ msgstr "没有慢速请求"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/main.js:64 module:io.ox/mail
+#: apps/io.ox/mail/compose/main.js:69 module:io.ox/mail
 #: apps/io.ox/mail/util.js:374 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:774
@@ -5081,7 +5090,7 @@ msgstr "隐私通告"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/folder/extensions.js:242 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:255 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 #: apps/io.ox/tasks/edit/view-template.js:357 module:io.ox/tasks/edit
 msgid "Private"
@@ -5124,7 +5133,7 @@ msgstr "进度必须是 0 到 100 之间的有效数值"
 msgid "Properties"
 msgstr "属性"
 
-#: apps/io.ox/core/folder/extensions.js:247 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:260 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Public"
 msgstr "公共"
@@ -5666,7 +5675,7 @@ msgid "Send"
 msgstr "发送"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:565 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:578 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5817,7 +5826,7 @@ msgstr "分享此文件"
 msgid "Share this folder"
 msgstr "分享此文件夹"
 
-#: apps/io.ox/core/folder/extensions.js:250 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:263 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:986
 msgid "Shared"
 msgstr "共享"
@@ -5852,7 +5861,7 @@ msgstr "在收件夹里显示所有 %1$d 消息"
 msgid "Show all items"
 msgstr "显示所有项目"
 
-#: apps/io.ox/calendar/main.js:566 module:io.ox/calendar
+#: apps/io.ox/calendar/main.js:578 module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr "从所有日历显示我所有的约会"
 
@@ -5900,7 +5909,7 @@ msgstr "显示隐藏文件和文件夹"
 msgid "Show icons"
 msgstr "显示注释"
 
-#: apps/io.ox/mail/common-extensions.js:481 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:494 module:io.ox/mail
 msgid "Show images"
 msgstr "显示图像"
 
@@ -5939,7 +5948,7 @@ msgstr "显示下一页"
 msgid "Show previous day"
 msgstr "显示上一页"
 
-#: apps/io.ox/mail/detail/content.js:399 module:io.ox/mail
+#: apps/io.ox/mail/detail/content.js:396 module:io.ox/mail
 msgid "Show quoted text"
 msgstr "显示引用文本"
 
@@ -6604,7 +6613,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "提供的文件名称超过允许长度。"
 
-#: apps/io.ox/mail/common-extensions.js:568 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "此发送人想在您阅读此电子邮件时获得一个通知"
 
@@ -6755,13 +6764,13 @@ msgid ""
 "the folder structure from the folder \"%1$s\"."
 msgstr "这些统计只包含从 \"%1$s\" 文件夹少于四层文件夹结构深度的文件夹。"
 
-#: apps/io.ox/mail/common-extensions.js:438 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:451 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:449
+#: apps/io.ox/mail/common-extensions.js:454 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7062,7 +7071,7 @@ msgstr "最高十个您发送邮件的人"
 msgid "Total cost"
 msgstr "总费用"
 
-#: apps/io.ox/core/folder/node.js:354 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
 #, fuzzy
 #| msgid "Contact: %1$s"
 msgid "Total: %1$d"
@@ -7190,7 +7199,7 @@ msgstr "解锁"
 msgid "Unread"
 msgstr "未读"
 
-#: apps/io.ox/core/folder/node.js:355 module:io.ox/core
+#: apps/io.ox/core/folder/node.js:356 module:io.ox/core
 #, fuzzy
 #| msgid "Unread"
 msgid "Unread: %1$d"
@@ -7373,7 +7382,7 @@ msgstr "检视来源"
 msgid "Waiting"
 msgstr "等待中"
 
-#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:521 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：该邮件可能存在邮件欺诈！"
 
@@ -7868,11 +7877,6 @@ msgstr "与"
 #: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "和 %1$d 位收件人"
-
-#. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:368 module:io.ox/mail
-msgid "and %1$d others ..."
-msgstr "和 %1$d 个附件 ..."
 
 #: apps/io.ox/tasks/util.js:22 module:io.ox/tasks
 msgid "by noon"
@@ -8425,9 +8429,6 @@ msgstr "每年"
 
 #~ msgid "&Social"
 #~ msgstr "&社交"
-
-#~ msgid "(%1$s) Attachments"
-#~ msgstr "(%1$s) 个附件"
 
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "（在旧机器上可能较慢）"
@@ -11320,6 +11321,9 @@ msgstr "每年"
 
 #~ msgid "all"
 #~ msgstr "全部"
+
+#~ msgid "and %1$d others ..."
+#~ msgstr "和 %1$d 个附件 ..."
 
 #~ msgid "april"
 #~ msgstr "四月"
