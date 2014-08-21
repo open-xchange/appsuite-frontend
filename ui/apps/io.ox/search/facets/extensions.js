@@ -198,7 +198,7 @@ define('io.ox/search/facets/extensions',
                         // get active value
                         var facet = pool[item.facet], value, node, button;
 
-                        if (!facet) return $();
+                        if (!facet || _.contains(facet, 'advanced')) return $();
 
                         value = facet.values[item.value];
 
@@ -220,6 +220,54 @@ define('io.ox/search/facets/extensions',
                     }).reverse()
                 );
             },
+
+            advfacets: function (baton) {
+                // ensure folder facet is set
+                baton.model.ensure();
+                var facets = baton.model.get('autocomplete'),
+                    pool = baton.model.get('pool'),
+                    list = baton.model.get('poollist');
+
+                this.append(
+                    _(facets).map(function (facet) {
+
+                        var item, value, node, button;
+                        // only advanced s'il vous plaît
+                        if (!_.contains(facet.flags, 'advanced') || pool[facet.id]) return;
+
+                        item = _.find(list, function (item) {
+                           return facet.id === item.facet;
+                        });
+
+                        //OPTIONAL: when advaced facets should stay in place
+                        // if (item) {
+                        //     value = _.find(facet.values, function (value) {
+                        //         return value.id === item.value;
+                        //     });
+                        // }
+                        value = value || {placeholder: true};
+
+
+                        // create facet node
+                        node = $('<li role="presentation" class="facet btn-group">').append(
+                            // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
+                            button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
+                            .on('click', function (e) { e.preventDefault(); })
+                            .append($('<label>'))
+                        );
+
+                        // general stuff
+                        ext.point('io.ox/search/view/window/facet').invoke('draw', button, baton, value, facet);
+
+                        // additional actions per id/type
+                        ext.point('io.ox/search/view/window/facet/' + value.facet).invoke('draw', node, value, baton);
+
+                        return node;
+                    }).reverse()
+                );
+            },
+
+
 
             optionsHandler: function (baton) {
 
@@ -251,6 +299,8 @@ define('io.ox/search/facets/extensions',
                         if (facet === 'folder') {
                             // overwrite custom
                             baton.model.update(facet, value, {name: link.attr('title'), custom: option });
+                        } else if (!value) {
+                            baton.model.add(facet, option, option);
                         } else {
                             // use existing option
                             baton.model.update(facet, value, {option: option });
@@ -261,15 +311,18 @@ define('io.ox/search/facets/extensions',
             },
 
             facetType: function (baton, value, facet) {
-                var options = value.options,
-                    id = value._compact.option,
+                var options = value.options || facet.options,
+                    id = value._compact ? value._compact.option : undefined,
                     type;
                 // get type label
-                if (value.facet === 'folder')
+                if (value.placeholder) {
+                    type = facet.name;
+                } else if (value.facet === 'folder') {
                     type = gt('Folder');
-                else if (options) {
+                } else if (options) {
                     type = util.getOptionLabel(options, id);
                 }
+
                 // append type
                 if (type) {
                     this.find('label').prepend(
@@ -285,7 +338,7 @@ define('io.ox/search/facets/extensions',
                 var type;
 
                 // TYPE 3: use option label instead of value label
-                if (facet.style === 'exclusive')
+                if (facet.style === 'exclusive' && value._compact)
                     type = util.getOptionLabel(value.options, value._compact.option);
 
                 if ((value.item || {}).detail)
@@ -294,7 +347,7 @@ define('io.ox/search/facets/extensions',
                 this.find('label').append(
                     $('<span>')
                         .addClass('name')
-                        .html(type || value.name || (value.item || {}).name)
+                        .html(type || value.name || (value.item || {}).name || gt('all'))
                 );
             },
 
@@ -318,7 +371,8 @@ define('io.ox/search/facets/extensions',
 
             facetDropdown: function (baton, value, facet) {
                 var options = facet.options || _.values(facet.values)[0].options || [],
-                current = value._compact.option, option,
+                current = value._compact ? value._compact.option : '',
+                option,
                 parent = this.parent(),
                 menu;
 

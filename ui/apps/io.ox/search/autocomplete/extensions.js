@@ -53,6 +53,13 @@ define('io.ox/search/autocomplete/extensions',
                                 ref.open();
                                 return app.apiproxy.search(val);
                             },
+                            reduce: function (data) {
+                                // only show not 'advanced'
+                                data.list = _.filter(data.list, function (facet) {
+                                    return !_.contains(facet.flags, 'advanced');
+                                });
+                                return data;
+                            },
                             draw: function (value) {
                                 var individual = ext.point(POINT + '/item/' + baton.data.facet);
                                 baton.data = value;

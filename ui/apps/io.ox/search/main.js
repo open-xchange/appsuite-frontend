@@ -18,6 +18,7 @@ define('io.ox/search/main',
      'io.ox/search/model',
      'io.ox/search/view',
      'io.ox/search/apiproxy',
+     'io.ox/search/next',
      'less!io.ox/search/style'
     ], function (gt, settings, ext, SearchModel, SearchView, apiproxy) {
 
