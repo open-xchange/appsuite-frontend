@@ -22,6 +22,11 @@
     @normal : 300;
     @bold   : 700;
 
+    // custom mobile values
+    @mobile-line-height: 40px;
+    @mobile-arrow-size: 20px;
+    @mobile-label-size: 15px;
+
     // width fix
     .tree-container {
         min-width: 100%;
@@ -231,4 +236,21 @@
 
     .window-sidepanel.top-toolbar & { top: 45px; }
     .window-sidepanel.bottom-toolbar & { bottom: 45px; }
+
+    @media(max-width: 480px), (max-device-width: 480px) {
+        .folder {
+            line-height: @mobile-line-height;
+        }
+
+        .folder-node {
+            .folder-arrow {
+                font-size: @mobile-arrow-size;
+            }
+
+            .folder-label, .folder-counter, .folder-options {
+                font-size: @mobile-label-size;
+            }
+        }
+    }
+
 }
