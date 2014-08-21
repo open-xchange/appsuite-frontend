@@ -217,7 +217,7 @@ define('io.ox/search/facets/extensions',
                         ext.point('io.ox/search/view/window/facet/' + value.facet).invoke('draw', node, value, baton);
 
                         return node;
-                    })
+                    }).reverse()
                 );
             },
 
