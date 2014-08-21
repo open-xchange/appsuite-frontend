@@ -291,23 +291,6 @@ define('io.ox/mail/compose/extensions',
             });
         },
 
-        attachmentList: function (baton) {
-            var $el = this,
-                def = $.Deferred();
-
-            require(['io.ox/core/tk/attachments'], function (attachments) {
-                var view = new attachments.view.AttachmentList({
-                    collection: baton.model.get('attachments'),
-                    editable: true
-                });
-                view.render();
-                $el.append(view.$el);
-                view.$el.addClass('inline-items');
-                def.resolve(view);
-            }, def.reject);
-            return def;
-        },
-
         attachmentPreviewList: function (baton) {
             var $el = this,
                 def = $.Deferred();
@@ -317,7 +300,8 @@ define('io.ox/mail/compose/extensions',
                     collection: baton.model.get('attachments'),
                     editable: true,
                     preview: true
-                });
+                }),
+                previewToggle = $('<i class="fa fa-list preview-toggle">');
 
                 // dropzone
                 var zone = new dropzone.Inplace({
@@ -342,6 +326,16 @@ define('io.ox/mail/compose/extensions',
 
                 view.render();
                 $el.append(
+                    $('<a href="#" class="pull-right">')
+                        .append(previewToggle)
+                        .on('click', function () {
+                            if (previewToggle.hasClass('fa-th-large')) {
+                                previewToggle.removeClass('fa-th-large').addClass('fa-list');
+                            } else {
+                                previewToggle.removeClass('fa-list').addClass('fa-th-large');
+                            }
+                            view.togglePreview();
+                        }),
                     zone.render().$el.addClass('abs'),
                     view.$el.addClass('inline-items')
                 );

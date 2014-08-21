@@ -184,17 +184,7 @@ define('io.ox/mail/compose/view',
     });
 
     ext.point(POINT + '/attachments').extend({
-        id: 'attachmentList',
-        index: 200,
-        draw: function (baton) {
-            var node = $('<div class="col-xs-12">');
-            extensions.attachmentList.call(node, baton);
-            node.appendTo(this);
-        }
-    });
-
-    ext.point(POINT + '/attachments').extend({
-        id: 'attachmentPreviewList',
+        id: 'attachmentPreview',
         index: 200,
         draw: function (baton) {
             var node = $('<div class="col-xs-12">');
