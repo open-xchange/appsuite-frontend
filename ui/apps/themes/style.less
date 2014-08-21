@@ -644,6 +644,11 @@ div.hopscotch-bubble {
 
         float: left;
         display: none;
+        @media (max-width: 480px), (max-device-width: 480px) {
+            .dropdown-toggle {
+                font-size: @mobile-launcher-icon-size;
+            }
+        }
 
         li {
             text-align: left;
