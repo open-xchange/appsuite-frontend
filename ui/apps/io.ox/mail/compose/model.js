@@ -17,8 +17,9 @@ define('io.ox/mail/compose/model',
      'io.ox/core/api/account',
      'io.ox/emoji/main',
      'io.ox/core/tk/attachments',
-     'settings!io.ox/mail'
-    ], function (mailAPI, mailUtil, accountAPI, emoji, attachments, settings) {
+     'settings!io.ox/mail',
+     'gettext!io.ox/mail'
+    ], function (mailAPI, mailUtil, accountAPI, emoji, attachments, settings, gt) {
 
     'use strict';
 
@@ -200,6 +201,20 @@ define('io.ox/mail/compose/model',
 
         getTokens: function (type) {
             return this.get(type, []).map(function (o) { return { label: o[0] || '', value: o[1] || '' }; });
+        },
+
+        getFailSave: function () {
+            this.trigger('needsync');
+            var mail = this.toJSON();
+            //remove local files, since they can not be restored
+            delete mail.files;
+            mail.attachments = mail.attachments.filter(function (attachment) {
+                return attachment.get('group') !== 'localFile';
+            });
+            return {
+                description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
+                point: mail
+            };
         },
 
         getMail: function() {

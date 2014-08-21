@@ -23,14 +23,12 @@
 
 define('io.ox/mail/compose/main',
     ['io.ox/mail/api',
-     'io.ox/mail/compose/model',
      'io.ox/mail/compose/view',
      'io.ox/core/notifications',
-     'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'less!io.ox/mail/compose/style'
-    ], function (mailAPI, MailModel, MailComposeView, notifications, settings, gt) {
+    ], function (mailAPI, MailComposeView, notifications, gt) {
 
     'use strict';
 
@@ -58,17 +56,7 @@ define('io.ox/mail/compose/main',
         });
 
         app.failSave = function () {
-            var mail = app.view.model.toJSON();
-            //remove local files, since they can not be restored
-            delete mail.files;
-            mail.attachments = mail.attachments.filter(function (attachment) {
-                return attachment.get('group') !== 'localFile';
-            });
-            return {
-                module: 'io.ox/mail/compose',
-                description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
-                point: mail
-            };
+            return _.extend({module: 'io.ox/mail/compose'}, app.view.model.getFailSave());
         };
 
         app.failRestore = function (point) {
