@@ -399,7 +399,7 @@ define('io.ox/mail/common-extensions',
             def = $.Deferred();
 
             require(['io.ox/core/tk/attachments'], function (attachments) {
-                var list = baton.data.attachments.filter(function (m) {
+                var list = baton.attachments.filter(function (m) {
                         return m.disp === 'attachment';
                     }).map(function (m) {
                         m.group = 'mail';
