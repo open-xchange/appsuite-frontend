@@ -322,7 +322,7 @@ define('io.ox/mail/compose/view',
 
         initialize: function (options) {
             this.app = options.app;
-            this.model = new MailModel(options.data);
+            this.model = new MailModel(this.filterData(options.data));
             this.editorHash = {};
             this.autosave = {};
             this.intervals = [];
@@ -342,8 +342,6 @@ define('io.ox/mail/compose/view',
             });
 
             this.baton = ext.Baton({
-                // please don't use this data attribute - use model instead
-                data: this.model.toJSON(),
                 model: this.model,
                 view: this
             });
@@ -358,6 +356,11 @@ define('io.ox/mail/compose/view',
             this.listenTo(this.model, 'needsync', this.syncMail);
 
             this.signatures = _.device('smartphone') ? [{ id: 0, content: this.getMobileSignature(), misc: { insertion: 'below' } }] : [];
+        },
+
+        filterData: function (data) {
+            if(/(compose|edit)/.test(data.mode)) return data;
+            return _.pick(data, 'id', 'folder_id', 'mode');
         },
 
         fetchMail: function (obj) {
