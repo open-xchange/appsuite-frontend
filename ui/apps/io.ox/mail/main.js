@@ -393,9 +393,6 @@ define('io.ox/mail/main',
          */
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value) {
-                if (app.listView.collection) {
-                    app.listView.collection.expired = true;
-                }
                 if (value === true) {
                     app.props.set('sort', 610);
                     app.listView.model.set('thread', true);
