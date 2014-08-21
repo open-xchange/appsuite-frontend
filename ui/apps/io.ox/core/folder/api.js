@@ -244,7 +244,9 @@ define('io.ox/core/folder/api',
         options = _.extend({ cache: true }, options);
 
         var model = pool.models[id];
-        if (options.cache === true && model !== undefined && model.has('title')) return $.Deferred().resolve(model.toJSON());
+        if (options.cache === true && model !== undefined && model.has('title')) return $.when(model.toJSON());
+
+        if (/^virtual/.test(id)) return $.when({ id: id });
 
         return http.GET({
             module: 'folders',

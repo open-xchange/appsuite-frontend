@@ -284,8 +284,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                     'aria-label'    : '',
                     'aria-level'    : o.level + 1,
                     'aria-selected' : false,
-                    'data-index'    : this.model.get('index'),
                     'data-id'       : this.folder,
+                    'data-index'    : this.model.get('index'),
+                    'data-model'    : o.model_id,
                     'role'          : 'treeitem',
                     'tabindex'      : '-1'
                 })
@@ -315,7 +316,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             if (this.isVirtual) this.$el.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if (!this.isVirtual && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
+            if ((!this.isVirtual || o.contextmenu !== 'default') && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) this.renderContextControl();
 
             // get data
             if (!this.isVirtual) api.get(o.model_id);
@@ -366,7 +367,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         renderContextControl: function () {
             this.$.selectable.append(
                 $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
-                .attr('title', gt('Folder-specific actions'))
+                .attr({
+                    'data-contextmenu': this.options.contextmenu || 'default',
+                    'title': gt('Folder-specific actions')
+                })
                 .append($('<i class="fa fa-bars">'))
             );
         },

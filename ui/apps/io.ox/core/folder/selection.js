@@ -38,8 +38,8 @@ define('io.ox/core/folder/selection', [], function () {
             return items.filter('[data-id="' + $.escape(id) + '"]').first(); // use first, we might have duplicates
         },
 
-        get: function () {
-            return this.view.$el.find('.selectable.selected').attr('data-id');
+        get: function (attribute) {
+            return this.view.$el.find('.selectable.selected').attr(attribute || 'data-id');
         },
 
         set: function (id) {

@@ -72,21 +72,26 @@ define('io.ox/core/folder/extensions',
         },
 
         localFolders: function (tree) {
-            this.append(
-                // local folders
-                new TreeNodeView({
-                    count: 0,
-                    filter: function (id, model) {
-                        return !account.isStandardFolder(model.id);
-                    },
-                    folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
-                    model_id: 'default0/INBOX',
-                    parent: tree,
-                    title: 'My folders',
-                    tree: tree
-                })
-                .render().$el
-            );
+
+            var node = new TreeNodeView({
+                contextmenu: 'myfolders',
+                count: 0,
+                filter: function (id, model) {
+                    return !account.isStandardFolder(model.id);
+                },
+                folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
+                model_id: 'default0/INBOX',
+                parent: tree,
+                title: 'My folders',
+                tree: tree
+            });
+
+            // open my folder whenever a folder is added to INBOX
+            api.pool.getCollection('default0/INBOX').on('add', function () {
+                node.toggle(true);
+            });
+
+            this.append(node.render().$el);
         },
 
         remoteAccounts: function (tree) {

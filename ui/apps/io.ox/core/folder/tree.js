@@ -27,9 +27,9 @@ define('io.ox/core/folder/tree',
         className: 'folder-tree abs',
 
         events: {
-            'click .contextmenu-control': 'onToggleContextMenu',
-            'keydown .contextmenu-control': 'onKeydown',
-            'contextmenu .selectable': 'onContextMenu'
+            'click .contextmenu-control'    : 'onToggleContextMenu',
+            'keydown .contextmenu-control'  : 'onKeydown',
+            'contextmenu .selectable'       : 'onContextMenu'
         },
 
         initialize: function (options) {
@@ -108,32 +108,24 @@ define('io.ox/core/folder/tree',
             return options;
         },
 
-        toggleContextMenu: (function () {
+        toggleContextMenu: function (target, top, left) {
 
-            function renderItems() {
-                this.$dropdownMenu.idle();
-                this.renderContextMenuItems();
-            }
+            // return early on close
+            var isOpen = this.$dropdown.hasClass('open');
+            if (isOpen || _.device('smartphone')) return;
 
-            return function (target, top, left) {
+            // copy contextmenu id
+            this.$dropdown.attr('data-contextmenu', target.attr('data-contextmenu'));
 
-                // return early on close
-                var isOpen = this.$dropdown.hasClass('open');
-                if (isOpen || _.device('smartphone')) return;
+            _.defer(function () {
 
-                _.defer(function () {
+                this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
+                this.$dropdown
+                    .data('previous-focus', target) // helps to restore focus (see renderContextMenu)
+                    .find('.dropdown-toggle').dropdown('toggle'); // use official method
 
-                    this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).busy();
-                    this.$dropdown
-                        .data('previous-focus', target) // helps to restore focus (see renderContextMenu)
-                        .find('.dropdown-toggle').dropdown('toggle'); // use official method
-
-                    // load relevant code on demand
-                    require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this)));
-
-                }.bind(this));
-            };
-        }()),
+            }.bind(this));
+        },
 
         onToggleContextMenu: function (e) {
 
@@ -177,12 +169,16 @@ define('io.ox/core/folder/tree',
             }
         },
 
-        renderContextMenuItems: function () {
-            var id = this.selection.get(),
+        getContextMenuId: function (id) {
+            return 'io.ox/core/foldertree/contextmenu/' + (id || 'default');
+        },
+
+        renderContextMenuItems: function (contextmenu) {
+            var id = this.selection.get('data-model'),
                 app = this.app,
                 module = this.module,
                 ul = this.$dropdownMenu.empty(),
-                point = 'io.ox/core/foldertree/contextmenu',
+                point = this.getContextMenuId(contextmenu),
                 view = this;
             // get folder data and redraw
             api.get(id).done(function (data) {
@@ -200,14 +196,15 @@ define('io.ox/core/folder/tree',
 
         renderContextMenu: (function () {
 
-            function renderItems() {
+            function renderItems(contextmenu) {
                 this.$dropdownMenu.idle();
-                this.renderContextMenuItems();
+                this.renderContextMenuItems(contextmenu);
             }
 
-            function show() {
+            function show(e) {
                 // load relevant code on demand
-                require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this)));
+                var contextmenu = $(e.target).attr('data-contextmenu');
+                require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this, contextmenu)));
             }
 
             function hide() {
@@ -219,7 +216,7 @@ define('io.ox/core/folder/tree',
             return function () {
 
                 this.$el.after(
-                    this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
+                    this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
                         $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
                         this.$dropdownMenu = $('<ul class="dropdown-menu" role="menu">')

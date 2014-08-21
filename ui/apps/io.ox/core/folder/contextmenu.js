@@ -21,8 +21,6 @@ define('io.ox/core/folder/contextmenu',
 
     'use strict';
 
-    var point = ext.point('io.ox/core/foldertree/contextmenu');
-
     //
     // drawing utility functions
     //
@@ -318,7 +316,7 @@ define('io.ox/core/folder/contextmenu',
                             tempLink.on('click', function () {
                                 upsell.trigger({
                                     type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/publications',
+                                    id: 'io.ox/core/foldertree/contextmenu/default/publications',
                                     missing: upsell.missing(['publication'])
                                 });
                             });
@@ -360,7 +358,7 @@ define('io.ox/core/folder/contextmenu',
                             tempLink.on('click', function () {
                                 upsell.trigger({
                                     type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/subscribe',
+                                    id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
                                     missing: upsell.missing(['subscription'])
                                 });
                             });
@@ -434,10 +432,10 @@ define('io.ox/core/folder/contextmenu',
     };
 
     //
-    // Extensions
+    // Default extensions
     //
 
-    point.extend(
+    ext.point('io.ox/core/foldertree/contextmenu/default').extend(
         {
             id: 'mark-folder-read',
             index: 100,
@@ -531,6 +529,18 @@ define('io.ox/core/folder/contextmenu',
             id: 'delete',
             index: 4300,
             draw: extensions.removeFolder
+        }
+    );
+
+    //
+    // Special extensions
+    //
+
+    ext.point('io.ox/core/foldertree/contextmenu/myfolders').extend(
+        {
+            id: 'add-folder',
+            index: 1000,
+            draw: extensions.add
         }
     );
 
