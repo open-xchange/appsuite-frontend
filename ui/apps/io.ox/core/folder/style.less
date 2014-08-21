@@ -54,15 +54,10 @@
             display: none;
         }
 
-        &.disabled > .selectable > .folder-label {
+        &.disabled > .folder-node > .folder-label {
             opacity: 0.5;
             font-style: italic;
         }
-
-        // not sure if virtual folders need a different color
-        // .selectable.virtual:focus {
-        //     background-color: rgba(0, 0, 0, 0.50);
-        // }
     }
 
     &.visible-selection {
@@ -175,7 +170,7 @@
         margin-bottom: 14px;
     }
 
-    .favorites > .selectable > .folder-label {
+    .favorites > .folder-node > .folder-label {
         font-weight: 500;
     }
 
@@ -190,7 +185,7 @@
             margin-top: 0;
         }
 
-        & > .selectable > .folder-label {
+        & > .folder-node > .folder-label {
             font-weight: @bold;
         }
     }

@@ -334,7 +334,7 @@ define('io.ox/core/folder/extensions',
                 var model = baton.view.model, data = model.toJSON();
                 if (!api.is('shared', data)) return;
 
-                this.addClass('shared').find('.selectable').append(
+                this.addClass('shared').find('.folder-node').append(
                     $('<div class="owner">').append(
                         userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
                     )
