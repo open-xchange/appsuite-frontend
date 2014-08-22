@@ -291,17 +291,19 @@ define('io.ox/portal/main',
         ext.point(baton.point).invoke('performSetUp', null, baton);
     }
 
-    app.drawDefaultSetup = function (baton) {
+    app.drawDefaultSetup = function (baton, title) {
         baton.model.node
-            .addClass('requires-setup')
             .append(
-                $('<div class="content" tabindex="1" role="button">').text(gt('Click here to add your account'))
-                .on('click', { baton: baton }, setup)
-                .on('keypress', { baton: baton }, function (e) {
-                    if (e.which === 13) {
-                        setup(e);
-                    }
-                })
+                $('<div class="content">').append(
+                    $('<div class="item">').text(gt('Welcome to ') + title + '. ' + gt('Get started here!')),
+                    $('<div class="btn btn-primary" tabindex="1" role="button">').text(gt('Add') + ' ' + title + ' ' + gt('Account'))
+                    .on('click', { baton: baton }, setup)
+                    .on('keypress', { baton: baton }, function (e) {
+                        if (e.which === 13) {
+                            setup(e);
+                        }
+                    })
+                )
             );
     };
 
@@ -397,7 +399,7 @@ define('io.ox/portal/main',
             if (requiresSetUp || requiresCustomSetUp) {
                 node.find('.decoration').removeClass('pending');
                 if (requiresSetUp) {
-                    app.drawDefaultSetup(baton);
+                    app.drawDefaultSetup(baton, title);
                 } else {
                     point.invoke('performCustomSetUp', node, baton);
                 }
