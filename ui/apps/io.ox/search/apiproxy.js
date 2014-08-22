@@ -64,6 +64,31 @@ define('io.ox/search/apiproxy',
             }
         });
 
+        POINT.extend({
+            id: 'only-once',
+            index: 300,
+            customize: function (baton) {
+
+                if (_.device('smartphone')) return;
+
+                var whitelist = {
+                        style: ['simple'],
+                        id: ['contacts', 'contact', 'participant', 'participant']
+                    };
+
+                // flag  facet
+                _.each(baton.data, function (facet) {
+                    var style = _.contains(whitelist.style, facet.style),
+                        id = _.contains(whitelist.id, facet.id),
+                        advanced = !(style || id);
+
+                    // flag when not in whitelist
+                    if (advanced)
+                        facet.flags.push('advanced');
+                });
+            }
+        });
+
         /**
          * success handler to pass data through extension point
          * @param  {[type]} data [description]
