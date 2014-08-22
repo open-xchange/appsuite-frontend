@@ -85,6 +85,9 @@ define('io.ox/search/apiproxy',
                     // flag when not in whitelist
                     if (advanced)
                         facet.flags.push('advanced');
+                    else if (style) {
+                        facet.flags.push('highlander');
+                    }
                 });
             }
         });
