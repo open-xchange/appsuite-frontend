@@ -62,6 +62,9 @@
             cursor: pointer;
         }
 
+        div.dropdown {
+            overflow: visible;
+        }
         div {
             white-space: nowrap;
             overflow: hidden;
@@ -81,7 +84,7 @@
             padding-right: 0.5em;
         }
 
-        .remove {
+        .control {
             display: inline-block;
             position: absolute;
             top: 1px;
@@ -89,9 +92,24 @@
             bottom: 1px;
             width: 2em;
             line-height: 1em;
-            background-color: #f5f5f5;
-            color: #aaa;
             cursor: pointer;
+
+            &.remove {
+                background-color: #f5f5f5;
+                color: #aaa;
+            }
+            &.dropdown {
+                margin: 0;
+            }
+
+            .fa {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                margin-top: -0.5em;
+                text-align: center;
+            }
         }
 
         .remove:hover {
@@ -100,14 +118,6 @@
             text-decoration: none;
         }
 
-        .remove .fa {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            margin-top: -0.5em;
-            text-align: center;
-        }
 
         .group-label {
             display: block;
