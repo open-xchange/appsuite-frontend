@@ -61,6 +61,7 @@ define('io.ox/mail/compose/extensions',
     var extensions = {
 
         header: function (baton) {
+            if (!baton.view.app.getWindow()) return;
             var header = $('<div class="row" data-extension-id="header">');
             ext.point(POINT + '/header').invoke('draw', header, baton);
             baton.view.app.getWindow().setHeader(header).addClass('container default-header-padding');
