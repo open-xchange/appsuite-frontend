@@ -196,8 +196,13 @@ define('io.ox/calendar/edit/recurrence-view',
             var $menu = $('<ul class="dropdown-menu no-clone" role="menu">');
             _(options.options).each(function (label, value) {
                 $menu.append(
-                    $('<li>')
-                        .append($('<a href="#">').attr({ tabindex: $anchor.attr('tabindex'), 'role': 'menuitem' }).text(label).on('click', function (e) {
+                    $('<li>').attr({
+                        role: 'presentation'
+                    }).append($('<a>').attr({
+                            href: '#',
+                            tabindex: $anchor.attr('tabindex'),
+                            role: 'menuitem'
+                        }).text(label).on('click', function (e) {
                             e.preventDefault();
                             self[attribute] = value;
                             self.trigger('change', self);
@@ -212,11 +217,9 @@ define('io.ox/calendar/edit/recurrence-view',
             // Tell the anchor that it triggers the dropdown
             $anchor.attr({
                 'data-toggle': 'dropdown',
-                'aria-haspopup': true
-            });
-
-            $anchor.dropdown();
-            $anchor.attr('aria-label', self.ghost());
+                'aria-haspopup': true,
+                'aria-label': self.ghost()
+            }).dropdown();
 
             this.on('change:' + attribute, drawState);
         },
@@ -260,13 +263,17 @@ define('io.ox/calendar/edit/recurrence-view',
             $container.append(
                 $('<ul class="dropdown-menu no-clone" role="menu">').append(
                     _(array).map(function (day) {
-                        return (nodes[day] = $('<li>').append(
-                            $('<a href="#">')
-                            .attr({ tabindex: $anchor.attr('tabindex') }).append(
+                        return (nodes[day] = $('<li>').attr({
+                            role: 'presentation'
+                        }).append(
+                            $('<a>').attr({
+                                href: '#',
+                                role: 'menuitem',
+                                tabindex: $anchor.attr('tabindex')
+                            }).append(
                                 $('<i class="fa fa-check">'),
                                 $.txt(DAYS.i18n[day])
-                            )
-                            .on('click', function (e) {
+                            ).on('click', function (e) {
                                 e.preventDefault();
                                 var bitmask = self[attribute];
                                 bitmask = bitmask ^ DAYS[day];
@@ -287,11 +294,10 @@ define('io.ox/calendar/edit/recurrence-view',
             $anchor.attr({
                 'data-toggle': 'dropdown',
                 'aria-haspopup': true,
+                'aria-label': self.ghost(),
                 role: 'menuitem'
-            });
+            }).dropdown();
 
-            $anchor.dropdown();
-            $anchor.attr('aria-label', self.ghost());
             this.on('change:' + attribute, drawState);
         },
 
