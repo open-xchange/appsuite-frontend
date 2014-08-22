@@ -230,6 +230,22 @@ define('io.ox/search/main',
                             return error;
                         })
                         .then(function (obj) {
+
+                            var whitelist = {
+                                style: ['simple'],
+                                id: ['contacts', 'contact', 'participant', 'participant']
+                            };
+
+                            // flag facets as 'highlander'
+                            _.each(obj.facets, function (facet) {
+                                var style = _.contains(whitelist.style, facet.style);
+                                if (style)
+                                    facet.flags.push('highlander');
+                            });
+
+                            return obj;
+                        })
+                        .then(function (obj) {
                             //TODO: remove when backend is ready
                             _.each(obj.facets.values, function (value) {
                                 //multifilter facet

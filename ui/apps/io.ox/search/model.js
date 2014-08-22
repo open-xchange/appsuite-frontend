@@ -74,7 +74,8 @@ define('io.ox/search/model',
     conflicts = function () {
         var pool = _.extend({}, this.get('pool')),
             list = [].concat(this.get('poollist')),
-            disabled = {};
+            disabled = {},
+            hash = {}, i;
 
         //remove conflicting facets
         _.each(this.get('pool'), function (facet) {
@@ -91,7 +92,23 @@ define('io.ox/search/model',
             });
         });
 
-        //update
+        // keep only last added value of highlander facets
+        for (i = list.length - 1; i >= 0; i--) {
+            var data = list[i],
+                facet = pool[data.facet];
+            if (_.contains(facet.flags, 'highlander') && Object.keys(facet.values).length > 1) {
+                if (!hash[data.facet])
+                    // keep latest value (negative loop)
+                    hash[data.facet] = true;
+                else {
+                    // remove others
+                    list.splice(i, 1);
+                    delete facet.values[data.value];
+                }
+            }
+        }
+
+        // update
         this.set('pooldisabled', disabled, {silent: true});
         this.set('pool', pool);
         this.set('poollist', list);
