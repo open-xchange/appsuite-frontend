@@ -305,7 +305,8 @@ define('io.ox/mail/common-extensions',
 
                 $el.append(
                     $('<a href="#" class="n-more">').append(
-                        '<i class="fa fa-caret-right">&nbsp;',
+                        '<i class="fa fa-caret-right">',
+                        '<i class="fa fa-paperclip">',
                         gt.format(
                             //#. %1$d - number of attachments
                             gt.ngettext('%1$d Attachment', '%1$d Attachments', length),
@@ -319,13 +320,13 @@ define('io.ox/mail/common-extensions',
                             extensions.attachmentPreview.call(list, baton).then(function (attachmentList) {
                                 view = attachmentList;
                             });
-                            $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
+                            $(this).find('i.fa-caret-right').removeClass('fa-caret-right').addClass('fa-caret-down');
                         } else if (view.$el.is(':visible')) {
                             view.$el.hide();
-                            $(this).find('i').removeClass('fa-caret-down').addClass('fa-caret-right');
+                            $(this).find('i.fa-caret-down').removeClass('fa-caret-down').addClass('fa-caret-right');
                         } else {
                             view.$el.show();
-                            $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
+                            $(this).find('i.fa-caret-right').removeClass('fa-caret-right').addClass('fa-caret-down');
                         }
                     })
                 );
@@ -344,7 +345,7 @@ define('io.ox/mail/common-extensions',
                             } else {
                                 previewToggle.removeClass('fa-list').addClass('fa-th-large');
                             }
-                            $el.children('a.n-more').find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
+                            $el.children('a.n-more').find('i.fa-caret-right').removeClass('fa-caret-right').addClass('fa-caret-down');
                             if (!view) {
                                 baton.preview = previewToggle.hasClass('fa-list');
                                 extensions.attachmentPreview.call(list, baton).then(function (attachmentList) {
