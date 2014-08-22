@@ -162,13 +162,17 @@ define('io.ox/mail/mobile-toolbar-actions',
     var updateToolbar = _.debounce(function (list) {
 
         if (!list) return;
+
         // remember if this list is based on a single thread
-        var isThread = list.length === 1 && /^thread\./.test(list[0]);
+        var isThread = this.props.get('thread');
+
         // resolve thread
-        list = api.threads.resolve(list);
+        list = api.resolve(list, isThread);
         if (list.length === 0) isThread = false;
+
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
+
         // draw toolbar
         var baton = ext.Baton({data: list, isThread: isThread, app: this });
 

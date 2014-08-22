@@ -1776,6 +1776,23 @@ define('io.ox/mail/api',
     // publish pool
     api.pool = pool;
 
+    // resolve a list of composite keys
+    api.resolve = (function () {
+
+        function map(cid) {
+            cid = String(cid).replace(/^thread\./, ''); // yep, also in non-threaded mails)
+            return pool.get('detail').get(cid);
+        }
+
+        return function (list, threaded) {
+            // threaded
+            if (threaded) return api.threads.resolve(list);
+            // non-threaded
+            return _(list).chain().map(map).compact().invoke('toJSON').value();
+        };
+
+    }());
+
     // simple thread support
     api.threads = {
 
@@ -1939,8 +1956,8 @@ define('io.ox/mail/api',
         api.pool.add('detail', thread);
     };
 
-    api.collectionLoader.each = function (obj) {
-        api.processThreadMessage(obj);
+    api.collectionLoader.each = function (obj, index, offset, params) {
+        if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
 
     return api;

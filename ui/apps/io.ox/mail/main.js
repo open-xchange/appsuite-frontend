@@ -551,7 +551,7 @@ define('io.ox/mail/main',
         'show-mail': function (app) {
             if (_.device('small')) return;
             app.showMail = function (cid) {
-                app.threadView.show(cid);
+                app.threadView.show(cid, app.props.get('thread'));
             };
         },
 
@@ -574,7 +574,7 @@ define('io.ox/mail/main',
             // clicking on a thread will show a custom overview
             // based on a custom threadview only showing mail headers
             app.showThreadOverview = function (cid) {
-                app.threadView.show(cid);
+                app.threadView.show(cid, app.props.get('thread'));
             };
         },
 
@@ -598,7 +598,7 @@ define('io.ox/mail/main',
             if (_.device('small')) return;
             app.showMultiple = function (list) {
                 app.threadView.empty();
-                list = api.threads.resolve(list);
+                list = api.resolve(list, app.props.get('thread'));
                 app.right.find('.multi-selection-message div').text(
                     gt('%1$d messages selected', list.length)
                 );
@@ -615,7 +615,7 @@ define('io.ox/mail/main',
 
                 app.threadView.empty();
                 if (list) {
-                    list = api.threads.resolve(list);
+                    list = api.resolve(list, app.props.get('thread'));
                     app.pages.getCurrentPage().navbar.setTitle(
                         //#. This is a short version of "x messages selected", will be used in mobile mail list view
                         gt('%1$d selected', list.length));
@@ -837,8 +837,10 @@ define('io.ox/mail/main',
                     })
                     .slice(0, count)
                     .each(function (model) {
-                        var thread = model.get('thread'), i, obj;
-                        for (i = thread.length - 1; obj = _.cid(thread[i]); i--) {
+                        var thread = model.get('thread') || [model.toJSON()], i, obj;
+                        for (i = thread.length - 1; obj = thread[i]; i--) {
+                            // get data
+                            if (_.isString(obj)) obj = _.cid(obj);
                             // most recent or first unseen? (in line with threadview's autoSelectMail)
                             if ((i === 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
                                 api.get({ unseen: true, id: obj.id, folder: obj.folder_id });
@@ -898,7 +900,7 @@ define('io.ox/mail/main',
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.threads.resolve(baton.data);
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
                 actions.invoke('io.ox/mail/actions/move', null, baton);
             });
@@ -913,7 +915,7 @@ define('io.ox/mail/main',
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.threads.resolve(baton.data);
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
                 actions.invoke('io.ox/mail/actions/delete', null, baton);
             });

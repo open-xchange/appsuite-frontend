@@ -240,23 +240,24 @@ define('io.ox/mail/toolbar',
     var toolbar = $('<ul class="classic-toolbar" role="menu">');
 
     var updateToolbar = _.debounce(function (list) {
+
         if (!list) return;
-        // remember if this list is based on a single thread
-        var isThread = list.length === 1 && /^thread\./.test(list[0]),
-            hasFocus = $.contains(toolbar[0], document.activeElement) ? $(document.activeElement) : null;
+
+        var isThread = this.props.get('thread'),
+            hasFocus = $.contains(toolbar[0], document.activeElement);
+
         // resolve thread
-        list = api.threads.resolve(list);
-        if (list.length === 0) isThread = false;
+        list = api.resolve(list, isThread);
+
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
-        // draw toolbar
 
+        // draw toolbar
         var baton = ext.Baton({ $el: toolbar, data: list, isThread: isThread, app: this });
         ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), baton);
 
-        if (hasFocus) {
-            $('a:first', toolbar).focus();
-        }
+        if (hasFocus) toolbar.find('a:first').focus();
+
     }, 10);
 
     ext.point('io.ox/mail/mediator').extend({
