@@ -128,11 +128,13 @@
     display: table-cell;
     vertical-align: middle;
     padding: 0;
-    &.column-1 { width: 30px; text-align: center; }
-    &.column-2 { width: 30px; text-align: center; }
-    &.column-3 { width: 35%; }
-    &.column-4 { width: 55%; }
-    &.column-5 { width: 100px; text-align: right; }
+    @icon-width: 24px;
+    &.column-1 { width: @icon-width; text-align: center; }
+    &.column-2 { width: @icon-width; text-align: center; }
+    &.column-3 { width: @icon-width; text-align: center; }
+    &.column-4 { width: 35%; }
+    &.column-5 { width: 55%; }
+    &.column-6 { width: 140px; text-align: right; }
 }
 
 .list-view .list-item {
@@ -141,6 +143,16 @@
 
         .priority { float: none; }
         .from span.person { .fontWeight(normal); }
+
+        .drag-title {
+            opacity: 1;
+        }
+
+        .date {
+            display: block;
+            float: none;
+            .ellipsis();
+        }
 
         &.unread {
             .from span.person, .subject, .date { .fontWeight(bold); }
@@ -340,7 +352,7 @@
     div.subject {
 
         .fontWeight(300);
-        line-height: 20px; // need that to avoid flicker base on icon height
+        line-height: 21px; // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
         .ellipsis();
 
         i {
