@@ -128,7 +128,7 @@
     &.column-2 { width: 30px; text-align: center; }
     &.column-3 { width: 35%; }
     &.column-4 { width: 55%; }
-    &.column-5 { width: 100px; text-align: right; }
+    &.column-5 { width: 140px; text-align: right; }
 }
 
 .list-view .list-item {
@@ -140,6 +140,12 @@
 
         &.unread {
             .from span.person, .subject, .date { .fontWeight(bold); }
+        }
+
+        .date {
+            display: block;
+            float: none;
+            .ellipsis();
         }
     }
 
