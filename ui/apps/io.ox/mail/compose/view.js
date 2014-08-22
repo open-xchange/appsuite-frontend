@@ -962,8 +962,12 @@ define('io.ox/mail/compose/view',
         render: function () {
             var self = this;
 
+            var node = $('<div class="mail-compose-fields">');
+
             // draw all extensionpoints
-            ext.point('io.ox/mail/compose/fields').invoke('draw', this.$el, this.baton);
+            ext.point('io.ox/mail/compose/fields').invoke('draw', node, this.baton);
+
+            this.$el.append(node);
 
             // add subject to app title
             this.setTitle();
