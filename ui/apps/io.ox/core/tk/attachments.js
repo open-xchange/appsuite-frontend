@@ -775,6 +775,7 @@ define('io.ox/core/tk/attachments',
             if (this.preview) {
                 this.$el.addClass('preview');
             }
+            this.attachmentView = options.attachmentView || AttachmentView;
         },
         togglePreview: function () {
             this.preview = !this.preview;
@@ -789,7 +790,7 @@ define('io.ox/core/tk/attachments',
             if (!model.isFileAttachment()) return;
             var addPreview = this.preview,
                 isEditable = this.editable,
-                view = new AttachmentView({
+                view = new this.attachmentView({
                     model: model,
                     preview: addPreview,
                     editable: isEditable
@@ -874,6 +875,17 @@ define('io.ox/core/tk/attachments',
                 'data-id': this.model.get('id')
             };
         },
+        renderControls: function (widget) {
+            if (_.isFunction(this.renderCustomControls)) {
+                this.renderCustomControls(widget);
+            } else if (this.editable) {
+                widget.append(
+                    $('<a href="#" class="control remove" tabindex="1">')
+                        .attr('title', gt('Remove attachment'))
+                        .append($('<i class="fa fa-times">'))
+                );
+            }
+        },
         render: function () {
             this.$el.empty();
             var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el),
@@ -896,13 +908,7 @@ define('io.ox/core/tk/attachments',
             );
             if (size.text() === '0 B') { size.text(' '); }
 
-            if (this.editable) {
-                widget.append(
-                    $('<a href="#" class="remove" tabindex="1">')
-                        .attr('title', gt('Remove attachment'))
-                        .append($('<i class="fa fa-times">'))
-                );
-            }
+            this.renderControls(widget);
             return this;
         }
     });
