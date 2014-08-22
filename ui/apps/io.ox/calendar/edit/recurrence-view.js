@@ -89,34 +89,6 @@ define('io.ox/calendar/edit/recurrence-view',
 
     var Widgets = {
 
-        toggle: function ($anchor, attribute, options) {
-            var self = this;
-
-            // check options
-            if (!options || !options.values) {
-                return false;
-            }
-
-            self[attribute] = 0;
-            $anchor.text(options.values[self.value]);
-
-            $anchor.on('click', function (e) {
-                e.preventDefault();
-                var newValue = (self.value === 0) ? 1 : 0;
-                self[attribute] = newValue;
-                self.trigger('change', self);
-                self.trigger('change:' + attribute, self);
-                drawState();
-            });
-
-            function drawState() {
-                $anchor.text(options.values[self[attribute]]);
-                self.trigger('redraw', self);
-            }
-
-            this.on('change:' + attribute, drawState);
-        },
-
         number: function ($anchor, attribute, options) {
             var self = this,
                 originalContent = $anchor.html();
@@ -249,10 +221,6 @@ define('io.ox/calendar/edit/recurrence-view',
             this.on('change:' + attribute, drawState);
         },
 
-        custom: function ($anchor, attribute, func, options) {
-            func.call(this, $anchor, attribute, options);
-        },
-
         days: function ($anchor, attribute) {
 
             var self = this,
@@ -327,8 +295,6 @@ define('io.ox/calendar/edit/recurrence-view',
             this.on('change:' + attribute, drawState);
         },
 
-        dateFormat: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-
         datePicker: function ($anchor, attribute, options) {
             var self = this;
 
@@ -390,7 +356,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     });
                 } else {
                     $dateInput.datepicker({
-                        format: Widgets.dateFormat,
+                        format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
                         parentEl: $(this).parent(),
                         weekStart: dateAPI.locale.weekStart,
                         autoclose: true,
@@ -564,7 +530,7 @@ define('io.ox/calendar/edit/recurrence-view',
                         initial: 1,
                         gt: gt
                     }),
-                    weekly: new ConfigSentence(gt('The appointment is repeated <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> weeks</a> on <a href="#"  data-widget="custom" data-attribute="days">monday</a>.'), {
+                    weekly: new ConfigSentence(gt('The appointment is repeated <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> weeks</a> on <a href="#"  data-widget="days" data-attribute="days">monday</a>.'), {
                         id: 'weekly',
                         tabindex: self.tabindex,
                         interval: {
@@ -584,8 +550,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             },
                             initial: 1,
                             gt: gt
-                        },
-                        days: Widgets.days
+                        }
                     }),
                     monthlyDate: new ConfigSentence(gt('The appointment is repeated on day <a href="#" data-widget="number" data-attribute="dayInMonth"><span class="number-control">10</span></a> <a href="#" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>.'), {
                         id: 'monthlyDate',
@@ -767,11 +732,10 @@ define('io.ox/calendar/edit/recurrence-view',
                             }
                         })
                     }).on('change:ending', this.endingChanged, this).on('change', this.updateModel, this),
-                    date: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> on <a href="#" data-attribute="until" data-widget="custom">11/03/2013</a>.'), {
+                    date: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> on <a href="#" data-attribute="until" data-widget="datePicker">11/03/2013</a>.'), {
                         id: 'date',
                         tabindex: self.tabindex,
                         ending: endingOptions,
-                        until: Widgets.datePicker,
                         model: self.model,
                         initial: function () {
                             //tasks may not have a start date at this point
