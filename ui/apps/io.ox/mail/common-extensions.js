@@ -361,49 +361,91 @@ define('io.ox/mail/common-extensions',
             };
         }()),
 
-        attachmentPreview: function attachmentPreview(baton) {
+        attachmentPreview: (function attachmentPreview() {
 
-            if (baton.attachments.length === 0) return $.when();
+            var customAttachmentView,
+                renderCustomControls = function (widget) {
+                    if (this.preview) return; //only for non-preview view
 
-            var $el = this,
-            def = $.Deferred();
+                    var label = this.model.getTitle() || ('Attachment #' + this.model.collection.indexOf(this.model))
+                        // lower case file extensions for better readability
+                        .replace(/\.(\w+)$/, function (match) {
+                            return match.toLowerCase();
+                        });
+                    var dd = new links.Dropdown({
+                            label: label,
+                            icon: 'fa fa-bars',
+                            noCaret: true,
+                            ref: 'io.ox/mail/attachment/links'
+                        }).draw.call(widget, ext.Baton({ data: this.model.attributes, $el: widget })),
+                        url, contentType;
 
-            require(['io.ox/core/tk/attachments'], function (attachments) {
-                var list = baton.attachments.filter(function (m) {
-                        return m.disp === 'attachment';
-                    }).map(function (m) {
-                        m.group = 'mail';
-                        return m;
-                    }),
-                    collection = new attachments.model.Attachments(list),
-                    view = new attachments.view.AttachmentList({
-                        collection: collection,
-                        editable: false,
-                        preview: baton.preview
-                    });
+                    url = api.getUrl(this.model.attributes, 'download');
+                    contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
+                    dd.find('a[data-toggle= "dropdown"]')
+                        .addClass('control');
 
-                view.render();
-                $el.append(
-                    view.$el.addClass('inline-items')
-                );
+                    this.$el.attr({
+                            title: this.model.getTitle(),
+                            draggable: true,
+                            'data-downloadurl': contentType + ':' + this.model.getTitle().replace(/:/g, '') + ':' + ox.abs + url
+                        })
+                        .on('dragstart', function (e) {
+                            $(this).css({ display: 'inline-block' });
+                            e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+                        });
+                };
 
-                view.delegateEvents({
-                    'click li.item': function (ev) {
-                        //skip attachments without preview
-                        if (!$(ev.currentTarget).data().original) return;
+            return function (baton) {
+                if (baton.attachments.length === 0) return $.when();
 
-                        var id = $(ev.currentTarget).data().id,
-                            data = collection.get(id).toJSON(),
-                            b = ext.Baton({ startItem: data, data: list });
+                var $el = this,
+                def = $.Deferred();
 
-                        actions.invoke('io.ox/mail/actions/slideshow-attachment', null, b);
+                require(['io.ox/core/tk/attachments'], function (attachments) {
+                    if (!customAttachmentView) {
+                        //define only once
+                        customAttachmentView = attachments.view.Attachment.extend({
+                            renderCustomControls: renderCustomControls
+                        });
                     }
-                });
-                def.resolve(view);
-            }, def.reject);
+                    var list = baton.attachments.filter(function (m) {
+                            return m.disp === 'attachment';
+                        }).map(function (m) {
+                            m.group = 'mail';
+                            return m;
+                        }),
+                        collection = new attachments.model.Attachments(list),
+                        view = new attachments.view.AttachmentList({
+                            collection: collection,
+                            editable: false,
+                            preview: baton.preview,
+                            attachmentView: customAttachmentView
+                        });
 
-            return def;
-        },
+                    view.render();
+                    $el.append(
+                        view.$el.addClass('inline-items')
+                    );
+
+                    view.delegateEvents({
+                        'click li.item': function (ev) {
+                            //skip attachments without preview
+                            if (!$(ev.currentTarget).data().original) return;
+
+                            var id = $(ev.currentTarget).data().id,
+                                data = collection.get(id).toJSON(),
+                                b = ext.Baton({ startItem: data, data: list });
+
+                            actions.invoke('io.ox/mail/actions/slideshow-attachment', null, b);
+                        }
+                    });
+                    def.resolve(view);
+                }, def.reject);
+
+                return def;
+            };
+        }()),
 
         flagPicker: function (baton) {
             flagPicker.draw(this, baton);
