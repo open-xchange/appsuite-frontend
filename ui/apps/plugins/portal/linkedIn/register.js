@@ -18,7 +18,8 @@ define('plugins/portal/linkedIn/register',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'io.ox/core/capabilities',
-     'gettext!plugins/portal'
+     'gettext!plugins/portal',
+     'less!io.ox/linkedIn/style'
     ], function (ext, http, proxy, strings, keychain, capabilities, gt) {
 
     'use strict';
@@ -166,6 +167,11 @@ define('plugins/portal/linkedIn/register',
 
         requiresSetUp: function () {
             return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
+        },
+
+        drawDefaultSetup: function () {
+            this.find('h2 .title').replaceWith('<i class="fa fa-linkedin">');
+            this.addClass('widget-color-custom color-linkedin');
         },
 
         performSetUp: function (baton) {

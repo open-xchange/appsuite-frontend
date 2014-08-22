@@ -11,13 +11,22 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+// special color scheme if widget has no account yet
+.widget-color-custom.color-facebook {
+    @color: #435F9C;
+    .decoration { background-color: @color; }
+    &:focus {
+        .decoration { background-color: darken(@color, 10%); }
+    }
+}
+
 .facebook {
     &.clear-title { margin: 0 0 26px 0; }
     &.wall-entry {
         position: relative;
         min-height: 55px;
         margin: 0 0 20px 65px;
-        
+
         >a.profile-picture {
             position: absolute;
             top: 2px;

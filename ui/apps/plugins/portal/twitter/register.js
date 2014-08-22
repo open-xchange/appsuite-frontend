@@ -279,6 +279,11 @@ define('plugins/portal/twitter/register',
             return keychain.isEnabled('twitter') && !keychain.hasStandardAccount('twitter');
         },
 
+        drawDefaultSetup: function () {
+            this.find('h2 .title').replaceWith('<i class="fa fa-twitter">');
+            this.addClass('widget-color-custom color-twitter');
+        },
+
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychain.createInteractively('twitter', win)
@@ -371,24 +376,6 @@ define('plugins/portal/twitter/register',
                 $('<div class="io-ox-portal-preview centered">').append(
                     $('<div>').text(gt('Add your account'))
                 )
-            );
-        },
-
-        error: function (error, baton) {
-
-            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
-
-            $(this).empty().append(
-                $('<div class="decoration">').append(
-                    $('<h2>').append(
-                        $('<a href="#" class="disable-widget"><i class="fa fa-times"/></a>'),
-                        $('<span class="title">').text(gt('Twitter'))
-                    )
-                ),
-                $('<div class="content">').text(gt('Click here to add your account'))
-                .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp', null, baton);
-                })
             );
         }
     });

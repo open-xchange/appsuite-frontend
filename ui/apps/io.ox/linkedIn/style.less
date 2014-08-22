@@ -11,6 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+// special color scheme if widget has no account yet
+.widget-color-custom.color-linkedin {
+    @color: #007bb6;
+    .decoration { background-color: @color; }
+    &:focus {
+        .decoration { background-color: darken(@color, 10%); }
+    }
+}
+
 .linkedIn {
     .actions a {
         margin-right : 10px;

@@ -167,15 +167,14 @@
                 }
 
                 .action {
+                    color: white;
                     background-color: @black;
                 }
 
                 &.inverse .decoration {
                     background-color: @black
                 }
-
             }
-
         }
 
         &.widget-color-black      { .mixin-widget-color(#333, #333);                                         }
@@ -188,6 +187,20 @@
         &.widget-color-purple     { .mixin-widget-color(@purple, darken(@purple, 10%));                      }
         &.widget-color-pink       { .mixin-widget-color(darken(@pink, 10%), darken(@pink, 20%));             }
         &.widget-color-gray       { .mixin-widget-color(darken(@gray-light, 20%), darken(@gray-light, 30%));   }
+
+        &.widget-color-custom {
+
+            color: white;
+            h2 { color: white; }
+            .accent { color: rgba(255, 255, 255, 0.50); }
+            .action { background-color: rgba(0, 0, 0, 0.25); }
+            .action:hover, .action:focus { background-color: rgba(0, 0, 0, 0.40); }
+
+            html.high-contrast & {
+                color: @black;
+                .decoration { background-color: #f5f5f5; }
+            }
+        }
 
         &.requires-setup {
 

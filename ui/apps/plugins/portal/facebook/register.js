@@ -88,7 +88,7 @@ define('plugins/portal/facebook/register',
                 link.off();
                 link = null;
             }
-            
+
         });
         wall_content.append(link);
     };
@@ -213,6 +213,11 @@ define('plugins/portal/facebook/register',
 
         requiresSetUp: function () {
             return keychain.isEnabled('facebook') && !keychain.hasStandardAccount('facebook');
+        },
+
+        drawDefaultSetup: function () {
+            this.find('h2 .title').replaceWith('<i class="fa fa-facebook">');
+            this.addClass('widget-color-custom color-facebook');
         },
 
         performSetUp: function (baton) {
@@ -349,24 +354,6 @@ define('plugins/portal/facebook/register',
                     $('<span>').text(gt('Add your account'))),
                 $('<div class="io-ox-portal-actions"').append(
                     $('<i class="fa fa-times io-ox-portal-action">'))
-            );
-        },
-
-        error: function (error, baton) {
-
-            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
-
-            $(this).empty().append(
-                $('<div class="decoration">').append(
-                    $('<h2>').append(
-                        $('<a href="#" class="disable-widget"><i class="fa fa-times"/></a>'),
-                        $('<span class="title">').text(gt('Facebook'))
-                    )
-                ),
-                $('<div class="content">').text(gt('Click here to add your account'))
-                .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp', null, baton);
-                })
             );
         }
     });
