@@ -1367,7 +1367,7 @@ define('io.ox/core/desktop',
                                 'top': '300px'
                             })
                             .append(
-                                $('<label>').text(gt('Advanced')),
+                                $('<label class="search-facets-advanced-label">').text(gt('Advanced')).hide(),
                                 $('<ul class="search-facets search-facets-advanced">')
                             ),
                             // cancel button

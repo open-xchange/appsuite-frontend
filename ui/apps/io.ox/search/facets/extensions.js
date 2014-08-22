@@ -226,47 +226,55 @@ define('io.ox/search/facets/extensions',
                 baton.model.ensure();
                 var facets = baton.model.get('autocomplete'),
                     pool = baton.model.get('pool'),
-                    list = baton.model.get('poollist');
+                    list = baton.model.get('poollist'),
+                    nodes = [];
 
-                this.append(
-                    _(facets).map(function (facet) {
+                // add inactive advanced facets
+                nodes = _(facets).map(function (facet) {
 
-                        var item, value, node, button;
-                        // only advanced s'il vous plaît
-                        if (!_.contains(facet.flags, 'advanced') || pool[facet.id]) return;
+                    var item, value, node, button;
+                    // only advanced s'il vous plaît
+                    if (!_.contains(facet.flags, 'advanced') || pool[facet.id]) return;
 
-                        item = _.find(list, function (item) {
-                           return facet.id === item.facet;
-                        });
+                    item = _.find(list, function (item) {
+                       return facet.id === item.facet;
+                    });
 
-                        //OPTIONAL: when advaced facets should stay in place
-                        // if (item) {
-                        //     value = _.find(facet.values, function (value) {
-                        //         return value.id === item.value;
-                        //     });
-                        // }
-                        value = value || {placeholder: true};
+                    //OPTIONAL: when advaced facets should stay in place
+                    // if (item) {
+                    //     value = _.find(facet.values, function (value) {
+                    //         return value.id === item.value;
+                    //     });
+                    // }
+                    value = value || {placeholder: true};
 
 
-                        // create facet node
-                        node = $('<li role="presentation" class="facet btn-group">').append(
-                            // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                            button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
-                            .on('click', function (e) { e.preventDefault(); })
-                            .append($('<label>'))
-                        );
+                    // create facet node
+                    node = $('<li role="presentation" class="facet btn-group">').append(
+                        // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
+                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
+                        .on('click', function (e) { e.preventDefault(); })
+                        .append($('<label>'))
+                    );
 
-                        // general stuff
-                        ext.point('io.ox/search/view/window/facet').invoke('draw', button, baton, value, facet);
+                    // general stuff
+                    ext.point('io.ox/search/view/window/facet').invoke('draw', button, baton, value, facet);
 
-                        // additional actions per id/type
-                        ext.point('io.ox/search/view/window/facet/' + value.facet).invoke('draw', node, value, baton);
+                    // additional actions per id/type
+                    ext.point('io.ox/search/view/window/facet/' + value.facet).invoke('draw', node, value, baton);
 
-                        return node;
-                    }).reverse()
-                );
+                    return node;
+                }).reverse();
+
+                // add label
+                if (_.compact(nodes).length) {
+                    nodes.unshift(
+                        $('<label>').text(gt('Advanced'))
+                    );
+                }
+
+                this.append(nodes);
             },
-
 
 
             optionsHandler: function (baton) {
@@ -353,20 +361,21 @@ define('io.ox/search/facets/extensions',
 
             facetRemove: function (baton, value) {
                 var isMandatory = baton.model.isMandatory(value.facet);
-               // remove action for non mandatory facets
-                if (!isMandatory && value.facet !== 'folder') {
-                    this.prepend(
-                        $('<span class="remove">')
-                        .append(
-                            $('<i class="fa fa-times action">')
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            baton.model.remove(value.facet || value._compact.facet, value.id);
-                        })
-                    );
-                }
+
+                // remove action for non mandatory facets
+                if ((isMandatory && value.facet === 'folder') || value.placeholder) return;
+
+                this.prepend(
+                    $('<span class="remove">')
+                    .append(
+                        $('<i class="fa fa-times action">')
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        baton.model.remove(value.facet || value._compact.facet, value.id);
+                    })
+                );
             },
 
             facetDropdown: function (baton, value, facet) {
