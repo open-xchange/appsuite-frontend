@@ -295,7 +295,7 @@ define('io.ox/portal/main',
         baton.model.node
             .append(
                 $('<div class="content">').append(
-                    $('<div class="paragraph">').text(gt('Welcome to ') + title + '. ' + gt('Get started here!')),
+                    $('<div class="paragraph setup">').text(gt('Welcome to ') + title + '. ' + gt('Get started here!')),
                     $('<div class="action" tabindex="1" role="button">').text(gt('Add') + ' ' + title + ' ' + gt('Account'))
                     .on('click', { baton: baton }, setup)
                     .on('keypress', { baton: baton }, function (e) {
