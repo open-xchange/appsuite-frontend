@@ -22,7 +22,7 @@ msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
 #. %1$d - number of attachments
-#: apps/io.ox/mail/common-extensions.js:363 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:312 module:io.ox/mail
 #, fuzzy
 #| msgid "(%1$s) Attachments"
 msgid "%1$d Attachment"
@@ -184,11 +184,11 @@ msgstr "Новый контакт у %1$s:"
 msgid "%1$s has new contacts:"
 msgstr "Новые контакты у %1$s:"
 
-#: apps/plugins/portal/linkedIn/register.js:126 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:127 module:plugins/portal
 msgid "%1$s is a new contact"
 msgstr "%1$s является новым контактом"
 
-#: apps/plugins/portal/linkedIn/register.js:100 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:101 module:plugins/portal
 msgid "%1$s is now connected with %2$s"
 msgstr "%1$s теперь связан с %2$s"
 
@@ -451,7 +451,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> выбран(о)"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:548 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:561 module:io.ox/mail
 #, fuzzy
 #| msgid "A return receipt has been sent"
 msgid "A read receipt has been sent"
@@ -591,7 +591,7 @@ msgstr "Действительная продолжительность (мин.
 #: apps/io.ox/core/folder/actions/add.js:100 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:279
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:367 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:362 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:584
 msgid "Add"
 msgstr "Добавить"
@@ -610,7 +610,7 @@ msgstr "Добавить учетную запись"
 msgid "Add action"
 msgstr "Добавить действие"
 
-#: apps/io.ox/mail/compose/extensions.js:369 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:364 module:io.ox/mail
 #, fuzzy
 #| msgid "Adding attachments"
 msgid "Add attachments"
@@ -641,13 +641,13 @@ msgid "Add files"
 msgstr "Добавить файлы"
 
 #: apps/io.ox/core/tk/attachments.js:592 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:397 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:392 module:io.ox/mail
 #, fuzzy
 #| msgid "Add files"
 msgid "Add from Drive"
 msgstr "Добавить файлы"
 
-#: apps/io.ox/mail/compose/extensions.js:390 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:385 module:io.ox/mail
 #, fuzzy
 #| msgid "Add files"
 msgid "Add local file"
@@ -707,7 +707,7 @@ msgstr "Добавить участника или ресурс"
 msgid "Add signature"
 msgstr "Добавить подпись"
 
-#: apps/io.ox/mail/compose/view.js:679 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:669 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1250
 msgid "Add subject"
 msgstr "Добавить тему"
@@ -739,9 +739,9 @@ msgstr "Добавить в портал"
 msgid "Add widget"
 msgstr "Добавить модуль"
 
-#: apps/plugins/portal/facebook/register.js:349 module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:344
-#: apps/plugins/portal/twitter/register.js:372
+#: apps/plugins/portal/facebook/register.js:354 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:350
+#: apps/plugins/portal/twitter/register.js:377
 msgid "Add your account"
 msgstr "Добавить учетную запись"
 
@@ -826,7 +826,7 @@ msgstr "Разрешить использование вашей учетной 
 msgid "An error occurred"
 msgstr "Произошла ошибка"
 
-#: apps/io.ox/portal/main.js:353 module:io.ox/portal
+#: apps/io.ox/portal/main.js:376 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Произошла ошибка."
 
@@ -871,7 +871,7 @@ msgstr "Добавить vCard"
 msgid "Application Toolbar"
 msgstr "Панель приложений"
 
-#: apps/io.ox/mail/main.js:1100 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1102 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Надо исправить ошибку, иначе работа приложения может быть нарушена."
 
@@ -958,9 +958,9 @@ msgstr "Встречи"
 msgid "Approximate Duration for Subscriptions"
 msgstr "Примерная продолжительность подписки"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:476
+#: apps/io.ox/calendar/edit/recurrence-view.js:655
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:525
+#: apps/io.ox/calendar/edit/recurrence-view.js:704
 msgid "April"
 msgstr "Апрель"
 
@@ -1002,7 +1002,7 @@ msgstr[2] "Вложения сохранены"
 #: apps/io.ox/calendar/edit/template.js:450 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:384 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:379 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:528
 #: apps/io.ox/mail/write/view-main.js:597
 #: apps/io.ox/tasks/edit/view-template.js:481 module:io.ox/tasks/edit
@@ -1021,9 +1021,9 @@ msgstr "Вложения сохранены."
 msgid "Attention"
 msgstr "Внимание"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:480
+#: apps/io.ox/calendar/edit/recurrence-view.js:659
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:529
+#: apps/io.ox/calendar/edit/recurrence-view.js:708
 msgid "August"
 msgstr "Август"
 
@@ -1085,7 +1085,7 @@ msgid "B"
 msgstr "Б"
 
 #: apps/io.ox/mail/compose/extensions.js:58 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:181
+#: apps/io.ox/mail/compose/extensions.js:182
 #, fuzzy
 #| msgid "CC"
 msgid "BCC"
@@ -1112,7 +1112,7 @@ msgstr "Назад к встрече"
 msgid "Basic settings"
 msgstr "Основные параметры"
 
-#: apps/io.ox/mail/common-extensions.js:259 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:262 module:io.ox/mail
 msgid "Bcc"
 msgstr "Скрытая копия"
 
@@ -1185,7 +1185,7 @@ msgid ""
 msgstr "Изменение даты встречи создаст исключение в группе встреч. Продолжить?"
 
 #: apps/io.ox/mail/compose/extensions.js:57 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:173
+#: apps/io.ox/mail/compose/extensions.js:174
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1260,14 +1260,14 @@ msgstr "Календарь"
 #: apps/io.ox/mail/accounts/settings.js:280
 #: apps/io.ox/mail/accounts/view-form.js:312 module:io.ox/settings/settings
 #: apps/io.ox/mail/actions.js:87 apps/io.ox/mail/actions.js:106
-#: apps/io.ox/mail/actions.js:788 apps/io.ox/mail/compose/extensions.js:368
-#: apps/io.ox/mail/compose/view.js:540
+#: apps/io.ox/mail/actions.js:788 apps/io.ox/mail/compose/extensions.js:363
+#: apps/io.ox/mail/compose/view.js:530
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
-#: apps/io.ox/mail/main.js:258 apps/io.ox/mail/main.js:976
+#: apps/io.ox/mail/main.js:258 apps/io.ox/mail/main.js:978
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1409 apps/io.ox/mail/write/view-main.js:585
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:509 module:io.ox/portal
+#: apps/io.ox/portal/main.js:536 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:63
@@ -1420,33 +1420,27 @@ msgstr "Щелкните для создания встречи на весь д
 msgid "Click here for free trial."
 msgstr "Нажмите для доступа к пробной версии."
 
-#: apps/io.ox/portal/main.js:298 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:366 module:plugins/portal
-#: apps/plugins/portal/twitter/register.js:388
-msgid "Click here to add your account"
-msgstr "Нажмите здесь для добавления учетной записи"
-
 #: apps/io.ox/help/center.js:127 module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Нажмите для выхода из справочного центра"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:323
+#: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
 msgid "Click on a sentence to choose when to repeat the appointment."
 msgstr "Выберите, чтобы определить время повтора встречи."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:322
+#: apps/io.ox/calendar/edit/recurrence-view.js:502
 #: module:io.ox/calendar/edit/main
 msgid "Click on the links to change the values."
 msgstr "Нажмите ссылки, чтобы изменить значения."
 
 #: apps/plugins/portal/facebook/register.js:175 module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:144
+#: apps/plugins/portal/linkedIn/register.js:145
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
 msgstr "Нажмите для повторной авторизации учетной записи"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:296
+#: apps/io.ox/calendar/edit/recurrence-view.js:476
 #: module:io.ox/calendar/edit/main
 msgid "Click to close the recurrence view"
 msgstr ""
@@ -1471,7 +1465,7 @@ msgstr "Нажмите, чтобы повторить попытку"
 msgid "Click to retry later."
 msgstr "Нажмите, чтобы повторить позднее."
 
-#: apps/io.ox/portal/main.js:356 module:io.ox/portal
+#: apps/io.ox/portal/main.js:379 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Нажмите, чтобы повторить попытку."
 
@@ -1587,7 +1581,7 @@ msgid "Company"
 msgstr "Компания"
 
 #: apps/io.ox/mail/compose/main.js:43 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:384 apps/io.ox/mail/compose/view.js:388
+#: apps/io.ox/mail/compose/view.js:374 apps/io.ox/mail/compose/view.js:378
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:213 apps/io.ox/mail/toolbar.js:42
 #: apps/io.ox/mail/write/main.js:207
@@ -1599,7 +1593,7 @@ msgid "Compose new email"
 msgstr "Создать новое сообщение"
 
 #: apps/io.ox/mail/actions.js:853 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:71 apps/io.ox/mail/write/main.js:681
+#: apps/io.ox/mail/compose/extensions.js:72 apps/io.ox/mail/write/main.js:681
 msgid "Compose new mail"
 msgstr "Создать новое сообщение"
 
@@ -1701,7 +1695,7 @@ msgstr "Обсуждения"
 msgid "Copy"
 msgstr "Копировать"
 
-#: apps/io.ox/mail/common-extensions.js:248 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:251 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 #, fuzzy
 #| msgctxt "CC"
@@ -1936,9 +1930,9 @@ msgstr "День"
 msgid "Days"
 msgstr "Дни"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:484
+#: apps/io.ox/calendar/edit/recurrence-view.js:663
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:533
+#: apps/io.ox/calendar/edit/recurrence-view.js:712
 msgid "December"
 msgstr "Декабрь"
 
@@ -2002,7 +1996,7 @@ msgstr "Отложено"
 #: apps/io.ox/mail/actions.js:105 apps/io.ox/mail/actions.js:915
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:283
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:507
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:534
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2035,7 +2029,7 @@ msgstr "Удалить версию"
 msgid "Delete whole series"
 msgstr "Удалить всю серию"
 
-#: apps/io.ox/portal/main.js:503 module:io.ox/portal
+#: apps/io.ox/portal/main.js:530 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Удалить модуль"
@@ -2093,7 +2087,7 @@ msgid "Disable"
 msgstr "Отключить"
 
 #: apps/io.ox/portal/main.js:143 module:io.ox/portal
-#: apps/io.ox/portal/main.js:144 apps/io.ox/portal/main.js:394
+#: apps/io.ox/portal/main.js:144 apps/io.ox/portal/main.js:421
 msgid "Disable widget"
 msgstr "Отключить модуль"
 
@@ -2101,7 +2095,7 @@ msgstr "Отключить модуль"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:62 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:181
 #: apps/io.ox/core/settings/user.js:81
-#: apps/io.ox/mail/compose/extensions.js:80 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:81 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:59
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:109
@@ -2124,7 +2118,7 @@ msgstr "Отменить изменения"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:538 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:528 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1407
 msgctxt "dialog"
 msgid "Discard message"
@@ -2219,7 +2213,7 @@ msgstr[0] "Удалить эту задачу?"
 msgstr[1] "Удалить задачи?"
 msgstr[2] "Удалить задачи?"
 
-#: apps/io.ox/portal/main.js:504 module:io.ox/portal
+#: apps/io.ox/portal/main.js:531 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Удалить модуль?"
@@ -2231,7 +2225,7 @@ msgstr "Удалить модуль?"
 msgid "Do you really want to discard your changes?"
 msgstr "Отменить изменения?"
 
-#: apps/io.ox/mail/compose/view.js:535 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1404
 msgid "Do you really want to discard your message?"
 msgstr "Вы действительно хотите удалить сообщение?"
@@ -2347,7 +2341,7 @@ msgstr "Параметры Drive"
 msgid "Drop EML file here for import"
 msgstr "Перетащите сюда файл EML для импорта"
 
-#: apps/io.ox/mail/compose/extensions.js:323 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:308 module:io.ox/mail
 #, fuzzy
 #| msgid "Adding attachments"
 msgid "Drop attachments here"
@@ -2430,7 +2424,7 @@ msgstr "ЭБ"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:154
 #: apps/io.ox/mail/mailfilter/settings/filter.js:159
 #: apps/io.ox/mail/main.js:145 apps/io.ox/mail/main.js:151
-#: apps/io.ox/mail/main.js:258 apps/io.ox/mail/main.js:980
+#: apps/io.ox/mail/main.js:258 apps/io.ox/mail/main.js:982
 #: apps/io.ox/mail/settings/signatures/register.js:280
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2797,7 +2791,7 @@ msgstr "Расширенный вид"
 msgid "External contact"
 msgstr "Внешний контакт"
 
-#: apps/io.ox/mail/common-extensions.js:495 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:508 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Внешние изображения были заблокированы с целью защиты от спама."
@@ -2818,8 +2812,7 @@ msgid "Face"
 msgstr "Улыбки"
 
 #: apps/plugins/portal/facebook/register.js:196 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:363
-#: apps/plugins/portal/facebook/register.js:656
+#: apps/plugins/portal/facebook/register.js:643
 msgid "Facebook"
 msgstr "Facebook"
 
@@ -2900,9 +2893,9 @@ msgstr "Факс (дом.)"
 msgid "Fax (alt)"
 msgstr "Факс (доп.)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:474
+#: apps/io.ox/calendar/edit/recurrence-view.js:653
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:523
+#: apps/io.ox/calendar/edit/recurrence-view.js:702
 msgid "February"
 msgstr "Февраль"
 
@@ -3137,15 +3130,15 @@ msgstr "Фрилансер"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:49
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:442
-#: apps/io.ox/calendar/edit/recurrence-view.js:513
+#: apps/io.ox/calendar/edit/recurrence-view.js:621
+#: apps/io.ox/calendar/edit/recurrence-view.js:692
 #: apps/io.ox/calendar/util.js:415 module:io.ox/calendar
 msgid "Friday"
 msgstr "Пятница"
 
 #: apps/io.ox/mail/actions.js:804 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:107
-#: apps/io.ox/mail/compose/extensions.js:122 apps/io.ox/mail/main.js:529
+#: apps/io.ox/mail/compose/extensions.js:108
+#: apps/io.ox/mail/compose/extensions.js:123 apps/io.ox/mail/main.js:529
 #: apps/io.ox/mail/vacationnotice/settings/model.js:140
 #: apps/io.ox/mail/view-options.js:32 apps/io.ox/mail/write/view-main.js:269
 msgid "From"
@@ -3178,6 +3171,12 @@ msgstr "ГБ"
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
 msgstr "Получить бесплатное обновление"
+
+#: apps/io.ox/portal/main.js:312 module:io.ox/portal
+#, fuzzy
+#| msgid "Getting started"
+msgid "Get started here"
+msgstr "Приступая к работе"
 
 #: apps/plugins/core/feedback/register.js:178 module:io.ox/core
 msgid "Give feedback"
@@ -3543,9 +3542,9 @@ msgstr "Объекты без файла не могут быть загруже
 msgid "Items without a file can not be opened."
 msgstr "Объекты без файла не могут быть открыты."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:473
+#: apps/io.ox/calendar/edit/recurrence-view.js:652
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:522
+#: apps/io.ox/calendar/edit/recurrence-view.js:701
 msgid "January"
 msgstr "Январь"
 
@@ -3562,20 +3561,20 @@ msgstr "Должность"
 msgid "Job description"
 msgstr "Описание должности"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:479
+#: apps/io.ox/calendar/edit/recurrence-view.js:658
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:528
+#: apps/io.ox/calendar/edit/recurrence-view.js:707
 msgid "July"
 msgstr "Июль"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:478
+#: apps/io.ox/calendar/edit/recurrence-view.js:657
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:527
+#: apps/io.ox/calendar/edit/recurrence-view.js:706
 msgid "June"
 msgstr "Июнь"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:513 module:io.ox/portal
+#: apps/io.ox/portal/main.js:540 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Отключить модуль"
@@ -3665,7 +3664,7 @@ msgstr "Светло-зеленый"
 msgid "Like"
 msgstr "Нравится"
 
-#: apps/plugins/portal/facebook/register.js:487 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:474 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "Понравилось: %s"
 
@@ -3674,15 +3673,15 @@ msgstr "Понравилось: %s"
 msgid "Liked comment"
 msgstr "Комментарий нравится"
 
-#: apps/plugins/portal/linkedIn/register.js:351 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:357 module:plugins/portal
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: apps/plugins/portal/linkedIn/register.js:271 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:277 module:plugins/portal
 msgid "LinkedIn Network Updates"
 msgstr "Обновления контактов LinkedIn"
 
-#: apps/plugins/portal/linkedIn/register.js:138 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:139 module:plugins/portal
 msgid "LinkedIn reported an error:"
 msgstr "Ошибка LinkedIn:"
 
@@ -3796,12 +3795,12 @@ msgstr "Импорт почты выполнен"
 msgid "Mail has been moved"
 msgstr "Почта перенесена"
 
-#: apps/io.ox/mail/compose/view.js:677 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:667 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1248
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Пустая тема сообщения. Отправить?"
 
-#: apps/io.ox/mail/compose/view.js:670 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:660 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1241
 msgid "Mail has no recipient."
 msgstr "Не указан получатель."
@@ -3822,8 +3821,8 @@ msgstr "Напоминание по почте"
 msgid "Mail reminder for"
 msgstr "Напоминание для "
 
-#: apps/io.ox/mail/compose/view.js:427 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:447 apps/io.ox/mail/write/main.js:1292
+#: apps/io.ox/mail/compose/view.js:417 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:437 apps/io.ox/mail/write/main.js:1292
 #: apps/io.ox/mail/write/main.js:1337
 msgid "Mail saved as draft"
 msgstr "Черновик сохранен"
@@ -3880,9 +3879,9 @@ msgstr "Управление файлами"
 msgid "Manual"
 msgstr "Вручную"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:475
+#: apps/io.ox/calendar/edit/recurrence-view.js:654
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:524
+#: apps/io.ox/calendar/edit/recurrence-view.js:703
 msgid "March"
 msgstr "Март"
 
@@ -3954,9 +3953,9 @@ msgstr "Непрочитанное"
 msgid "Matches"
 msgstr "совпадает с"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:477
+#: apps/io.ox/calendar/edit/recurrence-view.js:656
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:526
+#: apps/io.ox/calendar/edit/recurrence-view.js:705
 msgid "May"
 msgstr "Май"
 
@@ -4000,8 +3999,8 @@ msgstr "Минуты"
 msgid "Miscellaneous"
 msgstr "Другое"
 
-#: apps/io.ox/mail/compose/view.js:218 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:219 apps/io.ox/mail/write/view-main.js:1094
+#: apps/io.ox/mail/compose/view.js:208 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:209 apps/io.ox/mail/write/view-main.js:1094
 #: apps/io.ox/mail/write/view-main.js:1095
 msgid "Mobile"
 msgstr "Мобильный"
@@ -4020,8 +4019,8 @@ msgstr "Изменено"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:45
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:438
-#: apps/io.ox/calendar/edit/recurrence-view.js:509
+#: apps/io.ox/calendar/edit/recurrence-view.js:617
+#: apps/io.ox/calendar/edit/recurrence-view.js:688
 #: apps/io.ox/calendar/util.js:411 module:io.ox/calendar
 msgid "Monday"
 msgstr "Понедельник"
@@ -4443,9 +4442,9 @@ msgstr "Уведомления"
 msgid "Notify all participants by email."
 msgstr "Уведомить всех участников по почте."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:483
+#: apps/io.ox/calendar/edit/recurrence-view.js:662
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:532
+#: apps/io.ox/calendar/edit/recurrence-view.js:711
 msgid "November"
 msgstr "Ноябрь"
 
@@ -4474,9 +4473,9 @@ msgstr "Разрешения объектов"
 msgid "Objects"
 msgstr "Объекты"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:482
+#: apps/io.ox/calendar/edit/recurrence-view.js:661
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:531
+#: apps/io.ox/calendar/edit/recurrence-view.js:710
 msgid "October"
 msgstr "Октябрь"
 
@@ -4794,8 +4793,8 @@ msgid "Phone (business alt)"
 msgstr "Телефон (доп. рабочий)"
 
 #: apps/io.ox/contacts/model.js:264 module:io.ox/contacts
-#: apps/io.ox/mail/compose/view.js:214 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:215 apps/io.ox/mail/write/view-main.js:1090
+#: apps/io.ox/mail/compose/view.js:204 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:205 apps/io.ox/mail/write/view-main.js:1090
 #: apps/io.ox/mail/write/view-main.js:1091
 msgid "Phone (business)"
 msgstr "Телефон (рабочий)"
@@ -4820,8 +4819,8 @@ msgstr "Телефон (домашний)"
 msgid "Phone (other)"
 msgstr "Телефон (другой)"
 
-#: apps/io.ox/mail/compose/view.js:216 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:217 apps/io.ox/mail/write/view-main.js:1092
+#: apps/io.ox/mail/compose/view.js:206 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:207 apps/io.ox/mail/write/view-main.js:1092
 #: apps/io.ox/mail/write/view-main.js:1093
 msgid "Phone (private)"
 msgstr "Телефон (личный)"
@@ -4870,7 +4869,7 @@ msgstr "Проигрывать аудиофайлы"
 msgid "Play video files"
 msgstr "Проигрывать видеофайлы"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:924
+#: apps/io.ox/calendar/edit/recurrence-view.js:1102
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
 msgstr "Выберите предложение."
@@ -5015,7 +5014,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Портал"
 
-#: apps/io.ox/portal/main.js:469 module:io.ox/portal
+#: apps/io.ox/portal/main.js:496 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Виджеты портала"
 
@@ -5040,7 +5039,7 @@ msgstr "Индекс"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "Нажмите [Enter] для перехода к списку дней рождения."
 
-#: apps/plugins/portal/facebook/register.js:229 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:234 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Нажмите [Enter] для перехода к ленте Facebook."
 
@@ -5048,7 +5047,7 @@ msgstr "Нажмите [Enter] для перехода к ленте Facebook."
 msgid "Press [enter] to jump to the flicker stream."
 msgstr "Нажмите [Enter] для перехода к ленте flicker."
 
-#: apps/plugins/portal/linkedIn/register.js:214 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:220 module:plugins/portal
 msgid "Press [enter] to jump to the linkedin stream."
 msgstr "Нажмите [Enter] для перехода к ленте LinkedIn."
 
@@ -5061,7 +5060,7 @@ msgstr "Нажмите [Enter] для перехода к ленте rss."
 msgid "Press [enter] to jump to the tumblr feed."
 msgstr "Нажмите [Enter] для перехода к ленте tumblr."
 
-#: apps/plugins/portal/twitter/register.js:305 module:plugins/portal
+#: apps/plugins/portal/twitter/register.js:310 module:plugins/portal
 msgid "Press [enter] to jump to the twitter feed."
 msgstr "Нажмите [Enter] для перехода к ленте твиттера."
 
@@ -5298,8 +5297,8 @@ msgstr "Авторизовать повторно"
 msgid "Received mails"
 msgstr "Полученные сообщения"
 
-#: apps/plugins/portal/linkedIn/register.js:297 module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:327
+#: apps/plugins/portal/linkedIn/register.js:303 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:333
 msgid "Recent activities"
 msgstr "Последние действия"
 
@@ -5426,7 +5425,7 @@ msgstr "Напоминание создано"
 #: apps/io.ox/backbone/mini-views/attachments.js:88
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/backbone/mini-views/attachments.js:90
-#: apps/io.ox/core/tk/attachments.js:88 apps/io.ox/core/tk/attachments.js:893
+#: apps/io.ox/core/tk/attachments.js:88 apps/io.ox/core/tk/attachments.js:884
 #: apps/io.ox/core/tk/attachmentsUtil.js:228
 msgid "Remove attachment"
 msgstr "Удалить вложение"
@@ -5464,7 +5463,7 @@ msgstr "Переименовать"
 msgid "Rename folder"
 msgstr "Переименовать папку"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:1044
+#: apps/io.ox/calendar/edit/recurrence-view.js:1222
 #: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Повтор"
@@ -5589,8 +5588,8 @@ msgstr "Объем продаж"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:50
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:443
-#: apps/io.ox/calendar/edit/recurrence-view.js:514
+#: apps/io.ox/calendar/edit/recurrence-view.js:622
+#: apps/io.ox/calendar/edit/recurrence-view.js:693
 #: apps/io.ox/calendar/util.js:416 module:io.ox/calendar
 msgid "Saturday"
 msgstr "Суббота"
@@ -5608,7 +5607,7 @@ msgstr "Суббота"
 #: apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:68 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:91
+#: apps/io.ox/mail/compose/extensions.js:92
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/settings/signatures/register.js:108
 #: apps/io.ox/mail/write/view-main.js:55 apps/io.ox/oauth/settings.js:80
@@ -5627,7 +5626,7 @@ msgstr "Сохранить"
 msgid "Save as distribution list"
 msgstr "Сохранить как список рассылки"
 
-#: apps/io.ox/mail/compose/view.js:539 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:529 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1408
 msgid "Save as draft"
 msgstr "Сохранить черновик"
@@ -5745,14 +5744,14 @@ msgstr "Выбор папки"
 msgid "Selection Details"
 msgstr "Свойства выбора"
 
-#: apps/io.ox/mail/compose/extensions.js:94 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:95 module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:115
 #: apps/io.ox/mail/write/view-main.js:46
 msgid "Send"
 msgstr "Отправить"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:578 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:591 module:io.ox/mail
 #, fuzzy
 #| msgid "Send a return receipt"
 msgid "Send a read receipt"
@@ -5811,7 +5810,7 @@ msgid "Sent folder"
 msgstr "Папка отправленных"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:842 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:832 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:237
 msgid "Sent from %s via mobile"
 msgstr "Отправлено с мобильного из %s"
@@ -5820,9 +5819,9 @@ msgstr "Отправлено с мобильного из %s"
 msgid "Sent mails"
 msgstr "Отправленные"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:481
+#: apps/io.ox/calendar/edit/recurrence-view.js:660
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:530
+#: apps/io.ox/calendar/edit/recurrence-view.js:709
 msgid "September"
 msgstr "Сентябрь"
 
@@ -5946,16 +5945,16 @@ msgstr "Показать встречи из всех календарей"
 msgid "Show appointment details"
 msgstr "Показать данные встречи"
 
-#: apps/io.ox/mail/compose/extensions.js:180 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:181 module:io.ox/mail
 msgid "Show blind carbon copy input field"
 msgstr ""
 
-#: apps/io.ox/mail/compose/extensions.js:172 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:173 module:io.ox/mail
 msgid "Show carbon copy input field"
 msgstr ""
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:317
+#: apps/plugins/portal/facebook/register.js:322
 msgid "Show comments"
 msgstr "Показать комментарии"
 
@@ -5986,7 +5985,7 @@ msgstr "Показать скрытые файлы и папки"
 msgid "Show icons"
 msgstr "Показать комментарии"
 
-#: apps/io.ox/mail/common-extensions.js:494 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:507 module:io.ox/mail
 msgid "Show images"
 msgstr "Показать изображения"
 
@@ -6145,7 +6144,7 @@ msgid "Some fields contain invalid data"
 msgstr "Поля содержат недопустимые данные"
 
 #: apps/plugins/portal/facebook/register.js:179 module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:148
+#: apps/plugins/portal/linkedIn/register.js:149
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
 msgstr "Не удалось повторно авторизовать %s."
@@ -6166,7 +6165,7 @@ msgstr "Не удалось подключиться к %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Для вас нет данных на %s."
 
-#: apps/plugins/portal/linkedIn/register.js:155 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:156 module:plugins/portal
 msgid ""
 "Sorry, we cannot help you here. Your provider needs to obtain a key from "
 "LinkedIn with the permission to do read messages."
@@ -6242,7 +6241,7 @@ msgstr "Студент"
 
 #: apps/io.ox/calendar/edit/template.js:135 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:798 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:259
+#: apps/io.ox/mail/compose/extensions.js:260
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:135
@@ -6297,8 +6296,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:44
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:437
-#: apps/io.ox/calendar/edit/recurrence-view.js:508
+#: apps/io.ox/calendar/edit/recurrence-view.js:616
+#: apps/io.ox/calendar/edit/recurrence-view.js:687
 #: apps/io.ox/calendar/util.js:410 module:io.ox/calendar
 msgid "Sunday"
 msgstr "Воскресенье"
@@ -6482,7 +6481,7 @@ msgstr "Встреча удалена"
 msgid "The appointment has been updated"
 msgstr "Встреча обновлена"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:338
+#: apps/io.ox/calendar/edit/recurrence-view.js:518
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -6492,19 +6491,24 @@ msgstr ""
 "Встреча повторяется <a href=\"#\"  data-widget=\"number\" data-attribute="
 "\"interval\">каждые <span class=\"number-control\">2</span> дня</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:359
+#: apps/io.ox/calendar/edit/recurrence-view.js:539
 #: module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid ""
+#| "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#| "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#| "weeks</a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days"
+#| "\">monday</a>."
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">monday</"
-"a>."
+"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
 msgstr ""
 "Встреча повторяется <a href=\"#\"  data-widget=\"number\" data-attribute="
 "\"interval\">каждые <span class=\"number-control\">2</span> недели</a> в <a "
 "href=\"#\"  data-widget=\"custom\" data-attribute=\"days\">понедельник</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:324
+#: apps/io.ox/calendar/edit/recurrence-view.js:504
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
@@ -6513,7 +6517,7 @@ msgstr ""
 "Встреча повторяется <a href=\"#\" data-attribute=\"recurrenceType\" data-"
 "widget=\"options\">каждую неделю</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:489
+#: apps/io.ox/calendar/edit/recurrence-view.js:668
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
@@ -6526,7 +6530,7 @@ msgstr ""
 "\"day\">среду</a> <a href=\"#\" data-widget=\"options\" data-attribute="
 "\"month\">октября</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:461
+#: apps/io.ox/calendar/edit/recurrence-view.js:640
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
@@ -6538,7 +6542,7 @@ msgstr ""
 "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
 "href=\"#\" data-widget=\"options\" data-attribute=\"month\">октября</a>. "
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:382
+#: apps/io.ox/calendar/edit/recurrence-view.js:561
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
@@ -6551,7 +6555,7 @@ msgstr ""
 "\" data-widget=\"number\" data-attribute=\"interval\">каждые <span class="
 "\"number-control\">2</span> месяца</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:411
+#: apps/io.ox/calendar/edit/recurrence-view.js:590
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
@@ -6600,7 +6604,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "%1$s уже в списке"
 
-#: apps/io.ox/mail/compose/view.js:612 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:602 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1183
 msgid "The email has been sent"
 msgstr "Сообщение отправлено"
@@ -6693,11 +6697,11 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Предоставленное имя файла превышает допустимую длину."
 
-#: apps/io.ox/mail/common-extensions.js:581 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:594 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Отправитель запрашивает уведомление о прочтении сообщения"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:573
+#: apps/io.ox/calendar/edit/recurrence-view.js:751
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6708,18 +6712,23 @@ msgstr ""
 "завершена</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
 "\"number\">после <span class=\"number-control\">2</span> встреч</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:562
+#: apps/io.ox/calendar/edit/recurrence-view.js:741
 #: module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid ""
+#| "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#| "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
+#| "\">11/03/2013</a>."
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget=\"custom"
-"\">11/03/2013</a>."
+"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+"\"datePicker\">11/03/2013</a>."
 msgstr ""
 "Серия <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 "\">заканчивается</a> <a href=\"#\" data-attribute=\"until\" data-widget="
 "\"custom\">11.03.2013</a>."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:553
+#: apps/io.ox/calendar/edit/recurrence-view.js:732
 #: module:io.ox/calendar/edit/main
 msgid ""
 "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
@@ -6840,7 +6849,7 @@ msgstr "Ошибка XING: «%s»"
 msgid "There was no suitable server found for this mail/password combination"
 msgstr "Не найден сервер для заданной комбинации почты и пароля."
 
-#: apps/plugins/portal/linkedIn/register.js:257 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:263 module:plugins/portal
 msgid "There were not activities in your network"
 msgstr "Нет действий в сети."
 
@@ -6853,13 +6862,13 @@ msgid ""
 msgstr ""
 "Эта статистика включает папки с глубиной не более 4, начиная с папки «%1$s»."
 
-#: apps/io.ox/mail/common-extensions.js:451 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:462
+#: apps/io.ox/mail/common-extensions.js:464 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:475
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:454 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:462
+#: apps/io.ox/mail/common-extensions.js:467 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:475
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 
@@ -7062,8 +7071,8 @@ msgstr "Обсуждение"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:48
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:441
-#: apps/io.ox/calendar/edit/recurrence-view.js:512
+#: apps/io.ox/calendar/edit/recurrence-view.js:620
+#: apps/io.ox/calendar/edit/recurrence-view.js:691
 #: apps/io.ox/calendar/util.js:414 module:io.ox/calendar
 msgid "Thursday"
 msgstr "Четверг"
@@ -7099,7 +7108,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Обращение"
 
-#: apps/io.ox/mail/common-extensions.js:237 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:240 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:56
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:527
@@ -7201,8 +7210,8 @@ msgstr "Автоматическая конфигурация вашей уче�
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:46
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:439
-#: apps/io.ox/calendar/edit/recurrence-view.js:510
+#: apps/io.ox/calendar/edit/recurrence-view.js:618
+#: apps/io.ox/calendar/edit/recurrence-view.js:689
 #: apps/io.ox/calendar/util.js:412 module:io.ox/calendar
 msgid "Tuesday"
 msgstr "Вторник"
@@ -7212,8 +7221,7 @@ msgid "Tumblr"
 msgstr "Tumblr"
 
 #: apps/plugins/portal/twitter/register.js:249 module:plugins/portal
-#: apps/plugins/portal/twitter/register.js:385
-#: apps/plugins/portal/twitter/register.js:397
+#: apps/plugins/portal/twitter/register.js:384
 msgid "Twitter"
 msgstr "Твиттер"
 
@@ -7490,7 +7498,7 @@ msgstr "Показать код"
 msgid "Waiting"
 msgstr "Ожидание"
 
-#: apps/io.ox/mail/common-extensions.js:521 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:534 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Предупреждение. Возможно, это поддельное или мошенническое сообщение."
 
@@ -7509,8 +7517,8 @@ msgstr "Погода • Времена года"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:47
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:440
-#: apps/io.ox/calendar/edit/recurrence-view.js:511
+#: apps/io.ox/calendar/edit/recurrence-view.js:619
+#: apps/io.ox/calendar/edit/recurrence-view.js:690
 #: apps/io.ox/calendar/util.js:413 module:io.ox/calendar
 msgid "Wednesday"
 msgstr "Среда"
@@ -7639,7 +7647,7 @@ msgstr "Желтый"
 msgid "Yes"
 msgstr "Да"
 
-#: apps/io.ox/mail/compose/view.js:678 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:668 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1249
 msgid "Yes, send without subject"
 msgstr "Да, отправить без темы"
@@ -7783,7 +7791,7 @@ msgstr "Сеанс был автоматически завершен"
 msgid "You have declined the appointment"
 msgstr "Вы отказались от встречи"
 
-#: apps/plugins/portal/linkedIn/register.js:233 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:239 module:plugins/portal
 msgid "You have no new messages"
 msgstr "Нет новых сообщений"
 
@@ -7791,7 +7799,7 @@ msgstr "Нет новых сообщений"
 msgid "You have no unread messages"
 msgstr "У вас есть непрочитанные сообщения."
 
-#: apps/plugins/portal/linkedIn/register.js:146 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:147 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:235
 msgid "You have reauthorized this %s account."
 msgstr "Учетная запись %s повторно авторизована."
@@ -7912,7 +7920,7 @@ msgstr "Ваш электронный адрес будет добавлен в 
 msgid "Your mail address"
 msgstr "Почтовый адрес"
 
-#: apps/plugins/portal/linkedIn/register.js:276 module:plugins/portal
+#: apps/plugins/portal/linkedIn/register.js:282 module:plugins/portal
 msgid "Your messages"
 msgstr "Ваши сообщения"
 
@@ -7982,9 +7990,9 @@ msgstr "ЗБ"
 msgid "accepted"
 msgstr "принято"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:283
+#: apps/io.ox/calendar/edit/recurrence-view.js:463
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:580
+#: apps/io.ox/calendar/edit/recurrence-view.js:758
 msgid "after %1$d appointment"
 msgid_plural "after %1$d appointments"
 msgstr[0] "после %1$d встречи"
@@ -7998,7 +8006,7 @@ msgid "and"
 msgstr "и"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:274 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:277 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "и еще %1$d"
 
@@ -8019,7 +8027,7 @@ msgstr "закрыть"
 msgid "close for %1$s"
 msgstr "закрыть для %1$s"
 
-#: apps/plugins/portal/facebook/register.js:289 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:294 module:plugins/portal
 msgid "collapse"
 msgstr "свернуть"
 
@@ -8034,7 +8042,7 @@ msgstr "создать объекты"
 msgid "create objects and subfolders"
 msgstr "создать объекты и вложенные папки"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:329
+#: apps/io.ox/calendar/edit/recurrence-view.js:509
 #: module:io.ox/calendar/edit/main
 msgid "daily"
 msgstr "каждый день"
@@ -8046,15 +8054,15 @@ msgstr "каждый день"
 msgid "date range"
 msgstr "Сохранить изменения"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:444
+#: apps/io.ox/calendar/edit/recurrence-view.js:623
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:515
+#: apps/io.ox/calendar/edit/recurrence-view.js:694
 msgid "day of the week"
 msgstr "день недели"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:445
+#: apps/io.ox/calendar/edit/recurrence-view.js:624
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:516
+#: apps/io.ox/calendar/edit/recurrence-view.js:695
 msgid "day of the weekend"
 msgstr "выходной день"
 
@@ -8100,27 +8108,27 @@ msgstr "изменять свои объекты"
 msgid "end date"
 msgstr "дата окончания"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:549
+#: apps/io.ox/calendar/edit/recurrence-view.js:728
 #: module:io.ox/calendar/edit/main
 msgid "ends"
 msgstr "заканчивается"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:546
+#: apps/io.ox/calendar/edit/recurrence-view.js:725
 #: module:io.ox/calendar/edit/main
 msgid "ends after a certain number of appointments"
 msgstr "завершается после заданного числа встреч"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:545
+#: apps/io.ox/calendar/edit/recurrence-view.js:724
 #: module:io.ox/calendar/edit/main
 msgid "ends on a specific date"
 msgstr "заканчивается в заданный день"
 
 #. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:280
+#: apps/io.ox/calendar/edit/recurrence-view.js:460
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:350
-#: apps/io.ox/calendar/edit/recurrence-view.js:353
+#: apps/io.ox/calendar/edit/recurrence-view.js:530
+#: apps/io.ox/calendar/edit/recurrence-view.js:533
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
 msgstr[0] "каждый %1$d день"
@@ -8129,11 +8137,11 @@ msgstr[2] "каждые %1$d дней"
 
 #. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:282
+#: apps/io.ox/calendar/edit/recurrence-view.js:462
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:395
-#: apps/io.ox/calendar/edit/recurrence-view.js:397
-#: apps/io.ox/calendar/edit/recurrence-view.js:455
+#: apps/io.ox/calendar/edit/recurrence-view.js:574
+#: apps/io.ox/calendar/edit/recurrence-view.js:576
+#: apps/io.ox/calendar/edit/recurrence-view.js:634
 msgid "every %1$d month"
 msgid_plural "every %1$d months"
 msgstr[0] "каждый %1$d месяц"
@@ -8142,10 +8150,10 @@ msgstr[2] "каждые %1$d месяцев"
 
 #. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
 #. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js:281
+#: apps/io.ox/calendar/edit/recurrence-view.js:461
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:371
-#: apps/io.ox/calendar/edit/recurrence-view.js:374
+#: apps/io.ox/calendar/edit/recurrence-view.js:551
+#: apps/io.ox/calendar/edit/recurrence-view.js:554
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
 msgstr[0] "через %1$d неделю"
@@ -8154,36 +8162,36 @@ msgstr[2] "каждые %1$d недель"
 
 #. as in: The appointment is repeated every day
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:345
+#: apps/io.ox/calendar/edit/recurrence-view.js:525
 #: module:io.ox/calendar/edit/main
 msgid "every day"
 msgstr "каждый день"
 
 #. as in: The appointment is repeated every month
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:391
+#: apps/io.ox/calendar/edit/recurrence-view.js:570
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:453
+#: apps/io.ox/calendar/edit/recurrence-view.js:632
 msgid "every month"
 msgstr "каждый месяц"
 
 #. as in: The appointment is repeated every week
 #. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js:367
+#: apps/io.ox/calendar/edit/recurrence-view.js:547
 #: module:io.ox/calendar/edit/main
 msgid "every week"
 msgstr "каждую неделю"
 
-#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:292
+#: apps/plugins/portal/facebook/register.js:290 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:297
 msgid "expand"
 msgstr "развернуть"
 
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:420
+#: apps/io.ox/calendar/edit/recurrence-view.js:599
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:495
+#: apps/io.ox/calendar/edit/recurrence-view.js:674
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "first"
 msgstr "перв."
@@ -8198,9 +8206,9 @@ msgstr "flickr.photos.search"
 
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:429
+#: apps/io.ox/calendar/edit/recurrence-view.js:608
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:501
+#: apps/io.ox/calendar/edit/recurrence-view.js:680
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "fourth"
 msgstr "четв."
@@ -8252,9 +8260,9 @@ msgstr "не является допустимым пользователем и
 
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:417
+#: apps/io.ox/calendar/edit/recurrence-view.js:596
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:503
+#: apps/io.ox/calendar/edit/recurrence-view.js:682
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "last"
 msgstr "прошл."
@@ -8263,14 +8271,14 @@ msgstr "прошл."
 msgid "late in the evening"
 msgstr "поздно вечером"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:331
+#: apps/io.ox/calendar/edit/recurrence-view.js:511
 #: module:io.ox/calendar/edit/main
 msgid "monthly"
 msgstr "каждый месяц"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:544
+#: apps/io.ox/calendar/edit/recurrence-view.js:723
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:558
+#: apps/io.ox/calendar/edit/recurrence-view.js:737
 msgid "never ends"
 msgstr "не заканчивается"
 
@@ -8343,9 +8351,9 @@ msgstr "удалить"
 
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:423
+#: apps/io.ox/calendar/edit/recurrence-view.js:602
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:497
+#: apps/io.ox/calendar/edit/recurrence-view.js:676
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "second"
 msgstr "втор."
@@ -8379,9 +8387,9 @@ msgstr "под вопросом"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js:426
+#: apps/io.ox/calendar/edit/recurrence-view.js:605
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/recurrence-view.js:499
+#: apps/io.ox/calendar/edit/recurrence-view.js:678
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "third"
 msgstr "трет."
@@ -8442,7 +8450,7 @@ msgstr "через"
 msgid "view the folder"
 msgstr "просмотр папки"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:330
+#: apps/io.ox/calendar/edit/recurrence-view.js:510
 #: module:io.ox/calendar/edit/main
 msgid "weekly"
 msgstr "каждую неделю"
@@ -8452,7 +8460,7 @@ msgstr "каждую неделю"
 msgid "work days"
 msgstr "рабочие дни"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js:332
+#: apps/io.ox/calendar/edit/recurrence-view.js:512
 #: module:io.ox/calendar/edit/main
 msgid "yearly"
 msgstr "каждый год"
@@ -8640,6 +8648,9 @@ msgstr "каждый год"
 
 #~ msgid "Clear cache"
 #~ msgstr "Очистить кэш"
+
+#~ msgid "Click here to add your account"
+#~ msgstr "Нажмите здесь для добавления учетной записи"
 
 #~ msgid ""
 #~ "Click on a letter on the left side of the navigation bar in order to "
@@ -8937,9 +8948,6 @@ msgstr "каждый год"
 
 #~ msgid "Further information"
 #~ msgstr "Дополнительная информация"
-
-#~ msgid "Getting started"
-#~ msgstr "Приступая к работе"
 
 #~ msgid "Go to page"
 #~ msgstr "Перейти к странице"
