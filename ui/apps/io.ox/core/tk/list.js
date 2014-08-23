@@ -402,6 +402,12 @@ define('io.ox/core/tk/list',
 
         previous: function () {
             if (this.hasPrevious()) this.selection.previous(); else this.$el.scrollTop(0);
+        },
+
+        // set proper focus
+        focus: function () {
+            var items = this.getItems().filter('.selected').focus();
+            if (items.length === 0) this.$el.focus();
         }
     });
 

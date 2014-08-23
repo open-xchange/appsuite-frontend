@@ -479,6 +479,7 @@ define('io.ox/mail/main',
             app.threadView.on({
                 back: function () {
                     app.right.removeClass('preview-visible');
+                    app.listView.focus();
                 },
                 previous: function () {
                     app.listView.previous();
