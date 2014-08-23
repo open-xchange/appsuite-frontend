@@ -112,28 +112,29 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         }, 0x1000000).toString(16).substr(1));
     }
 
-    function gradientStr(a, b) {
-        return 'linear-gradient(to bottom, ' + a + ', ' + b + ')';
+    function gradientStr(a, b, c) {
+        if (c) return 'linear-gradient(to bottom, ' + a + ' 0%, ' + b + ' 50%, ' + c + ' 100%)';
+        return 'linear-gradient(to bottom, ' + a + ' 0%, ' + b + ' 100%)';
     }
 
     function gradient(model) {
         var type = model.get('headerGradient'), bg = model.get('headerBackground');
         switch (type) {
-        // lighten
-        case 1: return gradientStr(shade(bg, +10), bg);
-        case 2: return gradientStr(shade(bg, +20), bg);
-        case 3: return gradientStr(bg, shade(bg, +10));
-        case 4: return gradientStr(bg, shade(bg, +20));
         // darken
-        case 5: return gradientStr(bg, shade(bg, -10));
-        case 6: return gradientStr(bg, shade(bg, -20));
-        case 7: return gradientStr(shade(bg, -10), bg);
-        case 8: return gradientStr(shade(bg, -20), bg);
+        case 1: return gradientStr(bg, shade(bg, -10));
+        case 2: return gradientStr(bg, shade(bg, -20));
+        // darken reverse
+        case 3: return gradientStr(shade(bg, -10), bg);
+        case 4: return gradientStr(shade(bg, -20), bg);
+        // lighten
+        case 5: return gradientStr(shade(bg, +10), bg);
+        case 6: return gradientStr(shade(bg, +20), bg);
+        // three colors
+        case 7: return gradientStr(shade(bg, +10), bg, shade(bg, -10));
+        case 8: return gradientStr(shade(bg, +20), bg, shade(bg, -20));
         default: return 'none';
         }
     }
-
-    window.shade = shade;
 
     var updateStylesheet = _.debounce(function () {
 
