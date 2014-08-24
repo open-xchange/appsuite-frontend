@@ -260,7 +260,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/view.js:530
 #: apps/io.ox/mail/mailfilter/settings/filter.js:102
 #: apps/io.ox/mail/main.js:258
-#: apps/io.ox/mail/main.js:978
+#: apps/io.ox/mail/main.js:979
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1409
 #: apps/io.ox/mail/write/view-main.js:585
@@ -546,7 +546,7 @@ msgstr ""
 #: apps/io.ox/mail/main.js:145
 #: apps/io.ox/mail/main.js:151
 #: apps/io.ox/mail/main.js:258
-#: apps/io.ox/mail/main.js:982
+#: apps/io.ox/mail/main.js:983
 #: apps/io.ox/mail/settings/signatures/register.js:280
 #: apps/io.ox/portal/settings/pane.js:312
 #: module:io.ox/portal
@@ -3575,7 +3575,7 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js:102
 #: module:io.ox/core
-#: apps/io.ox/mail/main.js:603
+#: apps/io.ox/mail/main.js:604
 #: module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr ""
@@ -6630,7 +6630,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:108
 #: apps/io.ox/mail/compose/extensions.js:123
-#: apps/io.ox/mail/main.js:529
+#: apps/io.ox/mail/main.js:530
 #: apps/io.ox/mail/vacationnotice/settings/model.js:140
 #: apps/io.ox/mail/view-options.js:32
 #: apps/io.ox/mail/write/view-main.js:269
@@ -6799,7 +6799,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js:56
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/main.js:527
+#: apps/io.ox/mail/main.js:528
 #: apps/io.ox/mail/print.js:84
 #: apps/io.ox/mail/view-options.js:32
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7383,18 +7383,18 @@ msgstr ""
 msgid "Mail Details"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:589
+#: apps/io.ox/mail/main.js:590
 #: module:io.ox/mail
 msgid "No message selected"
 msgstr ""
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:621
+#: apps/io.ox/mail/main.js:622
 #: module:io.ox/mail
 msgid "%1$d selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:1102
+#: apps/io.ox/mail/main.js:1103
 #: module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
