@@ -299,7 +299,7 @@ define('io.ox/search/facets/extensions',
                     // select option
                     if (option === 'dialog') {
                         // open folder dialog
-                        var facet = baton.model.get('folder');
+                        var facet = baton.model.get('pool').folder;
                         folderDialog(facet, baton);
                     } else if (link.attr('data-point')) {
                         ext.point('io.ox/search/facets/custom/' + link.attr('data-point')).invoke('draw', this, baton, facet, value, {option: link.attr('data-point') });

@@ -92,6 +92,29 @@ define('io.ox/search/apiproxy',
             }
         });
 
+        POINT.extend({
+            id: 'folder',
+            index: 350,
+            customize: function (baton) {
+                baton.data.push({
+                    id: 'folder',
+                    name: gt('Folder'),
+                    style: 'custom',
+                    custom: true,
+                    hidden: true,
+                    flags: [
+                        'advanced'
+                    ],
+                    values: [{
+                        facet: 'folder',
+                        id: 'custom',
+                        custom: '',
+                        filter: {}
+                    }]
+                });
+            }
+        });
+
         /**
          * success handler to pass data through extension point
          * @param  {[type]} data [description]

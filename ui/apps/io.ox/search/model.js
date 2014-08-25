@@ -49,20 +49,6 @@ define('io.ox/search/model',
         pool: {},
         poollist: [],
         pooldisabled: {},
-        folder: {
-            id: 'folder',
-            style: 'custom',
-            custom: true,
-            hidden: true,
-            flags: [],
-            values: [{
-                facet: 'folder',
-                id: 'custom',
-                name: '',
-                custom: '',
-                filter: {}
-            }]
-        },
         options: options,
         // current folder
         start: 0,
@@ -148,7 +134,7 @@ define('io.ox/search/model',
                     list = this.get('poollist');
 
                 // add facet to pool
-                _.each(this.get('autocomplete').concat(this.get('folder')), function (data) {
+                _.each(this.get('autocomplete'), function (data) {
                     if (data.id === facet) {
                         var item = _.copy(data, true),
                             itemvalue;
