@@ -647,7 +647,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 200,
         prio: 'hi',
-        mobile: 'lo',
+        mobile: 'hi',
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
@@ -656,7 +656,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
         prio: 'hi',
-        mobile: 'hi',
+        mobile: 'lo',
         id: 'delete',
         label: gt('Delete'),
         ref: 'io.ox/calendar/detail/actions/delete'

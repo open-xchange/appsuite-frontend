@@ -86,13 +86,16 @@ define('io.ox/mail/detail/view',
         draw: extensions.unreadToggle
     });
 
-    ext.point('io.ox/mail/detail/header').extend(new links.Dropdown({
+    /* move the actions menu to the top in sidepanel on smartphones */
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header';
+
+    ext.point(extPoint).extend(new links.Dropdown({
         id: 'actions',
-        index: INDEX_header += 100,
-        classes: 'actions pull-right',
+        index: _.device('smartphone') ? 50 : INDEX_header += 100,
+        classes: _.device('smartphone') ? '': 'actions pull-right',
         label: gt('Actions'),
         ariaLabel: gt('Actions'),
-        icon: 'fa fa-bars',
+        icon: _.device('smartphone') ? undefined : 'fa fa-bars',
         noCaret: true,
         ref: 'io.ox/mail/links/inline',
     }));

@@ -402,9 +402,16 @@ define('io.ox/core/extPatterns/links',
     };
 
     var drawDropDownItems = function (options, baton, args) {
-        var ul = this.data('ul');
+        var ul = this.data('ul'), closer;
         if (!ul) return; // race-condition
+        // special handling for mobile menus, otherwise the "closer"
+        // may be removed from menu
+        if (ul.find('[data-action="close-menu"]')) {
+            closer = ul.find('[data-action="close-menu"]').parent().clone(true);
+        }
         baton.$el = ul.empty();
+        // reappend the closer
+        if (closer) baton.$el.append(closer);
         drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
             injectDividers(baton.$el);
         });
