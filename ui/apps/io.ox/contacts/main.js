@@ -19,7 +19,6 @@ define('io.ox/contacts/main',
      'io.ox/core/tk/vgrid',
      'io.ox/help/hints',
      'io.ox/contacts/view-detail',
-     'io.ox/core/tk/dropdown-options',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/commons',
@@ -35,7 +34,7 @@ define('io.ox/contacts/main',
      'io.ox/contacts/mobile-navbar-extensions',
      'io.ox/contacts/mobile-toolbar-actions',
      'less!io.ox/contacts/style'
-    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+    ], function (util, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
     'use strict';
 

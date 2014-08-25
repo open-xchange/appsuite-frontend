@@ -326,17 +326,17 @@ define('io.ox/calendar/util',
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data))),
                 $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
-                    title: that.getTimeInterval(data) + ' ' + current.abbr,
+                    container: '#io-ox-core',
                     content: getContent(),
                     html: true,
-                    trigger: 'hover',
                     placement: function (tip) {
                         // add missing outer class
                         $(tip).addClass('timezones');
                         // get placement
                         return 'left';
                     },
-                    container: '#io-ox-core'
+                    title: that.getTimeInterval(data) + ' ' + current.abbr,
+                    trigger: 'hover'
                 }).on('blur', function () {
                     $(this).popover('hide');
                 })

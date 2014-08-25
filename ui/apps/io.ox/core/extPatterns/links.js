@@ -126,7 +126,7 @@ define('io.ox/core/extPatterns/links',
             draw: function (baton) {
                 baton = ext.Baton.ensure(baton);
                 this.append(
-                    $('<li>').append(
+                    $('<li>').attr({ role: 'presentation' }).append(
                         $('<a href="#" tabindex="1">').attr({
                             'data-action': extension.ref,
                             'role': 'menuitem'
@@ -349,8 +349,8 @@ define('io.ox/core/extPatterns/links',
                             $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
                         }),
                         $('<ul class="dropdown-menu pull-right" role="menu">')
-                        .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
-                        .append(lo)
+                            .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
+                            .append(lo)
                     )
                 );
                 injectDividers(nav.find('ul'));

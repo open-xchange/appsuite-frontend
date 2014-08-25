@@ -425,7 +425,7 @@ define('io.ox/calendar/edit/recurrence-view',
 
         this.ghost = function () {
             var $ghost = this.$el.clone(false);
-            $ghost.find('.no-clone, .datepicker, .popover')
+            $ghost.find('.no-clone, .datepicker')
                 .remove();
             $ghost
                 .find('*')
