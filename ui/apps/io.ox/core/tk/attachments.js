@@ -807,12 +807,14 @@ define('io.ox/core/tk/attachments',
             this.$el.append(view.$el);
 
             this.$el.removeClass('empty');
+            this.trigger('filled');
             return this;
         },
         removeAttachment: function (model, collection, options) {
             this.$el.children()[options.index - 1].remove();
             if (this.$el.children().length === 0) {
                 this.$el.addClass('empty');
+                this.trigger('empty');
             }
         },
         render: function () {

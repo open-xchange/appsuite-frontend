@@ -324,7 +324,17 @@ define('io.ox/mail/compose/extensions',
                     }
                 });
 
+                view.on('empty', function () {
+                    previewToggle.hide();
+                });
+                view.on('filled', function () {
+                    previewToggle.show();
+                });
+
                 view.render();
+                if (view.$el.children().length === 0) {
+                    previewToggle.hide();
+                }
                 $el.append(
                     $('<a href="#" class="pull-right">')
                         .append(previewToggle)
