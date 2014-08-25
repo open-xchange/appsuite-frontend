@@ -902,7 +902,7 @@ define('io.ox/core/tk/attachments',
                 );
             }
             widget.append(
-                $('<i class="fa fa-paperclip">'),
+                $('<div class="icon">').append($('<i class="fa fa-paperclip">')),
                 $('<div class="row-1">').append(this.model.getTitle()),
                 $('<div class="row-2">').append(
                     size = $('<span class="filesize">').text(strings.fileSize(this.model.get('file_size') || this.model.get('size')))

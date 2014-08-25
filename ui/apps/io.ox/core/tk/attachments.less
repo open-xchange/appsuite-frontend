@@ -25,7 +25,6 @@
             display: inline-block;
             padding: 4px 0.5em 4px 5px;
             margin-right: 1px;
-            width: 15em;
         }
 
         &.preview li.item{
@@ -72,7 +71,6 @@
         }
 
         > i {
-            position: absolute;
             font-size: 20px;
             top: 12px;
             left: 11px;
@@ -151,20 +149,10 @@
         }
 
         .row-1 {
-            position: absolute;
-            left: 40px;
-            right: 30px;
+            margin-left: 0.5em;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        .row-2 {
-            position: absolute;
-            left: 40px;
-            right: 30px;
-            top: 23px;
-        }
-
     }
 
     .col-md-6:nth-child(odd) {
@@ -175,27 +163,29 @@
     .io-ox-core-tk-attachment {
 
         position: relative;
-        height: 3em;
+        height: 2em;
         line-height: 1.5em;
         margin-bottom: 2px;
         padding: 4px 2.5em 4px 5px;
         background-color: #f5f5f5;
 
         i {
-            position: absolute;
             font-size: 20px;
             top: 12px;
             left: 11px;
         }
 
         div {
-            position: absolute;
             left: 40px;
             right: 30px;
             .ellipsis();
 
+            &.icon, &.row-2, &.row-1 {
+                display: inline-block;
+            }
             &.row-2 {
-                top: 23px;
+                float: right;
+                margin-left: 1em;
             }
         }
 
@@ -259,18 +249,23 @@
                 background-color: rgba(0, 0, 0, 0.6);
                 color: @white;
 
-                > i.fa-paperclip {
+                > .icon > i.fa-paperclip {
                     display: none;
                 }
 
                 > .row-1 {
                     left: 3px;
+                    margin-left: 0;
+                    position: absolute;
                     right: 3px;
                     top: 60%;
                 }
 
                 > .row-2 {
+                    float: none;
                     left: 3px;
+                    margin-left: 0;
+                    position: absolute;
                     right: 3px;
                     top: 77%;
                 }
