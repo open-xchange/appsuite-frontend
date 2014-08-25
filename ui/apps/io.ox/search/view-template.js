@@ -142,76 +142,15 @@ define('io.ox/search/view-template',
     });
 
     // facet
-    ext.point('io.ox/search/view/window/facet').extend({
+    ext.point('iio.ox/search/facets/item').extend({
         id: 'type',
         index: 100,
         draw: function (baton, value, facet) {
-            ext.point('io.ox/search/facets/facet-type').invoke('draw', this, baton, value, facet);
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet').extend({
-        id: 'name',
-        index: 200,
-        draw: function (baton, value, facet) {
-            ext.point('io.ox/search/facets/facet-name').invoke('draw', this, baton, value, facet);
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet').extend({
-        id: 'dropdown',
-        index: 300,
-        draw: function (baton, value, facet) {
-            ext.point('io.ox/search/facets/facet-dropdown').invoke('draw', this, baton, value, facet);
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet').extend({
-        id: 'remove',
-        index: 400,
-        draw: function (baton, value) {
-            ext.point('io.ox/search/facets/facet-remove').invoke('draw', this, baton, value);
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet/folder').extend({
-        id: 'dropdown',
-        index: '300',
-        draw: function (value, baton) {
-            ext.point('io.ox/search/facets/folder-facet').invoke('draw', this, baton, value);
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet/folder').extend({
-        id: 'all-folders',
-        index: '400',
-        draw: function (value, baton) {
-            var link;
-            // dropdown entry
-            if (!baton.model.isMandatory('folder')) {
-
-                // add dropdown entry
-                this.find('ul.dropdown').prepend(
-                    $('<li role="presentation">').append(
-                         link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
-                                    .append(
-                                        $('<i class="fa fa-fw ">'),
-                                        $('<span>').text(gt('All folders'))
-                                    )
-                                    .attr('data-custom', 'custom')
-                                    .attr('title', gt('All folders'))
-                    )
-                );
-                // is active
-                if (!value.custom || value.custom === 'custom') {
-                    // set display name
-                    this.find('.name')
-                        .text(gt('All folders'));
-                    // set fa-check icon
-                    link.find('i')
-                        .addClass('fa-check');
-                }
-            }
+            var button = this.find('a');
+            ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
+            ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
+            ext.point('io.ox/search/facets/facet-dropdown').invoke('draw', button, baton, value, facet);
+            ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet);
         }
     });
 

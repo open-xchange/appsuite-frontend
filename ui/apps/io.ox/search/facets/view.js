@@ -37,10 +37,18 @@ define('io.ox/search/facets/view',
     });
 
     /**
-     * special: folder facet is hardcoded by front end instead as
-     * a response from autocomplete action
+     * special: folder facet is hardcoded by front end
      */
-    ext.point(POINT + '/folder-facet').extend({
+    ext.point(POINT + '/item').extend({
+        id: 'general',
+        index: INDEX += 100,
+        draw: extensions.item
+    });
+
+    /**
+     * special: folder facet is hardcoded by front end
+     */
+    ext.point(POINT + '/item/folder').extend({
         id: 'folder-facet',
         index: INDEX += 100,
         draw: extensions.folderFacet

@@ -21,7 +21,8 @@ define('io.ox/search/facets/extensions',
 
     function folderDialog(facet, baton) {
         require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
-            var id = facet.values[0].custom,
+            var value = facet.values.custom,
+                id = value.custom,
                 type = baton.model.getModule();
 
             picker({
@@ -185,6 +186,14 @@ define('io.ox/search/facets/extensions',
 
             },
 
+            item: function (baton, value, facet) {
+                var button = this.find('a');
+                ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
+                ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
+                ext.point('io.ox/search/facets/facet-dropdown').invoke('draw', button, baton, value, facet);
+                ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet);
+            },
+
             facets: function (baton) {
                 // ensure folder facet is set
                 baton.model.ensure();
@@ -198,7 +207,7 @@ define('io.ox/search/facets/extensions',
                         // get active value
                         var facet = pool[item.facet], value, node, button;
 
-                        if (!facet || _.contains(facet, 'advanced')) return $();
+                        if (!facet || _.contains(facet.flags, 'advanced')) return $();
 
                         value = facet.values[item.value];
 
@@ -210,11 +219,14 @@ define('io.ox/search/facets/extensions',
                             .append($('<label>'))
                         );
 
-                        // general stuff
-                        ext.point('io.ox/search/view/window/facet').invoke('draw', button, baton, value, facet);
+                        var special = ext.point('io.ox/search/facets/item/' + value.facet);
+                        if (special.list().length > 0)
+                            // additional actions per id/type
+                            special.invoke('draw', node, baton, value, facet);
+                        else
+                            // general stuff
+                            ext.point('io.ox/search/facets/item').invoke('draw', node, baton, value, facet);
 
-                        // additional actions per id/type
-                        ext.point('io.ox/search/view/window/facet/' + value.facet).invoke('draw', node, value, baton);
 
                         return node;
                     }).reverse()
@@ -224,6 +236,7 @@ define('io.ox/search/facets/extensions',
             advfacets: function (baton) {
                 // ensure folder facet is set
                 baton.model.ensure();
+
                 var facets = baton.model.get('autocomplete'),
                     pool = baton.model.get('pool'),
                     list = baton.model.get('poollist'),
@@ -231,23 +244,22 @@ define('io.ox/search/facets/extensions',
 
                 // add inactive advanced facets
                 nodes = _(facets).map(function (facet) {
+                    var value, node, button;
 
-                    var item, value, node, button;
-                    // only advanced s'il vous plaît
-                    if (!_.contains(facet.flags, 'advanced') || pool[facet.id]) return;
+                    // only advanced
+                    if (!_.contains(facet.flags, 'advanced')) return;
 
-                    item = _.find(list, function (item) {
-                       return facet.id === item.facet;
+                   _.each(list, function (elem) {
+                        if (facet.id === elem.facet) {
+                            // get value from pool
+                            value = _.find(pool[facet.id].values, function (value) {
+                                return value.id === elem.value;
+                            });
+                        }
                     });
 
-                    //OPTIONAL: when advaced facets should stay in place
-                    // if (item) {
-                    //     value = _.find(facet.values, function (value) {
-                    //         return value.id === item.value;
-                    //     });
-                    // }
+                    // use value  when currently active or placeholder
                     value = value || {placeholder: true};
-
 
                     // create facet node
                     node = $('<li role="presentation" class="facet btn-group">').append(
@@ -257,11 +269,14 @@ define('io.ox/search/facets/extensions',
                         .append($('<label>'))
                     );
 
-                    // general stuff
-                    ext.point('io.ox/search/view/window/facet').invoke('draw', button, baton, value, facet);
+                    var special = ext.point('io.ox/search/facets/item/' + value.facet);
+                    if (special.list().length > 0)
+                        // additional actions per id/type
+                        special.invoke('draw', node, baton, value, facet);
+                    else
+                        // general stuff
+                        ext.point('io.ox/search/facets/item').invoke('draw', node, baton, value, facet);
 
-                    // additional actions per id/type
-                    ext.point('io.ox/search/view/window/facet/' + value.facet).invoke('draw', node, value, baton);
 
                     return node;
                 }).reverse();
@@ -322,22 +337,18 @@ define('io.ox/search/facets/extensions',
                 var options = value.options || facet.options,
                     id = value._compact ? value._compact.option : undefined,
                     type;
-                // get type label
-                if (value.placeholder) {
-                    type = facet.name;
-                } else if (value.facet === 'folder') {
-                    type = gt('Folder');
-                } else if (options) {
-                    type = util.getOptionLabel(options, id);
-                }
 
+                // get type label
+                // TYPE 3: use facet label instead of option label
+                if (options && facet.style !== 'exclusive')
+                    type = util.getOptionLabel(options, id);
                 // append type
-                if (type) {
+                if (facet.style !== 'simple') {
                     this.find('label').prepend(
                         $('<span>')
                             .addClass('type')
-                            // TYPE 3: use facet label instead of option label
-                            .html(facet.style === 'exclusive' ? facet.name : type)
+                            .html(type || facet.name)
+
                     );
                 }
             },
@@ -424,7 +435,7 @@ define('io.ox/search/facets/extensions',
                 }
             },
 
-            folderFacet: function (baton, value) {
+            folderFacet: function (baton, value, facet) {
                 var button = this.find('a[type="button"]'),
                     current = value.custom,
                     option,
@@ -434,7 +445,11 @@ define('io.ox/search/facets/extensions',
                             'data-value': 'custom'
                         });
 
+                ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
+                ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
+
                 button.attr('data-toggle', 'dropdown');
+
                 button.prepend(
                     $('<div class="caret-container">').append(
                         $('<span class="caret">')
@@ -500,10 +515,38 @@ define('io.ox/search/facets/extensions',
                         );
                     });
 
+                // add 'all folders'
+                var link;
+                if (!baton.model.isMandatory('folder')) {
+                    // add dropdown entry
+                    this.find('ul.dropdown').prepend(
+                        $('<li role="presentation">').append(
+                             link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
+                                        .append(
+                                            $('<i class="fa fa-fw ">'),
+                                            $('<span>').text(gt('All folders'))
+                                        )
+                                        .attr('data-custom', 'custom')
+                                        .attr('title', gt('All folders'))
+                        )
+                    );
+                    // is active
+                    if (!value.custom || value.custom === 'custom') {
+                        // set display name
+                        this.find('.name')
+                            .text(gt('All folders'));
+                        // set fa-check icon
+                        link.find('i')
+                            .addClass('fa-check');
+                    }
+                }
+
+
                 // add to dom
                 this.append(menu).appendTo(this);
-            }
 
+                ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet);
+            }
         };
 
     return extensions;
