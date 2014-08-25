@@ -175,7 +175,14 @@ define('io.ox/calendar/list/perspective',
         }
 
         function buildOption(value, text) {
-            return $('<li>').append($('<a href="#"><i/></a>').attr('data-option', value).append($.txt(text)));
+            return $('<li role="presentation">')
+                .append(
+                    $('<a>').attr({
+                        href: '#',
+                        role: 'menuitem',
+                        'data-option': value
+                    }).text(text)
+                );
         }
 
         this.updateGridOptions = function () {
@@ -208,8 +215,14 @@ define('io.ox/calendar/list/perspective',
                 this.prepend(
                     optDropdown = $('<div class="grid-options dropdown">')
                         .append(
-                            $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
-                                .append(
+                            $('<a>').attr({
+                                    href: '#',
+                                    tabindex: 1,
+                                    'data-toggle': 'dropdown',
+                                    'aria-haspopup': true,
+                                    'aria-expandet': false,
+                                    'aria-label': gt('Sort options')
+                                }).append(
                                     $('<i class="fa fa-arrow-down">'),
                                     $('<i class="fa fa-arrow-up">')
                                 )
