@@ -219,10 +219,10 @@ define('io.ox/core/settings/errorlog/settings/pane',
         renderTabs: function () {
             this.$el.append(
                 // draw tab controls
-                $('<ul class="nav nav-tabs">').append(
-                    $('<li class="active">').append($('<a href="#errors">').text(gt('Errors'))),
-                    $('<li>').append($('<a href="#slow">').text(gt('Slow requests'))),
-                    $('<li>').append($('<a href="#loss">').text(gt('Loss')))
+                $('<ul class="nav nav-tabs" role="tablist">').append(
+                    $('<li class="active" role="presentation">').append($('<a href="#errors" role="tab">').text(gt('Errors'))),
+                    $('<li>').append($('<a href="#slow" role="tab">').text(gt('Slow requests'))),
+                    $('<li>').append($('<a href="#loss" role="tab">').text(gt('Loss')))
                 ),
                 // draw tab panes
                 $('<div class="tab-content">').append(
