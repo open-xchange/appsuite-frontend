@@ -884,7 +884,7 @@ define('io.ox/core/tk/attachments',
                 widget.append(
                     $('<a href="#" class="control remove" tabindex="1">')
                         .attr('title', gt('Remove attachment'))
-                        .append($('<i class="fa fa-times">'))
+                        .append($('<i class="fa fa-trash-o">'))
                 );
             }
         },
