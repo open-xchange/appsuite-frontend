@@ -240,6 +240,7 @@ define('io.ox/search/facets/extensions',
                 var facets = baton.model.get('autocomplete'),
                     pool = baton.model.get('pool'),
                     list = baton.model.get('poollist'),
+                    self = this,
                     nodes = [];
 
                 // add inactive advanced facets
@@ -282,9 +283,23 @@ define('io.ox/search/facets/extensions',
                 }).reverse();
 
                 // add label
+                this.parent().find('a').remove();
                 if (_.compact(nodes).length) {
-                    nodes.unshift(
-                        $('<label>').text(gt('Advanced'))
+                    this.parent().prepend(
+                        $('<a>')
+                            .css({
+                                'margin-bottom': '8px',
+                                'margin-top': '6px',
+                                'float': 'right'
+                            })
+                            .text(gt('Hide Advanced Filters'))
+                            .on('click', function () {
+                                if (self.is(':visible'))
+                                    $(this).text(gt('Show Advanced Filters'));
+                                else
+                                    $(this).text(gt('Hide Advanced Filters'));
+                                self.toggle();
+                            })
                     );
                 }
 
@@ -366,7 +381,7 @@ define('io.ox/search/facets/extensions',
                 this.find('label').append(
                     $('<span>')
                         .addClass('name')
-                        .html(type || value.name || (value.item || {}).name || gt('all'))
+                        .html(type || value.name || (value.item || {}).name || gt('All'))
                 );
             },
 

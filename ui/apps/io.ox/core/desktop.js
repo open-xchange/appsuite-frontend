@@ -1361,13 +1361,11 @@ define('io.ox/core/desktop',
                         nodes.container = $('<div class="abs search-container">').hide().append(
                             // active facets
                             $('<ul class="search-facets">'),
-                            $('<div class="fixed">')
+                            $('<div>')
                             .css({
-                                'position': 'relative',
-                                'top': '300px'
+                                'margin-top': '14x'
                             })
                             .append(
-                                $('<label class="search-facets-advanced-label">').text(gt('Advanced')).hide(),
                                 $('<ul class="search-facets search-facets-advanced">')
                             ),
                             // cancel button
