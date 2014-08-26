@@ -139,8 +139,12 @@ define('io.ox/search/util',
                         name: folder.title || id
                     });
                 };
+
+            // infostore hack
+            module = module === 'files' ? 'infostore' : module;
+
             //'all folders' when not mandatory and not default folder
-            if (model.isMandatory('folder') || id !== folderAPI.getDefaultFolder(module)) {
+            if (model.isMandatory('folder') || id !== folderAPI.getDefaultFolder(module).toString()) {
                 // 'preselected folder'
                 folderAPI.get(id).always(value.bind(this, id));
                 return def.promise();
