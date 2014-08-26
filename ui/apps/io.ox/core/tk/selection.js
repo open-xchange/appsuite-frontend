@@ -1092,7 +1092,10 @@ define('io.ox/core/tk/selection',
                 }
             }
 
-            function drop() {
+            function drop(e) {
+                // avoid multiple events on parent tree nodes
+                if (e.isDefaultPrevented()) return; else e.preventDefault();
+                // process drop
                 clearTimeout(expandTimer);
                 var target = $(this).attr('data-obj-id') || $(this).attr('data-cid') || $(this).attr('data-id'),
                     baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
