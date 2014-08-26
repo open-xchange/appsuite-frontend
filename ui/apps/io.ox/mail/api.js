@@ -274,7 +274,6 @@ define('io.ox/mail/api',
             },
             get: {
                 action: 'get',
-                view: settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text',
                 embedded: 'true'
             },
             getUnmodified: {
@@ -448,6 +447,17 @@ define('io.ox/mail/api',
         api.threads.touch(model.toJSON());
     }
 
+    function allowImages(obj) {
+        if (!settings.get('allowHtmlImages', false)) return false;
+        if (accountAPI.is('spam', obj.folder_id || obj.folder)) return false;
+        return true;
+    }
+
+    function defaultView(obj) {
+        if (!settings.get('allowHtmlMessages', true)) return 'text';
+        return allowImages(obj) ? 'html' : 'noimg';
+    }
+
     api.get = function (obj, options) {
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
@@ -455,6 +465,9 @@ define('io.ox/mail/api',
 
         // TODO: make this smarter
         if (!obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
+
+        // determine default view parameter
+        if (!obj.view) obj.view = defaultView(obj);
 
         return get.call(api, obj, options && options.cache).done(function (data) {
             if (model) {
