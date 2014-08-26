@@ -458,6 +458,16 @@ define('io.ox/search/facets/extensions',
                     // add menu
                     parent.append(menu);
                 }
+
+                // copy search string to input
+                if (_.contains(facet.flags, 'highlander')) {
+                    this.on('click', function () {
+                        var sidepanel = $(this).closest('.window-sidepanel'),
+                            field = sidepanel.find('.search-field');
+                        field.val((facet.item || facet).name);
+                    });
+                }
+
             },
 
             folderFacet: function (baton, value, facet) {
