@@ -183,7 +183,7 @@ define('io.ox/mail/accounts/settings',
 
         validateMailaccount = function (data, popup, def) {
 
-            myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
+            myModel.validationCheck(data, { ignoreInvalidTransport: true }).then(
                 function success(response) {
                     if (response === true) {
                         myModel.save(data).then(

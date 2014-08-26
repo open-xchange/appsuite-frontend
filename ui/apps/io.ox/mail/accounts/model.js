@@ -124,7 +124,7 @@ define('io.ox/mail/accounts/model',
 
         validationCheck: function (data, options) {
 
-            data = _.extend({ unified_inbox_enabled: false }, data);
+            data = _.extend({ unified_inbox_enabled: false }, data || this.toJSON());
             data.name = data.personal = data.primary_address;
             return AccountAPI.validate(data, options);
         },

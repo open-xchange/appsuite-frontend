@@ -76,13 +76,6 @@ define.async('io.ox/mail/accounts/view-form',
         InputView = mini.InputView.extend(custom),
         PasswordView = mini.PasswordView.extend(custom),
 
-        validationCheck = function (data) {
-
-            data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
-            data.name = data.personal = data.primary_address;
-            return accountAPI.validate(data);
-        },
-
         returnPortMail = function () {
             var secure = model.get('mail_secure'),
                 protocol = model.get('mail_protocol') || 'imap';
@@ -294,7 +287,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 if (needToValidate(list, differences)) {
-                    validationCheck(this.model.attributes).done(function (response, error) {
+                    this.model.validationCheck().done(function (response, error) {
                         //an undefined response variable implies an error (f.e. category 'USER_INPUT')
                         var hasError = _.isUndefined(response) || (error ? [].concat(error.categories || []).indexOf('ERROR') > -1 : false),
                             hasWarning = error && error.warnings;
