@@ -1688,6 +1688,9 @@ define('io.ox/core/desktop',
                     view.model.on({
                         'query': function (appname) {
                             view.trigger('query', appname);
+                        },
+                        'cancel': function (appname) {
+                            view.trigger('button:cancel', appname);
                         }
                     });
                 });

@@ -215,7 +215,16 @@ define('io.ox/search/model',
                 conflicts.call(this);
 
                 items.empty();
-                this.trigger('query', this.getApp());
+
+                // cancel search when last non advanced facet value is removed
+                var some = _.find(pool, function (facet) {
+                    return !(_.contains(facet.flags, 'advanced'));
+                });
+
+                if (!some)
+                    this.trigger('cancel');
+                else
+                    this.trigger('query', this.getApp());
             },
             update: function (facet, value, data) {
                 var facetdata = this.get('pool')[facet],
