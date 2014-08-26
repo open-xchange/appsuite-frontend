@@ -306,7 +306,7 @@ define('io.ox/files/carousel',
                     item.append(
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            file.folder_id ? getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
+                            file.folder_id ? getBreadcrumb(file.folder_id, { exclude: ['9'], handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {
