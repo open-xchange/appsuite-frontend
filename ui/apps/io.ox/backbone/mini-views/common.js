@@ -165,7 +165,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var SelectView = AbstractView.extend({
             tagName: 'select',
-            className: 'input-xlarge',
+            className: 'input-xlarge form-control',
             events: { 'change': 'onChange' },
             onChange: function () {
                 this.model.set(this.name, this.$el.val());

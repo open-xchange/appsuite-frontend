@@ -22,18 +22,20 @@ define('io.ox/backbone/mini-views/abstract', [], function () {
     var AbstractView = Backbone.View.extend({
 
         initialize: function (options) {
-            this.options = options || {};
+            var o = this.options = options || {};
+            // use id if id is given and no name
+            if (o.id && !o.name) o.name = o.id;
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
             // make all views accessible via DOM; gets garbage-collected on remove
             this.$el.data('view', this);
             // has model and a name?
             if (this.model && options.name) {
-                this.listenTo(this.model, 'valid:' + options.name, this.valid);
-                this.listenTo(this.model, 'invalid:' + options.name, this.invalid);
+                this.listenTo(this.model, 'valid:' + o.name, this.valid);
+                this.listenTo(this.model, 'invalid:' + o.name, this.invalid);
             }
             // call custom setup
-            if (this.setup) this.setup(options);
+            if (this.setup) this.setup(o);
         },
 
         valid: function () {
