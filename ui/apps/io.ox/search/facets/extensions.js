@@ -385,7 +385,7 @@ define('io.ox/search/facets/extensions',
                 );
             },
 
-            facetRemove: function (baton, value) {
+            facetRemove: function (baton, value, facet, fn) {
                 var isMandatory = baton.model.isMandatory(value.facet);
 
                 // remove action for non mandatory facets
@@ -393,10 +393,20 @@ define('io.ox/search/facets/extensions',
 
                 this.prepend(
                     $('<span class="remove">')
+                     .attr({
+                        'tabindex': '1',
+                        'data-toggle': 'tooltip',
+                        'data-placement': 'bottom',
+                        'data-animation': 'false',
+                        'data-container': 'body',
+                        'data-original-title': _.contains(facet.flags, 'advanced') ? gt('Reset') : gt('Remove'),
+                        'aria-label': _.contains(facet.flags, 'advanced') ? gt('Reset') : gt('Remove')
+                    })
+                    .tooltip()
                     .append(
                         $('<i class="fa fa-times action">')
                     )
-                    .on('click', function (e) {
+                    .on('click', fn || function (e) {
                         e.preventDefault();
                         e.stopPropagation();
                         baton.model.remove(value.facet || value._compact.facet, value.id);
@@ -406,10 +416,10 @@ define('io.ox/search/facets/extensions',
 
             facetDropdown: function (baton, value, facet) {
                 var options = facet.options || _.values(facet.values)[0].options || [],
-                current = value._compact ? value._compact.option : '',
-                option,
-                parent = this.parent(),
-                menu;
+                    current = value._compact ? value._compact.option : '',
+                    option,
+                    parent = this.parent(),
+                    menu;
 
                 if (options.length) {
                     this.attr('data-toggle', 'dropdown');
@@ -532,35 +542,39 @@ define('io.ox/search/facets/extensions',
 
                 // add 'all folders'
                 var link;
-                if (!baton.model.isMandatory('folder')) {
-                    // add dropdown entry
-                    this.find('ul.dropdown').prepend(
-                        $('<li role="presentation">').append(
-                             link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
-                                        .append(
-                                            $('<i class="fa fa-fw ">'),
-                                            $('<span>').text(gt('All folders'))
-                                        )
-                                        .attr('data-custom', 'custom')
-                                        .attr('title', gt('All folders'))
-                        )
-                    );
-                    // is active
-                    if (!value.custom || value.custom === 'custom') {
-                        // set display name
-                        this.find('.name')
-                            .text(gt('All folders'));
-                        // set fa-check icon
-                        link.find('i')
-                            .addClass('fa-check');
-                    }
+                // add dropdown entry
+                menu.prepend(
+                    $('<li role="presentation">').append(
+                         link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
+                                    .append(
+                                        $('<i class="fa fa-fw ">'),
+                                        $('<span>').text(gt('All folders'))
+                                    )
+                                    .attr('data-custom', 'custom')
+                                    .attr('title', gt('All folders'))
+                    )
+                );
+                // is active
+                if (!value.custom || value.custom === 'custom') {
+                    // set display name
+                    this.find('.name')
+                        .text(gt('All folders'));
+                    // set fa-check icon
+                    link.find('i')
+                        .addClass('fa-check');
                 }
-
 
                 // add to dom
                 this.append(menu).appendTo(this);
 
-                ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet);
+                if (value.custom && value.custom !== 'custom')
+                    // use custom click handler
+                    ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        facet.custom = 'custom';
+                        baton.model.update(facet.id, 'custom', facet);
+                    });
             }
         };
 
