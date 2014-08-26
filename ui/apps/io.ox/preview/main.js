@@ -22,7 +22,7 @@ define('io.ox/preview/main',
 
     'use strict';
 
-    var supportsDragOut = false && Modernizr.draganddrop && _.browser.Chrome;
+    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
     var dragOutHandler = $.noop;
     var clickableLink = $.noop;
 
