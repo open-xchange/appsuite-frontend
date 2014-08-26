@@ -33,11 +33,11 @@ define('io.ox/search/view',
 
                 if (_.device('smartphone')) {
                     // create new toolbar on bottom
-                    ext.point('io.ox/search/view/window/mobile').invoke('draw', node, self.baton);
+                    ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
                 }
 
                 //invoke extensions defined by io.ox/search/view-template
-                ext.point('io.ox/search/view/window').invoke('draw', node, self.baton);
+                ext.point('io.ox/search/view').invoke('draw', node, self.baton);
 
                 return this;
             },
@@ -69,7 +69,7 @@ define('io.ox/search/view',
             },
             repaint: function (ids) {
                 var self = this;
-                ext.point('io.ox/search/view/window').each(function (p) {
+                ext.point('io.ox/search/view').each(function (p) {
                     var list = ids.split(' ');
                     list.forEach(function (id) {
                         if (id === p.id)
@@ -77,7 +77,7 @@ define('io.ox/search/view',
                     });
                 });
                 if (_.device('smartphone')) {
-                    ext.point('io.ox/search/view/window/mobile').each(function (p) {
+                    ext.point('io.ox/search/view/mobile').each(function (p) {
                         var list = ids.split(' ');
                         list.forEach(function (id) {
                             if (id === p.id)

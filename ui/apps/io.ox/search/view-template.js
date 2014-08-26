@@ -24,11 +24,11 @@ define('io.ox/search/view-template',
     'use strict';
 
     /**
-     * fullscreen:  io.ox/search/view/window
-     * mobile:      io.ox/search/view/window/mobile
+     * fullscreen:  io.ox/search/view
+     * mobile:      io.ox/search/view/mobile
      */
 
-    var point = ext.point('io.ox/search/view/window');
+    var point = ext.point('io.ox/search/view');
 
     //input field
     point.extend({
@@ -141,21 +141,8 @@ define('io.ox/search/view-template',
         }
     });
 
-    // facet
-    ext.point('iio.ox/search/facets/item').extend({
-        id: 'type',
-        index: 100,
-        draw: function (baton, value, facet) {
-            var button = this.find('a');
-            ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
-            ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
-            ext.point('io.ox/search/facets/facet-dropdown').invoke('draw', button, baton, value, facet);
-            ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet);
-        }
-    });
-
     // inline dropdown
-    ext.point('io.ox/search/view/window/mobile').extend({
+    ext.point('io.ox/search/view/mobile').extend({
         id: 'dropdown',
         index: 100,
         draw: function () {
@@ -166,7 +153,7 @@ define('io.ox/search/view-template',
         }
     });
 
-    ext.point('io.ox/search/view/window/mobile').extend({
+    ext.point('io.ox/search/view/mobile').extend({
         id: 'app',
         index: 100,
         draw: function () {
