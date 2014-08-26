@@ -111,10 +111,12 @@ define('plugins/portal/userSettings/register',
                     }
                 var pwContainer = [];
                 if (showStrength) {
-                    strengthBarWrapper = $('<div>').append(
-                            strengthLabel = $('<label class="password-change-label">'),
-                            $('<div class="progress">').append(
-                                strengthBar = $('<div class="progress-bar password-strength-bar">')).hide());//hide till new pw is inserted
+                    strengthBarWrapper = $('<div>').hide().append(
+                        strengthLabel = $('<label class="password-change-label">'),
+                        $('<div class="progress">').append(
+                            strengthBar = $('<div class="progress-bar password-strength-bar">')
+                        )
+                    );
                     pwContainer = [strengthBarWrapper, $('<div class=password-hint-container>').append(hintText)];
                 }
                 this.getContentNode().append(
@@ -133,7 +135,7 @@ define('plugins/portal/userSettings/register',
                     ).css('max-height', '500px');
                 if (showStrength) {
                     newPass.on('keyup', updateStrength);
-                } 
+                }
             })
             .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
