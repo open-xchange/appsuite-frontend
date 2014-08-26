@@ -90,7 +90,7 @@ define('io.ox/mail/compose/view',
         id: 'add_attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div class="col-xs-12 col-md-5 col-md-offset-1">');
+            var node = $('<div class="col-xs-12 col-md-5 col-md-offset-1">').attr('data-extension-id', 'add_attachments');
             extensions.attachment.call(node, baton);
             this.append(node);
         }

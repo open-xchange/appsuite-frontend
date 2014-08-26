@@ -20,10 +20,11 @@ define('io.ox/mail/compose/extensions',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/dropzone',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'static/3rd.party/jquery-ui.min.js'
-    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, settings, gt) {
+    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -385,23 +386,33 @@ define('io.ox/mail/compose/extensions',
             }
 
             return function (baton) {
+                if (capabilities.has('infostore')) {
+                    var dropdown = new Dropdown({ label: gt('Attachments'), caret: true });
 
-                var dropdown = new Dropdown({ label: gt('Attachments'), caret: true });
-
-                this.append(
-                    dropdown.append(
-                        // must be <span>; <a href> doesn't work
-                        $('<span role="button" class="hidden-file-picker">').append(
-                            $.txt(gt('Add local file')),
-                            // file input
-                            $('<input type="file" name="file" tabindex="1">')
-                                .on('change', addLocalFile.bind(this, baton.model))
-                                .prop('multiple', true)
+                    this.append(
+                        dropdown.append(
+                            // must be <span>; <a href> doesn't work
+                            $('<span role="button" class="hidden-file-picker">').append(
+                                $.txt(gt('Add local file')),
+                                // file input
+                                $('<input type="file" name="file" tabindex="1">')
+                                    .on('change', addLocalFile.bind(this, baton.model))
+                                    .prop('multiple', true)
+                            )
                         )
-                    )
-                    .link('add-file', gt('Add from Drive'), openFilePicker.bind(this, baton.model))
-                    .render().$el
-                );
+                        .link('add-file', gt('Add from Drive'), openFilePicker.bind(this, baton.model))
+                        .render().$el
+                    );
+                } else {
+                    this.append($('<button type="button" class="btn btn-link hidden-file-picker">').append(
+                        $('<span class="hidden">'),
+                        $.txt(gt('Attachments')),
+                        // file input
+                        $('<input type="file" name="file" tabindex="1">')
+                            .on('change', addLocalFile.bind(this, baton.model))
+                            .prop('multiple', true)
+                    ));
+                }
             };
 
         }()),
