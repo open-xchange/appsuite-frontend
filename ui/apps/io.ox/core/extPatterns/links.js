@@ -127,9 +127,11 @@ define('io.ox/core/extPatterns/links',
                 baton = ext.Baton.ensure(baton);
                 this.append(
                     $('<li>').attr({ role: 'presentation' }).append(
-                        $('<a href="#" tabindex="1">').attr({
+                        $('<a>').attr({
                             'data-action': extension.ref,
-                            'role': 'menuitem'
+                            role: 'menuitem',
+                            href: '#',
+                            tabindex: 1
                         }).text(extension.label)
                         .on('click', { baton: baton, extension: extension }, actionClick)
                     )
@@ -159,7 +161,12 @@ define('io.ox/core/extPatterns/links',
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
-            var attr = { href: '#', 'class': 'btn btn-default', 'data-action': self.id, tabIndex: self.tabIndex };
+            var attr = {
+                href: '#',
+                'class': 'btn btn-default',
+                'data-action': self.id,
+                tabindex: self.tabIndex
+            };
             if (tag === 'button') attr.type = 'button';
             this.append(
                 node = $('<' + tag + '>', attr)

@@ -213,7 +213,7 @@
             );
         }
 
-        return alert;
+        return alert.alert();
     };
 
 }());
