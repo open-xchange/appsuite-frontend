@@ -22,7 +22,7 @@ define('io.ox/preview/main',
 
     'use strict';
 
-    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
+    var supportsDragOut = false && Modernizr.draganddrop && _.browser.Chrome;
     var dragOutHandler = $.noop;
     var clickableLink = $.noop;
 
@@ -33,24 +33,22 @@ define('io.ox/preview/main',
             });
         };
         clickableLink = function (desc, clickHandler) {
-            var $a = $('<a>', { draggable: true, tabindex: 1 })
-                .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + '&delivery=download');
+            var $a = $('<a draggable="true" tabindex="1">').attr({
+                'data-downloadurl': desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.downloadURL
+            });
             if (clickHandler) {
                 $a.on('click', clickHandler);
             } else {
-                $a.attr({ href: desc.dataURL + '&delivery=view', target: '_blank'});
+                $a.attr({ href: desc.dataURL + '&delivery=view', target: '_blank' });
             }
             return $a;
         };
     } else {
         clickableLink = function (desc, clickHandler) {
-            var link = $('<a>', { href: desc.dataURL + '&delivery=view', target: '_blank', tabindex: 1});
-            if (clickHandler) {
-                link.on('click', clickHandler);
-            }
+            var link = $('<a>', { href: desc.dataURL + '&delivery=view', target: '_blank', tabindex: 1 });
+            if (clickHandler) link.on('click', clickHandler);
             return link;
         };
-
     }
 
     var Renderer = {
@@ -99,17 +97,24 @@ define('io.ox/preview/main',
         index: 10,
         supports: ['image/png', 'png', 'image/jpeg', 'jpg', 'jpeg', 'image/gif', 'gif', 'bmp'],
         draw: function (file, options) {
-            var param = {
-                width: options.width || 400,
-                height: options.height || 400,
-                scaleType: options.scaleType || 'contain',
-                delivery: 'view'
-            };
-            if (options.height === 'auto') {
-                delete param.height;
+
+            var param, url = file.dataURL;
+
+            if (options.resize !== false) {
+                param = {
+                    width: options.width || 400,
+                    height: options.height || 400,
+                    scaleType: options.scaleType || 'contain',
+                    delivery: 'view'
+                };
+                if (options.height === 'auto') delete param.height;
+                if (options.width === 'auto') delete param.width;
+                url += '&' + $.param(param);
             }
+
             this.append(
-                $('<img>', { src: file.dataURL + '&' + $.param(param), alt: 'Preview' }));
+                $('<img>', { src: url, alt: gt('Preview') })
+            );
         }
     }));
 

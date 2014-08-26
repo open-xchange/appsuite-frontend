@@ -802,7 +802,7 @@ define('io.ox/files/api',
                 url + name + query + '&delivery=download';
         case 'thumbnail':
             return (file.meta && file.meta.thumbnailUrl) ||
-                url + query + '&delivery=view' + thumbnail + '&content_type=' + file.file_mimetype;
+                url + query + '&delivery=view' + thumbnail + (file.file_mimetype ? '&content_type=' + file.file_mimetype : '');
         case 'preview':
             return (file.meta && file.meta.previewUrl) ||
                 url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';

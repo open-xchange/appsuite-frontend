@@ -212,8 +212,11 @@ define('io.ox/files/carousel',
         },
 
         urlFor: function (file) {
-            var url = file.url || api.getUrl(file, 'open');
-            return url + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+            return file.url || api.getUrl(file, 'thumbnail', {
+                scaleType: 'contain',
+                thumbnailWidth: $(window).width(),
+                thumbnailHeight: $(window).height()
+            });
         },
 
         imgError: function () {
