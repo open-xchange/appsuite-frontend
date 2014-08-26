@@ -309,10 +309,10 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('Opening an E-Mail in a separate window'),
-                placement: 'right',
+                placement: 'top', // see bug #34125
                 target: function () { return $('.list-view:visible')[0]; },
                 content: gt('If double-clicking on an E-Mail in the list, the E-Mail is opened in a separate window.'),
-                xOffset: -15
+                yOffset: 110  // see bug #34125
             },
             {
                 title: gt('Reading E-Mail conversations'),
@@ -708,7 +708,7 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('Editing multiple tasks'),
-                placement: 'right',
+                placement: 'bottom', // preventive fixed along with bug #34125
                 target: function () { return $('.vgrid-scrollpane-container:visible')[0]; },
                 //target: function () { return $('abs.vgrid-scrollpane:visible')[0]; },
                 content: gt('To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'),
