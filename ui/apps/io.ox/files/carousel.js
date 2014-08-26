@@ -225,8 +225,11 @@ define('io.ox/files/carousel',
         },
 
         urlFor: function (file) {
-            var url = file.url || api.getUrl(file, 'open');
-            return url + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+            return file.url || api.getUrl(file, 'thumbnail', {
+                scaleType: 'contain',
+                thumbnailWidth: $(window).width(),
+                thumbnailHeight: $(window).height()
+            });
         },
 
         imgError: function () {
@@ -292,7 +295,11 @@ define('io.ox/files/carousel',
                     filename: file.filename,
                     mimetype: file.file_mimetype,
                     size: file.file_size,
-                    dataURL: api.getUrl(file, 'bare'),
+                    dataURL: api.getUrl(file, 'thumbnail', {
+                        scaleType: 'contain',
+                        thumbnailWidth: $(window).width(),
+                        thumbnailHeight: $(window).height()
+                    }),
                     version: file.version,
                     id: file.id,
                     folder_id: file.folder_id
@@ -301,7 +308,7 @@ define('io.ox/files/carousel',
 
             if (item.children().length === 0) {
                 if (!this.config.attachmentMode) {
-                    var prev = new preview.Preview(parseArguments(file), { width: 'auto', height: $(window).height()});
+                    var prev = new preview.Preview(parseArguments(file), { resize: false });
                     prev.appendTo(item);
                     item.append(
                         $('<div class="carousel-caption">').append(

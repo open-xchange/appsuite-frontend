@@ -99,10 +99,11 @@ define('io.ox/files/fluid/view-detail',
                 filename: file.filename,
                 mimetype: file.file_mimetype,
                 size: file.file_size,
-                dataURL: filesAPI.getUrl(file, 'bare'),
                 version: file.version,
                 id: file.id,
-                folder_id: file.folder_id
+                folder_id: file.folder_id,
+                dataURL: filesAPI.getUrl(file, 'bare'),
+                downloadURL: filesAPI.getUrl(file, 'download')
             };
         }
 
@@ -121,12 +122,18 @@ define('io.ox/files/fluid/view-detail',
 
                 function fnDrawPreview() {
                     var width = $previewNode.innerWidth();
-                    if (width !== lastWidth) {
-                        $previewNode.empty();
-                        lastWidth = width; // Must only recalculate once we get bigger
-                        var prev = new preview.Preview(parseArguments(baton.data), { width: width, height: 'auto'});
-                        prev.appendTo($previewNode);
-                    }
+                    if (width === lastWidth) return;
+                    $previewNode.empty();
+                    lastWidth = width; // Must only recalculate once we get bigger
+                    var file = parseArguments(baton.data);
+                    // get proper URL
+                    file.previewURL = filesAPI.getUrl(file, 'thumbnail', {
+                        scaleType: 'contain',
+                        thumbnailWidth: width,
+                        thumbnailHeight: Math.round(width * 1.5)
+                    });
+                    var prev = new preview.Preview(file, { resize: false });
+                    prev.appendTo($previewNode);
                 }
 
                 if (isEnabled(baton.data)) {
