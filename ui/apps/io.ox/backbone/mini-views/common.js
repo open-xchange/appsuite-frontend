@@ -26,8 +26,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
         },
-        setup: function (options) {
-            this.name = options.name;
+        setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
@@ -50,14 +49,16 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         className: 'form-control',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val(), { validate: true });
+            var value = this.$el.val();
+            if (/^\*$/.test(value)) value = null;
+            this.model.set(this.name, value, { validate: true });
         },
-        setup: function (options) {
-            this.name = options.name;
+        setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            this.$el.val($.trim(this.model.get(this.name)));
+            var value = this.model.get(this.name);
+            this.$el.val(value !== null ? $.trim(value) : '********');
         },
         render: function () {
             this.$el.attr({
@@ -84,7 +85,6 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.model.set(this.name, this.$el.val());
         },
         setup: function (options) {
-            this.name = options.name;
             this.rows = options.rows;
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
@@ -110,8 +110,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         onChange: function () {
             this.model.set(this.name, this.$el.prop('checked'));
         },
-        initialize: function (options) {
-            this.name = options.name;
+        setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
@@ -135,8 +134,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         onChange: function () {
             this.model.set(this.name, this.$el.find('[name="' + this.name + '"]:checked').val());
         },
-        initialize: function (options) {
-            this.name = options.name;
+        setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
@@ -164,29 +162,28 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     //
 
     var SelectView = AbstractView.extend({
-            tagName: 'select',
-            className: 'input-xlarge form-control',
-            events: { 'change': 'onChange' },
-            onChange: function () {
-                this.model.set(this.name, this.$el.val());
-            },
-            initialize: function (options) {
-                this.name = options.name;
-                this.listenTo(this.model, 'change:' + this.name, this.update);
-            },
-            update: function () {
-                this.$el.val(this.model.get(this.name));
-            },
-            render: function () {
-                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-                if (this.id) this.$el.attr({ id: this.id});
-                this.$el.append(_.map(this.options.list, function (option) {
-                    return $('<option>').attr({ value: option.value}).text(option.label);
-                }));
-                this.update();
-                return this;
-            }
-        });
+        tagName: 'select',
+        className: 'input-xlarge form-control',
+        events: { 'change': 'onChange' },
+        onChange: function () {
+            this.model.set(this.name, this.$el.val());
+        },
+        setup: function () {
+            this.listenTo(this.model, 'change:' + this.name, this.update);
+        },
+        update: function () {
+            this.$el.val(this.model.get(this.name));
+        },
+        render: function () {
+            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            if (this.id) this.$el.attr({ id: this.id});
+            this.$el.append(_.map(this.options.list, function (option) {
+                return $('<option>').attr({ value: option.value}).text(option.label);
+            }));
+            this.update();
+            return this;
+        }
+    });
 
     return {
         AbstractView: AbstractView,

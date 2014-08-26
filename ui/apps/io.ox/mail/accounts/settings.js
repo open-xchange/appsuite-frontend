@@ -182,28 +182,29 @@ define('io.ox/mail/accounts/settings',
         },
 
         validateMailaccount = function (data, popup, def) {
-            var deferedSave = $.Deferred();
 
             myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
                 function success(response) {
                     if (response === true) {
-                        myModel.save(data, deferedSave);
-                        deferedSave.done(function (response) {
-                            if (response.error_id) {
+                        myModel.save(data).then(
+                            function saveSuccess(response) {
+                                if (response.error_id) {
+                                    popup.close();
+                                    failDialog(response.error);
+                                } else {
+                                    popup.close();
+                                    if (collection) {
+                                        collection.add([response]);
+                                    }
+                                    successDialog();
+                                    def.resolve(response);
+                                }
+                            },
+                            function saveFail(response) {
                                 popup.close();
                                 failDialog(response.error);
-                            } else {
-                                popup.close();
-                                if (collection) {
-                                    collection.add([response]);
-                                }
-                                successDialog();
-                                def.resolve(response);
                             }
-                        }).fail(function (response) {
-                            popup.close();
-                            failDialog(response.error);
-                        });
+                        );
                     } else {
                         var message = gt('There was no suitable server found for this mail/password combination');
                         drawAlert(getAlertPlaceholder(popup), message);

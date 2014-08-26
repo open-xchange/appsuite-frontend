@@ -16,7 +16,7 @@ define.async('io.ox/mail/accounts/view-form',
     ['io.ox/core/notifications',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
-     'gettext!io.ox/settings/settings',
+     'gettext!io.ox/settings',
      'io.ox/core/extensions',
      'io.ox/backbone/mini-views',
      'io.ox/core/folder/picker'
@@ -28,8 +28,8 @@ define.async('io.ox/mail/accounts/view-form',
         model,
 
         optionsServerType = [
-            { label: gt.noI18n('imap'), value: 'imap'},
-            { label: gt.noI18n('pop3'), value: 'pop3'}
+            { label: gt.noI18n('IMAP'), value: 'imap'},
+            { label: gt.noI18n('POP3'), value: 'pop3'}
         ],
 
         optionsRefreshRatePop = [
@@ -40,6 +40,15 @@ define.async('io.ox/mail/accounts/view-form',
             { label: gt.noI18n('30'), value: '30'},
             { label: gt.noI18n('60'), value: '60'},
             { label: gt.noI18n('360'), value: '360'}
+        ],
+
+        optionsAuthType = [
+            //#. Auth type. Short for "Use same credentials as incoming mail server"
+            { value: 'mail',    label: gt('As incoming mail server') },
+            //#. Auth type. Use separate username and password
+            { value: 'custom',  label: gt('Use name and password') },
+            //#. Auth type. None. No authentication
+            { value: 'none',    label: gt('None') }
         ],
 
         portDefaults = {
@@ -56,7 +65,7 @@ define.async('io.ox/mail/accounts/view-form',
             }
         },
 
-        oldModel,
+        originalModel,
 
         //customize mini views: suppress validate onChange (validated when user hits save)
         custom = {
@@ -102,7 +111,9 @@ define.async('io.ox/mail/accounts/view-form',
                     this.model.set('personal', '');
                 }
 
-                oldModel = _.copy(this.model.attributes, true);
+                // store original model to determine changes
+                originalModel = _.copy(this.model.toJSON(), true);
+
                 // forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
                 Backbone.Validation.bind(this, { selector: 'name', forceUpdate: true });
             },
@@ -115,7 +126,7 @@ define.async('io.ox/mail/accounts/view-form',
                     )
                 );
 
-                ext.point(POINT + '/pane').invoke('draw', self.$el.find('.io-ox-account-settings'));
+                ext.point(POINT + '/pane').invoke('draw', self.$el.find('.io-ox-account-settings'), this);
 
                 var pop3nodes = self.$el.find('.form-group.pop3'),
                     dropdown = self.$el.find('#mail_protocol');
@@ -219,9 +230,10 @@ define.async('io.ox/mail/accounts/view-form',
             },
 
             onSave: function () {
+
                 var self = this,
                     list = ['name', 'personal', 'unified_inbox_enabled'],
-                    differences = returnDifferences(this.model.attributes, oldModel);
+                    differences = returnDifferences(this.model.attributes, originalModel);
 
                 function returnDifferences(a, b) {
                     var array = [];
@@ -385,159 +397,155 @@ define.async('io.ox/mail/accounts/view-form',
     ext.point(POINT + '/pane').extend({
         index: 100,
         id: 'header',
-        draw: function () {
+        draw: function (view) {
 
-            var formBlocks = [],
-
-                //
-                // Incoming (IMAP/POP3)
-                //
-                serverSettingsIn = $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').text(gt('Server settings')),
-                    $('<form class="form-horizontal" role="form">').append(
-                        // server type
-                        group(
-                            label('mail_protocol', gt('Server type')),
-                            $('<div class="col-sm-4">').append(
-                                new mini.SelectView({ list: optionsServerType, model: model, id: 'mail_protocol' }).render().$el
-                            )
-                        ),
-                        // ssl connection
-                        group(
-                            checkbox(
-                                gt('Use SSL connection'),
-                                new mini.CheckboxView({ name: 'mail_secure', model: model }).render().$el
-                            )
-                        ),
-                        // mail_server
-                        group(
-                            label('mail_server', gt('Server name')),
-                            div(
-                                new InputView({ model: model, id: 'mail_server' }).render().$el
-                            )
-                        ),
-                        // mail_port
-                        group(
-                            label('mail_port', gt('Server port')),
-                            div(
-                                new InputView({ model: model, id: 'mail_port' }).render().$el
-                            )
-                        ),
-                        // login
-                        group(
-                            label('login', gt('Username')),
-                            div(
-                                new InputView({ model: model, id: 'login' }).render().$el
-                            )
-                        ),
-                        // password
-                        group(
-                            label('password', gt('Password')),
-                            div(
-                                new PasswordView({ model: model, id: 'password' }).render().$el
-                            )
-                        ),
-                        // refresh rate (pop3 only)
-                        group(
-                            label('pop3_refresh_rate', gt('Refresh rate in minutes')),
-                            div(
-                                new mini.SelectView({ list: optionsRefreshRatePop, model: model, id: 'pop3_refresh_rate' }).render().$el
-                            )
+            //
+            // Incoming (IMAP/POP3)
+            //
+            var serverSettingsIn = $('<fieldset>').append(
+                $('<legend class="sectiontitle">').text(gt('Incoming server')),
+                $('<form class="form-horizontal" role="form">').append(
+                    // server type
+                    group(
+                        label('mail_protocol', gt('Server type')),
+                        $('<div class="col-sm-4">').append(
+                            new mini.SelectView({ list: optionsServerType, model: model, id: 'mail_protocol' }).render().$el
                         )
-                        .addClass('pop3'),
-                        // expunge (pop3 only)
-                        group(
-                            checkbox(
-                                gt('Remove copy from server after retrieving a message'),
-                                new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model }).render().$el
-                            )
+                    ),
+                    // ssl connection
+                    group(
+                        checkbox(
+                            gt('Use SSL connection'),
+                            new mini.CheckboxView({ name: 'mail_secure', model: model }).render().$el
                         )
-                        .addClass('pop3'),
-                        // delete write-through (pop3)
-                        group(
-                            checkbox(
-                                gt('Deleting messages on local storage also deletes them on server'),
-                                new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model }).render().$el
-                            )
+                    ),
+                    // mail_server
+                    group(
+                        label('mail_server', gt('Server name')),
+                        div(
+                            new InputView({ model: model, id: 'mail_server' }).render().$el
                         )
-                        .addClass('pop3')
-                    )
-                ),
-
-                serverSettingsOut = $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').text(gt('Outgoing server settings (SMTP)')),
-                    $('<form class="form-horizontal" role="form">').append(
-                        // secure
-                        group(
-                            checkbox(
-                                gt('Use SSL connection'),
-                                new mini.CheckboxView({ name: 'transport_secure', model: model}).render().$el
-                            )
-                        ),
-                        // server
-                        group(
-                            label('transport_server', gt('Server name')),
-                            div(
-                                new InputView({ model: model, id: 'transport_server' }).render().$el
-                            )
-                        ),
-                        // port
-                        group(
-                            label('transport_port', gt('Server port')),
-                            div(
-                                new InputView({ model: model, id: 'transport_port' }).render().$el
-                            )
-                        ),
-                        // login
-                        group(
-                            label('transport_login', gt('Username')),
-                            div(
-                                new InputView({ model: model, id: 'transport_login' }).render().$el
-                            )
-                        ),
-                        // password
-                        group(
-                            label('transport_password', gt('Password')),
-                            div(
-                                new PasswordView({ model: model, id: 'transport_password' }).render().$el
-                            )
+                    ),
+                    // mail_port
+                    group(
+                        label('mail_port', gt('Server port')),
+                        div(
+                            new InputView({ model: model, id: 'mail_port' }).render().$el
+                        )
+                    ),
+                    // login
+                    group(
+                        label('login', gt('Username')),
+                        div(
+                            new InputView({ model: model, id: 'login' }).render().$el
+                        )
+                    ),
+                    // password
+                    group(
+                        label('password', gt('Password')),
+                        div(
+                            new PasswordView({ model: model, id: 'password' }).render().$el
+                        )
+                    ),
+                    // refresh rate (pop3 only)
+                    group(
+                        label('pop3_refresh_rate', gt('Refresh rate in minutes')),
+                        div(
+                            new mini.SelectView({ list: optionsRefreshRatePop, model: model, id: 'pop3_refresh_rate' }).render().$el
                         )
                     )
-                ),
-
-                folderLabels = { sent: gt('Sent folder'), trash: gt('Trash folder'), drafts: gt('Drafts folder'), spam: gt('Spam folder') },
-
-                serverSettingsFolder = $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').text(gt('Folder settings')),
-                    $('<form class="form-horizontal" role="form">').append(
-                        // add four input fields
-                        _('sent trash drafts spam'.split(' ')).map(function (id) {
-
-                            var label = folderLabels[id];
-                            id = id + '_fullname';
-
-                            return $('<div class="form-group">').append(
-                                $('<label class="control-label col-sm-3">').attr({ 'for': id }).text(label),
-                                $('<div class="col-sm-6 variable_size">').append(
-                                    new InputView({ name: id, model: model, id: id }).render().$el.prop('disabled', true)
-                                ),
-                                $('<div class="col-sm-1">').append(
-                                    $('<button type="button" class="btn btn-default folderselect" tabindex="1">')
-                                    .attr('data-property', id).text(gt('Select'))
-                                )
-                            );
-                        })
+                    .addClass('pop3'),
+                    // expunge (pop3 only)
+                    group(
+                        checkbox(
+                            gt('Remove copy from server after retrieving a message'),
+                            new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model }).render().$el
+                        )
                     )
-                );
+                    .addClass('pop3'),
+                    // delete write-through (pop3)
+                    group(
+                        checkbox(
+                            gt('Deleting messages on local storage also deletes them on server'),
+                            new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model }).render().$el
+                        )
+                    )
+                    .addClass('pop3')
+                )
+            );
 
-            if (!model.isHidden()) {
-                formBlocks.push(serverSettingsIn, serverSettingsOut);
-            }
+            var serverSettingsOut = $('<fieldset>').append(
+                $('<legend class="sectiontitle">').text(gt('Outgoing server (SMTP)')),
+                $('<form class="form-horizontal" role="form">').append(
+                    // secure
+                    group(
+                        checkbox(
+                            gt('Use SSL connection'),
+                            new mini.CheckboxView({ name: 'transport_secure', model: model}).render().$el
+                        )
+                    ),
+                    // server
+                    group(
+                        label('transport_server', gt('Server name')),
+                        div(
+                            new InputView({ model: model, id: 'transport_server' }).render().$el
+                        )
+                    ),
+                    // port
+                    group(
+                        label('transport_port', gt('Server port')),
+                        div(
+                            new InputView({ model: model, id: 'transport_port' }).render().$el
+                        )
+                    ),
+                    // Auth type
+                    group(
+                        label('transport_auth', gt('Authentication')),
+                        div(
+                            new mini.SelectView({ list: optionsAuthType, model: model, id: 'transport_auth' }).render().$el
+                        )
+                    ),
+                    // login
+                    group(
+                        label('transport_login', gt('Username')),
+                        div(
+                            new InputView({ model: model, id: 'transport_login' }).render().$el
+                        )
+                    ),
+                    // password
+                    group(
+                        label('transport_password', gt('Password')),
+                        div(
+                            new PasswordView({ model: model, id: 'transport_password' }).render().$el
+                        )
+                    )
+                )
+            );
 
-            // don't show folder settings if this is a new account
-            if (model.get('id') !== undefined) {
-                formBlocks.push(serverSettingsFolder);
-            }
+            var folderLabels = { sent: gt('Sent folder'), trash: gt('Trash folder'), drafts: gt('Drafts folder'), spam: gt('Spam folder') };
+
+            var serverSettingsFolder = $('<fieldset>').append(
+                $('<legend class="sectiontitle">').text(gt('Folder settings')),
+                $('<form class="form-horizontal" role="form">').append(
+                    // add four input fields
+                    _('sent trash drafts spam'.split(' ')).map(function (id) {
+
+                        var label = folderLabels[id];
+                        id = id + '_fullname';
+
+                        return $('<div class="form-group">').append(
+                            $('<label class="control-label col-sm-3">').attr({ 'for': id }).text(label),
+                            $('<div class="col-sm-6 variable_size">').append(
+                                new InputView({ name: id, model: model, id: id }).render().$el.prop('disabled', true)
+                            ),
+                            $('<div class="col-sm-1">').append(
+                                $('<button type="button" class="btn btn-default folderselect" tabindex="1">')
+                                .attr('data-property', id).text(gt('Select'))
+                            )
+                        );
+                    })
+                )
+            );
 
             this.append(
                 $('<fieldset>').append(
@@ -572,9 +580,39 @@ define.async('io.ox/mail/accounts/view-form',
                             )
                         )
                     )
-                ),
-                formBlocks
+                )
             );
+
+            function adoptCredentials() {
+                if (this.model.get('transport_auth') === 'mail') {
+                    this.model.set({
+                        transport_login: model.get('login'),
+                        transport_password: null
+                    });
+                }
+            }
+
+            function changeTransportAuth() {
+                var type = this.model.get('transport_auth');
+                this.$el.find('#transport_login, #transport_password').prop('disabled', type !== 'custom');
+                if (type === 'mail') {
+                    adoptCredentials.call(this);
+                } else {
+                    this.model.set({ transport_login: '', transport_password: '' });
+                }
+            }
+
+            if (!model.isHidden()) {
+                this.append(serverSettingsIn, serverSettingsOut);
+                view.listenTo(model, 'change:transport_auth', changeTransportAuth);
+                view.listenTo(model, 'change:login', adoptCredentials);
+                changeTransportAuth.call(view);
+            }
+
+            // don't show folder settings if this is a new account
+            if (model.get('id') !== undefined) {
+                this.append(serverSettingsFolder);
+            }
         }
     });
 

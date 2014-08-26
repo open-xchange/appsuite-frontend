@@ -30,7 +30,8 @@ define('io.ox/backbone/mini-views/abstract', [], function () {
             // make all views accessible via DOM; gets garbage-collected on remove
             this.$el.data('view', this);
             // has model and a name?
-            if (this.model && options.name) {
+            if (this.model && o.name) {
+                this.name = o.name;
                 this.listenTo(this.model, 'valid:' + o.name, this.valid);
                 this.listenTo(this.model, 'invalid:' + o.name, this.invalid);
             }
