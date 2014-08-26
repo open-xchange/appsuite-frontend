@@ -410,9 +410,7 @@ define('io.ox/mail/common-extensions',
                             renderCustomControls: renderCustomControls
                         });
                     }
-                    var list = baton.attachments.filter(function (m) {
-                            return m.disp === 'attachment';
-                        }).map(function (m) {
+                    var list = baton.attachments.map(function (m) {
                             m.group = 'mail';
                             return m;
                         }),

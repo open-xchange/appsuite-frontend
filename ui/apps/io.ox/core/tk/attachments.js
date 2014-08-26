@@ -708,7 +708,8 @@ define('io.ox/core/tk/attachments',
             return this.get('filename');
         },
         isFileAttachment: function () {
-            return this.get('disp') === 'attachment';
+            return this.get('disp') === 'attachment' ||
+                this.get('disp') === 'inline' && this.get('filename');
         },
         needsUpload: function () {
             return this.get('uploaded') === 0;
