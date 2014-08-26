@@ -119,7 +119,7 @@ define('io.ox/core/folder/favorites',
         return link;
     }
 
-    ext.point('io.ox/core/foldertree/contextmenu').extend({
+    ext.point('io.ox/core/foldertree/contextmenu/default').extend({
         id: 'toggle-favorite',
         index: 1000,
         draw: function (baton) {
