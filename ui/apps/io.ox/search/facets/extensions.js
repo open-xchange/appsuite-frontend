@@ -577,14 +577,16 @@ define('io.ox/search/facets/extensions',
                 // add to dom
                 this.append(menu).appendTo(this);
 
+                function remove (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    (facet.values.custom || facet.values[0]).custom = 'custom';
+                    baton.model.update(facet.id, 'custom', {custom: 'custom'});
+                }
+
                 if (value.custom && value.custom !== 'custom')
                     // use custom click handler
-                    ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        facet.custom = 'custom';
-                        baton.model.update(facet.id, 'custom', facet);
-                    });
+                    ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, remove);
             }
         };
 
