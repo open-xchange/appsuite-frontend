@@ -543,7 +543,7 @@ define('io.ox/core/notifications',
                                 o.headline ? $('<h2 class="headline">').text(o.headline) : [],
                                 $('<div>').css('word-break', wordbreak).html(html)
                             ),
-                            $('<a href="#" role="button" class="close" tabindex="1">').attr('aria-label', gt('Click to close this notification')).html('&times')
+                            $('<a href="#" role="button" class="close fa fa-times" tabindex="1">').attr('aria-label', gt('Click to close this notification'))
                         );
                     } else {
                         node.append(
