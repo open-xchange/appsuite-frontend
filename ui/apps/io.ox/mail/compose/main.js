@@ -16,9 +16,9 @@
  * ox.registry.set('mail-compose', 'io.ox/mail/compose/main');
  *
  * Permanently:
- * require('settings!io.ox/core').set(['registry', 'mail-compose'], 'io.ox/mail/compose/main').save();
+ * require('settings!io.ox/core').set('registry/mail-compose', 'io.ox/mail/compose/main').save();
  * To use old mail compose:
- * require('settings!io.ox/core').set(['registry', 'mail-compose'], undefined).save();
+ * require('settings!io.ox/core').set('registry/mail-compose', undefined).save();
  */
 
 define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], function (mailAPI, gt) {
@@ -50,7 +50,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
 
         app.failSave = function () {
             if (!app.view) return;
-            return _.extend({module: 'io.ox/mail/compose'}, app.view.model.getFailSave());
+            return _.extend({ module: 'io.ox/mail/compose' }, app.view.model.getFailSave());
         };
 
         app.failRestore = function (point) {
@@ -64,7 +64,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
-                obj = _.extend({mode: type}, obj);
+                obj = _.extend({ mode: type }, obj);
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
@@ -76,7 +76,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                             app.view.setMail()
                             .done(function () {
                                 win.idle();
-                                def.resolve({app: app});
+                                def.resolve({ app: app });
                             });
                         })
                         .fail(function (e) {
