@@ -44,11 +44,31 @@ define('io.ox/files/carousel',
 
         firstStart: true,
         list: [],
-        container:      $('<div class="abs carousel slide">'),
-        inner:          $('<div class="abs carousel-inner">'),
-        prevControl:    $('<a class="left carousel-control">').attr('data-slide', 'prev').append($('<i class="icon-prev fa fa-angle-left">')),
-        nextControl:    $('<a class="right carousel-control">').attr('data-slide', 'next').append($('<i class="icon-next fa fa-angle-right">')),
-        closeControl:   $('<button type="button" class="btn btn-link closecarousel">').append($('<i class="fa fa-times">')),
+        container:      $('<div class="abs carousel slide">').attr({ 'data-ride': 'carousel' }),
+        inner:          $('<div class="abs carousel-inner" role="listbox">'),
+        prevControl:    $('<a class="left carousel-control">')
+                            .attr({
+                                'data-slide': 'prev',
+                                role: 'button'
+                            })
+                            .append(
+                                $('<i class="icon-prev fa fa-angle-left"aria-hidden="true" >'),
+                                $('<span class="sr-only">').text(gt('Prev'))
+                            ),
+        nextControl:    $('<a class="right carousel-control">')
+                            .attr({
+                                'data-slide': 'next',
+                                role: 'button'
+                            })
+                            .append(
+                                $('<i class="icon-next fa fa-angle-right"aria-hidden="true" >'),
+                                $('<span class="sr-only">').text(gt('Next'))
+                            ),
+        closeControl:   $('<button type="button" class="btn btn-link closecarousel">')
+                            .append(
+                                $('<i class="fa fa-times" aria-hidden="true" >'),
+                                $('<span class="sr-only">').text(gt('Close'))
+                            ),
 
        /**
         * The config parameter used to initialize a carousel.
@@ -121,13 +141,10 @@ define('io.ox/files/carousel',
             }
             this.firstStart = true; // should have a better name
 
-            // no automatic animation
-            this.container.carousel({ interval: false });
-
             // fill with proper amount of DIVs (need to be fast here)
             var frag = document.createDocumentFragment(), i = 0, $i = this.list.length;
             for (; i < $i; i++) {
-                frag.appendChild($('<div class="item" data-index="' + i + '">').get(0));
+                frag.appendChild($('<div class="item" data-index="' + i + '" role="option">').get(0));
             }
             this.inner.get(0).appendChild(frag);
 
@@ -136,6 +153,9 @@ define('io.ox/files/carousel',
 
             this.show();
             this.eventHandler();
+
+            // no automatic animation
+            this.container.carousel({ interval: false });
         },
 
         eventHandler: function () {
