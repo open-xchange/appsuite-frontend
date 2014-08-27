@@ -23,7 +23,9 @@ define('io.ox/mail/compose/view',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'io.ox/core/api/snippets',
-     'gettext!io.ox/mail'
+     'gettext!io.ox/mail',
+     'less!io.ox/mail/style',
+     'less!io.ox/mail/compose/style'
     ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, settings, coreSettings, notifications, snippetAPI, gt) {
 
     'use strict';

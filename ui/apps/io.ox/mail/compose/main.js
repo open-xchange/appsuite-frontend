@@ -23,12 +23,8 @@
 
 define('io.ox/mail/compose/main',
     ['io.ox/mail/api',
-     'io.ox/mail/compose/view',
-     'io.ox/core/notifications',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style',
-     'less!io.ox/mail/compose/style'
-    ], function (mailAPI, MailComposeView, notifications, gt) {
+     'gettext!io.ox/mail'
+    ], function (mailAPI, gt) {
 
     'use strict';
 
@@ -74,21 +70,24 @@ define('io.ox/mail/compose/main',
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
-                app.view = new MailComposeView({ data: obj, app: app });
-
                 win.busy().show(function () {
-                    win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                    app.view.fetchMail(obj).done(function () {
-                        app.view.setMail()
-                        .done(function () {
-                            win.idle();
-                            def.resolve({app: app});
+                    require(['io.ox/mail/compose/view'], function (MailComposeView) {
+                        app.view = new MailComposeView({ data: obj, app: app });
+                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                        app.view.fetchMail(obj).done(function () {
+                            app.view.setMail()
+                            .done(function () {
+                                win.idle();
+                                def.resolve({app: app});
+                            });
+                        })
+                        .fail(function (e) {
+                            require(['io.ox/core/notifications'], function (notifications) {
+                                notifications.yell(e);
+                                app.quit();
+                                def.reject();
+                            });
                         });
-                    })
-                    .fail(function (e) {
-                        notifications.yell(e);
-                        app.quit();
-                        def.reject();
                     });
                 });
 
