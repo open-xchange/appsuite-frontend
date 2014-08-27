@@ -203,6 +203,32 @@ define('io.ox/core/folder/contextmenu',
         }()),
 
         //
+        // Zip folder
+        //
+        zip: (function () {
+
+            function handler(e) {
+                require(['io.ox/files/api'], function (api) {
+                    api.zip(e.data.id);
+                });
+            }
+
+            return function (baton) {
+
+                if (_.device('smartphone')) return;
+                if (baton.module !== 'infostore') return;
+
+                addLink(this, {
+                    action: 'zip',
+                    data: { id: baton.data.id },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Download entire folder')
+                });
+            };
+        }()),
+
+        //
         // Export folder
         //
         exportData: (function () {
@@ -492,6 +518,11 @@ define('io.ox/core/folder/contextmenu',
             id: 'export',
             index: 2200,
             draw: extensions.exportData
+        },
+        {
+            id: 'zip',
+            index: 2200,
+            draw: extensions.zip
         },
         {
             id: 'divider-3',

@@ -1011,6 +1011,18 @@ define('io.ox/files/api',
         });
     };
 
+    //
+    // Download zipped content of a folder
+    //
+
+    api.zip = function (id) {
+        return require(['io.ox/core/download']).then(function (download) {
+            download.url(
+                ox.apiRoot + '/files?' + $.param({ action: 'zipfolder', folder: id, recursive: true, session: ox.session })
+            );
+        });
+    };
+
     return api;
 
 });
