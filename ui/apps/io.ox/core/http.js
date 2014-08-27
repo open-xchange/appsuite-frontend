@@ -317,7 +317,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '1037': 'personal',
             '1038': 'reply_to',
             '1039': 'addresses',
-            '1040': 'meta'
+            '1040': 'meta',
+            '1041': 'archive',
+            '1042': 'archive_fullname',
+            '1043': 'transport_auth'
         },
         'attachment': {
             '1': 'id',
