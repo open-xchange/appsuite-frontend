@@ -619,4 +619,12 @@
         }
     });
 
+    define('wait', {
+        load: function (name, parentRequire, loaded) {
+            var interval = parseInt(name, 10);
+            console.log('wait', interval, '>', name);
+            setTimeout(loaded, interval);
+        }
+    });
+
 }());
