@@ -690,7 +690,7 @@ define('io.ox/mail/compose/view',
             return def;
         },
 
-        attachmentsExceedQouta: function (mail) {
+        attachmentsExceedQuota: function (mail) {
 
             var allAttachmentsSizes = [].concat(mail.files).concat(mail.attachments)
                     .map(function (m) {

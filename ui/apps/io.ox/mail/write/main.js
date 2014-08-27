@@ -116,7 +116,7 @@ define('io.ox/mail/write/main',
         delay();
     }
 
-    function attachmentsExceedQouta(mail) {
+    function attachmentsExceedQuota(mail) {
         var allAttachmentsSizes = [].concat(mail.files).concat(mail.data.attachments)
                 .map(function (m) {
                     return m.size || 0;
@@ -1153,7 +1153,7 @@ define('io.ox/mail/write/main',
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
 
-                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQouta(mail)) {
+                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQuota(mail)) {
                     notifications.yell({
                         type: 'info',
                         message: gt(

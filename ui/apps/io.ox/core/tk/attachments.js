@@ -305,24 +305,15 @@ define('io.ox/core/tk/attachments',
                     maxFileSize,
                     quota,
                     usage,
-                    maxFileSize,
                     isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
                     filesLength = files.length,
-                    autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments'),
+                    autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments'),
                     result = { added: [] };
-
-                /*
-                function getQuota(a, b) {
-                    // 0 and -1 means that this is disabled
-                    return (a >= 0 && b >= 0 && Math.min(a, b)) || (a >= 0 && a) || b || 0;
-                }
-                */
 
                 if (!list.length) return;
 
                 //check
                 if (isMail) {
-                    autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments');
                     maxFileSize = autoPublish ? -1 : properties.attachmentQuotaPerFile;
                     quota = autoPublish ? -1 : properties.attachmentQuota;
                     usage = 0;
@@ -348,6 +339,18 @@ define('io.ox/core/tk/attachments',
                             result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota));
                             result.reason = 'quota';
                             return true;
+                        }
+                        if (isMail && autoPublish) {
+                            if (properties.infostoreMaxUploadSize > 0 && fileSize > properties.infostoreMaxUploadSize) {
+                                result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s', fileTitle, strings.fileSize(properties.infostoreMaxUploadSize));
+                                result.reason = 'filesizeAutoPublish';
+                                return true;
+                            }
+                            if (properties.infostoreQuota > 0 && (total > (properties.infostoreQuota - properties.infostoreUsage))) {
+                                result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the infostore quota limit of %2$s', fileTitle, strings.fileSize(properties.infostoreQuota));
+                                result.reason = 'quotaAutoPublish';
+                                return true;
+                            }
                         }
                     }
 
