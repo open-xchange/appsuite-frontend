@@ -21,10 +21,7 @@
  * require('settings!io.ox/core').set(['registry', 'mail-compose'], undefined).save();
  */
 
-define('io.ox/mail/compose/main',
-    ['io.ox/mail/api',
-     'gettext!io.ox/mail'
-    ], function (mailAPI, gt) {
+define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], function (mailAPI, gt) {
 
     'use strict';
 
@@ -52,9 +49,8 @@ define('io.ox/mail/compose/main',
         });
 
         app.failSave = function () {
-            if (app.view) {
-                return _.extend({module: 'io.ox/mail/compose'}, app.view.model.getFailSave());
-            }
+            if (!app.view) return;
+            return _.extend({module: 'io.ox/mail/compose'}, app.view.model.getFailSave());
         };
 
         app.failRestore = function (point) {
@@ -98,7 +94,9 @@ define('io.ox/mail/compose/main',
         }
 
         // destroy
-        app.setQuit(function () { if (app.view) { return app.view.discard(); } });
+        app.setQuit(function () {
+            if (app.view) return app.view.discard();
+        });
 
         app.compose  = compose('compose');
         app.forward  = compose('forward');

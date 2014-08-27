@@ -530,11 +530,11 @@ define('io.ox/core/desktop',
                         data = self.failSave();
                         ids = _(list).pluck('id');
                         pos = _(ids).indexOf(uniqueID);
-                        data.id = uniqueID;
-                        data.timestamp = _.now();
-                        data.version = ox.version;
-                        data.ua = navigator.userAgent;
                         if (data) {
+                            data.id = uniqueID;
+                            data.timestamp = _.now();
+                            data.version = ox.version;
+                            data.ua = navigator.userAgent;
                             //consider db limit for jslob
                             data = apputil.crop(list, data, pos);
                             if (pos > -1) {
