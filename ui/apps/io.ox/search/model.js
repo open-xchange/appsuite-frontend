@@ -64,24 +64,63 @@ define('io.ox/search/model',
     conflicts = function () {
         var pool = _.extend({}, this.get('pool')),
             list = [].concat(this.get('poollist')),
+            remove = {},
             disabled = {},
             hash = {}, i;
 
-        // remove conflicting facets
-        _.each(pool, function (facet) {
+        // FLAG: conflicts:[id]
+        // prefer last set facets
+        list.reverse();
+
+        // ignore folder facet with 'custom' (it's equivalent to an unset filter)
+        var relevant = _.filter(list, function (value) {
+            var facet = pool[value.facet];
+            if (value.facet === 'folder' && (facet.values.custom.custom === 'custom' || !facet.values.custom.custom))
+                return false;
+            else
+                return true;
+        });
+
+        // collect facets that should be disabled/
+        _.each(relevant, function (value) {
+            var facet = pool[value.facet];
             _.each(facet.flags, function (flag) {
-                if (flag.indexOf('conflicts:') === 0) {
+                if (flag.indexOf('conflicts:') === 0 && !remove[facet.id]) {
                     var id = flag.split(':')[1];
-                    // remove from pool/list and mark disabled
-                    delete pool[id];
-                    disabled[id] = facet;
-                    list = _.filter(list, function (compact) {
-                        return compact.facet !== id;
-                    });
+                    remove[id] = true;
                 }
             });
         });
 
+        // remove/disable facet
+        _.each(remove, function (value, id) {
+            // remove from pool/list and mark disabled
+            if (id === 'folder') {
+                pool.folder.values.custom.custom = 'custom';
+                var tmp;
+                // special handling for folder (put at the end of the list)
+                list = _.filter(list, function (compact) {
+                    if (compact.facet === 'folder') {
+                        compact.custom = 'custom';
+                        tmp = compact;
+                        return false;
+                    } else
+                        return true;
+                });
+                list.unshift(tmp);
+            } else {
+                delete pool[id];
+                list = _.filter(list, function (compact) {
+                    return compact.facet !== id;
+                });
+            }
+            disabled[id] = facet;
+        });
+
+        // recover order
+        list.reverse();
+
+        // FLAG: highlander
         // keep only last added value of highlander facets
         for (i = list.length - 1; i >= 0; i--) {
             var data = list[i],
@@ -267,6 +306,7 @@ define('io.ox/search/model',
                         }
                     });
                 }
+                conflicts.call(this);
                 this.trigger('query', this.getApp());
             },
             fetch: function () {
@@ -288,7 +328,7 @@ define('io.ox/search/model',
                         simple = _.copy(value, true);
                     }
 
-                    if (value && (value.custom || value.id !== 'custom')) {
+                    if (value && (value.id !== 'custom' || (value.custom && value.custom !== 'custom'))) {
                         active.push({
                             //remove temporary suffix
                             facet: facet.id.split('.')[0],
