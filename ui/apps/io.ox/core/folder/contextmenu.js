@@ -521,12 +521,12 @@ define('io.ox/core/folder/contextmenu',
         },
         {
             id: 'zip',
-            index: 2200,
+            index: 2300,
             draw: extensions.zip
         },
         {
             id: 'divider-3',
-            index: 2300,
+            index: 2400,
             draw: divider
         },
         // -----------------------------------------------
