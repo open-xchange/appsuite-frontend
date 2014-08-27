@@ -26,7 +26,8 @@ define('plugins/portal/mail/register',
     'use strict';
 
     // helper to remember tracked mails
-    var trackedMails = [];
+    var trackedMails = [],
+        previewPopup;
 
     function draw(baton) {
         var popup = this.busy();
@@ -34,6 +35,7 @@ define('plugins/portal/mail/register',
             var obj = api.reduce(baton.item);
             api.get(obj).done(function (data) {
                 var view = new detail.View({ data: data });
+                previewPopup = view;
                 popup.idle().append(view.render().expand().$el.addClass('no-padding'));
                 data = null;
             });
@@ -55,7 +57,9 @@ define('plugins/portal/mail/register',
                         portalApp.refreshWidget(portalModel, 0);
                     }
                 });
-
+            });
+            api.on('delete', function () {
+                $(previewPopup.el).trigger('close');
             });
         },
 
