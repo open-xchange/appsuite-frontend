@@ -98,7 +98,7 @@ define('io.ox/preview/main',
         supports: ['image/png', 'png', 'image/jpeg', 'jpg', 'jpeg', 'image/gif', 'gif', 'bmp'],
         draw: function (file, options) {
 
-            var param, url = file.dataURL;
+            var param, url = file.previewURL || file.dataURL;
 
             if (options.resize !== false) {
                 param = {
