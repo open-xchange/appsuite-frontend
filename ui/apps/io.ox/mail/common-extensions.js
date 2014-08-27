@@ -281,88 +281,13 @@ define('io.ox/mail/common-extensions',
             };
         }()),
 
-        attachmentList: (function () {
-
+        attachmentList: (function attachmentList() {
             function drawInlineLinks(node, data) {
                 var extension = new links.InlineLinks({
                     ref: 'io.ox/mail/attachment/links'
                 });
                 return extension.draw.call(node, ext.Baton({ data: data }));
             }
-
-            return function (baton) {
-
-                var attachments = baton.attachments,
-                    length = attachments.length,
-                    list,
-                    view,
-                    previewToggle = $('<i class="fa fa-th-large preview-toggle">'),
-                    $el = this;
-
-                if (!length) return;
-
-                list = $('<div class="attachment-list">');
-
-                $el.append(
-                    $('<a href="#" class="n-more">').append(
-                        '<i class="fa fa-caret-right">',
-                        '<i class="fa fa-paperclip">',
-                        gt.format(
-                            //#. %1$d - number of attachments
-                            gt.ngettext('%1$d Attachment', '%1$d Attachments', length),
-                            length
-                        )
-                    )
-                    .click(function () {
-                        //toggle attachment links
-                        if (!view) {
-                            baton.preview = previewToggle.hasClass('fa-list');
-                            extensions.attachmentPreview.call(list, baton).then(function (attachmentList) {
-                                view = attachmentList;
-                            });
-                            $(this).find('i.fa-caret-right').removeClass('fa-caret-right').addClass('fa-caret-down');
-                        } else if (view.$el.is(':visible')) {
-                            view.$el.hide();
-                            $(this).find('i.fa-caret-down').removeClass('fa-caret-down').addClass('fa-caret-right');
-                        } else {
-                            view.$el.show();
-                            $(this).find('i.fa-caret-right').removeClass('fa-caret-right').addClass('fa-caret-down');
-                        }
-                    })
-                );
-
-                if (attachments.length > 1) {
-                    // show actions for 'all' attachments
-                    attachments.subject = baton.data.subject;
-                    drawInlineLinks($el, attachments);
-                }
-                $el.append(
-                    $('<a href="#" class="pull-right">')
-                        .append(previewToggle)
-                        .on('click', function () {
-                            if (previewToggle.hasClass('fa-th-large')) {
-                                previewToggle.removeClass('fa-th-large').addClass('fa-list');
-                            } else {
-                                previewToggle.removeClass('fa-list').addClass('fa-th-large');
-                            }
-                            $el.children('a.n-more').find('i.fa-caret-right').removeClass('fa-caret-right').addClass('fa-caret-down');
-                            if (!view) {
-                                baton.preview = previewToggle.hasClass('fa-list');
-                                extensions.attachmentPreview.call(list, baton).then(function (attachmentList) {
-                                    view = attachmentList;
-                                });
-                            } else {
-                                view.togglePreview();
-                                view.$el.show();
-                            }
-                        })
-                );
-
-                $el.append(list);
-            };
-        }()),
-
-        attachmentPreview: (function attachmentPreview() {
 
             var customAttachmentView,
                 renderCustomControls = function (widget) {
@@ -395,39 +320,47 @@ define('io.ox/mail/common-extensions',
                             $(this).css({ display: 'inline-block' });
                             e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
                         });
-                };
+                },
+                CustomAttachmentList;
 
             return function (baton) {
                 if (baton.attachments.length === 0) return $.when();
 
                 var $el = this,
-                def = $.Deferred();
+                    def = $.Deferred();
 
                 require(['io.ox/core/tk/attachments'], function (attachments) {
-                    if (!customAttachmentView) {
-                        //define only once
+                    _.once(function () {
                         customAttachmentView = attachments.view.Attachment.extend({
                             renderCustomControls: renderCustomControls
                         });
-                    }
+                        CustomAttachmentList = attachments.view.AttachmentList.extend({
+                            renderCustomHeader: function () {
+                                this.renderDefaultHeader();
+                                if (this.filteredCollection().length > 1) {
+                                    drawInlineLinks(this.$header, this.filteredCollection().map(function (m) {
+                                        return m.toJSON();
+                                    }));
+                                }
+                                return this.$el;
+                            }
+                        });
+                    })();
                     var list = baton.attachments.map(function (m) {
                             m.group = 'mail';
                             return m;
                         }),
                         collection = new attachments.model.Attachments(list),
-                        view = new attachments.view.AttachmentList({
+                        view = new CustomAttachmentList({
                             collection: collection,
                             editable: false,
                             preview: baton.preview,
                             attachmentView: customAttachmentView
                         });
 
-                    view.render();
-                    $el.append(
-                        view.$el.addClass('inline-items')
-                    );
+                    $el.append(view.render().$el);
 
-                    view.delegateEvents({
+                    view.delegateEvents(_.extend({
                         'click li.item': function (ev) {
                             //skip attachments without preview
                             if (!$(ev.currentTarget).data().original) return;
@@ -438,7 +371,7 @@ define('io.ox/mail/common-extensions',
 
                             actions.invoke('io.ox/mail/actions/slideshow-attachment', null, b);
                         }
-                    });
+                    }, view.events));
                     def.resolve(view);
                 }, def.reject);
 

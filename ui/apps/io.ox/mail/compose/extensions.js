@@ -298,12 +298,12 @@ define('io.ox/mail/compose/extensions',
 
             require(['io.ox/core/tk/attachments'], function (attachments) {
                 var view = new attachments.view.AttachmentList({
-                    collection: baton.model.get('attachments'),
-                    editable: true,
-                    preview: true
-                }),
-                previewToggle = $('<i class="fa fa-list preview-toggle">');
+                        collection: baton.model.get('attachments'),
+                        editable: true,
+                        preview: true
+                    });
 
+                //TODO: move dropzone into custom header method for view
                 // dropzone
                 var zone = new dropzone.Inplace({
                     caption: gt('Drop attachments here')
@@ -325,28 +325,8 @@ define('io.ox/mail/compose/extensions',
                     }
                 });
 
-                view.on('empty', function () {
-                    previewToggle.hide();
-                });
-                view.on('filled', function () {
-                    previewToggle.show();
-                });
-
                 view.render();
-                if (view.$el.children().length === 0) {
-                    previewToggle.hide();
-                }
                 $el.append(
-                    $('<a href="#" class="pull-right">')
-                        .append(previewToggle)
-                        .on('click', function () {
-                            if (previewToggle.hasClass('fa-th-large')) {
-                                previewToggle.removeClass('fa-th-large').addClass('fa-list');
-                            } else {
-                                previewToggle.removeClass('fa-list').addClass('fa-th-large');
-                            }
-                            view.togglePreview();
-                        }),
                     zone.render().$el.addClass('abs'),
                     view.$el.addClass('inline-items')
                 );

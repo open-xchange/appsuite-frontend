@@ -768,7 +768,7 @@ define('io.ox/core/tk/attachments',
     });
 
     var AttachmentList = Backbone.View.extend({
-        tagName: 'ul',
+        tagName: 'div',
         className: 'io-ox-core-tk-attachment-list',
         initialize: function (options) {
             this.listenTo(this.collection, 'add', this.addAttachment);
@@ -780,6 +780,16 @@ define('io.ox/core/tk/attachments',
                 this.$el.addClass('preview');
             }
             this.attachmentView = options.attachmentView || AttachmentView;
+            this.$header = $('<header>');
+        },
+        filteredCollection: function () {
+            return this.collection.filter(function (m) {
+                return m.isFileAttachment();
+            });
+        },
+        events: {
+            'click a.content-toggle': 'toggleContent',
+            'click a.preview-toggle': 'togglePreview'
         },
         togglePreview: function () {
             this.preview = !this.preview;
@@ -788,10 +798,52 @@ define('io.ox/core/tk/attachments',
             } else {
                 this.$el.removeClass('preview');
             }
-            return this.render();
+            return this.toggleContent('open').render();
+        },
+        toggleContent: function (forceState) {
+            if (!this.$ul) {
+                this.render();
+                forceState = forceState || 'open';
+            }
+            if (forceState === 'close' ||
+                (this.$ul.hasClass('open') && forceState !== 'open')) {
+                this.hideList();
+            } else {
+                this.showList();
+            }
+            return this;
+        },
+        showList: function () {
+            this.$ul.show().addClass('open');
+            if (this.$ul.hasClass('empty')) this.renderList();
+            this.$header.find('i.fa-caret-right')
+                .removeClass('fa-caret-right')
+                .addClass('fa-caret-down');
+        },
+        hideList: function () {
+            this.$header.find('i.fa-caret-down')
+                .removeClass('fa-caret-down')
+                .addClass('fa-caret-right');
+            this.$ul.hide().removeClass('open');
         },
         addAttachment: function (model) {
-            if (!model.isFileAttachment()) return;
+            if (this.$el.hasClass('empty')) {
+                this.$el.removeClass('empty');
+                return this.render();
+            }
+            if (!this.$ul || !model.isFileAttachment()) return;
+            this.renderHeader();
+            this.renderAttachment(model);
+        },
+        removeAttachment: function (model, collection, options) {
+            this.$el.children()[options.index - 1].remove();
+            if (this.$el.children().length === 0) {
+                this.$el.addClass('empty');
+                this.$ul.addClass('empty');
+                this.trigger('empty');
+            }
+        },
+        renderAttachment: function (model) {
             var addPreview = this.preview,
                 isEditable = this.editable,
                 view = new this.attachmentView({
@@ -802,29 +854,68 @@ define('io.ox/core/tk/attachments',
             if (view.preview) {
                 this.listenTo(view.preview, 'lazyload', function (el) {
                     el.lazyload({
-                        container: this.$el,
+                        container: this.$ul,
                         effect: 'fadeIn'
                     });
                 });
             }
             view.render();
-            this.$el.append(view.$el);
+            this.$ul.append(view.$el);
 
-            this.$el.removeClass('empty');
+            this.$ul.removeClass('empty');
             this.trigger('filled');
             return this;
         },
-        removeAttachment: function (model, collection, options) {
-            this.$el.children()[options.index - 1].remove();
-            if (this.$el.children().length === 0) {
-                this.$el.addClass('empty');
-                this.trigger('empty');
+        renderDefaultHeader: function () {
+            var length = this.filteredCollection().length;
+            if (length === 0) {
+                //don't render header, if collection is empty
+                return this.$el.addClass('empty');
             }
+            this.$header.empty().append(
+                $('<a href="#" class="content-toggle">').append(
+                    $('<i>').addClass('fa ' + (this.$ul && this.$ul.hasClass('open') ? 'fa-caret-down' : 'fa-caret-right')),
+                    $('<i>').addClass('fa fa-paperclip'),
+                    $.txt(gt.format(
+                        gt.ngettext('%1$d Attachment', '%1$d Attachments', length),
+                        length
+                    ))
+                ),
+                $('<a href="#" class="pull-right preview-toggle">').append(
+                    $('<i>').addClass('fa ' + (this.preview ? 'fa-list' : 'fa-th-large'))
+                )
+            );
+            if (this.$header.parent() !== this.$el) this.$el.prepend(this.$header);
+            return this.$el;
+        },
+        renderHeader: function () {
+            if (_.isFunction(this.renderCustomHeader)) {
+                return this.renderCustomHeader();
+            }
+            return this.renderDefaultHeader();
+        },
+        renderList: function () {
+            if (!this.$ul) {
+                this.$el.append(
+                    this.$ul = $('<ul>').addClass('inline-items empty')
+                );
+                if (this.filteredCollection().length === 1) {
+                    this.toggleContent('open');
+                } else {
+                    this.toggleContent('close'); //start closed
+                }
+            } else {
+                this.$ul.empty();
+                this.$ul.addClass('empty');
+                this.filteredCollection().forEach(this.renderAttachment.bind(this));
+                if (this.$ul.parent() !== this.$el) this.$el.append(this.$ul);
+            }
+            return this.$el;
         },
         render: function () {
             this.$el.empty();
-            this.$el.addClass('empty');
-            this.collection.forEach(this.addAttachment.bind(this));
+            this.renderHeader();
+            this.renderList();
             return this;
         }
     });

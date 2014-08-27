@@ -11,12 +11,16 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-.io-ox-core-tk-attachment-list {
+.io-ox-core-tk-attachment-list, .io-ox-core-tk-attachment-list > ul {
 
     padding: 0;
 
     &.empty {
         display: none;
+    }
+
+    header .content-toggle > i.fa-paperclip {
+        padding: 0 0.5em;
     }
 
     &.inline-items {
