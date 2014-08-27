@@ -386,13 +386,13 @@ define('io.ox/search/facets/extensions',
             },
 
             facetRemove: function (baton, value, facet, fn) {
-                var isMandatory = baton.model.isMandatory(value.facet);
+                var isMandatory = baton.model.isMandatory(value.facet), node;
 
                 // remove action for non mandatory facets
                 if ((isMandatory && value.facet === 'folder') || value.placeholder) return;
 
                 this.prepend(
-                    $('<span class="remove">')
+                    node = $('<span class="remove">')
                      .attr({
                         'tabindex': '1',
                         'data-toggle': 'tooltip',
@@ -406,6 +406,9 @@ define('io.ox/search/facets/extensions',
                     .append(
                         $('<i class="fa fa-times action">')
                     )
+                    .on('click', function () {
+                        node.tooltip('hide');
+                    })
                     .on('click', fn || function (e) {
                         e.preventDefault();
                         e.stopPropagation();
