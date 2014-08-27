@@ -51,6 +51,16 @@ define.async('io.ox/mail/accounts/view-form',
             { value: 'none',    label: gt('None') }
         ],
 
+        // already for 7.8.0
+        // optionsConnectionSecurity = [
+        //     //#. Connection security. None.
+        //     { value: 'none',     label: gt('None') },
+        //     //#. Connection security. StartTLS.
+        //     { value: 'starttls', label: gt('StartTLS') },
+        //     //#. Connection security. SSL/TLS.
+        //     { value: 'ssl',      label: gt('SSL/TLS') },
+        // ],
+
         portDefaults = {
             mail_port: '143',
             transport_port: '587'
@@ -77,14 +87,11 @@ define.async('io.ox/mail/accounts/view-form',
         PasswordView = mini.PasswordView.extend(custom),
 
         returnPortMail = function () {
+
             var secure = model.get('mail_secure'),
                 protocol = model.get('mail_protocol') || 'imap';
 
-            if (protocol === 'imap') {
-                return secure ? '993' : '143';
-            } else {
-                return secure ? '995' : '110';
-            }
+            return protocol === 'imap' ? (secure ? '993' : '143') : (secure ? '995' : '110');
         },
 
         defaultDisplayName = '',
@@ -133,7 +140,7 @@ define.async('io.ox/mail/accounts/view-form',
                     dropdown.prop('disabled', true);
                 }
 
-                //setting port defefaults
+                // setting port defaults
                 if (self.model.get('id') === undefined) {
                     _.each(portDefaults, function (value, key) {
                         model.set(key, value);
@@ -183,16 +190,10 @@ define.async('io.ox/mail/accounts/view-form',
                             self.inSync = false;
                         }
                     });
-                } else {//primary account does not allow editing besides display name and unified mail
+                } else {
+
+                    //primary account does not allow editing besides display name and unified mail
                     self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
-
-                    self.$el.find('.variable_size').removeClass('col-sm-6').addClass('col-sm-8');
-
-                    self.$el.find('button.btn.folderselect').hide();
-                }
-                //disable folderselect if no account is defined
-                if (self.model.get('id') === undefined) {
-                    self.$el.find('button.btn.folderselect').prop('disabled', true);
                 }
 
                 return self;
@@ -207,17 +208,14 @@ define.async('io.ox/mail/accounts/view-form',
             },
 
             onMailProtocolChange: function () {
-                if (this.model.id) return;
                 model.set('mail_port', returnPortMail());
             },
 
             onMailSecureChange: function () {
-                if (this.model.id) return;
                 model.set('mail_port', returnPortMail());
             },
 
             onTransportSecureChange: function () {
-                if (this.model.id) return;
                 var value = this.model.get('transport_secure') ? '465' : '587';
                 this.model.set('transport_port', value);
             },
@@ -342,7 +340,7 @@ define.async('io.ox/mail/accounts/view-form',
                 this.dialog.getPopup().hide();
 
                 var accountId = 'default' + this.model.get('id'),
-                    property = $(e.target).attr('data-property'),
+                    property = $(e.currentTarget).attr('data-property'),
                     id = this.model.get(property),
                     self = this;
 
@@ -357,8 +355,7 @@ define.async('io.ox/mail/accounts/view-form',
                     },
                     folder: id,
                     module: 'mail',
-                    root: accountId,
-                    tr: { 'default0/INBOX': 'virtual/default0' }
+                    root: accountId
                 });
             }
         });
@@ -370,17 +367,17 @@ define.async('io.ox/mail/accounts/view-form',
     }
 
     function label(id, text) {
-        return $('<label class="control-label col-sm-3">').attr('for', id).text(text);
+        return $('<label class="control-label col-sm-4">').attr('for', id).text(text);
     }
 
     function div() {
         var args = _(arguments).toArray();
-        return $('<div class="col-sm-8">').append(args);
+        return $('<div class="col-sm-7">').append(args);
     }
 
     function checkbox(text) {
         var args = _(arguments).toArray();
-        return $('<div class="col-sm-offset-3 col-sm-8">').append(
+        return $('<div class="col-sm-offset-4 col-sm-7">').append(
             $('<div class="checkbox">').append(
                 $('<label class="control-label">').text(text).prepend(args.slice(1))
             )
@@ -401,15 +398,15 @@ define.async('io.ox/mail/accounts/view-form',
                     // server type
                     group(
                         label('mail_protocol', gt('Server type')),
-                        $('<div class="col-sm-4">').append(
+                        $('<div class="col-sm-3">').append(
                             new mini.SelectView({ list: optionsServerType, model: model, id: 'mail_protocol' }).render().$el
                         )
                     ),
-                    // ssl connection
+                    // secure
                     group(
                         checkbox(
                             gt('Use SSL connection'),
-                            new mini.CheckboxView({ name: 'mail_secure', model: model }).render().$el
+                            new mini.CheckboxView({ id: 'mail_secure', model: model }).render().$el
                         )
                     ),
                     // mail_server
@@ -419,10 +416,17 @@ define.async('io.ox/mail/accounts/view-form',
                             new InputView({ model: model, id: 'mail_server' }).render().$el
                         )
                     ),
+                    // secure - for 7.8.0
+                    // group(
+                    //     label('mail_secure', gt('Connection security')),
+                    //     $('<div class="col-sm-3">').append(
+                    //         new mini.SelectView({ list: optionsConnectionSecurity, model: model, id: 'mail_secure' }).render().$el
+                    //     )
+                    // ),
                     // mail_port
                     group(
                         label('mail_port', gt('Server port')),
-                        div(
+                        $('<div class="col-sm-3">').append(
                             new InputView({ model: model, id: 'mail_port' }).render().$el
                         )
                     ),
@@ -474,7 +478,7 @@ define.async('io.ox/mail/accounts/view-form',
                     group(
                         checkbox(
                             gt('Use SSL connection'),
-                            new mini.CheckboxView({ name: 'transport_secure', model: model}).render().$el
+                            new mini.CheckboxView({ id: 'transport_secure', model: model }).render().$el
                         )
                     ),
                     // server
@@ -484,10 +488,17 @@ define.async('io.ox/mail/accounts/view-form',
                             new InputView({ model: model, id: 'transport_server' }).render().$el
                         )
                     ),
+                    // secure - for 7.8.0
+                    // group(
+                    //     label('transport_secure', gt('Connection security')),
+                    //     $('<div class="col-sm-3">').append(
+                    //         new mini.SelectView({ list: optionsConnectionSecurity, model: model, id: 'transport_secure' }).render().$el
+                    //     )
+                    // ),
                     // port
                     group(
                         label('transport_port', gt('Server port')),
-                        div(
+                        $('<div class="col-sm-3">').append(
                             new InputView({ model: model, id: 'transport_port' }).render().$el
                         )
                     ),
@@ -515,25 +526,39 @@ define.async('io.ox/mail/accounts/view-form',
                 )
             );
 
-            var folderLabels = { sent: gt('Sent folder'), trash: gt('Trash folder'), drafts: gt('Drafts folder'), spam: gt('Spam folder') };
+            var folderLabels = {
+                //#. Sent folder
+                sent:   gt.pgettext('folder', 'Sent messages'),
+                //#. Trash folder
+                trash:  gt.pgettext('folder', 'Deleted messages'),
+                //#. Drafts folder
+                drafts: gt.pgettext('folder', 'Drafts'),
+                //#. Spam folder
+                spam:   gt.pgettext('folder', 'Spam')
+            };
 
             var serverSettingsFolder = $('<fieldset>').append(
-                $('<legend class="sectiontitle">').text(gt('Folder settings')),
+                $('<legend class="sectiontitle">').text(gt('Standard folders')),
                 $('<form class="form-horizontal" role="form">').append(
                     // add four input fields
-                    _('sent trash drafts spam'.split(' ')).map(function (id) {
+                    _('sent trash drafts spam'.split(' ')).map(function (folder) {
 
-                        var label = folderLabels[id];
-                        id = id + '_fullname';
+                        var text = folderLabels[folder], id = model.get('id'), enabled = !!id; // neither 0 nor undefined
+                        folder = folder + '_fullname';
 
-                        return $('<div class="form-group">').append(
-                            $('<label class="control-label col-sm-3">').attr({ 'for': id }).text(label),
-                            $('<div class="col-sm-6 variable_size">').append(
-                                new InputView({ name: id, model: model, id: id }).render().$el.prop('disabled', true)
-                            ),
-                            $('<div class="col-sm-1">').append(
-                                $('<button type="button" class="btn btn-default folderselect" tabindex="1">')
-                                .attr('data-property', id).text(gt('Select'))
+                        return group(
+                            label(folder, text),
+                            $('<div class="col-sm-7">').append(
+                                enabled ?
+                                // show controls
+                                $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
+                                    new InputView({ model: model, id: folder }).render().$el.prop('disabled', true),
+                                    $('<span class="input-group-btn">').append(
+                                        $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Select'))
+                                    )
+                                ) :
+                                // just show path
+                                new InputView({ model: model, id: folder }).render().$el.prop('disabled', true)
                             )
                         );
                     })
@@ -569,7 +594,7 @@ define.async('io.ox/mail/accounts/view-form',
                         group(
                             checkbox(
                                 gt('Use unified mail for this account'),
-                                new mini.CheckboxView({ name: 'unified_inbox_enabled', model: model }).render().$el
+                                new mini.CheckboxView({ id: 'unified_inbox_enabled', model: model }).render().$el
                             )
                         )
                     )

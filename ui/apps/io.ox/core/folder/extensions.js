@@ -207,8 +207,8 @@ define('io.ox/core/folder/extensions',
 
     ext.point('io.ox/core/foldertree/mail/account').extend(
         {
-            id: 'standard-folders',
-            draw: extensions.standardFolders
+            id: 'root-folders',
+            draw: extensions.rootFolders
         }
     );
 

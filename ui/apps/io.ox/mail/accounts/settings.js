@@ -32,7 +32,7 @@ define('io.ox/mail/accounts/settings',
         myView = new AccountDetailView({model: myModel, node: myViewNode});
 
         myView.dialog = new dialogs.ModalDialog({
-            width: 600,
+            width: 700,
             async: true
         });
         //TOOD: hack to avoid horizontal scrollbar
