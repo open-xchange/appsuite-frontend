@@ -52,7 +52,9 @@ define('io.ox/mail/compose/main',
         });
 
         app.failSave = function () {
-            return _.extend({module: 'io.ox/mail/compose'}, app.view.model.getFailSave());
+            if (app.view) {
+                return _.extend({module: 'io.ox/mail/compose'}, app.view.model.getFailSave());
+            }
         };
 
         app.failRestore = function (point) {
@@ -96,7 +98,7 @@ define('io.ox/mail/compose/main',
         }
 
         // destroy
-        app.setQuit(function () { return app.view.discard(); });
+        app.setQuit(function () { if (app.view) { return app.view.discard(); } });
 
         app.compose  = compose('compose');
         app.forward  = compose('forward');
