@@ -149,6 +149,11 @@ define('io.ox/mail/accounts/model',
                         _(this.toJSON()).each(function (value, key) {
                             if (!_.isEqual(value, account[key])) changes[key] = value;
                         });
+                        // don't send transport_login/password if transport_auth is mail
+                        if (this.get('transport_auth') === 'mail') {
+                            delete changes.transport_login;
+                            delete changes.transport_password;
+                        }
                     }
 
                     return AccountAPI.update(changes).done(function () {
