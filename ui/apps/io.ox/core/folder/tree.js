@@ -184,7 +184,14 @@ define('io.ox/core/folder/tree',
             api.get(id).done(function (data) {
                 var baton = new ext.Baton({ app: app, data: data, view: view, module: module });
                 if (_.device('smartphone')) {
-                    ul.append('<li><a class="io-ox-action-link" data-action="close-menu"><i class="fa fa-chevron-down"></i></a></li>');
+                    ul.append(
+                        $('<li role="presentation">').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').append(
+                                $('<i class="fa fa-chevron-down" aria-hidden="true">'),
+                                $('<span class="sr-only">')
+                            )
+                        )
+                    );
                 }
                 ext.point(point).invoke('draw', ul, baton);
                 // check if menu exceeds viewport

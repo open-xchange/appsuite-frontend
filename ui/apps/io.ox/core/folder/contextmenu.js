@@ -38,7 +38,7 @@ define('io.ox/core/folder/contextmenu',
     function addLink(node, options) {
         var link = a(options.action, options.text);
         if (options.enabled) link.on('click', options.data, options.handler); else disable(link);
-        node.append($('<li>').append(link));
+        node.append($('<li role="presentation">').append(link));
         return link;
     }
 

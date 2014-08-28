@@ -417,17 +417,20 @@ define('io.ox/calendar/freebusy/controller',
                 state.resolve(action);
             }
 
+            var drop;
+
             this.$el.append(
                 templates.getHeadline(standalone),
                 this.autoCompleteControls,
                 templates.getParticipantsScrollpane().append(this.participantsView),
                 !standalone ? templates.getBackControl() : templates.getQuitControl(),
                 templates.getControls().append(
-                    templates.getIntervalDropdown().on('click', 'li a', changeView),
+                    drop = templates.getIntervalDropdown().on('click', 'li a', changeView),
                     templates.getPopover(standalone)
                 )
             )
             .on('click', '.close-control a', clickButton);
+            drop.find('a.dropdown-toggle').dropdown();
         },
 
         getInstance: function (options, callback) {
