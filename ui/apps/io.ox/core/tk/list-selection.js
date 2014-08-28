@@ -127,11 +127,13 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.view.trigger('selection:doubleclick', [cid]);
         },
 
-        triggerChange: function () {
-            var list = this.get(), events = 'selection:change ';
-            if (list.length === 0) events += 'selection:empty';
-            else if (list.length === 1) events += 'selection:one';
-            else if (list.length > 1) events += 'selection:multiple';
+        triggerChange: function (items) {
+            items = items || this.getItems();
+            var list = this.get(), events = 'selection:change';
+            if (list.length === 0) events += ' selection:empty';
+            else if (list.length === 1) events += ' selection:one';
+            else if (list.length > 1) events += ' selection:multiple';
+            if (items.length === list.length) events += ' selection:all'; else events += ' selection:subset';
             this.view.trigger(events, list);
         },
 
@@ -228,14 +230,14 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.resetCheckmark(items);
             this.resetTabIndex(items, items.eq(index));
             this.pick(index, items);
-            this.triggerChange();
+            this.triggerChange(items);
         },
 
         selectAll: function () {
             var items = this.getItems();
             this.check(items.slice(0, items.length));
             this.focus(0, items);
-            this.triggerChange();
+            this.triggerChange(items);
         },
 
         selectNone: function () {
@@ -303,7 +305,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.resetTabIndex(items, items.eq(index));
             this.resetCheckmark(items);
             this.pick(index, items, e);
-            this.triggerChange();
+            this.triggerChange(items);
         },
 
         onPageUpDown: function (e) {
@@ -376,7 +378,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
             // range select / single select
             this.pick(index, items, e);
-            if (!_.isEqual(previous, this.get())) this.triggerChange();
+            if (!_.isEqual(previous, this.get())) this.triggerChange(items);
         },
 
         onSwipeLeft: function (e) {

@@ -78,23 +78,15 @@ define('io.ox/mail/view-options',
         }
     });
 
+    function toggleControl(i, state) {
+        i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o');
+    }
+
     function toggleSelection(e) {
         if (e.type === 'click' || e.keyCode === 32) {
             e.preventDefault();
-            var i = $(this).find('i'),
-            selection = e.data.baton.app.listView.selection;
-            if (i.hasClass('fa-check-square-o')) {
-                i.attr('class', 'fa fa-square-o');
-                selection.selectNone();
-            } else {
-                i.attr('class', 'fa fa-check-square-o');
-                selection.selectAll();
-            }
-
-             e.data.baton.view.listView.on('selection:empty', function () {
-                i.removeClass('fa fa-check-square-o');
-                i.addClass('fa fa-square-o');
-            });
+            var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
+            if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();
         }
     }
 
@@ -113,6 +105,17 @@ define('io.ox/mail/view-options',
                 })
                 .on('keydown', { baton: baton }, toggleSelection)
             );
+
+            var i = this.find('.select-all > i');
+
+            baton.view.listView.on({
+                'selection:all': function () {
+                    toggleControl(i, true);
+                },
+                'selection:subset': function () {
+                    toggleControl(i, false);
+                }
+            });
         }
     });
 
