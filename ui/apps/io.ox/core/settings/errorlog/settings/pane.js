@@ -243,7 +243,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
         getUrl: function (model) {
             return model.get('url')
                 // obscure password parameters (see bug #27250)
-                .replace(/password=[^&#]+/g, 'password=****')
+                .replace(/(password\w*)=[^&#]+/g, '$1=****')
                 // make slahes and commas readable
                 .replace(/%2F/g, '/').replace(/%2C/g, ',');
         },
@@ -266,8 +266,10 @@ define('io.ox/core/settings/errorlog/settings/pane',
                         return data;
                     }
                     // obscure password properties (at least top-level; see bug #27250)
-                    if (_.isObject(data) && 'password' in data) {
-                        data.password = '****';
+                    if (_.isObject(data)) {
+                        _(data).each(function (value, key) {
+                            if (/password/.test(key)) data[key] = '****';
+                        });
                     }
                     return JSON.stringify(data, null, '  ');
                 })

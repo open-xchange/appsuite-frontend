@@ -3098,6 +3098,19 @@ input.flat-input {
             text-align: right;
         }
     }
+
+    .android {
+         .custom-dropdown.dropdown-menu {
+            /* active state must be disabled due to messed up active classes on android */
+            &.dropdown-menu li > a:active {
+                color: inherit;
+                text-decoration: none;
+                outline: 0;
+                background: none;
+            }
+        }
+    }
+
     //** blur style for body when mobile custom menus are shown **/
     .ios {
         #io-ox-core {

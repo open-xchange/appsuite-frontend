@@ -30,7 +30,7 @@ define('io.ox/core/api/folder',
     var // folder object cache
         folderCache = new cache.SimpleCache('folder', false),
         subFolderCache = new cache.SimpleCache('subfolder', true),
-        visibleCache = new cache.SimpleCache('visible-folder', true),
+        visibleCache = new cache.SimpleCache('visible-folder', false),
         firstSubFolderFetch = {},
 
         /**
