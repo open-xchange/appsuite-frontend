@@ -361,7 +361,9 @@ define('io.ox/files/api',
         } else {
             e.data.custom = {
                 type: 'error',
-                text: gt('This file has not been added') + '\n' + e.error
+                text: gt('This file could not be uploaded.') +
+                    // add native error message unless generic "0 An unknown error occurred"
+                    (!/^0 /.test(e.error) ? '\n' + e.error : '')
             };
         }
         return e;
