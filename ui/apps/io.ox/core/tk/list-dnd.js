@@ -87,16 +87,7 @@ define('io.ox/core/tk/list-dnd', [
             // avoid handling bubbling events
             if (e.isDefaultPrevented()) return; else e.preventDefault();
 
-            var ft = $(this).closest('.folder-tree'),
-                arrow = $(this).find('.folder-arrow'),
-                node = ft[0],
-                interval,
-                scrollSpeed = 0,
-                yMax,
-                RANGE = 3 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
-                MAX = 1, // Maximal scrolling speed in px/ms.
-                scale = MAX / RANGE,
-                nodeOffsetTop = 0;
+            var arrow = $(this).find('.folder-arrow');
 
             // css hover doesn't work!
             $(this).addClass('dnd-over');
@@ -105,66 +96,42 @@ define('io.ox/core/tk/list-dnd', [
                 clearTimeout(toggleTimer);
                 toggleTimer = setTimeout(toggle.bind(arrow), 1500);
             }
-
-            function canScroll() {
-                var scrollTop = node.scrollTop;
-                return scrollSpeed < 0 && scrollTop > 0 || scrollSpeed > 0 && scrollTop < yMax;
-            }
-
-            // The speed is specified in px/ms. A range of 1 to 10 results
-            // in a speed of 100 to 1000 px/s.
-            function scroll() {
-                if (canScroll()) {
-                    var t0 = new Date().getTime(), y0 = node.scrollTop;
-                    if (interval !== undefined) clearInterval(interval);
-                    interval = setInterval(function () {
-                        if (canScroll()) {
-                            var dt = new Date().getTime() - t0,
-                            y = y0 + scrollSpeed * dt;
-                            if (y < 0) y = 0;
-                            else if (y > yMax) y = yMax;
-                            else {
-                                node.scrollTop = y;
-                                return;
-                            }
-                        }
-                        clearInterval(interval);
-                        interval = undefined;
-                    }, 10);
-                } else {
-                    if (interval !== undefined) clearInterval(interval);
-                    interval = undefined;
-                }
-            }
-
-            $(node).on({
-                'mousemove.dnd': function (e) {
-                    if (helper === null) return;
-                    if (!nodeOffsetTop) { nodeOffsetTop = $(node).offset().top; }
-                    var y = e.pageY - nodeOffsetTop;
-                    yMax = node.scrollHeight - node.clientHeight;
-
-                    if (y < RANGE) {
-                        scrollSpeed = (y - RANGE) * scale;
-                    } else if (node.clientHeight - y < RANGE) {
-                        scrollSpeed = (RANGE - node.clientHeight + y) * scale;
-                    } else {
-                        scrollSpeed = 0;
-                    }
-                    scroll();
-                },
-                'mouseleave.dnd': function () {
-                    scrollSpeed = 0;
-                    scroll();
-                    $(node).off('mousemove.dnd mouseleave.dnd');
-                }
-            });
         }
 
         function out() {
             clearTimeout(toggleTimer);
             $(this).removeClass('dnd-over');
         }
+
+        //
+        // Auto-Scroll
+        //
+
+        var scroll = (function () {
+
+            var y = 0, timer = null;
+
+            return {
+                move: function (e) {
+                    y = e.pageY - $(this).offset().top;
+                },
+                out: function () {
+                    clearInterval(timer);
+                    timer = null;
+                },
+                over: function () {
+                    if (timer) return;
+                    var height = this.clientHeight;
+                    timer = setInterval(function () {
+                        var threshold = Math.round(y / height * 10) - 5,
+                            sign = threshold < 0 ? -1 : +1,
+                            abs = Math.abs(threshold);
+                        if (abs > 2) this.scrollTop += sign * (abs - 2) * 2;
+                    }.bind(this), 5);
+                }
+            };
+
+        }());
 
         function drag(e) {
             // unbind
@@ -194,8 +161,11 @@ define('io.ox/core/tk/list-dnd', [
             // bind
             $(document).on('mousemove.dnd', move)
                 .one('mousemove.dnd', firstMove)
+                .on('mouseover.dnd', '.folder-tree', scroll.over)
+                .on('mouseout.dnd',  '.folder-tree', scroll.out)
+                .on('mousemove.dnd', '.folder-tree', scroll.move)
                 .on('mouseover.dnd', options.dropzoneSelector, over)
-                .on('mouseout.dnd', options.dropzoneSelector, out);
+                .on('mouseout.dnd',  options.dropzoneSelector, out);
         }
 
         function remove() {
@@ -206,6 +176,8 @@ define('io.ox/core/tk/list-dnd', [
         }
 
         function stop() {
+            // stop auto-scroll
+            scroll.out();
             // unbind handlers
             $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd');
             $('.dropzone').each(function () {
