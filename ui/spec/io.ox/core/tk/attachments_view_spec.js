@@ -18,7 +18,7 @@ define([
     'use strict';
     var views = attachments.view;
 
-    describe.only('Attachments Views:', function () {
+    describe('Attachments Views:', function () {
         it('API should provide an AttachmentList view', function () {
             expect(views.AttachmentList).to.exist;
         });
@@ -298,6 +298,28 @@ define([
                    expect(list.$('header').text(), 'header text').to.contain('3 Attachments');
                 });
             });
+        });
+    });
+
+    describe('Attachment View:', function () {
+        var FakeModel = Backbone.Model.extend({
+            needsUpload: sinon.stub().returns(false),
+            getTitle: sinon.stub().returns('TestTitle')
+        });
+
+        it('should render a li item', function () {
+            var view = new views.Attachment({
+                model: new FakeModel()
+            });
+            view.render();
+            expect(view.$el.is('li'), 'rendered element is a li element').to.be.true;
+        });
+        it('should render the title', function () {
+            var view = new views.Attachment({
+                model: new FakeModel()
+            });
+            view.render();
+            expect(view.$el.text(), 'the rendered text').to.contain('TestTitle');
         });
     });
 });
