@@ -336,9 +336,10 @@ define('io.ox/core/extPatterns/links',
             if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
 
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
+                var dd;
                 nav.append(
                     $('<li class="dropdown">').append(
-                        $('<a>').addClass('actionlink').attr({
+                        dd = $('<a>').addClass('actionlink').attr({
                             href: '#',
                             tabindex: 1,
                             role: 'menuitem',
@@ -347,8 +348,8 @@ define('io.ox/core/extPatterns/links',
                             'aria-haspopup': true,
                             'aria-label': isSmall ? gt('Actions') : gt('More')
                         }).append(
-                            isSmall ? $.txt(gt('Actions')) : $('<i class="fa fa-bars">'),
-                            $('<i class="fa fa-caret-down">')
+                            isSmall ? $.txt(gt('Actions')) : $('<span class="sr-only">' + gt('Actions') + '</span><i aria-hidden="true" class="fa fa-bars">'),
+                            $('<i aria-hidden="true" class="fa fa-caret-down">')
                         )
                         .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
@@ -360,6 +361,7 @@ define('io.ox/core/extPatterns/links',
                             .append(lo)
                     )
                 );
+                dd.dropdown();
                 injectDividers(nav.find('ul'));
             }
 
@@ -436,14 +438,14 @@ define('io.ox/core/extPatterns/links',
         var label = baton.label || options.label,
             args = $.makeArray(arguments),
             node = baton.$el || $('<div>'),
-            ul;
+            ul, toggle;
 
         // label: Use baton or String or DOM node
         label = _.isString(label) ? $.txt(label) : label;
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                $('<a>').attr({
+                toggle = $('<a>').attr({
                     href: '#',
                     tabindex: 1,
                     'data-toggle': 'dropdown',
@@ -456,7 +458,7 @@ define('io.ox/core/extPatterns/links',
                 ul = $('<ul class="dropdown-menu" role="menu">')
             )
         );
-
+        toggle.dropdown();
         // store reference to <ul>; we need that for mobile drop-downs
         node.data('ul', ul);
 

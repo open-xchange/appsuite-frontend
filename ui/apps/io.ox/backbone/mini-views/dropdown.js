@@ -104,12 +104,13 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         render: function () {
             var label = _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label),
-                ariaLabel = this.options.aria ? this.options.aria : '';
+                ariaLabel = this.options.aria ? this.options.aria : '',
+                toggle;
             if (_.isString(label)) {
                 ariaLabel += (' ' + label);
             }
             this.$el.append(
-                $('<a>').attr({
+                toggle = $('<a>').attr({
                     href: '#',
                     tabindex: 1,
                     role: 'menuitem',
@@ -122,10 +123,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                         label
                     ),
                     // caret
-                    this.options.caret ? $('<i class="fa fa-caret-down">') : []
+                    this.options.caret ? $('<i aria-hidden="true" class="fa fa-caret-down">') : []
                 ),
                 this.$ul
             );
+            toggle.dropdown();
             // update custom label
             this.label();
             return this;

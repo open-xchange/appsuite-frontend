@@ -27,7 +27,7 @@
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
     "requirejs": "2.1.14",
-    "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#72ff07f1ab6d3a4cf7c431a4ac2d62b12424904a",
+    "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#c43bb9ff68dd404f774df357bd9e7e0bf296e0e8",
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
     "bootstrap-tokenfield": "https://github.com/sliptree/bootstrap-tokenfield.git#481c1b883707620bb02861e3f83891bcebc379cc",
     "typeahead.js": "~0.10.5"
