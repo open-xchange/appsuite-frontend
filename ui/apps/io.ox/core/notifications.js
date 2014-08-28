@@ -581,9 +581,10 @@ define('io.ox/core/notifications',
 
     var controller = new NotificationController();
 
-    // auto-close if other apps are started; see bug #32768
+    // auto-close if other apps are started or app is changed see bug #32768
     // users might open mails from notification area, open a contact halo, clicking edit
-    ox.on('app:start', function () {
+    ox.on('app:start app:resume', function () {
+        console.log(arguments);
         if (controller.badgeView) {//don't trigger to early
             controller.hideList();
         }
