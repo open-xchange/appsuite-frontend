@@ -34,7 +34,7 @@ define('io.ox/core/tk/list',
     var ListView = Backbone.View.extend({
 
         tagName: 'ul',
-        className: 'list-view scrollpane',
+        className: 'list-view scrollpane f6-target',
 
         // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
         // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/

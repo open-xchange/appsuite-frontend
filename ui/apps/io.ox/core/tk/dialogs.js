@@ -570,7 +570,7 @@ define('io.ox/core/tk/dialogs',
 
             overlay,
 
-            pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs" tabindex="1">'),
+            pane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
                     $('<a class="btn-sidepopup" data-action="close" role="button" tabindex="1">')

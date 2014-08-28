@@ -37,14 +37,14 @@ define('io.ox/core/folder/tree',
             options = _.extend({ contextmenu: false }, options);
 
             this.app = options.app;
-            this.root = options.root || 'default0/INBOX';
+            this.root = options.root || 'default0/INBOX';
             this.module = options.module;
             this.open = options.open;
             this.flat = !!options.flat;
             this.context = options.context || 'app';
             this.all = !!options.all;
             this.$el.data('view', this);
-            this.$container = $('<ul class="tree-container" role="tree">');
+            this.$container = $('<ul class="tree-container f6-target" role="tree">');
             this.$dropdown = $();
             this.$dropdownMenu = $();
             this.options = options;
