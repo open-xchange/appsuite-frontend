@@ -291,35 +291,37 @@ define('io.ox/mail/common-extensions',
 
             var customAttachmentView,
                 renderCustomControls = function (widget) {
-                    if (this.preview) return; //only for non-preview view
-
-                    var label = this.model.getTitle() || ('Attachment #' + this.model.collection.indexOf(this.model))
-                        // lower case file extensions for better readability
-                        .replace(/\.(\w+)$/, function (match) {
-                            return match.toLowerCase();
-                        });
+                    return widget;
+                },
+                renderCustomContent = function (widget) {
                     var dd = new links.Dropdown({
-                            label: label,
-                            icon: 'fa fa-bars',
-                            noCaret: true,
+                            label: '',
+                            noCaret: this.preview,
                             ref: 'io.ox/mail/attachment/links'
                         }).draw.call(widget, ext.Baton({ data: this.model.attributes, $el: widget })),
-                        url, contentType;
+                        url, contentType, size;
 
                     url = api.getUrl(this.model.attributes, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
-                    dd.find('a[data-toggle= "dropdown"]')
-                        .addClass('control');
 
                     this.$el.attr({
-                            title: this.model.getTitle(),
-                            draggable: true,
-                            'data-downloadurl': contentType + ':' + this.model.getTitle().replace(/:/g, '') + ':' + ox.abs + url
-                        })
-                        .on('dragstart', function (e) {
-                            $(this).css({ display: 'inline-block' });
-                            e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
-                        });
+                        title: this.model.getTitle(),
+                        draggable: true,
+                        'data-downloadurl': contentType + ':' + this.model.getTitle().replace(/:/g, '') + ':' + ox.abs + url
+                    })
+                    .on('dragstart', function (e) {
+                        $(this).css({ display: 'inline-block' });
+                        e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+                    });
+
+                    dd.find('a[data-toggle="dropdown"]').prepend(
+                        this.model.getTitle(),
+                        size = $('<span class="filesize">').text(
+                            strings.fileSize(this.model.get('file_size') || this.model.get('size'))
+                        )
+                    );
+                    if (size.text() === '0 B') { size.text(' '); }
+                    return widget;
                 },
                 CustomAttachmentList;
 
@@ -332,7 +334,8 @@ define('io.ox/mail/common-extensions',
                 require(['io.ox/core/tk/attachments'], function (attachments) {
                     _.once(function () {
                         customAttachmentView = attachments.view.Attachment.extend({
-                            renderCustomControls: renderCustomControls
+                            renderCustomControls: renderCustomControls,
+                            renderCustomContent: renderCustomContent
                         });
                         CustomAttachmentList = attachments.view.AttachmentList.extend({
                             renderCustomHeader: function () {

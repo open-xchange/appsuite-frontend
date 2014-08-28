@@ -33,7 +33,19 @@
             margin-right: 1px;
 
             .io-ox-core-tk-attachment {
+                background-color: inherit;
                 height: 2em;
+                padding: 4px 5px 4px 5px;
+
+                .filesize {
+                    padding-left: 1em;
+                }
+            }
+
+            &.editable {
+                background-color: #f5f5f5;
+                border: 0;
+                padding: 4px 2.5em 4px 5px;
             }
         }
 
@@ -242,57 +254,57 @@
     &.preview {
 
         margin: 0;
-        overflow-x: auto;
-        overflow-y: hidden;
         white-space: nowrap;
 
-        .item {
+        ul.inline-items {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        ul.inline-items li.item {
 
-            position: relative;
-            height: 120px;
-            width: 120px;
             background-color: #f5f5f5;
+            height: 120px;
+            padding: 0;
+            position: relative;
+            width: 120px;
 
-            &:hover .io-ox-core-tk-attachment {
-                height: 100%;
+            &:hover .io-ox-core-tk-attachment, &:hover .control {
+                display: block;
             }
 
             .io-ox-core-tk-attachment {
+                background-color: rgba(0, 0, 0, 0.6);
                 bottom: 0;
-                height: 0;
+                color: @white;
+                display: none;
+                height: 3em;
                 margin: 0;
                 padding: 0;
                 position: absolute;
                 width: 100%;
-                background-color: rgba(0, 0, 0, 0.6);
-                color: @white;
 
-                > i.fa-paperclip {
-                    display: none;
+                .filesize {
+                    display: block;
+                    padding-left: 0;
                 }
-
-                > .row-1 {
-                    left: 3px;
-                    right: 3px;
-                    top: 60%;
-                }
-
-                > .row-2 {
-                    left: 3px;
-                    right: 3px;
-                    top: 77%;
-                }
-
-                .remove {
-                    bottom: initial;
-                    background-color: initial;
-                    top: 0;
-                    right: 0;
-                    height: 2em;
-                }
-
             }
 
+            .control {
+                display: none;
+            }
+            .remove {
+                background-color: initial;
+                bottom: 0;
+                height: 3em;
+                right: 0;
+                top: auto;
+
+                .fa {
+                    bottom: 3px;
+                    font-size: 20px;
+                    top: auto;
+                }
+            }
         }
 
     }

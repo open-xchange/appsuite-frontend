@@ -980,13 +980,29 @@ define('io.ox/core/tk/attachments',
                     $('<a href="#" class="control remove" tabindex="1">')
                         .attr('title', gt('Remove attachment'))
                         .append($('<i class="fa fa-trash-o">'))
-                );
+                ).addClass('editable');
             }
+        },
+        renderDefaultContent: function (widget) {
+            var size;
+            widget.append(
+                this.model.getTitle(),
+                size = $('<span class="filesize">').text(
+                    strings.fileSize(this.model.get('file_size') || this.model.get('size'))
+                )
+            );
+            if (size.text() === '0 B') { size.text(' '); }
+            return widget;
+        },
+        renderContent: function (widget) {
+            if (_.isFunction(this.renderCustomContent)) {
+                return this.renderCustomContent(widget);
+            }
+            return this.renderDefaultContent(widget);
         },
         render: function () {
             this.$el.empty();
-            var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el),
-                size;
+            var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el);
 
             if (this.preview) {
                 this.preview.render();
@@ -996,16 +1012,9 @@ define('io.ox/core/tk/attachments',
                     this.progress = $('<div class="progress">')
                 );
             }
-            widget.append(
-                $('<div class="icon">').append($('<i class="fa fa-paperclip">')),
-                $('<div class="row-1">').append(this.model.getTitle()),
-                $('<div class="row-2">').append(
-                    size = $('<span class="filesize">').text(strings.fileSize(this.model.get('file_size') || this.model.get('size')))
-                )
-            );
-            if (size.text() === '0 B') { size.text(' '); }
+            this.renderContent(widget);
 
-            this.renderControls(widget);
+            this.renderControls(this.$el);
             return this;
         }
     });
