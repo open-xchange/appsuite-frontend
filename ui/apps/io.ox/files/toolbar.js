@@ -16,14 +16,12 @@ define('io.ox/files/toolbar',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
      'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
      'io.ox/core/notifications',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/files/actions',
      'less!io.ox/files/style'
-    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt, api) {
+    ], function (ext, links, actions, Dropdown, notifications, gt, api) {
 
     'use strict';
 
