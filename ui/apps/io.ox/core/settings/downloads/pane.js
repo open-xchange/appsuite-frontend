@@ -17,13 +17,15 @@ define('io.ox/core/settings/downloads/pane',
      'io.ox/core/config',
      'gettext!io.ox/core',
      'settings!io.ox/core',
-     'less!io.ox/core/settings/downloads/style'
-    ], function (ext, capabilities, config, gt, settings) {
+     'settings!plugins/portal/oxdriveclients',
+     'less!io.ox/core/settings/downloads/style',
+     'less!plugins/portal/oxdriveclients/style'
+    ], function (ext, capabilities, config, gt, settings, driveClientsSettings) {
 
     'use strict';
 
-    // please no download on mobile devices or when disabled via setting
-    if (_.device('!desktop') || settings.get('settings/downloadsDisabled')) return;
+    // please no download when disabled via setting
+    if (settings.get('settings/downloadsDisabled')) return;
 
     //available products (ox6 setting)
     var list = ((config.get('modules') || {})['com.openexchange.oxupdater'] || {}).products || [],
@@ -75,7 +77,7 @@ define('io.ox/core/settings/downloads/pane',
                             $('<p>').text(
                                 gt('Informs about the current status of E-Mails and appointments without having to display the user interface or another Windows® client.')
                         )
-                    ),
+                    )/*,
                     $('<section>')
                         .addClass(products['com.openexchange.updater.drive'] ? '' : 'hidden')
                         .append(
@@ -83,10 +85,75 @@ define('io.ox/core/settings/downloads/pane',
                             $('<p>').text(
                                 gt('Data synchronization with your local (Windows) machine. Drive Client lets you configure the folders to be synchronized.')
                         )
-                    )
+                    )*/
                 );
             }
         });
+    }
+
+    // add OX Drive download links
+    if (capabilities.has('infostore')) {
+
+        var productName = driveClientsSettings.get('productName'),
+            linkTo = driveClientsSettings.get('linkTo');
+
+        var getShopLinkWithImage = function (platform, url) {
+            var lang = ox.language.split('_')[0],
+                // languages we have custom shop icons for
+                langs = driveClientsSettings.get('l10nImages'),
+                imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/',
+                platform = platform.toLowerCase();
+            // fallback
+            if (_.indexOf(langs, lang) === -1) lang = 'en';
+
+            var $img = $('<div class="oxdrive-shop-image ' + platform +'">')
+                .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
+
+            return $('<a class="shoplink">').attr({
+                        href: url,
+                        target: '_blank',
+                        aria: gt.format(gt('Download the %s client for %s'), productName, platform)
+
+                    }).append($img);
+        };
+
+        ext.point('io.ox/core/settings/downloads/pane/detail').extend({
+            id: 'oxdrive',
+            index: 200,
+            draw: function () {
+
+                var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session;
+
+                this.append(
+                    $('<section class="oxdrive">').append(
+                        $('<h2>').text(productName),
+                        products['com.openexchange.updater.drive'] ? $('<div class="shop-link-container">').append(
+                            //.# String will include the product name, "OX Drive for Windows"
+                            gt.format(gt('%s client for Windows (Installation via the OX Updater)'), productName),
+                            $('<br>'),
+                            $('<i class="fa fa-download">'),
+                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download installation file'))
+
+                        ) : [],
+                        $('<div class="shop-link-container">').append(
+                            //.# String will include the product name, "OX Drive for Mac OS"
+                            gt.format(gt('%s client for Mac OS'), productName),
+                            getShopLinkWithImage('mac_os', linkTo['Mac OS'])
+                        ),
+                        $('<div class="shop-link-container">').append(
+                            //.# String will include the product name, "OX Drive for Mac OS"
+                            gt.format(gt('%s client for iOS'), productName),
+                            getShopLinkWithImage('iOS', linkTo.iOS)
+                        ),
+                        $('<div class="shop-link-container">').append(
+                            //.# String will include the product name, "OX Drive for Mac OS"
+                            gt.format(gt('%s client for Android'), productName),
+                            getShopLinkWithImage('Android', linkTo.Android)
+                        )
+                    )
+                );
+            }
+         });
     }
 
     // no download available?

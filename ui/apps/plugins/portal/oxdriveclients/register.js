@@ -51,7 +51,7 @@ define('plugins/portal/oxdriveclients/register',
 
         var lang = ox.language.split('_')[0],
             // languages we have custom shop icons for
-            langs = ['de', 'en', 'es', 'fr', 'it', 'nl'],
+            langs = settings.get('l10nImages'),
             imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/',
             platform = platform.toLowerCase();
         // fallback
@@ -65,13 +65,15 @@ define('plugins/portal/oxdriveclients/register',
             return $('<a class="shoplink">').attr({
                         href: url,
                         target: '_blank',
+                        aria: gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)
                     }).append($img);
         } else if (platform === 'windows' && capabilities.has('oxupdater')) {
             return  [$('<i class="fa fa-download">'),
                     $('<a class="shoplink">').attr({
                         href: ox.apiRoot + url + '?session=' + ox.session,
-                        target: '_blank'
-                    }).text(gt('Download installation file (for Windows)'))
+                        target: '_blank',
+                        aria: gt.format(gt('Download the %s client for %s via the OX updater'), settings.get('productName'), platform)
+                    }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
                     ];
         } else {
             return $();
@@ -122,7 +124,8 @@ define('plugins/portal/oxdriveclients/register',
                 )
             );
             // all other platforms
-            ul.append($('<li>').append($('<h3>').text(gt('OX Drive is also available for other platforms:'))));
+            // .# Product name will be inserted, i.E. "Ox Drive is also available for other platforms". Platforms is meant as operating system like Windows
+            ul.append($('<li>').append($('<h3>').text(gt.format(gt('%s is also available for other platforms:'), settings.get('productName')))));
 
             _.each(getAllOtherPlatforms(), function (os) {
                 ul.append($('<li class="link">').append(getShopLinkWithImage(os, settings.get('linkTo/' + os))));

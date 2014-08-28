@@ -22,6 +22,9 @@ define('plugins/portal/oxdriveclients/settings/defaults', function () {
             'Mac OS': 'https://itunes.apple.com/us/app/ox-drive/id818195014?l=de&ls=1&mt=12',
             'Windows': '/updater/installer/oxupdater-install.exe'
         },
+        // list all languages for which are localized shop images available. All other will fall back to EN
+        // images are located under apps/plugins/portal/oxdriveclients/img
+        l10nImages: ['de', 'en', 'es', 'fr', 'it', 'nl'],
         // defaults to OX Drive with our logo
         productName: 'OX Drive',
         // App Icon as 144x144px png in base64 encoding
