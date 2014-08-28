@@ -528,7 +528,7 @@ define('io.ox/core/notifications',
                         reuse = true;
                         className += ' appear';
                     } else {
-                        node = $('<div role="alert" tabindex="-1">');
+                        node = $('<div tabindex="-1">');
                     }
 
                     node.attr('class', className).append(
@@ -537,20 +537,21 @@ define('io.ox/core/notifications',
                         )
                     );
 
-                    if (o.type !== 'screenreader') {
+                    //DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
+                    _.defer(function () {
                         node.append(
-                            $('<div class="message user-select-text">').append(
+                            $('<div role="alert" aria-live="polite" class="message user-select-text">').append(
                                 o.headline ? $('<h2 class="headline">').text(o.headline) : [],
                                 $('<div>').css('word-break', wordbreak).html(html)
-                            ),
-                            $('<a href="#" role="button" class="close fa fa-times" tabindex="1">').attr('aria-label', gt('Click to close this notification'))
+                            )
                         );
-                    } else {
+                    });
+
+                    if (o.type !== 'screenreader') {
                         node.append(
-                            $('<div class="message user-select-text">').append(
-                                o.headline ? $('<h2 class="headline">').text(o.headline) : []
-                            ),
-                            $('<div>').css('word-break', wordbreak).html(html)
+                            $('<a href="#" role="button" class="close" tabindex="1">').append(
+                                $('<i class="fa fa-times" aria-hidden="true">'),
+                                $('<span class="sr-only">').text(gt('Click to close this notification')))
                         );
                     }
 
