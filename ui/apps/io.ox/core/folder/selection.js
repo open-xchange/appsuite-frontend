@@ -155,7 +155,7 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         check: function (nodes) {
-            return nodes.addClass('selected').attr('aria-selected', true);
+            return nodes.addClass('selected').attr({ 'aria-selected': true, tabindex: 1 });
         },
 
         uncheck: function (nodes) {
