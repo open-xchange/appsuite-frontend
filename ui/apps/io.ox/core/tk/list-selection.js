@@ -129,11 +129,15 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         triggerChange: function (items) {
             items = items || this.getItems();
+            // default event
             var list = this.get(), events = 'selection:change';
+            // empty, one, multiple
             if (list.length === 0) events += ' selection:empty';
             else if (list.length === 1) events += ' selection:one';
             else if (list.length > 1) events += ' selection:multiple';
-            if (items.length === list.length) events += ' selection:all'; else events += ' selection:subset';
+            // all vs subset
+            if (items.length > 0 && items.length === list.length) events += ' selection:all';
+            else events += ' selection:subset';
             this.view.trigger(events, list);
         },
 
