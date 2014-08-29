@@ -28,7 +28,7 @@ define('io.ox/core/tk/folderviews',
 
     'use strict';
 
-    console.warn('Module "io.ox/core/tk/folderviews" is deprecated.');
+    if (ox.debug) console.warn('Module "io.ox/core/tk/folderviews" is deprecated.');
 
     var OPEN = 'fa fa-chevron-right',
         CLOSE = 'fa fa-chevron-down',
