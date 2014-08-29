@@ -722,7 +722,7 @@ define('io.ox/core/tk/attachments',
             var supportsDocumentPreview = capabilities.has('document_preview'),
                 filename = this.get('filename'),
                 url;
-            if (!(this.get('disp') === 'attachment' && (regIsImage.test(filename) ||
+            if (!(this.isFileAttachment() && (regIsImage.test(filename) ||
                 supportsDocumentPreview && regIsDocument.test(filename))))
             {
                 return null;
