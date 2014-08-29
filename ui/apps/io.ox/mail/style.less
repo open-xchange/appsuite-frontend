@@ -1276,7 +1276,11 @@ textarea.inplace-editor {
 
             // TODO: Remove width:auto for correct styling of mail-chimp mails
             // Leaving this for now, needs testing!
-            width: auto;
+
+            // Removed this on 29.8.14
+            // Seems this is a relict from Bootstrap 2.x
+            // As we are now on 3.0 and Bootstrap added a new image-responsive class we do not have to reset this here
+            //width: auto;
 
             max-width: 10000px;
             vertical-align: middle;
