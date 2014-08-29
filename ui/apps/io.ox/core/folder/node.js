@@ -205,6 +205,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             return new TreeNodeView(options);
         },
 
+        // indentation in px per level
+        indentation: 30,
+
         functions: function () {
 
             // functions that use debounce or throttle must be defined
@@ -293,7 +296,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                 .append(
                     // folder
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
-                    .css('padding-left', o.level * 30)
+                    .css('padding-left', o.level * this.indentation)
                     .append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : $(),
                         this.$.label = $('<div class="folder-label">'),
