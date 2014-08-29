@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-.io-ox-core-tk-attachment-list, .io-ox-core-tk-attachment-list > ul {
+.io-ox-core-tk-attachment-list {
 
     padding: 0;
 
@@ -23,12 +23,18 @@
         padding: 0 0.5em;
     }
 
-    &.inline-items {
+    ul.inline-items {
+
+        padding-left: 0;
 
         li.item {
             display: inline-block;
             padding: 4px 0.5em 4px 5px;
             margin-right: 1px;
+
+            .io-ox-core-tk-attachment {
+                height: 2em;
+            }
         }
 
         &.preview li.item{
@@ -75,6 +81,7 @@
         }
 
         > i {
+            position: absolute;
             font-size: 20px;
             top: 12px;
             left: 11px;
@@ -86,7 +93,7 @@
             padding-right: 0.5em;
         }
 
-        .control {
+        .control, .remove {
             display: inline-block;
             position: absolute;
             top: 1px;
@@ -120,7 +127,6 @@
             text-decoration: none;
         }
 
-
         .group-label {
             display: block;
             font-style: italic;
@@ -153,10 +159,20 @@
         }
 
         .row-1 {
-            margin-left: 0.5em;
+            position: absolute;
+            left: 40px;
+            right: 30px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        .row-2 {
+            position: absolute;
+            left: 40px;
+            right: 30px;
+            top: 23px;
+        }
+
     }
 
     .col-md-6:nth-child(odd) {
@@ -167,29 +183,27 @@
     .io-ox-core-tk-attachment {
 
         position: relative;
-        height: 2em;
+        height: 3em;
         line-height: 1.5em;
         margin-bottom: 2px;
         padding: 4px 2.5em 4px 5px;
         background-color: #f5f5f5;
 
-        i {
+        > i, .remove i {
+            position: absolute;
             font-size: 20px;
             top: 12px;
             left: 11px;
         }
 
-        div {
+        > div {
+            position: absolute;
             left: 40px;
             right: 30px;
             .ellipsis();
 
-            &.icon, &.row-2, &.row-1 {
-                display: inline-block;
-            }
             &.row-2 {
-                float: right;
-                margin-left: 1em;
+                top: 23px;
             }
         }
 
@@ -253,23 +267,18 @@
                 background-color: rgba(0, 0, 0, 0.6);
                 color: @white;
 
-                > .icon > i.fa-paperclip {
+                > i.fa-paperclip {
                     display: none;
                 }
 
                 > .row-1 {
                     left: 3px;
-                    margin-left: 0;
-                    position: absolute;
                     right: 3px;
                     top: 60%;
                 }
 
                 > .row-2 {
-                    float: none;
                     left: 3px;
-                    margin-left: 0;
-                    position: absolute;
                     right: 3px;
                     top: 77%;
                 }
