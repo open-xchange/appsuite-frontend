@@ -92,7 +92,7 @@ define('io.ox/mail/compose/view',
         id: 'add_attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div class="col-xs-12 col-md-5 col-md-offset-1">').attr('data-extension-id', 'add_attachments');
+            var node = $('<div data-extension-id="add_attachments" class="col-xs-12 col-md-5 col-md-offset-1">');
             extensions.attachment.call(node, baton);
             this.append(node);
         }
@@ -153,9 +153,11 @@ define('io.ox/mail/compose/view',
             signatureDropdown.$ul.addClass('pull-right');
 
             this.append(
-                $('<div class="col-xs-12 col-md-6 pull-right text-right">').append(
-                    signatureDropdown.render().$el.addClass('signatures text-left'),
-                    optionDropdown.render().$el.addClass('text-left')
+                $('<div data-extension-id="composetoolbar-menu" class="col-xs-12 col-md-6">').append(
+                    $('<div class="pull-right text-right">').append(
+                        signatureDropdown.render().$el.addClass('signatures text-left'),
+                        optionDropdown.render().$el.addClass('text-left')
+                    )
                 )
             );
         }
@@ -165,7 +167,7 @@ define('io.ox/mail/compose/view',
         id: 'composetoolbar',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div class="row composetoolbar">');
+            var node = $('<div data-extension-id="composetoolbar" class="row composetoolbar">');
             ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
             this.append(node);
         },
