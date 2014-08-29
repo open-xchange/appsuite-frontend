@@ -799,7 +799,7 @@ define('io.ox/core/tk/attachments',
             } else {
                 this.$el.removeClass('preview');
             }
-            return this.toggleContent('open').render();
+            return this.toggleContent('open').renderList();
         },
         toggleContent: function (forceState) {
             if (!this.$ul) {
