@@ -406,8 +406,6 @@ define('io.ox/files/main',
             require(['io.ox/search/main'], function (facetedsearch) {
                 //add reference: used in perspective
                 app.searchapi = facetedsearch.apiproxy;
-                //register
-                //commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
             });
         }
     });

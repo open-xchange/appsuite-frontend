@@ -469,39 +469,43 @@ define('io.ox/calendar/main',
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
 
-            require(['io.ox/search/main'], function (facetedsearch) {
-                var lastPerspective,
-                    SEARCH_PERSPECTIVE = 'list',
-                    cancelSearch = function () {
-                        var win = app.getWindow();
-                        if (win.facetedsearch && win.facetedsearch.view)
-                            win.facetedsearch.view.trigger('button:cancel');
-                    };
-                // register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
+            // when search is ready
+            win.facetedsearch.ready
+                .done(function () {
+                    require(['io.ox/search/main'], function (facetedsearch) {
+                        var lastPerspective,
+                            SEARCH_PERSPECTIVE = 'list',
+                            cancelSearch = function () {
+                                var win = app.getWindow();
+                                if (win.facetedsearch && win.facetedsearch.view)
+                                    win.facetedsearch.view.trigger('button:cancel');
+                            };
+                        // register
+                        commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
 
-                // additional handler: switch to list perspective (and back)
-                win.on({
-                    'search:query': function () {
-                        // switch to supported perspective
-                        lastPerspective =  app.props.get('layout') || _.url.hash('perspective');
-                        if (lastPerspective !== SEARCH_PERSPECTIVE) {
-                            // fluent option: do not write to user settings
-                            app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
-                            // cancel search when user changes view
-                            app.props.on('change', cancelSearch);
-                        }
-                    },
-                    'search:cancel': function () {
-                        // switch back to perspective used before
-                        var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
-                        if (lastPerspective && lastPerspective !== currentPerspective)
-                            ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
-                        // disable
-                        app.props.off('change', cancelSearch);
-                    }
+                        // additional handler: switch to list perspective (and back)
+                        win.on({
+                            'search:query': function () {
+                                // switch to supported perspective
+                                lastPerspective =  app.props.get('layout') || _.url.hash('perspective');
+                                if (lastPerspective !== SEARCH_PERSPECTIVE) {
+                                    // fluent option: do not write to user settings
+                                    app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
+                                    // cancel search when user changes view
+                                    app.props.on('change', cancelSearch);
+                                }
+                            },
+                            'search:cancel': function () {
+                                // switch back to perspective used before
+                                var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                                if (lastPerspective && lastPerspective !== currentPerspective)
+                                    ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
+                                // disable
+                                app.props.off('change', cancelSearch);
+                            }
+                        });
+                    });
                 });
-            });
         },
         /*
          * mobile only

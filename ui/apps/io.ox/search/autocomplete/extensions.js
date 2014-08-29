@@ -14,131 +14,267 @@
 define('io.ox/search/autocomplete/extensions',
     ['io.ox/core/extensions',
      'settings!io.ox/contacts',
-     'gettext!io.ox/core'], function (ext, settings, gt) {
+     'gettext!io.ox/core',
+     'less!io.ox/search/style'], function (ext, settings, gt) {
 
     var POINT = 'io.ox/search/autocomplete';
 
     var extensions = {
 
-        searchfield: function (baton) {
-            var ref,
-                app = baton.app,
-                model = baton.model,
-                container = baton.$.container,
-                group;
+        dummy: function (baton) {
+            var group;
             // input group and dropdown
             this.append(
                 group = $('<div class="input-group">')
                     .append(
-                        baton.$.input = ref = $('<input type="text" class="form-control search-field" tabindex="1">')
+                        $('<input type="text" class="form-control search-field" tabindex="1">')
                         .attr({
                             placeholder: gt('Search') + ' ...'
-                        })
-                        .autocomplete({
-                            api: app.apiproxy,
-                            minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
-                            mode: 'search',
-                            delay: 100,
-                            parentSelector: container  ? '.query' : '.io-ox-search',
-                            model: model,
-                            container: container,
-                            cbshow: function () {
-                                // reset autocomplete tk styles (currently only mobile)
-                                ext.point(POINT + '/style-container').invoke('draw', this, baton);
-
-                            },
-                            // TODO: would be nice to move to control
-                            source: function (val) {
-                                // show dropdown immediately (busy by autocomplete tk)
-                                ref.open();
-                                return app.apiproxy.search(val);
-                            },
-                            reduce: function (data) {
-                                // only show not 'advanced'
-                                data.list = _.filter(data.list, function (facet) {
-                                    return !_.contains(facet.flags, 'advanced');
-                                });
-                                return data;
-                            },
-                            draw: function (value) {
-                                var individual = ext.point(POINT + '/item/' + baton.data.facet);
-                                baton.data = value;
-
-                                // use special draw handler
-                                if (individual.list().length) {
-                                    // special
-                                    individual.invoke('draw', this, baton);
-                                } else {
-                                    // default
-                                    ext.point(POINT + '/item').invoke('draw', this, baton);
-                                }
-                            },
-                            stringify: function () {
-                                // keep input value when item selected
-                                return ref.val();
-                            },
-                            click: function (e) {
-
-                                // apply selected filter
-                                var node = $(e.target).closest('.autocomplete-item'),
-                                    value = node.data();
-                                ref.val('');
-
-                                // exclusive: define used option (type2 default is index 0 of options)
-                                var option = _.find(value.options, function (item) {
-                                    return item.id === value.id;
-                                });
-
-                                model.add(value.facet, value.id, (option || {}).id);
-                            }
-                        })
-                        .on('focus focus:custom click', function (e, opt) {
-
-                            //search mode: not when enterin input with tab key
-                            if (ref.data('byclick')) {
-                                ref.removeData('byclick');
-                                app.view.trigger('focus', model.getApp());
-                            }
-                            // hint: 'click' supports click on already focused
-                            // keep dropdown closed on focus event
-                            opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
-
-                            // simulate tab keyup event
-                            ref.trigger({
-                                    type: 'keyup',
-                                    which: 9
-                                }, opt);
-
-                        })
-                        .on('mousedown', function () {
-                            if(!ref.is(':focus'))
-                                ref.data('byclick', true);
-
-                        })
-                        .on('keyup', function (e, options) {
-                            var opt = _.extend({}, (e.data || {}), options || {}),
-                                // keys pressed
-                                down = e.which === 40 && !ref.isOpen(),
-                                tab = e.which === 9;
-
-                            // adjust original event instead of throwing a new one
-                            // cause handler (fnKeyUp) is debounced and we might set some options
-                            if (_.isUndefined(opt.isRetry) && (down || tab)) {
-                                e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
-                            }
                         })
                     )
             );
 
             //buttons
-            ext.point(POINT + '/cancel-button').invoke('draw', group, baton);
-            ext.point(POINT + '/search-button').invoke('draw', group, baton);
+            extensions.cancelButton.call(group, baton);
+            extensions.searchButton.call(group, baton);
 
             return this;
         },
 
-        cancelButton: function (baton) {
-            var view = baton.app.view;
+        register: function (baton) {
+            var ref = this.find('.search-field'),
+                app = baton.app,
+                model = baton.model,
+                view = baton.app.view,
+                container = baton.$.container;
+            // input group and dropdown
+            ref.autocomplete({
+                    api: app.apiproxy,
+                    minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
+                    mode: 'search',
+                    delay: 100,
+                    parentSelector: container  ? '.query' : '.io-ox-search',
+                    container: container,
+                    cbshow: function () {
+                        // reset autocomplete tk styles (currently only mobile)
+                        ext.point(POINT + '/style-container').invoke('draw', this, baton);
+
+                    },
+                    // TODO: would be nice to move to control
+                    source: function (val) {
+                        // show dropdown immediately (busy by autocomplete tk)
+                        ref.open();
+                        return app.apiproxy.search(val);
+                    },
+                    reduce: function (data) {
+                        // only show not 'advanced'
+                        data.list = _.filter(data.list, function (facet) {
+                            return !_.contains(facet.flags, 'advanced');
+                        });
+                        return data;
+                    },
+                    draw: function (value) {
+                        var individual = ext.point(POINT + '/item/' + baton.data.facet);
+                        baton.data = value;
+
+                        // use special draw handler
+                        if (individual.list().length) {
+                            // special
+                            individual.invoke('draw', this, baton);
+                        } else {
+                            // default
+                            ext.point(POINT + '/item').invoke('draw', this, baton);
+                        }
+                    },
+                    stringify: function () {
+                        // keep input value when item selected
+                        return ref.val();
+                    },
+                    click: function (e) {
+
+                        // apply selected filter
+                        var node = $(e.target).closest('.autocomplete-item'),
+                            value = node.data();
+                        ref.val('');
+
+                        // exclusive: define used option (type2 default is index 0 of options)
+                        var option = _.find(value.options, function (item) {
+                            return item.id === value.id;
+                        });
+
+                        model.add(value.facet, value.id, (option || {}).id);
+                    }
+                })
+                .on('focus focus:custom click', function (e, opt) {
+
+                    //search mode: not when enterin input with tab key
+                    if (ref.data('byclick')) {
+                        ref.removeData('byclick');
+                        app.view.trigger('focus', model.getApp());
+                    }
+                    // hint: 'click' supports click on already focused
+                    // keep dropdown closed on focus event
+                    opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
+
+                    // simulate tab keyup event
+                    ref.trigger({
+                            type: 'keyup',
+                            which: 9
+                        }, opt);
+
+                })
+                .on('mousedown', function () {
+                    if(!ref.is(':focus'))
+                        ref.data('byclick', true);
+
+                })
+                .on('keyup', function (e, options) {
+                    var opt = _.extend({}, (e.data || {}), options || {}),
+                        // keys pressed
+                        down = e.which === 40 && !ref.isOpen(),
+                        tab = e.which === 9;
+
+                    // adjust original event instead of throwing a new one
+                    // cause handler (fnKeyUp) is debounced and we might set some options
+                    if (_.isUndefined(opt.isRetry) && (down || tab)) {
+                        e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
+                    }
+                });
+
+            this.find('.btn-clear')
+                .on('click', function () {
+                    debugger;
+                    view.trigger('button:clear');
+                });
+
+            this.find('.btn-search')
+                .on('click', function (e) {
+                    debugger;
+                    ref.trigger(e);
+                    view.trigger('button:search');
+                });
+
+            return this;
+        },
+
+        // searchfield: function (baton) {
+        //     var ref,
+        //         app = baton.app,
+        //         model = baton.model,
+        //         container = baton.$.container,
+        //         group;
+        //     // input group and dropdown
+        //     this.append(
+        //         group = $('<div class="input-group">')
+        //             .append(
+        //                 baton.$.input = ref = $('<input type="text" class="form-control search-field" tabindex="1">')
+        //                 .attr({
+        //                     placeholder: gt('Search') + ' ...'
+        //                 })
+        //                 .autocomplete({
+        //                     api: app.apiproxy,
+        //                     minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
+        //                     mode: 'search',
+        //                     delay: 100,
+        //                     parentSelector: container  ? '.query' : '.io-ox-search',
+        //                     //model: model,
+        //                     container: container,
+        //                     cbshow: function () {
+        //                         // reset autocomplete tk styles (currently only mobile)
+        //                         ext.point(POINT + '/style-container').invoke('draw', this, baton);
+
+        //                     },
+        //                     // TODO: would be nice to move to control
+        //                     source: function (val) {
+        //                         // show dropdown immediately (busy by autocomplete tk)
+        //                         ref.open();
+        //                         return app.apiproxy.search(val);
+        //                     },
+        //                     reduce: function (data) {
+        //                         // only show not 'advanced'
+        //                         data.list = _.filter(data.list, function (facet) {
+        //                             return !_.contains(facet.flags, 'advanced');
+        //                         });
+        //                         return data;
+        //                     },
+        //                     draw: function (value) {
+        //                         var individual = ext.point(POINT + '/item/' + baton.data.facet);
+        //                         baton.data = value;
+
+        //                         // use special draw handler
+        //                         if (individual.list().length) {
+        //                             // special
+        //                             individual.invoke('draw', this, baton);
+        //                         } else {
+        //                             // default
+        //                             ext.point(POINT + '/item').invoke('draw', this, baton);
+        //                         }
+        //                     },
+        //                     stringify: function () {
+        //                         // keep input value when item selected
+        //                         return ref.val();
+        //                     },
+        //                     click: function (e) {
+
+        //                         // apply selected filter
+        //                         var node = $(e.target).closest('.autocomplete-item'),
+        //                             value = node.data();
+        //                         ref.val('');
+
+        //                         // exclusive: define used option (type2 default is index 0 of options)
+        //                         var option = _.find(value.options, function (item) {
+        //                             return item.id === value.id;
+        //                         });
+
+        //                         model.add(value.facet, value.id, (option || {}).id);
+        //                     }
+        //                 })
+        //                 .on('focus focus:custom click', function (e, opt) {
+
+        //                     //search mode: not when enterin input with tab key
+        //                     if (ref.data('byclick')) {
+        //                         ref.removeData('byclick');
+        //                         app.view.trigger('focus', model.getApp());
+        //                     }
+        //                     // hint: 'click' supports click on already focused
+        //                     // keep dropdown closed on focus event
+        //                     opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
+
+        //                     // simulate tab keyup event
+        //                     ref.trigger({
+        //                             type: 'keyup',
+        //                             which: 9
+        //                         }, opt);
+
+        //                 })
+        //                 .on('mousedown', function () {
+        //                     if(!ref.is(':focus'))
+        //                         ref.data('byclick', true);
+
+        //                 })
+        //                 .on('keyup', function (e, options) {
+        //                     var opt = _.extend({}, (e.data || {}), options || {}),
+        //                         // keys pressed
+        //                         down = e.which === 40 && !ref.isOpen(),
+        //                         tab = e.which === 9;
+
+        //                     // adjust original event instead of throwing a new one
+        //                     // cause handler (fnKeyUp) is debounced and we might set some options
+        //                     if (_.isUndefined(opt.isRetry) && (down || tab)) {
+        //                         e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
+        //                     }
+        //                 })
+        //             )
+        //     );
+
+        //     //buttons
+        //     ext.point(POINT + '/cancel-button').invoke('draw', group, baton);
+        //     ext.point(POINT + '/search-button').invoke('draw', group, baton);
+
+        //     return this;
+        // },
+
+        cancelButton: function () {
 
             this.append(
                 $('<a href="#">')
@@ -150,15 +286,12 @@ define('io.ox/search/autocomplete/extensions',
                     )
                     .on('click', function (e) {
                         e.preventDefault();
-                        view.trigger('button:clear');
+                        //view.trigger('button:clear');
                     })
             );
         },
 
-        searchButton: function (baton) {
-            var input = baton.$.input,
-                view = baton.app.view;
-
+        searchButton: function () {
             this.append(
                 $('<span class="input-group-btn">').append(
                     // submit
@@ -181,8 +314,6 @@ define('io.ox/search/autocomplete/extensions',
                         e.preventDefault();
                         var e = $.Event('keydown');
                         e.which = 13;
-                        input.trigger(e);
-                        view.trigger('button:search');
                     })
                 )
             );

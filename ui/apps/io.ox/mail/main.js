@@ -1057,21 +1057,24 @@ define('io.ox/mail/main',
                     });
 
                 // events
-                win.facetedsearch.view.on({
-                    'query': _.debounce(function (e, appname) {
-                        if (appname === app.get('name')) {
-                            // connect
-                            if (app.listView.loader.mode !== 'search') {
-                                app.listView.connect(collectionLoader);
+                win.facetedsearch.ready
+                    .done(function () {
+                        var view = win.facetedsearch.view;
+                        view.on({
+                            'query': _.debounce(function (e, appname) {
+                                if (appname === app.get('name')) {
+                                    // connect
+                                    if (app.listView.loader.mode !== 'search') {
+                                        app.listView.connect(collectionLoader);
+                                    }
+                                    app.listView.load();
+                                    win.facetedsearch.focus();
+                                }
+                            }, 10),
+                            'focus': function () {
+                                // register collection loader
                             }
-                            app.listView.load();
-                            win.facetedsearch.focus();
-                        }
-                    }, 10),
-                    'focus': function () {
-                        // register collection loader
-                    }
-
+                        });
                 });
 
                 win.on('search:cancel', function () {

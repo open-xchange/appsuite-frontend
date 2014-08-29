@@ -1349,13 +1349,14 @@ define('io.ox/core/desktop',
                 this.facetedsearch = {
                     active: false,
                     lastFocus: '',
+                    ready: $.Deferred(),
                     init: function () {
 
                         var side = self.nodes.sidepanel,
                             nodes = self.nodes.facetedsearch = {};
 
                         // search field
-                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search io-ox-busy">');
+                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">');
 
                         // facets container
                         nodes.container = $('<div class="abs search-container">').hide().append(
@@ -1639,61 +1640,50 @@ define('io.ox/core/desktop',
             }
 
             if (opt.facetedsearch) {
+                require(['io.ox/search/quickstart'], function (quickstart) {
+                    quickstart.run(win)
+                        .done(function () {
+                            // get view
+                            var view = win.facetedsearch.view;
 
-                //add container nodes
-                win.facetedsearch.init();
-
-                require(['io.ox/search/main'], function (search) {
-
-                    // overwrite views focus method
-                    var view = win.facetedsearch.view = _.extend(
-                                              search.getView(), //app.view
-                                              { focus: win.facetedsearch.focus }
-                                          );
-
-                    // render search app view and add search field
-                    win.nodes.facetedsearch.toolbar
-                        .removeClass('io-ox-busy')
-                        .append(
-                            view.render().$el.find('.input-group')
-                        );
-
-                    //events: app resume cancels search mode
-                    win.app.on('resume', function () {
-                        if (win.facetedsearch.active) {
-                            view.trigger('button:cancel');
-                        }
-                    });
-
-                    // events: internal
-                    view.on({
-                        'query':
-                            _.debounce(function (e, appname) {
-                                // one search app, one model but multiple views
-                                if (win.app.get('name') === appname) {
-                                    win.facetedsearch.open();
-                                    if (e.type === 'query') win.trigger('search:query');
+                            //events: app resume cancels search mode
+                            win.app.on('resume', function () {
+                                if (win.facetedsearch.active) {
+                                    view.trigger('button:cancel');
                                 }
-                            }, 10
-                        ),
-                        'button:clear': function () {
-                            win.facetedsearch.clear();
-                        },
-                        'button:cancel': function () {
-                            win.facetedsearch.cancel();
-                        }
-                    });
+                            });
 
-                    // events: redirect
-                    view.model.on({
-                        'query': function (appname) {
-                            view.trigger('query', appname);
-                        },
-                        'cancel': function (appname) {
-                            view.trigger('button:cancel', appname);
-                        }
+                            // events: internal
+                            view.on({
+                                'query':
+                                    _.debounce(function (e, appname) {
+                                        // one search app, one model but multiple views
+                                        if (win.app.get('name') === appname) {
+                                            win.facetedsearch.open();
+                                            if (e.type === 'query') win.trigger('search:query');
+                                        }
+                                    }, 10
+                                ),
+                                'button:clear': function () {
+                                    win.facetedsearch.clear();
+                                },
+                                'button:cancel': function () {
+                                    win.facetedsearch.cancel();
+                                }
+                            });
+
+                            // events: redirect
+                            view.model.on({
+                                'query': function (appname) {
+                                    view.trigger('query', appname);
+                                },
+                                'cancel': function (appname) {
+                                    view.trigger('button:cancel', appname);
+                                }
+                            });
                     });
                 });
+
             }
 
 
