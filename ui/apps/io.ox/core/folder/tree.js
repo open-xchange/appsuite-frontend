@@ -89,7 +89,7 @@ define('io.ox/core/folder/tree',
             if (result !== undefined) return result;
             // other folders
             var module = model.get('module');
-            return module === this.module || (module === 'mail' && (/^default\d+(\W|$)/i).test(model.id));
+            return module === this.module || (this.module === 'mail' && (/^default\d+(\W|$)/i).test(model.id));
         },
 
         getOpenFolders: function () {
