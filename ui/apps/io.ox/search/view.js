@@ -31,7 +31,7 @@ define('io.ox/search/view',
                 var self = this,
                     node = node || self.$el;
 
-                if (_.device('smartphone')) {
+                if (_.device('small')) {
                     // create new toolbar on bottom
                     ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
                 }
@@ -76,7 +76,7 @@ define('io.ox/search/view',
                             p.invoke('draw', self.$el, self.baton);
                     });
                 });
-                if (_.device('smartphone')) {
+                if (_.device('small')) {
                     ext.point('io.ox/search/view/mobile').each(function (p) {
                         var list = ids.split(' ');
                         list.forEach(function (id) {

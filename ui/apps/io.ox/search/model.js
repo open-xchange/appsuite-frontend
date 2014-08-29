@@ -260,7 +260,7 @@ define('io.ox/search/model',
                     return !(_.contains(facet.flags, 'advanced'));
                 });
 
-                if (!some)
+                if (!some && ox.ui.App.getCurrentApp().get('name') !== 'io.ox/search')
                     this.trigger('cancel');
                 else
                     this.trigger('query', this.getApp());

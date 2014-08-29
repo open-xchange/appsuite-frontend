@@ -69,7 +69,7 @@ define('io.ox/search/apiproxy',
             index: 300,
             customize: function (baton) {
 
-                if (_.device('smartphone')) return;
+                if (_.device('small')) return;
 
                 var whitelist = {
                         style: ['simple'],
@@ -103,7 +103,7 @@ define('io.ox/search/apiproxy',
                     custom: true,
                     hidden: true,
                     flags: [
-                        'advanced',
+                        _.device('small') ? '' : 'advanced',
                         'conflicts:folder_type'
                     ],
                     values: [{

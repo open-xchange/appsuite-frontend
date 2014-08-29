@@ -115,7 +115,7 @@ define('io.ox/search/items/view-template',
 
                         node.attr({
                             'data-id': model.get('id'),
-                            'data-folder': model.get('pool').folder,
+                            'data-folder': model.get('folder'),
                             'data-app': model.get('application'),
                         });
 

@@ -25,7 +25,7 @@ define('io.ox/search/quickstart',
             win.facetedsearch.init();
 
             // render search field
-            extensions.dummy.call(win.nodes.facetedsearch.toolbar);
+            extensions.searchfieldSkeleton.call(win.nodes.facetedsearch.toolbar);
      }
 
      function addLogic (win) {
@@ -39,7 +39,7 @@ define('io.ox/search/quickstart',
             // register handler
             view.render();
             // add autocomplete and addional handler
-            extensions.register.call(win.nodes.facetedsearch.toolbar, baton);
+            extensions.searchfieldLogic.call(win.nodes.facetedsearch.toolbar, baton);
             // add reference to window
             win.facetedsearch.view = view;
             // resolve win.facet

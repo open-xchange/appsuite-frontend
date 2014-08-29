@@ -46,8 +46,7 @@ define('io.ox/search/view-template',
                 row = $('<div class="col-xs-12">')
             ).appendTo(this);
 
-            ext.point('io.ox/search/autocomplete/dummy').invoke('draw', row, baton);
-            ext.point('io.ox/search/autocomplete/register').invoke('draw', row, baton);
+            ext.point('io.ox/search/autocomplete/searchfield').invoke('draw', row, baton);
         }
     });
 
