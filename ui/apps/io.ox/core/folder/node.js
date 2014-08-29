@@ -368,10 +368,12 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.$.selectable.append(
                 $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
                 .attr({
-                    'data-contextmenu': this.options.contextmenu || 'default',
-                    'title': gt('Folder-specific actions')
+                    'data-contextmenu': this.options.contextmenu || 'default'
                 })
-                .append($('<i class="fa fa-bars">'))
+                .append(
+                    $('<i class="fa fa-bars" aria-hidden="true">'),
+                    $('<span class="sr-only">').text(gt('Folder-specific actions'))
+                )
             );
         },
 

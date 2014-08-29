@@ -366,8 +366,10 @@ define('io.ox/files/main',
             side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
-                    .attr('title', gt('Close folder view'))
-                    .append($('<i class="fa fa-angle-double-left">'))
+                    .append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close folder view'))
+                    )
                     .on('click', { app: app, state: false }, toggleFolderView)
                 )
             );

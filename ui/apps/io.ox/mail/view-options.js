@@ -79,7 +79,7 @@ define('io.ox/mail/view-options',
     });
 
     function toggleControl(i, state) {
-        i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o');
+        i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
     }
 
     function toggleSelection(e) {
@@ -95,8 +95,8 @@ define('io.ox/mail/view-options',
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item select-all" tabindex="1">').append(
-                    $('<i class="fa fa-square-o">'),
+                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
+                    $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )
                 .on('click', { baton: baton }, toggleSelection)
@@ -152,8 +152,10 @@ define('io.ox/mail/view-options',
             side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
-                    .attr('title', gt('Close folder view'))
-                    .append($('<i class="fa fa-angle-double-left">'))
+                    .append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close folder view'))
+                    )
                     .on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );
