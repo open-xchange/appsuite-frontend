@@ -159,13 +159,15 @@ define('io.ox/core/tk/list-dnd', [
             // replace in DOM
             helper.appendTo(document.body);
             // bind
-            $(document).on('mousemove.dnd', move)
+            $(document)
                 .one('mousemove.dnd', firstMove)
+                .on('mousemove.dnd', move)
                 .on('mouseover.dnd', '.folder-tree', scroll.over)
-                .on('mouseout.dnd',  '.folder-tree', scroll.out)
+                .on('mouseout.dnd', '.folder-tree', scroll.out)
                 .on('mousemove.dnd', '.folder-tree', scroll.move)
                 .on('mouseover.dnd', options.dropzoneSelector, over)
-                .on('mouseout.dnd',  options.dropzoneSelector, out);
+                .on('mouseout.dnd', options.dropzoneSelector, out)
+                .on('keyup.dnd', onEscape);
         }
 
         function remove() {
@@ -175,11 +177,15 @@ define('io.ox/core/tk/list-dnd', [
             }
         }
 
+        function onEscape(e) {
+            if (e.which === 27) stop();
+        }
+
         function stop() {
             // stop auto-scroll
             scroll.out();
             // unbind handlers
-            $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd');
+            $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd keyup.dnd');
             $('.dropzone').each(function () {
                 var node = $(this), selector = node.attr('data-dropzones');
                 (selector ? node.find(selector) : node).off('mouseup.dnd');
