@@ -14,6 +14,7 @@
 define('io.ox/core/tk/attachments',
     ['io.ox/core/extensions',
      'io.ox/core/api/attachment',
+     'io.ox/core/folder/title',
      'io.ox/core/strings',
      'io.ox/core/tk/attachmentsUtil',
      'io.ox/core/capabilities',
@@ -24,7 +25,7 @@ define('io.ox/core/tk/attachments',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'less!io.ox/core/tk/attachments',
-    ], function (ext, attachmentAPI, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
+    ], function (ext, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
 
@@ -986,10 +987,12 @@ define('io.ox/core/tk/attachments',
         renderDefaultContent: function (widget) {
             var size;
             widget.append(
-                this.model.getTitle(),
+                shortTitle(this.model.getTitle(), 15),
+                this.preview ? '' : ' (',
                 size = $('<span class="filesize">').text(
                     strings.fileSize(this.model.get('file_size') || this.model.get('size'))
-                )
+                ),
+                this.preview ? '' : ')'
             );
             if (size.text() === '0 B') { size.text(' '); }
             return widget;

@@ -21,6 +21,7 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/api/account',
      'io.ox/core/date',
      'io.ox/core/strings',
+     'io.ox/core/folder/title',
      'io.ox/core/notifications',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
@@ -28,7 +29,7 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, emoji, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+    ], function (ext, links, actions, emoji, util, api, account, date, strings, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -296,7 +297,7 @@ define('io.ox/mail/common-extensions',
                 renderCustomContent = function (widget) {
                     var dd = new links.Dropdown({
                             label: '',
-                            noCaret: this.preview,
+                            noCaret: true,
                             ref: 'io.ox/mail/attachment/links'
                         }).draw.call(widget, ext.Baton({ data: this.model.attributes, $el: widget })),
                         url, contentType, size;
@@ -315,10 +316,12 @@ define('io.ox/mail/common-extensions',
                     });
 
                     dd.find('a[data-toggle="dropdown"]').prepend(
-                        this.model.getTitle(),
+                        shortTitle(this.model.getTitle(), 15),
+                        this.preview ? '' : ' (',
                         size = $('<span class="filesize">').text(
                             strings.fileSize(this.model.get('file_size') || this.model.get('size'))
-                        )
+                        ),
+                        this.preview ? '' : ')'
                     );
                     if (size.text() === '0 B') { size.text(' '); }
                     return widget;
