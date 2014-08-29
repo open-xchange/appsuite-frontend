@@ -132,6 +132,7 @@ define('io.ox/files/fluid/perspective',
     }
 
     function calculateLayout(el, options) {
+
         var rows = Math.round((el.height() - 40) / options.fileIconHeight),
             cols = Math.floor((el.width() - 6) / options.fileIconWidth);
 
@@ -622,45 +623,46 @@ define('io.ox/files/fluid/perspective',
                 );
             };
 
+            function onScroll() {
+                /*
+                 *  How this works:
+                 *
+                 *      +--------+     0
+                 *      |        |
+                 *      |        |
+                 *      |        |
+                 *      |        |
+                 *   +--+--------+--+  scrollTop
+                 *   |  |        |  |
+                 *   |  |        |  |
+                 *   |  |        |  |  height
+                 *   |  |        |  |
+                 *   |  |        |  |
+                 *   +--+--------+--+  bottom
+                 *      |        |
+                 *      |        |
+                 *      +--------+     scrollHeight
+                 *
+                 *  If bottom and scrollHeight are near (~ 50 pixels) load new icons.
+                 *
+                 */
+                var scrollTop = wrapper.scrollTop(),
+                    scrollHeight = wrapper.prop('scrollHeight'),
+                    height = wrapper.outerHeight(),
+                    bottom = scrollTop + height;
+                // scrolled to bottom?
+                if (bottom > (scrollHeight - 50)) {
+                    start = end;
+                    end = end + layout.iconCols;
+                    if (layout.iconCols <= 3) end = end + 10;
+                    displayedRows = displayedRows + 1;
+                    redraw(allIds.slice(start, end));
+                }
+            }
+
             redraw = function (ids) {
                 drawFiles(ids);
-                wrapper.on('scroll', function () {
-                    /*
-                     *  How this works:
-                     *
-                     *      +--------+     0
-                     *      |        |
-                     *      |        |
-                     *      |        |
-                     *      |        |
-                     *   +--+--------+--+  scrollTop
-                     *   |  |        |  |
-                     *   |  |        |  |
-                     *   |  |        |  |  height
-                     *   |  |        |  |
-                     *   |  |        |  |
-                     *   +--+--------+--+  bottom
-                     *      |        |
-                     *      |        |
-                     *      +--------+     scrollHeight
-                     *
-                     *  If bottom and scrollHeight are near (~ 50 pixels) load new icons.
-                     *
-                     */
-                    var scrollTop = wrapper.scrollTop(),
-                        scrollHeight = wrapper.prop('scrollHeight'),
-                        height = wrapper.outerHeight(),
-                        bottom = scrollTop + height;
-                    // scrolled to bottom?
-                    if (bottom > (scrollHeight - 50)) {
-                        wrapper.off('scroll');
-                        start = end;
-                        end = end + layout.iconCols;
-                        if (layout.iconCols <= 3) end = end + 10;
-                        displayedRows = displayedRows + 1;
-                        redraw(allIds.slice(start, end));
-                    }
-                });
+                wrapper.off('scroll', onScroll).on('scroll', onScroll);
                 //requesting data-src and setting to src after load finised (icon view only)
                 $('img.img-thumbnail.lazy').imageloader({
                     timeout: 60000
@@ -710,13 +712,17 @@ define('io.ox/files/fluid/perspective',
                         if (layout.iconCols <= 3) { end = end + 10; }
                         var displayedIds = allIds.slice(start, end);
 
+                        redraw(displayedIds);
+
                         // provoke scrolling if not all elements are displayed
                         // if not, there is no possibility to display all elements due to our loading on demand
                         if (displayedIds < allIds) {
-                            filesContainer.css('height', parseInt(parseInt(wrapper.css('height'), 10) + 1, 10) + 'px');//one pixel to large so a scrollbar is displayed
+                            // one pixel to large so a scrollbar is displayed
+                            var height = parseInt(wrapper.css('height'), 10) + 1;
+                            filesContainer.css('height', height + 'px');
+                            // some browser don't trigger a scroll event
+                            wrapper.trigger('scroll');
                         }
-
-                        redraw(displayedIds);
 
                         self.selection.init(allIds).trigger('update', 'inital');
 
