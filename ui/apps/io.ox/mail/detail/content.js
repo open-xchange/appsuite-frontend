@@ -232,9 +232,7 @@ define('io.ox/mail/detail/content',
             if (!baton.isHTML) return;
             this.find('blockquote')
                 // remove white-space: pre/nowrap
-                .find('[style*="white-space: "]').css('whiteSpace', '').end()
-                // remove color inside blockquotes
-                .find('*').css('color', '');
+                .find('[style*="white-space: "]').css('whiteSpace', '').end();
         }
     });
 
