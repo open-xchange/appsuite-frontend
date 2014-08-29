@@ -550,18 +550,16 @@ define('io.ox/core/folder/api',
     // Create folder
     //
 
-    function create(id, data) {
-
-        // default data
-        data = _.extend({
-            title: gt('New Folder'),
-            subscribed: 1
-        }, data);
+    function create(id, options) {
 
         // get parent folder first - actually just to inherit 'module';
         return get(id).then(function (parent) {
-            // get module
-            var module = parent.module;
+            // default options
+            options = _.extend({
+                module: parent.module,
+                subscribed: 1,
+                title: gt('New Folder')
+            }, options);
             // go!
             return http.PUT({
                 module: 'folders',
@@ -569,10 +567,9 @@ define('io.ox/core/folder/api',
                     action: 'new',
                     autorename: true,
                     folder_id: id,
-                    module: module,
                     tree: tree(id)
                 },
-                data: data,
+                data: options,
                 appendColumns: false
             })
             .then(function getNewFolder(newId) {
@@ -580,7 +577,7 @@ define('io.ox/core/folder/api',
             })
             .then(function reloadSubFolders(data) {
                 return (
-                    isFlat(module) ? flat({ module: module, cache: false }) : list(id, { cache: false })
+                    isFlat(options.module) ? flat({ module: options.module, cache: false }) : list(id, { cache: false })
                 )
                 .then(function () {
                     // make sure to return new folder data
