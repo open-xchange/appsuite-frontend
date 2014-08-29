@@ -1009,16 +1009,11 @@ define('io.ox/core/tk/attachments',
             }
         },
         renderDefaultContent: function (widget) {
-            var size;
+            var size = this.model.get('file_size') || this.model.get('size') || 0;
             widget.append(
-                shortTitle(this.model.getTitle(), 15),
-                this.preview ? '' : ' (',
-                size = $('<span class="filesize">').text(
-                    strings.fileSize(this.model.get('file_size') || this.model.get('size'))
-                ),
-                this.preview ? '' : ')'
+                shortTitle(this.model.getTitle(), 30),
+                size ? $('<span class="filesize">').text(' (' + strings.fileSize(size) + ')') : $()
             );
-            if (size.text() === '0 B') { size.text(' '); }
             return widget;
         },
         renderContent: function (widget) {

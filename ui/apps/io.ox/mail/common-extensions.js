@@ -300,7 +300,7 @@ define('io.ox/mail/common-extensions',
                             noCaret: true,
                             ref: 'io.ox/mail/attachment/links'
                         }).draw.call(widget, ext.Baton({ data: this.model.attributes, $el: widget })),
-                        url, contentType, size;
+                        url, contentType;
 
                     url = api.getUrl(this.model.attributes, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
@@ -315,12 +315,7 @@ define('io.ox/mail/common-extensions',
                         e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
                     });
 
-                    var size = this.model.get('file_size') || this.model.get('size') || 0;
-                    dd.find('a[data-toggle="dropdown"]').prepend(
-                        shortTitle(this.model.getTitle(), 30),
-                        size ? $('<span class="filesize">').text(' (' + strings.fileSize(size) + ')') : $()
-                    );
-
+                    this.renderDefaultContent(dd.find('a[data-toggle="dropdown"]'));
                     return widget;
                 },
                 CustomAttachmentList;
