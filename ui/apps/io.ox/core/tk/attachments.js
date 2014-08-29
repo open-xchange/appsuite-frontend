@@ -822,6 +822,9 @@ define('io.ox/core/tk/attachments',
             } else {
                 this.$el.removeClass('preview');
             }
+            this.$('a.preview-toggle').empty().append(
+                $('<i>').addClass('fa ' + (this.preview ? 'fa-list' : 'fa-th-large'))
+            );
             return this.toggleContent('open').renderList();
         },
         toggleContent: function (forceState) {
