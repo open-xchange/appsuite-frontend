@@ -183,15 +183,24 @@ define('io.ox/tasks/actions',
         requires: function (e) {
             if (!e.collection.has('some')) return false;
             if (!e.collection.has('delete')) return false;
-            if (isShared(e.baton.app.folder.get())) return false;
+            if (e.baton.app) {//app object is not available when opened from notification area
+                if (isShared(e.baton.app.folder.get())) {
+                    return false;
+                }
+            } else if (e.data.folder_id) {
+                isShared(e.data.folder_id);
+            } else {
+                return false;
+            }
             return true;
         },
         multiple: function (list, baton) {
 
-            var vgrid = baton.grid || (baton.app && baton.app.getGrid());
+            var vgrid = baton.grid || (baton.app && baton.app.getGrid()),
+                folder = baton.app ? baton.app.folder.get() : baton.data.folder_id;//when opened from notification area there is no app object
 
             // shared?
-            if (isShared(baton.app.folder.get()) || (baton.target && isShared(baton.target))) {
+            if (!folder || isShared(folder) || (baton.target && isShared(baton.target))) {
                 return notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
             }
 
