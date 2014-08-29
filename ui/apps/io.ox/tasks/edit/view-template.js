@@ -407,7 +407,10 @@ define('io.ox/tasks/edit/view-template',
                                tabindex: 1}),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
-                                .append($('<i class="fa fa-plus">'))
+                                .append(
+                                    $('<i class="fa fa-plus" aria-hidden="true">'),
+                                    $('<span class="sr-only">').text(gt('Plus'))
+                                )
                         )
                     )
                 );

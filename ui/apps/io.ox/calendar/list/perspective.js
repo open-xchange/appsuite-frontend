@@ -223,8 +223,8 @@ define('io.ox/calendar/list/perspective',
                                     'aria-expandet': false,
                                     'aria-label': gt('Sort options')
                                 }).append(
-                                    $('<i class="fa fa-arrow-down">'),
-                                    $('<i class="fa fa-arrow-up">')
+                                    $('<i class="fa fa-arrow-down" aria-hidden="true">'),
+                                    $('<i class="fa fa-arrow-up" aria-hidden="true">')
                                 )
                                 .dropdown(),
                             $('<ul class="dropdown-menu" role="menu">')

@@ -698,7 +698,13 @@ define('io.ox/contacts/view-detail',
     function toggleQRCode(e) {
         e.preventDefault();
         var node = $(e.delegateTarget);
-        if (node.find('canvas').length) hideQRCode(node); else showQRCode(node);
+        if (node.find('canvas').length) {
+            hideQRCode(node);
+            $(this).attr('aria-checked', false);
+        } else {
+            showQRCode(node);
+            $(this).attr('aria-checked', true);
+        }
     }
 
     ext.point('io.ox/contacts/detail/content').extend({
@@ -714,8 +720,8 @@ define('io.ox/contacts/view-detail',
             this.append(
                 $('<fieldset class="block">').append(
                     $('<legend class="sr-only">').text(gt('Show QR code')),
-                    $('<i class="fa fa-qrcode">'), $.txt(' '),
-                    $('<a href="#">').text(gt('Show QR code'))
+                    $('<i class="fa fa-qrcode" aria-hidden="true">'), $.txt(' '),
+                    $('<a href="#" role="checkbox" aria-checked="false">').text(gt('Show QR code'))
                 )
                 .data(baton.data)
                 .on('click', 'a', toggleQRCode)

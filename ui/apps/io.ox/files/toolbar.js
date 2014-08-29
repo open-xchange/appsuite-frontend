@@ -58,7 +58,7 @@ define('io.ox/files/toolbar',
                     'aria-haspopup': 'true',
                     'data-toggle': 'dropdown',
                     'role': 'button'
-                });
+                }).dropdown();
 
                 this.parent().addClass('dropdown');
             }

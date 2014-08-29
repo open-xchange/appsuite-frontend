@@ -801,7 +801,7 @@ define('io.ox/core/main',
             index: 100,
             draw: function () {
                 this.append(
-                    $('<li>').append(
+                    $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
@@ -817,7 +817,7 @@ define('io.ox/core/main',
             index: 150,
             draw: function () {
                 this.append(
-                    $('<li>').append(
+                    $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">')
                         .text(gt('My contact data'))
                     )
@@ -847,7 +847,7 @@ define('io.ox/core/main',
                 };
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                    $('<li role="presentation">', {'class': 'io-ox-specificHelp'}).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
@@ -886,7 +886,7 @@ define('io.ox/core/main',
                             fullscreenButton.text(gt('Fullscreen'));
                         };
                         this.append(
-                            $('<li>').append(
+                            $('<li role="presentation">').append(
                                 fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
                             )
                             .on('click', function (e) {
@@ -904,7 +904,7 @@ define('io.ox/core/main',
             index: 400,
             draw: function () {
                 this.append(
-                    $('<li>').append(
+                    $('<li role="presentation">').append(
                         $('<a href="#" data-action="about" role="menuitem" tabindex="1">').text(gt('About'))
                     )
                     .on('click', function (e) {
@@ -925,7 +925,7 @@ define('io.ox/core/main',
                 draw: function () {
                     this.append(
                         $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                        $('<li>').append(
+                        $('<li role="presentation">').append(
                             $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
                         )
                         .on('click', function (e) {
@@ -941,18 +941,19 @@ define('io.ox/core/main',
             id: 'dropdown',
             index: 1000,
             draw: function () {
-                var ul;
+                var ul, a;
                 this.append(
                     $('<li class="launcher dropdown" role="presentation">').append(
-                        $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
-                        .attr('aria-label', gt('Settings'))
+                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
                         .append(
-                            $('<i class="fa fa-cog launcher-icon" aria-hidden="true">')
+                            $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
+                            $('<span class="sr-only">').text(gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
+                a.dropdown();
             }
         });
 

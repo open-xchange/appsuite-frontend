@@ -49,8 +49,7 @@ define('io.ox/files/mobile-toolbar-actions',
 
                     this.addClass('dropdown-toggle').attr({
                         'data-toggle': 'dropdown'
-                    });
-
+                    }).dropdown();
                 }
             },
             'view-icon': {

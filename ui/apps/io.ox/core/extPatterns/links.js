@@ -210,12 +210,12 @@ define('io.ox/core/extPatterns/links',
                     var link = item.link;
                     if (item.state === false) {
                         if (_.isFunction(link.drawDisabled)) {
-                            link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
+                            link.drawDisabled.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
                             count++;
                         }
                     }
                     else if (_.isFunction(link.draw)) {
-                        link.draw.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
+                        link.draw.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
                         count++;
                     }
                 });

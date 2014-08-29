@@ -404,7 +404,7 @@ define('io.ox/mail/common-extensions',
                 if (util.isEmbedded(baton.data)) return;
 
                 var a11y = util.isUnseen(baton.data) ? gt('This E-mail is unread, press to mark it as read.') : gt('This E-mail is read, press to mark it as unread.'),
-                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa"/></a>');
+                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa" aria-hidden="true"/></a>');
                 this.append(button.on('click', { view: baton.view, node: button }, toggle)
                 );
             };
