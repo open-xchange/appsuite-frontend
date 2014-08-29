@@ -470,9 +470,6 @@
             font-family: @normal-font-family;
             font-size: 13px;
             margin-left: 1em;
-            a {
-                color: #333;
-            }
             a:hover {
                 text-decoration: underline;
             }
@@ -1162,7 +1159,7 @@ textarea.inplace-editor {
 
     .detail-view-header {
         .fontWeight(300);
-        padding: 14px @header-padding;
+        padding: 14px (@header-padding + 1);
         padding-left: @picture-padding + @unread-toggle-width;
     }
 

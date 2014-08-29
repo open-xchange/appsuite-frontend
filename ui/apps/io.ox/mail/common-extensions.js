@@ -315,15 +315,12 @@ define('io.ox/mail/common-extensions',
                         e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
                     });
 
+                    var size = this.model.get('file_size') || this.model.get('size') || 0;
                     dd.find('a[data-toggle="dropdown"]').prepend(
-                        shortTitle(this.model.getTitle(), 15),
-                        this.preview ? '' : ' (',
-                        size = $('<span class="filesize">').text(
-                            strings.fileSize(this.model.get('file_size') || this.model.get('size'))
-                        ),
-                        this.preview ? '' : ')'
+                        shortTitle(this.model.getTitle(), 30),
+                        size ? $('<span class="filesize">').text(' (' + strings.fileSize(size) + ')') : $()
                     );
-                    if (size.text() === '0 B') { size.text(' '); }
+
                     return widget;
                 },
                 CustomAttachmentList;

@@ -20,7 +20,7 @@
     }
 
     header {
-        margin-bottom: 0.7ex;
+
         .content-toggle {
             color: #333;
 
@@ -45,21 +45,25 @@
 
     ul.inline-items {
 
-        padding-left: 0;
+        padding: 0;
+        margin-top: 10px;
 
         li.item {
+
             display: inline-block;
             padding: 0;
             margin-right: 1px;
 
             .io-ox-core-tk-attachment {
+
                 background-color: inherit;
                 height: 1em;
-                padding: 0px 5px 0px 5px;
+                padding: 0;
+                margin-right: 14px;
 
-                a, .filesize {
-                    color: #333;
-                }
+                a { color: #333; }
+                a:hover { text-decoration: underline; }
+                .filesize { color: #888; }
             }
 
             &.editable {
@@ -302,11 +306,14 @@
                 bottom: 0;
                 color: @white;
                 display: none;
-                height: 3em;
+                height: 40px;
+                line-height: 18px;
                 margin: 0;
-                padding: 0;
+                padding: 2px 7px;
                 position: absolute;
+
                 width: 100%;
+                .ellipsis();
 
                 .filesize {
                     color: #bbb;
