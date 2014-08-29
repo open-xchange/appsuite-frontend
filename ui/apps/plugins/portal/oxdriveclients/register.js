@@ -64,15 +64,13 @@ define('plugins/portal/oxdriveclients/register',
 
             return $('<a class="shoplink">').attr({
                         href: url,
-                        target: '_blank',
-                        aria: gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)
-                    }).append($img);
+                        target: '_blank'
+                    }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
         } else if (platform === 'windows' && capabilities.has('oxupdater')) {
             return  [$('<i class="fa fa-download">'),
                     $('<a class="shoplink">').attr({
                         href: ox.apiRoot + url + '?session=' + ox.session,
                         target: '_blank',
-                        aria: gt.format(gt('Download the %s client for %s via the OX updater'), settings.get('productName'), platform)
                     }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
                     ];
         } else {

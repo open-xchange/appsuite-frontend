@@ -77,15 +77,7 @@ define('io.ox/core/settings/downloads/pane',
                             $('<p>').text(
                                 gt('Informs about the current status of E-Mails and appointments without having to display the user interface or another Windows® client.')
                         )
-                    )/*,
-                    $('<section>')
-                        .addClass(products['com.openexchange.updater.drive'] ? '' : 'hidden')
-                        .append(
-                            $('<h2>').text(gt('Drive Client')),
-                            $('<p>').text(
-                                gt('Data synchronization with your local (Windows) machine. Drive Client lets you configure the folders to be synchronized.')
-                        )
-                    )*/
+                    )
                 );
             }
         });
@@ -106,15 +98,13 @@ define('io.ox/core/settings/downloads/pane',
             // fallback
             if (_.indexOf(langs, lang) === -1) lang = 'en';
 
-            var $img = $('<div class="oxdrive-shop-image ' + platform +'">')
+            var $img = $('<div aria-hidden="true" class="oxdrive-shop-image ' + platform +'">')
                 .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
                         href: url,
-                        target: '_blank',
-                        aria: gt.format(gt('Download the %s client for %s'), productName, platform)
-
-                    }).append($img);
+                        target: '_blank'
+                    }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
         };
 
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
