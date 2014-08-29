@@ -790,7 +790,30 @@ define('io.ox/core/tk/attachments',
         },
         events: {
             'click a.content-toggle': 'toggleContent',
-            'click a.preview-toggle': 'togglePreview'
+            'click a.preview-toggle': 'togglePreview',
+            'mousewheel ul': 'onWheel',
+            'click a.scroll-left': 'scrollLeft',
+            'click a.scroll-right': 'scrollRight'
+        },
+        onWheel: function (ev) {
+            if (!ev.shiftKey || !ev.originalEvent.wheelDelta) return;
+
+            this.scrollList(ev.originalEvent.wheelDelta);
+            ev.preventDefault();
+        },
+        scrollLeft: function () {
+            this.scrollList(-120);
+            if (this.$ul.scrollLeft() === 0) {
+                this.$('a.scroll-left').hide();
+            }
+            this.$('a.scroll-right').hide();
+        },
+        scrollRight: function () {
+            this.scrollList(120);
+            this.$('a.scroll-left').show();
+        },
+        scrollList: function (delta) {
+            this.$ul.scrollLeft(this.$ul.scrollLeft() + delta);
         },
         togglePreview: function () {
             this.preview = !this.preview;
