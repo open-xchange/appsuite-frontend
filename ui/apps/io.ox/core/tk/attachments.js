@@ -837,12 +837,13 @@ define('io.ox/core/tk/attachments',
             this.renderAttachment(model);
         },
         removeAttachment: function (model, collection, options) {
-            this.$el.children()[options.index - 1].remove();
-            if (this.$el.children().length === 0) {
+            this.$ul.children()[options.index - 1].remove();
+            if (this.$ul.children().length === 0) {
                 this.$el.addClass('empty');
                 this.$ul.addClass('empty');
                 this.trigger('empty');
             }
+            this.renderHeader();
         },
         renderAttachment: function (model) {
             var addPreview = this.preview,
