@@ -43,10 +43,56 @@
         }
     }
 
+    //
+    // Preview container
+    //
+
+    .inline-items-container {
+        position: relative;
+        margin-top: 10px;
+    }
+
+    //
+    // Scroll controls
+    //
+
+    .scroll-left, .scroll-right {
+        position: absolute;
+        top: 0;
+        width: 20px;
+        height: 120px;
+        z-index: 2;
+        background-color: #888;
+        border: 0;
+        outline: 0;
+        i.fa {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            margin-top: -7px;
+            color: white;
+        }
+        &[disabled] {
+            background-color: #eee;
+            i.fa { color: #ccc; }
+        }
+    }
+
+    .scroll-left { left: 0; }
+    .scroll-right { right: 0; }
+
+    //
+    // Attachment List
+    //
+
     ul.inline-items {
 
         padding: 0;
-        margin-top: 10px;
+        margin: 0 21px; // yep, 20 + 1
+        z-index: 1;
 
         li.item {
 
@@ -83,7 +129,6 @@
             width: 120px;
             background-size: cover;
         }
-
     }
 
     /* SimpleEditableList */

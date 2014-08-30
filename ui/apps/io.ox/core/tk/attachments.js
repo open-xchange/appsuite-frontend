@@ -769,9 +769,13 @@ define('io.ox/core/tk/attachments',
     });
 
     var AttachmentList = Backbone.View.extend({
+
         tagName: 'div',
         className: 'io-ox-core-tk-attachment-list',
+        scrollStep: 120,
+
         initialize: function (options) {
+
             this.listenTo(this.collection, 'add', this.addAttachment);
             this.listenTo(this.collection, 'remove', this.removeAttachment);
 
@@ -788,43 +792,73 @@ define('io.ox/core/tk/attachments',
                 return m.isFileAttachment();
             });
         },
-        events: {
-            'click a.content-toggle': 'toggleContent',
-            'click a.preview-toggle': 'togglePreview',
-            'mousewheel ul': 'onWheel',
-            'click a.scroll-left': 'scrollLeft',
-            'click a.scroll-right': 'scrollRight'
-        },
-        onWheel: function (ev) {
-            if (!ev.shiftKey || !ev.originalEvent.wheelDelta) return;
 
-            this.scrollList(ev.originalEvent.wheelDelta);
-            ev.preventDefault();
+        events: {
+            'click .content-toggle': 'onToggleContent',
+            'click .preview-toggle': 'onTogglePreview',
+            //'mousewheel ul': 'onWheel',
+            'click .scroll-left': 'scrollLeft',
+            'click .scroll-right': 'scrollRight'
         },
+
+        onToggleContent: function (e) {
+            e.preventDefault();
+            this.toggleContent();
+        },
+
+        onTogglePreview: function (e) {
+            e.preventDefault();
+            this.togglePreview();
+        },
+
+        // onWheel: function (ev) {
+        //     if (!ev.shiftKey || !ev.originalEvent.wheelDelta) return;
+        //     this.scrollList(ev.originalEvent.wheelDelta);
+        //     ev.preventDefault();
+        // },
+
         scrollLeft: function () {
-            this.scrollList(-120);
-            if (this.$ul.scrollLeft() === 0) {
-                this.$('a.scroll-left').hide();
-            }
-            this.$('a.scroll-right').hide();
+            this.scrollList(-1);
         },
+
         scrollRight: function () {
-            this.scrollList(120);
-            this.$('a.scroll-left').show();
+            this.scrollList(+1);
         },
+
         scrollList: function (delta) {
-            this.$ul.scrollLeft(this.$ul.scrollLeft() + delta);
+            var index = this.getScrollIndex() + delta, max = this.getMaxScrollIndex();
+            // ignore invalid indexes
+            if (index < 0 || index > max) return;
+            // update controls with new index
+            this.updateScrollControls(index);
+            // clear queue, jump to end to support fast consecutive clicks
+            this.$ul.stop(true, true).animate({ scrollLeft: index * this.scrollStep }, 'fast');
         },
+
+        getScrollIndex: function () {
+            // make sure we're always at a multiple of 120 (this.scrollStep)
+            return Math.round(this.$ul.scrollLeft() / this.scrollStep);
+        },
+
+        getMaxScrollIndex: function () {
+            var width = this.$ul.width(), scrollWidth = this.$ul.prop('scrollWidth');
+            return Math.max(0, Math.ceil((scrollWidth - width) / this.scrollStep));
+        },
+
+        updateScrollControls: function (index, max) {
+            if (index === undefined) index = this.getScrollIndex();
+            var max = this.getMaxScrollIndex();
+            this.$('.scroll-left').attr('disabled', index <= 0 ? 'disabled' : null);
+            this.$('.scroll-right').attr('disabled', index >= max ? 'disabled' : null);
+        },
+
         togglePreview: function () {
             this.preview = !this.preview;
-            if (this.preview) {
-                this.$el.addClass('preview');
-            } else {
-                this.$el.removeClass('preview');
-            }
+            this.$el.toggleClass('preview', this.preview);
             this.$('a.preview-toggle').empty().append(
                 $('<i>').addClass('fa ' + (this.preview ? 'fa-list' : 'fa-th-large'))
             );
+            this.updateScrollControls();
             return this.toggleContent('open').renderList();
         },
         toggleContent: function (forceState) {
@@ -841,7 +875,7 @@ define('io.ox/core/tk/attachments',
             return this;
         },
         showList: function () {
-            this.$ul.show().addClass('open');
+            this.$ul.addClass('open').parent().show();
             if (this.$ul.hasClass('empty')) this.renderList();
             this.$header.find('i.fa-caret-right')
                 .removeClass('fa-caret-right')
@@ -851,7 +885,7 @@ define('io.ox/core/tk/attachments',
             this.$header.find('i.fa-caret-down')
                 .removeClass('fa-caret-down')
                 .addClass('fa-caret-right');
-            this.$ul.hide().removeClass('open');
+            this.$ul.removeClass('open').parent().hide();
         },
         addAttachment: function (model) {
             if (this.$el.hasClass('empty')) {
@@ -925,7 +959,11 @@ define('io.ox/core/tk/attachments',
         renderList: function () {
             if (!this.$ul) {
                 this.$el.append(
-                    this.$ul = $('<ul>').addClass('inline-items empty')
+                    $('<div class="inline-items-container">').append(
+                        $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left"></i></button>'),
+                        $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right"></i></button>'),
+                        this.$ul = $('<ul class="inline-items empty">')
+                    )
                 );
                 if (this.filteredCollection().length === 1) {
                     this.toggleContent('open');
@@ -936,7 +974,7 @@ define('io.ox/core/tk/attachments',
                 this.$ul.empty();
                 this.$ul.addClass('empty');
                 this.filteredCollection().forEach(this.renderAttachment.bind(this));
-                if (this.$ul.parent() !== this.$el) this.$el.append(this.$ul);
+                //if (this.$ul.parent() !== this.$el) this.$el.append(this.$ul);
             }
             return this.$el;
         },
@@ -944,6 +982,7 @@ define('io.ox/core/tk/attachments',
             this.$el.empty();
             this.renderHeader();
             this.renderList();
+            this.updateScrollControls();
             return this;
         }
     });
