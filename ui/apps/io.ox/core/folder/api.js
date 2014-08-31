@@ -219,7 +219,7 @@ define('io.ox/core/folder/api',
 
         get: function (id) {
             var getter = this.hash[id];
-            return getter === undefined ? $.when([]) : getter();
+            return getter !== undefined ? getter() : $.Deferred().reject();
         },
 
         add: function (id, getter) {
