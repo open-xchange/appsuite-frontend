@@ -283,8 +283,10 @@ define('io.ox/mail/common-extensions',
         }()),
 
         attachmentList: (function attachmentList() {
+
             function drawInlineLinks(node, data) {
                 var extension = new links.InlineLinks({
+                    dropdown: false,
                     ref: 'io.ox/mail/attachment/links'
                 });
                 return extension.draw.call(node, ext.Baton({ data: data }));
@@ -352,8 +354,8 @@ define('io.ox/mail/common-extensions',
                     $el.append(view.render().$el);
 
                     view.renderInlineLinks = function () {
-                        var models = this.getValidModels(), $links = this.$header.find('.links');
-                        if (models.length > 1) drawInlineLinks($links, _(models).invoke('toJSON')); else $links.empty();
+                        var models = this.getValidModels(), $links = this.$header.find('.links').empty();
+                        if (models.length > 1) drawInlineLinks($links, _(models).invoke('toJSON'));
                     };
 
                     view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);

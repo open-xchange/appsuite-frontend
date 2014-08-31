@@ -124,13 +124,22 @@
                 .filesize { color: #888; }
             }
 
-            &.editable {
-                background-color: #f5f5f5;
-                border: 1px solid #ddd;
-                padding: 1px 30px 1px 5px;
-                margin: 0 5px 2px 0;
-                .border-radius(2px);
+            .remove {
+                display: none;
             }
+        }
+    }
+
+    &.editable ul.inline-items > li.item {
+
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        padding: 1px 30px 1px 5px;
+        margin: 0 5px 2px 0;
+        .border-radius(2px);
+
+        .remove {
+            display: inline-block;
         }
     }
 
@@ -344,6 +353,7 @@
             height: 120px;
             padding: 0;
             margin: 0 1px 0 0;
+            border: 0;
             cursor: pointer;
 
             .file {
@@ -366,7 +376,7 @@
                 display: none;
             }
 
-            &:hover .file, &:hover .control {
+            &:hover .file {
                 display: block;
             }
 
@@ -383,12 +393,17 @@
                     top: 50%;
                 }
             }
+        }
+    }
 
-            &.editable {
-                .file {
-                    padding-right: 30px;
-                }
-            }
+    &.editable ul.inline-items.preview > li.item {
+
+        .file {
+            padding-right: 30px;
+        }
+
+        &:hover .control {
+            display: block;
         }
     }
 }

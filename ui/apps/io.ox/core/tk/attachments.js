@@ -798,6 +798,9 @@ define('io.ox/core/tk/attachments',
             // add class here to support $el via options
             this.$el.addClass('io-ox-core-tk-attachment-list');
 
+            // editable?
+            if (this.options.editable) this.$el.addClass('editable');
+
             this.$header = $('<header>');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
@@ -879,12 +882,7 @@ define('io.ox/core/tk/attachments',
         },
 
         renderAttachment: function (mode, model) {
-            return new this.options.AttachmentView({
-                editable: this.options.editable,
-                mode: mode,
-                model: model
-            })
-            .render().$el;
+            return new this.options.AttachmentView({ mode: mode, model: model }).render().$el;
         },
 
         addAttachment: function (model) {
@@ -991,7 +989,7 @@ define('io.ox/core/tk/attachments',
 
         initialize: function (options) {
 
-            this.options = _.extend({ editable: false, mode: 'list' }, options);
+            this.options = _.extend({ mode: 'list' }, options);
 
             this.preview = this.options.mode === 'preview' &&
                 new AttachmentPreview({ model: this.model, el: this.el });
@@ -1003,13 +1001,18 @@ define('io.ox/core/tk/attachments',
                 },
                 'upload:complete': function () {
                     this.render();
-                }
+                },
+                'remove': this.onRemoveModel
             });
         },
 
         onRemove: function (e) {
             e.preventDefault();
             this.model.collection.remove(this.model);
+        },
+
+        onRemoveModel: function () {
+            // this must be event-based otherwise list and preview get out of sync
             this.remove();
         },
 
@@ -1041,8 +1044,7 @@ define('io.ox/core/tk/attachments',
         },
 
         renderControls: function () {
-            if (!this.options.editable) return;
-            this.$el.addClass('editable').append(
+            this.$el.append(
                 $('<a href="#" class="control remove" tabindex="1">')
                     .attr('title', gt('Remove attachment'))
                     .append($('<i class="fa fa-trash-o">'))
