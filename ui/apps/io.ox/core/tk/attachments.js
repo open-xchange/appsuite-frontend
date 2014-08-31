@@ -768,54 +768,139 @@ define('io.ox/core/tk/attachments',
         }
     });
 
+    //
+    // New attachment list (combines a flat list and a preview)
+    //
+
     var AttachmentList = Backbone.View.extend({
 
-        tagName: 'div',
-        className: 'io-ox-core-tk-attachment-list',
         scrollStep: 120,
 
-        initialize: function (options) {
-
-            this.listenTo(this.collection, 'add', this.addAttachment);
-            this.listenTo(this.collection, 'remove', this.removeAttachment);
-
-            this.preview = options && options.preview === true;
-            this.editable = options && options.editable === true;
-            if (this.preview) {
-                this.$el.addClass('preview');
-            }
-            this.attachmentView = options.attachmentView || AttachmentView;
-            this.$header = $('<header>');
-        },
-        filteredCollection: function () {
-            return this.collection.filter(function (m) {
-                return m.isFileAttachment();
-            });
-        },
-
         events: {
-            'click .content-toggle': 'onToggleContent',
-            'click .preview-toggle': 'onTogglePreview',
-            //'mousewheel ul': 'onWheel',
+            'click .toggle-details': 'onToggleDetails',
+            'click .toggle-mode': 'onToggleMode',
             'click .scroll-left': 'scrollLeft',
             'click .scroll-right': 'scrollRight'
         },
 
-        onToggleContent: function (e) {
-            e.preventDefault();
-            this.toggleContent();
+        initialize: function (options) {
+
+            this.options = _.extend({ AttachmentView: AttachmentView, editable: false, mode: 'list' }, options);
+
+            this.listenTo(this.collection, {
+                add:    this.addAttachment,
+                remove: this.removeAttachment
+            });
+
+            // add class here to support $el via options
+            this.$el.addClass('io-ox-core-tk-attachment-list');
+
+            this.$header = $('<header>');
+            this.$list = $('<ul class="inline-items">');
+            this.$preview = $('<ul class="inline-items preview">');
+
+            // things to do whenever the collection changes:
+            this.listenTo(this.collection, 'add remove reset', function () {
+                // toggle if empty
+                var length = this.getValidModels().length;
+                this.$el.toggle(length > 0);
+                // update scroll controls
+                this.updateScrollControls();
+                // update summary
+                this.renderSummary(length);
+            });
+
+            // debugging
+            window.attachmentList = this;
         },
 
-        onTogglePreview: function (e) {
-            e.preventDefault();
-            this.togglePreview();
+        render: function () {
+
+            this.renderHeader();
+            this.renderList();
+
+            this.$el.append(
+                // header
+                this.$header,
+                // short list
+                $('<div class="list-container">').append(
+                    this.$list
+                ),
+                // preview list
+                $('<div class="preview-container">').append(
+                    $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left"></i></button>'),
+                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right"></i></button>'),
+                    this.$preview
+                )
+            );
+
+            this.updateScrollControls();
+
+            return this;
         },
 
-        // onWheel: function (ev) {
-        //     if (!ev.shiftKey || !ev.originalEvent.wheelDelta) return;
-        //     this.scrollList(ev.originalEvent.wheelDelta);
-        //     ev.preventDefault();
-        // },
+        renderHeader: function () {
+
+            this.$header.append(
+                $('<a href="#" class="toggle-details">').append(
+                    $('<i class="fa toggle-caret">'),
+                    $('<i class="fa fa-paperclip">'),
+                    $('<span class="summary">')
+                ),
+                $('<span class="links">'),
+                $('<a href="#" class="pull-right toggle-mode">').append('<i class="fa">')
+            );
+
+            this.renderSummary();
+        },
+
+        renderSummary: function (length) {
+            length = length || this.getValidModels().length;
+            this.$header.find('.summary').text(
+                gt.format(gt.ngettext('%1$d attachment', '%1$d attachments', length), length)
+            );
+        },
+
+        renderList: function () {
+
+            // use inner function cause we do this twice
+            function render(list, target, mode, options) {
+                target.append(
+                    _(list).map(function (model) {
+                        return new options.AttachmentView({
+                            editable: options.editable,
+                            mode: mode,
+                            model: model
+                        })
+                        .render().$el;
+                    })
+                );
+            }
+
+            var models = this.getValidModels();
+            render(models, this.$list, 'list', this.options);
+            render(models, this.$preview, 'preview', this.options);
+        },
+
+        filter: function (model) {
+            return model.isFileAttachment();
+        },
+
+        getValidModels: function () {
+            return this.collection.filter(this.filter, this);
+        },
+
+        onToggleDetails: function (e) {
+            e.preventDefault();
+            this.$el.toggleClass('open');
+        },
+
+        onToggleMode: function (e) {
+            e.preventDefault();
+            this.$el.toggleClass('show-preview');
+            this.$preview.trigger('scroll'); // to provoke lazyload
+            this.updateScrollControls();
+        },
 
         scrollLeft: function () {
             this.scrollList(-1);
@@ -831,17 +916,17 @@ define('io.ox/core/tk/attachments',
             if (index < 0 || index > max) return;
             // update controls with new index
             this.updateScrollControls(index);
-            // clear queue, jump to end to support fast consecutive clicks
-            this.$ul.stop(true, true).animate({ scrollLeft: index * this.scrollStep }, 'fast');
+            // clear queue, don't jump to end; to support fast consecutive clicks
+            this.$preview.stop(true, false).animate({ scrollLeft: index * this.scrollStep }, 'fast');
         },
 
         getScrollIndex: function () {
             // make sure we're always at a multiple of 120 (this.scrollStep)
-            return Math.round(this.$ul.scrollLeft() / this.scrollStep);
+            return Math.round(this.$preview.scrollLeft() / this.scrollStep);
         },
 
         getMaxScrollIndex: function () {
-            var width = this.$ul.width(), scrollWidth = this.$ul.prop('scrollWidth');
+            var width = this.$preview.width(), scrollWidth = this.$preview.prop('scrollWidth');
             return Math.max(0, Math.ceil((scrollWidth - width) / this.scrollStep));
         },
 
@@ -850,206 +935,88 @@ define('io.ox/core/tk/attachments',
             var max = this.getMaxScrollIndex();
             this.$('.scroll-left').attr('disabled', index <= 0 ? 'disabled' : null);
             this.$('.scroll-right').attr('disabled', index >= max ? 'disabled' : null);
-        },
-
-        togglePreview: function () {
-            this.preview = !this.preview;
-            this.$el.toggleClass('preview', this.preview);
-            this.$('a.preview-toggle').empty().append(
-                $('<i>').addClass('fa ' + (this.preview ? 'fa-list' : 'fa-th-large'))
-            );
-            this.updateScrollControls();
-            return this.toggleContent('open').renderList();
-        },
-        toggleContent: function (forceState) {
-            if (!this.$ul) {
-                this.render();
-                forceState = forceState || 'open';
-            }
-            if (forceState === 'close' ||
-                (this.$ul.hasClass('open') && forceState !== 'open')) {
-                this.hideList();
-            } else {
-                this.showList();
-            }
-            return this;
-        },
-        showList: function () {
-            this.$ul.addClass('open').parent().show();
-            if (this.$ul.hasClass('empty')) this.renderList();
-            this.$header.find('i.fa-caret-right')
-                .removeClass('fa-caret-right')
-                .addClass('fa-caret-down');
-        },
-        hideList: function () {
-            this.$header.find('i.fa-caret-down')
-                .removeClass('fa-caret-down')
-                .addClass('fa-caret-right');
-            this.$ul.removeClass('open').parent().hide();
-        },
-        addAttachment: function (model) {
-            if (this.$el.hasClass('empty')) {
-                this.$el.removeClass('empty');
-                return this.render();
-            }
-            if (!this.$ul || !model.isFileAttachment()) return;
-            this.renderHeader();
-            this.renderAttachment(model);
-        },
-        removeAttachment: function (model, collection, options) {
-            this.$ul.children()[options.index - 1].remove();
-            if (this.$ul.children().length === 0) {
-                this.$el.addClass('empty');
-                this.$ul.addClass('empty');
-                this.trigger('empty');
-            }
-            this.renderHeader();
-        },
-        renderAttachment: function (model) {
-            var addPreview = this.preview,
-                isEditable = this.editable,
-                view = new this.attachmentView({
-                    model: model,
-                    preview: addPreview,
-                    editable: isEditable
-                });
-            if (view.preview) {
-                this.listenTo(view.preview, 'lazyload', function (el) {
-                    el.lazyload({
-                        container: this.$ul,
-                        effect: 'fadeIn'
-                    });
-                });
-            }
-            view.render();
-            this.$ul.append(view.$el);
-
-            this.$ul.removeClass('empty');
-            this.trigger('filled');
-            return this;
-        },
-        renderDefaultHeader: function () {
-            var length = this.filteredCollection().length;
-            if (length === 0) {
-                //don't render header, if collection is empty
-                return this.$el.addClass('empty');
-            }
-            this.$header.empty().append(
-                $('<a href="#" class="content-toggle">').append(
-                    $('<i>').addClass('fa ' + (this.$ul && this.$ul.hasClass('open') ? 'fa-caret-down' : 'fa-caret-right')),
-                    $('<i>').addClass('fa fa-paperclip'),
-                    $.txt(gt.format(
-                        gt.ngettext('%1$d Attachment', '%1$d Attachments', length),
-                        length
-                    ))
-                ),
-                $('<a href="#" class="pull-right preview-toggle">').append(
-                    $('<i>').addClass('fa ' + (this.preview ? 'fa-list' : 'fa-th-large'))
-                )
-            );
-            if (this.$header.parent() !== this.$el) this.$el.prepend(this.$header);
-            return this.$el;
-        },
-        renderHeader: function () {
-            if (_.isFunction(this.renderCustomHeader)) {
-                return this.renderCustomHeader();
-            }
-            return this.renderDefaultHeader();
-        },
-        renderList: function () {
-            if (!this.$ul) {
-                this.$el.append(
-                    $('<div class="inline-items-container">').append(
-                        $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left"></i></button>'),
-                        $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right"></i></button>'),
-                        this.$ul = $('<ul class="inline-items empty">')
-                    )
-                );
-                if (this.filteredCollection().length === 1) {
-                    this.toggleContent('open');
-                } else {
-                    this.toggleContent('close'); //start closed
-                }
-            } else {
-                this.$ul.empty();
-                this.$ul.addClass('empty');
-                this.filteredCollection().forEach(this.renderAttachment.bind(this));
-                //if (this.$ul.parent() !== this.$el) this.$el.append(this.$ul);
-            }
-            return this.$el;
-        },
-        render: function () {
-            this.$el.empty();
-            this.renderHeader();
-            this.renderList();
-            this.updateScrollControls();
-            return this;
         }
     });
 
     var AttachmentPreview = Backbone.View.extend({
+
+        className: 'preview',
+
         initialize: function () {
             this.listenTo(this.model, 'change:meta', this.render);
         },
-        className: 'preview',
+
+        lazyload: function () {
+            // use defer to make sure this view has already been added to the DOM
+            _.defer(function () {
+                this.$el.lazyload({ container: this.$el.closest('ul'), effect: 'fadeIn' });
+            }.bind(this));
+        },
+
         render: function () {
             var url = this.model.previewUrl();
             this.$el.removeClass('lazy no-preview');
             if (_.isString(url)) {
-                this.$el.addClass('lazy');
-                this.$el.attr('data-original', url);
-                _.defer(function () {
-                    this.trigger('lazyload', this.$el);
-                }.bind(this));
+                this.$el.addClass('lazy').attr('data-original', url);
+                this.lazyload();
             } else {
                 this.$el.addClass('no-preview');
             }
-
             return this;
         }
     });
 
     var AttachmentView = Backbone.View.extend({
+
         tagName: 'li',
         className: 'item',
-        initialize: function (options) {
-            this.preview = options && options.preview === true &&
-                new AttachmentPreview({
-                    model: this.model,
-                    el: this.el
-                });
-            this.editable = options && options.editable === true;
-            this.listenTo(this.model, 'change:uploaded', function (model) {
-                var w = model.get('uploaded') * this.$el.width();
-                this.$('.progress').width(w);
-            });
-            this.listenTo(this.model, 'upload:complete', function () {
-                this.render();
-            });
-        },
-        onRemove: function () {
-            var c = this.model.collection;
-            c.remove(this.model);
-        },
+
         events: {
-            'click a.remove': 'onRemove'
+            'click .remove': 'onRemove'
         },
+
+        initialize: function (options) {
+
+            this.options = _.extend({ editable: false, mode: 'list' }, options);
+
+            this.preview = this.options.mode === 'preview' &&
+                new AttachmentPreview({ model: this.model, el: this.el });
+
+            this.listenTo(this.model, {
+                'change:uploaded': function (model) {
+                    var w = model.get('uploaded') * this.$el.width();
+                    this.$('.progress').width(w);
+                },
+                'upload:complete': function () {
+                    this.render();
+                }
+            });
+        },
+
+        onRemove: function (e) {
+            e.preventDefault();
+            this.model.collection.remove(this.model);
+            this.remove();
+        },
+
         attributes: function () {
             return {
                 'data-id': this.model.get('id')
             };
         },
+
         renderControls: function (widget) {
             if (_.isFunction(this.renderCustomControls)) {
                 this.renderCustomControls(widget);
-            } else if (this.editable) {
-                widget.append(
+            } else if (this.options.editable) {
+                widget.addClass('editable').append(
                     $('<a href="#" class="control remove" tabindex="1">')
                         .attr('title', gt('Remove attachment'))
                         .append($('<i class="fa fa-trash-o">'))
-                ).addClass('editable');
+                );
             }
         },
+
         renderDefaultContent: function (widget) {
             var size = this.model.get('file_size') || this.model.get('size') || 0;
             widget.append(
@@ -1058,15 +1025,17 @@ define('io.ox/core/tk/attachments',
             );
             return widget;
         },
+
         renderContent: function (widget) {
             if (_.isFunction(this.renderCustomContent)) {
                 return this.renderCustomContent(widget);
             }
             return this.renderDefaultContent(widget);
         },
+
         render: function () {
             this.$el.empty();
-            var widget = $('<div class="io-ox-core-tk-attachment file">').appendTo(this.$el);
+            var widget = $('<div class="file">').appendTo(this.$el);
 
             if (this.preview) {
                 this.preview.render();

@@ -19,38 +19,51 @@
         display: none;
     }
 
-    header {
+    .toggle-details {
 
-        .content-toggle {
+        color: #333;
+
+        > i.toggle-caret {
+            width: 7px;
+        }
+
+        > i.fa-paperclip {
             color: #333;
-
-            > i.fa-caret-down, > i.fa-caret-right {
-                width: 7px;
-            }
-            > i.fa-paperclip {
-                color: #333;
-                padding: 0 0.5em;
-            }
-        }
-
-        .preview-toggle {
-            font-size: 16px;
-            padding: 0;
-
-            > i {
-                color: #aaa;
-            }
+            padding: 0 0.5em;
         }
     }
 
+    .toggle-details > .toggle-caret:before { content: '\f0da'; } // caret right
+    &.open .toggle-details > .toggle-caret:before { content: '\f0d7'; } // caret down
+
+    .toggle-mode {
+
+        font-size: 14px;
+        padding: 0;
+        display: none;
+
+        > i {
+            color: #aaa;
+        }
+    }
+
+    &.open .toggle-mode { display: inline-block; }
+    .toggle-mode > i:before { content: '\f009'; } // fa-th-large
+    &.show-preview .toggle-mode > i:before { content: '\f0ca'; } // fa-list-ul
+
     //
-    // Preview container
+    // Container
     //
 
-    .inline-items-container {
-        position: relative;
+    .list-container, .preview-container {
         margin-top: 10px;
+        position: relative;
+        display: none;
     }
+
+    &.open .list-container { display: block; }
+    &.open.show-preview .list-container { display: none; }
+    &.open.show-preview .preview-container { display: block; }
 
     //
     // Scroll controls
@@ -91,21 +104,21 @@
     ul.inline-items {
 
         padding: 0;
-        margin: 0 21px; // yep, 20 + 1
-        z-index: 1;
+        margin: 0;
 
         li.item {
 
             display: inline-block;
             padding: 0;
-            margin-right: 1px;
+            margin: 0;
 
-            .io-ox-core-tk-attachment {
+            .file {
 
                 background-color: inherit;
-                height: 1em;
+                height: 18px;
+                line-height: 18px;
                 padding: 0;
-                margin-right: 14px;
+                margin: 0 14px 0 0;
 
                 a { color: #333; }
                 a:hover { text-decoration: underline; }
@@ -114,20 +127,11 @@
 
             &.editable {
                 background-color: #f5f5f5;
-                border: 0;
-                padding: 1px 5px 1px 5px;
-
-                .io-ox-core-tk-attachment {
-                    height: 1.5em;
-                    padding: 3px 2em 1px 5px;
-                }
+                border: 1px solid #ddd;
+                padding: 1px 30px 1px 5px;
+                margin: 0 5px 2px 0;
+                .border-radius(2px);
             }
-        }
-
-        &.preview li.item{
-            padding: 0;
-            width: 120px;
-            background-size: cover;
         }
     }
 
@@ -325,16 +329,13 @@
     }
 
     /* Preview mode */
-    &.preview {
+    ul.inline-items.preview {
 
-        margin: 0;
+        overflow: hidden;
+        margin: 0 21px; // yep, 20 + 1
         white-space: nowrap;
 
-        ul.inline-items {
-            overflow: hidden;
-        }
-
-        ul.inline-items li.item {
+        li.item {
 
             background-color: #f5f5f5;
             background-size: cover;
@@ -343,48 +344,50 @@
             width: 120px;
             height: 120px;
             padding: 0;
+            margin: 0 1px 0 0;
             cursor: pointer;
 
-            &:hover .io-ox-core-tk-attachment, &:hover .control {
-                display: block;
-            }
-
-            .io-ox-core-tk-attachment {
-                background-color: rgba(0, 0, 0, 0.6);
-                bottom: 0;
-                color: @white;
-                display: none;
-                height: 40px;
-                line-height: 18px;
-                margin: 0;
-                padding: 2px 7px;
+            .file {
                 position: absolute;
-
+                bottom: 0;
                 width: 100%;
+                height: 30px;
+                line-height: 20px;
+                padding: 5px 7px;
+                margin: 0;
+
+                color: @white;
+                background-color: rgba(0, 0, 0, 0.5);
                 .ellipsis();
 
-                .filesize {
-                    color: #bbb;
-                    display: block;
-                    padding-left: 0;
-                }
+                .filesize { display: none; }
             }
 
-            .control {
+            .file, .control {
                 display: none;
+            }
+
+            &:hover .file, &:hover .control {
+                display: block;
             }
 
             .remove {
                 background-color: initial;
                 bottom: 0;
-                height: 3em;
+                width: 30px;
+                height: 30px;
                 right: 0;
                 top: auto;
 
                 .fa {
-                    bottom: 3px;
-                    font-size: 20px;
-                    top: auto;
+                    font-size: 14px;
+                    top: 50%;
+                }
+            }
+
+            &.editable {
+                .file {
+                    padding-right: 30px;
                 }
             }
         }

@@ -317,10 +317,10 @@ define('io.ox/mail/common-extensions',
 
                     this.renderDefaultContent(dd.find('a[data-toggle="dropdown"]'));
                     return widget;
-                },
-                CustomAttachmentList;
+                };
 
             return function (baton) {
+
                 if (baton.attachments.length === 0) return $.when();
 
                 var $el = this,
@@ -332,44 +332,55 @@ define('io.ox/mail/common-extensions',
                             renderCustomControls: renderCustomControls,
                             renderCustomContent: renderCustomContent
                         });
-                        CustomAttachmentList = attachments.view.AttachmentList.extend({
-                            renderCustomHeader: function () {
-                                this.renderDefaultHeader();
-                                if (this.filteredCollection().length > 1) {
-                                    drawInlineLinks(this.$header, this.filteredCollection().map(function (m) {
-                                        return m.toJSON();
-                                    }));
-                                }
-                                return this.$el;
-                            }
-                        });
+                        // CustomAttachmentList = attachments.view.AttachmentList.extend({
+                        //     renderCustomHeader: function () {
+                        //         this.renderDefaultHeader();
+                        //         if (this.filteredCollection().length > 1) {
+                        //             drawInlineLinks(this.$header, this.filteredCollection().map(function (m) {
+                        //                 return m.toJSON();
+                        //             }));
+                        //         }
+                        //         return this.$el;
+                        //     }
+                        // });
                     })();
                     var list = baton.attachments.map(function (m) {
                             m.group = 'mail';
                             return m;
                         }),
                         collection = new attachments.model.Attachments(list),
-                        view = new CustomAttachmentList({
+                        view = new attachments.view.AttachmentList({
                             collection: collection,
-                            editable: false,
+                            el: $el,
                             preview: baton.preview,
                             attachmentView: customAttachmentView
                         });
 
                     $el.append(view.render().$el);
 
-                    view.delegateEvents(_.extend({
-                        'click li.item': function (ev) {
-                            //skip attachments without preview
-                            if (!$(ev.currentTarget).data().original) return;
+                    view.renderInlineLinks = function () {
+                        var models = this.getValidModels(), $links = this.$header.find('.links');
+                        console.log('renderInlineLinks', $links.length, models.length);
+                        if (models.length > 1) drawInlineLinks($links, _(models).invoke('toJSON')); else $links.empty();
+                    };
 
-                            var id = $(ev.currentTarget).data().id,
-                                data = collection.get(id).toJSON(),
-                                b = ext.Baton({ startItem: data, data: list });
+                    view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
+                    view.renderInlineLinks();
 
-                            actions.invoke('io.ox/mail/actions/slideshow-attachment', null, b);
-                        }
-                    }, view.events));
+                    view.$el.on('click', 'li.item', function (e) {
+
+                        var node = $(e.currentTarget), id, data, baton;
+
+                        // skip attachments without preview
+                        if (!node.attr('data-original')) return;
+
+                        id = node.attr('data-id');
+                        data = collection.get(id).toJSON();
+                        baton = ext.Baton({ startItem: data, data: list });
+
+                        actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
+                    });
+
                     def.resolve(view);
                 }, def.reject);
 
