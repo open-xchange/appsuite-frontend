@@ -295,11 +295,6 @@ define('io.ox/mail/common-extensions',
             var CustomAttachmentView,
                 renderContent = function () {
 
-                    if (this.preview) {
-                        this.$('.file').text(this.model.getShortTitle());
-                        return;
-                    }
-
                     var node = this.$('.file'),
                         data = this.model.toJSON(),
                         url, contentType;
@@ -308,7 +303,26 @@ define('io.ox/mail/common-extensions',
                         label: this.model.getShortTitle(),
                         noCaret: true,
                         ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(node, ext.Baton({ data: data, $el: node }));
+                    })
+                    .draw.call(node, ext.Baton({ data: data, $el: node }));
+
+                    // support for fixed position
+                    // TODO: introduce as general solution
+                    node.on('show.bs.dropdown', function (e) {
+                        var link = $(e.relatedTarget), offset = link.offset(), menu = link.next(), top, overlay;
+                        top = offset.top + link.height();
+                        menu.css({ top: offset.top + link.height(), bottom: 'auto', left: offset.left });
+                        if ((top + menu.height()) > $(window).height()) menu.css({ top: 'auto', bottom: '20px' });
+                        overlay = $('<div class="dropdown-overlay">').append(menu);
+                        link.data('overlay', overlay);
+                        $('body').append(overlay);
+                    });
+
+                    node.on('hide.bs.dropdown', function (e) {
+                        var link = $(e.relatedTarget), overlay = link.data('overlay');
+                        link.parent().append(overlay.children());
+                        overlay.remove();
+                    });
 
                     url = api.getUrl(data, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];

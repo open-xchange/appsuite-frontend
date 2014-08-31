@@ -104,6 +104,8 @@
 
         padding: 0;
         margin: 0;
+        max-height: 120px;
+        overflow: hidden;
 
         li.item {
 
@@ -169,7 +171,7 @@
 
     ul.inline-items.preview {
 
-        overflow: hidden;
+        height: 120px; // no clue but helps keeping proper scrollHeight
         margin: 0 21px; // yep, 20 + 1
         white-space: nowrap;
 
@@ -199,6 +201,7 @@
                 background-color: rgba(0, 0, 0, 0.5);
                 .ellipsis();
 
+                a { color: @white; }
                 .filesize { display: none; }
             }
 
@@ -234,5 +237,21 @@
         &:hover .control {
             display: block;
         }
+    }
+}
+
+.dropdown-overlay {
+
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.01);
+
+    .dropdown-menu {
+        position: absolute;
+        display: block;
     }
 }
