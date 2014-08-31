@@ -1,0 +1,238 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
+ */
+
+.mail-attachment-list {
+
+    &.empty {
+        display: none;
+    }
+
+    .toggle-details {
+
+        color: #333;
+
+        > i.toggle-caret {
+            width: 7px;
+        }
+
+        > i.fa-paperclip {
+            color: #333;
+            padding: 0 0.5em;
+        }
+    }
+
+    .toggle-details > .toggle-caret:before { content: '\f0da'; } // caret right
+    &.open .toggle-details > .toggle-caret:before { content: '\f0d7'; } // caret down
+
+    .toggle-mode {
+
+        font-size: 14px;
+        padding: 0;
+        display: none;
+
+        > i {
+            color: #aaa;
+        }
+    }
+
+    &.open .toggle-mode { display: inline-block; }
+    .toggle-mode > i:before { content: '\f009'; } // fa-th-large
+    &.show-preview .toggle-mode > i:before { content: '\f0ca'; } // fa-list-ul
+
+    //
+    // Container
+    //
+
+    .list-container, .preview-container {
+        margin-top: 10px;
+        position: relative;
+        display: none;
+    }
+
+    &.open .list-container { display: block; }
+    &.open.show-preview .list-container { display: none; }
+    &.open.show-preview .preview-container { display: block; }
+
+    //
+    // Scroll controls
+    //
+
+    .scroll-left, .scroll-right {
+        position: absolute;
+        top: 0;
+        width: 20px;
+        height: 120px;
+        z-index: 2;
+        background-color: #888;
+        border: 0;
+        outline: 0;
+        i.fa {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            margin-top: -7px;
+            color: white;
+        }
+        &[disabled] {
+            background-color: #eee;
+            i.fa { color: #ccc; }
+        }
+    }
+
+    .scroll-left { left: 0; }
+    .scroll-right { right: 0; }
+
+    //
+    // Attachment List
+    //
+
+    ul.inline-items {
+
+        padding: 0;
+        margin: 0;
+
+        li.item {
+
+            position: relative;
+            display: inline-block;
+            padding: 0;
+            margin: 0 14px 0 0;
+
+            .file {
+
+                background-color: inherit;
+                height: 18px;
+                line-height: 18px;
+                padding: 0;
+
+                a { color: #333; }
+                a:hover { text-decoration: underline; }
+            }
+
+            .filesize { color: #888; }
+
+            .remove {
+                position: absolute;
+                top: 1px;
+                right: 1px;
+                bottom: 1px;
+                width: 2em;
+                line-height: 1em;
+                cursor: pointer;
+                display: none;
+
+                .fa {
+                    color: #aaa;
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    margin-top: -0.5em;
+                    text-align: center;
+                }
+            }
+
+            .remove:hover .fa { color: @link-color; }
+        }
+    }
+
+    &.editable ul.inline-items > li.item {
+
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        padding: 1px 30px 1px 5px;
+        margin: 0 5px 2px 0;
+        .border-radius(2px);
+
+        .remove {
+            display: inline-block;
+        }
+    }
+
+    //
+    // Preview list
+    //
+
+    ul.inline-items.preview {
+
+        overflow: hidden;
+        margin: 0 21px; // yep, 20 + 1
+        white-space: nowrap;
+
+        li.item {
+
+            background-color: #f5f5f5;
+            background-size: cover;
+
+            position: relative;
+            width: 120px;
+            height: 120px;
+            padding: 0;
+            margin: 0 1px 0 0;
+            border: 0;
+            cursor: pointer;
+
+            .file {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 30px;
+                line-height: 20px;
+                padding: 5px 7px;
+                margin: 0;
+
+                color: @white;
+                background-color: rgba(0, 0, 0, 0.5);
+                .ellipsis();
+
+                .filesize { display: none; }
+            }
+
+            .file, .control {
+                display: none;
+            }
+
+            &:hover .file {
+                display: block;
+            }
+
+            .remove {
+                bottom: 0;
+                width: 30px;
+                height: 30px;
+                right: 0;
+                top: auto;
+                .fa {
+                    font-size: 14px;
+                    top: 50%;
+                }
+                &:hover .fa { color: #fff; }
+            }
+        }
+    }
+
+    &.editable ul.inline-items.preview > li.item {
+
+        .file {
+            padding-right: 30px;
+        }
+
+        &:hover .control {
+            display: block;
+        }
+    }
+}

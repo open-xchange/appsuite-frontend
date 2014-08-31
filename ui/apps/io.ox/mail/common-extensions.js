@@ -331,10 +331,10 @@ define('io.ox/mail/common-extensions',
                 var $el = this,
                     def = $.Deferred();
 
-                require(['io.ox/core/tk/attachments'], function (attachments) {
+                require(['io.ox/core/attachments/view'], function (attachment) {
 
                     _.once(function () {
-                        CustomAttachmentView = attachments.view.Attachment.extend({
+                        CustomAttachmentView = attachment.View.extend({
                             renderContent: renderContent
                         });
                     })();
@@ -343,8 +343,8 @@ define('io.ox/mail/common-extensions',
                             m.group = 'mail';
                             return m;
                         }),
-                        collection = new attachments.model.Attachments(list),
-                        view = new attachments.view.AttachmentList({
+                        collection = new attachment.Collection(list),
+                        view = new attachment.List({
                             AttachmentView: CustomAttachmentView,
                             collection: collection,
                             el: $el,
