@@ -290,19 +290,25 @@ define('io.ox/mail/common-extensions',
                 return extension.draw.call(node, ext.Baton({ data: data }));
             }
 
-            var customAttachmentView,
-                renderCustomControls = function (widget) {
-                    return widget;
-                },
-                renderCustomContent = function (widget) {
-                    var dd = new links.Dropdown({
-                            label: '',
-                            noCaret: true,
-                            ref: 'io.ox/mail/attachment/links'
-                        }).draw.call(widget, ext.Baton({ data: this.model.attributes, $el: widget })),
+            var CustomAttachmentView,
+                renderContent = function () {
+
+                    if (this.preview) {
+                        this.$('.file').text(this.model.getShortTitle());
+                        return;
+                    }
+
+                    var node = this.$('.file'),
+                        data = this.model.toJSON(),
                         url, contentType;
 
-                    url = api.getUrl(this.model.attributes, 'download');
+                    new links.Dropdown({
+                        label: this.model.getShortTitle(),
+                        noCaret: true,
+                        ref: 'io.ox/mail/attachment/links'
+                    }).draw.call(node, ext.Baton({ data: data, $el: node }));
+
+                    url = api.getUrl(data, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
 
                     this.$el.attr({
@@ -314,9 +320,6 @@ define('io.ox/mail/common-extensions',
                         $(this).css({ display: 'inline-block' });
                         e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
                     });
-
-                    this.renderDefaultContent(dd.find('a[data-toggle="dropdown"]'));
-                    return widget;
                 };
 
             return function (baton) {
@@ -327,40 +330,29 @@ define('io.ox/mail/common-extensions',
                     def = $.Deferred();
 
                 require(['io.ox/core/tk/attachments'], function (attachments) {
+
                     _.once(function () {
-                        customAttachmentView = attachments.view.Attachment.extend({
-                            renderCustomControls: renderCustomControls,
-                            renderCustomContent: renderCustomContent
+                        CustomAttachmentView = attachments.view.Attachment.extend({
+                            renderContent: renderContent
                         });
-                        // CustomAttachmentList = attachments.view.AttachmentList.extend({
-                        //     renderCustomHeader: function () {
-                        //         this.renderDefaultHeader();
-                        //         if (this.filteredCollection().length > 1) {
-                        //             drawInlineLinks(this.$header, this.filteredCollection().map(function (m) {
-                        //                 return m.toJSON();
-                        //             }));
-                        //         }
-                        //         return this.$el;
-                        //     }
-                        // });
                     })();
+
                     var list = baton.attachments.map(function (m) {
                             m.group = 'mail';
                             return m;
                         }),
                         collection = new attachments.model.Attachments(list),
                         view = new attachments.view.AttachmentList({
+                            AttachmentView: CustomAttachmentView,
                             collection: collection,
                             el: $el,
-                            preview: baton.preview,
-                            attachmentView: customAttachmentView
+                            preview: baton.preview
                         });
 
                     $el.append(view.render().$el);
 
                     view.renderInlineLinks = function () {
                         var models = this.getValidModels(), $links = this.$header.find('.links');
-                        console.log('renderInlineLinks', $links.length, models.length);
                         if (models.length > 1) drawInlineLinks($links, _(models).invoke('toJSON')); else $links.empty();
                     };
 

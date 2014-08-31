@@ -711,6 +711,12 @@ define('io.ox/core/tk/attachments',
         getTitle: function () {
             return this.get('filename');
         },
+        getShortTitle: function () {
+            return shortTitle(this.getTitle(), 30);
+        },
+        getSize: function () {
+            return this.get('file_size') || this.get('size') || 0;
+        },
         isFileAttachment: function () {
             return this.get('disp') === 'attachment' ||
                 this.get('disp') === 'inline' && this.get('filename');
@@ -787,10 +793,7 @@ define('io.ox/core/tk/attachments',
 
             this.options = _.extend({ AttachmentView: AttachmentView, editable: false, mode: 'list' }, options);
 
-            this.listenTo(this.collection, {
-                add:    this.addAttachment,
-                remove: this.removeAttachment
-            });
+            this.listenTo(this.collection, 'add', this.addAttachment);
 
             // add class here to support $el via options
             this.$el.addClass('io-ox-core-tk-attachment-list');
@@ -864,22 +867,29 @@ define('io.ox/core/tk/attachments',
         renderList: function () {
 
             // use inner function cause we do this twice
-            function render(list, target, mode, options) {
+            function render(list, target, mode) {
                 target.append(
-                    _(list).map(function (model) {
-                        return new options.AttachmentView({
-                            editable: options.editable,
-                            mode: mode,
-                            model: model
-                        })
-                        .render().$el;
-                    })
+                    _(list).map(this.renderAttachment.bind(this, mode))
                 );
             }
 
             var models = this.getValidModels();
-            render(models, this.$list, 'list', this.options);
-            render(models, this.$preview, 'preview', this.options);
+            render.call(this, models, this.$list, 'list');
+            render.call(this, models, this.$preview, 'preview');
+        },
+
+        renderAttachment: function (mode, model) {
+            return new this.options.AttachmentView({
+                editable: this.options.editable,
+                mode: mode,
+                model: model
+            })
+            .render().$el;
+        },
+
+        addAttachment: function (model) {
+            this.$list.append(this.renderAttachment('list', model));
+            this.$preview.append(this.renderAttachment('list', model));
         },
 
         filter: function (model) {
@@ -975,6 +985,10 @@ define('io.ox/core/tk/attachments',
             'click .remove': 'onRemove'
         },
 
+        attributes: function () {
+            return { 'data-id': this.model.get('id') };
+        },
+
         initialize: function (options) {
 
             this.options = _.extend({ editable: false, mode: 'list' }, options);
@@ -999,56 +1013,40 @@ define('io.ox/core/tk/attachments',
             this.remove();
         },
 
-        attributes: function () {
-            return {
-                'data-id': this.model.get('id')
-            };
-        },
-
-        renderControls: function (widget) {
-            if (_.isFunction(this.renderCustomControls)) {
-                this.renderCustomControls(widget);
-            } else if (this.options.editable) {
-                widget.addClass('editable').append(
-                    $('<a href="#" class="control remove" tabindex="1">')
-                        .attr('title', gt('Remove attachment'))
-                        .append($('<i class="fa fa-trash-o">'))
-                );
-            }
-        },
-
-        renderDefaultContent: function (widget) {
-            var size = this.model.get('file_size') || this.model.get('size') || 0;
-            widget.append(
-                shortTitle(this.model.getTitle(), 30),
-                size ? $('<span class="filesize">').text(' (' + strings.fileSize(size) + ')') : $()
-            );
-            return widget;
-        },
-
-        renderContent: function (widget) {
-            if (_.isFunction(this.renderCustomContent)) {
-                return this.renderCustomContent(widget);
-            }
-            return this.renderDefaultContent(widget);
-        },
-
         render: function () {
-            this.$el.empty();
-            var widget = $('<div class="file">').appendTo(this.$el);
 
-            if (this.preview) {
-                this.preview.render();
-            }
-            if (this.model.needsUpload()) {
-                this.$el.append(
-                    this.progress = $('<div class="progress">')
-                );
-            }
-            this.renderContent(widget);
+            this.$el.append(
+                $('<span class="file">'),
+                $('<span class="filesize">'),
+                // progress?
+                this.model.needsUpload() ? $('<div class="progress">') : $()
+            );
 
-            this.renderControls(this.$el);
+            if (this.preview) this.preview.render();
+            if (!this.preview) this.renderFileSize();
+
+            this.renderContent();
+            this.renderControls();
+
             return this;
+        },
+
+        renderFileSize: function () {
+            var size = this.model.getSize();
+            if (size) this.$('.filesize').text(' (' + strings.fileSize(size) + ')');
+        },
+
+        renderContent: function () {
+            this.$('.file').text(this.model.getShortTitle());
+        },
+
+        renderControls: function () {
+            if (!this.options.editable) return;
+            this.$el.addClass('editable').append(
+                $('<a href="#" class="control remove" tabindex="1">')
+                    .attr('title', gt('Remove attachment'))
+                    .append($('<i class="fa fa-trash-o">'))
+            );
         }
     });
 
