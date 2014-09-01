@@ -59,10 +59,6 @@ define.async('io.ox/oauth/keychain',
             return account;
         }
 
-        function incoming(account) {
-            return account;
-        }
-
         function chooseDisplayName() {
             var names = {}, name, counter = 0;
             _(cache[service.id].accounts).each(function (account) {
@@ -95,23 +91,11 @@ define.async('io.ox/oauth/keychain',
             return this.getAll().length > 0;
         };
 
-        this.createInteractively = function (win) {
-            // TODO: die zeile hier drunter macht nix, oder!?
-            var account = incoming(account),
-                def = $.Deferred();
+        this.createInteractively = function (popupWindow) {
 
-            require(['io.ox/core/tk/keys'], function () {
-                var callbackName = 'oauth' + generateId();
-                var params = {
-                    action: 'init',
-                    serviceId: service.id,
-                    displayName: chooseDisplayName(),
-                    cb: callbackName
-                };
-                if (account) {
-                    params.id = account.id;
-                }
+            var def = $.Deferred();
 
+<<<<<<< HEAD
                 // this is far too late not to run into popup blocker
                 var popupWindow = win || window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
 
@@ -131,23 +115,44 @@ define.async('io.ox/oauth/keychain',
                         ox.trigger('refresh-portal');
                         notifications.yell('success', gt('Account added successfully'));
                     };
+=======
+            // the popup must exist already, otherwise we run into the popup blocker
+            if (!popupWindow) return def.reject();
+>>>>>>> d011f70... OAuth: Migrated to new "redirect=true" approach (needs new backend; otherwise popups broken)
 
-                    popupWindow.location = interaction.authUrl + '&display=popup';
+            require(['io.ox/core/tk/keys']).done(function () {
 
-                }).fail(function (e) {
-                    // TODO handle errors
-                    notifications.yell('error', e.error);
+                var callbackName = 'oauth' + generateId(),
+                    params = {
+                        action: 'init',
+                        cb: callbackName,
+                        display: 'popup',
+                        displayName: chooseDisplayName(),
+                        redirect: true,
+                        serviceId: service.id,
+                        session: ox.session
+                    };
+
+                window['callback_' + callbackName] = function (response) {
+                    // TODO handle a possible error object in response
+                    cache[service.id].accounts[response.data.id] = response.data;
+                    def.resolve(response.data);
+                    delete window['callback_' + callbackName];
                     popupWindow.close();
-                    def.reject();
-                });
+                    self.trigger('create', response.data);
+                    self.trigger('refresh.all refresh.list');
+                    ox.trigger('refresh-portal');
+                    notifications.yell('success', gt('Account added successfully'));
+                };
 
+                popupWindow.location = ox.apiRoot + '/oauth/accounts?' + $.param(params);
             });
 
-            return def;
+            return def.promise();
         };
 
         this.remove = function (account) {
-            account = incoming(account);
+
             return http.PUT({
                 module: 'oauth/accounts',
                 params: {
@@ -162,7 +167,7 @@ define.async('io.ox/oauth/keychain',
         };
 
         this.update = function (account) {
-            account = incoming(account);
+
             return http.PUT({
                 module: 'oauth/accounts',
                 params: {
