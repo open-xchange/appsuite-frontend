@@ -12,24 +12,28 @@
  */
 
 define([
-    'io.ox/core/tk/attachments'
-], function (attachments) {
+    'io.ox/core/attachments/view'
+], function (Attachments) {
 
     'use strict';
-    var views = attachments.view;
 
     describe('Attachments Views:', function () {
         it('API should provide an AttachmentList view', function () {
-            expect(views.AttachmentList).to.exist;
+            expect(Attachments.List).to.exist;
         });
 
         it('API should provide an Attachment view', function () {
-            expect(views.Attachment).to.exist;
+            expect(Attachments.View).to.exist;
+        });
+
+        it('API should provide an Attachment view rendering with preview', function () {
+            expect(Attachments.Preview).to.exist;
         });
 
         it('provided by the API should be extendable (Backbone views)', function () {
-            expect(views.AttachmentList).itself.to.respondTo('extend');
-            expect(views.Attachment).itself.to.respondTo('extend');
+            expect(Attachments.List).itself.to.respondTo('extend');
+            expect(Attachments.View).itself.to.respondTo('extend');
+            expect(Attachments.Preview).itself.to.respondTo('extend');
         });
 
         describe('AttachmentList', function () {
@@ -42,110 +46,88 @@ define([
                 });
 
             beforeEach(function () {
-                EmptyAttachmentList = views.AttachmentList.extend({
+                EmptyAttachmentList = Attachments.List.extend({
                     collection: new Backbone.Collection()
                 });
             });
             it('has a constructor expecting a Collection', function () {
                 var createWithCollection = function () {
-                        new views.AttachmentList({
+                        new Attachments.List({
                             collection: new Backbone.Collection()
                         });
                     },
                     createWithoutCollection = function () {
-                        new views.AttachmentList({});
+                        new Attachments.List({});
                     };
 
                 expect(createWithoutCollection).to.throw(Error);
                 expect(createWithCollection).not.to.throw(Error);
             });
 
-            describe('has a preview option', function () {
-                it('that renders a .preview class', function () {
-                    var list1 = new EmptyAttachmentList({}),
-                        list2 = new EmptyAttachmentList({
-                            preview: true
-                        });
+            describe('has a preview mode toggle', function () {
+                    var Model = Backbone.Model.extend({
+                        isFileAttachment: sinon.stub().returns(true)
+                    }),
+                    list = new Attachments.List({
+                        collection: new Backbone.Collection([new Model(), new Model()]),
+                        AttachmentView: Backbone.View.extend({
+                            tagName: 'li'
+                        })
+                    });
 
-                    list1.render();
-                    list2.render();
-                    expect(list1.$el.hasClass('preview'), 'has class .preview').not.to.be.true;
-                    expect(list2.$el.hasClass('preview'), 'has class .preview').to.be.true;
-                });
-                it('that can be toggled live', function () {
-                    var list = new EmptyAttachmentList({});
-                    list.render();
-                    expect(list.$el.hasClass('preview'), 'has class .preview').not.to.be.true;
-                    list.togglePreview();
-                    expect(list.$el.hasClass('preview'), 'has class .preview').to.be.true;
-                });
-
-                it('changes the icon on toggle', function () {
-                        var Model = Backbone.Model.extend({
-                            isFileAttachment: sinon.stub().returns(true)
-                        }),
-                        list = new views.AttachmentList({
-                            collection: new Backbone.Collection([new Model(), new Model()]),
-                            attachmentView: Backbone.View.extend({
-                                tagName: 'li'
-                            })
-                        });
-
-                    list.render().toggleContent('open');
-                    expect(list.$('header a.preview-toggle i').hasClass('fa-th-large'), 'preview toggle item shows "fa-th-large"').to.be.true;
-                    expect(list.$('header a.preview-toggle i').hasClass('fa-list'), 'preview toggle item shows "fa-list"').to.be.false;
-                    expect(list.$('ul li'), 'li elements within the ul after open').to.have.length(2);
-                    list.togglePreview();
-                    expect(list.$('header a.preview-toggle i').hasClass('fa-th-large'), 'preview toggle item shows "fa-th-large"').to.be.false;
-                    expect(list.$('header a.preview-toggle i').hasClass('fa-list'), 'preview toggle item shows "fa-list"').to.be.true;
-                    expect(list.$('ul li'), 'li elements within the ul after toggle preview').to.have.length(2);
-                });
+                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                expect(list.$el.hasClass('show-preview'), 'preview is shown').to.be.false;
+                list.onToggleMode({preventDefault: sinon.stub()});
+                expect(list.$el.hasClass('show-preview'), 'preview is shown').to.be.true;
             });
 
             it('only renders "file attachment" models', function () {
                 var model = new NonFileModel({}),
-                    renderMe = sinon.spy(),
+                    renderMe = sinon.stub().returns({'$el': $()}),
                     list = new EmptyAttachmentList({
-                        attachmentView: Backbone.View.extend({
+                        AttachmentView: Backbone.View.extend({
                             render: renderMe
                         })
                     });
 
                 list.collection.reset([model]);
-                list.render().toggleContent('show');
+                list.render().onToggleDetails({preventDefault: sinon.stub()});
                 expect(renderMe.called, 'render method called').to.be.false;
 
                 model.isFileAttachment = sinon.stub().returns(true);
                 list = new EmptyAttachmentList({
-                    attachmentView: Backbone.View.extend({
+                    AttachmentView: Backbone.View.extend({
                         render: renderMe
                     })
                 });
                 list.collection.reset([model]);
-                list.render().toggleContent('open');
-                expect(renderMe.calledOnce, 'render method called once').to.be.true;
+                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                //render twice, one time with preview, one time without
+                expect(renderMe.calledTwice, 'render method called twice').to.be.true;
             });
 
             it('allows to provide custom attachment views', function () {
                 var model = new FileModel(),
-                    renderMe = sinon.spy(),
+                    renderMe = sinon.stub().returns({'$el': $()}),
                     list = new EmptyAttachmentList({
-                        attachmentView: Backbone.View.extend({
+                        AttachmentView: Backbone.View.extend({
                             render: renderMe
                         })
                     });
 
                  list.collection.reset([model]);
-                 list.render().toggleContent('open');
-                 expect(renderMe.calledOnce, 'render method called once').to.be.true;
+                 list.render().onToggleDetails({preventDefault: sinon.stub()});
+                 //render twice, one time with preview, one time without
+                 expect(renderMe.calledTwice, 'render method called twice').to.be.true;
             });
 
             describe('renders', function () {
-                it('no header for empty collections', function () {
+                //we don't do this any longer
+                it.skip('no header for empty collections', function () {
                     var list = new EmptyAttachmentList({});
 
                     list.render();
-                    expect(list.$('header'), 'header elements in list').to.have.length(0);
+                    expect(list.$('header').children(), 'header elements in list').to.have.length(0);
                     expect(list.$el.hasClass('empty'), '.empty class for list element').to.be.true;
                 });
 
@@ -153,24 +135,24 @@ define([
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
                         }),
-                        list = new views.AttachmentList({
+                        list = new Attachments.List({
                             collection: new Backbone.Collection([new Model(), new Model()]),
-                            attachmentView: Backbone.View.extend({})
+                            AttachmentView: Backbone.View.extend({})
                         });
 
                    list.render();
-                   expect(list.$ul.hasClass('open'), 'ul has class .open').to.be.false;
-                   expect(list.$ul.hasClass('empty'), 'ul has class .empty').to.be.true;
-                   expect(list.$ul.children('li'), 'li items in ul').to.have.length(0);
+                   expect(list.$el.hasClass('open'), 'list has class .open').to.be.false;
+                   expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(0);
                 });
 
-                it('with "opened" list for collections with one item', function () {
+                //we don't do this, at the moment
+                it.skip('with "opened" list for collections with one item', function () {
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
                         }),
-                        list = new views.AttachmentList({
+                        list = new Attachments.List({
                             collection: new Backbone.Collection([new Model()]),
-                            attachmentView: Backbone.View.extend({
+                            AttachmentView: Backbone.View.extend({
                                 tagName: 'li'
                             })
                         });
@@ -184,9 +166,9 @@ define([
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
                         }),
-                        list = new views.AttachmentList({
+                        list = new Attachments.List({
                             collection: new Backbone.Collection([new Model()]),
-                            attachmentView: Backbone.View.extend({})
+                            AttachmentView: Backbone.View.extend({})
                         });
 
                    list.render();
@@ -197,70 +179,63 @@ define([
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
                         }),
-                        list = new views.AttachmentList({
+                        list = new Attachments.List({
                             collection: new Backbone.Collection([new Model()]),
-                            attachmentView: Backbone.View.extend({})
+                            AttachmentView: Backbone.View.extend({})
                         });
 
-                    list.renderCustomHeader = sinon.stub();
+                    list.renderHeader = sinon.stub();
 
                     list.render();
                     //custom header rendered
-                    expect(list.renderCustomHeader.calledOnce, 'renderCustomHeader method has been called once').to.be.true;
+                    expect(list.renderHeader.calledOnce, 'renderHeader method has been called once').to.be.true;
                     //default header not rendered
-                    expect(list.$('header'), 'header elements in list').to.have.length(0);
+                    expect(list.$('header').children(), 'header element should be empty').to.have.length(0);
                 });
 
-                it('a content toggle', function () {
+                it('a details toggle', function () {
                     var Model = Backbone.Model.extend({
                         isFileAttachment: sinon.stub().returns(true)
                     }),
-                   list = new views.AttachmentList({
+                   list = new Attachments.List({
                        collection: new Backbone.Collection([new Model()]),
-                       attachmentView: Backbone.View.extend({})
+                       AttachmentView: Backbone.View.extend({})
                    });
 
                    list.render();
-                   expect(list.$('header a.content-toggle').length === 1, 'found content toggle link').to.be.true;
+                   expect(list.$('header a.toggle-details').length === 1, 'found details toggle link').to.be.true;
                 });
 
-                it('a preview toggle', function () {
+                it('a preview mode toggle', function () {
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
                         }),
-                        list = new views.AttachmentList({
+                        list = new Attachments.List({
                             collection: new Backbone.Collection([new Model()]),
-                            attachmentView: Backbone.View.extend({})
+                            AttachmentView: Backbone.View.extend({})
                         });
 
                     list.render();
-                    expect(list.$('header a.preview-toggle').length === 1, 'found preview toggle link').to.be.true;
+                    expect(list.$('header a.toggle-mode').length === 1, 'found preview toggle link').to.be.true;
                 });
             });
 
-            describe('has a content toggle', function () {
-                it('that can be used to force open the content', function () {
-                    var Model = Backbone.Model.extend({
-                            isFileAttachment: sinon.stub().returns(true)
-                        }),
-                        list = new views.AttachmentList({
-                            collection: new Backbone.Collection([new Model(), new Model()]),
-                            attachmentView: Backbone.View.extend({
-                                tagName: 'li'
-                            })
-                        });
+            it('has a details toggle', function () {
+                var Model = Backbone.Model.extend({
+                        isFileAttachment: sinon.stub().returns(true)
+                    }),
+                    list = new Attachments.List({
+                        collection: new Backbone.Collection([new Model(), new Model()]),
+                        AttachmentView: Backbone.View.extend({
+                            tagName: 'li'
+                        })
+                    });
 
-                    list.render();
-                    //renders closed by default
-                    expect(list.$ul.hasClass('open'), 'ul has class open').to.be.false;
-                    expect(list.$ul.children('li'), 'li items in ul').to.have.length(0);
-                    list.toggleContent('open');
-                    expect(list.$ul.hasClass('open'), 'ul has class open').to.be.true;
-                    expect(list.$ul.children('li'), 'li items in ul').to.have.length(2);
-                    list.toggleContent('open');
-                    expect(list.$ul.hasClass('open'), 'ul has class open').to.be.true;
-                    expect(list.$ul.children('li'), 'li items in ul').to.have.length(2);
-                });
+                list.render();
+                //renders closed by default
+                expect(list.$el.hasClass('open'), 'ul has class open').to.be.false;
+                list.onToggleDetails({preventDefault: sinon.stub()});
+                expect(list.$el.hasClass('open'), 'ul has class open').to.be.true;
             });
 
             describe('can dynamically add/remove attachments', function () {
@@ -268,34 +243,34 @@ define([
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
                         }),
-                        list = new views.AttachmentList({
+                        list = new Attachments.List({
                             collection: new Backbone.Collection([new Model(), new Model()]),
-                            attachmentView: Backbone.View.extend({
+                            AttachmentView: Backbone.View.extend({
                                 tagName: 'li'
                             })
                         });
 
-                   list.render().toggleContent('open');
-                   expect(list.$ul.hasClass('open'), 'ul has class open').to.be.true;
-                   expect(list.$ul.children('li'), 'li items in ul').to.have.length(2);
-                   list.collection.add(new Model());
-                   expect(list.$ul.children('li'), 'li items in ul').to.have.length(3);
+                    list.render().onToggleDetails({preventDefault: sinon.stub()});
+                    expect(list.$el.hasClass('open'), 'list has class open').to.be.true;
+                    expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(2);
+                    list.collection.add(new Model());
+                    expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(3);
                 });
 
                 it('updates the header', function () {
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
                         }),
-                        list = new views.AttachmentList({
+                        list = new Attachments.List({
                             collection: new Backbone.Collection([new Model(), new Model()]),
-                            attachmentView: Backbone.View.extend({
+                            AttachmentView: Backbone.View.extend({
                                 tagName: 'li'
                             })
                         });
 
-                   list.render().toggleContent('open');
-                   list.collection.add(new Model());
-                   expect(list.$('header').text(), 'header text').to.contain('3 Attachments');
+                    list.render().onToggleDetails({preventDefault: sinon.stub()});
+                    list.collection.add(new Model());
+                    expect(list.$('header').text(), 'header text').to.contain('3 attachments');
                 });
             });
         });
@@ -308,14 +283,14 @@ define([
         });
 
         it('should render a li item', function () {
-            var view = new views.Attachment({
+            var view = new Attachments.View({
                 model: new FakeModel()
             });
             view.render();
             expect(view.$el.is('li'), 'rendered element is a li element').to.be.true;
         });
         it('should render the title', function () {
-            var view = new views.Attachment({
+            var view = new Attachments.View({
                 model: new FakeModel()
             });
             view.render();

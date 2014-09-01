@@ -38,7 +38,7 @@ define('io.ox/core/attachments/view',
 
         initialize: function (options) {
 
-            this.options = _.extend({ AttachmentView: backbone.AttachmentView, editable: false, mode: 'list' }, options);
+            this.options = _.extend({ AttachmentView: View, editable: false, mode: 'list' }, options);
 
             this.listenTo(this.collection, 'add', this.addAttachment);
 
