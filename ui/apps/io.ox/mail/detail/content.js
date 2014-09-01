@@ -236,6 +236,10 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    // Both fixes, images and tables were moved to the backend
+    // sanitizer on 01.08.2014
+
+    /*
     ext.point('io.ox/mail/detail/content').extend({
         id: 'images',
         index: 300,
@@ -252,7 +256,8 @@ define('io.ox/mail/detail/content',
             });
         }
     });
-
+    */
+    /*
     ext.point('io.ox/mail/detail/content').extend({
         id: 'tables',
         index: 400,
@@ -281,7 +286,7 @@ define('io.ox/mail/detail/content',
             });
         }
     });
-
+    */
     ext.point('io.ox/mail/detail/content').extend({
         id: 'nested',
         index: 500,
