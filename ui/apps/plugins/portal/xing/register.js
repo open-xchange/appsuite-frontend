@@ -137,9 +137,7 @@ define('plugins/portal/xing/register',
     addXingAccount = function (event) {
         var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600'),
             baton = event.data.baton;
-        return $.when(
-            keychain.createInteractively('xing', win))
-        .then(function () {
+        return keychain.createInteractively('xing', win).done(function () {
             var model = baton.model;
             $(model.node).find('.setup-questions').remove();
             model.changed.props = baton.model.drawn = true; //hack to provoke loadAndPreview()
