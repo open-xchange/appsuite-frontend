@@ -65,9 +65,6 @@ define('io.ox/core/attachments/view',
 
             // initial toggle if empty
             this.$el.toggle(this.getValidModels().length > 0);
-
-            // debugging
-            window.attachmentList = this;
         },
 
         render: function () {
