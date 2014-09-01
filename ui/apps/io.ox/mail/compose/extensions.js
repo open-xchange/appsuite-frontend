@@ -302,7 +302,6 @@ define('io.ox/mail/compose/extensions',
                         editable: true
                     });
 
-                //TODO: move dropzone into custom header method for view
                 // dropzone
                 var zone = new dropzone.Inplace({
                     caption: gt('Drop attachments here')
