@@ -163,6 +163,7 @@ define('io.ox/core/extPatterns/links',
             baton = ext.Baton.ensure(baton);
             var attr = {
                 href: '#',
+                role: 'button',
                 'class': 'btn btn-default',
                 'data-action': self.id,
                 tabindex: self.tabIndex

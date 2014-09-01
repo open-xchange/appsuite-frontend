@@ -181,7 +181,7 @@ define('io.ox/mail/write/view-main',
             return this.createLink(id, label).appendTo(this.scrollpane);
         },
 
-        createField: function (id) {
+        createField: function (id, label) {
 
             var self = this, node = self.app.getWindowNode();
 
@@ -256,7 +256,8 @@ define('io.ox/mail/write/view-main',
                                 self.showSection('bcc');
                             }
                         }
-                    })
+                    }),
+                    label ? $('<span class="sr-only">').text(label) : $()
                 )
             );
         },
@@ -503,7 +504,7 @@ define('io.ox/mail/write/view-main',
             // TO
             this.addSection('to').append(
                 this.createRecipientList('to'),
-                this.createField('to')
+                this.createField('to', gt('To'))
                     .find('input').attr('placeholder', gt.format('%1$s ...', gt('To'))).placeholder().end()
             );
 
@@ -511,7 +512,7 @@ define('io.ox/mail/write/view-main',
             this.addLink('cc', gt('Copy (CC) to'));
             this.addSection('cc', gt('Copy (CC) to'), false, true)
                 .append(this.createRecipientList('cc'))
-                .append(this.createField('cc')
+                .append(this.createField('cc', gt('in copy'))
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in copy'))).placeholder().end()
                     );
 
@@ -519,7 +520,7 @@ define('io.ox/mail/write/view-main',
             this.addLink('bcc', gt('Blind copy (BCC) to'));
             this.addSection('bcc', gt('Blind copy (BCC) to'), false, true)
                 .append(this.createRecipientList('bcc'))
-                .append(this.createField('bcc')
+                .append(this.createField('bcc', gt('in blind copy'))
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in blind copy'))).placeholder().end()
                     );
 
@@ -924,6 +925,8 @@ define('io.ox/mail/write/view-main',
                                 }
                             }),*/
                             'mail_subject'
+                        ).append(
+                            $('<span class="sr-only">').text(gt('Subject'))
                         )
                     ),
                     // append emojitoggle
