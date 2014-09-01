@@ -1361,22 +1361,17 @@ define('io.ox/core/desktop',
                         // facets container
                         nodes.container = $('<div class="abs search-container">').hide().append(
                             // active facets
-                            $('<ul class="search-facets">'),
-                            $('<div>')
-                            .css({
-                                'margin-top': '14x'
-                            })
+                            $('<div class="default">').append(
+                                $('<ul class="search-facets">')
+                            ),
+                            // advanced facets
+                            $('<div class="advanced">')
                             .append(
                                 $('<ul class="search-facets search-facets-advanced">')
                             ),
                             // cancel button
-                            $('<button type="button" class="btn btn-primary">')
+                            $('<a data-action="close">')
                                 .text(gt('Close search'))
-                                .css({
-                                    position: 'absolute',
-                                    bottom: '13px',
-                                    right: '13px'
-                                })
                                 .on('click', function (e) {
                                     e.preventDefault();
                                     self.facetedsearch.view.trigger('button:cancel');

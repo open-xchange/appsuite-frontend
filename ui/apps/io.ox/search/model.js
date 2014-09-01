@@ -54,6 +54,8 @@ define('io.ox/search/model',
         start: 0,
         size: 100,
         extra: 1,
+        // show advanced facets block initially
+        showadv: false,
         // data container for extensions/plugins
         extensions: {
             history: []

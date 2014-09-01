@@ -34,9 +34,11 @@ define('io.ox/search/autocomplete/extensions',
                     )
             );
 
-            //buttons
-            extensions.cancelButton.call(group, baton);
+            // buttons
             extensions.searchButton.call(group, baton);
+
+            // disabled in core
+            //extensions.cancelButton.call(group, baton);
 
             return this;
         },

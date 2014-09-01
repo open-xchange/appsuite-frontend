@@ -243,6 +243,10 @@ define('io.ox/search/facets/extensions',
                     self = this,
                     nodes = [];
 
+
+                if (!baton.model.get('showadv'))
+                    self.hide();
+
                 // add inactive advanced facets
                 nodes = _(facets).map(function (facet) {
                     var value, node, button;
@@ -286,18 +290,12 @@ define('io.ox/search/facets/extensions',
                 this.parent().find('a').remove();
                 if (_.compact(nodes).length) {
                     this.parent().prepend(
-                        $('<a>')
-                            .css({
-                                'margin-bottom': '8px',
-                                'margin-top': '6px',
-                                'float': 'right'
-                            })
-                            .text(gt('Hide Advanced Filters'))
+                        $('<a data-action="toggle-adv">')
+                            .text(gt('Show advanced filters'))
                             .on('click', function () {
-                                if (self.is(':visible'))
-                                    $(this).text(gt('Show Advanced Filters'));
-                                else
-                                    $(this).text(gt('Hide Advanced Filters'));
+                                var visible = self.is(':visible');
+                                $(this).text(visible ? gt('Show advanced filters') : gt('Hide advanced filters'));
+                                baton.model.set('showadv', !visible);
                                 self.toggle();
                             })
                     );
