@@ -160,6 +160,15 @@
         margin: 0 5px 2px 0;
         .border-radius(2px);
 
+
+        .progress {
+            background-color: rgba(255, 0, 0, 0.3);
+            height: 3px;
+            position: absolute;
+            top: 0;
+            width: 0px;
+        }
+
         .remove {
             display: inline-block;
         }
@@ -202,8 +211,8 @@
                 .ellipsis();
 
                 a { color: @white; }
-                .filesize { display: none; }
             }
+            .filesize { display: none; }
 
             .file, .control {
                 display: none;

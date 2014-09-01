@@ -16,10 +16,10 @@ define('io.ox/mail/compose/model',
      'io.ox/mail/util',
      'io.ox/core/api/account',
      'io.ox/emoji/main',
-     'io.ox/core/tk/attachments',
+     'io.ox/core/attachments/backbone',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (mailAPI, mailUtil, accountAPI, emoji, attachments, settings, gt) {
+    ], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
 
     'use strict';
 
@@ -67,7 +67,7 @@ define('io.ox/mail/compose/model',
         initialize: function () {
             var list = this.get('attachments');
             if (_.isArray(list)) {
-                this.set('attachments', new attachments.model.Attachments(list), {silent: true});
+                this.set('attachments', new Attachments.Collection(list), {silent: true});
                 list = this.get('attachments');
             }
             var content = list.at(0);

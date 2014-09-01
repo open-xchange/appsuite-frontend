@@ -296,11 +296,10 @@ define('io.ox/mail/compose/extensions',
             var $el = this,
                 def = $.Deferred();
 
-            require(['io.ox/core/tk/attachments'], function (attachments) {
-                var view = new attachments.view.AttachmentList({
+            require(['io.ox/core/attachments/view'], function (Attachments) {
+                var view = new Attachments.List({
                         collection: baton.model.get('attachments'),
-                        editable: true,
-                        preview: true
+                        editable: true
                     });
 
                 //TODO: move dropzone into custom header method for view
@@ -328,7 +327,7 @@ define('io.ox/mail/compose/extensions',
                 view.render();
                 $el.append(
                     zone.render().$el.addClass('abs'),
-                    view.$el.addClass('inline-items')
+                    view.$el
                 );
 
                 def.resolve(view);
