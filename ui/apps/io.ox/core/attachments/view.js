@@ -63,6 +63,9 @@ define('io.ox/core/attachments/view',
                 this.renderSummary(length);
             });
 
+            // initial toggle if empty
+            this.$el.toggle(this.getValidModels().length > 0);
+
             // debugging
             window.attachmentList = this;
         },

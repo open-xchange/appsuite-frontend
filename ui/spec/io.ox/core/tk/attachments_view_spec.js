@@ -122,13 +122,13 @@ define([
             });
 
             describe('renders', function () {
-                //we don't do this any longer
-                it.skip('no header for empty collections', function () {
+                it('hidden for empty collections', function () {
                     var list = new EmptyAttachmentList({});
 
                     list.render();
-                    expect(list.$('header').children(), 'header elements in list').to.have.length(0);
-                    expect(list.$el.hasClass('empty'), '.empty class for list element').to.be.true;
+                    $('body').append(list.$el);
+                    expect(list.$el.is(':hidden'), 'list element is hidden').to.be.true;
+                    list.remove();
                 });
 
                 it('with "closed" and empty list for collections with more than one item', function () {
