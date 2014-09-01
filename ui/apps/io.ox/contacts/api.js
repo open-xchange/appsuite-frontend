@@ -933,5 +933,15 @@ define('io.ox/contacts/api',
         api.trigger('update:' + key);
     };
 
+    //
+    // Simple auto-complete search
+    //
+    api.autocomplete = function (query, options) {
+
+        options = _.extend({ email: true, sort: '609' }, options, { query: query });
+
+        return http.GET({ module: 'contacts', params: options });
+    };
+
     return api;
 });
