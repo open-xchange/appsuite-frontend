@@ -171,6 +171,8 @@ module.exports = function (grunt) {
                              'apps/io.ox/core/dropzone.js',
                              // mail app - 3rd wave
                              'apps/io.ox/core/strings.js',
+                             'apps/io.ox/core/attachments/backbone.js',
+                             'apps/io.ox/core/attachments/view.js',
                              'apps/io.ox/core/api/user.js',
                              'apps/io.ox/contacts/util.js',
                              'apps/l10n/ja_JP/io.ox/collation.js',

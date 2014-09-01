@@ -128,6 +128,11 @@ define('io.ox/core/attachments/backbone',
             return this.get('file_size') || this.get('size') || 0;
         },
 
+        getExtension: function () {
+            var parts = String(this.get('filename') || '').split('.');
+            return parts.length === 1 ? '' : parts.pop().toLowerCase();
+        },
+
         isFileAttachment: function () {
             return this.get('disp') === 'attachment' ||
                 this.get('disp') === 'inline' && this.get('filename');
@@ -138,23 +143,19 @@ define('io.ox/core/attachments/backbone',
         },
 
         previewUrl: function () {
+
             var supportsDocumentPreview = capabilities.has('document_preview'),
-                filename = this.get('filename'),
-                url;
-            if (!(this.isFileAttachment() && (regIsImage.test(filename) ||
-                supportsDocumentPreview && regIsDocument.test(filename))))
-            {
-                return null;
-            }
+                filename = this.get('filename'), url;
+
+            if (!this.isFileAttachment()) return null;
+            if (!regIsImage.test(filename) && !(supportsDocumentPreview && regIsDocument.test(filename))) return null;
+
             url = this.get('meta').previewUrl;
-            if (url) {
-                return url;
-            }
+            if (url) return url;
 
             var fetchPreview = previewFetcher[this.get('group')];
-            if (fetchPreview) {
-                return fetchPreview(this);
-            }
+            if (fetchPreview) return fetchPreview(this);
+
             return null;
         },
 

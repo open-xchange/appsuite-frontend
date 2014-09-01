@@ -51,6 +51,7 @@ define('io.ox/core/attachments/view',
             this.$header = $('<header>');
             this.$list = $('<ul class="inline-items">');
             this.$preview = $('<ul class="inline-items preview">');
+            this.isListRendered = false;
 
             // things to do whenever the collection changes:
             this.listenTo(this.collection, 'add remove reset', function () {
@@ -70,7 +71,6 @@ define('io.ox/core/attachments/view',
         render: function () {
 
             this.renderHeader();
-            this.renderList();
 
             this.$el.append(
                 // header
@@ -126,6 +126,8 @@ define('io.ox/core/attachments/view',
             var models = this.getValidModels();
             render.call(this, models, this.$list, 'list');
             render.call(this, models, this.$preview, 'preview');
+
+            this.isListRendered = true;
         },
 
         renderAttachment: function (mode, model) {
@@ -133,6 +135,7 @@ define('io.ox/core/attachments/view',
         },
 
         addAttachment: function (model) {
+            if (!this.isListRendered) return;
             this.$list.append(this.renderAttachment('list', model));
             this.$preview.append(this.renderAttachment('list', model));
         },
@@ -148,6 +151,7 @@ define('io.ox/core/attachments/view',
         onToggleDetails: function (e) {
             e.preventDefault();
             this.$el.toggleClass('open');
+            if (!this.isListRendered) this.renderList();
         },
 
         onToggleMode: function (e) {
@@ -198,7 +202,12 @@ define('io.ox/core/attachments/view',
         className: 'preview',
 
         initialize: function () {
-            this.listenTo(this.model, 'change:meta', this.render);
+            this.listenTo(this.model, 'change:meta', function () {
+                if (this.$el.hasClass('lazy')) return;
+                // render again since we might now have a preview URL
+                this.$('.fallback').remove();
+                this.render();
+            });
         },
 
         lazyload: function () {
@@ -208,14 +217,32 @@ define('io.ox/core/attachments/view',
             }.bind(this));
         },
 
+        getColor: function (extension) {
+            if (/^do[ct]x?$/.test(extension)) return '#2C5897'; // word blue
+            if (/^xlsx?$/.test(extension)) return '#1D7047'; // excel green
+            if (/^p[po]tx?$/.test(extension)) return '#D04423'; // powerpoint orange
+            if (/^pdf$/.test(extension)) return '#C01E07'; // pdf red
+            if (/^(zip|gz|gzip|tgz)$/.test(extension)) return '#FF940A'; // zip orange
+        },
+
+        fallback: function () {
+            var extension = this.model.getExtension(), color;
+            if (!extension) return;
+            color = this.getColor(extension);
+            this.$el.append(
+                $('<div class="abs fallback">')
+                    .css({ color: color && 'white', backgroundColor: color })
+                    .text(extension)
+            );
+        },
+
         render: function () {
             var url = this.model.previewUrl();
-            this.$el.removeClass('lazy no-preview');
             if (_.isString(url)) {
                 this.$el.addClass('lazy').attr('data-original', url);
                 this.lazyload();
             } else {
-                this.$el.addClass('no-preview');
+                this.fallback();
             }
             return this;
         }
