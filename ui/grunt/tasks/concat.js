@@ -107,6 +107,9 @@ module.exports = function (grunt) {
                              'apps/io.ox/core/adaptiveLoader.js',
                              'apps/io.ox/core/tk/dialogs.js',
                              'apps/io.ox/core/tk/draghelper.js',
+                             // mobile stuff
+                             'apps/io.ox/core/page-controller.js',
+                             'apps/io.ox/core/toolbars-mobile.js',
                              // folder support
                              'apps/io.ox/core/folder/util.js',
                              'apps/io.ox/core/folder/sort.js',
@@ -149,6 +152,9 @@ module.exports = function (grunt) {
                              'apps/io.ox/mail/toolbar.js',
                              'apps/io.ox/mail/import.js',
                              'apps/io.ox/mail/folderview-extensions.js',
+                             // mobile mail
+                             'apps/io.ox/mail/mobile-navbar-extensions.js',
+                             'apps/io.ox/mail/mobile-toolbar-actions.js',
                              // mail app - 2nd wave
                              'apps/io.ox/core/util.js',
                              'apps/io.ox/core/api/factory.js',

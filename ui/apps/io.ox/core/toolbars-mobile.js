@@ -13,8 +13,7 @@
 
 
 define('io.ox/core/toolbars-mobile',
-    ['io.ox/core/extensions',
-    'io.ox/mail/mobile-toolbar-actions'], function (ext) {
+    ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
