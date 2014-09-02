@@ -1131,9 +1131,7 @@ define('io.ox/mail/write/view-main',
         index: 100,
         draw: function (baton) {
             this.append(
-                contactsAPI
-                    .getDisplayName(baton.data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
-                    .addClass('recipient-name')
+                $('<div class="recipient-name">').text(contactsUtil.getMailFullName(baton.data))
             );
         }
     });

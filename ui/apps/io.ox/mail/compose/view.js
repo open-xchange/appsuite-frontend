@@ -19,6 +19,7 @@ define('io.ox/mail/compose/view',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/contacts/api',
+     'io.ox/contacts/util',
      'settings!io.ox/mail',
      'settings!io.ox/core',
      'io.ox/core/notifications',
@@ -26,7 +27,7 @@ define('io.ox/mail/compose/view',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'less!io.ox/mail/compose/style'
-    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, settings, coreSettings, notifications, snippetAPI, gt) {
+    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt) {
 
     'use strict';
 
@@ -249,9 +250,7 @@ define('io.ox/mail/compose/view',
         index: 100,
         draw: function (baton) {
             this.append(
-                contactsAPI
-                    .getDisplayName(baton.data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
-                    .addClass('recipient-name')
+                $('<div class="recipient-name">').text(contactsUtil.getMailFullName(baton.data))
             );
         }
     });

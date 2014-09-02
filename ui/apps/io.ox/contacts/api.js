@@ -520,7 +520,7 @@ define('io.ox/contacts/api',
     * @param  {string} address (emailaddress)
     * @return {deferred} returns exactyl one contact object
     */
-    api.getByEmailadress = function (address) {
+    api.getByEmailaddress = function (address) {
 
         address = address || '';
 
@@ -771,15 +771,15 @@ define('io.ox/contacts/api',
         if (data && data.full_name) {
             cont(data.full_name);
             clear();
-
+        }
         // looks like a full object?
-        } else if (data && (data.last_name || data.first_name)) {
+        else if (data && (data.last_name || data.first_name)) {
             cont(data);
             clear();
-
+        }
         // load data
-        } else {
-            api.getByEmailadress(data.email).done(cont).fail(clear);
+        else {
+            api.getByEmailaddress(data.email).done(cont).fail(clear);
         }
 
         return node;
@@ -938,7 +938,10 @@ define('io.ox/contacts/api',
     //
     api.autocomplete = function (query, options) {
 
-        options = _.extend({ admin: false, email: true, sort: '609', columns: api.options.requests.search.columns }, options);
+        // default: standard columns plus cell phone for MSISDN support
+        var columns = '1,2,5,20,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,551,552';
+
+        options = _.extend({ admin: false, email: true, sort: '609', columns: columns }, options);
 
         return http.GET({
             module: 'contacts',

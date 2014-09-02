@@ -512,6 +512,7 @@ define('io.ox/core/api/factory',
              * @return {deferred}
              */
             api.search = function (query, options) {
+
                 // merge defaults for search
                 var opt = $.extend({}, o.requests.search, options || {}), list,
                     getData = opt.getData;
@@ -557,6 +558,7 @@ define('io.ox/core/api/factory',
              * @return {deferred}
              */
             api.advancedsearch = function (query, options) {
+
                 // merge defaults for search
                 var opt = $.extend({}, o.requests.advancedsearch, options || {}),
                     getData = opt.getData;
