@@ -935,26 +935,101 @@ define('io.ox/contacts/api',
 
     //
     // Simple auto-complete search
+    // that supports client-side lookups on former queries
     //
-    api.autocomplete = function (query, options) {
+    api.autocomplete = (function () {
 
-        // default: standard columns plus cell phone for MSISDN support
-        var columns = '1,2,5,20,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,551,552';
+        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)), // should be >= 1!
+            // use these fields for local lookups
+            fields = 'display_name email1 email2 email3 first_name last_name'.split(' ');
 
-        options = _.extend({ admin: false, email: true, sort: '609', columns: columns }, options);
+        // check for minimum length
+        function hasMinLength(str) {
+            return str.length >= minLength;
+        }
 
-        return http.GET({
-            module: 'contacts',
-            params: {
-                action: 'autocomplete',
+        // hash key: it's the first word in a query that matches the minimum length
+        function getHashKey(query) {
+            return (_(query.split(' ')).find(hasMinLength) || '').substr(0, minLength);
+        }
+
+        // get from local cache
+        function get(query) {
+
+            var key = getHashKey(query), co = search.cache[key], words = query.split(' ');
+
+            if (!co) return; // cache miss
+            if (co.query === query) return co.data; // perfect match; needs no further subset search
+
+            // local lookup:
+            return _(co.data).filter(function (item) {
+                return _(words).every(function (word) {
+                    return _(item.fulltext).some(function (str) {
+                        return str.indexOf(word) === 0; // server also uses startsWith() / not contains()
+                    });
+                });
+            });
+        }
+
+        // add to cache
+        function add(query, data) {
+            var key = getHashKey(query);
+            search.cache[key] = {
                 query: query,
-                admin: options.admin,
-                email: options.email,
-                sort: options.sort,
-                columns: options.columns
-            }
-        });
-    };
+                data: _(data).map(function (item) {
+                    // prepare simple array for fast lookups
+                    item.fulltext = _(fields).map(function (id) {
+                        return String(item[id] || '').toLowerCase();
+                    });
+                    // avoid useless lookups by removing empty strings
+                    item.fulltext = _(item.fulltext).compact();
+                    return item;
+                })
+            };
+        }
+
+        function search(query, options) {
+
+            // always work with trimmed lower-case variant
+            query = $.trim(query).toLowerCase();
+
+            // default: standard columns plus cell phone for MSISDN support
+            var columns = '1,2,5,20,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,551,552';
+            options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true }, options);
+
+            // try local cache
+            var cache = options.cache && get(query);
+            if (cache) return $.when(cache);
+
+            // ask server
+            return http.GET({
+                module: 'contacts',
+                params: {
+                    action: 'autocomplete',
+                    query: query,
+                    admin: options.admin,
+                    email: options.email,
+                    sort: options.sort,
+                    columns: options.columns
+                }
+            })
+            .then(function (data) {
+                add(query, data);
+                return data; // make sure it's just data
+            });
+        }
+
+        // export cache for debugging/clearing
+        search.cache = {};
+
+        return search;
+
+    }());
+
+    // clear update cache whenever a contact is added, changed, or removed
+    api.on('create update delete', function () {
+        api.autocomplete.cache = {};
+    });
 
     return api;
 });
