@@ -550,14 +550,6 @@ define.async('io.ox/core/tk/html-editor',
             return;
         },
 
-        trimIn = function (str) {
-            return trimEnd(str);
-        },
-
-        trimOut = function (str) {
-            return trimEnd(str).replace(/[\r\n]+/g, '');
-        },
-
         quote = function (str) {
             return '> ' + $.trim(str).replace(/\n/g, '\n> ');
         },
@@ -597,7 +589,7 @@ define.async('io.ox/core/tk/html-editor',
                 .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                 .replace(/(<p>(<br>)?<\/p>)+$/, '');
             // remove trailing white-space
-            return trimOut(content);
+            return trimEnd(content);
         };
 
         // publish internal 'done'
@@ -660,7 +652,7 @@ define.async('io.ox/core/tk/html-editor',
         this.setPlainText = function (str) {
             var text = '', quote = false, tmp = '', lTag, rTag;
             // clean up
-            str = trimIn(str);
+            str = trimEnd(str);
             // needs leading empty paragraph?
             if (str.substr(0, 2) === '\n\n') {
                 text += '<p></p>';
