@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-02 14:35+0100\n"
+"PO-Revision-Date: 2014-09-02 15:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -6936,9 +6936,8 @@ msgstr "Zum Öffnen bitte klicken."
 
 #: apps/io.ox/search/apiproxy.js:58 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:119
-#, fuzzy
 msgid "date range"
-msgstr "Zeitrahmen"
+msgstr "Zeitraum"
 
 #: apps/io.ox/search/facets/extensions.js:123 module:io.ox/core
 msgid "Apply"
