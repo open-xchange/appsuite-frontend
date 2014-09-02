@@ -110,7 +110,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         node.attr('class', className).append(
             $('<div class="icon">').append(
-                $('<i>').addClass(icons[o.type] || 'fa fa-fw')
+                $('<i>').attr('aria-hidden', true).addClass(icons[o.type] || 'fa fa-fw')
             )
         );
 
