@@ -30,7 +30,9 @@ define('io.ox/backbone/validation',
             return true;
         },
         anyFloat: function (val) {//numbers with . or , as a separator are valid 1.23 or 1,23 for example
-            val = String(val).replace(/,/g, '.');
+            val = String(val)
+                    .replace(/,/g, '.')
+                    .replace(/\.0*$/, ''); //remove zero only decimal places
             var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
             (!isNaN(parseFloat(val, 10)) &&  //check if its a number
             (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
