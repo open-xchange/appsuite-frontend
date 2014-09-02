@@ -18,19 +18,22 @@ define('io.ox/core/folder/extensions',
      'io.ox/core/extensions',
      'io.ox/core/capabilities',
      'io.ox/core/api/user',
+     'io.ox/mail/api',
      'gettext!io.ox/core',
      'io.ox/core/folder/favorites',
-     'less!io.ox/core/folder/style'], function (TreeNodeView, api, account, ext, capabilities, userAPI, gt) {
+     'less!io.ox/core/folder/style'], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt) {
 
     'use strict';
+
+    var INBOX = 'default0' + mailAPI.separator + 'INBOX';
 
     // define virtual/standard
     api.virtual.add('virtual/standard', function () {
         return api.virtual.concat(
             // inbox
-            api.get('default0/INBOX'),
+            api.get(INBOX),
             // sent, drafts, spam, trash
-            api.list('default0/INBOX')
+            api.list(INBOX)
         );
     });
 
@@ -80,14 +83,14 @@ define('io.ox/core/folder/extensions',
                     return !account.isStandardFolder(model.id);
                 },
                 folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
-                model_id: 'default0/INBOX',
+                model_id: INBOX,
                 parent: tree,
                 title: 'My folders',
                 tree: tree
             });
 
             // open my folder whenever a folder is added to INBOX
-            api.pool.getCollection('default0/INBOX').on('add', function () {
+            api.pool.getCollection(INBOX).on('add', function () {
                 node.toggle(true);
             });
 
@@ -117,7 +120,7 @@ define('io.ox/core/folder/extensions',
                     //empty: false,
                     filter: function (id, model) {
                         // exclude INBOX
-                        return model.get('id') !== 'default0/INBOX';
+                        return model.get('id') !== INBOX;
                     },
                     folder: 'default0',
                     headless: true,
