@@ -323,7 +323,18 @@ define('io.ox/mail/compose/extensions',
                     }
                 });
 
+                view.listenToOnce(view.collection, 'add remove reset', function () {
+                    if (this.getValidModels().length > 0) {
+                        this.$el.addClass('open');
+                        if (!this.isListRendered) this.renderList();
+                    }
+                });
+
                 view.render();
+                if (view.getValidModels().length > 0) {
+                    view.renderList();
+                    view.$el.addClass('open');
+                }
                 $el.append(
                     zone.render().$el.addClass('abs'),
                     view.$el
