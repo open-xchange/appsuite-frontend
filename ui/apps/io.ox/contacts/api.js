@@ -938,9 +938,19 @@ define('io.ox/contacts/api',
     //
     api.autocomplete = function (query, options) {
 
-        options = _.extend({ email: true, sort: '609' }, options, { query: query });
+        options = _.extend({ admin: false, email: true, sort: '609', columns: api.options.requests.search.columns }, options);
 
-        return http.GET({ module: 'contacts', params: options });
+        return http.GET({
+            module: 'contacts',
+            params: {
+                action: 'autocomplete',
+                query: query,
+                admin: options.admin,
+                email: options.email,
+                sort: options.sort,
+                columns: options.columns
+            }
+        });
     };
 
     return api;

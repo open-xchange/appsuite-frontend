@@ -88,6 +88,8 @@ define('io.ox/core/api/autocomplete',
                 http.pause();
                 _(self.apis).each(function (apiModule) {
                     apiModule.api.search(query, options);
+                    // prefer autocomplete over search
+                    // (module.api.autocomplete || module.api.search)(query, options);
                 });
                 return http.resume().pipe(function (data) {
                     //unify and process
