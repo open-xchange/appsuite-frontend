@@ -50,6 +50,16 @@
     .toggle-mode > i:before { content: '\f009'; } // fa-th-large
     &.show-preview .toggle-mode > i:before { content: '\f0ca'; } // fa-list-ul
 
+    &.touch {
+        ul.inline-items.preview {
+            margin: 0;
+            overflow-x: auto;
+            overflow-y: none;
+        }
+
+        .scroll-left, .scroll-right { display: none; }
+    }
+
     //
     // Container
     //

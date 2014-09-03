@@ -43,7 +43,8 @@ define('io.ox/core/attachments/view',
             this.listenTo(this.collection, 'add', this.addAttachment);
 
             // add class here to support $el via options
-            this.$el.addClass('mail-attachment-list');
+            this.$el.addClass('mail-attachment-list')
+                .addClass(_.device('touch') ? 'touch' : '');
 
             // editable?
             if (this.options.editable) this.$el.addClass('editable');
