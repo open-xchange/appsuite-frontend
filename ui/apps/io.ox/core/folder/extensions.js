@@ -354,6 +354,7 @@ define('io.ox/core/folder/extensions',
                 draw: function (baton) {
 
                     var model = baton.view.model, data = model.toJSON();
+                    if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
 
                     this.addClass('shared').find('.folder-node').append(
