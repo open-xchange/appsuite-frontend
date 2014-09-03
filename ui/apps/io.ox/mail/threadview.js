@@ -398,7 +398,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view f6-target" role="wurstblinker">')
+                    this.$ul = $('<ul class="thread-view list-view f6-target">')
                 )
             );
         }
