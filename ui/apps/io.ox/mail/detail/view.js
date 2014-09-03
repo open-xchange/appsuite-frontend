@@ -220,7 +220,7 @@ define('io.ox/mail/detail/view',
 
     var View = Backbone.View.extend({
 
-        className: 'list-item mail-item mail-detail',
+        className: 'list-item mail-item mail-detail f6-target',
 
         events: {
             'keydown': 'onToggle',
@@ -302,7 +302,13 @@ define('io.ox/mail/detail/view',
 
             var $li = this.$el;
 
-            if (state === undefined) $li.toggleClass('expanded'); else $li.toggleClass('expanded', state);
+            if (state === undefined) {
+                $li.toggleClass('expanded'); 
+                $li.attr('aria-expanded', !$li.attr('aria-expanded'));
+            } else {
+                $li.toggleClass('expanded', state);
+                $li.attr('aria-expanded', state);
+            }
 
             // trigger DOM event that bubbles
             this.$el.trigger('toggle');
@@ -380,6 +386,7 @@ define('io.ox/mail/detail/view',
 
             this.$el.attr({
                 'aria-label': title,
+                'aria-expanded': 'false',
                 'data-cid': this.model.cid,
                 'data-loaded': 'false'
             });

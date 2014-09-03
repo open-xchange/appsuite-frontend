@@ -57,7 +57,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view f6-target" role="listbox">')
+                    this.$ul = $('<ul class="thread-view list-view" role="listbox">')
                 )
             );
         }
@@ -398,7 +398,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view f6-target">')
+                    this.$ul = $('<ul class="thread-view list-view">')
                 )
             );
         }
