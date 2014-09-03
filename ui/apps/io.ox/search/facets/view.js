@@ -54,6 +54,25 @@ define('io.ox/search/facets/view',
         draw: extensions.folderFacet
     });
 
+
+    /**
+     * special: datepicker
+     */
+    ext.point(POINT + '/item/time.custom').extend({
+        id: 'time-facet',
+        index: INDEX += 100,
+        draw: extensions.timeFacet
+    });
+
+    /**
+     * special: datepicker
+     */
+    ext.point(POINT + '/item/data.custom').extend({
+        id: 'date-facet',
+        index: INDEX += 100,
+        draw: extensions.timeFacet
+    });
+
     /**
      * presentation of facet type
      * @example: e.g. folder, time, contact

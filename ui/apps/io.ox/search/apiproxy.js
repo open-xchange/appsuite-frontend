@@ -46,19 +46,29 @@ define('io.ox/search/apiproxy',
         });
 
         POINT.extend({
-            id: 'custom-facet-timespan',
+            id: 'custom-facet-daterange',
             index: 200,
             customize: function (baton) {
+                if (baton.args[0].params.module !== 'mail') return;
+
+                // for mail only
                 _.each(baton.data, function (facet) {
                     // hack to add custom timespan value
-                    if (facet.id === 'time') {
-                        var tmp = _.copy(facet.options[0]);
+                    if (facet.id === 'time' || facet.id === 'date') {
+
+                        // new id
+                        facet.id = facet.id + '.custom';
+                        var tmp = _.copy(facet.values[0]);
+
                         delete tmp.filter;
-                        tmp.facet = 'time';
+                        tmp.facet = facet.id;
                         tmp.name = gt('date range');
                         tmp.id = 'daterange';
                         tmp.point = 'daterange';
-                        facet.options.push(tmp);
+                        tmp.options = [];
+
+                        delete facet.options;
+                        facet.values = [tmp];
                     }
                 });
             }
@@ -121,8 +131,8 @@ define('io.ox/search/apiproxy',
          * @param  {[type]} data [description]
          * @return {deferred} returns available facets
          */
-        function extend (data) {
-            var baton = ext.Baton.ensure({app: app, data: data.facets});
+        function extend (args, data) {
+            var baton = ext.Baton.ensure({app: app, data: data.facets, args: args});
             POINT.invoke('customize', this, baton);
             return baton.data;
         }
@@ -137,7 +147,7 @@ define('io.ox/search/apiproxy',
             var args = [{}].concat(Array.prototype.slice.call(arguments)),
                 opt = $.extend.apply(undefined, args);
             // call api
-            return api.autocomplete(opt).then(extend);
+            return api.autocomplete(opt).then(extend.bind(this, args));
         }
 
         var model = app.getModel(),

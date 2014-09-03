@@ -212,7 +212,7 @@ define('io.ox/search/model',
                             facet: facet,
                             value: value,
                             // a) simple or default without options, b) exclusive, c) default with options
-                            option: data.style === 'simple' || itemvalue.filter ? '' : option || itemvalue.options[0].id
+                            option: data.style === 'simple' || itemvalue.filter || !itemvalue.options ? '' : option || itemvalue.options[0].id
                         };
 
                         (itemvalue || data)._compact = compact;
@@ -267,6 +267,7 @@ define('io.ox/search/model',
                 else
                     this.trigger('query', this.getApp());
             },
+            // manipulates poollist only
             update: function (facet, value, data) {
                 var facetdata = this.get('pool')[facet],
                     isCustom = facetdata.custom,
@@ -281,13 +282,13 @@ define('io.ox/search/model',
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
-                            _.extend(item, data, facetdata.style === 'exclusive' ?  {value: data.option } : {});
+                            _.extend(item, facetdata.style === 'exclusive' ?  {value: data.option } : {}, data);
                         }
                     }
                 }
 
                 // TODO: remove hack
-                if (facetdata.style === 'exclusive') {
+                if (facetdata.style === 'exclusive' && facetdata.options) {
                     facetdata.values = {};
                     // get value object
                     _.each(facetdata.options, function (obj) {
