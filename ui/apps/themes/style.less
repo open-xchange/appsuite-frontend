@@ -1031,6 +1031,19 @@ div.hopscotch-bubble {
         background-color: rgba(0, 0, 0, 0.10);
     }
 
+    html.high-contrast &.io-ox-alert-error {
+        background-color: @red;
+        .icon, .close { color: @black; }
+    }
+    html.high-contrast &.io-ox-alert-warning {
+        background-color: @yellow;
+        .icon, .close { color: @black; }
+    }
+    html.high-contrast &.io-ox-alert-success {
+        background-color: @green;
+        .icon, .close { color: @black; }
+    }
+
     &.io-ox-alert-info .icon { color: #08c; }
     &.io-ox-alert-error .icon { color: #a00; }
     &.io-ox-alert-warning .icon { color: #fc0; }
