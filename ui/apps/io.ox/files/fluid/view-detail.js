@@ -87,9 +87,7 @@ define('io.ox/files/fluid/view-detail',
     (function () {
 
         function parseArguments(file) {
-            if (!file.filename) {
-                return null;
-            }
+            if (!file.filename) return null;
             return {
                 name: file.filename,
                 filename: file.filename,
@@ -99,7 +97,8 @@ define('io.ox/files/fluid/view-detail',
                 id: file.id,
                 folder_id: file.folder_id,
                 dataURL: filesAPI.getUrl(file, 'bare'),
-                downloadURL: filesAPI.getUrl(file, 'download')
+                downloadURL: filesAPI.getUrl(file, 'download'),
+                meta: file.meta
             };
         }
 
@@ -107,14 +106,13 @@ define('io.ox/files/fluid/view-detail',
             id: 'preview',
             index: 300,
             draw: function (baton) {
-                function isEnabled(file) {
-                    if (!file.filename) {
-                        return false;
-                    }
-                    return (new preview.Preview(parseArguments(file))).supportsPreview() && util.previewMode(file);
-                }
 
                 var lastWidth = 0, $previewNode, drawResizedPreview;
+
+                function isEnabled(file) {
+                    if (!file.filename) return false;
+                    return (new preview.Preview(parseArguments(file))).supportsPreview() && util.previewMode(file);
+                }
 
                 function fnDrawPreview() {
                     var width = $previewNode.innerWidth();
@@ -132,21 +130,22 @@ define('io.ox/files/fluid/view-detail',
                     prev.appendTo($previewNode);
                 }
 
-                if (isEnabled(baton.data)) {
-                    $previewNode = $('<div class="preview">');
-                    this.append($previewNode);
+                if (!isEnabled(baton.data)) return;
 
-                    if (_.device('small && android')) {//ugly hack for samsung galaxy s4 stock browser. Cannot exclude chrome because the stock browser says it's chrome
-                        //delayed drawing of to large previews does not make the sidepane scrollable
-                        this.css('height', window.innerHeight + 1 + 'px');//make it 1 pixel to big to force the s4 stockbrowser into scrolling mode
-                    }
-                    drawResizedPreview = _.debounce(fnDrawPreview, 300);
-                    $(window).on('resize', drawResizedPreview);
-                    $previewNode.on('dispose', function () {
-                        $(window).off('resize', drawResizedPreview);
-                    });
-                    _.defer(fnDrawPreview);
+                this.append(
+                    $previewNode = $('<div class="preview">')
+                );
+
+                if (_.device('small && android')) {//ugly hack for samsung galaxy s4 stock browser. Cannot exclude chrome because the stock browser says it's chrome
+                    //delayed drawing of to large previews does not make the sidepane scrollable
+                    this.css('height', window.innerHeight + 1 + 'px');//make it 1 pixel to big to force the s4 stockbrowser into scrolling mode
                 }
+                drawResizedPreview = _.debounce(fnDrawPreview, 300);
+                $(window).on('resize', drawResizedPreview);
+                $previewNode.on('dispose', function () {
+                    $(window).off('resize', drawResizedPreview);
+                });
+                _.defer(fnDrawPreview);
             }
         });
     }());
