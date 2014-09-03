@@ -232,10 +232,10 @@ define('io.ox/tasks/actions',
         id: 'confirm',
         requires: function (args) {
             var result = false;
-            if (args.baton.data.participants) {
+            if (args.baton.data.users) {
                 var userId = ox.user_id;
-                _(args.baton.data.participants).each(function (participant) {
-                    if (participant.id === userId) {
+                _(args.baton.data.users).each(function (user) {
+                    if (user.id === userId) {
                         result = true;
                     }
                 });

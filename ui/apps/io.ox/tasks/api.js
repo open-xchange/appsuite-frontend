@@ -223,7 +223,7 @@ define('io.ox/tasks/api',
             },
             list: {
                 action: 'list',
-                columns: '1,2,20,101,200,202,203,220,300,301,309',
+                columns: '1,2,20,101,200,202,203,220,221,300,301,309',
                 extendColumns: 'io.ox/tasks/api/list',
                 timezone: 'UTC'
             },
@@ -233,7 +233,7 @@ define('io.ox/tasks/api',
             },
             search: {
                 action: 'search',
-                columns: '1,20,101,200,202,203,220,300,301,309',
+                columns: '1,20,101,200,202,203,220,221,300,301,309',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
                 order: 'asc',
@@ -548,7 +548,7 @@ define('io.ox/tasks/api',
             module: 'tasks',
             params: {action: 'all',
                 folder: api.getDefaultFolder(),
-                columns: '1,20,200,202,220,203,300,309',
+                columns: '1,20,200,202,203,221,300,309',
                 sort: '202',
                 order: 'asc',
                 timezone: 'UTC'
@@ -564,10 +564,11 @@ define('io.ox/tasks/api',
                 if (filterOverdue) {
                     dueTasks.push(list[i]);
                 }
-                for (var a = 0; a < list[i].participants.length; a++) {
-                    if (list[i].participants[a].id === userId && list[i].participants[a].confirmation === 0) {
-                        confirmTasks.push(list[i]);
 
+                //use users array here because participants array contains external participants and unresolved groups(members of this groups are in the users array)
+                for (var a = 0; a < list[i].users.length; a++) {
+                    if (list[i].users[a].id === userId && list[i].users[a].confirmation === 0) {
+                        confirmTasks.push(list[i]);
                     }
                 }
             }
