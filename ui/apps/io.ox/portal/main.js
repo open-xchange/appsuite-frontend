@@ -28,6 +28,52 @@ define('io.ox/portal/main',
 
     'use strict';
 
+    var widgetsWithFirstVisit = ['mail', 'calendar', 'tasks', 'myfiles'],
+        hadData = settings.get('settings/hadData') || [];
+
+    function isFirstVisitWidget(widget, baton) {
+
+        var hasDataShown = function (widget) {
+            return _.contains(hadData, widget) ? true : false;
+        },
+            containsData = function (widget) {
+            var tasks;
+            if (widget === 'tasks') {
+                tasks = _(baton.data).filter(function (task) {
+                    return task.end_date !== null && task.status !== 3;
+                });
+                if (_.isEmpty(tasks)) {
+                    return false;
+                }
+            }
+            if (!_.isEmpty(baton.data)) {
+                return true;
+            }
+        };
+
+        if (_.contains(widgetsWithFirstVisit, widget)) {
+
+            if (containsData(widget)) {
+                if (!hasDataShown(widget)) {
+                    hadData.push(widget);
+                }
+                settings.set('settings/hadData', hadData).save();
+
+                return false;
+            }
+            else if (!containsData(widget))
+                if (hasDataShown(widget)) {
+                    // reset
+                    // settings.set('settings/hadData', []).save();
+                    return false;
+                } else {
+                    return true;
+                }
+        } else {
+            return false;
+        }
+    }
+
     // time-based greeting phrase
     function getGreetingPhrase(name) {
         var hour = new date.Local().getHours();
@@ -292,6 +338,38 @@ define('io.ox/portal/main',
         ext.point(baton.point).invoke('performSetUp', null, baton);
     }
 
+    app.drawFirstVisitPane = function (baton) {
+
+        var productName = ox.serverConfig.productName,
+            data = baton.model.toJSON(),
+            point = ext.point(baton.point),
+            title = widgets.getTitle(data, point.prop('title')),
+            node = baton.model.node,
+            link = settings.get('settings/getStartedLink') || '#';
+
+        node.append(
+            $('<div class="content">').append(
+                // text
+                $('<div class="paragraph" style="min-height: 40px">').append(
+                    $('<span class="bold">').append(
+                        $.txt(
+                        //#. %1$s is the product name
+                        gt.format('%1$s. ' , productName)
+                        )
+                    ),
+                    $.txt(
+                        //#. %1$s is the widgettitle
+                        gt.format('Welcome to your %1$s.', title)
+                    ),
+                    $('<br>')
+                ),
+                $('<a tabindex="1" target="_blank" role="button">').attr('href', link).text(
+                    gt('Get started here!')
+                )
+            )
+        );
+    };
+
     app.drawDefaultSetup = function (baton) {
 
         var data = baton.model.toJSON(),
@@ -341,6 +419,7 @@ define('io.ox/portal/main',
             decoration = node.find('.decoration');
         return $.when.apply($, defs).then(
             function success() {
+                var widgetTitle = _.last(baton.point.split('/'));
                 node.find('.content').remove();
                 // draw summary only on small devices, i.e. smartphones
                 if (_.device('smartphone') && settings.get('mobile/summaryView')) {
@@ -355,7 +434,12 @@ define('io.ox/portal/main',
                         });
                     }
                 }
-                point.invoke('preview', node, baton);
+
+                if (isFirstVisitWidget(widgetTitle, baton)) {
+                    app.drawFirstVisitPane(baton);
+                } else {
+                    point.invoke('preview', node, baton);
+                }
                 node.removeClass('error-occurred');
                 decoration.removeClass('pending error-occurred');
             },
