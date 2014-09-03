@@ -22,6 +22,9 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         tagName: 'li',
         className: 'folder selectable',
 
+        // indentation in px per level
+        indentation: 30,
+
         events: {
             'click .folder-options'     : 'onOptions',
             'click .folder-arrow'       : 'onToggle',
@@ -205,9 +208,6 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             return new TreeNodeView(options);
         },
 
-        // indentation in px per level
-        indentation: 30,
-
         functions: function () {
 
             // functions that use debounce or throttle must be defined
@@ -328,7 +328,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             if (o.empty === false && o.open === false) this.reset();
 
             // allow extensions
-            ext.point('io.ox/core/foldertree/node').invoke('scaffold', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+            ext.point('io.ox/core/foldertree/node').invoke('initialize', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
 
             // simple tree-based customize callback
             if (_.isFunction(o.tree.options.customize)) o.tree.options.customize.call(this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
@@ -404,7 +404,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.renderTooltip();
             this.renderCounter();
             this.onChangeSubFolders();
-            ext.point('io.ox/core/foldertree/node').invoke('render', this.$el, ext.Baton({ view: this }));
+            ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
             return this;
         },
 

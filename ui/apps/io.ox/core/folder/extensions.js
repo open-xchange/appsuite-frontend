@@ -334,21 +334,65 @@ define('io.ox/core/folder/extensions',
         // Shared folders
         //
 
-        ext.point('io.ox/core/foldertree/node').extend({
-            id: 'scaffold-shared',
-            index: 100,
-            scaffold: function (baton) {
+        function openPermissions(e) {
+            require(['io.ox/core/permissions/permissions'], function (controller) {
+                controller.show(e.data.id);
+            });
+        }
 
-                var model = baton.view.model, data = model.toJSON();
-                if (!api.is('shared', data)) return;
+        function openPubSubSettings(e) {
+            var options = { id: 'io.ox/core/pubsub', folder: e.data.folder.id, data: e.data.folder };
+            ox.launch('io.ox/settings/main', options).done(function () {
+                this.setSettingsPane(options);
+            });
+        }
 
-                this.addClass('shared').find('.folder-node').append(
-                    $('<div class="owner">').append(
-                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
-                    )
-                );
+        ext.point('io.ox/core/foldertree/node').extend(
+            {
+                id: 'shared-by',
+                index: 100,
+                draw: function (baton) {
+
+                    var model = baton.view.model, data = model.toJSON();
+                    if (!api.is('shared', data)) return;
+
+                    this.addClass('shared').find('.folder-node').append(
+                        $('<div class="owner">').append(
+                            userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
+                        )
+                    );
+                }
+            },
+            {
+                id: 'shared',
+                index: 200,
+                draw: function (baton) {
+
+                    this.find('.folder-shared').remove();
+                    if (!api.is('unlocked', baton.data)) return;
+
+                    this.find('.folder-node').append(
+                        $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users'))
+                        .on('click', { id: baton.data.id }, openPermissions)
+                    );
+                }
+            },
+            {
+                id: 'pubsub',
+                index: 300,
+                draw: function (baton) {
+
+                    this.find('.folder-pubsub').remove();
+
+                    if (!capabilities.has('publication') || !api.is('published|subscribed', baton.data)) return;
+
+                    this.find('.folder-node').append(
+                        $('<i class="fa folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
+                        .on('click', { folder: baton.data }, openPubSubSettings)
+                    );
+                }
             }
-        });
+        );
     });
 
     return extensions;
