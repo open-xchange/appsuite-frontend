@@ -168,7 +168,6 @@ define('io.ox/core/folder/api',
 
     _(ox.rampup.folderlist || {}).each(function (list, id) {
         // make objects
-        if (2 > 1) return;
         rampup[id] = _(list).map(function (data) {
             return _.isArray(data) ? http.makeObject(data, 'folders') : data;
         });
