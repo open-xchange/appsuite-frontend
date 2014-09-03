@@ -54,6 +54,10 @@ define('io.ox/core/folder/actions/move',
 
                 if (type === 'move' && options.vgrid) options.vgrid.busy();
 
+                if (/^virtual/.test(target)) {
+                    return notifications.yell('error', gt('You cannot move items to virtual folders'));
+                }
+
                 options.api[type](options.list, target, options.all).then(
                     function (response) {
                         // files API returns array on error; mail just a single object

@@ -202,7 +202,7 @@ define('io.ox/core/tk/list-dnd', [
             if (e.isDefaultPrevented()) return; else e.preventDefault();
             // process drop
             clearTimeout(toggleTimer);
-            var target = $(this).attr('data-obj-id') || $(this).attr('data-cid') || $(this).attr('data-id'),
+            var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
                 baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
             $(this).trigger('selection:drop', [baton]);
         }
