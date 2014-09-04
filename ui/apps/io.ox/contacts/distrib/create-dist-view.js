@@ -14,14 +14,14 @@
 
 define('io.ox/contacts/distrib/create-dist-view',
     ['io.ox/backbone/views',
-     'io.ox/backbone/forms',
+     'io.ox/backbone/mini-views',
      'gettext!io.ox/contacts',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/extensions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/notifications'
-    ], function (views, forms, gt, api, util, ext, AddParticipantsView, notifications) {
+    ], function (views, mini, gt, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
 
@@ -64,28 +64,21 @@ define('io.ox/contacts/distrib/create-dist-view',
         }
     });
 
-    point.extend(new forms.ControlGroup({
+    point.extend({
         id: 'displayname',
         index: 200,
-        attribute: 'display_name',
         className: 'row',
-        label:
-            //#. Name of distribution list
-            gt('Name'), // mind bug #31073
-        control: '<input tabindex="1" type="text" class="form-control">',
-        buildControls: function () {
-            return this.buildElement();
-        },
-        buildControlGroup: function () {
+        render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                this.nodes.controlGroup = $('<div class="form-group col-md-12">').append(
-                    this.buildLabel().attr('for', guid),
-                    this.buildControls().attr('id', guid)
+                $('<div>').addClass('form-group col-md-12').append(
+                    //#. Name of distribution list
+                    $('<label>').addClass('control-label').attr('for', guid).text(gt('Name')), // mind bug #31073
+                    new mini.InputView({ name: 'display_name', model: this.baton.model, className: 'form-control control', id: guid }).render().$el
                 )
             );
         }
-    }));
+    });
 
     point.extend({
         id: 'add-members',
