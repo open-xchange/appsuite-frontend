@@ -350,7 +350,7 @@ define('io.ox/portal/main',
         node.append(
             $('<div class="content">').append(
                 // text
-                $('<div class="paragraph" style="min-height: 40px">').append(
+                $('<div>').append(
                     $('<span class="bold">').append(
                         $.txt(
                         //#. %1$s is the product name
@@ -360,10 +360,9 @@ define('io.ox/portal/main',
                     $.txt(
                         //#. %1$s is the widgettitle
                         gt.format('Welcome to your %1$s.', title)
-                    ),
-                    $('<br>')
+                    )
                 ),
-                $('<a tabindex="1" target="_blank" role="button">').attr('href', link).text(
+                $('<a tabindex="1" target="_blank" style="white-space: nowrap;"role="button">').attr('href', link).text(
                     gt('Get started here!')
                 )
             )
