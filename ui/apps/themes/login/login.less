@@ -291,23 +291,23 @@ html, body {
 
 /* support for busy spinner */
 
-@-moz-keyframes spin {
+@-moz-keyframes fa-spin {
   0%    { -moz-transform: rotate(0deg);     }
   100%  { -moz-transform: rotate(359deg);   }
 }
-@-webkit-keyframes spin {
+@-webkit-keyframes fa-spin {
   0%    { -webkit-transform: rotate(0deg);  }
   100%  { -webkit-transform: rotate(359deg);}
 }
-@-o-keyframes spin {
+@-o-keyframes fa-spin {
   0%    { -o-transform: rotate(0deg);       }
   100%  { -o-transform: rotate(359deg);     }
 }
-@-ms-keyframes spin {
+@-ms-keyframes fa-spin {
   0%    { -ms-transform: rotate(0deg);      }
   100%  { -ms-transform: rotate(359deg);    }
 }
-@keyframes spin {
+@keyframes fa-spin {
   0%    { transform: rotate(0deg);          }
   100%  { transform: rotate(359deg);        }
 }
@@ -325,10 +325,10 @@ html, body {
         content: '\f021';
         color: rgba(0, 0, 0, 0.30);
         /* icon-spin */
-        -moz-animation: spin 1.5s infinite linear;
-        -o-animation: spin 1.5s infinite linear;
-        -webkit-animation: spin 1.5s infinite linear;
-        animation: spin 1.5s infinite linear;
+        -moz-animation: fa-spin 1.5s infinite linear;
+        -o-animation: fa-spin 1.5s infinite linear;
+        -webkit-animation: fa-spin 1.5s infinite linear;
+        animation: fa-spin 1.5s infinite linear;
     }
 }
 
