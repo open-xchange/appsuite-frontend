@@ -48,7 +48,7 @@ msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d settimana"
 msgstr[1] "%1$d settimane"
 
-#: apps/io.ox/core/attachments/view.js:113 module:io.ox/core
+#: apps/io.ox/core/attachments/view.js:114 module:io.ox/core
 #, fuzzy
 #| msgid "(%1$s) Attachments"
 msgid "%1$d attachment"
@@ -794,7 +794,7 @@ msgstr "Amministratore"
 msgid "Advanced Settings"
 msgstr "Impostazioni avanzate"
 
-#: apps/io.ox/search/facets/extensions.js:384 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:298 module:io.ox/core
 msgid "All"
 msgstr "Tutto"
 
@@ -814,9 +814,9 @@ msgstr "Tutti gli allegati"
 msgid "All day"
 msgstr "Tutto il giorno"
 
-#: apps/io.ox/search/facets/extensions.js:564 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:567
-#: apps/io.ox/search/facets/extensions.js:574
+#: apps/io.ox/search/facets/extensions.js:618 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:621
+#: apps/io.ox/search/facets/extensions.js:628
 msgid "All folders"
 msgstr "Tutte le cartelle"
 
@@ -836,7 +836,7 @@ msgstr "Consentici di utilizzare qui l'account %s"
 msgid "An error occurred"
 msgstr "Si è verificato un errore"
 
-#: apps/io.ox/portal/main.js:376 module:io.ox/portal
+#: apps/io.ox/portal/main.js:460 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Si è verificato un errore."
 
@@ -890,12 +890,6 @@ msgstr ""
 #: apps/io.ox/core/main.js:206 module:io.ox/core
 msgid "Applications"
 msgstr "Applicazioni"
-
-#: apps/io.ox/search/facets/extensions.js:123 module:io.ox/core
-#, fuzzy
-#| msgid "Apply role"
-msgid "Apply"
-msgstr "Applica ruolo"
 
 #: apps/io.ox/core/permissions/permissions.js:112 module:io.ox/core
 msgid "Apply role"
@@ -1257,7 +1251,7 @@ msgstr "Vista calendario per giorni"
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:690
-#: apps/io.ox/core/desktop.js:1789 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1784 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:101
 #: apps/io.ox/core/folder/actions/common.js:44
@@ -1274,7 +1268,7 @@ msgstr "Vista calendario per giorni"
 #: apps/io.ox/editor/main.js:346 module:io.ox/editor
 #: apps/io.ox/files/actions.js:381 module:io.ox/files
 #: apps/io.ox/files/actions.js:543 apps/io.ox/files/actions.js:597
-#: apps/io.ox/files/actions.js:703 apps/io.ox/files/fluid/view-detail.js:224
+#: apps/io.ox/files/actions.js:703 apps/io.ox/files/fluid/view-detail.js:223
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
 #: apps/io.ox/files/main.js:337 apps/io.ox/files/main.js:389
 #: apps/io.ox/files/views/create.js:114
@@ -1290,7 +1284,7 @@ msgstr "Vista calendario per giorni"
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1409 apps/io.ox/mail/write/view-main.js:577
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:536 module:io.ox/portal
+#: apps/io.ox/portal/main.js:620 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:63
@@ -1487,7 +1481,7 @@ msgstr "Fai clic per riprovare"
 msgid "Click to retry later."
 msgstr "Fai clic per provare più tardi."
 
-#: apps/io.ox/portal/main.js:379 module:io.ox/portal
+#: apps/io.ox/portal/main.js:463 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Fai clic per riprovare."
 
@@ -1508,7 +1502,6 @@ msgstr "Fai clic per caricare l'immagine"
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:353 apps/io.ox/mail/actions.js:205
 #: module:io.ox/mail apps/io.ox/mail/statistics.js:272
-#: apps/io.ox/search/facets/extensions.js:122
 #: apps/plugins/upsell/simple-wizard/register.js:91
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
@@ -1774,12 +1767,12 @@ msgstr "Impossibile caricare questo elenco"
 msgid "Could not save settings"
 msgstr "Impossibile salvare le impostazioni"
 
-#: apps/io.ox/portal/widgets.js:403 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:409 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Impossibile salvare le impostazioni."
 
 #: apps/io.ox/core/api/folder.js:684 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:517
+#: apps/io.ox/core/folder/api.js:516
 msgid ""
 "Could not save settings. There have to be at least one user with "
 "administration rights."
@@ -1894,7 +1887,7 @@ msgstr "Creazione file"
 msgid "Currency"
 msgstr "Valuta"
 
-#: apps/io.ox/portal/main.js:86 module:io.ox/portal
+#: apps/io.ox/portal/main.js:132 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Personalizza questa pagina"
 
@@ -2009,7 +2002,7 @@ msgstr "Rinviata"
 #: apps/io.ox/mail/actions.js:105 apps/io.ox/mail/actions.js:918
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:283
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:534
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:618
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2042,7 +2035,7 @@ msgstr "Elimina versione"
 msgid "Delete whole series"
 msgstr "Elimina l'intera serie"
 
-#: apps/io.ox/portal/main.js:530 module:io.ox/portal
+#: apps/io.ox/portal/main.js:614 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Elimina widget"
@@ -2108,8 +2101,8 @@ msgstr "Collegamento diretto: %1$s"
 msgid "Disable"
 msgstr "Disabilita"
 
-#: apps/io.ox/portal/main.js:143 module:io.ox/portal
-#: apps/io.ox/portal/main.js:144 apps/io.ox/portal/main.js:421
+#: apps/io.ox/portal/main.js:189 module:io.ox/portal
+#: apps/io.ox/portal/main.js:190 apps/io.ox/portal/main.js:505
 msgid "Disable widget"
 msgstr "Disabilita widget"
 
@@ -2233,7 +2226,7 @@ msgid_plural "Do you really want to delete this tasks?"
 msgstr[0] "Vuoi davvero eliminare questa attività?"
 msgstr[1] "Vuoi davvero eliminare queste attività?"
 
-#: apps/io.ox/portal/main.js:531 module:io.ox/portal
+#: apps/io.ox/portal/main.js:615 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Vuoi davvero eliminare questo widget?"
@@ -2572,7 +2565,7 @@ msgstr "Indirizzi di posta elettronica"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:229 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:368
+#: apps/io.ox/mail/detail/view.js:374
 msgid "Email from %1$s: %2$s"
 msgstr "Messaggio di posta da %1$s: %2$s"
 
@@ -2899,7 +2892,7 @@ msgstr "Salvataggio della lista di distribuzione non riuscito."
 msgid "Failed to sign in"
 msgstr "Accesso non riuscito"
 
-#: apps/io.ox/core/desktop.js:1889 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1884 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -2968,7 +2961,7 @@ msgstr "Commento"
 msgid "Feeling • Decoration"
 msgstr "Sentimento • Decorazione"
 
-#: apps/io.ox/files/fluid/view-detail.js:348 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:347 module:io.ox/files
 #: apps/io.ox/mail/detail/links.js:189 module:io.ox/mail
 msgid "File"
 msgstr "File"
@@ -3043,7 +3036,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:190 module:io.ox/mail
-#: apps/io.ox/search/apiproxy.js:101 module:io.ox/core
+#: apps/io.ox/search/apiproxy.js:111 module:io.ox/core
 msgid "Folder"
 msgstr "Cartella"
 
@@ -3227,21 +3220,27 @@ msgstr ""
 msgid "Get free upgrade"
 msgstr "Ottieni l'aggiornamento gratuito"
 
-#: apps/io.ox/portal/main.js:312 module:io.ox/portal
+#: apps/io.ox/portal/main.js:390 module:io.ox/portal
 #, fuzzy
 #| msgid "Getting started"
 msgid "Get started here"
+msgstr "Primi passi"
+
+#: apps/io.ox/portal/main.js:367 module:io.ox/portal
+#, fuzzy
+#| msgid "Getting started"
+msgid "Get started here!"
 msgstr "Primi passi"
 
 #: apps/plugins/core/feedback/register.js:178 module:io.ox/core
 msgid "Give feedback"
 msgstr "Commenta"
 
-#: apps/io.ox/portal/main.js:38 module:io.ox/portal
+#: apps/io.ox/portal/main.js:84 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "Buona sera, %s"
 
-#: apps/io.ox/portal/main.js:36 module:io.ox/portal
+#: apps/io.ox/portal/main.js:82 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Buongiorno, %s"
 
@@ -3285,7 +3284,7 @@ msgstr "HTML e testo semplice"
 msgid "Header"
 msgstr "Intestazione"
 
-#: apps/io.ox/portal/main.js:40 module:io.ox/portal
+#: apps/io.ox/portal/main.js:86 module:io.ox/portal
 msgid "Hello %s"
 msgstr "Ciao %s"
 
@@ -3318,16 +3317,15 @@ msgstr "Cartelle nascoste"
 msgid "Hide"
 msgstr "Nascondi"
 
-#: apps/io.ox/search/facets/extensions.js:295 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:300
-#, fuzzy
-#| msgid "Hide details"
-msgid "Hide Advanced Filters"
-msgstr "Nascondi i dettagli"
-
 #: apps/io.ox/contacts/view-detail.js:687 module:io.ox/contacts
 msgid "Hide QR code"
 msgstr "Nascondi codice QR"
+
+#: apps/io.ox/search/facets/extensions.js:213 module:io.ox/core
+#, fuzzy
+#| msgid "Hide details"
+msgid "Hide advanced filters"
+msgstr "Nascondi i dettagli"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 msgid "Hide comments"
@@ -3641,7 +3639,7 @@ msgid "June"
 msgstr "Giugno"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:540 module:io.ox/portal
+#: apps/io.ox/portal/main.js:624 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Disabilita il widget"
@@ -4128,7 +4126,7 @@ msgstr "Mesi"
 #: apps/io.ox/core/extPatterns/links.js:350 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:361
 #: apps/io.ox/mail/write/view-main.js:682 module:io.ox/mail
-#: apps/io.ox/search/facets/extensions.js:549
+#: apps/io.ox/search/facets/extensions.js:603
 msgid "More"
 msgstr "Altro"
 
@@ -4156,7 +4154,7 @@ msgstr "Sono stati trovati più elementi dei %1$s attualmente visualizzati"
 msgid "Move"
 msgstr "Sposta"
 
-#: apps/io.ox/core/folder/actions/move.js:132 module:io.ox/core
+#: apps/io.ox/core/folder/actions/move.js:136 module:io.ox/core
 msgid "Move folder"
 msgstr "Sposta la cartella"
 
@@ -4211,7 +4209,7 @@ msgid "New"
 msgstr "Nuovo"
 
 #: apps/io.ox/core/api/folder.js:547 module:io.ox/core
-#: apps/io.ox/core/folder/api.js:561
+#: apps/io.ox/core/folder/api.js:560
 #: apps/io.ox/core/pubsub/subscriptions.js:157 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Nuova cartella"
@@ -5100,7 +5098,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Portale"
 
-#: apps/io.ox/portal/main.js:496 module:io.ox/portal
+#: apps/io.ox/portal/main.js:580 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Widget del portale"
 
@@ -5518,8 +5516,8 @@ msgstr "Promemoria %1$s"
 msgid "Reminder has been created"
 msgstr "Il promemoria è stato creato"
 
-#: apps/io.ox/search/facets/extensions.js:402 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:403
+#: apps/io.ox/search/facets/extensions.js:316 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:317
 #, fuzzy
 #| msgid "remove"
 msgid "Remove"
@@ -5528,7 +5526,7 @@ msgstr "rimuovi"
 #: apps/io.ox/backbone/mini-views/attachments.js:88
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/backbone/mini-views/attachments.js:90
-#: apps/io.ox/core/attachments/view.js:322 module:io.ox/core
+#: apps/io.ox/core/attachments/view.js:323 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:89
 #: apps/io.ox/core/tk/attachmentsUtil.js:228
 msgid "Remove attachment"
@@ -5616,8 +5614,8 @@ msgstr "Conferma di lettura"
 msgid "Reserved"
 msgstr "Riservato"
 
-#: apps/io.ox/search/facets/extensions.js:402 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:403
+#: apps/io.ox/search/facets/extensions.js:316 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:317
 #, fuzzy
 #| msgid "Reset image"
 msgid "Reset"
@@ -5777,7 +5775,7 @@ msgid "Saved contact attachment"
 msgstr "Allegato di posta salvato"
 
 #: apps/io.ox/contacts/view-detail.js:737 module:io.ox/contacts
-#: apps/io.ox/files/fluid/view-detail.js:189 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:188 module:io.ox/files
 msgid "Saved in"
 msgstr "Salvato in"
 
@@ -5809,18 +5807,18 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Pianificazione"
 
-#: apps/io.ox/core/desktop.js:1619 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1620 apps/io.ox/core/desktop.js:1726
+#: apps/io.ox/core/desktop.js:1614 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1615 apps/io.ox/core/desktop.js:1721
 #: apps/io.ox/core/main.js:776 apps/io.ox/search/autocomplete/extensions.js:32
-#: apps/io.ox/search/autocomplete/extensions.js:193
-#: apps/io.ox/search/autocomplete/extensions.js:194
+#: apps/io.ox/search/autocomplete/extensions.js:195
+#: apps/io.ox/search/autocomplete/extensions.js:196
 #: apps/io.ox/search/main.js:161 module:io.ox/search
 #: apps/io.ox/search/main.js:221 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Cerca"
 
-#: apps/io.ox/core/desktop.js:1611 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1606 module:io.ox/core
 msgid "Search for items"
 msgstr "Ricerca elementi"
 
@@ -6032,17 +6030,18 @@ msgstr "Carrello della spesa"
 msgid "Show"
 msgstr "Mostra"
 
-#: apps/io.ox/search/facets/extensions.js:298 module:io.ox/core
-#, fuzzy
-#| msgid "Show all items"
-msgid "Show Advanced Filters"
-msgstr "Mostra tutti gli elementi"
-
 #: apps/io.ox/contacts/view-detail.js:695 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:722
 #: apps/io.ox/contacts/view-detail.js:724
 msgid "Show QR code"
 msgstr "Mostra codice QR"
+
+#: apps/io.ox/search/facets/extensions.js:210 module:io.ox/core
+#: apps/io.ox/search/facets/extensions.js:213
+#, fuzzy
+#| msgid "Show all items"
+msgid "Show advanced filters"
+msgstr "Mostra tutti gli elementi"
 
 #: apps/plugins/notifications/mail/register.js:38 module:plugins/notifications
 msgid "Show all %1$d messages in inbox"
@@ -6169,7 +6168,7 @@ msgstr "Mostra i dettagli dell'attività"
 msgid "Show tiles"
 msgstr "Mostra file"
 
-#: apps/io.ox/files/fluid/view-detail.js:360 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:359 module:io.ox/files
 msgid "Show version history"
 msgstr "Mostra lo storico delle versioni"
 
@@ -6216,7 +6215,7 @@ msgid "Signatures"
 msgstr "Firme"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:66 module:io.ox/portal
+#: apps/io.ox/portal/main.js:112 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Accesso effettuato come %1$s"
 
@@ -7170,7 +7169,8 @@ msgstr "Questa cartella non ha pubblicazioni"
 msgid "This folder has no subscriptions"
 msgstr "Questa cartella non ha sottoscrizioni"
 
-#: apps/io.ox/core/tk/folderviews.js:941 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:391 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:941
 msgid "This folder has publications and/or subscriptions"
 msgstr "Questa cartella ha pubblicazioni e/o sottoscrizioni"
 
@@ -7326,7 +7326,7 @@ msgstr "Commuta le caselle di selezione"
 msgid "Toggle folder"
 msgstr "Cartella"
 
-#: apps/io.ox/core/desktop.js:1718 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1713 module:io.ox/core
 msgid "Toggle search"
 msgstr "Ricerca"
 
@@ -7535,12 +7535,12 @@ msgstr "Passa a Premium"
 msgid "Upgrade to premium edition"
 msgstr "Aggiornamento all'edizione premium"
 
-#: apps/io.ox/files/fluid/view-detail.js:213 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:212 module:io.ox/files
 msgid "Upload a new version"
 msgstr "Carica una nuova versione"
 
 #: apps/io.ox/core/tk/attachments.js:585 module:io.ox/core/tk/attachments
-#: apps/io.ox/files/fluid/view-detail.js:222 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:221 module:io.ox/files
 msgid "Upload file"
 msgstr "Carica un file"
 
@@ -7553,7 +7553,7 @@ msgstr "Carica un nuovo file"
 msgid "Upload new files"
 msgstr "Carica nuovi file"
 
-#: apps/io.ox/files/fluid/view-detail.js:236 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:235 module:io.ox/files
 msgid "Upload new version"
 msgstr "Carica una nuova versione"
 
@@ -7561,7 +7561,7 @@ msgstr "Carica una nuova versione"
 msgid "Uploading folders is not supported."
 msgstr "Il caricamento delle cartelle non è supportato."
 
-#: apps/io.ox/files/fluid/view-detail.js:260 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:259 module:io.ox/files
 msgid "Uploading..."
 msgstr "Caricamento in corso..."
 
@@ -7605,7 +7605,7 @@ msgstr "Usa un carattere a larghezza fissa per il testo dei messaggi"
 #: apps/io.ox/mail/accounts/view-form.js:49 module:io.ox/settings
 #, fuzzy
 #| msgid "Use username and password"
-msgid "Use name and password"
+msgid "Use separate username and password"
 msgstr "Usa nome utente e password"
 
 #: apps/io.ox/mail/accounts/view-form.js:596 module:io.ox/settings
@@ -7646,11 +7646,11 @@ msgstr "Il nome utente non può essere vuoto."
 msgid "Vacation Notice"
 msgstr "Avviso di assenza"
 
-#: apps/io.ox/files/fluid/view-detail.js:228 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:227 module:io.ox/files
 msgid "Version Comment"
 msgstr "Commento della versione"
 
-#: apps/io.ox/files/fluid/view-detail.js:365 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:364 module:io.ox/files
 msgid "Version history"
 msgstr "Storico delle versioni"
 
@@ -7925,6 +7925,12 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Puoi salvare rapidamente le tue modifiche con Ctrl+Invio."
 
+#: apps/io.ox/core/folder/actions/move.js:58 module:io.ox/core
+#, fuzzy
+#| msgid "Cannot move default folders."
+msgid "You cannot move items to virtual folders"
+msgstr "Impossibile spostare le cartelle predefinite."
+
 #: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "Hai rifiutato questo appuntamento"
@@ -8031,7 +8037,8 @@ msgstr "Devi utilizzare Android %n o successivo."
 msgid "You need to use iOS %n or higher."
 msgstr "Devi utilizzare iOS %n o successivo."
 
-#: apps/io.ox/core/tk/folderviews.js:964 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:376 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:964
 msgid "You share this folder with other users"
 msgstr "Condividi questa cartella con altri utenti"
 
@@ -8254,8 +8261,7 @@ msgstr "creare oggetti e sottocartelle"
 msgid "daily"
 msgstr "giornaliera"
 
-#: apps/io.ox/search/apiproxy.js:58 module:io.ox/core
-#: apps/io.ox/search/facets/extensions.js:119
+#: apps/io.ox/search/apiproxy.js:65 module:io.ox/core
 #, fuzzy
 #| msgid "Save changes"
 msgid "date range"
@@ -9047,6 +9053,11 @@ msgstr "La tua password"
 #~ msgid "Antigua and Barbuda"
 #~ msgstr "Antigua e Barbuda"
 
+#, fuzzy
+#~| msgid "Apply role"
+#~ msgid "Apply"
+#~ msgstr "Applica ruolo"
+
 #~ msgid "Appointment has been copied"
 #~ msgid_plural "Appointments have been copied"
 #~ msgstr[0] "L'appuntamento è stato copiato"
@@ -9446,9 +9457,6 @@ msgstr "La tua password"
 
 #~ msgid "Cancel search"
 #~ msgstr "Annulla la ricerca"
-
-#~ msgid "Cannot move default folders."
-#~ msgstr "Impossibile spostare le cartelle predefinite."
 
 #~ msgid "Cannot move folder into itself."
 #~ msgstr "Impossibile spostare una cartella dentro se stessa."
