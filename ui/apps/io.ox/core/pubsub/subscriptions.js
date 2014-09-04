@@ -173,7 +173,7 @@ define('io.ox/core/pubsub/subscriptions',
 
     function showErrorInline(node, label, msg) {
         node.find('div.alert').remove();
-        node.prepend($('<div class="alert alert-danger">').append(
+        node.prepend($('<div class="alert alert-danger" role="alert">').append(
             $('<strong>').text(label),
             $.txt(' '),
             $('<span>').html(msg),
