@@ -528,20 +528,22 @@ define.async('io.ox/mail/accounts/view-form',
 
             var folderLabels = {
                 //#. Sent folder
-                sent:   gt.pgettext('folder', 'Sent messages'),
+                sent:    gt.pgettext('folder', 'Sent messages'),
                 //#. Trash folder
-                trash:  gt.pgettext('folder', 'Deleted messages'),
+                trash:   gt.pgettext('folder', 'Deleted messages'),
                 //#. Drafts folder
-                drafts: gt.pgettext('folder', 'Drafts'),
+                drafts:  gt.pgettext('folder', 'Drafts'),
                 //#. Spam folder
-                spam:   gt.pgettext('folder', 'Spam')
+                spam:    gt.pgettext('folder', 'Spam'),
+                //#. Archive folder
+                archive: gt.pgettext('folder', 'Archive')
             };
 
             var serverSettingsFolder = $('<fieldset>').append(
                 $('<legend class="sectiontitle">').text(gt('Standard folders')),
                 $('<form class="form-horizontal" role="form">').append(
                     // add four input fields
-                    _('sent trash drafts spam'.split(' ')).map(function (folder) {
+                    _('sent trash drafts spam archive'.split(' ')).map(function (folder) {
 
                         var text = folderLabels[folder], id = model.get('id'), enabled = !!id; // neither 0 nor undefined
                         folder = folder + '_fullname';

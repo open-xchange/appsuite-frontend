@@ -571,6 +571,21 @@ define('io.ox/mail/api',
         });
     };
 
+    //
+    // Archive messages
+    //
+    api.archive = function (id) {
+
+        return http.PUT({
+            module: 'mail',
+            params: { action: 'archive_folder', folder: id }
+        })
+        .done(function () {
+            api.trigger('refresh.all');
+            folderAPI.reload(id);
+        });
+    };
+
     /**
      * requests data for all ids
      * @param  {object} options

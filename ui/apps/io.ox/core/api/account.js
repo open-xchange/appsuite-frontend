@@ -57,6 +57,7 @@ define('io.ox/core/api/account',
             fix(account, 'sent', 'Sent');
             fix(account, 'drafts', 'Drafts');
             fix(account, 'spam', 'Spam');
+            fix(account, 'archive', 'Archive');
             fix(account, 'confirmed_spam', 'Confirmed Spam');
             fix(account, 'confirmed_ham', 'Confirmed Ham');
         });
@@ -445,7 +446,7 @@ define('io.ox/core/api/account',
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
-                _('sent drafts trash spam'.split(' ')).each(function (type) {
+                _('sent drafts trash spam archive'.split(' ')).each(function (type) {
                     typeHash[account[type + '_fullname']] = type;
                 });
             });

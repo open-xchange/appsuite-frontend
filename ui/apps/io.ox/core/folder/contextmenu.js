@@ -83,6 +83,33 @@ define('io.ox/core/folder/contextmenu',
         },
 
         //
+        // Archive messages
+        //
+        archive: (function () {
+
+            function handler(e) {
+                ox.load(['io.ox/core/folder/actions/archive']).done(function (archive) {
+                    archive(e.data.id);
+                });
+            }
+
+            return function (baton) {
+
+                if (baton.module !== 'mail') return;
+
+                addLink(this, {
+                    action: 'archive',
+                    data: { id: baton.data.id },
+                    enabled: api.can('delete', baton.data),
+                    handler: handler,
+                    //#. Verb: (to) archive messages
+                    text: gt.pgettext('verb', 'Archive')
+                });
+            };
+
+        }()),
+
+        //
         // Empty folder
         //
         empty: function (baton) {
@@ -473,8 +500,13 @@ define('io.ox/core/folder/contextmenu',
             draw: extensions.expunge
         },
         {
-            id: 'divider-1',
+            id: 'archive',
             index: 300,
+            draw: extensions.archive
+        },
+        {
+            id: 'divider-1',
+            index: 400,
             draw: divider
         },
         // -----------------------------------------------
