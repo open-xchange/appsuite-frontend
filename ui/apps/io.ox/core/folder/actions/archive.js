@@ -14,15 +14,19 @@
 define('io.ox/core/folder/actions/archive',
     ['io.ox/mail/api',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (api, dialogs, notifications, gt) {
+     'io.ox/core/yell',
+     'gettext!io.ox/core'], function (api, dialogs, yell, gt) {
 
     'use strict';
 
     var DAYS = 90;
 
     function handler(id) {
-        api.archive(id).fail(notifications.yell);
+
+        //#. notification while archiving messages
+        yell.busy(gt('Archiving messages'));
+
+        api.archive(id).then(yell.done, yell);
     }
 
     return function (id) {

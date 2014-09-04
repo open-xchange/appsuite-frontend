@@ -57,7 +57,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
     $(document).on(_.device('touch') ? 'tap.yell' : 'click.yell', click);
 
-    return function yell(type, message, focus) {
+    function yell(type, message, focus) {
 
         if (type === 'destroy' || type === 'close') return remove();
 
@@ -143,5 +143,21 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         }, _.device('touch') ? 300 : 0);
 
         return node;
+    }
+
+    // add convenience functions
+    yell.busy = function (str) {
+        // use this to standardize messages (be patient, take a few seconds, take a while etc.)
+        yell('busy', str + '. ' + gt('This may take some seconds') + ' ...');
     };
+
+    yell.done = function () {
+        yell('success', gt('Done'));
+    };
+
+    yell.close = function () {
+        yell('close');
+    };
+
+    return yell;
 });
