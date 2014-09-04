@@ -132,7 +132,7 @@ define('io.ox/tasks/edit/view-template',
             }
             this.append(
                 $('<div class="col-lg-12">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-link expand-link">').text(text)
+                    $('<button type="button" tabindex="1" class="btn btn-link expand-link">').attr('aria-expanded', !baton.parentView.collapsed).text(text)
                     .on('click', function () {
                         if (baton.parentView.collapsed) {
                             baton.parentView.$el.find('.collapsed').show();
@@ -146,7 +146,7 @@ define('io.ox/tasks/edit/view-template',
                             }
                         }
                         baton.parentView.collapsed = !baton.parentView.collapsed;
-                        $(this).text((baton.parentView.collapsed ? gt('Expand form') : gt('Collapse form')));
+                        $(this).attr('aria-expanded', !baton.parentView.collapsed).text((baton.parentView.collapsed ? gt('Expand form') : gt('Collapse form')));
                     })
                 )
             );
@@ -577,11 +577,11 @@ define('io.ox/tasks/edit/view-template',
             }
             this.append(
                 $('<div class="col-lg-12 collapsed">').append(
-                    $('<button tabindex="1" class="btn btn-link expand-details-link">').text(text)
+                    $('<button tabindex="1" class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
                     .on('click', function () {
                         baton.parentView.$el.find('.task-edit-details').toggle();
                         baton.parentView.detailsCollapsed = !baton.parentView.detailsCollapsed;
-                        $(this).text((baton.parentView.detailsCollapsed ? gt('Show details') : gt('Hide details')));
+                        $(this).attr('aria-expanded', !baton.parentView.detailsCollapsed).text((baton.parentView.detailsCollapsed ? gt('Show details') : gt('Hide details')));
                     })
                 )
             );
