@@ -58,7 +58,7 @@ define('io.ox/core/attachments/view',
             this.listenTo(this.collection, 'add remove reset', function () {
                 // toggle if empty
                 var length = this.getValidModels().length;
-                this.$el.toggle(length > 0);
+                this.$el.toggleClass('empty', length === 0);
                 // update scroll controls
                 this.updateScrollControls();
                 // update summary
@@ -66,7 +66,7 @@ define('io.ox/core/attachments/view',
             });
 
             // initial toggle if empty
-            this.$el.toggle(this.getValidModels().length > 0);
+            this.$el.toggleClass('empty', this.getValidModels().length === 0);
         },
 
         render: function () {
