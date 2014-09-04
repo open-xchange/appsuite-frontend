@@ -51,12 +51,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     $('<h1 class="clear-title title">').text(header),
                     // save/create button
                     $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
-                        self.options.parentView.trigger('save:start');
-                        self.options.model.save().done(function () {
-                            self.options.parentView.trigger('save:success');
-                        }).fail(function () {
-                            self.options.parentView.trigger('save:fail');
-                        });
+                        self.options.model.save();
                     }),
                     // cancel button
                     $('<button type="button" class="btn btn-default" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
@@ -300,11 +295,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         validate: function () {
         }
     });
-
-    point.extend(new forms.ErrorAlert({
-        id: 'io.ox/contacts/distrib/create-dist-view/errors',
-        index: 250
-    }));
 
     return ContactCreateDistView;
 });

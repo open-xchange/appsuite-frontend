@@ -330,7 +330,7 @@ define('io.ox/contacts/edit/view-form',
         });
 
         // attachment Drag & Drop
-        views.ext.point('io.ox/contacts/edit/dnd/actions').extend({
+        ext.point('io.ox/contacts/edit/dnd/actions').extend({
             id: 'attachment',
             index: 100,
             label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
