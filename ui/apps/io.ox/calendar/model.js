@@ -136,9 +136,9 @@ define('io.ox/calendar/model',
     });
 
     Validators.validationFor('io.ox/calendar/model', {
-        title: { format: 'string', mandatory: true},
-        start_date : { format: 'date', mandatory: true},
-        end_date: { format: 'date', mandatory: true}
+        title: { format: 'string', mandatory: true },
+        start_date : { format: 'date', mandatory: true },
+        end_date: { format: 'date', mandatory: true }
     });
 
     return {

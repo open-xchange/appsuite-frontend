@@ -106,24 +106,6 @@ define('io.ox/calendar/edit/template',
         tagName: 'div'
     });
 
-    // alert error
-    point.extend(new forms.ErrorAlert({
-        id: 'error',
-        index: 100,
-        className: 'error-alerts col-xs-12',
-        isRelevant: function (response, xhr) {
-            // don't handle conflicts as error
-            if (response.conflicts) {
-                return false;
-            }
-            if (xhr && (xhr.status === 404 || xhr.status === 0)) {
-                notifications.yell(response);
-                return false;
-            }
-            return true;
-        }
-    }));
-
     // title
     point.extend(new forms.InputField({
         id: 'title',
