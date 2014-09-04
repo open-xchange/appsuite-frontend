@@ -121,12 +121,9 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
     describe('Vacationnotice with two active mails', function () {
 
         beforeEach(function () {
-            this.server.autoRespond = false;
-            this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlagTwoMails));
-            });
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify([]));
+                var data = (xhr.url.indexOf('flag=vacation') > 0) ? resultWithFlagTwoMails : { data: [{}] };
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(data));
             });
             $('body', document).append(node = $('<div id="vacationnoticetestNode">'));
 
@@ -138,13 +135,10 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         });
 
         it('should check two aliases', function (done) {
-
             filter.editVacationtNotice(node, multiValues, 'tester@open-xchange.com').then(function () {
                 expect(node.find('input[type="checkbox"]:checked')).to.have.length(2);
                 done();
             });
-            this.server.respond();
-
         });
 
         it('should create the filtermodel', function (done) {
@@ -160,7 +154,6 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
                 expect(model.get('tester2@open-xchange.com')).to.equal(expextedModel['tester2@open-xchange.com']);
                 done();
             });
-            this.server.respond();
         });
 
     });
