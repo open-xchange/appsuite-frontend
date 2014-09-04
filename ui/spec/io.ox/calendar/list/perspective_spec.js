@@ -54,9 +54,12 @@ define(['io.ox/calendar/main',
 
         it('should open the listview perspective', function (done) {
             var app = main.getApp();
-            ox.ui.Perspective.show(app, 'list').done(function () {
-                var perspective = app.attributes.window.currentPerspective;
-                expect(perspective).to.equal('list');
+            app.launch().then(function () {
+                return ox.ui.Perspective.show(app, 'list');
+            })
+            .done(function (perspective) {
+                expect(perspective.name).to.equal('list');
+                expect(perspective.rendered).to.be.true;
                 done();
             });
         });
