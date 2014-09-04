@@ -560,7 +560,8 @@ define.async('io.ox/mail/accounts/view-form',
                                     )
                                 ) :
                                 // just show path
-                                new InputView({ model: model, id: folder }).render().$el.prop('disabled', true)
+                                $('<input type="text" class="form-control" disabled="disabled">')
+                                .val($.trim(model.get(folder)).replace(/^default\d+\D/, ''))
                             )
                         );
                     })
