@@ -86,15 +86,15 @@ define('io.ox/calendar/edit/main',
 
                         self.model
                             .on('backendError', function (response) {
-                                if (response.conflicts) {
-                                    return;
-                                }
                                 try {
                                     self.getWindow().idle();
                                 } catch (e) {
                                     if (response.code === 'UPL-0005') {//uploadsize to big
                                         api.removeFromUploadList(_.ecid(this.attributes));//remove busy animation
                                     }
+                                }
+                                if (response.conflicts) {
+                                    return;
                                 }
                                 notifications.yell('error', response.error);
                             })
