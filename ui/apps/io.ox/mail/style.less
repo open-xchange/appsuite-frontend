@@ -344,9 +344,11 @@
         margin-left: 14px;
     }
 
+    @item-line-height: 21px;
+
     .list-item-content {
 
-        line-height: 21px; // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
+        line-height: @item-line-height; // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
         .ellipsis();
 
         i {
@@ -411,6 +413,7 @@
 
     .box() {
         color: #888;
+        line-height: @item-line-height - 2;
         padding: 0 7px;
         margin: 0 0 0 7px;
         display: inline-block;
