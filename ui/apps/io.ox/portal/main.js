@@ -392,7 +392,7 @@ define('io.ox/portal/main',
                 // button
                 $('<a href="#" class="action" tabindex="1" role="button">').text(
                     //#. %1$s is social media name, e.g. Facebook
-                    gt.format('Add %1$s account', title)
+                    gt.format('Add your %1$s account', title)
                 )
                 .on('click', { baton: baton }, setup)
             )
@@ -495,8 +495,7 @@ define('io.ox/portal/main',
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
                 $title = node.find('h2 .title').text(_.noI18n(title)),
-                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
-                requiresCustomSetUp = point.invoke('requiresCustomSetUp').reduce(reduceBool, true).value();
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
@@ -504,13 +503,9 @@ define('io.ox/portal/main',
                 'aria-label': title + ', ' + gt('Disable widget'),
             });
             // setup?
-            if (requiresSetUp || requiresCustomSetUp) {
+            if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');
-                if (requiresSetUp) {
-                    app.drawDefaultSetup(baton);
-                } else {
-                    point.invoke('performCustomSetUp', node, baton);
-                }
+                app.drawDefaultSetup(baton);
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {

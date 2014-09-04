@@ -62,7 +62,10 @@ define('plugins/portal/xing/register',
         });
     };
 
-    createXingAccount = function (event) {
+    createXingAccount = function (e) {
+
+        e.preventDefault();
+
         var email, firstname, lastname, language;
 
         new dialogs.ModalDialog()
@@ -74,28 +77,31 @@ define('plugins/portal/xing/register',
 
 
                 this.append(
-                    menu = $('<div>').addClass('io-ox-xing submitted-data').append(
-                        $('<p>').text(gt('Please select which of the following data we may use to create your %s account:', XING_NAME)),
+                    menu = $('<div class="io-ox-xing submitted-data">').append(
+                        $('<p>').text(
+                            gt('Please select which of the following data we may use to create your %s account:', XING_NAME)
+                        ),
                         $('<label>').append(
                             $.txt(gt('Mail address')),
-                            email = $('<input>').attr({type: 'text', name: 'email'})
+                            email = $('<input type="text" name="email">')
                         ),
                         $('<label>').append(
                             $.txt(gt('First name')),
-                            firstname = $('<input>').attr({type: 'text', name: 'firstname'})
+                            firstname = $('<input type="text" name="firstname">')
                         ),
                         $('<label>').append(
                             $.txt(gt('Last name')),
-                            lastname = $('<input>').attr({type: 'text', name: 'lastname'})
+                            lastname = $('<input type="text" name="lastname">')
                         ),
                         $('<label>').append(
                             $.txt(gt('Language')),
-                            language = $('<select>').attr({name: 'language'}).append(
-                                _.map(availableLangs, function (elem) { return $('<option>').val(elem).text(elem); })
+                            language = $('<select name="language">').append(
+                                _(availableLangs).map(function (elem) { return $('<option>').val(elem).text(elem); })
                             )
                         )
                     )
                 );
+
                 userApi.getCurrentUser().done(function (userData) {
                     var locale = userData.attributes.locale,
                         lang = locale.indexOf('_') > -1 ? locale.split('_')[0] : locale;
@@ -127,7 +133,7 @@ define('plugins/portal/xing/register',
                 .done(function () {
                     notifications.yell('success', gt('Your %s account has been created. Expect a confirmation mail from %s soon.', XING_NAME, XING_NAME));
                     notifications.yell('success', gt('The next step is allowing this system to access your %s account for you.', XING_NAME));
-                    addXingAccount(event);
+                    addXingAccount(e);
                 });
             }
         );
@@ -242,30 +248,36 @@ define('plugins/portal/xing/register',
      * Portal extension points: Here's where it all starts
      */
     point.extend({
+
         title: title,
 
         isEnabled: function () {
             return keychain.isEnabled('xing');
         },
 
-        requiresCustomSetUp: function () {
+        requiresSetUp: function () {
             return keychain.isEnabled('xing') && !keychain.hasStandardAccount('xing');
         },
 
-        performCustomSetUp: function (baton) {
-            var node = baton.model.node,
-                choiceMenu = $('<div>').addClass('setup-questions');
+        drawDefaultSetup: function (baton) {
 
-            choiceMenu.append(
-                $('<div>').text(gt('Do you already have a %s account?', XING_NAME)),
-                $('<a>').addClass('setup-action')
-                    .text(gt('Allow us to use your %s account here', XING_NAME))
-                    .on('click', {baton: baton}, addXingAccount),
-                $('<div>').text(gt('Do you want to create a %s account?', XING_NAME)),
-                $('<a>').addClass('setup-action').text(gt('Create a %s account using the data stored here', XING_NAME))
-                    .on('click', {baton: baton}, createXingAccount)
+            this.find('h2 .title').replaceWith('<i class="fa fa-xing">');
+            this.addClass('widget-color-custom color-xing');
+            this.find('.content').append(
+                $('<a href="#" class="action" tabindex="1" role="button">').text(
+                    //#. %1$s is social media name, e.g. Facebook
+                    gt('Create new %1$s account', XING_NAME)
+                )
+                .on('click', { baton: baton }, createXingAccount)
             );
-            $(node).addClass('content io-ox-xing').children('.decoration').append(choiceMenu);
+        },
+
+        performSetUp: function (baton) {
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+            return keychain.createInteractively('xing', win).done(function () {
+                baton.model.node.removeClass('requires-setup widget-color-custom color-xing');
+                ox.trigger('refresh^');
+            });
         },
 
         load: function (baton) {
@@ -295,18 +307,6 @@ define('plugins/portal/xing/register',
                     makeNewsfeed(baton.data.network_activities)
                 )
             );
-        },
-
-        error: function (error, baton) {
-            if (!point.invoke('requiresCustomSetUp')) {
-                return;
-            }
-            var node = baton.model.node,
-                title = node.find('.title').parent(),
-                decoration = $('<div>').addClass('decoration').append(title);
-
-            node.empty().append(decoration);
-            point.invoke('performCustomSetUp', node, baton);
         }
     });
 

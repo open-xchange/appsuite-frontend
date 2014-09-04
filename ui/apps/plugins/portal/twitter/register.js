@@ -287,7 +287,7 @@ define('plugins/portal/twitter/register',
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychain.createInteractively('twitter', win).done(function () {
-                baton.model.node.removeClass('requires-setup');
+                baton.model.node.removeClass('requires-setup widget-color-custom color-twitter');
                 ox.trigger('refresh^');
             });
         },

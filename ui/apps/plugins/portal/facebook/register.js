@@ -223,7 +223,7 @@ define('plugins/portal/facebook/register',
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychain.createInteractively('facebook', win).done(function () {
-                baton.model.node.removeClass('requires-setup');
+                baton.model.node.removeClass('requires-setup widget-color-custom color-facebook');
                 ox.trigger('refresh^');
             });
         },
