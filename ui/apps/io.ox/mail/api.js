@@ -578,7 +578,8 @@ define('io.ox/mail/api',
 
         return http.PUT({
             module: 'mail',
-            params: { action: 'archive_folder', folder: id }
+            params: { action: 'archive_folder', folder: id, days: 90 },
+            appendColumns: false
         })
         .done(function () {
             api.trigger('refresh.all');
