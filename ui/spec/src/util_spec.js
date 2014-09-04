@@ -259,9 +259,9 @@ define([], function () {
             it('should return identify recurrence_position', function () {
                 result = _.cid(str);
                 expect(result).to.be.an('object');
-                expect(result.folder_id).to.equals('1');
-                expect(result.id).to.equals('2');
-                expect(result.recurrence_position).to.equals('3');
+                expect(result.folder_id).to.equal('1');
+                expect(result.id).to.equal('2');
+                expect(result.recurrence_position).to.equal(3);
 
             });
         });
