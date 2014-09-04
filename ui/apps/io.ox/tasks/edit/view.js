@@ -16,14 +16,11 @@ define('io.ox/tasks/edit/view',
      'io.ox/tasks/edit/view-template',
      'io.ox/tasks/model',
      'io.ox/core/date',
-     'io.ox/core/api/account',
      'io.ox/tasks/edit/util',
      'io.ox/core/extensions',
-     'io.ox/core/notifications',
      'io.ox/backbone/views',
-     'io.ox/backbone/forms',
      'io.ox/core/capabilities'
-    ], function (gt, template, model, date, account, util, ext, notifications, views, forms, capabilities) {
+    ], function (gt, template, model, date, util, ext, views, capabilities) {
 
     'use strict';
 

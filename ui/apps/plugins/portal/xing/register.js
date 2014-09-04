@@ -30,14 +30,12 @@ define('plugins/portal/xing/register',
      'io.ox/core/api/user',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/extPatterns/links',
      'io.ox/keychain/api',
-     'io.ox/backbone/forms',
      'io.ox/core/date',
      'gettext!plugins/portal',
      'less!plugins/portal/xing/xing'
     ], function (ext, eventActions, activityParsers, api, userApi,
-        notifications, dialogs, links, keychain, forms, date, gt) {
+        notifications, dialogs, keychain, date, gt) {
 
     'use strict';
 
