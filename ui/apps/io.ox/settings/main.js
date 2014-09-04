@@ -288,16 +288,18 @@ define('io.ox/settings/main',
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function () {
                     right.empty().idle(); // again, since require makes this async
-                    right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     vsplit.right.attr('title', baton.data.title);
+                    vsplit.right.find('#currentsettingtitle').remove();
                     ext.point(extPointPart).invoke('draw', right, baton);
+                    vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     updateExpertMode();
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
                     right.empty().idle(); // again, since require makes this async
-                    right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     vsplit.right.attr('title', baton.data.title);
+                    vsplit.right.find('#currentsettingtitle').remove();
+                    vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
                 });
