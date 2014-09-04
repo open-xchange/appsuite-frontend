@@ -106,6 +106,9 @@ define('io.ox/mail/write/main',
             if (app.dirty()) {
                 app.autoSaveDraft().done(function (data) {
                     app.refId = data;
+                    app.setSendType(mailAPI.SENDTYPE.DRAFT);
+                    app.setMsgRef(data);
+                    app.dirty(false);
                 });
             } else {
                 delay();
