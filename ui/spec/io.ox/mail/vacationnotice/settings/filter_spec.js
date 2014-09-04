@@ -83,12 +83,11 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
     describe('Vacationnotice with one active mail', function () {
 
         beforeEach(function () {
-            this.server.autoRespond = false;
-            this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlag));
+            this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
+                var data = (xhr.url.indexOf('flag=vacation') >= 0) ? resultWithFlag : { data: [{}] };
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(data));
             });
             $('body', document).append(node = $('<div id="vacationnoticetestNode">'));
-
         });
 
         afterEach(function () {
@@ -96,24 +95,22 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             node = null;
         });
 
-        it('should draw the form', function () {
-
-            filter.editVacationtNotice(node, multiValues, 'tester@open-xchange.com');
-            this.server.respond();
-            expect(node.find('input[name="subject"]')).to.have.length(1);
-            expect(node.find('textarea[name="text"]')).to.have.length(1);
-            expect(node.find('select')).to.have.length(1);
-            expect(node.find('option')).to.have.length(31);
-            expect(node.find('input[type="checkbox"]')).to.have.length(2);
-
+        it('should draw the form', function (done) {
+            filter.editVacationtNotice(node, multiValues, 'tester@open-xchange.com').then(function () {
+                expect(node.find('input[name="subject"]')).to.have.length(1);
+                expect(node.find('textarea[name="text"]')).to.have.length(1);
+                expect(node.find('select')).to.have.length(1);
+                expect(node.find('option')).to.have.length(31);
+                expect(node.find('input[type="checkbox"]')).to.have.length(2);
+                done();
+            });
         });
 
-        it('should check only one alias', function () {
-
-            filter.editVacationtNotice(node, multiValues, 'tester@open-xchange.com');
-            this.server.respond();
-            expect(node.find('input[type="checkbox"]:checked')).to.have.length(1);
-
+        it('should check only one alias', function (done) {
+            filter.editVacationtNotice(node, multiValues, 'tester@open-xchange.com').then(function () {
+                expect(node.find('input[type="checkbox"]:checked')).to.have.length(1);
+                done();
+            });
         });
 
     });
@@ -122,7 +119,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                var data = (xhr.url.indexOf('flag=vacation') > 0) ? resultWithFlagTwoMails : { data: [{}] };
+                var data = (xhr.url.indexOf('flag=vacation') >= 0) ? resultWithFlagTwoMails : { data: [{}] };
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(data));
             });
             $('body', document).append(node = $('<div id="vacationnoticetestNode">'));
