@@ -796,18 +796,17 @@ define('io.ox/calendar/week/view',
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var formatDate = tmpDate.format('E d'),
-                    day = $('<a>')
+                var day = $('<a>')
                     .addClass('weekday')
                     .attr({
                         date: d,
-                        title: gt('Click for whole day appointment'),
+                        title: tmpDate.format(date.DATE) + ', ' + gt('Click for whole day appointment'),
                         role: 'button',
                         tabindex: 1,
                         href: '#',
-                        'aria-label': formatDate + ', ' + gt('Click for whole day appointment')
+                        'aria-label': tmpDate.format(date.DATE) + ', ' + gt('Click for whole day appointment')
                     })
-                    .text(gt.noI18n(formatDate))
+                    .text(gt.noI18n(tmpDate.format('E d')))
                     .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
