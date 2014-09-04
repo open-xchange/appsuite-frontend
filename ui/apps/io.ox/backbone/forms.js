@@ -22,46 +22,6 @@ define('io.ox/backbone/forms',
 
     'use strict';
 
-    // Error Alert
-
-    function ErrorAlert(options) {
-        _.extend(this, {
-
-            tagName: 'div',
-            className: 'error-alerts',
-
-            init: function () {
-                var self = this;
-
-                function showBackendError(error, xhr) {
-                    if (!self.isRelevant(error, xhr)) {
-                        return;
-                    }
-                    var alert = $.alert({title: self.errorTitle, message: self.formatError(error)});
-                    self.$el.find('.alert').remove();
-                    self.$el.append(alert);
-
-                    alert.find('.close').on('click', function () {
-                        alert.remove();
-                    });
-                }
-
-                this.observeModel('backendError', showBackendError);
-            },
-
-            isRelevant: function () {
-                return true;
-            },
-
-            errorTitle: gt('An error occurred'),
-
-            formatError: function (error) {
-                return error.error || gt('An error occurred. Please try again later');
-            }
-
-        }, options || {});
-    }
-
     // Control Group
     function ControlGroup(options) {
 
@@ -676,7 +636,6 @@ define('io.ox/backbone/forms',
     }
 
     var forms = {
-        ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
         SelectControlGroup: SelectControlGroup,
         InputField: InputField,

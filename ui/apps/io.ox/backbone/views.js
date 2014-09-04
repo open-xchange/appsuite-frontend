@@ -237,64 +237,10 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
     }
 
-    function AttributeView(options) {
-        _.extend(this, {
-
-            render: function () {
-                var self = this;
-                var lastAttribute = null;
-
-                _([this.attribute]).chain().flatten().each(function (attribute) {
-                    var value = self.model.get(attribute);
-                    if (self.transform && self.transform[attribute]) {
-                        value = self.transform[attribute](value);
-                    } else if (self.transform) {
-                        value = self.transform(value);
-                    }
-
-                    if (lastAttribute) {
-                        self.$el.append($.txt(self.separator(lastAttribute)));
-                    }
-
-                    if (self.model.isSet(attribute)) {
-                        self.$el.append($.txt(_.noI18n(value)));
-                    } else if (self.initialValue) {
-                        self.$el.append($.txt(self.initialValue));
-                    }
-
-                    lastAttribute = attribute;
-                });
-
-            },
-            separator: function () {
-                return ' ';
-            },
-            updateNode: function () {
-                this.$el.empty();
-                this.render();
-            }
-
-        });
-
-        var self = this;
-        this.modelEvents = {};
-
-        _([options.attribute]).chain().flatten().each(function (attribute) {
-            self.modelEvents['change:' + attribute] = 'updateNode';
-        });
-
-        _.extend(this, options);
-    }
-
     views = {
-
         point: function (name) {
             return new ViewExtensionPoint(name);
-        },
-        AttributeView: AttributeView,
-        ext: ext,
-        createViewClass: createViewClass,
-        buildExtension: buildExtension
+        }
     };
 
     return views;
