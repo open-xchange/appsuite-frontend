@@ -337,14 +337,25 @@ define('plugins/portal/twitter/register',
             }
 
             var script = document.createElement('script');
+            if (!window.twttr) {
+                script.onload= function () {
+                    window.twttr.ready(function (twttr) {
+                        twttr.events.bind('tweet', function () {
+                            loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
+                                baton.data = data;
+                                renderTweets(baton);
+                            });
+                        });
+                    });
+                };
+            }
             script.type = 'text/javascript';
             script.src = 'https://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
-
             this.empty().append(
                 $('<div>').addClass('clear-title io-ox-twitter-title').text('Twitter'),
-                getComposeBox(),
-                script
+                getComposeBox()
             );
+            this[0].appendChild(script);//need to use native methos here to trigger onload
 
             this.append($tweets.empty(), $busyIndicator);
 

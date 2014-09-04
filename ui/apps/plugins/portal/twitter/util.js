@@ -7,8 +7,7 @@ define('plugins/portal/twitter/util',
 
     'use strict';
 
-    var replyBox,
-        tweetCache,
+    var tweetCache,
         $tweets,
         currentUserID;
 
@@ -223,57 +222,11 @@ define('plugins/portal/twitter/util',
         return $myTweet;
     };
 
-    var getReplyLink = function (tweet, $myTweet) {
+    var getReplyLink = function (tweet) {
         return $('<a>').attr({'class': 'io-ox-twitter-reply',
-                'href': '#',
+                'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str,
                 role: 'button'})
-            .text(gt('Reply'))
-            .on('click', function (e) {
-                e.preventDefault();
-
-                replyBox = replyBox || new TwitterTextBox(gt('Reply'), {
-                    open: function (options) {
-                        options.textArea
-                            .attr({rows: '4', placeholder: ''});
-                        options.buttonContainer.removeClass('io-ox-twitter-hidden');
-
-                        if (options.baton !== undefined) {
-                            options.textArea.val('@' + options.baton.tweet.user.screen_name + ' ');
-                        }
-                    },
-                    close: function (options) {
-                        if (options.textArea.val() === '') {
-                            options.textArea.attr({rows: '1', placeholder: 'Reply to'})
-                                .css('height', '');
-                            options.buttonContainer.addClass('io-ox-twitter-hidden');
-                        }
-                    },
-                    isOpen: true
-                });
-                replyBox.appendTo($myTweet, {tweet: tweet,
-                    callback: function (text, options) {
-                        $.when(network.sendTweet({ status: text, in_reply_to_status_id: tweet.id_str })).then(function success(response) {
-                            var jsonResponse = JSON.parse(response);
-
-                            if (!jsonResponse.errors) {
-                                $tweets.prepend(renderTweet(jsonResponse));
-                                tweetCache.add(jsonResponse.id_str, jsonResponse);
-                            } else {
-                                if (_.isArray(jsonResponse.errors)) {
-                                    notifications.yell('error', jsonResponse.errors[0].message);
-                                } else {
-                                    notifications.yell('error', jsonResponse.errors);
-                                }
-                            }
-
-                            options.replyBoxContainer.remove();
-                        },
-                        function fail() {
-                            notifications.yell('error', gt('An internal error occurred'));
-                        });
-                    }
-                });
-            });
+            .text(gt('Reply'));
     };
 
     var getRetweetLink = function (tweet, $myTweet) {
