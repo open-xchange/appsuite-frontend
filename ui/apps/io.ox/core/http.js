@@ -1184,13 +1184,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     })
                     .done(function (data) {
                         // orchestrate callbacks and their data
-                        for (i = 0, $l = q.length; i < $l; i++) {
-                            if (data[i].data && data[i].timestamp) {
-                                q[i].deferred.resolve(data[i].data, data[i].timestamp);
-                            } else if (data[i].error) {
-                                q[i].deferred.reject(data[i].error);
+                        for (var i = 0, $l = q.length, item; i < $l; i++) {
+                            item = data[i];
+                            if (_.isObject(item) && 'data' in item && 'timestamp' in item) {
+                                q[i].deferred.resolve(item.data, item.timestamp);
+                            } else if (item.error) {
+                                q[i].deferred.reject(item.error);
                             } else {
-                                q[i].deferred.resolve(data[i]);
+                                q[i].deferred.resolve(item);
                             }
                         }
                         // continuation

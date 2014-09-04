@@ -956,27 +956,27 @@ define('io.ox/contacts/api',
         // get from local cache
         function get(query) {
 
-            var key = getHashKey(query), co = search.cache[key], words = query.split(' ');
+            var key = getHashKey(query), def = search.cache[key], words = query.split(' ');
 
-            if (!co) return; // cache miss
-            if (co.query === query) return co.data; // perfect match; needs no further subset search
+            if (!def) return; // cache miss
 
             // local lookup:
-            return _(co.data).filter(function (item) {
-                return _(words).every(function (word) {
-                    return _(item.fulltext).some(function (str) {
-                        return str.indexOf(word) === 0; // server also uses startsWith() / not contains()
+            return def.then(function (data) {
+                return _(data).filter(function (item) {
+                    return _(words).every(function (word) {
+                        return _(item.fulltext).some(function (str) {
+                            return str.indexOf(word) === 0; // server also uses startsWith() / not contains()
+                        });
                     });
                 });
             });
         }
 
         // add to cache
-        function add(query, data) {
+        function add(query, def) {
             var key = getHashKey(query);
-            search.cache[key] = {
-                query: query,
-                data: _(data).map(function (item) {
+            search.cache[key] = def.then(function (data) {
+                return _(data).map(function (item) {
                     // prepare simple array for fast lookups
                     item.fulltext = _(fields).map(function (id) {
                         return String(item[id] || '').toLowerCase();
@@ -984,8 +984,8 @@ define('io.ox/contacts/api',
                     // avoid useless lookups by removing empty strings
                     item.fulltext = _(item.fulltext).compact();
                     return item;
-                })
-            };
+                });
+            });
         }
 
         function search(query, options) {
@@ -999,28 +999,39 @@ define('io.ox/contacts/api',
 
             // try local cache
             var cache = options.cache && get(query);
-            if (cache) return $.when(cache);
+            if (cache) return cache;
 
-            // ask server
-            return http.GET({
+            // add query to cache
+            add(query, http.GET({
                 module: 'contacts',
                 params: {
                     action: 'autocomplete',
-                    query: query,
+                    query: getHashKey(query), // we just look for the shortest word
                     admin: options.admin,
                     email: options.email,
                     sort: options.sort,
                     columns: options.columns
                 }
-            })
-            .then(function (data) {
-                add(query, data);
-                return data; // make sure it's just data
-            });
+            }));
+
+            // use local lookup! first query might exceed minimum length
+            return get(query);
         }
 
         // export cache for debugging/clearing
         search.cache = {};
+
+        // use this to debug bad results:
+        // search.inspect = function () {
+        //     var pairs = _(search.cache).pairs();
+        //     $.when.apply($, _(pairs).pluck(1)).then(function () {
+        //         var result = {};
+        //         _(arguments).each(function (data, index) {
+        //             result[pairs[index][0]] = data;
+        //         });
+        //         console.log('Inspect', result);
+        //     });
+        // };
 
         return search;
 

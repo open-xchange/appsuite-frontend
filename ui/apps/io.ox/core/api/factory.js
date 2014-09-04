@@ -578,6 +578,9 @@ define('io.ox/core/api/factory',
                     module: o.module,
                     params: opt,
                     data: getData(query, options)
+                })
+                .then(function (data) {
+                    return data; // make sure we always have the same response
                 });
             };
         }

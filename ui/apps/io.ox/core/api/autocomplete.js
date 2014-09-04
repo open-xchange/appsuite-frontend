@@ -96,8 +96,9 @@ define('io.ox/core/api/autocomplete',
                     .then(function () {
                         // unify and process
                         var retData = [], data = _(arguments).toArray();
-                        _(self.apis).each(function (apiModule, index) {
-                            var type = apiModule.type, items = self.processItem(type, data[index]);
+
+                        _(self.apis).each(function (module, index) {
+                            var type = module.type, items = self.processItem(type, data[index]);
                             switch (type) {
                             case 'user':
                             case 'contact':
