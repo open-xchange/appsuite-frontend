@@ -148,7 +148,9 @@ define('io.ox/settings/main',
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
-            'tabindex': 1
+            'tabindex': 1,
+            'aria-describedby': 'currentsettingtitle',
+            'role': 'main' //needed or mac voice over reads the whole settings pane when an input element is focused
         }).scrollable();
 
         grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
@@ -286,12 +288,16 @@ define('io.ox/settings/main',
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function () {
                     right.empty().idle(); // again, since require makes this async
+                    right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
+                    vsplit.right.attr('title', baton.data.title);
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
                     right.empty().idle(); // again, since require makes this async
+                    right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
+                    vsplit.right.attr('title', baton.data.title);
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
                 });
