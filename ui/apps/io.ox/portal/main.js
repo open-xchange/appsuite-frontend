@@ -657,7 +657,7 @@ define('io.ox/portal/main',
                         cancel: 'li.protected',
                         containment: win.nodes.main,
                         delay: 150,
-                        items: '> li.draggable',
+                        items: '> li.draggable:visible',
                         scroll: true,
                         tolerance: 'pointer', // default 'intersect' by 50%
                         update: function () {
