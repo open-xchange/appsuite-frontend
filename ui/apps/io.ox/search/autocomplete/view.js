@@ -18,37 +18,16 @@ define('io.ox/search/autocomplete/view',
 
     'use strict';
 
-    var INDEX = 100,
-        POINT = 'io.ox/search/autocomplete';
+    var POINT = 'io.ox/search/autocomplete';
 
     /**
      * search field
      * @id  io.ox/search/autocomplete/searchfield
      */
-    ext.point(POINT + '/searchfield').extend({
-        id: 'searchfield',
-        index: INDEX += 100,
-        draw: extensions.searchfield
-    });
-
-    /**
-     * search field: cancel button
-     * @id  io.ox/search/autocomplete/cancel-button'
-     */
-    ext.point(POINT + '/cancel-button').extend({
-        id: 'cancel-button',
-        index: INDEX += 100,
-        draw: extensions.cancelButton
-    });
-
-    /**
-     * search field: search button
-     * @id  io.ox/search/autocomplete/search-button
-     */
-    ext.point(POINT + '/search-button').extend({
-        id: 'search-button',
-        index: INDEX += 100,
-        draw: extensions.searchButton
+    ext.point(POINT + '/searchfield-mobile').extend({
+        id: 'searchfield-mobile',
+        index: 100,
+        draw: extensions.searchfieldMobile
     });
 
     /**
@@ -57,7 +36,7 @@ define('io.ox/search/autocomplete/view',
      */
     ext.point(POINT + '/style-container').extend({
         id: 'style-container',
-        index: INDEX += 100,
+        index: 100,
         draw: extensions.styleContainer
     });
 
@@ -67,7 +46,7 @@ define('io.ox/search/autocomplete/view',
      */
     ext.point(POINT + '/item').extend({
         id: 'item',
-        index: INDEX += 100,
+        index: 100,
         draw: extensions.item
     });
 
@@ -75,8 +54,7 @@ define('io.ox/search/autocomplete/view',
      * dropdown item: special
      * @id  io.ox/search/autocomplete/item/[facet.id]
      */
-
-
+     // called via ext.point(POINT + '/item')
 
     /**
      * dropdown item: name
@@ -84,7 +62,7 @@ define('io.ox/search/autocomplete/view',
      */
     ext.point(POINT + '/name').extend({
         id: 'name',
-        index: INDEX += 100,
+        index: 100,
         draw: extensions.name
     });
 
@@ -94,7 +72,7 @@ define('io.ox/search/autocomplete/view',
      */
     ext.point(POINT + '/detail').extend({
         id: 'detail',
-        index: INDEX += 100,
+        index: 100,
         draw: extensions.detail
     });
 
@@ -104,7 +82,7 @@ define('io.ox/search/autocomplete/view',
      */
     ext.point(POINT + '/image').extend({
         id: 'image',
-        index: INDEX += 100,
+        index: 100,
         draw: extensions.image
     });
 

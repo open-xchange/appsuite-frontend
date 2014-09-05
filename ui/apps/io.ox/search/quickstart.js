@@ -18,44 +18,30 @@ define('io.ox/search/quickstart',
 
     'use strict';
 
-     var def;
-
-     function addNodes (win) {
-            // add container nodes
-            ext.point(win.name + '/facetedsearch').invoke('init', win.facetedsearch, win);
-
-            // render search field
-            extensions.searchfieldSkeleton.call(win.nodes.facetedsearch.toolbar);
-     }
-
-     function addLogic (win) {
-        require(['io.ox/search/main'], function (search) {
-            // overwrite views focus method
-            var view = _.extend(
-                      search.getView(),
-                      { focus: win.facetedsearch.focus }
-                ),
-                baton = view.getBaton();
-            // register handler
-            view.render();
-            // add autocomplete and addional handler
-            extensions.searchfieldLogic.call(win.nodes.facetedsearch.toolbar, baton);
-            // add reference to window
-            win.facetedsearch.view = view;
-            // resolve win.facet
-            def.resolve(win.facetedsearch.ready);
-        });
-     }
 
     return {
 
         run: function (win) {
             // reference ready deferred
-            def = win.facetedsearch.ready;
-            // add container nodes and input
-            addNodes(win);
-            // load search module in full
-            addLogic(win);
+            var def = win.facetedsearch.ready;
+
+            require(['io.ox/search/main'], function (search) {
+                // overwrite views focus method
+                var view = _.extend(
+                          search.getView(),
+                          { focus: win.facetedsearch.focus }
+                    ),
+                    baton = view.getBaton();
+                // register handler
+                view.render();
+                // add autocomplete and addional handler
+                extensions.searchfieldLogic.call(win.nodes.facetedsearch.toolbar, baton);
+                // add reference to window
+                win.facetedsearch.view = view;
+                // resolve win.facet
+                def.resolve(win.facetedsearch.ready);
+            });
+
             return def;
         }
 

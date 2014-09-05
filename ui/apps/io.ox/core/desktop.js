@@ -1355,7 +1355,7 @@ define('io.ox/core/desktop',
                         facetsadv: '.search-facets-advanced'
                     },
                     init: function () {
-
+                        // via ext.point: this.name + '/facetedsearch'
                     },
 
                     toggle: function () {
@@ -1368,7 +1368,6 @@ define('io.ox/core/desktop',
                     },
 
                     open: function () {
-                        debugger;
                         var container = self.nodes.facetedsearch.container,
                             facets = container.find(this.selectors.facets),
                             advfacets = container.find(this.selectors.facetsadv),
@@ -1415,7 +1414,7 @@ define('io.ox/core/desktop',
                 };
 
                 ext.point(this.name + '/facetedsearch').extend({
-                    id: '',
+                    id: 'init',
                     init: function (win) {
                         var side = win.nodes.sidepanel,
                             nodes = win.nodes.facetedsearch = {};
@@ -1648,6 +1647,93 @@ define('io.ox/core/desktop',
             }
 
             if (opt.facetedsearch) {
+
+                    ext.point(win.name + '/facetedsearch/view').extend({
+                        id: 'container',
+                        index: 100,
+                        draw: function () {
+                             ext.point(this.name + '/facetedsearch').
+                                invoke('init', this.facetedsearch, win);
+
+                        }
+                    });
+
+                    ext.point(win.name + '/facetedsearch/view').extend({
+                        id: 'input',
+                        index: 200,
+                        draw: function () {
+                            var node = this.nodes.facetedsearch.toolbar;
+                            var group;
+                            // input group and dropdown
+                            node.append(
+                                group = $('<div class="input-group">')
+                                    .append(
+                                        $('<input type="text" class="form-control search-field" tabindex="1">')
+                                        .attr({
+                                            placeholder: gt('Search') + ' ...'
+                                        })
+                                    )
+                            );
+                        }
+                    });
+
+                    // ext.point(win.name + '/facetedsearch/view').extend({
+                    //     id: 'clear',
+                    //     index: 250,
+                    //     draw: function () {
+
+                    //         var group = this.nodes.facetedsearch.toolbar.find('.input-group');
+                    //         group.append(
+                    //             $('<a href="#">')
+                    //                 .attr({
+                    //                     'tabindex': '1',
+                    //                     'class': 'btn-clear',
+                    //                 }).append(
+                    //                     $('<i class="fa fa-times"></i>')
+                    //                 )
+                    //                 .on('click', function (e) {
+                    //                     e.preventDefault();
+                    //                 })
+                    //         );
+                    //     }
+                    // });
+
+                    ext.point(win.name + '/facetedsearch/view').extend({
+                        id: 'action',
+                        index: 300,
+                        draw: function () {
+                            var group = this.nodes.facetedsearch.toolbar.find('.input-group');
+                            group.append(
+                                $('<span class="input-group-btn">').append(
+                                    // submit
+                                    $('<button type="button">')
+                                    .attr({
+                                        'tabindex': '1',
+                                        'class': 'btn btn-default btn-search',
+                                        'data-toggle': 'tooltip',
+                                        'data-placement': 'bottom',
+                                        'data-animation': 'false',
+                                        'data-container': 'body',
+                                        'data-original-title': gt('Search'),
+                                        'aria-label': gt('Search')
+                                    })
+                                    .append(
+                                        $('<i class="fa fa-search"></i>')
+                                    )
+                                    .tooltip()
+                                    .on('click', function (e) {
+                                        e.preventDefault();
+                                        var e = $.Event('keydown');
+                                        e.which = 13;
+                                    })
+                                )
+                            );
+                        }
+                    });
+
+                // draw searchfield
+                ext.point(win.name + '/facetedsearch/view').invoke('draw', win, ext.Baton.ensure({}));
+
                 require(['io.ox/search/quickstart'], function (quickstart) {
                     quickstart.run(win)
                         .done(function () {
