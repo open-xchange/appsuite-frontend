@@ -58,16 +58,7 @@ define('io.ox/search/facets/view',
     /**
      * special: datepicker
      */
-    ext.point(POINT + '/item/time.custom').extend({
-        id: 'time-facet',
-        index: INDEX += 100,
-        draw: extensions.timeFacet
-    });
-
-    /**
-     * special: datepicker
-     */
-    ext.point(POINT + '/item/data.custom').extend({
+    ext.point(POINT + '/item/date.custom').extend({
         id: 'date-facet',
         index: INDEX += 100,
         draw: extensions.timeFacet

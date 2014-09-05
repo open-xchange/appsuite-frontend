@@ -54,7 +54,7 @@ define('io.ox/search/apiproxy',
                 // for mail only
                 _.each(baton.data, function (facet) {
                     // hack to add custom timespan value
-                    if (facet.id === 'time' || facet.id === 'date') {
+                    if (facet.id === 'date') {
 
                         // new id
                         facet.id = facet.id + '.custom';
