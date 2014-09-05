@@ -654,11 +654,12 @@ define('io.ox/portal/main',
             if (!Modernizr.touch) {
                 require(['static/3rd.party/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
-                        items: '> li.draggable',
                         cancel: 'li.protected',
                         containment: win.nodes.main,
-                        scroll: true,
                         delay: 150,
+                        items: '> li.draggable',
+                        scroll: true,
+                        tolerance: 'pointer', // default 'intersect' by 50%
                         update: function () {
                             widgets.save(appBaton.$.widgets);
                         }
