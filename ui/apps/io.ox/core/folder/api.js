@@ -429,6 +429,7 @@ define('io.ox/core/folder/api',
                 'private' : collection.toJSON(),
                 'public'  : getFlatCollection(module, 'public').toJSON(),
                 'shared'  : getFlatCollection(module, 'shared').toJSON(),
+                'sharing' : getFlatCollection(module, 'sharing').toJSON(),
                 'hidden'  : getFlatCollection(module, 'hidden').toJSON()
             });
         }
@@ -447,6 +448,7 @@ define('io.ox/core/folder/api',
         .then(function (data) {
             var sections = {},
                 hidden = [],
+                sharing = [],
                 hash = settings.get(['folder/hidden'], {}),
                 collectionId;
             // loop over results to get proper objects and sort out hidden folders
@@ -459,6 +461,8 @@ define('io.ox/core/folder/api',
                         if (!util.can('read', folder)) return false;
                         // store section / easier than type=1,2,3
                         if (hash[folder.id]) { hidden.push(folder); return false; }
+                        // sharing?
+                        if (util.is('shared-by-me', folder)) sharing.push(folder);
                         // otherwise
                         return true;
                     })
@@ -472,6 +476,10 @@ define('io.ox/core/folder/api',
             collectionId = getFlatCollectionId(module, 'hidden');
             hidden = processListResponse(collectionId, hidden);
             pool.addCollection(collectionId, sections.hidden = hidden, { reset: true });
+            // add collection for folders shared by me
+            collectionId = getFlatCollectionId(module, 'sharing');
+            sharing = processListResponse(collectionId, sharing);
+            pool.addCollection(collectionId, sections.sharing = sharing, { reset: true });
             // done
             return sections;
         });

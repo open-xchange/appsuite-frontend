@@ -1,0 +1,160 @@
+Bug 30903
+=========
+
+Title: [L3] Auto saved drafts are not removed when sending an email
+Description: ---
+Version: 7.6.1
+Git commit: 0448a0f465a2bd571e2eaed21ac249c3b0f564d8
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 33334
+=========
+
+Title: [L3] protected widgets (on first place) did not get honored while adding a new widget
+Description: ---
+Version: 7.6.1
+Git commit: 549b9d1ccda2ba68c39172718ae1ce7cb1a346f3
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 33729
+=========
+
+Title: [L3] hidden links in topbar when no documents is installed
+Description: Could reproduce by adding a non-existent app to hard-coded "allFavorites" array. Guess the same happens if documents is not installed at all (no manifests anywhere) so that even the application title cannot be determined. Now ignoring apps that cannot be resolved.
+Version: 7.6.1
+Git commit: 48645a7981e77e7c52c2212f547391f108e73a6b
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 33815
+=========
+
+Title: [L3] Drop down list closes immediately on mouse down when selecting from auto complete list
+Description: The selected name is now added immediately as participant.
+Version: 7.6.1
+Git commit: ea61dd5a155c484b86b3e76da3e577d6a8c5a10f
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 33992
+=========
+
+Title: [L3] not all possible parameters of mailto links seem to work
+Description: Added support for all mentioned parameters (to, cc, bcc, subject, body)
+Version: 7.6.1
+Git commit: 501d90a95901a9e49f1d6027196f8af3a4498036
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 34010
+=========
+
+Title: [L3] - Getting started boxes are not displayed correctly
+Description: Using xOffset, arrowOffset, and width for a proper placement.
+Version: 7.6.1
+Git commit: 4fefb4e4fb599d370d0689c8b36f4bbec5f99d31
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-guidedtours
+
+
+Bug 34067
+=========
+
+Title: [L3] mail compose and reply does not work when language set to chinese (never-ending loading UI)
+Description: ---
+Version: 7.6.1
+Git commit: 3a8c7c6ae1e2e7cc72a1de251fdf0a8513d47a70
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 34163
+=========
+
+Title: [L3] Entering a new search term should not create an "AND" search with the previous searchterm
+Description: Each so-called simple facet, like "Foo in subject", will be replaced by a new search term
+Version: 7.6.1
+Git commit: ab273e9b7e84799206f73fa29f7585506e2bb2b0
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 34164
+=========
+
+Title: [L3] Mail module shows images of mails in the spam folder
+Description:
+The mail app has a user-setting to block external images (allowHtmlImages). This bug is about *not* blocking external images in general but only in the spam folder.
+
+If allowHtmlImages = true, the UI will load external images for all folder except the configured spam folder.
+If allowHtmlImages = false, the UI will never load external images (showing a button instead).
+
+Version: 7.6.1
+Git commit: 5866edaa79b289eba05c58d8cfb9d01efd69e02a
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 34165
+=========
+
+Title: [L3] Slideshow and file detail view do not use fileapi.getUrl()
+Description: Added proper usage of fileapi.getUrl()
+Version: 7.6.1
+Git commit: 2a554b91c9d360ddcffd515f21faab3a9277b4fe, dc77ce0516ed920ea3b9808de3ea6049e31c8152, f4143e3bc836b330ca0a6c37a4f4bfb1da0dcff3
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 34166
+=========
+
+Title: [L3] Slideshow shows root folder
+Description: No longer showing top-level folder of OX Drive (id=9).
+Version: 7.6.1
+Git commit: 2a554b91c9d360ddcffd515f21faab3a9277b4fe, dc77ce0516ed920ea3b9808de3ea6049e31c8152, f4143e3bc836b330ca0a6c37a4f4bfb1da0dcff3
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 34259
+=========
+
+Title: Adding attachments does not work after saving draft
+Description: ---
+Version: 7.6.1
+Git commit: bd66985c97c4bc15a150855d93497eb534f246ff
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite
+
+
+Bug 34294
+=========
+
+Title: Javascript files not minimized during grunt dist
+Description:
+The build configuration is setup in a way, that `grunt dist` will not produce any minified javascript files. The original files will be created, instead. This has been fixed in the shared grunt config with the 0.6.3 release. This has mainly been an issue for the core-ui, because the dist task has been customized. The 0.6.3 of shared-grunt-config provides better filters for files being copied around.
+Version: 7.6.1
+Git commit: 0f91f10d62bfac94d66d5e776dd65c2930c969cb
+Git repository: wd/frontend
+Git branch: develop, hotfix-2135
+Package: open-xchange-appsuite

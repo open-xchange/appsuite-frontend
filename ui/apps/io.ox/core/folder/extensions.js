@@ -114,6 +114,21 @@ define('io.ox/core/folder/extensions',
             );
         },
 
+        addRemoteAccount: function () {
+            this.append(
+                $('<div class="links">').append(
+                    $('<a href="#" data-action="add-mail-account" tabindex="1" role="button">')
+                    .text(gt('Add mail account'))
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['io.ox/mail/accounts/settings'], function (m) {
+                            m.mailAutoconfigDialog(e);
+                        });
+                    })
+                )
+            );
+        },
+
         otherFolders: function (tree) {
             this.append(
                 new TreeNodeView({
@@ -172,6 +187,11 @@ define('io.ox/core/folder/extensions',
             id: 'remote-accounts',
             index: INDEX += 100,
             draw: extensions.remoteAccounts
+        },
+        {
+            id: 'add-account',
+            index: INDEX += 100,
+            draw: extensions.addRemoteAccount
         },
         {
             id: 'other',
@@ -265,13 +285,16 @@ define('io.ox/core/folder/extensions',
                     // links
                     links,
                     // public folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public', model_id: model_id + '/public', title: gt('Public') }))
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: gt('Public') }))
                     .render().$el.addClass('section'),
-                    // shared folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared', model_id: model_id + '/shared', title: gt('Shared') }))
+                    // shared with me
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: gt('Shared') }))
                     .render().$el.addClass('section'),
+                    // // shared by me
+                    // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
+                    // .render().$el.addClass('section'),
                     // hidden folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden', model_id: model_id + '/hidden', title: gt('Hidden') }))
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: gt('Hidden') }))
                     .render().$el.addClass('section')
                 );
             }
