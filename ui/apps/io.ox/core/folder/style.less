@@ -168,7 +168,6 @@
         margin: 0;
         padding: 0;
         list-style-type: none;
-        min-height: 30px;
         display: none;
     }
 
@@ -200,19 +199,28 @@
         }
     }
 
-    // sections links
+    // links
     .links {
 
+        margin: -14px 0 0 0;
+        padding: 0 14px 14px 40px;
+        line-height: 30px;
         font-weight: @normal;
-        margin: 14px 0 20px 40px;
 
         &:empty {
             margin: 0;
+            padding: 0;
         }
 
         & > div {
             margin-bottom: 7px;
         }
+    }
+
+    .folder.section + .links {
+        margin: 14px 0 20px 40px;
+        padding: 0;
+        line-height: 20px;
     }
 
     .mobile-edit-mode & {
