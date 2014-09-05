@@ -1,5 +1,5 @@
 Name:           open-xchange-appsuite-spamexperts
-Version:        0.0.1
+Version:        @OXVERSION@
 %define         ox_release 0
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
@@ -51,7 +51,7 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 #for i in $files
 #do
 #    mkdir -p "%{buildroot}%{docroot}/$(dirname $i)"
-#    cp "%{buildroot}/opt/open-xchange/appsuite/$i" "%{buildroot}%{docroot}/$i" 
+#    cp "%{buildroot}/opt/open-xchange/appsuite/$i" "%{buildroot}%{docroot}/$i"
 #done
 
 %clean
