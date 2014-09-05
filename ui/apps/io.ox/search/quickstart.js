@@ -22,7 +22,7 @@ define('io.ox/search/quickstart',
 
      function addNodes (win) {
             // add container nodes
-            win.facetedsearch.init();
+            ext.point(win.name + '/facetedsearch').invoke('init', win.facetedsearch, win);
 
             // render search field
             extensions.searchfieldSkeleton.call(win.nodes.facetedsearch.toolbar);

@@ -1350,35 +1350,12 @@ define('io.ox/core/desktop',
                     active: false,
                     lastFocus: '',
                     ready: $.Deferred(),
+                    selectors : {
+                        facets: '.search-facets:first',
+                        facetsadv: '.search-facets-advanced'
+                    },
                     init: function () {
 
-                        var side = self.nodes.sidepanel,
-                            nodes = self.nodes.facetedsearch = {};
-
-                        // search field
-                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">');
-
-                        // facets container
-                        nodes.container = $('<div class="abs search-container">').hide().append(
-                            // active facets
-                            $('<div class="default">').append(
-                                $('<ul class="search-facets">')
-                            ),
-                            // advanced facets
-                            $('<div class="advanced">')
-                            .append(
-                                $('<ul class="search-facets search-facets-advanced">')
-                            ),
-                            // cancel button
-                            $('<a data-action="close">')
-                                .text(gt('Close search'))
-                                .on('click', function (e) {
-                                    e.preventDefault();
-                                    self.facetedsearch.view.trigger('button:cancel');
-                                })
-                        );
-                        // add nodes
-                        side.append(nodes.toolbar, nodes.container);
                     },
 
                     toggle: function () {
@@ -1391,14 +1368,17 @@ define('io.ox/core/desktop',
                     },
 
                     open: function () {
-                        if (!this.active) {
-                            this.toggle();
-                        }
-                        var facets = self.nodes.facetedsearch.container.find('.search-facets').first();
-                        var advfacets = self.nodes.facetedsearch.container.find('.search-facets-advanced');
+                        debugger;
+                        var container = self.nodes.facetedsearch.container,
+                            facets = container.find(this.selectors.facets),
+                            advfacets = container.find(this.selectors.facetsadv),
+                            baton = self.facetedsearch.view.baton;
+
+                        if (!this.active) this.toggle();
+
                         require(['io.ox/search/facets/extensions'], function (extensions) {
-                            extensions.facets.call(facets.empty(), self.facetedsearch.view.baton);
-                            extensions.advfacets.call(advfacets.empty(), self.facetedsearch.view.baton);
+                            extensions.facets.call(facets.empty(), baton);
+                            extensions.advfacets.call(advfacets.empty(), baton);
                         });
                         return this;
                     },
@@ -1433,6 +1413,39 @@ define('io.ox/core/desktop',
                         self.facetedsearch.close();
                     }
                 };
+
+                ext.point(this.name + '/facetedsearch').extend({
+                    id: '',
+                    init: function (win) {
+                        var side = win.nodes.sidepanel,
+                            nodes = win.nodes.facetedsearch = {};
+
+                        // search field
+                        nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">');
+
+                        // facets container
+                        nodes.container = $('<div class="abs search-container">').hide().append(
+                            // active facets
+                            $('<div class="default">').append(
+                                $('<ul class="search-facets">')
+                            ),
+                            // advanced facets
+                            $('<div class="advanced">')
+                            .append(
+                                $('<ul class="search-facets search-facets-advanced">')
+                            ),
+                            // cancel button
+                            $('<a data-action="close">')
+                                .text(gt('Close search'))
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    win.facetedsearch.view.trigger('button:cancel');
+                                })
+                        );
+                        // add nodes
+                        side.append(nodes.toolbar, nodes.container);
+                    }
+                });
 
                 this.addClass = function () {
                     var o = this.nodes.outer;
