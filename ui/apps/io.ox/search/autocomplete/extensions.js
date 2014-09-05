@@ -21,28 +21,6 @@ define('io.ox/search/autocomplete/extensions',
 
     var extensions = {
 
-        searchfieldSkeleton: function (baton) {
-            var group;
-            // input group and dropdown
-            this.append(
-                group = $('<div class="input-group">')
-                    .append(
-                        $('<input type="text" class="form-control search-field" tabindex="1">')
-                        .attr({
-                            placeholder: gt('Search') + ' ...'
-                        })
-                    )
-            );
-
-            // buttons
-            extensions.searchButton.call(group, baton);
-
-            // disabled in core
-            //extensions.cancelButton.call(group, baton);
-
-            return this;
-        },
-
         searchfieldLogic: function (baton) {
             var ref = this.find('.search-field'),
                 app = baton.app,
@@ -157,15 +135,21 @@ define('io.ox/search/autocomplete/extensions',
             return this;
         },
 
-        searchfield: function (baton) {
-            extensions.searchfieldSkeleton.call(this, baton);
-            extensions.searchfieldLogic.call(this, baton);
-            return this;
-        },
-
-        cancelButton: function () {
-
+        searchfieldMobile: function (baton) {
+            var group;
+            // input group and dropdown
             this.append(
+                group = $('<div class="input-group">')
+                    .append(
+                        $('<input type="text" class="form-control search-field" tabindex="1">')
+                        .attr({
+                            placeholder: gt('Search') + ' ...'
+                        })
+                    )
+            );
+
+            // buttons
+            group.append(
                 $('<a href="#">')
                     .attr({
                         'tabindex': '1',
@@ -178,10 +162,7 @@ define('io.ox/search/autocomplete/extensions',
                         //view.trigger('button:clear');
                     })
             );
-        },
-
-        searchButton: function () {
-            this.append(
+            group.append(
                 $('<span class="input-group-btn">').append(
                     // submit
                     $('<button type="button">')
@@ -206,6 +187,9 @@ define('io.ox/search/autocomplete/extensions',
                     })
                 )
             );
+
+            // add search logic (autocomplet etc.)
+            extensions.searchfieldLogic.call(this, baton);
         },
 
         styleContainer: function (baton) {

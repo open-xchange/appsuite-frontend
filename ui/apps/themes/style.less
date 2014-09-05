@@ -3473,11 +3473,36 @@ ul.io-ox-inline-links + header {
 
 // ------
 
-.inplace-search {
-    padding: 7px 10px;
-    line-height: 20px;
-    z-index: 10;
-    //background-color: @foldertree-sidepanel-background;
+.io-ox-search {
+
+    &.inplace-search {
+        padding: 7px 10px;
+        line-height: 20px;
+        z-index: 10;
+        //background-color: @foldertree-sidepanel-background;
+    }
+    .search-field {
+        //space for fa-times
+        padding-right: 36px;
+    }
+    .btn-clear {
+        position: absolute;
+        right: 50px;
+        top: 6px;
+        color: rgba(204, 204, 204, 0.6);
+        cursor: pointer;
+        font-family: FontAwesome;
+        font-size: 18px;
+        font-style: normal;
+        line-height: normal;
+        text-decoration: inherit;
+        z-index: 3;
+        -webkit-font-smoothing: antialiased;
+
+        &:hover {
+            color: rgb(170, 170, 170);
+        }
+    }
 }
 
 // ------
