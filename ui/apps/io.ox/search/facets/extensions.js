@@ -389,12 +389,12 @@ define('io.ox/search/facets/extensions',
 
             timeFacet: function (baton, value, facet) {
                 var self = this,
-                    isUpdate = !!baton.model.get('pool')['time.custom'] || !!baton.model.get('pool')['date.custom'],
+                    isUpdate = !!baton.model.get('pool')['date.custom'],
                     from, to,
                     group;
 
                 // add vs update
-                facet = baton.model.get('pool')['time.custom'] || baton.model.get('pool')['date.custom'] || facet;
+                facet = baton.model.get('pool')['date.custom'] || facet;
 
                 // predefined values
                 from = value.options ? value.options[0].from : undefined;
