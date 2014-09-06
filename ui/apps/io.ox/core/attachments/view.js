@@ -28,6 +28,7 @@ define('io.ox/core/attachments/view',
     var List = Backbone.View.extend({
 
         scrollStep: 120,
+        openByDefault: false,
 
         events: {
             'click .toggle-details': 'onToggleDetails',
@@ -90,6 +91,8 @@ define('io.ox/core/attachments/view',
 
             this.updateScrollControls();
 
+            if (this.openByDefault) this.toggleDetails();
+
             return this;
         },
 
@@ -149,10 +152,14 @@ define('io.ox/core/attachments/view',
             return this.collection.filter(this.filter, this);
         },
 
-        onToggleDetails: function (e) {
-            e.preventDefault();
+        toggleDetails: function () {
             this.$el.toggleClass('open');
             if (!this.isListRendered) this.renderList();
+        },
+
+        onToggleDetails: function (e) {
+            e.preventDefault();
+            this.toggleDetails();
         },
 
         onToggleMode: function (e) {

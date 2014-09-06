@@ -369,7 +369,7 @@ define('io.ox/mail/common-extensions',
 
                     view.renderInlineLinks = function () {
                         var models = this.getValidModels(), $links = this.$header.find('.links').empty();
-                        if (models.length > 1) drawInlineLinks($links, _(models).invoke('toJSON'));
+                        if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'));
                     };
 
                     view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
