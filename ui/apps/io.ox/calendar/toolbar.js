@@ -47,6 +47,7 @@ define('io.ox/calendar/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Scheduling'),
+            title: gt('Find a free time'),
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
         },
