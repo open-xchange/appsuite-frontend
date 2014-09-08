@@ -303,7 +303,7 @@ define('io.ox/search/facets/extensions',
                 var isMandatory = baton.model.isMandatory(value.facet), node;
 
                 // remove action for non mandatory facets
-                if ((isMandatory && value.facet === 'folder') || value.placeholder) return;
+                if ((isMandatory && value.facet === 'folder') || _.contains(facet.flags, 'advanced') || value.placeholder) return;
 
                 this.prepend(
                     node = $('<span class="remove">')
@@ -313,8 +313,8 @@ define('io.ox/search/facets/extensions',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
                         'data-container': 'body',
-                        'data-original-title': _.contains(facet.flags, 'advanced') ? gt('Reset') : gt('Remove'),
-                        'aria-label': _.contains(facet.flags, 'advanced') ? gt('Reset') : gt('Remove')
+                        'data-original-title': gt('Remove'),
+                        'aria-label': gt('Remove')
                     })
                     .tooltip()
                     .append(
@@ -347,12 +347,37 @@ define('io.ox/search/facets/extensions',
                         )
                     );
 
-                    // creste menu
+                    // create menu
                     menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
                             .attr({
                                 'data-facet': facet.id,
                                 'data-value': value.id
                             });
+
+                    // add generic 'all'
+                    if (_.contains(facet.flags, 'advanced')) {
+                        menu.append(
+                            $('<li role="presentation">').append(
+                                 $('<a role="menuitem" tabindex="-1" href="#">')
+                                    .append(
+                                        $('<i class="fa fa-fw">')
+                                            .addClass(current === '' ? 'fa-check': 'fa-none'),
+                                        $('<span>').html(gt('All'))
+                                    )
+                                    //.addClass('option')
+                                    .attr({
+                                        'data-option': 'unset'
+                                    })
+                                    .click(function () {
+                                        if (current !== '')
+                                            baton.model.remove(facet.id, current);
+                                    })
+                            ),
+                            $('<li role="presentation" class="divider"></li>')
+                        );
+                    }
+
+                    // add options
                     _.each(options, function (item) {
                         menu.append(
                             option = $('<li role="presentation">').append(

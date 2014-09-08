@@ -1676,7 +1676,7 @@ define('io.ox/core/desktop',
                             );
                         }
                     });
-
+                    // hint: listener is implemented in search/autocomplete/extensions
                     // ext.point(win.name + '/facetedsearch/view').extend({
                     //     id: 'clear',
                     //     index: 250,
