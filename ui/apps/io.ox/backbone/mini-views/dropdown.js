@@ -48,6 +48,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 // loop over list items also allow compare non-primitive values
                 li.each(function () {
                     var node = $(this);
+                    node.filter('[role=menuitemcheckbox][aria-checked]').attr({ 'aria-checked': _.isEqual(node.data('value'), value) });
                     if (_.isEqual(node.data('value'), value)) node.children('i').attr('class', 'fa fa-fw fa-check');
                 });
             }, this);
@@ -72,14 +73,17 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             return this.append(
                 $('<a href="#">')
                 .attr({
-                    role: 'menuitem',
+                    role: 'menuitemcheckbox',
+                    'aria-checked': _.isEqual(this.model.get(name), value),
                     'data-name': name,
                     'data-value': this.stringify(value),
                     'data-toggle': _.isBoolean(value)
                 })
                 .data('value', value) // store original value
                 .append(
-                    $('<i class="fa fa-fw">').attr('aria-hidden', true).addClass(_.isEqual(this.model.get(name), value) ? 'fa-check' : 'fa-none'),
+                    $('<i class="fa fa-fw">')
+                        .attr({ 'aria-hidden': true })
+                        .addClass(_.isEqual(this.model.get(name), value) ? 'fa-check' : 'fa-none'),
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
