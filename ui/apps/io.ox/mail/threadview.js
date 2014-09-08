@@ -442,8 +442,8 @@ define('io.ox/mail/threadview',
                 tagName: 'li',
                 data: model.toJSON(),
                 disable: {
-                    'io.ox/mail/detail': 'subject',
-                    'io.ox/mail/detail/header': ['flag-picker', 'actions', 'unread-toggle']
+                    'io.ox/mail/detail': ['subject', 'actions'],
+                    'io.ox/mail/detail/header': ['flag-picker', 'unread-toggle']
                 }
             });
 
