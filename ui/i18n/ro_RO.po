@@ -498,7 +498,7 @@ msgstr "Despre"
 msgid "Above quoted text"
 msgstr "Deasupra textului între ghilimele"
 
-#: apps/io.ox/calendar/edit/template.js:254 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:253 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Absent"
 msgstr "Absent"
@@ -717,9 +717,9 @@ msgstr "Adaugă pe %s"
 msgid "Add participant"
 msgstr "Adaugă participant"
 
-#: apps/io.ox/calendar/edit/template.js:316 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/template.js:318
-#: apps/io.ox/calendar/edit/template.js:325
+#: apps/io.ox/calendar/edit/template.js:315 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:317
+#: apps/io.ox/calendar/edit/template.js:324
 #: apps/io.ox/tasks/edit/view-template.js:403 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:405
 msgid "Add participant/resource"
@@ -826,7 +826,7 @@ msgstr "Toate caracterele emoji"
 msgid "All attachments"
 msgstr "Toate fișierele atașate"
 
-#: apps/io.ox/calendar/edit/template.js:173 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:172 module:io.ox/calendar/edit/main
 msgid "All day"
 msgstr "Toată ziua"
 
@@ -1043,7 +1043,7 @@ msgstr[0] "Fișierul atașat a fost salvat"
 msgstr[1] "Fișierele atașate au fost salvate"
 msgstr[2] "Fișierele atașate au fost salvate"
 
-#: apps/io.ox/calendar/edit/template.js:432 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:431 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:112 module:io.ox/contacts
 #: apps/io.ox/mail/compose/extensions.js:379 module:io.ox/mail
@@ -1403,7 +1403,7 @@ msgid "Change password and sign out"
 msgstr "Modificare parolă și deconectare"
 
 #: apps/io.ox/calendar/actions.js:652 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:63
+#: apps/io.ox/calendar/toolbar.js:64
 msgid "Change status"
 msgstr "Modifică starea"
 
@@ -1435,7 +1435,7 @@ msgstr "Modificările au fost salvate."
 msgid "Character"
 msgstr "Caracter"
 
-#: apps/io.ox/calendar/toolbar.js:149 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:165 module:io.ox/contacts
 #: apps/io.ox/mail/toolbar.js:224 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:141
@@ -1566,7 +1566,7 @@ msgstr "Închide tot"
 msgid "Close this reminder"
 msgstr "Închide memento"
 
-#: apps/io.ox/calendar/edit/template.js:216 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:215 module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:128 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:149
 msgid "Collapse form"
@@ -1863,7 +1863,7 @@ msgstr "Nu s-au putut încărca mesajul dumneavoastră de absență."
 msgid "Country"
 msgstr "Țară"
 
-#: apps/io.ox/calendar/edit/template.js:77 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:76 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:35 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:41 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:92
@@ -1872,7 +1872,7 @@ msgstr "Creează"
 
 #: apps/io.ox/calendar/edit/main.js:142 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:290
-#: apps/io.ox/calendar/edit/template.js:67
+#: apps/io.ox/calendar/edit/template.js:66
 msgid "Create appointment"
 msgstr "Creează o întâlnire"
 
@@ -1932,7 +1932,7 @@ msgstr "Monedă"
 msgid "Customize this page"
 msgstr "Personalizează pagina"
 
-#: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:151 module:io.ox/calendar
 #, fuzzy
 #| msgid "Standard colors"
 msgid "Dark colors"
@@ -1965,7 +1965,7 @@ msgstr "Data nașterii"
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
 #: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:78 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:141
+#: apps/io.ox/calendar/toolbar.js:142
 msgid "Day"
 msgstr "Zi"
 
@@ -2028,7 +2028,7 @@ msgstr "Amânat"
 #: apps/io.ox/calendar/actions.js:661
 #: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:106
-#: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
+#: apps/io.ox/calendar/toolbar.js:70 apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:758
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:70 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:82
@@ -2105,7 +2105,7 @@ msgstr "Departament"
 msgid "Descending"
 msgstr "În ordine descrescătoare"
 
-#: apps/io.ox/calendar/edit/template.js:197 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:196 module:io.ox/calendar/edit/main
 #: apps/io.ox/files/actions.js:592 module:io.ox/files
 #: apps/io.ox/files/views/create.js:163
 #: apps/io.ox/tasks/edit/view-template.js:117 module:io.ox/tasks/edit
@@ -2147,7 +2147,7 @@ msgstr "Dezactivează"
 msgid "Disable widget"
 msgstr "Dezactiveză aplicația"
 
-#: apps/io.ox/calendar/edit/template.js:94 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:93 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:57 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:181
 #: apps/io.ox/core/settings/user.js:81
@@ -2428,7 +2428,7 @@ msgstr "Niciun fișier atașat disponibil"
 msgid "Drop here to import this mail"
 msgstr "Glisați aici pentru a importa mailul"
 
-#: apps/io.ox/calendar/edit/template.js:503 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:502 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:336 module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js:722 module:io.ox/tasks/edit
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
@@ -2487,7 +2487,7 @@ msgstr "EB"
 #: apps/io.ox/calendar/actions.js:643 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:220 apps/io.ox/calendar/main.js:226
 #: apps/io.ox/calendar/main.js:247 apps/io.ox/calendar/main.js:318
-#: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:748
+#: apps/io.ox/calendar/toolbar.js:57 apps/io.ox/contacts/actions.js:748
 #: module:io.ox/contacts apps/io.ox/contacts/main.js:350
 #: apps/io.ox/contacts/main.js:356 apps/io.ox/contacts/main.js:690
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
@@ -2531,7 +2531,7 @@ msgstr "Editează un flux Tumblr"
 
 #: apps/io.ox/calendar/edit/main.js:142 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:288
-#: apps/io.ox/calendar/edit/template.js:67
+#: apps/io.ox/calendar/edit/template.js:66
 msgid "Edit appointment"
 msgstr "Editează întâlnirea"
 
@@ -2711,7 +2711,7 @@ msgstr "Sfârșit"
 msgid "End of working time"
 msgstr "Sfârșitul zilei de lucru"
 
-#: apps/io.ox/calendar/edit/template.js:151 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:150 module:io.ox/calendar/edit/main
 msgid "Ends on"
 msgstr "Se termină în data de"
 
@@ -2836,8 +2836,8 @@ msgstr "Director"
 msgid "Exit Fullscreen"
 msgstr "Ieșire ecran complet"
 
-#: apps/io.ox/calendar/edit/template.js:208 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/template.js:214
+#: apps/io.ox/calendar/edit/template.js:207 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:213
 #: apps/io.ox/tasks/edit/view-template.js:131 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:149
 msgid "Expand form"
@@ -3049,8 +3049,9 @@ msgstr "Fișierele au fost copiate"
 msgid "Files have been moved"
 msgstr "Fișierele au fost mutate"
 
-#: apps/io.ox/calendar/edit/template.js:544 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:543 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
+#: apps/io.ox/calendar/toolbar.js:50 module:io.ox/calendar
 msgid "Find a free time"
 msgstr "Găsește un interval de timp liber"
 
@@ -3103,7 +3104,7 @@ msgstr "Permisiuni dosar"
 msgid "Folder type"
 msgstr "Tip dosar"
 
-#: apps/io.ox/calendar/toolbar.js:148 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:149 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:164 module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:499 module:io.ox/core
 #: apps/io.ox/files/toolbar.js:212 module:io.ox/files
@@ -3199,7 +3200,7 @@ msgstr "Redirecționează toate e-mailurile primite către această adresă"
 msgid "Forward emails as"
 msgstr "Redirecționează e-mailurile ca"
 
-#: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:254 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Free"
 msgstr "Liber"
@@ -3730,7 +3731,7 @@ msgstr ""
 "Listă derulantă de lansare de aplicații. Apăsați [Enter] pentru a vedea "
 "lista."
 
-#: apps/io.ox/calendar/toolbar.js:140 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:141 module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:206 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 msgid "Layout"
@@ -3796,7 +3797,7 @@ msgid "Links"
 msgstr "Legături"
 
 #: apps/io.ox/calendar/actions.js:597 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:145 apps/io.ox/files/actions.js:772
+#: apps/io.ox/calendar/toolbar.js:146 apps/io.ox/files/actions.js:772
 #: module:io.ox/files apps/io.ox/files/actions.js:1373
 #: apps/io.ox/files/toolbar.js:207 apps/io.ox/mail/toolbar.js:220
 #: module:io.ox/mail
@@ -3809,7 +3810,7 @@ msgstr "Listă"
 msgid "Listview"
 msgstr "Vedere pe liste"
 
-#: apps/io.ox/calendar/edit/template.js:129 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:128 module:io.ox/calendar/edit/main
 msgid "Location"
 msgstr "Loc"
 
@@ -4139,7 +4140,7 @@ msgstr "Luni"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
 #: apps/io.ox/calendar/actions.js:590 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:144
+#: apps/io.ox/calendar/toolbar.js:145
 msgid "Month"
 msgstr "Lună"
 
@@ -4178,7 +4179,7 @@ msgstr "S-au găsit mai multe elemente decât cele %1$s afișate momentan."
 #: apps/io.ox/calendar/actions.js:410 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:422 apps/io.ox/calendar/actions.js:670
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:97
-#: apps/io.ox/calendar/toolbar.js:85 apps/io.ox/contacts/actions.js:157
+#: apps/io.ox/calendar/toolbar.js:86 apps/io.ox/contacts/actions.js:157
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:774
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:76 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:105
@@ -4552,7 +4553,7 @@ msgstr ""
 msgid "Notifier"
 msgstr "Notificator"
 
-#: apps/io.ox/calendar/edit/template.js:415 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:414 module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
 msgstr "Informează toți participanții prin e-mail."
 
@@ -4750,7 +4751,7 @@ msgstr "Opțional 19"
 msgid "Optional 20"
 msgstr "Opțional 20"
 
-#: apps/io.ox/calendar/toolbar.js:147 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:148 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:163 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:211 module:io.ox/files
@@ -4823,7 +4824,7 @@ msgstr "PB"
 msgid "Pager"
 msgstr "Pager"
 
-#: apps/io.ox/calendar/edit/template.js:281 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:280 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/participants.js:159 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:367 module:io.ox/tasks/edit
 msgid "Participants"
@@ -5258,8 +5259,8 @@ msgid "Primary account"
 msgstr "Cont principal"
 
 #: apps/io.ox/calendar/actions.js:627 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:679 apps/io.ox/calendar/toolbar.js:78
-#: apps/io.ox/calendar/toolbar.js:152 apps/io.ox/contacts/actions.js:275
+#: apps/io.ox/calendar/actions.js:679 apps/io.ox/calendar/toolbar.js:79
+#: apps/io.ox/calendar/toolbar.js:153 apps/io.ox/contacts/actions.js:275
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:730
 #: apps/io.ox/contacts/toolbar.js:98 apps/io.ox/core/print.js:108
 #: module:io.ox/core apps/io.ox/mail/actions.js:1028 module:io.ox/mail
@@ -5288,7 +5289,7 @@ msgstr "Prioritate"
 msgid "Privacy Notice"
 msgstr "Declarație de confidențialitate"
 
-#: apps/io.ox/calendar/edit/template.js:269 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:268 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
@@ -5542,7 +5543,7 @@ msgid "Remind me again"
 msgstr "Amintește-mi din nou"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
-#: apps/io.ox/calendar/edit/template.js:235 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:234 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:561 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1056 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
@@ -5657,7 +5658,7 @@ msgstr "Răspunde expeditorului"
 msgid "Request read receipt"
 msgstr "Confirmare de primire"
 
-#: apps/io.ox/calendar/edit/template.js:252 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:251 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Reserved"
 msgstr "Rezervat"
@@ -5753,7 +5754,7 @@ msgstr "Volumul vânzărilor"
 msgid "Saturday"
 msgstr "Sâmbătă"
 
-#: apps/io.ox/calendar/edit/template.js:77 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:76 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:45 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:171
 #: apps/io.ox/core/folder/actions/imap-subscription.js:49 module:io.ox/core
@@ -6226,7 +6227,7 @@ msgid "Show version history"
 msgstr "Afișează istoricul de versiuni"
 
 #. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-#: apps/io.ox/calendar/edit/template.js:249 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:248 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:196 module:io.ox/calendar
 msgid "Shown as"
 msgstr "Afișat ca"
@@ -6385,7 +6386,7 @@ msgstr "Dată de început"
 msgid "Start of working time"
 msgstr "Ora la care s-a început lucrul"
 
-#: apps/io.ox/calendar/edit/template.js:140 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 msgid "Starts on"
 msgstr "Incepe în data de"
 
@@ -6398,7 +6399,7 @@ msgstr "Stat"
 msgid "Statistics"
 msgstr "Statistici"
 
-#: apps/io.ox/calendar/toolbar.js:62 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:63 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:646 module:io.ox/tasks
 msgid "Status"
@@ -6417,7 +6418,7 @@ msgstr "Stradă"
 msgid "Student"
 msgstr "Student"
 
-#: apps/io.ox/calendar/edit/template.js:117 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:116 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:799 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:261
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -6606,7 +6607,7 @@ msgstr "Telex"
 msgid "Template"
 msgstr "Model"
 
-#: apps/io.ox/calendar/edit/template.js:253 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:252 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Temporary"
 msgstr "Temporar"
@@ -7107,7 +7108,7 @@ msgstr "Acest contact este personal și nu poate fi partajat"
 msgid "This distribution list has been added to the portal"
 msgstr "Lista de distribuție a fost adugată la portal"
 
-#: apps/io.ox/calendar/edit/template.js:379 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:378 module:io.ox/calendar/edit/main
 msgid "This email address cannot be used for appointments"
 msgstr "Această adresă de e-mail nu poate fi utilizată pentru întâlniri"
 
@@ -7223,7 +7224,7 @@ msgstr "Dosarul nu conține nicio publicație"
 msgid "This folder has no subscriptions"
 msgstr "Dosarul nu conține niciun abonament"
 
-#: apps/io.ox/core/folder/extensions.js:414 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:415 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:941
 msgid "This folder has publications and/or subscriptions"
 msgstr "Dosarul conține publicații și/sau abonamente"
@@ -7466,7 +7467,7 @@ msgstr "Twitter"
 msgid "Twitter reported the following errors:"
 msgstr "Twitter a returnat următoarele erori:"
 
-#: apps/io.ox/calendar/edit/template.js:268 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/template.js:267 module:io.ox/calendar/edit/main
 #: apps/plugins/portal/flickr/register.js:221 module:plugins/portal
 msgid "Type"
 msgstr "Tip"
@@ -7720,7 +7721,7 @@ msgid "Vertical"
 msgstr "Vertical"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-#: apps/io.ox/calendar/toolbar.js:139 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:140 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:162 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:205 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
@@ -7772,7 +7773,7 @@ msgstr "Miercuri"
 
 #: apps/io.ox/calendar/actions.js:583 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:143
+#: apps/io.ox/calendar/toolbar.js:144
 msgid "Week"
 msgstr "Săptămână"
 
@@ -7846,7 +7847,7 @@ msgstr "Toată ziua"
 
 #: apps/io.ox/calendar/actions.js:576 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:79 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:142
+#: apps/io.ox/calendar/toolbar.js:143
 msgid "Workweek"
 msgstr "Săptămână de lucru"
 
@@ -8098,7 +8099,7 @@ msgstr "Trebuie să utilizați Android %n sau o versiune mai recentă."
 msgid "You need to use iOS %n or higher."
 msgstr "Trebuie să utilizați  iOS %n sau o versiune mai recentă."
 
-#: apps/io.ox/core/folder/extensions.js:399 module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js:400 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:964
 msgid "You share this folder with other users"
 msgstr "Acest dosar este partajat cu alți utilizatori"

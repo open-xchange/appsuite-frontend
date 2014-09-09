@@ -95,7 +95,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/calendar/actions.js:590
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:144
+#: apps/io.ox/calendar/toolbar.js:145
 msgid "Month"
 msgstr ""
 
@@ -105,7 +105,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:78
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:141
+#: apps/io.ox/calendar/toolbar.js:142
 msgid "Day"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:48
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/edit/template.js:235
+#: apps/io.ox/calendar/edit/template.js:234
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:561
 #: module:io.ox/calendar/main
@@ -365,7 +365,7 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js:33
 #: module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:106
-#: apps/io.ox/calendar/toolbar.js:69
+#: apps/io.ox/calendar/toolbar.js:70
 #: apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:758
@@ -416,7 +416,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:422
 #: apps/io.ox/calendar/actions.js:670
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:97
-#: apps/io.ox/calendar/toolbar.js:85
+#: apps/io.ox/calendar/toolbar.js:86
 #: apps/io.ox/contacts/actions.js:157
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:774
@@ -454,7 +454,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:79
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:142
+#: apps/io.ox/calendar/toolbar.js:143
 msgid "Workweek"
 msgstr ""
 
@@ -462,13 +462,13 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:80
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:143
+#: apps/io.ox/calendar/toolbar.js:144
 msgid "Week"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js:597
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:145
+#: apps/io.ox/calendar/toolbar.js:146
 #: apps/io.ox/files/actions.js:772
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:1373
@@ -489,8 +489,8 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:627
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:679
-#: apps/io.ox/calendar/toolbar.js:78
-#: apps/io.ox/calendar/toolbar.js:152
+#: apps/io.ox/calendar/toolbar.js:79
+#: apps/io.ox/calendar/toolbar.js:153
 #: apps/io.ox/contacts/actions.js:275
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:730
@@ -513,7 +513,7 @@ msgstr ""
 #: apps/io.ox/calendar/main.js:226
 #: apps/io.ox/calendar/main.js:247
 #: apps/io.ox/calendar/main.js:318
-#: apps/io.ox/calendar/toolbar.js:56
+#: apps/io.ox/calendar/toolbar.js:57
 #: apps/io.ox/contacts/actions.js:748
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:350
@@ -560,7 +560,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions.js:652
 #: module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:63
+#: apps/io.ox/calendar/toolbar.js:64
 msgid "Change status"
 msgstr ""
 
@@ -607,14 +607,14 @@ msgstr ""
 #: apps/io.ox/calendar/edit/main.js:142
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:290
-#: apps/io.ox/calendar/edit/template.js:67
+#: apps/io.ox/calendar/edit/template.js:66
 msgid "Create appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/main.js:142
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:288
-#: apps/io.ox/calendar/edit/template.js:67
+#: apps/io.ox/calendar/edit/template.js:66
 msgid "Edit appointment"
 msgstr ""
 
@@ -1022,7 +1022,7 @@ msgstr ""
 msgid "Repeat"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:77
+#: apps/io.ox/calendar/edit/template.js:76
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:45
 #: module:io.ox/contacts
@@ -1063,7 +1063,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:77
+#: apps/io.ox/calendar/edit/template.js:76
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:35
 #: module:io.ox/calendar
@@ -1073,7 +1073,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:94
+#: apps/io.ox/calendar/edit/template.js:93
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:57
 #: module:io.ox/contacts
@@ -1093,7 +1093,7 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:117
+#: apps/io.ox/calendar/edit/template.js:116
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:799
 #: module:io.ox/mail
@@ -1111,27 +1111,27 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:129
+#: apps/io.ox/calendar/edit/template.js:128
 #: module:io.ox/calendar/edit/main
 msgid "Location"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:140
+#: apps/io.ox/calendar/edit/template.js:139
 #: module:io.ox/calendar/edit/main
 msgid "Starts on"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:151
+#: apps/io.ox/calendar/edit/template.js:150
 #: module:io.ox/calendar/edit/main
 msgid "Ends on"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:173
+#: apps/io.ox/calendar/edit/template.js:172
 #: module:io.ox/calendar/edit/main
 msgid "All day"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:197
+#: apps/io.ox/calendar/edit/template.js:196
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/files/actions.js:592
 #: module:io.ox/files
@@ -1147,16 +1147,16 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:208
+#: apps/io.ox/calendar/edit/template.js:207
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/template.js:214
+#: apps/io.ox/calendar/edit/template.js:213
 #: apps/io.ox/tasks/edit/view-template.js:131
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:149
 msgid "Expand form"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:216
+#: apps/io.ox/calendar/edit/template.js:215
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js:128
 #: module:io.ox/tasks/edit
@@ -1165,49 +1165,49 @@ msgid "Collapse form"
 msgstr ""
 
 #. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-#: apps/io.ox/calendar/edit/template.js:249
+#: apps/io.ox/calendar/edit/template.js:248
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:196
 #: module:io.ox/calendar
 msgid "Shown as"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:252
+#: apps/io.ox/calendar/edit/template.js:251
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Reserved"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:253
+#: apps/io.ox/calendar/edit/template.js:252
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Temporary"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:254
+#: apps/io.ox/calendar/edit/template.js:253
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Absent"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:255
+#: apps/io.ox/calendar/edit/template.js:254
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30
 #: module:io.ox/calendar
 msgid "Free"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:268
+#: apps/io.ox/calendar/edit/template.js:267
 #: module:io.ox/calendar/edit/main
 #: apps/plugins/portal/flickr/register.js:221
 #: module:plugins/portal
 msgid "Type"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:269
+#: apps/io.ox/calendar/edit/template.js:268
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:72
 #: module:io.ox/calendar
@@ -1222,7 +1222,7 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:281
+#: apps/io.ox/calendar/edit/template.js:280
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/participants.js:159
 #: module:io.ox/calendar
@@ -1231,27 +1231,27 @@ msgstr ""
 msgid "Participants"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:316
+#: apps/io.ox/calendar/edit/template.js:315
 #: module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/template.js:318
-#: apps/io.ox/calendar/edit/template.js:325
+#: apps/io.ox/calendar/edit/template.js:317
+#: apps/io.ox/calendar/edit/template.js:324
 #: apps/io.ox/tasks/edit/view-template.js:403
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:405
 msgid "Add participant/resource"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:379
+#: apps/io.ox/calendar/edit/template.js:378
 #: module:io.ox/calendar/edit/main
 msgid "This email address cannot be used for appointments"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:415
+#: apps/io.ox/calendar/edit/template.js:414
 #: module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:432
+#: apps/io.ox/calendar/edit/template.js:431
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:316
 #: module:io.ox/calendar
@@ -1269,7 +1269,7 @@ msgstr ""
 msgid "Attachments"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:503
+#: apps/io.ox/calendar/edit/template.js:502
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/edit/view-form.js:336
 #: module:io.ox/contacts
@@ -1278,10 +1278,12 @@ msgstr ""
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:544
+#: apps/io.ox/calendar/edit/template.js:543
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freebusy/templates.js:31
 #: module:io.ox/calendar/freebusy
+#: apps/io.ox/calendar/toolbar.js:50
+#: module:io.ox/calendar
 msgid "Find a free time"
 msgstr ""
 
@@ -1955,7 +1957,7 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:62
+#: apps/io.ox/calendar/toolbar.js:63
 #: module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272
 #: module:io.ox/tasks/edit
@@ -1965,7 +1967,7 @@ msgid "Status"
 msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-#: apps/io.ox/calendar/toolbar.js:139
+#: apps/io.ox/calendar/toolbar.js:140
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:162
 #: module:io.ox/contacts
@@ -1977,7 +1979,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:140
+#: apps/io.ox/calendar/toolbar.js:141
 #: module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:206
 #: module:io.ox/files
@@ -1986,7 +1988,7 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:147
+#: apps/io.ox/calendar/toolbar.js:148
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:163
 #: module:io.ox/contacts
@@ -2002,7 +2004,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:148
+#: apps/io.ox/calendar/toolbar.js:149
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:164
 #: module:io.ox/contacts
@@ -2016,7 +2018,7 @@ msgstr ""
 msgid "Folder view"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:149
+#: apps/io.ox/calendar/toolbar.js:150
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:165
 #: module:io.ox/contacts
@@ -2026,7 +2028,7 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:150
+#: apps/io.ox/calendar/toolbar.js:151
 #: module:io.ox/calendar
 msgid "Dark colors"
 msgstr ""
@@ -4116,13 +4118,13 @@ msgstr ""
 msgid "Hidden"
 msgstr ""
 
-#: apps/io.ox/core/folder/extensions.js:399
+#: apps/io.ox/core/folder/extensions.js:400
 #: module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:964
 msgid "You share this folder with other users"
 msgstr ""
 
-#: apps/io.ox/core/folder/extensions.js:414
+#: apps/io.ox/core/folder/extensions.js:415
 #: module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:941
 msgid "This folder has publications and/or subscriptions"
