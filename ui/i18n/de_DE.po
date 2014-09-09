@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-03 18:03+0000\n"
+"PO-Revision-Date: 2014-09-09 13:17+0000\n"
 "Last-Translator: testuser <mk@open-xchange.com>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1409767390.000000\n"
+"X-POOTLE-MTIME: 1410268670.000000\n"
 
 #. File size
 #. %1$d is the number
@@ -3201,7 +3201,6 @@ msgstr "GB"
 
 #: apps/plugins/portal/oxdriveclients/register.js:84 module:plugins/portal
 #: apps/plugins/portal/oxdriveclients/register.js:135
-#, fuzzy
 msgid "Get %s"
 msgstr "%s abrufen"
 
@@ -3750,7 +3749,6 @@ msgid "List"
 msgstr "Liste"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js:44 module:io.ox/calendar
-#, fuzzy
 msgid "Listview"
 msgstr "Listenansicht"
 
