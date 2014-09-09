@@ -509,6 +509,7 @@
         height: 120px;
         overflow-y: hidden;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
 
         li {
             margin: 0 1px 0 0;
@@ -1473,14 +1474,17 @@ h4.mail-attachment-preview {
 @media (max-width: 480px), (max-device-width: 480px)  {
 
     .thread-view-list {
-
         padding: 0;
-
         & > h1 {
             font-size: 16px;
         }
-
+        .thread-view {
+            header {
+                border-bottom: 1px solid #ccc;
+            }
+        }
     }
+
 
     .mail-detail {
 
@@ -1507,7 +1511,23 @@ h4.mail-attachment-preview {
             left: 0px;
         }
 
+        .attachments {
+            border-bottom-width: 0;
+        }
+
+        .mail-attachment-list ul.inline-items li.item {
+            line-height: 35px;
+            .file a {
+                color: @link-color;
+            }
+        }
+
+        section.attachments {
+            margin-bottom: 0;
+        }
+
         section.body {
+            border-top: 1px solid #ccc;
             margin-bottom: @toolbar-height;
             padding: 10px;
         }
@@ -1522,11 +1542,7 @@ h4.mail-attachment-preview {
         }
 
         & > header {
-
-            border-bottom: 1px solid #ccc;
-
             &.mobile-detail-view-mail {
-
                 .date {
                     margin-left: 0;
                     display: inline-block;
@@ -1537,13 +1553,10 @@ h4.mail-attachment-preview {
                     display: inline-block;
                     float: none;
                     position: absolute;
-                    right: 10px;
+                    right: 20px;
                 }
-
             }
-
         }
-
     }
 
     .thread-view.list-view {
