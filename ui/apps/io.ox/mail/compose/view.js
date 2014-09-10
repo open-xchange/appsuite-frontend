@@ -567,10 +567,11 @@ define('io.ox/mail/compose/view',
             function cont() {
                 var win = self.app.getWindow();
                 // start being busy
-                win.busy();
-                // close window now (!= quit / might be reopened)
-                win.preQuit();
-
+                if (win) {
+                    win.busy();
+                    // close window now (!= quit / might be reopened)
+                    win.preQuit();
+                }
                 /*if (self.attachmentsExceedQouta(mail)) {
                     notifications.yell({
                         type: 'info',
@@ -592,7 +593,7 @@ define('io.ox/mail/compose/view',
                 .always(function (result) {
 
                     if (result.error && !result.warnings) {
-                        win.idle().show();
+                        if (win) { win.idle().show(); }
                         notifications.yell(result); // TODO: check if backend just says "A severe error occurred"
                         return;
                     }
