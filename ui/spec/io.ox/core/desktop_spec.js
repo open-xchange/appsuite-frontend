@@ -20,49 +20,51 @@ define(['io.ox/core/desktop'], function (desktop) {
         });
 
         describe('provides the App API which', function () {
-            beforeEach(function () {
-                this.app = new ox.ui.App({
-                    name: 'io.ox/testApp'
-                });
+            var app;
 
-                ox.manifests.apps['io.ox/testApp/main'] = {
-                    path: 'spec/io.ox/testApp',
-                    category: 'tests'
-                };
-            });
-
-            afterEach(function () {
+            afterEach(function (done) {
                 //clean up
-                ox.ui.apps.each(function (app) {
-                    app.quit();
-                });
-            });
-
-            it('should define global ox.ui.App object', function () {
-                expect(ox.ui.App).to.exist;
-            });
-
-            it('should launch a test app', function (done) {
-                var app = this.app;
-
-                expect(app.get('state')).to.equal('ready');
-                app.launch().then(function () {
-                    expect(ox.ui.apps.models).to.contain(app);
-                    expect(app.get('state')).to.equal('running');
+                if (app && app.get('state') === 'running') {
+                    app.quit().done(done);
+                } else {
                     done();
-                });
+                }
             });
 
-            it('should not launch an unregistered app', function () {
-                var app = this.app,
-                    def;
-                ox.manifests.disabled['io.ox/testApp/main'] = true;
+            describe('has simple applications', function () {
+                beforeEach(function () {
+                    app = new ox.ui.App({
+                        name: 'io.ox/testApp'
+                    });
 
-                def = app.launch();
+                    ox.manifests.apps['io.ox/testApp/main'] = {
+                        path: 'spec/io.ox/testApp',
+                        category: 'tests'
+                    };
+                });
+                it('should define global ox.ui.App object', function () {
+                    expect(ox.ui.App).to.exist;
+                });
 
-                ox.manifests.disabled = {};
-                expect(ox.ui.apps.models).not.to.contain(app);
-                expect(def.state()).to.equal('rejected');
+                it('should launch a test app', function (done) {
+                    expect(app.get('state')).to.equal('ready');
+                    app.launch().then(function () {
+                        expect(ox.ui.apps.models).to.contain(app);
+                        expect(app.get('state')).to.equal('running');
+                        done();
+                    });
+                });
+
+                it('should not launch an unregistered app', function () {
+                    var def;
+                    ox.manifests.disabled['io.ox/testApp/main'] = true;
+
+                    def = app.launch();
+
+                    ox.manifests.disabled = {};
+                    expect(ox.ui.apps.models).not.to.contain(app);
+                    expect(def.state()).to.equal('rejected');
+                });
             });
 
             describe('should allow to customize the launch method', function () {
@@ -74,21 +76,20 @@ define(['io.ox/core/desktop'], function (desktop) {
                         def.resolve();
                     });
                     return def;
-                };
+                }, callback;
 
                 beforeEach(function () {
-                    this.callback = sinon.spy();
+                    app = new ox.ui.App({
+                        name: 'io.ox/testApp',
+                        launch: launcher
+                    });
+                    callback = sinon.spy();
                 });
                 afterEach(function () {
-                    expect(this.callback).to.have.been.calledTwice;
+                    expect(callback.calledTwice, 'callback has been called twice').to.be.true;
                 });
 
                 it('during initialization', function (done) {
-                    var app = new ox.ui.App({
-                            name: 'io.ox/testApp',
-                            launch: launcher
-                        }),
-                        callback = this.callback;
 
                     expect(app.get('state')).to.equal('ready');
                     app.launch({callback: callback}).done(function () {
@@ -101,9 +102,6 @@ define(['io.ox/core/desktop'], function (desktop) {
                 });
 
                 it('after initialization', function (done) {
-                    var app = this.app,
-                        callback = this.callback;
-
                     app.setLauncher(launcher);
                     app.launch({callback: callback}).done(function () {
                         callback();
