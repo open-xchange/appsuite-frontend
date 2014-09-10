@@ -152,7 +152,8 @@ define('io.ox/tours/main',
                 title: gt('The Detail view'),
                 placement: 'left',
                 target: function () { return $('.mail-detail-pane:visible')[0]; },
-                content: gt('The Detail view displays an object\'s content. Depending on the app, further functions for organizing objects can be found in the Detail view.')
+                content: gt('The Detail view displays an object\'s content. Depending on the app, further functions for organizing objects can be found in the Detail view.'),
+                xOffset: 100
             },
             {
                 title: gt('Further information'),
