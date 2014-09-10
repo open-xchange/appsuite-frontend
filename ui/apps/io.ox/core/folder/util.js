@@ -111,6 +111,7 @@ define('io.ox/core/folder/util',
         case 'subscribed':
             return !!data['com.openexchange.subscribe.subscriptionFlag'];
         case 'unlocked':
+        case 'shared-by-me':
             // maybe need a better word. It's shared TO others
             if (!data.permissions || data.permissions.length <= 1) return false;
             // only shared BY me, not TO me

@@ -1354,9 +1354,6 @@ define('io.ox/mail/write/main',
                 //using draftMail.attachments[0].content_type instead of draftMail.content_type because if there are attachments this becomes multipart/mixed and you cannot get the right type
                 var format = draftMail.attachments[0].content_type === 'text/plain' ? 'text' : 'html',
                     def = $.Deferred();
-
-                view.form.find('.section-item.file').remove();
-                $(_.initial(view.form.find(':input[name][type=file]'))).remove();
                 view.baton.fileList.clear();
                 draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                 draftMail.vcard = old_vcard_flag;

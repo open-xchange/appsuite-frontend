@@ -122,12 +122,12 @@ define([
             });
 
             describe('renders', function () {
-                it('hidden for empty collections', function () {
+                it('with empty class for empty collections', function () {
                     var list = new EmptyAttachmentList({});
 
                     list.render();
                     $('body').append(list.$el);
-                    expect(list.$el.is(':hidden'), 'list element is hidden').to.be.true;
+                    expect(list.$el.hasClass('empty'), 'list element has class .empty').to.be.true;
                     list.remove();
                 });
 
@@ -270,7 +270,7 @@ define([
 
                     list.render().onToggleDetails({preventDefault: sinon.stub()});
                     list.collection.add(new Model());
-                    expect(list.$('header').text(), 'header text').to.contain('3 attachments');
+                    expect(list.$('header').text(), 'header text').to.contain('3 Anlagen');
                 });
             });
         });
@@ -279,7 +279,8 @@ define([
     describe('Attachment View:', function () {
         var FakeModel = Backbone.Model.extend({
             needsUpload: sinon.stub().returns(false),
-            getTitle: sinon.stub().returns('TestTitle')
+            getShortTitle: sinon.stub().returns('TestTitle'),
+            getSize: sinon.stub().returns(65535)
         });
 
         it('should render a li item', function () {

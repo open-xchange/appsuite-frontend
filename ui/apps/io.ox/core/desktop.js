@@ -1417,7 +1417,6 @@ define('io.ox/core/desktop',
                     id: 'searchfield',
                     index: 100,
                     draw: function (win) {
-                        debugger;
                         var side = win.nodes.sidepanel,
                             nodes = win.nodes.facetedsearch;
 
@@ -1433,7 +1432,6 @@ define('io.ox/core/desktop',
                     id: 'container',
                     index: 100,
                     draw: function (win) {
-                        debugger;
                         var side = win.nodes.sidepanel,
                             nodes = win.nodes.facetedsearch;
 
@@ -1680,8 +1678,8 @@ define('io.ox/core/desktop',
                         id: 'input',
                         index: 200,
                         draw: function () {
-                            var node = this.nodes.facetedsearch.toolbar,
-                                group;
+                            var node = this.nodes.facetedsearch.toolbar;
+                            var group;
                             // input group and dropdown
                             node.append(
                                 group = $('<div class="input-group">')
