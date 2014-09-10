@@ -34,7 +34,7 @@ define(['io.ox/settings/util'], function (util) {
                     util.destroy();
                 });
 
-                it('with default message (reject without args)', function () {
+                it.skip('with default message (reject without args)', function () {
                     util.yellOnReject(def.reject());
                     text = $('.io-ox-alert-error').find('.message').find('div').text();
                     expect('unknown').to.equal(text);
