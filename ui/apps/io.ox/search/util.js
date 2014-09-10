@@ -144,7 +144,7 @@ define('io.ox/search/util',
             module = module === 'files' ? 'infostore' : module;
 
             //'all folders' when not mandatory and not default folder
-            if (model.isMandatory('folder') || id !== folderAPI.getDefaultFolder(module).toString()) {
+            if (model.isMandatory('folder') || id !== (folderAPI.getDefaultFolder(module) || '').toString()) {
                 // 'preselected folder'
                 folderAPI.get(id).always(value.bind(this, id));
                 return def.promise();

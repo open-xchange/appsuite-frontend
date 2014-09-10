@@ -1,206 +1,265 @@
 {
-   "data":{
-      "facets":[
-         {
-            "id":"global",
-            "style":"simple",
-            "display_name":"f",
-            "filter":{
-               "fields":[
-                  "global"
-               ],
-               "queries":[
-                  "f"
-               ]
-            },
-            "flags":[
+  "data": {
+    "facets": [
+      {
+        "id": "global",
+        "style": "simple",
+        "name": "te",
+        "filter": {
+          "fields": [
+            "global"
+          ],
+          "queries": [
+            "te"
+          ]
+        },
+        "flags": [
 
-            ]
-         },
-         {
-            "id":"subject",
-            "style":"simple",
-            "display_item":[
-               "f",
-               "in subject"
-            ],
-            "filter":{
-               "fields":[
-                  "subject"
-               ],
-               "queries":[
-                  "f"
-               ]
-            },
-            "flags":[
+        ]
+      },
+      {
+        "id": "subject",
+        "style": "simple",
+        "item": {
+          "name": "te",
+          "detail": "in subject"
+        },
+        "filter": {
+          "fields": [
+            "subject"
+          ],
+          "queries": [
+            "te"
+          ]
+        },
+        "flags": [
 
-            ]
-         },
-         {
-            "id":"mail_text",
-            "style":"simple",
-            "display_item":[
-               "f",
-               "in mail text"
-            ],
-            "filter":{
-               "fields":[
-                  "body"
-               ],
-               "queries":[
-                  "f"
-               ]
-            },
-            "flags":[
+        ]
+      },
+      {
+        "id": "mail_text",
+        "style": "simple",
+        "item": {
+          "name": "te",
+          "detail": "in mail text"
+        },
+        "filter": {
+          "fields": [
+            "body"
+          ],
+          "queries": [
+            "te"
+          ]
+        },
+        "flags": [
 
-            ]
-         },
-         {
-            "id":"contacts",
-            "style":"default",
-            "display_name":"Sender/Recipient",
-            "values":[
-               {
-                  "id":"contact/1/428931",
-                  "display_name":"Hawthorne, Pierce",
-                  "options":[
-                     {
-                        "id":"all",
-                        "display_name":"Sender/Recipient",
-                        "filter":{
-                           "fields":[
-                              "from",
-                              "to",
-                              "cc"
-                           ],
-                           "queries":[
-                              "pierce.hawthoren@open-xchange.com"
-                           ]
-                        }
-                     },
-                     {
-                        "id":"sender",
-                        "display_name":"Sender",
-                        "filter":{
-                           "fields":[
-                              "from"
-                           ],
-                           "queries":[
-                              "pierce.hawthoren@open-xchange.com"
-                           ]
-                        }
-                     },
-                     {
-                        "id":"recipient",
-                        "display_name":"Recipient",
-                        "filter":{
-                           "fields":[
-                              "to",
-                              "cc"
-                           ],
-                           "queries":[
-                              "pierce.hawthoren@open-xchange.com"
-                           ]
-                        }
-                     }
+        ]
+      },
+      {
+        "id": "contacts",
+        "style": "default",
+        "name": "People",
+        "values": [
+          {
+            "id": "contact\/1\/103054",
+            "item": {
+              "name": "Steffen Templin",
+              "detail": "steffen.templin@open-xchange.com",
+              "image_url": "\/ajax\/image\/user\/picture?id=246&timestamp=1409818907125"
+            },
+            "options": [
+              {
+                "id": "from",
+                "name": "From",
+                "filter": {
+                  "fields": [
+                    "from"
+                  ],
+                  "queries": [
+                    "steffen.templin@open-xchange.com"
                   ]
-               },
-               {
-                  "id":"f",
-                  "display_name":"f",
-                  "options":[
-                     {
-                        "id":"all",
-                        "display_name":"Sender/Recipient",
-                        "filter":{
-                           "fields":[
-                              "from",
-                              "to",
-                              "cc"
-                           ],
-                           "queries":[
-                              "f"
-                           ]
-                        }
-                     },
-                     {
-                        "id":"sender",
-                        "display_name":"Sender",
-                        "filter":{
-                           "fields":[
-                              "from"
-                           ],
-                           "queries":[
-                              "f"
-                           ]
-                        }
-                     },
-                     {
-                        "id":"recipient",
-                        "display_name":"Recipient",
-                        "filter":{
-                           "fields":[
-                              "to",
-                              "cc"
-                           ],
-                           "queries":[
-                              "f"
-                           ]
-                        }
-                     }
+                }
+              },
+              {
+                "id": "to",
+                "name": "To",
+                "filter": {
+                  "fields": [
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "steffen.templin@open-xchange.com"
                   ]
-               }
-            ],
-            "flags":[
-
+                }
+              },
+              {
+                "id": "all",
+                "name": "From\/To",
+                "filter": {
+                  "fields": [
+                    "from",
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "steffen.templin@open-xchange.com"
+                  ]
+                }
+              }
             ]
-         },
-         {
-            "id":"time",
-            "style":"exclusive",
-            "display_name":"Time",
-            "options":[
-               {
-                  "id":"last_week",
-                  "display_name":"last week",
-                  "filter":{
-                     "fields":[
-                        "time"
-                     ],
-                     "queries":[
-                        "last_week"
-                     ]
-                  }
-               },
-               {
-                  "id":"last_month",
-                  "display_name":"last month",
-                  "filter":{
-                     "fields":[
-                        "time"
-                     ],
-                     "queries":[
-                        "last_month"
-                     ]
-                  }
-               },
-               {
-                  "id":"last_year",
-                  "display_name":"last year",
-                  "filter":{
-                     "fields":[
-                        "time"
-                     ],
-                     "queries":[
-                        "last_year"
-                     ]
-                  }
-               }
-            ],
-            "flags":[
-
+          },
+          {
+            "id": "contact\/1\/480502",
+            "item": {
+              "name": "test",
+              "detail": "test@test.de",
+              "image_url": "\/ajax\/image\/contact\/picture?folder=14830&id=480502&timestamp=1360571521293"
+            },
+            "options": [
+              {
+                "id": "from",
+                "name": "From",
+                "filter": {
+                  "fields": [
+                    "from"
+                  ],
+                  "queries": [
+                    "test@test.de",
+                    "tester@test.de",
+                    "testerama@test.de"
+                  ]
+                }
+              },
+              {
+                "id": "to",
+                "name": "To",
+                "filter": {
+                  "fields": [
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "test@test.de",
+                    "tester@test.de",
+                    "testerama@test.de"
+                  ]
+                }
+              },
+              {
+                "id": "all",
+                "name": "From\/To",
+                "filter": {
+                  "fields": [
+                    "from",
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "test@test.de",
+                    "tester@test.de",
+                    "testerama@test.de"
+                  ]
+                }
+              }
             ]
-         }
-      ]
-   }
+          },
+          {
+            "id": "te",
+            "name": "te",
+            "options": [
+              {
+                "id": "from",
+                "name": "From",
+                "filter": {
+                  "fields": [
+                    "from"
+                  ],
+                  "queries": [
+                    "te"
+                  ]
+                }
+              },
+              {
+                "id": "to",
+                "name": "To",
+                "filter": {
+                  "fields": [
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "te"
+                  ]
+                }
+              },
+              {
+                "id": "all",
+                "name": "From\/To",
+                "filter": {
+                  "fields": [
+                    "from",
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "te"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "flags": [
+
+        ]
+      },
+      {
+        "id": "date",
+        "style": "exclusive",
+        "name": "Date",
+        "options": [
+          {
+            "id": "last_week",
+            "name": "last week",
+            "filter": {
+              "fields": [
+                "date"
+              ],
+              "queries": [
+                "last_week"
+              ]
+            }
+          },
+          {
+            "id": "last_month",
+            "name": "last month",
+            "filter": {
+              "fields": [
+                "date"
+              ],
+              "queries": [
+                "last_month"
+              ]
+            }
+          },
+          {
+            "id": "last_year",
+            "name": "last year",
+            "filter": {
+              "fields": [
+                "date"
+              ],
+              "queries": [
+                "last_year"
+              ]
+            }
+          }
+        ],
+        "flags": [
+
+        ]
+      }
+    ]
+  }
 }

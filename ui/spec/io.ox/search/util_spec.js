@@ -12,9 +12,10 @@
  */
 define(['io.ox/search/util',
         'fixture!io.ox/core/settings.json',
+        'spec/shared/capabilities',
         'settings!io.ox/mail',
         'settings!io.ox/core',
-        'beforeEachEnsure'], function (util, settingsFixture, mailSettings, settings, beforeEachEnsure) {
+        'beforeEachEnsure'], function (util, settingsFixture, caputil, mailSettings, settings, beforeEachEnsure) {
 
     function isPromise(def) {
         return (!def.reject && !!def.done);
@@ -32,30 +33,28 @@ define(['io.ox/search/util',
         var def = $.Deferred(),
             self = this;
 
-        //apply relevant setting fixtures
-        mailSettings.set('folder', settingsFixture['io.ox/mail'].folder);
-        settings.set('folder', settingsFixture['io.ox/core'].folder);
-        settings.set('search', settingsFixture['io.ox/core'].search);
-        _.each(settings.get('search/modules'), function (module) {
-            var id = 'io.ox/' + module + '/main';
-            ox.manifests.apps[id] = {title: module};
-        });
-
         //load app
-        require(['io.ox/search/main'], function (main) {
-            main.init();
-            var app = main.run();
-            self.vars = {
-                app: app,
-                model: app.getModel(),
-                node: $(document.body, '.io-ox-search-window').find('.window-content')
-            };
-            def.resolve();
+        require(['io.ox/mail/main'], function (main) {
+            var capabilities = caputil.preset('common').init('io.ox/mail/main', main);
+            capabilities.enable('search');
+            main.getApp().launch().done(function () {
+                var win = main.getApp().getWindow();
+                self.vars = {
+                    win: win,
+                    nodes: win.nodes.facetedsearch,
+                    api: win.facetedsearch
+                };
+                win.on('search:loaded', function () {
+                    self.vars.view = self.vars.api.view;
+                    self.vars.model = self.vars.api.view.model;
+                    def.resolve();
+                });
+            });
         });
         return def;
     }
 
-    describe.skip('Utilities for search:', function () {
+    describe('Utilities for search:', function () {
         beforeEachEnsure(setup);
 
         describe('getFolders', function () {
