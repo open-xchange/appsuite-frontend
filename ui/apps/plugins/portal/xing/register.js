@@ -175,7 +175,10 @@ define('plugins/portal/xing/register',
         return form;
     };
 
-    makeNewsfeed = function (networkActivities, maxCount) {
+    makeNewsfeed = function (networkActivities, options) {
+        options = options || {};
+
+        var maxCount = options.maxCount;
         var node = $('<div>').addClass('networkActivities'),
             newsItemCount = 0;
 
@@ -204,9 +207,9 @@ define('plugins/portal/xing/register',
 
 
             ext.point('io.ox/portal/widget/xing/activityhandler').each(function (handler) {
-                if (handler.accepts(activity)) {
+                if (handler.accepts(activity, options)) {
                     foundHandler = true;
-                    handler.handle(activity).appendTo(activityNode);
+                    handler.handle(activity, options).appendTo(activityNode);
                 }
             });
 
@@ -292,7 +295,7 @@ define('plugins/portal/xing/register',
             this.find('.setup-questions').remove();
             this.append(
                 $('<div class="content preview io-ox-xing pointer">').append(
-                    makeNewsfeed(baton.data.network_activities, MAX_ITEMS_PREVIEW)
+                    makeNewsfeed(baton.data.network_activities, {maxsCount: MAX_ITEMS_PREVIEW, limitLength: true})
                 ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
             );
         },
