@@ -520,9 +520,13 @@ define('io.ox/core/folder/api',
                 });
             },
             function fail(error) {
-                if (error && error.code && error.code === 'FLD-0018')
+                if (error && error.code && error.code === 'FLD-0018') {
                     error.error = gt('Could not save settings. There have to be at least one user with administration rights.');
-                if (!options.silent) api.trigger('update:fail', error, id);
+                }
+                if (!options.silent) {
+                    api.trigger('update:fail', error, id);
+                }
+                return error;
             }
         );
     }
@@ -631,8 +635,9 @@ define('io.ox/core/folder/api',
         // trigger event
         api.trigger('remove:prepare', data);
 
-        // update collection
+        // update collection (now)
         removeFromCollection(model);
+        model.trigger('destroy');
 
         // delete on server
         return http.PUT({
