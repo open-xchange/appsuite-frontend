@@ -45,7 +45,7 @@ define('plugins/portal/xing/register',
         statusUpdateForm,
         title = gt('XING'),
         reauthorizeAccount,
-        MAX_ITEMS_PREVIEW = 3,
+        MAX_ITEMS_PREVIEW = 6,
         XING_NAME = gt('XING'),
         point = ext.point('io.ox/portal/widget/xing');
 
@@ -295,7 +295,7 @@ define('plugins/portal/xing/register',
             this.find('.setup-questions').remove();
             this.append(
                 $('<div class="content preview io-ox-xing pointer">').append(
-                    makeNewsfeed(baton.data.network_activities, {maxsCount: MAX_ITEMS_PREVIEW, limitLength: true})
+                    makeNewsfeed(baton.data.network_activities, {maxCount: MAX_ITEMS_PREVIEW, limitLength: true})
                 ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
             );
         },
