@@ -15,8 +15,8 @@ define('io.ox/core/folder/actions/rename',
     ['io.ox/core/folder/api',
      'io.ox/core/tk/dialogs',
      'io.ox/core/extensions',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (api, dialogs, ext, notifications, gt) {
+     'io.ox/core/yell',
+     'gettext!io.ox/core'], function (api, dialogs, ext, yell, gt) {
 
     'use strict';
 
@@ -29,14 +29,14 @@ define('io.ox/core/folder/actions/rename',
             .invoke('validate', null, changes.title, 'folder')
             .find(function (result) {
                 if (result !== true) {
-                    notifications.yell('warning', result);
+                    yell('warning', result);
                     return (invalid = true);
                 }
             });
 
         if (invalid) return $.Deferred().reject();
 
-        return api.update(id, changes);
+        return api.update(id, changes).fail(yell);
     }
 
     return function (id) {
@@ -44,7 +44,7 @@ define('io.ox/core/folder/actions/rename',
         var model = api.pool.getModel(id);
 
         if (model.get('standard_folder')) {
-            notifications.yell('error', gt('This is a standard folder, which can\'t be renamed.'));
+            yell('error', gt('This is a standard folder, which can\'t be renamed.'));
             return;
         }
 
