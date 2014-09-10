@@ -635,8 +635,9 @@ define('io.ox/core/folder/api',
         // trigger event
         api.trigger('remove:prepare', data);
 
-        // update collection
+        // update collection (now)
         removeFromCollection(model);
+        model.trigger('destroy');
 
         // delete on server
         return http.PUT({

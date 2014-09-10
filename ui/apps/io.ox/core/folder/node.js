@@ -278,7 +278,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             // model changes
             this.listenTo(this.model, {
                 'change': this.onChange,
-                'change:subfolders': this.onChangeSubFolders
+                'change:subfolders': this.onChangeSubFolders,
+                'destroy': this.destroy.bind(this)
             });
 
             // draw scaffold
@@ -406,6 +407,11 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.onChangeSubFolders();
             ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
             return this;
+        },
+
+        destroy: function () {
+            this.$el.remove();
+            this.remove();
         },
 
         remove: function () {
