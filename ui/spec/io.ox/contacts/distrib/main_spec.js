@@ -53,8 +53,7 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'waitsFor'], functi
 
     describe('Distributionlist edit', function () {
 
-        var app = null, appContainer, createForm, inputName, addButton,
-        saveButton, displayName;
+        var app = null;
 
         beforeEach(function () {
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
@@ -67,66 +66,52 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'waitsFor'], functi
         });
 
         it('should provide a launch function ', function () {
-            var app = main.getApp();
+            app = main.getApp();
             expect(app.launch).to.be.a('function');
         });
 
-        it('opens distributionlist app ', function (done) {
-            main.getApp().launch().done(function () {
-
-                app = this;
+        it('should open distributionlist app ', function (done) {
+            app.launch().done(function () {
                 app.create(1);
                 expect(app).to.exist;
                 done();
             });
         });
 
-        it('logs the dom ', function () {
-
-            appContainer = app.getWindow().nodes.body;
+        it('should open the create formular', function () {
+            var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
+            expect(createForm.children().length, 'number of elements in the form').to.be.above(0);
         });
 
-        it('checks if the createform is opend ', function (done) {
-            waitsFor(function () {
-                createForm = appContainer.find('.window-content .create-distributionlist');
-                if (createForm[0]) {
-                    return true;
-                }
-            }).done(done);
-
-        });
-
-        it('looks for the form components ', function (done) {
-            waitsFor(function () {
-                inputName = createForm.find('input.add-participant');
-                saveButton = createForm.find('button.btn.btn-primary');
-                addButton = createForm.find('button[data-action="add"]');
-                displayName = createForm.find('[data-extension-id="displayname"] input');
-
-                if (inputName[0] && addButton[0] && saveButton[0] && displayName[0]) {
-                    return true;
-                }
-            }).done(done);
-
+        it('should paint some form components', function () {
+            var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
+            expect(createForm.find('input.add-participant').length, 'find input for name').to.equal(1);
+            expect(createForm.find('button.btn.btn-primary').length, 'find save button').to.equal(1);
+            expect(createForm.find('button[data-action="add"]').length, 'find add button').to.equal(1);
+            expect(createForm.find('[data-extension-id="displayname"] input').length, 'find display name').to.equal(1);
         });
 
         it('fills the namefield ', function () {
-            displayName.val(listname).trigger('change');
+            var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
+            createForm.find('[data-extension-id="displayname"] input').val(listname).trigger('change');
         });
 
         it('fills the array with the test data ', function () {
+            var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
             _.each(testObjects, function (val) {
                 fillAndTrigger({
-                    inputName: inputName,
-                    addButton: addButton,
+                    inputName: createForm.find('input.add-participant'),
+                    addButton: createForm.find('button[data-action="add"]'),
                     fillForm: val.fillForm
                 });
             });
         });
 
-        it('hits the savebutton', function () {
-            saveButton.trigger('click');
-            //FIXME: check for something to happen?
+        it('quit the app', function (done) {
+            //quit the app, but don't cleanup (force = true)
+            //and don't sync any models (override default destroy method)
+            app.destroy = _.noop;
+            app.quit(true).done(done);
         });
 
     });
