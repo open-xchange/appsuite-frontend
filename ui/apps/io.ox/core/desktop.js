@@ -1414,13 +1414,28 @@ define('io.ox/core/desktop',
                 };
 
                 ext.point(this.name + '/facetedsearch').extend({
-                    id: 'init',
-                    init: function (win) {
+                    id: 'searchfield',
+                    index: 100,
+                    draw: function (win) {
+                        debugger;
                         var side = win.nodes.sidepanel,
-                            nodes = win.nodes.facetedsearch = {};
+                            nodes = win.nodes.facetedsearch;
 
                         // search field
                         nodes.toolbar = $('<div class="generic-toolbar top inplace-search io-ox-search">');
+
+                        // add nodes
+                        side.append(nodes.toolbar);
+                    }
+                });
+
+                ext.point(this.name + '/facetedsearch').extend({
+                    id: 'container',
+                    index: 100,
+                    draw: function (win) {
+                        debugger;
+                        var side = win.nodes.sidepanel,
+                            nodes = win.nodes.facetedsearch;
 
                         // facets container
                         nodes.container = $('<div class="abs search-container">').hide().append(
@@ -1442,7 +1457,7 @@ define('io.ox/core/desktop',
                                 })
                         );
                         // add nodes
-                        side.append(nodes.toolbar, nodes.container);
+                        side.append(nodes.container);
                     }
                 });
 
@@ -1529,7 +1544,7 @@ define('io.ox/core/desktop',
                 win.nodes.head = $();
                 win.nodes.body = $();
                 win.nodes.search = $();
-                win.nodes.facetedsearch = $();
+                win.nodes.facetedsearch = {};
 
             } else {
 
@@ -1560,6 +1575,8 @@ define('io.ox/core/desktop',
                         if (win.app) { win.app.quit(); }
                     })
                 );
+
+                win.nodes.facetedsearch = {};
 
                 // classic window header?
                 if (opt.classic) win.nodes.outer.addClass('classic');
@@ -1652,8 +1669,9 @@ define('io.ox/core/desktop',
                         id: 'container',
                         index: 100,
                         draw: function () {
+                             // init container
                              ext.point(this.name + '/facetedsearch').
-                                invoke('init', this.facetedsearch, win);
+                                invoke('draw', this.facetedsearch, win);
 
                         }
                     });
@@ -1662,8 +1680,8 @@ define('io.ox/core/desktop',
                         id: 'input',
                         index: 200,
                         draw: function () {
-                            var node = this.nodes.facetedsearch.toolbar;
-                            var group;
+                            var node = this.nodes.facetedsearch.toolbar,
+                                group;
                             // input group and dropdown
                             node.append(
                                 group = $('<div class="input-group">')
