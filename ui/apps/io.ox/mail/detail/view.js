@@ -290,7 +290,12 @@ define('io.ox/mail/detail/view',
             if (data) this.model.set(data);
 
             // process unseen flag
-            if (unseen) this.onUnseen();
+            if (unseen) {
+                this.onUnseen();
+            } else {
+                //if this mail was read elsewhere notify other apps about it, for example the notification area (also manages new mail window title)
+                api.trigger('update:set-seen', [{id: this.model.get('id'), folder_id: this.model.get('folder_id')}]);
+            }
         },
 
         onLoadFail: function () {
