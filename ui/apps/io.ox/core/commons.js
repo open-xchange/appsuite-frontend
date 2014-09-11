@@ -801,7 +801,7 @@ define('io.ox/core/commons',
                     data = changed;
                 }
 
-                if ((getter = getter || (api ? api.get : null))) {
+                if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
                     if (!data.id) {
                         data.id = arguments[1].id;

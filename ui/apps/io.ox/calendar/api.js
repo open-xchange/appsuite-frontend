@@ -24,34 +24,111 @@ define('io.ox/calendar/api',
 
     'use strict';
 
-    // really stupid caching for speed
-    var all_cache = {},
-        get_cache = {},
-        participant_cache = {},
-        HOUR = 60000 * 60,
-        DAY = HOUR * 24;
-    // object to store appointments, that have attachments uploading atm
-    var uploadInProgress = {},
+    var api = {
 
-        checkForNotification = function (obj, removeAction) {
-            if (removeAction) {
-                api.trigger('delete:appointment', obj);
-            } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {//new appointments
-                require(['io.ox/core/api/reminder'], function (reminderAPI) {
-                    reminderAPI.getReminders();
-                });
-            } else if (obj.alarm || obj.end_date || obj.start_date) {//if one of this has changed during update action
-                require(['io.ox/core/api/reminder'], function (reminderAPI) {
-                    reminderAPI.getReminders();
-                });
+        MINUTE: date.MINUTE,
+        HOUR: date.HOUR,
+        DAY: date.DAY,
+        WEEK: date.WEEK,
+
+        // fluent caches
+        caches: {
+            freebusy: {},
+            all: {},
+            get: {},
+            upload: {} // object to store appointments, that have attachments uploading atm
+        },
+
+        reduce: factory.reduce,
+
+        get: function (o, useCache) {
+
+            o = o || {};
+            useCache = useCache === undefined ? true : !!useCache;
+            var params = {
+                action: 'get',
+                id: o.id,
+                folder: o.folder || o.folder_id,
+                timezone: 'UTC'
+            };
+
+            if (o.recurrence_position !== null) {
+                params.recurrence_position = o.recurrence_position;
+            }
+
+            var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
+
+            if (api.caches.get[key] === undefined || !useCache) {
+                return http.GET({
+                        module: 'calendar',
+                        params: params
+                    })
+                    .done(function (data) {
+                        api.caches.get[key] = data;
+                    });
+            } else {
+                return $.Deferred().resolve(api.caches.get[key]);
             }
         },
 
-        getUpdates = function (o) {
+        getAll: function (o, useCache) {
+
             o = $.extend({
                 start: _.now(),
-                end: _.now() + 28 * 1 * DAY,
-                timestamp:  _.now() - (2 * DAY),
+                end: _.now() + (28 * date.DAY),
+                order: 'asc'
+            }, o || {});
+            useCache = useCache === undefined ? true : !!useCache;
+            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end + '.' + o.order,
+                params = {
+                    action: 'all',
+                    // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
+                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
+                    // participants, recurrence_type, days, day_in_month, month, interval, until, occurrences
+                    columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
+                    start: o.start,
+                    end: o.end,
+                    showPrivate: true,
+                    recurrence_master: false,
+                    sort: '201',
+                    order: o.order,
+                    timezone: 'UTC'
+                };
+
+            if (o.folder !== undefined) {
+                params.folder = o.folder;
+            }
+            if (api.caches.all[key] === undefined || !useCache) {
+                return http.GET({
+                        module: 'calendar',
+                        params: params
+                    })
+                    .done(function (data) {
+                        api.caches.all[key] = JSON.stringify(data);
+                    });
+            } else {
+                return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
+            }
+        },
+
+        getList: function (ids) {
+            return http.fixList(ids,
+                http.PUT({
+                    module: 'calendar',
+                    params: {
+                        action: 'list',
+                        timezone: 'UTC'
+                    },
+                    data: http.simplify(ids)
+                })
+            );
+        },
+
+        getUpdates: function (o) {
+            o = $.extend({
+                start: _.now(),
+                end: _.now() + 28 * 1 * date.DAY,
+                timestamp:  _.now() - (2 * date.DAY),
                 ignore: 'deleted',
                 recurrence_master: false
             }, o || {});
@@ -78,103 +155,17 @@ define('io.ox/calendar/api',
             }
 
             // do not know if cache is a good idea
-            if (all_cache[key] === undefined) {
+            if (api.caches.all[key] === undefined) {
                 return http.GET({
                         module: 'calendar',
                         params: params
                     })
                     .done(function (data) {
-                        all_cache[key] = JSON.stringify(data);
+                        api.caches.all[key] = JSON.stringify(data);
                     });
             } else {
-                return $.Deferred().resolve(JSON.parse(all_cache[key]));
+                return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
             }
-        };
-
-    var api = {
-
-        get: function (o, useCache) {
-
-            o = o || {};
-            useCache = useCache === undefined ? true : !!useCache;
-            var params = {
-                action: 'get',
-                id: o.id,
-                folder: o.folder || o.folder_id,
-                timezone: 'UTC'
-            };
-
-            if (o.recurrence_position !== null) {
-                params.recurrence_position = o.recurrence_position;
-            }
-
-            var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
-
-            if (get_cache[key] === undefined || !useCache) {
-                return http.GET({
-                        module: 'calendar',
-                        params: params
-                    })
-                    .done(function (data) {
-                        get_cache[key] = data;
-                    });
-            } else {
-                return $.Deferred().resolve(get_cache[key]);
-            }
-        },
-
-        getAll: function (o, useCache) {
-
-            o = $.extend({
-                start: _.now(),
-                end: _.now() + (28 * DAY),
-                order: 'asc'
-            }, o || {});
-            useCache = useCache === undefined ? true : !!useCache;
-            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end + '.' + o.order,
-                params = {
-                    action: 'all',
-                    // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
-                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
-                    // participants, recurrence_type, days, day_in_month, month, interval, until, occurrences
-                    columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
-                    start: o.start,
-                    end: o.end,
-                    showPrivate: true,
-                    recurrence_master: false,
-                    sort: '201',
-                    order: o.order,
-                    timezone: 'UTC'
-                };
-
-            if (o.folder !== undefined) {
-                params.folder = o.folder;
-            }
-
-            if (all_cache[key] === undefined || !useCache) {
-                return http.GET({
-                        module: 'calendar',
-                        params: params
-                    })
-                    .done(function (data) {
-                        all_cache[key] = JSON.stringify(data);
-                    });
-            } else {
-                return $.Deferred().resolve(JSON.parse(all_cache[key]));
-            }
-        },
-
-        getList: function (ids) {
-            return http.fixList(ids,
-                http.PUT({
-                    module: 'calendar',
-                    params: {
-                        action: 'list',
-                        timezone: 'UTC'
-                    },
-                    data: http.simplify(ids)
-                })
-            );
         },
 
         search: function (query) {
@@ -194,7 +185,7 @@ define('io.ox/calendar/api',
 
         needsRefresh: function (folder) {
             // has entries in 'all' cache for specific folder
-            return all_cache[folder] !== undefined;
+            return api.caches.all[folder] !== undefined;
         },
 
         /**
@@ -208,7 +199,9 @@ define('io.ox/calendar/api',
             var folder_id = o.folder_id || o.folder,
                 key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
                 attachmentHandlingNeeded = o.tempAttachmentIndicator;
+
             delete o.tempAttachmentIndicator;
+
             if (_.isEmpty(o)) {
                 return $.when();
             } else {
@@ -242,9 +235,15 @@ define('io.ox/calendar/api',
                     }
 
                     // clear caches
-                    all_cache = {};
-                    delete get_cache[key];
-
+                    api.caches.all = {};
+                    delete api.caches.get[key];
+                    // if master, delete all appointments from cache
+                    if (o.recurrence_type > 0 && !o.recurrence_position) {
+                        var deleteKey = folder_id + '.' + o.id;
+                        for ( var i in api.caches.get ) {
+                            if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
+                        }
+                    }
                     return api.get(getObj)
                         .then(function (data) {
                             if (attachmentHandlingNeeded) {
@@ -256,7 +255,7 @@ define('io.ox/calendar/api',
                             return data;
                         });
                 }, function (error) {
-                    all_cache = {};
+                    api.caches.all = {};
                     api.trigger('delete', o);
                     return error;
                 });
@@ -274,8 +273,8 @@ define('io.ox/calendar/api',
 
             // clear caches
             if (doCallback) {
-                all_cache = {};
-                delete get_cache[_.ecid(o)];
+                api.caches.all = {};
+                delete api.caches.get[_.ecid(o)];
             }
 
             return api.get(o, !doCallback)
@@ -316,7 +315,7 @@ define('io.ox/calendar/api',
                     id: obj.id,
                     folder: o.folder_id
                 };
-                all_cache = {};
+                api.caches.all = {};
 
                 if (o.recurrence_position && o.recurrence_position !== null) {
                     getObj.recurrence_position = o.recurrence_position;
@@ -359,16 +358,16 @@ define('io.ox/calendar/api',
                     appendColumns: false
                 })
                 .done(function () {
-                    all_cache = {};
+                    api.caches.all = {};
                     _(keys).each(function (key) {
-                        delete get_cache[key];
+                        delete api.caches.get[key];
                     });
                     api.trigger('delete', obj);
                     api.trigger('delete:' + _.ecid(obj), obj);
                     //remove Reminders in Notification Area
                     checkForNotification(obj, true);
                 }).fail(function () {
-                    all_cache = {};
+                    api.caches.all = {};
                     api.trigger('delete');
                 });
             });
@@ -376,6 +375,26 @@ define('io.ox/calendar/api',
             return http.resume().then(function () {
                 api.trigger('refresh.all');
             });
+        },
+
+        /**
+         * move appointments to a folder
+         * @param  {array} list
+         * @param  {string} targetFolderId
+         * @return {deferred}
+         */
+        move: function (list, targetFolderId) {
+            return copymove(list, 'update', targetFolderId);
+        },
+
+        /**
+         * copy appointments to a folder
+         * @param  {array} list
+         * @param  {string} targetFolderId
+         * @return {deferred}
+         */
+        copy: function (list, targetFolderId) {
+            return copymove(list, 'copy', targetFolderId);
         },
 
         /**
@@ -426,82 +445,199 @@ define('io.ox/calendar/api',
                 });
             })
             .then(function () {
-                get_cache = {};
-                all_cache = {};
+                api.caches.get = {};
+                api.caches.all = {};
                 api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
-                delete get_cache[key];
+                delete api.caches.get[key];
                 return api.get(o).then(function (data) {
                     api.trigger('update', data);
                     api.trigger('update:' + _.ecid(data), data);
                     return data;
                 });
             });
+        },
+
+        /**
+         * removes recurrence information
+         * @param  {object} obj (appointment object)
+         * @return {object} reduced copy of appointment object
+         */
+        removeRecurrenceInformation: function (obj) {
+            var recAttr = ['change_exceptions', 'delete_exceptions', 'days',
+                'day_in_month', 'month', 'interval', 'until', 'occurrences'],
+                ret = _.clone(obj);
+            for (var i = 0; i < recAttr.length; i++) {
+                if (ret[recAttr[i]]) {
+                    delete ret[recAttr[i]];
+                }
+            }
+            ret.recurrence_type = 0;
+            return ret;
+        },
+
+         /**
+         * get invites
+         * @fires  api#new-invites (invites)
+         * @return {deferred} returns sorted array of appointments
+         */
+        getInvites: function () {
+
+            var now = _.now(),
+                start = now - 2 * date.HOUR,
+                end = new date.Local().addYears(5).getTime();
+
+            return this.getUpdates({
+                folder: 'all',
+                start: start,
+                end: end, // 5 years like OX6
+                timestamp: 0,
+                recurrence_master: true
+            })
+            .then(function (list) {
+                // sort by start_date & look for unconfirmed appointments
+                // exclude appointments that already ended
+                var invites = _.chain(list)
+                    .filter(function (item) {
+
+                        var isOver = item.end_date < now,
+                            isRecurring = !!item.recurrence_type;
+
+                        if (!isRecurring && isOver) {
+                            return false;
+                        }
+
+                        return _(item.users).any(function (user) {
+                            return user.id === ox.user_id && user.confirmation === 0;
+                        });
+                    })
+                    .sortBy('start_date')
+                    .value();
+                // even if empty array is given it needs to be triggered to remove
+                // notifications that does not exist anymore (already handled in ox6 etc)
+                api.trigger('new-invites', invites);
+                return invites;
+            });
+        },
+
+        /**
+         * get participants appointments
+         * @param  {array} list  (participants)
+         * @param  {object} options
+         * @param  {boolean} useCache [optional]
+         * @return {deferred} returns a nested array with participants and their appointments
+         */
+         freebusy: function (list, options, useCache) {
+            list = [].concat(list);
+            useCache = useCache === undefined ? true : !!useCache;
+
+            if (list.length === 0) {
+                return $.Deferred().resolve([]);
+            }
+
+            options = _.extend({
+                start: _.now(),
+                end: _.now() + date.DAY
+            }, options);
+
+            var result = [], requests = [];
+
+            _(list).each(function (obj) {
+                if (obj.type === 1 || obj.type === 3) {//freebusy only supports internal users and resources
+                    var key = [obj.type, obj.id, options.start, options.end].join('-');
+                    // in cache?
+                    if (key in api.caches.freebusy && useCache) {
+                        result.push(api.caches.freebusy[key]);
+                    } else {
+                        result.push(key);
+                        requests.push({
+                            module: 'calendar',
+                            action: 'freebusy',
+                            id: obj.id,
+                            type: obj.type,
+                            start: options.start,
+                            end: options.end,
+                            timezone: 'UTC'
+                        });
+                    }
+                } else {
+                    result.push({data: []});
+                }
+            });
+
+            if (requests.length === 0) {
+                return $.Deferred().resolve(result);
+            }
+
+            return http.PUT({
+                module: 'multiple',
+                data: requests,
+                appendColumns: false,
+                'continue': true
+            })
+            .then(function (response) {
+                return _(result).map(function (obj) {
+                    if (_.isString(obj)) {
+                        // use fresh server data
+                        return (api.caches.freebusy[obj] = response.shift());
+                    } else {
+                        // use cached data
+                        return obj;
+                    }
+                });
+            });
+        },
+
+        /**
+         * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
+         * @param  {string} key (task id)
+         * @return {boolean}
+         */
+        uploadInProgress: function (key) {
+            return this.caches.upload[key] || false;//return true boolean
+        },
+
+        /**
+         * add appointment to the list
+         * @param {string} key (task id)
+         * @return {undefined}
+         */
+        addToUploadList: function (key) {
+            this.caches.upload[key] = true;
+        },
+
+        /**
+         * remove appointment from the list
+         * @param  {string} key (task id)
+         * @fires  api#update: + key
+         * @return {undefined}
+         */
+        removeFromUploadList: function (key) {
+            delete this.caches.upload[key];
+            //trigger refresh
+            api.trigger('update:' + key);
+        },
+
+        /**
+         * bind to global refresh; clears caches and trigger refresh.all
+         * @fires  api#refresh.all
+         * @return {promise}
+         */
+        refresh: function () {
+            // check capabilities
+            if (capabilities.has('calendar')) {
+                api.getInvites().done(function () {
+                    // clear caches
+                    api.caches.all = {};
+                    api.caches.get = {};
+                    // trigger local refresh
+                    api.trigger('refresh.all');
+                });
+            }
         }
+
     };
 
     Events.extend(api);
-
-    /**
-     * removes recurrence information
-     * @param  {object} obj (appointment object)
-     * @return {object} reduced copy of appointment object
-     */
-    api.removeRecurrenceInformation = function (obj) {
-        var recAttr = ['change_exceptions', 'delete_exceptions', 'days',
-            'day_in_month', 'month', 'interval', 'until', 'occurrences'],
-            ret = _.clone(obj);
-        for (var i = 0; i < recAttr.length; i++) {
-            if (ret[recAttr[i]]) {
-                delete ret[recAttr[i]];
-            }
-        }
-        ret.recurrence_type = 0;
-        return ret;
-    };
-
-    /**
-     * get invites
-     * @fires  api#new-invites (invites)
-     * @return {deferred} returns sorted array of appointments
-     */
-    api.getInvites = function () {
-
-        var now = _.now(),
-            start = now - 2 * HOUR,
-            end = new date.Local().addYears(5).getTime();
-
-        return getUpdates({
-            folder: 'all',
-            start: start,
-            end: end, // 5 years like OX6
-            timestamp: 0,
-            recurrence_master: true
-        })
-        .then(function (list) {
-            // sort by start_date & look for unconfirmed appointments
-            // exclude appointments that already ended
-            var invites = _.chain(list)
-                .filter(function (item) {
-
-                    var isOver = item.end_date < now,
-                        isRecurring = !!item.recurrence_type;
-
-                    if (!isRecurring && isOver) {
-                        return false;
-                    }
-
-                    return _(item.users).any(function (user) {
-                        return user.id === ox.user_id && user.confirmation === 0;
-                    });
-                })
-                .sortBy('start_date')
-                .value();
-            // even if empty array is given it needs to be triggered to remove
-            // notifications that does not exist anymore (already handled in ox6 etc)
-            api.trigger('new-invites', invites);
-            return invites;
-        });
-    };
 
     var copymove = function (list, action, targetFolderId) {
         // allow single object and arrays
@@ -540,8 +676,8 @@ define('io.ox/calendar/api',
             })
             .done(function () {
                 // clear cache and trigger local refresh
-                all_cache = {};
-                get_cache = {};
+                api.caches.all = {};
+                api.caches.get = {};
                 _(list).each(function (obj) {
                     api.trigger('move:' + _.ecid(obj), targetFolderId);
                 });
@@ -549,151 +685,16 @@ define('io.ox/calendar/api',
             });
     };
 
-    /**
-     * move appointments to a folder
-     * @param  {array} list
-     * @param  {string} targetFolderId
-     * @return {deferred}
-     */
-    api.move = function (list, targetFolderId) {
-        return copymove(list, 'update', targetFolderId);
-    };
-
-    /**
-     * copy appointments to a folder
-     * @param  {array} list
-     * @param  {string} targetFolderId
-     * @return {deferred}
-     */
-    api.copy = function (list, targetFolderId) {
-        return copymove(list, 'copy', targetFolderId);
-    };
-
-    api.MINUTE = 60000;
-    api.HOUR = api.MINUTE * 60;
-    api.DAY = api.HOUR * 24;
-    api.WEEK = api.DAY * 7;
-
-    // fluent caches
-    api.caches = {
-        freebusy: {}
-    };
-
-    /**
-     * get participants appointments
-     * @param  {array} list  (participants)
-     * @param  {object} options
-     * @param  {boolean} useCache [optional]
-     * @return {deferred} returns a nested array with participants and their appointments
-     */
-    api.freebusy = function (list, options, useCache) {
-        list = [].concat(list);
-        useCache = useCache === undefined ? true : !!useCache;
-
-        if (list.length === 0) {
-            return $.Deferred().resolve([]);
-        }
-
-        options = _.extend({
-            start: _.now(),
-            end: _.now() + DAY
-        }, options);
-
-        var result = [], requests = [];
-
-        _(list).each(function (obj) {
-            if (obj.type === 1 || obj.type === 3) {//freebusy only supports internal users and resources
-                var key = [obj.type, obj.id, options.start, options.end].join('-');
-                // in cache?
-                if (key in api.caches.freebusy && useCache) {
-                    result.push(api.caches.freebusy[key]);
-                } else {
-                    result.push(key);
-                    requests.push({
-                        module: 'calendar',
-                        action: 'freebusy',
-                        id: obj.id,
-                        type: obj.type,
-                        start: options.start,
-                        end: options.end,
-                        timezone: 'UTC'
-                    });
-                }
-            } else {
-                result.push({data: []});
-            }
-        });
-
-        if (requests.length === 0) {
-            return $.Deferred().resolve(result);
-        }
-
-        return http.PUT({
-            module: 'multiple',
-            data: requests,
-            appendColumns: false,
-            'continue': true
-        })
-        .then(function (response) {
-            return _(result).map(function (obj) {
-                if (_.isString(obj)) {
-                    // use fresh server data
-                    return (api.caches.freebusy[obj] = response.shift());
-                } else {
-                    // use cached data
-                    return obj;
-                }
+    var checkForNotification = function (obj, removeAction) {
+        if (removeAction) {
+            api.trigger('delete:appointment', obj);
+        } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {//new appointments
+            require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                reminderAPI.getReminders();
             });
-        });
-    };
-
-    /**
-     * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
-     * @param  {string} key (task id)
-     * @return {boolean}
-     */
-    api.uploadInProgress = function (key) {
-        return uploadInProgress[key] || false;//return true boolean
-    };
-
-    /**
-     * add appointment to the list
-     * @param {string} key (task id)
-     * @return {undefined}
-     */
-    api.addToUploadList = function (key) {
-        uploadInProgress[key] = true;
-    };
-
-    /**
-     * remove appointment from the list
-     * @param  {string} key (task id)
-     * @fires  api#update: + key
-     * @return {undefined}
-     */
-    api.removeFromUploadList = function (key) {
-        delete uploadInProgress[key];
-        //trigger refresh
-        api.trigger('update:' + key);
-    };
-
-    api.reduce = factory.reduce;
-
-    /**
-     * bind to global refresh; clears caches and trigger refresh.all
-     * @fires  api#refresh.all
-     * @return {promise}
-     */
-    api.refresh = function () {
-        // check capabilities
-        if (capabilities.has('calendar')) {
-            api.getInvites().done(function () {
-                // clear caches
-                all_cache = {};
-                get_cache = {};
-                participant_cache = {};
-                // trigger local refresh
-                api.trigger('refresh.all');
+        } else if (obj.alarm || obj.end_date || obj.start_date) {//if one of this has changed during update action
+            require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                reminderAPI.getReminders();
             });
         }
     };
