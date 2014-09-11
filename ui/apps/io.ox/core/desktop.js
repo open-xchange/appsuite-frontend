@@ -1447,12 +1447,19 @@ define('io.ox/core/desktop',
                                 $('<ul class="search-facets search-facets-advanced">')
                             ),
                             // cancel button
-                            $('<a data-action="close">')
-                                .text(gt('Close search'))
-                                .on('click', function (e) {
-                                    e.preventDefault();
-                                    win.facetedsearch.view.trigger('button:cancel');
-                                })
+                            $('<nav>').append(
+                                $('<a data-action="close">')
+                                    .text(gt('Close search'))
+                                    .attr({
+                                        tabindex: 1,
+                                        role: 'button',
+                                        href: '#'
+                                    })
+                                    .on('click', function (e) {
+                                        e.preventDefault();
+                                        win.facetedsearch.view.trigger('button:cancel');
+                                    })
+                            )
                         );
                         // add nodes
                         side.append(nodes.container);
@@ -1678,16 +1685,24 @@ define('io.ox/core/desktop',
                         id: 'input',
                         index: 200,
                         draw: function () {
-                            var node = this.nodes.facetedsearch.toolbar;
-                            var group;
+                            var node = this.nodes.facetedsearch.toolbar,
+                                label = gt('Search'),
+                                id = win.name + '-search-field',
+                                group;
                             // input group and dropdown
                             node.append(
                                 group = $('<div class="input-group">')
                                     .append(
-                                        $('<input type="text" class="form-control search-field" tabindex="1">')
-                                        .attr({
-                                            placeholder: gt('Search') + ' ...'
-                                        })
+                                            $('<input type="text">')
+                                            .attr({
+                                                class: 'form-control search-field',
+                                                tabindex: 1,
+                                                id: id,
+                                                placeholder: label + ' ...'
+                                            }),
+                                            $('<label class="sr-only">')
+                                                .attr('for', id)
+                                                .text(label)
                                     )
                             );
                         }
@@ -1730,8 +1745,8 @@ define('io.ox/core/desktop',
                                         'data-placement': 'bottom',
                                         'data-animation': 'false',
                                         'data-container': 'body',
-                                        'data-original-title': gt('Search'),
-                                        'aria-label': gt('Search')
+                                        'data-original-title': gt('Start search'),
+                                        'aria-label': gt('Start search')
                                     })
                                     .append(
                                         $('<i class="fa fa-search"></i>')

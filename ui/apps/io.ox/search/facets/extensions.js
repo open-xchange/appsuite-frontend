@@ -78,7 +78,11 @@ define('io.ox/search/facets/extensions',
                                     $('<div class="btn-group">')
                                     .append(
                                         $('<button type="button" class="btn btn-link">')
-                                            .attr('data-app', id)
+                                            .attr({
+                                                'data-app': id,
+                                                tabIndex: 1,
+                                                role: 'menuitemcheckbox'
+                                            })
                                             .addClass('pull-left')
                                             .text(/*#, dynamic*/gt.pgettext('app', title))
                                     )
@@ -206,14 +210,21 @@ define('io.ox/search/facets/extensions',
                 this.parent().find('a').remove();
                 if (_.compact(nodes).length) {
                     this.parent().prepend(
-                        $('<a data-action="toggle-adv">')
-                            .text(gt('Show advanced filters'))
-                            .on('click', function () {
-                                var visible = self.is(':visible');
-                                $(this).text(visible ? gt('Show advanced filters') : gt('Hide advanced filters'));
-                                baton.model.set('showadv', !visible);
-                                self.toggle();
-                            })
+                        $('<nav>').append(
+                            $('<a data-action="toggle-adv">')
+                                .text(gt('Show advanced filters'))
+                                .attr({
+                                    tabindex: 1,
+                                    role: 'button',
+                                    href: '#'
+                                })
+                                .on('click ', function () {
+                                    var visible = self.is(':visible');
+                                    $(this).text(visible ? gt('Show advanced filters') : gt('Hide advanced filters'));
+                                    baton.model.set('showadv', !visible);
+                                    self.toggle();
+                                })
+                        )
                     );
                 }
 
@@ -348,7 +359,7 @@ define('io.ox/search/facets/extensions',
                     );
 
                     // create menu
-                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
+                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
                             .attr({
                                 'data-facet': facet.id,
                                 'data-value': value.id
@@ -357,8 +368,8 @@ define('io.ox/search/facets/extensions',
                     // add generic 'all'
                     if (_.contains(facet.flags, 'advanced')) {
                         menu.append(
-                            $('<li role="presentation">').append(
-                                 $('<a role="menuitem" tabindex="-1" href="#">')
+                            $('<li>').append(
+                                 $('<a tabindex="-1" href="#" role="menuitemcheckbox">')
                                     .append(
                                         $('<i class="fa fa-fw">')
                                             .addClass(current === '' ? 'fa-check': 'fa-none'),
@@ -381,7 +392,7 @@ define('io.ox/search/facets/extensions',
                     _.each(options, function (item) {
                         menu.append(
                             option = $('<li role="presentation">').append(
-                                         $('<a role="menuitem" tabindex="-1" href="#">')
+                                         $('<a role="menuitemcheckbox" tabindex="-1" href="#">')
                                             .append(
                                                 $('<i class="fa fa-fw fa-none">'),
                                                 $('<span>').html(item.name || item.item.name)
@@ -399,6 +410,9 @@ define('io.ox/search/facets/extensions',
                     });
                     // add menu
                     parent.append(menu);
+
+                    //apply a11y
+                    this.dropdown();
                 }
 
                 // copy search string to input
@@ -553,10 +567,11 @@ define('io.ox/search/facets/extensions',
             },
 
             folderFacet: function (baton, value, facet) {
-                var button = this.find('a[type="button"]'),
+                var self = this,
+                    button = this.find('a[type="button"]'),
                     current = value.custom,
-                    option,
-                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
+                    option, link,
+                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
                         .attr({
                             'data-facet': 'folder',
                             'data-value': 'custom'
@@ -565,13 +580,40 @@ define('io.ox/search/facets/extensions',
                 ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
                 ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
 
-                button.attr('data-toggle', 'dropdown');
+                button.attr({
+                        'data-toggle': 'dropdown'
+                    });
 
                 button.prepend(
                     $('<div class="caret-container">').append(
                         $('<i class="fa fa-caret-down">')
                     )
                 );
+
+                // add 'all folders'
+                var link;
+                // add dropdown entry
+                menu.prepend(
+                    $('<li role="presentation">').append(
+                         link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
+                                    .append(
+                                        $('<i class="fa fa-fw ">'),
+                                        $('<span>').text(gt('All folders'))
+                                    )
+                                    .attr('data-custom', 'custom')
+                                    .attr('title', gt('All folders'))
+                    )
+                );
+                // is active
+                if (!value.custom || value.custom === 'custom') {
+                    // set display name
+                    this.find('.name')
+                        .text(gt('All folders'));
+                    // set fa-check icon
+                    link.find('i')
+                        .addClass('fa-check');
+                    link.attr('aria-checked', true);
+                }
 
                 // add fodlers
                 util.getFolders(baton.model)
@@ -594,35 +636,40 @@ define('io.ox/search/facets/extensions',
                             // account name as dropdown header
                             if (Object.keys(accounts).length > 1) {
                                 menu.append(
-                                    $('<li role="presentation" class="dropdown-header">').append(account.name)
+                                    $('<li class="dropdown-header">').append(account.name)
                                 );
                             }
                             // add option
                             _.each(account.list, function (folder) {
                                 menu.append(
-                                    option = $('<li role="presentation">').append(
-                                        $('<a href="#" role="menuitem" class="option" tabindex="-1">')
+                                    option = $('<li>').append(
+                                        $('<a href="#" role="menuitemcheckbox" class="option" tabindex="-1">')
                                             .append(
                                                 $('<i class="fa fa-fw fa-none">'),
                                                 $('<span>').text(folder.title)
                                             )
-                                            .attr('data-custom', folder.id)
-                                            .attr('title', folder.title)
+                                            .attr({
+                                                'data-custom': folder.id,
+                                                'title': folder.title,
+                                                tabIndex: '-1'
+                                            })
                                     )
                                 );
-                                if (current === folder.id)
+                                if (current === folder.id) {
+                                    option.find('a').attr('aria-checked', true);
                                     option.find('.fa').removeClass('fa-none').addClass('fa-check');
+                                }
                             });
 
                             // add divider
                             menu.append(
-                                $('<li role="presentation" class="divider">')
+                                $('<li class="divider">')
                             );
                         });
                         // add option to open dialog
                         menu.append(
-                            $('<li role="presentation">').append(
-                                 $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
+                            $('<li>').append(
+                                 $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
                                     .append(
                                         $('<i class="fa fa-fw fa-none">'),
                                         $('<span>').text(gt('More') + '...')
@@ -630,45 +677,25 @@ define('io.ox/search/facets/extensions',
                                     .attr('data-action', 'dialog')
                             )
                         );
+                    }).then(function () {
+                        // add to dom
+                        self.append(menu);
+
+                        // custom remove handler for folders
+                        function remove (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            (facet.values.custom || facet.values[0]).custom = 'custom';
+                            baton.model.update(facet.id, 'custom', {custom: 'custom'});
+                        }
+
+                        if (value.custom && value.custom !== 'custom')
+                            // use custom click handler
+                            ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, remove);
+
+                        // apply a11y
+                        button.dropdown();
                     });
-
-                // add 'all folders'
-                var link;
-                // add dropdown entry
-                menu.prepend(
-                    $('<li role="presentation">').append(
-                         link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
-                                    .append(
-                                        $('<i class="fa fa-fw ">'),
-                                        $('<span>').text(gt('All folders'))
-                                    )
-                                    .attr('data-custom', 'custom')
-                                    .attr('title', gt('All folders'))
-                    )
-                );
-                // is active
-                if (!value.custom || value.custom === 'custom') {
-                    // set display name
-                    this.find('.name')
-                        .text(gt('All folders'));
-                    // set fa-check icon
-                    link.find('i')
-                        .addClass('fa-check');
-                }
-
-                // add to dom
-                this.append(menu).appendTo(this);
-
-                function remove (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    (facet.values.custom || facet.values[0]).custom = 'custom';
-                    baton.model.update(facet.id, 'custom', {custom: 'custom'});
-                }
-
-                if (value.custom && value.custom !== 'custom')
-                    // use custom click handler
-                    ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, remove);
             }
         };
 
