@@ -424,6 +424,8 @@ define('io.ox/core/extPatterns/links',
         if (closer) baton.$el.append(closer);
         drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
             injectDividers(baton.$el);
+            // remove items with 'none' prio
+            if (_.device('smartphone')) baton.$el.find('[data-prio="none"]').closest('li').remove();
         });
     };
 
