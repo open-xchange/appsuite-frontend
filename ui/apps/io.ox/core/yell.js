@@ -86,9 +86,13 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         // add message
         if (!validType.test(o.type)) return;
 
+        var alert = [];
+
         if (o.type !== 'screenreader') { //screenreader notifications should not remove standard ones, so special remove here
             clearTimeout(timer);
             timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+            // replace existing alert?
+            alert = $('.io-ox-alert:not().io-ox-alert-screenreader');
         } else {
             setTimeout(function () {
                 $('.io-ox-alert-screenreader').remove();
@@ -99,9 +103,6 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             className = 'io-ox-alert io-ox-alert-' + o.type + (o.type === 'screenreader' ? ' sr-only' : ''),
             wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal',
             node = $('<div tabindex="-1">');
-
-        // replace existing alert?
-        var alert = $('.io-ox-alert');
 
         if (alert.length) {
             className += ' appear';
