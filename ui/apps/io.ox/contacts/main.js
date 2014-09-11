@@ -384,6 +384,10 @@ define('io.ox/contacts/main',
                 if (app.props.get('checkboxes') === true) {
                     // leave multiselect? -> clear selection
                     app.grid.selection.clear();
+                    // hide folder button on the left
+                    app.pages.getNavbar('listView').show('.left');
+                } else {
+                    app.pages.getNavbar('listView').hide('.left');
                 }
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
