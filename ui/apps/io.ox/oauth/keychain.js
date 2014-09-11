@@ -218,8 +218,23 @@ define.async('io.ox/oauth/keychain',
             // build and register extensions
             cache = {};
             _(services[0]).each(function (service) {
+                var keychainAPI = new OAuthKeychainAPI(service);
                 cache[service.id] = $.extend({accounts: {}}, service);
-                point.extend(new OAuthKeychainAPI(service));
+                point.extend(keychainAPI);
+
+                keychainAPI.on('create', function () {
+                    // Some standard event handlers    
+                    require(['plugins/halo/api'], function (haloAPI) {
+                        haloAPI.halo.refreshServices();
+                    });
+                });
+
+                keychainAPI.on('delete', function () {
+                    // Some standard event handlers    
+                    require(['plugins/halo/api'], function (haloAPI) {
+                        haloAPI.halo.refreshServices();
+                    });
+                });
             });
 
             _(accounts[0]).each(function (account) {
@@ -241,6 +256,9 @@ define.async('io.ox/oauth/keychain',
             // Resolve on fail
             moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
         });
+
+
+
 
     return moduleDeferred;
 });
