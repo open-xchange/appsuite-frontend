@@ -13,10 +13,12 @@
 define(['fixture!io.ox/core/settings.json',
         'fixture!io.ox/search/autocomplete.json',
         'fixture!io.ox/search/query.json',
+        'spec/shared/capabilities',
         'settings!io.ox/mail',
         'settings!io.ox/core',
         'beforeEachEnsure',
-        'waitsFor'], function (settingsFixture, autocompleteFixture, queryFixture, mailSettings, settings, beforeEachEnsure, waitsFor) {
+        'waitsFor'], function (settingsFixture, autocompleteFixture, queryFixture, caputil,  mailSettings, settings, beforeEachEnsure, waitsFor) {
+
 
     var setupFakeServer = function () {
         var server = this.server;
@@ -25,7 +27,6 @@ define(['fixture!io.ox/core/settings.json',
                 JSON.stringify({timestamp: 1378223251586, data: autocompleteFixture.data})
             );
         });
-
         server.respondWith('PUT', /api\/find\?action=query/, function (xhr) {
             xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({timestamp: 1378223251586, data: queryFixture.data})
@@ -34,130 +35,134 @@ define(['fixture!io.ox/core/settings.json',
     };
 
     //aync setup loads app and and add some variables to test context
-    function setup () {
+    var setup = function (context) {
         var def = $.Deferred(),
             self = this;
-        //apply relevant setting fixtures
-        mailSettings.set('folder', settingsFixture['io.ox/mail'].folder);
-        settings.set('folder', settingsFixture['io.ox/core'].folder);
-        settings.set('search', settingsFixture['io.ox/core'].search);
-        _.each(settings.get('search/modules'), function (module) {
-            var id = 'io.ox/' + module + '/main';
-            ox.manifests.apps[id] = {title: module};
-        });
 
-        //load app
-        require(['io.ox/search/main'], function (main) {
-            main.init();
-            var app = main.run();
-            self.vars = {
-                app: app,
-                model: app.getModel(),
-                node: $(document.body, '.io-ox-search-window').find('.window-content')
-            };
-            def.resolve();
-        });
-        return def;
-    }
-
-
-    describe.skip('Search app:', function () {
-        //ensure setup is finished
-        beforeEachEnsure(setup);
-
-        describe('has a view that', function () {
-
-            describe('has applications row that', function () {
-
-                var getApps = function (data) {
-                    return data.vars.node.find('.row.applications>ul').children();
-                };
-
-                it('exists', function () {
-                    var row = this.vars.node.find('.row.applications');
-                    expect(row).to.not.be.empty;
-                });
-                it('contains a list element for each available application', function () {
-                    var apps = getApps(this);
-                    expect(apps.length).to.equal(4);
-                });
-                it('contains exactly one active list element', function () {
-                    var apps = getApps(this);
-                    expect(apps.find('.btn-primary').length).to.equal(1);
-                });
-                it('reflects module changes', function () {
-                    var apps = getApps(this),
-                        id = apps.find('.btn-primary').attr('data-app'),
-                        self = this;
-
-                    this.vars.app.view.on('redraw', function () {
-                        var apps = getApps(self),
-                            idnext = apps.find('.btn-primary').attr('data-app');
-                        expect(id).to.not.be.equal(idnext);
-                        expect(idnext).to.be.equal('io.ox/tasks');
-                    });
-                    this.vars.model.setModule('io.ox/tasks');
+        // load mail app
+        require(['io.ox/mail/main'], function (main) {
+            // set search capability
+            var capabilities = caputil.preset('common').init('io.ox/mail/main', main);
+            capabilities.enable('search');
+            // start mail app
+            main.getApp().launch().done(function () {
+                var win = this.getWindow(),
+                    api = win.facetedsearch;
+                win.on('search:loaded', function () {
+                    self.vars = {
+                        win: win,
+                        nodes: win.nodes.facetedsearch,
+                        api: api,
+                        view: api.view,
+                        model: api.view.modelm
+                    };
+                    // show
+                    // api.toggle();
+                    // TOOD: why is this hack necessary?
+                    $('.launcher-dropdown ul').find('li[data-app-name="io.ox/mail"]').trigger('click');
+                    def.resolve();
                 });
             });
+        });
+        return def;
+    };
 
-            describe('has a search field row that', function () {
+    var dropdownLoaded = function (done) {
+        return waitsFor(function () {
+            var items = $('.autocomplete-popup>.scrollable-pane').children();
+            return items.length !== 0;
+        }).done(done);
+    };
+
+    // var openDropdown = function (done) {
+    //     var def = $.Deferred();
+    //     // in case already opened
+    //     // if ($('.autocomplete-popup>.scrollable-pane').children().length)
+    //     //     return def.resolve();
+
+    //     // trigger autocomplete request
+    //     var field = this.vars.nodes.toolbar.find('.search-field');
+    //     field.val('t');
+    //     field.trigger(
+    //         $.Event('keyup', { keyCode: 80})
+    //     );
+
+    //     done.call(this);
+    //     dropdownLoaded.done(function () {
+    //         debugger;
+    //     });
+    //     return dropdownLoaded.done(done);
+    // };
+
+
+    describe('in-app search:', function () {
+        //ensure setup is finished
+        beforeEachEnsure(setup);
+        beforeEach(setupFakeServer);
+
+
+        describe('has a view with', function () {
+
+            describe('a search field section that', function () {
 
                 var getField = function (data) {
-                    return data.vars.node.find('.search-field');
+                    return data.vars.nodes.toolbar.find('.search-field');
                 };
 
                 it('exists', function () {
-                    expect(getField(this)).to.not.be.empty;
+                    expect(this.vars.nodes.toolbar).to.not.be.empty;
 
                 });
                 describe('contains an input field that', function () {
                     it('exists', function () {
                         expect(getField(this).length).to.equal(1);
                     });
-                    it('has focus', function (done) {
-                        var self = this;
-                        return waitsFor(function () {
-                            var field = getField(self),
-                                focused = document.activeElement;
 
-                            return $(document.activeElement).hasClass('search-field');
-                        }).done(done);
-                    });
-                    describe('calls autocomplete action when', function () {
+                    describe('shows autocomplete popup when at least one char was entered and', function () {
 
-                        beforeEach(setupFakeServer);
-
-                        afterEach(function () {
-                            $('.autocomplete-popup').empty();
+                        beforeEach(function () {
+                            //
+                            $('.autocomplete-popup>.scrollable-pane').empty();
                         });
 
-                        var expectsDropdown = function (done) {
-                            waitsFor(function () {
-                                var items = $('.autocomplete-popup>.scrollable-pane').children();
-                                return items.length !== 0;
-                            }).done(done);
-                        };
-
-                        it('clicked', function () {
+                        it('key was pressed', function (done) {
                             var field = getField(this);
-                            field.trigger($.Event('click'));
-                            expectsDropdown();
-                        });
-                        it.skip('key was pressed', function (done) {
-                            var field = getField(this);
+                            field.val('test');
                             field.trigger(
-                                $.Event('keydown', { keyCode: 80})
+                                $.Event('keyup', { keyCode: 80})
                             );
-                            expectsDropdown();
+                            dropdownLoaded(done);
                         });
-                        it.skip('focused via tab', function () {
+                        it('input is clicked', function (done) {
                             var field = getField(this);
+                            field.val('t');
+                            field.trigger($.Event('mousedown'));
                             field.trigger($.Event('click'));
-                            expectsDropdown();
+                            dropdownLoaded(done);
                         });
                     });
 
                 });
+            });
+
+            describe('a container for active facets that', function () {
+
+                function getDropdown ()  {
+                    return $('.autocomplete-popup>.scrollable-pane').children();
+                }
+
+                //beforeEach(openDropdown);
+
+                it('exists', function () {
+                    expect(!!this.vars.nodes.container).to.equal(true);
+                });
+                // it('exists', function () {
+                //     var dropdown = getDropdown();
+                //     dropdown.first().trigger('click');
+                //     debugger;
+                //     expect(this.vars.nodes.container.length).to.equal(1);
+                // });
+
             });
 
         });
