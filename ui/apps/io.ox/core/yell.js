@@ -36,9 +36,12 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         timer = null;
 
-    function remove() {
+    function remove(replace) {
         clearTimeout(timer);
         $('.io-ox-alert').trigger('notification:removed').remove();
+        if (!replace) {//don't remove the event listener if this was just a replacement alert
+            $(document).off(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
+        }
     }
 
     function click (e) {
@@ -54,8 +57,6 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         // click on close?
         if ($(e.target).closest('.close').length) return remove();
     }
-
-    $(document).on(_.device('touch') ? 'tap.yell' : 'click.yell', click);
 
     function yell(type, message, focus) {
 
@@ -93,6 +94,11 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
             // replace existing alert?
             alert = $('.io-ox-alert:not().io-ox-alert-screenreader');
+            //prevent double binding
+            //we can not use an event listener that always listens. Otherwise we might run into opening clicks and close our notifications, when they should not. See Bug 34339
+            //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although he should not)
+            $(document).off(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
+            $(document).on(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
         } else {
             setTimeout(function () {
                 $('.io-ox-alert-screenreader').remove();
@@ -106,7 +112,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         if (alert.length) {
             className += ' appear';
-            alert.remove();
+            alert.remove(true);
         }
 
         node.attr('class', className).append(
