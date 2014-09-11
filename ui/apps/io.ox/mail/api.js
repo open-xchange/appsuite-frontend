@@ -763,22 +763,23 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.expunge = function (folder_id) {
-        // new clear
+
+        // remove deleted messages immediately
+        _(pool.getByFolder(folder_id)).each(function (collection) {
+            collection.set(
+                collection.filter(function (model) {
+                    return !util.isDeleted(model.toJSON());
+                })
+            );
+        });
+
         return http.PUT({
             module: 'mail',
             appendColumns: false,
-            params: {
-                action: 'expunge'
-            },
+            params: { action: 'expunge' },
             data: [folder_id]
         })
-        .then(function (data) {
-            return api.caches.all.grepRemove(folder_id + DELIM).then(function () {
-                return data;
-            });
-        })
         .done(function () {
-            api.trigger('refresh.all');
             folderAPI.reload(folder_id);
         });
     };
