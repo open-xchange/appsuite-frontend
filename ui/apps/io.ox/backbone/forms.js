@@ -509,7 +509,7 @@ define('io.ox/backbone/forms',
                         weekStart: date.locale.weekStart,
                         parentEl: self.nodes.controlGroup,
                         todayHighlight: true,
-                        todayBtn: true,
+                        todayBtn: 'linked',//today button should insert the date when clicked. See 34381
                         autoclose: true
                     });
                 } else {
