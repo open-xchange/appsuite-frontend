@@ -43,9 +43,7 @@ define('io.ox/mail/detail/main',
                     app.setTitle(util.getSubject(subject));
                     // respond to 'remove' event to close the detail view
                     app.threadView.listenTo(app.threadView.model, 'remove', function () {
-                        app.threadView.remove();
                         app.quit();
-                        app = app.threadView = null;
                     });
                 }
             };
@@ -60,6 +58,11 @@ define('io.ox/mail/detail/main',
             closable: true,
             name: NAME,
             title: ''
+        });
+
+        app.on('quit', function () {
+            app.threadView.remove();
+            app.threadView = null;
         });
 
         // launcher
