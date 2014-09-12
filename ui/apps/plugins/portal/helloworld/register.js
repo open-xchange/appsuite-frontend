@@ -11,10 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/helloworld/register',
-    ['io.ox/core/extensions',
-     'gettext!plugins/portal'
-    ], function (ext, gt) {
+define('plugins/portal/helloworld/register', [
+    'io.ox/core/extensions',
+    'gettext!plugins/portal'
+], function (ext, gt) {
 
     'use strict';
 

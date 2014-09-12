@@ -12,16 +12,16 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/distrib/create-dist-view',
-    ['io.ox/backbone/views',
-     'io.ox/backbone/mini-views',
-     'gettext!io.ox/contacts',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/extensions',
-     'io.ox/calendar/edit/view-addparticipants',
-     'io.ox/core/notifications'
-    ], function (views, mini, gt, api, util, ext, AddParticipantsView, notifications) {
+define('io.ox/contacts/distrib/create-dist-view', [
+    'io.ox/backbone/views',
+    'io.ox/backbone/mini-views',
+    'gettext!io.ox/contacts',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'io.ox/core/extensions',
+    'io.ox/calendar/edit/view-addparticipants',
+    'io.ox/core/notifications'
+], function (views, mini, gt, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
 
@@ -89,7 +89,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             var pNode = $('<div class="col-xs-12 col-md-6">').append(
                     $('<div class="autocomplete-controls input-group">').append(
-                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr({'placeholder': gt('Add contact') + ' ...', 'aria-label': gt('Add contact')}),
+                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr({ 'placeholder': gt('Add contact') + ' ...', 'aria-label': gt('Add contact') }),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" aria-label="' + gt('Add contact') + '" data-action="add" tabindex="1">')
                                 .append($('<i class="fa fa-plus">'))
@@ -148,7 +148,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         * check for uniqueness (emailadress, name-only entries) and displays error message
         *
         * @param {object} newMember contains with properties email and display_name
-        * @return {boolean}
+        * @return { boolean }
         */
         isUnique: function (newMember) {
 
@@ -240,7 +240,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     // contact picture
                     api.pictureHalo(
                         $('<div class="contact-image">'),
-                        $.extend(o, { width: 48, height: 48, scaleType: 'cover'})
+                        $.extend(o, { width: 48, height: 48, scaleType: 'cover' })
                     ),
                     // name
                     $('<div class="person-name">').text(o.display_name),

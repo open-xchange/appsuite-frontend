@@ -1041,7 +1041,7 @@ define('io.ox/mail/main', [
                         },
                         getQueryParams: function (params) {
                             // paging support
-                            search.model.set('start', params.offset || 0, {silent: true});
+                            search.model.set('start', params.offset || 0, { silent: true });
                             return {};
                         },
                         cid: function () {

@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/session',
-    ['io.ox/core/http',
-     'io.ox/core/manifests',
-     'io.ox/core/uuids'
-    ], function (http, manifests, uuids) {
+define('io.ox/core/session', [
+    'io.ox/core/http',
+    'io.ox/core/manifests',
+    'io.ox/core/uuids'
+], function (http, manifests, uuids) {
 
     'use strict';
 
@@ -25,8 +25,8 @@ define('io.ox/core/session',
         var language = (navigator.language || navigator.userLanguage).substr(0, 2),
             languages = ox.serverConfig.languages || {};
         return _.chain(languages).keys().find(function (id) {
-                return id.substr(0, 2) === language;
-            }).value();
+            return id.substr(0, 2) === language;
+        }).value();
     };
 
     var check = function (language) {

@@ -11,13 +11,13 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/files/settings/pane',
-    ['settings!io.ox/files',
-     'io.ox/files/settings/model',
-     'io.ox/core/extensions',
-     'gettext!io.ox/files',
-     'io.ox/backbone/mini-views'
-    ], function (settings, filesSettingsModel, ext, gt, mini) {
+define('io.ox/files/settings/pane', [
+    'settings!io.ox/files',
+    'io.ox/files/settings/model',
+    'io.ox/core/extensions',
+    'gettext!io.ox/files',
+    'io.ox/backbone/mini-views'
+], function (settings, filesSettingsModel, ext, gt, mini) {
 
     'use strict';
 
@@ -55,24 +55,22 @@ define('io.ox/files/settings/pane',
     });
 
     ext.point(POINT + '/pane').extend({
-            index: 200,
-            id: 'common',
-            draw: function () {
-
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('row').append(
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Show hidden files and folders')).append(
-                                        new mini.CheckboxView({ name: 'showHidden', model: model}).render().$el
-                                    )
+        index: 200,
+        id: 'common',
+        draw: function () {
+            this.append(
+                $('<div>').addClass('form-group').append(
+                    $('<div>').addClass('row').append(
+                        $('<div>').addClass('col-sm-8').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label>').addClass('control-label').text(gt('Show hidden files and folders')).append(
+                                    new mini.CheckboxView({ name: 'showHidden', model: model }).render().$el
                                 )
                             )
                         )
                     )
-                );
-            }
-        });
-
+                )
+            );
+        }
+    });
 });

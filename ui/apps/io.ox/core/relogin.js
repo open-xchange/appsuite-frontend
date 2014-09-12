@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/relogin',
-    ['io.ox/core/session',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core',
-     'settings!io.ox/core'
-    ], function (session, notifications, gt, settings) {
+define('io.ox/core/relogin', [
+    'io.ox/core/session',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core',
+    'settings!io.ox/core'
+], function (session, notifications, gt, settings) {
 
     'use strict';
 

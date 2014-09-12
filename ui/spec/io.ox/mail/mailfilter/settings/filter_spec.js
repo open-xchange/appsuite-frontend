@@ -15,7 +15,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
     'use strict';
 
-    var resultWithFilter = {timestamp: 1378223251586, data: [{
+    var resultWithFilter = { timestamp: 1378223251586, data: [{
             'position': 0,
             'id': 0,
             'flags': [],
@@ -36,7 +36,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
             'position': 1,
             'id': 1,
             'flags': ['vacation'],
-            'test': {'id': 'true'},
+            'test': { 'id': 'true' },
             'actioncmds': [{
                 'id': 'vacation',
                 'text': 'text',
@@ -84,7 +84,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
         it('should draw the list of tests', function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFilter));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultWithFilter));
             });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 
@@ -115,7 +115,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
         beforeEach(function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithoutFilter));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultWithoutFilter));
             });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 

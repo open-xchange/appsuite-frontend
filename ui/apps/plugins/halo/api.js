@@ -14,11 +14,11 @@
 
 // TODO: Caching?
 
-define.async('plugins/halo/api',
-    ['io.ox/core/http',
-     'plugins/halo/config',
-     'io.ox/core/extensions'
-    ], function (http, haloConfigUtil, ext) {
+define.async('plugins/halo/api', [
+    'io.ox/core/http',
+    'plugins/halo/config',
+    'io.ox/core/extensions'
+], function (http, haloConfigUtil, ext) {
 
     'use strict';
 
@@ -144,17 +144,17 @@ define.async('plugins/halo/api',
 
     // initialize (async)
     return http.GET({
-            module: 'halo/contact',
-            params: {
-                action: 'services'
-            }
-        })
-        .pipe(function (list) {
-            // TODO: remove; temp.fix for sequence
-            list = _(list).without('com.openexchange.halo.contacts');
-            list.unshift('com.openexchange.halo.contacts');
-            activeProviders = list;
-            // publish api!
-            return api;
-        });
+        module: 'halo/contact',
+        params: {
+            action: 'services'
+        }
+    })
+    .pipe(function (list) {
+        // TODO: remove; temp.fix for sequence
+        list = _(list).without('com.openexchange.halo.contacts');
+        list.unshift('com.openexchange.halo.contacts');
+        activeProviders = list;
+        // publish api!
+        return api;
+    });
 });

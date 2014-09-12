@@ -11,14 +11,14 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/calendar/acceptdeny',
-    ['io.ox/calendar/api',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/folder/api',
-     'io.ox/calendar/util',
-     'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'
-    ], function (api, dialogs, folderAPI, util, calSettings, gt) {
+define('io.ox/calendar/acceptdeny', [
+    'io.ox/calendar/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/folder/api',
+    'io.ox/calendar/util',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar'
+], function (api, dialogs, folderAPI, util, calSettings, gt) {
 
     'use strict';
 
@@ -86,17 +86,17 @@ define('io.ox/calendar/acceptdeny',
                             $('<p>').append(
                                 description
                             ),
-                            $('<div class="form-group">').css({'margin-top': '20px'}).append(
+                            $('<div class="form-group">').css({ 'margin-top': '20px' }).append(
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
                                 $('<input type="text" class="form-control" data-property="comment">').attr({ id: inputid, tabindex: '1' }).val(message),
                                 reminderSelect
                             )
                         );
                     })
-                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                    .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
-                    .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
-                    .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
+                    .addAlternativeButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                    .addDangerButton('declined', gt('Decline'), 'declined', { tabIndex: 1 })
+                    .addWarningButton('tentative', gt('Tentative'), 'tentative', { tabIndex: 1 })
+                    .addSuccessButton('accepted', gt('Accept'), 'accepted', { tabIndex: 1 })
                     .show(function () {
                         $(this).find('[data-property="comment"]').focus();
                     })
@@ -159,9 +159,9 @@ define('io.ox/calendar/acceptdeny',
                 .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
                 .addPrimaryButton('series',
                     //#. Use singular in this context
-                    gt('Series'), 'series', {tabIndex: '1'})
-                .addButton('appointment', gt('Appointment'), 'appointment', {tabIndex: '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                    gt('Series'), 'series', { tabIndex: 1 })
+                .addButton('appointment', gt('Appointment'), 'appointment', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                 .show()
                 .then(function (action) {
                     if (action === 'cancel') {

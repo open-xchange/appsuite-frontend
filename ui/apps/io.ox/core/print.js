@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/print',
-    ['io.ox/core/http',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'
-    ], function (http, notifications, gt) {
+define('io.ox/core/print', [
+    'io.ox/core/http',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (http, notifications, gt) {
 
     'use strict';
 
@@ -221,7 +221,7 @@ define('io.ox/core/print',
         // use options to overwrite default request params
         open: function (module, data, options) {
 
-            var params = {action: 'get'}, url;
+            var params = { action: 'get' }, url;
 
             // workaround for old printcalendar
             if (module === 'printCalendar') {

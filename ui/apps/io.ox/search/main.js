@@ -11,15 +11,15 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/main',
-    ['gettext!io.ox/search',
-     'settings!io.ox/core',
-     'io.ox/core/extensions',
-     'io.ox/search/model',
-     'io.ox/search/view',
-     'io.ox/search/apiproxy',
-     'less!io.ox/search/style'
-    ], function (gt, settings, ext, SearchModel, SearchView, apiproxy) {
+define('io.ox/search/main', [
+    'gettext!io.ox/search',
+    'settings!io.ox/core',
+    'io.ox/core/extensions',
+    'io.ox/search/model',
+    'io.ox/search/view',
+    'io.ox/search/apiproxy',
+    'less!io.ox/search/style'
+], function (gt, settings, ext, SearchModel, SearchView, apiproxy) {
 
     'use strict';
 
@@ -47,17 +47,17 @@ define('io.ox/search/main',
             // active app : app searched in
             data.mapping = {
                 // name mapping
-                'io.ox/mail/compose' : 'io.ox/mail',
-                'com.voiceworks/ox-messenger' : data.defaultApp,
-                'io.ox/drive' : 'io.ox/files',
-                'io.ox/office/text' : 'io.ox/files',
-                'io.ox/office/portal' : 'io.ox/files',
-                'io.ox/office/spreadsheet' : 'io.ox/files',
-                'io.ox/office/portal/text' : 'io.ox/files',
-                'io.ox/office/portal/spreadsheet' : 'io.ox/files',
-                'io.ox/portal' : data.defaultApp,
-                'io.ox/search' : data.defaultApp,
-                'io.ox/settings' : data.defaultApp
+                'io.ox/mail/compose': 'io.ox/mail',
+                'com.voiceworks/ox-messenger': data.defaultApp,
+                'io.ox/drive': 'io.ox/files',
+                'io.ox/office/text': 'io.ox/files',
+                'io.ox/office/portal': 'io.ox/files',
+                'io.ox/office/spreadsheet': 'io.ox/files',
+                'io.ox/office/portal/text': 'io.ox/files',
+                'io.ox/office/portal/spreadsheet': 'io.ox/files',
+                'io.ox/portal': data.defaultApp,
+                'io.ox/search': data.defaultApp,
+                'io.ox/settings': data.defaultApp
             };
         }
     });
@@ -93,7 +93,6 @@ define('io.ox/search/main',
         }),
         sidepopup,
         win, model, run;
-
 
     // hide/show topbar search field
     win.on('show', function () {
@@ -147,7 +146,7 @@ define('io.ox/search/main',
         // mark as not running
         app.trigger('quit');
         // reset
-        model.reset({silent: true});
+        model.reset({ silent: true });
     };
 
     // define launcher callback
@@ -224,7 +223,7 @@ define('io.ox/search/main',
         win.show(function () {
             // detail view sidepopo
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                sidepopup = new dialogs.SidePopup({tabTrap: true})
+                sidepopup = new dialogs.SidePopup({ tabTrap: true })
                             .delegate(app.view.$el, '.item', openSidePopup);
             });
         });
@@ -248,17 +247,17 @@ define('io.ox/search/main',
         if (app.is('ready')) {
             // not started yet use app callback for inital stuff
             app.launch.call(app);
-        } else  {
+        } else {
             // reset model and update current app
-            model.reset({silent: true});
+            model.reset({ silent: true });
             current = ox.ui.App.getCurrentApp().get('name');
             if (current !== 'io.ox/search')
-                model.set('app', current, {silent: true});
+                model.set('app', current, { silent: true });
             // update state
             app.set('state', 'running');
             // reset view
             app.launch();
-            app.view.redraw({closeSidepanel: true});
+            app.view.redraw({ closeSidepanel: true });
         }
         app.view.focus();
         app.idle();

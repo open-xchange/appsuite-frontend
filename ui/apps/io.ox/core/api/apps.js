@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/apps',
-    ['io.ox/core/event',
-     'io.ox/core/extensions',
-     'io.ox/core/manifests',
-     'io.ox/core/capabilities'
-    ], function (Events, ext, manifests, capabilities) {
+define('io.ox/core/api/apps', [
+    'io.ox/core/event',
+    'io.ox/core/extensions',
+    'io.ox/core/manifests',
+    'io.ox/core/capabilities'
+], function (Events, ext, manifests, capabilities) {
 
     'use strict';
 
@@ -47,9 +47,12 @@ define('io.ox/core/api/apps',
     appData.categories = _(appData.categories).uniq();
 
     // TODO: Make favorites dynamic
-    var allFavorites = ['io.ox/portal', 'io.ox/mail', 'io.ox/contacts',
-                        'io.ox/calendar', 'io.ox/tasks', 'io.ox/files',
-                        'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet'];
+    var allFavorites = [
+        'io.ox/portal', 'io.ox/mail', 'io.ox/contacts',
+        'io.ox/calendar', 'io.ox/tasks', 'io.ox/files',
+        'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet'
+    ];
+
     ext.point('io.ox/core/apps/favorites/allFavorites').invoke('customize', allFavorites, allFavorites);
     _(allFavorites).each(function (id) {
         var app = appData.apps[id];
@@ -59,98 +62,97 @@ define('io.ox/core/api/apps',
     });
 
     var bless = function (obj, id) {
-            obj = _.clone(obj || {});
-            obj.id = id;
-            obj.icon = ox.base + (obj.icon && (obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, '/apps/$1') + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
-            obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
-            obj.visible = obj.visible !== false;
-            return obj;
-        },
+        obj = _.clone(obj || {});
+        obj.id = id;
+        obj.icon = ox.base + (obj.icon && (obj.icon.charAt(0) === '/') ? obj.path.replace(/(.+)\/(.+)$/, '/apps/$1') + obj.icon : '/apps/io.ox/core/images/' + (obj.icon || 'default.png'));
+        obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
+        obj.visible = obj.visible !== false;
+        return obj;
+    },
 
-        /**
-         * get number of apps per category/special category
-         * @return {array} object for each category
-         */
-        getCategories = function () {
-            // loop over apps to figure out numbers per category
-            var counts = {};
-            _(appData.apps).each(function (app) {
-                var id = app.category || '---';
-                counts[id] = (counts[id] || 0) + (app.visible !== false ? 1 : 0);
-            });
-            return [
-                    {
-                        // special 'Installed' category
-                        id: 'installed',
-                        title: 'Installed',
-                        count: appData.installed.length,
-                        group: 'Your Apps'
-                    },
-                    {
-                        // special 'Favorites' category
-                        id: 'favorites',
-                        title: 'Favorites',
-                        count: appData.favorites.length,
-                        group: 'Your Apps'
-                    },
-                    {
-                        // special 'Upgrades' category
-                        id: 'upgrades',
-                        title: 'Upgrades',
-                        count: 1,
-                        group: 'Your Apps'
-                    }
-                ].concat(
-                    // loop over categories and add count per category
-                    _(appData.categories).map(function (id) {
-                        return {
-                            id: id.toLowerCase(),
-                            title: id,
-                            count: counts[id],
-                            group: 'Categories'
-                        };
-                    })
-                ).concat(
-                    // Add extension point categories
-                    ext.point('io.ox/core/apps/category').map(function (ext) {
-                        if (ext.category) {
-                            return ext.metadata('category');
-                        }
-                        return ext;
-                    }).value()
-                );
-        },
+    /**
+     * get number of apps per category/special category
+     * @return { array} object for each category
+     */
+    getCategories = function () {
+        // loop over apps to figure out numbers per category
+        var counts = {};
+        _(appData.apps).each(function (app) {
+            var id = app.category || '---';
+            counts[id] = (counts[id] || 0) + (app.visible !== false ? 1 : 0);
+        });
+        return [
+            {
+                // special 'Installed' category
+                id: 'installed',
+                title: 'Installed',
+                count: appData.installed.length,
+                group: 'Your Apps'
+            }, {
+                // special 'Favorites' category
+                id: 'favorites',
+                title: 'Favorites',
+                count: appData.favorites.length,
+                group: 'Your Apps'
+            },
+            {
+                // special 'Upgrades' category
+                id: 'upgrades',
+                title: 'Upgrades',
+                count: 1,
+                group: 'Your Apps'
+            }
+        ].concat(
+            // loop over categories and add count per category
+            _(appData.categories).map(function (id) {
+                return {
+                    id: id.toLowerCase(),
+                    title: id,
+                    count: counts[id],
+                    group: 'Categories'
+                };
+            })
+        ).concat(
+            // Add extension point categories
+            ext.point('io.ox/core/apps/category').map(function (ext) {
+                if (ext.category) {
+                    return ext.metadata('category');
+                }
+                return ext;
+            }).value()
+        );
+    },
 
-        /**
-         * get by category ('productivity', 'basic', 'dev')
-         * @param  {string} category
-         * @return {array} object for each category
-         */
-        getByCategory = function (id) {
-            return _(appData.apps)
-                .chain()
-                .map(function (obj, id) {
-                    return bless(obj, id);
-                })
-                .filter(function (obj) {
-                    return obj.visible && obj.category.toLowerCase() === id;
-                })
-                .value();
-        },
+    /**
+     * get by category ('productivity', 'basic', 'dev')
+     * @param  {string} category
+     * @return { array} object for each category
+     */
+    getByCategory = function (id) {
+        return _(appData.apps)
+            .chain()
+            .map(function (obj, id) {
+                return bless(obj, id);
+            })
+            .filter(function (obj) {
+                return obj.visible && obj.category.toLowerCase() === id;
+            })
+            .value();
+    },
 
-        getSpecial = function (prop, apps) {
-            return _(apps || appData[prop]).map(function (id) {
-                return bless(appData.apps[id], id);
-            }).concat(
-                // Add extension point categories
-                ext.point('io.ox/core/apps/' + prop).map(function (ext) {
-                    if (ext.app) {
-                        return ext.metadata('app');
-                    }
-                    return ext;
-                }).value()
-            );
-        };
+    getSpecial = function (prop, apps) {
+        return _(apps || appData[prop]).map(function (id) {
+            return bless(appData.apps[id], id);
+        }).concat(
+            // Add extension point categories
+            ext.point('io.ox/core/apps/' + prop).map(function (ext) {
+                if (ext.app) {
+                    return ext.metadata('app');
+                }
+                return ext;
+            }).value()
+        );
+    };
 
     var cachedInstalled = null;
 
@@ -160,7 +162,7 @@ define('io.ox/core/api/apps',
         /**
          * get app (creates empty one if doesn't exists yet)
          * @param  {string} id
-         * @return {object} app
+         * @return { object} app
          */
         get: function (id) {
             return bless(appData.apps[id], id);
@@ -173,7 +175,7 @@ define('io.ox/core/api/apps',
         /**
          * get installed apps (special category)
          * @param  {string} [optional]
-         * @return {array} app objects
+         * @return { array} app objects
          */
         getInstalled: function (mode) {
             // TODO: not this way please!
@@ -197,7 +199,7 @@ define('io.ox/core/api/apps',
         /**
          * get favorite apps (special category)
          * @param  {string} [optional]
-         * @return {array} app objects
+         * @return { array} app objects
          */
         getFavorites: function () {
             return getSpecial('favorites');
@@ -205,7 +207,7 @@ define('io.ox/core/api/apps',
 
         /**
          * get all favorites, regardless of the required capabilities
-         * @return {array} app objects
+         * @return { array} app objects
          */
         getAllFavorites: function () {
             return getSpecial('favorites', allFavorites);
@@ -218,7 +220,7 @@ define('io.ox/core/api/apps',
         /**
          * checks if app is marked as favorite (special category)
          * @param  {object}  data (app object)
-         * @return {boolean}
+         * @return { boolean }
          */
         isFavorite: function (data) {
             return _(appData.favorites).indexOf(data.id) > -1;
@@ -227,7 +229,7 @@ define('io.ox/core/api/apps',
         /**
          * mark as favorites (special category)
          * @param  {string} id
-         * @return {undefined}
+         * @return { undefined }
          */
         markAsFavorite: function (id) {
             if (_(appData.favorites).indexOf(id) === -1) {
@@ -239,7 +241,7 @@ define('io.ox/core/api/apps',
         /**
          * unmark as favorites (special category)
          * @param  {string} id
-         * @return {undefined}
+         * @return { undefined }
          */
         unmarkAsFavorite: function (id) {
             var pos = _(appData.favorites).indexOf(id);

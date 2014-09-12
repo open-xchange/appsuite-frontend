@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/dev/chineseRoom/room',
-    ['io.ox/realtime/groups',
-     'io.ox/core/event'
-    ], function (groups, Events) {
+define('io.ox/dev/chineseRoom/room', [
+    'io.ox/realtime/groups',
+    'io.ox/core/event'
+], function (groups, Events) {
 
     'use strict';
 
@@ -108,7 +108,7 @@ define('io.ox/dev/chineseRoom/room',
 
             if (message) {
                 console.log(m.from, message.data);
-                self.trigger('received', {from: m.from, message: message.data});
+                self.trigger('received', { from: m.from, message: message.data });
 
             }
 

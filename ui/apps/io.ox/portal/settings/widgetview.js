@@ -12,14 +12,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/settings/widgetview',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/manifests',
-     'io.ox/core/upsell',
-     'gettext!io.ox/portal',
-     'less!io.ox/portal/style'
-    ], function (ext, dialogs, manifests, upsell, gt) {
+define('io.ox/portal/settings/widgetview', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/manifests',
+    'io.ox/core/upsell',
+    'gettext!io.ox/portal',
+    'less!io.ox/portal/style'
+], function (ext, dialogs, manifests, upsell, gt) {
 
     'use strict';
 
@@ -40,10 +40,10 @@ define('io.ox/portal/settings/widgetview',
             this.$el.attr('data-widget-id', this.model.get('id'));
             // get explicit state
             var enabled = this.model.get('enabled');
-            this.model.set('enabled', !!(enabled === undefined || enabled === true), {validate: true});
+            this.model.set('enabled', !!(enabled === undefined || enabled === true), { validate: true });
             // get default color
             var color = this.model.get('color');
-            this.model.set('color', color === undefined || color === 'default' ? 'black' : color, {validate: true});
+            this.model.set('color', color === undefined || color === 'default' ? 'black' : color, { validate: true });
             // get widget options
             this.point = 'io.ox/portal/widget/' + this.model.get('type');
             this.options = ext.point(this.point + '/settings').options();
@@ -92,7 +92,7 @@ define('io.ox/portal/settings/widgetview',
                 });
             } else {
                 // toggle widget
-                this.model.set('enabled', !enabled, {validate: true});
+                this.model.set('enabled', !enabled, { validate: true });
                 this.render();
             }
         },
@@ -111,13 +111,13 @@ define('io.ox/portal/settings/widgetview',
                 .append($('<span>').text(gt('Do you really want to delete this widget?')))
                 .addPrimaryButton('delete',
                     //#. Really delete portal widget - in contrast to "just disable"
-                    gt('Delete'), 'delete', {tabIndex: '1'}
+                    gt('Delete'), 'delete', { tabIndex: 1 }
                 )
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
                 if (this.model.get('enabled')) {
                     dialog.addAlternativeButton('disable',
                         //#. Just disable portal widget - in contrast to delete
-                        gt('Just disable widget'), 'disable', {tabIndex: '1'}
+                        gt('Just disable widget'), 'disable', { tabIndex: 1 }
                     );
                 }
                 dialog.show().done(function (action) {

@@ -17,7 +17,7 @@ define(['io.ox/files/fluid/view-detail',
     'waitsFor',
     'fixture!io.ox/files/file.json',
     'fixture!io.ox/files/file-versions.json'
-    ], function (view, api, ext, waitsFor, file, fileversions) {
+], function (view, api, ext, waitsFor, file, fileversions) {
 
     //skip these tests, because something fishy is going on, here.
     //all tests have functional dependency on each other, should be refactored

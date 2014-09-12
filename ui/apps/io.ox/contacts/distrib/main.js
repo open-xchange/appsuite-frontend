@@ -12,13 +12,13 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/distrib/main',
-    ['io.ox/contacts/api',
-     'io.ox/contacts/model',
-     'io.ox/contacts/distrib/create-dist-view',
-     'gettext!io.ox/contacts',
-     'less!io.ox/contacts/distrib/style'
-    ], function (api, contactModel, ContactCreateDistView, gt) {
+define('io.ox/contacts/distrib/main', [
+    'io.ox/contacts/api',
+    'io.ox/contacts/model',
+    'io.ox/contacts/distrib/create-dist-view',
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/distrib/style'
+], function (api, contactModel, ContactCreateDistView, gt) {
 
     'use strict';
 
@@ -42,12 +42,7 @@ define('io.ox/contacts/distrib/main',
 
         app.create = function (folderId, initdata) {
 
-            initialDistlist = _.extend({
-                    mark_as_distributionlist: true,
-                    last_name: ''
-                },
-                data || {}, { folder_id: folderId }
-            );
+            initialDistlist = _.extend({ mark_as_distributionlist: true, last_name: '' }, data || {}, { folder_id: folderId });
 
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
@@ -86,7 +81,7 @@ define('io.ox/contacts/distrib/main',
                 if (model.get('id')) {//set url parameters
                     app.setState({ folder: model.get('folder_id'), id: model.get('id') });
                 } else {
-                    app.setState({ folder: model.get('folder_id'), id: null});
+                    app.setState({ folder: model.get('folder_id'), id: null });
                 }
             });
 
@@ -130,7 +125,7 @@ define('io.ox/contacts/distrib/main',
                     if (model.get('id')) {//set url parameters
                         app.setState({ folder: model.get('folder_id'), id: model.get('id') });
                     } else {
-                        app.setState({ folder: model.get('folder_id'), id: null});
+                        app.setState({ folder: model.get('folder_id'), id: null });
                     }
                 });
 
@@ -187,8 +182,8 @@ define('io.ox/contacts/distrib/main',
                             .text(gt('Do you really want to discard your changes?'))
                             //#. "Discard changes" appears in combination with "Cancel" (this action)
                             //#. Translation should be distinguishable for the user
-                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {'tabIndex': '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete',  { 'tabIndex': '1' })
+                            .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {

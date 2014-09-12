@@ -94,7 +94,7 @@ define('io.ox/core/event', function () {
                     delete context.off;
                     delete context.one;
                     delete context.trigger;
-                } catch (e) { }
+                } catch (e) {}
             }
             hub = context = null;
             this.on = this.off = this.one = this.trigger = null;

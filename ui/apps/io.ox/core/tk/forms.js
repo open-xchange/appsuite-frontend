@@ -39,7 +39,7 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
 
         dateChange = function () {
             var self = $(this),
-                reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;
+                reg = /((\d{2 })|(\d))\.((\d{2 })|(\d))\.((\d{4 })|(\d{2 }))/;
             if (self.val() !== '' && reg.test(self.val())) {
                 var dateArray = self.val().split('.'),
                 date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
@@ -216,15 +216,15 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
             return utils.createLabel(options)
                 .css({ width: '100%', display: 'inline-block' })
                 .append(utils.createText({ text: options.label }))
-                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model, span: options.span})
+                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model, span: options.span })
                         .css({ width: options.width + 'px', display: 'inline-block' })
                 );
         },
 
         createLabeledPasswordField: function (options) {
-            var l = utils.createLabel(options).css({width: '100%', display: 'inline-block'});
-            l.append(utils.createText({text: options.label}));
-            l.append(utils.createPasswordField({property: options.property, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
+            var l = utils.createLabel(options).css({ width: '100%', display: 'inline-block' });
+            l.append(utils.createText({ text: options.label }));
+            l.append(utils.createPasswordField({ property: options.property, value: options.value, model: options.model, validator: options.validator }).css({ width: options.width + 'px', display: 'inline-block' }));
             return l;
         },
 
@@ -315,7 +315,7 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
             if (options) {
                 var forTag = utils.connectLabelToField(options['for']);
 
-                return $('<label>', {'for': forTag})
+                return $('<label>',  { 'for': forTag })
                 .text(options.text).addClass('control-label');
             } else {
                 return $('<label>');
@@ -334,25 +334,25 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
             // make target unique
             o.target += '-' + _.now();
             return $('<form>', {
-                    'accept-charset': 'UTF-8',
-                    enctype: 'multipart/form-data',
-                    method: 'POST',
-                    target: o.target
+                'accept-charset': 'UTF-8',
+                enctype: 'multipart/form-data',
+                method: 'POST',
+                target: o.target
+            })
+            .append(
+                utils.createFileField({
+                    wrap: false,
+                    accept: 'image/*',
+                    'data-property': o.name,
+                    name: o.name
                 })
-                .append(
-                    utils.createFileField({
-                        wrap: false,
-                        accept: 'image/*',
-                        'data-property': o.name,
-                        name: o.name
-                    })
-                )
-                .append(
-                    $('<iframe>', {
-                        name: o.target,
-                        src: 'blank.html'
-                    }).hide()
-                );
+            )
+            .append(
+                $('<iframe>', {
+                    name: o.target,
+                    src: 'blank.html'
+                }).hide()
+            );
         },
 
         getLastLabelId: function () {
@@ -387,7 +387,7 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
         },
 
         createListSpacer: function () {
-            return $('<div>').addClass('spacer').css({height: '0px'});
+            return $('<div>').addClass('spacer').css({ height: '0px' });
         },
 
         createButton: function (options) {

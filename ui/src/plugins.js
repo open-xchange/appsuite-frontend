@@ -57,8 +57,8 @@
 
             request.onupgradeneeded = function (e) {
                 db = e.target.result;
-                db.createObjectStore('filecache', {keyPath: 'name'});
-                db.createObjectStore('version', {keyPath: 'name'});
+                db.createObjectStore('filecache', { keyPath: 'name' });
+                db.createObjectStore('version', { keyPath: 'name' });
             };
 
             request.onsuccess = function (e) {

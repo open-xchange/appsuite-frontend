@@ -26,7 +26,7 @@ define(['plugins/portal/birthdays/register',
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');
                 });
                 this.node = $('<div>');
@@ -71,7 +71,7 @@ define(['plugins/portal/birthdays/register',
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": []}');
                 });
                 this.node = $('<div>');

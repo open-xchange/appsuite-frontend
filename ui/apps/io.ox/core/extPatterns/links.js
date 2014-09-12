@@ -12,12 +12,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/extPatterns/links',
-    ['io.ox/core/extensions',
-     'io.ox/core/collection',
-     'io.ox/core/extPatterns/actions',
-     'gettext!io.ox/core'
-    ], function (ext, Collection, actions, gt) {
+define('io.ox/core/extPatterns/links', [
+    'io.ox/core/extensions',
+    'io.ox/core/collection',
+    'io.ox/core/extPatterns/actions',
+    'gettext!io.ox/core'
+], function (ext, Collection, actions, gt) {
 
     'use strict';
 
@@ -214,8 +214,7 @@ define('io.ox/core/extPatterns/links',
                             link.drawDisabled.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
                             count++;
                         }
-                    }
-                    else if (_.isFunction(link.draw)) {
+                    } else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
                         count++;
                     }
@@ -253,8 +252,7 @@ define('io.ox/core/extPatterns/links',
                             link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
                             count++;
                         }
-                    }
-                    else if (_.isFunction(link.draw)) {
+                    } else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
                         count++;
                     }
@@ -500,7 +498,7 @@ define('io.ox/core/extPatterns/links',
                     options.emptyCallback();
                 }
                 injectDividers(baton.$el);
-                });
+            });
         return baton.$el;
     };
 

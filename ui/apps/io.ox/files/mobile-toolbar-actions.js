@@ -11,12 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/files/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/files/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/files/api',
-    'gettext!io.ox/mail'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/mail'
+], function (ext, links, api, gt) {
 
     'use strict';
 
@@ -38,13 +38,15 @@ define('io.ox/files/mobile-toolbar-actions',
                     var self = this;
 
                     this.after(
-                        links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default',
+                        links.DropdownLinks({
+                            ref: 'io.ox/files/links/toolbar/default',
                             wrap: false,
                             emptyCallback: function () {//function to call when dropdown is empty
                                 self.addClass('disabled')
                                     .attr({ 'aria-disabled': true })
                                     .removeAttr('href');
-                            }}, baton)
+                            }
+                        }, baton)
                     );
 
                     this.addClass('dropdown-toggle').attr({
@@ -136,7 +138,7 @@ define('io.ox/files/mobile-toolbar-actions',
             // extract single object if length === 1
             data = data.length === 1 ? data[0] : data;
             // draw toolbar
-            var baton = ext.Baton({data: data, app: self, allIds: ids});
+            var baton = ext.Baton({ data: data, app: self, allIds: ids });
              // handle updated baton to pageController
             self.pages.getToolbar('detailView').setBaton(baton);
             self.pages.getSecondaryToolbar('fluid').setBaton(baton);
@@ -204,7 +206,7 @@ define('io.ox/files/mobile-toolbar-actions',
             });
 
             app.pages.getPage('fluid').on('pageshow', function () {
-                app.pages.getToolbar('fluid').setBaton(new ext.Baton({app: app}));
+                app.pages.getToolbar('fluid').setBaton(new ext.Baton({ app: app }));
             });
         }
     });

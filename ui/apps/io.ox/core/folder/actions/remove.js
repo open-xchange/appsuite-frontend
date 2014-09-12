@@ -11,11 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/remove',
-    ['io.ox/core/folder/api',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (api, dialogs, notifications, gt) {
+define('io.ox/core/folder/actions/remove', [
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (api, dialogs, notifications, gt) {
 
     'use strict';
 

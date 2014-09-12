@@ -20,8 +20,8 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
             $('body', document).append(this.node = $('<div id="testNode">'));
             this.dialog = new dialogs.ModalDialog({ container: this.node })
                 .text(dialogTitle)
-                .addButton('cancel', 'Cancel', 'cancel', {tabIndex: '1'})
-                .addPrimaryButton('delete', 'Delete', 'delete', {tabIndex: '1'})
+                .addButton('cancel', 'Cancel', 'cancel', { tabIndex: 1 })
+                .addPrimaryButton('delete', 'Delete', 'delete', { tabIndex: 1 })
                 .show();
         });
 
@@ -60,7 +60,7 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
         });
 
         it('should close on escape keydown', function () {
-            var e = $.Event('keydown', { keyCode: 27});
+            var e = $.Event('keydown', { keyCode: 27 });
             this.node.find('.io-ox-dialog-popup').trigger(e);
             expect(this.node.find('.io-ox-dialog-popup')).to.have.length(0);
         });
@@ -69,7 +69,7 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
             var deleteButton = this.node.find('button[data-action="delete"]');
             expect($(document.activeElement)[0]).to.equal(deleteButton[0]);
 
-            var e = $.Event('keydown', { keyCode: 9});
+            var e = $.Event('keydown', { keyCode: 9 });
             for (var i = 0; i < 4; i++) {
                 $(document.activeElement).trigger(e);
             }

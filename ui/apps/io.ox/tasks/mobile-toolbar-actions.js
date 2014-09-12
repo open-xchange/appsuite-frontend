@@ -11,12 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/tasks/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/tasks/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/tasks/api',
-    'gettext!io.ox/tasks'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/tasks'
+], function (ext, links, api, gt) {
 
     'use strict';
 
@@ -114,7 +114,6 @@ define('io.ox/tasks/mobile-toolbar-actions',
         ref: 'io.ox/tasks/mobile/actions'
     }));
 
-
     var updateToolbar = _.debounce(function (task) {
         var self = this;
         //get full data, needed for require checks for example
@@ -175,9 +174,9 @@ define('io.ox/tasks/mobile-toolbar-actions',
                 if (app.props.get('checkboxes') !== true ) return;
                 if (list.length === 0) {
                     // reset to remove old baton
-                     app.pages.getSecondaryToolbar('listView')
-                        .setBaton(ext.Baton({data: [], app: app}));
-                     return;
+                    app.pages.getSecondaryToolbar('listView')
+                        .setBaton(ext.Baton({ data: [], app: app }));
+                    return;
                 }
                 api.getList(list).done(function (data) {
                     if (!data) return;

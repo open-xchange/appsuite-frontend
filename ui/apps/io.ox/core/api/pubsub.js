@@ -12,18 +12,18 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/api/pubsub',
-    ['io.ox/core/http',
-     'io.ox/core/api/factory',
-     'io.ox/core/folder/api',
-    ], function (http, apiFactory, folderAPI) {
+define('io.ox/core/api/pubsub', [
+    'io.ox/core/http',
+    'io.ox/core/api/factory',
+    'io.ox/core/folder/api'
+], function (http, apiFactory, folderAPI) {
 
     'use strict';
 
     /**
      * clears cache
      * @private
-     * @return {deferred}
+     * @return { deferred }
      */
     var clearCache = function (api, data) {
         var keys = {
@@ -33,7 +33,7 @@ define('io.ox/core/api/pubsub',
             sub: data.folder + '.'
         };
         return $.when(
-            //api.caches.all.remove(keys.folder), //enable to support getAll({folder: folder})
+            //api.caches.all.remove(keys.folder), //enable to support getAll({ folder: folder })
             api.caches.all.remove(keys.general),
             api.caches.get.grepRemove(keys.pub),
             api.caches.get.grepRemove(keys.sub)
@@ -43,7 +43,7 @@ define('io.ox/core/api/pubsub',
     /**
      * gerneralized API for pubsub
      * @param  {object} opt
-     * @return {object} api
+     * @return { object} api
      */
     function api(opt) {
 
@@ -51,7 +51,7 @@ define('io.ox/core/api/pubsub',
             /**
              * update publication/subscription
              * @param  {object} data
-             * @return {deferred}
+             * @return { deferred }
              */
             update: function (data) {
                 return clearCache(this, { id: data.id || '', folder: data.folder || data.entity.folder || '' })
@@ -69,11 +69,11 @@ define('io.ox/core/api/pubsub',
             /**
              * removes publication/subscription
              * @param  {string} id
-             * @return {deferred}
+             * @return { deferred }
              */
             destroy: function (id) {
                 var that = this;
-                return clearCache(this, {id: id})
+                return clearCache(this, { id: id })
                     .pipe(function () {
                         return that.remove(id);
                     });
@@ -82,7 +82,7 @@ define('io.ox/core/api/pubsub',
             /**
              * create publication/subscription
              * @param  {object} data (pubsub model attributes)
-             * @return {deferred} subscription id
+             * @return { deferred} subscription id
              */
             create: function (data) {
                 var that = this;
@@ -126,7 +126,7 @@ define('io.ox/core/api/pubsub',
         /**
          * refresh subscription
          * @param  {object} data (id,folder)
-         * @return {deferred} item count
+         * @return { deferred} item count
          */
         refresh: function (data) { //checked
             if (!data) {
@@ -140,7 +140,7 @@ define('io.ox/core/api/pubsub',
                     appendColumns: false,
                     params: {
                         action: 'refresh',
-                        id : data.id,
+                        id: data.id,
                         folder: folder
                     }
                 }).then(this.resolve, function (resp) {

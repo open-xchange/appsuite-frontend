@@ -92,7 +92,7 @@ define(['io.ox/core/desktop'], function (desktop) {
                 it('during initialization', function (done) {
 
                     expect(app.get('state')).to.equal('ready');
-                    app.launch({callback: callback}).done(function () {
+                    app.launch({ callback: callback }).done(function () {
                         expect(ox.ui.apps.models).to.contain(app);
                         expect(app.get('state')).to.equal('running');
                         callback();
@@ -103,7 +103,7 @@ define(['io.ox/core/desktop'], function (desktop) {
 
                 it('after initialization', function (done) {
                     app.setLauncher(launcher);
-                    app.launch({callback: callback}).done(function () {
+                    app.launch({ callback: callback }).done(function () {
                         callback();
                         done();
                     });

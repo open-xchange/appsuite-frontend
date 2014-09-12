@@ -11,14 +11,13 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/calendar/listview',
-    ['io.ox/calendar/common-extensions',
-     'io.ox/core/extensions',
-     'less!io.ox/calendar/style'
-    ], function (extensions, ext) {
+define('io.ox/calendar/listview', [
+    'io.ox/calendar/common-extensions',
+    'io.ox/core/extensions',
+    'less!io.ox/calendar/style'
+], function (extensions, ext) {
 
     'use strict';
-
 
     ext.point('io.ox/calendar/listview/item').extend({
         id: 'default',
@@ -52,7 +51,6 @@ define('io.ox/calendar/listview',
         draw: extensions.title
     });
 
-
     ext.point('io.ox/calendar/listview/item/default').extend({
         id: 'row2',
         index: 200,
@@ -74,7 +72,4 @@ define('io.ox/calendar/listview',
         index: 200,
         draw: extensions.day
     });
-
-
-
 });

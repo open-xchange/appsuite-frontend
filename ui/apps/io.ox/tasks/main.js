@@ -11,28 +11,28 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/main',
-    ['io.ox/tasks/api',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/actions',
-     'gettext!io.ox/tasks',
-     'io.ox/core/tk/vgrid',
-     'io.ox/tasks/view-grid-template',
-     'io.ox/core/commons',
-     'io.ox/tasks/util',
-     'io.ox/tasks/view-detail',
-     'settings!io.ox/tasks',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/core/capabilities',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/tasks/toolbar',
-     'io.ox/tasks/mobile-navbar-extensions',
-     'io.ox/tasks/mobile-toolbar-actions'
-    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, Dropdown) {
+define('io.ox/tasks/main', [
+    'io.ox/tasks/api',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
+    'gettext!io.ox/tasks',
+    'io.ox/core/tk/vgrid',
+    'io.ox/tasks/view-grid-template',
+    'io.ox/core/commons',
+    'io.ox/tasks/util',
+    'io.ox/tasks/view-detail',
+    'settings!io.ox/tasks',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/core/capabilities',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/tasks/toolbar',
+    'io.ox/tasks/mobile-navbar-extensions',
+    'io.ox/tasks/mobile-toolbar-actions'
+], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, TreeView, FolderView, Bars, PageController, capabilities, Dropdown) {
 
     'use strict';
 
@@ -58,7 +58,7 @@ define('io.ox/tasks/main',
             app.navbar = navbar;
             app.toolbar = toolbar;
 
-            app.pages = new PageController(app, {container: c});
+            app.pages = new PageController(app, { container: c });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
@@ -162,7 +162,7 @@ define('io.ox/tasks/main',
             app.pages.showPage('listView');
         },
 
-       'toolbars-mobile': function (app) {
+        'toolbars-mobile': function (app) {
 
             if (!_.device('smartphone')) return;
 
@@ -261,7 +261,7 @@ define('io.ox/tasks/main',
                 } else {
                     column = 202;
                 }
-                return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
+                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).pipe(function (data) {
                     if (sort !== 'urgency') {
                         datacopy = _.copy(data, true);
                     } else {
@@ -281,7 +281,7 @@ define('io.ox/tasks/main',
                     var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
                         i = 0;
                     for (; i < listcopy.length; i++) {
-                        listcopy[i] = util.interpretTask(listcopy[i], {noOverdue: grid.prop('sort') !== 'urgency'});
+                        listcopy[i] = util.interpretTask(listcopy[i], { noOverdue: grid.prop('sort') !== 'urgency' });
                     }
 
                     return listcopy;
@@ -333,7 +333,7 @@ define('io.ox/tasks/main',
             showTask = function (obj) {
                 // be busy
                 app.right.busy(true);
-                obj = {folder: obj.folder || obj.folder_id, id: obj.id}; //remove unnecessary information
+                obj = { folder: obj.folder || obj.folder_id, id: obj.id }; //remove unnecessary information
                 api.get(obj)
                     .done(_.lfo(drawTask))
                     .fail(_.lfo(drawFail, obj));
@@ -413,7 +413,7 @@ define('io.ox/tasks/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': _.device('smartphone') ? false: app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
                 'folderEditMode': false
             });
         },

@@ -11,15 +11,15 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/user',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/user',
-     'io.ox/contacts/model',
-     'io.ox/contacts/edit/view-form',
-     'io.ox/core/tk/dialogs',
-     'io.ox/contacts/util',
-     'gettext!io.ox/contacts'
-    ], function (ext, api, contactModel, ViewForm, dialogs, util, gt) {
+define('io.ox/core/settings/user', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/user',
+    'io.ox/contacts/model',
+    'io.ox/contacts/edit/view-form',
+    'io.ox/core/tk/dialogs',
+    'io.ox/contacts/util',
+    'gettext!io.ox/contacts'
+], function (ext, api, contactModel, ViewForm, dialogs, util, gt) {
 
     'use strict';
 
@@ -41,7 +41,7 @@ define('io.ox/core/settings/user',
                         $node.append($userEditView);
 
                         user.on('change:first_name change:last_name', function () {
-                            user.set('display_name', util.getFullName(user.toJSON(), {validate: true}));
+                            user.set('display_name', util.getFullName(user.toJSON(), { validate: true }));
                             //app.setTitle(util.getFullName(contact.toJSON()));
                         });
 
@@ -77,8 +77,8 @@ define('io.ox/core/settings/user',
                 maximize: true,
                 async: true
             })
-            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: '1' })
-            .addButton('discard', gt('Discard'), 'discard', { tabIndex: '1' });
+            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+            .addButton('discard', gt('Discard'), 'discard', { tabIndex: 1 });
 
             var $node = dialog.getContentNode();
             var usermodel;

@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/files/register',
-    ['io.ox/core/extensions',
-     'io.ox/files/api',
-     'io.ox/preview/main',
-     'io.ox/portal/widgets',
-     'gettext!plugins/portal',
-    ], function (ext, api, preview, portalWidgets, gt) {
+define('plugins/portal/files/register', [
+    'io.ox/core/extensions',
+    'io.ox/files/api',
+    'io.ox/preview/main',
+    'io.ox/portal/widgets',
+    'gettext!plugins/portal'
+], function (ext, api, preview, portalWidgets, gt) {
 
     'use strict';
 

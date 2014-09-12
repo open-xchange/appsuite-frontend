@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/flag-picker',
-    ['io.ox/mail/api',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/mail'
-    ], function (api, folderAPI, gt) {
+define('io.ox/core/tk/flag-picker', [
+    'io.ox/mail/api',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/mail'
+], function (api, folderAPI, gt) {
 
     'use strict';
 

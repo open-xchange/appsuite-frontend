@@ -10,13 +10,13 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define('io.ox/core/api/reminder',
-    ['io.ox/core/http',
-     'io.ox/tasks/api',
-     'io.ox/calendar/api',
-     'io.ox/core/date',
-     'io.ox/core/event'
-    ], function (http, taskAPI, calendarAPI, date, Events) {
+define('io.ox/core/api/reminder', [
+    'io.ox/core/http',
+    'io.ox/tasks/api',
+    'io.ox/calendar/api',
+    'io.ox/core/date',
+    'io.ox/core/event'
+], function (http, taskAPI, calendarAPI, date, Events) {
 
     'use strict';
 
@@ -32,7 +32,7 @@ define('io.ox/core/api/reminder',
                     reminderStorage[reminder.id] = reminder;
                 } else if (reminderStorage[reminder.id].alarm !== reminder.alarm) {//alarm was updated
                     if (reminderStorage[reminder.id].displayed) {
-                        api.trigger('remove:reminder', [{id: reminder.target_id, folder_id: reminder.folder}]);
+                        api.trigger('remove:reminder', [{ id: reminder.target_id, folder_id: reminder.folder }]);
                         needsForceCheck = true;
                     }
                     reminderStorage[reminder.id] = reminder;
@@ -62,7 +62,7 @@ define('io.ox/core/api/reminder',
                 }
             });
 
-            if  (changed) {
+            if (changed) {
                 clearTimeout(reminderTimer);
                 var timeout = nextReminder.alarm - _.now();
                 if (timeout < 0) { //setTimeout can only handle small negative values, to prevent errors we set it to 0
@@ -96,7 +96,7 @@ define('io.ox/core/api/reminder',
                     nextReminder = null;
                 }
                 if (reminderStorage[id].displayed) {
-                    api.trigger('remove:reminder', [{id: reminderStorage[id].target_id, folder_id: reminderStorage[id].folder}]);//remove displayed reminders
+                    api.trigger('remove:reminder', [{ id: reminderStorage[id].target_id, folder_id: reminderStorage[id].folder }]);//remove displayed reminders
                 }
                 delete reminderStorage[id];
             });
@@ -108,13 +108,13 @@ define('io.ox/core/api/reminder',
         /**
          * delete reminder
          * @param  {string} reminderId
-         * @return {deferred}
+         * @return { deferred }
          */
         deleteReminder: function (reminderId) {
             return http.PUT({
                 module: 'reminder',
-                params: {action: 'delete'},
-                data: {id: reminderId}
+                params: { action: 'delete' },
+                data: { id: reminderId }
             }).then(function () {
                 delete reminderStorage[reminderId];
             });
@@ -124,16 +124,17 @@ define('io.ox/core/api/reminder',
          * remind again
          * @param  {number} remindDate (unix datetime)
          * @param  {string} reminderId
-         * @return {deferred}
+         * @return { deferred }
          */
         remindMeAgain: function (remindDate, reminderId) {
             return http.PUT({
                 module: 'reminder',
-                params: {action: 'remindAgain',
-                         id: reminderId,
-                         timezone: 'UTC'
-                         },
-                data: {alarm: remindDate}
+                params: {
+                    action: 'remindAgain',
+                    id: reminderId,
+                    timezone: 'UTC'
+                },
+                data: { alarm: remindDate }
             }).then(function () {
                 delete reminderStorage[reminderId];//remove old reminder
                 api.getReminders();//get the new data
@@ -149,7 +150,7 @@ define('io.ox/core/api/reminder',
          * @param  {number} module
          * @fires  api#add:tasks:reminder (reminderTaskId, reminderId)
          * @fires  api#add:calendar:reminder (reminderCalId)
-         * @return {deferred}
+         * @return { deferred }
          */
         getReminders: function (range) {
             return http.GET({
@@ -172,7 +173,7 @@ define('io.ox/core/api/reminder',
     /**
      * bind to global refresh; clears caches and trigger refresh.all
      * @fires  api#refresh.all
-     * @return {promise}
+     * @return { promise }
      */
     api.refresh = function () {
         api.getReminders().done(function () {

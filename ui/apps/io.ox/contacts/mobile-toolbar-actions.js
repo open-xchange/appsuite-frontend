@@ -11,12 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/contacts/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/contacts/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/contacts/api',
-    'gettext!io.ox/mail'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/mail'
+], function (ext, links, api, gt) {
 
     'use strict';
 
@@ -27,63 +27,63 @@ define('io.ox/contacts/mobile-toolbar-actions',
         actions = ext.point('io.ox/contacts/mobile/actions'),
         pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
         meta = {
-        'create': {
-            prio: 'hi',
-            mobile: 'hi',
-            label: gt('New'),
-            icon: 'fa fa-plus',
-            drawDisabled: true,
-            ref: 'io.ox/contacts/actions/create',
-            cssClasses: 'io-ox-action-link mobile-toolbar-action'
-        },
-        'send': {
-            prio: 'hi',
-            mobile: 'hi',
-            label: gt('Send mail'),
-            ref: 'io.ox/contacts/actions/send',
-            drawDisabled: true
-        },
-        'vcard': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Send as vCard'),
-            ref: 'io.ox/contacts/actions/vcard',
-            drawDisabled: true
-        },
-        'invite': {
-            prio: 'hi',
-            mobile: 'hi',
-            label: gt('Invite to appointment'),
-            ref: 'io.ox/contacts/actions/invite',
-            drawDisabled: true
-        },
-        'edit': {
-            prio: 'hi',
-            mobile: 'hi',
-            label: gt('Edit'),
-            ref: 'io.ox/contacts/actions/update',
-            drawDisabled: true
-        },
-        'delete': {
-            prio: 'hi',
-            mobile: 'hi',
-            label: gt('Delete'),
-            drawDisabled: true,
-            ref: 'io.ox/contacts/actions/delete'
-        },
-        'move': {
-            mobile: 'lo',
-            label: gt('Move'),
-            drawDisabled: true,
-            ref: 'io.ox/contacts/actions/move'
-        },
-        'copy': {
-            mobile: 'lo',
-            label: gt('Copy'),
-            drawDisabled: true,
-            ref: 'io.ox/contacts/actions/copy'
-        }
-    };
+            'create': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('New'),
+                icon: 'fa fa-plus',
+                drawDisabled: true,
+                ref: 'io.ox/contacts/actions/create',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'send': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Send mail'),
+                ref: 'io.ox/contacts/actions/send',
+                drawDisabled: true
+            },
+            'vcard': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Send as vCard'),
+                ref: 'io.ox/contacts/actions/vcard',
+                drawDisabled: true
+            },
+            'invite': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Invite to appointment'),
+                ref: 'io.ox/contacts/actions/invite',
+                drawDisabled: true
+            },
+            'edit': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Edit'),
+                ref: 'io.ox/contacts/actions/update',
+                drawDisabled: true
+            },
+            'delete': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Delete'),
+                drawDisabled: true,
+                ref: 'io.ox/contacts/actions/delete'
+            },
+            'move': {
+                mobile: 'lo',
+                label: gt('Move'),
+                drawDisabled: true,
+                ref: 'io.ox/contacts/actions/move'
+            },
+            'copy': {
+                mobile: 'lo',
+                label: gt('Copy'),
+                drawDisabled: true,
+                ref: 'io.ox/contacts/actions/copy'
+            }
+        };
 
     function addAction(point, ids) {
         var index = 0;
@@ -180,9 +180,9 @@ define('io.ox/contacts/mobile-toolbar-actions',
                 if (app.props.get('checkboxes') !== true ) return;
                 if (list.length === 0) {
                     // reset to remove old baton
-                     app.pages.getSecondaryToolbar('listView')
-                        .setBaton(ext.Baton({data: [], app: app}));
-                     return;
+                    app.pages.getSecondaryToolbar('listView')
+                        .setBaton(ext.Baton({ data: [], app: app }));
+                    return;
                 }
                 api.getList(list).done(function (data) {
                     if (!data) return;

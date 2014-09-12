@@ -36,9 +36,6 @@ module.exports = function (grunt) {
             },
             all: {
                 src: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js']
-            },
-            test: {
-                src: ['apps/io.ox/mail/main.js']
             }
         }
     });

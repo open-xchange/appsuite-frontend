@@ -11,10 +11,10 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/tk/dropdown-options',
-    ['io.ox/core/event',
-     'gettext!io.ox/core'
-    ], function (Events, gt) {
+define('io.ox/core/tk/dropdown-options', [
+    'io.ox/core/event',
+    'gettext!io.ox/core'
+], function (Events, gt) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/core/tk/dropdown-options',
             $menu = $('<ul class="dropdown-menu pull-right no-clone" role="menu">'),
 
             /**
-             * @return {object} self for chaining
+             * @return { object} self for chaining
              */
             init = function () {
                 opt = _.extend({
@@ -75,7 +75,7 @@ define('io.ox/core/tk/dropdown-options',
 
             /**
              * load last used options (or default)
-             * @return {undefined}
+             * @return { undefined }
              */
             load = function () {
                 data = opt.defaults;
@@ -95,11 +95,11 @@ define('io.ox/core/tk/dropdown-options',
 
             /**
              * store data in node and settings
-             * @return {undefined}
+             * @return { undefined }
              */
             save = function () {
                 //store in node
-                $anchor.data(_.extend($anchor.data(), {options: data}));
+                $anchor.data(_.extend($anchor.data(), { options: data }));
                 //store setting
                 if (opt.settings)
                     opt.settings.set('options/' + opt.id, data).save();
@@ -115,7 +115,7 @@ define('io.ox/core/tk/dropdown-options',
 
         /**
          * anchor node
-         * @return {jquery} anchor node
+         * @return { jquery} anchor node
          */
         self.anchor = function () {
             return $anchor;
@@ -123,7 +123,7 @@ define('io.ox/core/tk/dropdown-options',
 
         /**
          * current data
-         * @return {object} option name, label and value
+         * @return { object} option name, label and value
          */
         self.data = function () {
             return data;
@@ -131,7 +131,7 @@ define('io.ox/core/tk/dropdown-options',
 
         /**
          * toggle visibility
-         * @return {object} self for chaining
+         * @return { object} self for chaining
          */
         self.toggle = function () {
             $anchor.dropdown('toggle');
@@ -140,7 +140,7 @@ define('io.ox/core/tk/dropdown-options',
 
         /**
          * refresh nodes (values/icons)
-         * @return {object} self for chaining
+         * @return { object} self for chaining
          */
         self.refresh = function () {
             var selected = [];
@@ -169,7 +169,7 @@ define('io.ox/core/tk/dropdown-options',
 
         /**
          * redraw
-         * @return {object} self for chaining
+         * @return { object} self for chaining
          */
         self.redraw = function () {
             self.draw();
@@ -178,7 +178,7 @@ define('io.ox/core/tk/dropdown-options',
 
         /**
          * create nodes
-         * @return {object} self for chaining
+         * @return { object} self for chaining
          */
         self.draw = function () {
             $menu.empty();

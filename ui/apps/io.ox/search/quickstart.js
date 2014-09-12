@@ -11,13 +11,12 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/quickstart',
-    ['io.ox/core/extensions',
-     'io.ox/search/autocomplete/extensions'
-    ], function (ext, extensions) {
+define('io.ox/search/quickstart', [
+    'io.ox/core/extensions',
+    'io.ox/search/autocomplete/extensions'
+], function (ext, extensions) {
 
     'use strict';
-
 
     return {
 

@@ -176,9 +176,9 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
-            if (this.id) this.$el.attr({ id: this.id});
+            if (this.id) this.$el.attr({ id: this.id });
             this.$el.append(_.map(this.options.list, function (option) {
-                return $('<option>').attr({ value: option.value}).text(option.label);
+                return $('<option>').attr({ value: option.value }).text(option.label);
             }));
             this.update();
             return this;

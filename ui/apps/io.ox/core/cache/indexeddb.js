@@ -370,7 +370,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         opened.onupgradeneeded = function (e) {
             // Set up object stores
             var db = e.target.result;
-            db.createObjectStore('meta', {keyPath: 'id'});
+            db.createObjectStore('meta', { keyPath: 'id' });
         };
 
         OP(opened).then(

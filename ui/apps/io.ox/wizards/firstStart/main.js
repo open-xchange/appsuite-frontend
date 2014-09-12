@@ -58,7 +58,7 @@ define('io.ox/wizards/firstStart/main', [
                                 wizard.close();
                             })
                      );
-                    wizard.start({cssClass: 'first-start-wizard'}).done(function () {
+                    wizard.start({ cssClass: 'first-start-wizard' }).done(function () {
                         if (def.state() === 'pending') {
                             def.resolve();
                         }

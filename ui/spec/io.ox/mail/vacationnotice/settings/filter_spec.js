@@ -21,7 +21,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             'position': 1,
             'id': 1,
             'flags': ['vacation'],
-            'test': {'id': 'true'},
+            'test': { 'id': 'true' },
             'actioncmds': [{
                 'id': 'vacation',
                 'text': 'text',
@@ -40,7 +40,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             'position': 1,
             'id': 1,
             'flags': ['vacation'],
-            'test': {'id': 'true'},
+            'test': { 'id': 'true' },
             'actioncmds': [{
                 'id': 'vacation',
                 'text': 'text',
@@ -85,7 +85,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         beforeEach(function () {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 var data = (xhr.url.indexOf('flag=vacation') >= 0) ? resultWithFlag : { data: [{}] };
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(data));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(data));
             });
             $('body', document).append(node = $('<div id="vacationnoticetestNode">'));
         });
@@ -119,7 +119,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         beforeEach(function () {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 var data = (xhr.url.indexOf('flag=vacation') >= 0) ? resultWithFlagTwoMails : { data: [{}] };
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(data));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(data));
             });
             $('body', document).append(node = $('<div id="vacationnoticetestNode">'));
 

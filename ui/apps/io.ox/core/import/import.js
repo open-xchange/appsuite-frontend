@@ -12,17 +12,17 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/import/import',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/tk/attachments',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/core/api/import',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core',
-     'less!io.ox/core/import/style'
-    ], function (ext, dialogs, attachments, folderAPI, getBreadcrumb, api, notifications, gt) {
+define('io.ox/core/import/import', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/tk/attachments',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/api/import',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core',
+    'less!io.ox/core/import/style'
+], function (ext, dialogs, attachments, folderAPI, getBreadcrumb, api, notifications, gt) {
 
     'use strict';
 
@@ -126,8 +126,8 @@ define('io.ox/core/import/import',
     ext.point('io.ox/core/import/buttons').extend({
         id: 'default',
         draw: function () {
-            this.addPrimaryButton('import', gt('Import'), 'import', {'tabIndex': '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
+            this.addPrimaryButton('import', gt('Import'), 'import',  { 'tabIndex': '1' })
+                .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' });
         }
     });
 
@@ -136,7 +136,7 @@ define('io.ox/core/import/import',
 
             var id = String(id),
                 dialog = new dialogs.ModalDialog(),
-                baton = {id: id, module: module, format: {}, nodes: {}},
+                baton = { id: id, module: module, format: {}, nodes: {}},
                 form;
 
             //get folder and process
@@ -213,7 +213,7 @@ define('io.ox/core/import/import',
                         if (failed.length === 0) {
                             notifications.yell('success', gt('Data imported successfully'));
                         } else {
-                            var custom = { error: gt('Data only partially imported ( %1$s of %2$s records)', (data.length - failed.length), data.length)};
+                            var custom = { error: gt('Data only partially imported ( %1$s of %2$s records)', (data.length - failed.length), data.length) };
                             failHandler([].concat(custom, failed));
                         }
                         popup.close();

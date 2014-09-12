@@ -75,15 +75,15 @@ define([
                         })
                     });
 
-                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
                 expect(list.$el.hasClass('show-preview'), 'preview is shown').to.be.false;
-                list.onToggleMode({preventDefault: sinon.stub()});
+                list.onToggleMode({ preventDefault: sinon.stub() });
                 expect(list.$el.hasClass('show-preview'), 'preview is shown').to.be.true;
             });
 
             it('only renders "file attachment" models', function () {
                 var model = new NonFileModel({}),
-                    renderMe = sinon.stub().returns({'$el': $()}),
+                    renderMe = sinon.stub().returns({ '$el': $() }),
                     list = new EmptyAttachmentList({
                         AttachmentView: Backbone.View.extend({
                             render: renderMe
@@ -91,7 +91,7 @@ define([
                     });
 
                 list.collection.reset([model]);
-                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
                 expect(renderMe.called, 'render method called').to.be.false;
 
                 model.isFileAttachment = sinon.stub().returns(true);
@@ -101,14 +101,14 @@ define([
                     })
                 });
                 list.collection.reset([model]);
-                list.render().onToggleDetails({preventDefault: sinon.stub()});
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
                 //render twice, one time with preview, one time without
                 expect(renderMe.calledTwice, 'render method called twice').to.be.true;
             });
 
             it('allows to provide custom attachment views', function () {
                 var model = new FileModel(),
-                    renderMe = sinon.stub().returns({'$el': $()}),
+                    renderMe = sinon.stub().returns({ '$el': $() }),
                     list = new EmptyAttachmentList({
                         AttachmentView: Backbone.View.extend({
                             render: renderMe
@@ -116,7 +116,7 @@ define([
                     });
 
                  list.collection.reset([model]);
-                 list.render().onToggleDetails({preventDefault: sinon.stub()});
+                 list.render().onToggleDetails({ preventDefault: sinon.stub() });
                  //render twice, one time with preview, one time without
                  expect(renderMe.calledTwice, 'render method called twice').to.be.true;
             });
@@ -234,7 +234,7 @@ define([
                 list.render();
                 //renders closed by default
                 expect(list.$el.hasClass('open'), 'ul has class open').to.be.false;
-                list.onToggleDetails({preventDefault: sinon.stub()});
+                list.onToggleDetails({ preventDefault: sinon.stub() });
                 expect(list.$el.hasClass('open'), 'ul has class open').to.be.true;
             });
 
@@ -250,7 +250,7 @@ define([
                             })
                         });
 
-                    list.render().onToggleDetails({preventDefault: sinon.stub()});
+                    list.render().onToggleDetails({ preventDefault: sinon.stub() });
                     expect(list.$el.hasClass('open'), 'list has class open').to.be.true;
                     expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(2);
                     list.collection.add(new Model());
@@ -268,7 +268,7 @@ define([
                             })
                         });
 
-                    list.render().onToggleDetails({preventDefault: sinon.stub()});
+                    list.render().onToggleDetails({ preventDefault: sinon.stub() });
                     list.collection.add(new Model());
                     expect(list.$('header').text(), 'header text').to.contain('3 Anlagen');
                 });

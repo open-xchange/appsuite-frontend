@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/demo/red/register',
-    ['io.ox/core/extensions',
-     'io.ox/portal/util',
-     'less!plugins/demo/red/style'
-    ], function (ext, util) {
+define('plugins/demo/red/register', [
+    'io.ox/core/extensions',
+    'io.ox/portal/util',
+    'less!plugins/demo/red/style'
+], function (ext, util) {
 
     'use strict';
 

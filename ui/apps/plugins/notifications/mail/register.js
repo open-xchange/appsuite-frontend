@@ -12,11 +12,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/notifications/mail/register',
-    ['io.ox/mail/api',
-     'io.ox/core/extensions',
-     'gettext!plugins/notifications'
-    ], function (api, ext, gt) {
+define('plugins/notifications/mail/register', [
+    'io.ox/mail/api',
+    'io.ox/core/extensions',
+    'gettext!plugins/notifications'
+], function (api, ext, gt) {
 
     'use strict';
 
@@ -28,10 +28,12 @@ define('plugins/notifications/mail/register',
                 $('<legend class="section-title">').text(gt('New Mails'))
                     .attr('focusId', 'mail-notification-')//special attribute to restore focus on redraw
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({ tabindex: 1,
+                        .attr({
+                            tabindex: 1,
                             'aria-label': gt('Press to hide all notifications for new mails.'),
                             'data-action': 'clear',
-                            'focus-id': 'mail-notification-clear'})),
+                            'focus-id': 'mail-notification-clear'
+                        })),
                 $('<div class="items">'),
                 $('<div class="open-app">').append(
                     $('<a role="button" href="#" data-action="open-app" tabindex="1" class="btn btn-primary btn-sm refocus" focus-id="mail-notification-open-app">').text(
@@ -48,17 +50,18 @@ define('plugins/notifications/mail/register',
                 var f = data.from || [['', '']];
                 node.append(
                     $('<div class="item refocus" tabindex="1" role="listitem">')
-                        .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
-                               'data-cid': _.cid(data),
-                                //#. %1$s mail sender
-                                //#. %2$s mail subject
-                                //#, c-format
-                                'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
-                              }).append(
-                        $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                        $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
-                        // TODO: re-add teaser once we get this via getList(...)
-                    )
+                        .attr({
+                            'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
+                            'data-cid': _.cid(data),
+                            //#. %1$s mail sender
+                            //#. %2$s mail subject
+                            //#, c-format
+                            'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+                        }).append(
+                            $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                            $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+                            // TODO: re-add teaser once we get this via getList(...)
+                        )
                 );
             });
         }
@@ -106,7 +109,7 @@ define('plugins/notifications/mail/register',
                 });
 
                 if (mails.length > 0) {
-                    api.getList(mails, true, {unseen: true}).done(function (response) {
+                    api.getList(mails, true, { unseen: true }).done(function (response) {
                         view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
                         //save data to model so we don't need to ask again everytime
                         for (i = 0; i < mails.length; i++) {
@@ -163,7 +166,7 @@ define('plugins/notifications/mail/register',
                         .show(e, function (popup) {
                             // fetch proper mail now
                             popup.busy();
-                            api.get(_.extend(_.cid(cid), {unseen: true})).done(function (data) {//detail view sets unseen so get the unseen mail here to prevent errors
+                            api.get(_.extend(_.cid(cid), { unseen: true })).done(function (data) {//detail view sets unseen so get the unseen mail here to prevent errors
 
                                 var view = new detail.View({ data: data });
                                 popup.idle().append(view.render().expand().$el.addClass('no-padding'));
@@ -185,7 +188,7 @@ define('plugins/notifications/mail/register',
             require('io.ox/core/notifications').hideList();
             ox.launch('io.ox/mail/main').done(function () {
                 // go to inbox
-                this.folder.set(api.getDefaultFolder(), {validate: true});
+                this.folder.set(api.getDefaultFolder(), { validate: true });
             });
         },
 

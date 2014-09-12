@@ -12,14 +12,15 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/participants',
-    ['io.ox/calendar/util',
-     'gettext!io.ox/calendar',
-     'io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/api/resource',
-     'io.ox/core/extensions',
-     'io.ox/contacts/util'], function (util, gt, userAPI, groupAPI, resourceAPI, ext, contactsUtil) {
+define('io.ox/calendar/participants', [
+    'io.ox/calendar/util',
+    'gettext!io.ox/calendar',
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/core/api/resource',
+    'io.ox/core/extensions',
+    'io.ox/contacts/util'
+], function (util, gt, userAPI, groupAPI, resourceAPI, ext, contactsUtil) {
 
     'use strict';
 
@@ -54,7 +55,7 @@ define('io.ox/calendar/participants',
                 name = obj.display_name ? obj.display_name + ' <' + mail_lc + '>' : mail_lc;
                 display_name = obj.display_name || mail_lc;
             }
-            text= $.txt(name);
+            text = $.txt(name);
         } else {
             name = display_name = obj.full_name || obj.display_name || mail_lc;
             text = obj.full_name || $.txt(name);
@@ -79,9 +80,10 @@ define('io.ox/calendar/participants',
     function ParticipantsView(baton, options) {
 
         options = _.extend({
-            summary: true,//show summary
-            inlineLinks: false,//no inline links (provide extensionpoint id here to make them show)
-            //inlineLinks: true
+            //show summary
+            summary: true,
+            //no inline links (provide extensionpoint id here to make them show)
+            inlineLinks: false
         }, options);
 
         this.draw = function () {
@@ -144,7 +146,7 @@ define('io.ox/calendar/participants',
                     .value();
 
                 if (baton.data.confirmations === undefined || baton.data.confirmations.length === 0) {//workaround for tasks
-                    confirmations = util.getConfirmations({users: baton.data.users, confirmations: external});
+                    confirmations = util.getConfirmations({ users: baton.data.users, confirmations: external });
                 } else {
                     confirmations = util.getConfirmations(baton.data);
                 }

@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/dialogs',
-    ['io.ox/core/event',
-     'gettext!io.ox/core',
-     'less!io.ox/core/tk/dialog'
-    ], function (Events, gt) {
+define('io.ox/core/tk/dialogs', [
+    'io.ox/core/event',
+    'gettext!io.ox/core',
+    'less!io.ox/core/tk/dialog'
+], function (Events, gt) {
 
     'use strict';
 
@@ -540,7 +540,7 @@ define('io.ox/core/tk/dialogs',
     var CreateDialog = function (options) {
 
         options = $.extend(
-            {top: '50px', center: false},
+            { top: '50px', center: false },
             options || {}
         );
 

@@ -11,31 +11,32 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/util',
-    ['io.ox/core/date',
-     'gettext!io.ox/calendar',
-     'settings!io.ox/calendar',
-     'io.ox/core/api/user',
-     'io.ox/contacts/api',
-     'io.ox/core/api/group',
-     'io.ox/core/folder/api',
-     'io.ox/core/util'
-    ], function (date, gt, settings, userAPI, contactAPI, groupAPI, folderAPI, util) {
+define('io.ox/calendar/util', [
+    'io.ox/core/date',
+    'gettext!io.ox/calendar',
+    'settings!io.ox/calendar',
+    'io.ox/core/api/user',
+    'io.ox/contacts/api',
+    'io.ox/core/api/group',
+    'io.ox/core/folder/api',
+    'io.ox/core/util'
+], function (date, gt, settings, userAPI, contactAPI, groupAPI, folderAPI, util) {
 
     'use strict';
 
-    var // day names
-        n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],
+    // day names
+    var n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],
         // shown as
         n_shownAs = [gt('Reserved'), gt('Temporary'), gt('Absent'), gt('Free')],
         shownAsClass = 'reserved temporary absent free'.split(' '),
         shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
         confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
-        confirmTitles = [/*appointment confirmation status*/gt('unconfirmed'),
-            /*appointment confirmation status*/gt('accepted'),
-            /*appointment confirmation status*/gt('declined'),
-            /*appointment confirmation status*/gt('tentative')
+        confirmTitles = [
+            gt('unconfirmed'),
+            gt('accepted'),
+            gt('declined'),
+            gt('tentative')
         ],
         n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'];
 
@@ -95,8 +96,7 @@ define('io.ox/calendar/util',
         },
 
         isToday: function (timestamp) {
-            return Math.floor(timestamp / date.DAY) ===
-                Math.floor(new date.Local().getTime() / date.DAY);
+            return Math.floor(timestamp / date.DAY) === Math.floor(new date.Local().getTime() / date.DAY);
         },
 
         floor: function (timestamp, step) {
@@ -228,33 +228,33 @@ define('io.ox/calendar/util',
 
         getReminderOptions: function () {
             var reminderListValues = [
-                {value: -1, format: 'string'},
+                { value: -1, format: 'string' },
 
-                {value: 0, format: 'minutes'},
-                {value: 5, format: 'minutes'},
-                {value: 10, format: 'minutes'},
-                {value: 15, format: 'minutes'},
-                {value: 30, format: 'minutes'},
-                {value: 45, format: 'minutes'},
+                { value: 0, format: 'minutes' },
+                { value: 5, format: 'minutes' },
+                { value: 10, format: 'minutes' },
+                { value: 15, format: 'minutes' },
+                { value: 30, format: 'minutes' },
+                { value: 45, format: 'minutes' },
 
-                {value: 60, format: 'hours'},
-                {value: 120, format: 'hours'},
-                {value: 240, format: 'hours'},
-                {value: 360, format: 'hours'},
-                {value: 480, format: 'hours'},
-                {value: 720, format: 'hours'},
+                { value: 60, format: 'hours' },
+                { value: 120, format: 'hours' },
+                { value: 240, format: 'hours' },
+                { value: 360, format: 'hours' },
+                { value: 480, format: 'hours' },
+                { value: 720, format: 'hours' },
 
-                {value: 1440, format: 'days'},
-                {value: 2880, format: 'days'},
-                {value: 4320, format: 'days'},
-                {value: 5760, format: 'days'},
-                {value: 7200, format: 'days'},
-                {value: 8640, format: 'days'},
+                { value: 1440, format: 'days' },
+                { value: 2880, format: 'days' },
+                { value: 4320, format: 'days' },
+                { value: 5760, format: 'days' },
+                { value: 7200, format: 'days' },
+                { value: 8640, format: 'days' },
 
-                {value: 10080, format: 'weeks'},
-                {value: 20160, format: 'weeks'},
-                {value: 30240, format: 'weeks'},
-                {value: 40320, format: 'weeks'}
+                { value: 10080, format: 'weeks' },
+                { value: 20160, format: 'weeks' },
+                { value: 30240, format: 'weeks' },
+                { value: 40320, format: 'weeks' }
             ],
             options = {};
 
@@ -349,27 +349,27 @@ define('io.ox/calendar/util',
             function getContent() {
                 // hard coded for demo purposes
                 var div = $('<ul class="list-unstyled">');
-                $.when.apply($, _.map(
-                    ['America/Los_Angeles',
-                     'America/New_York',
-                     'Europe/London',
-                     'Europe/Berlin',
-                     'Australia/Sydney'], date.getTimeZone))
-                    .done(function () {
-                        _(Array.prototype.slice.call(arguments)).each(function (zone) {
-                            // must use outer DIV with "clear: both" here for proper layout in firefox
-                            div.append($('<li>').append(
-                                $('<span>')
-                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
-                                $('<span>')
-                                    .addClass('label label-info')
-                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
-                                $('<span>')
-                                    .addClass('time')
-                                    .text(gt.noI18n(that.getTimeInterval(data, zone)))
-                            ));
-                        });
+                $.when.apply($, _.map([
+                    'America/Los_Angeles',
+                    'America/New_York',
+                    'Europe/London',
+                    'Europe/Berlin',
+                    'Australia/Sydney'
+                ], date.getTimeZone)).done(function () {
+                    _(Array.prototype.slice.call(arguments)).each(function (zone) {
+                        // must use outer DIV with "clear: both" here for proper layout in firefox
+                        div.append($('<li>').append(
+                            $('<span>')
+                                .text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
+                            $('<span>')
+                                .addClass('label label-info')
+                                .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
+                            $('<span>')
+                                .addClass('time')
+                                .text(gt.noI18n(that.getTimeInterval(data, zone)))
+                        ));
                     });
+                });
 
                 return div;
             }
@@ -444,10 +444,10 @@ define('io.ox/calendar/util',
             // DAILY
             case 1:
                 return interval === 1 ?
-                    gt('Every day') :
-                    //#. recurrence string
-                    //#. %1$d: numeric
-                    gt('Every %1$d days', interval);
+                gt('Every day') :
+                //#. recurrence string
+                //#. %1$d: numeric
+                gt('Every %1$d days', interval);
 
             // WEEKLY
             case 2:
@@ -471,13 +471,13 @@ define('io.ox/calendar/util',
                 }
 
                 return interval === 1 ?
-                    //#. recurrence string
-                    //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-                    gt('Weekly on %1$s', getDayString(days)) :
-                    //#. recurrence string
-                    //#. %1$d: numeric
-                    //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                    gt('Every %1$d weeks on %2$s', interval, getDayString(days));
+                //#. recurrence string
+                //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
+                gt('Weekly on %1$s', getDayString(days)) :
+                //#. recurrence string
+                //#. %1$d: numeric
+                //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+                gt('Every %1$d weeks on %2$s', interval, getDayString(days));
 
             // MONTHLY
             case 3:
@@ -493,15 +493,15 @@ define('io.ox/calendar/util',
                 }
 
                 return interval === 1 ?
-                    //#. recurrence string
-                    //#. %1$s: count string, e.g. first, second, or last
-                    //#. %2$s: day string, e.g. Monday
-                    gt('Monthly on the %1$s %2$s', getCountString(day_in_month), getDayString(days)) :
-                    //#. recurrence string
-                    //#. %1$d: numeric, interval
-                    //#. %2$s: count string, e.g. first, second, or last
-                    //#. %3$s: day string, e.g. Monday
-                    gt('Every %1$d months on the %2$s %3$s', interval, getCountString(day_in_month), getDayString(days));
+                //#. recurrence string
+                //#. %1$s: count string, e.g. first, second, or last
+                //#. %2$s: day string, e.g. Monday
+                gt('Monthly on the %1$s %2$s', getCountString(day_in_month), getDayString(days)) :
+                //#. recurrence string
+                //#. %1$d: numeric, interval
+                //#. %2$s: count string, e.g. first, second, or last
+                //#. %3$s: day string, e.g. Monday
+                gt('Every %1$d months on the %2$s %3$s', interval, getCountString(day_in_month), getDayString(days));
 
             // YEARLY
             case 4:
@@ -519,17 +519,17 @@ define('io.ox/calendar/util',
                 }
 
                 return !interval || interval === 1 ?
-                    //#. recurrence string
-                    //#. %1$s: count string, e.g. first, second, or last
-                    //#. %2$s: day string, e.g. Monday
-                    //#. %3$s: month nane, e.g. January
-                    gt('Yearly on the %1$s %2$s of %3$d', getCountString(day_in_month), getDayString(days), getMonthString(month)) :
-                    //#. recurrence string
-                    //#. %1$d: interval, numeric
-                    //#. %2$s: count string, e.g. first, second, or last
-                    //#. %3$s: day string, e.g. Monday
-                    //#. %4$s: month nane, e.g. January
-                    gt('Every %1$d years on the %2$s %3$s of %4$d', interval, getCountString(day_in_month), getDayString(days), getMonthString(month));
+                //#. recurrence string
+                //#. %1$s: count string, e.g. first, second, or last
+                //#. %2$s: day string, e.g. Monday
+                //#. %3$s: month nane, e.g. January
+                gt('Yearly on the %1$s %2$s of %3$d', getCountString(day_in_month), getDayString(days), getMonthString(month)) :
+                //#. recurrence string
+                //#. %1$d: interval, numeric
+                //#. %2$s: count string, e.g. first, second, or last
+                //#. %3$s: day string, e.g. Monday
+                //#. %4$s: month nane, e.g. January
+                gt('Every %1$d years on the %2$s %3$s of %4$d', interval, getCountString(day_in_month), getDayString(days), getMonthString(month));
             }
 
             return str;

@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/import',
-    ['io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
-     'io.ox/core/notifications',
-     'gettext!io.ox/mail'
-    ], function (ext, api, upload, dropzone, notifications, gt) {
+define('io.ox/mail/import', [
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/core/tk/upload',
+    'io.ox/core/dropzone',
+    'io.ox/core/notifications',
+    'gettext!io.ox/mail'
+], function (ext, api, upload, dropzone, notifications, gt) {
 
     'use strict';
 

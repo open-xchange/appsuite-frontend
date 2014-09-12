@@ -11,11 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/tk/upload',
-    ['io.ox/core/event',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'
-    ], function (Events, notifications, gt) {
+define('io.ox/core/tk/upload', [
+    'io.ox/core/event',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (Events, notifications, gt) {
 
     'use strict';
 
@@ -32,7 +32,7 @@ define('io.ox/core/tk/upload',
 
     // options should contain a list of actions. The action id will be the first parameter to the event handlers
     // { actions: [
-    //      {id: 'action1', label: 'Some cool Action'}, {id: 'action2', label: 'Some other cool action'}
+    //      {id: 'action1', label: 'Some cool Action' }, { id: 'action2', label: 'Some other cool action' }
     // ]}
     function DropZone(options) {
         require(['less!io.ox/core/tk/upload']);
@@ -148,7 +148,7 @@ define('io.ox/core/tk/upload',
                     try {
                         effectAllowed = origEvt.dataTransfer.effectAllowed;
                     } catch (err) {}
-                    origEvt.dataTransfer.dropEffect = 'move' === effectAllowed || 'linkMove' === effectAllowed ? 'move' : 'copy';
+                    origEvt.dataTransfer.dropEffect = effectAllowed === 'move' || effectAllowed === 'linkMove' ? 'move' : 'copy';
 
                     clearTimeout(dragLeaveTimer);
                     e.preventDefault();

@@ -12,13 +12,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/add',
-    ['io.ox/core/folder/api',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/extensions',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'
-    ], function (api, dialogs, ext, notifications, gt) {
+define('io.ox/core/folder/actions/add', [
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (api, dialogs, ext, notifications, gt) {
 
     'use strict';
 
@@ -55,11 +55,9 @@ define('io.ox/core/folder/actions/add',
     function getTitle(folder, module) {
         if (module === 'mail' || module === 'infostore') {
             return gt('New subfolder');
-        }
-        else if (folder === '2') {
+        } else if (folder === '2') {
             return module === 'calendar' ? gt('New public calendar') : gt('New public folder');
-        }
-        else {
+        } else {
             return module === 'calendar' ? gt('New private calendar') : gt('New private folder');
         }
     }

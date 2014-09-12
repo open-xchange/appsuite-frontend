@@ -11,21 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/view-detail',
-    ['io.ox/core/extensions',
-     'io.ox/calendar/util',
-     'io.ox/calendar/api',
-     'io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/api/resource',
-     'io.ox/core/folder/api',
-     'io.ox/core/tk/attachments',
-     'io.ox/core/extPatterns/links',
-     'io.ox/calendar/participants',
-     'gettext!io.ox/calendar',
-     'io.ox/calendar/actions',
-     'less!io.ox/calendar/style'
-    ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, gt) {
+define('io.ox/calendar/view-detail', [
+    'io.ox/core/extensions',
+    'io.ox/calendar/util',
+    'io.ox/calendar/api',
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/core/api/resource',
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/attachments',
+    'io.ox/core/extPatterns/links',
+    'io.ox/calendar/participants',
+    'gettext!io.ox/calendar',
+    'io.ox/calendar/actions',
+    'less!io.ox/calendar/style'
+], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, gt) {
 
     'use strict';
 
@@ -128,7 +128,7 @@ define('io.ox/calendar/view-detail',
         index: 600,
         id: 'participants',
         draw: function (baton) {
-            var pView = new ParticipantsView(baton, {summary: true, inlineLinks: 'io.ox/calendar/detail/inline-actions-participantrelated'});
+            var pView = new ParticipantsView(baton, { summary: true, inlineLinks: 'io.ox/calendar/detail/inline-actions-participantrelated' });
             this.append(pView.draw());
         }
     });
@@ -224,17 +224,17 @@ define('io.ox/calendar/view-detail',
 
     function getDeepLink (data) {
         return [
-                ox.abs,
-                ox.root,
-                '/#app=io.ox/calendar&id=',
-                data.folder_id || data.folder,
-                '.',
-                data.recurrence_id || data.id,
-                '.',
-                data.recurrence_position || 0,
-                '&folder=',
-                data.folder_id || data.folder
-            ].join('');
+            ox.abs,
+            ox.root,
+            '/#app=io.ox/calendar&id=',
+            data.folder_id || data.folder,
+            '.',
+            data.recurrence_id || data.id,
+            '.',
+            data.recurrence_position || 0,
+            '&folder=',
+            data.folder_id || data.folder
+        ].join('');
     }
 
     //used to show deep link when outside calendar app (search, portal)
@@ -245,20 +245,15 @@ define('io.ox/calendar/view-detail',
             //stolen from io.ox/mail/detail/links: processDeepLinks
             if (options && options.deeplink)  {
                 var url = getDeepLink(baton.data),
-                    label = $('<dt class="detail-label">')
-                            .html(gt('Direct link') + ':' + '&#160;'),
-                    link = $('<dd class="detail">')
-                                .attr('style', 'font-size: 12px;')
-                                .append(
-                                        $('<a role="button">')
-                                        .attr({
-                                                href: url,
-                                                target: '_blank',
-                                                class: 'deep-link btn btn-primary btn-xs deep-link-calendar',
-                                                style: 'font-family: Arial; color: white; text-decoration: none; height: 16px; line-height: 16px; box-sizing: content-box;'
-                                        })
-                                        .text(gt('Appointment'))
-                                    );
+                    label = $('<dt class="detail-label">').html(gt('Direct link') + ':' + '&#160;'),
+                    link = $('<dd class="detail">').attr('style', 'font-size: 12px;').append(
+                        $('<a role="button">').attr({
+                            href: url,
+                            target: '_blank',
+                            class: 'deep-link btn btn-primary btn-xs deep-link-calendar',
+                            style: 'font-family: Arial; color: white; text-decoration: none; height: 16px; line-height: 16px; box-sizing: content-box;'
+                        }).text(gt('Appointment'))
+                    );
                 this.append(label, link);
             }
         }
@@ -318,7 +313,7 @@ define('io.ox/calendar/view-detail',
 
             if (calAPI.uploadInProgress(_.ecid(baton.data))) {
                 this.append(
-                    $node.css({width: '30%', height: '12px'}).busy()
+                    $node.css({ width: '30%', height: '12px' }).busy()
                 );
             } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
                 this.append($node);

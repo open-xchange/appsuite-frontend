@@ -11,11 +11,11 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/mail/folderview-extensions',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/mail'
-    ], function (ext, capabilities, gt) {
+define('io.ox/mail/folderview-extensions', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/mail'
+], function (ext, capabilities, gt) {
 
     'use strict';
 

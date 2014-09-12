@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/user',
-    ['io.ox/core/http',
-     'io.ox/core/api/factory',
-     'io.ox/contacts/util',
-     'io.ox/core/date',
-     'io.ox/core/capabilities'
-    ], function (http, apiFactory, util, date, capabilities) {
+define('io.ox/core/api/user', [
+    'io.ox/core/http',
+    'io.ox/core/api/factory',
+    'io.ox/contacts/util',
+    'io.ox/core/date',
+    'io.ox/core/capabilities'
+], function (http, apiFactory, util, date, capabilities) {
 
     'use strict';
 
@@ -86,7 +86,7 @@ define('io.ox/core/api/user',
      * @fires  api#update: + id
      * @fires  api#update, (id)
      * @fires  api#refresh.list
-     * @return {deferred} done returns object with timestamp, data
+     * @return { deferred} done returns object with timestamp, data
      */
     api.update =  function (o) {
         if (_.isEmpty(o.data)) {
@@ -97,45 +97,45 @@ define('io.ox/core/api/user',
                     o.data.birthday = util.gregorianToJulian(o.data.birthday);
                 }
                 return http.PUT({
-                        module: 'user',
-                        params: {
-                            action: 'update',
-                            id: o.id,
-                            folder: o.folder,
-                            timestamp: o.timestamp || _.then()
-                        },
-                        data: o.data,
-                        appendColumns: false
-                    })
-                    .pipe(function () {
-                        // get updated contact
-                        return api.get({ id: o.id }, false)
-                            .pipe(function (data) {
-                                return $.when(
-                                    api.caches.get.add(data),
-                                    api.caches.all.clear(),
-                                    api.caches.list.remove({ id: o.id }),
-                                    // update contact caches
-                                    contactsApi.caches.get.remove({folder_id: data.folder_id, id: data.contact_id}),//no add here because this userdata not contactdata (similar but not equal)
-                                    contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
-                                    contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
-                                    contactsApi.clearFetchCache()
-                                )
-                                .done(function () {
-                                    api.trigger('update:' + _.ecid(data), data);
-                                    api.trigger('update', data);
-                                    api.trigger('refresh.list');
-                                    // get new contact and trigger contact events
-                                    // skip this if GAB is missing
-                                    if (data.folder_id === 6 && capabilities.has('!gab')) return;
-                                    // fetch contact
-                                    contactsApi.get({folder_id: data.folder_id, id: data.contact_id}).done(function (contactData) {
-                                        contactsApi.trigger('update:' + _.ecid(contactData), contactData);
-                                        contactsApi.trigger('update', contactData);
-                                    });
+                    module: 'user',
+                    params: {
+                        action: 'update',
+                        id: o.id,
+                        folder: o.folder,
+                        timestamp: o.timestamp || _.then()
+                    },
+                    data: o.data,
+                    appendColumns: false
+                })
+                .pipe(function () {
+                    // get updated contact
+                    return api.get({ id: o.id }, false)
+                        .pipe(function (data) {
+                            return $.when(
+                                api.caches.get.add(data),
+                                api.caches.all.clear(),
+                                api.caches.list.remove({ id: o.id }),
+                                // update contact caches
+                                contactsApi.caches.get.remove({ folder_id: data.folder_id, id: data.contact_id }),//no add here because this userdata not contactdata (similar but not equal)
+                                contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
+                                contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
+                                contactsApi.clearFetchCache()
+                            )
+                            .done(function () {
+                                api.trigger('update:' + _.ecid(data), data);
+                                api.trigger('update', data);
+                                api.trigger('refresh.list');
+                                // get new contact and trigger contact events
+                                // skip this if GAB is missing
+                                if (data.folder_id === 6 && capabilities.has('!gab')) return;
+                                // fetch contact
+                                contactsApi.get({ folder_id: data.folder_id, id: data.contact_id }).done(function (contactData) {
+                                    contactsApi.trigger('update:' + _.ecid(contactData), contactData);
+                                    contactsApi.trigger('update', contactData);
                                 });
                             });
-                    });
+                        });
+                });
             });
         }
     };
@@ -146,8 +146,8 @@ define('io.ox/core/api/user',
      * @param  {object} changes (target values)
      * @param  {object} file
      * @fires  api#refresh.list
-     * @fires  api#update ({id})
-     * @return {deferred} object with timestamp
+     * @fires  api#update ({id })
+     * @return { deferred} object with timestamp
      */
     api.editNewImage = function (o, changes, file) {
         var filter = function (data) {
@@ -183,7 +183,7 @@ define('io.ox/core/api/user',
                 action: 'update',
                 form: file,
                 data: changes,
-                params: {id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then()}
+                params: { id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then() }
             })
             .pipe(filter);
         }
@@ -192,7 +192,7 @@ define('io.ox/core/api/user',
     /**
      * get user display name (or email if display name undefined)
      * @param {string} id of a user
-     * @return {deferred} returns name string
+     * @return { deferred} returns name string
      */
     api.getName = function (id) {
         return api.get({ id: id }).pipe(function (data) {
@@ -203,7 +203,7 @@ define('io.ox/core/api/user',
     /**
      * get greeting ('Hello ...')
      * @param {string} id of a user
-     * @return {deferred} returns greeting string
+     * @return { deferred} returns greeting string
      */
     api.getGreeting = function (id) {
         return api.get({ id: id }).pipe(function (data) {
@@ -214,7 +214,7 @@ define('io.ox/core/api/user',
     /**
      * get text node which fetches user name asynchronously
      * @param {string} id of a user
-     * @return {object} text node
+     * @return { object} text node
      */
     api.getTextNode = function (id) {
         var node = document.createTextNode(_.noI18n(''));
@@ -234,7 +234,7 @@ define('io.ox/core/api/user',
      * get halo text link
      * @param {string} id of a user
      * @param  {string} text [optional]
-     * @return {jquery} textlink node
+     * @return { jquery} textlink node
      */
     api.getLink = function (id, text) {
         text = text ? $.txt(_.noI18n(text)) : api.getTextNode(id);
@@ -243,7 +243,7 @@ define('io.ox/core/api/user',
 
     /**
      * get a contact model of the currently logged in user
-     * @return {object} a contact model of the current user
+     * @return { object} a contact model of the current user
      */
     api.getCurrentUser = function () {
         return require(['io.ox/core/settings/user']).then(function (api) {

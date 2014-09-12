@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/contacts/register',
-    ['io.ox/core/extensions',
-     'io.ox/contacts/api',
-     'io.ox/portal/widgets'
-    ], function (ext, api, portalWidgets) {
+define('plugins/portal/contacts/register', [
+    'io.ox/core/extensions',
+    'io.ox/contacts/api',
+    'io.ox/portal/widgets'
+], function (ext, api, portalWidgets) {
 
     'use strict';
 

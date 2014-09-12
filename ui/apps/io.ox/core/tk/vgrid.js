@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/vgrid',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/selection',
-     'io.ox/core/event',
-     'gettext!io.ox/core'
-    ], function (ext, Selection, Events, gt) {
+define('io.ox/core/tk/vgrid', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/selection',
+    'io.ox/core/event',
+    'gettext!io.ox/core'
+], function (ext, Selection, Events, gt) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/core/tk/vgrid',
 
     /**
      * Template class
-     * @returns {Template}
+     * @returns {Template }
      */
     function Template(o) {
 
@@ -303,7 +303,7 @@ define('io.ox/core/tk/vgrid',
                     // show toggle
                     options.showToggle === false ?
                         [] :
-                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes')})
+                        $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes') })
                             .addClass('select-all-toggle')
                             .append($('<i class="fa fa-th-list">'))
                             .on('click', { grid: this }, fnToggleEditable)
@@ -807,8 +807,7 @@ define('io.ox/core/tk/vgrid',
                         if (!isVisible(i)) {
                             setIndex(i - 2); // not at the very top
                         }
-                    }
-                    else if (_.isArray(i)) {
+                    } else if (_.isArray(i)) {
                         // select by object (cid)
                         //console.debug('case #3 select() >> object (cid)', i);
                         if (self.selection.contains(i)) {
@@ -816,12 +815,10 @@ define('io.ox/core/tk/vgrid',
                         } else {
                             self.selection.clear();
                         }
-                    }
-                    else if (options.selectFirst) {
+                    } else if (options.selectFirst) {
                         //console.debug('case #4 select() >> first', i);
                         self.selection.selectFirst();
-                    }
-                    else {
+                    } else {
                         self.selection.clear();
                     }
                 }
@@ -1185,7 +1182,7 @@ define('io.ox/core/tk/vgrid',
 
                         this.trigger('beforechange:prop', key, value, previous);
                         this.trigger('beforechange:prop:' + key, value, previous);
-                        props.set(key, value, {silent: true});
+                        props.set(key, value, { silent: true });
                         this.trigger('change:prop', key, value, previous);
                         this.trigger('change:prop:' + key, value, previous);
                         responsiveChange = true;

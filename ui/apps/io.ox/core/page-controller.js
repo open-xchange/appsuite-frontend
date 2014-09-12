@@ -11,8 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/page-controller',
-    ['less!io.ox/core/page-controller'], function () {
+define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], function () {
 
     'use strict';
 
@@ -87,7 +86,7 @@ define('io.ox/core/page-controller',
             // check if same page
             if (to === current) return;
 
-            var opt = _.extend({ from: current, animation: _.device('smartphone') ? 'slideleft': 'pop', disableAnimations: false}, options || {}),
+            var opt = _.extend({ from: current, animation: _.device('smartphone') ? 'slideleft' : 'pop', disableAnimations: false }, options || {}),
                 $toPage = pages[to].$el,
                 $fromPage = pages[opt.from].$el;
 
@@ -95,8 +94,8 @@ define('io.ox/core/page-controller',
             opt.animation = _.device('android') ? 'pop' : opt.animation;
 
             // trigger 'before' events
-            $toPage.trigger('pagebeforeshow', {frompage: opt.from});
-            $fromPage.trigger('pagebeforehide', {topage: opt.to});
+            $toPage.trigger('pagebeforeshow', { frompage: opt.from });
+            $fromPage.trigger('pagebeforehide', { topage: opt.to });
 
             // since the pagecontroller is also used on desktop
             // we have to dismiss this part on dekstop to prevent focus and a11y trouble
@@ -133,7 +132,7 @@ define('io.ox/core/page-controller',
                         .addClass('io-ox-core-animation in current ' + opt.animation)
                         .one('webkitAnimationEnd mozAnimationEnd animationend', function () {
                             $(this).removeClass('io-ox-core-animation in ' + opt.animation);
-                            $toPage.trigger('pageshow', {from: opt.from, to: opt.to});
+                            $toPage.trigger('pageshow', { from: opt.from, to: opt.to });
                             taptrap.remove();
                         });
                 }, 1);
@@ -144,13 +143,13 @@ define('io.ox/core/page-controller',
                         .addClass('io-ox-core-animation out inmotion ' + opt.animation)
                         .one('webkitAnimationEnd mozAnimationEnd animationend', function () {
                             $(this).removeClass('io-ox-core-animation out inmotion ' + opt.animation);
-                            $fromPage.trigger('pagehide', {from: opt.from, to: opt.to});
+                            $fromPage.trigger('pagehide', { from: opt.from, to: opt.to });
                         });
                 }, 1);
             } else {
                 // no animations, direct page change
-                $toPage.addClass('current').trigger('pageshow', {from: opt.from, to: opt.to});
-                $fromPage.removeClass('current').trigger('pagehide', {from: opt.from, to: opt.to});
+                $toPage.addClass('current').trigger('pageshow', { from: opt.from, to: opt.to });
+                $fromPage.removeClass('current').trigger('pagehide', { from: opt.from, to: opt.to });
             }
 
             showNavbar(to);
@@ -176,7 +175,7 @@ define('io.ox/core/page-controller',
             if (backButtonRules && backButtonRules[current]) {
                 target = backButtonRules[current];
             }
-            this.changePage(target, {animation: 'slideright'});
+            this.changePage(target, { animation: 'slideright' });
         };
 
         /**
@@ -200,7 +199,7 @@ define('io.ox/core/page-controller',
          * getPage
          * return the main DOM node of the page
          * @param  {string} page pagename to return
-         * @return {jQuery object} jQuery node
+         * @return { jQuery object} jQuery node
          */
         this.getPage = function (page) {
             if (!pages[page]) {
@@ -213,10 +212,10 @@ define('io.ox/core/page-controller',
         /**
          * returns the whole page object
          * @param  {string} page identifier of the page
-         * @return {Object} the page object
+         * @return { Object} the page object
          */
         this.getPageObject = function (page) {
-             if (!pages[page]) {
+            if (!pages[page]) {
                 console.error('PageController: Page ' + page + ' does not exist.');
                 console.error('PageController: Available pages are ' + order.join());
                 return;
@@ -279,8 +278,8 @@ define('io.ox/core/page-controller',
             var bar = pages[page].navbar;
 
             if (bar) {
-                    app.navbar.find('.toolbar-content').detach();
-                    app.navbar.append(bar.$el);
+                app.navbar.find('.toolbar-content').detach();
+                app.navbar.append(bar.$el);
             }
         };
 

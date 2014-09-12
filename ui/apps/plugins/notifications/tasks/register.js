@@ -11,13 +11,13 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('plugins/notifications/tasks/register',
-    ['io.ox/core/extensions',
-     'gettext!plugins/notifications',
-     'io.ox/tasks/api',
-     'io.ox/core/api/reminder',
-     'less!plugins/notifications/tasks/style'
-    ], function (ext, gt, api, reminderAPI) {
+define('plugins/notifications/tasks/register', [
+    'io.ox/core/extensions',
+    'gettext!plugins/notifications',
+    'io.ox/tasks/api',
+    'io.ox/core/api/reminder',
+    'less!plugins/notifications/tasks/style'
+], function (ext, gt, api, reminderAPI) {
 
     'use strict';
 
@@ -55,10 +55,12 @@ define('plugins/notifications/tasks/register',
 
         node.append(
             $('<div class="taskNotification item refocus" tabindex="1" role="listitem">')
-            .attr({'data-cid': model.get('cid'),
-                   'focus-id': 'task-overdue-notification-' + model.get('cid'),
-                   'model-cid': model.cid,
-                   'aria-label': label})
+            .attr({
+                'data-cid': model.get('cid'),
+                'focus-id': 'task-overdue-notification-' + model.get('cid'),
+                'model-cid': model.cid,
+                'aria-label': label
+            })
             .append(
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
@@ -122,14 +124,15 @@ define('plugins/notifications/tasks/register',
                 cid = item.attr('data-cid'),
                 obj = _.cid(cid), model;
             // now with much cooler api signature. YEAH!
-            api.update({id: obj.id,
-                        folder_id: obj.folder_id,
-                        status: 3,
-                        percent_completed: 100,
-                        date_completed: _.now() })
-                .done(function (result) {
-                    api.trigger('update:' + _.ecid(obj), result);
-                });
+            api.update({
+                id: obj.id,
+                folder_id: obj.folder_id,
+                status: 3,
+                percent_completed: 100,
+                date_completed: _.now()
+            }).done(function (result) {
+                api.trigger('update:' + _.ecid(obj), result);
+            });
             model = this.collection.get(item.attr('model-cid'));
             this.collection.remove(model);
         },
@@ -190,7 +193,7 @@ define('plugins/notifications/tasks/register',
             function add(e, tasks, reset) {
                 var items = [];
 
-                if(tasks.length > 0) {
+                if (tasks.length > 0) {
                     require(['io.ox/tasks/util'], function (util) {
                         _(tasks).each(function (taskObj) {
                             if (!hiddenOverDueItems[_.ecid(taskObj)]) {
@@ -207,7 +210,7 @@ define('plugins/notifications/tasks/register',
                                 if (reset) {
                                     items.push(tmp);
                                 } else {
-                                    notifications.collection.push(tmp, {merge: true, silent: true});//update data but don't throw events until we are finished(causes many redraws)
+                                    notifications.collection.push(tmp, { merge: true, silent: true });//update data but don't throw events until we are finished(causes many redraws)
                                 }
                             }
                         });
@@ -416,8 +419,7 @@ define('plugins/notifications/tasks/register',
                 var taskIds = [];
                 _(reminders).each(function (reminder) {
                     if (!hiddenReminderItems[_.ecid(reminder)]) {
-                        taskIds.push({id: reminder.target_id,
-                                      folder: reminder.folder});
+                        taskIds.push({ id: reminder.target_id, folder: reminder.folder });
                     }
                 });
 
@@ -466,12 +468,15 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-confirmation/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task invitations'))
-                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                    .attr({ tabindex: 1,
-                        'aria-label': gt('Press to hide all task invitations.'),
-                        'data-action': 'clear',
-                        'focus-id': 'task-invitation-notification-clear'})),
+                $('<legend class="section-title">').text(gt('Task invitations')).append(
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                        .attr({
+                            tabindex: 1,
+                            'aria-label': gt('Press to hide all task invitations.'),
+                            'data-action': 'clear',
+                            'focus-id': 'task-invitation-notification-clear'
+                        })
+                ),
                 $('<div class="notifications">')
             );
         }
@@ -490,11 +495,13 @@ define('plugins/notifications/tasks/register',
                         //#. %2$s task end date
                         //#, c-format
                 var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
-                self.attr({role: 'listitem',
-                           'data-cid': _.ecid(baton.model.attributes),
-                           'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
-                           tabindex: 1,
-                           'aria-label': label})
+                self.attr({
+                    role: 'listitem',
+                    'data-cid': _.ecid(baton.model.attributes),
+                    'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
+                    tabindex: 1,
+                    'aria-label': label
+                })
                 .append(
                     $('<div class="title">').text(_.noI18n(task.title)),
                     $('<div class="clearfix">').append(
@@ -505,9 +512,11 @@ define('plugins/notifications/tasks/register',
                         .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
                         .text(gt('Accept/Decline')),
                         $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                            .attr({'title': gt('Accept invitation'),
-                                   'aria-label': gt('Accept invitation'),
-                                   'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
+                            .attr({
+                                'title': gt('Accept invitation'),
+                                'aria-label': gt('Accept invitation'),
+                                'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)
+                            })
                             .append('<i class="fa fa-check">')
                     )
                 );
@@ -589,9 +598,11 @@ define('plugins/notifications/tasks/register',
             if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
 
             var model = this.model,
-                o = {id: model.get('id'),
-                     folder_id: model.get('folder_id'),
-                     data: {confirmmessage: '', confirmation: 1 }};
+                o = {
+                    id: model.get('id'),
+                    folder_id: model.get('folder_id'),
+                    data: { confirmmessage: '', confirmation: 1 }
+                };
             api.confirm(o).done(function () {
                 //update detailview
                 var data = model.toJSON();
@@ -605,9 +616,9 @@ define('plugins/notifications/tasks/register',
 
             var data = this.model.attributes;
             ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
-                acceptdeny(data, {taskmode: true, api: api, callback: function () {
+                acceptdeny(data, { taskmode: true, api: api, callback: function () {
                     //update detailview
-                    api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
+                    api.trigger('update:' + _.ecid({ id: data.id, folder_id: data.folder_id }));
                 }});
             });
         }
@@ -675,7 +686,7 @@ define('plugins/notifications/tasks/register',
             }).on('mark:task:to-be-confirmed', function (e, ids) {
                 _(ids).each(function (id) {
                     if (!hiddenInvitationItems[_.ecid(id)]) {
-                        notifications.collection.push(new Backbone.Model(id), {silent: true});
+                        notifications.collection.push(new Backbone.Model(id), { silent: true });
                     }
                 });
                 notifications.collection.trigger('add');

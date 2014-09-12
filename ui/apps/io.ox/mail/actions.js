@@ -12,21 +12,21 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/mail/actions',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'gettext!io.ox/mail',
-     'settings!io.ox/core',
-     'io.ox/core/folder/api',
-     'io.ox/core/notifications',
-     'io.ox/core/print',
-     'io.ox/contacts/api',
-     'io.ox/core/api/account',
-     'io.ox/core/extPatterns/actions',
-     'settings!io.ox/mail'
-    ], function (ext, links, api, util, gt, coreConfig, folderAPI, notifications, print, contactAPI, account, actions, settings) {
+define('io.ox/mail/actions', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'gettext!io.ox/mail',
+    'settings!io.ox/core',
+    'io.ox/core/folder/api',
+    'io.ox/core/notifications',
+    'io.ox/core/print',
+    'io.ox/contacts/api',
+    'io.ox/core/api/account',
+    'io.ox/core/extPatterns/actions',
+    'settings!io.ox/mail'
+], function (ext, links, api, util, gt, coreConfig, folderAPI, notifications, print, contactAPI, account, actions, settings) {
 
     'use strict';
 
@@ -83,8 +83,8 @@ define('io.ox/mail/actions',
                         .append(
                             $('<h4>').text(question)
                         )
-                        .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                        .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                         .on('delete', function () {
                             api.remove(list, all).fail(notifications.yell);
                         }).show();
@@ -102,8 +102,8 @@ define('io.ox/mail/actions',
                                     $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
                                     $('<div>').text(question)
                                 )
-                                .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
-                                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                .addPrimaryButton('delete', gt('Delete'), 'delete', { tabIndex: 1 })
+                                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                                 .on('delete', function () {
                                     api.remove(list, { force: true });
                                 })
@@ -202,7 +202,7 @@ define('io.ox/mail/actions',
             var data = baton.first();
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog({ width: 700 })
-                    .addPrimaryButton('close', gt('Close'), 'close', {tabIndex: '1'})
+                    .addPrimaryButton('close', gt('Close'), 'close', { tabIndex: 1 })
                     .header(
                         $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
@@ -428,14 +428,14 @@ define('io.ox/mail/actions',
                     startIndex = 0;
                 if (baton.startItem) {
                     _(files).each(function (file, index) {
-                       if (file.url.indexOf('attachment=' + baton.startItem.id) !== -1) {
-                           startIndex = index;
-                       }
+                        if (file.url.indexOf('attachment=' + baton.startItem.id) !== -1) {
+                            startIndex = index;
+                        }
                     });
                 }
                 slideshow.init({
                     fullScreen: false,
-                    baton: {allIds: files, startIndex: startIndex},
+                    baton: { allIds: files, startIndex: startIndex },
                     attachmentMode: true,
                     useSelectionAsStart: true
                 });
@@ -481,7 +481,7 @@ define('io.ox/mail/actions',
                 hasRightSuffix = (/\.vcf$/i).test(context.filename),
                 isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
                 isDirectoryType = (/^text\/directory/i).test(context.content_type);
-            return  (hasRightSuffix && isDirectoryType) || isVCardType;
+            return (hasRightSuffix && isDirectoryType) || isVCardType;
         },
         action: function (baton) {
             var attachment = baton.data;
@@ -489,9 +489,9 @@ define('io.ox/mail/actions',
                 conversionAPI.convert({
                     identifier: 'com.openexchange.mail.vcard',
                     args: [
-                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
-                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
-                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                        { 'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id },
+                        { 'com.openexchange.mail.conversion.mailid': attachment.parent.id },
+                        { 'com.openexchange.mail.conversion.sequenceid': attachment.id }
                     ]
                 }, {
                     identifier: 'com.openexchange.contact.json',
@@ -549,16 +549,16 @@ define('io.ox/mail/actions',
                 conversionAPI.convert({
                     identifier: 'com.openexchange.mail.ical',
                     args: [
-                        {'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id},
-                        {'com.openexchange.mail.conversion.mailid': attachment.parent.id},
-                        {'com.openexchange.mail.conversion.sequenceid': attachment.id}
+                        { 'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id },
+                        { 'com.openexchange.mail.conversion.mailid': attachment.parent.id },
+                        { 'com.openexchange.mail.conversion.sequenceid': attachment.id }
                     ]
                 },
                 {
                     identifier: 'com.openexchange.ical',
                     args: [
-                        {'com.openexchange.groupware.calendar.folder': coreConfig.get('folder/calendar')},
-                        {'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks')}
+                        { 'com.openexchange.groupware.calendar.folder': coreConfig.get('folder/calendar') },
+                        { 'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks') }
                     ]
                 })
                 .done(function () {
@@ -727,7 +727,7 @@ define('io.ox/mail/actions',
                                     return util.getChannel(participant.mail, false) !== 'phone';
                                 return true;
                             });
-                            var initData = {participants: participants, title: notetext, folder_id: currentFolder};
+                            var initData = { participants: participants, title: notetext, folder_id: currentFolder };
                             this.create(initData);
 //                             to set Dirty
                             this.model.toSync = initData;
@@ -743,9 +743,9 @@ define('io.ox/mail/actions',
 
             _(collectedRecipients).each(function (mail) {
                 contactAPI.search(mail).done(function (obj) {
-                    var currentObj = (obj[0]) ? obj[0] : {email1: mail, display_name: mail},
-                        internalUser = {id: currentObj.internal_userid, type: 1},
-                        externalUser = {type: 5, display_name: currentObj.display_name, mail: currentObj.email1};
+                    var currentObj = (obj[0]) ? obj[0] : { email1: mail, display_name: mail },
+                        internalUser = { id: currentObj.internal_userid, type: 1 },
+                        externalUser = { type: 5, display_name: currentObj.display_name, mail: currentObj.email1 };
 
                     if (currentObj.internal_userid !== currentId) {
                         if (currentObj.internal_userid !== undefined && currentObj.internal_userid !== 0) {
@@ -785,8 +785,8 @@ define('io.ox/mail/actions',
                     dateSelector,
                     endDate = new Date(),
                     popup = new dialogs.ModalDialog()
-                        .addPrimaryButton('create', gt('Create reminder'), 'create', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+                        .addPrimaryButton('create', gt('Create reminder'), 'create', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
 
                 //Header
                 popup.getHeader().append($('<h4>').text(gt('Remind me')));
@@ -807,7 +807,7 @@ define('io.ox/mail/actions',
                     ),
                     $('<div class="form-group">').append(
                         $('<label id="remindme">').text(gt('Remind me')),
-                        dateSelector = $('<select class="form-control">', { name: 'dateselect', tabindex: '1', 'aria-labelledby': 'remindme' }).append(tasksUtil.buildDropdownMenu({time: endDate}))
+                        dateSelector = $('<select class="form-control">', { name: 'dateselect', tabindex: '1', 'aria-labelledby': 'remindme' }).append(tasksUtil.buildDropdownMenu({ time: endDate }))
                     )
                 );
 

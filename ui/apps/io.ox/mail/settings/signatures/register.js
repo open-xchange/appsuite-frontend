@@ -11,14 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/settings/signatures/register',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/mail',
-     'settings!io.ox/mail',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/api/snippets',
-     'less!io.ox/mail/settings/signatures/style'
-    ], function (ext, gt, settings, dialogs, snippets) {
+define('io.ox/mail/settings/signatures/register', [
+    'io.ox/core/extensions',
+    'gettext!io.ox/mail',
+    'settings!io.ox/mail',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/api/snippets',
+    'less!io.ox/mail/settings/signatures/style'
+], function (ext, gt, settings, dialogs, snippets) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/mail/settings/signatures/register',
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="signature-name">').text(gt('Signature name')),
-                    baton.$.name = $('<input type="text" class="form-control">').attr({'id': 'signature-name', 'tabindex': 1})
+                    baton.$.name = $('<input type="text" class="form-control">').attr({ 'id': 'signature-name', 'tabindex': 1 })
                 )
             );
         }
@@ -52,7 +52,7 @@ define('io.ox/mail/settings/signatures/register',
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="signature-text">').text(gt('Signature text')),
-                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">').attr({'tabindex': 1})
+                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">').attr({ 'tabindex': 1 })
                 )
             );
         }
@@ -66,7 +66,7 @@ define('io.ox/mail/settings/signatures/register',
                 $('<div class="form-group">').append(
                     $('<label for="signature-position">').text(gt('Signature position')),
                     baton.$.insertion = $('<select id="signature-position" class="form-control">')
-                        .attr({'tabindex': 1})
+                        .attr({ 'tabindex': 1 })
                         .append(
                             $('<option value="above">').text(gt('Above quoted text')),
                             $('<option value="below">').text(gt('Below quoted text'))
@@ -105,11 +105,11 @@ define('io.ox/mail/settings/signatures/register',
         ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', popup.getContentNode(), baton);
         popup.getContentNode().css('overflow-y', 'hidden');
 
-        popup.addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
-        .addButton('cancel', gt('Discard'), 'cancel', {tabIndex: '1'})
+        popup.addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+        .addButton('cancel', gt('Discard'), 'cancel', { tabIndex: 1 })
         .on('save', function () {
             if (baton.$.name.val() !== '') {
-                var update = signature.id ? {} : {type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: {insertion: 'below'}};
+                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below' }};
 
                 update.id = signature.id;
                 update.misc = { insertion: baton.$.insertion.val() };
@@ -191,10 +191,10 @@ define('io.ox/mail/settings/signatures/register',
                                 .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
 
                 $row.append(
-                    $('<td>').css({width: '10%', textAlign: 'center'}).append(
+                    $('<td>').css({ width: '10%', textAlign: 'center' }).append(
                         $('<input type="checkbox">').attr('data-index', index)
                     ),
-                    $('<td>').css({width: '80%', padding: '10px'}).append(
+                    $('<td>').css({ width: '80%', padding: '10px' }).append(
                         classicSignature.signature_name, $('<br>'),
                         $('<div>').text(gt.noI18n(preview)).addClass('classic-sig-preview')
                     )
@@ -233,23 +233,23 @@ define('io.ox/mail/settings/signatures/register',
                 busy();
                 var deferreds = [];
                 $container.find(':checked').each(function () {
-                    var index = $(this).data('index');
-                    var classicSignature = signatures[index];
+                    var index = $(this).data('index'),
+                        classicSignature = signatures[index];
 
                     deferreds.push(
                         snippets.create({
-
-                        type: 'signature',
-                        module: 'io.ox/mail',
-                        displayname: classicSignature.signature_name,
-                        content: classicSignature.signature_text,
-                        misc: {
-                            insertion: classicSignature.position
-                        },
-                        meta: {
-                            imported: classicSignature
-                        }
-                    }).fail(require('io.ox/core/notifications').yell));
+                            type: 'signature',
+                            module: 'io.ox/mail',
+                            displayname: classicSignature.signature_name,
+                            content: classicSignature.signature_text,
+                            misc: {
+                                insertion: classicSignature.position
+                            },
+                            meta: {
+                                imported: classicSignature
+                            }
+                        }).fail(require('io.ox/core/notifications').yell)
+                    );
                 });
 
                 $.when.apply($, deferreds).always(function () { idle(); popup.close(); });

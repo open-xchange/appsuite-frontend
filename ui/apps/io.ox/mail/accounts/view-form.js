@@ -12,15 +12,15 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define.async('io.ox/mail/accounts/view-form',
-    ['io.ox/core/notifications',
-     'io.ox/core/api/account',
-     'settings!io.ox/mail',
-     'gettext!io.ox/settings',
-     'io.ox/core/extensions',
-     'io.ox/backbone/mini-views',
-     'io.ox/core/folder/picker'
-    ], function (notifications, accountAPI, settings, gt, ext, mini, picker) {
+define.async('io.ox/mail/accounts/view-form', [
+    'io.ox/core/notifications',
+    'io.ox/core/api/account',
+    'settings!io.ox/mail',
+    'gettext!io.ox/settings',
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views',
+    'io.ox/core/folder/picker'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker) {
 
     'use strict';
 
@@ -28,18 +28,18 @@ define.async('io.ox/mail/accounts/view-form',
         model,
 
         optionsServerType = [
-            { label: gt.noI18n('IMAP'), value: 'imap'},
-            { label: gt.noI18n('POP3'), value: 'pop3'}
+            { label: gt.noI18n('IMAP'), value: 'imap' },
+            { label: gt.noI18n('POP3'), value: 'pop3' }
         ],
 
         optionsRefreshRatePop = [
-            { label: gt.noI18n('3'), value: '3'},
-            { label: gt.noI18n('5'), value: '5'},
-            { label: gt.noI18n('10'), value: '10'},
-            { label: gt.noI18n('15'), value: '15'},
-            { label: gt.noI18n('30'), value: '30'},
-            { label: gt.noI18n('60'), value: '60'},
-            { label: gt.noI18n('360'), value: '360'}
+            { label: gt.noI18n('3'), value: '3' },
+            { label: gt.noI18n('5'), value: '5' },
+            { label: gt.noI18n('10'), value: '10' },
+            { label: gt.noI18n('15'), value: '15' },
+            { label: gt.noI18n('30'), value: '30' },
+            { label: gt.noI18n('60'), value: '60' },
+            { label: gt.noI18n('360'), value: '360' }
         ],
 
         optionsAuthType = [
@@ -148,7 +148,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 function syncLogin(model, value) {
-                    model.set('login', value, {validate: true});
+                    model.set('login', value, { validate: true });
                 }
 
                 if (self.model.get('id') !== 0) {//check for primary account
@@ -169,7 +169,7 @@ define.async('io.ox/mail/accounts/view-form',
 
                     //login for server should be email-address by default;
                     if (self.model.get('login') === undefined && self.model.get('primary_address') !== '') {
-                        self.model.set('login', self.model.get('primary_address'), {validate: true});
+                        self.model.set('login', self.model.get('primary_address'), { validate: true });
                     }
 
                     //if login and mailadress are the same change login if mailadress changes

@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/list/perspective',
-    ['io.ox/calendar/api',
-     'io.ox/calendar/list/view-grid-template',
-     'io.ox/calendar/view-detail',
-     'io.ox/core/commons',
-     'io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/calendar/util',
-     'io.ox/core/extPatterns/actions',
-     'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'
-    ], function (api, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
+define('io.ox/calendar/list/perspective', [
+    'io.ox/calendar/api',
+    'io.ox/calendar/list/view-grid-template',
+    'io.ox/calendar/view-detail',
+    'io.ox/core/commons',
+    'io.ox/core/extensions',
+    'io.ox/core/date',
+    'io.ox/calendar/util',
+    'io.ox/core/extPatterns/actions',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar'
+], function (api, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
 
     'use strict';
 
@@ -160,7 +160,6 @@ define('io.ox/calendar/list/perspective',
                 // update toolbar with new baton
                 app.pages.getToolbar('detailView').setBaton(baton);
 
-
             } else {
                 right.idle().empty().append(viewDetail.draw(baton));
             }
@@ -215,7 +214,8 @@ define('io.ox/calendar/list/perspective',
                 this.prepend(
                     optDropdown = $('<div class="grid-options dropdown">')
                         .append(
-                            $('<a>').attr({
+                            $('<a>')
+                                .attr({
                                     href: '#',
                                     tabindex: 1,
                                     'data-toggle': 'dropdown',
@@ -249,10 +249,10 @@ define('io.ox/calendar/list/perspective',
         /**
          * returns the all request for the vgrid
          * @param  {Object} dates   contains a start end end date
-         * @return {function}       the all request function for the vgrid
+         * @return { function}       the all request function for the vgrid
          */
         var generateAllRequest = function (dates) {
-            //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
+            //var timeframe = util.getDateInterval({ start_date: dates.start, end_date: dates.end });
             var endDate = new date.Local(dates.end).format(date.DATE);
             grid.setEmptyMessage(function () {
                 return gt.format(gt('No appointments found until %s'), endDate);
@@ -295,9 +295,9 @@ define('io.ox/calendar/list/perspective',
 
                             //found valid recurrence, append it
                             if (foundRecurrence !== false) {
-                                _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
+                                _.url.hash({ id: _.url.hash('id') + '.' + foundRecurrence });
                             } else {//ok its not in the list lets show it directly
-                                app.trigger('show:appointment', {id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0}, true);
+                                app.trigger('show:appointment', { id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0 }, true);
                             }
 
                             findRecurrence = false;//only search once
@@ -316,7 +316,7 @@ define('io.ox/calendar/list/perspective',
             end = new date.Local(start).setMonth(start.getMonth() + months);
             // increase for next run
             months++;
-            return {start: start, end: end};
+            return { start: start, end: end };
         };
 
         // standard call will get the first month

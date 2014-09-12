@@ -11,23 +11,23 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/view',
-    ['io.ox/mail/compose/extensions',
-     'io.ox/mail/compose/model',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'settings!io.ox/mail',
-     'settings!io.ox/core',
-     'io.ox/core/notifications',
-     'io.ox/core/api/snippets',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style',
-     'less!io.ox/mail/compose/style'
-    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt) {
+define('io.ox/mail/compose/view', [
+    'io.ox/mail/compose/extensions',
+    'io.ox/mail/compose/model',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'settings!io.ox/mail',
+    'settings!io.ox/core',
+    'io.ox/core/notifications',
+    'io.ox/core/api/snippets',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style',
+    'less!io.ox/mail/compose/style'
+], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt) {
 
     'use strict';
 
@@ -210,7 +210,7 @@ define('io.ox/mail/compose/view',
         draw: function (baton) {
             this.append(
                 $('<div class="contact-image">')
-                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data , { width: 42, height: 42, scaleType: 'contain' })))
+                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data, { width: 42, height: 42, scaleType: 'contain' })))
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
                     .lazyload({
                         effect: 'fadeIn',
@@ -330,7 +330,7 @@ define('io.ox/mail/compose/view',
         },
 
         filterData: function (data) {
-            if(/(compose|edit)/.test(data.mode)) return data;
+            if (/(compose|edit)/.test(data.mode)) return data;
             return _.pick(data, 'id', 'folder_id', 'mode');
         },
 
@@ -376,7 +376,7 @@ define('io.ox/mail/compose/view',
 
             if (_(mail.flags).isUndefined()) {
                 mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if (mail.data.flags & 4 === 0) {
+            } else if ((mail.data.flags & 4) === 0) {
                 mail.flags += mailAPI.FLAGS.DRAFT;
             }
 
@@ -425,7 +425,7 @@ define('io.ox/mail/compose/view',
             return def;
         },
 
-        stopAutoSave: function() {
+        stopAutoSave: function () {
             if (this.autosave) {
                 window.clearTimeout(this.autosave.timer);
             }
@@ -506,9 +506,9 @@ define('io.ox/mail/compose/view',
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', {tabIndex: '1'})
-                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
+                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
@@ -647,8 +647,8 @@ define('io.ox/mail/compose/view',
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt('Mail has empty subject. Send it anyway?'))
-                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', {tabIndex: '1'})
-                            .addButton('subject', gt('Add subject'), 'subject', {tabIndex: '1'})
+                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
+                            .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
                             .show(function () {
                                 def.notify('empty subject');
                             })
@@ -1008,8 +1008,7 @@ define('io.ox/mail/compose/view',
                         $(window).trigger('resize.tinymce');
                         fixed = true;
                     }
-                }
-                else if (fixed) {
+                } else if (fixed) {
                     toolbar.removeClass('fixed');
                     editor.css('margin-top', 0);
                     fixed = false;

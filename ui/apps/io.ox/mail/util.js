@@ -12,16 +12,16 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/util',
-    ['io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/core/util',
-     'io.ox/core/api/account',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail',
-     'settings!io.ox/contacts',
-     'gettext!io.ox/core'
-    ], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
+define('io.ox/mail/util', [
+    'io.ox/core/extensions',
+    'io.ox/core/date',
+    'io.ox/core/util',
+    'io.ox/core/api/account',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail',
+    'settings!io.ox/contacts',
+    'gettext!io.ox/core'
+], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
@@ -69,8 +69,7 @@ define('io.ox/mail/util',
                 base = Math.floor(timestamp / DAY) * DAY;
                 now = Math.floor(_.utc() / DAY) * DAY;
                 delta = Math.floor((now - base) / DAY);
-                if (delta === 1) return gt('Yesterday');
-                else if (delta <= 6) return d.format('EEEE');
+                if (delta === 1) { return gt('Yesterday'); } else if (delta <= 6) { return d.format('EEEE'); }
             }
 
             return datestr();
@@ -109,7 +108,7 @@ define('io.ox/mail/util',
         /**
          * currently registred types
          * @example: { MSISND : '/TYPE=PLMN' }
-         * @return {array} list of types
+         * @return { array} list of types
          */
         getChannelSuffixes: (function () {
             //important: used for global replacements so keep this value unique
@@ -123,7 +122,7 @@ define('io.ox/mail/util',
          * identify channel (email or phone)
          * @param  {string} value
          * @param  {boolean} check for activated cap first (optional: default is true)
-         * @return {string} channel
+         * @return { string} channel
          */
         getChannel: function (value, check) {
             //default value
@@ -134,9 +133,9 @@ define('io.ox/mail/util',
                 setting = !(check) || capabilities.has('msisdn'),
                 //no '@' AND no alphabetic digit AND at least one numerical digit
                 phoneval = function () {
-                            return value.replace(rNotDigitAndAt, '').length === 0 &&
-                                   value.replace(rTelephoneCleanup, '').length > 0;
-                        };
+                    return value.replace(rNotDigitAndAt, '').length === 0 &&
+                           value.replace(rTelephoneCleanup, '').length > 0;
+                };
             return type || (setting && phoneval()) ? 'phone' : 'email';
         },
 
@@ -169,7 +168,7 @@ define('io.ox/mail/util',
         /**
          * remove typesuffix from sender/reciepients
          * @param  {object|string} mail
-         * @return {undefined}
+         * @return { undefined }
          */
         removeChannelSuffix: !capabilities.has('msisdn') ? _.identity :
             function (mail) {
@@ -557,9 +556,9 @@ define('io.ox/mail/util',
                             //consider changes applied by appsuite
                             clean = add(signature.content, !!isHTML);
                             //consider changes applied by tiny
-                            if (clean === '')
+                            if (clean === '') {
                                 return '<br>';
-                            else {
+                            } else {
                                 return clean
                                         //replace surrounding white-space (except linebreaks)
                                         .replace(/>[\t\f\v ]+/g, '>')
@@ -611,7 +610,7 @@ define('io.ox/mail/util',
                             id: obj.id,
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
-                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}), // remove consecutive white-space
+                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), { max: 50 }), // remove consecutive white-space
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,

@@ -11,13 +11,13 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/files/folderview-extensions',
-    ['io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'io.ox/files/api',
-     'io.ox/core/notifications',
-     'gettext!io.ox/mail'
-    ], function (ext, folderAPI, filesAPI, notifications, gt) {
+define('io.ox/files/folderview-extensions', [
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'io.ox/files/api',
+    'io.ox/core/notifications',
+    'gettext!io.ox/mail'
+], function (ext, folderAPI, filesAPI, notifications, gt) {
 
     'use strict';
 
@@ -34,8 +34,8 @@ define('io.ox/files/folderview-extensions',
         ).done(function (folder, dialogs) {
             new dialogs.ModalDialog()
                 .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
-                .addPrimaryButton('delete', gt('Empty folder'), 'delete', {tabIndex: '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {

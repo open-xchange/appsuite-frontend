@@ -20,10 +20,10 @@
         misc: { insertion: above } // Object with misc options
     }
 */
-define('io.ox/core/api/snippets',
-    ['io.ox/core/http',
-     'io.ox/core/event'
-    ], function (http, Events) {
+define('io.ox/core/api/snippets', [
+    'io.ox/core/http',
+    'io.ox/core/event'
+], function (http, Events) {
 
     'use strict';
 
@@ -33,7 +33,7 @@ define('io.ox/core/api/snippets',
 
     /**
      * get all snippets
-     * @return {deferred} array of snippet objects
+     * @return { deferred} array of snippet objects
      */
     api.getAll = function () {
 
@@ -49,7 +49,7 @@ define('io.ox/core/api/snippets',
             function success(data) {
                 cache = _(data).map(function (sig) {
                     // robustness: snippet migration
-                    sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
+                    sig.misc = $.extend({ insertion: 'below' }, sig.misc || {});
                     return sig;
                 });
                 return cache;
@@ -64,7 +64,7 @@ define('io.ox/core/api/snippets',
      * create snippet
      * @param  {object} snippet
      * @fires  api#refresh.all
-     * @return {deferred} returns snippet id
+     * @return { deferred} returns snippet id
      */
     api.create = function (snippet) {
         return http.PUT({
@@ -84,7 +84,7 @@ define('io.ox/core/api/snippets',
      * update snippet
      * @param  {object} snippet
      * @fires  api#refresh.all
-     * @return {deferred} returns snippet object
+     * @return { deferred} returns snippet object
      */
     api.update = function (snippet) {
         return http.PUT({
@@ -104,7 +104,7 @@ define('io.ox/core/api/snippets',
     /**
      * get snippet
      * @param  {string} id
-     * @return {deferred}
+     * @return { deferred }
      */
     api.get = function (id) {
         return http.GET({
@@ -119,7 +119,7 @@ define('io.ox/core/api/snippets',
     /**
      * get snippets
      * @param  {array} ids
-     * @return {deferred}
+     * @return { deferred }
      */
     api.list = function (ids) {
         return http.PUT({
@@ -137,7 +137,7 @@ define('io.ox/core/api/snippets',
      * remove snippets
      * @param  {string} id
      * @fires  api#refresh.all
-     * @return {deferred} returns empty object
+     * @return { deferred} returns empty object
      */
     api.destroy = function (id) {
         return http.GET({

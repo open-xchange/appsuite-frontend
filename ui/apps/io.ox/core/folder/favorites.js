@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/favorites',
-    ['io.ox/core/folder/node',
-     'io.ox/core/folder/api',
-     'io.ox/core/extensions',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-     ], function (TreeNodeView, api, ext, settings, gt) {
+define('io.ox/core/folder/favorites', [
+    'io.ox/core/folder/node',
+    'io.ox/core/folder/api',
+    'io.ox/core/extensions',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (TreeNodeView, api, ext, settings, gt) {
 
     'use strict';
 

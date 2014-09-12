@@ -11,10 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/freebusy/templates',
-    ['io.ox/core/notifications',
-     'gettext!io.ox/calendar/freebusy'
-    ], function (notifications, gt) {
+define('io.ox/calendar/freebusy/templates', [
+    'io.ox/core/notifications',
+    'gettext!io.ox/calendar/freebusy'
+], function (notifications, gt) {
 
     'use strict';
 

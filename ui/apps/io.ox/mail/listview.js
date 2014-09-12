@@ -11,16 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/listview',
-    ['io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/util',
-     'io.ox/mail/api',
-     'io.ox/core/api/account',
-     'io.ox/core/tk/list',
-     'io.ox/mail/view-options',
-     'less!io.ox/mail/style'
-    ], function (extensions, ext, util, api, account, ListView) {
+define('io.ox/mail/listview', [
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/util',
+    'io.ox/mail/api',
+    'io.ox/core/api/account',
+    'io.ox/core/tk/list',
+    'io.ox/mail/view-options',
+    'less!io.ox/mail/style'
+], function (extensions, ext, util, api, account, ListView) {
 
     'use strict';
 

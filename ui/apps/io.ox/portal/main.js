@@ -12,19 +12,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/main',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/user',
-     'io.ox/contacts/api',
-     'io.ox/core/date',
-     'io.ox/core/tk/dialogs',
-     'io.ox/portal/widgets',
-     'io.ox/portal/util',
-     'io.ox/portal/settings/pane',
-     'gettext!io.ox/portal',
-     'settings!io.ox/portal',
-     'less!io.ox/portal/style'
-    ], function (ext, userAPI, contactAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
+define('io.ox/portal/main', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/user',
+    'io.ox/contacts/api',
+    'io.ox/core/date',
+    'io.ox/core/tk/dialogs',
+    'io.ox/portal/widgets',
+    'io.ox/portal/util',
+    'io.ox/portal/settings/pane',
+    'gettext!io.ox/portal',
+    'settings!io.ox/portal',
+    'less!io.ox/portal/style'
+], function (ext, userAPI, contactAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -36,7 +36,7 @@ define('io.ox/portal/main',
         var hasDataShown = function (widget) {
             return _.contains(hadData, widget) ? true : false;
         },
-            containsData = function (widget) {
+        containsData = function (widget) {
             var tasks;
             if (widget === 'tasks') {
                 tasks = _(baton.data).filter(function (task) {
@@ -60,8 +60,7 @@ define('io.ox/portal/main',
                 settings.set('settings/hadData', hadData).save();
 
                 return false;
-            }
-            else if (!containsData(widget))
+            } else if (!containsData(widget))
                 if (hasDataShown(widget)) {
                     // reset
                     // settings.set('settings/hadData', []).save();
@@ -211,7 +210,7 @@ define('io.ox/portal/main',
         win,
         scrollPos = window.innerHeight,
         appBaton = ext.Baton({ app: app }),
-        sidepopup = new dialogs.SidePopup({tabTrap: true}),
+        sidepopup = new dialogs.SidePopup({ tabTrap: true }),
         collection = widgets.getCollection();
 
     app.settings = settings;
@@ -223,7 +222,7 @@ define('io.ox/portal/main',
             // clean up
             if (model.has('baton')) {
                 delete model.get('baton').model;
-                model.set('baton', null, {validate: true});
+                model.set('baton', null, { validate: true });
                 model.isDeleted = true;
             }
             widgets.save(appBaton.$.widgets);
@@ -361,8 +360,8 @@ define('io.ox/portal/main',
                 $('<div>').append(
                     $('<span class="bold">').append(
                         $.txt(
-                        //#. %1$s is the product name
-                        gt.format('%1$s. ' , productName)
+                            //#. %1$s is the product name
+                            gt.format('%1$s. ', productName)
                         )
                     ),
                     $.txt(
@@ -433,8 +432,7 @@ define('io.ox/portal/main',
                     if (point.all()[0].summary) {
                         //invoke special summary if there is one
                         point.invoke('summary', node, baton);
-                    }
-                    else if(!node.hasClass('generic-summary')) {//add generic open close if it's not added yet
+                    } else if (!node.hasClass('generic-summary')) { //add generic open close if it's not added yet
                         node.addClass('with-summary show-summary generic-summary');
                         node.on('tap', 'h2', function (e) {
                             $(e.delegateTarget).toggleClass('show-summary generic-summary');
@@ -508,7 +506,7 @@ define('io.ox/portal/main',
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
             node.find('a.disable-widget').attr({
-                'aria-label': title + ', ' + gt('Disable widget'),
+                'aria-label': title + ', ' + gt('Disable widget')
             });
             // setup?
             if (requiresSetUp) {
@@ -588,7 +586,7 @@ define('io.ox/portal/main',
         _.tick(1, 'hour', app.updateTitle);
         //change name if username changes
         userAPI.get(ox.user_id).done(function (userData) {
-            contactAPI.on('update:' + _.ecid({folder_id: userData.folder_id, id: userData.contact_id}), app.updateTitle);
+            contactAPI.on('update:' + _.ecid({ folder_id: userData.folder_id, id: userData.contact_id }), app.updateTitle);
         });
 
         win.show(function () {
@@ -617,13 +615,13 @@ define('io.ox/portal/main',
                         .append($('<span>').text(gt('Do you really want to delete this widget?')))
                         .addPrimaryButton('delete',
                             //#. Really delete portal widget - in contrast to "just disable"
-                            gt('Delete'), 'delete', {tabIndex: '1'}
+                            gt('Delete'), 'delete', { tabIndex: 1 }
                         )
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
                         if (model.get('enabled')) {
                             dialog.addAlternativeButton('disable',
                                 //#. Just disable portal widget - in contrast to delete
-                                gt('Just disable widget'), 'disable', {tabIndex: '1'}
+                                gt('Just disable widget'), 'disable', { tabIndex: 1 }
                             );
                         }
                         dialog.show().done(function (action) {

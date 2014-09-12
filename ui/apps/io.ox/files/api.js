@@ -13,18 +13,18 @@
  *
  */
 
-define('io.ox/files/api',
-    ['io.ox/core/http',
-     'io.ox/core/extensions',
-     'io.ox/core/api/factory',
-     'io.ox/core/folder/api',
-     'settings!io.ox/core',
-     'io.ox/core/cache',
-     'io.ox/core/date',
-     'io.ox/files/mediasupport',
-     'gettext!io.ox/files',
-     'io.ox/filter/files'
-    ], function (http, ext, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
+define('io.ox/files/api', [
+    'io.ox/core/http',
+    'io.ox/core/extensions',
+    'io.ox/core/api/factory',
+    'io.ox/core/folder/api',
+    'settings!io.ox/core',
+    'io.ox/core/cache',
+    'io.ox/core/date',
+    'io.ox/files/mediasupport',
+    'gettext!io.ox/files',
+    'io.ox/filter/files'
+], function (http, ext, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
 
     'use strict';
 
@@ -59,7 +59,7 @@ define('io.ox/files/api',
             /**
              * returns local date time string of lock expiry if expiry is sometime in the next week
              * @param  {object} file
-             * @return {string|false}
+             * @return { string|false }
              */
             getLockTime: function (obj) {
                 if (obj.locked_until < _.now() + date.WEEK) {
@@ -72,7 +72,7 @@ define('io.ox/files/api',
             /**
              * add file to tracker
              * @param {object} obj
-             * @return {object} tracker
+             * @return { object} tracker
              */
             addFile: function (obj) {
                 if (obj.locked_until === 0) return self;
@@ -87,7 +87,7 @@ define('io.ox/files/api',
             /**
              * wrapper to add/remove file; resolves inconsistencies
              * @param {object} obj
-             * @return {object} tracker
+             * @return { object} tracker
              */
             updateFile: function (obj) {
                 obj = _.isObject(obj) ? obj : {};
@@ -95,10 +95,11 @@ define('io.ox/files/api',
                 var cid = getCID(obj),
                     inconsistent = obj.locked_until !== (fileLocks[cid] ? fileLocks[cid] : 0);
                 if (inconsistent) {
-                    if (obj.locked_until)
+                    if (obj.locked_until) {
                         self.addFile(obj);
-                    else
+                    } else {
                         self.removeFile(cid);
+                    }
                 }
                 return self;
             },
@@ -106,7 +107,7 @@ define('io.ox/files/api',
             /**
              * remove file from tracker
              * @param {object|string} obj/cid
-             * @return {object} tracker
+             * @return { object} tracker
              */
             removeFile: function (obj) {
                 var cid = getCID(obj);
@@ -117,7 +118,7 @@ define('io.ox/files/api',
 
             /**
              * clear tracker and clear timeouts (chainable)
-             * @return {object} tracker
+             * @return { object} tracker
              */
             clear: function () {
                 fileLocks = {};
@@ -132,27 +133,27 @@ define('io.ox/files/api',
 
     var mime_types = {
         // images
-        'jpg' : 'image/jpeg',
+        'jpg':  'image/jpeg',
         'jpeg': 'image/jpeg',
-        'png' : 'image/png',
-        'gif' : 'image/gif',
-        'tif' : 'image/tiff',
+        'png':  'image/png',
+        'gif':  'image/gif',
+        'tif':  'image/tiff',
         'tiff': 'image/tiff',
-        'bmp' : 'image/bmp',
+        'bmp':  'image/bmp',
         // audio
-        'mp3' : 'audio/mpeg',
-        'ogg' : 'audio/ogg',
+        'mp3':  'audio/mpeg',
+        'ogg':  'audio/ogg',
         'opus': 'audio/ogg',
-        'aac' : 'audio/aac',
-        'm4a' : 'audio/mp4',
-        'm4b' : 'audio/mp4',
-        'wav' : 'audio/wav',
+        'aac':  'audio/aac',
+        'm4a':  'audio/mp4',
+        'm4b':  'audio/mp4',
+        'wav':  'audio/wav',
 
         // video
-        'mp4' : 'video/mp4',
-        'm4v' : 'video/mp4',
-        'ogv' : 'video/ogg',
-        'ogm' : 'video/ogg',
+        'mp4':  'video/mp4',
+        'm4v':  'video/mp4',
+        'ogv':  'video/ogg',
+        'ogm':  'video/ogg',
         'webm': 'video/webm',
         // open office
         'odc': 'application/vnd.oasis.opendocument.chart',
@@ -214,14 +215,14 @@ define('io.ox/files/api',
     var processFiles = function (data) {
         return _(data).filter(function (file) {
             return ext.point('io.ox/files/filter').filter(function (p) {
-                    return p.invoke('isEnabled', this, file) !== false;
-                })
-                .map(function (p) {
-                    return p.invoke('isVisible', this, file);
-                })
-                .reduce(function (acc, isVisible) {
-                    return acc && isVisible;
-                }, true);
+                return p.invoke('isEnabled', this, file) !== false;
+            })
+            .map(function (p) {
+                return p.invoke('isVisible', this, file);
+            })
+            .reduce(function (acc, isVisible) {
+                return acc && isVisible;
+            }, true);
         });
     };
 
@@ -338,7 +339,7 @@ define('io.ox/files/api',
     /**
      * map error codes and text phrases for user feedback
      * @param  {event} e
-     * @return {event}
+     * @return { event }
      */
     var failedUpload = function (e) {
         e.data = e.data || {};
@@ -374,29 +375,30 @@ define('io.ox/files/api',
      * @param  {object}           obj
      * @param  {string|array}     property keys
      * @param  {object}           options
-     * @return {undefined|object}
+     * @return { undefined|object }
      */
     var missing = function (obj, keys, options) {
         var opt, empty = [], undef = [], response, missing;
         //preparation
         obj = obj || {};
         keys = [].concat(keys.split(','));
-        opt = $.extend({type: 'undefined'}, options);
+        opt = $.extend({ type: 'undefined' }, options);
         //idenfity undefined/empty
         _.each(keys, function (key) {
-            if (!(key in obj))
+            if (!(key in obj)) {
                 undef.push(key);
-            else if (_.isEmpty(obj[key]))
+            } else if (_.isEmpty(obj[key])) {
                 empty.push(key);
+            }
         });
         //consider option
         missing = opt.type === 'undefined' ? undef : undef.concat(empty);
         //set response
         if (missing.length) {
             response = failedUpload({
-                    categories: 'ERROR',
-                    error: opt.message || gt('Please specify these missing variables: ') + missing
-                });
+                categories: 'ERROR',
+                error: opt.message || gt('Please specify these missing variables: ') + missing
+            });
         }
         return response;
     };
@@ -408,7 +410,7 @@ define('io.ox/files/api',
      *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
      *         'file' - the file object to upload
      * @fires  api#create.file
-     * @return {deferred}
+     * @return { deferred }
      */
     api.uploadFile = function (options) {
 
@@ -449,12 +451,12 @@ define('io.ox/files/api',
             formData.append('json', JSON.stringify(options.json));
 
             return http.UPLOAD({
-                    module: 'files',
-                    params: { action: 'new', filename: options.filename },
-                    data: formData,
-                    fixPost: true
-                })
-                .pipe(success, failedUpload);
+                module: 'files',
+                params: { action: 'new', filename: options.filename },
+                data: formData,
+                fixPost: true
+            })
+            .pipe(success, failedUpload);
 
         } else {
 
@@ -477,7 +479,7 @@ define('io.ox/files/api',
      *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
      *         'file' - the file object to upload
      * @fires  api#create.file
-     * @return {deferred}
+     * @return { deferred }
      */
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
@@ -506,26 +508,26 @@ define('io.ox/files/api',
         if (error) return $.Deferred().reject(error).promise();
 
         return http.UPLOAD({
-                module: 'files',
-                params: {
-                    action: 'update',
-                    extendedResponse: true,
-                    filename: options.filename,
-                    id: options.id,
-                    timestamp: _.now()
-                },
-                data: formData,
-                fixPost: true // TODO: temp. backend fix
-            })
-            .then(
-                function success(response) {
-                    var id = options.json.id || options.id,
-                        folder_id = String(options.json.folder_id),
-                        file = { folder_id: folder_id, id: id };
-                    return handleExtendedResponse(file, response, options);
-                },
-                failedUpload
-            );
+            module: 'files',
+            params: {
+                action: 'update',
+                extendedResponse: true,
+                filename: options.filename,
+                id: options.id,
+                timestamp: _.now()
+            },
+            data: formData,
+            fixPost: true // TODO: temp. backend fix
+        })
+        .then(
+            function success(response) {
+                var id = options.json.id || options.id,
+                    folder_id = String(options.json.folder_id),
+                    file = { folder_id: folder_id, id: id };
+                return handleExtendedResponse(file, response, options);
+            },
+            failedUpload
+        );
     };
 
     /**
@@ -535,7 +537,7 @@ define('io.ox/files/api',
      *         'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
      *         'file' - the file object to upload
      * @fires  api#create.version
-     * @return {deferred}
+     * @return { deferred }
      */
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
@@ -557,7 +559,7 @@ define('io.ox/files/api',
         } else {
             options.json = { folder_id: options.folder };
         }
-        formData.append($('<input>', {'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json)}));
+        formData.append($('<input>',  { 'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json) }));
 
         /*return http.UPLOAD({
             module: 'files',
@@ -566,7 +568,7 @@ define('io.ox/files/api',
             fixPost: true // TODO: temp. backend fix
         });*/
         var tmpName = 'iframe_' + _.now(),
-        frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
+        frame = $('<iframe>',  { 'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
         $('#tmp').append(frame);
 
         window.callback_update = function (response) {
@@ -609,7 +611,7 @@ define('io.ox/files/api',
      * @param  {object} file
      * @param  {boolean} makeCurrent (special handling for mark as current version) [optional]
      * @fires  api#create.file (object)
-     * @return {deferred}
+     * @return { deferred }
      */
     api.update = function (file, makeCurrent) {
 
@@ -626,19 +628,19 @@ define('io.ox/files/api',
         if (error) return $.Deferred().reject(error).promise();
 
         return http.PUT({
-                module: 'files',
-                params: {
-                    action: 'update',
-                    extendedResponse: true,
-                    id: file.id,
-                    timestamp: _.then()
-                },
-                data: updateData,
-                appendColumns: false
-            })
-            .then(function (response) {
-                return handleExtendedResponse(file, response);
-            });
+            module: 'files',
+            params: {
+                action: 'update',
+                extendedResponse: true,
+                id: file.id,
+                timestamp: _.then()
+            },
+            data: updateData,
+            appendColumns: false
+        })
+        .then(function (response) {
+            return handleExtendedResponse(file, response);
+        });
     };
 
     // deprecated/unused; commented out on 18.11.2013
@@ -658,7 +660,7 @@ define('io.ox/files/api',
     //         .pipe(function (data) {
     //             // clear folder cache
     //             return api.propagate('new', { folder_id: options.folder }).pipe(function () {
-    //                 api.trigger('create.file', {id: data, folder: options.folder});
+    //                 api.trigger('create.file', { id: data, folder: options.folder });
     //                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
     //             });
     //         });
@@ -673,7 +675,7 @@ define('io.ox/files/api',
      * @fires  api#update
      * @fires  api#update: + cid
      * @fires  api#refresh.all
-     * @return {promise}
+     * @return { promise }
      *
      * TODO: api.propagate should be changed to be able to process arrays
      */
@@ -712,16 +714,14 @@ define('io.ox/files/api',
                             api.trigger('update update:' + _.ecid(data), data);
                             if (!noRefreshAll) api.trigger('refresh.all');
                         });
-                    }
-                    else if (type === 'rename') {
+                    } else if (type === 'rename') {
                         return api.get(obj).done(function (data) {
                             var cid = encodeURIComponent(_.cid({ folder_id: data.folder_id, id: former_id }));
                             data.former_id = former_id;
                             api.trigger('update:' + cid, data);
                             if (!noRefreshAll) api.trigger('refresh.all');
                         });
-                    }
-                    else {
+                    } else {
                         if (!noRefreshAll) api.trigger('refresh.all');
                     }
                 }
@@ -737,7 +737,7 @@ define('io.ox/files/api',
      * returns versions
      * @param  {object} options
      * @param  {string} options.id
-     * @return {deferred}
+     * @return { deferred }
      */
     api.versions = function (options) {
         options = _.extend({ action: 'versions', timezone: 'utc' }, options);
@@ -770,10 +770,10 @@ define('io.ox/files/api',
      * @param  {object} file
      * @param  {string} mode
      * @param  {string} options
-     * @return {string} url
+     * @return { string} url
      */
     api.getUrl = function (file, mode, options) {
-        options = $.extend({scaletype: 'contain'}, options || {});
+        options = $.extend({ scaletype: 'contain' }, options || {});
         var url = ox.apiRoot + '/files',
             // basic URL
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
@@ -800,14 +800,11 @@ define('io.ox/files/api',
         case 'play':
             return url + query + '&delivery=view';
         case 'download':
-            return (file.meta && file.meta.downloadUrl) ||
-                url + name + query + '&delivery=download';
+            return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
         case 'thumbnail':
-            return (file.meta && file.meta.thumbnailUrl) ||
-                url + query + '&delivery=view' + thumbnail + (file.file_mimetype ? '&content_type=' + file.file_mimetype : '');
+            return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + thumbnail + (file.file_mimetype ? '&content_type=' + file.file_mimetype : '');
         case 'preview':
-            return (file.meta && file.meta.previewUrl) ||
-                url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
+            return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
         case 'cover':
             return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg' + userContext;
         case 'zip':
@@ -825,7 +822,7 @@ define('io.ox/files/api',
      * removes version
      * @param  {object} version (file version object)
      * @fires  api#delete.version (version)
-     * @return {deferred}
+     * @return { deferred }
      */
     api.detach = function (version) {
         //missing arguments / argument properties
@@ -898,7 +895,7 @@ define('io.ox/files/api',
      * move files to a folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @return {deferred}
+     * @return { deferred }
      */
     api.move = function (list, targetFolderId) {
         return copymove(list, 'update', targetFolderId);
@@ -908,7 +905,7 @@ define('io.ox/files/api',
      * copy files to a folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @return {deferred}
+     * @return { deferred }
      */
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
@@ -918,7 +915,7 @@ define('io.ox/files/api',
      * file playable in current browser
      * @param  {string} type ('audio', 'video')
      * @param  {string} filename
-     * @return {boolean}
+     * @return { boolean }
      */
     api.checkMediaFile = function (type, filename) {
         return mediasupport.checkFile(type, filename);
@@ -971,7 +968,7 @@ define('io.ox/files/api',
     /**
      * unlocks files
      * @param  {array} list
-     * @return {deferred}
+     * @return { deferred }
      */
     api.unlock = function (list) {
         return lockToggle(list, 'unlock');
@@ -980,7 +977,7 @@ define('io.ox/files/api',
     /**
      * locks files
      * @param  {array} list
-     * @return {deferred}
+     * @return { deferred }
      */
     api.lock = function (list) {
         return lockToggle(list, 'lock');
@@ -990,7 +987,7 @@ define('io.ox/files/api',
      * deletes all files from a specific folder
      * @param  {string} folder_id
      * @fires  api#refresh.all
-     * @return {deferred}
+     * @return { deferred }
      */
     api.clear = function (folder_id) {
         // new clear

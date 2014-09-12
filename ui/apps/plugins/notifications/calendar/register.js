@@ -12,12 +12,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/notifications/calendar/register',
-    ['io.ox/calendar/api',
-     'io.ox/core/api/reminder',
-     'io.ox/core/extensions',
-     'gettext!plugins/notifications'
-    ], function (calAPI, reminderAPI, ext, gt) {
+define('plugins/notifications/calendar/register', [
+    'io.ox/calendar/api',
+    'io.ox/core/api/reminder',
+    'io.ox/core/extensions',
+    'gettext!plugins/notifications'
+], function (calAPI, reminderAPI, ext, gt) {
 
     'use strict';
 
@@ -26,10 +26,12 @@ define('plugins/notifications/calendar/register',
             this.append(
                 $('<legend class="section-title">').text(gt('Appointment invitations'))
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({ tabindex: 1,
+                        .attr({
+                            tabindex: 1,
                             'aria-label': gt('Press to hide all appointment invitations.'),
                             'data-action': 'clear',
-                            'focus-id': 'calendar-invite-clear'})),
+                            'focus-id': 'calendar-invite-clear'
+                        })),
                 $('<div class="notifications">')
             );
         }
@@ -40,10 +42,12 @@ define('plugins/notifications/calendar/register',
             this.append(
                 $('<legend class="section-title">').text(gt('Appointment reminders'))
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
-                        .attr({ tabindex: 1,
+                        .attr({
+                            tabindex: 1,
                             'aria-label': gt('Press to hide all appointment reminders.'),
                             'data-action': 'clear',
-                            'focus-id': 'calendar-reminder-notification-clear'})),
+                            'focus-id': 'calendar-reminder-notification-clear'
+                        })),
                 $('<div class="reminder">')
             );
         }
@@ -79,9 +83,11 @@ define('plugins/notifications/calendar/register',
                         .css('margin-right', '14px')
                         .text(gt('Accept / Decline')),
                     $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                        .attr({'title': gt('Accept invitation'),
-                               'aria-label': gt('Accept invitation'),
-                               'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
+                        .attr({
+                            'title': gt('Accept invitation'),
+                            'aria-label': gt('Accept invitation'),
+                            'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'
+                        })
                         .append('<i class="fa fa-check">')
                 )
             );
@@ -165,8 +171,8 @@ define('plugins/notifications/calendar/register',
         onClickAccept: function (e) {
             e.stopPropagation();
             var o = calAPI.reduce(this.model.get('data'));
-                require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
-                    folderAPI.get(o.folder).done(function (folder) {
+            require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
+                folderAPI.get(o.folder).done(function (folder) {
                     o.data = {
                         alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
                         confirmmessage: '',
@@ -225,7 +231,7 @@ define('plugins/notifications/calendar/register',
                 sidepopup = overlay.prop('sidepopup'),
                 lastFocus = e.target,
                 cid = String(overlay.find('[data-cid]').data('cid'));
-            obj = {id: obj.target_id, folder: obj.folder};
+            obj = { id: obj.target_id, folder: obj.folder };
             // toggle?
             if (sidepopup && cid === _.cid(obj)) {
                 sidepopup.close();
@@ -456,15 +462,18 @@ define('plugins/notifications/calendar/register',
                         }
                     });
                 });
-            calAPI.on('delete:appointment', removeReminders)
-                  .on('delete:appointment', function () {
-                        reminderAPI.getReminders();
-                    })
-                  .on('mark:invite:confirmed', function (e, obj) {
-                        if (obj.data.confirmation === 2) {//remove reminders for declined appointments
-                            removeReminders(e, obj);
-                        }
-                    });
+
+            calAPI
+                .on('delete:appointment', removeReminders)
+                .on('delete:appointment', function () {
+                    reminderAPI.getReminders();
+                })
+                .on('mark:invite:confirmed', function (e, obj) {
+                    if (obj.data.confirmation === 2) {//remove reminders for declined appointments
+                        removeReminders(e, obj);
+                    }
+                });
+
             reminderAPI.getReminders();
         }
     });

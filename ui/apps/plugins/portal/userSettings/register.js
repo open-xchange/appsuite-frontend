@@ -12,13 +12,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/userSettings/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/main',
-     'gettext!io.ox/core',
-     'settings!io.ox/core',
-     'less!plugins/portal/userSettings/style'
-    ], function (ext, main, gt, settings) {
+define('plugins/portal/userSettings/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/main',
+    'gettext!io.ox/core',
+    'settings!io.ox/core',
+    'less!plugins/portal/userSettings/style'
+], function (ext, main, gt, settings) {
 
     'use strict';
 
@@ -83,14 +83,14 @@ define('plugins/portal/userSettings/register',
                 pwRegex = settings.get('password/regexp', '[^a-z0-9]'),
                 regexText = settings.get('password/special', '$, _, %'),
                 pwStrengths = [
-                    {label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%'},//red
-                    {label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%'},//red
-                    {label: gt('Password strength: Very weak'), color: 'bar-weak', barLength: '20%'},//red
-                    {label: gt('Password strength: Weak'), color: 'bar-weak', barLength: '40%'},//red
-                    {label: gt('Password strength: Good'), color: 'bar-good', barLength: '60%'},//orange
-                    {label: gt('Password strength: Strong'), color: 'bar-strong', barLength: '80%'},//green
-                    {label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%'},//green
-                    {label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%'},//golden
+                    { label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%' },//red
+                    { label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%' },//red
+                    { label: gt('Password strength: Very weak'), color: 'bar-weak', barLength: '20%' },//red
+                    { label: gt('Password strength: Weak'), color: 'bar-weak', barLength: '40%' },//red
+                    { label: gt('Password strength: Good'), color: 'bar-good', barLength: '60%' },//orange
+                    { label: gt('Password strength: Strong'), color: 'bar-strong', barLength: '80%' },//green
+                    { label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%' },//green
+                    { label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%' }//golden
                 ];
 
             new dialogs.ModalDialog({ async: true, width: 500 })
@@ -108,7 +108,7 @@ define('plugins/portal/userSettings/register',
                     //#. %1$s is the minimum password length
                     //#, c-format
                     hintText = gt('Minimum password length is %1$d.', minLength) + '<br>' + hintText;
-                    }
+                }
                 var pwContainer = [];
                 if (showStrength) {
                     strengthBarWrapper = $('<div>').hide().append(
@@ -242,7 +242,7 @@ define('plugins/portal/userSettings/register',
                 if (capabilities.has('edit_password')) {
                     content.append(
                         $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
-                        .on('click keypress', { fn: changePassword}, keyClickFilter)
+                        .on('click keypress', { fn: changePassword }, keyClickFilter)
                     );
                 }
             });

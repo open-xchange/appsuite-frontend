@@ -11,14 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/backbone/forms',
-    ['io.ox/core/extensions',
-     'io.ox/core/event',
-     'io.ox/core/date',
-     'settings!io.ox/calendar',
-     'gettext!io.ox/core',
-     'less!io.ox/backbone/forms'
-    ], function (ext, Events, date, settings, gt) {
+define('io.ox/backbone/forms', [
+    'io.ox/core/extensions',
+    'io.ox/core/event',
+    'io.ox/core/date',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/core',
+    'less!io.ox/backbone/forms'
+], function (ext, Events, date, settings, gt) {
 
     'use strict';
 
@@ -69,7 +69,7 @@ define('io.ox/backbone/forms',
         };
 
         this.setValueInModel = function (valueFromElement) {
-            this.model.set(this.attribute, valueFromElement, {validate: true});
+            this.model.set(this.attribute, valueFromElement, { validate: true });
         };
 
         this.updateElement = function () {
@@ -135,10 +135,10 @@ define('io.ox/backbone/forms',
                     return this.nodes.element;
                 }
                 this.nodes.label.attr('for', guid);
-                this.nodes.element = $('<select>').attr({ tabindex: options.tabindex || 1, id: guid}).addClass('form-control');
+                this.nodes.element = $('<select>').attr({ tabindex: options.tabindex || 1, id: guid }).addClass('form-control');
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.element.append(
-                        $('<option>', {value: value}).text(label)
+                        $('<option>', { value: value }).text(label)
                     );
                 });
 
@@ -150,7 +150,6 @@ define('io.ox/backbone/forms',
             }
         }, options);
     }
-
 
     function CheckControlGroup(options) {
         _.extend(this, new ControlGroup(options), {
@@ -170,7 +169,7 @@ define('io.ox/backbone/forms',
                 }
                 this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
                 this.nodes.checkbox.on('change', function () {
-                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), {validate: true});
+                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), { validate: true });
                 });
                 this.nodes.label.empty();
                 return this.nodes.element;
@@ -235,7 +234,7 @@ define('io.ox/backbone/forms',
                 this.nodes.inputField.val(this.model.get(this.attribute));
             },
             updateModel: function () {
-                this.model.set(this.attribute, this.nodes.inputField.val(), {validate: true});
+                this.model.set(this.attribute, this.nodes.inputField.val(), { validate: true });
             }
 
         };
@@ -269,7 +268,7 @@ define('io.ox/backbone/forms',
                 }
                 this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
                 this.nodes.checkbox.on('change', function () {
-                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), {validate: true});
+                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), { validate: true });
                 });
             },
             updateCheckbox: function () {
@@ -296,13 +295,13 @@ define('io.ox/backbone/forms',
                 }
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.select.append(
-                        $('<option>', {value: value}).text(label)
+                        $('<option>', { value: value }).text(label)
                     );
                 });
                 this.$el.append($('<label>').attr('for', guid).addClass(this.labelClassName || '').text(this.label)).append(this.nodes.select);
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
-                    self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
+                    self.model.set(self.attribute, self.nodes.select.val(), { validate: true });
                 });
             },
             updateChoice: function () {
@@ -591,7 +590,7 @@ define('io.ox/backbone/forms',
             updateModelTime: function () {
                 var time = BinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model);
                 if (time && _.isNumber(time)) {
-                    this.model.set(this.attribute, time, {validate: true});
+                    this.model.set(this.attribute, time, { validate: true });
                     this.model.trigger('valid');
                 } else {
                     this.model.trigger('invalid:' + this.attribute, [gt('Please enter a valid date')]);

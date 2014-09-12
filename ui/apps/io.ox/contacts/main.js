@@ -13,28 +13,28 @@
  *
  */
 
-define('io.ox/contacts/main',
-    ['io.ox/contacts/util',
-     'io.ox/contacts/api',
-     'io.ox/core/tk/vgrid',
-     'io.ox/help/hints',
-     'io.ox/contacts/view-detail',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/commons',
-     'io.ox/core/capabilities',
-     'io.ox/contacts/toolbar',
-     'gettext!io.ox/contacts',
-     'settings!io.ox/contacts',
-     'io.ox/core/folder/api',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'io.ox/contacts/mobile-navbar-extensions',
-     'io.ox/contacts/mobile-toolbar-actions',
-     'less!io.ox/contacts/style'
-    ], function (util, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+define('io.ox/contacts/main', [
+    'io.ox/contacts/util',
+    'io.ox/contacts/api',
+    'io.ox/core/tk/vgrid',
+    'io.ox/help/hints',
+    'io.ox/contacts/view-detail',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/commons',
+    'io.ox/core/capabilities',
+    'io.ox/contacts/toolbar',
+    'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
+    'io.ox/core/folder/api',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'io.ox/contacts/mobile-navbar-extensions',
+    'io.ox/contacts/mobile-toolbar-actions',
+    'less!io.ox/contacts/style'
+], function (util, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
     'use strict';
 
@@ -443,7 +443,7 @@ define('io.ox/contacts/main',
                 var obj = _.cid(id);
 
                 if (hasDeletePermission === undefined) {
-                    folderAPI.get({folder: obj.folder_id, cache: true}).done(function (data) {
+                    folderAPI.get({ folder: obj.folder_id, cache: true }).done(function (data) {
                         if (folderAPI.can('delete', data)) {
                             hasDeletePermission = true;
                             api.getList([obj]).done(function (list) {

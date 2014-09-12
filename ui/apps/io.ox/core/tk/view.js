@@ -14,11 +14,11 @@
 define: true
 */
 
-define('io.ox/core/tk/view',
-    ['io.ox/core/tk/forms',
-     'io.ox/core/tk/model',
-     'io.ox/core/event'
-    ], function (forms, Model, Event) {
+define('io.ox/core/tk/view', [
+    'io.ox/core/tk/forms',
+    'io.ox/core/tk/model',
+    'io.ox/core/event'
+], function (forms, Model, Event) {
 
     'use strict';
 
@@ -44,7 +44,7 @@ define('io.ox/core/tk/view',
         // #1: capture all changes of form elements
         this.node.on('update.model', function (e, o) {
             e.stopPropagation();
-            self.model.set(o.property, o.value, {validate: true});
+            self.model.set(o.property, o.value, { validate: true });
         });
 
         // #2: update form elements if model changes

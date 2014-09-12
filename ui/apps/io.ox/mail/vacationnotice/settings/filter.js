@@ -11,15 +11,15 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/vacationnotice/settings/filter',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/mailfilter',
-     'io.ox/mail/vacationnotice/settings/model',
-     'io.ox/mail/vacationnotice/settings/view-form',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/date',
-     'gettext!io.ox/mail'
-    ], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
+define('io.ox/mail/vacationnotice/settings/filter', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/mailfilter',
+    'io.ox/mail/vacationnotice/settings/model',
+    'io.ox/mail/vacationnotice/settings/view-form',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/date',
+    'gettext!io.ox/mail'
+], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
 
     'use strict';
 
@@ -44,11 +44,11 @@ define('io.ox/mail/vacationnotice/settings/filter',
 
             api.getRules('vacation').done(function (data) {
                 var defaultNotice = {
-                    days: '7',
-                    internal_id: 'vacation',
-                    subject: '',
-                    text: ''
-                },
+                        days: '7',
+                        internal_id: 'vacation',
+                        subject: '',
+                        text: ''
+                    },
                     vacationData,
                     VacationEdit,
                     vacationNotice;
@@ -80,11 +80,11 @@ define('io.ox/mail/vacationnotice/settings/filter',
                 vacationData.primaryMail = primaryMail;
 
                 VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame);
-                vacationNotice = new VacationEdit({model: factory.create(vacationData)});
+                vacationNotice = new VacationEdit({ model: factory.create(vacationData) });
 
                 if (data[0] && data[0].active === true) {
                     _(vacationData.addresses).each(function (mail) {
-                        vacationNotice.model.set(mail, true, {validate: true});
+                        vacationNotice.model.set(mail, true, { validate: true });
                     });
                 }
 
@@ -120,7 +120,6 @@ define('io.ox/mail/vacationnotice/settings/filter',
                     }
                     deferred.resolve(vacationNotice.model);
                 });
-
 
             }).fail(function (error) {
                 deferred.reject(error);

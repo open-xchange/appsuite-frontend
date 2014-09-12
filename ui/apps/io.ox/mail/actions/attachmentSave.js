@@ -11,15 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/actions/attachmentSave',
-    ['io.ox/mail/api',
-     'io.ox/core/notifications',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/folder/picker',
-     'io.ox/core/folder/api',
-     'settings!io.ox/files', // yep, files not mail!
-     'settings!io.ox/core',
-     'gettext!io.ox/mail'], function (api, notifications, dialogs, picker, folderAPI, settings, settingsCore, gt) {
+define('io.ox/mail/actions/attachmentSave', [
+    'io.ox/mail/api',
+    'io.ox/core/notifications',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/folder/picker',
+    'io.ox/core/folder/api',
+    'settings!io.ox/files', // yep, files not mail!
+    'settings!io.ox/core',
+    'gettext!io.ox/mail'
+], function (api, notifications, dialogs, picker, folderAPI, settings, settingsCore, gt) {
 
     'use strict';
 

@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/detail/links',
-    ['io.ox/mail/api',
-     'io.ox/core/util',
-     'io.ox/core/emoji/util',
-     'io.ox/core/extensions',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail'
-    ], function (api, coreUtil, emoji, ext, settings, gt) {
+define('io.ox/mail/detail/links', [
+    'io.ox/mail/api',
+    'io.ox/core/util',
+    'io.ox/core/emoji/util',
+    'io.ox/core/extensions',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (api, coreUtil, emoji, ext, settings, gt) {
 
     'use strict';
 
@@ -61,7 +61,7 @@ define('io.ox/mail/detail/links',
     $(document).on('click', '.deep-link-contacts', function (e) {
         e.preventDefault();
         var data = $(this).data();
-        ox.launch('io.ox/contacts/main', { folder: data.folder}).done(function () {
+        ox.launch('io.ox/contacts/main', { folder: data.folder }).done(function () {
             var app = this, folder = data.folder, id = data.id;
             if (app.folder.get() === folder) {
                 app.getGrid().selection.set(id);
@@ -107,7 +107,7 @@ define('io.ox/mail/detail/links',
     $(document).on('click', '.deep-link-tasks', function (e) {
         e.preventDefault();
         var data = $(this).data();
-        ox.launch('io.ox/tasks/main', { folder: data.folder}).done(function () {
+        ox.launch('io.ox/tasks/main', { folder: data.folder }).done(function () {
             var app = this, folder = data.folder, id = data.id;
             if (app.folder.get() === folder) {
                 app.getGrid().selection.set(id);

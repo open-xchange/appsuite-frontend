@@ -11,25 +11,25 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/freebusy/controller',
-    ['io.ox/core/tk/dialogs',
-     'io.ox/calendar/week/view',
-     'io.ox/calendar/freebusy/templates',
-     'io.ox/core/folder/api',
-     'io.ox/calendar/edit/view-addparticipants',
-     'io.ox/participants/model',
-     'io.ox/participants/views',
-     'io.ox/core/api/user',
-     'io.ox/contacts/util',
-     'io.ox/calendar/api',
-     'io.ox/core/notifications',
-     'io.ox/core/date',
-     'io.ox/calendar/view-detail',
-     'gettext!io.ox/calendar/freebusy',
-     'settings!io.ox/core',
-     'less!io.ox/calendar/week/style',
-     'less!io.ox/calendar/freebusy/style'
-    ], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
+define('io.ox/calendar/freebusy/controller', [
+    'io.ox/core/tk/dialogs',
+    'io.ox/calendar/week/view',
+    'io.ox/calendar/freebusy/templates',
+    'io.ox/core/folder/api',
+    'io.ox/calendar/edit/view-addparticipants',
+    'io.ox/participants/model',
+    'io.ox/participants/views',
+    'io.ox/core/api/user',
+    'io.ox/contacts/util',
+    'io.ox/calendar/api',
+    'io.ox/core/notifications',
+    'io.ox/core/date',
+    'io.ox/calendar/view-detail',
+    'gettext!io.ox/calendar/freebusy',
+    'settings!io.ox/core',
+    'less!io.ox/calendar/week/style',
+    'less!io.ox/calendar/freebusy/style'
+], function (dialogs, WeekView, templates, folderAPI, AddParticipantsView, participantsModel, participantsView, userAPI, contactsUtil, api, notifications, date, detailView, gt, settings) {
 
     'use strict';
 

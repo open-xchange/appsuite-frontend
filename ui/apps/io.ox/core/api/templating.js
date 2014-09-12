@@ -19,7 +19,7 @@ define('io.ox/core/api/templating', ['io.ox/core/http'], function (http) {
 
             /**
              * get names
-             * @return {deferred} returns array of template names
+             * @return { deferred} returns array of template names
              */
             getNames: function () {
                 return http.GET({

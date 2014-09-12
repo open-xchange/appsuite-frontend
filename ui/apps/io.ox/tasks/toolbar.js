@@ -11,20 +11,20 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/tasks/toolbar',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
-     'io.ox/core/notifications',
-     'io.ox/tasks/common-extensions',
-     'io.ox/tasks/api',
-     'gettext!io.ox/mail',
-     'io.ox/tasks/actions',
-     'less!io.ox/tasks/style'
-    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, extensions, api, gt) {
+define('io.ox/tasks/toolbar', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/tk/upload',
+    'io.ox/core/dropzone',
+    'io.ox/core/notifications',
+    'io.ox/tasks/common-extensions',
+    'io.ox/tasks/api',
+    'gettext!io.ox/mail',
+    'io.ox/tasks/actions',
+    'less!io.ox/tasks/style'
+], function (ext, links, actions, Dropdown, upload, dropzone, notifications, extensions, api, gt) {
 
     'use strict';
 

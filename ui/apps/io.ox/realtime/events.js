@@ -16,10 +16,10 @@
  * Use this only, if the 'rt' capability is present.
  */
 
-define('io.ox/realtime/events',
-    ['io.ox/realtime/rt',
-     'io.ox/core/http'
-    ], function (rt, http) {
+define('io.ox/realtime/events', [
+    'io.ox/realtime/rt',
+    'io.ox/core/http'
+], function (rt, http) {
 
     'use strict';
 
@@ -47,14 +47,14 @@ define('io.ox/realtime/events',
                 });
             },
             all: function () {
-                return http.GET({module: 'events', params: {action: 'all'}});
+                return http.GET({ module: 'events', params: { action: 'all' }});
             },
             events: function () {
                 if (internal.backend.cachedEvents) {
                     return internal.backend.cachedEvents;
                 }
 
-                internal.backend.cachedEvents = http.GET({module: 'events', params: {action: 'events'}});
+                internal.backend.cachedEvents = http.GET({ module: 'events', params: { action: 'events' }});
                 return internal.backend.cachedEvents;
             }
         }

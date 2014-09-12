@@ -11,13 +11,13 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/vacationnotice/settings/view-form',
-    ['io.ox/mail/vacationnotice/settings/model',
-     'io.ox/backbone/views',
-     'io.ox/core/extensions',
-     'io.ox/backbone/mini-views',
-     'less!io.ox/mail/vacationnotice/settings/style'
-    ], function (model, views, ext, mini) {
+define('io.ox/mail/vacationnotice/settings/view-form', [
+    'io.ox/mail/vacationnotice/settings/model',
+    'io.ox/backbone/views',
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views',
+    'less!io.ox/mail/vacationnotice/settings/style'
+], function (model, views, ext, mini) {
 
     'use strict';
 
@@ -73,7 +73,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'days' }).addClass('control-label col-md-offset-2 col-md-8').text(model.fields.days),
                             $('<div>').addClass('col-md-2').append(
-                                new mini.SelectView({ list: multiValues.days, name: 'days', model: baton.model, id: 'days', className: 'form-control'}).render().$el
+                                new mini.SelectView({ list: multiValues.days, name: 'days', model: baton.model, id: 'days', className: 'form-control' }).render().$el
                             )
                         )
                     )

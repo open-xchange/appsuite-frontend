@@ -11,12 +11,12 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/files/common-extensions',
-    ['io.ox/mail/util',
-     'io.ox/files/api',
-     'io.ox/core/date',
-     'io.ox/core/strings'
-    ], function (util, api, date, strings) {
+define('io.ox/files/common-extensions', [
+    'io.ox/mail/util',
+    'io.ox/files/api',
+    'io.ox/core/date',
+    'io.ox/core/strings'
+], function (util, api, date, strings) {
 
     'use strict';
 

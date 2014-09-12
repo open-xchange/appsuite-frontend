@@ -11,20 +11,20 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/compose/extensions',
-    ['io.ox/mail/sender',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/extensions',
-     'io.ox/core/api/autocomplete',
-     'io.ox/core/tk/typeahead',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/dropzone',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail',
-     'static/3rd.party/jquery-ui.min.js'
-    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
+define('io.ox/mail/compose/extensions', [
+    'io.ox/mail/sender',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/extensions',
+    'io.ox/core/api/autocomplete',
+    'io.ox/core/tk/typeahead',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'io.ox/core/dropzone',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail',
+    'static/3rd.party/jquery-ui.min.js'
+], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -230,7 +230,7 @@ define('io.ox/mail/compose/extensions',
                 // add class to tokenfield wrapper
                 input.parent().addClass(attr);
 
-                input.getOriginalInput().data('ttTypeahead').dropdown.onAsync('datasetRendered', function() {
+                input.getOriginalInput().data('ttTypeahead').dropdown.onAsync('datasetRendered', function () {
                     $('div.contact-image', this.$menu).lazyload({
                         container: this.$menu
                     });
@@ -269,7 +269,7 @@ define('io.ox/mail/compose/extensions',
                     )
                 )
             );
-            baton.view.listenTo(baton.model, 'change:subject', function() {
+            baton.view.listenTo(baton.model, 'change:subject', function () {
                 input.val(baton.model.get('subject'));
             });
         },
@@ -362,7 +362,7 @@ define('io.ox/mail/compose/extensions',
                         primaryButtonText: gt('Add'),
                         cancelButtonText: gt('Cancel'),
                         header: gt('Add attachments'),
-                        multiselect: true,
+                        multiselect: true
                     })
                     .done(function (files) {
                         model.attachFiles(

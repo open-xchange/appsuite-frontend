@@ -11,13 +11,13 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/util',
-    ['io.ox/core/api/pubsub',
-     'settings!io.ox/core',
-     'io.ox/core/folder/api',
-     'io.ox/core/pubsub/model',
-     'gettext!io.ox/mail'
-    ], function (api, coreConfig, folderAPI, model, gt) {
+define('io.ox/core/pubsub/util', [
+    'io.ox/core/api/pubsub',
+    'settings!io.ox/core',
+    'io.ox/core/folder/api',
+    'io.ox/core/pubsub/model',
+    'gettext!io.ox/mail'
+], function (api, coreConfig, folderAPI, model, gt) {
 
     'use strict';
 
@@ -35,7 +35,7 @@ define('io.ox/core/pubsub/util',
          * @param  {string} module id
          * @param  {string|number} folder id
          * @param  {string} url
-         * @return {deferred} subscription id
+         * @return { deferred} subscription id
          */
         createSubscription: function (module, folder, url, options) {
             var dynkey = {}, o;
@@ -64,7 +64,7 @@ define('io.ox/core/pubsub/util',
         /**
          * refresh
          * @param  {object} data id and folder
-         * @return {deferred} number of items
+         * @return { deferred} number of items
          */
         refreshSubscription: function (data) {
             return api.subscriptions.refresh(data);
@@ -76,15 +76,15 @@ define('io.ox/core/pubsub/util',
          * @param  {string|number} folder id
          * @param  {string} url
          * @param  {object} options (optional)
-         * @return {deferred} subscription id and number of items
+         * @return { deferred} subscription id and number of items
          */
         initSubscription: function (module, folder, url, options) {
             return util.createSubscription(module, folder, url, options)
                     .pipe(function (subscription) {
                         //refresh
-                        return util.refreshSubscription({id: subscription, folder: folder})
+                        return util.refreshSubscription({ id: subscription, folder: folder })
                         .pipe(function (items) {
-                            return {subscription: subscription, items: items};
+                            return { subscription: subscription, items: items };
                         });
                     });
         },
@@ -95,7 +95,7 @@ define('io.ox/core/pubsub/util',
          * @param  {string} name of folder
          * @param  {string} url
          * @param  {object} options (optional)
-         * @return {deferred} subscription id and number of items
+         * @return { deferred} subscription id and number of items
          */
         autoSubscribe: function (module, name, url, options) {
             var parent = coreConfig.get('folder/' + module),

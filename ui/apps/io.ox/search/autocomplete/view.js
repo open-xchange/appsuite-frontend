@@ -11,10 +11,10 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/search/autocomplete/view',
-    ['io.ox/search/autocomplete/extensions',
-     'io.ox/core/extensions'
-    ], function (extensions, ext) {
+define('io.ox/search/autocomplete/view', [
+    'io.ox/search/autocomplete/extensions',
+    'io.ox/core/extensions'
+], function (extensions, ext) {
 
     'use strict';
 

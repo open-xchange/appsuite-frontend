@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/editor/main',
-    ['io.ox/files/api',
-     'io.ox/core/folder/api',
-     'io.ox/core/notifications',
-     'gettext!io.ox/editor',
-     'less!io.ox/editor/style'
-    ], function (api, folderAPI, notifications, gt) {
+define('io.ox/editor/main', [
+    'io.ox/files/api',
+    'io.ox/core/folder/api',
+    'io.ox/core/notifications',
+    'gettext!io.ox/editor',
+    'less!io.ox/editor/style'
+], function (api, folderAPI, notifications, gt) {
 
     'use strict';
 
@@ -161,7 +161,7 @@ define('io.ox/editor/main',
                         $('<div class="col-md-12">').append(
                             // editor
                             $('<textarea class="content form-control" tabindex="2">').val('')
-                                .attr('placeholder', _.device('ios || android') ? '': gt('You can quick-save your changes via Ctrl+Enter.'))
+                                .attr('placeholder', _.device('ios || android') ? '' : gt('You can quick-save your changes via Ctrl+Enter.'))
                         )
                     )
                 )

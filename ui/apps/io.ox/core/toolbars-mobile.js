@@ -11,9 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-
-define('io.ox/core/toolbars-mobile',
-    ['io.ox/core/extensions'], function (ext) {
+define('io.ox/core/toolbars-mobile', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -61,7 +59,7 @@ define('io.ox/core/toolbars-mobile',
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
-            this.baton = opt.baton || ext.Baton({app: opt.app});
+            this.baton = opt.baton || ext.Baton({ app: opt.app });
             this.extension = opt.extension;
             this.hiddenElements = [];
         },
@@ -133,7 +131,6 @@ define('io.ox/core/toolbars-mobile',
         }
     });
 
-
     /*
      * Toolbars
      * Will be placed at the bottom of a page to
@@ -144,7 +141,7 @@ define('io.ox/core/toolbars-mobile',
         initialize: function (opt) {
             this.app = opt.app;
             this.page = opt.page;
-            this.baton = opt.baton || ext.Baton({app: opt.app});
+            this.baton = opt.baton || ext.Baton({ app: opt.app });
             this.extension = opt.extension;
         },
         render: function () {

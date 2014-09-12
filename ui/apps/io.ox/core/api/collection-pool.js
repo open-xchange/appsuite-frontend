@@ -154,7 +154,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
     };
 
     // don't propagate remove events; usually during a collection.set
-    Pool.preserve = function(fn) {
+    Pool.preserve = function (fn) {
         skipRemove = true;
         if (fn) fn();
         skipRemove = false;

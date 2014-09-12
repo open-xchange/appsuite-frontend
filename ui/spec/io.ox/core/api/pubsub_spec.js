@@ -10,24 +10,24 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(
-    ['io.ox/core/api/pubsub',
-     'shared/examples/for/api'
-    ], function (api, sharedExamplesFor) {
+define([
+    'io.ox/core/api/pubsub',
+    'shared/examples/for/api'
+], function (api, sharedExamplesFor) {
 
     var testData = {
         create: {
-            'entity': {'folder': '14657'}
+            'entity': { 'folder': '14657' }
         }
     };
 
     describe('Pub/Sub API', function () {
         describe('publication API', function () {
-            sharedExamplesFor(api.publications, {testData: testData});
+            sharedExamplesFor(api.publications, { testData: testData });
         });
 
         describe('subscription API', function () {
-            sharedExamplesFor(api.subscriptions, {testData: testData});
+            sharedExamplesFor(api.subscriptions, { testData: testData });
         });
     });
 });

@@ -11,26 +11,26 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/main',
-    ['io.ox/core/date',
-     'settings!io.ox/core',
-     'io.ox/core/commons',
-     'io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'settings!io.ox/calendar',
-     'gettext!io.ox/calendar',
-     'io.ox/core/tk/vgrid',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/calendar/mobile-navbar-extensions',
-     'io.ox/calendar/mobile-toolbar-actions',
-     'io.ox/calendar/toolbar',
-     'io.ox/calendar/actions',
-     'less!io.ox/calendar/style'
-    ], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController) {
+define('io.ox/calendar/main', [
+    'io.ox/core/date',
+    'settings!io.ox/core',
+    'io.ox/core/commons',
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar',
+    'io.ox/core/tk/vgrid',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/calendar/mobile-navbar-extensions',
+    'io.ox/calendar/mobile-toolbar-actions',
+    'io.ox/calendar/toolbar',
+    'io.ox/calendar/actions',
+    'less!io.ox/calendar/style'
+], function (date, coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController) {
 
     'use strict';
 
@@ -206,7 +206,7 @@ define('io.ox/calendar/main',
 
             app.pages.getNavbar('week')
                 .on('leftAction', function () {
-                    ox.ui.Perspective.show(app, 'month', {animation: 'slideright'});
+                    ox.ui.Perspective.show(app, 'month', { animation: 'slideright' });
                 })
                 .setLeft(gt('Back'));
 
@@ -232,7 +232,6 @@ define('io.ox/calendar/main',
                     gt('Back')
                 );
 
-
             app.pages.getNavbar('detailView').on('leftAction', function () {
                 app.pages.goBack();
             });
@@ -254,7 +253,6 @@ define('io.ox/calendar/main',
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
         },
-
 
         /*
          * VGrid
@@ -307,7 +305,7 @@ define('io.ox/calendar/main',
             app.folderView.resize.enable();
         },
 
-         'toggle-folder-editmode': function (app) {
+        'toggle-folder-editmode': function (app) {
 
             if (_.device('!smartphone')) return;
 
@@ -351,7 +349,7 @@ define('io.ox/calendar/main',
                 }
             };
             // initialize folder view
-            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb});
+            FolderView.initialize({ app: app, tree: tree, firstResponder: 'month', respondCallback: cb });
             page.append(tree.render().$el);
         },
 
@@ -458,7 +456,7 @@ define('io.ox/calendar/main',
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 // no animations on desktop
-                ox.ui.Perspective.show(app, value, {disableAnimations: true});
+                ox.ui.Perspective.show(app, value, { disableAnimations: true });
             });
         },
 
@@ -490,7 +488,7 @@ define('io.ox/calendar/main',
                                 lastPerspective =  app.props.get('layout') || _.url.hash('perspective');
                                 if (lastPerspective !== SEARCH_PERSPECTIVE) {
                                     // fluent option: do not write to user settings
-                                    app.props.set('layout', SEARCH_PERSPECTIVE, {fluent: true});
+                                    app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
                                     // cancel search when user changes view
                                     app.props.on('change', cancelSearch);
                                 }
@@ -499,7 +497,7 @@ define('io.ox/calendar/main',
                                 // switch back to perspective used before
                                 var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
                                 if (lastPerspective && lastPerspective !== currentPerspective)
-                                    ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
+                                    ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
                                 // disable
                                 app.props.off('change', cancelSearch);
                             }
@@ -614,7 +612,7 @@ define('io.ox/calendar/main',
                     // corrupt data fix
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
-                ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
+                ox.ui.Perspective.show(app, lastPerspective, { disableAnimations: true });
                 app.props.set('layout', lastPerspective);
             });
     });

@@ -79,13 +79,13 @@ define('plugins/wizards/mandatory/main', [
                     $('<div class="control-group" />').append(
                         $('<label class="control-label" for="first_name" />').text(gt('First name')),
                         $('<div class="controls" />').append(
-                            baton.focusNode = new mini.InputView({name: 'first_name', model: baton.user}).render().$el
+                            baton.focusNode = new mini.InputView({ name: 'first_name', model: baton.user }).render().$el
                         )
                     ),
                     $('<div class="control-group" />').append(
                         $('<label class="control-label" for="last_name" />').text(gt('Last name')),
                         $('<div class="controls" />').append(
-                            new mini.InputView({name: 'last_name', model: baton.user}).render().$el
+                            new mini.InputView({ name: 'last_name', model: baton.user }).render().$el
                         )
                     )
                 )
@@ -174,7 +174,7 @@ define('plugins/wizards/mandatory/main', [
                 $('<form class="form-horizontal" />').append(
                     $('<label class="control-label" for="timezone">').text(gt('Timezone')),
                     baton.focusNode = new baton.libraries.forms.SelectView({
-                        list: _.map(baton.availableTimeZones, function(key, val) { return { label: key, value: val }; }),
+                        list: _.map(baton.availableTimeZones, function (key, val) { return { label: key, value: val }; }),
                         name: 'timezone',
                         model: baton.model.createModel(Backbone.Model),
                         id: 'timezone',

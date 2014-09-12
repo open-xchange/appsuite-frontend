@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('plugins/halo/appointments/register',
-    ['io.ox/core/extensions',
-     'gettext!plugins/halo'
-    ], function (ext, gt) {
+define('plugins/halo/appointments/register', [
+    'io.ox/core/extensions',
+    'gettext!plugins/halo'
+], function (ext, gt) {
 
     'use strict';
 

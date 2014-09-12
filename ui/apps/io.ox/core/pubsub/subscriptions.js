@@ -11,18 +11,17 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/subscriptions',
-    ['io.ox/core/extensions',
-     'io.ox/core/pubsub/model',
-     'io.ox/core/api/pubsub',
-     'io.ox/core/folder/api',
-     'io.ox/core/notifications',
-     'io.ox/core/tk/dialogs',
-     'io.ox/keychain/api',
-     'gettext!io.ox/core/pubsub',
-     'settings!io.ox/core'
-    ],
-    function (ext, pubsub, api, folderAPI, notifications, dialogs, keychainAPI, gt) {
+define('io.ox/core/pubsub/subscriptions', [
+    'io.ox/core/extensions',
+    'io.ox/core/pubsub/model',
+    'io.ox/core/api/pubsub',
+    'io.ox/core/folder/api',
+    'io.ox/core/notifications',
+    'io.ox/core/tk/dialogs',
+    'io.ox/keychain/api',
+    'gettext!io.ox/core/pubsub',
+    'settings!io.ox/core'
+], function (ext, pubsub, api, folderAPI, notifications, dialogs, keychainAPI, gt) {
 
     'use strict';
 
@@ -49,7 +48,7 @@ define('io.ox/core/pubsub/subscriptions',
         render: function (app) {
             var self = this,
 
-            popup = new dialogs.ModalDialog({async: true})
+            popup = new dialogs.ModalDialog({ async: true })
                 .addPrimaryButton('subscribe', gt('Subscribe'))
                 .addButton('cancel', gt('Cancel'));
 
@@ -94,7 +93,7 @@ define('io.ox/core/pubsub/subscriptions',
                             .then(function (model) {
                                 var subscriptions = pubsub.subscriptions();
                                 //update the model-(collection)
-                                subscriptions.add(model, {merge: true});
+                                subscriptions.add(model, { merge: true });
                             })
                             .done(function () {
                                 app.folder.set(folder);
@@ -323,7 +322,7 @@ define('io.ox/core/pubsub/subscriptions',
         id: 'durationinformation',
         index: 300,
         draw: function () {
-            var fullNode = $('<div>').addClass('alert alert-info').css({'margin-bottom': 0, 'margin-top': '10px'}).append(
+            var fullNode = $('<div>').addClass('alert alert-info').css({ 'margin-bottom': 0, 'margin-top': '10px' }).append(
                 $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
                         $('<div>').addClass('privacy-text').text(
                             gt('Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience.')));

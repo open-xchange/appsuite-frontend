@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings!plugins/demo/customize'], function (notifications, settings) {
+define('plugins/demo/customize/register', [
+    'io.ox/core/notifications',
+    'settings!plugins/demo/customize'
+], function (notifications, settings) {
 
     'use strict';
 
@@ -166,7 +169,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             'a, a:hover, a:active, a:focus, .primary-btn,\n' +
             '.mail-detail .content a, .mail-detail .content a:hover,\n' +
             '.mail-item div.subject i.icon-unread, .mail-item.unread .unread-toggle,\n' +
-            '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder-arrow {' +
+            '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder-arrow  { ' +
             '  color: ' + model.get('linkColor') + ';\n' +
             '}\n' +
             // buttons
@@ -175,7 +178,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             '  border-color: ' + model.get('linkColor') + ';\n' +
             '}\n' +
              // wrong wrt a11y but works better for demo purposes
-            '.list-view.visible-selection .list-item.selected {' +
+            '.list-view.visible-selection .list-item.selected  { ' +
             '  color: white;\n' +
             '  background-color: ' + model.get('selectionColor') + ';\n' +
             '}\n' +
@@ -239,8 +242,11 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         // update fields
         _(model.changed).each(function (value, name) {
             var field = fields.filter('[data-name="' + name + '"]'), current = field.val();
-            if (field.attr('type') === 'checkbox') field.prop('checked', value);
-            else if (current !== value) field.val(value);
+            if (field.attr('type') === 'checkbox') {
+                field.prop('checked', value);
+            } else if (current !== value) {
+                field.val(value);
+            }
         });
         // save
         settings.set('presets/default', model.toJSON()).save();
@@ -267,7 +273,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             ratio = 40 / img.height;
             // apply logo
             $('#customize-css-logo').text(
-                '#io-ox-top-logo-small {' +
+                '#io-ox-top-logo-small  { ' +
                 '  background-image: url(' + url + ') !important;' +
                 '  background-size: contain; height: 40px; margin: 0 10px;' +
                 '  width: ' + Math.floor(img.width * ratio) + 'px;' +
@@ -281,7 +287,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         if (url !== '' && model.get('headerSize') > 0) {
             $('#customize-text .logo').css({
                 backgroundImage: 'url(' + url + ')',
-                backgroundSize: 'contain',
+                backgroundSize: 'contain'
             });
             $('html').addClass('hide-small-logo');
         } else {
@@ -329,7 +335,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         if (!file.type.match(/image.*/)) return;
 
         var reader = new FileReader();
-        reader.onload = function() {
+        reader.onload = function () {
             url = reader.result;
             // jslobs cannot handle more that 64KB right now; let's keep some safety distance
             if (url.length <= 54 * 1024) model.set('url', url); else updateLogo();

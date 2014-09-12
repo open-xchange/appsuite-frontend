@@ -11,12 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/items/collection',
-    ['io.ox/search/items/model'], function (Item) {
+define('io.ox/search/items/collection', ['io.ox/search/items/model'], function (Item) {
 
     'use strict';
 
     return Backbone.Collection.extend({
-            model: Item
-        });
+        model: Item
+    });
 });

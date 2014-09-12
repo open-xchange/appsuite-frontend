@@ -22,7 +22,7 @@ module.exports = function (grunt) {
                 revision: '<%= String(pkg.version.slice(pkg.version.indexOf("-") + 1)) %>',
                 enable_debug: '<%= String(local.debug) %>',
                 base: 'v=<%= assemble.options.version %>',
-                cap: '<%= String(local.cap || "") %>',
+                cap: '<%= String(local.cap || "") %>'
             },
             base: {
                 options: {

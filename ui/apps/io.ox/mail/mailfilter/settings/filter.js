@@ -11,19 +11,18 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/mailfilter',
-     'io.ox/mail/mailfilter/settings/model',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/notifications',
-     'io.ox/settings/util',
-     'io.ox/mail/mailfilter/settings/filter/view-form',
-     'gettext!io.ox/mail',
-     'io.ox/mail/mailfilter/settings/filter/defaults',
-     'static/3rd.party/jquery-ui.min.js'
-
-    ], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS) {
+define('io.ox/mail/mailfilter/settings/filter', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/mailfilter',
+    'io.ox/mail/mailfilter/settings/model',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/notifications',
+    'io.ox/settings/util',
+    'io.ox/mail/mailfilter/settings/filter/view-form',
+    'gettext!io.ox/mail',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
+    'static/3rd.party/jquery-ui.min.js'
+], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS) {
 
     'use strict';
 
@@ -78,7 +77,7 @@ define('io.ox/mail/mailfilter/settings/filter',
         rulename = _.copy(myView.model.get('rulename'), true);
 
         if (testArray.tests) {
-            testArray.tests = filterCondition(testArray.tests, {id: 'true'});
+            testArray.tests = filterCondition(testArray.tests, { id: 'true' });
 
             if (testArray.tests.length === 1) {
                 var includedTest = _.copy(testArray.tests[0]);
@@ -98,8 +97,8 @@ define('io.ox/mail/mailfilter/settings/filter',
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
-        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+        .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();
@@ -249,25 +248,26 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                         var title = self.model.get('rulename'),
                             titleNode;
+
                         this.$el.attr({
-                                'data-id': self.model.get('id')
+                            'data-id': self.model.get('id')
+                        })
+                        .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
+                        .append(
+                            $('<a>').addClass('drag-handle ' + (this.model.collection.length <= 1 ? 'hidden' : '')).append(
+                                $('<i class="fa fa-bars">')
+                            ).attr({
+                                href: '#',
+                                role: 'button',
+                                tabindex: 1,
+                                'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
+                            }),
+                            titleNode = $('<span>').addClass('widget-title pull-left').text(title),
+                            $('<div class="widget-controls">').append(function () {
+                                var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
+                                point.invoke('draw', $(this), self.model);
                             })
-                            .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
-                            .append(
-                                $('<a>').addClass('drag-handle ' + (this.model.collection.length <= 1 ? 'hidden' : '')).append(
-                                    $('<i class="fa fa-bars">')
-                                ).attr({
-                                    href: '#',
-                                    role: 'button',
-                                    tabindex: 1,
-                                    'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
-                                }),
-                                titleNode = $('<span>').addClass('widget-title pull-left').text(title),
-                                $('<div class="widget-controls">').append(function () {
-                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
-                                    point.invoke('draw', $(this), self.model);
-                                })
-                            );
+                        );
 
                         self.model.on('change:rulename', function (el, val) {
                             titleNode.text(val);
@@ -318,11 +318,10 @@ define('io.ox/mail/mailfilter/settings/filter',
                         if (stop) {
                             actioncmds.pop();
                         } else {
-                            actioncmds.push({id: 'stop'});
+                            actioncmds.push({ id: 'stop' });
                         }
 
                         this.model.set('actioncmds', actioncmds);
-
 
                         //yell on reject
                         settingsUtil.yellOnReject(

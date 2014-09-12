@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/view-options',
-    ['io.ox/core/extensions',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/api/account',
-     'gettext!io.ox/mail'
-    ], function (ext, Dropdown, account, gt) {
+define('io.ox/mail/view-options', [
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/api/account',
+    'gettext!io.ox/mail'
+], function (ext, Dropdown, account, gt) {
 
     'use strict';
 

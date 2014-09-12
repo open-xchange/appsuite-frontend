@@ -11,10 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/breadcrumb',
-    ['io.ox/core/folder/api',
-     'io.ox/core/folder/title',
-     'gettext!io.ox/core'], function (api, getFolderTitle, gt) {
+define('io.ox/core/folder/breadcrumb', [
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/title',
+    'gettext!io.ox/core'
+], function (api, getFolderTitle, gt) {
 
     'use strict';
 
@@ -27,22 +28,22 @@ define('io.ox/core/folder/breadcrumb',
      * @param {string} - folder id
      * @param {object} - options:
      * {
-     *     exclude: {Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
-     *     leaf: {DOMnode} - An extra node that is appended as last crumb
-     *     last: {boolean} - true: last item should have the active class set (default)
+     *     exclude: { Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
+     *     leaf: { DOMnode} - An extra node that is appended as last crumb
+     *     last: { boolean} - true: last item should have the active class set (default)
      *                     - no relevance if subfolder option is set to true and element is 'clickable' (*)
      *                     - false: same as true if element is 'clickable' (*)
      *                     - false: a link that reacts to the function assigned to the handler option
-     *     handler: {function} - a handler function, called with the id of the folder as parameter
-     *     module: {string} - provide a module to limit 'clickable' attribute (*) to a specific module
-     *     subfolder: {boolean} - show all subfolders of the folder as a dropdown if element is 'clickable' (*)
+     *     handler: { function} - a handler function, called with the id of the folder as parameter
+     *     module: { string} - provide a module to limit 'clickable' attribute (*) to a specific module
+     *     subfolder: { boolean} - show all subfolders of the folder as a dropdown if element is 'clickable' (*)
      *                          - default: true
      * }
      * (*) - element is defined to be clickable, if a few conditions are met:
      *         - module option equals the folder module or module option is undefined
      *         - handler function is defined
      *
-     * @return {Node} - an ul element that contains the list (populated later, after path is loaded via the API (async))
+     * @return { Node} - an ul element that contains the list (populated later, after path is loaded via the API (async))
      */
 
     var dropdown = function (li, id, title, options) {
@@ -66,7 +67,7 @@ define('io.ox/core/folder/breadcrumb',
                             _(list).map(function (folder) {
                                 var $a, $li = $('<li>').append(
                                     $a = $('<a href="#" tabindex="1" role="menuitem">')
-                                    .attr({'data-folder-id': folder.id}).text(gt.noI18n(getFolderTitle(folder.title, 30)))
+                                    .attr({ 'data-folder-id': folder.id }).text(gt.noI18n(getFolderTitle(folder.title, 30)))
                                 );
                                 /**
                                  * special mobile handling due to on-the-fly bootstrap-dropdown mod on mobile

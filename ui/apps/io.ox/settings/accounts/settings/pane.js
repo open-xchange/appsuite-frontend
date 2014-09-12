@@ -11,17 +11,17 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/settings/accounts/settings/pane',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/keychain/api',
-     'io.ox/keychain/model',
-     'io.ox/core/folder/api',
-     'io.ox/settings/util',
-     'io.ox/core/notifications',
-     'gettext!io.ox/settings/accounts',
-     'withPluginsFor!keychainSettings'
-    ], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
+define('io.ox/settings/accounts/settings/pane', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/keychain/api',
+    'io.ox/keychain/model',
+    'io.ox/core/folder/api',
+    'io.ox/settings/util',
+    'io.ox/core/notifications',
+    'gettext!io.ox/settings/accounts',
+    'withPluginsFor!keychainSettings'
+], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
 
     'use strict';
 
@@ -158,8 +158,8 @@ define('io.ox/settings/accounts/settings/pane',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({ async: true })
                     .text(gt('Do you really want to delete this account?'))
-                    .addPrimaryButton('delete', gt('Delete account'), 'delete', {tabIndex: '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                    .addPrimaryButton('delete', gt('Delete account'), 'delete', { tabIndex: 1 })
+                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                     .on('delete', function () {
                         var popup = this;
                         settingsUtil.yellOnReject(

@@ -11,8 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/about/c64',
-    ['less!io.ox/core/about/c64'], function () {
+define('io.ox/core/about/c64', ['less!io.ox/core/about/c64'], function () {
 
     'use strict';
 

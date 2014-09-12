@@ -11,15 +11,15 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/model',
-    ['io.ox/tasks/api',
-     'io.ox/backbone/modelFactory',
-     'io.ox/backbone/validation',
-     'io.ox/core/extensions',
-     'io.ox/participants/model',
-     'io.ox/core/date',
-     'gettext!io.ox/tasks'
-    ], function (api, ModelFactory, Validations, ext, pModel, date, gt) {
+define('io.ox/tasks/model', [
+    'io.ox/tasks/api',
+    'io.ox/backbone/modelFactory',
+    'io.ox/backbone/validation',
+    'io.ox/core/extensions',
+    'io.ox/participants/model',
+    'io.ox/core/date',
+    'gettext!io.ox/tasks'
+], function (api, ModelFactory, Validations, ext, pModel, date, gt) {
 
     'use strict';
 
@@ -74,23 +74,23 @@ define('io.ox/tasks/model',
         });
 
     Validations.validationFor('io.ox/tasks/model', {
-        start_date: {format: 'date'},
-        end_date: {format: 'date'},
-        alarm: {format: 'date'},
-        title: {format: 'string'},
-        note: {format: 'string'},
-        companies: {format: 'string'},
-        billing_information: {format: 'string'},
-        trip_meter: {format: 'string'},
-        currency: {format: 'string'},
-        status: {format: 'number'},
-        percent_completed: {format: 'number'},
-        number_of_attachments: {format: 'number'},
-        actual_costs: {format: 'anyFloat'},//floats with , or . as separator
-        target_costs: {format: 'anyFloat'},//floats with , or . as separator
-        actual_duration: {format: 'number'},
-        target_duration: {format: 'number'},
-        private_flag: { format: 'boolean'}
+        start_date: { format: 'date' },
+        end_date: { format: 'date' },
+        alarm: { format: 'date' },
+        title: { format: 'string' },
+        note: { format: 'string' },
+        companies: { format: 'string' },
+        billing_information: { format: 'string' },
+        trip_meter: { format: 'string' },
+        currency: { format: 'string' },
+        status: { format: 'number' },
+        percent_completed: { format: 'number' },
+        number_of_attachments: { format: 'number' },
+        actual_costs: { format: 'anyFloat' },//floats with , or . as separator
+        target_costs: { format: 'anyFloat' },//floats with , or . as separator
+        actual_duration: { format: 'number' },
+        target_duration: { format: 'number' },
+        private_flag: { format: 'boolean' }
     });
 
     ext.point('io.ox/tasks/model/validation').extend({

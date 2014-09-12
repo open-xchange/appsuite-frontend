@@ -57,7 +57,7 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'waitsFor'], functi
 
         beforeEach(function () {
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(result));
             });
         });
 

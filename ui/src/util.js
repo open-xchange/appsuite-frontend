@@ -525,7 +525,7 @@
          * This can be safely used without risking CSS.
          * @param {string} text
          * @param {object} jQuery node
-         * @return {object} jQuery node
+         * @return { object} jQuery node
          */
         nltobr: function (text, node) {
             var normalizedText = text.replace('\r\n', '\n'),
@@ -574,7 +574,7 @@
          * hint: throttle of lo-dash can be used alternatively
          * @param  {function} func
          * @param  {nunber} wait
-         * @return {function} debonced version of func
+         * @return { function} debonced version of func
          */
         mythrottle: function (func, wait) {
             var context, args, result,

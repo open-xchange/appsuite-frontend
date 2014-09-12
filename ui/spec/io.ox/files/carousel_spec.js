@@ -16,13 +16,13 @@ define(['io.ox/files/carousel'], function (slideshow) {
     describe('Slideshow for files:', function () {
 
         var testFiles = [
-            {file_mimetype: 'audio/mp3', filename: 'music.mp3', folder_id: '1', id: '1'},
-            {file_mimetype: 'image/jpg', filename: '1.jpg', folder_id: '1', id: '2'},
-            {file_mimetype: 'image/jpg', filename: '2.jpg', folder_id: '1', id: '3'},
-            {file_mimetype: 'video/m4v', filename: 'video.m4v', folder_id: '1', id: '4'},
-            {file_mimetype: 'image/jpg', filename: '3.jpg', folder_id: '1', id: '5'},
-            {file_mimetype: 'image/jpg', filename: '4.jpg', folder_id: '1', id: '6'},
-            {file_mimetype: 'text/html', filename: 'page.html', folder_id: '1', id: '7'}
+            { file_mimetype: 'audio/mp3', filename: 'music.mp3', folder_id: '1', id: '1' },
+            { file_mimetype: 'image/jpg', filename: '1.jpg', folder_id: '1', id: '2' },
+            { file_mimetype: 'image/jpg', filename: '2.jpg', folder_id: '1', id: '3' },
+            { file_mimetype: 'video/m4v', filename: 'video.m4v', folder_id: '1', id: '4' },
+            { file_mimetype: 'image/jpg', filename: '3.jpg', folder_id: '1', id: '5' },
+            { file_mimetype: 'image/jpg', filename: '4.jpg', folder_id: '1', id: '6' },
+            { file_mimetype: 'text/html', filename: 'page.html', folder_id: '1', id: '7' }
         ];
 
         beforeEach(function () {
@@ -37,7 +37,7 @@ define(['io.ox/files/carousel'], function (slideshow) {
 
             beforeEach(function () {
                 slideshow.init({
-                    baton: {allIds: testFiles},
+                    baton: { allIds: testFiles },
                     attachmentMode: false,
                     selector: '#testNode'
                 });
@@ -78,7 +78,7 @@ define(['io.ox/files/carousel'], function (slideshow) {
             });
 
             it('should close on escape keyup', function () {
-                var e = $.Event('keyup', { keyCode: 27});
+                var e = $.Event('keyup', { keyCode: 27 });
                 this.node.find('.carousel').trigger(e);
                 expect(this.node.find('.carousel')).to.have.length(0);
             });
@@ -98,7 +98,7 @@ define(['io.ox/files/carousel'], function (slideshow) {
 
             beforeEach(function () {
                 slideshow.init({
-                    baton: {allIds: [testFiles[1]]},
+                    baton: { allIds: [testFiles[1]]},
                     attachmentMode: false,
                     selector: '#testNode'
                 });

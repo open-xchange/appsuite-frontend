@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/settings/util',
-    ['io.ox/core/notifications',
-     'gettext!io.ox/settings/settings',
-     'gettext!io.ox/core'
-    ], function (notifications, gt, gtcore) {
+define('io.ox/settings/util', [
+    'io.ox/core/notifications',
+    'gettext!io.ox/settings/settings',
+    'gettext!io.ox/core'
+], function (notifications, gt, gtcore) {
 
     'use strict';
 
@@ -31,18 +31,19 @@ define('io.ox/settings/util',
             if (!(def && def.promise && def.done)) return $.when();
 
             var opt = $.extend({
-                    debug: false
-                }, options || {});
+                debug: false
+            }, options || {});
 
             // debug
             if (opt.debug) {
                 def.always(function () {
                     var list = _.isArray(this) ? this : [this];
                     _.each(list, function (current) {
-                        if (current.state)
+                        if (current.state) {
                             console.warn('NOTIFIY: ' +  current.state());
-                        else if (def.state)
+                        } else if (def.state) {
                             console.warn('NOTIFIY: ' +  def.state());
+                        }
                     });
                 });
             }
@@ -52,10 +53,10 @@ define('io.ox/settings/util',
                 function (e) {
                     //try to add a suitable message (new property)
                     var obj = $.extend({
-                                type: 'error',
-                                error: 'unknown',
-                                error_params: []
-                            }, e || {});
+                        type: 'error',
+                        error: 'unknown',
+                        error_params: []
+                    }, e || {});
                     if (obj.code  === 'MAIL_FILTER-0015') {
                         //show custom error message
                         obj.message = gtcore('Unable to load mail filter settings.');

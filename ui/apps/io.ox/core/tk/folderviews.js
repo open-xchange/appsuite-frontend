@@ -12,19 +12,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/folderviews',
-    ['io.ox/core/tk/selection',
-     'io.ox/core/folder/api',
-     'io.ox/core/api/user',
-     'io.ox/core/api/account',
-     'io.ox/core/extensions',
-     'io.ox/core/event',
-     'io.ox/core/notifications',
-     'io.ox/core/http',
-     'io.ox/core/capabilities',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (Selection, api, userAPI, accountAPI, ext, Events, notifications, http, capabilities, settings, gt) {
+define('io.ox/core/tk/folderviews', [
+    'io.ox/core/tk/selection',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/user',
+    'io.ox/core/api/account',
+    'io.ox/core/extensions',
+    'io.ox/core/event',
+    'io.ox/core/notifications',
+    'io.ox/core/http',
+    'io.ox/core/capabilities',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (Selection, api, userAPI, accountAPI, ext, Events, notifications, http, capabilities, settings, gt) {
 
     'use strict';
 
@@ -908,7 +908,7 @@ define('io.ox/core/tk/folderviews',
             if (!isEnabled) { cls += 'disabled '; isSelectable = false; }
             if (!!data.subfolders) { cls += 'expandable '; }
             if (!isReadable) { cls += 'unreadable '; }
-            cls += (!isSelectable ? 'un' :'') + 'selectable';
+            cls += (!isSelectable ? 'un' : '') + 'selectable';
 
             this.addClass(cls)
                 .attr('aria-label', labelTitle);
@@ -1015,7 +1015,7 @@ define('io.ox/core/tk/folderviews',
         draw: function (baton) {
             // loop over folders
             _(baton.data[baton.id]).each(function (data) {
-                ext.point('io.ox/foldertree/section/folder').invoke('draw', (baton.id === 'hidden' ? this.find('.hidden-folders-container'): this), baton.clone({ data: data }));
+                ext.point('io.ox/foldertree/section/folder').invoke('draw', (baton.id === 'hidden' ? this.find('.hidden-folders-container') : this), baton.clone({ data: data }));
             }, this);
         }
     });

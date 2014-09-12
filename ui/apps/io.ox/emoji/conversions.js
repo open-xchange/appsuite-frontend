@@ -10,8 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define('io.ox/emoji/conversions',
-       [], function () {
+define('io.ox/emoji/conversions', [], function () {
 
     'use strict';
 

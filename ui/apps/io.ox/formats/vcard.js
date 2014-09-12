@@ -21,7 +21,7 @@ define('io.ox/formats/vcard', function () {
      * qualifies a vcard line
      * @private
      * @param  {string} line
-     * @return {object} (key.type.values)
+     * @return { object} (key.type.values)
      */
     var qualify = function (line) {
         var data = {},
@@ -74,7 +74,7 @@ define('io.ox/formats/vcard', function () {
      * returns parse vcard
      * @private
      * @param  {string} vcard
-     * @return {array} contacts
+     * @return { array} contacts
      */
     var parse = function (vcard) {
         //typeless vs. typed: 'key:value' vs. 'key;type:value'
@@ -123,7 +123,7 @@ define('io.ox/formats/vcard', function () {
      * returns hcard
      * @private
      * @param  {object} contact
-     * @return {string} hcard
+     * @return { string} hcard
      */
     var hCardContact = function (contact) {
         //http://microformats.org/wiki/hcard
@@ -215,7 +215,7 @@ define('io.ox/formats/vcard', function () {
      * converts contact array into hcard string
      * @private
      * @param  {array} contacts
-     * @return {string} hcard
+     * @return { string} hcard
      */
     var hCard = function (contacts) {
         var content = '';
@@ -229,7 +229,7 @@ define('io.ox/formats/vcard', function () {
      * returns array with contact objects
      * @public
      * @param  {string} vcard
-     * @return {array} contacts
+     * @return { array} contacts
      */
     that.getParsed = function (vcard) {
         return parse(vcard);
@@ -240,7 +240,7 @@ define('io.ox/formats/vcard', function () {
      * details: http://microformats.org/wiki/hcard
      * @public
      * @param  {string} vcard
-     * @return {string} hcard
+     * @return { string} hcard
      */
     that.getHCard = function (vcard) {
         return hCard(that.getParsed(vcard));

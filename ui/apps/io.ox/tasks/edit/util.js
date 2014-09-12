@@ -34,7 +34,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
         //build progressField and buttongroup
         buildProgress: function (val) {
             var val = val || 0,
-                progress = $('<input class="form-control progress-field">').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val(val),
+                progress = $('<input class="form-control progress-field">').attr({ type: 'text', id: 'task-edit-progress-field', tabindex: 1 }).val(val),
                 wrapper = $('<div class="input-group">').append(
                     progress,
                     $('<div class="input-group-btn">').append(
@@ -71,7 +71,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                     )
                 );
 
-            return {progress: progress, wrapper: wrapper};
+            return { progress: progress, wrapper: wrapper };
         },
         buildExtensionRow: function (parent, extensions, baton) {
             var row = $('<div class="row">').appendTo(parent);

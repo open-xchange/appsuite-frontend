@@ -11,12 +11,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/autoforward/settings/filter',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/mailfilter',
-     'io.ox/mail/autoforward/settings/model',
-     'io.ox/mail/autoforward/settings/view-form'
-    ], function (ext, api, mailfilterModel, ViewForm) {
+define('io.ox/mail/autoforward/settings/filter', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/mailfilter',
+    'io.ox/mail/autoforward/settings/model',
+    'io.ox/mail/autoforward/settings/view-form'
+], function (ext, api, mailfilterModel, ViewForm) {
 
     'use strict';
 
@@ -35,7 +35,7 @@ define('io.ox/mail/autoforward/settings/filter',
                     autoForwardData.userMainEmail = userMainEmail;
                     ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward');
 
-                    autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
+                    autoForward = new ForwardEdit({ model: factory.create(autoForwardData) });
 
                     $node.append(autoForward.render().$el);
                     $node.one('dispose', function () {
@@ -82,7 +82,7 @@ define('io.ox/mail/autoforward/settings/filter',
                     autoForwardData.userMainEmail = userMainEmail;
                     ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward');
 
-                    autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
+                    autoForward = new ForwardEdit({ model: factory.create(autoForwardData) });
 
                     if (data[0].active === true) {
                        // set active state
@@ -105,9 +105,6 @@ define('io.ox/mail/autoforward/settings/filter',
                         }
                         deferred.resolve(autoForward.model);
                     });
-
-
-
                 }
 
             }).fail(function (error) {

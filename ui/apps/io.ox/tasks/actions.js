@@ -11,19 +11,19 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/actions',
-    ['io.ox/core/extensions',
-     'io.ox/tasks/api',
-     'io.ox/tasks/util',
-     'io.ox/core/extPatterns/links',
-     'settings!io.ox/tasks',
-     'gettext!io.ox/tasks',
-     'io.ox/core/notifications',
-     'io.ox/core/print',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/tasks/common-extensions',
-     'io.ox/core/folder/api'
-    ], function (ext, api, util, links, settings, gt, notifications, print, actions, extensions, folderAPI) {
+define('io.ox/tasks/actions', [
+    'io.ox/core/extensions',
+    'io.ox/tasks/api',
+    'io.ox/tasks/util',
+    'io.ox/core/extPatterns/links',
+    'settings!io.ox/tasks',
+    'gettext!io.ox/tasks',
+    'io.ox/core/notifications',
+    'io.ox/core/print',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/tasks/common-extensions',
+    'io.ox/core/folder/api'
+], function (ext, api, util, links, settings, gt, notifications, print, actions, extensions, folderAPI) {
 
     'use strict';
 
@@ -36,7 +36,7 @@ define('io.ox/tasks/actions',
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (edit) {
-                edit.getApp().launch({ folderid: baton.app.folder.get()});
+                edit.getApp().launch({ folderid: baton.app.folder.get() });
             });
         }
     });
@@ -58,9 +58,9 @@ define('io.ox/tasks/actions',
                 numberOfTasks = data.length || 1;
             ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                 //build popup
-                var popup = new dialogs.ModalDialog({async: true})
-                    .addPrimaryButton('deleteTask', gt('Delete'), 'deleteTask', {tabIndex: '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+                var popup = new dialogs.ModalDialog({ async: true })
+                    .addPrimaryButton('deleteTask', gt('Delete'), 'deleteTask', { tabIndex: 1 })
+                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
                 //Header
                 popup.getBody()
                     .append($('<h4>')
@@ -87,10 +87,14 @@ define('io.ox/tasks/actions',
                                 } else {//show generic error message
                                     //show retrymessage and enable buttons again
                                     popup.idle();
-                                    popup.getBody().empty().append($.fail(gt.ngettext('The task could not be deleted.',
-                                                                              'The tasks could not be deleted.', numberOfTasks), function () {
-                                        popup.trigger('deleteTask', data);
-                                    })).find('h4').remove();
+                                    popup.getBody().empty().append($.fail(
+                                        gt.ngettext(
+                                            'The task could not be deleted.',
+                                            'The tasks could not be deleted.',
+                                            numberOfTasks
+                                        ), function () {
+                                            popup.trigger('deleteTask', data);
+                                        })).find('h4').remove();
                                 }
                             });
                     });
@@ -127,19 +131,23 @@ define('io.ox/tasks/actions',
         var mods,
             data = baton.data;
         if (state === 3) {
-            mods = {label: gt('Undone'),
-                    data: {status: 1,
-                           percent_completed: 0,
-                           date_completed: null
-                          }
-                   };
+            mods = {
+                label: gt('Undone'),
+                data: {
+                    status: 1,
+                    percent_completed: 0,
+                    date_completed: null
+                }
+            };
         } else {
-            mods = {label: gt('Done'),
-                    data: {status: 3,
-                           percent_completed: 100,
-                           date_completed: _.now()
-                          }
-                   };
+            mods = {
+                label: gt('Done'),
+                data: {
+                    status: 3,
+                    percent_completed: 100,
+                    date_completed: _.now()
+                }
+            };
         }
         require(['io.ox/tasks/api'], function (api) {
             if (data.length > 1) {
@@ -251,7 +259,7 @@ define('io.ox/tasks/actions',
                     api: api,
                     callback: function () {
                         //update detailview
-                        api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
+                        api.trigger('update:' + _.ecid({ id: data.id, folder_id: data.folder_id }));
                     }
                 });
             });
@@ -319,7 +327,7 @@ define('io.ox/tasks/actions',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
+                    baton: { allIds: files },
                     attachmentMode: false,
                     selector: '.window-container.io-ox-tasks-window'
                 });
@@ -344,9 +352,11 @@ define('io.ox/tasks/actions',
                 });
         },
         multiple: function (list, baton) {
-            ox.load(['io.ox/core/tk/dialogs',
-                     'io.ox/preview/main',
-                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
+            ox.load([
+                'io.ox/core/tk/dialogs',
+                'io.ox/preview/main',
+                'io.ox/core/api/attachment'
+            ]).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
                     _(list).each(function (data) {
@@ -407,7 +417,7 @@ define('io.ox/tasks/actions',
                 _(list).each(function (data) {
                     attachmentAPI.save(data);
                 });
-                setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
+                setTimeout(function () { notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });
         }
     });
@@ -468,12 +478,12 @@ define('io.ox/tasks/actions',
         id: 'delete',
         index: 10,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-trash-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/tasks/actions/delete', null, baton);
@@ -490,12 +500,12 @@ define('io.ox/tasks/actions',
         id: 'done',
         index: 20,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-check-square-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/tasks/actions/done', null, baton);
@@ -512,12 +522,12 @@ define('io.ox/tasks/actions',
         id: 'unDone',
         index: 30,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-square-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/tasks/actions/undone', null, baton);
@@ -534,12 +544,12 @@ define('io.ox/tasks/actions',
         id: 'move',
         index: 40,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-sign-in">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/tasks/actions/move', null, baton);

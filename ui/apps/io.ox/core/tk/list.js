@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/list',
-    ['io.ox/core/tk/list-selection',
-     'io.ox/core/tk/list-dnd',
-     'io.ox/core/extensions'
-    ], function (Selection, dnd, ext) {
+define('io.ox/core/tk/list', [
+    'io.ox/core/tk/list-selection',
+    'io.ox/core/tk/list-dnd',
+    'io.ox/core/extensions'
+], function (Selection, dnd, ext) {
 
     'use strict';
 

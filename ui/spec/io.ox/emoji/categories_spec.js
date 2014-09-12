@@ -53,7 +53,7 @@ define([
 
             it('should provide all icons for a specific category', function () {
                 var peopleIcons = this.emoji.iconsForCategory('People'),
-                    pile = _(peopleIcons).where({unicode: pile_unicode})[0];
+                    pile = _(peopleIcons).where({ unicode: pile_unicode })[0];
 
                 expect(this.emoji.icons.length).to.be.above(peopleIcons.length);
                 expect(peopleIcons.length).to.equal(167);

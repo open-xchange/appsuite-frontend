@@ -11,14 +11,14 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/participants/model',
-    ['io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/api/resource',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/util'
-    ], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
+define('io.ox/participants/model', [
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/core/api/resource',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'io.ox/core/util'
+], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
 
     'use strict';
     // TODO: Bulk Loading
@@ -45,35 +45,33 @@ define('io.ox/participants/model',
                     id: this.get('internal_userid'),
                     type: this.TYPE_USER
                 });
-            }
-            else if (this.get('entity')) {
+            } else if (this.get('entity')) {
                 this.cid = 'entity_' + parseInt(this.get('entity'), 10);
                 this.set({
                     id: parseInt(this.get('entity'), 10),
                     type: this.TYPE_USER
                 });
-            }
-            else {
+            } else {
                 switch (this.get('type')) {
-                case this.TYPE_USER:
-                    this.cid = 'internal_' + this.get('id');
-                    break;
-                case this.TYPE_USER_GROUP:
-                    this.cid = 'usergroup_' + this.get('id');
-                    break;
-                case this.TYPE_RESOURCE:
-                    this.cid = 'resource_' + this.get('id');
-                    break;
-                case this.TYPE_RESOURCE_GROUP:
-                    this.cid = 'resourcegroup_' + this.get('id');
-                    break;
-                case this.TYPE_EXTERNAL_USER:
-                    this.cid = 'external_' + this.getEmail();
-                    this.set('id', this.getEmail());
-                    break;
-                case this.TYPE_DISTLIST_USER_GROUP:
-                    this.cid = 'distlist_' + this.get('id');
-                    break;
+                    case this.TYPE_USER:
+                        this.cid = 'internal_' + this.get('id');
+                        break;
+                    case this.TYPE_USER_GROUP:
+                        this.cid = 'usergroup_' + this.get('id');
+                        break;
+                    case this.TYPE_RESOURCE:
+                        this.cid = 'resource_' + this.get('id');
+                        break;
+                    case this.TYPE_RESOURCE_GROUP:
+                        this.cid = 'resourcegroup_' + this.get('id');
+                        break;
+                    case this.TYPE_EXTERNAL_USER:
+                        this.cid = 'external_' + this.getEmail();
+                        this.set('id', this.getEmail());
+                        break;
+                    case this.TYPE_DISTLIST_USER_GROUP:
+                        this.cid = 'distlist_' + this.get('id');
+                        break;
                 }
             }
 
@@ -126,21 +124,21 @@ define('io.ox/participants/model',
                 break;
             case self.TYPE_USER_GROUP:
                 //fetch user group
-                groupAPI.get({id: self.get('id')}).done(function (group) {
+                groupAPI.get({ id: self.get('id') }).done(function (group) {
                     self.set(group);
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE:
-                resourceAPI.get({id: self.get('id')}).done(function (resource) {
+                resourceAPI.get({ id: self.get('id') }).done(function (resource) {
                     self.set(resource);
                     self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE_GROUP:
-                self._data = {display_name: 'resource group'};
+                self._data = { display_name: 'resource group' };
                 self.trigger('change', self);
                 df.resolve();
                 break;

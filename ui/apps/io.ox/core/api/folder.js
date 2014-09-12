@@ -11,19 +11,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/folder',
-    ['io.ox/core/http',
-     'io.ox/core/cache',
-     'settings!io.ox/mail',
-     'settings!io.ox/core',
-     'io.ox/core/api/account',
-     'io.ox/core/event',
-     'io.ox/core/notifications',
-     'io.ox/core/capabilities',
-     'io.ox/core/extensions',
-     'gettext!io.ox/core',
-     'io.ox/filter/folder'
-    ], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
+define('io.ox/core/api/folder', [
+    'io.ox/core/http',
+    'io.ox/core/cache',
+    'settings!io.ox/mail',
+    'settings!io.ox/core',
+    'io.ox/core/api/account',
+    'io.ox/core/event',
+    'io.ox/core/notifications',
+    'io.ox/core/capabilities',
+    'io.ox/core/extensions',
+    'gettext!io.ox/core',
+    'io.ox/filter/folder'
+], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
 
     'use strict';
 
@@ -38,19 +38,19 @@ define('io.ox/core/api/folder',
         /**
          * checks if folder is currently blacklisted
          * @param  {object} folder
-         * @return {boolean} true if not blacklisted
+         * @return { boolean} true if not blacklisted
          */
         visible = function (folder) {
             var point = ext.point('io.ox/folder/filter');
             return point.filter(function (p) {
-                    return p.invoke('isEnabled', this, folder) !== false;
-                })
-                .map(function (p) {
-                    return p.invoke('isVisible', this, folder);
-                })
-                .reduce(function (acc, isVisible) {
-                    return acc && isVisible;
-                }, true);
+                return p.invoke('isEnabled', this, folder) !== false;
+            })
+            .map(function (p) {
+                return p.invoke('isVisible', this, folder);
+            })
+            .reduce(function (acc, isVisible) {
+                return acc && isVisible;
+            }, true);
         },
 
         // magic permission check
@@ -429,54 +429,54 @@ define('io.ox/core/api/folder',
 
                 getter = function () {
                     return http.GET({
-                            module: 'folders',
-                            appendColumns: true,
-                            params: {
-                                action: 'allVisible',
-                                content_type: opt.type,
-                                tree: '1',
-                                altNames: true,
-                                timezone: 'UTC'
-                            }
-                        })
-                        .pipe(function (data, timestamp) {
-                            // clean up
-                            var id, folders, tmp = {},
+                        module: 'folders',
+                        appendColumns: true,
+                        params: {
+                            action: 'allVisible',
+                            content_type: opt.type,
+                            tree: '1',
+                            altNames: true,
+                            timezone: 'UTC'
+                        }
+                    })
+                    .pipe(function (data, timestamp) {
+                        // clean up
+                        var id, folders, tmp = {},
 
-                                makeObject = function (raw) {
-                                    return http.makeObject(raw, 'folders');
-                                },
-                                blacklisted = function (folder) {
-                                    // checks if folder is blacklisted
-                                    return visible(folder);
-                                },
-                                canReadOrIsAdmin = function (obj) {
-                                    // read permission?
-                                    return api.can('read', obj) || (perm(obj.own_rights, 28) === 1);
-                                },
-                                addToCache = function (obj) {
-                                    // add to folder cache
-                                    folderCache.add(obj.id, obj, timestamp);
-                                    return obj;
-                                };
-                            for (id in data) {
-                                folders = _.chain(data[id])
-                                    .map(makeObject)
-                                    .filter(blacklisted)
-                                    .filter(canReadOrIsAdmin)
-                                    .map(addToCache) // since each doesn't chain
-                                    .value();
-                                // empty?
-                                if (folders.length > 0) {
-                                    tmp[id] = folders;
-                                }
+                            makeObject = function (raw) {
+                                return http.makeObject(raw, 'folders');
+                            },
+                            blacklisted = function (folder) {
+                                // checks if folder is blacklisted
+                                return visible(folder);
+                            },
+                            canReadOrIsAdmin = function (obj) {
+                                // read permission?
+                                return api.can('read', obj) || (perm(obj.own_rights, 28) === 1);
+                            },
+                            addToCache = function (obj) {
+                                // add to folder cache
+                                folderCache.add(obj.id, obj, timestamp);
+                                return obj;
+                            };
+                        for (id in data) {
+                            folders = _.chain(data[id])
+                                .map(makeObject)
+                                .filter(blacklisted)
+                                .filter(canReadOrIsAdmin)
+                                .map(addToCache) // since each doesn't chain
+                                .value();
+                            // empty?
+                            if (folders.length > 0) {
+                                tmp[id] = folders;
                             }
-                            return tmp;
-                        })
-                        .done(function (data) {
-                            // add to simple cache
-                            visibleCache.add(opt.type, data);
-                        });
+                        }
+                        return tmp;
+                    })
+                    .done(function (data) {
+                        // add to simple cache
+                        visibleCache.add(opt.type, data);
+                    });
                 };
 
             return opt.cache === false ? getter() : visibleCache.get(opt.type, getter);
@@ -670,7 +670,7 @@ define('io.ox/core/api/folder',
                     })
                     .done(function (id) {
                         // get fresh folder data (use maybe changed id)
-                        api.get({ folder: id, cache: false}).done(function (data) {
+                        api.get({ folder: id, cache: false }).done(function (data) {
                             if (!visible(data)) {
                                 api.trigger('warn:hidden', data);
                             }
@@ -816,8 +816,7 @@ define('io.ox/core/api/folder',
                         // maybe need a better word. It's shared TO others
                         if (!data.permissions || data.permissions.length <= 1) return false;
                         // only shared BY me, not TO me
-                        return data.type === 1 || data.type === 7 ||
-                            (data.module === 'infostore' && data.created_by === ox.user_id);
+                        return data.type === 1 || data.type === 7 || (data.module === 'infostore' && data.created_by === ox.user_id);
                     }
                 }
             }
@@ -1106,22 +1105,22 @@ define('io.ox/core/api/folder',
      * @param {string} - folder id
      * @param {object} - options:
      * {
-     *     exclude: {Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
-     *     leaf: {DOMnode} - An extra node that is appended as last crumb
-     *     last: {boolean} - true: last item should have the active class set (default)
+     *     exclude: { Array} - An array of folder IDs that are ignored and won't appear in the breadcrumb
+     *     leaf: { DOMnode} - An extra node that is appended as last crumb
+     *     last: { boolean} - true: last item should have the active class set (default)
      *                     - no relevance if subfolder option is set to true and element is 'clickable' (*)
      *                     - false: same as true if element is 'clickable' (*)
      *                     - false: a link that reacts to the function assigned to the handler option
-     *     handler: {function} - a handler function, called with the id of the folder as parameter
-     *     module: {string} - provide a module to limit 'clickable' attribute (*) to a specific module
-     *     subfolder: {boolean} - show all subfolders of the folder as a dropdown if element is 'clickable' (*)
+     *     handler: { function} - a handler function, called with the id of the folder as parameter
+     *     module: { string} - provide a module to limit 'clickable' attribute (*) to a specific module
+     *     subfolder: { boolean} - show all subfolders of the folder as a dropdown if element is 'clickable' (*)
      *                          - default: true
      * }
      * (*) - element is defined to be clickable, if a few conditions are met:
      *         - module option equals the folder module or module option is undefined
      *         - handler function is defined
      *
-     * @return {Node} - an ul element that contains the list (populated later, after path is loaded via the API (async))
+     * @return { Node} - an ul element that contains the list (populated later, after path is loaded via the API (async))
      */
     api.getBreadcrumb = (function () {
 
@@ -1146,7 +1145,7 @@ define('io.ox/core/api/folder',
                                 _(list).map(function (folder) {
                                     var $a, $li = $('<li>').append(
                                         $a = $('<a href="#" tabindex="1" role="menuitem">')
-                                        .attr({'data-folder-id': folder.id}).text(gt.noI18n(api.getFolderTitle(folder.title, 30)))
+                                        .attr({ 'data-folder-id': folder.id }).text(gt.noI18n(api.getFolderTitle(folder.title, 30)))
                                     );
                                     /**
                                      * special mobile handling due to on-the-fly bootstrap-dropdown mod on mobile

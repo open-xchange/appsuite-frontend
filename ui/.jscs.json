@@ -1,5 +1,5 @@
 {
-    "requireCurlyBraces": ["for", "while", "do", "try", "catch"],
+    "requireCurlyBraces": ["do", "try", "catch"],
     "requireSpaceAfterKeywords": ["if", "else", "for", "while", "do", "switch", "return", "try", "catch"],
     "requireSpaceBeforeBinaryOperators": ["?", "+", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
     "requireSpaceAfterBinaryOperators": ["?", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
@@ -38,7 +38,6 @@
         "beforeAlternate": true
     },
     "requireSpaceBeforeBlockStatements": true,
-    "disallowDanglingUnderscores": true,
     "disallowSpaceAfterObjectKeys": true,
-    "requireMultipleVarDecl": true
+    "requireSpacesInsideObjectBrackets": "allButNested"
 }

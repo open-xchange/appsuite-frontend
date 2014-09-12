@@ -11,17 +11,17 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/detail/mobileView',
-    ['io.ox/mail/detail/view',
-     'io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/mail/detail/content',
-     'io.ox/core/extPatterns/links',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style'
-    ], function (DetailView, extensions, ext, api, util, content, links, gt) {
+define('io.ox/mail/detail/mobileView', [
+    'io.ox/mail/detail/view',
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/mail/detail/content',
+    'io.ox/core/extPatterns/links',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style'
+], function (DetailView, extensions, ext, api, util, content, links, gt) {
 
     'use strict';
 
@@ -98,7 +98,6 @@ define('io.ox/mail/detail/mobileView',
         draw: extensions.recipients
     });
 
-
     ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'subject',
         index: INDEX_header += 100,
@@ -163,7 +162,6 @@ define('io.ox/mail/detail/mobileView',
             this.idle().append(data.content);
         }
     });
-
 
     /*
      * Used for header information in threads on mobile (threadView page)
@@ -245,8 +243,7 @@ define('io.ox/mail/detail/mobileView',
             ext.point('io.ox/mail/mobile/detail').invoke('draw', this.$el, baton);
 
             return this;
-        },
-
+        }
     });
 
     return {

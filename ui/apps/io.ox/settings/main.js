@@ -11,18 +11,18 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/settings/main',
-    ['io.ox/core/tk/vgrid',
-     'io.ox/core/api/apps',
-     'io.ox/core/extensions',
-     'io.ox/core/commons',
-     'gettext!io.ox/core',
-     'settings!io.ox/settings/configjump',
-     'settings!io.ox/core',
-     'io.ox/core/settings/errorlog/settings/pane',
-     'io.ox/core/settings/downloads/pane',
-     'less!io.ox/settings/style'
-    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings) {
+define('io.ox/settings/main', [
+    'io.ox/core/tk/vgrid',
+    'io.ox/core/api/apps',
+    'io.ox/core/extensions',
+    'io.ox/core/commons',
+    'gettext!io.ox/core',
+    'settings!io.ox/settings/configjump',
+    'settings!io.ox/core',
+    'io.ox/core/settings/errorlog/settings/pane',
+    'io.ox/core/settings/downloads/pane',
+    'less!io.ox/settings/style'
+], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings) {
 
     'use strict';
 
@@ -103,49 +103,50 @@ define('io.ox/settings/main',
 
             saveSettings = function (triggeredBy) {
 
-            switch (triggeredBy) {
-            case 'changeMain':
-                if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
-                    var settingsID = currentSelection.id + '/settings';
-                    ext.point(settingsID + '/detail').invoke('save');
-                } else if (currentSelection !== null && currentSelection.lazySaveSettings === true) {
-                    changeStatus = true;
+                switch (triggeredBy) {
+                    case 'changeMain':
+                        if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
+                            var settingsID = currentSelection.id + '/settings';
+                            ext.point(settingsID + '/detail').invoke('save');
+                        } else if (currentSelection !== null && currentSelection.lazySaveSettings === true) {
+                            changeStatus = true;
+                        }
+                        break;
+                    case 'changeGrid':
+                        if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
+                            var settingsID = previousSelection.id + '/settings';
+                            ext.point(settingsID + '/detail').invoke('save');
+                            changeStatus = false;
+                        }
+                        break;
+                    case 'changeGridMobile':
+                        if (currentSelection.lazySaveSettings === true && changeStatus === true) {
+                            var settingsID = currentSelection.id + '/settings';
+                            ext.point(settingsID + '/detail').invoke('save');
+                            changeStatus = false;
+                        }
+                        break;
+                    case 'hide':
+                    case 'logout':
+                        if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
+                            var settingsID = currentSelection.id + '/settings',
+                                defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
+                            changeStatus = false;
+                            return $.when.apply($, defs);
+                        }
+                        break;
+                    default:
+                        var settingsID = currentSelection.id + '/settings';
+                        ext.point(settingsID + '/detail').invoke('save');
                 }
-                break;
-            case 'changeGrid':
-                if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
-                    var settingsID = previousSelection.id + '/settings';
-                    ext.point(settingsID + '/detail').invoke('save');
-                    changeStatus = false;
-                }
-                break;
-            case 'changeGridMobile':
-                if (currentSelection.lazySaveSettings === true && changeStatus === true) {
-                    var settingsID = currentSelection.id + '/settings';
-                    ext.point(settingsID + '/detail').invoke('save');
-                    changeStatus = false;
-                }
-                break;
-            case 'hide':
-            case 'logout':
-                if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
-                    var settingsID = currentSelection.id + '/settings',
-                        defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
-                    changeStatus = false;
-                    return $.when.apply($, defs);
-                }
-                break;
-            default:
-                var settingsID = currentSelection.id + '/settings';
-                ext.point(settingsID + '/detail').invoke('save');
-            }
 
-            return $.when();
-        };
+                return $.when();
+            };
 
         win.addClass('io-ox-settings-main');
 
         var vsplit = commons.vsplit(win.nodes.main, app);
+
         left = vsplit.left.addClass('leftside border-right');
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             'tabindex': 1,
@@ -206,7 +207,7 @@ define('io.ox/settings/main',
                 index: 100,
                 draw: function () {
                     var $node = this;
-                    $node.css({height: '100%'});
+                    $node.css({ height: '100%' });
                     var fillUpURL = $.Deferred();
 
                     if (declaration.url.indexOf('[token]') > 0) {
@@ -254,7 +255,6 @@ define('io.ox/settings/main',
                 disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
 
             appsInitialized.done(function () {
-
                 def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
                     var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
                     if (expertmode && shown) {
@@ -367,16 +367,13 @@ define('io.ox/settings/main',
             draw: function () {
 
                 var buildCheckbox = function () {
-                    var checkbox = $('<input type="checkbox">')
-                    .on('change', function () {
-
+                    var checkbox = $('<input type="checkbox" class="input-xlarge">').on('change', function () {
                         expertmode = checkbox.prop('checked');
                         coreSettings.set('settings/advancedMode', expertmode).save();
                         grid.setAllRequest(getAllSettingsPanes);
                         grid.paint();
                         updateExpertMode();
-
-                    }).addClass('input-xlarge');
+                    });
                     checkbox.prop('checked', expertmode);
                     return checkbox;
                 };

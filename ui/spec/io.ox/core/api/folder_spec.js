@@ -25,7 +25,7 @@ define(['shared/examples/for/api',
                 .replace('/api/folders?', '')
                 .replace(/"/g, '\\"').replace(/&/g, '","')
                 .replace(/=/g, '":"') + '"}'),
-                parentFolderIDs = {'2': '1',
+                parentFolderIDs =  { '2': '1',
                     '3' : '2',
                     '4' : '2',
                     '5' : '2',
@@ -36,20 +36,20 @@ define(['shared/examples/for/api',
                     folder_id: parentFolderIDs[sendObject.id]
                 }, fakeFolders[sendObject.id] || {});
 
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: data})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                JSON.stringify({ timestamp: 1378223251586, data: data })
             );
         });
 
         //sends a list of subfolders
         server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                 JSON.stringify({
                     timestamp: 1368791630910,
                     data: [
-                        {id: '3', folder_id: '2'},
-                        {id: '4', folder_id: '2'},
-                        {id: '5', folder_id: '2'}
+                        {id: '3', folder_id: '2' },
+                        {id: '4', folder_id: '2' },
+                        {id: '5', folder_id: '2' }
                     ]
                 })
             );
@@ -57,7 +57,7 @@ define(['shared/examples/for/api',
 
         //sends a path from a folder
         server.respondWith('GET', /api\/folders\?action=path/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                 JSON.stringify({
                     'timestamp': 9223372036854775807,
                     'data': [
@@ -71,15 +71,15 @@ define(['shared/examples/for/api',
 
         //sends the created folder
         server.respondWith('PUT', /api\/folders\?action=(new|delete)/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: '21'})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                JSON.stringify({ timestamp: 1378223251586, data: '21' })
             );
         });
 
         //responds with empty message to allVisible calls
         server.respondWith(/api\/folders\?action=allVisible/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: []})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                JSON.stringify({ timestamp: 1378223251586, data: []})
             );
         });
     };
@@ -241,38 +241,38 @@ define(['shared/examples/for/api',
 
             describe('to find out, if a folder', function () {
                 it('can read', function () {
-                    expect(api.can('read', {own_rights: 128})).to.be.true;
-                    expect(api.can('read', {own_rights: 127})).to.befalse;
+                    expect(api.can('read', { own_rights: 128 })).to.be.true;
+                    expect(api.can('read', { own_rights: 127 })).to.befalse;
                 });
 
                 it('can create', function () {
-                    expect(api.can('create', {own_rights: 2})).to.be.true;
-                    expect(api.can('create', {own_rights: 1})).to.be.false;
+                    expect(api.can('create', { own_rights: 2 })).to.be.true;
+                    expect(api.can('create', { own_rights: 1 })).to.be.false;
                 });
 
                 it('can write', function () {
-                    expect(api.can('write', {own_rights: 20000})).to.be.true;
-                    expect(api.can('write', {own_rights: 0})).to.be.false;
+                    expect(api.can('write', { own_rights: 20000 })).to.be.true;
+                    expect(api.can('write', { own_rights: 0 })).to.be.false;
                 });
 
                 it('can delete', function () {
-                    expect(api.can('delete', {own_rights: 5000000})).to.be.true;
-                    expect(api.can('delete', {own_rights: 0})).to.be.false;
+                    expect(api.can('delete', { own_rights: 5000000 })).to.be.true;
+                    expect(api.can('delete', { own_rights: 0 })).to.be.false;
                 });
 
                 it('can rename', function () {
-                    expect(api.can('rename', {own_rights: 0x50000000})).to.be.true;
-                    expect(api.can('rename', {own_rights: 0})).to.be.false;
+                    expect(api.can('rename', { own_rights: 0x50000000 })).to.be.true;
+                    expect(api.can('rename', { own_rights: 0 })).to.be.false;
                 });
 
                 it('can create folder', function () {
-                    expect(api.can('createFolder', {own_rights: 0x10000000})).to.be.true;
-                    expect(api.can('createFolder', {own_rights: 0, permissions: 0})).to.be.false;
+                    expect(api.can('createFolder', { own_rights: 0x10000000 })).to.be.true;
+                    expect(api.can('createFolder', { own_rights: 0, permissions: 0 })).to.be.false;
                 });
 
                 it('can delete folder', function () {
-                    expect(api.can('deleteFolder', {own_rights: 0x10000000})).to.be.true;
-                    expect(api.can('deleteFolder', {own_rights: 0})).to.be.false;
+                    expect(api.can('deleteFolder', { own_rights: 0x10000000 })).to.be.true;
+                    expect(api.can('deleteFolder', { own_rights: 0 })).to.be.false;
                 });
             });
         });
@@ -306,15 +306,15 @@ define(['shared/examples/for/api',
         describe('hidden objects', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                                 JSON.stringify({
                                     timestamp: 1368791630910,
                                     data: [
-                                        {id: '3', folder_id: 'hidden/test', title: '.drive'},
-                                        {id: '4', folder_id: 'hidden/test', title: 'visible'},
-                                        {id: '5', folder_id: 'hidden/test', title: '.hidden'},
-                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden'},
-                                        {id: '0815', folder_id: 'hidden/test', title: 'for general files specs'}
+                                        {id: '3', folder_id: 'hidden/test', title: '.drive' },
+                                        {id: '4', folder_id: 'hidden/test', title: 'visible' },
+                                        {id: '5', folder_id: 'hidden/test', title: '.hidden' },
+                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden' },
+                                        {id: '0815', folder_id: 'hidden/test', title: 'for general files specs' }
                                     ]
                                 })
                     );
@@ -391,8 +391,8 @@ define(['shared/examples/for/api',
                                 oldData = fakeFolders[id];
 
                             fakeFolders[id] = _.extend(oldData, JSON.parse(xhr.requestBody));
-                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                                JSON.stringify({'timestamp': 1386862269412, 'data': id})
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                                JSON.stringify({ 'timestamp': 1386862269412, 'data': id })
                             );
                         });
                         require([
@@ -413,7 +413,7 @@ define(['shared/examples/for/api',
                     it('should warn the user that files will be hidden', function () {
                         var spy = sinon.spy(notifications, 'yell');
 
-                        api.trigger('warn:hidden', {title: '.secret'});
+                        api.trigger('warn:hidden', { title: '.secret' });
                         //expect to contain the folder name in the message
                         expect(spy.calledWithMatch('info', /\.secret/)).to.be.ok;
                         spy.restore();
@@ -467,7 +467,7 @@ define(['shared/examples/for/api',
                         'settings!io.ox/core',
                         'settings!io.ox/files'
                     ]).then(function (settings, fileSettings) {
-                        settings.set('folder/blacklist', {'4': true});
+                        settings.set('folder/blacklist',  { '4': true });
                         fileSettings.set('showHidden', false);
                         return api.unfetch('0');
                     }).then(function () {
@@ -486,7 +486,7 @@ define(['shared/examples/for/api',
                         'settings!io.ox/core',
                         'settings!io.ox/files'
                     ]).then(function (settings, fileSettings) {
-                        settings.set('folder/blacklist', {'4': true});
+                        settings.set('folder/blacklist',  { '4': true });
                         fileSettings.set('showHidden', true);
                         return api.unfetch('0');
                     }).then(function () {

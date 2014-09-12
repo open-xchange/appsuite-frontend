@@ -11,15 +11,15 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/calendar/invitations/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/http',
-     'settings!io.ox/calendar',
-     'io.ox/calendar/util',
-     'gettext!io.ox/calendar/main',
-     'io.ox/core/notifications',
-     'less!io.ox/calendar/style'
-    ], function (ext, http, settings, util, gt, notifications) {
+define('io.ox/calendar/invitations/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/http',
+    'settings!io.ox/calendar',
+    'io.ox/calendar/util',
+    'gettext!io.ox/calendar/main',
+    'io.ox/core/notifications',
+    'less!io.ox/calendar/style'
+], function (ext, http, settings, util, gt, notifications) {
 
     'use strict';
 

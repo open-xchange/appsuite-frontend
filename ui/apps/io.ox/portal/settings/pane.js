@@ -11,17 +11,17 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/settings/pane',
-    ['io.ox/core/extensions',
-     'io.ox/core/manifests',
-     'io.ox/portal/settings/widgetview',
-     'io.ox/core/upsell',
-     'io.ox/portal/widgets',
-     'gettext!io.ox/portal',
-     'settings!io.ox/portal',
-     'static/3rd.party/jquery-ui.min.js',
-     'less!io.ox/portal/style'
-    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings) {
+define('io.ox/portal/settings/pane', [
+    'io.ox/core/extensions',
+    'io.ox/core/manifests',
+    'io.ox/portal/settings/widgetview',
+    'io.ox/core/upsell',
+    'io.ox/portal/widgets',
+    'gettext!io.ox/portal',
+    'settings!io.ox/portal',
+    'static/3rd.party/jquery-ui.min.js',
+    'less!io.ox/portal/style'
+], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings) {
 
     'use strict';
 
@@ -302,11 +302,11 @@ define('io.ox/portal/settings/pane',
 
             var $controls = $('<div class="widget-controls">'),
                 $link = $('<a>').attr({
-                            href: '#',
-                            role: 'button',
-                            tabindex: 1,
-                            'data-action': 'toggle'
-                        }).addClass('action');
+                    href: '#',
+                    role: 'button',
+                    tabindex: 1,
+                    'data-action': 'toggle'
+                }).addClass('action');
             if (data.enabled) {
                 // editable?
                 if (baton.view.options.editable) {
@@ -336,23 +336,23 @@ define('io.ox/portal/settings/pane',
                 }
                 $controls.append(
                     $node,
-                    appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Disable')}), gt('Disable'), 'disable')
+                    appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Disable') }), gt('Disable'), 'disable')
                 );
             } else {
                 $controls.append(
-                    appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Enable')}), gt('Enable'), 'enable')
+                    appendIconText($link.attr({ 'aria-label': title + ', ' + gt('Enable') }), gt('Enable'), 'enable')
                 );
             }
 
             $controls.append(
                 // close (has float: right)
                 $('<a>').attr({
-                        href: '#',
-                        role: 'button',
-                        tabindex: 1,
-                        'data-action': 'remove',
-                        'aria-label': title + ', ' + gt('remove')
-                    }).append('<i class="fa fa-trash-o">')
+                    href: '#',
+                    role: 'button',
+                    tabindex: 1,
+                    'data-action': 'remove',
+                    'aria-label': title + ', ' + gt('remove')
+                }).append('<i class="fa fa-trash-o">')
             );
 
             this.append($controls);

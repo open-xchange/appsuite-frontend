@@ -11,14 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/commons',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'gettext!io.ox/core',
-     // 'io.ox/core/commons-folderview',
-     'io.ox/core/folder/api',
-     'io.ox/core/api/account'
-    ], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI) {
+define('io.ox/core/commons', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'gettext!io.ox/core',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/account'
+], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI) {
 
     'use strict';
 
@@ -123,10 +122,10 @@ define('io.ox/core/commons',
             function draw(id, selection, grid) {
                 var node = $('<div>');
 
-                ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, {count: selection.length});
+                ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, { count: selection.length });
 
                 (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
-                    .invoke('draw', node, {data: selection, grid: grid});
+                    .invoke('draw', node, { data: selection, grid: grid });
                 return node;
             }
 
@@ -143,7 +142,7 @@ define('io.ox/core/commons',
                     container = $('#' + toolbarID);
                 } else {
                     // or creaet a new one
-                    container = $('<div>', {id: toolbarID});
+                    container = $('<div>', { id: toolbarID });
                 }
                 _.defer(function () {
                     if (selection.length > 0) {
@@ -278,13 +277,13 @@ define('io.ox/core/commons',
          */
         wireGridAndWindow: function (grid, win) {
             var top = 0, on = function () {
-                    grid.keyboard(true);
-                    if (grid.selection.get().length) {
-                        // only retrigger if selection is not empty; hash gets broken if caches are empty
-                        // TODO: figure out why this was important
-                        grid.selection.retriggerUnlessEmpty();
-                    }
-                };
+                grid.keyboard(true);
+                if (grid.selection.get().length) {
+                    // only retrigger if selection is not empty; hash gets broken if caches are empty
+                    // TODO: figure out why this was important
+                    grid.selection.retriggerUnlessEmpty();
+                }
+            };
 
             grid.setApp(win.app);
             // show
@@ -375,8 +374,7 @@ define('io.ox/core/commons',
                     if (mode === 'all') {
                         // non-search; show foldername
                         drawFolderInfo(folder_id);
-                    }
-                    else if (mode === 'search') {
+                    } else if (mode === 'search') {
                         var node = getInfoNode();
                         node.find('.folder-name')
                             .text(gt('Results'));
@@ -546,14 +544,12 @@ define('io.ox/core/commons',
             // explicit vs. default
             if (defaultFolderId !== undefined) {
                 return apply(defaultFolderId);
-            }
-            else if (type === 'mail') {
+            } else if (type === 'mail') {
                 return accountAPI.getUnifiedInbox().then(function (id) {
                     if (id === null) return app.folder.setDefault();
                     return apply(id);
                 });
-            }
-            else {
+            } else {
                 return app.folder.setDefault();
             }
         },
@@ -567,7 +563,7 @@ define('io.ox/core/commons',
          */
         addPropertyCaching: function (grid, options) {
             //be robust
-            grid = grid || {prop: $.noop()};
+            grid = grid || { prop: $.noop() };
 
             var mapping = {},
                 superprop = grid.prop,
@@ -856,17 +852,17 @@ define('io.ox/core/commons',
         }
 
         return node.one('dispose', function () {
-                if (_.isArray(data)) {
-                    folderAPI.off('update', redraw);
-                    api.off('delete update', redraw);
-                } else {
-                    folderAPI.off('update', checkFolder);
-                    api.off('delete:' + ecid, remove);
-                    api.off('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
-                    api.off('move:' + ecid, move);
-                }
-                api = update = data = node = getter = cid = ecid = null;
-            });
+            if (_.isArray(data)) {
+                folderAPI.off('update', redraw);
+                api.off('delete update', redraw);
+            } else {
+                folderAPI.off('update', checkFolder);
+                api.off('delete:' + ecid, remove);
+                api.off('create update:' + ecid + (shortecid ? ' update:' + shortecid : ''), update);
+                api.off('move:' + ecid, move);
+            }
+            api = update = data = node = getter = cid = ecid = null;
+        });
     };
 
     // located here since we need a translation for 'Retry'

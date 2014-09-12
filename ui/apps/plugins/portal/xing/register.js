@@ -22,19 +22,19 @@
  * - error handling when looking up e-mails for add/invite-to
  */
 
-define('plugins/portal/xing/register',
-    ['io.ox/core/extensions',
-     'plugins/portal/xing/actions',
-     'plugins/portal/xing/activities',
-     'io.ox/xing/api',
-     'io.ox/core/api/user',
-     'io.ox/core/notifications',
-     'io.ox/core/tk/dialogs',
-     'io.ox/keychain/api',
-     'io.ox/core/date',
-     'gettext!plugins/portal',
-     'less!plugins/portal/xing/xing'
-    ], function (ext, eventActions, activityParsers, api, userApi,
+define('plugins/portal/xing/register', [
+    'io.ox/core/extensions',
+    'plugins/portal/xing/actions',
+    'plugins/portal/xing/activities',
+    'io.ox/xing/api',
+    'io.ox/core/api/user',
+    'io.ox/core/notifications',
+    'io.ox/core/tk/dialogs',
+    'io.ox/keychain/api',
+    'io.ox/core/date',
+    'gettext!plugins/portal',
+    'less!plugins/portal/xing/xing'
+], function (ext, eventActions, activityParsers, api, userApi,
         notifications, dialogs, keychain, date, gt) {
 
     'use strict';
@@ -73,7 +73,6 @@ define('plugins/portal/xing/register',
 
                 availableLangs = 'de en es fr it nl pl pt ru tr zh'.split(' ');
 
-
                 this.append(
                     menu = $('<div class="io-ox-xing submitted-data">').append(
                         $('<p>').text(
@@ -111,8 +110,8 @@ define('plugins/portal/xing/register',
                 });
             })
 
-            .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-            .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
+            .addAlternativeButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+            .addSuccessButton('accepted', gt('Accept'), 'accepted', { tabIndex: 1 })
 
             .show()
 
@@ -151,7 +150,7 @@ define('plugins/portal/xing/register',
 
     statusUpdateForm = function () {
         var form = $('<div>').addClass('xing comment').append(
-            $('<textarea>').attr({rows: 3, cols: 40}),
+            $('<textarea>').attr({ rows: 3, cols: 40 }),
             $('<button>').addClass('btn btn-primary').text(gt('Post a status update'))
         );
 
@@ -205,7 +204,6 @@ define('plugins/portal/xing/register',
                 activityNode.attr('data-activity-id', id);
             }
 
-
             ext.point('io.ox/portal/widget/xing/activityhandler').each(function (handler) {
                 if (handler.accepts(activity, options)) {
                     foundHandler = true;
@@ -243,7 +241,6 @@ define('plugins/portal/xing/register',
         }
         return node;
     };
-
 
     /*
      * Portal extension points: Here's where it all starts
@@ -283,11 +280,11 @@ define('plugins/portal/xing/register',
 
         load: function (baton) {
             return api.getUserfeed({
-                    user_fields: '0,1,2,3,4,8,23' //name variations, page_name and picture
-                }).then(function (xingResponse) {
-//                    console.log('LOAD', JSON.stringify(xingResponse));
-                    baton.data = xingResponse;
-                });
+                user_fields: '0,1,2,3,4,8,23' //name variations, page_name and picture
+            }).then(function (xingResponse) {
+                // console.log('LOAD', JSON.stringify(xingResponse));
+                baton.data = xingResponse;
+            });
         },
 
         preview: function (baton) {
@@ -295,7 +292,7 @@ define('plugins/portal/xing/register',
             this.find('.setup-questions').remove();
             this.append(
                 $('<div class="content preview io-ox-xing pointer">').append(
-                    makeNewsfeed(baton.data.network_activities, {maxCount: MAX_ITEMS_PREVIEW, limitLength: true})
+                    makeNewsfeed(baton.data.network_activities, { maxCount: MAX_ITEMS_PREVIEW, limitLength: true })
                 ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
             );
         },

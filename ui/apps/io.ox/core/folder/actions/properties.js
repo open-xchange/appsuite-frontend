@@ -11,12 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/properties',
-    ['io.ox/core/folder/api',
-     'io.ox/core/capabilities',
-     'io.ox/core/tk/dialogs',
-     'settings!io.ox/caldav',
-     'gettext!io.ox/core'], function (api, capabilities, dialogs, caldavConfig, gt) {
+define('io.ox/core/folder/actions/properties', [
+    'io.ox/core/folder/api',
+    'io.ox/core/capabilities',
+    'io.ox/core/tk/dialogs',
+    'settings!io.ox/caldav',
+    'gettext!io.ox/core'
+], function (api, capabilities, dialogs, caldavConfig, gt) {
 
     'use strict';
 

@@ -10,16 +10,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/month/view',
-    ['io.ox/calendar/util',
-     'io.ox/core/date',
-     'io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/calendar',
-     'settings!io.ox/calendar',
-     'less!io.ox/calendar/month/style',
-     'static/3rd.party/jquery-ui.min.js'
-    ], function (util, date, ext, folderAPI, gt, settings) {
+define('io.ox/calendar/month/view', [
+    'io.ox/calendar/util',
+    'io.ox/core/date',
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/calendar',
+    'settings!io.ox/calendar',
+    'less!io.ox/calendar/month/style',
+    'static/3rd.party/jquery-ui.min.js'
+], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -40,8 +40,8 @@ define('io.ox/calendar/month/view',
         pane:           $(),
 
         events: {
-            'click .appointment': 'onClickAppointment',
-            'dblclick .day' : 'onCreateAppointment',
+            'click .appointment':      'onClickAppointment',
+            'dblclick .day':           'onCreateAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment'
         },
@@ -118,7 +118,7 @@ define('io.ox/calendar/month/view',
             // set refDate for app to selected day and change
             // perspective afterwards
             this.app.refDate = d;
-            ox.ui.Perspective.show(this.app, 'week:day', {animation: 'slideleft'});
+            ox.ui.Perspective.show(this.app, 'week:day', { animation: 'slideleft' });
         },
 
         render: function () {
@@ -192,7 +192,7 @@ define('io.ox/calendar/month/view',
                     });
 
             ext.point('io.ox/calendar/month/view/appointment')
-                .invoke('draw', el, ext.Baton(_.extend({}, this.options, {model: a, folder: self.folder})));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folder: self.folder })));
             return el;
         },
 
@@ -377,7 +377,7 @@ define('io.ox/calendar/month/view',
                     .addClass('appointment-content')
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock"></i></span>'): '',
+                        a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock"></i></span>') : '',
                         a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
                         a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )

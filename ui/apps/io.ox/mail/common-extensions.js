@@ -11,25 +11,25 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/common-extensions',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/emoji/util',
-     'io.ox/mail/util',
-     'io.ox/mail/api',
-     'io.ox/core/api/account',
-     'io.ox/core/date',
-     'io.ox/core/strings',
-     'io.ox/core/folder/title',
-     'io.ox/core/notifications',
-     'io.ox/contacts/api',
-     'io.ox/core/api/collection-pool',
-     'io.ox/core/tk/flag-picker',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail'
-    ], function (ext, links, actions, emoji, util, api, account, date, strings, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+define('io.ox/mail/common-extensions', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/emoji/util',
+    'io.ox/mail/util',
+    'io.ox/mail/api',
+    'io.ox/core/api/account',
+    'io.ox/core/date',
+    'io.ox/core/strings',
+    'io.ox/core/folder/title',
+    'io.ox/core/notifications',
+    'io.ox/contacts/api',
+    'io.ox/core/api/collection-pool',
+    'io.ox/core/tk/flag-picker',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (ext, links, actions, emoji, util, api, account, date, strings, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -552,7 +552,7 @@ define('io.ox/mail/common-extensions',
                 baton.view.listenTo(baton.model, 'change:disp_notification_to', draw.bind(this));
             };
 
-        }()),
+        }())
     };
 
     return extensions;

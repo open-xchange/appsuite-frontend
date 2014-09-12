@@ -11,15 +11,15 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter/view-form',
-    ['io.ox/core/notifications',
-     'gettext!io.ox/settings/settings',
-     'io.ox/core/extensions',
-     'io.ox/mail/mailfilter/settings/filter/form-elements',
-     'io.ox/mail/mailfilter/settings/filter/defaults',
-     'io.ox/backbone/mini-views',
-     'io.ox/core/folder/picker'
-    ], function (notifications, gt, ext, elements, DEFAULTS, mini, picker) {
+define('io.ox/mail/mailfilter/settings/filter/view-form', [
+    'io.ox/core/notifications',
+    'gettext!io.ox/settings/settings',
+    'io.ox/core/extensions',
+    'io.ox/mail/mailfilter/settings/filter/form-elements',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
+    'io.ox/backbone/mini-views',
+    'io.ox/core/folder/picker'
+], function (notifications, gt, ext, elements, DEFAULTS, mini, picker) {
 
     'use strict';
 
@@ -233,27 +233,25 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         'size': ['size']
                     };
 
-
                 function loopAndRemove(testsArray) {
                     var idArray = [];
                     _.each(testsArray, function (single) {
                         var valueIds = config[single.id],
                             sum = _.reduce(valueIds, function (memo, val) {
-                            var value = _.isArray(single[val]) ? single[val][0] : single[val];
-                            return value.trim() === '' ? false : memo;
-                        }, true);
+                                var value = _.isArray(single[val]) ? single[val][0] : single[val];
+                                return value.trim() === '' ? false : memo;
+                            }, true);
                         if (sum) {
                             idArray.push(single);
                         }
                     });
-
                     return idArray;
                 }
 
                 function returnKeyForStop(actionsArray) {
                     var indicatorKey;
                     _.each(actionsArray, function (action, key) {
-                        if (_.isEqual(action, {id: 'stop'})) {
+                        if (_.isEqual(action, { id: 'stop' })) {
                             indicatorKey = key;
                         }
                     });
@@ -286,7 +284,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 // if there is a stop action it should always be the last
                 if (returnKeyForStop(actionArray) !== undefined) {
                     actionArray.splice(returnKeyForStop(actionArray), 1);
-                    actionArray.push({id: 'stop'});
+                    actionArray.push({ id: 'stop' });
                     this.model.set('actioncmds', actionArray);
                 }
 
@@ -318,7 +316,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     } else if (checkForMultipleTests(this.el).length === 1) {
                         var createdArray = [testArray];
                         createdArray.push(_.copy(DEFAULTS.tests[data.value], true));
-                        testArray = { id: 'allof'};
+                        testArray = { id: 'allof' };
                         testArray.tests = createdArray;
                     } else {
 
@@ -424,7 +422,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 function validateValue(value) {
                     var regex =  /\s/;
-                    return  regex.test(value);
+                    return regex.test(value);
                 }
 
                 e.preventDefault();
@@ -525,7 +523,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             _(appliedTest).each(function (test, num) {
                 if (test.id === 'size') {
                     listTests.append(
-                        $('<li>').addClass('filter-settings-view row').attr({'data-type': 'size', 'data-test-id': num}).append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'size', 'data-test-id': num }).append(
                             $('<div>').addClass('col-md-6 singleline').append(
                                 $('<span>').addClass('list-title').text(headerTranslation[test.id])
                             ),
@@ -557,7 +555,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     if (test.headers[0] === '' || name === undefined) {
                         name = headerTranslation.cleanHeader;
                         listTests.append(
-                            $('<li>').addClass('filter-settings-view row').attr({'data-test-id': num, 'data-type': 'values', 'data-type-second': 'headers' }).append(
+                            $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num, 'data-type': 'values', 'data-type-second': 'headers' }).append(
                                 $('<div>').addClass('col-md-6 doubleline').append(
                                     $('<span>').addClass('list-title').text(name)
                                 ),
@@ -581,7 +579,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         );
                     } else {
                         listTests.append(
-                            $('<li>').addClass('filter-settings-view row').attr({'data-test-id': num, 'data-type': 'values'}).append(
+                            $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': num, 'data-type': 'values' }).append(
                                 $('<div>').addClass('col-md-6 singleline').append(
                                     $('<span>').addClass('list-title').text(name)
                                 ),
@@ -605,7 +603,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 } else if (test.id === 'envelope') {
 
                     listTests.append(
-                        $('<li>').addClass('filter-settings-view row').attr({'data-type': 'values', 'data-test-id': num}).append(
+                        $('<li>').addClass('filter-settings-view row').attr({ 'data-type': 'values', 'data-test-id': num }).append(
                             $('<div>').addClass('col-md-6 singleline').append(
                                 $('<span>').addClass('list-title').text(headerTranslation[test.id])
                             ),
@@ -632,7 +630,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                     if (action.id === 'redirect') {
                         listActions.append(
-                            $('<li>').addClass('filter-settings-view row').attr({'data-action-id': num, 'data-type': 'to'}).append(
+                            $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'to' }).append(
                                 $('<div>').addClass('col-md-6 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
@@ -648,11 +646,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 )
                             )
                         );
-                    }
-
-                    else if (action.id === 'move') {
+                    } else if (action.id === 'move') {
                         listActions.append(
-                            $('<li>').addClass('filter-settings-view row').attr({'data-action-id': num, 'data-type': 'into'}).append(
+                            $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'into' }).append(
                                 $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
@@ -671,10 +667,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 )
                             )
                         );
-                    }
-                    else if (action.id === 'reject') {
+                    } else if (action.id === 'reject') {
                         listActions.append(
-                            $('<li>').addClass('filter-settings-view row').attr({'data-action-id': num, 'data-type': 'text'}).append(
+                            $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'text' }).append(
                                 $('<div>').addClass('col-md-6 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
@@ -689,11 +684,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                     elements.drawDeleteButton('action')
                                 )
                         ));
-                    }
-                    else if (action.id === 'addflags') {
+                    } else if (action.id === 'addflags') {
                         if (/delete|seen/.test(action.flags[0])) {
                             listActions.append(
-                                $('<li>').addClass('filter-settings-view row').attr({'data-action-id': num, 'data-type': 'text'}).append(
+                                $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'text' }).append(
                                     $('<div>').addClass('col-md-6 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.markmail)
                                     ),
@@ -711,7 +705,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 )
                             );
                         } else if (/^\$cl/.test(action.flags[0])) {
-                            listActions.append($('<li>').addClass('filter-settings-view row').attr({'data-action-id': num, 'data-type': 'text'}).append(
+                            listActions.append($('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'text' }).append(
                                     $('<div>').addClass('col-md-6 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.flag)
                                     ),
@@ -729,7 +723,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             ));
                         } else {
                             listActions.append(
-                                $('<li>').addClass('filter-settings-view row').attr({'data-action-id': num, 'data-type': 'flags'}).append(
+                                $('<li>').addClass('filter-settings-view row').attr({ 'data-action-id': num, 'data-type': 'flags' }).append(
                                     $('<div>').addClass('col-md-6 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.tag)
                                     ),
@@ -746,8 +740,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 )
                             );
                         }
-                    }
-                    else {
+                    } else {
                         var classSet = action.id === 'discard' ? 'filter-settings-view warning' : 'filter-settings-view';
                         listActions.append(
                             $('<li>').addClass(classSet + ' row').attr('data-action-id', num).append(
@@ -768,7 +761,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 headlineActions = $('<legend>').addClass('sectiontitle expertmode actions').text(gt('Actions')),
                 notification = $('<div>');
 
-            if (_.isEqual(appliedTest[0], {id : 'true'})) {
+            if (_.isEqual(appliedTest[0], { id: 'true' })) {
                 renderWarningForEmptyTests(notification);
             }
 
@@ -809,10 +802,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     toggle: 'dropup',
                     classes: 'no-positioning',
                     caret: true
-//                    test: { nrInArray: '', target: ''  },
-//                    action: { nrInArray: '', target: ''  }
+//                    test: { nrInArray: '', target: '' },
+//                    action: { nrInArray: '', target: '' }
                 },
-                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met.')}, options);
+                optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, { allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met.') }, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
                 this.append($('<div>').addClass('line').append(optionsSwitch));
             } else {
@@ -826,12 +819,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         index: 200,
         id: 'stopaction',
         draw: function (baton) {
-
             var checkStopAction = function (e) {
                 var currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked'),
                     arrayOfActions = baton.model.get('actioncmds');
 
-                    baton.model.trigger('ChangeProcessSub', currentState);
+                baton.model.trigger('ChangeProcessSub', currentState);
 
                 function getCurrentPosition(array) {
                     var currentPosition;
@@ -848,15 +840,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
 
                 } else {
-                    arrayOfActions.push({id: 'stop'});
+                    arrayOfActions.push({ id: 'stop' });
                 }
 
                 baton.model.set('actioncmds', arrayOfActions);
 
             },
 
-                target = baton.view.dialog.getFooter(),
-                arrayOfActions = baton.model.get('actioncmds');
+            target = baton.view.dialog.getFooter(),
+            arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
                 var stopAction;

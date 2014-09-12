@@ -11,21 +11,21 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/permissions/permissions',
-    ['io.ox/core/extensions',
-     'io.ox/core/notifications',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/core/api/user',
-     'io.ox/core/api/group',
-     'io.ox/core/tk/dialogs',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/calendar/edit/view-addparticipants',
-     'io.ox/core/http',
-     'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style'
-    ], function (ext, notifications, api, getBreadcrumb, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+define('io.ox/core/permissions/permissions', [
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/api/user',
+    'io.ox/core/api/group',
+    'io.ox/core/tk/dialogs',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'io.ox/calendar/edit/view-addparticipants',
+    'io.ox/core/http',
+    'gettext!io.ox/core',
+    'less!io.ox/core/permissions/style'
+], function (ext, notifications, api, getBreadcrumb, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 
@@ -98,14 +98,14 @@ define('io.ox/core/permissions/permissions',
                     type    = link.attr('data-type'),
                     newbits = api.Bitmask(this.model.get('bits')).set(type, value).get();
                 link.text($el.text());
-                this.model.set('bits', newbits, {validate: true});
+                this.model.set('bits', newbits, { validate: true });
                 this.updateRole();
             },
 
             applyRole: function (e) {
                 e.preventDefault();
                 var node = $(e.target), bits = node.attr('data-value');
-                this.model.set('bits', parseInt(bits, 10), {validate: true});
+                this.model.set('bits', parseInt(bits, 10), { validate: true });
             },
 
             updateRole: function () {
@@ -252,7 +252,7 @@ define('io.ox/core/permissions/permissions',
                 options.addClass('readwrite');
             } else {
                 options.addClass('readonly');
-                options.find('span.dropdown a').attr({'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled'});//disable dropdown
+                options.find('span.dropdown a').attr({ 'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled' });//disable dropdown
             }
             node.append(
                 addRemoveButton(baton.model.get('entity')),
@@ -308,7 +308,7 @@ define('io.ox/core/permissions/permissions',
             if (value === '64') return true; // Skip maximum rights
             ul.append(
                 $('<li>').append(
-                    $('<a>', { href: '#', 'data-value': value, role: 'menuitem'}).addClass('bit').text(item)
+                    $('<a>', { href: '#', 'data-value': value, role: 'menuitem' }).addClass('bit').text(item)
                 )
             );
         });
@@ -344,9 +344,9 @@ define('io.ox/core/permissions/permissions',
                         isFolderAdmin = false;
                     }
 
-                    var options = {top: 60, width: 800, center: false, maximize: true};
+                    var options = { top: 60, width: 800, center: false, maximize: true };
                     if (_.device('!desktop')) {
-                        options = {top: '40px', center: false};
+                        options = { top: '40px', center: false };
                     }
                     var dialog = new dialogs.ModalDialog(options);
                     dialog.getHeader().append(
@@ -424,9 +424,9 @@ define('io.ox/core/permissions/permissions',
                         });
                         //add recipents to baton-data-node; used to filter sugestions list in view
                         autocomplete.on('update', function () {
-                            var baton = {list: []};
+                            var baton = { list: [] };
                             collection.any(function (item) {
-                                baton.list.push({id: item.get('entity'), type: item.get('group') ? 2 : 1});
+                                baton.list.push({ id: item.get('entity'), type: item.get('group') ? 2 : 1 });
                             });
                             $.data(node, 'baton', baton);
                         });

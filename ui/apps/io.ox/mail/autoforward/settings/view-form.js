@@ -11,13 +11,13 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/autoforward/settings/view-form',
-    ['io.ox/mail/autoforward/settings/model',
-     'io.ox/backbone/views',
-     'io.ox/core/extensions',
-     'io.ox/backbone/mini-views',
-     'less!io.ox/mail/autoforward/settings/style'
-    ], function (model, views, ext, mini) {
+define('io.ox/mail/autoforward/settings/view-form', [
+    'io.ox/mail/autoforward/settings/model',
+    'io.ox/backbone/views',
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views',
+    'less!io.ox/mail/autoforward/settings/style'
+], function (model, views, ext, mini) {
 
     'use strict';
 
@@ -50,7 +50,7 @@ define('io.ox/mail/autoforward/settings/view-form',
                 );
             }
         });
-        
+
         ext.point(ref + '/edit/view').extend({
             index: 250,
             id: ref + '/edit/view/keep',

@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/view',
-    ['io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (ext, api, settings, gt) {
+define('io.ox/core/folder/view', [
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (ext, api, settings, gt) {
 
     'use strict';
 
@@ -116,8 +116,11 @@ define('io.ox/core/folder/view',
                 function mouseup(e) {
                     $(this).off('mousemove.resize mouseup.resize');
                     // auto-close?
-                    if (e.pageX < minSidePanelWidth) app.folderView.hide();
-                    else storeWidth(width || 250);
+                    if (e.pageX < minSidePanelWidth) {
+                        app.folderView.hide();
+                    } else {
+                        storeWidth(width || 250);
+                    }
                 }
 
                 function mousedown(e) {

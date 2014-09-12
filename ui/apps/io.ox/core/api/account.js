@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/account',
-    ['settings!io.ox/mail',
-     'io.ox/core/http',
-     'io.ox/core/event'
-    ], function (settings, http, Events) {
+define('io.ox/core/api/account', [
+    'settings!io.ox/mail',
+    'io.ox/core/http',
+    'io.ox/core/event'
+], function (settings, http, Events) {
 
     'use strict';
 
@@ -75,7 +75,7 @@ define('io.ox/core/api/account',
     /**
      * is unified
      * @param  {string}  id (folder_id)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.isUnified = function (id) {
         // extend if number
@@ -88,7 +88,7 @@ define('io.ox/core/api/account',
     /**
      * is unified folder
      * @param  {string}  id (folder_id)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.isUnifiedFolder = function (id) {
         return regUnified.test(id) && api.isUnified(id);
@@ -97,7 +97,7 @@ define('io.ox/core/api/account',
     /**
      * is account folder
      * @param  {string}  id (folder_id)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.isAccount = function (id) {
         if (_.isNumber(id)) return id in idHash;
@@ -108,7 +108,7 @@ define('io.ox/core/api/account',
     /**
      * is primary folder
      * @param  {string}  id (folder_id)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.isPrimary = function (id) {
         return (/^default0/).test(id);
@@ -117,7 +117,7 @@ define('io.ox/core/api/account',
     /**
      * is external folder
      * @param  {string}  id (folder_id)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.isExternal = function (id) {
         return api.isAccount(id) && !api.isPrimary(id);
@@ -125,7 +125,7 @@ define('io.ox/core/api/account',
 
     /**
      * get unified mailbox name
-     * @return {deferred} returns array or null
+     * @return { deferred} returns array or null
      */
     api.getUnifiedMailboxName = function () {
         var def = $.Deferred();
@@ -162,7 +162,7 @@ define('io.ox/core/api/account',
      * check folder type
      * @param  {string} type (foldertype, example is 'drafts')
      * @param  {type} id [optional]
-     * @return {boolean}
+     * @return { boolean }
      */
     api.is = (function () {
 
@@ -204,7 +204,7 @@ define('io.ox/core/api/account',
     /**
      * return folders for accounts
      * @param  {string} type ('inbox', 'send', 'drafts')
-     * @return {array} folders
+     * @return { array} folders
      */
     api.getFoldersByType = function (type) {
         return _(typeHash).chain().map(function (value, key) {
@@ -228,7 +228,7 @@ define('io.ox/core/api/account',
      * get account id
      * @param  {string|number} str (folder_id|account_id)
      * @param  {boolean} strict
-     * @return {integer} account id
+     * @return { integer} account id
      */
     api.parseAccountId = function (str, strict) {
         if (typeof str === 'number') {
@@ -261,7 +261,7 @@ define('io.ox/core/api/account',
     /**
      * get the primary address for a given account
      * @param  {string} account_id [optional: default account will be used instead]
-     * @return {deferred} returns array (name, primary adress)
+     * @return { deferred} returns array (name, primary adress)
      */
     api.getPrimaryAddress = function (account_id) {
 
@@ -289,7 +289,7 @@ define('io.ox/core/api/account',
     /**
      * get primary address from folder
      * @param  {string} folder_id
-     * @return {deferred} object with properties 'displayname' and 'primaryaddress'
+     * @return { deferred} object with properties 'displayname' and 'primaryaddress'
      */
     api.getPrimaryAddressFromFolder = function (folder_id) {
 
@@ -338,7 +338,7 @@ define('io.ox/core/api/account',
     /**
      * get sender adress
      * @param  {object} account
-     * @return {deferred} returns array the personal name and a list of (alias) addresses
+     * @return { deferred} returns array the personal name and a list of (alias) addresses
      */
     function getSenderAddress(account) {
 
@@ -361,7 +361,7 @@ define('io.ox/core/api/account',
     /**
      * get a list of addresses that can be used when sending mails
      * @param  {string} accountId [optional: default account will be used instead]
-     * @return {deferred} returns array the personal name and a list of (alias) addresses
+     * @return { deferred} returns array the personal name and a list of (alias) addresses
      */
     api.getSenderAddresses = function (accountId) {
         return this.get(accountId || 0)
@@ -371,7 +371,7 @@ define('io.ox/core/api/account',
 
     /**
      * get all sender addresses
-     * @return {promise} returns array of arrays
+     * @return { promise} returns array of arrays
      */
     api.getAllSenderAddresses = function () {
 
@@ -407,7 +407,7 @@ define('io.ox/core/api/account',
 
     /**
      * get all accounts
-     * @return {deferred} returns array of account object
+     * @return { deferred} returns array of account object
      */
     api.all = function () {
 
@@ -456,7 +456,7 @@ define('io.ox/core/api/account',
     /**
      * get mail account
      * @param  {string} id
-     * @return {deferred} returns account object
+     * @return { deferred} returns account object
      */
     api.get = function (id) {
 
@@ -473,7 +473,7 @@ define('io.ox/core/api/account',
      * create mail account
      * @param  {object} data (attributes)
      * @fires  api#create:account (data)
-     * @return {deferred}
+     * @return { deferred }
      */
     api.create = function (data) {
         return http.PUT({
@@ -500,7 +500,7 @@ define('io.ox/core/api/account',
      * @param  {object} data (attributes)
      * @fires  api#refresh.all
      * @fires  api#delete
-     * @return {deferred}
+     * @return { deferred }
      */
     api.remove = function (data) {
 
@@ -524,7 +524,7 @@ define('io.ox/core/api/account',
     /**
      * validate account data
      * @param  {object} data (accont object)
-     * @return {deferred} returns boolean
+     * @return { deferred} returns boolean
      */
     api.validate = function (data, params) {
         params = _.extend({
@@ -552,7 +552,7 @@ define('io.ox/core/api/account',
     /**
      * update account
      * @param  {object} data (account)
-     * @return {deferred} returns new account object
+     * @return { deferred} returns new account object
      */
     api.update = function (data) {
         // don't send computed data
@@ -606,7 +606,7 @@ define('io.ox/core/api/account',
     /**
      * get autoconfig for given emailadress
      * @param  {object} data (email, password)
-     * @return {deferred} returns best available mail server settings (may be incomplete or empty)
+     * @return { deferred} returns best available mail server settings (may be incomplete or empty)
      */
     api.autoconfig = function (data) {
         return http.POST({
@@ -621,7 +621,7 @@ define('io.ox/core/api/account',
 
     /**
      * jslob testapi
-     * @return {deferred}
+     * @return { deferred }
      */
     api.configtestAll = function () {
         return http.GET({
@@ -634,7 +634,7 @@ define('io.ox/core/api/account',
 
     /**
      * jslob testapi
-     * @return {deferred}
+     * @return { deferred }
      */
     api.configtestList = function (data) {
         return http.PUT({
@@ -648,7 +648,7 @@ define('io.ox/core/api/account',
 
     /**
      * jslob testapi
-     * @return {deferred}
+     * @return { deferred }
      */
     api.configtestUpdate = function (data, id) {
         return http.PUT({
@@ -663,7 +663,7 @@ define('io.ox/core/api/account',
 
     /**
      * jslob testapi
-     * @return {deferred}
+     * @return { deferred }
      */
     api.configtestSet = function (data, id) {
         return http.PUT({
@@ -679,7 +679,7 @@ define('io.ox/core/api/account',
     /**
      * bind to global refresh; clears caches and trigger refresh.all
      * @fires  api#refresh.all
-     * @return {promise}
+     * @return { promise }
      */
     api.refresh = function () {
         api.cache = {};

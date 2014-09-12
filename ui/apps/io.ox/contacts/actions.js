@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/actions',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/contacts/api',
-     'settings!io.ox/core',
-     'io.ox/core/notifications',
-     'io.ox/core/print',
-     'io.ox/portal/util',
-     'gettext!io.ox/contacts',
-     'settings!io.ox/contacts',
-     'io.ox/core/extPatterns/actions'
-    ], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings, actions) {
+define('io.ox/contacts/actions', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/contacts/api',
+    'settings!io.ox/core',
+    'io.ox/core/notifications',
+    'io.ox/core/print',
+    'io.ox/portal/util',
+    'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
+    'io.ox/core/extPatterns/actions'
+], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings, actions) {
 
     'use strict';
 
@@ -50,8 +50,8 @@ define('io.ox/contacts/actions',
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
                 .text(question)
-                .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
+                .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {
@@ -73,8 +73,8 @@ define('io.ox/contacts/actions',
             //get full object first, because data might be a restored selection resulting in only having id and folder_id.
             //This would make distribution lists behave as normal contacts
             if (data.mark_as_distributionlist === true) {
-            require(['io.ox/contacts/distrib/main'], function (m) {
-                if (m.reuse('edit', data)) return;
+                require(['io.ox/contacts/distrib/main'], function (m) {
+                    if (m.reuse('edit', data)) return;
                     m.getApp(data).launch().done(function () {
                         this.edit(data);
                     });
@@ -230,8 +230,8 @@ define('io.ox/contacts/actions',
             tentativeLoad(list).then(function (list) {
                 return api.getList(list);
             }).then(function (list) {
-                return {contacts_ids: list};
-            }).done(function(data) {
+                return { contacts_ids: list };
+            }).done(function (data) {
                 ox.registry.call('mail-compose', 'compose', data);
             });
         }
@@ -334,7 +334,7 @@ define('io.ox/contacts/actions',
                     return;
                 } else if (obj.internal_userid || obj.user_id) {
                     // internal user
-                    return { type: 1, id: obj.internal_userid || obj.user_id};
+                    return { type: 1, id: obj.internal_userid || obj.user_id };
                 } else {
                     // external user
                     return { type: 5, display_name: obj.display_name, mail: obj.mail || obj.email1 || obj.email2 || obj.email3 };
@@ -357,7 +357,7 @@ define('io.ox/contacts/actions',
                 return cleaned;
             }
 
-            tentativeLoad(list, {check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
+            tentativeLoad(list, { check: function (obj) { return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3; }}).done(function (list) {
                 // set participants
                 var def = $.Deferred(),
                     resolvedContacts = [],
@@ -487,7 +487,7 @@ define('io.ox/contacts/actions',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
+                    baton: { allIds: files },
                     attachmentMode: false,
                     selector: '.window-container.io-ox-contacts-window'
                 });
@@ -513,9 +513,11 @@ define('io.ox/contacts/actions',
                 });
         },
         multiple: function (list, baton) {
-            require(['io.ox/core/tk/dialogs',
-                     'io.ox/preview/main',
-                     'io.ox/core/api/attachment'], function (dialogs, p, attachmentAPI) {
+            require([
+                'io.ox/core/tk/dialogs',
+                'io.ox/preview/main',
+                'io.ox/core/api/attachment'
+            ], function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
                     _(list).each(function (data) {
@@ -576,7 +578,7 @@ define('io.ox/contacts/actions',
                 _(list).each(function (data) {
                     attachmentAPI.save(data);
                 });
-                setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
+                setTimeout(function () { notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });
         }
     });
@@ -587,12 +589,12 @@ define('io.ox/contacts/actions',
         id: 'sendmail',
         index: 10,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-envelope">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/contacts/actions/send', null, baton);
@@ -610,12 +612,12 @@ define('io.ox/contacts/actions',
         id: 'invite',
         index: 20,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-calendar-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/contacts/actions/invite', null, baton);
@@ -632,12 +634,12 @@ define('io.ox/contacts/actions',
         id: 'delete',
         index: 30,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-trash-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/contacts/actions/delete', null, baton);
@@ -654,12 +656,12 @@ define('io.ox/contacts/actions',
         id: 'vcard',
         index: 30,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-share-square-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/contacts/actions/vcard', null, baton);

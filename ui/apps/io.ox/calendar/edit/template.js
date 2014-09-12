@@ -11,20 +11,20 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/calendar/edit/template',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/calendar/edit/main',
-     'io.ox/calendar/util',
-     'io.ox/contacts/util',
-     'io.ox/backbone/views',
-     'io.ox/backbone/forms',
-     'io.ox/core/tk/attachments',
-     'io.ox/calendar/edit/recurrence-view',
-     'io.ox/calendar/api',
-     'io.ox/participants/views',
-     'settings!io.ox/calendar',
-     'io.ox/core/capabilities'
-    ], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, capabilities) {
+define('io.ox/calendar/edit/template', [
+    'io.ox/core/extensions',
+    'gettext!io.ox/calendar/edit/main',
+    'io.ox/calendar/util',
+    'io.ox/contacts/util',
+    'io.ox/backbone/views',
+    'io.ox/backbone/forms',
+    'io.ox/core/tk/attachments',
+    'io.ox/calendar/edit/recurrence-view',
+    'io.ox/calendar/api',
+    'io.ox/participants/views',
+    'settings!io.ox/calendar',
+    'io.ox/core/capabilities'
+], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, capabilities) {
 
     'use strict';
 
@@ -290,10 +290,10 @@ define('io.ox/calendar/edit/template',
         rowClass: 'collapsed',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
-                    collection: baton.model.getParticipants(),
-                    baton: baton,
-                    sortBy: 'organizer'
-                }).render().$el);
+                collection: baton.model.getParticipants(),
+                baton: baton,
+                sortBy: 'organizer'
+            }).render().$el);
         }
     });
 
@@ -350,12 +350,12 @@ define('io.ox/calendar/edit/template',
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
                 autocomplete.on('update', function () {
-                    var baton = {list: []};
+                    var baton = { list: [] };
                     collection.each(function (item) {
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
-                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
+                            baton.list.push({ email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type') });
                     });
                     $.data(pNode, 'baton', baton);
                 });
@@ -384,11 +384,11 @@ define('io.ox/calendar/edit/template',
                                         if (val.folder_id === 6) {
                                             calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
                                                 userId = id;
-                                                obj = {id: userId, type: 1 };
+                                                obj = { id: userId, type: 1 };
                                                 collection.add(obj);
                                             });
                                         } else {
-                                            obj = {type: 5, mail: val.mail, display_name: val.display_name};
+                                            obj = { type: 5, mail: val.mail, display_name: val.display_name };
                                             collection.add(obj);
                                         }
                                     });
@@ -397,7 +397,7 @@ define('io.ox/calendar/edit/template',
                                 }
 
                             } else {
-                                obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
+                                obj = { type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || '' };
                                 collection.add(obj);
                             }
                         }
@@ -415,7 +415,7 @@ define('io.ox/calendar/edit/template',
         attribute: 'notification',
         index: 1510,
         customizeNode: function () {
-            this.$el.css({'top': '-12px'});
+            this.$el.css({ 'top': '-12px' });
         }
     }), {
         nextTo: 'add-participant',
@@ -460,7 +460,7 @@ define('io.ox/calendar/edit/template',
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'),
                 $node = $('<form class="attachments-form">').appendTo(this).attr('id', guid),
-                $inputWrap = attachments.fileUploadWidget({multi: true}),
+                $inputWrap = attachments.fileUploadWidget({ multi: true }),
                 $input = $inputWrap.find('input[type="file"]'),
                 changeHandler = function (e) {
                     e.preventDefault();

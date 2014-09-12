@@ -12,14 +12,14 @@
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/facebook/register',
-    ['io.ox/core/extensions',
-     'io.ox/oauth/proxy',
-     'io.ox/keychain/api',
-     'io.ox/core/date',
-     'gettext!plugins/portal',
-     'less!plugins/portal/facebook/style'
-    ], function (ext, proxy, keychain, date, gt) {
+define('plugins/portal/facebook/register', [
+    'io.ox/core/extensions',
+    'io.ox/oauth/proxy',
+    'io.ox/keychain/api',
+    'io.ox/core/date',
+    'gettext!plugins/portal',
+    'less!plugins/portal/facebook/style'
+], function (ext, proxy, keychain, date, gt) {
 
     'use strict';
 
@@ -40,7 +40,7 @@ define('plugins/portal/facebook/register',
                         $('<a class="from">').text(from.name).attr('href', from.url),
                         $('<div class="wall-comment-text">').text(comment.text),
                         $('<span class="datetime">').text(new date.Local(comment.time * 1000)),
-                        addLikeInfo({user_likes: comment.user_likes, like_count: comment.likes}))
+                        addLikeInfo({ user_likes: comment.user_likes, like_count: comment.likes }))
                     )
                     .appendTo($(node));
             if ($(node).find('.wall-comment:visible').length === 0) {//only hide if comments are hidden
@@ -65,11 +65,11 @@ define('plugins/portal/facebook/register',
 
             return [
                 $('<div>').append(parseMessageText(post.description || post.message || '')),
-                media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">').attr({src: media.src}),
+                media ? $('<a>', { href: media.href }).append(
+                    $('<img class="wall-img-left">').attr({ src: media.src }),
                     $('<span class="caption">').text(post.attachment.description)
                 ) : '',
-                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
+                (!media && link) ? $('<a>', { href: link }).text(post.attachment.name || link) : ''
             ];
         };
 
@@ -104,7 +104,7 @@ define('plugins/portal/facebook/register',
 
         _(links).each(function (link) {
             var splitText = tempText.split(link, 1);
-            if(splitText[0]) {
+            if (splitText[0]) {
                 nodes.push($('<span>').text(splitText[0]));
             }
             nodes.push($('<a href="' + link + '">').text(link));
@@ -123,19 +123,19 @@ define('plugins/portal/facebook/register',
 
     var getHelpFromUser = function (post) {
         console.log('Little was known about this type of post (#' + post.type + ') when we wrote this program. Maybe you can send us the following information so we can improve it?',
-            JSON.stringify(post));
+        JSON.stringify(post));
     };
 
     var loadFromFacebook = function () {
         return proxy.request({
-                api: 'facebook',
-                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
-                    profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
-                    comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
-                })
+            api: 'facebook',
+            url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
+                profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
+                comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
             })
-            .pipe(JSON.parse).fail(require('io.ox/core/notifications').yell);
+        })
+        .pipe(JSON.parse).fail(require('io.ox/core/notifications').yell);
     };
 
     var drawPreview = function (baton) {
@@ -157,7 +157,7 @@ define('plugins/portal/facebook/register',
         } else {
             wall = wall.slice(0, _.device('smartphone') ? 1 : 10);
             _(wall).each(function (post) {
-                var message = _.ellipsis(post.message || post.description || post.attachment.caption || '', {max: 150});
+                var message = _.ellipsis(post.message || post.description || post.attachment.caption || '', { max: 150 });
                 content.append(
                     $('<li class="paragraph">').append(
                         $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
@@ -288,10 +288,10 @@ define('plugins/portal/facebook/register',
                         $('<button class="facebook-content-expand btn-link">').hide().text(gt('expand')).on('click', function () {//add expand link for long content
                             var content = wall_content.find('.wall-post-content');
                             if (content.css('max-height') !== content.prop('scrollHeight') + 'px') {
-                                content.animate({'max-height': content.prop('scrollHeight') + 'px'}, 'fast');//sliding animation
+                                content.animate({ 'max-height': content.prop('scrollHeight') + 'px' }, 'fast');//sliding animation
                                 $(this).text(gt('collapse'));
                             } else {
-                                content.animate({'max-height': '350px'}, 'fast');//sliding animation
+                                content.animate({ 'max-height': '350px' }, 'fast');//sliding animation
                                 $(this).text(gt('expand'));
                             }
                         }),
@@ -367,8 +367,8 @@ define('plugins/portal/facebook/register',
             var self = $(this);
             $('<div class="message">').append(parseMessageText(post.message || post.attachment.name)).appendTo($(this));
             _(post.attachment.media).each(function (media) {
-                $('<a class = facebook-image>').attr({href: media.href})
-                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                $('<a class = facebook-image>').attr({ href: media.href })
+                    .append($('<img>').attr({ src: media.src }).css({ height: '150px', width: 'auto' }))
                     .append($('<div>').text(post.attachment.caption))
                     .appendTo(self);
             });
@@ -442,7 +442,7 @@ define('plugins/portal/facebook/register',
                 $('<div>').text(post.description));
             if (post.attachment && post.attachment.name && post.attachment.href) {
                 var attachment = post.attachment;
-                $('<a>', {href: attachment.href}).text(attachment.name);
+                $('<a>', { href: attachment.href }).text(attachment.name);
             }
             getHelpFromUser(post);
         }
@@ -468,7 +468,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             if (post.attachment.href && post.attachment.name) {
-                var $link = $('<a>', {href: post.attachment.href}).text(post.attachment.name);
+                var $link = $('<a>', { href: post.attachment.href }).text(post.attachment.name);
                 this.text(gt('Liked a link: %s', $link));
             }
             getHelpFromUser(post);
@@ -485,8 +485,8 @@ define('plugins/portal/facebook/register',
             $('<div class="message">').append(parseMessageText(post.attachment.name || post.message)).appendTo($(this));
             var self = $(this);
             _(post.attachment.media).each(function (media) {
-                $('<a class = facebook-image>').attr({href: media.href})
-                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                $('<a class = facebook-image>').attr({ href: media.href })
+                    .append($('<img>').attr({ src: media.src }).css({ height: '150px', width: 'auto' }))
                     .append($('<div>').text(post.attachment.caption))
                     .appendTo(self);
             });
@@ -505,8 +505,8 @@ define('plugins/portal/facebook/register',
                     $('<div class="message">').append(parseMessageText(post.message)));
             var self = $(this);
             _(post.attachment.media).each(function (media) {
-                $('<a class = facebook-image>').attr({href: media.href})
-                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                $('<a class = facebook-image>').attr({ href: media.href })
+                    .append($('<img>').attr({ src: media.src }).css({ height: '150px', width: 'auto' }))
                     .append($('<div>').text(post.attachment.caption))
                     .appendTo(self);
             });
@@ -525,8 +525,8 @@ define('plugins/portal/facebook/register',
                     $('<div class="message">').append(parseMessageText(post.message)));
             var self = $(this);
             _(post.attachment.media).each(function (media) {
-                $('<a class = facebook-image>').attr({href: media.href})
-                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                $('<a class = facebook-image>').attr({ href: media.href })
+                    .append($('<img>').attr({ src: media.src }).css({ height: '150px', width: 'auto' }))
                     .append($('<div>').text(post.attachment.caption))
                     .appendTo(self);
             });
@@ -559,8 +559,8 @@ define('plugins/portal/facebook/register',
 
             $('<div class="message">').append(parseMessageText(post.attachment.name || post.message)).appendTo($(this));
             if (media) {
-                $('<a>').attr({href: media.href})
-                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                $('<a>').attr({ href: media.href })
+                    .append($('<img>').attr({ src: media.src }).css({ height: '150px', width: 'auto' }))
                     .appendTo($(this));
             }
         }

@@ -12,13 +12,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/typeahead',
-    ['io.ox/core/util',
-     'settings!io.ox/contacts',
-     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
-     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
-     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
-    ], function (util, settings) {
+define('io.ox/core/tk/typeahead', [
+    'io.ox/core/util',
+    'settings!io.ox/contacts',
+    'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+    'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
+    'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
+], function (util, settings) {
 
     'use strict';
 
@@ -78,7 +78,7 @@ define('io.ox/core/tk/typeahead',
                 highlight: o.highlight,
                 hint: o.hint
             }, {
-                source: function(query, callback) {
+                source: function (query, callback) {
                     o.source(query)
                         .then(o.reduce)
                         .then(function (data) {
@@ -123,8 +123,7 @@ define('io.ox/core/tk/typeahead',
                         return node;
                     }
                 }
-            }
-        ];
+            }];
 
         if (o.tokenfield) {
 

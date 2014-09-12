@@ -19,19 +19,19 @@ define(['io.ox/calendar/main',
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.getList));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.getList));
             });
 
             this.server.respondWith('GET', /api\/calendar\?action=get.+id=1337/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.get1337));
             });
 
             this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userList));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.userList));
             });
 
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userGet));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixture.userGet));
             });
         });
 

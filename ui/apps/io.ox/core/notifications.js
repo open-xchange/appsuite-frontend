@@ -12,12 +12,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/notifications',
-    ['io.ox/core/extensions',
-     'io.ox/core/yell',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (ext, yell, settings, gt) {
+define('io.ox/core/notifications', [
+    'io.ox/core/extensions',
+    'io.ox/core/yell',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (ext, yell, settings, gt) {
 
     'use strict';
 
@@ -35,7 +35,7 @@ define('io.ox/core/notifications',
                 //#, c-format
                 a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count),
                 a11yState = this.$el.attr('aria-pressed') ? gt('The notification area is open') : gt('The notification area is closed');
-            this.model.set('a11y', a11y, {silent: true});//don't create a loop here
+            this.model.set('a11y', a11y, { silent: true });//don't create a loop here
             this.nodes.badge.toggleClass('empty', count === 0);
             this.$el.attr('aria-label', a11y + ' ' + a11yState);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
@@ -44,23 +44,25 @@ define('io.ox/core/notifications',
         onToggle: function (open) {
             var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
-            this.$el.attr({'aria-pressed': open ? true : false,
-                           'aria-label': this.model.get('a11y') + ' ' + a11yState});
+            this.$el.attr({
+                'aria-pressed': open ? true : false,
+                'aria-label': this.model.get('a11y') + ' ' + a11yState
+            });
         },
         render: function () {
             this.$el.attr({
-                    href: '#',
-                    tabindex: '1',
-                    role: 'button',
-                    'aria-pressed': false
-                })
-                .append(
-                    this.nodes.badge = $('<span class="badge">').append(
-                        this.nodes.number = $('<span class="number">'),
-                        $.txt(' '),
-                        this.nodes.icon = $('<i class="fa fa-caret-right">')
-                    )
-                );
+                href: '#',
+                tabindex: '1',
+                role: 'button',
+                'aria-pressed': false
+            })
+            .append(
+                this.nodes.badge = $('<span class="badge">').append(
+                    this.nodes.number = $('<span class="number">'),
+                    $.txt(' '),
+                    this.nodes.icon = $('<i class="fa fa-caret-right">')
+                )
+            );
 
             this.onChange();
             return this;
@@ -75,8 +77,8 @@ define('io.ox/core/notifications',
                 this.trigger('newNotifications');
             } else if (newMails > 0) { //new mail notifications
                 this.trigger('newMailNotifications');
-            } else //just trigger if count is set to 0, not if it was 0 already
-                if (count === 0 && this.model.get('count') > count) {
+            } else if (count === 0 && this.model.get('count') > count) {
+                //just trigger if count is set to 0, not if it was 0 already
                 this.trigger('lastItemDeleted');
             }
             this.model.set('count', count);
@@ -121,11 +123,10 @@ define('io.ox/core/notifications',
                 refocus = true;
             }
 
-
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
                 _(notifications).each(function (category, type) {
                     if (self.subviews[type] === undefined) {
-                        self.subviews[type] = new category.ListView({ collection: category.collection});
+                        self.subviews[type] = new category.ListView({ collection: category.collection });
                     }
                 });
             }
@@ -232,9 +233,9 @@ define('io.ox/core/notifications',
         },
 
         // deprecated
-        toggleList : function () { this.toggle(); },
-        showList   : function () { this.show(); },
-        hideList   : function () { this.hide(); },
+        toggleList: function () { this.toggle(); },
+        showList:   function () { this.show(); },
+        hideList:   function () { this.hide(); },
 
         nodes: {
             main: $('<div>').attr({
@@ -250,7 +251,7 @@ define('io.ox/core/notifications',
             //view
             var self = this;
 
-            this.badgeView = new BadgeView({ model: new Backbone.Model({ count: 0}) });
+            this.badgeView = new BadgeView({ model: new Backbone.Model({ count: 0 }) });
 
             this.notificationsView = new NotificationsView();
 

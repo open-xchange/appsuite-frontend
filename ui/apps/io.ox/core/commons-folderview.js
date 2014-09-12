@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/commons-folderview',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/notifications',
-     'io.ox/core/folder/api',
-     'settings!io.ox/core',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/core'
-    ], function (ext, links, notifications, api, coreConfig, capabilities, gt) {
+define('io.ox/core/commons-folderview', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/notifications',
+    'io.ox/core/folder/api',
+    'settings!io.ox/core',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/core'
+], function (ext, links, notifications, api, coreConfig, capabilities, gt) {
 
     'use strict';
 
@@ -100,8 +100,7 @@ define('io.ox/core/commons-folderview',
                     }
 
                     // to refocus button on dropdown close
-                    ul.off('keydown.foldertreecontext')
-                      .on('keydown.foldertreecontext', 'a', function (e) {
+                    ul.off('keydown.foldertreecontext').on('keydown.foldertreecontext', 'a', function (e) {
                         if (/(27)/.test(e.keyCode)) {
                             dropdown.removeClass('open');
                             current.removeClass('dropdown-opened').focus();
@@ -187,7 +186,7 @@ define('io.ox/core/commons-folderview',
                     // sidepanel
                     baton.$.spacer = $('<div class="mobile-clickintercept">')
                         .addClass('foldertree-click-intercept')
-                        .on('touchstart', {baton: baton}, function (e) {
+                        .on('touchstart', { baton: baton }, function (e) {
                             e.preventDefault();
                             e.stopImmediatePropagation();
                             e.data.baton.app.toggleFolderView();
@@ -269,24 +268,6 @@ define('io.ox/core/commons-folderview',
                 });
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     /**
@@ -327,11 +308,9 @@ define('io.ox/core/commons-folderview',
 
             onChangeFolder = (function () {
 
-
                 var current = null;
 
                 return function (e, selection) {
-
 
                     var id = _(selection).first(),
                         previous = current;
@@ -506,7 +485,6 @@ define('io.ox/core/commons-folderview',
                 return $.when();
             };
 
-
             toggle = function (state) {
                 if (state === undefined) state = !visible;
 
@@ -526,7 +504,6 @@ define('io.ox/core/commons-folderview',
         };
 
         this.init = function (views) {
-
 
             // init tree before running toolbar extensions
             var tree = baton.tree = app.folderView = new views[options.view](container, {
@@ -650,7 +627,6 @@ define('io.ox/core/commons-folderview',
                 });
             });
         };
-
 
         this.load = function () {
 

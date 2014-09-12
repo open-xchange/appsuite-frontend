@@ -11,12 +11,12 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('plugins/portal/tasks/register',
-    ['io.ox/core/extensions',
-     'io.ox/tasks/api',
-     'gettext!plugins/portal',
-     'io.ox/tasks/util'
-    ], function (ext, taskAPI, gt, util) {
+define('plugins/portal/tasks/register', [
+    'io.ox/core/extensions',
+    'io.ox/tasks/api',
+    'gettext!plugins/portal',
+    'io.ox/tasks/util'
+], function (ext, taskAPI, gt, util) {
 
     'use strict';
 
@@ -61,7 +61,7 @@ define('plugins/portal/tasks/register',
 
                 sum.append(
                     $('<li class="item" tabindex="1">').data('item', task).append(
-                            $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, {max: 50}))), $.txt(' '),
+                            $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
                             task.end_date === '' ? $() :
                                 $('<span class="accent">').text(
                                     //#. Due on date
@@ -69,7 +69,7 @@ define('plugins/portal/tasks/register',
                                 ),
                             $.txt(' '),
                             $('<span class="status pull-right">').text(task.status).addClass(task.badge),
-                            $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, {max: 100})))
+                            $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, { max: 100 })))
                         )
                 );
 
@@ -104,7 +104,7 @@ define('plugins/portal/tasks/register',
                 task = util.interpretTask(task);
                 content.append(
                     $('<li class="item" tabindex="1">').data('item', task).append(
-                        $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, {max: 50}))), $.txt(' '),
+                        $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
                         task.end_date === '' ? $() :
                             $('<span class="accent">').text(
                                 //#. Due on date
@@ -112,7 +112,7 @@ define('plugins/portal/tasks/register',
                             ),
                         $.txt(' '),
                         $('<span class="pull-right">').text(task.status).addClass(task.badge),
-                        $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, {max: 100})))
+                        $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, { max: 100 })))
                     )
                 );
             });

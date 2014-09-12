@@ -15,7 +15,7 @@
 
 module.exports = function (grunt) {
     try {
-	require('q');
+        require('q');
     } catch (e) {
         grunt.verbose.warn('Skipping upload optional tasks');
         return;

@@ -11,7 +11,9 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/calendar/mobile-navbar-extensions', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/calendar/mobile-navbar-extensions', [
+    'io.ox/core/extensions'
+], function (ext) {
 
     'use strict';
 

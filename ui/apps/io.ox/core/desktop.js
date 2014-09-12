@@ -12,18 +12,18 @@
  *
  */
 
-define('io.ox/core/desktop',
-    ['io.ox/core/event',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/cache',
-     'io.ox/core/notifications',
-     'io.ox/core/upsell',
-     'io.ox/core/adaptiveLoader',
-     'io.ox/core/folder/api',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, coreConfig, gt) {
+define('io.ox/core/desktop', [
+    'io.ox/core/event',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/cache',
+    'io.ox/core/notifications',
+    'io.ox/core/upsell',
+    'io.ox/core/adaptiveLoader',
+    'io.ox/core/folder/api',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, coreConfig, gt) {
 
     'use strict';
 
@@ -257,7 +257,7 @@ define('io.ox/core/desktop',
                                     .done(def.resolve)
                                     .fail(def.reject);
                             } else {
-                                def.reject({error: gt('Could not get a default folder for this application.')});
+                                def.reject({ error: gt('Could not get a default folder for this application.') });
                             }
                         });
                         return def;
@@ -377,7 +377,7 @@ define('io.ox/core/desktop',
          *  triggered once automatically when the application window becomes
          *  visible.
          *
-         * @returns {ox.io.App}
+         * @returns {ox.io.App }
          *  A reference to this application instance.
          */
         registerGlobalEventHandler: function (target, eventType, eventHandler) {
@@ -405,7 +405,7 @@ define('io.ox/core/desktop',
          *  window. Will be triggered once automatically when the application
          *  window becomes visible.
          *
-         * @returns {ox.io.App}
+         * @returns {ox.io.App }
          *  A reference to this application instance.
          */
         registerWindowResizeHandler: function (resizeHandler) {
@@ -766,10 +766,9 @@ define('io.ox/core/desktop',
             this.afterShow = $.noop;
             this.afterHide = $.noop;
 
-
             this.show = function (app, opt) {
                 var win = app.getWindow(),
-                    pcOpt = opt.animation ? {animation: opt.animation} : {},
+                    pcOpt = opt.animation ? { animation: opt.animation } : {},
                     self = this,
                     newPerspective = opt.perspective.split(':')[0];
 
@@ -910,9 +909,7 @@ define('io.ox/core/desktop',
                 if (type === 'window.quit') {
                     // remove item at pos
                     windows.splice(pos, 1);
-                }
-                // close?
-                else if (type === 'window.close' || type === 'window.pre-quit') {
+                } else if (type === 'window.close' || type === 'window.pre-quit') {
                     // add/move window to end of stack
                     windows = _(windows).without(win);
                     windows.push(win);
@@ -966,7 +963,7 @@ define('io.ox/core/desktop',
                 this.options = options || {};
                 this.id = options.id;
                 this.name = options.name || 'generic';
-                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() , facetedsearch: {}};
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $(), facetedsearch: {}};
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
@@ -1310,7 +1307,11 @@ define('io.ox/core/desktop',
                     },
 
                     toggle: function () {
-                        if (this.active) { this.close(); } else { this.open(); }
+                        if (this.active) {
+                            this.close();
+                        } else {
+                            this.open();
+                        }
                         return this;
                     },
 
@@ -1350,7 +1351,7 @@ define('io.ox/core/desktop',
                     active: false,
                     lastFocus: '',
                     ready: $.Deferred(),
-                    selectors : {
+                    selectors: {
                         facets: '.search-facets:first',
                         facetsadv: '.search-facets-advanced'
                     },
@@ -1629,8 +1630,7 @@ define('io.ox/core/desktop',
                         if (win.search.query !== '' && changed) {
                             win.search.optionsprev = win.search.options;
                             triggerSearch(win.search.previous = win.search.query);
-                        }
-                        else if (win.search.query === '') {
+                        } else if (win.search.query === '') {
                             win.search.clear();
                         }
                     }
@@ -1670,148 +1670,143 @@ define('io.ox/core/desktop',
 
             if (opt.facetedsearch) {
 
-                    ext.point(win.name + '/facetedsearch/view').extend({
-                        id: 'container',
-                        index: 100,
-                        draw: function () {
-                             // init container
-                             ext.point(this.name + '/facetedsearch').
-                                invoke('draw', this.facetedsearch, win);
+                ext.point(win.name + '/facetedsearch/view').extend({
+                    id: 'container',
+                    index: 100,
+                    draw: function () {
+                         // init container
+                        ext.point(this.name + '/facetedsearch').invoke('draw', this.facetedsearch, win);
+                    }
+                });
 
-                        }
-                    });
-
-                    ext.point(win.name + '/facetedsearch/view').extend({
-                        id: 'input',
-                        index: 200,
-                        draw: function () {
-                            var node = this.nodes.facetedsearch.toolbar,
-                                label = gt('Search'),
-                                id = win.name + '-search-field',
-                                group;
-                            // input group and dropdown
-                            node.append(
-                                group = $('<div class="input-group">')
-                                    .append(
-                                            $('<input type="text">')
-                                            .attr({
-                                                class: 'form-control search-field',
-                                                tabindex: 1,
-                                                id: id,
-                                                placeholder: label + ' ...'
-                                            }),
-                                            $('<label class="sr-only">')
-                                                .attr('for', id)
-                                                .text(label)
-                                    )
-                            );
-                        }
-                    });
-                    // hint: listener is implemented in search/autocomplete/extensions
-                    // ext.point(win.name + '/facetedsearch/view').extend({
-                    //     id: 'clear',
-                    //     index: 250,
-                    //     draw: function () {
-
-                    //         var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                    //         group.append(
-                    //             $('<a href="#">')
-                    //                 .attr({
-                    //                     'tabindex': '1',
-                    //                     'class': 'btn-clear',
-                    //                 }).append(
-                    //                     $('<i class="fa fa-times"></i>')
-                    //                 )
-                    //                 .on('click', function (e) {
-                    //                     e.preventDefault();
-                    //                 })
-                    //         );
-                    //     }
-                    // });
-
-                    ext.point(win.name + '/facetedsearch/view').extend({
-                        id: 'action',
-                        index: 300,
-                        draw: function () {
-                            var group = this.nodes.facetedsearch.toolbar.find('.input-group');
-                            group.append(
-                                $('<span class="input-group-btn">').append(
-                                    // submit
-                                    $('<button type="button">')
-                                    .attr({
-                                        'tabindex': '1',
-                                        'class': 'btn btn-default btn-search',
-                                        'data-toggle': 'tooltip',
-                                        'data-placement': 'bottom',
-                                        'data-animation': 'false',
-                                        'data-container': 'body',
-                                        'data-original-title': gt('Start search'),
-                                        'aria-label': gt('Start search')
-                                    })
-                                    .append(
-                                        $('<i class="fa fa-search"></i>')
-                                    )
-                                    .tooltip()
-                                    .on('click', function (e) {
-                                        e.preventDefault();
-                                        var e = $.Event('keydown');
-                                        e.which = 13;
-                                    })
+                ext.point(win.name + '/facetedsearch/view').extend({
+                    id: 'input',
+                    index: 200,
+                    draw: function () {
+                        var node = this.nodes.facetedsearch.toolbar,
+                            label = gt('Search'),
+                            id = win.name + '-search-field',
+                            group;
+                        // input group and dropdown
+                        node.append(
+                            group = $('<div class="input-group">')
+                                .append(
+                                        $('<input type="text">')
+                                        .attr({
+                                            class: 'form-control search-field',
+                                            tabindex: 1,
+                                            id: id,
+                                            placeholder: label + ' ...'
+                                        }),
+                                        $('<label class="sr-only">')
+                                            .attr('for', id)
+                                            .text(label)
                                 )
-                            );
-                        }
-                    });
+                        );
+                    }
+                });
+                // hint: listener is implemented in search/autocomplete/extensions
+                // ext.point(win.name + '/facetedsearch/view').extend({
+                //     id: 'clear',
+                //     index: 250,
+                //     draw: function () {
+
+                //         var group = this.nodes.facetedsearch.toolbar.find('.input-group');
+                //         group.append(
+                //             $('<a href="#">')
+                //                 .attr({
+                //                     'tabindex': '1',
+                //                     'class': 'btn-clear',
+                //                 }).append(
+                //                     $('<i class="fa fa-times"></i>')
+                //                 )
+                //                 .on('click', function (e) {
+                //                     e.preventDefault();
+                //                 })
+                //         );
+                //     }
+                // });
+
+                ext.point(win.name + '/facetedsearch/view').extend({
+                    id: 'action',
+                    index: 300,
+                    draw: function () {
+                        var group = this.nodes.facetedsearch.toolbar.find('.input-group');
+                        group.append(
+                            $('<span class="input-group-btn">').append(
+                                // submit
+                                $('<button type="button">')
+                                .attr({
+                                    'tabindex': '1',
+                                    'class': 'btn btn-default btn-search',
+                                    'data-toggle': 'tooltip',
+                                    'data-placement': 'bottom',
+                                    'data-animation': 'false',
+                                    'data-container': 'body',
+                                    'data-original-title': gt('Start search'),
+                                    'aria-label': gt('Start search')
+                                })
+                                .append(
+                                    $('<i class="fa fa-search"></i>')
+                                )
+                                .tooltip()
+                                .on('click', function (e) {
+                                    e.preventDefault();
+                                    var e = $.Event('keydown');
+                                    e.which = 13;
+                                })
+                            )
+                        );
+                    }
+                });
 
                 // draw searchfield
                 ext.point(win.name + '/facetedsearch/view').invoke('draw', win, ext.Baton.ensure({}));
 
                 require(['io.ox/search/quickstart'], function (quickstart) {
-                    quickstart.run(win)
-                        .done(function () {
-                            // get view
-                            var view = win.facetedsearch.view;
+                    quickstart.run(win).done(function () {
+                        // get view
+                        var view = win.facetedsearch.view;
 
-                            //events: app resume cancels search mode
-                            win.app.on('resume', function () {
-                                if (win.facetedsearch.active) {
-                                    view.trigger('button:cancel');
-                                }
-                            });
+                        //events: app resume cancels search mode
+                        win.app.on('resume', function () {
+                            if (win.facetedsearch.active) {
+                                view.trigger('button:cancel');
+                            }
+                        });
 
-                            // events: internal
-                            view.on({
-                                'query':
-                                    _.debounce(function (e, appname) {
-                                        // one search app, one model but multiple views
-                                        if (win.app.get('name') === appname) {
-                                            win.facetedsearch.open();
-                                            if (e.type === 'query') win.trigger('search:query');
-                                        }
-                                    }, 10
-                                ),
-                                'button:clear': function () {
-                                    win.facetedsearch.clear();
-                                },
-                                'button:cancel': function () {
-                                    win.facetedsearch.cancel();
-                                }
-                            });
+                        // events: internal
+                        view.on({
+                            'query':
+                                _.debounce(function (e, appname) {
+                                    // one search app, one model but multiple views
+                                    if (win.app.get('name') === appname) {
+                                        win.facetedsearch.open();
+                                        if (e.type === 'query') win.trigger('search:query');
+                                    }
+                                }, 10
+                            ),
+                            'button:clear': function () {
+                                win.facetedsearch.clear();
+                            },
+                            'button:cancel': function () {
+                                win.facetedsearch.cancel();
+                            }
+                        });
 
-                            // events: redirect
-                            view.model.on({
-                                'query': function (appname) {
-                                    view.trigger('query', appname);
-                                },
-                                'cancel': function (appname) {
-                                    view.trigger('button:cancel', appname);
-                                }
-                            });
-                            win.trigger('search:loaded');
+                        // events: redirect
+                        view.model.on({
+                            'query': function (appname) {
+                                view.trigger('query', appname);
+                            },
+                            'cancel': function (appname) {
+                                view.trigger('button:cancel', appname);
+                            }
+                        });
+                        win.trigger('search:loaded');
                     });
                 });
-
             }
-
 
             // fix height/position/appearance
             if (opt.chromeless) {

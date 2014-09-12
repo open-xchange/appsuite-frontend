@@ -11,17 +11,18 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/items/view-template',
-    ['gettext!io.ox/core',
-     'io.ox/core/extensions'], function (gt, ext) {
+define('io.ox/search/items/view-template', [
+    'gettext!io.ox/core',
+    'io.ox/core/extensions'
+], function (gt, ext) {
 
     'use strict';
 
     var config = {
-            dependencies: {},
-            points: {},
-            classes: {},
-        };
+        dependencies: {},
+        points: {},
+        classes: {}
+    };
 
     ext.point('io.ox/search/main/items').extend({
         id: 'dependencies',
@@ -94,7 +95,6 @@ define('io.ox/search/items/view-template',
                 cell = $('<ul class="col-xs-12 list-unstyled">') // list-view
             );
 
-
             // require list view extensions points
             var dep = [].concat(config.dependencies[module]).concat('less!io.ox/search/items/style');
             require(dep, function (view, api) {
@@ -116,7 +116,7 @@ define('io.ox/search/items/view-template',
                         node.attr({
                             'data-id': model.get('id'),
                             'data-folder': model.get('folder'),
-                            'data-app': model.get('application'),
+                            'data-app': model.get('application')
                         });
 
                         // add app specific classes
@@ -146,10 +146,11 @@ define('io.ox/search/items/view-template',
             });
 
             var elem = self.find('.row.result');
-            if (elem.length)
+            if (elem.length) {
                 elem.replaceWith(row);
-            else
+            } else {
                 self.append(row);
+            }
 
             self.append(row);
         }
@@ -180,7 +181,7 @@ define('io.ox/search/items/view-template',
 
             ext.point('io.ox/search/items/calendar').extend({
                 draw: function (baton) {
-                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api', {deeplink: true});
+                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api', { deeplink: true });
                 }
             });
 
@@ -215,7 +216,7 @@ define('io.ox/search/items/view-template',
                         api.get(api.reduce(baton.data)).then(function (data) {
                             // render again with get response
                             if (!_.isEqual(baton.data, data)) {
-                                var view = new detail.View({ data: data }, {deeplink: true});
+                                var view = new detail.View({ data: data }, { deeplink: true });
                                 popup.idle().empty().append(
                                     view.render().expand().$el.addClass('no-padding')
                                 );

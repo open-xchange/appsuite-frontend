@@ -12,76 +12,91 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/edit/view-form',
-    ['io.ox/contacts/model',
-     'io.ox/backbone/views',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/contacts/widgets/pictureUpload',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/capabilities',
-     'io.ox/core/extensions',
-     'io.ox/backbone/mini-views',
-     'io.ox/backbone/mini-views/attachments',
-     'gettext!io.ox/contacts',
-     'less!io.ox/contacts/edit/style'
-    ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
+define('io.ox/contacts/edit/view-form', [
+    'io.ox/contacts/model',
+    'io.ox/backbone/views',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/contacts/widgets/pictureUpload',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'io.ox/core/capabilities',
+    'io.ox/core/extensions',
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/attachments',
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/edit/style'
+], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
 
     'use strict';
 
     var meta = {
         sections: {
-            personal: ['title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
-                         'second_name', 'suffix', 'nickname', 'birthday',
-                         'marital_status', 'number_of_children', 'spouse_name',
-                         'anniversary', 'url'],
-            job: ['profession', 'position', 'department', 'company', 'room_number',
-                    'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
-                    'commercial_register', 'branches', 'business_category', 'info',
-                    'manager_name', 'assistant_name'],
+            personal: [
+                'title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
+                'second_name', 'suffix', 'nickname', 'birthday',
+                'marital_status', 'number_of_children', 'spouse_name',
+                'anniversary', 'url'
+            ],
+            job: [
+                'profession', 'position', 'department', 'company', 'room_number',
+                'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
+                'commercial_register', 'branches', 'business_category', 'info',
+                'manager_name', 'assistant_name'
+            ],
             messaging: ['email1', 'email2', 'email3', 'instant_messenger1', 'instant_messenger2'],
-            phone:  ['cellular_telephone1', 'cellular_telephone2',
-                      'telephone_business1', 'telephone_business2',
-                      'telephone_home1', 'telephone_home2',
-                      'telephone_company', 'telephone_other',
-                      'fax_business', 'fax_home', 'fax_other',
-                      'telephone_car', 'telephone_isdn', 'telephone_pager',
-                      'telephone_primary', 'telephone_radio',
-                      'telephone_telex', 'telephone_ttytdd',
-                      'telephone_ip', 'telephone_assistant', 'telephone_callback'],
-            home_address: ['street_home', 'postal_code_home', 'city_home',
-                           'state_home', 'country_home'],
-            business_address: ['street_business', 'postal_code_business',
-                               'city_business', 'state_business',
-                               'country_business'],
-            other_address: ['street_other', 'postal_code_other', 'city_other',
-                            'state_other', 'country_other'],
+            phone: [
+                'cellular_telephone1', 'cellular_telephone2',
+                'telephone_business1', 'telephone_business2',
+                'telephone_home1', 'telephone_home2',
+                'telephone_company', 'telephone_other',
+                'fax_business', 'fax_home', 'fax_other',
+                'telephone_car', 'telephone_isdn', 'telephone_pager',
+                'telephone_primary', 'telephone_radio',
+                'telephone_telex', 'telephone_ttytdd',
+                'telephone_ip', 'telephone_assistant', 'telephone_callback'
+            ],
+            home_address: [
+                'street_home', 'postal_code_home', 'city_home',
+                'state_home', 'country_home'
+            ],
+            business_address: [
+                'street_business', 'postal_code_business',
+                'city_business', 'state_business',
+                'country_business'
+            ],
+            other_address: [
+                'street_other', 'postal_code_other', 'city_other',
+                'state_other', 'country_other'
+            ],
 
             comment: ['note'],
 
-            userfields: ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05',
-                        'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
-                        'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
-                        'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
+            userfields: [
+                'userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05',
+                'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
+                'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
+                'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
+            ],
             attachments: ['attachments_list']
         },
 
-        rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name', 'anniversary',
-               // phones
-               'telephone_company', 'fax_other',
-               'telephone_car', 'telephone_isdn', 'telephone_pager', 'telephone_primary',
-               'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'telephone_assistant',
-               'telephone_callback', 'telephone_ip',
-               // job
-               'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches',
-               'business_category', 'info', 'manager_name', 'assistant_name', 'employee_type'
-               // optional
-               // 'userfield04', 'userfield05',
-               // 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
-               // 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
-               // 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
-               ],
+        rare: [
+            'nickname', 'marital_status', 'number_of_children', 'spouse_name', 'anniversary',
+            // phones
+            'telephone_company', 'fax_other',
+            'telephone_car', 'telephone_isdn', 'telephone_pager', 'telephone_primary',
+            'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'telephone_assistant',
+            'telephone_callback', 'telephone_ip',
+            // job
+            'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches',
+            'business_category', 'info', 'manager_name', 'assistant_name', 'employee_type'
+            // optional
+            // 'userfield04', 'userfield05',
+            // 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
+            // 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
+            // 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'
+        ],
 
         alwaysVisible: [
             'title', 'first_name', 'last_name', 'birthday',
@@ -467,7 +482,7 @@ define('io.ox/contacts/edit/view-form',
         function propagateAttachmentChange(model, id, errors) {
 
             var folder_id = model.get('folder_id'), id = model.get('id') || id,
-                upload = api.uploadInProgress(_.ecid({ folder: folder_id, id: id}));
+                upload = api.uploadInProgress(_.ecid({ folder: folder_id, id: id }));
 
             //if there are errors show them
             if (errors.length > 0) {

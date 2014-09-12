@@ -29,7 +29,7 @@ define(['plugins/portal/quota/register',
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '[{ "timestamp":1368791630910,"data": {"quota":1200, "countquota":50, "use":1200, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":' + 100 * 1024 * 1024 + ', "use":' + 91 * 1024 * 1024 + '} }]');
                 });
@@ -70,7 +70,7 @@ define(['plugins/portal/quota/register',
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
                 });
@@ -94,7 +94,7 @@ define(['plugins/portal/quota/register',
             beforeEach(function (done) {
                 capabilities.disable('infostore');
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
                 });

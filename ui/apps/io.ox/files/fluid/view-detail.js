@@ -12,21 +12,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/files/fluid/view-detail',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/date',
-     'io.ox/files/actions',
-     'io.ox/files/api',
-     'io.ox/preview/main',
-     'io.ox/core/api/user',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/core/tk/attachments',
-     'gettext!io.ox/files',
-     'io.ox/files/util',
-     'less!io.ox/files/style'
-    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, getBreadcrumb, attachments, gt, util) {
+define('io.ox/files/fluid/view-detail', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/date',
+    'io.ox/files/actions',
+    'io.ox/files/api',
+    'io.ox/preview/main',
+    'io.ox/core/api/user',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/tk/attachments',
+    'gettext!io.ox/files',
+    'io.ox/files/util',
+    'less!io.ox/files/style'
+], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, getBreadcrumb, attachments, gt, util) {
 
     'use strict';
 
@@ -80,8 +80,11 @@ define('io.ox/files/fluid/view-detail',
                     lockInfo = gt('This file is locked by %1$s');
                 }
                 lockInfo.replace(/(%1\$s)|([^%]+)/g, function (a, link, text) {
-                    if (link) div.append(userAPI.getLink(baton.data.modified_by));
-                    else div.append($.txt(text));
+                    if (link) {
+                        div.append(userAPI.getLink(baton.data.modified_by));
+                    } else {
+                        div.append($.txt(text));
+                    }
                 });
             }
         }
@@ -219,7 +222,7 @@ define('io.ox/files/fluid/view-detail',
                     ),
                     $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
                         .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
-                    $cancelUploadButton = $('<button>', {'data-dismiss': 'fileupload', tabindex: 1, 'aria-label': 'cancel'})
+                    $cancelUploadButton = $('<button>',  { 'data-dismiss': 'fileupload', tabindex: 1, 'aria-label': 'cancel' })
                         .addClass('btn pull-right').text(gt('Cancel')).hide(),
                     $progressBarWrapper = $('<div>').addClass('row').append($progressBar = $('<div>').addClass('progress-bar')),
                     $('<div>').addClass('comment').append(
@@ -268,7 +271,7 @@ define('io.ox/files/fluid/view-detail',
                         id: file.id,
                         folder: file.folder_id,
                         timestamp: _.now(),
-                        json: {version_comment: $commentArea.val()}
+                        json: { version_comment: $commentArea.val() }
                     }).progress(function (e) {
                         var sub = (e.loaded / e.total) * 100;
                         $progressBar.css('width', sub + '%');
@@ -282,7 +285,7 @@ define('io.ox/files/fluid/view-detail',
                         id: file.id,
                         folder: file.folder_id,
                         timestamp: _.now(),
-                        json: {version_comment: $commentArea.val()}
+                        json: { version_comment: $commentArea.val() }
                     }).done(resetCommentArea);
                 }
                 return false;
@@ -331,7 +334,7 @@ define('io.ox/files/fluid/view-detail',
                                 )
                             );
 
-                    var baton = ext.Baton({ data: version, openedBy: openedBy});
+                    var baton = ext.Baton({ data: version, openedBy: openedBy });
                     baton.isCurrent = version.id === baton.data.current_version;
                     ext.point(POINT + '/version').invoke('draw', $entryRow, baton);
                     $content.append($entryRow);
@@ -357,16 +360,17 @@ define('io.ox/files/fluid/view-detail',
                 }
 
                 var $historyDefaultLabel = gt('Show version history') + ' (' + baton.data.number_of_versions + ')',
-                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#', tabindex: 1 }).addClass('noI18n').text($historyDefaultLabel)
+                    $historyButton = $('<a>', { 'data-action': 'history', 'href': '#', tabindex: 1 })
+                        .addClass('noI18n').text($historyDefaultLabel)
                         .on('click', function (e) {
-                        e.preventDefault();
-                        if ($content.is(':hidden')) {
-                            $(this).text(gt('Version history') + ' (' + baton.data.number_of_versions + ')');
-                        } else {
-                            $(this).text($historyDefaultLabel);
-                        }
-                        $content.toggle();
-                    });
+                            e.preventDefault();
+                            if ($content.is(':hidden')) {
+                                $(this).text(gt('Version history') + ' (' + baton.data.number_of_versions + ')');
+                            } else {
+                                $(this).text($historyDefaultLabel);
+                            }
+                            $content.toggle();
+                        });
 
                 this.append(
                     $historyButton,

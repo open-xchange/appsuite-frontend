@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/widgets',
-    ['io.ox/core/extensions',
-     'io.ox/core/manifests',
-     'io.ox/core/upsell',
-     'io.ox/core/notifications',
-     'settings!io.ox/portal',
-     'gettext!io.ox/portal'
-    ], function (ext, manifests, upsell, notifications, settings, gt) {
+define('io.ox/portal/widgets', [
+    'io.ox/core/extensions',
+    'io.ox/core/manifests',
+    'io.ox/core/upsell',
+    'io.ox/core/notifications',
+    'settings!io.ox/portal',
+    'gettext!io.ox/portal'
+], function (ext, manifests, upsell, notifications, settings, gt) {
 
     'use strict';
 
@@ -97,7 +97,7 @@ define('io.ox/portal/widgets',
 
         // Load the users widgets
         _(settings.get('widgets/user') || setDefaultWidgets()).each(function (widgetDef, id) {
-            widgets[id] = _.extend({}, widgetDef, {userWidget: true});
+            widgets[id] = _.extend({}, widgetDef, { userWidget: true });
         });
 
         // Ensure all eager widgets of all generations that weren't removed in their corresponding generation
@@ -108,7 +108,7 @@ define('io.ox/portal/widgets',
             });
             return function process(widgetDef, id) {
                 if (!deleted[id]) {
-                    widgets[id] = _.extend({}, widgets[id], widgetDef, userValues[id], {eagerWidget: true});
+                    widgets[id] = _.extend({}, widgets[id], widgetDef, userValues[id], { eagerWidget: true });
                 }
             };
         }
@@ -120,7 +120,7 @@ define('io.ox/portal/widgets',
         // Ensure all protected widgets
         _(settings.get('widgets/protected' + widgetSet)).each(function (widgetDef, id) {
             widgetDef.protectedWidget = true;
-            widgets[id] = _.extend({}, widgets[id], widgetDef, {protectedWidget: true});
+            widgets[id] = _.extend({}, widgets[id], widgetDef, { protectedWidget: true });
             if (widgetDef.changeable) {
                 var updates = userValues[id] || {};
                 _(widgetDef.changeable).each(function (enabled, attr) {

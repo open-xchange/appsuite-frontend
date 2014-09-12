@@ -11,12 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/rename',
-    ['io.ox/core/folder/api',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/extensions',
-     'io.ox/core/yell',
-     'gettext!io.ox/core'], function (api, dialogs, ext, yell, gt) {
+define('io.ox/core/folder/actions/rename', [
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/extensions',
+    'io.ox/core/yell',
+    'gettext!io.ox/core'
+], function (api, dialogs, ext, yell, gt) {
 
     'use strict';
 

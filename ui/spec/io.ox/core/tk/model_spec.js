@@ -62,17 +62,17 @@ define(['io.ox/core/tk/model'], function (Model) {
         });
 
         it('change property value', function () {
-            model.set('city', '44135 Dortmund', {validate: true});
+            model.set('city', '44135 Dortmund', { validate: true });
             expect(model.get('city')).to.equal('44135 Dortmund');
         });
 
         it('returns one change', function () {
-            model.set('city', '44135 Dortmund', {validate: true});
+            model.set('city', '44135 Dortmund', { validate: true });
             expect(model.getChanges()).to.deep.equal({ city: '44135 Dortmund' });
         });
 
         it('detects that model is dirty', function () {
-            model.set('city', '44135 Dortmund', {validate: true});
+            model.set('city', '44135 Dortmund', { validate: true });
             expect(model.isDirty()).to.equal(true);
         });
 
@@ -83,7 +83,7 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(value).to.equal('Matthias B.');
             });
             model.off().on('change', callback);
-            model.set('firstName', 'Matthias B.', {validate: true});
+            model.set('firstName', 'Matthias B.', { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
@@ -94,7 +94,7 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(value).to.equal('Matthias B.');
             });
             model.off().on('change:firstName', callback);
-            model.set('firstName', 'Matthias B.', {validate: true});
+            model.set('firstName', 'Matthias B.', { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
@@ -137,12 +137,12 @@ define(['io.ox/core/tk/model'], function (Model) {
         });
 
         it('setting mandatory property', function () {
-            model.set('familyName', 'B.', {validate: true});
+            model.set('familyName', 'B.', { validate: true });
             expect(model.get('familyName')).to.equal('B.');
         });
 
         it('clearing mandatory property', function () {
-            model.set('familyName', '', {validate: true});
+            model.set('familyName', '', { validate: true });
             expect(model.get('familyName')).to.be.empty; // invalid states are allowed!
         });
 
@@ -152,10 +152,10 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(model.get('familyName')).to.be.empty;
             });
             // set value back
-            model.set('familyName', 'B.', {validate: true});
+            model.set('familyName', 'B.', { validate: true });
             // catch error
             model.off().on('error:invalid', callback);
-            model.set('familyName', '', {validate: true});
+            model.set('familyName', '', { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
@@ -166,19 +166,19 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(model.get('age')).to.equal(-1);
             });
             model.off().on('error:invalid', callback);
-            model.set('familyName', 'B.', {validate: true});
-            model.set('age', -1, {validate: true});
+            model.set('familyName', 'B.', { validate: true });
+            model.set('age', -1, { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
         it('detects that model is dirty', function () {
-            model.set('familyName', 'B.', {validate: true});
+            model.set('familyName', 'B.', { validate: true });
             expect(model.isDirty()).to.be.true;
         });
 
         it('returns all data via get()', function () {
-            model.set('age', 34, {validate: true});
-            model.set('email', 'matthias.biggeleben@open-xchange.com', {validate: true});
+            model.set('age', 34, { validate: true });
+            model.set('email', 'matthias.biggeleben@open-xchange.com', { validate: true });
             expect(model.get()).to.deep.equal({
                 firstName: 'Matthias',
                 familyName: '',
@@ -196,7 +196,7 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(model.isDirty()).to.be.false;
             });
             model.off().on('error:invalid', errorCallback);
-            model.set('familyName', 'B.', {validate: true});
+            model.set('familyName', 'B.', { validate: true });
             model.save().done(doneCallback);
             expect(doneCallback).to.have.been.calledOnce;
             expect(errorCallback).not.to.have.been.calledOnce;
@@ -247,7 +247,7 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(value).to.equal('123400009');
             });
             model.off().on('change:x', callback);
-            model.set('a', '0000', {validate: true});
+            model.set('a', '0000', { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
@@ -258,7 +258,7 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(value).to.equal('12345678#');
             });
             model.off().on('change:x', callback);
-            model.set('b', '#', {validate: true});
+            model.set('b', '#', { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
@@ -269,7 +269,7 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(value).to.equal(999);
             });
             model.off().on('change:y', callback);
-            model.set('c', -1, {validate: true});
+            model.set('c', -1, { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
@@ -280,26 +280,26 @@ define(['io.ox/core/tk/model'], function (Model) {
                 expect(value).to.equal('1234----9_1111');
             });
             model.off().on('change:z', callback);
-            model.set('a', '----', {validate: true});
+            model.set('a', '----', { validate: true });
             expect(callback).to.have.been.calledOnce;
         });
 
         it('check for the right set of change events', function () {
             var callback = sinon.spy();
             model.off().on('change:a change:b change:c change:x change:y change:z', callback);
-            model.set('c', '1234', {validate: true});
+            model.set('c', '1234', { validate: true });
             expect(callback).to.have.been.calledThrice;
         });
 
         it('check proper events for unchanged computed properties', function () {
             var callback = sinon.spy();
             model.off().on('change:mod', callback);
-            model.set('d', 0, {validate: true}); // initial value -> no change, mod = 0
-            model.set('d', 2, {validate: true}); // no change, mod = 0
-            model.set('d', 4, {validate: true}); // no change, mod = 0
-            model.set('d', 1, {validate: true}); // change!, mod = 1
-            model.set('d', 2, {validate: true}); // change!, mod = 0
-            model.set('d', 4, {validate: true}); // no change, mod = 0
+            model.set('d', 0, { validate: true }); // initial value -> no change, mod = 0
+            model.set('d', 2, { validate: true }); // no change, mod = 0
+            model.set('d', 4, { validate: true }); // no change, mod = 0
+            model.set('d', 1, { validate: true }); // change!, mod = 1
+            model.set('d', 2, { validate: true }); // change!, mod = 0
+            model.set('d', 4, { validate: true }); // no change, mod = 0
             expect(callback).to.have.been.calledTwice;
         });
     });

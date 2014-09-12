@@ -10,15 +10,15 @@
  *
  */
 
-define('plugins/portal/birthdays/register',
-    ['io.ox/core/extensions',
-     'io.ox/contacts/api',
-     'io.ox/core/date',
-     'io.ox/contacts/util',
-     'gettext!plugins/portal',
-     'settings!io.ox/core',
-     'less!plugins/portal/birthdays/style'
-    ], function (ext, api, date, util, gt, settings) {
+define('plugins/portal/birthdays/register', [
+    'io.ox/core/extensions',
+    'io.ox/contacts/api',
+    'io.ox/core/date',
+    'io.ox/contacts/util',
+    'gettext!plugins/portal',
+    'settings!io.ox/core',
+    'less!plugins/portal/birthdays/style'
+], function (ext, api, date, util, gt, settings) {
 
     'use strict';
 

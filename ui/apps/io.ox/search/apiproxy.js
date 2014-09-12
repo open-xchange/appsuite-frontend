@@ -11,11 +11,12 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/apiproxy',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/core',
-     'io.ox/search/api',
-     'io.ox/core/notifications'], function (ext, gt, api, notifications) {
+define('io.ox/search/apiproxy', [
+    'io.ox/core/extensions',
+    'gettext!io.ox/core',
+    'io.ox/search/api',
+    'io.ox/core/notifications'
+], function (ext, gt, api, notifications) {
 
     'use strict';
 
@@ -36,7 +37,7 @@ define('io.ox/search/apiproxy',
                     if (facet.style === 'exclusive' && !facet.values) {
                         facet.values = [];
                         _.each(facet.options, function (option) {
-                            var value = _.extend({}, option, {options: facet.options});
+                            var value = _.extend({}, option, { options: facet.options });
                             delete value.filter;
                             facet.values.push(value);
                         });
@@ -82,9 +83,9 @@ define('io.ox/search/apiproxy',
                 if (_.device('small')) return;
 
                 var whitelist = {
-                        style: ['simple'],
-                        id: ['contacts', 'contact', 'participant', 'participant']
-                    };
+                    style: ['simple'],
+                    id: ['contacts', 'contact', 'participant', 'participant']
+                };
 
                 // flag  facet
                 _.each(baton.data, function (facet) {
@@ -93,9 +94,9 @@ define('io.ox/search/apiproxy',
                         advanced = !(style || id);
 
                     // flag when not in whitelist
-                    if (advanced)
+                    if (advanced) {
                         facet.flags.push('advanced');
-                    else if (style) {
+                    } else if (style) {
                         facet.flags.push('highlander');
                     }
                 });
@@ -129,10 +130,10 @@ define('io.ox/search/apiproxy',
         /**
          * success handler to pass data through extension point
          * @param  {[type]} data [description]
-         * @return {deferred} returns available facets
+         * @return { deferred} returns available facets
          */
         function extend (args, data) {
-            var baton = ext.Baton.ensure({app: app, data: data.facets, args: args});
+            var baton = ext.Baton.ensure({ app: app, data: data.facets, args: args });
             POINT.invoke('customize', this, baton);
             return baton.data;
         }
@@ -140,7 +141,7 @@ define('io.ox/search/apiproxy',
         /**
          * calls api and pass the response through an extension point
          * @param {object} any number of objects that will be
-         * @return {deferred} returns available facets
+         * @return { deferred} returns available facets
          * extended into one new options object
          */
         function autocomplete () {
@@ -155,63 +156,63 @@ define('io.ox/search/apiproxy',
                 // alias for autocomplete tk
                 search: function (query, options) {
                     var standard = {
-                            params: {
-                                module: model.getModule()
-                            },
-                            data: {
-                                prefix: query
-                            }
-                        };
+                        params: {
+                            module: model.getModule()
+                        },
+                        data: {
+                            prefix: query
+                        }
+                    };
 
                     return model.getFacets()
-                            .then(function (facets) {
-                                // extend standard options
-                                standard.data.facets = facets;
-                            })
-                            .then(function () {
-                                // call server
-                                return autocomplete(standard, options);
-                            })
-                            .then(undefined, function (error) {
-                                // fallback when app doesn't support search
-                                if (error.code === 'SVL-0010') {
-                                    var app = model.getApp();
-                                    // add temporary mapping (default app)
-                                    model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
-                                    return autocomplete(standard, options, { params: {module: model.getModule()} });
-                                }
-                                return error;
-                            })
-                            .then(function (data) {
+                        .then(function (facets) {
+                            // extend standard options
+                            standard.data.facets = facets;
+                        })
+                        .then(function () {
+                            // call server
+                            return autocomplete(standard, options);
+                        })
+                        .then(undefined, function (error) {
+                            // fallback when app doesn't support search
+                            if (error.code === 'SVL-0010') {
+                                var app = model.getApp();
+                                // add temporary mapping (default app)
+                                model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
+                                return autocomplete(standard, options, { params: { module: model.getModule() }});
+                            }
+                            return error;
+                        })
+                        .then(function (data) {
 
-                                var pool = model.get('pool'),
-                                    hash = {};
+                            var pool = model.get('pool'),
+                                hash = {};
 
-                                _.each(data, function (facet) {
-                                    hash[facet.id] = true;
-                                });
+                            _.each(data, function (facet) {
+                                hash[facet.id] = true;
+                            });
 
-                                // add
-                                _.each(pool, function (facet) {
-                                    if (!hash[facet.id])
-                                        data.unshift(facet);
-                                });
-                                return data;
-                            })
-                            .then(function (data) {
-                                // match convention in autocomplete tk
-                                var data = {
-                                    list: data,
-                                    hits: 0
-                                };
-                                model.set({
-                                    query: query,
-                                    autocomplete: data.list
-                                }, {
-                                    silent: true
-                                });
-                                return data;
-                            }, notifications.yell);
+                            // add
+                            _.each(pool, function (facet) {
+                                if (!hash[facet.id])
+                                    data.unshift(facet);
+                            });
+                            return data;
+                        })
+                        .then(function (data) {
+                            // match convention in autocomplete tk
+                            var data = {
+                                list: data,
+                                hits: 0
+                            };
+                            model.set({
+                                query: query,
+                                autocomplete: data.list
+                            }, {
+                                silent: true
+                            });
+                            return data;
+                        }, notifications.yell);
                 },
                 query: (function () {
 

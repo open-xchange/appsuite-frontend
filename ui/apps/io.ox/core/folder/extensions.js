@@ -11,17 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/extensions',
-    ['io.ox/core/folder/node',
-     'io.ox/core/folder/api',
-     'io.ox/core/api/account',
-     'io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'io.ox/core/api/user',
-     'io.ox/mail/api',
-     'gettext!io.ox/core',
-     'io.ox/core/folder/favorites',
-     'less!io.ox/core/folder/style'], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt) {
+define('io.ox/core/folder/extensions', [
+    'io.ox/core/folder/node',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/account',
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/api/user',
+    'io.ox/mail/api',
+    'gettext!io.ox/core',
+    'io.ox/core/folder/favorites',
+    'less!io.ox/core/folder/style'
+], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt) {
 
     'use strict';
 

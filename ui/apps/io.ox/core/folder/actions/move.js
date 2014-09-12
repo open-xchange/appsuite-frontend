@@ -11,12 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/move',
-    ['io.ox/core/folder/api',
-     'io.ox/core/folder/picker',
-     'io.ox/core/notifications',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core'], function (api, picker, notifications, dialogs, gt) {
+define('io.ox/core/folder/actions/move', [
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/picker',
+    'io.ox/core/notifications',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/core'
+], function (api, picker, notifications, dialogs, gt) {
 
     'use strict';
 

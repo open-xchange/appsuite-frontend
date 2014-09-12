@@ -11,12 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/common',
-    ['io.ox/mail/api',
-     'io.ox/core/folder/api',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (mailAPI, folderAPI, dialogs, notifications, gt) {
+define('io.ox/core/folder/actions/common', [
+    'io.ox/mail/api',
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (mailAPI, folderAPI, dialogs, notifications, gt) {
 
     'use strict';
 
@@ -40,8 +41,8 @@ define('io.ox/core/folder/actions/common',
             folderAPI.get(id).done(function (folder) {
                 new dialogs.ModalDialog()
                     .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
-                    .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: '1' })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
+                    .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: 1 })
+                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                     .on('delete', function () {
                         notifications.yell('busy', gt('Emptying folder... This may take a few seconds.'));
                         var dep = e.data.module === 'mail' ? 'io.ox/mail/api' : 'io.ox/files/api';

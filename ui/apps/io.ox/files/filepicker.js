@@ -11,16 +11,16 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/files/filepicker',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/folder/picker',
-     'io.ox/core/cache',
-     'io.ox/files/api',
-     'io.ox/core/tk/selection',
-     'settings!io.ox/core',
-     'gettext!io.ox/files'
-    ], function (ext, dialogs, picker, cache, filesAPI, Selection, settings, gt) {
+define('io.ox/files/filepicker', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/folder/picker',
+    'io.ox/core/cache',
+    'io.ox/files/api',
+    'io.ox/core/tk/selection',
+    'settings!io.ox/core',
+    'gettext!io.ox/files'
+], function (ext, dialogs, picker, cache, filesAPI, Selection, settings, gt) {
 
     'use strict';
 

@@ -13,7 +13,7 @@
 define(['io.ox/core/api/account',
         'io.ox/mail/sender',
         'fixture!io.ox/core/api/user.json',
-        'fixture!io.ox/mail/write/accounts.json'
+        'fixture!io.ox/mail/compose/accounts.json'
        ], function (api, sender, fixtureUser, fixtureAccounts) {
 
     describe.skip('account API', function () {

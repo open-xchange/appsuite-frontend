@@ -11,20 +11,20 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/api',
-    ['io.ox/core/http',
-     'io.ox/core/cache',
-     'settings!io.ox/core',
-     'io.ox/core/api/factory',
-     'io.ox/core/folder/api',
-     'io.ox/core/api/account',
-     'io.ox/core/notifications',
-     'io.ox/mail/util',
-     'io.ox/core/api/collection-pool',
-     'io.ox/core/api/collection-loader',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail'
-    ], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, Pool, CollectionLoader, settings, gt) {
+define('io.ox/mail/api', [
+    'io.ox/core/http',
+    'io.ox/core/cache',
+    'settings!io.ox/core',
+    'io.ox/core/api/factory',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/account',
+    'io.ox/core/notifications',
+    'io.ox/mail/util',
+    'io.ox/core/api/collection-pool',
+    'io.ox/core/api/collection-loader',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, Pool, CollectionLoader, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -134,10 +134,11 @@ define('io.ox/mail/api',
 
                 return api.updateAllCache(list, function (obj) {
                     // handles threadView: on || off
-                    if (obj.thread)
+                    if (obj.thread) {
                         _(obj.thread).each(process);
-                    else
+                    } else {
                         process(obj);
+                    }
                 });
             },
 
@@ -178,7 +179,7 @@ define('io.ox/mail/api',
 
             /**
              * @param {object|string} obj (id, folder_id) or string (cid)
-             * @returns {void}
+             * @returns {void }
              */
             remove: function (obj) {
                 var cid = getCID(obj),
@@ -502,7 +503,7 @@ define('io.ox/mail/api',
      * @param  {array} ids
      * @param  {boolean} useCache (default is true)
      * @param  {object} options
-     * @return {deferred}
+     * @return { deferred }
      */
     api.getList = function (ids, useCache, options) {
         //TOOD: use this until backend removes channel suffix
@@ -545,7 +546,7 @@ define('io.ox/mail/api',
      * wrapper for factories remove to update counters
      * @param  {array} ids
      * @param  {object} options [see api factory]
-     * @return {deferred} resolves as array
+     * @return { deferred} resolves as array
      */
     api.remove = function (ids, all) {
 
@@ -593,7 +594,7 @@ define('io.ox/mail/api',
      * requests data for all ids
      * @param  {object} options
      * @param  {boolean} useCache (default is true)
-     * @return {deferred} returns array of threads
+     * @return { deferred} returns array of threads
      */
     api.getAllThreads = function (options, useCache) {
         // request for brand new thread support
@@ -657,7 +658,7 @@ define('io.ox/mail/api',
                 api.trigger('update:' + _.ecid(obj), obj);
             });
             if (apiAction === 'copy' || move) {//give response if its a copy action (to look if there was an error)
-                return { list: list, response: response};//not doing this as a standardaction to prevent errors with functions looking only for the list parameter
+                return { list: list, response: response };//not doing this as a standardaction to prevent errors with functions looking only for the list parameter
             }
             // return list
             return list;
@@ -693,7 +694,7 @@ define('io.ox/mail/api',
      * update item in all caches via callback in element
      * @param {array} list
      * @param {function} callback
-     * @return {deferred}
+     * @return { deferred }
      */
     api.updateAllCache = (function () {
         function update(folder_id, hash, callback) {
@@ -762,7 +763,7 @@ define('io.ox/mail/api',
      * cleaning up
      * @param  {string]} folder_id
      * @fires  api#refresh.all
-     * @return {deferred}
+     * @return { deferred }
      */
     api.expunge = function (folder_id) {
 
@@ -790,7 +791,7 @@ define('io.ox/mail/api',
      * deletes all mails from a specific folder
      * @param  {string} id
      * @fires  api#refresh.all
-     * @return {deferred}
+     * @return { deferred }
      */
     api.clear = function (id) {
 
@@ -827,7 +828,7 @@ define('io.ox/mail/api',
      * @param  {string} label (numeric color id mapped in api.COLORS)
      * @param  {boolean} local
      * @fires  api#refresh.list
-     * @return {promise} done returns list of mails in current folder
+     * @return { promise} done returns list of mails in current folder
      */
     api.changeColor = function (list, label, local) {
 
@@ -848,23 +849,23 @@ define('io.ox/mail/api',
         });
 
         return tracker.update(list, function (obj) {
-                obj.color_label = label;
-                tracker.setColorLabel(obj);
-            })
-            .then(function () {
-                return local ? DONE : update(list, { color_label: label });
-            })
-            .done(function () {
-                api.trigger('refresh.color', list);
-                api.trigger('refresh.list');
-            });
+            obj.color_label = label;
+            tracker.setColorLabel(obj);
+        })
+        .then(function () {
+            return local ? DONE : update(list, { color_label: label });
+        })
+        .done(function () {
+            api.trigger('refresh.color', list);
+            api.trigger('refresh.list');
+        });
     };
 
     /**
      * marks list of mails unread
      * @param {array} list
      * @fires api#refresh.list
-     * @return {deferred}
+     * @return { deferred }
      */
     api.markUnread = function (list) {
         list = [].concat(list);
@@ -904,7 +905,7 @@ define('io.ox/mail/api',
      * @param {array} list
      * @fires api#refresh.list
      * @fires api#update:set-seen (list)
-     * @return {deferred}
+     * @return { deferred }
      */
     api.markRead = function (list) {
 
@@ -978,7 +979,7 @@ define('io.ox/mail/api',
     /**
      * marks list of mails as spam
      * @param {array} list
-     * @return {deferred}
+     * @return { deferred }
      */
     api.markSpam = function (list) {
 
@@ -1026,7 +1027,7 @@ define('io.ox/mail/api',
      * @param  {string} targetFolderId
      * @fires  api#refresh.all
      * @fires  api#move (list, targetFolderId)
-     * @return {deferred}
+     * @return { deferred }
      */
     api.move = function (list, targetFolderId, all) {
 
@@ -1056,7 +1057,7 @@ define('io.ox/mail/api',
      * copies a number of mails to another folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @return {deferred}
+     * @return { deferred }
      */
     api.copy = function (list, targetFolderId) {
 
@@ -1112,77 +1113,76 @@ define('io.ox/mail/api',
             settings.get('attachOriginalMessage', false) === true;
 
         return http.PUT({
-                module: 'mail',
-                params: {
-                    action: action || '',
-                    attachOriginalMessage: attachOriginalMessage,
-                    view: view,
-                    setFrom: (/reply|replyall|forward/.test(action))
-                },
-                data: _([].concat(obj)).map(function (obj) {
-                    return api.reduce(obj);
-                }),
-                appendColumns: false
-            })
-            .pipe(function (data) {
-                var text = '', quote = '', tmp = '';
-                // transform pseudo-plain text to real text
-                if (data.attachments && data.attachments.length) {
-                    if (data.attachments[0].content === '') {
-                        // nothing to do - nothing to break
-                    } else {
-                        //content-type specific
-                        if (data.attachments[0].content_type === 'text/plain') {
-                            $('<div>')
-                                // escape everything but BR tags
-                                .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
-                                .contents().each(function () {
-                                    if (this.tagName === 'BR') {
-                                        text += '\n';
-                                    } else {
-                                        text += $(this).text();
-                                    }
-                                });
-                            // remove white space
-                            text = $.trim(text);
-                            // polish for html editing
-                            if (view === 'html') {
-                                // escape '<'
-                                text = text.replace(/</ig, '&lt;');
-                                // replace '\n>' sequences by blockquote-tags
-                                _(text.split(/\n/).concat('\n')).each(function (line) {
-                                    if (/^> /.test(line)) {
-                                        quote += line.substr(2) + '\n';
-                                    } else {
-                                        tmp += (quote !== '' ? '<blockquote type="cite"><p>' + quote + '</p></blockquote>' : '') + line + '\n';
-                                        quote = '';
-                                    }
-                                });
-                                // transform line-feeds back to BR
-                                data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
-                            } else {
-                                // replace
-                                data.attachments[0].content = $.trim(text);
-                            }
-                        } else if (data.attachments[0].content_type === 'text/html') {
-                            // robust approach for large mails
-                            tmp = document.createElement('DIV');
-                            tmp.innerHTML = data.attachments[0].content;
-                            _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
-                                node.removeAttribute('style');
-                            });
-                            data.attachments[0].content = tmp.innerHTML;
-                            tmp = null;
-                        }
-                    }
+            module: 'mail',
+            params: {
+                action: action || '',
+                attachOriginalMessage: attachOriginalMessage,
+                view: view,
+                setFrom: (/reply|replyall|forward/.test(action))
+            },
+            data: _([].concat(obj)).map(function (obj) {
+                return api.reduce(obj);
+            }),
+            appendColumns: false
+        })
+        .pipe(function (data) {
+            var text = '', quote = '', tmp = '';
+            // transform pseudo-plain text to real text
+            if (data.attachments && data.attachments.length) {
+                if (data.attachments[0].content === '') {
+                    // nothing to do - nothing to break
                 } else {
-                    data.attachments = data.attachments || [{}];
-                    data.attachments[0].content = '';
+                    //content-type specific
+                    if (data.attachments[0].content_type === 'text/plain') {
+                        $('<div>')
+                            // escape everything but BR tags
+                            .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
+                            .contents().each(function () {
+                                if (this.tagName === 'BR') {
+                                    text += '\n';
+                                } else {
+                                    text += $(this).text();
+                                }
+                            });
+                        // remove white space
+                        text = $.trim(text);
+                        // polish for html editing
+                        if (view === 'html') {
+                            // escape '<'
+                            text = text.replace(/</ig, '&lt;');
+                            // replace '\n>' sequences by blockquote-tags
+                            _(text.split(/\n/).concat('\n')).each(function (line) {
+                                if (/^> /.test(line)) {
+                                    quote += line.substr(2) + '\n';
+                                } else {
+                                    tmp += (quote !== '' ? '<blockquote type="cite"><p>' + quote + '</p></blockquote>' : '') + line + '\n';
+                                    quote = '';
+                                }
+                            });
+                            // transform line-feeds back to BR
+                            data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
+                        } else {
+                            // replace
+                            data.attachments[0].content = $.trim(text);
+                        }
+                    } else if (data.attachments[0].content_type === 'text/html') {
+                        // robust approach for large mails
+                        tmp = document.createElement('DIV');
+                        tmp.innerHTML = data.attachments[0].content;
+                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                            node.removeAttribute('style');
+                        });
+                        data.attachments[0].content = tmp.innerHTML;
+                        tmp = null;
+                    }
                 }
-                return data;
-            });
+            } else {
+                data.attachments = data.attachments || [{}];
+                data.attachments[0].content = '';
+            }
+            return data;
+        });
     };
-
 
     /**
      * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
@@ -1198,7 +1198,7 @@ define('io.ox/mail/api',
     /**
      * get mail object with unmodified content (in case externalresources warning message was ignored)
      * @param  {object]} obj (mail object)
-     * @return {deferred} obj (mail object)
+     * @return { deferred} obj (mail object)
      */
     api.getUnmodified = function (obj) {
         // has folder?
@@ -1213,23 +1213,23 @@ define('io.ox/mail/api',
             // nested message!?
             var id = obj.id, parent = obj.parent;
             return this.get({
-                    action: 'get',
-                    id: obj.parent.id,
-                    folder: obj.parent.folder || obj.parent.folder_id,
-                    view: 'html'
-                }, false)
-                .pipe(function (data) {
-                    return _.chain(data.nested_msgs)
-                        .filter(function (obj) {
-                            if (obj.id === id) {
-                                obj.parent = parent;
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        })
-                        .first().value();
-                });
+                action: 'get',
+                id: obj.parent.id,
+                folder: obj.parent.folder || obj.parent.folder_id,
+                view: 'html'
+            }, false)
+            .pipe(function (data) {
+                return _.chain(data.nested_msgs)
+                    .filter(function (obj) {
+                        if (obj.id === id) {
+                            obj.parent = parent;
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
+                    .first().value();
+            });
         } else {
             console.error('api.getUnmodified(). Invalid case.', obj);
             return $.Deferred().resolve(obj);
@@ -1239,7 +1239,7 @@ define('io.ox/mail/api',
     /**
      * get source code of specified mail
      * @param  {object} obj (mail)
-     * @return {deferred} returns source string
+     * @return { deferred} returns source string
      */
     api.getSource = function (obj) {
         return this.get({
@@ -1255,7 +1255,7 @@ define('io.ox/mail/api',
      * prepares object content for 'replayall' action
      * @param  {object} obj (mail object)
      * @param  {string} view (html or text)
-     * @return {deferred} done returns prepared object
+     * @return { deferred} done returns prepared object
      */
     api.replyall = function (obj, view) {
         return react('replyall', obj, view);
@@ -1265,7 +1265,7 @@ define('io.ox/mail/api',
      * prepares object content for 'reply' action
      * @param  {object} obj (mail object)
      * @param  {string} view (html or text)
-     * @return {deferred} done returns prepared object
+     * @return { deferred} done returns prepared object
      */
     api.reply = function (obj, view) {
         return react('reply', obj, view);
@@ -1275,7 +1275,7 @@ define('io.ox/mail/api',
      * prepares object content for 'forward' action
      * @param  {object} obj (mail object)
      * @param  {string} view (html or text)
-     * @return {deferred} done returns prepared object
+     * @return { deferred} done returns prepared object
      */
     api.forward = function (obj, view) {
         return react('forward', obj, view);
@@ -1288,7 +1288,7 @@ define('io.ox/mail/api',
      * @param  {jquery} form (for 'oldschool')
      * @fires  api#refresh.all
      * @fires  api#refresh.list
-     * @return {deferred}
+     * @return { deferred }
      */
     api.send = function (data, files, form) {
 
@@ -1317,7 +1317,7 @@ define('io.ox/mail/api',
 
         function mapArgs(obj) {
             return {
-                'args': [{'com.openexchange.groupware.contact.pairs': [{'folder': obj.folder_id, 'id': obj.id}]}],
+                'args': [{ 'com.openexchange.groupware.contact.pairs': [{ 'folder': obj.folder_id, 'id': obj.id }] }],
                 'identifier': 'com.openexchange.contact'
             };
         }
@@ -1406,7 +1406,7 @@ define('io.ox/mail/api',
         return http.UPLOAD({
             module: 'mail',
             params: {
-                action: 'new',
+                action: 'new'
             },
             data: form,
             dataType: 'text'
@@ -1429,7 +1429,7 @@ define('io.ox/mail/api',
      * @param  {array} list
      * @param  {string} target (folder id) [optional]
      * @fires  api#refresh.all
-     * @return {deferred}
+     * @return { deferred }
      */
     api.saveAttachments = function (list, target) {
         // be robust
@@ -1464,7 +1464,7 @@ define('io.ox/mail/api',
      * get url for attachment in requested mode
      * @param  {object} data (attachment)
      * @param  {string} mode ('download', 'zip', 'email, 'view', 'open')
-     * @return {string} url
+     * @return { string} url
      */
     api.getUrl = function (data, mode) {
         var url = ox.apiRoot + '/mail', first;
@@ -1530,7 +1530,7 @@ define('io.ox/mail/api',
     /**
      * checks inbox for new mails
      * @fires api#new-mail (recent, unseen)
-     * @return {deferred} done returns { unseen: [], recent: [] }
+     * @return { deferred} done returns { unseen: [], recent: [] }
      */
     api.checkInbox = function () {
         // look for new unseen mails in INBOX
@@ -1581,7 +1581,7 @@ define('io.ox/mail/api',
     /**
      * bind to global refresh; clears caches and trigger refresh.all
      * @fires  api#refresh.all
-     * @return {promise}
+     * @return { promise }
      */
     api.refresh = function () {
         if (!ox.online) return;
@@ -1598,7 +1598,7 @@ define('io.ox/mail/api',
      * remove elements from list
      * @param  {array} list (list)
      * @param  {object} hash (ids of items to be removed)
-     * @return {array} (cleaned list)
+     * @return { array} (cleaned list)
      */
     api.localRemove = function (list, hash) {
         // reverse lookup first to get affacted top-level elements
@@ -1652,7 +1652,7 @@ define('io.ox/mail/api',
     };
 
     /**
-     * @return {string} default folder for mail
+     * @return { string} default folder for mail
      */
     api.getDefaultFolder = function () {
         return folderAPI.getDefaultFolder('mail');
@@ -1661,7 +1661,7 @@ define('io.ox/mail/api',
     /**
      * get account id
      * @param  {[type]} initialFolder (folder id)
-     * @return {string} account id
+     * @return { string} account id
      */
     api.getAccountIDFromFolder = function (initialFolder) {
         var accountId = /^default(\d*)\b/.exec(initialFolder);
@@ -1694,7 +1694,7 @@ define('io.ox/mail/api',
      * imports mail as EML
      * @param  {object} options (file: {}, folder: string )
      * @fires  api#refresh.all
-     * @return {deferred} returns array with objects (id, folder_id)
+     * @return { deferred} returns array with objects (id, folder_id)
      */
     api.importEML = function (options) {
         options.folder = options.folder || api.getDefaultFolder();
@@ -1703,22 +1703,22 @@ define('io.ox/mail/api',
         form.append('file', options.file);
 
         return http.UPLOAD({
-                module: 'mail',
-                params: {
-                    action: 'import',
-                    folder: options.folder,
-                    force: true // don't check from address!
-                },
-                data: form,
-                fixPost: true
-            })
-            .pipe(function (data) {
-                return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
-                    api.trigger('refresh.all');
-                    folderAPI.reload(options.folder);
-                    return data;
-                });
+            module: 'mail',
+            params: {
+                action: 'import',
+                folder: options.folder,
+                force: true // don't check from address!
+            },
+            data: form,
+            fixPost: true
+        })
+        .pipe(function (data) {
+            return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
+                api.trigger('refresh.all');
+                folderAPI.reload(options.folder);
+                return data;
             });
+        });
     };
 
     // send read receipt
@@ -1778,7 +1778,7 @@ define('io.ox/mail/api',
     /**
      * sets title to 'New Mail' or default
      * @param  {boolean} state
-     * @return {undefined}
+     * @return { undefined }
      */
     api.newMailTitle = (function () {
 

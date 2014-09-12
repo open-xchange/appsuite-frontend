@@ -15,13 +15,13 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
 
-define.async('io.ox/oauth/keychain',
-    ['io.ox/core/extensions',
-     'io.ox/core/http',
-     'io.ox/core/event',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core'
-    ], function (ext, http, Events, notifications, gt) {
+define.async('io.ox/oauth/keychain', [
+    'io.ox/core/extensions',
+    'io.ox/core/http',
+    'io.ox/core/event',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core'
+], function (ext, http, Events, notifications, gt) {
 
     'use strict';
 
@@ -149,7 +149,7 @@ define.async('io.ox/oauth/keychain',
                     action: 'update',
                     id: account.id
                 },
-                data: {displayName: account.displayName}
+                data: { displayName: account.displayName }
             }).done(function () {
                 cache[service.id].accounts[account.id] = account;
                 self.trigger('update', account);
@@ -219,18 +219,18 @@ define.async('io.ox/oauth/keychain',
             cache = {};
             _(services[0]).each(function (service) {
                 var keychainAPI = new OAuthKeychainAPI(service);
-                cache[service.id] = $.extend({accounts: {}}, service);
+                cache[service.id] = $.extend({ accounts: {}}, service);
                 point.extend(keychainAPI);
 
                 keychainAPI.on('create', function () {
-                    // Some standard event handlers    
+                    // Some standard event handlers
                     require(['plugins/halo/api'], function (haloAPI) {
                         haloAPI.halo.refreshServices();
                     });
                 });
 
                 keychainAPI.on('delete', function () {
-                    // Some standard event handlers    
+                    // Some standard event handlers
                     require(['plugins/halo/api'], function (haloAPI) {
                         haloAPI.halo.refreshServices();
                     });
@@ -256,9 +256,6 @@ define.async('io.ox/oauth/keychain',
             // Resolve on fail
             moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
         });
-
-
-
 
     return moduleDeferred;
 });

@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/realtime/groups',
-    ['io.ox/realtime/rt',
-     'io.ox/core/event'
-    ], function (rt, Event) {
+define('io.ox/realtime/groups', [
+    'io.ox/realtime/rt',
+    'io.ox/core/event'
+], function (rt, Event) {
 
     'use strict';
 

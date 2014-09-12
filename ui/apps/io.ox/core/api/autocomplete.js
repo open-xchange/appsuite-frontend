@@ -11,16 +11,16 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/core/api/autocomplete',
-    ['io.ox/core/http',
-     'io.ox/core/capabilities',
-     'io.ox/mail/api',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/api/resource',
-     'io.ox/core/api/group',
-     'settings!io.ox/contacts'
-    ], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI, settings) {
+define('io.ox/core/api/autocomplete', [
+    'io.ox/core/http',
+    'io.ox/core/capabilities',
+    'io.ox/mail/api',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'io.ox/core/api/resource',
+    'io.ox/core/api/group',
+    'settings!io.ox/contacts'
+], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI, settings) {
 
     'use strict';
 
@@ -44,16 +44,16 @@ define('io.ox/core/api/autocomplete',
         });
 
         if (options.users) {
-            this.apis.push({type: 'user', api: contactsAPI});
+            this.apis.push({ type: 'user', api: contactsAPI });
         }
         if (options.contacts) {
-            this.apis.push({type: 'contact', api: contactsAPI});
+            this.apis.push({ type: 'contact', api: contactsAPI });
         }
         if (options.resources) {
-            this.apis.push({type: 'resource', api: resourceAPI});
+            this.apis.push({ type: 'resource', api: resourceAPI });
         }
         if (options.groups) {
-            this.apis.push({type: 'group', api: groupAPI});
+            this.apis.push({ type: 'group', api: groupAPI });
         }
         if (options.msisdn && (capabilities.has('msisdn'))) {
             this.options.calloptions = $.extend(this.options.calloptions || {}, { extra: ['msisdn'] });
@@ -65,7 +65,7 @@ define('io.ox/core/api/autocomplete',
         /**
          * search
          * @param  {string} query
-         * @return {deferred} returns results
+         * @return { deferred} returns results
          */
         search: function (query) {
 
@@ -123,7 +123,7 @@ define('io.ox/core/api/autocomplete',
          * process results
          * @param  {string} type
          * @param  {array} data (contains results array)
-         * @return {array}
+         * @return { array }
          */
         processItem: function (type, array) {
             return _(array).map(function (data) {
@@ -137,7 +137,7 @@ define('io.ox/core/api/autocomplete',
          * @param  {array}  data (contains results array)
          * @param  {string} query
          * @param  {object} options (request options)
-         * @return {array}
+         * @return { array }
          */
         processContactResults: function (type, data, query, options) {
 
@@ -197,7 +197,7 @@ define('io.ox/core/api/autocomplete',
          * @param  {object} obj
          * @param  {string} target (target property)
          * @param  {string|array} fields
-         * @return {undefined}
+         * @return { undefined }
          */
         processContactItem: function (type, list, obj, target, fields) {
             //ensure array

@@ -40,7 +40,7 @@ define('io.ox/backbone/settings', ['io.ox/backbone/basicModel'], function (Basic
                     },
                     read: function () {
                         var def = $.Deferred();
-                        settings.load({noCache: true})
+                        settings.load({ noCache: true })
                             .done(function () {
                                 return def.resolve(settings.all());
                             });

@@ -10,10 +10,10 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/basicModel',
-    ['io.ox/core/extensions',
-     'gettext!io.ox/core'
-    ], function (ext, gt) {
+define('io.ox/backbone/basicModel', [
+    'io.ox/core/extensions',
+    'gettext!io.ox/core'
+], function (ext, gt) {
 
     'use strict';
 
@@ -125,8 +125,8 @@ define('io.ox/backbone/basicModel',
                 action = 'destroy';
             }
             if ((action === 'update' || action === 'create')) {
-                if (!this.isValid({isSave: true})) {//isValid actually calls the validate function, no need to do this manually
-                    return $.Deferred().reject({error: gt('Invalid data'), model: this});
+                if (!this.isValid({ isSave: true })) {//isValid actually calls the validate function, no need to do this manually
+                    return $.Deferred().reject({ error: gt('Invalid data'), model: this });
                 }
             }
             if (this.syncer) {

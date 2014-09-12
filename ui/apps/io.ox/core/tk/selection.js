@@ -12,14 +12,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/selection',
-    ['io.ox/core/event',
-     'io.ox/core/extensions',
-     'io.ox/core/collection',
-     'io.ox/core/notifications',
-     'gettext!io.ox/core',
-     'io.ox/core/tk/draghelper'
-    ], function (Events, ext, Collection, notifications, gt) {
+define('io.ox/core/tk/selection', [
+    'io.ox/core/event',
+    'io.ox/core/extensions',
+    'io.ox/core/collection',
+    'io.ox/core/notifications',
+    'gettext!io.ox/core',
+    'io.ox/core/tk/draghelper'
+], function (Events, ext, Collection, notifications, gt) {
 
     'use strict';
 

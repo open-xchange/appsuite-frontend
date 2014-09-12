@@ -11,14 +11,14 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/tasks/common-extensions',
-    ['io.ox/tasks/util',
-     'io.ox/mail/util',
-     'io.ox/tasks/api',
-     'io.ox/core/date',
-     'io.ox/core/strings',
-     'gettext!io.ox/tasks'
-    ], function (util, mailUtil, api, date, strings, gt) {
+define('io.ox/tasks/common-extensions', [
+    'io.ox/tasks/util',
+    'io.ox/mail/util',
+    'io.ox/tasks/api',
+    'io.ox/core/date',
+    'io.ox/core/strings',
+    'gettext!io.ox/tasks'
+], function (util, mailUtil, api, date, strings, gt) {
 
     'use strict';
 
@@ -92,8 +92,8 @@ define('io.ox/tasks/common-extensions',
                     if (data.start_date && data.start_date > endDate) {
 
                         var popup = new dialogs.ModalDialog()
-                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: '1' })
-                            .addPrimaryButton('change', gt('Adjust start date'), 'changechange', {tabIndex: '1'});
+                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                            .addPrimaryButton('change', gt('Adjust start date'), 'changechange', { tabIndex: 1 });
                         //text
                         popup.getBody().append(
                             $('<h4>').text(gt('Inconsistent dates')),

@@ -10,19 +10,19 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/core/wizard/registry',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core/wizard',
-     'less!io.ox/core/wizard/style'
-    ], function (ext, dialogs, gt) {
+define('io.ox/core/wizard/registry', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/core/wizard',
+    'less!io.ox/core/wizard/style'
+], function (ext, dialogs, gt) {
 
     'use strict';
 
     function Wizard(options) {
         if (!options) {
             console.error('Please specify options for the wizard. At minimum it needs an id!');
-            options = {id: 'defunct'};
+            options = { id: 'defunct' };
         }
         var state = 'stopped';
         var batons = {};
@@ -290,7 +290,7 @@ define('io.ox/core/wizard/registry',
                 console.error('Cannot start wizard, when it is in state: ', state);
                 return;
             }
-            this.dialog = new dialogs.ModalDialog({easyOut: !!this.options.closeable});
+            this.dialog = new dialogs.ModalDialog({ easyOut: !!this.options.closeable });
             this.dialog.getContentControls().append(this.navButtons);
             if (!!options.id) {
                 this.dialog.getPopup().attr('id', options.id);

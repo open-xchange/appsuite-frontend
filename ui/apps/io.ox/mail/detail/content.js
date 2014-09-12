@@ -11,16 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/detail/content',
-    ['io.ox/mail/api',
-     'io.ox/core/util',
-     'io.ox/core/emoji/util',
-     'io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail',
-     'io.ox/mail/detail/links'
-    ], function (api, coreUtil, emoji, ext, capabilities, settings, gt) {
+define('io.ox/mail/detail/content', [
+    'io.ox/mail/api',
+    'io.ox/core/util',
+    'io.ox/core/emoji/util',
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail',
+    'io.ox/mail/detail/links'
+], function (api, coreUtil, emoji, ext, capabilities, settings, gt) {
 
     'use strict';
 
@@ -251,8 +251,8 @@ define('io.ox/mail/detail/content',
                     pat = /%/;
                 node.removeAttr('width height');
                 // just set width; max-width=100% should still apply
-                if (w) { node.css({ width: pat.test(w) ? w : w + 'px'}); }
-                if (h) { node.css({ height: pat.test(h) ? h : h + 'px'}); }
+                if (w) { node.css({ width: pat.test(w) ? w : w + 'px' }); }
+                if (h) { node.css({ height: pat.test(h) ? h : h + 'px' }); }
             });
         }
     });

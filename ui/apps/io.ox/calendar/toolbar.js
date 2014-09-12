@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/toolbar',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
-     'io.ox/core/notifications',
-     'gettext!io.ox/calendar',
-     'io.ox/calendar/actions',
-     'less!io.ox/calendar/style'
-    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt) {
+define('io.ox/calendar/toolbar', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/tk/upload',
+    'io.ox/core/dropzone',
+    'io.ox/core/notifications',
+    'gettext!io.ox/calendar',
+    'io.ox/calendar/actions',
+    'less!io.ox/calendar/style'
+], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt) {
 
     'use strict';
 

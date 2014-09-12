@@ -13,12 +13,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/preview/main',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'io.ox/files/mediasupport',
-     'gettext!io.ox/preview'
-    ], function (ext, capabilities, mediasupport, gt) {
+define('io.ox/preview/main', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/files/mediasupport',
+    'gettext!io.ox/preview'
+], function (ext, capabilities, mediasupport, gt) {
 
     'use strict';
 
@@ -139,8 +139,10 @@ define('io.ox/preview/main',
                     autoplay: false
                 }).hide().appendTo(this.on('click', function () { return false; }));
                 var self = this;
-                require(['static/3rd.party/mediaelement/mediaelement-and-player.js',
-                        'css!3rd.party/mediaelement/mediaelementplayer.css'], function () {
+                require([
+                    'static/3rd.party/mediaelement/mediaelement-and-player.js',
+                    'css!3rd.party/mediaelement/mediaelementplayer.css'
+                ], function () {
 
                     var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
 

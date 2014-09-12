@@ -11,10 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/group',
-    ['io.ox/core/http',
-     'io.ox/core/api/factory'
-    ], function (http, apiFactory) {
+define('io.ox/core/api/group', [
+    'io.ox/core/http',
+    'io.ox/core/api/factory'
+], function (http, apiFactory) {
 
     'use strict';
 
@@ -50,7 +50,7 @@ define('io.ox/core/api/group',
 
     /**
      * @param  {string} id
-     * @return {deferred} done handler returns name (string)
+     * @return { deferred} done handler returns name (string)
      */
     api.getName = function (id) {
         return api.get({ id: id }).pipe(function (data) {

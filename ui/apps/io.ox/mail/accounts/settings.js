@@ -11,16 +11,16 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/mail/accounts/settings',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/account',
-     'io.ox/mail/accounts/model',
-     'io.ox/mail/accounts/view-form',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/notifications',
-     'gettext!io.ox/mail/accounts/settings',
-     'less!io.ox/settings/style'
-    ], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
+define('io.ox/mail/accounts/settings', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/account',
+    'io.ox/mail/accounts/model',
+    'io.ox/mail/accounts/view-form',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/notifications',
+    'gettext!io.ox/mail/accounts/settings',
+    'less!io.ox/settings/style'
+], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, gt) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/mail/accounts/settings',
 
         myViewNode = $('<div>').addClass('accountDetail');
         myModel = new AccountModel(data);
-        myView = new AccountDetailView({model: myModel, node: myViewNode});
+        myView = new AccountDetailView({ model: myModel, node: myViewNode });
 
         myView.dialog = new dialogs.ModalDialog({
             width: 700,
@@ -41,8 +41,8 @@ define('io.ox/mail/accounts/settings',
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
-        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+        .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
         .show(function () {
             this.find('input[type=text]:first').focus();
         });
@@ -150,7 +150,7 @@ define('io.ox/mail/accounts/settings',
             alertPlaceholder.find('.alert').remove();
             alertPlaceholder.find('.busynotice').remove();
             alertPlaceholder.append(
-                $.alert({message: message, dismissable: true})
+                $.alert({ message: message, dismissable: true })
             );
         },
 
@@ -277,9 +277,9 @@ define('io.ox/mail/accounts/settings',
                     // invoke extensions
                     ext.point('io.ox/mail/add-account/wizard').invoke('draw', this.getContentNode());
                 })
-                .addPrimaryButton('add', gt('Add'), 'add', {tabIndex: '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                .addAlternativeButton('skip', gt('Manual'), 'skip', {tabIndex: '1'})
+                .addPrimaryButton('add', gt('Add'), 'add', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .addAlternativeButton('skip', gt('Manual'), 'skip', { tabIndex: 1 })
                 .on('add', function () {
 
                     var content = this.getContentNode(),
@@ -328,7 +328,7 @@ define('io.ox/mail/accounts/settings',
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', gt('Close'), 'cancel', {tabIndex: '1'})
+                .addButton('cancel', gt('Close'), 'cancel', { tabIndex: 1 })
                 .show(function () {
                     successDialogbox.getFooter().find('.btn').addClass('closebutton');
                     var message = gt('Account added successfully');
@@ -350,7 +350,7 @@ define('io.ox/mail/accounts/settings',
                 .append(
                     alertPlaceholder
                 )
-                .addButton('cancel', gt('Close'), 'cancel', {tabIndex: '1'})
+                .addButton('cancel', gt('Close'), 'cancel', { tabIndex: 1 })
                 .show(function () {
                     failDialogbox.getFooter().find('.btn').addClass('closebutton');
                     drawMessageWarning(alertPlaceholder, message);

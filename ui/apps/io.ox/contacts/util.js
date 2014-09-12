@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util',
-    ['io.ox/core/util',
-     'settings!io.ox/contacts',
-     'gettext!io.ox/contacts',
-     'io.ox/core/date',
-     'io.ox/contacts/model'
-    ], function (util, settings, gt, date, model) {
+define('io.ox/contacts/util', [
+    'io.ox/core/util',
+    'settings!io.ox/contacts',
+    'gettext!io.ox/contacts',
+    'io.ox/core/date',
+    'io.ox/contacts/model'
+], function (util, settings, gt, date, model) {
 
     'use strict';
 

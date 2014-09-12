@@ -11,22 +11,22 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/calendar/edit/main',
-    ['io.ox/calendar/model',
-     'io.ox/calendar/api',
-     'io.ox/core/extPatterns/dnd',
-     'io.ox/calendar/edit/view-main',
-     'io.ox/core/notifications',
-     'gettext!io.ox/calendar/edit/main',
-     'settings!io.ox/calendar',
-     'less!io.ox/calendar/edit/style'
-    ], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
+define('io.ox/calendar/edit/main', [
+    'io.ox/calendar/model',
+    'io.ox/calendar/api',
+    'io.ox/core/extPatterns/dnd',
+    'io.ox/calendar/edit/view-main',
+    'io.ox/core/notifications',
+    'gettext!io.ox/calendar/edit/main',
+    'settings!io.ox/calendar',
+    'less!io.ox/calendar/edit/style'
+], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';
 
     function createInstance() {
 
-        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true, closable: true });
+        var app = ox.ui.createApp({ name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true, closable: true });
 
         _.extend(app, {
 
@@ -110,22 +110,23 @@ define('io.ox/calendar/edit/main',
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
                                     var dialog = new dialogs.ModalDialog({
-                                            top: '20%',
-                                            center: false,
-                                            container: self.getWindowNode()
-                                        })
-                                        .header(conflictView.drawHeader());
+                                        top: '20%',
+                                        center: false,
+                                        container: self.getWindowNode()
+                                    })
+                                    .header(conflictView.drawHeader());
 
-                                        dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
+                                    dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
+
                                     if (hardConflict) {
                                         dialog.prepend(
                                             $('<div class="alert alert-info hard-conflict">')
                                                 .text(gt('Conflicts with resources cannot be ignored'))
                                         );
                                     } else {
-                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'});
+                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 });
                                     }
-                                    dialog.addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                    dialog.addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                                         .show()
                                         .done(function (action) {
                                             if (action === 'cancel') {
@@ -163,7 +164,7 @@ define('io.ox/calendar/edit/main',
                             if (self.model.get('id')) {//set url parameters
                                 self.setState({ folder: self.model.attributes.folder_id, id: self.model.attributes.id });
                             } else {
-                                self.setState({ folder: self.model.attributes.folder_id, id: null});
+                                self.setState({ folder: self.model.attributes.folder_id, id: null });
                             }
                         });
 
@@ -178,17 +179,20 @@ define('io.ox/calendar/edit/main',
                             if (opt.action === 'series') {
 
                                 // fields for recurrences
-                                var fields = ['recurrence_date_position',
-                                    'change_exceptions',
-                                    'delete_exceptions',
-                                    'recurrence_type',
-                                    'days',
-                                    'day_in_month',
-                                    'month',
-                                    'interval',
-                                    'until',
-                                    'occurrences'];
-                                var x = 0;
+                                var x = 0,
+                                    fields = [
+                                        'recurrence_date_position',
+                                        'change_exceptions',
+                                        'delete_exceptions',
+                                        'recurrence_type',
+                                        'days',
+                                        'day_in_month',
+                                        'month',
+                                        'interval',
+                                        'until',
+                                        'occurrences'
+                                    ];
+
                                 // ensure theses fields will be send to backend to edit the whole series
                                 for (; x < fields.length; x++) {
                                     self.model.touch(fields[x]);
@@ -240,10 +244,10 @@ define('io.ox/calendar/edit/main',
             considerSaved: false,
 
             create: function (data) {
-                this.edit(data, { mode: 'create'});
+                this.edit(data, { mode: 'create' });
             },
 
-            getDirtyStatus : function () {
+            getDirtyStatus: function () {
                 if (this.considerSaved) {
                     return false;
                 }
@@ -300,7 +304,7 @@ define('io.ox/calendar/edit/main',
                     list = controlsBlock.find('ul'),
                     input = controlsBlock.find('input');
 
-                input.on('keyup focus', {list: list}, stopPointerEvents);
+                input.on('keyup focus', { list: list }, stopPointerEvents);
             },
 
             onSave: function () {
@@ -349,7 +353,7 @@ define('io.ox/calendar/edit/main',
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
                         .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
-                        .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

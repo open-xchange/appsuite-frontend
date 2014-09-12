@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/upsell/register',
-    ['io.ox/core/extensions',
-     'io.ox/files/api',
-     'gettext!plugins/portal'
-    ], function (ext, api, gt) {
+define('plugins/portal/upsell/register', [
+    'io.ox/core/extensions',
+    'io.ox/files/api',
+    'gettext!plugins/portal'
+], function (ext, api, gt) {
 
     'use strict';
 

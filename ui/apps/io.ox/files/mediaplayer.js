@@ -24,16 +24,16 @@
     If we provide an unsupported video file to a flash fallback it is likely to crash.
 */
 
-define('io.ox/files/mediaplayer',
-    ['io.ox/core/commons',
-     'gettext!io.ox/files',
-     'io.ox/files/api',
-     'static/3rd.party/mediaelement/mediaelement-and-player.js',
-     'io.ox/files/actions',
-     'less!io.ox/files/mediaplayer',
-     'css!3rd.party/mediaelement/mediaelementplayer.css',
-     'static/3rd.party/jquery-ui.min.js'
-    ], function (commons, gt, api) {
+define('io.ox/files/mediaplayer', [
+    'io.ox/core/commons',
+    'gettext!io.ox/files',
+    'io.ox/files/api',
+    'static/3rd.party/mediaelement/mediaelement-and-player.js',
+    'io.ox/files/actions',
+    'less!io.ox/files/mediaplayer',
+    'css!3rd.party/mediaelement/mediaelementplayer.css',
+    'static/3rd.party/jquery-ui.min.js'
+], function (commons, gt, api) {
 
     'use strict';
 
@@ -65,7 +65,7 @@ define('io.ox/files/mediaplayer',
             if (this.app) {
                 this.win = this.app.getWindow();
             } else {
-                this.win = {nodes: { outer: $('.window-container:visible').first()}};//get active window by hand
+                this.win = { nodes: { outer: $('.window-container:visible').first() }};//get active window by hand
             }
             this.lastActiveElement = $(document.activeElement);
 

@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/tasks/print',
-    ['io.ox/core/print',
-     'io.ox/calendar/print',
-     'io.ox/tasks/api',
-     'io.ox/tasks/util',
-     'io.ox/calendar/util',
-     'io.ox/core/date',
-     'gettext!io.ox/tasks'
-    ], function (print, calendarPrint, api, util, calendarUtil, date, gt) {
+define('io.ox/tasks/print', [
+    'io.ox/core/print',
+    'io.ox/calendar/print',
+    'io.ox/tasks/api',
+    'io.ox/tasks/util',
+    'io.ox/calendar/util',
+    'io.ox/core/date',
+    'gettext!io.ox/tasks'
+], function (print, calendarPrint, api, util, calendarUtil, date, gt) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/tasks/print',
     }
 
     var states = { 1: gt('Not started'), 2: gt('In progress'), 3: gt('Done'), 4: gt('Waiting'), 5: gt('Deferred') },
-        priorities = { 1: gt('Low'), 2: gt('Medium'), 3: gt('High')};
+        priorities = { 1: gt('Low'), 2: gt('Medium'), 3: gt('High') };
 
     function getState(data) {
         if (data.status === 2) {

@@ -11,24 +11,24 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/settings/pane',
-    ['io.ox/core/extensions',
-     'io.ox/backbone/basicModel',
-     'io.ox/backbone/views',
-     'io.ox/backbone/mini-views/common',
-     'io.ox/core/api/apps',
-     'io.ox/core/capabilities',
-     'io.ox/core/notifications',
-     'plugins/portal/userSettings/register',
-     'settings!io.ox/core',
-     'settings!io.ox/core/settingOptions',
-     'gettext!io.ox/core'
-    ], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
+define('io.ox/core/settings/pane', [
+    'io.ox/core/extensions',
+    'io.ox/backbone/basicModel',
+    'io.ox/backbone/views',
+    'io.ox/backbone/mini-views/common',
+    'io.ox/core/api/apps',
+    'io.ox/core/capabilities',
+    'io.ox/core/notifications',
+    'plugins/portal/userSettings/register',
+    'settings!io.ox/core',
+    'settings!io.ox/core/settingOptions',
+    'gettext!io.ox/core'
+], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
     var point = views.point('io.ox/core/settings/entry'),
-        SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
+        SettingView = point.createView({ tagName: 'form', className: 'form-horizontal' }),
         reloadMe = ['language', 'timezone', 'theme'];
 
     ext.point('io.ox/core/settings/detail').extend({
@@ -59,7 +59,7 @@ define('io.ox/core/settings/pane',
             this.addClass('settings-container').append(
                 $('<h1>').text(gt('Basic settings'))
             );
-            new SettingView({model: model}).render().$el.attr('role', 'form').appendTo(this);
+            new SettingView({ model: model }).render().$el.attr('role', 'form').appendTo(this);
         }
     });
 
@@ -128,7 +128,7 @@ define('io.ox/core/settings/pane',
                 }).text(gt('Language')),
                 $('<div>').addClass('col-sm-4').append(
                     new miniViews.SelectView({
-                        list: _.map(ox.serverConfig.languages, function(key, val) { return { label: key, value: val }; }),
+                        list: _.map(ox.serverConfig.languages, function (key, val) { return { label: key, value: val }; }),
                         name: 'language',
                         model: this.baton.model,
                         id: guid,
@@ -138,7 +138,6 @@ define('io.ox/core/settings/pane',
             );
         }
     });
-
 
     (function () {
         // Timezones
@@ -188,7 +187,7 @@ define('io.ox/core/settings/pane',
                     }).text(gt('Time zone')),
                     $('<div>').addClass('col-sm-4').append(
                         new miniViews.SelectView({
-                            list: _.map(sorted, function(key, val) { return { label: key, value: val }; }),
+                            list: _.map(sorted, function (key, val) { return { label: key, value: val }; }),
                             name: 'timezone',
                             model: this.baton.model,
                             id: guid,
@@ -221,7 +220,7 @@ define('io.ox/core/settings/pane',
                         }).text(gt('Theme')),
                         $('<div>').addClass('col-sm-4').append(
                             new miniViews.SelectView({
-                                list: _.map(availableThemes, function(key, val) { return { label: key, value: val }; }),
+                                list: _.map(availableThemes, function (key, val) { return { label: key, value: val }; }),
                                 name: 'theme',
                                 model: this.baton.model,
                                 id: guid,

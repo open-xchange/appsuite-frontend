@@ -10,10 +10,10 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/core/api/mailfilter',
-    ['io.ox/core/http',
-     'io.ox/core/event'
-    ], function (http, Events) {
+define('io.ox/core/api/mailfilter', [
+    'io.ox/core/http',
+    'io.ox/core/event'
+], function (http, Events) {
 
     'use strict';
 
@@ -22,27 +22,27 @@ define('io.ox/core/api/mailfilter',
         /**
          * delete rule
          * @param  {string} ruleId
-         * @return {deferred}
+         * @return { deferred }
          */
         deleteRule: function (ruleId) {
 
             return http.PUT({
                 module: 'mailfilter',
-                params: {action: 'delete'},
-                data: {id: ruleId}
+                params: { action: 'delete' },
+                data: { id: ruleId }
             });
         },
 
         /**
          * create rule
          * @param  {object} data
-         * @return {deferred}
+         * @return { deferred }
          */
         create: function (data) {
 
             return http.PUT({
                 module: 'mailfilter',
-                params: {action: 'new'},
+                params: { action: 'new' },
                 data: data
             });
         },
@@ -50,7 +50,7 @@ define('io.ox/core/api/mailfilter',
         /**
          * get rules
          * @param  {string} flag (filters list)
-         * @return {deferred}
+         * @return { deferred }
          */
         getRules: function (flag) {
 
@@ -66,37 +66,37 @@ define('io.ox/core/api/mailfilter',
         /**
          * update rule
          * @param  {object} data
-         * @return {deferred}
+         * @return { deferred }
          */
         update: function (data) {
 
             return http.PUT({
                 module: 'mailfilter',
-                params: {action: 'update'},
+                params: { action: 'update' },
                 data: data
             });
         },
 
         /**
          * get config
-         * @return {deferred}
+         * @return { deferred }
          */
         getConfig: function () {
             return http.PUT({
                 module: 'mailfilter',
-                params: {action: 'config'}
+                params: { action: 'config' }
             });
         },
 
         /**
          * reorder rules
          * @param  {array} data
-         * @return {deferred}
+         * @return { deferred }
          */
         reorder: function (data) {
             return http.PUT({
                 module: 'mailfilter',
-                params: {action: 'reorder'},
+                params: { action: 'reorder' },
                 data: data
             });
         }
@@ -115,7 +115,7 @@ define('io.ox/core/api/mailfilter',
     /**
      * bind to global refresh; clears caches and trigger refresh.all
      * @fires  api#refresh.all
-     * @return {promise}
+     * @return { promise }
      */
     ox.on('refresh^', function () {
         api.refresh();

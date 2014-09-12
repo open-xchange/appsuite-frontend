@@ -11,23 +11,23 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/main',
-    ['io.ox/core/desktop',
-     'io.ox/core/session',
-     'io.ox/core/http',
-     'io.ox/core/api/apps',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/stage',
-     'io.ox/core/date',
-     'io.ox/core/notifications',
-     'io.ox/core/commons', // defines jQuery plugin
-     'io.ox/core/upsell',
-     'io.ox/core/capabilities',
-     'io.ox/core/ping',
-     'settings!io.ox/core',
-     'gettext!io.ox/core',
-     'io.ox/core/relogin'
-    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
+define('io.ox/core/main', [
+    'io.ox/core/desktop',
+    'io.ox/core/session',
+    'io.ox/core/http',
+    'io.ox/core/api/apps',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/stage',
+    'io.ox/core/date',
+    'io.ox/core/notifications',
+    'io.ox/core/commons', // defines jQuery plugin
+    'io.ox/core/upsell',
+    'io.ox/core/capabilities',
+    'io.ox/core/ping',
+    'settings!io.ox/core',
+    'gettext!io.ox/core',
+    'io.ox/core/relogin'
+], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
 
     'use strict';
 
@@ -770,17 +770,16 @@ define('io.ox/core/main',
                 if (capabilities.has('search') && _.device('small')) {
                     this.append(
                         addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
-                                require(['io.ox/search/main'], function (searchapp) {
-                                    searchapp.run({reset: true});
-                                });
-                            },  gt('Search'))
+                            require(['io.ox/search/main'], function (searchapp) {
+                                searchapp.run({ reset: true });
+                            });
+                        }, gt('Search'))
                         .attr('id', 'io-ox-search-topbar-icon')
                         .addClass('io-ox-search')
                     );
                 }
             }
         });
-
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'refresh',
@@ -790,7 +789,7 @@ define('io.ox/core/main',
                     addLauncher('right', $('<i class="fa fa-refresh launcher-icon">').attr('aria-hidden', 'true'), function () {
                         refresh();
                         return $.when();
-                    },  gt('Refresh'))
+                    }, gt('Refresh'))
                     .attr('id', 'io-ox-refresh-icon')
                 );
             }
@@ -838,16 +837,16 @@ define('io.ox/core/main',
                 var helpDir = 'help/l10n/' + ox.language + '/',
                     node = this,
                     startingPoints = {
-                    'io.ox/contacts': 'ox.appsuite.user.chap.contacts.html',
-                    'io.ox/calendar': 'ox.appsuite.user.chap.calendar.html',
-                    'io.ox/tasks': 'ox.appsuite.user.chap.tasks.html',
-                    'io.ox/mail': 'ox.appsuite.user.chap.email.html',
-                    'io.ox/files': 'ox.appsuite.user.chap.files.html',
-                    'io.ox/portal': 'ox.appsuite.user.sect.portal.customize.html'
-                };
+                        'io.ox/contacts': 'ox.appsuite.user.chap.contacts.html',
+                        'io.ox/calendar': 'ox.appsuite.user.chap.calendar.html',
+                        'io.ox/tasks': 'ox.appsuite.user.chap.tasks.html',
+                        'io.ox/mail': 'ox.appsuite.user.chap.email.html',
+                        'io.ox/files': 'ox.appsuite.user.chap.files.html',
+                        'io.ox/portal': 'ox.appsuite.user.sect.portal.customize.html'
+                    };
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                    $('<li role="presentation">', {'class': 'io-ox-specificHelp'}).append(
+                    $('<li role="presentation">',  { 'class': 'io-ox-specificHelp' }).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
@@ -1512,7 +1511,6 @@ define('io.ox/core/main',
         };
 
     }());
-
 
     return {
         logout: logout,

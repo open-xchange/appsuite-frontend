@@ -16,21 +16,21 @@
  * - linking email
  */
 
-define('plugins/halo/xing/register',
-    ['io.ox/core/extensions',
-     'plugins/portal/xing/actions',
-     'plugins/portal/xing/activities',
-     'io.ox/xing/api',
-     'io.ox/core/api/user',
-     'io.ox/contacts/api',
-     'io.ox/core/date',
-     'gettext!plugins/portal',
-     'less!plugins/portal/xing/xing'
-    ], function (ext, eventActions, activityParsers, api, userApi, contactApi, date, gt) {
+define('plugins/halo/xing/register', [
+    'io.ox/core/extensions',
+    'plugins/portal/xing/actions',
+    'plugins/portal/xing/activities',
+    'io.ox/xing/api',
+    'io.ox/core/api/user',
+    'io.ox/contacts/api',
+    'io.ox/core/date',
+    'gettext!plugins/portal',
+    'less!plugins/portal/xing/xing'
+], function (ext, eventActions, activityParsers, api, userApi, contactApi, date, gt) {
 
     'use strict';
 
-    var  shortestPath, sharedContacts, miniProfile, extendedProfile, postalAddress, addressView, isEmpty,
+    var shortestPath, sharedContacts, miniProfile, extendedProfile, postalAddress, addressView, isEmpty,
         XING_NAME = gt('XING'),
         EMPLOYMENT = {
             //#. what follows is a set of job/status descriptions used by XING
@@ -42,7 +42,8 @@ define('plugins/halo/xing/register',
             'PUBLIC_SERVANT': gt('Public servant'),
             'STUDENT': gt('Student'),
             'UNEMPLOYED': gt('Unemployed'),
-            'RETIRED': gt('Retired')};
+            'RETIRED': gt('Retired')
+        };
 
     isEmpty = function (obj) {
         return _(obj).isEmpty() || (_(_(obj).values()).compact().length === 0);
@@ -67,7 +68,6 @@ define('plugins/halo/xing/register',
         //#. %5$s is the country
         return gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', ad.street || '', ad.zip_code || '', ad.city || '', ad.province || '', ad.country || '');
     };
-
 
     shortestPath = function (data) {
         var displayName = data.profile.display_name,
@@ -116,7 +116,7 @@ define('plugins/halo/xing/register',
         img = _.device('small') ? contact.photo_urls.thumb : contact.photo_urls.maxi_thumb;
 
         if (contact.permalink) {
-            name = $('<a>').attr({href: contact.permalink, target: '_blank'})
+            name = $('<a>').attr({ href: contact.permalink, target: '_blank' })
                 .addClass('permalink')
                 .text(contact.display_name);
         } else {
@@ -124,8 +124,8 @@ define('plugins/halo/xing/register',
         }
 
         node = $('<div>').addClass('mini-profile').append(
-            //$('<img>').attr({src: img}).addClass('pic'),
-            $('<div>').css({'background-image': 'url(' + img + ')'}).addClass('pic'),
+            //$('<img>').attr({ src: img }).addClass('pic'),
+            $('<div>').css({ 'background-image': 'url(' + img + ')' }).addClass('pic'),
             name
         );
 

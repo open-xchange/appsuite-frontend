@@ -12,19 +12,19 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/view-detail',
-    ['io.ox/core/extensions',
-     'io.ox/contacts/util',
-     'io.ox/contacts/api',
-     'io.ox/contacts/actions',
-     'io.ox/contacts/model',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/date',
-     'gettext!io.ox/contacts',
-     'settings!io.ox/contacts',
-     'less!io.ox/contacts/style'
-    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, gt, settings) {
+define('io.ox/contacts/view-detail', [
+    'io.ox/core/extensions',
+    'io.ox/contacts/util',
+    'io.ox/contacts/api',
+    'io.ox/contacts/actions',
+    'io.ox/contacts/model',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/date',
+    'gettext!io.ox/contacts',
+    'settings!io.ox/contacts',
+    'less!io.ox/contacts/style'
+], function (ext, util, api, actions, model, getBreadcrumb, links, date, gt, settings) {
 
     'use strict';
 
@@ -768,7 +768,7 @@ define('io.ox/contacts/view-detail',
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api)
-                    .on('redraw', { view: this, data: baton.data , baton: baton}, redraw)
+                    .on('redraw', { view: this, data: baton.data, baton: baton }, redraw)
                     .addClass('contact-detail view')
                     .attr({
                         'role': 'complementary',

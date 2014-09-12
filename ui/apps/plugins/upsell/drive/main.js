@@ -12,11 +12,11 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/upsell/drive/main',
-    ['io.ox/core/extPatterns/stage',
-     'io.ox/core/extensions',
-     'settings!plugins/upsell'
-    ], function (Stage, ext, settings) {
+define('plugins/upsell/drive/main', [
+    'io.ox/core/extPatterns/stage',
+    'io.ox/core/extensions',
+    'settings!plugins/upsell'
+], function (Stage, ext, settings) {
 
     'use strict';
 

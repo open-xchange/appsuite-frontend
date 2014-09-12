@@ -46,10 +46,10 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
 
         beforeEach(function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=autoforward/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlag));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultWithFlag));
             });
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify([]));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify([]));
             });
             $('body', document).append(this.node = $('<div id="autoforwardtestNode">'));
 

@@ -82,7 +82,7 @@ module.exports = function (grunt) {
                     url: 'http://www.tinymce.com/i18n/download.php',
                     method: 'POST',
                     form: {
-                        'download': languages,
+                        'download': languages
                     }
                 },
                 dest: 'tmp/tinymce_language_pack.zip'

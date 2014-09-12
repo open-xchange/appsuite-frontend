@@ -21,10 +21,10 @@ define([
             var node;
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/attachment\?action=all/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testAttachments) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testAttachments) + '}');
                 });
                 this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testUser) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testUser) + '}');
                 });
             });
             //clean up the dom
@@ -33,7 +33,7 @@ define([
             });
 
             it('should draw the whole content', function () {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 expect(node.find('.title')).to.have.length(1);
                 expect(node.find('.priority')).to.have.length(1);
@@ -60,7 +60,7 @@ define([
             });
 
             it('should draw every attachment', function (done) {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('.attachments-container').children().length === 4;
@@ -75,19 +75,19 @@ define([
                 node;
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testData) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testData) + '}');
                 });
                 this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
                     apiCallUpdate = true;
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {} }');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": {} }');
                 });
                 this.server.respondWith('PUT', /api\/tasks\?action=confirm/, function (xhr) {
                     apiCallUpdate = true;
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {} }');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": {} }');
                 });
                 this.server.respondWith('PUT', /api\/tasks\?action=delete/, function (xhr) {
                     apiCallUpdate = true;
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {} }');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": {} }');
                 });
             });
             //reset
@@ -96,7 +96,7 @@ define([
                 apiCallUpdate = false;
             });
             it('mark Task undone should call api', function (done) {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 node.find('[data-action="unDone"]').click();
                 waitsFor(function () {
@@ -105,7 +105,7 @@ define([
             });
 
             xit('edit should launch edit app', function () {//messes up task edit tests
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 node.find('[data-action="edit"]').click();
 
@@ -117,7 +117,7 @@ define([
                 //just leave it open until this is solved
                 /*this.after(function () {//close app
                     var editnode = $.find('.task-edit-cancel');
-                    if(editnode.length === 1) {
+                    if (editnode.length === 1) {
                         $(editnode[0]).click();
                     }
                 });*/
@@ -130,21 +130,22 @@ define([
             });
 
             it('change due date should have a dropdown with correct structure', function () {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 var inlineLink = node.find('[data-action="change-due-date"]').parent();
                 expect(inlineLink.find('ul li a').length).to.equal(7);//one menuitem for every day
             });
             it('change due date should call Api', function (done) {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 node.find('[data-action="change-due-date"]').parent().find('ul li a').first().click();//click tomorrow in dropdownmenu
                 waitsFor(function () {
                     return apiCallUpdate;
                 }).then(done);
             });
+
             it('confirm should open a popup', function (done) {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 node.find('[data-action="confirm"]').click();
                 waitsFor(function () {
@@ -155,7 +156,8 @@ define([
                 });
             });
             it('confirm should call Api', function (done) {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
+
                 node = detailView.draw(baton);
                 node.find('[data-action="confirm"]').click();
 
@@ -176,12 +178,13 @@ define([
                         return 'api/folders?action=get'.search(response.url) === 0;
                     });
                     this.server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
-                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testFolder) + '}');
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testFolder) + '}');
                     });
                 });
 
                 it('delete should open a popup', function (done) {
-                    var baton = ext.Baton({data: testData.testData});
+                    var baton = ext.Baton({ data: testData.testData });
+
                     node = detailView.draw(baton);
                     waitsFor(function () {
                         return node.find('[data-action="delete"]').length === 1;
@@ -197,7 +200,7 @@ define([
                 });
 
                 it('delete should call api', function (done) {
-                    var baton = ext.Baton({data: testData.testData});
+                    var baton = ext.Baton({ data: testData.testData });
                     node = detailView.draw(baton);
                     waitsFor(function () {
                         return node.find('[data-action="delete"]').length === 1;
@@ -219,7 +222,7 @@ define([
             });
             it('move should open a popup', function (done) {
                 //there is a missing api call for the foldertree. not important for this test
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('[data-action="move"]').length === 1;

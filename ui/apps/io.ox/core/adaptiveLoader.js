@@ -11,11 +11,11 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/adaptiveLoader',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'settings!io.ox/core'
-    ], function (ext, caps, settings) {
+define('io.ox/core/adaptiveLoader', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'settings!io.ox/core'
+], function (ext, caps, settings) {
 
     'use strict';
 

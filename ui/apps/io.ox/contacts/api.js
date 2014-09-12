@@ -11,17 +11,17 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/api',
-    ['io.ox/core/extensions',
-     'io.ox/core/http',
-     'io.ox/core/api/factory',
-     'io.ox/core/notifications',
-     'io.ox/core/cache',
-     'io.ox/contacts/util',
-     'l10n/ja_JP/io.ox/collation',
-     'settings!io.ox/contacts',
-     'io.ox/core/date'
-    ], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date) {
+define('io.ox/contacts/api', [
+    'io.ox/core/extensions',
+    'io.ox/core/http',
+    'io.ox/core/api/factory',
+    'io.ox/core/notifications',
+    'io.ox/core/cache',
+    'io.ox/contacts/util',
+    'l10n/ja_JP/io.ox/collation',
+    'settings!io.ox/contacts',
+    'io.ox/core/date'
+], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date) {
 
     'use strict';
 
@@ -187,7 +187,7 @@ define('io.ox/contacts/api',
                     _(opt).each(function (value, key) {
                         if (_(queryFields).chain().keys().contains(key).value() && value === 'on') {
                             _(queryFields[key]).each(function (name) {
-                                filter.push(['=', {'field': name}, query]);
+                                filter.push(['=',  { 'field': name }, query]);
                             });
                             defaultBehaviour = false;
                         }
@@ -195,7 +195,7 @@ define('io.ox/contacts/api',
 
                     if (defaultBehaviour) {
                         _(queryFields.names).each(function (name) {
-                            filter.push(['=', {'field': name}, query]);
+                            filter.push(['=',  { 'field': name }, query]);
                         });
                     }
                     data = { 'filter': filter };
@@ -262,7 +262,7 @@ define('io.ox/contacts/api',
      * fix backend WAT
      * @param  {object} data
      * @param  {string} id (data object property)
-     * @return {object} data (cleaned)
+     * @return { object} data (cleaned)
      */
     function wat(data, id) {
         if (data[id] === '' || data[id] === undefined) {
@@ -276,7 +276,7 @@ define('io.ox/contacts/api',
      * @param  {object} file (image) [optional]
      * @fires  api#create (object)
      * @fires  api#refresh.all
-     * @return {deferred} returns contact object
+     * @return { deferred} returns contact object
      */
     api.create = function (data, file) {
 
@@ -348,7 +348,7 @@ define('io.ox/contacts/api',
      * @fires  api#update: + cid
      * @fires  api#update (data)
      * @fires  api#refresh.all
-     * @return {deferred} returns
+     * @return { deferred} returns
      */
     api.update =  function (o) {
 
@@ -414,8 +414,8 @@ define('io.ox/contacts/api',
      * @param  {object} changes (target values)
      * @param  {object} file
      * @fires  api#refresh.list
-     * @fires  api#update:image ({id,folder})
-     * @return {deferred} object with timestamp
+     * @fires  api#update:image ({id,folder })
+     * @return { deferred} object with timestamp
      */
     api.editNewImage = function (o, changes, file) {
 
@@ -454,7 +454,7 @@ define('io.ox/contacts/api',
                 action: 'update',
                 form: file,
                 data: changes,
-                params: {id: o.id, folder: o.folder_id, timestamp: _.then() }
+                params: { id: o.id, folder: o.folder_id, timestamp: _.then() }
             })
             .then(filter);
         }
@@ -466,7 +466,7 @@ define('io.ox/contacts/api',
      * @fires  api#refresh.all
      * @fires  api#delete + cid
      * @fires  api#delete (data)
-     * @return {promise}
+     * @return { promise }
      */
     api.remove =  function (list) {
         api.trigger('beforedelete', list);
@@ -474,30 +474,30 @@ define('io.ox/contacts/api',
         list = _.isArray(list) ? list : [list];
         // remove
         return http.PUT({
-                module: 'contacts',
-                params: { action: 'delete', timestamp: _.then(), timezone: 'UTC' },
-                appendColumns: false,
-                data: _(list).map(function (data) {
-                    return { folder: data.folder_id, id: data.id };
-                })
+            module: 'contacts',
+            params: { action: 'delete', timestamp: _.then(), timezone: 'UTC' },
+            appendColumns: false,
+            data: _(list).map(function (data) {
+                return { folder: data.folder_id, id: data.id };
             })
-            .then(function () {
-                return $.when(
-                    api.caches.all.clear(),
-                    api.caches.list.remove(list),
-                    fetchCache.clear()
-                );
-            })
-            .fail(function (response) {
-                notifications.yell('error', response.error);
-            })
-            .done(function () {
-                _(list).map(function (data) {
-                    api.trigger('delete:' + _.ecid(data), data);
-                    api.trigger('delete', data);
-                });
-                api.trigger('refresh.all');
+        })
+        .then(function () {
+            return $.when(
+                api.caches.all.clear(),
+                api.caches.list.remove(list),
+                fetchCache.clear()
+            );
+        })
+        .fail(function (response) {
+            notifications.yell('error', response.error);
+        })
+        .done(function () {
+            _(list).map(function (data) {
+                api.trigger('delete:' + _.ecid(data), data);
+                api.trigger('delete', data);
             });
+            api.trigger('refresh.all');
+        });
     };
 
     api.on('refresh^', function () {
@@ -509,7 +509,7 @@ define('io.ox/contacts/api',
 
     /**
      * clear fetching cache
-     * @return {deferred}
+     * @return { deferred }
      */
     api.clearFetchCache = function () {
         return fetchCache.clear();
@@ -518,7 +518,7 @@ define('io.ox/contacts/api',
     /**
     * get contact redced/filtered contact data; manages caching
     * @param  {string} address (emailaddress)
-    * @return {deferred} returns exactyl one contact object
+    * @return { deferred} returns exactyl one contact object
     */
     api.getByEmailaddress = function (address) {
 
@@ -685,8 +685,11 @@ define('io.ox/contacts/api',
                         node = scrollpane = null;
                     },
                     load: function (elements_left, settings, image) {
-                        if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
-                        else cachesURLs[url] = url;
+                        if (image.width === 1) {
+                            node.css('background-image', 'url(' + fallback + ')');
+                        } else {
+                            cachesURLs[url] = url;
+                        }
                         node = scrollpane = null;
                     }
                 });
@@ -713,7 +716,7 @@ define('io.ox/contacts/api',
     /**
     * get div node with callbacks managing fetching/updating
     * @param  {object} obj ('display_name' and 'email')
-    * @return {object} div node with callbacks
+    * @return { object} div node with callbacks
     */
     api.getDisplayName = function (data, options) {
 
@@ -771,14 +774,14 @@ define('io.ox/contacts/api',
         if (data && data.full_name) {
             cont(data.full_name);
             clear();
-        }
+
         // looks like a full object?
-        else if (data && (data.last_name || data.first_name)) {
+        } else if (data && (data.last_name || data.first_name)) {
             cont(data);
             clear();
-        }
+
         // load data
-        else {
+        } else {
             api.getByEmailaddress(data.email).done(cont).fail(clear);
         }
 
@@ -838,7 +841,7 @@ define('io.ox/contacts/api',
      * move contact to a folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @return {deferred}
+     * @return { deferred }
      */
     api.move = function (list, targetFolderId) {
         return copymove(list, 'update', targetFolderId);
@@ -848,7 +851,7 @@ define('io.ox/contacts/api',
      * copy contact to a folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @return {deferred}
+     * @return { deferred }
      */
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
@@ -857,18 +860,18 @@ define('io.ox/contacts/api',
     /**
      * get birthday ordered list of contacts
      * @param  {object} options
-     * @return {deferred}
+     * @return { deferred }
      */
     api.birthdays = function (options) {
 
         var now = _.now(),
             params = _.extend({
-            action: 'birthdays',
-            start: now,
-            end: now + 604800000, // now + WEEK
-            columns: '1,20,500,501,502,503,504,505,511',
-            timezone: 'UTC'
-        }, options || {});
+                action: 'birthdays',
+                start: now,
+                end: now + 604800000, // now + WEEK
+                columns: '1,20,500,501,502,503,504,505,511',
+                timezone: 'UTC'
+            }, options || {});
 
         return http.GET({
             module: 'contacts',
@@ -879,7 +882,7 @@ define('io.ox/contacts/api',
     /**
      * is ressource (duck check)
      * @param  {object} obj (contact)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.looksLikeResource = function (obj) {
         return 'mailaddress' in obj && 'description' in obj;
@@ -888,7 +891,7 @@ define('io.ox/contacts/api',
     /**
      * is ressource (duck check)
      * @param  {object} obj (contact)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.looksLikeGroup = function (obj) {
         return 'members' in obj;
@@ -897,7 +900,7 @@ define('io.ox/contacts/api',
     /**
      * is distribution list
      * @param  {object} obj (contact)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.looksLikeDistributionList = function (obj) {
         return !!obj.mark_as_distributionlist;
@@ -906,7 +909,7 @@ define('io.ox/contacts/api',
     /**
      * ask if this contact has attachments uploading at the moment (busy animation in detail View)
      * @param  {string} key (task id)
-     * @return {boolean}
+     * @return { boolean }
      */
     api.uploadInProgress = function (key) {
         return uploadInProgress[key] || false;//return true boolean
@@ -915,7 +918,7 @@ define('io.ox/contacts/api',
     /**
      * add contact to the list
      * @param {string} key (task id)
-     * @return {undefined}
+     * @return { undefined }
      */
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
@@ -925,7 +928,7 @@ define('io.ox/contacts/api',
      * remove contact from the list
      * @param  {string} key (task id)
      * @fires  api#update: + key
-     * @return {undefined}
+     * @return { undefined }
      */
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];

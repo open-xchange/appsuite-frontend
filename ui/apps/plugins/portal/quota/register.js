@@ -11,14 +11,14 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('plugins/portal/quota/register',
-    ['io.ox/core/extensions',
-     'gettext!plugins/portal',
-     'io.ox/core/api/quota',
-     'io.ox/core/strings',
-     'io.ox/core/capabilities',
-     'less!plugins/portal/quota/style'
-    ], function (ext, gt, api, strings, capabilities) {
+define('plugins/portal/quota/register', [
+    'io.ox/core/extensions',
+    'gettext!plugins/portal',
+    'io.ox/core/api/quota',
+    'io.ox/core/strings',
+    'io.ox/core/capabilities',
+    'less!plugins/portal/quota/style'
+], function (ext, gt, api, strings, capabilities) {
 
     'use strict';
 

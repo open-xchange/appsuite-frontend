@@ -11,11 +11,11 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/settings/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/core/pubsub'
-    ], function (ext, capabilities, gt) {
+define('io.ox/core/pubsub/settings/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/core/pubsub'
+], function (ext, capabilities, gt) {
 
     'use strict';
 
@@ -27,16 +27,17 @@ define('io.ox/core/pubsub/settings/register',
         ref: 'io.ox/core/pubsub'
     });
 
-    if (!capabilities.has('publication') && !capabilities.has('subscription'))
+    if (!capabilities.has('publication') && !capabilities.has('subscription')) {
         point.disable(id);
-    else if (!capabilities.has('publication'))
+    } else if (!capabilities.has('publication')) {
         point.replace({
             id: id,
             title: gt('Subscriptions')
         });
-    else if (!capabilities.has('subscription'))
+    } else if (!capabilities.has('subscription')) {
         point.replace({
             id: id,
             title: gt('Publications')
         });
+    }
 });

@@ -11,12 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/picker',
-    ['io.ox/core/folder/tree',
-     'io.ox/core/folder/api',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core'
-     ], function (TreeView, api, dialogs, gt) {
+define('io.ox/core/folder/picker', [
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/api',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/core'
+], function (TreeView, api, dialogs, gt) {
 
     'use strict';
 
@@ -85,8 +85,8 @@ define('io.ox/core/folder/picker',
                     _.isString(o.title) ? $.txt(o.title) : o.title
                 )
             )
-            .addPrimaryButton('ok', o.button, 'ok', { tabindex: '1' })
-            .addButton('cancel', gt('Cancel'), 'cancel', { tabindex: '1' });
+            .addPrimaryButton('ok', o.button, 'ok', { tabIndex: 1 })
+            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
 
         dialog.getBody().css({ height: o.height });
 

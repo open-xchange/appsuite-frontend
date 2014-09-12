@@ -20,11 +20,11 @@ define(['plugins/portal/tasks/register',
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearch) + '}');
                 });
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": {"id": 13371, "folder_id": 555123456, "title": "Pommes kaufen"}}');
                 });
                 this.node = $('<div>');
@@ -55,7 +55,7 @@ define(['plugins/portal/tasks/register',
         describe('should not draw', function () {
             beforeEach(function (done) {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearchEdge) + '}');
                 });
                 this.node = $('<div>');
@@ -87,7 +87,7 @@ define(['plugins/portal/tasks/register',
         describe('should', function () {
             beforeEach(function (done) {
                 this.server.respondWith('PUT', /api\/tasks\?action=search/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                             '{ "timestamp":1368791630910,"data": []}');
                 });
                 this.node = $('<div>');

@@ -10,29 +10,33 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define('io.ox/tasks/util',
-    ['io.ox/core/date',
-     'settings!io.ox/tasks',
-     'gettext!io.ox/tasks'
-    ], function (date, settings, gt) {
+define('io.ox/tasks/util', [
+    'io.ox/core/date',
+    'settings!io.ox/tasks',
+    'gettext!io.ox/tasks'
+], function (date, settings, gt) {
 
     'use strict';
 
-    var lookupDaytimeStrings = [gt('this morning'),
-                                gt('by noon'),
-                                gt('this afternoon'),
-                                gt('tonight'),
-                                gt('late in the evening')],
+    var lookupDaytimeStrings = [
+            gt('this morning'),
+            gt('by noon'),
+            gt('this afternoon'),
+            gt('tonight'),
+            gt('late in the evening')
+        ],
 
-        lookupWeekdayStrings = [gt('next Sunday'),
-                                gt('next Monday'),
-                                gt('next Tuesday'),
-                                gt('next Wednesday'),
-                                gt('next Thursday'),
-                                gt('next Friday'),
-                                gt('next Saturday')];
+        lookupWeekdayStrings = [
+            gt('next Sunday'),
+            gt('next Monday'),
+            gt('next Tuesday'),
+            gt('next Wednesday'),
+            gt('next Thursday'),
+            gt('next Friday'),
+            gt('next Saturday')
+        ],
 
-    var util = {
+        util = {
             computePopupTime: function (value, smartEndDate) {
                 smartEndDate = smartEndDate || false;
                 var alarmDate = new date.Local(),
@@ -205,8 +209,8 @@ define('io.ox/tasks/util',
                 options = options || {};
                 task = _.copy(task, true);
                 if (!options.noOverdue && (task.status !== 3 && task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {//no state for task over time, so manual check is needed
-                        task.status = gt('Overdue');
-                        task.badge = 'badge badge-important';
+                    task.status = gt('Overdue');
+                    task.badge = 'badge badge-important';
                 } else if (task.status) {
                     switch (task.status) {
                         case 1:
@@ -229,7 +233,7 @@ define('io.ox/tasks/util',
                             task.status = gt('Deferred');
                             task.badge = 'badge';
                             break;
-                        }
+                    }
                 } else {
                     task.status = '';
                     task.badge = '';
@@ -276,24 +280,23 @@ define('io.ox/tasks/util',
                     dateArray = [],
                     emptyDateArray = [],
                     alphabetSort = function (a, b) {//sort by alphabet
-                            if (a.title.toLowerCase() > b.title.toLowerCase()) {
-                                return 1;
-                            } else {
-                                return -1;
-                            }
-                        },
+                        if (a.title.toLowerCase() > b.title.toLowerCase()) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    },
                     dateSort = function (a, b) {//sort by endDate. If equal, sort by alphabet
-                            /* jshint eqeqeq: false */
-                            if (a.end_date > b.end_date) {
-                                return 1;
-                            } else if (a.end_date == b.end_date) {// use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
-                                return alphabetSort(a, b);
-                            }
-                            else {
-                                return -1;
-                            }
-                            /* jshint eqeqeq: true */
-                        };
+                        /* jshint eqeqeq: false */
+                        if (a.end_date > b.end_date) {
+                            return 1;
+                        } else if (a.end_date == b.end_date) {// use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
+                            return alphabetSort(a, b);
+                        } else {
+                            return -1;
+                        }
+                        /* jshint eqeqeq: true */
+                    };
 
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {

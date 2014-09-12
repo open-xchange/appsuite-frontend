@@ -12,12 +12,12 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/attachments/view',
-    ['io.ox/core/attachments/backbone',
-     'io.ox/core/strings',
-     'gettext!io.ox/core',
-     'less!io.ox/core/attachments/style'
-    ], function (backbone, strings, gt) {
+define('io.ox/core/attachments/view', [
+    'io.ox/core/attachments/backbone',
+    'io.ox/core/strings',
+    'gettext!io.ox/core',
+    'less!io.ox/core/attachments/style'
+], function (backbone, strings, gt) {
 
     'use strict';
 

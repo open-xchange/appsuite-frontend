@@ -11,11 +11,12 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/facets/extensions',
-    ['io.ox/core/extensions',
-     'settings!io.ox/core',
-     'io.ox/search/util',
-     'gettext!io.ox/core'], function (ext, settings, util, gt) {
+define('io.ox/search/facets/extensions', [
+    'io.ox/core/extensions',
+    'settings!io.ox/core',
+    'io.ox/search/util',
+    'gettext!io.ox/core'
+], function (ext, settings, util, gt) {
 
     //var POINT = 'io.ox/search/facets';
 
@@ -89,15 +90,16 @@ define('io.ox/search/facets/extensions',
                         );
 
                         var special = ext.point('io.ox/search/facets/item/' + value.facet);
-                        if (special.list().length > 0)
+                        if (special.list().length > 0) {
                             // additional actions per id/type
                             special.invoke('draw', node, baton, value, facet);
-                        else
+                        } else {
                             // general stuff
                             ext.point('io.ox/search/facets/item').invoke('draw', node, baton, value, facet);
-
+                        }
 
                         return node;
+
                     }).reverse()
                 );
             },
@@ -112,7 +114,6 @@ define('io.ox/search/facets/extensions',
                     self = this,
                     nodes = [];
 
-
                 if (!baton.model.get('showadv'))
                     self.hide();
 
@@ -123,7 +124,7 @@ define('io.ox/search/facets/extensions',
                     // only advanced
                     if (!_.contains(facet.flags, 'advanced')) return;
 
-                   _.each(list, function (elem) {
+                    _.each(list, function (elem) {
                         if (facet.id === elem.facet) {
                             // get value from pool
                             value = _.find(pool[facet.id].values, function (value) {
@@ -133,7 +134,7 @@ define('io.ox/search/facets/extensions',
                     });
 
                     // use value  when currently active or placeholder
-                    value = value || {facet: facet.id, placeholder: true};
+                    value = value || { facet: facet.id, placeholder: true };
 
                     // create facet node
                     node = $('<li role="presentation" class="facet btn-group">').append(
@@ -144,13 +145,13 @@ define('io.ox/search/facets/extensions',
                     );
 
                     var special = ext.point('io.ox/search/facets/item/' + value.facet);
-                    if (special.list().length > 0)
+                    if (special.list().length > 0) {
                         // additional actions per id/type
                         special.invoke('draw', node, baton, value, facet);
-                    else
+                    } else {
                         // general stuff
                         ext.point('io.ox/search/facets/item').invoke('draw', node, baton, value, facet);
-
+                    }
 
                     return node;
                 }).reverse();
@@ -180,7 +181,6 @@ define('io.ox/search/facets/extensions',
                 this.append(nodes);
             },
 
-
             optionsHandler: function (baton) {
 
                 $('body').delegate('.facet-dropdown .option', 'click tap', function (e) {
@@ -206,16 +206,16 @@ define('io.ox/search/facets/extensions',
                         var facet = baton.model.get('pool').folder;
                         folderDialog(facet, baton);
                     } else if (link.attr('data-point')) {
-                        ext.point('io.ox/search/facets/custom/' + link.attr('data-point')).invoke('draw', this, baton, facet, value, {option: link.attr('data-point') });
+                        ext.point('io.ox/search/facets/custom/' + link.attr('data-point')).invoke('draw', this, baton, facet, value, { option: link.attr('data-point') });
                     } else {
                         if (facet === 'folder') {
                             // overwrite custom
-                            baton.model.update(facet, value, {name: link.attr('title'), custom: option });
+                            baton.model.update(facet, value, { name: link.attr('title'), custom: option });
                         } else if (!value) {
                             baton.model.add(facet, option, option);
                         } else {
                             // use existing option
-                            baton.model.update(facet, value, {option: option });
+                            baton.model.update(facet, value, { option: option });
                         }
                         baton.model.trigger('query', baton.model.getApp(), 'select option');
                     }
@@ -266,8 +266,7 @@ define('io.ox/search/facets/extensions',
                 if ((isMandatory && value.facet === 'folder') || _.contains(facet.flags, 'advanced') || value.placeholder) return;
 
                 this.prepend(
-                    node = $('<span class="remove">')
-                     .attr({
+                    node = $('<span class="remove">').attr({
                         'tabindex': '1',
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
@@ -308,11 +307,10 @@ define('io.ox/search/facets/extensions',
                     );
 
                     // create menu
-                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
-                            .attr({
-                                'data-facet': facet.id,
-                                'data-value': value.id
-                            });
+                    menu = $('<ul class="dropdown dropdown-menu facet-dropdown">').attr({
+                        'data-facet': facet.id,
+                        'data-value': value.id
+                    });
 
                     // add generic 'all'
                     if (_.contains(facet.flags, 'advanced')) {
@@ -321,7 +319,7 @@ define('io.ox/search/facets/extensions',
                                  $('<a tabindex="-1" href="#" role="menuitemcheckbox">')
                                     .append(
                                         $('<i class="fa fa-fw">')
-                                            .addClass(current === '' ? 'fa-check': 'fa-none'),
+                                            .addClass(current === '' ? 'fa-check' : 'fa-none'),
                                         $('<span>').html(gt('All'))
                                     )
                                     //.addClass('option')
@@ -341,18 +339,17 @@ define('io.ox/search/facets/extensions',
                     _.each(options, function (item) {
                         menu.append(
                             option = $('<li role="presentation">').append(
-                                         $('<a role="menuitemcheckbox" tabindex="-1" href="#">')
-                                            .append(
-                                                $('<i class="fa fa-fw fa-none">'),
-                                                $('<span>').html(item.name || item.item.name)
-                                            )
-                                            .addClass('option')
-                                            .attr({
-                                                'data-option': item.id,
-                                                // used to handle custom facets via extension points
-                                                'data-point': item.point
-                                            })
-                                    )
+                                $('<a role="menuitemcheckbox" tabindex="-1" href="#">').append(
+                                    $('<i class="fa fa-fw fa-none">'),
+                                    $('<span>').html(item.name || item.item.name)
+                                )
+                                .addClass('option')
+                                .attr({
+                                    'data-option': item.id,
+                                    // used to handle custom facets via extension points
+                                    'data-point': item.point
+                                })
+                            )
                         );
                         if (current === item.id)
                             option.find('.fa').removeClass('fa-none').addClass('fa-check');
@@ -409,7 +406,7 @@ define('io.ox/search/facets/extensions',
                     });
 
                     return {
-                        id: '['+ rangedates[0].valueOf() + ' TO ' + rangedates[1].valueOf() + ']',
+                        id: '[' + rangedates[0].valueOf() + ' TO ' + rangedates[1].valueOf() + ']',
                         name: range.join(' - '),
                         from: range[0].replace('*', ''),
                         to: range[1].replace('*', '')
@@ -432,7 +429,7 @@ define('io.ox/search/facets/extensions',
                     if (!isUpdate) {
                         baton.model.add(facet.id, 'daterange', data.id);
                     } else {
-                        baton.model.update(facet.id, VALUE, {option: data.id, value: VALUE});
+                        baton.model.update(facet.id, VALUE, { option: data.id, value: VALUE });
                     }
                     baton.model.trigger('query', baton.model.getApp());
                 }
@@ -530,8 +527,8 @@ define('io.ox/search/facets/extensions',
                 ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
 
                 button.attr({
-                        'data-toggle': 'dropdown'
-                    });
+                    'data-toggle': 'dropdown'
+                });
 
                 button.prepend(
                     $('<div class="caret-container">').append(
@@ -580,7 +577,6 @@ define('io.ox/search/facets/extensions',
                             account.list.sort(function (a, b) {
                                 return SORT[a.type] - SORT[b.type];
                             });
-
 
                             // account name as dropdown header
                             if (Object.keys(accounts).length > 1) {
@@ -635,7 +631,7 @@ define('io.ox/search/facets/extensions',
                             e.preventDefault();
                             e.stopPropagation();
                             (facet.values.custom || facet.values[0]).custom = 'custom';
-                            baton.model.update(facet.id, 'custom', {custom: 'custom'});
+                            baton.model.update(facet.id, 'custom', { custom: 'custom' });
                         }
 
                         if (value.custom && value.custom !== 'custom')

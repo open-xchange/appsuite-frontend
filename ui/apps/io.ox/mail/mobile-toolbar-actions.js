@@ -11,12 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/mobile-toolbar-actions',
-   ['io.ox/core/extensions',
+define('io.ox/mail/mobile-toolbar-actions', [
+    'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',
-    'gettext!io.ox/mail'],
-    function (ext, links, api, gt) {
+    'gettext!io.ox/mail'
+], function (ext, links, api, gt) {
 
     'use strict';
 
@@ -185,7 +185,7 @@ define('io.ox/mail/mobile-toolbar-actions',
         list = list.length === 1 ? list[0] : list;
 
         // draw toolbar
-        var baton = ext.Baton({data: list, isThread: isThread, app: this });
+        var baton = ext.Baton({ data: list, isThread: isThread, app: this });
 
         // handle updated baton to pageController
         var current = this.pages.getCurrentPage();
@@ -242,7 +242,7 @@ define('io.ox/mail/mobile-toolbar-actions',
             });
 
             app.threadView.$el.on('showmail', function () {
-                var baton = ext.Baton({data: app.threadView.mail, isThread: false, app: app });
+                var baton = ext.Baton({ data: app.threadView.mail, isThread: false, app: app });
                 // handle updated baton to pageController
                 app.pages.getCurrentPage().toolbar.setBaton(baton);
             });

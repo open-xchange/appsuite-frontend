@@ -10,12 +10,12 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/calendar/edit/recurrence-view',
-    ['io.ox/core/date',
-     'io.ox/core/tk/keys',
-     'gettext!io.ox/calendar/edit/main',
-     'less!io.ox/calendar/edit/recurrence-view-style'
-    ], function (dateAPI, KeyListener, gt) {
+define('io.ox/calendar/edit/recurrence-view', [
+    'io.ox/core/date',
+    'io.ox/core/tk/keys',
+    'gettext!io.ox/calendar/edit/main',
+    'less!io.ox/calendar/edit/recurrence-view-style'
+], function (dateAPI, KeyListener, gt) {
 
     'use strict';
 
@@ -71,7 +71,7 @@ define('io.ox/calendar/edit/recurrence-view',
             });
             return result;
         },
-        // Usage: DAYS.unpack(bitmask) -> {'MONDAY': 1, 'WEDNESDAY': 1, 'FRIDAY': 1}
+        // Usage: DAYS.unpack(bitmask) -> {'MONDAY': 1, 'WEDNESDAY': 1, 'FRIDAY': 1 }
         unpack: function (bitmask) {
             var days = {};
             _(DAYS.values).each(function (day) {
@@ -111,10 +111,10 @@ define('io.ox/calendar/edit/recurrence-view',
                 e.preventDefault();
                 var type = (Modernizr.inputtypes.number && _.device('touch')) ? 'number' : 'text',
                     $numberInput = $('<input type="' + type + '" size="4" tabindex="1">').css({
-                    width: (Modernizr.inputtypes.number && _.device('touch')) ? '2em' : '1em',
-                    marginBottom: 0,
-                    padding: 0
-                }).val(self[attribute]);
+                        width: (Modernizr.inputtypes.number && _.device('touch')) ? '2em' : '1em',
+                        marginBottom: 0,
+                        padding: 0
+                    }).val(self[attribute]);
                 var keys = new KeyListener($numberInput);
 
                 var $content = $('<span>' + originalContent + '</span>');
@@ -135,7 +135,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     }
                     try {
                         $content.remove();
-                    } catch (e) { }
+                    } catch (e) {}
                     $anchor.show();
                     self[attribute] = value;
                     self.trigger('change', self);
@@ -158,7 +158,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     keys.destroy();
                     try {
                         $content.remove();
-                    } catch (e) { }
+                    } catch (e) {}
                     $anchor.show();
                 });
             });
@@ -199,17 +199,16 @@ define('io.ox/calendar/edit/recurrence-view',
                     $('<li>').attr({
                         role: 'presentation'
                     }).append($('<a>').attr({
-                            href: '#',
-                            tabindex: $anchor.attr('tabindex'),
-                            role: 'menuitem'
-                        }).text(label).on('click', function (e) {
-                            e.preventDefault();
-                            self[attribute] = value;
-                            self.trigger('change', self);
-                            self.trigger('change:' + attribute, self);
-                            drawState();
-                        })
-                    )
+                        href: '#',
+                        tabindex: $anchor.attr('tabindex'),
+                        role: 'menuitem'
+                    }).text(label).on('click', function (e) {
+                        e.preventDefault();
+                        self[attribute] = value;
+                        self.trigger('change', self);
+                        self.trigger('change:' + attribute, self);
+                        drawState();
+                    }))
                 );
             });
             $container.append($menu);
@@ -389,7 +388,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             $dateInput.datepicker('remove');
                         }
                         $dateInput.remove();
-                    } catch (e) { }
+                    } catch (e) {}
                     $anchor.show().focus();
                 }
 
@@ -443,14 +442,13 @@ define('io.ox/calendar/edit/recurrence-view',
                 widget = $anchor.data('widget'),
                 opts = options[attribute] || options;
             if (options.tabindex) {
-                $anchor.attr({ tabindex: options.tabindex});
+                $anchor.attr({ tabindex: options.tabindex });
             }
             // TODO: Use ExtensionPoints here
             if (Widgets[widget]) {
                 Widgets[widget].call(self, $anchor, attribute, opts, options);
             }
         });
-
 
         this.id = options.id;
 
@@ -474,7 +472,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
                         'role': 'button',
                         'aria-label': gt('Click to close the recurrence view')
-                    }).css({'float': 'right'}).append($('<i class="fa fa-times">'))
+                    }).css({ 'float': 'right' }).append($('<i class="fa fa-times">'))
                 };
 
                 // add tabindex to all control elements
@@ -770,13 +768,13 @@ define('io.ox/calendar/edit/recurrence-view',
                     e.preventDefault();
                     if (self.controls.checkbox.is(':checked')) {
                         if (self.lastConfiguration) {
-                            self.model.set(self.lastConfiguration, {validate: true});
+                            self.model.set(self.lastConfiguration, { validate: true });
                         } else {
                             self.model.set({
                                 recurrence_type: RECURRENCE_TYPES.WEEKLY,
                                 interval: self.sentences.weekly.interval,
                                 days: self.sentences.weekly.days
-                            }, {validate: true});
+                            }, { validate: true });
                         }
                         self.showMore();
                     } else {
@@ -940,7 +938,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             .css('fontSize', 'small')
                     );
                 if (this.model.get('recurrence_type') !== RECURRENCE_TYPES.NO_RECURRENCE) {
-                    this.controls.checkboxLabel.css({'display': 'inline-block'});
+                    this.controls.checkboxLabel.css({ 'display': 'inline-block' });
                     this.nodes.summary.show();
                     sum.append(
                         this.choice.ghost(),
@@ -975,7 +973,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             recurrence_type: recType,
                             interval: this.sentences.daily.interval
                         };
-                        this.model.set(daily, {validate: true});
+                        this.model.set(daily, { validate: true });
                         break;
                     case 2:
                         var weekly =  {
@@ -983,7 +981,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             interval: this.sentences.weekly.interval,
                             days: this.sentences.weekly.days
                         };
-                        this.model.set(weekly, {validate: true});
+                        this.model.set(weekly, { validate: true });
                         break;
                     case 3:
                         var monthly =  {
@@ -1003,7 +1001,7 @@ define('io.ox/calendar/edit/recurrence-view',
                                 interval: this.choice.interval
                             });
                         }
-                        this.model.set(monthly, {validate: true});
+                        this.model.set(monthly, { validate: true });
                         break;
                     case 4:
                         var yearly =  {
@@ -1025,7 +1023,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             });
                         }
 
-                        this.model.set(yearly, {validate: true});
+                        this.model.set(yearly, { validate: true });
                         break;
                     default:
                         break;
@@ -1037,13 +1035,13 @@ define('io.ox/calendar/edit/recurrence-view',
                             // remove this when backend bug 24870 is fixed
                             this.model.set({
                                 until: null
-                            }, {validate: true});
+                            }, { validate: true });
                             // ----
                             break;
                         case 'date':
                             this.model.set({
                                 until: this.endsChoice.until
-                            }, {validate: true});
+                            }, { validate: true });
                             break;
                         case 'after':
                             if (this.endsChoice.occurrences <= 0) {
@@ -1051,13 +1049,13 @@ define('io.ox/calendar/edit/recurrence-view',
                             }
                             this.model.set({
                                 occurrences: this.endsChoice.occurrences
-                            }, {validate: true});
+                            }, { validate: true });
                             break;
                         }
                     }
                 } else {
                     // No Recurrence
-                    this.model.set({recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE}, {validate: true});
+                    this.model.set({ recurrence_type: RECURRENCE_TYPES.NO_RECURRENCE }, { validate: true });
                 }
                 this.updatingModel = false;
                 this.updateView();
@@ -1075,7 +1073,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             $('a:first', sentence.$el).focus();
                         }
                     })
-                    .css({cursor: 'pointer'});
+                    .css({ cursor: 'pointer' });
             },
             endingChanged: function (sentence) {
                 switch (String(sentence.ending)) {
@@ -1142,9 +1140,9 @@ define('io.ox/calendar/edit/recurrence-view',
                     ordinal = Math.ceil(startDate.getDate() / 7),
 
                     canUpdate = function (sentence) {
-                    // Don't update the chosen sentence carelessly
-                    return sentence !== self.choice;
-                };
+                        // Don't update the chosen sentence carelessly
+                        return sentence !== self.choice;
+                    };
 
                 if (this.previousStartDate) {
                     var previousAttributes = {

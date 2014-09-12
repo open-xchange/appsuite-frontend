@@ -26,10 +26,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         indentation: 30,
 
         events: {
-            'click .folder-options'     : 'onOptions',
-            'click .folder-arrow'       : 'onToggle',
-            'dblclick .folder-label'    : 'onToggle',
-            'keydown'                   : 'onKeydown'
+            'click .folder-options':  'onOptions',
+            'click .folder-arrow':    'onToggle',
+            'dblclick .folder-label': 'onToggle',
+            'keydown':                'onKeydown'
         },
 
         list: function () {
@@ -192,9 +192,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             if (e.which === 39 && !o.open) {
                 o.open = true;
                 this.onChangeSubFolders();
-            }
-            // cursor left?
-            else if (e.which === 37 && o.open) {
+            } else if (e.which === 37 && o.open) {
+                // cursor left?
                 o.open = false;
                 this.onChangeSubFolders();
             }
@@ -268,10 +267,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             // collection changes
             if (o.subfolders) {
                 this.listenTo(this.collection, {
-                    'add'    : this.onAdd,
-                    'remove' : this.onRemove,
-                    'reset'  : this.onReset,
-                    'sort'   : this.onSort
+                    'add':     this.onAdd,
+                    'remove':  this.onRemove,
+                    'reset':   this.onReset,
+                    'sort':    this.onSort
                 });
             }
 
@@ -285,14 +284,14 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             // draw scaffold
             this.$el
                 .attr({
-                    'aria-label'    : '',
-                    'aria-level'    : o.level + 1,
-                    'aria-selected' : false,
-                    'data-id'       : this.folder,
-                    'data-index'    : this.model.get('index'),
-                    'data-model'    : o.model_id,
-                    'role'          : 'treeitem',
-                    'tabindex'      : '-1'
+                    'aria-label':    '',
+                    'aria-level':    o.level + 1,
+                    'aria-selected': false,
+                    'data-id':       this.folder,
+                    'data-index':    this.model.get('index'),
+                    'data-model':    o.model_id,
+                    'role':         'treeitem',
+                    'tabindex':     '-1'
                 })
                 .append(
                     // folder

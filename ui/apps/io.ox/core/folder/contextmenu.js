@@ -11,13 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/contextmenu',
-    ['io.ox/core/extensions',
-     'io.ox/core/folder/actions/common',
-     'io.ox/core/folder/api',
-     'io.ox/core/notifications',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (ext, actions, api, notifications, capabilities, gt) {
+define('io.ox/core/folder/contextmenu', [
+    'io.ox/core/extensions',
+    'io.ox/core/folder/actions/common',
+    'io.ox/core/folder/api',
+    'io.ox/core/notifications',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/core'
+], function (ext, actions, api, notifications, capabilities, gt) {
 
     'use strict';
 

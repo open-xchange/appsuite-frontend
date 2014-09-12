@@ -11,18 +11,18 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/view-detail',
-    ['io.ox/tasks/util',
-     'io.ox/calendar/util',
-     'gettext!io.ox/tasks',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/tasks/api',
-     'io.ox/calendar/participants',
-     'io.ox/tasks/actions',
-     'less!io.ox/tasks/style',
-     'less!io.ox/calendar/style'//participantsview needs this
-    ], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
+define('io.ox/tasks/view-detail', [
+    'io.ox/tasks/util',
+    'io.ox/calendar/util',
+    'gettext!io.ox/tasks',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/tasks/api',
+    'io.ox/calendar/participants',
+    'io.ox/tasks/actions',
+    'less!io.ox/tasks/style',
+    'less!io.ox/calendar/style'//participantsview needs this
+], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
 
@@ -36,7 +36,7 @@ define('io.ox/tasks/view-detail',
 
             if (!data) return $('<div>');
 
-            var task = util.interpretTask(data, {detail: true}), self = this;
+            var task = util.interpretTask(data, { detail: true }), self = this;
 
             var node = $.createViewContainer(data, api)
                 .on('redraw', function (e, tmp) {
@@ -89,7 +89,7 @@ define('io.ox/tasks/view-detail',
                 this.append($('<div>').addClass('attachments-container')
                     .append(
                         $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
-                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy()));
+                        $('<div>').css({ width: '70px', height: '12px', display: 'inline-block' }).busy()));
             } else if (task.number_of_attachments > 0) {
                 ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
             }
@@ -218,7 +218,7 @@ define('io.ox/tasks/view-detail',
             }
             $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
-                api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
+                api.getAll({ folder_id: task.folder_id, id: task.id, module: 4 }).done(function (data) {
                     _(data).each(function (a) {
                         // draw
                         buildDropdown(attachmentNode, _.noI18n(a.filename), a);

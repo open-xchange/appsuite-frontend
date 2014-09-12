@@ -12,11 +12,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/autocomplete',
-    ['io.ox/core/util',
-     'settings!io.ox/contacts',
-     'gettext!io.ox/mail'
-    ], function (util, settings, gt) {
+define('io.ox/core/tk/autocomplete', [
+    'io.ox/core/util',
+    'settings!io.ox/contacts',
+    'gettext!io.ox/mail'
+], function (util, settings, gt) {
 
     'use strict';
 
@@ -81,11 +81,11 @@ define('io.ox/core/tk/autocomplete',
             isOpen = false,
 
             reposition = _.debounce(function () {
-                    //popup stays next to input
-                    var left = parseInt(o.container.css('left').replace('px', ''), 10),
-                        diff = self.offset().left - o.container.offset().left;
-                    o.container.css('left', (left + diff) + 'px');
-                }, 100),
+                //popup stays next to input
+                var left = parseInt(o.container.css('left').replace('px', ''), 10),
+                    diff = self.offset().left - o.container.offset().left;
+                o.container.css('left', (left + diff) + 'px');
+            }, 100),
 
             update = function () {
                 // get data from current item and update input field
@@ -104,26 +104,26 @@ define('io.ox/core/tk/autocomplete',
             },
 
             select = function (i, processData) {
-                    processData = typeof processData === 'undefined' ? true : processData;
-                    var children;
-                    if (i >= 0 && i < (children = scrollpane.children()).length) {
-                        children.removeClass('selected').eq(i).addClass('selected').intoViewport(o.container);
+                processData = typeof processData === 'undefined' ? true : processData;
+                var children;
+                if (i >= 0 && i < (children = scrollpane.children()).length) {
+                    children.removeClass('selected').eq(i).addClass('selected').intoViewport(o.container);
 
-                        //TODO: select next one
-                        if (o.mode === 'search') {
-                            if (scrollpane.children().eq(i).hasClass('unselectable')) {
-                                var next = index < i ? i + 1 : i - 1;
-                                select(next, processData);
-                                return;
-                            }
-                        }
-
-                        index = i;
-                        if (processData) {
-                            update();
+                    //TODO: select next one
+                    if (o.mode === 'search') {
+                        if (scrollpane.children().eq(i).hasClass('unselectable')) {
+                            var next = index < i ? i + 1 : i - 1;
+                            select(next, processData);
+                            return;
                         }
                     }
-                },
+
+                    index = i;
+                    if (processData) {
+                        update();
+                    }
+                }
+            },
 
             selectFirst = function () {
                 var length = scrollpane.children().length;
@@ -135,70 +135,70 @@ define('io.ox/core/tk/autocomplete',
             },
 
             fnBlur = function () {
-                    setTimeout(close, 200);
-                },
+                setTimeout(close, 200);
+            },
 
             blurOff = function () {
-                    self.off('blur', fnBlur).focus();
-                },
+                self.off('blur', fnBlur).focus();
+            },
 
             blurOn = function () {
-                    _.defer(function () {
-                        self.on('blur', fnBlur).focus();
-                    });
-                },
+                _.defer(function () {
+                    self.on('blur', fnBlur).focus();
+                });
+            },
 
             open = function () {
-                    if (!isOpen) {
-                        // toggle blur handlers
-                        self.off('blur', o.blur).on('blur', fnBlur);
-                        $(window).on('resize', reposition);
-                        // calculate position/dimension and show popup
-                        var off = self.offset(),
-                            w = self.outerWidth(),
-                            h = self.outerHeight();
-                        o.container.hide().appendTo(self.closest(o.parentSelector));
+                if (!isOpen) {
+                    // toggle blur handlers
+                    self.off('blur', o.blur).on('blur', fnBlur);
+                    $(window).on('resize', reposition);
+                    // calculate position/dimension and show popup
+                    var off = self.offset(),
+                        w = self.outerWidth(),
+                        h = self.outerHeight();
+                    o.container.hide().appendTo(self.closest(o.parentSelector));
 
-                        var parent = self.closest(o.parentSelector).offsetParent(),
-                            parentOffset = parent.offset(),
-                            myTop = off.top + h - parentOffset.top + parent.scrollTop(),
-                            myLeft = off.left - parentOffset.left;
+                    var parent = self.closest(o.parentSelector).offsetParent(),
+                        parentOffset = parent.offset(),
+                        myTop = off.top + h - parentOffset.top + parent.scrollTop(),
+                        myLeft = off.left - parentOffset.left;
 
-                        o.container.removeClass('top-placement bottom-placement');
-                        if (o.placement === 'top') {
-                            // top
-                            o.container.addClass('top-placement').css({ top: myTop - h - o.container.outerHeight(), left: myLeft + 4, width: w });
-                        } else {
-                            // bottom
-                            o.container.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
-                        }
-
-                        o.container.show();
-                        if (_.isFunction(o.cbshow)) o.cbshow();
-
-                        window.container = o.container;
-
-                        isOpen = true;
+                    o.container.removeClass('top-placement bottom-placement');
+                    if (o.placement === 'top') {
+                        // top
+                        o.container.addClass('top-placement').css({ top: myTop - h - o.container.outerHeight(), left: myLeft + 4, width: w });
+                    } else {
+                        // bottom
+                        o.container.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
                     }
-                },
+
+                    o.container.show();
+                    if (_.isFunction(o.cbshow)) o.cbshow();
+
+                    window.container = o.container;
+
+                    isOpen = true;
+                }
+            },
 
             close = function () {
-                    if (isOpen) {
-                        // toggle blur handlers
-                        self.on('blur', o.blur).off('blur', fnBlur);
-                        //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
-                        //body.has(self) is needed to check if the input is still attached (may happen if you close mail compose with opened dropdown for example)
-                        if (self.val() && $('body').has(self).length && !self.is(document.activeElement) && !o.container.has(document.activeElement).length) {
-                            //focus is outside so this can be handled as a blur
-                            self.trigger('blur');
-                        }
-                        $(window).off('resize', reposition);
-                        scrollpane.empty();
-                        o.container.detach();
-                        isOpen = false;
-                        index = -1;
+                if (isOpen) {
+                    // toggle blur handlers
+                    self.on('blur', o.blur).off('blur', fnBlur);
+                    //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
+                    //body.has(self) is needed to check if the input is still attached (may happen if you close mail compose with opened dropdown for example)
+                    if (self.val() && $('body').has(self).length && !self.is(document.activeElement) && !o.container.has(document.activeElement).length) {
+                        //focus is outside so this can be handled as a blur
+                        self.trigger('blur');
                     }
-                },
+                    $(window).off('resize', reposition);
+                    scrollpane.empty();
+                    o.container.detach();
+                    isOpen = false;
+                    index = -1;
+                }
+            },
 
             create = function (list, query) {
                 if (o.mode === 'participant') {
@@ -277,52 +277,50 @@ define('io.ox/core/tk/autocomplete',
 
             // handle search result
             cbSearchResult = function (query, data) {
-                    // reset scrollpane and show drop-down
-                    scrollpane.empty();
-                    open();
-                    var list = data.list;
-                    if (list.length) {
-                        o.container.idle();
-                        // draw results
-                        create.call(self, list, query);
-                        // leads to results
-                        emptyPrefix = '\u0000';
-                        index = -1;
-                        // select first element without updating input field
-                        if (o.autoselect) selectFirst();
-                    } else {
-                        // leads to no results if returned data wasn't filtered before (allready participant)
-                        emptyPrefix = data.hits ? emptyPrefix : query;
-                        close();
-                    }
-                    //lastSearch will never reject
-                    lastSearch.resolve('succeeded', query);
-                },
+                // reset scrollpane and show drop-down
+                scrollpane.empty();
+                open();
+                var list = data.list;
+                if (list.length) {
+                    o.container.idle();
+                    // draw results
+                    create.call(self, list, query);
+                    // leads to results
+                    emptyPrefix = '\u0000';
+                    index = -1;
+                    // select first element without updating input field
+                    if (o.autoselect) selectFirst();
+                } else {
+                    // leads to no results if returned data wasn't filtered before (allready participant)
+                    emptyPrefix = data.hits ? emptyPrefix : query;
+                    close();
+                }
+                //lastSearch will never reject
+                lastSearch.resolve('succeeded', query);
+            },
 
             // adds 'retry'-item to popup
             cbSearchResultFail = function (query) {
-                    scrollpane.empty();
-                    o.container.idle();
-                    var node = $('<div>')
-                        .addClass('io-ox-center')
-                        .append(
-                            // fail container/content
-                            $('<div class="io-ox-fail">').append(
-                                $.txt(gt('Could not load this list')),
-                                $.txt('. '),
-                                //link
-                                $('<a href="#">').text(gt('Retry'))
-                                .on('click', function () {
-                                        self.trigger('keyup', { isRetry: true });
-                                    }
-                                )
-
-                            )
-                        );
-                    node.appendTo(scrollpane);
-                    //lastSearch will will never reject
-                    lastSearch.resolve('failed', query);
-                },
+                scrollpane.empty();
+                o.container.idle();
+                var node = $('<div>')
+                    .addClass('io-ox-center')
+                    .append(
+                        // fail container/content
+                        $('<div class="io-ox-fail">').append(
+                            $.txt(gt('Could not load this list')),
+                            $.txt('. '),
+                            //link
+                            $('<a href="#">').text(gt('Retry'))
+                            .on('click', function () {
+                                self.trigger('keyup', { isRetry: true });
+                            })
+                        )
+                    );
+                node.appendTo(scrollpane);
+                //lastSearch will will never reject
+                lastSearch.resolve('failed', query);
+            },
 
             autoSelectFirst = function () {
                 scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
@@ -471,7 +469,7 @@ define('io.ox/core/tk/autocomplete',
        /**
         * get the selected item
         *
-        * @return {object|boolean} data object or false
+        * @return { object|boolean} data object or false
         */
         this.getSelectedItem = function () {
             var data = scrollpane.children().eq(Math.max(0, index)).data();

@@ -12,8 +12,9 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 define('io.ox/core/tk/draghelper', ['io.ox/core/extensions'], function (ext) {
+
     'use strict';
-    
+
     ext.point('io.ox/core/tk/draghelper').extend({
         id: 'counter',
         index: 100,

@@ -132,12 +132,19 @@ define('io.ox/core/tk/list-selection', [], function () {
             // default event
             var list = this.get(), events = 'selection:change';
             // empty, one, multiple
-            if (list.length === 0) events += ' selection:empty';
-            else if (list.length === 1) events += ' selection:one';
-            else if (list.length > 1) events += ' selection:multiple';
+            if (list.length === 0) {
+                events += ' selection:empty';
+            } else if (list.length === 1) {
+                events += ' selection:one';
+            } else if (list.length > 1) {
+                events += ' selection:multiple';
+            }
             // all vs subset
-            if (items.length > 0 && items.length === list.length) events += ' selection:all';
-            else events += ' selection:subset';
+            if (items.length > 0 && items.length === list.length) {
+                events += ' selection:all';
+            } else {
+                events += ' selection:subset';
+            }
             this.view.trigger(events, list);
         },
 
@@ -252,8 +259,11 @@ define('io.ox/core/tk/list-selection', [], function () {
         move: function (step) {
             var items = this.getItems(),
                 index = this.getPosition() + step;
-            if (index < 0) index = 0;
-            else if (index >= items.length) index = items.length - 1;
+            if (index < 0) {
+                index = 0;
+            } else if (index >= items.length) {
+                index = items.length - 1;
+            }
             this.select(index, items);
             this.view.trigger('selection:action', this.get());
         },

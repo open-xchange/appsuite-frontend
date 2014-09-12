@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/settings/accounts/settings/createAccountDialog',
-    ['io.ox/core/tk/dialogs',
-     'io.ox/keychain/api'
-    ], function (dialogs, keychain) {
+define('io.ox/settings/accounts/settings/createAccountDialog', [
+    'io.ox/core/tk/dialogs',
+    'io.ox/keychain/api'
+], function (dialogs, keychain) {
 
     'use strict';
 

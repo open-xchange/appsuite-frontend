@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/month/perspective',
-    ['io.ox/calendar/month/view',
-     'io.ox/calendar/api',
-     'io.ox/core/date',
-     'io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/calendar/view-detail',
-     'io.ox/calendar/conflicts/conflictList',
-     'io.ox/core/print',
-     'settings!io.ox/calendar',
-     'gettext!io.ox/calendar'
-    ], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
+define('io.ox/calendar/month/perspective', [
+    'io.ox/calendar/month/view',
+    'io.ox/calendar/api',
+    'io.ox/core/date',
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/calendar/view-detail',
+    'io.ox/calendar/conflicts/conflictList',
+    'io.ox/core/print',
+    'settings!io.ox/calendar',
+    'gettext!io.ox/calendar'
+], function (View, api, date, ext, dialogs, detailView, conflictView, print, settings, gt) {
 
     'use strict';
 
@@ -79,7 +79,7 @@ define('io.ox/calendar/month/perspective',
             startTS += Math.ceil((now.getHours() * date.HOUR + now.getMinutes() * date.MINUTE) / offset) * offset;
 
             ext.point('io.ox/calendar/detail/actions/create')
-                .invoke('action', this, {app: this.app}, {start_date: startTS, end_date: startTS + date.HOUR});
+                .invoke('action', this, { app: this.app }, { start_date: startTS, end_date: startTS + date.HOUR });
         },
 
         /**
@@ -89,7 +89,7 @@ define('io.ox/calendar/month/perspective',
          */
         openEditAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/edit')
-                .invoke('action', this, {data: obj});
+                .invoke('action', this, { data: obj });
         },
 
         /**
@@ -108,24 +108,24 @@ define('io.ox/calendar/month/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
-                                top: '20%',
-                                center: false,
-                                container: self.main
-                            })
-                            .append(conflictView.drawList(con.conflicts))
-                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                            .show()
-                            .done(function (action) {
-                                if (action === 'cancel') {
-                                    self.update();
-                                    return;
-                                }
-                                if (action === 'ignore') {
-                                    obj.ignore_conflicts = true;
-                                    apiUpdate(obj);
-                                }
-                            });
+                            top: '20%',
+                            center: false,
+                            container: self.main
+                        })
+                        .append(conflictView.drawList(con.conflicts))
+                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                        .show()
+                        .done(function (action) {
+                            if (action === 'cancel') {
+                                self.update();
+                                return;
+                            }
+                            if (action === 'ignore') {
+                                obj.ignore_conflicts = true;
+                                apiUpdate(obj);
+                            }
+                        });
                     }
                 });
             };
@@ -133,8 +133,8 @@ define('io.ox/calendar/month/perspective',
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
                     .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                    .addButton('appointment', gt('Yes'), 'appointment', {tabIndex: '1'})
-                    .addButton('cancel', gt('No'), 'cancel', {tabIndex: '1'})
+                    .addButton('appointment', gt('Yes'), 'appointment', { tabIndex: 1 })
+                    .addButton('cancel', gt('No'), 'cancel', { tabIndex: 1 })
                     .show()
                     .done(function (action) {
                         if (action === 'appointment') {
@@ -228,14 +228,14 @@ define('io.ox/calendar/month/perspective',
             }
             // update first positions
             self.getFirsts();
-            this.updateWeeks({start: start, weeks: weeks});
+            this.updateWeeks({ start: start, weeks: weeks });
             return $.when();
         },
 
         /**
          * wrapper for scrollTop funciton
          * @param  {number} top scrollposition
-         * @return {number}     new scroll position
+         * @return { number}     new scroll position
          */
         scrollTop: function (top) {
             // scrollTop checks arity, so just passing an undefined top does not work here
@@ -250,7 +250,7 @@ define('io.ox/calendar/month/perspective',
                 day.addClass('today');
             }
             var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
-            this.updateWeeks({start: this.firstWeek, weeks: weeks}, useCache);
+            this.updateWeeks({ start: this.firstWeek, weeks: weeks }, useCache);
         },
 
         /**
@@ -298,7 +298,7 @@ define('io.ox/calendar/month/perspective',
                             firstDay.get(0).scrollIntoView();
                             self.isScrolling = false;
                         } else {
-                            self.pane.animate({scrollTop : firstDay.position().top + self.scrollTop() + 1}, param.duration, function () {
+                            self.pane.animate({ scrollTop: firstDay.position().top + self.scrollTop() + 1 }, param.duration, function () {
                                 self.isScrolling = false;
                             });
                         }
@@ -308,7 +308,7 @@ define('io.ox/calendar/month/perspective',
                     scrollToDate();
                 } else {
                     if (param.date.getTime() < self.current.getTime()) {
-                        this.drawWeeks({up: true}).done(function () {
+                        this.drawWeeks({ up: true }).done(function () {
                             firstDay = $('#' + param.date.getYear() + '-' + param.date.getMonth() + '-1', self.pane);
                             scrollToDate();
                         });
@@ -324,7 +324,7 @@ define('io.ox/calendar/month/perspective',
 
         /**
          * get current folder data
-         * @return {Deferred} Deferred with folder data on resolve
+         * @return { Deferred} Deferred with folder data on resolve
          */
         getFolder: function () {
             var self = this,
@@ -355,7 +355,7 @@ define('io.ox/calendar/month/perspective',
                 win,
                 self = this;
             if (self.folder.id || self.folder.folder) {
-                data = {folder_id: self.folder.id || self.folder.folder};
+                data = { folder_id: self.folder.id || self.folder.folder };
             }
             win = print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',
@@ -474,7 +474,7 @@ define('io.ox/calendar/month/perspective',
                             this.drawWeeks();
                         }
                         if (this.scrollTop() <= this.scrollOffset) {
-                            this.drawWeeks({up: true});
+                            this.drawWeeks({ up: true });
                         }
                     }
                 }, this))
@@ -510,7 +510,7 @@ define('io.ox/calendar/month/perspective',
             $(window).on('resize', this.getFirsts);
 
             self.getFolder().done(function () {
-                self.drawWeeks({multi: self.initLoad}).done(function () {
+                self.drawWeeks({ multi: self.initLoad }).done(function () {
                     $('[id^="' + self.current.getYear() + '-' + self.current.getMonth() + '-"]', self.pane).toggleClass('out');
                     self.gotoMonth();
                 });
@@ -518,26 +518,26 @@ define('io.ox/calendar/month/perspective',
 
             this.main
                 .on('keydown', function (e) {
-                switch (e.which) {
-                case 37: // left
-                    self.gotoMonth({
-                        duration: _.device('desktop') ? 400 : 0,
-                        date: 'prev'
-                    });
-                    break;
-                case 39: // right
-                    self.gotoMonth({
-                        duration: _.device('desktop') ? 400 : 0,
-                        date: 'next'
-                    });
-                    break;
-                case 13: // enter
-                    $(e.target).click();
-                    break;
-                default:
-                    break;
-                }
-            });
+                    switch (e.which) {
+                    case 37: // left
+                        self.gotoMonth({
+                            duration: _.device('desktop') ? 400 : 0,
+                            date: 'prev'
+                        });
+                        break;
+                    case 39: // right
+                        self.gotoMonth({
+                            duration: _.device('desktop') ? 400 : 0,
+                            date: 'next'
+                        });
+                        break;
+                    case 13: // enter
+                        $(e.target).click();
+                        break;
+                    default:
+                        break;
+                    }
+                });
 
             // define default sidepopup dialog
             this.dialog = new dialogs.SidePopup({ tabTrap: true })

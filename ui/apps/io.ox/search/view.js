@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/view',
-    ['io.ox/search/view-template',
-     'io.ox/core/extensions',
-     'io.ox/backbone/views'
-    ], function (template, ext, views) {
+define('io.ox/search/view', [
+    'io.ox/search/view-template',
+    'io.ox/core/extensions',
+    'io.ox/backbone/views'
+], function (template, ext, views) {
 
     'use strict';
 

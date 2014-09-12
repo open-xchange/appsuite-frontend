@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/upsell',
-    ['io.ox/core/capabilities',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (capabilities, settings, gt) {
+define('io.ox/core/upsell', [
+    'io.ox/core/capabilities',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (capabilities, settings, gt) {
 
     'use strict';
 
@@ -165,7 +165,7 @@ define('io.ox/core/upsell',
         // neither registers events nor adds portal plugin
         demo: function (debugCustomWizard) {
             var e = enabled, c = capabilityCache;
-            e.portal = e.webmail = e.contacts = e.calendar = e.infostore = e.tasks = e.publication = e.subscription= true;
+            e.portal = e.webmail = e.contacts = e.calendar = e.infostore = e.tasks = e.publication = e.subscription = true;
             c.portal = c.webmail = c.contacts = true;
             c.calendar = c.infostore = c.tasks = false;
             c.publication = c.subscription = false;

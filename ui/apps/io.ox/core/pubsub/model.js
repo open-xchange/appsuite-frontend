@@ -11,14 +11,13 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/model',
-    ['io.ox/core/extensions',
-     'io.ox/backbone/basicModel',
-     'io.ox/core/api/pubsub',
-     'io.ox/settings/util',
-     'gettext!io.ox/core/pubsub'
-    ],
-    function (ext, BasicModel, api, settingsUtil, gt) {
+define('io.ox/core/pubsub/model', [
+    'io.ox/core/extensions',
+    'io.ox/backbone/basicModel',
+    'io.ox/core/api/pubsub',
+    'io.ox/settings/util',
+    'gettext!io.ox/core/pubsub'
+], function (ext, BasicModel, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -81,7 +80,7 @@ define('io.ox/core/pubsub/model',
              * - 'pending' - performing a refresh at the moment
              * - 'done' - refresh is already done
              *
-             * @return {string} - the state
+             * @return { string} - the state
              */
             refreshState: function () {
                 return this._refresh ? this._refresh.state() : 'ready';
@@ -120,7 +119,7 @@ define('io.ox/core/pubsub/model',
                                 });
                             });
                             collection.each(function (model) {
-                                if (_(res).where({id: model.id}).length === 0) {
+                                if (_(res).where({ id: model.id }).length === 0) {
                                     collection.remove(model);
                                 }
                             });
@@ -134,7 +133,7 @@ define('io.ox/core/pubsub/model',
                      *
                      * Use it like:
                      * <code>
-                     *   model.collection.forFolder({folder_id: 2342});
+                     *   model.collection.forFolder({ folder_id: 2342 });
                      * </code>
                      *
                      * @param {object} - an object containing a folder_id attribute
@@ -162,7 +161,7 @@ define('io.ox/core/pubsub/model',
         if (!filter) { return this.toArray(); }
 
         return this.filter(function (e) {
-            return (e.get('entity') || {folder: e.get('folder')}).folder === filter;
+            return (e.get('entity') || { folder: e.get('folder') }).folder === filter;
         });
     }
 

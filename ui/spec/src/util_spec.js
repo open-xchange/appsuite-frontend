@@ -157,30 +157,30 @@ define([], function () {
                     .to.equal('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam non' + chr);
             });
             it('should trim', function () {
-                expect(_.ellipsis('      ' + val, { max: 8})).to.equal('Lorem i' + chr);
+                expect(_.ellipsis('      ' + val, { max: 8 })).to.equal('Lorem i' + chr);
             });
             it('should use length option', function () {
-                expect(_.ellipsis(val, { max: 8})).to.equal('Lorem i' + chr);
+                expect(_.ellipsis(val, { max: 8 })).to.equal('Lorem i' + chr);
             });
             it('should handle also short length options', function () {
-                expect(_.ellipsis(val, { max: 0})).to.equal(chr);
-                expect(_.ellipsis(val, { max: 1})).to.equal(chr);
+                expect(_.ellipsis(val, { max: 0 })).to.equal(chr);
+                expect(_.ellipsis(val, { max: 1 })).to.equal(chr);
             });
             it('should handle also invalid length options', function () {
-                expect(_.ellipsis(val, { max: 10, length: 5, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
-                expect(_.ellipsis(val, { max: 10, length: 10, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
-                expect(_.ellipsis(val, { max: 10, length: 11, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 10, length: 5, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 10, length: 10, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 10, length: 11, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
             });
             it('should use char option', function () {
-                expect(_.ellipsis(val, { max: 10, char: '...'})).to.equal('Lorem i...');
+                expect(_.ellipsis(val, { max: 10, char: '...' })).to.equal('Lorem i...');
             });
             it('should use charpos option', function () {
-                expect(_.ellipsis(val, { max: 8, charpos: 'end'})).to.equal('Lorem i' + chr);
-                expect(_.ellipsis(val, { max: 11, charpos: 'middel'})).to.equal('Lorem' + chr + 'nonum');
-                expect(_.ellipsis(val, { max: 10, charpos: 'middel'})).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 8, charpos: 'end' })).to.equal('Lorem i' + chr);
+                expect(_.ellipsis(val, { max: 11, charpos: 'middel' })).to.equal('Lorem' + chr + 'nonum');
+                expect(_.ellipsis(val, { max: 10, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
             });
             it('should use length option', function () {
-                expect(_.ellipsis(val, { length: 5, charpos: 'middel'})).to.equal('Lorem' + chr + 'nonum');
+                expect(_.ellipsis(val, { length: 5, charpos: 'middel' })).to.equal('Lorem' + chr + 'nonum');
             });
         });
 
@@ -210,7 +210,7 @@ define([], function () {
                 debounced = _.mythrottle(function () {
                                     //console.warn((new Date() - now), 'repaint: debounced at ', counter);
                                     counterrepaint = counterrepaint + 1;
-                                }, 100, {leading: true, trailing: true}),
+                                }, 100, { leading: true, trailing: true }),
                 repaint = function () {
                     //counter = counter + 1;
                     //console.warn((new Date() - now), 'repaint', counter);
@@ -243,7 +243,7 @@ define([], function () {
 
         describe('_.cid', function () {
             var str = '1.2.3', result,
-                obj = {id: '4711', folder: '0815', folder_id: '007'};
+                obj = { id: '4711', folder: '0815', folder_id: '007' };
             it('should use dots as separator', function () {
                 expect(_.cid(obj)).to.equals('007.4711');
             });
@@ -268,7 +268,7 @@ define([], function () {
 
         describe('_.ecid', function () {
             var str = 'value.with.dots',
-                obj = {id: '4711', folder: '0815'};
+                obj = { id: '4711', folder: '0815' };
             it('should escape dots with colons', function () {
                 expect(_.ecid(str), 'string')
                     .to.have.string(':')
@@ -287,7 +287,7 @@ define([], function () {
         });
 
         describe('_.isSet', function () {
-            var obj = {valid: true};
+            var obj = { valid: true };
             it('should return true if value is set', function () {
                 expect(_.isSet('value')).to.be.true;
                 expect(_.isSet(obj.valid)).to.be.true;
@@ -312,9 +312,9 @@ define([], function () {
 
         describe('_.toHash', function () {
             var list = [
-                {id: 'A1', value: 'V1'},
-                {id: 'A1', value: 'V2'},
-                {id: 'A2', value: 'V3'}
+                {id: 'A1', value: 'V1' },
+                {id: 'A1', value: 'V2' },
+                {id: 'A2', value: 'V3' }
             ], hashmap = _.toHash(list, 'id');
             it('should always return a array', function () {
                 expect(_.toHash()).to.be.a('object');

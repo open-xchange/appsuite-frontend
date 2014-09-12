@@ -11,17 +11,17 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
-define('io.ox/calendar/week/perspective',
-    ['io.ox/calendar/week/view',
-     'io.ox/calendar/api',
-     'io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/calendar/view-detail',
-     'io.ox/calendar/conflicts/conflictList',
-     'io.ox/core/notifications',
-     'gettext!io.ox/calendar',
-     'less!io.ox/calendar/week/style'
-    ], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
+define('io.ox/calendar/week/perspective', [
+    'io.ox/calendar/week/view',
+    'io.ox/calendar/api',
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/calendar/view-detail',
+    'io.ox/calendar/conflicts/conflictList',
+    'io.ox/core/notifications',
+    'gettext!io.ox/calendar',
+    'less!io.ox/calendar/week/style'
+], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
 
@@ -53,7 +53,7 @@ define('io.ox/calendar/week/perspective',
 
                     if (_.device('smartphone')) {
                         var p = self.app.pages.getPage('detailView'),
-                            b = new ext.Baton({data: data});
+                            b = new ext.Baton({ data: data });
                         // draw details to page
                         p.idle().empty().append(detailView.draw(data));
                         // update toolbar with new baton
@@ -105,24 +105,24 @@ define('io.ox/calendar/week/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
-                                top: '20%',
-                                center: false,
-                                container: self.main
-                            })
-                            .append(conflictView.drawList(con.conflicts).addClass('additional-info'))
-                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                            .show()
-                            .done(function (action) {
-                                if (action === 'cancel') {
-                                    self.refresh();
-                                    return;
-                                }
-                                if (action === 'ignore') {
-                                    obj.ignore_conflicts = true;
-                                    apiUpdate(obj);
-                                }
-                            });
+                            top: '20%',
+                            center: false,
+                            container: self.main
+                        })
+                        .append(conflictView.drawList(con.conflicts).addClass('additional-info'))
+                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                        .show()
+                        .done(function (action) {
+                            if (action === 'cancel') {
+                                self.refresh();
+                                return;
+                            }
+                            if (action === 'ignore') {
+                                obj.ignore_conflicts = true;
+                                apiUpdate(obj);
+                            }
+                        });
                     }
                 });
             };
@@ -130,7 +130,7 @@ define('io.ox/calendar/week/perspective',
             /**
              * cleanup appointment data
              * @param  {Object} obj new appointment data
-             * @return {Object}     clean appointment data
+             * @return { Object}     clean appointment data
              */
             var clean = function (app) {
                 _.each(app, function (el, i) {
@@ -146,15 +146,15 @@ define('io.ox/calendar/week/perspective',
                 if (obj.drag_move && obj.drag_move !== 0) {
                     dialog
                         .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                        .addButton('appointment', gt('Yes'), 'appointment', {tabIndex: '1'})
-                        .addButton('cancel', gt('No'), 'cancel', {tabIndex: '1'});
+                        .addButton('appointment', gt('Yes'), 'appointment', { tabIndex: 1 })
+                        .addButton('cancel', gt('No'), 'cancel', { tabIndex: 1 });
                 } else {
                     dialog
                         .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                         //#. Use singular in this context
-                        .addPrimaryButton('series', gt('Series'), 'series', {tabIndex: '1'})
-                        .addButton('appointment', gt('Appointment'), 'appointment', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
+                        .addPrimaryButton('series', gt('Series'), 'series', { tabIndex: 1 })
+                        .addButton('appointment', gt('Appointment'), 'appointment', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
                 }
                 dialog
                     .show()
@@ -163,7 +163,7 @@ define('io.ox/calendar/week/perspective',
                         case 'series':
                             // get recurrence master object
                             if (obj.old_start_date || obj.old_end_date) {
-                                api.get({id: obj.id, folder_id: obj.folder_id}).done(function (data) {
+                                api.get({ id: obj.id, folder_id: obj.folder_id }).done(function (data) {
                                     // calculate new dates if old dates are available
                                     data.start_date += (obj.start_date - obj.old_start_date);
                                     data.end_date += (obj.end_date - obj.old_end_date);
@@ -191,7 +191,7 @@ define('io.ox/calendar/week/perspective',
          */
         openCreateAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/create')
-                .invoke('action', this, {app: this.app}, obj);
+                .invoke('action', this, { app: this.app }, obj);
         },
 
         /**
@@ -201,7 +201,7 @@ define('io.ox/calendar/week/perspective',
          */
         openEditAppointment: function (e, obj) {
             ext.point('io.ox/calendar/detail/actions/edit')
-                .invoke('action', this, {data: obj});
+                .invoke('action', this, { data: obj });
         },
 
         /**

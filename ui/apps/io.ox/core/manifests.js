@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/core/manifests',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities'
-    ], function (ext, capabilities) {
+define.async('io.ox/core/manifests', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities'
+], function (ext, capabilities) {
 
     'use strict';
 

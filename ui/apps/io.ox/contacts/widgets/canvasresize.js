@@ -24,8 +24,7 @@
  *
  */
 
-define('io.ox/contacts/widgets/canvasresize',
-    ['io.ox/contacts/widgets/exif'], function (exifread) {
+define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], function (exifread) {
 
     'use strict';
 
@@ -78,21 +77,21 @@ define('io.ox/contacts/widgets/canvasresize',
         rotate: function (orientation, angle) {
             var o = {
                 // nothing
-                1: {90: 6, 180: 3, 270: 8},
+                1: { 90: 6, 180: 3, 270: 8 },
                 // horizontal flip
-                2: {90: 7, 180: 4, 270: 5},
+                2: { 90: 7, 180: 4, 270: 5 },
                 // 180 rotate left
-                3: {90: 8, 180: 1, 270: 6},
+                3: { 90: 8, 180: 1, 270: 6 },
                 // vertical flip
-                4: {90: 5, 180: 2, 270: 7},
+                4: { 90: 5, 180: 2, 270: 7 },
                 // vertical flip + 90 rotate right
-                5: {90: 2, 180: 7, 270: 4},
+                5: { 90: 2, 180: 7, 270: 4 },
                 // 90 rotate right
-                6: {90: 3, 180: 8, 270: 1},
+                6: { 90: 3, 180: 8, 270: 1 },
                 // horizontal flip + 90 rotate right
-                7: {90: 4, 180: 5, 270: 2},
+                7: { 90: 4, 180: 5, 270: 2 },
                 // 90 rotate left
-                8: {90: 1, 180: 6, 270: 3}
+                8: { 90: 1, 180: 6, 270: 3 }
             };
             return o[orientation][angle] ? o[orientation][angle] : orientation;
         },

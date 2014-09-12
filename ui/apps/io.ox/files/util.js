@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/files/util',
-    ['io.ox/core/tk/dialogs',
-     'gettext!io.ox/files',
-     'io.ox/core/capabilities',
-    ], function (dialogs, gt, Caps) {
+define('io.ox/files/util', [
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/files',
+    'io.ox/core/capabilities'
+], function (dialogs, gt, Caps) {
 
     'use strict';
 
@@ -26,7 +26,7 @@ define('io.ox/files/util',
          * shows confirm dialog in case user changes file extension
          * @param  {string} formFilename    filename
          * @param  {string} serverFilename  filename
-         * @return {promise} resolves if user confirms or dialogie needen
+         * @return { promise} resolves if user confirms or dialogie needen
          */
         confirmDialog: function (formFilename, serverFilename, options) {
             var opt = options || {};
@@ -56,14 +56,15 @@ define('io.ox/files/util',
                 new dialogs.ModalDialog(opt)
                             .header($('<h4>').text(gt('Confirmation')))
                             .append(message, $hint)
-                            .addPrimaryButton('rename', gt('Yes'), 'rename', {'tabIndex': '1'})
-                            .addButton('change', gt('Adjust'), 'change', {'tabIndex': '1'})
+                            .addPrimaryButton('rename', gt('Yes'), 'rename',  { 'tabIndex': '1' })
+                            .addButton('change', gt('Adjust'), 'change',  { 'tabIndex': '1' })
                             .show()
                             .done(function (action) {
-                                if (action === 'rename')
+                                if (action === 'rename') {
                                     def.resolve();
-                                else
+                                } else {
                                     def.reject();
+                                }
                             });
             } else if (formFilename === '') {
                 //usually prevented from ui

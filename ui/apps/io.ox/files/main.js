@@ -12,26 +12,26 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/files/main',
-    ['io.ox/core/commons',
-     'gettext!io.ox/files',
-     'settings!io.ox/files',
-     'io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/core/capabilities',
-     'io.ox/files/api',
-     'io.ox/files/mobile-navbar-extensions',
-     'io.ox/files/mobile-toolbar-actions',
-     'io.ox/files/actions',
-     'io.ox/files/folderview-extensions',
-     'less!io.ox/files/style',
-     'io.ox/files/toolbar'
-    ], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, actions, Bars, PageController, capabilities, api) {
+define('io.ox/files/main', [
+    'io.ox/core/commons',
+    'gettext!io.ox/files',
+    'settings!io.ox/files',
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/core/capabilities',
+    'io.ox/files/api',
+    'io.ox/files/mobile-navbar-extensions',
+    'io.ox/files/mobile-toolbar-actions',
+    'io.ox/files/actions',
+    'io.ox/files/folderview-extensions',
+    'less!io.ox/files/style',
+    'io.ox/files/toolbar'
+], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, actions, Bars, PageController, capabilities, api) {
 
     'use strict';
 
@@ -213,7 +213,6 @@ define('io.ox/files/main',
         'change:folder-mobile': function (app) {
             if (_.device('!smartphone')) return;
 
-
             function update() {
                 app.folder.getData().done(function (d) {
                     app.pages.getNavbar('fluid').setTitle(d.title);
@@ -269,7 +268,6 @@ define('io.ox/files/main',
 
             win.trigger('change:perspective', 'fluid', app.props.get('layout'));
         },
-
 
         /*
          * Set folderview property

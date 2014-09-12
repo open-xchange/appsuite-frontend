@@ -11,15 +11,15 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/calendar/settings/pane',
-    ['settings!io.ox/calendar',
-     'io.ox/core/date',
-     'io.ox/calendar/settings/model',
-     'io.ox/core/extensions',
-     'io.ox/core/notifications',
-     'gettext!io.ox/calendar',
-     'io.ox/backbone/mini-views'
-    ], function (settings, date, calendarSettingsModel, ext, notifications, gt, mini) {
+define('io.ox/calendar/settings/pane', [
+    'settings!io.ox/calendar',
+    'io.ox/core/date',
+    'io.ox/calendar/settings/model',
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'gettext!io.ox/calendar',
+    'io.ox/backbone/mini-views'
+], function (settings, date, calendarSettingsModel, ext, notifications, gt, mini) {
 
     'use strict';
 
@@ -28,47 +28,47 @@ define('io.ox/calendar/settings/pane',
         reloadMe = [],
 
         optionsInterval = [
-            {label: gt.noI18n('5'), value: '5'},
-            {label: gt.noI18n('10'), value: '10'},
-            {label: gt.noI18n('15'), value: '15'},
-            {label: gt.noI18n('20'), value: '20'},
-            {label: gt.noI18n('30'), value: '30'},
-            {label: gt.noI18n('60'), value: '60'}
+            { label: gt.noI18n('5'), value: '5' },
+            { label: gt.noI18n('10'), value: '10' },
+            { label: gt.noI18n('15'), value: '15' },
+            { label: gt.noI18n('20'), value: '20' },
+            { label: gt.noI18n('30'), value: '30' },
+            { label: gt.noI18n('60'), value: '60' }
         ],
 
         optionsTime = function () {
             var array = [];
             for (var i = 0; i < 24; i++) {
                 array.push({
-                    label : new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME),
-                    value : String(i)
+                    label: new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME),
+                    value: String(i)
                 });
             }
             return array;
         },
 
         optionsReminder = [
-            {label: gt('No reminder'), value: '-1'},
-            {label: gt('0 minutes'), value: '0'},
-            {label: gt('15 minutes'), value: '15'},
-            {label: gt('30 minutes'), value: '30'},
-            {label: gt('45 minutes'), value: '45'},
-            {label: gt('1 hour'), value: '60'},
-            {label: gt('2 hour'), value: '120'},
-            {label: gt('4 hour'), value: '240'},
-            {label: gt('6 hour'), value: '360'},
-            {label: gt('8 hour'), value: '480'},
-            {label: gt('12 hour'), value: '720'},
-            {label: gt('1 day'), value: '1440'},
-            {label: gt('2 days'), value: '2880'},
-            {label: gt('3 days'), value: '4320'},
-            {label: gt('4 days'), value: '5760'},
-            {label: gt('5 days'), value: '7200'},
-            {label: gt('6 days'), value: '8640'},
-            {label: gt('1 week'), value: '10080'},
-            {label: gt('2 weeks'), value: '20160'},
-            {label: gt('3 weeks'), value: '30240'},
-            {label: gt('4 weeks'), value: '40320'}
+            { label: gt('No reminder'), value: '-1' },
+            { label: gt('0 minutes'), value: '0' },
+            { label: gt('15 minutes'), value: '15' },
+            { label: gt('30 minutes'), value: '30' },
+            { label: gt('45 minutes'), value: '45' },
+            { label: gt('1 hour'), value: '60' },
+            { label: gt('2 hour'), value: '120' },
+            { label: gt('4 hour'), value: '240' },
+            { label: gt('6 hour'), value: '360' },
+            { label: gt('8 hour'), value: '480' },
+            { label: gt('12 hour'), value: '720' },
+            { label: gt('1 day'), value: '1440' },
+            { label: gt('2 days'), value: '2880' },
+            { label: gt('3 days'), value: '4320' },
+            { label: gt('4 days'), value: '5760' },
+            { label: gt('5 days'), value: '7200' },
+            { label: gt('6 days'), value: '8640' },
+            { label: gt('1 week'), value: '10080' },
+            { label: gt('2 weeks'), value: '20160' },
+            { label: gt('3 weeks'), value: '30240' },
+            { label: gt('4 weeks'), value: '40320' }
         ];
 
     model.on('change', function (e, path) {
@@ -156,7 +156,7 @@ define('io.ox/calendar/settings/pane',
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('checkbox').append(
                                     $('<label>').addClass('control-label').text(gt('Show declined appointments')).prepend(
-                                        new mini.CheckboxView({ name: 'showDeclinedAppointments', model: model}).render().$el
+                                        new mini.CheckboxView({ name: 'showDeclinedAppointments', model: model }).render().$el
                                     )
                                 )
                             )
@@ -187,7 +187,7 @@ define('io.ox/calendar/settings/pane',
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('checkbox').append(
                                     $('<label>').addClass('control-label').text(gt('Mark all day appointments as free')).prepend(
-                                        new mini.CheckboxView({ name: 'markFulltimeAppointmentsAsFree', model: model}).render().$el
+                                        new mini.CheckboxView({ name: 'markFulltimeAppointmentsAsFree', model: model }).render().$el
                                     )
                                 )
                             )
@@ -210,7 +210,7 @@ define('io.ox/calendar/settings/pane',
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('checkbox').append(
                                     $('<label>').addClass('control-label').text(gt('Email notification for New, Changed, Deleted?')).prepend(
-                                        new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model}).render().$el
+                                        new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model }).render().$el
                                     )
                                 )
                             )
@@ -225,7 +225,7 @@ define('io.ox/calendar/settings/pane',
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('checkbox').append(
                                     $('<label>').addClass('control-label').text(gt('Email notification for appointment creator?')).prepend(
-                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model}).render().$el
+                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model }).render().$el
                                     )
                                 )
                             )
@@ -236,7 +236,7 @@ define('io.ox/calendar/settings/pane',
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('checkbox').append(
                                     $('<label>').addClass('control-label').text(gt('Email notification for appointment participant?')).prepend(
-                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model}).render().$el
+                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model }).render().$el
                                     )
                                 )
                             )
@@ -250,7 +250,7 @@ define('io.ox/calendar/settings/pane',
                             $('<div>').addClass('col-sm-8').append(
                                 $('<div>').addClass('checkbox').append(
                                     $('<label>').addClass('control-label').text(gt('Automatically delete a notification mail after it has been accepted or declined?')).prepend(
-                                        new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: model}).render().$el
+                                        new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: model }).render().$el
                                     )
                                 )
                             )

@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/actions',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/calendar/api',
-     'io.ox/calendar/util',
-     'io.ox/core/notifications',
-     'io.ox/core/print',
-     'settings!io.ox/calendar',
-     'settings!io.ox/core',
-     'io.ox/core/extPatterns/actions',
-     'gettext!io.ox/calendar'
-    ], function (ext, links, api, util, notifications, print, settings, coreSettings, actions, gt) {
+define('io.ox/calendar/actions', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/calendar/api',
+    'io.ox/calendar/util',
+    'io.ox/core/notifications',
+    'io.ox/core/print',
+    'settings!io.ox/calendar',
+    'settings!io.ox/core',
+    'io.ox/core/extPatterns/actions',
+    'gettext!io.ox/calendar'
+], function (ext, links, api, util, notifications, print, settings, coreSettings, actions, gt) {
 
     'use strict';
 
@@ -78,7 +78,7 @@ define('io.ox/calendar/actions',
         capabilities: 'webmail',
         action: function (baton) {
             util.createRecipientsArray(baton.data).done(function (recipients) {
-                ox.registry.call('mail-compose', 'compose', {to: recipients, subject: baton.data.title});
+                ox.registry.call('mail-compose', 'compose', { to: recipients, subject: baton.data.title });
             });
         }
     });
@@ -157,9 +157,9 @@ define('io.ox/calendar/actions',
                             .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                             .addPrimaryButton('series',
                                 //#. Use singular in this context
-                                gt('Series'), 'series', {tabIndex: '1'})
-                            .addButton('appointment', gt('Appointment'), 'appointment', {tabIndex: '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                gt('Series'), 'series', { tabIndex: 1 })
+                            .addButton('appointment', gt('Appointment'), 'appointment', { tabIndex: 1 })
+                            .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                             .show()
                             .done(function (action) {
 
@@ -177,12 +177,12 @@ define('io.ox/calendar/actions',
                                 // disable cache with second param
                                 api.get(o, false).then(
                                     function (data) {
-                                        if (m.reuse('edit', data, {action: action})) return;
+                                        if (m.reuse('edit', data, { action: action })) return;
                                         m.getApp().launch().done(function () {
                                             if (action === 'appointment') {
                                                 data = api.removeRecurrenceInformation(data);
                                             }
-                                            this.edit(data, {action: action});
+                                            this.edit(data, { action: action });
                                         });
                                     },
                                     notifications.yell
@@ -252,7 +252,7 @@ define('io.ox/calendar/actions',
                                     folder: obj.folder_id || obj.folder
                                 };
                                 if (!series && obj.recurrence_position) {
-                                    _.extend(options, {recurrence_position: obj.recurrence_position});
+                                    _.extend(options, { recurrence_position: obj.recurrence_position });
                                 }
                                 return options;
                             }).uniq(function (obj) {
@@ -266,9 +266,9 @@ define('io.ox/calendar/actions',
                         if (hasRec) {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                                .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment', {tabIndex: '1'})
-                                .addPrimaryButton('series', gt('Delete whole series'), 'series', {tabIndex: '1'})
-                                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment', { tabIndex: 1 })
+                                .addPrimaryButton('series', gt('Delete whole series'), 'series', { tabIndex: 1 })
+                                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                                 .show()
                                 .done(function (action) {
                                     if (action === 'cancel') {
@@ -279,8 +279,8 @@ define('io.ox/calendar/actions',
                         } else {
                             new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete this appointment?'))
-                                .addPrimaryButton('ok', gt('Delete'), 'ok', {tabIndex: '1'})
-                                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                .addPrimaryButton('ok', gt('Delete'), 'ok', { tabIndex: 1 })
+                                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                                 .show()
                                 .done(function (action) {
                                     if (action === 'cancel') {
@@ -441,7 +441,6 @@ define('io.ox/calendar/actions',
         }
     });
 
-
     /* new actions for mobile */
 
     // Actions
@@ -490,19 +489,18 @@ define('io.ox/calendar/actions',
         }
     });
 
-
     // Mobile multi select extension points
     // delete appointment(s)
     ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
         id: 'delete',
         index: 10,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-trash-o">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/calendar/detail/actions/delete', null, baton);
@@ -519,12 +517,12 @@ define('io.ox/calendar/actions',
         id: 'move',
         index: 20,
         draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({ data: data.data });
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
                         $('<i class="fa fa-sign-in">')
-                            .on('click', {grid: data.grid}, function (e) {
+                            .on('click', { grid: data.grid }, function (e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/calendar/detail/actions/move', null, baton);

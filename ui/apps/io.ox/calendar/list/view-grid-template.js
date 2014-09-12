@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/list/view-grid-template',
-    ['io.ox/calendar/util',
-     'io.ox/core/extensions',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/calendar',
-     'less!io.ox/calendar/list/style'
-    ], function (util, ext, folderAPI, gt) {
+define('io.ox/calendar/list/view-grid-template', [
+    'io.ox/calendar/util',
+    'io.ox/core/extensions',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/calendar',
+    'less!io.ox/calendar/list/style'
+], function (util, ext, folderAPI, gt) {
 
     'use strict';
 

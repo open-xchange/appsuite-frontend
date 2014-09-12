@@ -11,13 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt',
-    ['io.ox/core/extensions',
-     'io.ox/core/event',
-     'io.ox/core/capabilities',
-     'io.ox/core/uuids',
-     'io.ox/core/http'
-    ], function (ext, Event, caps, uuids, http) {
+define.async('io.ox/realtime/rt', [
+    'io.ox/core/extensions',
+    'io.ox/core/event',
+    'io.ox/core/capabilities',
+    'io.ox/core/uuids',
+    'io.ox/core/http'
+], function (ext, Event, caps, uuids, http) {
 
     'use strict';
 
@@ -229,7 +229,7 @@ define.async('io.ox/realtime/rt',
     // Periodically poll
     actions.poll = function () {
         // no need to poll if no one is listening for events
-        if (! someoneIsListeningForRemoveEvents()) {   
+        if (! someoneIsListeningForRemoveEvents()) {
             return;
         }
 
@@ -403,7 +403,7 @@ define.async('io.ox/realtime/rt',
                 resource: tabId
             },
             timeout: TIMEOUT,
-            data: {type: 'nextSequence', seq: newSequence},
+            data: { type: 'nextSequence', seq: newSequence },
             silent: true
         }).done(function () {
             if (api.debug) {
@@ -693,7 +693,7 @@ define.async('io.ox/realtime/rt',
             resp.stanzas = [];
             // Handle the regular stanzas later
             setTimeout(function () {
-                handleResponse({stanzas: stanzas});
+                handleResponse({ stanzas: stanzas });
             }, 0);
             return handleResponse(resp);
         }).fail(function (resp) {
@@ -743,7 +743,7 @@ define.async('io.ox/realtime/rt',
                 def = resendDeferreds[Number(options.seq)];
             } else {
                 resendDeferreds[Number(options.seq)] = def;
-                resendBuffer[Number(options.seq)] = {count: 0, msg: options};
+                resendBuffer[Number(options.seq)] = { count: 0, msg: options };
             }
         }
 

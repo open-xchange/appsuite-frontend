@@ -12,12 +12,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define.async('io.ox/core/tk/contenteditable-editor',
-    ['io.ox/core/emoji/util',
-     'io.ox/core/capabilities',
-     'settings!io.ox/core',
-     'io.ox/core/extensions'
-    ], function (emoji, capabilities, settings, ext) {
+define.async('io.ox/core/tk/contenteditable-editor', [
+    'io.ox/core/emoji/util',
+    'io.ox/core/capabilities',
+    'settings!io.ox/core',
+    'io.ox/core/extensions'
+], function (emoji, capabilities, settings, ext) {
 
     'use strict';
 
@@ -303,7 +303,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
                     start = prev.children('li').length + 1;
                     ol.attr('start', start);
                 }
-            } catch (e) { }
+            } catch (e) {}
             // climb up
             container = p;
         }
@@ -459,7 +459,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
         }
 
         var resizeEditor = _.debounce(function () {
-          if (el === null) return;
+            if (el === null) return;
 
             var p = el.parent(),
             h = $(window).height(),

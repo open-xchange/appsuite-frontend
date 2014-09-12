@@ -11,13 +11,13 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('plugins/portal/oxdriveclients/register',
-    ['io.ox/core/extensions',
+define('plugins/portal/oxdriveclients/register', [
+    'io.ox/core/extensions',
     'gettext!plugins/portal',
     'io.ox/core/capabilities',
     'settings!plugins/portal/oxdriveclients',
     'less!plugins/portal/oxdriveclients/style'
-    ], function (ext, gt, capabilities, settings) {
+], function (ext, gt, capabilities, settings) {
 
     'use strict';
 
@@ -42,7 +42,7 @@ define('plugins/portal/oxdriveclients/register',
             isWindows = _.device('windows');
 
         if (isWindows) return ['Android', 'iOS', 'Mac OS'];
-        if (isAndroid) return  ['Windows', 'iOS', 'Mac OS'];
+        if (isAndroid) return ['Windows', 'iOS', 'Mac OS'];
         if (isIOS) return ['Mac OS', 'Windows', 'Android'];
         if (isMac) return ['iOS', 'Android', 'Windows'];
     }
@@ -63,16 +63,17 @@ define('plugins/portal/oxdriveclients/register',
                 .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
-                        href: url,
-                        target: '_blank'
-                    }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
+                href: url,
+                target: '_blank'
+            }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), settings.get('productName'), platform)));
         } else if (platform === 'windows' && capabilities.has('oxupdater')) {
-            return  [$('<i class="fa fa-download">'),
-                    $('<a class="shoplink">').attr({
-                        href: ox.apiRoot + url + '?session=' + ox.session,
-                        target: '_blank',
-                    }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
-                    ];
+            return [
+                $('<i class="fa fa-download">'),
+                $('<a class="shoplink">').attr({
+                    href: ox.apiRoot + url + '?session=' + ox.session,
+                    target: '_blank'
+                }).text(gt.format(gt('Download %s via the OX Updater'), settings.get('productName')))
+            ];
         } else {
             return $();
         }
@@ -88,7 +89,7 @@ define('plugins/portal/oxdriveclients/register',
             // .# String will include a product name and a platform forming a sentence like "Download OX Drive for Windows now."
             baton.message = gt.format(gt('Download %s for %s now'), settings.get('productName'), getPlatform());
             baton.teaser = gt.format(gt('The %s client lets you store and share your photos, files, documents and videos, anytime,' +
-                        'anywhere. Access any file you save to OX Drive from all your computers, iPhone, iPad or from within OX App Suite itself.'), settings.get('productName'));
+                'anywhere. Access any file you save to OX Drive from all your computers, iPhone, iPad or from within OX App Suite itself.'), settings.get('productName'));
             baton.link = settings.get('linkTo/' + getPlatform());
 
             return def.resolve();

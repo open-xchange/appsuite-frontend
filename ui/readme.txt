@@ -31,16 +31,14 @@ How to get the UI running in Debian/Ubuntu
     export builddir="/Library/WebServer/Documents/appsuite"
     --- snap ---
 
-
 5.  Run the app loading server
-        
+
         ./appserver.sh
 
     Don't worry: If it doesn't tell you anything it's happily running.
 
 6.  If everything works fine, the documentation should be at
     http://localhost/appsuite/doc/apache.html. Continue reading there!
-
 
 How to get the UI running on MacOS X
 ------------------------------------

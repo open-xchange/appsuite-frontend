@@ -12,14 +12,14 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/tumblr/register',
-    ['io.ox/core/extensions',
-     'io.ox/portal/feed',
-     'gettext!io.ox/portal',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/date',
-     'settings!io.ox/portal'
-    ], function (ext, Feed, gt, dialogs, date, settings) {
+define('plugins/portal/tumblr/register', [
+    'io.ox/core/extensions',
+    'io.ox/portal/feed',
+    'gettext!io.ox/portal',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/date',
+    'settings!io.ox/portal'
+], function (ext, Feed, gt, dialogs, date, settings) {
 
     'use strict';
 
@@ -160,7 +160,7 @@ define('plugins/portal/tumblr/register',
                                 width = photo.width;
                             }
                         });
-                        img = $('<img>').attr({'src': url}).css({
+                        img = $('<img>').attr({ 'src': url }).css({
                             'width': '100%',
                             'max-width': width,
                             'margin-bottom': '13px'
@@ -317,7 +317,7 @@ define('plugins/portal/tumblr/register',
                 model.set({
                     title: description,
                     props: { url: url, description: description }
-                }, {validate: true});
+                }, { validate: true });
                 model.unset('candidate');
             });
 

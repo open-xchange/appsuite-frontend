@@ -6,11 +6,11 @@
  *
  */
 
-define('plugins/mobile/addToHomescreen/register',
-    ['io.ox/core/extensions',
-     'gettext!plugins/mobile/addToHomescreen/i18n',
-     'css!plugins/mobile/addToHomescreen/style.css'
-    ], function (ext, gt) {
+define('plugins/mobile/addToHomescreen/register', [
+    'io.ox/core/extensions',
+    'gettext!plugins/mobile/addToHomescreen/i18n',
+    'css!plugins/mobile/addToHomescreen/style.css'
+], function (ext, gt) {
 
     'use strict';
 

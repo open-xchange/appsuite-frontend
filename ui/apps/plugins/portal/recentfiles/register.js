@@ -11,21 +11,21 @@
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/recentfiles/register',
-    ['io.ox/core/extensions',
-     'io.ox/files/api',
-     'io.ox/core/api/user',
-     'io.ox/core/date',
-     'gettext!plugins/portal',
-     'settings!io.ox/core',
-     'less!plugins/portal/recentfiles/style'
-    ], function (ext, filesAPI, userAPI, date, gt, settings) {
+define('plugins/portal/recentfiles/register', [
+    'io.ox/core/extensions',
+    'io.ox/files/api',
+    'io.ox/core/api/user',
+    'io.ox/core/date',
+    'gettext!plugins/portal',
+    'settings!io.ox/core',
+    'less!plugins/portal/recentfiles/style'
+], function (ext, filesAPI, userAPI, date, gt, settings) {
 
     'use strict';
 
     _(['recentfiles', 'myfiles']).each(function (type) {
 
-        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5: 10, columns: '1,3,4,5,20,700,701,702,703,704' };
+        var searchOptions = { sort: 5, order: 'desc', limit: _.device('smartphone') ? 5 : 10, columns: '1,3,4,5,20,700,701,702,703,704' };
         if (type === 'myfiles') {
             searchOptions.folder = settings.get('folder/infostore');
             searchOptions.omitFolder = false;

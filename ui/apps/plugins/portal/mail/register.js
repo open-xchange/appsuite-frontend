@@ -12,16 +12,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/portal/mail/register',
-    ['io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/date',
-     'io.ox/core/api/account',
-     'io.ox/portal/widgets',
-     'io.ox/core/tk/dialogs',
-     'gettext!plugins/portal'
-    ], function (ext, api, util, date, accountAPI, portalWidgets, dialogs, gt) {
+define('plugins/portal/mail/register', [
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/date',
+    'io.ox/core/api/account',
+    'io.ox/portal/widgets',
+    'io.ox/core/tk/dialogs',
+    'gettext!plugins/portal'
+], function (ext, api, util, date, accountAPI, portalWidgets, dialogs, gt) {
 
     'use strict';
 
@@ -160,7 +160,7 @@ define('plugins/portal/mail/register',
                                     }
                                 })(),
                                 $('<span class="bold">').text(_.noI18n(util.getDisplayName(mail.from[0]))), $.txt(' '),
-                                $('<span class="normal">').text(_.noI18n(_.ellipsis(mail.subject, {max: 50}))), $.txt(' '),
+                                $('<span class="normal">').text(_.noI18n(_.ellipsis(mail.subject, { max: 50 }))), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(received))
                             );
                         // Give plugins a chance to customize mail display
@@ -188,7 +188,7 @@ define('plugins/portal/mail/register',
             var accId = _.uniqueId('form-control-label-'),
                 nameId = _.uniqueId('form-control-label-'),
                 options = _(accounts).map(function (acc) {
-                    return $('<option>').val(acc.id).text(acc.name).prop('selected', props.id && (props.id === acc.id + ''));
+                    return $('<option>').val(acc.id).text(acc.name).prop('selected', props.id && (props.id === String(acc.id)));
                 }), accSelect, nameInput;
 
             dialog.header($('<h4>').text(gt('Inbox')))
@@ -290,9 +290,9 @@ define('plugins/portal/mail/register',
                     .data('item', data)
                     .append(
                         $('<span class="bold">').text(util.getDisplayName(data.from[0])), $.txt(' '),
-                        $('<span class="normal">').text(_.ellipsis(data.subject, {max: 100})), $.txt(' '),
+                        $('<span class="normal">').text(_.ellipsis(data.subject, { max: 100 })), $.txt(' '),
                         $('<span class="accent">').text(received), $.txt(' '),
-                        $('<span class="gray">').text(_.ellipsis(content, {max: 600}))
+                        $('<span class="gray">').text(_.ellipsis(content, { max: 600 }))
                     )
                 )
             );

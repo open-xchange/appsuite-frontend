@@ -11,13 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/linkedIn/view-detail',
-    ['io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/http',
-     'gettext!io.ox/portal',
-     'less!io.ox/linkedIn/style'
-    ], function (ext, dialogs, http, gt) {
+define('io.ox/linkedIn/view-detail', [
+    'io.ox/core/extensions',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/http',
+    'gettext!io.ox/portal',
+    'less!io.ox/linkedIn/style'
+], function (ext, dialogs, http, gt) {
 
     'use strict';
 
@@ -54,7 +54,7 @@ define('io.ox/linkedIn/view-detail',
         });
 
         rendererPoint.each(function (ext) {
-            $node.append(ext.draw({data: data, win: $node}));
+            $node.append(ext.draw({ data: data, win: $node }));
         });
 
         return $node;
@@ -117,7 +117,7 @@ define('io.ox/linkedIn/view-detail',
                         if (pastEngagementsVisible) {
                             $moreToggle.text('Show less');
                             _(pastEngagements).invoke('show');
-                            win.animate({scrollTop: _(pastEngagements).first().offset().top - 50}, 500);
+                            win.animate({ scrollTop: _(pastEngagements).first().offset().top - 50 }, 500);
                         } else {
                             $moreToggle.text('More...');
                             _(pastEngagements).invoke('hide');

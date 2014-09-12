@@ -11,17 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/api',
-    ['io.ox/core/http',
-     'io.ox/core/event',
-     'io.ox/core/folder/util',
-     'io.ox/core/folder/sort',
-     'io.ox/core/folder/blacklist',
-     'io.ox/core/folder/title',
-     'io.ox/core/folder/bitmask',
-     'io.ox/core/api/account',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, settings, gt) {
+define('io.ox/core/folder/api', [
+    'io.ox/core/http',
+    'io.ox/core/event',
+    'io.ox/core/folder/util',
+    'io.ox/core/folder/sort',
+    'io.ox/core/folder/blacklist',
+    'io.ox/core/folder/title',
+    'io.ox/core/folder/bitmask',
+    'io.ox/core/api/account',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, settings, gt) {
 
     'use strict';
 
@@ -386,7 +387,6 @@ define('io.ox/core/folder/api',
         });
     }
 
-
     //
     // Flat list
     //
@@ -426,11 +426,11 @@ define('io.ox/core/folder/api',
 
         if (collection.fetched && options.cache === true) {
             return $.when({
-                'private' : collection.toJSON(),
-                'public'  : getFlatCollection(module, 'public').toJSON(),
-                'shared'  : getFlatCollection(module, 'shared').toJSON(),
-                'sharing' : getFlatCollection(module, 'sharing').toJSON(),
-                'hidden'  : getFlatCollection(module, 'hidden').toJSON()
+                'private': collection.toJSON(),
+                'public':  getFlatCollection(module, 'public').toJSON(),
+                'shared':  getFlatCollection(module, 'shared').toJSON(),
+                'sharing': getFlatCollection(module, 'sharing').toJSON(),
+                'hidden':  getFlatCollection(module, 'hidden').toJSON()
             });
         }
 

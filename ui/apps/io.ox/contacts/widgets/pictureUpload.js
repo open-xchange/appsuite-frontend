@@ -10,11 +10,11 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/contacts/widgets/pictureUpload',
-    ['io.ox/core/notifications',
-     'gettext!io.ox/contacts',
-     'less!io.ox/contacts/widgets/widgets'
-    ], function (notifications, gt) {
+define('io.ox/contacts/widgets/pictureUpload', [
+    'io.ox/core/notifications',
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/widgets/widgets'
+], function (notifications, gt) {
 
     'use strict';
 
@@ -34,7 +34,7 @@ define('io.ox/contacts/widgets/pictureUpload',
 
             resetImage: function (e) {
                 e.stopImmediatePropagation();
-                this.model.set('image1', '', {validate: true});
+                this.model.set('image1', '', { validate: true });
                 this.closeBtn.hide();
                 this.addImgText.show();
                 this.setImageURL();
@@ -147,7 +147,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 );
 
                 if (!self.oldMode || hasImage) {
-                    self.fileInput.css({ height: '1px', width: '1px', cursor: 'pointer'});
+                    self.fileInput.css({ height: '1px', width: '1px', cursor: 'pointer' });
                 }
 
                 self.imgCon.on('click', function () { self.fileInput.trigger('click'); });

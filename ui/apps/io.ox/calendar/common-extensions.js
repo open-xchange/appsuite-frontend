@@ -11,15 +11,14 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/calendar/common-extensions',
-    ['io.ox/core/extensions',
-     'io.ox/calendar/view-detail'
-    ], function (ext) {
+define('io.ox/calendar/common-extensions', [
+    'io.ox/core/extensions',
+    'io.ox/calendar/view-detail'
+], function (ext) {
 
     'use strict';
 
     var extensions = {
-
 
         title: function (baton) {
             this.append(

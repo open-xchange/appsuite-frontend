@@ -10,17 +10,17 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/calendar/model',
-    ['io.ox/calendar/api',
-     'io.ox/backbone/modelFactory',
-     'io.ox/core/extensions',
-     'gettext!io.ox/calendar',
-     'io.ox/backbone/validation',
-     'io.ox/participants/model',
-     'io.ox/core/date',
-     'io.ox/core/folder/api',
-     'settings!io.ox/calendar'
-    ], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
+define('io.ox/calendar/model', [
+    'io.ox/calendar/api',
+    'io.ox/backbone/modelFactory',
+    'io.ox/core/extensions',
+    'gettext!io.ox/calendar',
+    'io.ox/backbone/validation',
+    'io.ox/participants/model',
+    'io.ox/core/date',
+    'io.ox/core/folder/api',
+    'settings!io.ox/calendar'
+], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
     'use strict';
 
@@ -35,7 +35,7 @@ define('io.ox/calendar/model',
                 folder: model.get('folder_id') || model.get('folder')
             };
             if (model.attributes.recurrence_position) {
-                _.extend(options, {recurrence_position: model.get('recurrence_position')});
+                _.extend(options, { recurrence_position: model.get('recurrence_position') });
             }
             return api.remove(options);
         },
@@ -77,7 +77,7 @@ define('io.ox/calendar/model',
                         return;
                     }
                     resetListUpdate = true;
-                    self.set('participants', participants.toJSON(), {validate: true});
+                    self.set('participants', participants.toJSON(), { validate: true });
                     resetListUpdate = false;
                 }
 
@@ -137,7 +137,7 @@ define('io.ox/calendar/model',
 
     Validators.validationFor('io.ox/calendar/model', {
         title: { format: 'string', mandatory: true },
-        start_date : { format: 'date', mandatory: true },
+        start_date: { format: 'date', mandatory: true },
         end_date: { format: 'date', mandatory: true }
     });
 
@@ -149,7 +149,7 @@ define('io.ox/calendar/model',
                     if (options.create) {
                         // it's a private folder for the current user, add him by default
                         // as participant
-                        model.getParticipants().addUniquely({id: userID, type: 1});
+                        model.getParticipants().addUniquely({ id: userID, type: 1 });
 
                         // use a new, custom and unused property in his model to specify that he can't be removed
                         model.getParticipants().get(userID).set('ui_removable', false, { validate: true });
@@ -161,11 +161,11 @@ define('io.ox/calendar/model',
                 } else if (folderAPI.is('public', folder)) {
                     if (options.create) {
                         // if public folder, current user will be added
-                        model.getParticipants().addUniquely({id: userID, type: 1});
+                        model.getParticipants().addUniquely({ id: userID, type: 1 });
                     }
                 } else if (folderAPI.is('shared', folder)) {
                     // in a shared folder the owner (created_by) will be added by default
-                    model.getParticipants().addUniquely({id: folder.created_by, type: 1});
+                    model.getParticipants().addUniquely({ id: folder.created_by, type: 1 });
                 }
 
             });

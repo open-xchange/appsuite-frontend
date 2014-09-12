@@ -11,14 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/tree',
-    ['io.ox/core/folder/node',
-     'io.ox/core/folder/selection',
-     'io.ox/core/folder/api',
-     'io.ox/core/extensions',
-     'io.ox/core/folder/favorites',
-     'io.ox/core/folder/extensions',
-     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, ext) {
+define('io.ox/core/folder/tree', [
+    'io.ox/core/folder/node',
+    'io.ox/core/folder/selection',
+    'io.ox/core/folder/api',
+    'io.ox/core/extensions',
+    'io.ox/core/folder/favorites',
+    'io.ox/core/folder/extensions',
+    'less!io.ox/core/folder/style'
+], function (TreeNodeView, Selection, api, ext) {
 
     'use strict';
 
@@ -27,9 +28,9 @@ define('io.ox/core/folder/tree',
         className: 'folder-tree abs',
 
         events: {
-            'click .contextmenu-control'    : 'onToggleContextMenu',
-            'keydown .contextmenu-control'  : 'onKeydown',
-            'contextmenu .selectable'       : 'onContextMenu'
+            'click .contextmenu-control':   'onToggleContextMenu',
+            'keydown .contextmenu-control': 'onKeydown',
+            'contextmenu .selectable':      'onContextMenu'
         },
 
         initialize: function (options) {

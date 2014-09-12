@@ -11,16 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/settings/downloads/pane',
-    ['io.ox/core/extensions',
-     'io.ox/core/capabilities',
-     'io.ox/core/config',
-     'gettext!io.ox/core',
-     'settings!io.ox/core',
-     'settings!plugins/portal/oxdriveclients',
-     'less!io.ox/core/settings/downloads/style',
-     'less!plugins/portal/oxdriveclients/style'
-    ], function (ext, capabilities, config, gt, settings, driveClientsSettings) {
+define('io.ox/core/settings/downloads/pane', [
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/config',
+    'gettext!io.ox/core',
+    'settings!io.ox/core',
+    'settings!plugins/portal/oxdriveclients',
+    'less!io.ox/core/settings/downloads/style',
+    'less!plugins/portal/oxdriveclients/style'
+], function (ext, capabilities, config, gt, settings, driveClientsSettings) {
 
     'use strict';
 
@@ -102,9 +102,9 @@ define('io.ox/core/settings/downloads/pane',
                 .css('background-image', 'url(' + imagePath + lang + '_'  + platform + '.png)');
 
             return $('<a class="shoplink">').attr({
-                        href: url,
-                        target: '_blank'
-                    }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
+                href: url,
+                target: '_blank'
+            }).append($img, $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
         };
 
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
@@ -143,7 +143,7 @@ define('io.ox/core/settings/downloads/pane',
                     )
                 );
             }
-         });
+        });
     }
 
     // no download available?

@@ -11,19 +11,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/detail/view',
-    ['io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/api/collection-pool',
-     'io.ox/mail/detail/content',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/emoji/util',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style',
-     'io.ox/mail/actions'
-    ], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
+define('io.ox/mail/detail/view', [
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/api/collection-pool',
+    'io.ox/mail/detail/content',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/emoji/util',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style',
+    'io.ox/mail/actions'
+], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
 
@@ -92,12 +92,12 @@ define('io.ox/mail/detail/view',
     ext.point(extPoint).extend(new links.Dropdown({
         id: 'actions',
         index: _.device('smartphone') ? 50 : INDEX_header += 100,
-        classes: _.device('smartphone') ? '': 'actions pull-right',
+        classes: _.device('smartphone') ? '' : 'actions pull-right',
         label: gt('Actions'),
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
         noCaret: true,
-        ref: 'io.ox/mail/links/inline',
+        ref: 'io.ox/mail/links/inline'
     }));
 
     ext.point('io.ox/mail/detail/header').extend({
@@ -294,7 +294,7 @@ define('io.ox/mail/detail/view',
                 this.onUnseen();
             } else {
                 //if this mail was read elsewhere notify other apps about it, for example the notification area (also manages new mail window title)
-                api.trigger('update:set-seen', [{id: this.model.get('id'), folder_id: this.model.get('folder_id')}]);
+                api.trigger('update:set-seen', [{ id: this.model.get('id'), folder_id: this.model.get('folder_id') }]);
             }
         },
 
@@ -308,7 +308,7 @@ define('io.ox/mail/detail/view',
             var $li = this.$el;
 
             if (state === undefined) {
-                $li.toggleClass('expanded'); 
+                $li.toggleClass('expanded');
                 $li.attr('aria-expanded', !$li.attr('aria-expanded'));
             } else {
                 $li.toggleClass('expanded', state);

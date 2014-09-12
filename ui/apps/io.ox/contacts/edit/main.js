@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/edit/main',
-    ['io.ox/contacts/edit/view-form',
-     'io.ox/contacts/model',
-     'gettext!io.ox/contacts',
-     'io.ox/core/extensions',
-     'io.ox/contacts/util',
-     'io.ox/core/extPatterns/dnd',
-     'io.ox/core/capabilities',
-     'io.ox/core/notifications',
-     'io.ox/core/util',
-     'less!io.ox/contacts/edit/style'
-    ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
+define('io.ox/contacts/edit/main', [
+    'io.ox/contacts/edit/view-form',
+    'io.ox/contacts/model',
+    'gettext!io.ox/contacts',
+    'io.ox/core/extensions',
+    'io.ox/contacts/util',
+    'io.ox/core/extPatterns/dnd',
+    'io.ox/core/capabilities',
+    'io.ox/core/notifications',
+    'io.ox/core/util',
+    'less!io.ox/contacts/edit/style'
+], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
 
     'use strict';
 
@@ -160,7 +160,7 @@ define('io.ox/contacts/edit/main',
                             if (contact.get('id')) {//set url parameters
                                 app.setState({ folder: contact.get('folder_id'), id: contact.get('id') });
                             } else {
-                                app.setState({ folder: contact.get('folder_id'), id: null});
+                                app.setState({ folder: contact.get('folder_id'), id: null });
                             }
                         });
                         if (_.device('small')) {
@@ -232,7 +232,7 @@ define('io.ox/contacts/edit/main',
                                      : { folder: data.folder_id });
                 cont(data);
             } else {
-                cont({folder_id: app.getState().folder, id: app.getState().id});
+                cont({ folder_id: app.getState().folder, id: app.getState().id });
             }
 
             return def;
@@ -247,8 +247,8 @@ define('io.ox/contacts/edit/main',
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {'tabIndex': '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete',  { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

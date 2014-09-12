@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/print',
-    ['io.ox/core/print',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/mail/detail/content',
-     'gettext!io.ox/mail'
-    ], function (print, api, util, content,  gt) {
+define('io.ox/mail/print', [
+    'io.ox/core/print',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/mail/detail/content',
+    'gettext!io.ox/mail'
+], function (print, api, util, content,  gt) {
 
     'use strict';
 

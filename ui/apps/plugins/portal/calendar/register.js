@@ -12,14 +12,14 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/calendar/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/calendar/util',
-     'gettext!plugins/portal',
-     'settings!io.ox/calendar',
-     'io.ox/calendar/api'
-    ], function (ext, date, util, gt, settings, api) {
+define('plugins/portal/calendar/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/date',
+    'io.ox/calendar/util',
+    'gettext!plugins/portal',
+    'settings!io.ox/calendar',
+    'io.ox/calendar/api'
+], function (ext, date, util, gt, settings, api) {
 
     'use strict';
 
@@ -119,7 +119,7 @@ define('plugins/portal/calendar/register',
             require(['io.ox/calendar/view-detail'], function (view) {
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data, {deeplink: true}));
+                    popup.idle().append(view.draw(data, { deeplink: true }));
                 });
             });
         },

@@ -11,14 +11,14 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/main',
-    ['gettext!io.ox/tasks',
-     'io.ox/core/extensions',
-     'io.ox/tasks/model',
-     'io.ox/tasks/edit/view',
-     'io.ox/core/extPatterns/dnd',
-     'less!io.ox/tasks/edit/style'
-    ], function (gt, ext, model, view, dnd) {
+define('io.ox/tasks/edit/main', [
+    'gettext!io.ox/tasks',
+    'io.ox/core/extensions',
+    'io.ox/tasks/model',
+    'io.ox/tasks/edit/view',
+    'io.ox/core/extPatterns/dnd',
+    'less!io.ox/tasks/edit/style'
+], function (gt, ext, model, view, dnd) {
 
     'use strict';
 
@@ -110,7 +110,7 @@ define('io.ox/tasks/edit/main',
                 app.model = taskModel = model.factory.create();
                 if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
                     options.folderid = parseInt(options.folderid, 10);//folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
-                    taskModel.set('folder_id', options.folderid, {validate: true});
+                    taskModel.set('folder_id', options.folderid, { validate: true });
                 }
                 app.view = taskView = view.getView(taskModel, win.nodes.main, app);
             }
@@ -128,7 +128,7 @@ define('io.ox/tasks/edit/main',
                 if (taskModel.get('id')) {//set url parameters
                     self.setState({ folder: taskModel.attributes.folder_id, id: taskModel.attributes.id });
                 } else {
-                    self.setState({ folder: taskModel.attributes.folder_id, id: null});
+                    self.setState({ folder: taskModel.attributes.folder_id, id: null });
                 }
             });
 
@@ -159,8 +159,8 @@ define('io.ox/tasks/edit/main',
                         .text(gt('Do you really want to discard your changes?'))
                         //#. "Discard changes" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

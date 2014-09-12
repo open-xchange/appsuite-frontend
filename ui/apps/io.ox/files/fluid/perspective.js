@@ -11,22 +11,22 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/files/fluid/perspective',
-    ['io.ox/files/fluid/view-detail',
-     'io.ox/core/extensions',
-     'io.ox/core/commons',
-     'io.ox/core/tk/dialogs',
-     'io.ox/files/api',
-     'io.ox/core/date',
-     'io.ox/core/tk/upload',
-     'io.ox/core/extPatterns/dnd',
-     'io.ox/core/extPatterns/shortcuts',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/files/util',
-     'gettext!io.ox/files',
-     'io.ox/core/tk/selection',
-     'io.ox/core/notifications'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
+define('io.ox/files/fluid/perspective', [
+    'io.ox/files/fluid/view-detail',
+    'io.ox/core/extensions',
+    'io.ox/core/commons',
+    'io.ox/core/tk/dialogs',
+    'io.ox/files/api',
+    'io.ox/core/date',
+    'io.ox/core/tk/upload',
+    'io.ox/core/extPatterns/dnd',
+    'io.ox/core/extPatterns/shortcuts',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/files/util',
+    'gettext!io.ox/files',
+    'io.ox/core/tk/selection',
+    'io.ox/core/notifications'
+], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
 
     'use strict';
 
@@ -44,24 +44,34 @@ define('io.ox/files/fluid/perspective',
 
     function drawGenericIcon(name) {
         var node = $('<i>');
-        if (/(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
-        else if (/(xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
-        else if (/(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/i.test(name)) { node.addClass('fa fa-picture-o file-type-ppt'); }
-        else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('fa fa-music'); }
-        else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('fa fa-film'); }
-        else if ((/(epub|mobi)$/i).test(name)) { node.addClass('fa fa-book'); }
-        else if ((/(cbz|cbr|cb7|cbt|cba)$/i).test(name)) { node.addClass('fa fa-comment-o'); }
-        else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('fa fa-archive'); }
-        else { node.addClass('fa fa-file'); }
+        if (/(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/i.test(name)) {
+            node.addClass('fa fa-align-left file-type-doc');
+        } else if (/(xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/i.test(name)) {
+            node.addClass('fa fa-table file-type-xls');
+        } else if (/(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/i.test(name)) {
+            node.addClass('fa fa-picture-o file-type-ppt');
+        } else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) {
+            node.addClass('fa fa-music');
+        } else if ((/(mp4|ogv|webm)$/i).test(name)) {
+            node.addClass('fa fa-film');
+        } else if ((/(epub|mobi)$/i).test(name)) {
+            node.addClass('fa fa-book');
+        } else if ((/(cbz|cbr|cb7|cbt|cba)$/i).test(name)) {
+            node.addClass('fa fa-comment-o');
+        } else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) {
+            node.addClass('fa fa-archive');
+        } else {
+            node.addClass('fa fa-file');
+        }
         return node.addClass('not-selectable');
     }
 
     function cut(str, maxLen, cutPos) {
         return _.ellipsis(str, {
-                max: maxLen || 70,
-                length: cutPos || 15,
-                charpos: 'middle'
-            });
+            max: maxLen || 70,
+            length: cutPos || 15,
+            charpos: 'middle'
+        });
     }
 
     function dropZoneInit(app) {
@@ -199,7 +209,7 @@ define('io.ox/files/fluid/perspective',
         id: 'selection',
         register: function (baton) {
 
-            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
+            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined });
             //selection accessible via app
             baton.app.selection = this.selection;
 
@@ -331,8 +341,8 @@ define('io.ox/files/fluid/perspective',
                 wrapper.scrollTop(y);
             },
             isFolderHidden = function () {
-                    return !baton.app.folderViewIsVisible();
-                };
+                return !baton.app.folderViewIsVisible();
+            };
             this.append(
                 filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
                     .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
@@ -432,7 +442,7 @@ define('io.ox/files/fluid/perspective',
                         //smart last modified
                         $('<span class="text modified">').text(gt.noI18n(changed)),
                         //filesize
-                        $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''})))
+                        $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, { digits: 1, zerochar: '' })))
                     )
                 );
             if (_.device('smartphone')) {
@@ -524,13 +534,14 @@ define('io.ox/files/fluid/perspective',
                 var width = wrapper.width(),
                     container = self.main;
 
-                if (width > 768)
+                if (width > 768) {
                     container.removeClass('width-less-than-768 width-less-than-480');
-                else if (width >= 480 && width <= 768) {
+                } else if (width >= 480 && width <= 768) {
                     container.addClass('width-less-than-768');
                     container.removeClass('width-less-than-480');
-                } else if (width <= 480)
+                } else if (width <= 480) {
                     container.addClass('width-less-than-768 width-less-than-480');
+                }
             };
             adjustWidth();
             app.on('folderview:close folderview:open folderview:resize', _.debounce(function () {
@@ -540,8 +551,8 @@ define('io.ox/files/fluid/perspective',
             //register dnd handler
             dropZoneInit(app);
             app.on('perspective:fluid:hide ' + events('hide'), dropZoneOff)
-               .on('perspective:fluid:show ' + events('show'), dropZoneOn)
-               .on('folder:change', function () {
+                .on('perspective:fluid:show ' + events('show'), dropZoneOn)
+                .on('folder:change', function () {
                     app.currentFile = null;
                     dropZoneInit(app);
                     app.getWindow().search.clear();
@@ -576,12 +587,12 @@ define('io.ox/files/fluid/perspective',
                 scrollpane.on('tap', '.file-cell', function (e, data) {
                     var cid = _.cid($(this).attr('data-obj-id')),
                         valid = e.target.type !== 'checkbox' || data === 'automated';
-                    if (valid)
+                    if (valid) {
                         preview.call(self, e, cid);
                         self.selection.trigger('select', [cid]);
+                    }
                 });
             }
-
 
             //register dialog handler
             dialog.on('close', function () {
@@ -789,19 +800,19 @@ define('io.ox/files/fluid/perspective',
                     var pct = position / files.length;
                     win.busy(pct, 0);
                     return api.uploadNewVersion({
-                            file: item.file,
-                            id: app.currentFile.id,
-                            folder: app.currentFile.folder_id,
-                            timestamp: _.now()
-                        })
-                        .progress(function (e) {
-                            var sub = e.loaded / e.total;
-                            win.busy(pct + sub / files.length, sub);
-                        }).fail(function (e) {
-                            if (e && e.data && e.data.custom) {
-                                notifications.yell(e.data.custom.type, e.data.custom.text);
-                            }
-                        });
+                        file: item.file,
+                        id: app.currentFile.id,
+                        folder: app.currentFile.folder_id,
+                        timestamp: _.now()
+                    })
+                    .progress(function (e) {
+                        var sub = e.loaded / e.total;
+                        win.busy(pct + sub / files.length, sub);
+                    }).fail(function (e) {
+                        if (e && e.data && e.data.custom) {
+                            notifications.yell(e.data.custom.type, e.data.custom.text);
+                        }
+                    });
                 },
                 stop: function () {
                     win.idle();
@@ -873,10 +884,11 @@ define('io.ox/files/fluid/perspective',
 
                         _(allIds).each(function (obj) {
                             var cid = _.cid(obj);
-                            if (cid in oldhash)
+                            if (cid in oldhash) {
                                 duplicates[cid] = true;
-                            else
+                            } else {
                                 oldhash[cid] = obj;
+                            }
                         });
 
                         _(ids).each(function (obj) {

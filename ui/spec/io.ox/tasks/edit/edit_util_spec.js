@@ -32,7 +32,7 @@ define(['io.ox/tasks/edit/util',
             });
             it('should fill rest array', function () {
                 var rows = {};
-                extensionPoints.push({text: 'I have no row!'});
+                extensionPoints.push({ text: 'I have no row!' });
                 util.splitExtensionsByRow(extensionPoints, rows, true);
                 expect(rows).to.include.key('rest');
                 expect(rows.rest).to.have.length(1);
@@ -106,7 +106,7 @@ define(['io.ox/tasks/edit/util',
         describe('buildExtensionRow', function () {
             it('should build fluid grid row', function () {
                 var node = $('<div>'),
-                    baton = ext.Baton({model: model.factory.create(testData.testData)}),
+                    baton = ext.Baton({ model: model.factory.create(testData.testData) }),
                     rows = {},
                     fluidRow;
 

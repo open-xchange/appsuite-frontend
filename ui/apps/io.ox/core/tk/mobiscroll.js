@@ -11,13 +11,13 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/tk/mobiscroll',
-    ['apps/3rd.party/mobiscroll/mobiscroll.js',
-     'gettext!io.ox/core',
-     'io.ox/core/date',
-     'css!3rd.party/mobiscroll/css/mobiscroll.core.css',
-     'css!3rd.party/mobiscroll/css/mobiscroll.ios7.css'
-    ], function (mobi, gt, date) {
+define('io.ox/core/tk/mobiscroll', [
+    'apps/3rd.party/mobiscroll/mobiscroll.js',
+    'gettext!io.ox/core',
+    'io.ox/core/date',
+    'css!3rd.party/mobiscroll/css/mobiscroll.core.css',
+    'css!3rd.party/mobiscroll/css/mobiscroll.ios7.css'
+], function (mobi, gt, date) {
 
     'use strict';
 

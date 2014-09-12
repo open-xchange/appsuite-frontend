@@ -31,7 +31,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
     /**
      * Formats for validation
      */
-    regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4 })+$/;
 
     formats = {
         string: function () {
@@ -423,7 +423,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         }()),
 
         // store method must be replaced by custom handler
-        store: function () { },
+        store: function () {},
 
         // destructor
         destroy: function () {

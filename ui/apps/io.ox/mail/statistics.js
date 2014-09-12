@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/statistics',
-    ['io.ox/mail/api',
-     'io.ox/core/api/account',
-     'io.ox/core/extensions',
-     'io.ox/core/date',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/mail',
-     'static/3rd.party/Chart.js/Chart.js'
-    ], function (api, accountAPI, ext, date, dialogs, gt) {
+define('io.ox/mail/statistics', [
+    'io.ox/mail/api',
+    'io.ox/core/api/account',
+    'io.ox/core/extensions',
+    'io.ox/core/date',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/mail',
+    'static/3rd.party/Chart.js/Chart.js'
+], function (api, accountAPI, ext, date, dialogs, gt) {
 
     'use strict';
 

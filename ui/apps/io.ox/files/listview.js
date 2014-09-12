@@ -11,14 +11,13 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/files/listview',
-    ['io.ox/files/common-extensions',
-     'io.ox/core/extensions',
-     'less!io.ox/files/style'
-    ], function (extensions, ext) {
+define('io.ox/files/listview', [
+    'io.ox/files/common-extensions',
+    'io.ox/core/extensions',
+    'less!io.ox/files/style'
+], function (extensions, ext) {
 
     'use strict';
-
 
     ext.point('io.ox/files/listview/item').extend({
         id: 'default',

@@ -117,7 +117,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
 
             it('same day', function () {
                 var start = new date.Local(2012, 10, 11).getTime();
-                expect(util.getDateInterval({ start_date: start, end_date: start + date.WEEK})).to.equal('So., 11.11.2012 – So., 18.11.2012');
+                expect(util.getDateInterval({ start_date: start, end_date: start + date.WEEK })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
         });
@@ -135,7 +135,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
 
             it('same day', function () {
                 var start = new date.Local(2012, 10, 11, 11, 11, 0).getTime();
-                expect(util.getTimeInterval({ start_date: start, end_date: start + date.HOUR})).to.equal('11:11-12:11');
+                expect(util.getTimeInterval({ start_date: start, end_date: start + date.HOUR })).to.equal('11:11-12:11');
             });
 
         });
@@ -359,17 +359,17 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
 
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(userList));
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(userList));
                 });
                 this.server.respondWith('PUT', /api\/group\?action=list/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '{"timestamp":1383694139525,"data":[{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}]}'
                     );
                 });
             });
 
             it('for test group', function (done) {
-                util.resolveGroupMembers([{id: 1337}], [4]).then(function (result) {
+                util.resolveGroupMembers([{ id: 1337 }], [4]).then(function (result) {
                     var expectedResult = [{
                         'id': 1,
                         'folder_id': 6,

@@ -12,15 +12,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/files/carousel',
-    ['io.ox/core/commons',
-     'io.ox/core/capabilities',
-     'gettext!io.ox/files',
-     'io.ox/files/api',
-     'io.ox/preview/main',
-     'io.ox/core/folder/breadcrumb',
-     'less!io.ox/files/carousel'
-    ], function (commons, capabilities, gt, api, preview, getBreadcrumb) {
+define('io.ox/files/carousel', [
+    'io.ox/core/commons',
+    'io.ox/core/capabilities',
+    'gettext!io.ox/files',
+    'io.ox/files/api',
+    'io.ox/preview/main',
+    'io.ox/core/folder/breadcrumb',
+    'less!io.ox/files/carousel'
+], function (commons, capabilities, gt, api, preview, getBreadcrumb) {
 
     'use strict';
 
@@ -135,7 +135,7 @@ define('io.ox/files/carousel',
                 } else {
                     index = this.findStartItem (config.baton, this.list);
                 }
-                this.pos = _.defaults({cur: index}, this.defaults );
+                this.pos = _.defaults({ cur: index }, this.defaults );
             } else {
                 this.pos = _.extend({}, this.defaults); // get a fresh copy
             }

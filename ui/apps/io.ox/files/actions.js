@@ -11,18 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/files/actions',
-    ['io.ox/files/api',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/capabilities',
-     'io.ox/core/notifications',
-     'io.ox/core/util',
-     'io.ox/core/folder/api',
-     'gettext!io.ox/files',
-     'settings!io.ox/files'
-    ], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
+define('io.ox/files/actions', [
+    'io.ox/files/api',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/capabilities',
+    'io.ox/core/notifications',
+    'io.ox/core/util',
+    'io.ox/core/folder/api',
+    'gettext!io.ox/files',
+    'settings!io.ox/files'
+], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -81,7 +81,7 @@ define('io.ox/files/actions',
                     data = data || {};
                     return e.collection.has('one') && !_.isEmpty(e.baton.data.filename) && !folderAPI.is('trash', data);
                 };
-            if (e.baton.app){
+            if (e.baton.app) {
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -124,7 +124,7 @@ define('io.ox/files/actions',
                             (e.baton.openedBy !== 'io.ox/mail/compose') &&
                             !folderAPI.is('trash', data);
                     };
-                if (e.baton.app){
+                if (e.baton.app) {
                     return e.baton.app.folder.getData().then(check);
                 } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                     return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -144,7 +144,7 @@ define('io.ox/files/actions',
                         data = data || {};
                         return e.baton.openedBy !== 'io.ox/mail/compose' && !folderAPI.is('trash', data);
                     };
-                if (e.baton.app){
+                if (e.baton.app) {
                     return e.baton.app.folder.getData().then(check);
                 } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                     return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -233,7 +233,7 @@ define('io.ox/files/actions',
                         e.baton.openedBy !== 'io.ox/mail/compose' &&
                         !folderAPI.is('trash', data);
                 };
-            if (e.baton.app){
+            if (e.baton.app) {
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -271,7 +271,7 @@ define('io.ox/files/actions',
                             return memo || obj.file_size > 0;
                         }, false);
                 };
-            if (e.baton.app){
+            if (e.baton.app) {
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -299,7 +299,7 @@ define('io.ox/files/actions',
                         e.collection.has('some') &&
                         !folderAPI.is('trash', data);
                 };
-            if (e.baton.app){
+            if (e.baton.app) {
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -338,7 +338,7 @@ define('io.ox/files/actions',
                                 })
                             );
                         })
-                        .addPrimaryButton('cancel', gt('Close'), 'cancel', {'tabIndex': '1'})
+                        .addPrimaryButton('cancel', gt('Close'), 'cancel',  { 'tabIndex': '1' })
                         .show(function () {
                             this.find('a.direct-link').focus();
                         });
@@ -377,8 +377,8 @@ define('io.ox/files/actions',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog()
                     .text(question)
-                    .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                    .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
+                    .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -482,7 +482,7 @@ define('io.ox/files/actions',
                 var filename = baton.data.filename || baton.data.title;
 
                 /**
-                 * @return {promise}
+                 * @return { promise }
                  */
                 function fnRename(name) {
 
@@ -503,7 +503,7 @@ define('io.ox/files/actions',
 
                 /**
                  * user have to confirm if name doesn't contains a file extension
-                 * @return {promise}
+                 * @return { promise }
                  */
                 function process($input) {
 
@@ -539,8 +539,8 @@ define('io.ox/files/actions',
                     .append(
                         $('<input type="text" name="name" class="form-control" tabindex="1">')
                     )
-                    .addPrimaryButton('rename', gt('Rename'), 'rename', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'),  'cancel', {'tabIndex': '1'})
+                    .addPrimaryButton('rename', gt('Rename'), 'rename',  { 'tabIndex': '1' })
+                    .addButton('cancel', gt('Cancel'),  'cancel',  { 'tabIndex': '1' })
                     .on('rename', function () {
                         var $input = this.getContentNode().find('input[name="name"]');
                         process($input).then(this.close, this.idle);
@@ -593,8 +593,8 @@ define('io.ox/files/actions',
                 .append(
                     $form
                 )
-                .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                .addPrimaryButton('save', gt('Save'), 'save',  { 'tabIndex': '1' })
+                .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                 .show(function () {
                     $input.select();
                     keys.include();
@@ -644,7 +644,7 @@ define('io.ox/files/actions',
                     data = data || {};
                     return e.collection.has('one') && !_.isEmpty(e.baton.data) && !folderAPI.is('trash', data);
                 };
-            if (e.baton.app){
+            if (e.baton.app) {
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -699,8 +699,8 @@ define('io.ox/files/actions',
                 // ask
                 new dialogs.ModalDialog()
                     .text(question)
-                    .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                    .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
+                    .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -1057,7 +1057,7 @@ define('io.ox/files/actions',
                 data = data || {};
                 return folderAPI.can('publish', data) && !folderAPI.is('trash', data);
             };
-            if (e.baton.app){
+            if (e.baton.app) {
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
                 return folderAPI.get(e.baton.data.folder_id).then(check);
@@ -1115,7 +1115,7 @@ define('io.ox/files/actions',
     /**
      * filters 'description only files'
      * @param  {object|array} list or single item
-     * @return {deferred} resolves as array
+     * @return { deferred} resolves as array
      */
     function filterUnsupported(list) {
         return api.getList(list, false).then(function (data) {//no cache use here or just the current version is returned

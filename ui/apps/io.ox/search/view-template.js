@@ -11,15 +11,15 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/view-template',
-    ['gettext!io.ox/core',
-     'io.ox/core/extensions',
-     'io.ox/core/api/apps',
-     'settings!io.ox/core',
-     'io.ox/search/autocomplete/view',
-     'io.ox/search/facets/view',
-     'io.ox/core/tk/autocomplete'
-    ], function (gt, ext, appAPI, settings) {
+define('io.ox/search/view-template', [
+    'gettext!io.ox/core',
+    'io.ox/core/extensions',
+    'io.ox/core/api/apps',
+    'settings!io.ox/core',
+    'io.ox/search/autocomplete/view',
+    'io.ox/search/facets/view',
+    'io.ox/core/tk/autocomplete'
+], function (gt, ext, appAPI, settings) {
 
     'use strict';
 
@@ -76,8 +76,7 @@ define('io.ox/search/view-template',
             _(apps).each(function (id) {
                 var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
                 items.push(
-                    $('<li>')
-                    .append(
+                    $('<li>').append(
                         $('<a href="#">')
                             .attr({
                                 'title': title,
@@ -133,10 +132,11 @@ define('io.ox/search/view-template',
 
             //append or replace
             elem = this.find('.row.applications');
-            if (elem.length)
+            if (elem.length) {
                 elem.replaceWith(row);
-            else
+            } else {
                 this.append(row);
+            }
         }
     });
 
@@ -154,10 +154,11 @@ define('io.ox/search/view-template',
             ext.point('io.ox/search/facets/facets').invoke('draw', cell, baton);
 
             elem = this.find('.row.facets');
-            if (elem.length)
+            if (elem.length) {
                 elem.replaceWith(row);
-            else
+            } else {
                 this.append(row);
+            }
         }
     });
 
@@ -178,19 +179,18 @@ define('io.ox/search/view-template',
                 count = items.length - baton.model.get('extra'),
                 row = items.length <= baton.model.get('size') ?
                     $('<div class="info">').hide() :
-                    $('<div class="info">')
-                        .append(
-                            $('<span>')
-                            .addClass('info-item')
-                            .append(
-                                gt('More than the currently displayed %1$s items were found', count)
-                            )
-                        );
-            var elem = this.find('.info');
-            if (elem.length)
+                    $('<div class="info">').append(
+                        $('<span class="info-item">').append(
+                            gt('More than the currently displayed %1$s items were found', count)
+                        )
+                    ),
+                elem = this.find('.info');
+
+            if (elem.length) {
                 elem.replaceWith(row);
-            else
+            } else {
                 this.append(row);
+            }
         }
     });
 
@@ -199,11 +199,10 @@ define('io.ox/search/view-template',
         index: 500,
         draw: function () {
             this.append(
-                $('<div class="row busy">')
-                    .append(
-                        $('<div class="col-xs-12 io-ox-busy">')
-                            .css('min-height', '50px')
-                        )
+                $('<div class="row busy">').append(
+                    $('<div class="col-xs-12 io-ox-busy">')
+                        .css('min-height', '50px')
+                    )
             );
         }
     });
@@ -224,8 +223,7 @@ define('io.ox/search/view-template',
         id: 'app',
         index: 100,
         draw: function () {
-            // overwirte app
-
+            // overwrite app
         }
     });
 

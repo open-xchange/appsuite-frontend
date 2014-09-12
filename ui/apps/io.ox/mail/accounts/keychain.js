@@ -11,14 +11,14 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/mail/accounts/keychain',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/account',
-     'io.ox/core/api/user',
-     'io.ox/core/capabilities',
-     'io.ox/core/event',
-     'gettext!io.ox/core'
-    ], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
+define.async('io.ox/mail/accounts/keychain', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/account',
+    'io.ox/core/api/user',
+    'io.ox/core/capabilities',
+    'io.ox/core/event',
+    'gettext!io.ox/core'
+], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
 
     'use strict';
 
@@ -78,7 +78,7 @@ define.async('io.ox/mail/accounts/keychain',
     }
 
     init().done(function () {
-        moduleDeferred.resolve({message: 'Loaded mail keychain'});
+        moduleDeferred.resolve({ message: 'Loaded mail keychain' });
     });
     accountAPI.on('create:account refresh.all refresh.list', init);
 

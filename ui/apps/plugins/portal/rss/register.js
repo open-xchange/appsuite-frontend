@@ -11,18 +11,18 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('plugins/portal/rss/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/strings',
-     'io.ox/messaging/accounts/api',
-     'io.ox/messaging/services/api',
-     'io.ox/messaging/messages/api',
-     'io.ox/keychain/api',
-     'io.ox/rss/api',
-     'io.ox/core/date',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/portal'
-    ], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
+define('plugins/portal/rss/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/strings',
+    'io.ox/messaging/accounts/api',
+    'io.ox/messaging/services/api',
+    'io.ox/messaging/messages/api',
+    'io.ox/keychain/api',
+    'io.ox/rss/api',
+    'io.ox/core/date',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/portal'
+], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
 
     'use strict';
 

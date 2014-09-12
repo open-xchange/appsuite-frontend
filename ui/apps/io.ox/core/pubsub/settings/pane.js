@@ -11,19 +11,19 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/settings/pane',
-    ['io.ox/core/extensions',
-     'io.ox/core/pubsub/model',
-     'io.ox/backbone/views',
-     'io.ox/core/folder/api',
-     'io.ox/core/folder/breadcrumb',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/notifications',
-     'io.ox/core/capabilities',
-     'settings!io.ox/core/pubsub',
-     'gettext!io.ox/core/pubsub',
-     'less!io.ox/core/pubsub/style'
-    ], function (ext, model, views, folderAPI, getBreadcrumb, dialogs, notifications, capabilities, settings, gt) {
+define('io.ox/core/pubsub/settings/pane', [
+    'io.ox/core/extensions',
+    'io.ox/core/pubsub/model',
+    'io.ox/backbone/views',
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/tk/dialogs',
+    'io.ox/core/notifications',
+    'io.ox/core/capabilities',
+    'settings!io.ox/core/pubsub',
+    'gettext!io.ox/core/pubsub',
+    'less!io.ox/core/pubsub/style'
+], function (ext, model, views, folderAPI, getBreadcrumb, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';
 
@@ -297,13 +297,13 @@ define('io.ox/core/pubsub/settings/pane',
             var model = this.model;
             ev.preventDefault();
 
-            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function () {
-                model.set('enabled', !model.get('enabled'), {validate: true});
+            model.set('enabled', !model.get('enabled'), { validate: true }).save().fail(function () {
+                model.set('enabled', !model.get('enabled'), { validate: true });
             });
             this.render();
         },
         onEdit: function (ev) {
-            var baton = ext.Baton({model: this.model, view: this});
+            var baton = ext.Baton({ model: this.model, view: this });
             ev.preventDefault();
             require(['io.ox/core/pubsub/publications'], function (pubsubViews) {
                 pubsubViews.buildPublishDialog(baton);
@@ -334,7 +334,7 @@ define('io.ox/core/pubsub/settings/pane',
     });
 
     function createPubSubItem(model) {
-        return new PubSubItem({model: model});
+        return new PubSubItem({ model: model });
     }
 
     /**

@@ -11,16 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/toolbar',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/backbone/mini-views/dropdown',
-     'gettext!io.ox/contacts',
-     'io.ox/contacts/api',
-     'io.ox/contacts/actions',
-     'less!io.ox/contacts/style'
-    ], function (ext, links, actions, Dropdown, gt, api) {
+define('io.ox/contacts/toolbar', [
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/backbone/mini-views/dropdown',
+    'gettext!io.ox/contacts',
+    'io.ox/contacts/api',
+    'io.ox/contacts/actions',
+    'less!io.ox/contacts/style'
+], function (ext, links, actions, Dropdown, gt, api) {
 
     'use strict';
 

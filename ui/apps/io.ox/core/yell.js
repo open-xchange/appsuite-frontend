@@ -23,7 +23,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             info: 10000,
             success: 4000,
             warning: 10000,
-            screenreader: 100,
+            screenreader: 100
         },
 
         icons = {

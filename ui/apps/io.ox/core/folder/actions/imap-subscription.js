@@ -12,12 +12,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/actions/imap-subscription',
-    ['io.ox/core/folder/api',
-     'io.ox/core/folder/picker',
-     'io.ox/core/http',
-     'gettext!io.ox/core'
-    ], function (api, picker, http, gt) {
+define('io.ox/core/folder/actions/imap-subscription', [
+    'io.ox/core/folder/api',
+    'io.ox/core/folder/picker',
+    'io.ox/core/http',
+    'gettext!io.ox/core'
+], function (api, picker, http, gt) {
 
     'use strict';
 

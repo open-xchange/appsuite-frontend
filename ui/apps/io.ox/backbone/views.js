@@ -172,7 +172,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
 
         this.extend = function (options, extOptions) {
-            var ViewClass = createViewClass(_.extend({}, options, {ref: name}), extOptions);
+            var ViewClass = createViewClass(_.extend({}, options, { ref: name }), extOptions);
 
             extOptions = extOptions || {};
 
@@ -216,7 +216,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             options.initialize = options.initialize || function () {
                 Events.extend(this);
-                this.baton = ext.Baton(_.extend({}, this.options, {parentView: this}));
+                this.baton = ext.Baton(_.extend({}, this.options, { parentView: this }));
                 if (this.init) {
                     this.init.apply(this, $.makeArray(arguments));
                 }

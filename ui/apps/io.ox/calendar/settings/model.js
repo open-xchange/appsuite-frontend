@@ -10,8 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/calendar/settings/model',
-    ['settings!io.ox/calendar'], function (settings) {
+define('io.ox/calendar/settings/model', ['settings!io.ox/calendar'], function (settings) {
 
     'use strict';
 

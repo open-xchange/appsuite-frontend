@@ -10,27 +10,29 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/mail/main',
-        'fixture!io.ox/core/settings.json',
-        'fixture!io.ox/search/autocomplete.json',
-        'fixture!io.ox/search/query.json',
-        'spec/shared/capabilities',
-        'settings!io.ox/mail',
-        'settings!io.ox/core',
-        'beforeEachEnsure',
-        'waitsFor'], function (main, settingsFixture, autocompleteFixture, queryFixture, caputil,  mailSettings, settings, beforeEachEnsure, waitsFor) {
 
+define([
+    'io.ox/mail/main',
+    'fixture!io.ox/core/settings.json',
+    'fixture!io.ox/search/autocomplete.json',
+    'fixture!io.ox/search/query.json',
+    'spec/shared/capabilities',
+    'settings!io.ox/mail',
+    'settings!io.ox/core',
+    'beforeEachEnsure',
+    'waitsFor'
+], function (main, settingsFixture, autocompleteFixture, queryFixture, caputil,  mailSettings, settings, beforeEachEnsure, waitsFor) {
 
     var setupFakeServer = function () {
         var server = this.server;
         server.respondWith('PUT', /api\/find\?action=autocomplete/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: autocompleteFixture.data})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                JSON.stringify({ timestamp: 1378223251586, data: autocompleteFixture.data })
             );
         });
         server.respondWith('PUT', /api\/find\?action=query/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: queryFixture.data})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                JSON.stringify({ timestamp: 1378223251586, data: queryFixture.data })
             );
         });
     };
@@ -144,7 +146,6 @@ define(['io.ox/mail/main',
                                 dropdownLoaded(done);
                             });
                         });
-
                     });
                 });
 

@@ -14,9 +14,7 @@
 /**
 * In this example we will build a simple welcome wizard, that tries to complete the users information.
 */
-define(['io.ox/core/extensions',
-     'io.ox/core/wizard/registry'
-    ], function (ext, wizards) {
+define(['io.ox/core/extensions', 'io.ox/core/wizard/registry'], function (ext, wizards) {
 
     'use strict';
     // Grab the extension point for the wizard
@@ -127,7 +125,6 @@ define(['io.ox/core/extensions',
             // And it is called as soon as the page is the 'next' or 'previous' page of the active page, so you can start loading
             // even before the page shows up. Return a deferred to let the wizard framework know when you're done.
 
-
             // We will fetch the user data for our example.
             var def = $.Deferred();
 
@@ -194,13 +191,13 @@ define(['io.ox/core/extensions',
                     $('<div class="control-group" />').append(
                         $('<label class="control-label" for="first_name" />').text('First Name'), // Don't forget i18n in your own wizard!
                         $('<div class="controls" />').append(
-                            new mini.InputView({name: 'first_name', model: baton.user}).render().$el
+                            new mini.InputView({ name: 'first_name', model: baton.user }).render().$el
                         )
                     ),
                     $('<div class="control-group" />').append(
                         $('<label class="control-label" for="last_name" />').text('Last Name'), // Don't forget i18n in your own wizard!
                         $('<div class="controls" />').append(
-                            new mini.InputView({name: 'last_name', model: baton.user}).render().$el
+                            new mini.InputView({ name: 'last_name', model: baton.user }).render().$el
                         )
                     )
                 )
@@ -274,7 +271,8 @@ define(['io.ox/core/extensions',
     // Then, in the plugins file, define a new stage that runs the wizard after the curtain has been drawn back:
 
     /*
-    define('...', ['io.ox/core/extPatterns/stage'], function (Stage) {
+    define('...', [
+    'io.ox/core/extPatterns/stage'], function (Stage) {
     'use strict';
 
         new Stage('io.ox/core/stages', {
@@ -296,7 +294,6 @@ define(['io.ox/core/extensions',
             }
         });
 
-
     });
 
     */
@@ -304,7 +301,7 @@ define(['io.ox/core/extensions',
         getInstance: function () {
             // Create a new instance of the wizard. Note that the id of the wizard determines the extension point
             // that pages have to extend
-            return wizards.getWizard({id: 'io.ox/dev/wizard/welcomeWizard', closeable: true});
+            return wizards.getWizard({ id: 'io.ox/dev/wizard/welcomeWizard', closeable: true });
         }
     };
 });

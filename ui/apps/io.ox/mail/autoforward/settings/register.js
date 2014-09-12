@@ -11,12 +11,12 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/autoforward/settings/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/notifications',
-     'io.ox/core/api/user',
-     'gettext!io.ox/mail'
-    ], function (ext, notifications, userAPI, gt) {
+define('io.ox/mail/autoforward/settings/register', [
+    'io.ox/core/extensions',
+    'io.ox/core/notifications',
+    'io.ox/core/api/user',
+    'gettext!io.ox/mail'
+], function (ext, notifications, userAPI, gt) {
 
     'use strict';
 

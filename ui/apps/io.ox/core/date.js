@@ -12,12 +12,12 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define.async('io.ox/core/date',
-    ['io.ox/core/gettext',
-     'settings!io.ox/core/settingOptions',
-     'settings!io.ox/core',
-     'gettext!io.ox/core'
-    ], function (gettext, settingOptions, settings, gt) {
+define.async('io.ox/core/date', [
+    'io.ox/core/gettext',
+    'settings!io.ox/core/settingOptions',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (gettext, settingOptions, settings, gt) {
 
     /*jshint white:false */
 
@@ -392,7 +392,7 @@ define.async('io.ox/core/date',
             return n >= 3 ? function (s, d) { d.m = monthMap[s]; }
                           : function (s, d) { d.m = s - 1; };
         },
-        Y: function(n) {
+        Y: function (n) {
             return function (s, d) {
                 d.wcentury = n === 2 && s.match(/^\d\d$/);
                 d.wyStr = s.length;
@@ -801,7 +801,7 @@ define.async('io.ox/core/date',
         toString: function () {
             return this.format(api.FULL_DATE);
         },
-        add: function(time) {
+        add: function (time) {
             this.t = this.constructor.utc(this.local += time);
             return this;
         },
@@ -854,7 +854,7 @@ define.async('io.ox/core/date',
         getDate: function () {
             return new Date(this.local).getUTCDate();
         },
-        setDate: function(date) {
+        setDate: function (date) {
             var d = new Date(this.local);
             d.setUTCDate(date);
             this.t = this.constructor.utc(this.local = d.getTime());

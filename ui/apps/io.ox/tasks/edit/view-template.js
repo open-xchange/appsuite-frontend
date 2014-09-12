@@ -11,21 +11,21 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/view-template',
-    ['gettext!io.ox/tasks/edit',
-     'io.ox/backbone/views',
-     'io.ox/core/notifications',
-     'io.ox/backbone/forms',
-     'io.ox/calendar/util',
-     'io.ox/tasks/edit/util',
-     'io.ox/calendar/edit/recurrence-view',
-     'io.ox/participants/views',
-     'io.ox/core/tk/attachments',
-     'io.ox/tasks/api',
-     'io.ox/core/extensions',
-     'io.ox/tasks/util',
-     'settings!io.ox/tasks'
-    ], function (gt, views, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
+define('io.ox/tasks/edit/view-template', [
+    'gettext!io.ox/tasks/edit',
+    'io.ox/backbone/views',
+    'io.ox/core/notifications',
+    'io.ox/backbone/forms',
+    'io.ox/calendar/util',
+    'io.ox/tasks/edit/util',
+    'io.ox/calendar/edit/recurrence-view',
+    'io.ox/participants/views',
+    'io.ox/core/tk/attachments',
+    'io.ox/tasks/api',
+    'io.ox/core/extensions',
+    'io.ox/tasks/util',
+    'settings!io.ox/tasks'
+], function (gt, views, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
 
     'use strict';
 
@@ -47,40 +47,40 @@ define('io.ox/tasks/edit/view-template',
                 headlineText = gt('Edit task');
             }
             this.append($('<div class="col-lg-12">').append(
-                    headline = $('<h1 class="clear-title">').text(headlineText),//title
-                    saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')//save button
-                        .text(saveBtnText)
-                        .on('click', function () {
-                            app.getWindow().busy();
+                headline = $('<h1 class="clear-title">').text(headlineText),//title
+                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')//save button
+                    .text(saveBtnText)
+                    .on('click', function () {
+                        app.getWindow().busy();
 
-                            // check if waiting for attachmenthandling is needed
-                            var list = baton.attachmentList;
-                            if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
-                                baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
-                            }
-                            //accept any formating
-                            if (baton.model.get('actual_costs')) {
-                                baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));
-                            }
-                            if (baton.model.get('target_costs')) {
-                                baton.model.set('target_costs', (String(baton.model.get('target_costs'))).replace(/,/g, '.'));
-                            }
+                        // check if waiting for attachmenthandling is needed
+                        var list = baton.attachmentList;
+                        if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
+                            baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
+                        }
+                        //accept any formating
+                        if (baton.model.get('actual_costs')) {
+                            baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));
+                        }
+                        if (baton.model.get('target_costs')) {
+                            baton.model.set('target_costs', (String(baton.model.get('target_costs'))).replace(/,/g, '.'));
+                        }
 
-                            baton.model.save().done(function () {
-                                app.markClean();
-                                app.quit();
-                            }).fail(function (response) {
-                                setTimeout(function () {
-                                    app.getWindow().idle();
-                                    notifications.yell(response);
-                                }, 300);
-                            });
+                        baton.model.save().done(function () {
+                            app.markClean();
+                            app.quit();
+                        }).fail(function (response) {
+                            setTimeout(function () {
+                                app.getWindow().idle();
+                                notifications.yell(response);
+                            }, 300);
+                        });
 
-                        }),
-                    $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')//cancel button
-                        .text(gt('Discard'))
-                        .on('click', function () { app.quit(); })
-                    ));
+                    }),
+                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')//cancel button
+                    .text(gt('Discard'))
+                    .on('click', function () { app.quit(); })
+                ));
 
             baton.parentView.on('changeMode', function (e, mode) {
                 if (mode === 'edit') {
@@ -243,21 +243,21 @@ define('io.ox/tasks/edit/view-template',
             this.nodes.select = $('<select tabindex="1">').addClass('status-selector form-control').attr('id', guid);
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $('<option>', {value: value}).text(label)
+                    $('<option>', { value: value }).text(label)
                 );
             });
             this.$el.append($('<label for="' + guid + '">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
                 if (self.nodes.select.prop('selectedIndex') === 0) {
-                    self.model.set('percent_completed', 0, {validate: true});
+                    self.model.set('percent_completed', 0, { validate: true });
                 } else if (self.nodes.select.prop('selectedIndex') === 2) {
-                    self.model.set('percent_completed', 100, {validate: true});
+                    self.model.set('percent_completed', 100, { validate: true });
                 } else if (self.nodes.select.prop('selectedIndex') === 1 && (self.model.get('percent_completed') === 0 || self.model.get('percent_completed') === 100)) {
-                    self.model.set('percent_completed', 25, {validate: true});
+                    self.model.set('percent_completed', 25, { validate: true });
                 }
 
-                self.model.set(self.attribute, parseInt(self.nodes.select.val(), 10), {validate: true});
+                self.model.set(self.attribute, parseInt(self.nodes.select.val(), 10), { validate: true });
             });
         },
         attribute: 'status',
@@ -288,17 +288,17 @@ define('io.ox/tasks/edit/view-template',
                         if (value !== 'NaN' && value >= 0 && value <= 100) {
                             if (progressField.progress.val() === '') {
                                 progressField.progress.val(0);
-                                baton.model.set('status', 1, {validate: true});
+                                baton.model.set('status', 1, { validate: true });
                             } else if (progressField.progress.val() === '0' && baton.model.get('status') === 2) {
-                                baton.model.set('status', 1, {validate: true});
+                                baton.model.set('status', 1, { validate: true });
                             } else if (progressField.progress.val() === '100' && baton.model.get('status') !== 3) {
-                                baton.model.set('status', 3, {validate: true});
+                                baton.model.set('status', 3, { validate: true });
                             } else if (baton.model.get('status') === 3) {
-                                baton.model.set('status', 2, {validate: true});
+                                baton.model.set('status', 2, { validate: true });
                             } else if (baton.model.get('status') === 1) {
-                                baton.model.set('status', 2, {validate: true});
+                                baton.model.set('status', 2, { validate: true });
                             }
-                            baton.model.set('percent_completed', value, {validate: true});
+                            baton.model.set('percent_completed', value, { validate: true });
                         } else {
                             notifications.yell('error', gt('Please enter value between 0 and 100.'));
                             baton.model.trigger('change:percent_completed');
@@ -323,17 +323,17 @@ define('io.ox/tasks/edit/view-template',
             this.nodes = {};
             this.nodes.select = $('<select tabindex="1">').addClass('priority-selector form-control').attr('id', guid);
             self.nodes.select.append(
-                    $('<option>', {value: 'null'}).text(gt('None'))
+                    $('<option>', { value: 'null' }).text(gt('None'))
                 );
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
-                    $('<option>', {value: value}).text(label)
+                    $('<option>', { value: value }).text(label)
                 );
             });
             this.$el.append($('<label for="' + guid + '">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
-                self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
+                self.model.set(self.attribute, self.nodes.select.val(), { validate: true });
             });
         },
         attribute: 'priority',
@@ -400,21 +400,21 @@ define('io.ox/tasks/edit/view-template',
                 node.append(
                     $('<div class="input-group">').append(
                         $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-                        $('<input type="text" class="add-participant task-participant-input-field form-control">')
-                        .attr({placeholder: gt('Add participant/resource'),
-                               id: guid,
-                               tabindex: 1}),
+                        $('<input type="text" class="add-participant task-participant-input-field form-control">').attr({
+                            placeholder: gt('Add participant/resource'),
+                            id: guid,
+                            tabindex: 1
+                        }),
                         $('<span class="input-group-btn">').append(
-                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
-                                .append(
-                                    $('<i class="fa fa-plus" aria-hidden="true">'),
-                                    $('<span class="sr-only">').text(gt('Plus'))
-                                )
+                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">').append(
+                                $('<i class="fa fa-plus" aria-hidden="true">'),
+                                $('<span class="sr-only">').text(gt('Plus'))
+                            )
                         )
                     )
                 );
 
-                var autocomplete = new AddParticipantsView({el: node});
+                var autocomplete = new AddParticipantsView({ el: node });
                 autocomplete.render({
                     parentSelector: '.io-ox-tasks-edit',
                     resources: false//adding resources throws a backend error
@@ -422,12 +422,12 @@ define('io.ox/tasks/edit/view-template',
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
                 autocomplete.on('update', function () {
-                    var baton = {list: []};
+                    var baton = { list: [] };
                     collection.any(function (item) {
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
-                            baton.list.push({email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type')});
+                            baton.list.push({ email: email, id: item.get('user_id') || item.get('internal_userid') || item.get('id'), type: item.get('type') });
                     });
                     $.data(node, 'baton', baton);
                 });
@@ -452,11 +452,11 @@ define('io.ox/tasks/edit/view-template',
                                     if (val.folder_id === 6) {
                                         calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
                                             userId = id;
-                                            obj = {id: userId, type: 1 };
+                                            obj = { id: userId, type: 1 };
                                             collection.add(obj);
                                         });
                                     } else {
-                                        obj = {type: 5, mail: val.mail, display_name: val.display_name};
+                                        obj = { type: 5, mail: val.mail, display_name: val.display_name };
                                         collection.add(obj);
                                     }
                                 });
@@ -465,7 +465,7 @@ define('io.ox/tasks/edit/view-template',
                             }
 
                         } else {
-                            obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
+                            obj = { type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || '' };
                             collection.add(obj);
                         }
                     }
@@ -646,17 +646,17 @@ define('io.ox/tasks/edit/view-template',
             this.nodes.select = $('<select tabindex="1">').addClass('currency form-control').attr('id', 'task-edit-currency');
 
             self.nodes.select.append(//add empty currency
-                    $('<option>', {value: ''})
+                    $('<option>', { value: '' })
                 );
             _(this.selectOptions).each(function (value) {
                 self.nodes.select.append(
-                    $('<option>', {value: value}).text(_.noI18n(value))
+                    $('<option>', { value: value }).text(_.noI18n(value))
                 );
             });
             this.$el.append($('<label for="task-edit-currency">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
-                self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
+                self.model.set(self.attribute, self.nodes.select.val(), { validate: true });
             });
         },
         attribute: 'currency',

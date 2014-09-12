@@ -11,10 +11,10 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/attachments/backbone',
-    ['io.ox/core/folder/title',
-     'io.ox/core/capabilities'
-    ], function (shortTitle, capabilities) {
+define('io.ox/core/attachments/backbone', [
+    'io.ox/core/folder/title',
+    'io.ox/core/capabilities'
+], function (shortTitle, capabilities) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/core/attachments/backbone',
                 total: total
             });
             if (loaded / total >= 1) {
-                def.resolve({data: ['133713371337']});
+                def.resolve({ data: ['133713371337'] });
             } else {
                 _.delay(wait, 1000);
             }
@@ -110,9 +110,9 @@ define('io.ox/core/attachments/backbone',
         initialize: function (obj) {
             if (obj instanceof window.File) {
                 this.fileObj = obj;
-                this.set('filename', obj.name, {silent: true});
-                this.set('uploaded', 0, {silent: true});
-                this.set('file_size', obj.size, {silent: true});
+                this.set('filename', obj.name, { silent: true });
+                this.set('uploaded', 0, { silent: true });
+                this.set('file_size', obj.size, { silent: true });
             }
         },
 

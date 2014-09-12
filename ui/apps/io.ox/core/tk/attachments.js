@@ -11,21 +11,21 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/tk/attachments',
-    ['io.ox/core/extensions',
-     'io.ox/core/api/attachment',
-     'io.ox/core/folder/title',
-     'io.ox/core/strings',
-     'io.ox/core/tk/attachmentsUtil',
-     'io.ox/core/capabilities',
-     'io.ox/preview/main',
-     'io.ox/core/tk/dialogs',
-     'gettext!io.ox/core/tk/attachments',
-     'io.ox/core/extPatterns/links',
-     'settings!io.ox/core',
-     'io.ox/core/notifications',
-     'less!io.ox/core/tk/attachments',
-    ], function (ext, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
+define('io.ox/core/tk/attachments', [
+    'io.ox/core/extensions',
+    'io.ox/core/api/attachment',
+    'io.ox/core/folder/title',
+    'io.ox/core/strings',
+    'io.ox/core/tk/attachmentsUtil',
+    'io.ox/core/capabilities',
+    'io.ox/preview/main',
+    'io.ox/core/tk/dialogs',
+    'gettext!io.ox/core/tk/attachments',
+    'io.ox/core/extPatterns/links',
+    'settings!io.ox/core',
+    'io.ox/core/notifications',
+    'less!io.ox/core/tk/attachments'
+], function (ext, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
 
@@ -82,7 +82,7 @@ define('io.ox/core/tk/attachments',
                 var $el = $('<div class="col-lg-6 col-md-6">').append(
                     $('<div class="io-ox-core-tk-attachment file">').append(
                         $('<i class="fa fa-paperclip">'),
-                        $('<div class="row-1">').text(_.ellipsis(attachment.filename, {max: 40, charpos: 'middel'})),
+                        $('<div class="row-1">').text(_.ellipsis(attachment.filename, { max: 40, charpos: 'middel' })),
                         $('<div class="row-2">').append(
                             size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
                         ),
@@ -99,7 +99,7 @@ define('io.ox/core/tk/attachments',
             loadAttachments: function () {
                 var self = this;
                 if (this.model.id) {
-                    attachmentAPI.getAll({module: options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id')}).done(function (attachments) {
+                    attachmentAPI.getAll({ module: options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id') }).done(function (attachments) {
                         self.attachmentsOnServer = attachments;
                         self.updateState();
                     });
@@ -122,9 +122,9 @@ define('io.ox/core/tk/attachments',
             },
             addFile: function (file) {
                 if (oldMode) {
-                    this.addAttachment({file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                    this.addAttachment({ file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
                 } else {
-                    this.addAttachment({file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size});
+                    this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
                 }
             },
             addAttachment: function (attachment) {
@@ -278,8 +278,8 @@ define('io.ox/core/tk/attachments',
                     });
                 }
                 return _.map(list, function (file) {
-                            return file.file;
-                        });
+                    return file.file;
+                });
             },
 
             getNode: function () {
@@ -401,7 +401,7 @@ define('io.ox/core/tk/attachments',
                         label: label || data.filename,
                         classes: 'attachment-link',
                         ref: 'io.ox/core/tk/attachments/links'
-                    }).draw.call($node, { data: data, options: options});
+                    }).draw.call($node, { data: data, options: options });
                 }
 
                 function redraw(e, obj) {
@@ -490,9 +490,11 @@ define('io.ox/core/tk/attachments',
                 });
         },
         multiple: function (list, baton) {
-            ox.load(['io.ox/core/tk/dialogs',
-                     'io.ox/preview/main',
-                     'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
+            ox.load([
+                'io.ox/core/tk/dialogs',
+                'io.ox/preview/main',
+                'io.ox/core/api/attachment'
+            ]).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
                     _(list).each(function (data) {
@@ -533,7 +535,7 @@ define('io.ox/core/tk/attachments',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
+                    baton: { allIds: files },
                     attachmentMode: false,
                     selector: baton.options.selector
                 });
@@ -574,7 +576,7 @@ define('io.ox/core/tk/attachments',
                 attachmentAPI.save(data);
             });
             require(['io.ox/core/notifications'], function (notifications) {
-                setTimeout(function () {notifications.yell('success', gt('Attachments have been saved!')); }, 300);
+                setTimeout(function () { notifications.yell('success', gt('Attachments have been saved!')); }, 300);
             });
         }
     });

@@ -10,8 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define('io.ox/contacts/settings/model',
-      ['settings!io.ox/contacts'], function (settings) {
+define('io.ox/contacts/settings/model', ['settings!io.ox/contacts'], function (settings) {
 
     'use strict';
 

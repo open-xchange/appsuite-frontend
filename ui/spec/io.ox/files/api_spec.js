@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/files/api',
-        'shared/examples/for/api',
-        'sinon-wrapper',
-        'fixture!io.ox/files/file.json',
-        'fixture!io.ox/files/file-versions.json'
-    ], function (api, sharedExamplesFor, wrapper, unlocked, fileversions) {
+    'shared/examples/for/api',
+    'sinon-wrapper',
+    'fixture!io.ox/files/file.json',
+    'fixture!io.ox/files/file-versions.json'
+], function (api, sharedExamplesFor, wrapper, unlocked, fileversions) {
 
     var jexpect = this.expect,
         sinon = wrapper.create(),
@@ -93,7 +93,7 @@ define(['io.ox/files/api',
                         expect(tracker.addFile.notCalled).to.be.true;
                         expect(tracker.isLocked(locked)).to.be.true;
                         //unlocked
-                        tracker.updateFile($.extend({}, locked, {locked_until: 0}));
+                        tracker.updateFile($.extend({}, locked, { locked_until: 0 }));
                         expect(tracker.removeFile.calledOnce).to.be.true;
                         expect(tracker.addFile.notCalled).to.be.true;
                         expect(tracker.isLocked(locked)).to.be.false;
@@ -105,7 +105,7 @@ define(['io.ox/files/api',
                         expect(tracker.removeFile.notCalled).to.be.true;
                         expect(tracker.isLocked(unlocked)).to.be.false;
                         //locked
-                        tracker.updateFile($.extend({}, unlocked, {locked_until: 99384531810826}));
+                        tracker.updateFile($.extend({}, unlocked, { locked_until: 99384531810826 }));
                         expect(tracker.addFile.calledOnce).to.be.true;
                         expect(tracker.removeFile.notCalled).to.be.true;
                         expect(tracker.isLocked(unlocked)).to.be.true;
@@ -275,7 +275,7 @@ define(['io.ox/files/api',
                         sinon.spy(api, 'propagate');
                     });
                     it('after calling detach', function () {
-                        var def = api.detach($.extend({}, locked, {version: '1'}));
+                        var def = api.detach($.extend({}, locked, { version: '1' }));
                         jexpect(def).toResolveWith(function () {
                             return api.propagate.callCount === 1;
                         });
@@ -297,7 +297,7 @@ define(['io.ox/files/api',
             it('that return promises', function () {
                 jexpect(api.detach(locked)).toBePromise();
                 jexpect(api.uploadNewVersion(locked)).toBePromise();
-                jexpect(api.uploadNewVersionOldSchool({form: $('<div>'), json: '', file: '', id: ''})).toBePromise();
+                jexpect(api.uploadNewVersionOldSchool({ form: $('<div>'), json: '', file: '', id: '' })).toBePromise();
                 jexpect(api.update(locked)).toBePromise();
                 jexpect(api.uploadFile(locked)).toBePromise();
             });

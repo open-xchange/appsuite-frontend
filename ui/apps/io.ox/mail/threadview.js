@@ -11,21 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/threadview',
-    ['io.ox/mail/common-extensions',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/api/backbone',
-     'io.ox/mail/detail/view',
-     'io.ox/mail/detail/mobileView',
-     'io.ox/core/tk/list-dnd',
-     'io.ox/core/emoji/util',
-     'io.ox/core/http',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style',
-     'io.ox/mail/listview'
-     ], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
+define('io.ox/mail/threadview', [
+    'io.ox/mail/common-extensions',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/api/backbone',
+    'io.ox/mail/detail/view',
+    'io.ox/mail/detail/mobileView',
+    'io.ox/core/tk/list-dnd',
+    'io.ox/core/emoji/util',
+    'io.ox/core/http',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style',
+    'io.ox/mail/listview'
+], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
 
     'use strict';
 
@@ -109,8 +109,6 @@ define('io.ox/mail/threadview',
             );
         }
     });
-
-
 
     var ThreadView = Backbone.View.extend({
 
@@ -458,6 +456,7 @@ define('io.ox/mail/threadview',
             cid = String(cid).replace(/^thread\.(.+)$/, '$1');
 
             var model = api.pool.get('detail').get(cid);
+
             if (!model) return;
 
             var view = new detailViewMobile.DetailView({
@@ -466,7 +465,6 @@ define('io.ox/mail/threadview',
             });
             this.mail = model.toJSON();
             return view.render().toggle().$el.attr({ role: 'listitem', tabindex: '1' });
-
 
         },
         // render scaffold
@@ -477,9 +475,8 @@ define('io.ox/mail/threadview',
 
             ext.point('io.ox/mail/thread-view').invoke('draw', this);
             return this;
-        },
+        }
     });
-
 
     return {
         Desktop: ThreadView,

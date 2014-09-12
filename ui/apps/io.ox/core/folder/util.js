@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/util',
-    ['io.ox/core/api/account',
-     'settings!io.ox/mail',
-     'settings!io.ox/core'
-     ], function (account, mailSettings, coreSettings) {
+define('io.ox/core/folder/util', [
+    'io.ox/core/api/account',
+    'settings!io.ox/mail',
+    'settings!io.ox/core'
+], function (account, mailSettings, coreSettings) {
 
     'use strict';
 
@@ -115,8 +115,7 @@ define('io.ox/core/folder/util',
             // maybe need a better word. It's shared TO others
             if (!data.permissions || data.permissions.length <= 1) return false;
             // only shared BY me, not TO me
-            return data.type === 1 || data.type === 7 ||
-                (data.module === 'infostore' && data.created_by === ox.user_id);
+            return data.type === 1 || data.type === 7 || (data.module === 'infostore' && data.created_by === ox.user_id);
         case 'hidden':
             var hash = coreSettings.get(['folder/hidden'], {}),
                 id = _.isObject(data) ? data.id : data;
