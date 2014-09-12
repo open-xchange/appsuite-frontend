@@ -25,8 +25,7 @@ define('io.ox/files/fluid/perspective',
      'io.ox/files/util',
      'gettext!io.ox/files',
      'io.ox/core/tk/selection',
-     'io.ox/core/notifications',
-     'static/3rd.party/jquery-imageloader/jquery.imageloader.js'
+     'io.ox/core/notifications'
      ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
 
     'use strict';
@@ -47,7 +46,7 @@ define('io.ox/files/fluid/perspective',
         var node = $('<i>');
         if (/(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
         else if (/(xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
-        else if (/(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
+        else if (/(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/i.test(name)) { node.addClass('fa fa-picture-o file-type-ppt'); }
         else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('fa fa-music'); }
         else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('fa fa-film'); }
         else if ((/(epub|mobi)$/i).test(name)) { node.addClass('fa fa-book'); }
@@ -55,10 +54,6 @@ define('io.ox/files/fluid/perspective',
         else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('fa fa-archive'); }
         else { node.addClass('fa fa-file'); }
         return node.addClass('not-selectable');
-    }
-
-    function iconError() {
-        $(this).remove();
     }
 
     function cut(str, maxLen, cutPos) {
@@ -381,28 +376,29 @@ define('io.ox/files/fluid/perspective',
                 iconBackground = drawGenericIcon(file.filename),
                 previewBackground = $('<div class="preview-cover not-selectable">').append(iconBackground);
 
-            //add preview image
+            // add preview image
             if (mode) {
                 var url = api.getUrl(file, mode, options);
-                previewImage
-                    .append(
-                        $('<img>', {
-                                alt: '',
-                                'data-src': url
-                            })
-                            .addClass('img-thumbnail lazy')
-                            .one({
-                                load: function () {
-                                    //list/tile view
-                                    iconBackground.remove();
-                                    previewBackground.css('backgroundImage', 'url(' + url + ')');
-                                    //icon view
-                                    iconImage.remove();
-                                    $(this).fadeIn().removeClass('lazy');
-                                },
-                                error: iconError
-                            })
-                    );
+                previewImage.append(
+                    $('<img class="img-thumbnail lazy" alt="">')
+                        .attr('data-original', url)
+                        .queueload({ container: wrapper, event: 'scrollstop' })
+                        .one({
+                            'queue:load': function () {
+                                iconImage.remove();
+                                $(this).removeClass('lazy');
+                            },
+                            'queue:error': function () {
+                                $(this).remove();
+                            }
+                        })
+                );
+                previewBackground
+                    .attr('data-original', url)
+                    .queueload({ container: wrapper, event: 'scrollstop' })
+                    .one('queue:load', function () {
+                        iconBackground.remove();
+                    });
             }
 
             var title = file.filename || file.title;
@@ -418,7 +414,8 @@ define('io.ox/files/fluid/perspective',
                         )
                     ),
                     //preview
-                    previewImage, previewBackground,
+                    previewImage,
+                    previewBackground,
                     //details
                     $('<div class="details">').append(
                         //title
@@ -663,11 +660,6 @@ define('io.ox/files/fluid/perspective',
             redraw = function (ids) {
                 drawFiles(ids);
                 wrapper.off('scroll', onScroll).on('scroll', onScroll);
-                //requesting data-src and setting to src after load finised (icon view only)
-                $('img.img-thumbnail.lazy').imageloader({
-                    timeout: 60000
-                });
-
                 self.selection.update();
             };
 
@@ -841,7 +833,7 @@ define('io.ox/files/fluid/perspective',
                         // draw file ...
                         drawFile(obj)
                         // ... and reset lazy loader
-                        .find('img.img-thumbnail.lazy').imageloader({ timeout: 60000 }).end()
+                        .find('img.lazy').lazyload({ container: wrapper, event: 'scrollstop' }).end()
                     );
                 }
             });

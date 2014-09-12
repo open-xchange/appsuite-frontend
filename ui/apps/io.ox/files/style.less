@@ -268,11 +268,13 @@
                 }
 
                 .preview {
+
                     width: @outerWidth;
                     height: @innerHeight + 20;
                     display: table-cell;
                     text-align: center;
                     vertical-align: middle;
+                    position: relative;
 
                     img {
                         // till backend fix
@@ -280,8 +282,11 @@
                         max-width: 120px;
                     }
 
-                    .lazy {
-                        display:none;
+                    img.lazy {
+                        visibility: hidden;
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
                     }
 
                     background-size: auto;
