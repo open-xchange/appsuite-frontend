@@ -13,12 +13,9 @@
  */
 
 define('plugins/wizards/mandatory/main', [
-    'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'io.ox/backbone/mini-views/common',
-    'settings!io.ox/wizards/firstStart',
     'gettext!io.ox/wizards/firstStart'
-], function (Stage, ext, miniViews, settings, gt) {
+], function (ext, gt) {
 
     'use strict';
 
@@ -44,7 +41,7 @@ define('plugins/wizards/mandatory/main', [
         load: function (baton) {
             var def = $.Deferred();
 
-            require(['io.ox/core/api/user', 'io.ox/backbone/basicModel', 'io.ox/backbone/mini-views'], function (userAPI, Model, mini) {
+            require(['io.ox/core/api/user', 'io.ox/backbone/mini-views'], function (userAPI, mini) {
                 baton.libraries = {
                     userAPI: userAPI,
                     mini: mini
@@ -127,9 +124,8 @@ define('plugins/wizards/mandatory/main', [
             return require([
                 'settings!io.ox/core',
                 'settings!io.ox/core/settingOptions',
-                'io.ox/backbone/forms',
-                'io.ox/backbone/basicModel'
-            ], function (settings, settingOptions, forms) {
+                'io.ox/backbone/mini-views/common'
+            ], function (settings, settingOptions, miniViews) {
                 var available = settingOptions.get('availableTimeZones'),
                     technicalNames = _(available).keys(),
                     userTZ = settings.get('timezone', 'UTC'),
@@ -166,7 +162,7 @@ define('plugins/wizards/mandatory/main', [
                 baton.availableTimeZones = sorted;
                 baton.model = settings;
                 baton.libraries = {
-                    forms: forms
+                    forms: miniViews
                 };
 
                 baton.buttons.enableNext();
@@ -174,24 +170,18 @@ define('plugins/wizards/mandatory/main', [
         },
 
         draw: function (baton) {
-            var forms = baton.libraries.forms,
-                tzNode;
-
-            //TODO: port to miniviews, once there is a selectbox feature
             this.append(
                 $('<form class="form-horizontal" />').append(
-                    $('<label class="control-label" for="">').text(gt('Timezone')),
-                    tzNode = $('<div class="controls" />')
+                    $('<label class="control-label" for="timezone">').text(gt('Timezone')),
+                    baton.focusNode = new baton.libraries.forms.SelectView({
+                        list: _.map(baton.availableTimeZones, function(key, val) { return { label: key, value: val }; }),
+                        name: 'timezone',
+                        model: baton.model.createModel(Backbone.Model),
+                        id: 'timezone',
+                        className: 'form-control input-xlarge'
+                    }).render().$el
                 )
             );
-            new forms.SelectBoxField({
-                attribute: 'timezone',
-                model: baton.model,
-                selectOptions: baton.availableTimeZones,
-                '$el': tzNode
-            }).render();
-            baton.focusNode = tzNode.find('select');
-            tzNode.find('select').addClass('input-xlarge');
         },
 
         activate: function (baton) {
