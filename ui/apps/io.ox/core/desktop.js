@@ -1048,7 +1048,7 @@ define('io.ox/core/desktop',
 
                 this.show = function (cont) {
                     var appchange = false;
-                    //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
+                    //use the url app string before the first ':' to exclude parameter additions (see how mail compose adds the current mode here)
                     if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
                     }

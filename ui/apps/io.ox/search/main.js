@@ -47,7 +47,7 @@ define('io.ox/search/main',
             // active app : app searched in
             data.mapping = {
                 // name mapping
-                'io.ox/mail/write' : 'io.ox/mail',
+                'io.ox/mail/compose' : 'io.ox/mail',
                 'com.voiceworks/ox-messenger' : data.defaultApp,
                 'io.ox/drive' : 'io.ox/files',
                 'io.ox/office/text' : 'io.ox/files',

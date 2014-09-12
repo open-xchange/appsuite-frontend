@@ -172,7 +172,7 @@ define('io.ox/preview/officePreview/main',
             var keys = new KeyListener();
 
             win = ox.ui.createWindow({
-                name: 'io.ox/mail/write',
+                name: 'io.ox/preview/officepreview',
                 title: file.name,
                 titleWidth: '40%',
                 toolbar: true,

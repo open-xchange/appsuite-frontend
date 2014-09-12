@@ -1145,7 +1145,7 @@ define('io.ox/core/main',
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
-                mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose' || appURL === 'io.ox/mail/write:compose');
+                mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose');
 
             if (manifest && (manifest.refreshable || mailto)) {
                 return appURL.split(/,/);
@@ -1487,7 +1487,7 @@ define('io.ox/core/main',
     (function ()  {
 
         var hash = {
-            'mail-compose': 'io.ox/mail/write/main'
+            'mail-compose': 'io.ox/mail/compose/main'
         };
 
         var custom = {};

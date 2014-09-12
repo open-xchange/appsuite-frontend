@@ -198,7 +198,7 @@ define('io.ox/files/fluid/view-detail',
         id: 'upload',
         index: 600,
         draw: function (baton) {
-            if (baton.openedBy === 'io.ox/mail/write') return;//no uploads in mail preview
+            if (baton.openedBy === 'io.ox/mail/compose') return;//no uploads in mail preview
             var file = baton.data,
             $node,
             $commentArea,

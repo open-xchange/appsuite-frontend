@@ -14,7 +14,7 @@ define(['shared/examples/for/api',
         'io.ox/core/api/account',
         'io.ox/mail/sender',
         'fixture!io.ox/core/api/user.json',
-        'fixture!io.ox/mail/write/accounts.json'
+        'fixture!io.ox/mail/compose/accounts.json'
        ], function (sharedExamplesFor, api, sender, fixtureUser, fixtureAccounts) {
 
     describe('basic account API', function () {

@@ -387,9 +387,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
             extended_valid_elements: 'blockquote[type]',
 
-            // CSS for Editor content (See /apps/io.ox/core/tk/html-editor.less)
-            // content_css: ox.base + '/apps/themes/' + require('settings!io.ox/core').get('theme') + '/io.ox/core/tk/html-editor.css',
-
+            // content_css: ox.base + '/apps/themes/' + require('settings!io.ox/core').get('theme') + '/io.ox/core/tk/contenteditable-editor.css',
             inline: true,
 
             fixed_toolbar_container: fixed_toolbar,
@@ -418,14 +416,6 @@ define.async('io.ox/core/tk/contenteditable-editor',
             hidden_input: false,
 
             theme: 'unobtanium',
-
-            /*
-            TODO: needed for emoji ?
-            object_resizing: 0,
-            */
-
-            // need this to work in karma/phantomjs // TODO: still needed?
-            //content_element: textarea.get(0),
 
             init_instance_callback: function (editor) {
                 ed = editor;

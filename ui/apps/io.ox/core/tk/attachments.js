@@ -306,7 +306,7 @@ define('io.ox/core/tk/attachments',
                     maxFileSize,
                     quota,
                     usage,
-                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
+                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/compose'),
                     filesLength = files.length,
                     autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments'),
                     result = { added: [] };

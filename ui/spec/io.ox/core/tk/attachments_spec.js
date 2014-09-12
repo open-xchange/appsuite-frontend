@@ -61,7 +61,7 @@ define(['io.ox/core/extensions',
                 });
             },
             createList = function (baton, file, mail) {
-                if (mail) baton.app = {app: { attributes: { name: 'io.ox/mail/write' }}};
+                if (mail) baton.app = {app: { attributes: { name: 'io.ox/mail/compose' }}};
 
                 new attachments.EditableFileList({
                         id: 'attachment_list',

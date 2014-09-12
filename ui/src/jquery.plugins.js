@@ -166,20 +166,6 @@
         return $('<div>').addClass('scrollable-pane').appendTo(this.addClass('scrollable'));
     };
 
-    $.labelize = (function () {
-
-        var guid = 1;
-
-        return function (node, id) {
-            if (node.attr('id')) {
-                id = node.attr('id');
-            } else {
-                id = (id || 'field') + '_' + (guid++);
-            }
-            return $('<label>', { 'for': id }).addClass('wrapping-label').append(node.attr('id', id));
-        };
-    }());
-
     $.alert = function (o) {
         o = _.extend({
             title: false,

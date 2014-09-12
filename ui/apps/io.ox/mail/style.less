@@ -197,51 +197,6 @@
 
 .io-ox-mail-window .foldertree-sidepanel { left: 0; }
 
-.simple-mail-writer {
-    z-index: 10;
-    background-color: white;
-    @header-height: 190px;
-    @padding: 7px;
-    .header {
-        background-color: #eee;
-        position: absolute;
-        top: 40px + @padding;
-        right: @padding;
-        left: @padding;
-        height: @header-height;
-        td {
-            height: 45px;
-            padding: 0 14px 0 0;
-            vertical-align: middle;
-        }
-        td.row-label {
-            width: 100px;
-            text-align: right;
-        }
-        input {
-            height: 30px;
-            margin: 0px;
-        }
-    }
-    .editor {
-        color: #aaa;
-        background-color: white;
-        position: absolute;
-        top: @header-height + 40px;
-        right: @padding;
-        bottom: @padding;
-        left: @padding;
-        textarea {
-            height: 100%;
-            width: 100%;
-            padding: 14px;
-            overflow: auto;
-            outline: 0;
-            border: 0px none;
-        }
-    }
-}
-
 .mail-detail {
     section.body {
         margin: 0;
