@@ -14,11 +14,15 @@
     "requireLineFeedAtFileEnd": true,
     "requireCommaBeforeLineBreak": true,
     "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
-    "requireSpacesInFunctionExpression": {
+    "requireSpacesInAnonymousFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
         "beforeOpeningCurlyBrace": true
     },
+    "disallowSpacesInNamedFunctionExpression": {
+        "beforeOpeningRoundBrace": true
+    },
     "validateLineBreaks": "LF",
-    "validateQuoteMarks": "'",
+    "validateQuoteMarks": { "mark": "'", "escape": true },
     "validateJSDoc": {
         "checkParamNames": false,
         "requireParamTypes": false
@@ -32,5 +36,9 @@
         "beforeConsequent": true,
         "afterConsequent": true,
         "beforeAlternate": true
-    }
+    },
+    "requireSpaceBeforeBlockStatements": true,
+    "disallowDanglingUnderscores": true,
+    "disallowSpaceAfterObjectKeys": true,
+    "requireMultipleVarDecl": true
 }
