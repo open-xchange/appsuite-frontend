@@ -57,8 +57,8 @@ define('io.ox/mail/main', [
          */
         'pages-mobile': function (app) {
             if (_.device('!small')) return;
-            var c = app.getWindow().nodes.main;
-            var navbar = $('<div class="mobile-navbar">'),
+            var c = app.getWindow().nodes.main,
+                navbar = $('<div class="mobile-navbar">'),
                 toolbar = $('<div class="mobile-toolbar">');
             app.navbar = navbar;
             app.toolbar = toolbar;
@@ -844,7 +844,7 @@ define('io.ox/mail/main', [
                             // get data
                             if (_.isString(obj)) obj = _.cid(obj);
                             // most recent or first unseen? (in line with threadview's autoSelectMail)
-                            if ((i === 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
+                            if ((i == 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
                                 api.get({ unseen: true, id: obj.id, folder: obj.folder_id });
                                 break;
                             }
