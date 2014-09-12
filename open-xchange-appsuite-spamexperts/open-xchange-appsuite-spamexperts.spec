@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-spamexperts
-Version:        0.0.1
-%define         ox_release 8
+Version:        @OXVERSION@
+%define         ox_release 1
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -51,7 +51,7 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 #for i in $files
 #do
 #    mkdir -p "%{buildroot}%{docroot}/$(dirname $i)"
-#    cp "%{buildroot}/opt/open-xchange/appsuite/$i" "%{buildroot}%{docroot}/$i" 
+#    cp "%{buildroot}/opt/open-xchange/appsuite/$i" "%{buildroot}%{docroot}/$i"
 #done
 
 %clean
@@ -86,6 +86,10 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}
 
 %changelog
+* Fri Sep 05 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+First release candidate for 7.6.1
+* Fri Sep 05 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+prepare for 7.6.1
 * Wed Aug 20 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-08-25
 * Mon Aug 11 2014 Viktor Pracht <viktor.pracht@open-xchange.com>

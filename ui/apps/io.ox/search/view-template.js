@@ -30,7 +30,7 @@ define('io.ox/search/view-template',
 
     var point = ext.point('io.ox/search/view');
 
-    //input field
+    // input field
     point.extend({
         id: 'query',
         index: 200,
@@ -50,21 +50,88 @@ define('io.ox/search/view-template',
         }
     });
 
-    // window mode
+    // dropdown button
     point.extend({
         id: 'apps',
         index: 100,
         row: '0',
         draw: function (baton) {
-            var row, cell, elem;
+            var cell = $('<div class="btn-group col-xs-12">'),
+                row = $('<div class="row applications">').append(cell),
+                id = baton.model.getApp(),
+                opt = baton.model.getOptions(),
+                row, cell,
+                items = [],
+                titles = {},
+                apps = settings.get('search/modules', []),
+                elem;
 
-            // create container
-            row = $('<div class="row applications">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled">')
+            // apply mapping (infostore-files-drive chameleon)
+            apps = _.map(apps, function (module) {
+                var id = 'io.ox/' + module;
+                return opt.mapping[id] || id;
+            });
+
+            // create dropdown menu entries
+            _(apps).each(function (id) {
+                var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
+                items.push(
+                    $('<li>')
+                    .append(
+                        $('<a href="#">')
+                            .attr({
+                                'title': title,
+                                'data-app': id,
+                                'tabindex': '-1',
+                                'role': 'button'
+                            })
+                            .append(
+                                $('<i class="fa fa-fw"></i>'),
+                                $('<span>').text(title)
+                            )
+                    )
+                );
+            });
+
+            // create button and append dropdown menue
+            cell.append(
+                $('<a href="#" type="button" class="btn btn-primary dropdown-toggle">')
+                    .attr({
+                        'data-toggle': 'dropdown',
+                        'role': 'menuitemcheckbox'
+                    })
+                    .append(
+                        $('<span class="name">'),
+                        $('<span class="caret">')
+                    ),
+                $('<ul class="dropdown dropdown-menu app-dropdown">').append(items)
             );
 
-            ext.point('io.ox/search/facets/applications').invoke('draw', row, baton);
+            // apply a11y
+            cell.find('.dropdown-toggle')
+                .dropdown();
 
+            // current app
+            if (id !== '') {
+                // add icon
+                cell.find('[data-app="' + id + '"]')
+                    .find('.fa')
+                    .removeClass('fa-none')
+                    .addClass('fa-check');
+                // add name
+                cell.find('.name').text(titles[id]);
+            }
+
+            // delegate handler
+            $('body').delegate('.app-dropdown a', 'click', function (e) {
+                var cell = $(e.target),
+                    next = cell.closest('a').attr('data-app');
+
+                if (next && next !== id)
+                    baton.model.setModule(next);
+            });
+
+            //append or replace
             elem = this.find('.row.applications');
             if (elem.length)
                 elem.replaceWith(row);
@@ -158,87 +225,7 @@ define('io.ox/search/view-template',
         index: 100,
         draw: function () {
             // overwirte app
-            point.replace({
-                id: 'apps',
-                index: 100,
-                row: '0',
-                draw: function (baton) {
 
-                    var cell = $('<div class="btn-group col-xs-12">'),
-                        row = $('<div class="row applications">').append(cell),
-                        id = baton.model.getApp(),
-                        opt = baton.model.getOptions(),
-                        row, cell,
-                        items = [],
-                        titles = {},
-                        apps = settings.get('search/modules', []),
-                        elem;
-
-                    // apply mapping (infostore-files-drive chameleon)
-                    apps = _.map(apps, function (module) {
-                        var id = 'io.ox/' + module;
-                        return opt.mapping[id] || id;
-                    });
-
-                    // create dropdown menu entries
-                    _(apps).each(function (id) {
-                        var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
-                        items.push(
-                            $('<li role="presentation">')
-                            .append(
-                                $('<a role="menuitem" tabindex="-1" href="#">')
-                                    .attr({
-                                        'title': title,
-                                        'data-app': id
-                                    })
-                                    .append(
-                                        $('<i class="fa fa-fw"></i>'),
-                                        $('<span>').text(
-                                            title
-                                        )
-                                    )
-                            )
-                        );
-                    });
-
-                    // create button and append dropdown menue
-                    cell.append(
-                        $('<a href="#" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">')
-                            .append(
-                                $('<span class="name">'),
-                                $('<span class="caret">')
-                            ),
-                        $('<ul class="dropdown dropdown-menu app-dropdown" role="menu">').append(items)
-                    );
-
-                    // current app
-                    if (id !== '') {
-                        // add icon
-                        cell.find('[data-app="' + id + '"]')
-                            .find('.fa')
-                            .removeClass('fa-none')
-                            .addClass('fa-check');
-                        // add name
-                        cell.find('.name').text(titles[id]);
-                    }
-
-                    // delegate handler
-                    $('body').delegate('.app-dropdown a', 'click', function (e) {
-                        var cell = $(e.target),
-                            next = cell.closest('a').attr('data-app');
-
-                        if (next && next !== id)
-                            baton.model.setModule(next);
-                    });
-
-                    //append or replace
-                    elem = this.find('.row.applications');
-                    if (elem.length)
-                        elem.replaceWith(row);
-                    else
-                        this.append(row);
-                }
-            });
         }
     });
 

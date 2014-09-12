@@ -136,15 +136,24 @@ define('io.ox/search/autocomplete/extensions',
         },
 
         searchfieldMobile: function (baton) {
-            var group;
+            var group,
+                label = gt('Search'),
+                id = 'search-search-field';
+
             // input group and dropdown
             this.append(
                 group = $('<div class="input-group">')
                     .append(
-                        $('<input type="text" class="form-control search-field" tabindex="1">')
+                        $('<input type="text">')
                         .attr({
-                            placeholder: gt('Search') + ' ...'
-                        })
+                            class: 'form-control search-field',
+                            tabindex: 1,
+                            id: id,
+                            placeholder: label + ' ...'
+                        }),
+                        $('<label class="sr-only">')
+                            .attr('for', id)
+                            .text(label)
                     )
             );
 
@@ -154,12 +163,13 @@ define('io.ox/search/autocomplete/extensions',
                     .attr({
                         'tabindex': '1',
                         'class': 'btn-clear',
+                        'aria-label': gt('Clear field'),
+                        'role': 'button'
                     }).append(
                         $('<i class="fa fa-times"></i>')
                     )
                     .on('click', function (e) {
                         e.preventDefault();
-                        //view.trigger('button:clear');
                     })
             );
             group.append(

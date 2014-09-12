@@ -28,15 +28,6 @@ define('io.ox/search/facets/view',
     });
 
     /**
-     * special: presentation for application facet (search app only)
-     */
-    ext.point(POINT + '/applications').extend({
-        id: 'applications',
-        index: INDEX += 100,
-        draw: extensions.applications
-    });
-
-    /**
      * special: folder facet is hardcoded by front end
      */
     ext.point(POINT + '/item').extend({

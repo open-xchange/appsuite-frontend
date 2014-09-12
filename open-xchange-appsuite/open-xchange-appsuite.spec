@@ -4,8 +4,8 @@ BuildRequires:  ant
 BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
-Version:        7.6.0
-%define         ox_release 11
+Version:        @OXVERSION@
+%define         ox_release 1
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -535,14 +535,28 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Fri Sep 05 2014 Markus Wagner <markus.wagner@open-xchange.com>
+First release candidate for 7.6.1
+* Fri Sep 05 2014 Markus Wagner <markus.wagner@open-xchange.com>
+prepare for 7.6.1
 * Wed Aug 20 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-08-25
+* Mon Aug 18 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-08-25
 * Mon Aug 11 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-08-11
+* Thu Aug 07 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-08-11
 * Wed Jul 23 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-07-30
 * Mon Jul 21 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-07-28
+* Mon Jul 21 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-07-21
+* Wed Jul 09 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-07-14
+* Thu Jun 26 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-06-30
 * Wed Jun 25 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Seventh candidate for 7.6.0 release
 * Fri Jun 20 2014 Markus Wagner <markus.wagner@open-xchange.com>

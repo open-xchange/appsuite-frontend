@@ -25,7 +25,7 @@ define('plugins/portal/xing/activities',
 
     'use strict';
 
-    var linkXingContact, makeName;
+    var linkXingContact, makeName, very_short, shorter, very_short_middle_ellipsis;
 
     linkXingContact = function (contact) {
         var contactNode = $('<a>')
@@ -45,6 +45,29 @@ define('plugins/portal/xing/activities',
         return actor.type === 'user' ? actor.display_name : actor.name;
     };
 
+    very_short_middle_ellipsis = function (text, options) {
+        console.log('very_short_middle_ellipsis', text, options);
+        if (!options || !options.limitLength) {
+            return text;
+        }
+        console.log('Shortened: ', _.ellipsis(text, {max: 20, charpos: 'middle'}));
+        return _.ellipsis(text, {max: 30, charpos: 'middle'});
+
+    };
+
+    very_short = function (text, options) {
+        if (!options || !options.limitLength) {
+            return text;
+        }
+        return _.ellipsis(text, {max: 30});
+    };
+
+    shorter = function (text, options) {
+        if (!options || !options.limitLength) {
+            return text;
+        }
+        return _.ellipsis(text, {max: 50});
+    };
 
 
 
@@ -54,13 +77,13 @@ define('plugins/portal/xing/activities',
         accepts: function (activity) {
             return activity.verb === 'bookmark';
         },
-        handle: function (activityObj, creator) {
+        handle: function (activityObj, options) {
             return $('<div class="xing activityObj">').append(
-                $('<div class="actionDesc">').text(gt('%1$s recommends this link:', makeName(creator))),
+                $('<div class="actionDesc">').text(gt('%1$s recommends this link:', makeName(activityObj.creator))),
                 $('<div class="actionContent">').append(
-                    $('<a>').attr({href: activityObj.url}).addClass('external xing'),
-                    $('<div class="title">').text(activityObj.title),
-                    $('<div class="description">').text(activityObj.description)
+                    $('<a>').attr({href: activityObj.url}).text(very_short_middle_ellipsis(activityObj.url, options)).addClass('external xing'),
+                    $('<div class="title">').text(very_short(activityObj.title, options)),
+                    $('<div class="description">').text(shorter(activityObj.description, options))
                 )
             );
 
@@ -75,14 +98,14 @@ define('plugins/portal/xing/activities',
                 activity.objects.length === 1 &&
                 activity.objects[0].type === 'bookmark';
         },
-        handle: function (activity) {
+        handle: function (activity, options) {
             var linkActivity = activity.objects[0];
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a link:', makeName(linkActivity.creator))),
                 $('<div class="actionContent">').append(
                     $('<a>').attr({'href': linkActivity.url, 'target': '_blank'})
                     .addClass('external xing')
-                    .text(linkActivity.description || linkActivity.url)
+                    .text(shorter(linkActivity.description, options) || very_short_middle_ellipsis(linkActivity.url, options))
                 )
             );
         }
@@ -96,12 +119,12 @@ define('plugins/portal/xing/activities',
                 activity.objects.length === 1 &&
                 activity.objects[0].type === 'status';
         },
-        handle: function (activity) {
+        handle: function (activity, options) {
             var statusActivity = activity.objects[0];
 
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s changed their status:', makeName(statusActivity.creator))),
-                $('<div class="actionContent">').text(statusActivity.content)
+                $('<div class="actionContent">').text(shorter(statusActivity.content, options))
             );
         }
     });
@@ -146,12 +169,12 @@ define('plugins/portal/xing/activities',
                 activity.objects.length === 1 &&
                 activity.objects[0].type === 'activity';
         },
-        handle: function (activity) {
+        handle: function (activity, options) {
             var statusActivity = activity.objects[0];
 
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a new activity:', makeName(statusActivity.creator))),
-                $('<div class="actionContent">').text(statusActivity.content)
+                $('<div class="actionContent">').text(shorter(statusActivity.content, options))
             );
         }
     });
@@ -163,12 +186,12 @@ define('plugins/portal/xing/activities',
                 activity.objects.length === 1 &&
                 activity.objects[0].type === 'company_profile_update';
         },
-        handle: function (activity) {
+        handle: function (activity, options) {
             var profileUpdate = activity.objects[0];
 
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s updated their profile:', profileUpdate.description)),
-                $('<div class="actionContent">').text(profileUpdate.name)
+                $('<div class="actionContent">').text(shorter(profileUpdate.name, options))
             );
         }
     });

@@ -85,7 +85,7 @@ define('io.ox/core/folder/extensions',
                 folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
                 model_id: INBOX,
                 parent: tree,
-                title: 'My folders',
+                title: gt('My folders'),
                 tree: tree
             });
 
