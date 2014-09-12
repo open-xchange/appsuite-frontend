@@ -15,7 +15,7 @@ define('io.ox/core/settings/pane',
     ['io.ox/core/extensions',
      'io.ox/backbone/basicModel',
      'io.ox/backbone/views',
-     'io.ox/backbone/forms',
+     'io.ox/backbone/mini-views/common',
      'io.ox/core/api/apps',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
@@ -23,7 +23,7 @@ define('io.ox/core/settings/pane',
      'settings!io.ox/core',
      'settings!io.ox/core/settingOptions',
      'gettext!io.ox/core'
-    ], function (ext, BasicModel, views, forms, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
+    ], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -115,20 +115,30 @@ define('io.ox/core/settings/pane',
         });
     }
 
-    point.extend(new forms.SelectControlGroup({
+    point.extend({
         id: 'language',
         index: 100,
-        labelCssClass: 'col-sm-4',
-        controlCssClass: 'col-sm-4',
-        attribute: 'language',
-        label: gt('Language'),
-        selectOptions: ox.serverConfig.languages || {},
-        updateModel: function () {
-            var value = this.nodes.element.val();
-            this.model.set(this.attribute, value, {validate: true});
-            _.setCookie('language', value);
+        className: 'row form-group',
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label>').attr({
+                    class: 'control-label col-sm-4',
+                    for: guid
+                }).text(gt('Language')),
+                $('<div>').addClass('col-sm-4').append(
+                    new miniViews.SelectView({
+                        list: _.map(ox.serverConfig.languages, function(key, val) { return { label: key, value: val }; }),
+                        name: 'language',
+                        model: this.baton.model,
+                        id: guid,
+                        className: 'form-control'
+                    }).render().$el
+                )
+            );
         }
-    }));
+    });
+
 
     (function () {
         // Timezones
@@ -165,15 +175,29 @@ define('io.ox/core/settings/pane',
             }
         }
 
-        point.extend(new forms.SelectControlGroup({
+        point.extend({
             id: 'timezones',
             index: 200,
-            labelCssClass: 'col-sm-4',
-            controlCssClass: 'col-sm-4',
-            attribute: 'timezone',
-            label: gt('Time zone'),
-            selectOptions: sorted
-        }));
+            className: 'row form-group',
+            render: function () {
+                var guid = _.uniqueId('form-control-label-');
+                this.$el.append(
+                    $('<label>').attr({
+                        class: 'control-label col-sm-4',
+                        for: guid
+                    }).text(gt('Time zone')),
+                    $('<div>').addClass('col-sm-4').append(
+                        new miniViews.SelectView({
+                            list: _.map(sorted, function(key, val) { return { label: key, value: val }; }),
+                            name: 'timezone',
+                            model: this.baton.model,
+                            id: guid,
+                            className: 'form-control'
+                        }).render().$el
+                    )
+                );
+            }
+        });
 
         // Themes
         var availableThemes = settingOptions.get('themes') || {};
@@ -184,133 +208,194 @@ define('io.ox/core/settings/pane',
         }
 
         if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
-            point.extend(new forms.SelectControlGroup({
+            point.extend({
                 id: 'theme',
                 index: 400,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
-                attribute: 'theme',
-                label: gt('Theme'),
-                selectOptions: availableThemes
-            }));
+                className: 'row form-group',
+                render: function () {
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.append(
+                        $('<label>').attr({
+                            class: 'control-label col-sm-4',
+                            for: guid
+                        }).text(gt('Theme')),
+                        $('<div>').addClass('col-sm-4').append(
+                            new miniViews.SelectView({
+                                list: _.map(availableThemes, function(key, val) { return { label: key, value: val }; }),
+                                name: 'theme',
+                                model: this.baton.model,
+                                id: guid,
+                                className: 'form-control'
+                            }).render().$el
+                        )
+                    );
+                }
+            });
         }
 
-        point.extend(new forms.CheckControlGroup({
+        point.extend({
             id: 'highcontrast',
             index: 401,
-            labelCssClass: 'col-sm-4',
-            controlCssClass: 'col-sm-4',
-            attribute: 'highcontrast',
-            label: gt('High contrast theme')
-        }));
+            className: 'row form-group',
+            render: function () {
+                var guid = _.uniqueId('form-control-label-');
+                this.$el.append(
+                    $('<label>').attr({
+                        class: 'control-label col-sm-4',
+                        for: guid
+                    }).text(gt('High contrast theme')),
+                    $('<div>').addClass('col-sm-4').append(
+                        new miniViews.CheckboxView({
+                            name: 'highcontrast',
+                            model: this.baton.model,
+                            id: guid
+                        }).render().$el
+                    )
+                );
+            }
+        });
 
     }());
 
     (function () {
         if (settings.isConfigurable('refreshInterval')) {
-            var MINUTES = 60000;
-            var options = {};
+            var MINUTES = 60000,
+                options = [
+                    { label: gt('5 minutes'), value: 5 * MINUTES },
+                    { label: gt('10 minutes'), value: 10 * MINUTES },
+                    { label: gt('15 minutes'), value: 15 * MINUTES },
+                    { label: gt('30 minutes'), value: 30 * MINUTES }
+                ];
 
-            options[5 * MINUTES] = gt('5 minutes');
-            options[10 * MINUTES] = gt('10 minutes');
-            options[15 * MINUTES] = gt('15 minutes');
-            options[30 * MINUTES] = gt('30 minutes');
-
-            point.extend(new forms.SelectControlGroup({
+            point.extend({
                 id: 'refreshInterval',
                 index: 300,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
-                attribute: 'refreshInterval',
-                label: gt('Refresh interval'),
-                selectOptions: options
-            }));
+                className: 'row form-group',
+                render: function () {
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.append(
+                        $('<label>').attr({
+                            class: 'control-label col-sm-4',
+                            for: guid
+                        }).text(gt('Refresh interval')),
+                        $('<div>').addClass('col-sm-4').append(
+                            new miniViews.SelectView({
+                                list: options,
+                                name: 'refreshInterval',
+                                model: this.baton.model,
+                                id: guid,
+                                className: 'form-control'
+                            }).render().$el
+                        )
+                    );
+                }
+            });
         }
     }());
 
     // Auto Start App
-
     (function () {
         if (settings.isConfigurable('autoStart')) {
-            var options = {};
-            _(appAPI.getFavorites()).each(function (app) {
-                options[app.path] = /*#, dynamic*/gt.pgettext('app', app.title);
+            var options =  _(appAPI.getFavorites()).map(function (app) {
+                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
             });
+            options.push({ label: gt('None'), value: 'none' });
 
-            options.none = gt('None');
-            point.extend(new forms.SelectControlGroup({
+            point.extend({
                 id: 'autoStart',
                 index: 500,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
-                attribute: 'autoStart',
-                label: gt('Default app after sign in'),
-                selectOptions: options
-            }));
-        }
-    }());
-
-    // Auto open notification area
-    (function () {
-        var options = {};
-
-        options.never = gt('Never');
-        options.noEmail = gt('On new notifications except mails');
-        options.always = gt('On every new notification');
-
-        if (settings.isConfigurable('autoOpenNotificationarea')) {
-            point.extend(new forms.SelectControlGroup({
-                id: 'autoOpenNotfication',
-                index: 700,
-                labelCssClass: 'col-sm-4',
-                controlCssClass: 'col-sm-4',
-                attribute: 'autoOpenNotification',
-                label: gt('Automatic opening of notification area'),
-                selectOptions: options
-            }));
+                className: 'row form-group',
+                render: function () {
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.append(
+                        $('<label>').attr({
+                            class: 'control-label col-sm-4',
+                            for: guid
+                        }).text(gt('Default app after sign in')),
+                        $('<div>').addClass('col-sm-4').append(
+                            new miniViews.SelectView({
+                                list: options,
+                                name: 'autoStart',
+                                model: this.baton.model,
+                                id: guid,
+                                className: 'form-control'
+                            }).render().$el
+                        )
+                    );
+                }
+            });
         }
     }());
 
     // Auto Logout
-
     (function () {
         var MINUTES = 60000,
-            options = {};
+            options = [
+                { label: gt('Off'), value: 0 },
+                { label: gt('5 minutes'), value: 5 * MINUTES },
+                { label: gt('10 minutes'), value: 10 * MINUTES },
+                { label: gt('15 minutes'), value: 15 * MINUTES },
+                { label: gt('30 minutes'), value: 30 * MINUTES }
+            ];
 
-        options[0] = gt('Off');
-        options[5 * MINUTES] = gt('5 minutes');
-        options[10 * MINUTES] = gt('10 minutes');
-        options[15 * MINUTES] = gt('15 minutes');
-        options[30 * MINUTES] = gt('30 minutes');
-
-        point.extend(new forms.SelectControlGroup({
+        point.extend({
             id: 'autoLogout',
             index: 600,
-            labelCssClass: 'col-sm-4',
-            controlCssClass: 'col-sm-4',
-            attribute: 'autoLogout',
-            label: gt('Automatic sign out'),
-            selectOptions: options,
-            updateModel: function () {
-                this.setValueInModel(this.nodes.element.val());
-                ox.autoLogout.restart();
+            className: 'row form-group',
+            render: function () {
+                var guid = _.uniqueId('form-control-label-');
+                this.$el.append(
+                    $('<label>').attr({
+                        class: 'control-label col-sm-4',
+                        for: guid
+                    }).text(gt('Automatic sign out')),
+                    $('<div>').addClass('col-sm-4').append(
+                        new miniViews.SelectView({
+                            list: options,
+                            name: 'autoLogout',
+                            model: this.baton.model,
+                            id: guid,
+                            className: 'form-control'
+                        }).render().$el
+                    )
+                );
             }
-        }));
-
+        });
     }());
 
-    // point.basicExtend({
-    //     id: 'clearCache',
-    //     index: 200000,
-    //     draw: function () {
-    //         this.append(
-    //             $('<button type="button" class="btn btn-default">').text(gt("Clear cache")).on("click", function (e) {
-    //                 e.preventDefault();
-    //                 require(["io.ox/core/cache"], function () {
-    //                     ox.cache.clear();
-    //                 });
-    //             })
-    //         );
-    //     }
-    // });
+    // Auto open notification area
+    (function () {
+        if (settings.isConfigurable('autoOpenNotificationarea')) {
+            var options = [
+                    { label: gt('Never'), value: 'never' },
+                    { label: gt('On new notifications except mails'), value: 'noEmail' },
+                    { label: gt('On every new notification'), value: 'always' }
+                ];
+
+            point.extend({
+                id: 'autoOpenNotification',
+                index: 700,
+                className: 'row form-group',
+                render: function () {
+                    var guid = _.uniqueId('form-control-label-');
+                    this.$el.append(
+                        $('<label>').attr({
+                            class: 'control-label col-sm-4',
+                            for: guid
+                        }).text(gt('Automatic opening of notification area')),
+                        $('<div>').addClass('col-sm-4').append(
+                            new miniViews.SelectView({
+                                list: options,
+                                name: 'autoOpenNotification',
+                                model: this.baton.model,
+                                id: guid,
+                                className: 'form-control'
+                            }).render().$el
+                        )
+                    );
+                }
+            });
+        }
+    }());
+
 });

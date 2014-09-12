@@ -14,7 +14,6 @@
 define('io.ox/tasks/edit/view-template',
     ['gettext!io.ox/tasks/edit',
      'io.ox/backbone/views',
-     'io.ox/core/date',
      'io.ox/core/notifications',
      'io.ox/backbone/forms',
      'io.ox/calendar/util',
@@ -26,7 +25,7 @@ define('io.ox/tasks/edit/view-template',
      'io.ox/core/extensions',
      'io.ox/tasks/util',
      'settings!io.ox/tasks'
-    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
+    ], function (gt, views, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
 
     'use strict';
 
