@@ -55,57 +55,6 @@ define('io.ox/search/facets/extensions',
         },
         extensions = {
 
-            applications: function (baton) {
-                var id = baton.model.getApp(),
-                    opt = baton.model.getOptions(),
-                    row = this,
-                    cell = row.find('ul'),
-                    apps = settings.get('search/modules', []);
-
-                // apply mapping (infostore-files-drive chameleon)
-                apps = _.map(apps, function (module) {
-                    var id = 'io.ox/' + module;
-                    return opt.mapping[id] || id;
-                });
-
-                // create menu entries
-                _(apps).each(function (id) {
-                    var title = (ox.manifests.apps[id + '/main'] || {}).title;
-                    if (title) {
-                        cell.append(
-                            $('<li role="presentation" class="application">')
-                                .append(
-                                    $('<div class="btn-group">')
-                                    .append(
-                                        $('<button type="button" class="btn btn-link">')
-                                            .attr({
-                                                'data-app': id,
-                                                tabIndex: 1,
-                                                role: 'menuitemcheckbox'
-                                            })
-                                            .addClass('pull-left')
-                                            .text(/*#, dynamic*/gt.pgettext('app', title))
-                                    )
-                                )
-                        );
-                    }
-                });
-
-                // mark as active
-                if (id !== '') {
-                    cell.find('[data-app="' + id + '"]')
-                    .removeClass('btn-link')
-                    .addClass('btn-primary');
-                }
-                // register click handler
-                cell.find('li').on('click', function (e) {
-                    var node = $(e.target);
-                    baton.model.setModule(node.attr('data-app'));
-                    baton.app.view.trigger('change:app');
-                });
-
-            },
-
             item: function (baton, value, facet) {
                 var button = this.find('a');
                 ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
