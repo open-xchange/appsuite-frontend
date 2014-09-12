@@ -35,7 +35,7 @@ module.exports = function (grunt) {
             dist_custom: {
                 files: [
                     {
-                        src: ['readme.txt', 'apps/themes/.htaccess'],
+                        src: ['readme.txt'],
                         dest: 'dist/appsuite/'
                     },
                     {

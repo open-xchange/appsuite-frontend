@@ -30,21 +30,6 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'src/',
                         dest: 'build/'
-                    },
-                    {
-                        expand: true,
-                        src: ['apps/**/*.{json,yml,tmpl}', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
-                        dest: 'build/'
-                    }
-                ]
-            },
-            build_dateData: {
-                files: [
-                    {
-                        src: ['apps/io.ox/core/date/*.json'],
-                        expand: true,
-                        filter: 'isFile',
-                        dest: 'build/'
                     }
                 ]
             }
