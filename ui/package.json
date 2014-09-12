@@ -8,7 +8,7 @@
   "optionalDependencies": {
     "assemble": "^0.4.17",
     "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
-    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#15b39a25de",
+    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#59e60f9",
     "underscore": "^1.6.0"
   },
   "devDependencies": {

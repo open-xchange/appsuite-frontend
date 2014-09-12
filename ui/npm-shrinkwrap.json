@@ -92,7 +92,7 @@
                         },
                         "underscore.string": {
                           "version": "2.3.3",
-                          "from": "underscore.string@~2",
+                          "from": "underscore.string@~2.3.1",
                           "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.3.3.tgz"
                         }
                       }
@@ -516,7 +516,7 @@
                         },
                         "underscore.string": {
                           "version": "2.3.3",
-                          "from": "underscore.string@~2",
+                          "from": "underscore.string@~2.3.1",
                           "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-2.3.3.tgz"
                         }
                       }
@@ -820,7 +820,7 @@
           "dependencies": {
             "mime": {
               "version": "1.2.11",
-              "from": "mime@~1.2.9",
+              "from": "mime@1.2.x",
               "resolved": "https://registry.npmjs.org/mime/-/mime-1.2.11.tgz"
             },
             "request": {
@@ -1502,7 +1502,7 @@
                   "dependencies": {
                     "esprima": {
                       "version": "1.0.4",
-                      "from": "esprima@~ 1.0.2",
+                      "from": "esprima@~1.0.4",
                       "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz"
                     }
                   }
@@ -1536,7 +1536,7 @@
                   "dependencies": {
                     "ansi-regex": {
                       "version": "0.2.1",
-                      "from": "ansi-regex@^0.2.1",
+                      "from": "ansi-regex@^0.2.0",
                       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                     }
                   }
@@ -1548,7 +1548,7 @@
                   "dependencies": {
                     "ansi-regex": {
                       "version": "0.2.1",
-                      "from": "ansi-regex@^0.2.1",
+                      "from": "ansi-regex@^0.2.0",
                       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                     }
                   }
@@ -1633,7 +1633,7 @@
                     },
                     "inherits": {
                       "version": "2.0.1",
-                      "from": "inherits@~2.0.0",
+                      "from": "inherits@~2.0.1",
                       "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                     }
                   }
@@ -1688,7 +1688,7 @@
               "dependencies": {
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@~2.0.0",
+                  "from": "inherits@2",
                   "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                 },
                 "minimatch": {
@@ -2006,7 +2006,7 @@
                     },
                     "mute-stream": {
                       "version": "0.0.4",
-                      "from": "mute-stream@~0.0.4",
+                      "from": "mute-stream@0.0.4",
                       "resolved": "https://registry.npmjs.org/mute-stream/-/mute-stream-0.0.4.tgz"
                     },
                     "readline2": {
@@ -2274,7 +2274,7 @@
                 },
                 "tough-cookie": {
                   "version": "0.12.1",
-                  "from": "tough-cookie@^0.12.1",
+                  "from": "tough-cookie@>=0.12.0",
                   "resolved": "https://registry.npmjs.org/tough-cookie/-/tough-cookie-0.12.1.tgz",
                   "dependencies": {
                     "punycode": {
@@ -2577,7 +2577,7 @@
                 },
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@~2.0.0",
+                  "from": "inherits@2",
                   "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                 }
               }
@@ -2867,7 +2867,7 @@
                   "dependencies": {
                     "ansi-regex": {
                       "version": "0.2.1",
-                      "from": "ansi-regex@^0.2.0",
+                      "from": "ansi-regex@^0.2.1",
                       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                     }
                   }
@@ -2879,7 +2879,7 @@
                   "dependencies": {
                     "ansi-regex": {
                       "version": "0.2.1",
-                      "from": "ansi-regex@^0.2.0",
+                      "from": "ansi-regex@^0.2.1",
                       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                     }
                   }
@@ -2929,7 +2929,7 @@
             },
             "lodash": {
               "version": "2.4.1",
-              "from": "lodash@~2.4.1",
+              "from": "lodash@2.4.1",
               "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz"
             },
             "semver": {
@@ -3232,7 +3232,7 @@
       "dependencies": {
         "chalk": {
           "version": "0.5.1",
-          "from": "chalk@~0.5.0",
+          "from": "chalk@^0.5.1",
           "resolved": "https://registry.npmjs.org/chalk/-/chalk-0.5.1.tgz",
           "dependencies": {
             "ansi-styles": {
@@ -3252,7 +3252,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@^0.2.0",
+                  "from": "ansi-regex@^0.2.1",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3264,7 +3264,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@^0.2.0",
+                  "from": "ansi-regex@^0.2.1",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3302,7 +3302,7 @@
       "dependencies": {
         "hooker": {
           "version": "0.2.3",
-          "from": "hooker@0.2.3",
+          "from": "hooker@~0.2.3",
           "resolved": "https://registry.npmjs.org/hooker/-/hooker-0.2.3.tgz"
         }
       }
@@ -3314,7 +3314,7 @@
       "dependencies": {
         "chalk": {
           "version": "0.5.1",
-          "from": "chalk@~0.5.0",
+          "from": "chalk@^0.5.1",
           "resolved": "https://registry.npmjs.org/chalk/-/chalk-0.5.1.tgz",
           "dependencies": {
             "ansi-styles": {
@@ -3334,7 +3334,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@^0.2.1",
+                  "from": "ansi-regex@^0.2.0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3346,7 +3346,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@^0.2.1",
+                  "from": "ansi-regex@^0.2.0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -3707,7 +3707,7 @@
                 },
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@2",
+                  "from": "inherits@~2.0.1",
                   "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                 }
               }
@@ -3733,8 +3733,8 @@
     },
     "shared-grunt-config": {
       "version": "0.6.4",
-      "from": "git://github.com/Open-Xchange-Frontend/shared-grunt-config#15b39a25de",
-      "resolved": "git://github.com/Open-Xchange-Frontend/shared-grunt-config#15b39a25de52a2b465b2088c4bafe3337ccc5786",
+      "from": "git://github.com/Open-Xchange-Frontend/shared-grunt-config#59e60f9",
+      "resolved": "git://github.com/Open-Xchange-Frontend/shared-grunt-config#59e60f95f76f3b0f00989066930212616f3fc236",
       "dependencies": {
         "appserver": {
           "version": "0.3.1",
