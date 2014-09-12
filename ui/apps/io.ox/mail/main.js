@@ -12,32 +12,32 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/main',
-    ['io.ox/mail/util',
-     'io.ox/mail/api',
-     'io.ox/core/commons',
-     'io.ox/mail/listview',
-     'io.ox/core/tk/list-control',
-     'io.ox/mail/threadview',
-     'io.ox/core/extensions',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/api/account',
-     'io.ox/core/notifications',
-     'io.ox/core/toolbars-mobile',
-     'io.ox/core/page-controller',
-     'io.ox/core/capabilities',
-     'io.ox/core/folder/tree',
-     'io.ox/core/folder/view',
-     'gettext!io.ox/mail',
-     'settings!io.ox/mail',
-     'io.ox/mail/actions',
-     'io.ox/mail/mobile-navbar-extensions',
-     'io.ox/mail/mobile-toolbar-actions',
-     'io.ox/mail/toolbar',
-     'io.ox/mail/import',
-     'less!io.ox/mail/style',
-     'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
+define('io.ox/mail/main', [
+    'io.ox/mail/util',
+    'io.ox/mail/api',
+    'io.ox/core/commons',
+    'io.ox/mail/listview',
+    'io.ox/core/tk/list-control',
+    'io.ox/mail/threadview',
+    'io.ox/core/extensions',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/api/account',
+    'io.ox/core/notifications',
+    'io.ox/core/toolbars-mobile',
+    'io.ox/core/page-controller',
+    'io.ox/core/capabilities',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/view',
+    'gettext!io.ox/mail',
+    'settings!io.ox/mail',
+    'io.ox/mail/actions',
+    'io.ox/mail/mobile-navbar-extensions',
+    'io.ox/mail/mobile-toolbar-actions',
+    'io.ox/mail/toolbar',
+    'io.ox/mail/import',
+    'less!io.ox/mail/style',
+    'io.ox/mail/folderview-extensions'
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
 
     'use strict';
 
@@ -536,7 +536,6 @@ define('io.ox/mail/main',
             });
         },
 
-
         /*
          * Change foldername on mobiles in navbar
          */
@@ -560,7 +559,7 @@ define('io.ox/mail/main',
             };
         },
 
-           /*
+        /*
          * Define basic function to show an email
          */
         'show-mail-mobile': function (app) {
@@ -570,7 +569,6 @@ define('io.ox/mail/main',
                 app.pages.getPage('detailView').empty().append(app.threadView.renderMail(cid));
             };
         },
-
 
         /*
          * Define basic function to show an thread overview on mobile
@@ -582,7 +580,6 @@ define('io.ox/mail/main',
                 app.threadView.show(cid, app.props.get('thread'));
             };
         },
-
 
         /*
          * Define basic function to reflect empty selection
@@ -610,7 +607,7 @@ define('io.ox/mail/main',
             };
         },
 
-         /*
+        /*
          * Define function to reflect multiple selection
          */
         'show-multiple-mobile': function (app) {
@@ -768,7 +765,7 @@ define('io.ox/mail/main',
                     nodes.body.addClass(className).prepend(toolbar);
                 }
 
-                if(layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
+                if (layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
                     //listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
                     app.listView.selection.triggerChange();
                 }
@@ -1058,24 +1055,23 @@ define('io.ox/mail/main',
                     });
 
                 // events
-                win.facetedsearch.ready
-                    .done(function () {
-                        var view = win.facetedsearch.view;
-                        view.on({
-                            'query': _.debounce(function (e, appname) {
-                                if (appname === app.get('name')) {
-                                    // connect
-                                    if (app.listView.loader.mode !== 'search') {
-                                        app.listView.connect(collectionLoader);
-                                    }
-                                    app.listView.load();
-                                    win.facetedsearch.focus();
+                win.facetedsearch.ready.done(function () {
+                    var view = win.facetedsearch.view;
+                    view.on({
+                        'query': _.debounce(function (e, appname) {
+                            if (appname === app.get('name')) {
+                                // connect
+                                if (app.listView.loader.mode !== 'search') {
+                                    app.listView.connect(collectionLoader);
                                 }
-                            }, 10),
-                            'focus': function () {
-                                // register collection loader
+                                app.listView.load();
+                                win.facetedsearch.focus();
                             }
-                        });
+                        }, 10),
+                        'focus': function () {
+                            // register collection loader
+                        }
+                    });
                 });
 
                 win.on('search:cancel', function () {
