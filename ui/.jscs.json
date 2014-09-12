@@ -1,10 +1,10 @@
 {
     "requireCurlyBraces": ["for", "while", "do", "try", "catch"],
     "requireSpaceAfterKeywords": ["if", "else", "for", "while", "do", "switch", "return", "try", "catch"],
-    "disallowLeftStickedOperators": ["?", "+", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-    "disallowRightStickedOperators": ["?", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-    "requireRightStickedOperators": ["!"],
-    "requireLeftStickedOperators": [","],
+    "requireSpaceBeforeBinaryOperators": ["?", "+", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+    "requireSpaceAfterBinaryOperators": ["?", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+    "disallowSpaceAfterBinaryOperators": ["!"],
+    "disallowSpaceBeforeBinaryOperators": [","],
     "disallowImplicitTypeConversion": ["string"],
     "disallowKeywords": ["with"],
     "disallowMultipleLineBreaks": true,
@@ -26,5 +26,11 @@
     "validateIndentation": 4,
     "disallowTrailingComma": true,
     "disallowKeywordsOnNewLine": ["else"],
-    "disallowYodaConditions": true
+    "disallowYodaConditions": true,
+    "requireSpacesInConditionalExpression": {
+        "afterTest": true,
+        "beforeConsequent": true,
+        "afterConsequent": true,
+        "beforeAlternate": true
+    }
 }
