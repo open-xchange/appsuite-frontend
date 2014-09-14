@@ -12,8 +12,15 @@
  */
 
 define('waitsFor', function () {
+
     'use strict';
 
+    /**
+     * return deferred resolves (after continually called callback returns true for the first time)
+     * @param  {function} testCallback
+     * @param  {deferred} def (optional)
+     * @return {deferred}
+     */
     function waitFor(testCallback, def) {
         def = def || $.Deferred();
         if (!!testCallback()) return def.resolve();
