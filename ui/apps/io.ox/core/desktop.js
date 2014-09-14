@@ -1806,6 +1806,7 @@ define('io.ox/core/desktop',
                                     view.trigger('button:cancel', appname);
                                 }
                             });
+                            win.trigger('search:loaded');
                     });
                 });
 

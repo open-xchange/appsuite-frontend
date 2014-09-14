@@ -12,9 +12,11 @@
  */
 define(['io.ox/search/util',
         'fixture!io.ox/core/settings.json',
+        'spec/shared/capabilities',
         'settings!io.ox/mail',
         'settings!io.ox/core',
-        'beforeEachEnsure'], function (util, settingsFixture, mailSettings, settings, beforeEachEnsure) {
+        'io.ox/mail/main',
+        'beforeEachEnsure'], function (util, settingsFixture, caputil, mailSettings, settings, main, beforeEachEnsure) {
 
     function isPromise(def) {
         return (!def.reject && !!def.done);
@@ -30,32 +32,31 @@ define(['io.ox/search/util',
     //aync setup loads app and and add some variables to test context
     function setup (context) {
         var def = $.Deferred(),
-            self = this;
-
-        //apply relevant setting fixtures
-        mailSettings.set('folder', settingsFixture['io.ox/mail'].folder);
-        settings.set('folder', settingsFixture['io.ox/core'].folder);
-        settings.set('search', settingsFixture['io.ox/core'].search);
-        _.each(settings.get('search/modules'), function (module) {
-            var id = 'io.ox/' + module + '/main';
-            ox.manifests.apps[id] = {title: module};
-        });
-
-        //load app
-        require(['io.ox/search/main'], function (main) {
-            main.init();
-            var app = main.run();
-            self.vars = {
-                app: app,
-                model: app.getModel(),
-                node: $(document.body, '.io-ox-search-window').find('.window-content')
-            };
-            def.resolve();
-        });
+            self = this,
+            setCaps =  caputil.preset('common').init('io.ox/mail/main', main).apply;
+        setCaps()
+            .done(function () {
+                main.getApp().launch().done(function () {
+                    //console.warn('%c' + 'getAppDone', 'color: green; background-color: black');
+                    var win = main.getApp().getWindow();
+                    self.vars = {
+                        win: win,
+                        nodes: win.nodes.facetedsearch,
+                        api: win.facetedsearch
+                    };
+                    win.on('search:loaded', function () {
+                        //console.log('%c' + 'search:loaded', 'color: red; background-color: black');
+                        self.vars.view = self.vars.api.view;
+                        self.vars.model = self.vars.api.view.model;
+                        def.resolve();
+                    });
+                });
+            });
         return def;
     }
 
-    describe.skip('Utilities for search:', function () {
+
+    describe('Utilities for search:', function () {
         beforeEachEnsure(setup);
 
         describe('getFolders', function () {
@@ -93,7 +94,7 @@ define(['io.ox/search/util',
             });
         });
 
-        describe('getFirstChoice', function () {
+        describe.skip('getFirstChoice', function () {
             it('should always return a promise', function () {
                 var def = util.getFirstChoice(this.vars.model);
                 expect(isPromise(def)).to.be.true;
