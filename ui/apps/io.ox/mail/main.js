@@ -844,7 +844,7 @@ define('io.ox/mail/main', [
                             // get data
                             if (_.isString(obj)) obj = _.cid(obj);
                             // most recent or first unseen? (in line with threadview's autoSelectMail)
-                            if ((i == 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
+                            if ((i === 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
                                 api.get({ unseen: true, id: obj.id, folder: obj.folder_id });
                                 break;
                             }
