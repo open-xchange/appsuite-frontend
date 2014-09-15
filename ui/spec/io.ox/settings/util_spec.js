@@ -13,7 +13,7 @@
 
 define(['io.ox/settings/util'], function (util) {
 
-    describe('Utilities for settings:', function () {
+    describe('Settings Utilities', function () {
 
         describe('yellOnReject function', function () {
 

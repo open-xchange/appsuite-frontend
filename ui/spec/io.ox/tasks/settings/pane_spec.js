@@ -11,11 +11,11 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 define(['io.ox/core/extensions',
-        'gettext!io.ox/tasks',
-        'io.ox/tasks/settings/pane'
-        ], function (ext, gt) {
+    'gettext!io.ox/tasks',
+    'io.ox/tasks/settings/pane'
+], function (ext, gt) {
 
-	describe('tasksettings', function () {
+    describe('Tasks Settings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="tasksettingsNode">'));

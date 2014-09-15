@@ -21,13 +21,15 @@ define(
         }
     };
 
-    describe('Pub/Sub API', function () {
-        describe('publication API', function () {
-            sharedExamplesFor(api.publications, {testData: testData});
-        });
+    describe('Core', function () {
+        describe('Pub/Sub API', function () {
+            describe('publication API', function () {
+                sharedExamplesFor(api.publications, {testData: testData});
+            });
 
-        describe('subscription API', function () {
-            sharedExamplesFor(api.subscriptions, {testData: testData});
+            describe('subscription API', function () {
+                sharedExamplesFor(api.subscriptions, {testData: testData});
+            });
         });
     });
 });

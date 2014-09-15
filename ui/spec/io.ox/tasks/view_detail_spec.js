@@ -16,7 +16,9 @@ define([
     'fixture!io.ox/tasks/defaultTestData.json',
     'waitsFor'
 ], function (detailView, ext, testData, waitsFor) {
-    describe.skip('tasks detailview', function () {
+    'use strict';
+
+    describe.skip('Tasks DetailView', function () {
         describe('content', function () {
             var node;
             beforeEach(function () {
