@@ -384,7 +384,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         renderAttributes: function () {
             this.$el.attr({
                 'data-id': this.folder,
-                'data-index': this.model.get('index')
+                'data-index': this.model.get('index'),
+                'data-model': this.model_id
             });
         },
 
