@@ -55,65 +55,68 @@ define(['io.ox/search/util',
         return def;
     }
 
+    describe('Search', function () {
 
-    describe('Utilities for search:', function () {
-        beforeEachEnsure(setup);
+        describe('Utilities for search:', function () {
+            beforeEachEnsure(setup);
 
-        describe('getFolders', function () {
-            it('should always return a promise', function () {
-                var def = util.getFolders(this.vars.model);
-                expect(isPromise(def)).to.be.true;
+            describe('getFolders', function () {
+                it('should always return a promise', function () {
+                    var def = util.getFolders(this.vars.model);
+                    expect(isPromise(def)).to.be.true;
+                });
+
+                describe('returned promise', function () {
+                    it('should resolve with an object', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(_.isObject(data)).to.be.true;
+                        }, failed);
+                    });
+                    it('should always resolve with an object', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(_.isObject(data)).to.be.true;
+                        }, failed);
+                    });
+                    it('should always resolve with at least the default account', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(data).to.have.property('0').that.is.an('object');
+                        }, failed);
+                    });
+                    it('should always resolve with minimal account data', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(data[0]).to.have.property('list').that.is.an('array');
+                            expect(data[0].list).to.not.be.empty;
+                        }, failed);
+                    });
+                });
             });
 
-            describe('returned promise', function () {
-                it('should resolve with an object', function () {
-                    var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(_.isObject(data)).to.be.true;
-                    }, failed);
-                });
-                it('should always resolve with an object', function () {
-                    var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(_.isObject(data)).to.be.true;
-                    }, failed);
-                });
-                it('should always resolve with at least the default account', function () {
-                    var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(data).to.have.property('0').that.is.an('object');
-                    }, failed);
-                });
-                it('should always resolve with minimal account data', function () {
-                    var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(data[0]).to.have.property('list').that.is.an('array');
-                        expect(data[0].list).to.not.be.empty;
-                    }, failed);
-                });
-            });
-        });
-
-        describe.skip('getFirstChoice', function () {
-            it('should always return a promise', function () {
-                var def = util.getFirstChoice(this.vars.model);
-                expect(isPromise(def)).to.be.true;
-            });
-            describe('returned promise', function () {
-                it('should always resolve with an object', function () {
+            describe('getFirstChoice', function () {
+                it('should always return a promise', function () {
                     var def = util.getFirstChoice(this.vars.model);
-                    def.then(function (data) {
-                        expect(_.isObject(data)).to.be.true;
-                    }, failed);
+                    expect(isPromise(def)).to.be.true;
                 });
-                it('should always resolve with custom and display_name', function () {
-                    var def = util.getFirstChoice(this.vars.model);
-                    def.then(function (data) {
-                        expect(data).to.have.property('custom').that.is.equal('default0%2FINBOX');
-                        expect(data).to.have.property('display_name').that.is.equal('default0/INBOX');
-                    }, failed);
+                describe.skip('returned promise', function () {
+                    it('should always resolve with an object', function () {
+                        var def = util.getFirstChoice(this.vars.model);
+                        def.then(function (data) {
+                            expect(_.isObject(data)).to.be.true;
+                        }, failed);
+                    });
+                    it('should always resolve with custom and display_name', function () {
+                        var def = util.getFirstChoice(this.vars.model);
+                        def.then(function (data) {
+                            expect(data).to.have.property('custom').that.is.equal('default0%2FINBOX');
+                            expect(data).to.have.property('display_name').that.is.equal('default0/INBOX');
+                        }, failed);
+                    });
                 });
             });
+
         });
 
     });

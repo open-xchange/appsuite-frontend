@@ -98,96 +98,98 @@ define(['io.ox/mail/main',
         dropdown.first().trigger('click');
     };
 
-    describe.skip('in-app search:', function () {
-        //ensure setup is finished
-        beforeEachEnsure(setup);
-        beforeEach(setupFakeServer);
+    describe('Search', function () {
 
-        describe('has a view with', function () {
+        describe.skip('in-app search:', function () {
+            //ensure setup is finished
+            beforeEachEnsure(setup);
+            beforeEach(setupFakeServer);
 
-            describe('a search field section that', function () {
+            describe('has a view with', function () {
 
-                var getField = function (data) {
-                    return data.vars.nodes.toolbar.find('.search-field');
-                };
+                describe('a search field section that', function () {
 
-                it('exists', function () {
-                    expect(this.vars.nodes.toolbar).to.not.be.empty;
+                    var getField = function (data) {
+                        return data.vars.nodes.toolbar.find('.search-field');
+                    };
 
-                });
-                describe('contains an input field that', function () {
                     it('exists', function () {
-                        expect(getField(this).length).to.equal(1);
+                        expect(this.vars.nodes.toolbar).to.not.be.empty;
+
                     });
-
-                    describe('shows autocomplete popup when at least one char was entered and', function () {
-
-                        beforeEach(function () {
-                            $('.autocomplete-popup>.scrollable-pane').empty();
+                    describe('contains an input field that', function () {
+                        it('exists', function () {
+                            expect(getField(this).length).to.equal(1);
                         });
 
-                        it('key was pressed', function (done) {
-                            var field = getField(this);
-                            field.val('test');
-                            field.trigger(
-                                $.Event('keyup', { keyCode: 80})
-                            );
-                            dropdownLoaded(done);
+                        describe('shows autocomplete popup when at least one char was entered and', function () {
+
+                            beforeEach(function () {
+                                $('.autocomplete-popup>.scrollable-pane').empty();
+                            });
+
+                            it('key was pressed', function (done) {
+                                var field = getField(this);
+                                field.val('test');
+                                field.trigger(
+                                    $.Event('keyup', { keyCode: 80})
+                                );
+                                dropdownLoaded(done);
+                            });
+                            it('input is clicked', function (done) {
+                                var field = getField(this);
+                                field.val('test');
+                                field.trigger($.Event('mousedown'));
+                                field.trigger($.Event('click'));
+                                dropdownLoaded(done);
+                            });
                         });
-                        it('input is clicked', function (done) {
-                            var field = getField(this);
-                            field.val('test');
-                            field.trigger($.Event('mousedown'));
-                            field.trigger($.Event('click'));
-                            dropdownLoaded(done);
-                        });
-                    });
 
-                });
-            });
-
-            describe('a container for active facets that', function () {
-
-                //beforeEach(openDropdown);
-
-                function getDropdown ()  {
-                    return $('.autocomplete-popup>.scrollable-pane').children();
-                }
-
-                it('exists', function () {
-                    expect(!!this.vars.nodes.container).to.equal(true);
-                });
-                it('contains active default facets', function (done) {
-                    selectFilter();
-                    searchLoaded(done);
-                });
-                it('contains active default facets', function (done) {
-                    selectFilter();
-                    console.log('%c' + '!!!', 'color: white; background-color: grey');
-                    searchLoaded(done).done(function () {
-                        console.log('%c' + '!!!', 'color: white; background-color: grey');
                     });
                 });
-                it('contains active default facets', function (done) {
-                    selectFilter();
-                    searchLoaded()
-                        .then(function () {
-                        }, function () {
-                        })
-                        .then(openDropdown)
-                        .then(function () {
-                        })
-                        .then(selectFilter)
-                        .then(function () {
-                        })
-                        .then(searchLoaded.done(function () {
-                            expect($('.search-container>.default>.search-facets').children().length).to.equal(2);
-                        }));
+
+                describe('a container for active facets that', function () {
+
+                    //beforeEach(openDropdown);
+
+                    function getDropdown ()  {
+                        return $('.autocomplete-popup>.scrollable-pane').children();
+                    }
+
+                    it('exists', function () {
+                        expect(!!this.vars.nodes.container).to.equal(true);
+                    });
+                    it('contains active default facets', function (done) {
+                        selectFilter();
+                        searchLoaded(done);
+                    });
+                    it('contains active default facets', function (done) {
+                        selectFilter();
+                        searchLoaded(done).done(function () {
+                            console.log('%c' + '!!!', 'color: white; background-color: grey');
+                        });
+                    });
+                    it('contains active default facets', function (done) {
+                        selectFilter();
+                        searchLoaded()
+                            .then(function () {
+                            }, function () {
+                            })
+                            .then(openDropdown)
+                            .then(function () {
+                            })
+                            .then(selectFilter)
+                            .then(function () {
+                            })
+                            .then(searchLoaded.done(function () {
+                                expect($('.search-container>.default>.search-facets').children().length).to.equal(2);
+                            }));
+                    });
+
                 });
 
             });
 
         });
-
     });
 });
