@@ -104,6 +104,9 @@ define('io.ox/mail/write/main',
             if (app.dirty()) {
                 app.autoSaveDraft().done(function (data) {
                     app.refId = data;
+                    app.setSendType(mailAPI.SENDTYPE.DRAFT);
+                    app.setMsgRef(data);
+                    app.dirty(false);
                 });
             } else {
                 delay();
@@ -793,20 +796,20 @@ define('io.ox/mail/write/main',
                 }
             }
 
-            var mailto, tmp, params, def = $.Deferred();
+            var mailto, params, def = $.Deferred();
             // triggerd by mailto?
             if (data === undefined && (mailto = _.url.hash('mailto'))) {
-                tmp = mailto.split(/\?/, 2);
-                params = _.deserialize(tmp[1]);
+                // remove 'mailto:'' prefix and split at '?''
+                var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
+                var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
                 // Bug: 31345
-                for (var key in params) {
-                    params[key.toLowerCase()] = params[key];
-                }
-                tmp = tmp[0].split(/\:/, 2);
+                for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
                 data = {
-                    to: mailUtil.parseRecipients(tmp[1]) || [['', tmp[1]]],
-                    subject: params.subject,
+                    to: mailUtil.parseRecipients(to) || [['', to]],
+                    cc: mailUtil.parseRecipients(params.cc) || [],
+                    bcc: mailUtil.parseRecipients(params.bcc) || [],
+                    subject: params.subject || '',
                     attachments: [{ content: params.body || '' }]
                 };
                 // clear hash
@@ -1262,6 +1265,10 @@ define('io.ox/mail/write/main',
             // fix inline images
             mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
+            if (app.refId) {
+                mail.data.msgref = app.refId;
+            }
+
             mailAPI.autosave(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
@@ -1331,9 +1338,6 @@ define('io.ox/mail/write/main',
                 //using draftMail.attachments[0].content_type instead of draftMail.content_type because if there are attachments this becomes multipart/mixed and you cannot get the right type
                 var format = draftMail.attachments[0].content_type === 'text/plain' ? 'text' : 'html',
                     def = $.Deferred();
-
-                view.form.find('.section-item.file').remove();
-                $(_.initial(view.form.find(':input[name][type=file]'))).remove();
                 view.baton.fileList.clear();
                 draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
                 draftMail.vcard = old_vcard_flag;

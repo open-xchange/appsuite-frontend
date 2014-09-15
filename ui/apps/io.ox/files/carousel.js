@@ -212,8 +212,11 @@ define('io.ox/files/carousel',
         },
 
         urlFor: function (file) {
-            var url = file.url || api.getUrl(file, 'open');
-            return url + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+            return file.url || api.getUrl(file, 'thumbnail', {
+                scaleType: 'contain',
+                thumbnailWidth: $(window).width(),
+                thumbnailHeight: $(window).height()
+            });
         },
 
         imgError: function () {
@@ -278,7 +281,7 @@ define('io.ox/files/carousel',
                             .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
+                            file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { exclude: ['9'], handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {

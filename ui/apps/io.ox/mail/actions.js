@@ -459,7 +459,8 @@ define('io.ox/mail/actions',
                             filename: data.filename,
                             parent: data.parent,
                             mimetype: data.content_type,
-                            dataURL: api.getUrl(data, 'view')
+                            dataURL: api.getUrl(data, 'view'),
+                            downloadURL: api.getUrl(data, 'download')
                         }, {
                             width: popup.parent().width(),
                             height: 'auto'

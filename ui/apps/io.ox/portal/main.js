@@ -279,7 +279,7 @@ define('io.ox/portal/main',
             }
         }
 
-        appBaton.$.widgets[add ? 'prepend' : 'append'](node);
+        appBaton.$.widgets.append(node);
     };
 
     app.getWidgetNode = function (model) {
