@@ -802,7 +802,8 @@ define('io.ox/core/folder/api',
         processListResponse: processListResponse,
         changeUnseenCounter: changeUnseenCounter,
         getSection: getSection,
-        Bitmask: Bitmask
+        Bitmask: Bitmask,
+        propagate: propagate
     });
 
     return api;
