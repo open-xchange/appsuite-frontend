@@ -582,8 +582,10 @@ define('io.ox/mail/api',
             appendColumns: false
         })
         .done(function () {
+            // refresh all folders because the archive folder might be new
+            folderAPI.refresh();
+            // reload mail views
             api.trigger('refresh.all');
-            folderAPI.reload(id);
         });
     };
 
