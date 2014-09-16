@@ -25,8 +25,7 @@ module.exports = function (grunt) {
     grunt.config.merge({
         jscs: {
             options: {
-                config: '.jscs.json',
-                excludeFiles: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js', 'apps/io.ox/contacts/widgets/canvasresize.js', 'apps/io.ox/contacts/widgets/exif.js'] // date.js has some funky include stuff we have to figure out
+                config: '.jscs.json'
             },
             specs: {
                 src: ['spec/**/*_spec.js']
