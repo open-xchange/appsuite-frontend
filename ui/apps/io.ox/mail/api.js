@@ -551,24 +551,26 @@ define('io.ox/mail/api',
 
         prepareRemove(ids, all);
 
-        return http.PUT({
-            module: 'mail',
-            params: { action: 'delete', timestamp: _.then() },
-            data: http.simplify(ids),
-            appendColumns: false
-        })
-        .done(function () {
-            // reset trash folder
-            var trashId = accountAPI.getFoldersByType('trash');
-            _(pool.getByFolder(trashId)).each(function (collection) {
-                collection.expired = true;
-            });
-            // update unread counter and folder item counter
-            folderAPI.reload(ids, trashId);
-            // trigger delete to update notification area
-            api.trigger('delete');
-            api.trigger('deleted-mails', ids);
-        });
+        return http.wait(
+            http.PUT({
+                module: 'mail',
+                params: { action: 'delete', timestamp: _.then() },
+                data: http.simplify(ids),
+                appendColumns: false
+            })
+            .done(function () {
+                // reset trash folder
+                var trashId = accountAPI.getFoldersByType('trash');
+                _(pool.getByFolder(trashId)).each(function (collection) {
+                    collection.expired = true;
+                });
+                // update unread counter and folder item counter
+                folderAPI.reload(ids, trashId);
+                // trigger delete to update notification area
+                api.trigger('delete');
+                api.trigger('deleted-mails', ids);
+            })
+        );
     };
 
     //
@@ -1037,18 +1039,20 @@ define('io.ox/mail/api',
         });
 
         // start update on server
-        return update(list, { folder_id: targetFolderId }).then(function (response) {
-            var errorText, i = 0, $i = response.length;
-            for (; i < $i; i++) { // look if anything went wrong
-                if (response[i].error) {
-                    errorText = response[i].error.error;
-                    break;
+        return http.wait(
+            update(list, { folder_id: targetFolderId }).then(function (response) {
+                var errorText, i = 0, $i = response.length;
+                for (; i < $i; i++) { // look if anything went wrong
+                    if (response[i].error) {
+                        errorText = response[i].error.error;
+                        break;
+                    }
                 }
-            }
-            api.trigger('move', list, targetFolderId);
-            folderAPI.reload(targetFolderId, list);
-            if (errorText) return errorText;
-        });
+                api.trigger('move', list, targetFolderId);
+                folderAPI.reload(targetFolderId, list);
+                if (errorText) return errorText;
+            })
+        );
     };
 
     /**

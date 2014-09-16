@@ -162,7 +162,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
         fetch: function (params) {
 
-            var key = this.module + '/' + $.param(params) + '&session=' + ox.session,
+            var module = this.module,
+                key = module + '/' + $.param(params) + '&session=' + ox.session,
                 rampup = ox.rampup[key];
 
             if (rampup) {
@@ -170,7 +171,9 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 return $.Deferred().resolve(rampup);
             }
 
-            return http.GET({ module: this.module, params: params });
+            return http.wait().then(function () {
+                return http.GET({ module: module, params: params });
+            });
         },
 
         getQueryParams: function () {
