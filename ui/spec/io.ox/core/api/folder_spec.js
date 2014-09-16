@@ -17,8 +17,10 @@ define(['shared/examples/for/api',
        'io.ox/core/extensions',
        'io.ox/core/notifications'], function (sharedExamplesFor, api, http, ext, notifications) {
 
-    var fakeFolders = {},
-        setupFakeServer = function (server) {
+    var fakeFolders = {};
+
+    var setupFakeServer = function (server) {
+
         //sends a default folder for get calls
         server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
             var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
@@ -42,14 +44,14 @@ define(['shared/examples/for/api',
         });
 
         //sends a list of subfolders
-        server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
+        server.respondWith('GET', /api\/folders\?action=list.+parent=2/, function (xhr) {
             xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({
                     timestamp: 1368791630910,
                     data: [
-                        {id: '3', folder_id: '2'},
-                        {id: '4', folder_id: '2'},
-                        {id: '5', folder_id: '2'}
+                        {id: '3', folder_id: '2', title: 'Three' },
+                        {id: '4', folder_id: '2', title: 'Four' },
+                        {id: '5', folder_id: '2', title: 'Five' }
                     ]
                 })
             );
@@ -84,7 +86,8 @@ define(['shared/examples/for/api',
         });
     };
 
-    return xdescribe('folder API', function () {
+    describe.only('folder API', function () {
+
         var options = {
                 markedPending: {
                     'folder API a basic API class has some get methods should define a getAll method.': true,
@@ -93,6 +96,7 @@ define(['shared/examples/for/api',
                     'folder API a basic API class has some get methods should return a deferred object for getList.': true
                 }
             };
+
         //sharedExamplesFor(api, options);
 
         describe.skip('default folders', function () {
@@ -107,90 +111,66 @@ define(['shared/examples/for/api',
             });
         });
 
-        describe('requests some folders from the server', function () {
-            beforeEach(function (done) {
-                //TODO: clear global cache (must also be possible in phantomJS)
-                api.unfetch('0');
-                //make fake server only respond on demand
-                this.server.autoRespond = false;
+        describe.skip('requests some folders from the server', function () {
+
+            beforeEach(function () {
+                // reset pool
+                // api.pool.unfetch();
                 setupFakeServer(this.server);
-                done();
             });
 
             it('should return a folder with correct id', function (done) {
-                var result = api.get('2', { cache: false });
 
-                result.done(function (data) {
+                api.get('2').done(function (data) {
                     expect(data.id).to.equal('2');
                     done();
                 });
-
-                expect(result.state()).to.equal('pending');
-                this.server.respond();
             });
 
             it('should return a list of subfolders with correct parent ids', function (done) {
-                var result = api.list('2');
 
-                result.done(function (data) {
+                api.list('2').done(function (data) {
+                    expect(data).to.be.an('array');
                     _(data).each(function (folder) {
                         expect(folder.folder_id).to.equal('2');
                     });
                     done();
                 });
-
-                expect(result.state()).to.equal('pending');
-
-                this.server.respondUntilResolved(result);
             });
 
             it('should return a path of a folder with getPath', function (done) {
-                var result = api.path('3', { cache: true }),
-                    parentID = '1';
 
-                result.done(function (data) {
+                var parentID = '1';
+
+                api.path('3').done(function (data) {
                     _(data).each(function (folder) {
                         expect(folder.folder_id).to.equal(parentID);
                         parentID = folder.id;
                     });
-
                     expect(_(data).first().id).not.to.equal('0');
                     done();
                 });
-
-                expect(result.state()).to.equal('pending');
-
-                this.server.respondUntilResolved(result);
             });
 
-            it.skip('should trigger a create event', function () {
+            it.skip('should trigger a create event', function (done) {
+
                 expect(api).toTrigger('create');
-                var result = api.create('2');
 
-                //deferred should be pending
-                expect(result.state()).to.equal('pending');
-
-                this.server.respondUntilResolved(result);
+                var result = api.create('2').done(function () {
+                    done();
+                });
             });
 
             it('should create a folder', function (done) {
-                var spy = sinon.spy(http, 'PUT'),
-                    result = api.create('2'),
-                    param;
 
-                //deferred should be pending
-                expect(result.state()).to.equal('pending');
+                var spy = sinon.spy(http, 'PUT');
 
-                //make server respond
-                this.server.respondUntilResolved(result);
-
-                result.done(function () {
+                api.create('2').done(function () {
                     //server response should resolve deferred
-                    expect(result.state()).to.equal('resolved');
                     expect(spy).to.have.been.calledOnce;
 
                     //the http request should containt corrent values
-                    param = spy.getCall(0).args[0];
+                    var param = spy.getCall(0).args[0];
                     expect(param.module).to.equal('folders');
                     expect(param.params.action).to.equal('new');
                     expect(param.params.folder_id).to.equal('2');
@@ -201,37 +181,27 @@ define(['shared/examples/for/api',
                 });
             });
 
-            it.skip('should trigger a delete event', function () {
+            it.skip('should trigger a delete event', function (done) {
                 expect(api).toTrigger('delete');
-                var result = api.remove('2');
-
-                //deferred should be pending
-                expect(result.state()).to.equal('pending');
-
-                this.server.respondUntilResolved(result);
+                api.remove('2').done(function () {
+                    done();
+                });
             });
 
             it('should remove a folder', function (done) {
-                var spy = sinon.spy(http, 'PUT'),
-                    result = api.remove('2'),
-                    param;
 
-                //deferred should be pending
-                expect(result.state()).to.equal('pending');
+                var spy = sinon.spy(http, 'PUT');
 
-                //make server respond
-                this.server.respondUntilResolved(result);
+                api.remove('2').done(function () {
 
-                result.done(function () {
                     //server response should resolve deferred
-                    expect(result.state()).to.equal('resolved');
                     expect(spy).to.have.been.calledOnce;
 
-                    //the http request should containt corrent values
-                    param = spy.getCall(0).args[0];
+                    //the http request should contain correct values
+                    var param = spy.getCall(0).args[0];
                     expect(param.module).to.equal('folders');
                     expect(param.params.action).to.equal('delete');
-                    expect(param.params.folder_id).to.equal('2');
+                    expect(param.data).to.deep.equal(['2']);
 
                     //restore http.PUT
                     http.PUT.restore();
@@ -240,6 +210,7 @@ define(['shared/examples/for/api',
             });
 
             describe('to find out, if a folder', function () {
+
                 it('can read', function () {
                     expect(api.can('read', {own_rights: 128})).to.be.true;
                     expect(api.can('read', {own_rights: 127})).to.befalse;
@@ -266,18 +237,19 @@ define(['shared/examples/for/api',
                 });
 
                 it('can create folder', function () {
-                    expect(api.can('createFolder', {own_rights: 0x10000000})).to.be.true;
-                    expect(api.can('createFolder', {own_rights: 0, permissions: 0})).to.be.false;
+                    expect(api.can('create:folder', {own_rights: 0x10000000})).to.be.true;
+                    expect(api.can('create:folder', {own_rights: 0, permissions: 0})).to.be.false;
                 });
 
                 it('can delete folder', function () {
-                    expect(api.can('deleteFolder', {own_rights: 0x10000000})).to.be.true;
-                    expect(api.can('deleteFolder', {own_rights: 0})).to.be.false;
+                    expect(api.can('delete:folder', {own_rights: 0x10000000})).to.be.true;
+                    expect(api.can('delete:folder', {own_rights: 0})).to.be.false;
                 });
             });
         });
 
         describe('shortens the folder title', function () {
+
             it('from "this is a test title" to "this\u2026title"', function () {
                 expect(api.getFolderTitle('this is a test title', 10)).to.equal('this\u2026title');
             });
@@ -304,38 +276,45 @@ define(['shared/examples/for/api',
         });
 
         describe('hidden objects', function () {
+
             beforeEach(function () {
-                this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
+
+                this.server.respondWith('GET', /api\/folders\?action=list.+parent=hidden/, function (xhr, wurst) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                                JSON.stringify({
-                                    timestamp: 1368791630910,
-                                    data: [
-                                        {id: '3', folder_id: 'hidden/test', title: '.drive'},
-                                        {id: '4', folder_id: 'hidden/test', title: 'visible'},
-                                        {id: '5', folder_id: 'hidden/test', title: '.hidden'},
-                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden'},
-                                        {id: '0815', folder_id: 'hidden/test', title: 'for general files specs'}
-                                    ]
-                                })
+                        JSON.stringify({
+                            timestamp: 1368791630910,
+                            data: [
+                                {id: '3',    folder_id: 'hidden/test', module: 'infostore', title: '.drive' },
+                                {id: '4',    folder_id: 'hidden/test', module: 'infostore', title: 'visible' },
+                                {id: '5',    folder_id: 'hidden/test', module: 'infostore', title: '.hidden' },
+                                {id: '6',    folder_id: 'hidden/test', module: 'infostore', title: 'customHidden' },
+                                {id: '0815', folder_id: 'hidden/test', module: 'infostore', title: 'for general files specs' }
+                            ]
+                        })
                     );
                 });
             });
 
             describe('with "show hidden files" option enabled', function () {
+
                 it('should show folders starting with a dot', function (done) {
                     require([
                         'settings!io.ox/core',
                         'settings!io.ox/files'
-                    ]).then(function (settings, fileSettings) {
+                    ])
+                    .done(function (settings, fileSettings) {
                         settings.set('folder/blacklist');
                         fileSettings.set('showHidden', true);
-                        return api.unfetch('0');
-                    }).then(function () {
+                        api.pool.unfetch();
+                    })
+                    .then(function () {
                         return api.list('hidden/test');
-                    }).done(function (f) {
-                        expect(_(f).pluck('title')).to.contain('.hidden');
-                        expect(_(f).pluck('title')).to.contain('visible');
-                        expect(_(f).pluck('title')).to.contain('.drive');
+                    })
+                    .done(function (data) {
+                        var titles = _(data).pluck('title');
+                        expect(titles).to.contain('.hidden');
+                        expect(titles).to.contain('visible');
+                        expect(titles).to.contain('.drive');
                         done();
                     });
                 });
@@ -359,10 +338,6 @@ define(['shared/examples/for/api',
                         };
                     });
 
-                    afterEach(function () {
-                        this.server.restore();
-                    });
-
                     it.skip('should trigger "warn:hidden" event during create', function (done) {
                         fakeFolders['21'] = {
                             id: '21',
@@ -372,14 +347,17 @@ define(['shared/examples/for/api',
                         require([
                             'settings!io.ox/core',
                             'settings!io.ox/files'
-                        ]).then(function (settings, fileSettings) {
+                        ])
+                        .done(function (settings, fileSettings) {
                             settings.set('folder/blacklist');
                             fileSettings.set('showHidden');
-                            return api.unfetch('0');
-                        }).then(function () {
+                            api.pool.unfetch();
+                        })
+                        .then(function () {
                             expect(api).toTrigger('warn:hidden');
                             return api.create('13', { title: '.secret' });
-                        }).done(function () {
+                        })
+                        .done(function () {
                             done();
                         });
                     });
@@ -398,22 +376,24 @@ define(['shared/examples/for/api',
                         require([
                             'settings!io.ox/core',
                             'settings!io.ox/files'
-                        ]).then(function (settings, fileSettings) {
+                        ])
+                        .done(function (settings, fileSettings) {
                             settings.set('folder/blacklist');
                             fileSettings.set('showHidden');
-                            return api.unfetch('0');
-                        }).then(function () {
+                            api.pool.unfetch();
+                        })
+                        .then(function () {
                             expect(api).toTrigger('warn:hidden');
                             return api.update('31337', { title: '.secret' });
-                        }).done(function () {
+                        })
+                        .done(function () {
                             done();
                         });
                     });
 
                     it('should warn the user that files will be hidden', function () {
                         var spy = sinon.spy(notifications, 'yell');
-
-                        api.trigger('warn:hidden', {title: '.secret'});
+                        api.trigger('warn:hidden', { title: '.secret' });
                         //expect to contain the folder name in the message
                         expect(spy.calledWithMatch('info', /\.secret/)).to.be.ok;
                         spy.restore();
@@ -424,16 +404,20 @@ define(['shared/examples/for/api',
                     require([
                         'settings!io.ox/core',
                         'settings!io.ox/files'
-                    ]).then(function (settings, fileSettings) {
+                    ])
+                    .done(function (settings, fileSettings) {
                         settings.set('folder/blacklist');
                         fileSettings.set('showHidden');
-                        return api.unfetch('0');
-                    }).then(function () {
+                        api.pool.unfetch();
+                    })
+                    .then(function () {
                         return api.list('hidden/test');
-                    }).then(function (f) {
-                        expect(_(f).pluck('title')).not.to.contain('.hidden');
-                        expect(_(f).pluck('title')).to.contain('visible');
-                        expect(_(f).pluck('title')).not.to.contain('.drive');
+                    })
+                    .then(function (data) {
+                        var titles = _(data).pluck('title');
+                        expect(titles).not.to.contain('.hidden');
+                        expect(titles).to.contain('visible');
+                        expect(titles).not.to.contain('.drive');
                         done();
                     });
                 });
@@ -443,15 +427,18 @@ define(['shared/examples/for/api',
             });
 
             describe('defined by blacklist', function () {
+
                 it('should not filter without blacklist', function (done) {
                     require([
                         'settings!io.ox/core',
                         'settings!io.ox/files'
-                    ]).then(function (settings, fileSettings) {
+                    ])
+                    .done(function (settings, fileSettings) {
                         settings.set('folder/blacklist');
                         fileSettings.set('showHidden', true);
-                        return api.unfetch('0');
-                    }).then(function () {
+                        api.pool.unfetch();
+                    })
+                    .then(function () {
                         return api.list('hidden/test');
                     })
                     .done(function (f) {
@@ -466,11 +453,13 @@ define(['shared/examples/for/api',
                     require([
                         'settings!io.ox/core',
                         'settings!io.ox/files'
-                    ]).then(function (settings, fileSettings) {
-                        settings.set('folder/blacklist', {'4': true});
+                    ])
+                    .done(function (settings, fileSettings) {
+                        settings.set('folder/blacklist', { '4': true });
                         fileSettings.set('showHidden', false);
-                        return api.unfetch('0');
-                    }).then(function () {
+                        return api.pool.unfetch();
+                    })
+                    .then(function () {
                         return api.list('hidden/test');
                     })
                     .done(function (f) {
@@ -485,11 +474,13 @@ define(['shared/examples/for/api',
                     require([
                         'settings!io.ox/core',
                         'settings!io.ox/files'
-                    ]).then(function (settings, fileSettings) {
+                    ])
+                    .done(function (settings, fileSettings) {
                         settings.set('folder/blacklist', {'4': true});
                         fileSettings.set('showHidden', true);
-                        return api.unfetch('0');
-                    }).then(function () {
+                        api.pool.unfetch();
+                    })
+                    .then(function () {
                         return api.list('hidden/test');
                     })
                     .done(function (f) {
@@ -503,37 +494,27 @@ define(['shared/examples/for/api',
 
             describe('defined by extension point "io.ox/folders/filter"', function () {
 
-                beforeEach(function () {
-                    ext.point('io.ox/folder/filter').extend({
-                        id: 'custom_filter',
-                        isVisible: function (folder) {
-                            var title = (folder.data ? folder.data.title : folder.title) || '';
-                            return title !== 'customHidden';
-                        }
-                    });
-                    ext.point('io.ox/folder/filter').enable('custom_filter');
-                });
-
                 afterEach(function () {
                     ext.point('io.ox/folder/filter').disable('custom_filter');
                 });
 
-                it('should apply extension point isVisible method', function (done) {
-                    ext.point('io.ox/folder/filter').replace({
+                it('should apply extension point "visible" method', function (done) {
+                    ext.point('io.ox/core/folder/filter').extend({
                         id: 'custom_filter',
-                        isVisible: function (folder) {
-                            var title = (folder.data ? folder.data.title : folder.title) || '';
-                            return title !== 'customHidden';
+                        visible: function (baton) {
+                            return baton.data.title !== 'customHidden';
                         }
                     });
                     require([
                         'settings!io.ox/core',
                         'settings!io.ox/files'
-                    ]).then(function (settings, fileSettings) {
+                    ])
+                    .done(function (settings, fileSettings) {
                         settings.set('folder/blacklist', {});
                         fileSettings.set('showHidden', true);
-                        return api.unfetch('0');
-                    }).then(function () {
+                        api.pool.unfetch();
+                    })
+                    .then(function () {
                         return api.list('hidden/test');
                     })
                     .done(function (f) {
@@ -541,36 +522,6 @@ define(['shared/examples/for/api',
                         expect(_(f).pluck('title')).to.contain('visible');
                         expect(_(f).pluck('title')).to.contain('.drive');
                         expect(_(f).pluck('title')).not.to.contain('customHidden');
-                        done();
-                    });
-                });
-                it('should disable if isEnabled evaluates to false', function (done) {
-                    ext.point('io.ox/folder/filter').replace({
-                        id: 'custom_filter',
-                        isEnabled: function (folder) {
-                            folder = ext.Baton.ensure(folder);
-                            return folder.data.folder_id !== 'hidden/test';
-                        },
-                        isVisible: function (folder) {
-                            var title = (folder.data ? folder.data.title : folder.title) || '';
-                            return title !== 'customHidden';
-                        }
-                    });
-                    require([
-                        'settings!io.ox/core',
-                        'settings!io.ox/files'
-                    ]).then(function (settings, fileSettings) {
-                        settings.set('folder/blacklist', {});
-                        fileSettings.set('showHidden', true);
-                        return api.unfetch('0');
-                    }).then(function () {
-                        return api.list('hidden/test');
-                    })
-                    .done(function (f) {
-                        expect(_(f).pluck('title')).to.contain('.hidden');
-                        expect(_(f).pluck('title')).to.contain('visible');
-                        expect(_(f).pluck('title')).to.contain('.drive');
-                        expect(_(f).pluck('title')).to.contain('customHidden');
                         done();
                     });
                 });

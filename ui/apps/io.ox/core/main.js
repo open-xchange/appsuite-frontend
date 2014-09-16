@@ -24,10 +24,11 @@ define('io.ox/core/main',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
+     'io.ox/core/folder/api',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin'
-    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
+    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -1513,6 +1514,15 @@ define('io.ox/core/main',
 
     }());
 
+    //
+    // Visual response to hidden folders
+    //
+    folderAPI.on('warn:hidden', function (e, folder) {
+        notifications.yell('info',
+           //#. %1$s is the filename
+           gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
+        );
+    });
 
     return {
         logout: logout,

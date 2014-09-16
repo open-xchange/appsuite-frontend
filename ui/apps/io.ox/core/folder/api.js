@@ -126,7 +126,8 @@ define('io.ox/core/folder/api',
         },
 
         unfetch: function (id) {
-            if (id === '0') {
+            if (arguments.length === 0 || id === '0') {
+                // no need for recursion; reset all collections
                 return _(this.collections).each(function (collection) {
                     collection.fetched = false;
                 });
@@ -650,16 +651,14 @@ define('io.ox/core/folder/api',
             data: [id],
             appendColumns: false
         })
-        .then(
-            function success() {
-                api.trigger('remove', id, data);
-                api.trigger('remove:' + id, data);
-                api.trigger('remove:' + data.module, data);
-            },
-            function fail() {
-                api.trigger('remove:fail', id);
-            }
-        );
+        .done(function () {
+            api.trigger('remove', id, data);
+            api.trigger('remove:' + id, data);
+            api.trigger('remove:' + data.module, data);
+        })
+        .fail(function () {
+            api.trigger('remove:fail', id);
+        });
     }
 
     //
