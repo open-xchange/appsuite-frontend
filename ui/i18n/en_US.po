@@ -3098,7 +3098,7 @@ msgid "GB"
 msgstr ""
 
 #: apps/plugins/portal/oxdriveclients/register.js:84 module:plugins/portal
-#: apps/plugins/portal/oxdriveclients/register.js:135
+#: apps/plugins/portal/oxdriveclients/register.js:136
 msgid "Get %s"
 msgstr ""
 
