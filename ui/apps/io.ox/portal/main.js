@@ -335,8 +335,16 @@ define('io.ox/portal/main',
                 return;
             }
         }
-
-        appBaton.$.widgets.append(node);
+        if (add) {
+            var lastProtected = appBaton.$.widgets.find('li.protected').last();
+            if (lastProtected.length) {
+                lastProtected.after(node);
+            } else {
+                appBaton.$.widgets.prepend(node);
+            }
+        } else {
+            appBaton.$.widgets.append(node);
+        }
     };
 
     app.getWidgetNode = function (model) {
