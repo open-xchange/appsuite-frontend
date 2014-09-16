@@ -201,28 +201,6 @@ define('io.ox/mail/compose/view',
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
 
-    /**
-     * mapping for getFieldLabel()
-     * @type {object}
-     */
-    var mapping = {
-        telephone_business1: gt('Phone (business)'),
-        telephone_business2: gt('Phone (business)'),
-        telephone_home1: gt('Phone (private)'),
-        telephone_home2: gt('Phone (private)'),
-        cellular_telephone1: gt('Mobile'),
-        cellular_telephone2: gt('Mobile')
-    };
-
-    /**
-     * fieldname to fieldlabel
-     * @param  {string} field
-     * @return {string} label
-     */
-    function getFieldLabel(field) {
-        return mapping[field] || '';
-    }
-
     /*
      * extension point for contact picture
      */
@@ -267,8 +245,8 @@ define('io.ox/mail/compose/view',
                 this.append(
                     $('<div class="ellipsis email">').append(
                         $.txt(baton.data.email + (baton.data.phone || '') + ' '),
-                        getFieldLabel(baton.data.field) !== '' ?
-                            $('<span style="color: #888;">').text('(' + getFieldLabel(baton.data.field) + ')') : []
+                        contactsUtil.getFieldLabel(baton.data.field) !== '' ?
+                            $('<span style="color: #888;">').text('(' + contactsUtil.getFieldLabel(baton.data.field) + ')') : []
                     )
                 );
             } else {
