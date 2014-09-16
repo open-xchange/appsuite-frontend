@@ -833,7 +833,8 @@ define('io.ox/calendar/week/view',
                 $('<span class="cw">').text(
                     //#. %1$d = Calendar week
                     gt('CW %1$d', this.startDate.format('w'))
-                )
+                ),
+                $('<i>').addClass('fa fa-caret-down fa-fw').attr({ 'aria-hidden': true })
             );
 
             if (_.device('smartphone')) {
