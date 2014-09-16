@@ -443,50 +443,29 @@ define('io.ox/search/facets/extensions',
                         container = $('<div class="datepicker-container">').hide()
                     );
 
+                    self.addClass('timefacet');
+
                     // input group
                     self.find('label')
                         .append(
+                             $('<div>')
+                                .addClass('type')
+                                .html(facet.name),
                             group = $('<div class="input-daterange input-group" id="datepicker">')
-                                .css('height', '24px')
-                                .css('margin', 'auto')
-                                .css('overflow', 'hidden')
                         );
 
                     group
                         .append(
-                            $('<span>')
-                                .addClass('type')
-                                .css({
-                                    'display': 'table-cell',
-                                    'vertical-align': 'middle'
-                                })
-                                .html(facet.name),
                             $('<input type="text" class="input-sm form-control" name="start" />')
-                                .css({
-                                    'height': '24px',
-                                    'max-width': '140px',
-                                    'min-width': '90px'
-                                })
+                                .attr('placeholder', gt('From'))
+                                .on('change', apply)
                                 .val(from),
                             $('<span class="input-group-addon">')
-                                .css('min-width', '30px')
-                                .css('height', '24px')
-                                .css('padding', '0 12px')
-                                .text('to'),
+                                .text('-'),
                             $('<input type="text" class="input-sm form-control" name="end" />')
-                                .css({
-                                    'height': '24px',
-                                    'max-width': '140px',
-                                    'min-width': '90px'
-                                })
-                                .val(to),
-                            $('<i class="fa fa-check">')
-                                .css({
-                                    'display': 'table-cell',
-                                    'vertical-align': 'middle',
-                                    'padding-left': '6px'
-                                })
-                                .on('click', apply)
+                                .attr('placeholder', gt('To'))
+                                .on('change', apply)
+                                .val(to)
                         )
                         .datepicker({
                             format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
@@ -499,7 +478,7 @@ define('io.ox/search/facets/extensions',
                             todayBtn: true
                         })
                         .on('show', function (e) {
-                            // position container (workaround )
+                            // position container (workaround)
                             var offset = $(e.target).offset();
                             container.show();
 
