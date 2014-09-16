@@ -142,8 +142,7 @@
             };
 
         })();
-    }
-    else if (Modernizr.websqldatabase && _.device('!android')) {
+    } else if (Modernizr.websqldatabase && _.device('!android')) {
 
         // Web SQL
         (function () {
@@ -414,30 +413,30 @@
             function load(module, modulename) {
                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: 'text' })
                     .done(function (concatenatedText) {
-                    runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
-                    context.completeLoad(modulename);
-                    // Chop up the concatenated modules and put them into file cache
-                    _(concatenatedText.split('/*:oxsep:*/')).each(function (moduleText) {
-                        (function () {
-                            var name = null;
-                            var match = moduleText.match(/define(\.async)?\(([^,]+),/);
-                            if (match) {
-                                name = match[2].substr(1, match[2].length - 2);
-                            }
-                            if (name) {
-                                // cache file?
-                                if (badSource(moduleText)) {
-                                    if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
-                                    return;
+                        runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
+                        context.completeLoad(modulename);
+                        // Chop up the concatenated modules and put them into file cache
+                        _(concatenatedText.split('/*:oxsep:*/')).each(function (moduleText) {
+                            (function () {
+                                var name = null;
+                                var match = moduleText.match(/define(\.async)?\(([^,]+),/);
+                                if (match) {
+                                    name = match[2].substr(1, match[2].length - 2);
                                 }
-                                if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
-                                fileCache.cache(name, moduleText);
-                            } else if (_.url.hash('debug-filecache')) {
-                                console.log('FileCache: Could not determine name for ' + moduleText);
-                            }
-                        })();
+                                if (name) {
+                                    // cache file?
+                                    if (badSource(moduleText)) {
+                                        if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
+                                        return;
+                                    }
+                                    if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
+                                    fileCache.cache(name, moduleText);
+                                } else if (_.url.hash('debug-filecache')) {
+                                    console.log('FileCache: Could not determine name for ' + moduleText);
+                                }
+                            })();
+                        });
                     });
-                });
             }
         };
 
@@ -469,8 +468,8 @@
 
     function insertLess(file) {
         return require(['text!themes/' + theme + '/' + file.name + '.css'], function (css) {
-                file.node = insert(file.path, css, file.selector, file.node);
-            });
+            file.node = insert(file.path, css, file.selector, file.node);
+        });
     }
 
     define('less', {
@@ -591,7 +590,7 @@
                     f2[i] = function () { f[i].apply(f, arguments); };
                 };
                 for (var i in f) {
-                   f3(i);
+                    f3(i);
                 }
                 callbacks[name] = function (newF) { f = newF; };
                 load(f2);

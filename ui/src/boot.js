@@ -479,8 +479,8 @@ $(window).load(function () {
             var language = (navigator.language || navigator.userLanguage).substr(0, 2),
                 languages = ox.serverConfig.languages || {};
             return _.chain(languages).keys().find(function (id) {
-                    return id.substr(0, 2) === language;
-                }).value();
+                return id.substr(0, 2) === language;
+            }).value();
         };
 
         /**
@@ -626,7 +626,7 @@ $(window).load(function () {
                 debug('boot.js: autoLogin > hash.tokenSession');
 
                 session.redeemToken(hash.tokenSession).fail(function (e) {
-                  debug('boot.js redeemToken > failed', e);
+                    debug('boot.js redeemToken > failed', e);
                 }).done(function (resp) {
                     debug('boot.js redeemToken > success');
 
@@ -911,8 +911,9 @@ $(window).load(function () {
             } else {
                 // check/uncheck?
                 var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
-                if (cookie !== undefined) box.prop('checked', cookie === 'true');
-                else if ('staySignedIn' in sc) box.prop('checked', !!sc.staySignedIn);
+                if (cookie !== undefined) {
+                    box.prop('checked', cookie === 'true');
+                } else if ('staySignedIn' in sc) box.prop('checked', !!sc.staySignedIn);
                 box.on('change', function () {
                     _.setCookie('staySignedIn', $(this).prop('checked'));
                 });

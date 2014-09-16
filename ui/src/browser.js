@@ -35,12 +35,12 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome'  :   32,
-        'Safari'  :    7,
-        'Firefox' :   27,
-        'IE'      :   10,
-        'Android' :  4.1,
-        'iOS'     :  6.0
+        'Chrome':    32,
+        'Safari':     7,
+        'Firefox':   27,
+        'IE':        10,
+        'Android':  4.1,
+        'iOS':      6.0
     };
 
     // helpers
@@ -93,12 +93,11 @@
                         cssrule = '@media ' + q + ' { #ejs-qtest { position: absolute; } }';
                     //must set type for IE!
                     styleBlock.type = 'text/css';
-                        if (styleBlock.styleSheet) {
-                            styleBlock.styleSheet.cssText = cssrule;
-                        }
-                        else {
-                            styleBlock.appendChild(doc.createTextNode(cssrule));
-                        }
+                    if (styleBlock.styleSheet) {
+                        styleBlock.styleSheet.cssText = cssrule;
+                    } else {
+                        styleBlock.appendChild(doc.createTextNode(cssrule));
+                    }
                     docElem.insertBefore(fakeBody, docElem.firstChild);
                     docElem.insertBefore(styleBlock, docElem.firstChild);
                     cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv,null) : testDiv.currentStyle).position == 'absolute');
@@ -163,7 +162,7 @@
                 WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1)) ? true : undefined, // no version here yet
                 iOS: iOS,
                 MacOS: MacOS,
-                Android : Android,
+                Android: Android,
                 Windows: Windows,
                 Windows8: Windows8
             };
@@ -236,7 +235,7 @@
 
     function queryScreen() {
         for (var q in queries) {
-             display[q] = matchMedia(queries[q]).matches;
+            display[q] = matchMedia(queries[q]).matches;
         }
         if (display.large) {
             display.small = display.medium = false;
