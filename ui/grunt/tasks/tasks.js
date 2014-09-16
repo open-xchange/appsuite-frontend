@@ -20,6 +20,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('bootjs', ['newer:assemble:ox', 'newer:concat:bootjs']);
 
+    grunt.registerTask('lint', ['newer:jshint:all', 'newer:jscs:all', 'newer:jsonlint:all']);
+
     //Override the default tasks
 
     // steps to build the ui (ready for development)
