@@ -7,7 +7,7 @@
   },
   "optionalDependencies": {
     "assemble": "^0.4.17",
-    "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
+    "grunt-jscs": "^0.7.1",
     "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#59e60f9",
     "underscore": "^1.6.0"
   },
@@ -17,7 +17,6 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-curl": "~1.4.0",
     "grunt-devtools": "~0.2.0",
-    "grunt-jscs": "^0.6.1",
     "grunt-karma": "^0.8.2",
     "grunt-modernizr": "~0.5.2",
     "grunt-zip": "~0.13.0",

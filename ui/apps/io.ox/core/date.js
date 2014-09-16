@@ -174,7 +174,7 @@ define.async('io.ox/core/date', [
     };
 
     //@include api.locale = date/date.root.json
-    ;
+    ; // jshint ignore:line
 
     // TODO: Difference between server and client clocks.
     var offset = 0;
@@ -292,16 +292,16 @@ define.async('io.ox/core/date', [
             if (y < 1) y = 1 - y;
             return num(n, n === 2 ? y % 100 : y);
         },
-        z: function (n, d) {
+        z: function () {
 
         },
-        Z: function (n, d) {
+        Z: function () {
 
         },
         v: function (n, d) {
             return d.getTimeZone();
         },
-        V: function (n, d) {
+        V: function () {
 
         }
         // TODO: z, Z, v and V
@@ -338,16 +338,18 @@ define.async('io.ox/core/date', [
         return map;
     }
     var monthRegex, dayRegex, monthMap, dayMap;
+
     var numRex = '([+-]?\\d+)';
-    function number(n) { return numRex; }
+
+    function number() { return numRex; }
 
     var prexs = {
-        a: function (n) {
+        a: function () {
             return '(' + escape(api.locale.dayPeriods.am) + '|' +
                          escape(api.locale.dayPeriods.pm) + ')';
         },
-        E: function (n) { return dayRegex; },
-        G: function (n) {
+        E: function () { return dayRegex; },
+        G: function () {
             return '(' + escape(api.locale.eras[0]) + '|' +
                          escape(api.locale.eras[1]) + ')';
         },
@@ -371,23 +373,23 @@ define.async('io.ox/core/date', [
     };
 
     function nfun(field) {
-        return function (n) {
+        return function () {
             return function (s, d) { d[field] = Number(s); };
         };
     }
 
     var pfuns = {
-        a: function (n) {
+        a: function () {
             return function (s, d) { d.pm = s === api.locale.dayPeriods.pm; };
         },
-        E: function (n) { return function (s, d) {  }; },
-        G: function (n) {
+        E: function () { return function () {  }; },
+        G: function () {
             return function (s, d) { d.bc = s === api.locale.eras[0]; };
         },
-        h: function (n) {
+        h: function () {
             return function (s, d) { d.h2 = s === '12' ? 0 : Number(s); };
         },
-        k: function (n) {
+        k: function () {
             return function (s, d) { d.h = s === '24' ? 0 : Number(s); };
         },
         M: function (n) {
@@ -736,7 +738,7 @@ define.async('io.ox/core/date', [
 
         // time zone specific Date class
 
-        function LocalDate(y, m, d, h, min, s, ms) {
+        function LocalDate(y) {
             switch (arguments.length) {
                 case 0:
                     this.t = new Date().getTime() + offset;
@@ -842,7 +844,7 @@ define.async('io.ox/core/date', [
         getYear: function () {
             return new Date(this.local).getUTCFullYear();
         },
-        setYear: function (year, month, date) {
+        setYear: function () {
             var d = new Date(this.local);
             d.setUTCFullYear.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -851,7 +853,7 @@ define.async('io.ox/core/date', [
         getMonth: function () {
             return new Date(this.local).getUTCMonth();
         },
-        setMonth: function (month, date) {
+        setMonth: function () {
             var d = new Date(this.local);
             d.setUTCMonth.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -872,7 +874,7 @@ define.async('io.ox/core/date', [
         getHours: function () {
             return new Date(this.local).getUTCHours();
         },
-        setHours: function (hour, min, sec, ms) {
+        setHours: function () {
             var d = new Date(this.local);
             d.setUTCHours.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -881,7 +883,7 @@ define.async('io.ox/core/date', [
         getMinutes: function () {
             return new Date(this.local).getUTCMinutes();
         },
-        setMinutes: function (min, sec, ms) {
+        setMinutes: function () {
             var d = new Date(this.local);
             d.setUTCMinutes.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -890,7 +892,7 @@ define.async('io.ox/core/date', [
         getSeconds: function () {
             return new Date(this.local).getUTCSeconds();
         },
-        setSeconds: function (sec, ms) {
+        setSeconds: function () {
             var d = new Date(this.local);
             d.setUTCSeconds.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
@@ -977,7 +979,7 @@ define.async('io.ox/core/date', [
 
     var locale = gettext.language.pipe(function (lang) {
         return require(['text!io.ox/core/date/date.' + lang + '.json']);
-    }).pipe(null, function (err) {
+    }).pipe(null, function () {
         return require(['text!io.ox/core/date/date.root.json']);
     }).done(function (locale) {
         api.locale = JSON.parse(locale);

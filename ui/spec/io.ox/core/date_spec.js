@@ -12,6 +12,8 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
+/* jshint ignore:start */
+
 define(['io.ox/core/date', 'io.ox/core/extensions'],
 function (date, ext) {
 
@@ -241,3 +243,4 @@ function (date, ext) {
         });
     });
 });
+/* jshint ignore:end */
