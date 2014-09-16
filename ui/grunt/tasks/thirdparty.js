@@ -94,7 +94,7 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    src: ['bower_components/bootstrap-tokenfield/less/bootstrap-tokenfield.less'],
+                    src: ['bower_components/bootstrap-tokenfield/less/bootstrap-tokenfield.less', 'bower_components/bootstrap-tokenfield/less/tokenfield-typeahead.less'],
                     rename: function (dest) { return dest; },
                     dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
                 }]
