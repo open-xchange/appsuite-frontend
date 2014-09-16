@@ -93,7 +93,7 @@ define(['shared/examples/for/api',
                     'folder API a basic API class has some get methods should return a deferred object for getList.': true
                 }
             };
-        sharedExamplesFor(api, options);
+        //sharedExamplesFor(api, options);
 
         describe.skip('default folders', function () {
             it('should provide the mail folder as default', function () {

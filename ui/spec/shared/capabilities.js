@@ -57,7 +57,7 @@ define('spec/shared/capabilities',
                  * @return {deferred}
                  */
                 process = function (list, action) {
-                    var before = data.length;
+                    var before = [].concat(data);
                     list = [].concat(list);
 
                     if (action === 'add') {
@@ -71,7 +71,7 @@ define('spec/shared/capabilities',
                     }
 
                     //set
-                    return before.length === data.length ? $.Defered().resolve() : apply();
+                    return before.length === data.length ? $.Deferred().resolve() : apply();
                 };
 
             return {
@@ -116,7 +116,13 @@ define('spec/shared/capabilities',
                 reset: function () {
                     data = base.slice(0);
                     return apply();
-                }
+                },
+                /**
+                 * apply curret set of capabilities
+                 * @return {deferred} returns current set of enabled capabilties (array)
+                 */
+                apply: apply
+
             };
         };
 

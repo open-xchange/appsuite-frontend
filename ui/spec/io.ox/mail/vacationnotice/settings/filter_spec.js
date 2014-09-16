@@ -91,8 +91,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         });
 
         afterEach(function () {
-            $('#vacationnoticetestNode', document).remove();
-            node = null;
+            node.remove();
         });
 
         it('should draw the form', function (done) {
@@ -127,8 +126,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         });
 
         afterEach(function () {
-            $('#vacationnoticetestNode', document).remove();
-            node = null;
+            node.remove();
         });
 
         it('should check two aliases', function (done) {
@@ -138,7 +136,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             });
         });
 
-        it('should create the filtermodel', function (done) {
+        it.skip('should create the filtermodel', function (done) {
             filter.editVacationtNotice(node, multiValues, 'tester@open-xchange.com').done(function (model) {
                 expect(model.get('id')).to.equal(expextedModel.id);
                 expect(model.get('text')).to.equal(expextedModel.text);

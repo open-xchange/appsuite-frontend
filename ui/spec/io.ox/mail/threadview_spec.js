@@ -88,7 +88,7 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
 
                 api.threads.clear();
                 api.processThreadMessage(mail_C);
-                this.view.show('default0/INBOX.1');
+                this.view.show('default0/INBOX.1', true);
             });
 
             it('should be found in API\'s threads hash', function () {

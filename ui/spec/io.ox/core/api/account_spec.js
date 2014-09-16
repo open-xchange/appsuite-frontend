@@ -10,28 +10,13 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['shared/examples/for/api',
-        'io.ox/core/api/account',
+define(['io.ox/core/api/account',
         'io.ox/mail/sender',
         'fixture!io.ox/core/api/user.json',
-        'fixture!io.ox/mail/compose/accounts.json'
-       ], function (sharedExamplesFor, api, sender, fixtureUser, fixtureAccounts) {
+        'fixture!io.ox/mail/write/accounts.json'
+       ], function (api, sender, fixtureUser, fixtureAccounts) {
 
-    describe('basic account API', function () {
-
-        var options = {
-            markedPending: {
-                'basic account API a basic API class has some get methods should define a getAll method.': true,
-                'basic account API a basic API class has some get methods should define a getList method.': true,
-                'basic account API a basic API class has some get methods should return a deferred object for getAll.': true,
-                'basic account API a basic API class has some get methods should return a deferred object for getList.': true
-            }
-        };
-
-        sharedExamplesFor(api, options);
-    });
-
-    describe('account API', function () {
+    describe.skip('account API', function () {
 
         var select = $();
 

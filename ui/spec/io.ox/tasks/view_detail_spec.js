@@ -10,7 +10,12 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks/defaultTestData.json'], function (detailView, ext, testData) {
+define([
+    'io.ox/tasks/view-detail',
+    'io.ox/core/extensions',
+    'fixture!io.ox/tasks/defaultTestData.json',
+    'waitsFor'
+], function (detailView, ext, testData, waitsFor) {
     describe.skip('tasks detailview', function () {
         describe('content', function () {
             var node;
@@ -41,29 +46,27 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 expect(node.find('.task-details').children()).to.have.length(18);
             });
 
-            it('should draw every participant', function () {//find out why this fails in phantom, chrome is fine
+            it('should draw every participant', function (done) {//find out why this fails in phantom, chrome is fine
 
                 var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
 
                 waitsFor(function () {
                     return node.find('.participant').length === 2;
-                }, 'paint user', ox.testTimeout);
-
-                runs(function () {
-                    expect(node.find('.participant').length).toBe(2); // one external and one internal participant
+                }).then(function () {
+                    expect(node.find('.participant').length).to.equal(2); // one external and one internal participant
+                    done();
                 });
             });
 
-            it('should draw every attachment', function () {
+            it('should draw every attachment', function (done) {
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('.attachments-container').children().length === 4;
-                }, 'paint attachments', ox.testTimeout);
-
-                runs(function () {
-                    expect(node.find('.attachments-container').children().length).toBe(4);//one label, two attachments, one all dropdown
+                }).then(function () {
+                    expect(node.find('.attachments-container').children().length).to.equal(4);//one label, two attachments, one all dropdown
+                    done();
                 });
             });
         });
@@ -92,13 +95,13 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 node.remove();
                 apiCallUpdate = false;
             });
-            it('mark Task undone should call api', function () {
+            it('mark Task undone should call api', function (done) {
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="unDone"]').click();
                 waitsFor(function () {
                     return apiCallUpdate;
-                }, 'undone task', ox.testTimeout);
+                }).then(done);
             });
 
             xit('edit should launch edit app', function () {//messes up task edit tests
@@ -130,43 +133,40 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 var inlineLink = node.find('[data-action="change-due-date"]').parent();
-                expect(inlineLink.find('ul li a').length).toBe(7);//one menuitem for every day
+                expect(inlineLink.find('ul li a').length).to.equal(7);//one menuitem for every day
             });
-            it('change due date should call Api', function () {
+            it('change due date should call Api', function (done) {
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="change-due-date"]').parent().find('ul li a').first().click();//click tomorrow in dropdownmenu
                 waitsFor(function () {
                     return apiCallUpdate;
-                }, 'call api update', ox.testTimeout);
+                }).then(done);
             });
-            it('confirm should open a popup', function () {
+            it('confirm should open a popup', function (done) {
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="confirm"]').click();
                 waitsFor(function () {
                     return $('.io-ox-dialog-popup').length === 1;
-                }, 'open popup', ox.testTimeout);
-
-                runs(function () {//close popup
+                }).then(function () {//close popup
                     $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                    done();
                 });
             });
-            it('confirm should call Api', function () {
+            it('confirm should call Api', function (done) {
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="confirm"]').click();
 
                 waitsFor(function () {
                     return $('.io-ox-dialog-popup').length === 1;
-                }, 'open popup', ox.testTimeout);
-
-                runs(function () {
+                }).then(function () {
                     $('[data-action="accepted"]').click();
-                    waitsFor(function () {
+                    return waitsFor(function () {
                         return apiCallUpdate;
-                    }, 'call api confirm', ox.testTimeout);
-                });
+                    });
+                }).then(done);
             });
             describe('', function () {
                 beforeEach(function () {
@@ -180,63 +180,57 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                     });
                 });
 
-                it('delete should open a popup', function () {
+                it('delete should open a popup', function (done) {
                     var baton = ext.Baton({data: testData.testData});
                     node = detailView.draw(baton);
                     waitsFor(function () {
                         return node.find('[data-action="delete"]').length === 1;
-                    }, 'draw link', ox.testTimeout);
-                    runs(function () {
+                    }).then(function () {
                         node.find('[data-action="delete"]').click();
-                        waitsFor(function () {
+                        return waitsFor(function () {
                             return $('.io-ox-dialog-popup').length === 1;
                         }, 'open popup', ox.testTimeout);
-                    });
-
-                    this.after(function () {//close popup
+                    }).then(function () {
                         $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                        done();
                     });
                 });
 
-                it('delete should call api', function () {
+                it('delete should call api', function (done) {
                     var baton = ext.Baton({data: testData.testData});
                     node = detailView.draw(baton);
                     waitsFor(function () {
                         return node.find('[data-action="delete"]').length === 1;
-                    }, 'draw link', ox.testTimeout);
-                    runs(function () {
+                    }).then(function () {
                         node.find('[data-action="delete"]').click();
-                        waitsFor(function () {
+                        return waitsFor(function () {
                             return $('.io-ox-dialog-popup').length === 1;
-                        }, 'open popup', ox.testTimeout);
-                        runs(function () {
-                            $('[data-action="deleteTask"]').click();
-                            waitsFor(function () {
-                                return apiCallUpdate;
-                            }, 'call api delete', ox.testTimeout);
                         });
-                    });
-                    this.after(function () {//close popup
+                    }).then(function () {
+                        $('[data-action="deleteTask"]').click();
+                        return waitsFor(function () {
+                            return apiCallUpdate;
+                        });
+                    }).then(function () {//close popup
                         $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                        done();
                     });
                 });
             });
-            it('move should open a popup', function () {
+            it('move should open a popup', function (done) {
                 //there is a missing api call for the foldertree. not important for this test
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('[data-action="move"]').length === 1;
-                }, 'draw link', ox.testTimeout);
-                runs(function () {
+                }).then(function () {
                     node.find('[data-action="move"]').click();
-                    waitsFor(function () {
+                    return waitsFor(function () {
                         return $('.io-ox-dialog-popup').length === 1;
-                    }, 'open popup', ox.testTimeout);
-                });
-
-                this.after(function () {//close popup
+                    });
+                }).then(function () {//close popup
                     $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                    done();
                 });
             });
         });

@@ -10,14 +10,15 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['fixture!io.ox/core/settings.json',
+define(['io.ox/mail/main',
+        'fixture!io.ox/core/settings.json',
         'fixture!io.ox/search/autocomplete.json',
         'fixture!io.ox/search/query.json',
         'spec/shared/capabilities',
         'settings!io.ox/mail',
         'settings!io.ox/core',
         'beforeEachEnsure',
-        'waitsFor'], function (settingsFixture, autocompleteFixture, queryFixture, caputil,  mailSettings, settings, beforeEachEnsure, waitsFor) {
+        'waitsFor'], function (main, settingsFixture, autocompleteFixture, queryFixture, caputil,  mailSettings, settings, beforeEachEnsure, waitsFor) {
 
 
     var setupFakeServer = function () {
@@ -35,37 +36,30 @@ define(['fixture!io.ox/core/settings.json',
     };
 
     //aync setup loads app and and add some variables to test context
-    var setup = function (context) {
+    function setup (context) {
         var def = $.Deferred(),
-            self = this;
-
-        // load mail app
-        require(['io.ox/mail/main'], function (main) {
-            // set search capability
-            var capabilities = caputil.preset('common').init('io.ox/mail/main', main);
-            capabilities.enable('search');
-            // start mail app
-            main.getApp().launch().done(function () {
-                var win = this.getWindow(),
-                    api = win.facetedsearch;
-                win.on('search:loaded', function () {
+            self = this,
+            setCaps =  caputil.preset('common').init('io.ox/mail/main', main).apply;
+        setCaps()
+            .done(function () {
+                main.getApp().launch().done(function () {
+                    //console.warn('%c' + 'getAppDone', 'color: green; background-color: black');
+                    var win = main.getApp().getWindow();
                     self.vars = {
                         win: win,
                         nodes: win.nodes.facetedsearch,
-                        api: api,
-                        view: api.view,
-                        model: api.view.modelm
+                        api: win.facetedsearch
                     };
-                    // show
-                    // api.toggle();
-                    // TOOD: why is this hack necessary?
-                    $('.launcher-dropdown ul').find('li[data-app-name="io.ox/mail"]').trigger('click');
-                    def.resolve();
+                    win.on('search:loaded', function () {
+                        //console.log('%c' + 'search:loaded', 'color: red; background-color: black');
+                        self.vars.view = self.vars.api.view;
+                        self.vars.model = self.vars.api.view.model;
+                        def.resolve();
+                    });
                 });
             });
-        });
         return def;
-    };
+    }
 
     var dropdownLoaded = function (done) {
         return waitsFor(function () {
@@ -74,98 +68,128 @@ define(['fixture!io.ox/core/settings.json',
         }).done(done);
     };
 
-    // var openDropdown = function (done) {
-    //     var def = $.Deferred();
-    //     // in case already opened
-    //     // if ($('.autocomplete-popup>.scrollable-pane').children().length)
-    //     //     return def.resolve();
+    var searchLoaded = function (done) {
+        return waitsFor(function () {
+            var active = $('.search-container>.default>.search-facets').children();
+            return active.length !== 0;
+        }).done(done);
+    };
 
-    //     // trigger autocomplete request
-    //     var field = this.vars.nodes.toolbar.find('.search-field');
-    //     field.val('t');
-    //     field.trigger(
-    //         $.Event('keyup', { keyCode: 80})
-    //     );
+    var openDropdown = function (done) {
+        var def = $.Deferred(),
+            self = this;
+        // in case already opened
+        // if ($('.autocomplete-popup>.scrollable-pane').children().length)
+        //     return def.resolve();
 
-    //     done.call(this);
-    //     dropdownLoaded.done(function () {
-    //         debugger;
-    //     });
-    //     return dropdownLoaded.done(done);
-    // };
+        // trigger autocomplete request
+        var field = this.vars.nodes.toolbar.find('.search-field');
+        field.val('t');
+        field.trigger(
+            $.Event('keyup', { keyCode: 80})
+        );
 
+        //done.call(this);
+        return dropdownLoaded().done(done);
+    };
 
-    describe('in-app search:', function () {
-        //ensure setup is finished
-        beforeEachEnsure(setup);
-        beforeEach(setupFakeServer);
+    var selectFilter = function () {
+        var dropdown = $('.autocomplete-popup>.scrollable-pane').children();
+        dropdown.first().trigger('click');
+    };
 
+    describe('Search', function () {
 
-        describe('has a view with', function () {
+        describe.skip('in-app search:', function () {
+            //ensure setup is finished
+            beforeEachEnsure(setup);
+            beforeEach(setupFakeServer);
 
-            describe('a search field section that', function () {
+            describe('has a view with', function () {
 
-                var getField = function (data) {
-                    return data.vars.nodes.toolbar.find('.search-field');
-                };
+                describe('a search field section that', function () {
 
-                it('exists', function () {
-                    expect(this.vars.nodes.toolbar).to.not.be.empty;
+                    var getField = function (data) {
+                        return data.vars.nodes.toolbar.find('.search-field');
+                    };
 
-                });
-                describe('contains an input field that', function () {
                     it('exists', function () {
-                        expect(getField(this).length).to.equal(1);
+                        expect(this.vars.nodes.toolbar).to.not.be.empty;
+
                     });
-
-                    describe('shows autocomplete popup when at least one char was entered and', function () {
-
-                        beforeEach(function () {
-                            //
-                            $('.autocomplete-popup>.scrollable-pane').empty();
+                    describe('contains an input field that', function () {
+                        it('exists', function () {
+                            expect(getField(this).length).to.equal(1);
                         });
 
-                        it('key was pressed', function (done) {
-                            var field = getField(this);
-                            field.val('test');
-                            field.trigger(
-                                $.Event('keyup', { keyCode: 80})
-                            );
-                            dropdownLoaded(done);
+                        describe('shows autocomplete popup when at least one char was entered and', function () {
+
+                            beforeEach(function () {
+                                $('.autocomplete-popup>.scrollable-pane').empty();
+                            });
+
+                            it('key was pressed', function (done) {
+                                var field = getField(this);
+                                field.val('test');
+                                field.trigger(
+                                    $.Event('keyup', { keyCode: 80})
+                                );
+                                dropdownLoaded(done);
+                            });
+                            it('input is clicked', function (done) {
+                                var field = getField(this);
+                                field.val('test');
+                                field.trigger($.Event('mousedown'));
+                                field.trigger($.Event('click'));
+                                dropdownLoaded(done);
+                            });
                         });
-                        it('input is clicked', function (done) {
-                            var field = getField(this);
-                            field.val('t');
-                            field.trigger($.Event('mousedown'));
-                            field.trigger($.Event('click'));
-                            dropdownLoaded(done);
+
+                    });
+                });
+
+                describe('a container for active facets that', function () {
+
+                    //beforeEach(openDropdown);
+
+                    function getDropdown ()  {
+                        return $('.autocomplete-popup>.scrollable-pane').children();
+                    }
+
+                    it('exists', function () {
+                        expect(!!this.vars.nodes.container).to.equal(true);
+                    });
+                    it('contains active default facets', function (done) {
+                        selectFilter();
+                        searchLoaded(done);
+                    });
+                    it('contains active default facets', function (done) {
+                        selectFilter();
+                        searchLoaded(done).done(function () {
+                            console.log('%c' + '!!!', 'color: white; background-color: grey');
                         });
+                    });
+                    it('contains active default facets', function (done) {
+                        selectFilter();
+                        searchLoaded()
+                            .then(function () {
+                            }, function () {
+                            })
+                            .then(openDropdown)
+                            .then(function () {
+                            })
+                            .then(selectFilter)
+                            .then(function () {
+                            })
+                            .then(searchLoaded.done(function () {
+                                expect($('.search-container>.default>.search-facets').children().length).to.equal(2);
+                            }));
                     });
 
                 });
-            });
-
-            describe('a container for active facets that', function () {
-
-                function getDropdown ()  {
-                    return $('.autocomplete-popup>.scrollable-pane').children();
-                }
-
-                //beforeEach(openDropdown);
-
-                it('exists', function () {
-                    expect(!!this.vars.nodes.container).to.equal(true);
-                });
-                // it('exists', function () {
-                //     var dropdown = getDropdown();
-                //     dropdown.first().trigger('click');
-                //     debugger;
-                //     expect(this.vars.nodes.container.length).to.equal(1);
-                // });
 
             });
 
         });
-
     });
 });

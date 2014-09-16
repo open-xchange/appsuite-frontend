@@ -63,9 +63,9 @@
           {
             "id": "contact\/1\/103054",
             "item": {
-              "name": "Pierce Hawthorne",
-              "detail": "pierce.hawthorne@greendalecommunitycollege.com",
-              "image_url": ""
+              "name": "Steffen Templin",
+              "detail": "steffen.templin@open-xchange.com",
+              "image_url": "\/ajax\/image\/user\/picture?id=246&timestamp=1409818907125"
             },
             "options": [
               {
@@ -76,7 +76,7 @@
                     "from"
                   ],
                   "queries": [
-                    "pierce.hawthorne@greendalecommunitycollege.com"
+                    "steffen.templin@open-xchange.com"
                   ]
                 }
               },
@@ -89,7 +89,7 @@
                     "cc"
                   ],
                   "queries": [
-                    "pierce.hawthorne@greendalecommunitycollege.com"
+                    "steffen.templin@open-xchange.com"
                   ]
                 }
               },
@@ -114,7 +114,7 @@
             "item": {
               "name": "test",
               "detail": "test@test.de",
-              "image_url": ""
+              "image_url": "\/ajax\/image\/contact\/picture?folder=14830&id=480502&timestamp=1360571521293"
             },
             "options": [
               {

@@ -10,28 +10,10 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['shared/examples/for/api',
-        'io.ox/core/api/autocomplete'], function (sharedExamplesFor, api) {
+define(['io.ox/core/api/autocomplete'], function (api) {
 
     return describe('autocomplete API', function () {
-        var instance = new api({id: 'createDistributionList', contacts: true, distributionlists: false }),
-            options = {
-
-                //predefined results (ignore shared test)
-                markedPending: {
-                    'autocomplete API a basic API class has some get methods should define a getAll method.': true,
-                    'autocomplete API a basic API class has some get methods should return a deferred object for getAll.': true,
-                    'autocomplete API a basic API class has some get methods should define a getList method.': true,
-                    'autocomplete API a basic API class has some get methods should return a deferred object for getList.': true,
-                    'autocomplete API a basic API class implements an event system should define a trigger method.': true,
-                    'autocomplete API a basic API class implements an event system should define an on method.': true,
-                    'autocomplete API a basic API class has some get methods should define a get method.': true,
-                    'autocomplete API a basic API class has some get methods should return a deferred object for get.': true
-                }
-            };
-
-        //use shared examples
-        sharedExamplesFor(api, options);
+        var instance = new api({id: 'createDistributionList', contacts: true, distributionlists: false });
 
         //existance
         describe('has some methods', function () {
@@ -57,7 +39,7 @@ define(['shared/examples/for/api',
         });
 
         //server calls
-        describe('has some methods calling ser', function () {
+        describe.skip('has some methods calling ser', function () {
             it('with all needed parameters for search', function () {
                 var spy = sinon.spy($, 'ajax'),
                     query = this.test.title,
@@ -77,7 +59,7 @@ define(['shared/examples/for/api',
         });
 
         //results
-        describe('has some parsing functionality', function () {
+        describe.skip('has some parsing functionality', function () {
             it('should return an array for processItem', function () {
                 var args = [
                     'contact',

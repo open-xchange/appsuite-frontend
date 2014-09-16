@@ -137,7 +137,8 @@ define('io.ox/calendar/util',
                 showDate = showDate || false,
                 weekStart = this.floor(now.getTime(), 'week'),
                 diff = 0,
-                diffWeek = 0;
+                diffWeek = 0,
+                lastSunday;
 
             // normalize
             d.setHours(0, 0, 0, 0);
@@ -149,9 +150,12 @@ define('io.ox/calendar/util',
 
             // past?
             if (diff < 0) {
+                // handle last sunday on next sunday
+                lastSunday = (diffWeek === -7 * date.DAY && now.t === weekStart);
+
                 if (diff >= -1 * date.DAY) {
                     return gt('Yesterday');
-                } else if (diffWeek > -7 * date.DAY) {
+                } else if (diffWeek > -7 * date.DAY || lastSunday) {
                     return gt('Last Week');
                 }
             } else {
