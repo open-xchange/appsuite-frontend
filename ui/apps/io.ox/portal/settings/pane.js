@@ -39,8 +39,13 @@ define('io.ox/portal/settings/pane',
             repopulateAddButton();
         })
         .on('add', function (model) {
-            var view = createView(model).render();
-            list.prepend(view.el);
+            var view = createView(model).render(),
+                lastProtected = list.find('li.protected').last();
+            if (lastProtected.length) {
+                lastProtected.after(view.el);
+            } else {
+                list.prepend(view.el);
+            }
             view.edit();
         });
 
