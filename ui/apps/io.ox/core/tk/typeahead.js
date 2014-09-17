@@ -23,6 +23,56 @@ define('io.ox/core/tk/typeahead', [
     'use strict';
 
     $.fn.autocompleteNew = function (o) {
+        function fixType (obj) {
+            switch (obj.type) {
+            case 'user':
+            case 1:
+                obj.data.type = obj.type = obj.sort = 1;
+                break;
+            case 'group':
+            case 2:
+                obj.data.type = obj.type = obj.sort = 2;
+                break;
+            case 'resource':
+            case 3:
+                obj.data.type = obj.type = obj.sort = 3;
+                break;
+            case 4:
+                obj.data.type = obj.type = obj.sort = 4;
+                break;
+            case 'contact':
+            case 5:
+                if (obj.data.internal_userid) {
+                    obj.sort = 1;
+                } else if (obj.data.mark_as_distributionlist) {
+                    obj.sort = 4; //distlistunsergroup
+                } else {
+                    obj.sort = 5;
+                }
+                if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
+                    obj.data.external = true;
+                    if (obj.data.internal_userid && obj.data.email1 === obj.email) {
+                        obj.data.type = 1; //user
+                        obj.data.external = false;
+                        // if (!options.keepId) {
+                        //     obj.data.id = obj.data.internal_userid;
+                        // }
+                    } else if (obj.data.mark_as_distributionlist) {
+                        obj.data.type = 6; //distlistunsergroup
+                    } else {
+                        obj.data.type = 5;
+                        // h4ck
+                        obj.data.email1 = obj.email;
+                        //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
+                        obj.data.emailparam = obj.email;
+                    }
+                }
+                obj.type = 5;
+                break;
+            }
+            return obj;
+        }
+
         o = $.extend({
             api: null,
             draw: $.noop,
@@ -51,7 +101,7 @@ define('io.ox/core/tk/typeahead', [
             },
             // Filter items
             reduce: function (data) {
-                return data;
+                return fixType(data);
             },
             name: function (data) {
                 return util.unescapeDisplayName(data.display_name);
@@ -62,7 +112,8 @@ define('io.ox/core/tk/typeahead', [
                     return this.name(data.contact);
 
                 var name = this.name(data);
-                return name ? '"' + name + '" <' + data.email + '>' : data.email;
+                name = name ? '"' + name + '" <' + data.email + '>' : data.email;
+                return name || '';
             },
 
             // TODO: not implemented for new autocomplete
