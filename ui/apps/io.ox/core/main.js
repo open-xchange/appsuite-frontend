@@ -1518,10 +1518,12 @@ define('io.ox/core/main',
     // Visual response to hidden folders
     //
     folderAPI.on('warn:hidden', function (e, folder) {
-        notifications.yell('info',
-           //#. %1$s is the filename
-           gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
-        );
+        if (folder) {
+            notifications.yell('info',
+               //#. %1$s is the filename
+               gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
+            );
+        }
     });
 
     return {

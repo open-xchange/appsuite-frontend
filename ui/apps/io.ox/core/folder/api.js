@@ -509,6 +509,10 @@ define('io.ox/core/folder/api',
             data: changes,
             appendColumns: false
         })
+        .done(function () {
+            var data = model.toJSON();
+            if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
+        })
         .then(
             function success(newId) {
                 // id change? (caused by rename or move)
@@ -595,6 +599,10 @@ define('io.ox/core/folder/api',
                     // make sure to return new folder data
                     return data;
                 });
+            })
+            .done(function checkVisibility(data) {
+                // trigger event if folder will be hidden
+                if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
             })
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);

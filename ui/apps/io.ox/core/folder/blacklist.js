@@ -70,6 +70,11 @@ define('io.ox/core/folder/blacklist',
                 .value();
         },
 
+        // convenience
+        visible: function (data) {
+            return this.filter(data);
+        },
+
         // filter array of folders
         apply: function (array) {
             return _(array).filter(this.filter, this);
