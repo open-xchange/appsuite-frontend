@@ -17,7 +17,8 @@ define('io.ox/core/tk/typeahead', [
     'settings!io.ox/contacts',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
-    'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
+    'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
+    'less!io.ox/core/tk/typeahead'
 ], function (util, settings) {
 
     'use strict';
