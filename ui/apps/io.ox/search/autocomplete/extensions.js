@@ -54,8 +54,8 @@ define('io.ox/search/autocomplete/extensions',
                         return data;
                     },
                     draw: function (value) {
-                        var individual = ext.point(POINT + '/item/' + baton.data.facet);
                         baton.data = value;
+                        var individual = ext.point(POINT + '/item/' + baton.data.facet);
 
                         // use special draw handler
                         if (individual.list().length) {
