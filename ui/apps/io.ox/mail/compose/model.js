@@ -284,7 +284,7 @@ define('io.ox/mail/compose/model',
             });
 
             result.attachments = this.get('attachments').filter(function (a) {
-                return !!a.get('content') || a.get('disp') === 'attachment';
+                return a.get('disp') === 'inline' || a.get('disp') === 'attachment';
             }).map(function (m) {
                 return m.attributes;
             });
