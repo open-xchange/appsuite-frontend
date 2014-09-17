@@ -96,6 +96,26 @@
         }
     }
 
+    .autocomplete-item {
+
+        .contact-image {
+            margin-right: 14px;
+            display: inline-block;
+            float: left;
+            .picture(42px, 42px);
+        }
+
+        .recipient-name {
+            font-weight: bold;
+            .ellipsis();
+        }
+
+        .email {
+            .ellipsis();
+        }
+    }
+
+
     .editable-toolbar {
         position: relative;
         height: 100%;
@@ -265,3 +285,6 @@
         width: 1000px;
     }
 }
+
+
+
