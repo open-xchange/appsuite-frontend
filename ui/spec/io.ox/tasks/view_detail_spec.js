@@ -18,15 +18,37 @@ define([
 ], function (detailView, ext, testData, waitsFor) {
     'use strict';
 
-    describe.skip('Tasks DetailView', function () {
+    describe('Tasks DetailView', function () {
+        var multipleData = {
+            folders: {
+                get: {
+                    id: '555123456',
+                    title: 'some title'
+                }
+            }
+        };
         describe('content', function () {
             var node;
             beforeEach(function () {
+                this.server.responses = this.server.responses.filter(function (r) {
+                    return !(r.method === 'PUT' &&  String(r.url) === '/api\\/multiple\\?/');
+                });
+                this.server.respondWith('PUT', /api\/multiple\?/, function (xhr) {
+                    var actions = JSON.parse(xhr.requestBody),
+                        result = new Array(actions.length);
+
+                    actions.forEach(function (action, index) {
+                        result[index] = {
+                            data: multipleData[action.module][action.action]
+                        };
+                    });
+                    xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+                });
                 this.server.respondWith('GET', /api\/attachment\?action=all/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testAttachments) + '}');
                 });
-                this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testUser) + '}');
+                this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testUserList) + '}');
                 });
             });
             //clean up the dom
@@ -72,7 +94,7 @@ define([
                 });
             });
         });
-        describe('inline Links', function () {
+        describe.skip('inline Links', function () {
             var apiCallUpdate = false,
                 node;
             beforeEach(function () {
