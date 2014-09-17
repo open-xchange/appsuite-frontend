@@ -127,9 +127,15 @@ define('io.ox/search/autocomplete/extensions',
                 });
 
             this.find('.btn-search')
-                .on('click', function (e) {
-                    ref.trigger(e);
-                    view.trigger('button:search');
+                .on('click', function () {
+                    // open autocomplete dropdown
+                    ref.trigger('click');
+                    // trigger ENTER keypress
+                    var keydown = $.Event('keydown');
+                    keydown.which = 13;
+                    ref.trigger(keydown);
+                    // prevent, propagation
+                    return false;
                 });
 
             return this;

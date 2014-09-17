@@ -1752,11 +1752,6 @@ define('io.ox/core/desktop',
                                         $('<i class="fa fa-search"></i>')
                                     )
                                     .tooltip()
-                                    .on('click', function (e) {
-                                        e.preventDefault();
-                                        var e = $.Event('keydown');
-                                        e.which = 13;
-                                    })
                                 )
                             );
                         }
