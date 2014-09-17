@@ -39,11 +39,10 @@ define('io.ox/search/facets/extensions',
                             baton.model.update(facet.id, id, { custom: target, name: label });
                         });
                 },
-                customize: function (baton) {
-                    var data = baton.data,
-                        same = type === 'move' && data.id === id,
+                disable: function (data) {
+                    var same = type === 'move' && data.id === id,
                         create = api.can('create', data);
-                    if (same || !create) this.addClass('disabled');
+                    return same || !create;
                 }
             });
         });
