@@ -90,7 +90,7 @@ define(['shared/examples/for/api',
         });
     };
 
-    describe.only('folder API', function () {
+    describe('folder API', function () {
 
         var options = {
                 markedPending: {
