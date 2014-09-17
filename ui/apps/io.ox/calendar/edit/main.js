@@ -365,7 +365,7 @@ define('io.ox/calendar/edit/main',
                 self.dispose();
                 df.resolve();
             }
-            app.getWindow().nodes.main.find('input')[0].focus();
+            if (_.device('!smartphone')) app.getWindow().nodes.main.find('input')[0].focus();
             return df;
         });
 
