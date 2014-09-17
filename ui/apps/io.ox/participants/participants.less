@@ -68,20 +68,24 @@
         }
     }
 
-    .extra-decorator {
-        color: #888;
-        &:hover { color: #888; text-decoration: none }
-    }
-
     .participant-name {
         padding-top: 7px;
         font-weight: bold;
         .ellipsis();
     }
 
+    .participant-email-wrapper, .extra-decorator-wrapper {
+        .ellipsis();
+    }
+
     .participant-email {
         color: @link-color;
         .ellipsis();
+    }
+
+    .extra-decorator {
+        color: #888;
+        &:hover { color: #888; text-decoration: none }
     }
 
     &.three-rows {

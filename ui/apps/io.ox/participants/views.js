@@ -64,8 +64,8 @@ define('io.ox/participants/views', [
             this.$el.append(
                 this.nodes.$img,
                 this.nodes.$text,
-                $('<div>').append(this.nodes.$mail),
-                $('<div>').append(this.nodes.$extra),
+                $('<div class="participant-email-wrapper">').append(this.nodes.$mail),
+                $('<divclass="extra-decorator-wrapper">').append(this.nodes.$extra),
                 this.nodes.$removeButton
             );
 
