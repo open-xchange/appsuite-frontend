@@ -499,7 +499,7 @@ define('io.ox/calendar/main',
                                 // switch back to perspective used before
                                 var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
                                 if (lastPerspective && lastPerspective !== currentPerspective)
-                                    ox.ui.Perspective.show(app, lastPerspective, {disableAnimations: true});
+                                    app.props.set('layout', lastPerspective);
                                 // disable
                                 app.props.off('change', cancelSearch);
                             }

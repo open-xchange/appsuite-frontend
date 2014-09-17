@@ -27,6 +27,7 @@ define('io.ox/search/main',
         index: 100,
         id: 'default',
         config: function (data) {
+            // used only for search app
             data.defaultApp =  settings.get('search/default', 'io.ox/mail');
         }
     });
