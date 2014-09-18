@@ -536,27 +536,28 @@ define('io.ox/search/facets/extensions',
 
                 // add 'all folders'
                 var link;
-                // add dropdown entry
-                menu.prepend(
-                    $('<li role="presentation">').append(
-                         link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
-                                    .append(
-                                        $('<i class="fa fa-fw ">'),
-                                        $('<span>').text(gt('All folders'))
-                                    )
-                                    .attr('data-custom', 'custom')
-                                    .attr('title', gt('All folders'))
-                    )
-                );
-                // is active
-                if (!value.custom || value.custom === 'custom') {
-                    // set display name
-                    this.find('.name')
-                        .text(gt('All folders'));
-                    // set fa-check icon
-                    link.find('i')
-                        .addClass('fa-check');
-                    link.attr('aria-checked', true);
+                if (!baton.model.isMandatory('folder')) {
+                    menu.prepend(
+                        $('<li role="presentation">').append(
+                             link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
+                                        .append(
+                                            $('<i class="fa fa-fw ">'),
+                                            $('<span>').text(gt('All folders'))
+                                        )
+                                        .attr('data-custom', 'custom')
+                                        .attr('title', gt('All folders'))
+                        )
+                    );
+                    // is active
+                    if (!value.custom || value.custom === 'custom') {
+                        // set display name
+                        this.find('.name')
+                            .text(gt('All folders'));
+                        // set fa-check icon
+                        link.find('i')
+                            .addClass('fa-check');
+                        link.attr('aria-checked', true);
+                    }
                 }
 
                 // add fodlers
