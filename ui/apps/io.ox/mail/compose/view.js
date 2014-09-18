@@ -20,6 +20,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/util',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
+    'io.ox/contacts/model',
     'settings!io.ox/mail',
     'settings!io.ox/core',
     'io.ox/core/notifications',
@@ -27,7 +28,7 @@ define('io.ox/mail/compose/view', [
     'gettext!io.ox/mail',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt) {
+], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, ContactModel, settings, coreSettings, notifications, snippetAPI, gt) {
 
     'use strict';
 
@@ -245,8 +246,8 @@ define('io.ox/mail/compose/view', [
                 this.append(
                     $('<div class="ellipsis email">').append(
                         $.txt(baton.data.email + (baton.data.phone || '') + ' '),
-                        contactsUtil.getFieldLabel(baton.data.field) !== '' ?
-                            $('<span style="color: #888;">').text('(' + contactsUtil.getFieldLabel(baton.data.field) + ')') : []
+                        ContactModel.fields[baton.data.field] ?
+                            $('<span style="color: #888;">').text('(' + ContactModel.fields[baton.data.field] + ')') : []
                     )
                 );
             } else {

@@ -15,9 +15,8 @@ define('io.ox/contacts/util', [
     'io.ox/core/util',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts',
-    'io.ox/core/date',
-    'io.ox/contacts/model'
-], function (util, settings, gt, date, model) {
+    'io.ox/core/date'
+], function (util, settings, gt, date) {
 
     'use strict';
 
@@ -59,15 +58,6 @@ define('io.ox/contacts/util', [
     }
 
     var that = {
-
-        /**
-         * fieldname to fieldlabel
-         * @param  {string} field
-         * @return {string} label
-         */
-        getFieldLabel: function (field) {
-            return model.fields[field] || '';
-        },
 
         // variant of getFullName without title, all lowercase
         getSortName: function (obj) {
