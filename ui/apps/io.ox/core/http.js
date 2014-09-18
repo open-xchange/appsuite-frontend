@@ -927,7 +927,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         };
     }());
 
-
     var wait = (function () {
 
         var wait = $.when();
