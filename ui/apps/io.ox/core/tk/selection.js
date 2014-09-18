@@ -263,18 +263,14 @@ define('io.ox/core/tk/selection',
         };
 
         mousedownHandler = function (e) {
-            var node, key, id;
+            var node, key, id, handleMouseDown;
             // we check for isDefaultPrevented because elements inside .selectable
             // might also react on mousedown/click, e.g. folder tree open/close toggle
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // adding timeouts to avoid strange effect that occurs across different browsers.
-                // if we do too much inside these event handlers, the mousedown and mouseup events
-                // do not trigger a click. this still happens if timeout interval if too short,
-                // for example, 10 msecs. (see Bug 27794 - Sorting menu remains open)
-                setTimeout(function () {
+                handleMouseDown = function () {
                     // exists?
                     if (id !== undefined && !isCheckbox(e)) {
                         // explicit multiple?
@@ -293,18 +289,27 @@ define('io.ox/core/tk/selection',
                             apply(id, e);
                         }
                     }
-                }, 50);
+                };
+                if (_.device('!smartphone')) {
+                    // adding timeouts to avoid strange effect that occurs across different browsers.
+                    // if we do too much inside these event handlers, the mousedown and mouseup events
+                    // do not trigger a click. this still happens if timeout interval if too short,
+                    // for example, 10 msecs. (see Bug 27794 - Sorting menu remains open)
+                    setTimeout(handleMouseDown, 50);  
+                } else {
+                    //no timeouts on smartphones otherwise mobile toolbars are drawn with no or previous selection see bug 34488
+                    handleMouseDown();
+                }
             }
         };
 
         mouseupHandler = function (e) {
-            var node, key, id;
+            var node, key, id, handleMouseUp;
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // see above (mousedownHandler)
-                setTimeout(function () {
+                handleMouseUp = function () {
                     // exists?
                     if (id !== undefined) {
                         if (node.hasClass('pending-select') && isSelectable(e)) {
@@ -314,7 +319,14 @@ define('io.ox/core/tk/selection',
                     }
                     // remove helper classes
                     container.find('.pending-select').removeClass('pending-select');
-                }, 50);
+                };
+                if (_.device('!smartphone')) {
+                    // see above (mousedownHandler)
+                    setTimeout(handleMouseUp, 50);
+                } else {
+                    // see above (mousedownHandler)
+                    handleMouseUp();
+                }
             }
         };
 
