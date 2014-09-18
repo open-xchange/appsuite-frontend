@@ -121,6 +121,9 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             // add "expired" attribute
             hash[cid].collection.expired = false;
 
+            // to simplify debugging
+            hash[cid].collection.cid = cid;
+
             // propagate changes in all collections
             return hash[cid].collection.on({
                 'remove': propagateRemove.bind(this, module),

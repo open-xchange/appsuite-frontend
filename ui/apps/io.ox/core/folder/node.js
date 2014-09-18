@@ -327,11 +327,17 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             // fetch subfolders if not open but "empty" is false
             if (o.empty === false && o.open === false) this.reset();
 
+            // run through some custom callbacks
+            var data = this.model.toJSON(), baton = ext.Baton({ view: this, data: data });
+
             // allow extensions
-            ext.point('io.ox/core/foldertree/node').invoke('initialize', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+            ext.point('io.ox/core/foldertree/node').invoke('initialize', this.$el, baton);
 
             // simple tree-based customize callback
-            if (_.isFunction(o.tree.options.customize)) o.tree.options.customize.call(this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
+            o.tree.options.customize.call(this.$el, baton);
+
+            // simple tree-based disable callback
+            if (o.tree.options.disable(data)) this.$el.addClass('disabled');
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', this.remove.bind(this));

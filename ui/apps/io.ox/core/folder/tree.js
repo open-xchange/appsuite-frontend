@@ -35,7 +35,7 @@ define('io.ox/core/folder/tree', [
 
         initialize: function (options) {
 
-            options = _.extend({ contextmenu: false }, options);
+            options = _.extend({ contextmenu: false, customize: $.noop, disable: $.noop }, options);
 
             this.app = options.app;
             this.root = options.root || 'default0/INBOX';

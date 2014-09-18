@@ -100,11 +100,10 @@ define('io.ox/core/folder/actions/move', [
                     if (type === 'copy' || id !== current) commit(id);
                 },
 
-                customize: function (baton) {
-                    var data = baton.data,
-                        same = type === 'move' && data.id === current,
+                disable: function (data) {
+                    var same = type === 'move' && data.id === current,
                         create = api.can('create', data);
-                    if (same || !create) this.addClass('disabled');
+                    return same || !create;
                 }
             });
         },

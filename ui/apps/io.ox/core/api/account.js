@@ -447,7 +447,8 @@ define('io.ox/core/api/account', [
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
                 _('sent drafts trash spam archive'.split(' ')).each(function (type) {
-                    typeHash[account[type + '_fullname']] = type;
+                    // only add if account[type] is not null, i.e. if the folder exists
+                    if (account[type]) typeHash[account[type + '_fullname']] = type;
                 });
             });
         });

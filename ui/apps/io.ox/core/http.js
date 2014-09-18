@@ -927,6 +927,17 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         };
     }());
 
+
+    var wait = (function () {
+
+        var wait = $.when();
+
+        return function (def) {
+            if (def) def.always((wait = $.Deferred()).resolve);
+            return wait.promise();
+        };
+    }());
+
     that = {
 
         /**
@@ -1046,6 +1057,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
             return def;
         },
+
+        // simple utility function to wait for other requests
+        wait: wait,
 
         /**
          * Get all columns of a module

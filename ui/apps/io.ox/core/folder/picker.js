@@ -74,6 +74,7 @@ define('io.ox/core/folder/picker', [
             done: $.noop,
             filter: $.noop,
             customize: $.noop,
+            disable: $.noop,
             initialize: $.noop,
             close: $.noop,
             show: $.noop
@@ -108,7 +109,8 @@ define('io.ox/core/folder/picker', [
             module: o.module,
             open: open,
             root: o.root,
-            customize: o.customize
+            customize: o.customize,
+            disable: o.disable
         });
 
         if (o.settings && _.isString(o.persistent)) {
@@ -120,6 +122,14 @@ define('io.ox/core/folder/picker', [
                 o.settings.set(o.persistent + '/last', id).save();
             });
         }
+
+        // respond to invalid selection
+        tree.on('change virtual', function (id) {
+            var model = api.pool.getModel(id), data = model.toJSON();
+            dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data));
+        });
+
+        dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', true);
 
         o.initialize(dialog, tree);
 
