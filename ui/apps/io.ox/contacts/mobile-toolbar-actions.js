@@ -131,24 +131,6 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         });
     }, 50);
 
-    // multi select toolbar links need some attention
-    // in case nothing is selected disabled buttons
-    // This should be done via our Link concept, but I
-    // didn't get it running. Feel free to refactor this
-    // to a nicer solutioun
-    /*pointListViewMultiSelect.extend({
-        id: 'update-button-states',
-        index: 10000,
-        draw: function (baton) {
-            // hmmmm, should work for this easy case
-            if (baton.data.length === 0) {
-                $('.mobile-toolbar-action', this).addClass('ui-disabled');
-            } else {
-                $('.mobile-toolbar-action', this).removeClass('ui-disabled');
-            }
-        }
-    });*/
-
     // some mediator extensions
     // register update function and introduce toolbar updating
     ext.point('io.ox/contacts/mediator').extend({
@@ -175,6 +157,12 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 });
             });
 
+            //single select
+            app.grid.selection.on('select', function () {
+                var data = app.grid.selection.get();
+                app.updateToolbar(data[0]);
+            });
+
             // multiselect
             app.grid.selection.on('change', function  (e, list) {
                 if (app.props.get('checkboxes') !== true ) return;
@@ -191,14 +179,6 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                     app.pages.getSecondaryToolbar('listView').setBaton(baton);
                 });
             });
-
-            // simple select
-            app.grid.selection.on('pagechange:detailView', function () {
-                // update toolbar on each pagechange
-                var data = app.grid.selection.get();
-                app.updateToolbar(data[0]);
-            });
-
         }
     });
 
