@@ -1,0 +1,36 @@
+.share-view {
+
+    .participantsrow {
+        min-height: 56px;
+    }
+
+    .dropdown.inline {
+
+        display: inline-block;
+
+        a.disabled * {
+            color: #888;
+        }
+    }
+
+    .autocomplete-item {
+
+        .contact-image {
+            margin-right: 14px;
+            display: inline-block;
+            float: left;
+            .picture(42px, 42px);
+        }
+
+        .recipient-name {
+            font-weight: bold;
+            .ellipsis();
+        }
+
+        .email {
+            .ellipsis();
+        }
+
+    }
+}
+
