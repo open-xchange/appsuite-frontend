@@ -75,7 +75,10 @@ define('io.ox/search/autocomplete/extensions',
                         // apply selected filter
                         var node = $(e.target).closest('.autocomplete-item'),
                             value = node.data();
-                        ref.val('');
+
+                        // empty input field
+                        if (!model.getOptions().switches.keepinput)
+                            ref.val('');
 
                         // exclusive: define used option (type2 default is index 0 of options)
                         var option = _.find(value.options, function (item) {

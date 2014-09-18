@@ -63,6 +63,16 @@ define('io.ox/search/main',
         }
     });
 
+    ext.point('io.ox/search/main').extend({
+        index: 500,
+        id: 'switches',
+        config: function (data) {
+            data.switches = {
+                //keepinput: true
+            };
+        }
+    });
+
     function openSidePopup(popup, e, target) {
         var id = target.attr('data-id'),
             item = model.get('items').get(id),
