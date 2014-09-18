@@ -409,6 +409,7 @@ define('io.ox/core/folder/extensions',
 
                     this.find('.folder-pubsub').remove();
 
+                    if (api.is('shared', baton.data)) return; // ignore shared folders
                     if (!capabilities.has('publication') || !api.is('published|subscribed', baton.data)) return;
 
                     this.find('.folder-node').append(
