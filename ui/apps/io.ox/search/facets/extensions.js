@@ -460,6 +460,7 @@ define('io.ox/search/facets/extensions',
                 };
 
                 // used to handle overlow when datepicker is shown
+                $('body>.datepicker-container').remove();
                 $('body').append(
                     container = $('<div class="datepicker-container">').hide()
                 );
