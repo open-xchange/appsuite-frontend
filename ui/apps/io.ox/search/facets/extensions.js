@@ -269,26 +269,32 @@ define('io.ox/search/facets/extensions',
                     node = $('<span class="remove">')
                      .attr({
                         'tabindex': '1',
+                        'aria-label': gt('Remove')
+                    })
+                    .append(
+                        $('<i class="fa fa-times action">')
+                    )
+                    .on('click', fn || function () {
+                        baton.model.remove(value.facet || value._compact.facet, value.id);
+                        return false;
+                    })
+
+                );
+                // tooltip
+                if(!_.device('touch')) {
+                    node.attr({
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
                         'data-container': 'body',
-                        'data-original-title': gt('Remove'),
-                        'aria-label': gt('Remove')
-                    })
-                    .tooltip()
-                    .append(
-                        $('<i class="fa fa-times action">')
-                    )
-                    .on('click', function () {
-                        node.tooltip('hide');
-                    })
-                    .on('click', fn || function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        baton.model.remove(value.facet || value._compact.facet, value.id);
-                    })
-                );
+                        'data-original-title': gt('Remove')
+                        })
+                        .tooltip()
+                        .on('click', function () {
+                            if (node.tooltip)
+                                node.tooltip('hide');
+                        });
+                }
             },
 
             facetDropdown: function (baton, value, facet) {

@@ -185,17 +185,11 @@ define('io.ox/search/autocomplete/extensions',
                     .attr({
                         'tabindex': '1',
                         'class': 'btn btn-default btn-search',
-                        'data-toggle': 'tooltip',
-                        'data-placement': 'bottom',
-                        'data-animation': 'false',
-                        'data-container': 'body',
-                        'data-original-title': gt('Search'),
                         'aria-label': gt('Search')
                     })
                     .append(
                         $('<i class="fa fa-search"></i>')
                     )
-                    .tooltip()
                     .on('click', function (e) {
                         e.preventDefault();
                         var e = $.Event('keydown');
