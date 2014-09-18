@@ -712,7 +712,7 @@ define('io.ox/tasks/edit/view-template',
             var node = $(baton.app.attributes.window.nodes.body),
                 save = baton.parentView.$el.find('.task-edit-save'),
                 cancel = baton.parentView.$el.find('.task-edit-cancel');
-            node.append($('<div class="app-bottom-toolbar">').append(cancel, save));
+            node.append($('<div class="app-bottom-toolbar">').append(save, cancel));
         }
     });
 
