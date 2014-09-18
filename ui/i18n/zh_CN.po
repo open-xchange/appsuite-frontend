@@ -1238,7 +1238,7 @@ msgstr "日历日视图"
 #: apps/io.ox/calendar/week/perspective.js:157
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:186
-#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:694
+#: apps/io.ox/contacts/edit/main.js:252 apps/io.ox/contacts/main.js:694
 #: apps/io.ox/core/desktop.js:1910 module:io.ox/core
 #: apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/actions/add.js:99
@@ -1630,7 +1630,7 @@ msgstr "冲突："
 msgid "Connector for Microsoft Outlook®"
 msgstr "Microsoft Outlook® 的连接器"
 
-#: apps/io.ox/contacts/edit/main.js:274 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:275 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:189 module:io.ox/mail
 msgid "Contact"
 msgstr "联系人"
@@ -1825,7 +1825,7 @@ msgid "Create appointment"
 msgstr "创建约会"
 
 #: apps/io.ox/contacts/edit/main.js:64 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:178
+#: apps/io.ox/contacts/edit/main.js:179
 msgid "Create contact"
 msgstr "创建联系人"
 
@@ -2111,7 +2111,7 @@ msgstr "放弃"
 #. Translation should be distinguishable for the user
 #: apps/io.ox/calendar/edit/main.js:355 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:185 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:250 apps/io.ox/editor/main.js:345
+#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/editor/main.js:345
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:162 module:io.ox/tasks
 msgctxt "dialog"
 msgid "Discard changes"
@@ -2215,7 +2215,7 @@ msgstr "您确定要删除这个迷你程序吗？"
 
 #: apps/io.ox/calendar/edit/main.js:352 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:182 module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:342
+#: apps/io.ox/contacts/edit/main.js:248 apps/io.ox/editor/main.js:342
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:159 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
 msgstr "您真的想放弃更改吗？"
@@ -2447,7 +2447,7 @@ msgstr "EB"
 msgid "Edit"
 msgstr "编辑"
 
-#: apps/io.ox/contacts/edit/main.js:176 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:177 module:io.ox/contacts
 msgid "Edit Contact"
 msgstr "编辑联系人"
 
@@ -4173,7 +4173,7 @@ msgstr "新约会"
 msgid "New calendar"
 msgstr "日历"
 
-#: apps/io.ox/contacts/edit/main.js:204 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:205 module:io.ox/contacts
 msgid "New contact"
 msgstr "新联系人"
 
@@ -6111,7 +6111,7 @@ msgstr "社交户口只会用作下载联系人和/或日历数据"
 msgid "SoftBank"
 msgstr "软银"
 
-#: apps/io.ox/contacts/edit/main.js:92 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:93 module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr "有些输入字段包含无效数据"
 

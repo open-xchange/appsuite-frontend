@@ -200,7 +200,7 @@ msgstr ""
 #: apps/io.ox/contacts/actions.js:54
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:186
-#: apps/io.ox/contacts/edit/main.js:251
+#: apps/io.ox/contacts/edit/main.js:252
 #: apps/io.ox/contacts/main.js:694
 #: apps/io.ox/core/desktop.js:1910
 #: module:io.ox/core
@@ -619,7 +619,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:182
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:247
+#: apps/io.ox/contacts/edit/main.js:248
 #: apps/io.ox/editor/main.js:342
 #: module:io.ox/editor
 #: apps/io.ox/tasks/edit/main.js:159
@@ -633,7 +633,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:185
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:250
+#: apps/io.ox/contacts/edit/main.js:251
 #: apps/io.ox/editor/main.js:345
 #: module:io.ox/editor
 #: apps/io.ox/tasks/edit/main.js:162
@@ -2634,26 +2634,26 @@ msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js:64
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/edit/main.js:178
+#: apps/io.ox/contacts/edit/main.js:179
 msgid "Create contact"
 msgstr ""
 
-#: apps/io.ox/contacts/edit/main.js:92
+#: apps/io.ox/contacts/edit/main.js:93
 #: module:io.ox/contacts
 msgid "Some fields contain invalid data"
 msgstr ""
 
-#: apps/io.ox/contacts/edit/main.js:176
+#: apps/io.ox/contacts/edit/main.js:177
 #: module:io.ox/contacts
 msgid "Edit Contact"
 msgstr ""
 
-#: apps/io.ox/contacts/edit/main.js:204
+#: apps/io.ox/contacts/edit/main.js:205
 #: module:io.ox/contacts
 msgid "New contact"
 msgstr ""
 
-#: apps/io.ox/contacts/edit/main.js:274
+#: apps/io.ox/contacts/edit/main.js:275
 #: module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:189
 #: module:io.ox/mail
