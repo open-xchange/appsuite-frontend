@@ -191,7 +191,32 @@ module.exports = function (grunt) {
                              'apps/io.ox/core/emoji/util.js',
                              'apps/io.ox/mail/detail/links.js',
                              // mail app - main
-                             'apps/io.ox/mail/main.js'
+                             'apps/io.ox/mail/main.js',
+                             // search - model
+                             'apps/io.ox/backbone/basicModel.js',
+                             'apps/io.ox/backbone/modelFactory.js',
+                             'apps/io.ox/backbone/views.js',
+                             'apps/io.ox/search/model.js',
+                             // search - api
+                             'apps/io.ox/search/api.js',
+                             'apps/io.ox/search/apiproxy.js',
+                             // search - results
+                             'apps/io.ox/search/view.js',
+                             'apps/io.ox/search/view-template.js',
+                             'apps/io.ox/search/items/model.js',
+                             'apps/io.ox/search/items/main.js',
+                             'apps/io.ox/search/items/view.js',
+                             'apps/io.ox/search/items/collection.js',
+                             // search - draw facets
+                             'apps/io.ox/core/tk/autocomplete.js',
+                             'apps/io.ox/search/autocomplete/extensions.js',
+                             'apps/io.ox/search/autocomplete/view.js',
+                             'apps/io.ox/search/facets/view.js',
+                             'apps/io.ox/search/facets/extensions.js',
+                             // search - main
+                             'apps/io.ox/search/util.js',
+                             'apps/io.ox/search/quickstart.js',
+                             'apps/io.ox/search/main.js'
                         ],
                         dest: 'build/precore.js',
                         nonull: true
