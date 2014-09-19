@@ -335,19 +335,12 @@ define('io.ox/mail/write/main',
             view.render();
 
             // add panels to windows
-            win.nodes.main
-            .addClass('io-ox-mail-write')
-            .append(
-                view.form = $('<form>', {
-                    name: 'compose',
-                    method: 'post',
-                    enctype: 'multipart/form-data'
-                })
-                .addClass('form-inline')
-                .append(
-                    $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
-                    $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
-                    $('<input>', { type: 'hidden', name: 'headers', value: '' }),
+            win.nodes.main.addClass('io-ox-mail-write').append(
+                view.form = $('<form name="compose method="post" enctype="multipart/form-data" class="form-inline">').append(
+                    $('<input type="hidden" name="csid" value="">'),
+                    $('<input type="hidden" name="msgref" value="">'),
+                    $('<input type="hidden" name="sendtype" value="">').val(mailAPI.SENDTYPE.NORMAL),
+                    $('<input type="hidden" name="headers" value="">'),
                     view.leftside,
                     view.rightside
                 )
@@ -664,6 +657,11 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
+        app.setCSID = function (id) {
+            console.log('set csid', id);
+            view.form.find('input[name=csid]').val(id || '');
+        };
+
         app.setMsgRef = function (ref) {
             view.form.find('input[name=msgref]').val(ref || '');
         };
@@ -705,21 +703,23 @@ define('io.ox/mail/write/main',
         };
 
         app.setMail = function (mail) {
-            // be robust
-            mail = mail || {};
-            mail.data = mail.data || {};
-            mail.mode = mail.mode || 'compose';
-            mail.format = mail.format || getDefaultEditorMode();
-            mail.initial = mail.initial || false;
 
-            //config settings
-            mail.data.vcard = mail.data.vcard || settings.get('appendVcard');
+            // defaults
+            mail = _.extend({
+                data: {},
+                mode: 'compose',
+                format: getDefaultEditorMode(),
+                initial: false
+            }, mail);
+
+            // default data
+            var data = mail.data = _.extend({
+                vcard: settings.get('appendVcard'),
+                csid: _.uniqueId() + '.' + _.now() // composition space id
+            }, mail.data);
 
             // Allow extensions to have a go at the data
             ext.point('io.ox/mail/write/initializers/before').invoke('modify', app, new ext.Baton({mail: mail, app: this}));
-
-            // call setters
-            var data = mail.data;
 
             this.setFrom(data);
             this.setSubject(convertAllToUnified(data.subject));
@@ -731,6 +731,7 @@ define('io.ox/mail/write/main',
             this.setNestedMessages(data);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : settings.get('vcard', false));
+            this.setCSID(data.csid);
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
             this.setHeaders(data.headers);
@@ -1101,7 +1102,8 @@ define('io.ox/mail/write/main',
             };
             // add disp_notification_to?
             if (data.disp_notification_to) mail.disp_notification_to = true;
-            // add msgref?
+            // add csid/msgref?
+            if (data.csid) mail.csid = data.csid;
             if (data.msgref) mail.msgref = data.msgref;
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
