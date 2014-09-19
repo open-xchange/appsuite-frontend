@@ -53,6 +53,10 @@ define('io.ox/search/facets/extensions',
             'default': 2,
             standard: 3
         },
+        LABEL = {
+            hide: gt('Hide advanced filters'),
+            show: gt('Show advanced filters')
+        },
         extensions = {
 
             item: function (baton, value, facet) {
@@ -161,7 +165,7 @@ define('io.ox/search/facets/extensions',
                     this.parent().prepend(
                         $('<nav>').append(
                             $('<a data-action="toggle-adv">')
-                                .text(gt('Show advanced filters'))
+                                .text(baton.model.get('showadv') ? LABEL.hide : LABEL.show)
                                 .attr({
                                     tabindex: 1,
                                     role: 'button',
@@ -169,7 +173,7 @@ define('io.ox/search/facets/extensions',
                                 })
                                 .on('click ', function () {
                                     var visible = self.is(':visible');
-                                    $(this).text(visible ? gt('Show advanced filters') : gt('Hide advanced filters'));
+                                    $(this).text(visible ? LABEL.show : LABEL.hide);
                                     baton.model.set('showadv', !visible);
                                     self.toggle();
                                 })
