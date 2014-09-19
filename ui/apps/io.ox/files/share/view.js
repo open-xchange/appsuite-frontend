@@ -68,7 +68,7 @@ define('io.ox/files/share/view', [
         index: INDEX += 100,
         draw: function (baton) {
             this.append(
-                baton.nodes.default.description = $('<p>').addClass('form-group').text(trans[baton.model.get('type', 'mail')])
+                baton.nodes.default.description = $('<p>').addClass('form-group description').text(trans[baton.model.get('type', 'mail')])
             );
         }
     });
@@ -82,12 +82,12 @@ define('io.ox/files/share/view', [
         draw: function (baton) {
             var link = baton.model.get('link', '');
             this.append(
-                $('<p>').append(
-                    baton.nodes.link.link = $('<a>').attr({ href: link, tabindex: 1, target: '_blank' }).text(link).hide()
-                )
+                baton.nodes.link.link = $('<p>').addClass('link').append(
+                    $('<a>').attr({ href: link, tabindex: 1, target: '_blank' }).text(link)
+                ).hide()
             );
             baton.model.on('change:link', function (model, val) {
-                baton.nodes.link.link.text(val).attr('href', val);
+                baton.nodes.link.link.find('a').text(val).attr('href', val);
             });
         }
     });
@@ -305,7 +305,7 @@ define('io.ox/files/share/view', [
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
                         passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
                             .render().$el
-                            .attr({ id: guid, placeholder: gt('Enter Passowrd') })
+                            .attr({ id: guid, placeholder: gt('Enter Password') })
                             .prop('disabled', !baton.model.get('secured'))
                     )
                 )
@@ -354,13 +354,17 @@ define('io.ox/files/share/view', [
                     )
                 )
             );
-            var toggle = dropdown.$el.find('a[data-toggle=dropdown]');
-            toggle.dropdown()
-                .toggleClass('disabled', !baton.model.get('temporary'))
-                .attr({ tabindex: baton.model.get('temporary') ? 1 : -1 });
+            // var toggle = dropdown.$el.find('a[data-toggle=dropdown]');
+            // toggle.dropdown()
+            //     .toggleClass('disabled', !baton.model.get('temporary'))
+            //     .attr({ tabindex: baton.model.get('temporary') ? 1 : -1 });
 
-            baton.model.on('change:temporary', function (model, val) {
-                toggle.toggleClass('disabled', !val).attr({ tabindex: val ? 1 : -1 });
+            // baton.model.on('change:temporary', function (model, val) {
+            //     toggle.toggleClass('disabled', !val).attr({ tabindex: val ? 1 : -1 });
+            // });
+
+            baton.model.on('change:expires', function (model) {
+                model.set('temporary', true);
             });
 
         }

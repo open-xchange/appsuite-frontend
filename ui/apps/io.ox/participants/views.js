@@ -220,7 +220,7 @@ define('io.ox/participants/views', [
             _(this.nodes).chain().values().each(function (node) {
                 row.append(node);
             });
-            self.$el.append(row);
+            self.$el.append(row).toggleClass('empty', this.collection.length === 0);
             return this;
         },
         createParticipantNode: function (participant) {
