@@ -983,42 +983,28 @@ define('io.ox/mail/api',
      */
     api.markSpam = function (list) {
 
-        var collection = pool.get('detail');
+        prepareRemove(list);
 
-        api.trigger('beforedelete', list);
-
-        _(list).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
+        // reset spam folder
+        // we assume that the spam handler will move the message to the spam folder
+        _(pool.getByFolder(accountAPI.getFoldersByType('spam'))).each(function (collection) {
+            collection.expired = true;
         });
 
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: true })
-            .then(
-                function sucess() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
     };
 
     api.noSpam = function (list) {
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: false })
-            .then(
-                function success() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+
+        prepareRemove(list);
+
+        // reset inbox
+        // we assume that the spam handler will move the message (back) to the inbox
+        _(pool.getByFolder(accountAPI.getFoldersByType('inbox'))).each(function (collection) {
+            collection.expired = true;
+        });
+
+        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
     };
 
     /**
