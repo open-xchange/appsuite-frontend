@@ -55,13 +55,13 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                 models = _(this.collection.filter(this.getFilter())),
                 exists = {};
 
-            // recycle existing nodes
+            // recycle existing nodes / use detach to keep events
             this.$.subfolders.children().each(function () {
-                exists[$(this).attr('data-id')] = $(this).data('view');
+                exists[$(this).attr('data-id')] = $(this).detach().data('view');
             });
 
-            // empty & append nodes
-            this.$.subfolders.empty().append(
+            // append nodes
+            this.$.subfolders.append(
                 models.map(function (model) {
                     return (exists[model.id] || this.getTreeNode(model).render()).$el;
                 }, this)
