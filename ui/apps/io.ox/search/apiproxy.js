@@ -83,7 +83,7 @@ define('io.ox/search/apiproxy',
 
                 var whitelist = {
                         style: ['simple'],
-                        id: ['contacts', 'contact', 'participant', 'participant']
+                        id: ['contacts', 'contact', 'participant', 'task_participants']
                     };
 
                 // flag  facet
