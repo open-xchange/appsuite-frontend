@@ -500,8 +500,7 @@ define('io.ox/tasks/main',
          * Drag and Drop support
          */
         'drag-n-drop': function (app) {
-            if (_.device('!touch')) return;
-            // drag & drop
+            if (_.device('touch')) return;
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
                 actions.invoke('io.ox/tasks/actions/move', null, baton);
             });
