@@ -378,8 +378,9 @@ define('io.ox/search/facets/extensions',
                 if (_.contains(facet.flags, 'highlander')) {
                     this.on('click', function () {
                         var sidepanel = $(this).closest('.window-sidepanel'),
-                            field = sidepanel.find('.search-field');
-                        field.val((facet.item || facet).name);
+                            field = sidepanel.find('.search-field'),
+                            key = Object.keys(facet.values)[0];
+                        field.val(facet.values[key].name);
                     });
                 }
 
