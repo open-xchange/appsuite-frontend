@@ -19,19 +19,15 @@ define('io.ox/calendar/edit/view-main', [
     'use strict';
 
     var CommonView = views.point('io.ox/calendar/edit/section').createView({
-        tagName: 'div',
+
+        tagName: 'form',
+
         className: 'io-ox-calendar-edit container default-content-padding',
+
         render: function () {
-            var self = this;
-            var rows = [];
-            var rowPerExtensionId = {};
-
-            if (_.device('smartphone')) {
-                ext.point('io.ox/calendar/edit/section/buttons').disable('save');
-                ext.point('io.ox/calendar/edit/section/buttons').disable('discard');
-            }
-
-            ext.point('io.ox/calendar/edit/section/header').invoke('draw', self.$el, self.baton);
+            var self = this,
+                rows = [],
+                rowPerExtensionId = {};
 
             this.point.each(function (extension) {
                 var row = null;
@@ -48,6 +44,7 @@ define('io.ox/calendar/edit/view-main', [
                 rowPerExtensionId[extension.id] = row;
                 row.push(extension);
             });
+
             _(rows).each(function (row) {
                 var $rowNode = $('<div class="row">').appendTo(self.$el);
                 _(row).each(function (extension) {
@@ -56,11 +53,9 @@ define('io.ox/calendar/edit/view-main', [
                 });
             });
 
-            if (_.device('smartphone')) {
-                ext.point('io.ox/calendar/edit/bottomToolbar').invoke('draw', self.$el, self.baton);
-            }
             return this;
         }
+
     });
 
     return CommonView;

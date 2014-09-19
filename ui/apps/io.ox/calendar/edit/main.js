@@ -26,7 +26,12 @@ define('io.ox/calendar/edit/main', [
 
     function createInstance() {
 
-        var app = ox.ui.createApp({ name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true, closable: true });
+        var app = ox.ui.createApp({
+            name: 'io.ox/calendar/edit',
+            title: 'Edit Appointment',
+            userContent: true,
+            closable: true
+        });
 
         _.extend(app, {
 
