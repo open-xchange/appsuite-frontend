@@ -714,7 +714,7 @@ define('io.ox/mail/write/main',
             // default data
             var data = mail.data = _.extend({
                 vcard: settings.get('appendVcard'),
-                csid: _.uniqueId() + '.' + _.now() // composition space id
+                csid: mailAPI.csid() // composition space id
             }, mail.data);
 
             // Allow extensions to have a go at the data
