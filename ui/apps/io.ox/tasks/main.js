@@ -521,10 +521,10 @@ define('io.ox/tasks/main',
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
 
-            require(['io.ox/search/main'], function (facetedsearch) {
-                //register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
-            });
+            win.facetedsearch.ready
+                .done(function (search) {
+                    commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
+                });
         }
     });
 

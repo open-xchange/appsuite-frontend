@@ -471,8 +471,7 @@ define('io.ox/calendar/main',
 
             // when search is ready
             win.facetedsearch.ready
-                .done(function () {
-                    require(['io.ox/search/main'], function (facetedsearch) {
+                .done(function (facetedsearch) {
                         var lastPerspective,
                             SEARCH_PERSPECTIVE = 'list',
                             cancelSearch = function () {
@@ -503,7 +502,6 @@ define('io.ox/calendar/main',
                                 // disable
                                 app.props.off('change', cancelSearch);
                             }
-                        });
                     });
                 });
         },

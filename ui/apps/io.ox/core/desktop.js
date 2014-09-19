@@ -1757,53 +1757,69 @@ define('io.ox/core/desktop',
                         }
                     });
 
-                // draw searchfield
-                ext.point(win.name + '/facetedsearch/view').invoke('draw', win, ext.Baton.ensure({}));
+                    ext.point(win.name + '/facetedsearch/view').extend({
+                        id: 'lazy-load',
+                        index: 400,
+                        draw: function () {
 
-                require(['io.ox/search/quickstart'], function (quickstart) {
-                    quickstart.run(win)
-                        .done(function () {
-                            // get view
-                            var view = win.facetedsearch.view;
+                            var field = this.nodes.facetedsearch.toolbar.find('.search-field'),
+                                run = function () {
+                                    require(['io.ox/search/quickstart'], function (quickstart) {
+                                        //if (true) return;
+                                        quickstart.run(win)
+                                            .done(function () {
+                                                //field.off('focus', run);
+                                                // get view
+                                                var view = win.facetedsearch.view;
 
-                            //events: app resume cancels search mode
-                            win.app.on('resume', function () {
-                                if (win.facetedsearch.active) {
-                                    view.trigger('button:cancel');
-                                }
-                            });
+                                                //events: app resume cancels search mode
+                                                win.app.on('resume', function () {
+                                                    if (win.facetedsearch.active) {
+                                                        view.trigger('button:cancel');
+                                                    }
+                                                });
 
-                            // events: internal
-                            view.on({
-                                'query':
-                                    _.debounce(function (e, appname) {
-                                        // one search app, one model but multiple views
-                                        if (win.app.get('name') === appname) {
-                                            win.facetedsearch.open();
-                                            if (e.type === 'query') win.trigger('search:query');
-                                        }
-                                    }, 10
-                                ),
-                                'button:clear': function () {
-                                    win.facetedsearch.clear();
-                                },
-                                'button:cancel': function () {
-                                    win.facetedsearch.cancel();
-                                }
-                            });
+                                                // events: internal
+                                                view.on({
+                                                    'query':
+                                                        _.debounce(function (e, appname) {
+                                                            // one search app, one model but multiple views
+                                                            if (win.app.get('name') === appname) {
+                                                                win.facetedsearch.open();
+                                                                if (e.type === 'query') win.trigger('search:query');
+                                                            }
+                                                        }, 10
+                                                    ),
+                                                    'button:clear': function () {
+                                                        win.facetedsearch.clear();
+                                                    },
+                                                    'button:cancel': function () {
+                                                        win.facetedsearch.cancel();
+                                                    }
+                                                });
 
-                            // events: redirect
-                            view.model.on({
-                                'query': function (appname) {
-                                    view.trigger('query', appname);
-                                },
-                                'cancel': function (appname) {
-                                    view.trigger('button:cancel', appname);
-                                }
-                            });
-                            win.trigger('search:loaded');
+                                                // events: redirect
+                                                view.model.on({
+                                                    'query': function (appname) {
+                                                        view.trigger('query', appname);
+                                                    },
+                                                    'cancel': function (appname) {
+                                                        view.trigger('button:cancel', appname);
+                                                    }
+                                                });
+                                                win.trigger('search:loaded');
+                                        });
+                                    });
+                                };
+
+                            // lazy load search app when search field gets the focus for the first time
+                            field.one('focus', run);
+
+                        }
                     });
-                });
+
+                // draw searchfield and attach lazy load listener
+                ext.point(win.name + '/facetedsearch/view').invoke('draw', win, ext.Baton.ensure({}));
 
             }
 

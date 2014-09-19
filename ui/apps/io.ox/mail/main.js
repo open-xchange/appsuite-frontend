@@ -1030,58 +1030,61 @@ define('io.ox/mail/main',
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
 
-            require(['io.ox/search/main',  'io.ox/core/api/collection-loader'], function (search, CollectionLoader) {
+            win.facetedsearch.ready
+                .done(function (search) {
+                    require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
 
-                // define collection loader for search results
-                var collectionLoader = new CollectionLoader({
-                        module: 'mail',
-                        mode: 'search',
-                        fetch: function () {
-                            var params = { sort: app.props.get('sort'), order: app.props.get('order') };
-                            return search.apiproxy.query(true, params).then(function (response) {
-                                return response && response.results ? response.results : [];
-                            });
-                        },
-                        getQueryParams: function (params) {
-                            // paging support
-                            search.model.set('start', params.offset || 0, {silent: true});
-                            return {};
-                        },
-                        cid: function () {
-                            return 'search/' + search.model.getCompositeId() +
-                                '&sort=' + app.props.get('sort') +
-                                '&order=' + app.props.get('order');
-                        },
-                        each: function (obj) {
-                            api.processThreadMessage(obj);
-                        }
-                    });
-
-                // events
-                win.facetedsearch.ready
-                    .done(function () {
-                        var view = win.facetedsearch.view;
-                        view.on({
-                            'query': _.debounce(function (e, appname) {
-                                if (appname === app.get('name')) {
-                                    // connect
-                                    if (app.listView.loader.mode !== 'search') {
-                                        app.listView.connect(collectionLoader);
-                                    }
-                                    app.listView.load();
-                                    win.facetedsearch.focus();
+                        // define collection loader for search results
+                        var collectionLoader = new CollectionLoader({
+                                module: 'mail',
+                                mode: 'search',
+                                fetch: function () {
+                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                    return search.apiproxy.query(true, params).then(function (response) {
+                                        return response && response.results ? response.results : [];
+                                    });
+                                },
+                                getQueryParams: function (params) {
+                                    // paging support
+                                    search.model.set('start', params.offset || 0, {silent: true});
+                                    return {};
+                                },
+                                cid: function () {
+                                    return 'search/' + search.model.getCompositeId() +
+                                        '&sort=' + app.props.get('sort') +
+                                        '&order=' + app.props.get('order');
+                                },
+                                each: function (obj) {
+                                    api.processThreadMessage(obj);
                                 }
-                            }, 10),
-                            'focus': function () {
-                                // register collection loader
-                            }
-                        });
-                });
+                            });
 
-                win.on('search:cancel', function () {
-                    app.listView.connect(api.collectionLoader);
-                    app.listView.load();
-                });
+                        // events
+                        win.facetedsearch.ready
+                            .done(function () {
+                                var view = win.facetedsearch.view;
+                                view.on({
+                                    'query': _.debounce(function (e, appname) {
+                                        if (appname === app.get('name')) {
+                                            // connect
+                                            if (app.listView.loader.mode !== 'search') {
+                                                app.listView.connect(collectionLoader);
+                                            }
+                                            app.listView.load();
+                                            win.facetedsearch.focus();
+                                        }
+                                    }, 10),
+                                    'focus': function () {
+                                        // register collection loader
+                                    }
+                                });
+                        });
+
+                        win.on('search:cancel', function () {
+                            app.listView.connect(api.collectionLoader);
+                            app.listView.load();
+                        });
+                    });
             });
         }
     });
