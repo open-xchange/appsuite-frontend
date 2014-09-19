@@ -376,18 +376,17 @@ define('io.ox/mail/compose/extensions',
 
             return function (baton) {
                 if (capabilities.has('infostore')) {
-                    var dropdown = new Dropdown({ label: gt('Attachments'), caret: true });
+                    var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
+                        fileInput = $('<input type="file" name="file">').css('display', 'none')
+                            .on('change', addLocalFile.bind(this, baton.model))
+                            .prop('multiple', true);
 
                     this.append(
+                        fileInput,
                         dropdown.append(
-                            // must be <span>; <a href> doesn't work
-                            $('<span role="button" class="hidden-file-picker">').append(
-                                $.txt(gt('Add local file')),
-                                // file input
-                                $('<input type="file" name="file" tabindex="1">')
-                                    .on('change', addLocalFile.bind(this, baton.model))
-                                    .prop('multiple', true)
-                            )
+                            $('<a href="#">').append($.txt(gt('Add local file'))).on('click', function () {
+                                fileInput.trigger('click');
+                            })
                         )
                         .link('add-file', gt('Add from Drive'), openFilePicker.bind(this, baton.model))
                         .render().$el
