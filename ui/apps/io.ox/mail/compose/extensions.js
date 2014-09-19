@@ -262,7 +262,7 @@ define('io.ox/mail/compose/extensions', [
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        input = $('<input class="form-control">').val(baton.model.get('subject')).attr({
+                        input = $('<input type="text" class="form-control">').val(baton.model.get('subject')).attr({
                             id: guid,
                             tabindex: 1
                         })
