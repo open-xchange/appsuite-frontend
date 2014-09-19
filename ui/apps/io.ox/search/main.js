@@ -63,15 +63,17 @@ define('io.ox/search/main',
         }
     });
 
-    ext.point('io.ox/search/main').extend({
-        index: 500,
-        id: 'switches',
-        config: function (data) {
-            data.switches = {
-                //keepinput: true
-            };
-        }
-    });
+    // ext.point('io.ox/search/main').extend({
+    //     index: 500,
+    //     id: 'flags',
+    //     config: function (data) {
+    //         // limit active facets to 1
+    //         data.flags = (data.flags || []).concat('singleton');
+    //         // keep input value after selecting facet from dropdown
+    //         data.switches = (data.switches || {});
+    //         data.switches.keepinput = true;
+    //     }
+    // });
 
     function openSidePopup(popup, e, target) {
         var id = target.attr('data-id'),

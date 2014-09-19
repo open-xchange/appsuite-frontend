@@ -77,7 +77,7 @@ define('io.ox/search/autocomplete/extensions',
                             value = node.data();
 
                         // empty input field
-                        if (!model.getOptions().switches.keepinput)
+                        if (!(model.getOptions().switches || {}).keepinput)
                             ref.val('');
 
                         // exclusive: define used option (type2 default is index 0 of options)

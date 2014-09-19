@@ -139,6 +139,23 @@ define('io.ox/search/model',
             }
         }
 
+        var last;
+        if (_.contains(this.getOptions().flags, 'singleton')) {
+            for (i = list.length - 1; i >= 0; i--) {
+                var data = list[i],
+                    facet = pool[data.facet];
+                if (facet.id !== 'folder' && !_.contains(facet.flags, 'advanced')) {
+                    if (last) {
+                        list.splice(i, 1);
+                        delete facet.values[data.value];
+                    } else {
+                        last = true;
+                    }
+                }
+
+            }
+        }
+
         // update
         this.set('pooldisabled', disabled, {silent: true});
         this.set('pool', pool);
