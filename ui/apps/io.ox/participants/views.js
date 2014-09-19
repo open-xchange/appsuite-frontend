@@ -40,7 +40,7 @@ define('io.ox/participants/views', [
             this.nodes = {
                 $img: $('<div>'),
                 $text: $('<div class="participant-name">'),
-                $mail: $('<a class="participant-email">'),
+                $mail: this.options.halo ? $('<a class="participant-email">') : $('<span class="participant-email">'),
                 $extra: $('<a class="extra-decorator">'),
                 $removeButton: $('<a href="#" class="remove" tabindex="1"><div class="icon"><i class="fa fa-trash-o"></i></div></a>')
             };
@@ -199,6 +199,7 @@ define('io.ox/participants/views', [
         tagName: 'div',
         className: 'participantsrow col-xs-12',
         initialize: function (options) {
+            _.extend({ halo: true }, options);
             options.collection.on('add remove reset', _.bind(this.updateContainer, this));
         },
         render: function () {
@@ -226,8 +227,8 @@ define('io.ox/participants/views', [
             return new ParticipantEntryView({
                 model: participant,
                 baton: this.options.baton,
-                className: 'col-xs-12 col-sm-6',
-                halo: true,
+                className: 'col-xs-12 col-sm-' + (this.options.singlerow ? 12 : 6),
+                halo: this.options.halo,
                 callbacks: this.options.baton.callbacks || {}
             }).render().$el;
         },

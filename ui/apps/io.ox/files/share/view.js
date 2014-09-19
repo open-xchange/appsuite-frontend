@@ -44,7 +44,7 @@ define('io.ox/files/share/view', [
         draw: function (baton) {
             var typeTranslations = {
                 mail: gt('Invite people'),
-                link: gt('Get a Link')
+                link: gt('Get a link')
             };
 
             var dropdown = new Dropdown({ model: baton.model, label: typeTranslations[baton.model.get('type')], caret: true })
@@ -55,7 +55,7 @@ define('io.ox/files/share/view', [
                 });
 
             this.append(
-                dropdown.render().$el.addClass('form-group')
+                dropdown.render().$el
             );
         }
     });
@@ -68,8 +68,27 @@ define('io.ox/files/share/view', [
         index: INDEX += 100,
         draw: function (baton) {
             this.append(
-                baton.nodes.default.description = $('<p>').text(trans[baton.model.get('type', 'mail')])
+                baton.nodes.default.description = $('<p>').addClass('form-group').text(trans[baton.model.get('type', 'mail')])
             );
+        }
+    });
+
+    /*
+     * extension point for share link
+     */
+    ext.point(POINT + '/fields').extend({
+        id: 'link',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var link = baton.model.get('link', '');
+            this.append(
+                $('<p>').append(
+                    baton.nodes.link.link = $('<a>').attr({ href: link, tabindex: 1, target: '_blank' }).text(link).hide()
+                )
+            );
+            baton.model.on('change:link', function (model, val) {
+                baton.nodes.link.link.text(val).attr('href', val);
+            });
         }
     });
 
@@ -130,14 +149,14 @@ define('io.ox/files/share/view', [
             var guid = _.uniqueId('form-control-label-'),
                 input = $('<input>').attr({
                     id: guid,
-                    placeholder: gt('Add mail address'),
+                    placeholder: gt('Add recipients ...'),
                     type: 'text',
                     tabindex: 1
                 }).addClass('form-control');
 
             this.append(
                 baton.nodes.invite.autocomplete = $('<div class="form-group">').append(
-                    $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add mail address')),
+                    $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
                     input
                 )
             );
@@ -189,7 +208,9 @@ define('io.ox/files/share/view', [
             this.append(
                 baton.nodes.invite.container = new pViews.UserContainer({
                     collection: baton.model.getRecipients(),
-                    baton: baton
+                    baton: baton,
+                    singlerow: true,
+                    halo: false
                 }).render().$el.addClass('form-group')
             );
         }
@@ -205,14 +226,15 @@ define('io.ox/files/share/view', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 baton.nodes.invite.message = $('<div>').addClass('form-group').append(
-                    $('<label>').addClass('control-label sr-only').text(gt('Message')).attr({ for: guid }),
+                    $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid }),
                     new miniViews.TextView({
                         name: 'message',
                         model: baton.model
                     }).render().$el.attr({
                         id: guid,
                         rows: 3,
-                        placeholder: gt('Message')
+                        //#. placeholder text in share dialog
+                        placeholder: gt('Message (optional)')
                     })
                 )
             );
@@ -232,7 +254,7 @@ define('io.ox/files/share/view', [
             this.append(
                 $('<a href="#" tabindex=1>').append(
                     icon,
-                    $('<span>').text(gt('Advanced'))
+                    $('<span>').text(gt('Advanced options'))
                 ).click(function () {
                     optionGroup.toggle();
                     icon.toggleClass('fa-caret-right fa-caret-down');
@@ -270,12 +292,15 @@ define('io.ox/files/share/view', [
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-'), passInput;
             this.append(
-                $('<div>').addClass('form-group').append(
-                    $('<div>').addClass('checkbox').append(
-                        $('<label>').addClass('control-label').text(gt('Password required')).append(
-                            new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
+                $('<div>').addClass('form-inline passwordgroup').append(
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('checkbox-inline').append(
+                            $('<label>').addClass('control-label').text(gt('Password required')).append(
+                                new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
+                            )
                         )
                     ),
+                    $.txt(' '),
                     $('<div>').addClass('form-group').append(
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
                         passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
@@ -323,19 +348,19 @@ define('io.ox/files/share/view', [
                     $('<div>').addClass('checkbox-inline').append(
                         $('<label>').text(gt('Expires in')).append(
                             new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
-                        )
-                    ),
-                    $.txt(' '),
-                    dropdown.render().$el.addClass('inline dropup')
+                        ),
+                        $.txt(' '),
+                        dropdown.render().$el.addClass('inline dropup')
+                    )
                 )
             );
             var toggle = dropdown.$el.find('a[data-toggle=dropdown]');
-            toggle.dropdown().toggleClass('disabled', !baton.model.get('temporary'));
+            toggle.dropdown()
+                .toggleClass('disabled', !baton.model.get('temporary'))
+                .attr({ tabindex: baton.model.get('temporary') ? 1 : -1 });
 
-            baton.model.on({
-                'change:temporary': function (model, val) {
-                    toggle.toggleClass('disabled', !val);
-                }
+            baton.model.on('change:temporary', function (model, val) {
+                toggle.toggleClass('disabled', !val).attr({ tabindex: val ? 1 : -1 });
             });
 
         }
@@ -358,15 +383,31 @@ define('io.ox/files/share/view', [
                 view: this,
                 nodes: {
                     invite: {},
+                    link: {},
                     default: {}
                 }
             });
-            this.model.on('change:type', function (model, val) {
-                _(self.baton.nodes.invite).each(function (el) {
-                    el.toggle(val === 'mail');
-                });
-                self.baton.nodes.default.description.text(trans[val]);
+            this.model.on({
+                'change:type': function (model, val) {
+                    // toggle autocomplete and message input
+                    _(self.baton.nodes.invite).each(function (el) {
+                        el.toggle(val === 'mail');
+                    });
+                    _(self.baton.nodes.link).each(function (el) {
+                        el.toggle(val === 'link');
+                    });
+
+                    self.baton.nodes.default.description.text(trans[val]);
+
+                    // generate link if empty
+                    if (val === 'link' && model.get('link', '') === '') {
+                        model.generateLink().then(function (link) {
+                            model.set('link', link);
+                        });
+                    }
+                }
             });
+
         },
 
         render: function () {

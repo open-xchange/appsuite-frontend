@@ -42,8 +42,13 @@ define('io.ox/files/share/model', [
                 secured: false,
                 password: '',
                 temporary: false,
-                expires: 0
+                expires: 2,
+                link: ''
             };
+        },
+
+        generateLink: function () {
+            return $.Deferred().resolve('https://appsuite.open-xchange.com/share?secret=1234');
         },
 
         getRecipients: function () {
