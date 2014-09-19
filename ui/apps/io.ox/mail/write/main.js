@@ -658,7 +658,6 @@ define('io.ox/mail/write/main',
         };
 
         app.setCSID = function (id) {
-            console.log('set csid', id);
             view.form.find('input[name=csid]').val(id || '');
         };
 
