@@ -138,8 +138,6 @@ module.exports = function (grunt) {
                              'apps/io.ox/core/collection.js',
                              'apps/io.ox/core/extPatterns/actions.js',
                              'apps/io.ox/core/api/account.js',
-                             'apps/io.ox/filter/folder.js',
-                             'apps/io.ox/core/tk/folderviews.js',
                              'apps/io.ox/core/tk/selection.js',
                              // core
                              'apps/io.ox/core/main.js',
