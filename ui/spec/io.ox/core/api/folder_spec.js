@@ -101,17 +101,24 @@ define(['shared/examples/for/api',
                 }
             };
 
-        // doesn't work (yet) just because some settings are missing
-        describe.skip('default folders', function () {
+        describe('default folders', function () {
 
             it('should provide the mail folder as default', function () {
+                require('settings!io.ox/mail').set('folder/inbox', 'default0/INBOX');
                 var folder_id = api.getDefaultFolder();
                 expect(folder_id).to.equal('default0/INBOX');
             });
 
             it('should know about the mail folder', function () {
+                require('settings!io.ox/mail').set('folder/inbox', 'default0/INBOX');
                 var folder_id = api.getDefaultFolder('mail');
                 expect(folder_id).to.equal('default0/INBOX');
+            });
+
+            it('should get default folder for specific type from settings', function () {
+                require('settings!io.ox/core').set('folder/myType', 'testFolder');
+                var folder_id = api.getDefaultFolder('myType');
+                expect(folder_id).to.equal('testFolder');
             });
         });
 

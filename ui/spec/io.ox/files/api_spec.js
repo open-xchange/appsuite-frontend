@@ -28,8 +28,7 @@ define(['io.ox/files/api',
         return (!def.reject && !!def.done);
     }
 
-    var jexpect = this.expect,
-        sinon = wrapper.create(),
+    var sinon = wrapper.create(),
         locked = $.extend({}, unlocked, {
             id: '4710',
             //in 3 days
@@ -76,10 +75,6 @@ define(['io.ox/files/api',
         };
 
     describe('files API', function () {
-
-        //use shared examples
-        sharedExamplesFor(api);
-
         //tracker
         describe('has a tracker', function () {
             var tracker = api.tracker;
@@ -244,9 +239,7 @@ define(['io.ox/files/api',
                     var def = api.caches.versions.clear();
 
                     //wait for caches to be clear, then procceed
-                    waitsFor(function () {
-                        return def.state() === 'resolved';
-                    }).then(function () {
+                    return def.then(function () {
                         setupFakeServer(this.server);
                     }.bind(this));
                 });
@@ -274,7 +267,7 @@ define(['io.ox/files/api',
                     });
                 });
                 it('and use promises to finally return data', function () {
-                    jexpect(isPromise(api.versions(locked))).to.be.true;
+                    expect(isPromise(api.versions(locked))).to.be.true;
                     return isRejected(api.versions()).done(function () {
                         return api.versions(locked).done(function (data) {
                             expect(data).to.not.be.empty;
@@ -287,30 +280,30 @@ define(['io.ox/files/api',
                     });
                     it('after calling detach', function () {
                         var def = api.detach($.extend({}, locked, { version: '1' }));
-                        return def.done(function () {
-                            expect(api.propagate.callCount).to.equal(1);
+                        return def.then(function () {
+                            expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
                     xit('after calling lock', function () {
                         var def = api.lock(locked);
-                        jexpect(def).toResolveWith(function () {
-                            return api.propagate.callCount === 1;
+                        return def.then(function () {
+                            expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
                     xit('after calling upload file', function () {
                         var def = api.uploadFile(locked);
-                        jexpect(def).toResolveWith(function () {
+                        expect(def).toResolveWith(function () {
                             return api.propagate.callCount === 1;
                         });
                     });
                 });
             });
             it('that return promises', function () {
-                jexpect(isPromise(api.detach(locked))).to.be.true;
-                jexpect(isPromise(api.uploadNewVersion(locked))).to.be.true;
-                jexpect(isPromise(api.uploadNewVersionOldSchool({ form: $('<div>'), json: '', file: '', id: '' }))).to.be.true;
-                jexpect(isPromise(api.update(locked))).to.be.true;
-                jexpect(isPromise(api.uploadFile(locked))).to.be.true;
+                expect(isPromise(api.detach(locked))).to.be.true;
+                expect(isPromise(api.uploadNewVersion(locked))).to.be.true;
+                expect(isPromise(api.uploadNewVersionOldSchool({ form: $('<div>'), json: '', file: '', id: '' }))).to.be.true;
+                expect(isPromise(api.update(locked))).to.be.true;
+                expect(isPromise(api.uploadFile(locked))).to.be.true;
             });
             it('that reject on missing arguments', function () {
                 return $.when(isRejected(api.detach()),
@@ -328,10 +321,10 @@ define(['io.ox/files/api',
                 //TODO
             });
             it('that return promises', function () {
-                jexpect(isPromise(api.lock(locked))).to.be.true;
-                jexpect(isPromise(api.unlock(locked))).to.be.true;
-                jexpect(isPromise(api.copy(locked))).to.be.true;
-                jexpect(isPromise(api.move(locked))).to.be.true;
+                expect(isPromise(api.lock(locked))).to.be.true;
+                expect(isPromise(api.unlock(locked))).to.be.true;
+                expect(isPromise(api.copy(locked))).to.be.true;
+                expect(isPromise(api.move(locked))).to.be.true;
             });
             it('that reject on missing arguments', function () {
                 //TODO
