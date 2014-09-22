@@ -462,7 +462,6 @@ define.async('io.ox/realtime/rt',
                     console.log('Enqueueing receipt ' + stanza.seq);
                 }
                 ackBuffer[Number(stanza.seq)] = 1;
-                purge();
             }
             if (serverSequenceThreshhold === -1 && stanza.seq > 0) {
                 serverSequenceThreshhold = stanza.seq - 1;
@@ -561,9 +560,11 @@ define.async('io.ox/realtime/rt',
 
         if (resp.stanzas && !_.isEmpty(resp.stanzas)) {
             lastDelivery = _.now();
+
             _(resp.stanzas).each(function (s) {
                 received(new RealtimeStanza(s));
             });
+            purge();
         }
 
         if (resp.result) {
