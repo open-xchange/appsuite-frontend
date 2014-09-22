@@ -49,7 +49,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
         });
 
         _(userAgents.invalid).each(function (a, number) {
-            it.skip('should use the fallback "unknown" if an unknown or broken user agent occurs', function () {
+            it('should use the fallback "unknown" if an unknown or broken user agent occurs', function () {
                 var spy = sinon.stub(console, 'warn', function () {});
                 _.device.loadUA(userAgents.invalid[number]);
                 //FIXME: really test spy
