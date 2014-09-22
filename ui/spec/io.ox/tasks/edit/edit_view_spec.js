@@ -11,10 +11,13 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define(['io.ox/tasks/edit/main',
-        'io.ox/core/date',
-        'gettext!io.ox/tasks/edit',
-        'spec/shared/capabilities'], function (edit, date, gt, caputil) {
+define([
+    'io.ox/tasks/edit/main',
+    'io.ox/core/date',
+    'gettext!io.ox/tasks/edit',
+    'spec/shared/capabilities',
+    'waitsFor'
+], function (edit, date, gt, caputil, waitsFor) {
 
     var app,
         view,
@@ -90,9 +93,14 @@ define(['io.ox/tasks/edit/main',
                 expect(node.find('.private-flag').length).to.equal(1);
                 expect(node.find('.private-flag input[type="checkbox"]').length).to.equal(1);
             });
-            it('a correct participants tab', function () {//needs tasks delegate capability
-                expect(node.find('.task-participant-input-field').length, 'input field elements').to.equal(1);
-                expect(node.find('.participantsrow').length, 'row elements').to.equal(1);
+            it('a correct participants tab', function () {
+                //wait a little, until everything is painted (paint is async)
+                return waitsFor(function () {
+                    return node.find('.task-participant-input-field').length;
+                }).then(function () {
+                    expect(node.find('.task-participant-input-field').length, 'input field elements').to.equal(1);
+                    expect(node.find('.participantsrow').length, 'row elements').to.equal(1);
+                });
             });
             it('a correct details tab', function () {
                 expect(node.find('[data-extension-id="target_duration"]').length).to.equal(1);

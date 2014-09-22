@@ -12,9 +12,10 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define(['shared/examples/for/api',
-       'io.ox/tasks/api',
-       'fixture!io.ox/tasks/apiTestData.json'
+    'io.ox/tasks/api',
+    'fixture!io.ox/tasks/apiTestData.json'
 ], function (sharedExamplesFor, api, apiTestData) {
+    'use strict';
 
     describe('Tasks API', function () {
 
