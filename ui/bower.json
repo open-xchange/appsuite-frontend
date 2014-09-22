@@ -15,7 +15,7 @@
     "underscore": "1.6.0",
     "mediaelement": "2.15.0",
     "bootstrap": "3.1.1",
-    "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#7d8d91a94452d4a7856ca2882a2e17e6b3266aca",
+    "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#1cba48a2b711d4288f641a5a15e6508b8e3b2bde",
     "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git#304421b880ed990bada46c858b6fbdeec662dee3",
     "font-awesome": "4.2.0",
     "open-sans-fontface": "1.1.0",
