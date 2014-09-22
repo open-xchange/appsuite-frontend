@@ -501,9 +501,10 @@ define('io.ox/search/facets/extensions',
                                         weekStar: dateAPI.locale.weekStart,
                                         //orientation: 'top left auto',
                                         autoclose: true,
-                                        clearBtn: true,
+                                        clearBtn: false,
                                         todayHighlight: true,
-                                        todayBtn: true
+                                        //insert date when clicked
+                                        todayBtn: 'linked'
                                     })
                                     .on('show', function (e) {
                                         // position container (workaround)
