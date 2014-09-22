@@ -805,7 +805,7 @@ define('io.ox/mail/api',
             })
             .done(function () {
                 api.trigger('refresh.color', list);
-                api.trigger('refresh.list');
+                api.trigger('refresh.all');
             });
     };
 
