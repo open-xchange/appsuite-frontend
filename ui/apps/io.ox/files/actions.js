@@ -167,22 +167,21 @@ define('io.ox/files/actions',
         },
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
-            filterUnsupported(list).done(function (filtered) {
-                if (filtered.length === 1) {
-                    var o = _.first(filtered);
-                    require(['io.ox/core/download'], function (download) {
-                        download.file(o);
-                    });
-                } else if (filtered.length > 1) {
-                    require(['io.ox/core/download'], function (download) {
-                        download.files(filtered);
-                    });
-                }
-                // 'description only' items
-                if (filtered.length === 0 || list.length !== filtered.length) {
-                    notifications.yell('info', gt('Items without a file can not be downloaded.'));
-                }
-            });
+            var filtered = filterUnsupported(list);
+            if (filtered.length === 1) {
+                var o = _.first(filtered);
+                require(['io.ox/core/download'], function (download) {
+                    download.file(o);
+                });
+            } else if (filtered.length > 1) {
+                require(['io.ox/core/download'], function (download) {
+                    download.files(filtered);
+                });
+            }
+            // 'description only' items
+            if (filtered.length === 0 || list.length !== filtered.length) {
+                notifications.yell('info', gt('Items without a file can not be downloaded.'));
+            }
         }
     });
 
@@ -201,23 +200,12 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
+            // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
-            filterUnsupported(list).done(function (filtered) {
-                // loop over list, get full file object and open new window
-                _(filtered).each(function (o) {
-                    api.get(o).done(function (file) {
-                        if (o.version) {
-                            file = _.extend({}, file, { version: o.version });
-                        }
-                        window.open(api.getUrl(file, 'open'));
-                    });
-                });
-                //'description only' items
-                if (list.length === 0 || filtered.length !== list.length) {
-                    notifications.yell('info', gt('Items without a file can not be opened.'));
-                }
+            _(list).each(function (file) {
+                window.open(api.getUrl(file, 'open'));
             });
         }
     });
@@ -1118,10 +1106,8 @@ define('io.ox/files/actions',
      * @return {deferred} resolves as array
      */
     function filterUnsupported(list) {
-        return api.getList(list, false).then(function (data) {//no cache use here or just the current version is returned
-            return _(data).filter(function (obj) {
-                return !_.isEmpty(obj.filename) || obj.file_size > 0;
-            });
+        return _(list).filter(function (obj) {
+            return !_.isEmpty(obj.filename) || obj.file_size > 0;
         });
     }
 
