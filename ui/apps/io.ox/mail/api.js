@@ -848,7 +848,8 @@ define('io.ox/mail/api',
             api.trigger('update:' + _.ecid(obj), obj);
         });
 
-        return tracker.update(list, function (obj) {
+        return http.wait(
+            tracker.update(list, function (obj) {
                 obj.color_label = label;
                 tracker.setColorLabel(obj);
             })
@@ -857,8 +858,9 @@ define('io.ox/mail/api',
             })
             .done(function () {
                 api.trigger('refresh.color', list);
-                api.trigger('refresh.list');
-            });
+                api.trigger('refresh.all');
+            })
+        );
     };
 
     /**
