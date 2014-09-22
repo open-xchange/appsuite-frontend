@@ -282,22 +282,42 @@ define('plugins/portal/xing/register',
         },
 
         load: function (baton) {
-            return api.getUserfeed({
+            var def = $.Deferred();
+            api.getUserfeed({
                     user_fields: '0,1,2,3,4,8,23' //name variations, page_name and picture
                 }).then(function (xingResponse) {
-//                    console.log('LOAD', JSON.stringify(xingResponse));
                     baton.data = xingResponse;
+                    def.resolve(xingResponse);
+                }).fail(function (error) {
+                    if (error.error_params[0] === 'Invalid OAuth token') {
+                        if(keychain.getStandardAccount('xing')) {
+                            baton.reauthorize = true;
+                            def.resolve();
+                            return;
+                        }
+                    }
+                    def.reject(error);
                 });
+            return def;
         },
 
         preview: function (baton) {
             //remove setup that may not have been cleared correctly (may happen if an account was created successfully but callback function wasn't called)
             this.find('.setup-questions').remove();
-            this.append(
-                $('<div class="content preview io-ox-xing pointer">').append(
-                    makeNewsfeed(baton.data.network_activities, {maxCount: MAX_ITEMS_PREVIEW, limitLength: true})
-                ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
-            );
+            if (baton.reauthorize) {
+                this.append($('<div class="content">').append(
+                    $('<a href="#">').text(gt('Click here to reconnect to your xing account to see activities.')).on('click', function () {
+                        reauthorizeAccount();
+                        return false;
+                    })
+                ));
+            } else {
+                this.append(
+                    $('<div class="content preview io-ox-xing pointer">').append(
+                        makeNewsfeed(baton.data.network_activities, {maxCount: MAX_ITEMS_PREVIEW, limitLength: true})
+                    ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
+                );                
+            }
         },
 
         draw: function (baton) {
