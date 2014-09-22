@@ -501,6 +501,27 @@ define('io.ox/mail/api',
         return search.call(this, query, options);
     };
 
+    function prepareRemove(ids, all) {
+
+        var collection = pool.get('detail');
+
+        // fallback
+        all = all || ids;
+
+        if (all.length === 1) {
+            api.threads.touch(all[0]);
+        }
+
+        // we need the original list of ids "all" to also catch threads
+        // that start with an email from the sent folder
+        api.trigger('beforedelete', all);
+
+        _(all).each(function (item) {
+            var cid = _.cid(item), model = collection.get(cid);
+            if (model) collection.remove(model);
+        });
+    }
+
     /**
      * wrapper for factories remove to update counters
      * @param  {array} ids
@@ -930,33 +951,31 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markSpam = function (list) {
+
+        prepareRemove(list);
+
         this.trigger('refresh.pending');
         tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: true })
-            .then(
-                function sucess() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+
+        _(pool.getByFolder(accountAPI.getFoldersByType('spam'))).each(function (collection) {
+            collection.expired = true;
+        });
+
+        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
     };
 
     api.noSpam = function (list) {
+
+        prepareRemove(list);
+
         this.trigger('refresh.pending');
         tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: false })
-            .then(
-                function success() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+
+        _(pool.getByFolder(accountAPI.getFoldersByType('inbox'))).each(function (collection) {
+            collection.expired = true;
+        });
+
+        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
     };
 
     /**
