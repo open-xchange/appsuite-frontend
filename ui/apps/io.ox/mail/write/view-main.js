@@ -150,7 +150,7 @@ define('io.ox/mail/write/view-main',
         showSection: function (id, focus) {
             if (this.sections[id]) {
                 this.sections[id].show().trigger('show');
-                if (focus !== false) {
+                if (focus !== false && _.device('!smartphone')) {
                     this.sections[id].find('input[type!=hidden], select').eq(0).focus();
                 }
             }
@@ -703,7 +703,7 @@ define('io.ox/mail/write/view-main',
                 .append(createCheckbox('disp_notification_to', gt('Request read receipt')))
             );
 
-            if (!Modernizr.touch) {
+            if (_.device('!touch')) {
                 var format = settings.get('messageFormat', 'html');
                 this.addSection('format', true, gt('Text format'), false).append(
 
@@ -875,7 +875,7 @@ define('io.ox/mail/write/view-main',
                                 if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
                                     // auto jump to editor on enter/tab
                                     e.preventDefault();
-                                    app.getEditor().focus();
+                                    if (_.device('!smartphone')) app.getEditor().focus();
                                 }
                             })
                             .on('keyup', function () {

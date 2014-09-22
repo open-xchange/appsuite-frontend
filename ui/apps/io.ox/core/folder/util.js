@@ -167,8 +167,7 @@ define('io.ox/core/folder/util',
             }, true);
         }
         // vars
-        var result = true,
-            rights = data.own_rights,
+        var rights = data.own_rights,
             isSystem = data.standard_folder || is('system', data),
             isAdmin = perm(rights, 28) === 1,
             isMail = data.module === 'mail',
@@ -194,9 +193,9 @@ define('io.ox/core/folder/util',
             return perm(rights, 21) > compareValue;
         case 'rename':
             // can rename?
-            if (!isAdmin || isSystem) result = false; // missing admin privileges or system folder
-            if (perm(rights, 30) === 1) result = true; // special new rename bit
-            if (!isMail) return result = true;
+            if (!isAdmin || isSystem) return false; // missing admin privileges or system folder
+            if (perm(rights, 30) === 1) return true; // special new rename bit
+            if (!isMail) return true;
             // default folder cannot be renamed
             return !is('defaultfolder', data);
         case 'create:folder':

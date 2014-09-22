@@ -61,7 +61,7 @@ body {
         right: 0;
         min-width: 100%;
         min-height: 100%;
-        font-size: 999px;
+        font-size: 100px;
         text-align: right;
         filter: alpha(opacity=0);
         opacity: 0;
@@ -4257,7 +4257,7 @@ input.flat-input {
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
         z-index: 65500;
-        max-height: 90%;
+        /*max-height: 90%; Bug 34487: iOS 8 has problems on pre iPhone 6 devices with max-height, position fixed and bottom: 0 */
         min-width: initial;
         .overflow-y();
         position: fixed;

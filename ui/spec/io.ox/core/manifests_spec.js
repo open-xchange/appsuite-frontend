@@ -14,7 +14,7 @@
 define(['io.ox/core/manifests'], function (manifests) {
     'use strict';
 
-    describe('The manifests module', function () {
+    describe('Core manifests', function () {
 
         it('should define global ox.manifests object', function () {
             expect(ox.manifests).to.exist;

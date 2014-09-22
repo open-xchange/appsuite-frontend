@@ -19,10 +19,7 @@ define(['io.ox/files/fluid/view-detail',
     'fixture!io.ox/files/file-versions.json'
     ], function (view, api, ext, waitsFor, file, fileversions) {
 
-    //skip these tests, because something fishy is going on, here.
-    //all tests have functional dependency on each other, should be refactored
-    //so each test can be run independently (makes the result more predictable)
-    describe.skip('files detail view', function () {
+    describe('files detail view', function () {
         var baton = ext.Baton.ensure({
                 data: file
             }),
@@ -155,7 +152,7 @@ define(['io.ox/files/fluid/view-detail',
                         });
                         it('has a move action', function () {
                             //TODO: stub read/delete grants
-                            //expect(this.node.find('[data-action="move"]').length).toBeTruthy();
+                            //expect(this.node.find('[data-action="move"]').length).to.have.length.above(0);
                             expect(this.mod.find('[data-action="move"]')).to.have.length(0);
                         });
                     });
@@ -173,7 +170,7 @@ define(['io.ox/files/fluid/view-detail',
                         it('has a unlock action', function () {
                             expect(this.node.find('[data-action="unlock"]')).to.have.length(0);
                             //FIXME
-                            //expect(this.mod.find('[data-action="unlock"]').length).toBeTruthy();
+                            //expect(this.mod.find('[data-action="unlock"]')).to.have.length.above(0);
                         });
                     });
                     describe('file is locked by another user)', function () {
@@ -203,7 +200,7 @@ define(['io.ox/files/fluid/view-detail',
                         });
                         it('has a lock action', function () {
                             //FIXME
-                            //expect(this.node.find('[data-action="lock"]').length).toBeTruthy();
+                            //expect(this.node.find('[data-action="lock"]')).to.have.length.above(0);
                             expect(this.mod.find('[data-action="lock"]')).to.have.length(0);
                         });
                         it('has a edit-description action if file isn not locked', function () {

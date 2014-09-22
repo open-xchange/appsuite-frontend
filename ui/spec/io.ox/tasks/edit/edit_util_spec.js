@@ -19,7 +19,7 @@ define(['io.ox/tasks/edit/util',
 
     var extensionPoints = ext.point('io.ox/tasks/edit/view').list();
 
-    describe('task edit util', function () {
+    describe('Tasks edit utilities', function () {
         describe('splitExtensionsByRow', function () {
             it('should seperate rows', function () {
                 var rows = {};

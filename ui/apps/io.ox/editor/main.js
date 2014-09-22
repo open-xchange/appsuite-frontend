@@ -226,7 +226,7 @@ define('io.ox/editor/main',
                 app.setState({ folder: opt.folder, id: null });
             });
             win.show(function () {
-                view.focus();
+                if (_.device('!smartphone')) view.focus();
             });
         };
 
@@ -315,7 +315,7 @@ define('io.ox/editor/main',
                     app.setTitle(title);
 
                     model.set(previous = $.extend(data, { content: text[0] }));
-                    view.focus();
+                    if (_.device('!smartphone')) view.focus();
                     def.resolve();
                 })
                 .fail(win.idle)

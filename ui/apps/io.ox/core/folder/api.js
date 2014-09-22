@@ -126,7 +126,8 @@ define('io.ox/core/folder/api',
         },
 
         unfetch: function (id) {
-            if (id === '0') {
+            if (arguments.length === 0 || id === '0') {
+                // no need for recursion; reset all collections
                 return _(this.collections).each(function (collection) {
                     collection.fetched = false;
                 });
@@ -508,6 +509,10 @@ define('io.ox/core/folder/api',
             data: changes,
             appendColumns: false
         })
+        .done(function () {
+            var data = model.toJSON();
+            if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
+        })
         .then(
             function success(newId) {
                 // id change? (caused by rename or move)
@@ -595,6 +600,10 @@ define('io.ox/core/folder/api',
                     return data;
                 });
             })
+            .done(function checkVisibility(data) {
+                // trigger event if folder will be hidden
+                if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
+            })
             .done(function updateParentFolder(data) {
                 pool.getModel(id).set('subfolders', true);
                 api.trigger('create', data);
@@ -650,16 +659,14 @@ define('io.ox/core/folder/api',
             data: [id],
             appendColumns: false
         })
-        .then(
-            function success() {
-                api.trigger('remove', id, data);
-                api.trigger('remove:' + id, data);
-                api.trigger('remove:' + data.module, data);
-            },
-            function fail() {
-                api.trigger('remove:fail', id);
-            }
-        );
+        .done(function () {
+            api.trigger('remove', id, data);
+            api.trigger('remove:' + id, data);
+            api.trigger('remove:' + data.module, data);
+        })
+        .fail(function () {
+            api.trigger('remove:fail', id);
+        });
     }
 
     //
@@ -802,7 +809,8 @@ define('io.ox/core/folder/api',
         processListResponse: processListResponse,
         changeUnseenCounter: changeUnseenCounter,
         getSection: getSection,
-        Bitmask: Bitmask
+        Bitmask: Bitmask,
+        propagate: propagate
     });
 
     return api;

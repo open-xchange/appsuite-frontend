@@ -32,6 +32,7 @@ define('io.ox/core/folder/blacklist',
             index: 100,
             visible: function (baton) {
                 var data = baton.data, id = String(data.id);
+                hash = settings.get('folder/blacklist', {}); // work with fresh hash (esp. for testing)
                 return !hash[id];
             }
         },
@@ -42,7 +43,7 @@ define('io.ox/core/folder/blacklist',
                 // not in drive app?
                 if (baton.data.module !== 'infostore') return true;
                 // filter not enabled?
-                if (fileSettings.get('showHidden', false) === false) return true;
+                if (fileSettings.get('showHidden', false) === true) return true;
                 // check that title doesn't start with a dot
                 return !(/^\./.test(baton.data.title));
             }
@@ -56,7 +57,7 @@ define('io.ox/core/folder/blacklist',
 
     return {
 
-        // for direct access
+        // direct access
         hash: hash,
 
         // returns true if a folder is visible
@@ -67,6 +68,11 @@ define('io.ox/core/folder/blacklist',
                 .invoke('visible', null, baton)
                 .reduce(reduce, true)
                 .value();
+        },
+
+        // convenience
+        visible: function (data) {
+            return this.filter(data);
         },
 
         // filter array of folders

@@ -16,7 +16,7 @@ define(['shared/examples/for/api',
        'fixture!io.ox/tasks/apiTestData.json'
 ], function (sharedExamplesFor, api, apiTestData) {
 
-    describe('tasks API', function () {
+    describe('Tasks API', function () {
         sharedExamplesFor(api, apiTestData);
 
         describe('creating a task', function () {

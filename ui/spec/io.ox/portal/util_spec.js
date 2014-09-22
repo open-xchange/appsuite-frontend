@@ -12,7 +12,7 @@
  */
 define(['io.ox/portal/util', 'settings!io.ox/portal'], function (util, settings) {
 
-    describe('Utilities for portal:', function () {
+    describe('Portal Utilities', function () {
         var expect = chai.expect;
         describe('getWidgets function', function () {
             it('should always return an array', function () {

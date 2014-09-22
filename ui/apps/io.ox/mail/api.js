@@ -551,24 +551,26 @@ define('io.ox/mail/api',
 
         prepareRemove(ids, all);
 
-        return http.PUT({
-            module: 'mail',
-            params: { action: 'delete', timestamp: _.then() },
-            data: http.simplify(ids),
-            appendColumns: false
-        })
-        .done(function () {
-            // reset trash folder
-            var trashId = accountAPI.getFoldersByType('trash');
-            _(pool.getByFolder(trashId)).each(function (collection) {
-                collection.expired = true;
-            });
-            // update unread counter and folder item counter
-            folderAPI.reload(ids, trashId);
-            // trigger delete to update notification area
-            api.trigger('delete');
-            api.trigger('deleted-mails', ids);
-        });
+        return http.wait(
+            http.PUT({
+                module: 'mail',
+                params: { action: 'delete', timestamp: _.then() },
+                data: http.simplify(ids),
+                appendColumns: false
+            })
+            .done(function () {
+                // reset trash folder
+                var trashId = accountAPI.getFoldersByType('trash');
+                _(pool.getByFolder(trashId)).each(function (collection) {
+                    collection.expired = true;
+                });
+                // update unread counter and folder item counter
+                folderAPI.reload(ids, trashId);
+                // trigger delete to update notification area
+                api.trigger('delete');
+                api.trigger('deleted-mails', ids);
+            })
+        );
     };
 
     //
@@ -981,42 +983,28 @@ define('io.ox/mail/api',
      */
     api.markSpam = function (list) {
 
-        var collection = pool.get('detail');
+        prepareRemove(list);
 
-        api.trigger('beforedelete', list);
-
-        _(list).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
+        // reset spam folder
+        // we assume that the spam handler will move the message to the spam folder
+        _(pool.getByFolder(accountAPI.getFoldersByType('spam'))).each(function (collection) {
+            collection.expired = true;
         });
 
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: true })
-            .then(
-                function sucess() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
     };
 
     api.noSpam = function (list) {
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: false })
-            .then(
-                function success() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+
+        prepareRemove(list);
+
+        // reset inbox
+        // we assume that the spam handler will move the message (back) to the inbox
+        _(pool.getByFolder(accountAPI.getFoldersByType('inbox'))).each(function (collection) {
+            collection.expired = true;
+        });
+
+        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
     };
 
     /**
@@ -1037,18 +1025,20 @@ define('io.ox/mail/api',
         });
 
         // start update on server
-        return update(list, { folder_id: targetFolderId }).then(function (response) {
-            var errorText, i = 0, $i = response.length;
-            for (; i < $i; i++) { // look if anything went wrong
-                if (response[i].error) {
-                    errorText = response[i].error.error;
-                    break;
+        return http.wait(
+            update(list, { folder_id: targetFolderId }).then(function (response) {
+                var errorText, i = 0, $i = response.length;
+                for (; i < $i; i++) { // look if anything went wrong
+                    if (response[i].error) {
+                        errorText = response[i].error.error;
+                        break;
+                    }
                 }
-            }
-            api.trigger('move', list, targetFolderId);
-            folderAPI.reload(targetFolderId, list);
-            if (errorText) return errorText;
-        });
+                api.trigger('move', list, targetFolderId);
+                folderAPI.reload(targetFolderId, list);
+                if (errorText) return errorText;
+            })
+        );
     };
 
     /**
@@ -1098,6 +1088,11 @@ define('io.ox/mail/api',
         });
     };
 
+    // composition space id
+    api.csid = function () {
+        return _.uniqueId() + '.' + _.now();
+    };
+
     var react = function (action, obj, view) {
 
         // get proper view first
@@ -1107,8 +1102,8 @@ define('io.ox/mail/api',
 
         // attach original message on touch devices?
         var attachOriginalMessage = view === 'text' &&
-            Modernizr.touch &&
-            settings.get('attachOriginalMessage', false) === true;
+                Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+            csid = api.csid();
 
         return http.PUT({
                 module: 'mail',
@@ -1116,15 +1111,18 @@ define('io.ox/mail/api',
                     action: action || '',
                     attachOriginalMessage: attachOriginalMessage,
                     view: view,
-                    setFrom: (/reply|replyall|forward/.test(action))
+                    setFrom: (/reply|replyall|forward/.test(action)),
+                    csid: csid
                 },
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
                 }),
                 appendColumns: false
             })
-            .pipe(function (data) {
+            .then(function (data) {
                 var text = '', quote = '', tmp = '';
+                // inject csid
+                data.csid = csid;
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {

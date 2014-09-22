@@ -122,7 +122,7 @@ define('io.ox/tasks/edit/main',
 
             win.on('show', function () {
                 if (app.dropZone) {app.dropZone.include(); }
-                if (taskView) {
+                if (taskView && _.device('!smartphone')) {
                     taskView.$el.find('.title-field').focus();
                 }
                 if (taskModel.get('id')) {//set url parameters

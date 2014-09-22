@@ -558,10 +558,10 @@ define('io.ox/calendar/edit/template',
             node.append(toolbar = $('<div class="app-bottom-toolbar">'));
             ext.point('io.ox/calendar/edit/section/buttons').replace({
                 id: 'save',
-                index: 200
+                index: 100
             }).replace({
                 id: 'discard',
-                index: 100
+                index: 200
             });
             ext.point('io.ox/calendar/edit/section/buttons').enable('save').enable('discard').invoke('draw', toolbar, baton);
         }

@@ -208,8 +208,7 @@ define('io.ox/core/tk/list',
         // called whenever a model inside the collection changes
         onChange: function (model) {
             var li = this.$el.find('li[data-cid="' + $.escape(this.getCID(model)) + '"]'),
-                data = this.map(model),
-                baton = ext.Baton({ data: data, model: model, app: this.app }),
+                baton = this.getBaton(model),
                 index = model.changed.index;
             // change position?
             if (index !== undefined) li.attr('data-index', index);
@@ -336,21 +335,24 @@ define('io.ox/core/tk/list',
             this.getItems().each(function (index, li) {
                 if (index >= collection.length) return;
                 var model = collection.at(index),
-                    data = this.map(model),
-                    baton = ext.Baton({ data: data, model: model, app: this.app });
+                    baton = this.getBaton(model);
                 point.invoke('draw', $(li).children().eq(1).empty(), baton);
             }.bind(this));
         },
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                data = this.map(model),
-                baton = ext.Baton({ data: data, model: model, app: this.app });
+                baton = this.getBaton(model);
             // add cid and full data
             li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
+        },
+
+        getBaton: function (model) {
+            var data = this.map(model);
+            return ext.Baton({ data: data, model: model, app: this.app, options: this.options });
         },
 
         getBusyIndicator: function () {
