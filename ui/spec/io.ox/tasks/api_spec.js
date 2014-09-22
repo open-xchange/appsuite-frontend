@@ -16,8 +16,7 @@ define(['shared/examples/for/api',
        'fixture!io.ox/tasks/apiTestData.json'
 ], function (sharedExamplesFor, api, apiTestData) {
 
-    describe('Tasks API', function () {
-        sharedExamplesFor(api, apiTestData);
+    describe.only('Tasks API', function () {
 
         describe('creating a task', function () {
             beforeEach(function () {
@@ -36,14 +35,17 @@ define(['shared/examples/for/api',
                     done();
                 });
             });
-            it.skip('should trigger a create event', function (done) {
-                expect(api).toTrigger('create');
+            it('should trigger a create event', function () {
+                var spy = sinon.spy();
+
+                api.on('create', spy);
                 //make copy of testDatatoHaveKey
                 var testCopy = _.copy(apiTestData.testDataCreate, true),
                     result = api.create(testCopy);
                 this.server.respond();
-                result.done(function () {
-                    done();
+                return result.then(function () {
+                    api.off('create', spy);
+                    expect(spy.called).to.be.true;
                 });
             });
             it('should remove temporary attributes', function () {
@@ -93,24 +95,33 @@ define(['shared/examples/for/api',
                 });
                 this.server.autoRespond = false;
             });
-            it.skip('should update a task', function (done) {
+            it('should update a task', function () {
                 //make copy of testData
                 var testCopy = _.copy(apiTestData.testDataUpdate, true),
-                    result = api.update(testCopy);
-//                 expect(result).toBeDeferred();
+                    result = api.update(testCopy),
+                    spy = sinon.spy();
+
+                api.on('update', spy);
                 expect(result.state()).to.equal('pending');
-                this.server.respond();
-                result.done(function () {
-                    done();
+                this.server.respond();//respond to update call
+                this.server.respond();//respond to get after update call
+                return result.done(function () {
+                    api.off('update', spy);
+                    expect(spy.called, '"update" event triggered').to.be.true;
                 });
             });
-            it.skip('should trigger an update event', function () {
-                expect(api).toTrigger('update:555123456:122');
+            it('should trigger an update event', function () {
                 //make copy of testData
                 var testCopy = _.copy(apiTestData.testDataUpdate, true);
                 var result = api.update(testCopy);
-                this.server.respond();
-                expect(result).toResolve();
+                var spy = sinon.spy();
+                api.on('update:555123456:122', spy);
+                this.server.respond();//respond to update call
+                this.server.respond();//respond to get after update call
+                return result.done(function () {
+                    api.off('update:555123456:122', spy);
+                    expect(spy.called, '"update:555123456:122" event triggered').to.be.true;
+                });
             });
             it('should remove temporary attributes', function () {
                 //make copy of testData
@@ -118,17 +129,18 @@ define(['shared/examples/for/api',
                     result = api.update(testCopy);
                 expect(testCopy).not.to.contain.key('tempAttachmentIndicator');
             });
-            it.skip('should be added to \"Attachment upload in progress\" list if attachments are present', function (done) {
+            it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
               //make copy of testData
                 var testCopy = _.copy(apiTestData.tempTestDataUpdate, true),
                     result;
 
-                testCopy.testDescr = this.description;
+                testCopy.testDescr = this.test.title;
                 result = api.update(testCopy);
+
                 this.server.respond();
-                result.done(function () {
+                this.server.respond();
+                return result.then(function () {
                     expect(api.uploadInProgress(testCopy.folder_id + ':122')).to.exist;
-                    done();
                 });
             });
             it('should add date_completed if status = 3', function () {
@@ -150,40 +162,47 @@ define(['shared/examples/for/api',
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{}}');
                 });
             });
-            it('should confirm a task', function (done) {
+            it('should confirm a task', function () {
                 var result = api.confirm(apiTestData.testDataConfirm);
                 expect(result.state()).to.equal('pending');
                 this.server.respond();
-                result.done(function () {
-                    done();
-                });
+                return result;
             });
-            it.skip('should trigger mark:task:confirmed event', function (done) {
-                expect(api).toTrigger('mark:task:confirmed');
+            it('should trigger mark:task:confirmed event', function () {
+                var spy = sinon.spy();
+                api.on('mark:task:confirmed', spy);
                 var result = api.confirm(apiTestData.testDataConfirm);
                 this.server.respond();
-                result.done(function () {
-                    done();
+                return result.done(function () {
+                    expect(spy.called, '"mark:task:confirmed" event triggered').to.be.true;
                 });
             });
         });
-        describe.skip('getting Task Notifications', function () {
+        describe('getting Task Notifications', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/tasks\?action=all/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": []}');
                 });
             });
             it('should trigger new-tasks event', function () {
-                expect(api).toTrigger('new-tasks');
+                var spy = sinon.spy();
+                api.on('new-tasks', spy);
                 var result = api.getTasks();
                 this.server.respond();
-                expect(result).toResolve();
+                return result.done(function () {
+                    api.off('new-tasks', spy);
+                    expect(spy.called, '"new-tasks" event triggered').to.be.true;
+                });
             });
             it('should trigger set:tasks:to-be-confirmed event', function () {
-                expect(api).toTrigger('set:tasks:to-be-confirmed');
+                var spy = sinon.spy();
+                api.on('set:tasks:to-be-confirmed', spy);
                 var result = api.getTasks();
                 this.server.respond();
-                expect(result).toResolve();
+                return result.done(function () {
+                    api.off('set:tasks:to-be-confirmed', spy);
+                    expect(spy.called, '"set:tasks:to-be-confirmed').to.be.true;
+                });
             });
         });
     });
