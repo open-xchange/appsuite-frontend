@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-18 09:41+0100\n"
+"PO-Revision-Date: 2014-09-22 12:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1093,7 +1093,7 @@ msgstr "E-Mail-Benachrichtigung nach Bestätigen/Ablehnen automatisch löschen?"
 #. It's a label for an inputfield with a number
 #: apps/io.ox/mail/settings/pane.js:244 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
-msgstr "Automatischer Textumbruch nach Zeichen:"
+msgstr "Automatischer Zeilenumbruch in Klartextnachrichten nach Zeichen:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:133 module:io.ox/core
 msgid "Average time: %1$s ms"
