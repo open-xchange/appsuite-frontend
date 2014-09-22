@@ -163,6 +163,7 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
             if (e.collection.has('multiple')) return true;
+            // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
@@ -186,7 +187,11 @@ define('io.ox/files/actions',
     });
 
     new Action('io.ox/files/actions/downloadversion', {
-        requires: 'one',
+        requires: function (e) {
+            if (e.collection.has('multiple')) return true;
+            // 'description only' items
+            return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
+        },
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
             require(['io.ox/core/download'], function (download) {
