@@ -380,6 +380,8 @@ define('io.ox/core/folder/extensions',
                     if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
 
+                    this.find('.owner').remove();
+
                     this.addClass('shared').find('.folder-node').append(
                         $('<div class="owner">').append(
                             userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
@@ -391,9 +393,10 @@ define('io.ox/core/folder/extensions',
                 id: 'shared',
                 index: 200,
                 draw: function (baton) {
-                    if (_.device('smartphone')) return;
 
                     this.find('.folder-shared').remove();
+
+                    if (_.device('smartphone')) return;
                     if (!api.is('unlocked', baton.data)) return;
 
                     this.find('.folder-node').append(
