@@ -34,26 +34,16 @@ define('io.ox/core/tk/list', [
     var ListView = Backbone.View.extend({
 
         tagName: 'ul',
-        className: 'list-view scrollpane f6-target',
+        className: 'list-view',
 
-        // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
-        // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
         scaffold: $(
-            '<li class="list-item selectable" tabindex="-1" role="option" aria-selected="false">' +
+            '<li class="list-item">' +
             '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"/></div>' +
             '<div class="list-item-content"></div>' +
             '</li>'
         ),
 
         busyIndicator: $('<li class="list-item busy-indicator"><i class="fa fa-chevron-down"/></li>'),
-
-        events: {
-            'focus .list-item': 'onItemFocus',
-            'blur .list-item': 'onItemBlur',
-            'click': 'onKeepFocus',
-            'keydown .list-item': 'onItemKeydown',
-            'scroll': 'onScroll'
-        },
 
         onItemFocus: function () {
             this.$el.removeAttr('tabindex');
@@ -79,7 +69,7 @@ define('io.ox/core/tk/list', [
 
         onScroll: _.debounce(function () {
 
-            if (!this.options.pagination || this.isBusy || this.complete) return;
+            if (this.isBusy || this.complete) return;
 
             var height = this.$el.height(),
                 scrollTop = this.$el.scrollTop(),
@@ -122,7 +112,7 @@ define('io.ox/core/tk/list', [
             this.idle();
             this.toggleComplete(false);
             this.$el.empty();
-            this.selection.reset();
+            if (this.selection) this.selection.reset();
             this.$el.scrollTop(0);
         },
 
@@ -148,7 +138,6 @@ define('io.ox/core/tk/list', [
 
             // insert or append
             if (index < children.length) children.eq(index).before(li); else this.$el.append(li);
-            this.selection.add(this.getCID(model), li);
 
             if (li.position().top <= 0) {
                 this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
@@ -179,7 +168,7 @@ define('io.ox/core/tk/list', [
             // keep scroll position
             if (li.position().top < top) this.$el.scrollTop(top - li.outerHeight(true));
 
-            this.selection.remove(cid, li);
+            if (this.selection) this.selection.remove(cid, li);
             li.remove();
 
             // simulate scroll event because the list might need to paginate.
@@ -225,27 +214,59 @@ define('io.ox/core/tk/list', [
             // ref: id of the extension point that is used to render list items
             // app: application
             // pagination: use pagination (default is true)
-            this.options = _.extend({ pagination: true }, options);
+            this.options = _.extend({ pagination: true, selection: true, scrollable: true }, options);
+
+            var events = {};
+
+            // selection?
+            if (this.options.selection) {
+                this.selection = new Selection(this);
+                events = {
+                    'focus .list-item': 'onItemFocus',
+                    'blur .list-item': 'onItemBlur',
+                    'click': 'onKeepFocus',
+                    'keydown .list-item': 'onItemKeydown'
+                };
+                // set special class if not on smartphones (different behavior)
+                if (_.device('!smartphone')) this.$el.addClass('visible-selection');
+                // enable drag & drop
+                dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+                // a11y
+                this.$el.addClass('f6-target');
+            } else {
+                this.toggleCheckboxes(false);
+            }
+
+            // scroll?
+            if (this.options.scrollable) {
+                this.$el.addClass('scrollpane');
+            }
+
+            // pagination?
+            if (this.options.pagination) {
+                events.scroll = 'onScroll';
+            }
+
+            // initial collection?
+            if (this.options.collection) {
+                this.setCollection(this.collection);
+                if (this.collection.length) this.onReset();
+            }
 
             this.ref = this.ref || options.ref;
             this.app = options.app;
-            this.selection = new Selection(this);
             this.model = new Backbone.Model();
             this.isBusy = false;
             this.complete = false;
             this.firstReset = true;
 
-            // enable drag & drop
-            dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
+            this.delegateEvents(events);
 
             // don't know why but listenTo doesn't work here
             this.model.on('change', _.debounce(this.onModelChange, 10), this);
 
             // make sure busy & idle use proper this (for convenient callbacks)
             _.bindAll(this, 'busy', 'idle');
-
-            // set special class if not on smartphones (different behavior)
-            if (_.device('!smartphone')) this.$el.addClass('visible-selection');
         },
 
         setCollection: function (collection) {
@@ -270,7 +291,7 @@ define('io.ox/core/tk/list', [
                 'paginate:fail': this.idle,
                 'complete': this.onComplete
             });
-            this.selection.reset();
+            if (this.selection) this.selection.reset();
             return this;
         },
 
@@ -318,13 +339,19 @@ define('io.ox/core/tk/list', [
         paginate: NOOP,
         reload: NOOP,
 
+        map: function (model) {
+            return model.toJSON();
+        },
+
         render: function () {
-            this.$el.attr({
-                'aria-multiselectable': true,
-                'data-ref': this.ref,
-                'role': 'listbox',
-                'tabindex': 1
-            });
+            if (this.options.selection) {
+                this.$el.attr({
+                    'aria-multiselectable': true,
+                    'role': 'listbox',
+                    'tabindex': 1
+                });
+            }
+            this.$el.attr('data-ref', this.ref);
             // fix evil CSS transition issue with phantomJS
             if (_.device('phantomjs')) this.$el.addClass('no-transition');
             return this;
@@ -342,8 +369,18 @@ define('io.ox/core/tk/list', [
             }.bind(this));
         },
 
+        createListItem: function () {
+            var li = this.scaffold.clone();
+            if (this.options.selection) {
+                // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
+                // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
+                li.addClass('selectable').attr({ 'aria-selected': false, role: 'option', 'tabindex': '-1' });
+            }
+            return li;
+        },
+
         renderListItem: function (model) {
-            var li = this.scaffold.clone(),
+            var li = this.createListItem(),
                 data = this.map(model),
                 baton = ext.Baton({ data: data, model: model, app: this.app });
             // add cid and full data

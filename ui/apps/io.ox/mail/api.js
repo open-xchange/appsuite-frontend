@@ -30,218 +30,7 @@ define('io.ox/mail/api', [
 
     'use strict';
 
-    var DONE = $.when(),
-        DELIM = '//';
-
-    var tracker = (function () {
-
-        // simple temporary thread cache
-        var threads = {},
-
-            // stores CIDs to find items in threads
-            // key is item CID, value is top-level item CID
-            threadHash = {},
-
-            // track mails that are manually marked as unseen
-            unseen = {},
-            colorLabel = {};
-
-        var calculateUnread = function (memo, obj) {
-            return memo + ((obj.flags & 32) !== 32 ? 1 : 0);
-        };
-
-        var getCID = function (param) {
-            return _.isString(param) ? param : _.cid(param);
-        };
-
-        var getTailCID = function (obj) {
-            if (!obj) return '';
-            if (obj.thread) return _.cid(_(obj.thread).last());
-            return threadHash[getCID(obj)];
-        };
-
-        var self = {
-
-            getTailCID: getTailCID,
-
-            addThread: function (obj) {
-
-                var cid = getTailCID(obj), changed = false;
-
-                if (threads[cid]) {
-                    // has changed?
-                    changed = !_.isEqual(threads[cid], obj.thread);
-                }
-
-                threads[cid] = obj.thread;
-                _(obj.thread).each(function (o) {
-                    threadHash[_.cid(o)] = cid;
-                });
-
-                if (changed) {
-                    api.trigger('threadChanged threadChanged:' + _.ecid(obj), obj);
-                }
-            },
-
-            hasThread: function (obj) {
-                return self.getThread(obj).length > 1;
-            },
-
-            getThread: function (obj, copy) {
-                var cid = getCID(obj),
-                    tail = getTailCID(obj),
-                    thread = threads[tail] || [],
-                    first = _.cid(_(thread).first());
-                // is not first item?
-                if (cid !== first) return [];
-                return copy ? _.deepCopy(thread) : thread;
-            },
-
-            getThreadCID: function (obj) {
-                var cid = getCID(obj);
-                return threadHash[cid];
-            },
-
-            getThreadSize: function (obj) {
-                return self.getThread(obj).length || 1;
-            },
-
-            getUnreadCount: function (obj) {
-                var cid = getCID(obj), root = threads[cid];
-                return root === undefined ? 0 : _(root.thread).inject(calculateUnread, 0);
-            },
-
-            update: function (list, callback) {
-
-                var hash = {};
-
-                // hash affected cids
-                // return top thread obj (threadview) or mail obj (singleview)
-                list = _(list).chain()
-                    .map(function (obj) {
-                        var cid = _.cid(obj), top = threadHash[cid];
-                        hash[cid] = true;
-                        return top in threads ? _(threads[top]).first() : obj;
-                    })
-                    .compact().value();
-
-                function process(obj) {
-                    var cid = _.cid(obj);
-                    if (cid in hash) {
-                        callback(obj);
-                    }
-                }
-
-                return api.updateAllCache(list, function (obj) {
-                    // handles threadView: on || off
-                    if (obj.thread) {
-                        _(obj.thread).each(process);
-                    } else {
-                        process(obj);
-                    }
-                });
-            },
-
-            reset: (function () {
-
-                function reset(obj) {
-                    var cid = _.cid(obj);
-                    unseen[cid] = (obj.flags & 32) !== 32;
-                    colorLabel[cid] = parseInt(obj.color_label, 10) || 0;
-                }
-
-                return function (list) {
-                    _(list).each(function (obj) {
-                        reset(obj);
-                        _(obj.thread).each(reset);
-                    });
-                };
-
-            }()),
-
-            setUnseen: function (obj, options) {
-                var cid = getCID(obj);
-                unseen[cid] = true;
-                options = options || {};
-                if (!options.silent) {
-                    api.trigger('refresh.list');
-                }
-            },
-
-            setSeen: function (obj, options) {
-                var cid = getCID(obj);
-                unseen[cid] = false;
-                options = options || {};
-                if (!options.silent) {
-                    api.trigger('refresh.list');
-                }
-            },
-
-            /**
-             * @param {object|string} obj (id, folder_id) or string (cid)
-             * @returns {void }
-             */
-            remove: function (obj) {
-                var cid = getCID(obj),
-                    root = this.getThreadCID(cid);
-                if (root) {
-                    threads[root] = _(threads[root]).filter(function (item) {
-                        return cid !== getCID(item);
-                    });
-                }
-            },
-
-            // use this to check if mails in a thread are unseen
-            isPartiallyUnseen: function (obj) {
-                var cid = getCID(obj), top = threads[threadHash[cid]];
-                if (top) {
-                    return _(top).reduce(function (memo, obj) {
-                        return memo || unseen[_.cid(obj)] === true;
-                    }, false);
-                } else {
-                    return false;
-                }
-            },
-
-            isUnseen: function (obj) {
-                if (_.isObject(obj)) {
-                    var cid = getCID(obj);
-                    return cid in unseen ? !!unseen[cid] : (obj.flags & 32) !== 32;
-                } else {
-                    return !!unseen[obj];
-                }
-            },
-
-            getThreadColorLabel: function (obj) {
-                var cid = getCID(obj), top = threads[threadHash[cid]];
-                if (top) {
-                    return _(top).reduce(function (memo, obj) {
-                        return memo || colorLabel[cid] || obj.color_label;
-                    }, 0);
-                } else {
-                    return self.getColorLabel(obj);
-                }
-            },
-
-            getColorLabel: function (obj) {
-                var cid = getCID(obj);
-                return (cid in colorLabel ? colorLabel[cid] : obj.color_label) || 0; // fallback to 0 to avoid undefined
-            },
-
-            setColorLabel: function (obj) {
-                var cid = getCID(obj);
-                colorLabel[cid] = parseInt(obj.color_label, 10) || 0;
-            },
-
-            clear: function () {
-                threads = {};
-                threadHash = {};
-            }
-        };
-
-        return self;
-
-    }());
+    var DELIM = '//';
 
     // color_label resort hash
     var colorLabelResort = _('0 1 7 10 6 3 9 2 5 8 4'.split(' ')).invert(),
@@ -326,22 +115,7 @@ define('io.ox/mail/api', [
                     response.sort(colorLabelSort);
                     if (opt.order === 'desc') response.reverse();
                 }
-                // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
-                // another devices might have set it back to seen.
-                tracker.reset(response.data || response); // threadedAll || all
                 return response;
-            },
-            listPost: function (data) {
-                _(data).each(function (obj) {
-                    if (obj) {
-                        if (tracker.isUnseen(obj)) {
-                            obj.flags = obj.flags & ~32;
-                        } else {
-                            obj.flags = obj.flags | 32;
-                        }
-                    }
-                });
-                return data;
             },
             get: function (data, options) {
                 // inject view (text/html/noimg). need this to generate proper cache keys.
@@ -374,9 +148,6 @@ define('io.ox/mail/api', [
         api.options.requests.get.view = settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text';
         api.trigger('viewChanged');//special event to redraw current detailview
     };
-
-    // publish tracker
-    api.tracker = tracker;
 
     api.separator = settings.get('defaultseparator', '/');
 
@@ -433,12 +204,7 @@ define('io.ox/mail/api', [
         folderAPI.changeUnseenCounter(model.get('folder_id'), -1);
     });
 
-    // control for each folder:
-    // undefined -> first fetch
-    // true -> has been fetched in this session
-    // false -> caused by refresh
-    var cacheControl = {},
-        get = api.get,
+    var get = api.get,
         getAll = api.getAll,
         getList = api.getList,
         search = api.search;
@@ -483,19 +249,12 @@ define('io.ox/mail/api', [
     };
 
     api.getAll = function (options, useCache) {
-        // use cache?
-        var cid = api.cid(options);
-        if (useCache === 'auto') {
-            useCache = (cacheControl[cid] !== false);
-        }
         // support for from-to
         options = options || {};
         if (options.sort === 'from-to') {
             options.sort = accountAPI.is('sent|drafts', options.folder) ? 604 : 603;
         }
-        return getAll.call(this, options, useCache).done(function () {
-            cacheControl[cid] = true;
-        });
+        return getAll.call(this, options, useCache);
     };
 
     /**
@@ -520,6 +279,10 @@ define('io.ox/mail/api', [
         return search.call(this, query, options);
     };
 
+    //
+    // Utility functions
+    //
+
     function prepareRemove(ids, all) {
 
         var collection = pool.get('detail');
@@ -542,6 +305,16 @@ define('io.ox/mail/api', [
         });
     }
 
+    function resetFolder(ids) {
+        var list = _(pool.getByFolder(ids));
+        list.each(function (collection) { collection.expired = true; });
+        return list;
+    }
+
+    function resetFolderByType(type) {
+        return resetFolder(accountAPI.getFoldersByType(type));
+    }
+
     /**
      * wrapper for factories remove to update counters
      * @param  {array} ids
@@ -562,9 +335,7 @@ define('io.ox/mail/api', [
             .done(function () {
                 // reset trash folder
                 var trashId = accountAPI.getFoldersByType('trash');
-                _(pool.getByFolder(trashId)).each(function (collection) {
-                    collection.expired = true;
-                });
+                resetFolder(trashId);
                 // update unread counter and folder item counter
                 folderAPI.reload(ids, trashId);
                 // trigger delete to update notification area
@@ -599,8 +370,10 @@ define('io.ox/mail/api', [
      * @return { deferred} returns array of threads
      */
     api.getAllThreads = function (options, useCache) {
+
         // request for brand new thread support
         options = options || {};
+
         options = $.extend(options, {
             action: 'threadedAll',
             columns: options.columns || '601,600,611,102', // +flags +color_label
@@ -612,16 +385,8 @@ define('io.ox/mail/api', [
             cache: false, // never use server cache
             max: options.max || 500 // apply internal limit to build threads fast enough
         });
-        // use cache?
-        var cid = api.cid(options);
-        if (useCache === 'auto') {
-            useCache = (cacheControl[cid] !== false);
-        }
-        return getAll.call(this, options, useCache, null, false)
-            .done(function (response) {
-                _(response.data).each(tracker.addThread);
-                cacheControl[cid] = true;
-            });
+
+        return getAll.call(this, options, useCache, null, false);
     };
 
     var update = function (list, data, apiAction) {
@@ -667,97 +432,11 @@ define('io.ox/mail/api', [
         });
     };
 
-    var resetTrashFolders = function () {
-        return $.when.apply($,
-            _(accountAPI.getFoldersByType('trash')).map(function (folder) {
-                return api.caches.all.grepRemove(folder + DELIM);
-            })
-        );
-    };
-
-    var clearCaches = function (obj, targetFolderId) {
-        return function () {
-            var id = obj.folder_id || obj.folder;
-            return $.when(
-                api.caches.get.remove(obj),
-                api.caches.get.remove(id),
-                api.caches.list.remove(obj),
-                api.caches.list.remove(id),
-                api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
-            );
-        };
-    };
-
     api.update = function () {
         console.error('Do not call this directly because mail is so special');
     };
 
-    /**
-     * update item in all caches via callback in element
-     * @param {array} list
-     * @param {function} callback
-     * @return { deferred }
-     */
-    api.updateAllCache = (function () {
-        function update(folder_id, hash, callback) {
-            // get proper keys (differ due to sort/order suffix)
-            return api.caches.all.grepKeys(folder_id + DELIM).then(function (keys) {
-                return $.when.apply($, _(keys).map(function (folder_id) {
-                    return api.caches.all.get(folder_id).then(function (co) {
-                        // handles threadView: on || off
-                        if (!co) return DONE;
-
-                        co.data = co.data || co;
-                        // update affected items
-                        var defs,
-                            list = _(co.data)
-                            .chain()
-                            .filter(function (obj) {
-                                return _.cid(obj) in hash;
-                            })
-                            .map(function (obj) {
-                                callback(obj);
-                                // handles threadView: on || off
-                                return obj.thread || obj;
-                            })
-                            .value();
-
-                        if (list.length < 100) {
-                            defs = [
-                                api.caches.list.merge(list),
-                                api.caches.get.merge(list)
-                            ];
-                        } else {
-                            // due to performace reasons kill caches on to many update requests
-                            defs = [
-                                api.caches.list.clear(),
-                                api.caches.get.clear()
-                            ];
-                        }
-                        return $.when.apply($, defs).then(function () {
-                            return api.caches.all.add(folder_id, co);
-                        });
-                    });
-                }));
-            });
-        }
-
-        return function (list, callback) {
-            // get affected folders first
-            var folders = {}, hash = {};
-            _([].concat(list)).each(function (obj) {
-                hash[_.cid(obj)] = true;
-                folders[obj.folder_id] = true;
-            });
-            // run update for each folder
-            return $.when.apply($, _(folders).map(function (value, folder_id) {
-                return update(folder_id, hash, callback || _.identity);
-            }));
-        };
-    }());
-
-    api.on('not-found', function (e, obj) {
-        tracker.ignore(obj);
+    api.on('not-found', function () {
         api.trigger('refresh.list');
     });
 
@@ -798,10 +477,12 @@ define('io.ox/mail/api', [
     api.clear = function (id) {
 
         // clear target folder
-        _(pool.getByFolder(id)).each(function (collection) {
-            collection.expired = true;
+        resetFolder(id).each(function (collection) {
             collection.reset();
         });
+
+        // reset trash folders
+        resetFolderByType('trash');
 
         // new clear
         return http.PUT({
@@ -812,15 +493,6 @@ define('io.ox/mail/api', [
                 tree: '1'
             },
             data: [id]
-        })
-        .then(function (data) {
-            return api.caches.all.grepRemove(id + DELIM).pipe(function () {
-                api.trigger('refresh.all');
-                return data;
-            });
-        })
-        .then(function () {
-            return resetTrashFolders();
         });
     };
 
@@ -828,11 +500,10 @@ define('io.ox/mail/api', [
      * sets color
      * @param  {array|object} list of mail objects
      * @param  {string} label (numeric color id mapped in api.COLORS)
-     * @param  {boolean} local
      * @fires  api#refresh.list
      * @return { promise} done returns list of mails in current folder
      */
-    api.changeColor = function (list, label, local) {
+    api.changeColor = function (list, label) {
 
         list = [].concat(list);
         label = String(label); // Bugfix: #24730
@@ -846,21 +517,10 @@ define('io.ox/mail/api', [
             });
             // update thread model
             api.threads.touch(obj);
-            tracker.setColorLabel(obj);
             api.trigger('update:' + _.ecid(obj), obj);
         });
 
-        return tracker.update(list, function (obj) {
-            obj.color_label = label;
-            tracker.setColorLabel(obj);
-        })
-        .then(function () {
-            return local ? DONE : update(list, { color_label: label });
-        })
-        .done(function () {
-            api.trigger('refresh.color', list);
-            api.trigger('refresh.list');
-        });
+        update(list, { color_label: label });
     };
 
     /**
@@ -873,7 +533,6 @@ define('io.ox/mail/api', [
         list = [].concat(list);
 
         _(list).each(function (obj) {
-            tracker.setUnseen(obj, { silent: true });
             obj.flags = obj.flags & ~32;
             pool.propagate('change', {
                 id: obj.id,
@@ -883,23 +542,12 @@ define('io.ox/mail/api', [
             // update thread model
             api.threads.touch(obj);
             api.trigger('update:' + _.ecid(obj), obj);
+            api.trigger('refresh.unseen', list);
         });
 
-        return $.when(
-            // local update
-            tracker.update(list, function (obj) {
-                tracker.setUnseen(obj, { silent: true });
-                obj.flags = obj.flags & ~32;
-            })
-            .done(function () {
-                api.trigger('refresh.list');
-                api.trigger('refresh.unseen', list);
-            }),
-            // server update
-            update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
-                folderAPI.reload(list);
-            })
-        );
+        return update(list, { flags: api.FLAGS.SEEN, value: false }).done(function () {
+            folderAPI.reload(list);
+        });
     };
 
     /**
@@ -914,7 +562,6 @@ define('io.ox/mail/api', [
         list = [].concat(list);
 
         _(list).each(function (obj) {
-            tracker.setSeen(obj, { silent: true });
             obj.flags = obj.flags | 32;
             pool.propagate('change', {
                 id: obj.id,
@@ -925,25 +572,13 @@ define('io.ox/mail/api', [
             // update thread model
             api.threads.touch(obj);
             api.trigger('update:' + _.ecid(obj), obj);
+            api.trigger('refresh.seen', list);
+            api.trigger('update:set-seen', list); // used by notification area
         });
 
-        return $.when(
-            // local update
-            tracker.update(list, function (obj) {
-                tracker.setSeen(obj, { silent: true });
-                obj.flags = obj.flags | 32;
-            })
-            .done(function () {
-                api.trigger('refresh.list');
-                api.trigger('refresh.seen', list);
-            }),
-            // server update
-            update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
-                folderAPI.reload(list);
-                //used by notification area
-                api.trigger('update:set-seen', list);
-            })
-        );
+        return update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+            folderAPI.reload(list);
+        });
     };
 
     api.allSeen = function (folder) {
@@ -981,47 +616,47 @@ define('io.ox/mail/api', [
     /**
      * marks list of mails as spam
      * @param {array} list
-     * @return { deferred }
+     * @return {deferred}
      */
     api.markSpam = function (list) {
 
-        var collection = pool.get('detail');
+        prepareRemove(list);
+        // reset spam folder; we assume that the spam handler will move the message to the spam folder
+        resetFolderByType('spam');
 
-        api.trigger('beforedelete', list);
-
-        _(list).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
-        });
-
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: true })
-            .then(
-                function sucess() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
     };
 
     api.noSpam = function (list) {
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: false })
-            .then(
-                function success() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+
+        prepareRemove(list);
+        // reset inbox; we assume that the spam handler will move the message (back) to the inbox
+        resetFolderByType('inbox');
+
+        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
     };
+
+    // combines move & copy
+    function transfer(type, list, targetFolderId) {
+
+        // mark target folder as expired
+        resetFolder(targetFolderId);
+
+        return http.wait(
+            update(list, { folder_id: targetFolderId }, type).then(function (response) {
+                var errorText, i = 0, $i = response.length;
+                for (; i < $i; i++) { // look if anything went wrong
+                    if (response[i].error) {
+                        errorText = response[i].error.error;
+                        break;
+                    }
+                }
+                api.trigger(type, list, targetFolderId);
+                folderAPI.reload(targetFolderId, list);
+                if (errorText) return errorText;
+            })
+        );
+    }
 
     /**
      * move mails to another folder
@@ -1035,26 +670,7 @@ define('io.ox/mail/api', [
 
         prepareRemove(list, all);
 
-        // mark target folder as expired
-        _(pool.getByFolder(targetFolderId)).each(function (collection) {
-            collection.expired = true;
-        });
-
-        // start update on server
-        return http.wait(
-            update(list, { folder_id: targetFolderId }).then(function (response) {
-                var errorText, i = 0, $i = response.length;
-                for (; i < $i; i++) { // look if anything went wrong
-                    if (response[i].error) {
-                        errorText = response[i].error.error;
-                        break;
-                    }
-                }
-                api.trigger('move', list, targetFolderId);
-                folderAPI.reload(targetFolderId, list);
-                if (errorText) return errorText;
-            })
-        );
+        return transfer('move', list, targetFolderId);
     };
 
     /**
@@ -1065,33 +681,11 @@ define('io.ox/mail/api', [
      */
     api.copy = function (list, targetFolderId) {
 
-        var response;
-
-        return update(list, { folder_id: targetFolderId }, 'copy')
-            .then(function (resp) {
-                response = resp.response;
-                return (clearCaches(list, targetFolderId)()).then(function () {
-                    return resp.list;
-                });
-            })
-            .then(function () {
-
-                var errorText;
-                for (var i = 0; i < response.length; i++) { // look if something went wrong
-                    if (response[i].error) {
-                        errorText = response[i].error.error;
-                        break;
-                    }
-                }
-
-                api.trigger('copy', list, targetFolderId);
-                folderAPI.reload(targetFolderId, list);
-
-                if (errorText) return errorText;
-            });
+        return transfer('copy', list, targetFolderId);
     };
 
     api.autosave = function (obj) {
+
         return http.PUT({
             module: 'mail',
             params: {
@@ -1099,8 +693,6 @@ define('io.ox/mail/api', [
             },
             data: obj,
             appendColumns: false
-        }).pipe(function (data) {
-            return $.Deferred().resolve(data);
         });
     };
 
@@ -1347,20 +939,10 @@ define('io.ox/mail/api', [
             .then(function (text) {
                 // wait a moment, then update mail index
                 setTimeout(function () {
-                    // clear inbox & sent folder
-                    var folders = [].concat(
-                        accountAPI.getFoldersByType('inbox'),
-                        accountAPI.getFoldersByType('sent'),
-                        accountAPI.getFoldersByType('drafts')
-                    );
-                    $.when.apply($,
-                        _(folders).map(function (id) {
-                            return api.caches.all.grepRemove(id + DELIM);
-                        })
-                    )
-                    .done(function () {
-                        api.trigger('refresh.all');
-                    });
+                    resetFolderByType('inbox');
+                    resetFolderByType('sent');
+                    resetFolderByType('drafts');
+                    api.trigger('refresh.all');
                 }, 3000);
                 // IE9
                 if (_.isObject(text))
@@ -1555,9 +1137,6 @@ define('io.ox/mail/api', [
             }
         })
         .then(function (unseen) {
-            //update the tracker
-            //needed if mail app was not opened before to prevent mails not being marked as read because the tracker doesn't know them
-            tracker.reset(unseen);
 
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {
@@ -1589,70 +1168,9 @@ define('io.ox/mail/api', [
      */
     api.refresh = function () {
         if (!ox.online) return;
-        // reset cache control
-        _(cacheControl).each(function (val, cid) {
-            cacheControl[cid] = false;
-        });
         api.checkInbox().always(function () {
             api.trigger('refresh.all');
         });
-    };
-
-    /**
-     * remove elements from list
-     * @param  {array} list (list)
-     * @param  {object} hash (ids of items to be removed)
-     * @return { array} (cleaned list)
-     */
-    api.localRemove = function (list, hash) {
-        // reverse lookup first to get affacted top-level elements
-        var reverse = {};
-        _(hash).each(function (value, cid) {
-            var threadCID = tracker.getThreadCID(cid);
-            if (threadCID !== undefined) {
-                // is a thread, but we store the inner cid since we loop over root elements
-                reverse[threadCID] = cid;
-            }
-        });
-        // loop over list and check occurrence via hash
-        list = _(list).filter(function (obj) {
-            var cid = _.cid(obj), found = cid in hash, length = obj.thread ? obj.thread.length : 1, s, entire;
-            // case #1: found in hash; no thread
-            if (found && length <= 1) {
-                return false;
-            }
-            // case #2: found in hash; root element
-            if (found && length > 1) {
-                // delete entire thread?
-                entire = _(obj.thread).chain().map(_.cid)
-                    .inject(function (sum, cid) { return sum + (cid in hash ? 1 : 0); }, 0).value() === length;
-                if (entire) {
-                    return false;
-                } else {
-                    // copy props from second thread item
-                    s = obj.thread[1];
-                    _.extend(obj, { folder_id: s.folder_id, id: s.id, flags: s.flags, color_label: s.color_label });
-                    obj.thread.splice(0, 1);
-                    return true;
-                }
-            }
-            // case #3: found via reverse lookup
-            if (cid in reverse) {
-                obj.thread = _(obj.thread).filter(function (o) {
-                    return _.cid(o) !== reverse[cid];
-                });
-                return true;
-            }
-            // otherwise
-            return true;
-        });
-
-        try {
-            return list;
-        } finally {
-            // avoid leaks
-            list = reverse = hash = null;
-        }
     };
 
     /**
@@ -1716,12 +1234,10 @@ define('io.ox/mail/api', [
             data: form,
             fixPost: true
         })
-        .pipe(function (data) {
-            return api.caches.all.grepRemove(options.folder + DELIM).pipe(function () {
-                api.trigger('refresh.all');
-                folderAPI.reload(options.folder);
-                return data;
-            });
+        .done(function () {
+            resetFolder(options.folder);
+            folderAPI.reload(options.folder);
+            api.trigger('refresh.all');
         });
     };
 
@@ -1751,32 +1267,15 @@ define('io.ox/mail/api', [
         });
     });
 
-    // RegExp suffix for recursive grepRemove:
-    // id + '/' for subfolders or id + DELIM for the top folder
-    var reSuffix = ')(?:/|' + _.escapeRegExp(DELIM) + ')';
-
     accountAPI.on('refresh.all create:account', function () {
-        folderAPI.list('1', { cache: false }).done(function (folders) {
-            var ids = _(folders)
-                .chain()
-                .filter(function (obj) {
-                    return /^default/.test(obj.id) && accountAPI.isUnified(obj.id);
-                })
-                .map(function (obj) {
-                    return _.escapeRegExp(obj.id);
-                })
-                .value();
-            var re = new RegExp('(?:' + ids.join('|') + reSuffix);
-            api.caches.all.grepRemove(re);
+        folderAPI.list('1', { cache: false }).done(function () {
             folderAPI.pool.unfetch();
         });
     });
 
     //If the folder api creates a new folder in mail, the mail api needs to be refreshed
     folderAPI.on('create', function (e, data) {
-        if (data.module === 'mail') {
-            api.refresh();
-        }
+        if (data.module === 'mail') api.refresh();
     });
 
     /**

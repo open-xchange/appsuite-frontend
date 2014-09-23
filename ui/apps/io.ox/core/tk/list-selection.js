@@ -160,10 +160,6 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.triggerChange();
         },
 
-        add: function (/* cid, node */) {
-            // TODO: predefined selection
-        },
-
         remove: function (cid, node) {
             node = node || this.getNode(cid);
             if (!node.is('.selected')) return;

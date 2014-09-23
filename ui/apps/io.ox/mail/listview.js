@@ -276,7 +276,8 @@ define('io.ox/mail/listview', [
         ref: 'io.ox/mail/listview',
 
         initialize: function (options) {
-            ListView.prototype.initialize.call(this, options || {});
+            options = _.extend({ threaded: true }, options);
+            ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
         },
 
@@ -286,6 +287,8 @@ define('io.ox/mail/listview', [
         },
 
         map: function (model) {
+            // not threaded?
+            if (!this.options.threaded) return model.toJSON();
             // use head data for list view
             var data = api.threads.head(model.toJSON());
             // get thread with recent data
@@ -312,7 +315,7 @@ define('io.ox/mail/listview', [
         // support for custom cid attributes
         // needed to identify threads
         getCID: function (model) {
-            return 'thread.' + model.cid;
+            return this.options.threaded ? 'thread.' + model.cid : model.cid;
         }
     });
 
