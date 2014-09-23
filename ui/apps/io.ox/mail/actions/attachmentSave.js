@@ -77,9 +77,8 @@ define('io.ox/mail/actions/attachmentSave',
                     commit(list, target);
                 },
 
-                customize: function (baton) {
-                    var data = baton.data, create = folderAPI.can('create', data);
-                    if (!create) this.addClass('disabled');
+                disable: function (data) {
+                    return !folderAPI.can('create', data);
                 }
             });
         }

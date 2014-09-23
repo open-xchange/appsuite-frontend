@@ -75,7 +75,7 @@ define('io.ox/core/folder/picker',
             filter: $.noop,
             customize: $.noop,
             disable: function (data) {
-                return !/^virtual\//.test(data.id);
+                return /^virtual\//.test(data.id);
             },
             initialize: $.noop,
             close: $.noop,
