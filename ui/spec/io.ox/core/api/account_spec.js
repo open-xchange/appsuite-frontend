@@ -19,7 +19,7 @@ define(['io.ox/core/api/account',
     'use strict';
 
     describe('Core', function () {
-        describe.skip('account API', function () {
+        describe('account API', function () {
 
             var select = $();
 
@@ -43,7 +43,7 @@ define(['io.ox/core/api/account',
             });
 
             var account0 = {
-                addresses: 'otto.xentner@OX.IO', // uppercase!
+                addresses: 'otto.xentner@OPEN-XCHANGE.COM', // uppercase!
                 confirmed_ham: 'confirmed-ham',
                 confirmed_ham_fullname: 'default0/INBOX/confirmed-ham',
                 confirmed_spam: 'confirmed-spam',
@@ -66,7 +66,7 @@ define(['io.ox/core/api/account',
                 pop3_path: 'INBOX/EMail',
                 pop3_refresh_rate: null,
                 pop3_storage : null,
-                primary_address: 'otto.xentner@OX.IO', // uppercase!
+                primary_address: 'otto.xentner@OPEN-XCHANGE.COM', // uppercase!
                 reply_to: null,
                 sent: 'Gesendete Objekte',
                 sent_fullname: 'default0/INBOX/Gesendete Objekte',
