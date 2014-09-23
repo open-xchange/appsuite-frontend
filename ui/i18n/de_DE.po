@@ -5739,7 +5739,7 @@ msgstr "Gespeichert unter"
 
 #: apps/io.ox/mail/api.js:1448 module:io.ox/mail
 msgid "Saved mail attachment"
-msgstr "E-Mail-Anlage gespeichert"
+msgstr "E-Mail-Anlage wurde gespeichert"
 
 #: apps/io.ox/core/api/attachment.js:204 module:io.ox/core
 msgid "Saved task attachment"
