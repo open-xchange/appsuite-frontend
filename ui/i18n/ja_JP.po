@@ -1294,11 +1294,11 @@ msgstr "キャンセル"
 msgid "Canceled"
 msgstr "キャンセルされました。"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "この連絡先があなたに送信したメッセージが見つかりません。"
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "この連絡先に送信したメッセージが見つかりません。"
 
@@ -4224,7 +4224,7 @@ msgstr "新規"
 msgid "New Folder"
 msgstr "新規フォルダ"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "新規メール"
 
@@ -4435,7 +4435,6 @@ msgstr "低速なリクエストはありません。"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5367,7 +5366,7 @@ msgstr "tumblr.com の記事を閲覧"
 msgid "Reauthorize"
 msgstr "再認証"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "受信済みメール"
 
@@ -5376,7 +5375,7 @@ msgstr "受信済みメール"
 msgid "Recent activities"
 msgstr "最近のアクティビティ"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "最近のスレッド"
 
@@ -5747,7 +5746,7 @@ msgstr "保存された添付ファイル"
 msgid "Saved in"
 msgstr "保存先:"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存された添付ファイル"
 
@@ -5879,7 +5878,7 @@ msgstr "差出人"
 msgid "Sent from %s via mobile"
 msgstr "%s からモバイル経由で送信されました。"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "送信済みメール"
 

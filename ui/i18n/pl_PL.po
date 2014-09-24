@@ -1345,11 +1345,11 @@ msgstr "Anuluj"
 msgid "Canceled"
 msgstr "Anulowano"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Nie można znaleźć żadnych wiadomości wysłanych od tego kontaktu."
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "Nie można znaleźć żadnych wiadomości wysłanych do tego kontaktu."
 
@@ -4277,7 +4277,7 @@ msgstr "Nowe"
 msgid "New Folder"
 msgstr "Nowy folder"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nowa wiadomość"
 
@@ -4488,7 +4488,6 @@ msgstr "Bez wolnych żądań"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5428,7 +5427,7 @@ msgstr "Przeczytaj artykuł w serwisie tumblr.com"
 msgid "Reauthorize"
 msgstr "Autoryzuj ponownie"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "Odebrane wiadomości"
 
@@ -5437,7 +5436,7 @@ msgstr "Odebrane wiadomości"
 msgid "Recent activities"
 msgstr "Ostatnie aktywności"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "Ostatnie konwersacje"
 
@@ -5806,7 +5805,7 @@ msgstr "Zapisano załącznik wiadomości"
 msgid "Saved in"
 msgstr "Zapisano w"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Zapisano załącznik wiadomości"
 
@@ -5940,7 +5939,7 @@ msgstr "Nadawca/Od"
 msgid "Sent from %s via mobile"
 msgstr "Wysłane z %s przez telefon komórkowy"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "Wysłane wiadomości"
 

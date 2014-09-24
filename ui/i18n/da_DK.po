@@ -1323,11 +1323,11 @@ msgstr "Annullér"
 msgid "Canceled"
 msgstr "Annulleret"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Kan ikke finde nogle beskeder, som denne kontakt har sendt til dig."
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "Kan ikke finde nogle beskeder, som du har sendt til denne kontakt."
 
@@ -4240,7 +4240,7 @@ msgstr "Ny"
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "Ny e-email"
 
@@ -4451,7 +4451,6 @@ msgstr "Ingen langsomme forespørgsler"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5387,7 +5386,7 @@ msgstr "Læs artikel på tumblr.com"
 msgid "Reauthorize"
 msgstr "Re-godkend"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "Modtaget e-mails"
 
@@ -5396,7 +5395,7 @@ msgstr "Modtaget e-mails"
 msgid "Recent activities"
 msgstr "Nylige aktiviteter"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "Samtaler for nyligt"
 
@@ -5765,7 +5764,7 @@ msgstr "Gemt e-mail-vedhæftning"
 msgid "Saved in"
 msgstr "Gemt i"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Gemt e-mail-vedhæftning"
 
@@ -5898,7 +5897,7 @@ msgstr "Sender/Fra"
 msgid "Sent from %s via mobile"
 msgstr "Sendt fra %s via mobil"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "Sendte e-mails"
 

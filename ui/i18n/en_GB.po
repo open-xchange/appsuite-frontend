@@ -1320,11 +1320,11 @@ msgstr "Cancel"
 msgid "Canceled"
 msgstr "Cancelled"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Cannot find any messages this contact sent to you."
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "Cannot find any messages you sent to this contact."
 
@@ -4245,7 +4245,7 @@ msgstr "New"
 msgid "New Folder"
 msgstr "New Folder"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "New Email"
 
@@ -4455,7 +4455,6 @@ msgstr "No slow requests"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5391,7 +5390,7 @@ msgstr "Read article on tumblr.com"
 msgid "Reauthorize"
 msgstr "Reauthorise"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "Received mails"
 
@@ -5400,7 +5399,7 @@ msgstr "Received mails"
 msgid "Recent activities"
 msgstr "Recent activities"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "Recent conversations"
 
@@ -5769,7 +5768,7 @@ msgstr "Saved e-mail attachment"
 msgid "Saved in"
 msgstr "Saved in"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Saved e-mail attachment"
 
@@ -5902,7 +5901,7 @@ msgstr "Sender/From"
 msgid "Sent from %s via mobile"
 msgstr "Sent from %s via mobile"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "Sent emails"
 

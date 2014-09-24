@@ -1320,11 +1320,11 @@ msgstr "Avbryt"
 msgid "Canceled"
 msgstr "Avbruten"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Kan inte hitta meddelanden som den här kontakten skickade till dig."
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "Kan inte hitta meddelanden som du skickade till den här kontakten."
 
@@ -4240,7 +4240,7 @@ msgstr "Nytt"
 msgid "New Folder"
 msgstr "Ny mapp"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "Ny e-post"
 
@@ -4451,7 +4451,6 @@ msgstr "Inga långsamma sökningar"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5385,7 +5384,7 @@ msgstr "Läs artikel på tumblr.com"
 msgid "Reauthorize"
 msgstr "Kontrollera igen"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "Mottagen e-post"
 
@@ -5394,7 +5393,7 @@ msgstr "Mottagen e-post"
 msgid "Recent activities"
 msgstr "Senaste aktiviteter"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "Senaste konversationer"
 
@@ -5763,7 +5762,7 @@ msgstr "Sparade e-postbilaga"
 msgid "Saved in"
 msgstr "Sparades i"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Sparade e-postbilaga"
 
@@ -5896,7 +5895,7 @@ msgstr "Avsändare/Från"
 msgid "Sent from %s via mobile"
 msgstr "Skickades från %s med mobiltelefon"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "Skickad e-post"
 

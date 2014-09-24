@@ -1339,11 +1339,11 @@ msgstr "Atcelt"
 msgid "Canceled"
 msgstr "Atcelts"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Nav atrasts neviens ziņojums no šīs kontaktpersonas."
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "Nav atrasts neviens ziņojums šai kontaktpersonai."
 
@@ -4285,7 +4285,7 @@ msgstr "Jauns"
 msgid "New Folder"
 msgstr "Jauna mape"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "Jaunais pasts"
 
@@ -4496,7 +4496,6 @@ msgstr "Nav lēnu pieprasījumu"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5438,7 +5437,7 @@ msgstr "Lasīt rakstu no tumblr.com"
 msgid "Reauthorize"
 msgstr "Pārautorizēties"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "Saņemtais pasts"
 
@@ -5447,7 +5446,7 @@ msgstr "Saņemtais pasts"
 msgid "Recent activities"
 msgstr "Nesenās darbības"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "Nesnās sarunas"
 
@@ -5818,7 +5817,7 @@ msgstr "Pievienojums saglabāts"
 msgid "Saved in"
 msgstr "Saglabāt iekš"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Pievienojums saglabāts"
 
@@ -5952,7 +5951,7 @@ msgstr "Sūtītājs/No"
 msgid "Sent from %s via mobile"
 msgstr "Nosūtīts no %s ar mobilo ierīci"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "Nosūtītais pasts"
 

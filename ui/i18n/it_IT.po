@@ -1323,11 +1323,11 @@ msgstr "Annulla"
 msgid "Canceled"
 msgstr "Annullata"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Impossibile trovare i messaggi che questo contatto ti ha inviato."
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "Impossibile trovare i messaggi che hai inviato a questo contatto."
 
@@ -4249,7 +4249,7 @@ msgstr "Nuovo"
 msgid "New Folder"
 msgstr "Nuova cartella"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nuovo messaggio"
 
@@ -4459,7 +4459,6 @@ msgstr "Nessuna richiesta lenta"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5399,7 +5398,7 @@ msgstr "Leggi l'articolo su tumblr.com"
 msgid "Reauthorize"
 msgstr "Nuova autorizzazione"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "Messaggi ricevuti"
 
@@ -5408,7 +5407,7 @@ msgstr "Messaggi ricevuti"
 msgid "Recent activities"
 msgstr "Attività recenti"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "Conversazioni recenti"
 
@@ -5777,7 +5776,7 @@ msgstr "Allegato di posta salvato"
 msgid "Saved in"
 msgstr "Salvato in"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Allegato di posta salvato"
 
@@ -5910,7 +5909,7 @@ msgstr "Mittente/Da"
 msgid "Sent from %s via mobile"
 msgstr "Inviato da %s tramite mobile"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "Messaggi inviati"
 

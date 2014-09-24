@@ -1331,11 +1331,11 @@ msgstr "Zrušit"
 msgid "Canceled"
 msgstr "Zrušeno"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "Nepodařilo se nalézt žádné zprávy od tohoto kontaktu pro vás."
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "Nepodařilo se nalézt žádné zprávy od vás pro tento kontakt."
 
@@ -4251,7 +4251,7 @@ msgstr "Nový"
 msgid "New Folder"
 msgstr "Nová složka"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nová zpráva"
 
@@ -4462,7 +4462,6 @@ msgstr "Žádné pomalé požadavky"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5403,7 +5402,7 @@ msgstr "Přečíst článek na tumblr.com"
 msgid "Reauthorize"
 msgstr "Znovu autorizovat"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "Přijaté zprávy"
 
@@ -5412,7 +5411,7 @@ msgstr "Přijaté zprávy"
 msgid "Recent activities"
 msgstr "Nedávná činnost"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "Nedávné konverzace"
 
@@ -5783,7 +5782,7 @@ msgstr "Uložená příloha zprávy"
 msgid "Saved in"
 msgstr "Uloženo v"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Uložená příloha zprávy"
 
@@ -5917,7 +5916,7 @@ msgstr "Odesílatel/od"
 msgid "Sent from %s via mobile"
 msgstr "Posláno z %s z mobilního telefonu"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "Odeslané zprávy"
 

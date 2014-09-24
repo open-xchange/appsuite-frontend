@@ -1307,11 +1307,11 @@ msgstr "取消"
 msgid "Canceled"
 msgstr "已取消"
 
-#: apps/plugins/halo/mail/register.js:72 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
 msgid "Cannot find any messages this contact sent to you."
 msgstr "找不到此联系人向您发送的任何消息。"
 
-#: apps/plugins/halo/mail/register.js:79 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
 msgstr "找不到您向此联系人发送的任何消息。"
 
@@ -4203,7 +4203,7 @@ msgstr "新建"
 msgid "New Folder"
 msgstr "新文件夹"
 
-#: apps/io.ox/mail/api.js:1792 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1291 module:io.ox/mail
 msgid "New Mail"
 msgstr "新邮件"
 
@@ -4412,7 +4412,6 @@ msgstr "没有慢速请求"
 #. %2$s mail subject
 #: apps/io.ox/mail/compose/model.js:215 module:io.ox/mail
 #: apps/io.ox/mail/util.js:373 module:io.ox/core
-#: apps/io.ox/mail/view-grid-template.js:106 module:io.ox/core/mail
 #: apps/plugins/notifications/mail/register.js:59 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:62
 #, c-format
@@ -5337,7 +5336,7 @@ msgstr "在 tumblr.com 上阅读文章"
 msgid "Reauthorize"
 msgstr "再认证"
 
-#: apps/plugins/halo/mail/register.js:70 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:60 module:plugins/halo
 msgid "Received mails"
 msgstr "已接收邮件"
 
@@ -5346,7 +5345,7 @@ msgstr "已接收邮件"
 msgid "Recent activities"
 msgstr "最近活动"
 
-#: apps/plugins/halo/mail/register.js:62 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:41 module:plugins/halo
 msgid "Recent conversations"
 msgstr "最近交谈"
 
@@ -5715,7 +5714,7 @@ msgstr "保存邮件附件"
 msgid "Saved in"
 msgstr "保存在"
 
-#: apps/io.ox/mail/api.js:1455 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1037 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存邮件附件"
 
@@ -5848,7 +5847,7 @@ msgstr "发送者/来自"
 msgid "Sent from %s via mobile"
 msgstr "从 %s 经过移动网路发送"
 
-#: apps/plugins/halo/mail/register.js:77 module:plugins/halo
+#: apps/plugins/halo/mail/register.js:68 module:plugins/halo
 msgid "Sent mails"
 msgstr "已发送邮件"
 
