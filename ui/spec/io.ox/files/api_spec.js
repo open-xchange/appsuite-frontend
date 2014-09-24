@@ -284,16 +284,33 @@ define(['io.ox/files/api',
                             expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
-                    xit('after calling lock', function () {
+                    it('after calling lock', function () {
+                        this.server.respondWith('PUT', /api\/files\?action=list/, function (xhr) {
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                                JSON.stringify({
+                                    timestamp: 1368791630910,
+                                    data: locked
+                                })
+                            );
+                        });
                         var def = api.lock(locked);
                         return def.then(function () {
                             expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
-                    xit('after calling upload file', function () {
+                    it('after calling upload file', function () {
+                        this.server.respondWith('POST', /\/api\/files\?action=new/, function (xhr) {
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                                JSON.stringify({
+                                    timestamp: 1368791630910,
+                                    data: locked
+                                })
+                            );
+                        });
+                        if (_.device('!phantomjs')) locked.file = new Blob();
                         var def = api.uploadFile(locked);
-                        expect(def).toResolveWith(function () {
-                            return api.propagate.callCount === 1;
+                        return def.then(function () {
+                            expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
                 });
