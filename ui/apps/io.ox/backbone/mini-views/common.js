@@ -207,6 +207,14 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         }
     });
 
+    var FormView = AbstractView.extend({
+        tagName: 'form',
+        render: function () {
+            if (this.id) this.$el.attr({ id: this.id });
+            return this;
+        }
+    });
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -215,6 +223,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         CheckboxView: CheckboxView,
         RadioView: RadioView,
         SelectView: SelectView,
-        ErrorView: ErrorView
+        ErrorView: ErrorView,
+        FormView: FormView
     };
 });
