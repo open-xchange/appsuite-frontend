@@ -137,7 +137,7 @@ define('io.ox/files/main', [
          */
         'navbars-mobile': function (app) {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             app.pages.getNavbar('fluid')
                 .setLeft(gt('Folders'))
@@ -177,7 +177,7 @@ define('io.ox/files/main', [
          */
         'folder-view': function (app) {
 
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             // tree view
             var tree = new TreeView({ app: app, module: 'infostore', root: settings.get('rootFolderId', 9), contextmenu: true });
@@ -191,7 +191,7 @@ define('io.ox/files/main', [
          */
         'folder-view-mobile': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             var nav = app.pages.getNavbar('folderTree'),
                 page = app.pages.getPage('folderTree');
@@ -273,7 +273,7 @@ define('io.ox/files/main', [
          * Set folderview property
          */
         'prop-folderview': function (app) {
-            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+            app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
         },
 
         /*
@@ -292,7 +292,7 @@ define('io.ox/files/main', [
          * Respond to folder view changes
          */
         'change:folderview': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:folderview', function (model, value) {
                 app.folderView.toggle(value);
             });
@@ -352,7 +352,7 @@ define('io.ox/files/main', [
          */
         'folderview-toolbar': function (app) {
 
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             function toggleFolderView(e) {
                 e.preventDefault();
@@ -396,7 +396,7 @@ define('io.ox/files/main', [
 
         'inplace-search': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
