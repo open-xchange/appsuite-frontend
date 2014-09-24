@@ -84,7 +84,20 @@ define('io.ox/tasks/edit/main',
             require(['io.ox/core/notifications'], function (notifications) {
                 notifications.hideList();
             });
-            var taskData = options.taskData;
+
+            var taskData = options.taskData,
+                startApp = function ()  {
+                    app.view = taskView = view.getView(taskModel, win.nodes.main, app);
+    
+                    if (_.browser.IE === undefined || _.browser.IE > 9) {
+                        self.dropZone = new dnd.UploadZone({
+                            ref: 'io.ox/tasks/edit/dnd/actions'
+                        }, taskView);
+                    }
+                    //ready for show
+                    win.show();
+                };
+
             self = this;
             self.markDirty();
             // get window
@@ -96,29 +109,6 @@ define('io.ox/tasks/edit/main',
             win.addClass('io-ox-tasks-edit-main');
             app.setWindow(win);
             win.nodes.main.addClass('scrollable');
-            //ModelView
-            if (taskData && taskData.id) {
-                this.edit = true;
-                app.cid = 'io.ox/tasks:edit.' + _.cid(taskData);
-                model.factory.realm('edit').retain().get(taskData).done(function (task) {
-                    app.model = taskModel = task;
-                    taskModel.getParticipants();
-                    app.view = taskView = view.getView(taskModel, win.nodes.main, app);
-                });
-            } else {
-                app.attributes.title = gt('Create task');
-                app.model = taskModel = model.factory.create();
-                if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
-                    options.folderid = parseInt(options.folderid, 10);//folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
-                    taskModel.set('folder_id', options.folderid, {validate: true});
-                }
-                app.view = taskView = view.getView(taskModel, win.nodes.main, app);
-            }
-            if (_.browser.IE === undefined || _.browser.IE > 9) {
-                self.dropZone = new dnd.UploadZone({
-                    ref: 'io.ox/tasks/edit/dnd/actions'
-                }, taskView);
-            }
 
             win.on('show', function () {
                 if (app.dropZone) {app.dropZone.include(); }
@@ -138,8 +128,27 @@ define('io.ox/tasks/edit/main',
                 }
             });
 
-            //ready for show
-            win.show();
+            //ModelView
+            if (taskData && taskData.id) {
+                this.edit = true;
+                app.cid = 'io.ox/tasks:edit.' + _.cid(taskData);
+
+                model.factory.realm('edit').retain().get(taskData).done(function (task) {
+                    app.model = taskModel = task;
+                    taskModel.getParticipants();
+
+                    startApp();
+                });
+            } else {
+                app.attributes.title = gt('Create task');
+                app.model = taskModel = model.factory.create();
+                if (options.folderid) {//on reload there is no options.folderid so it would crash on saving. Leave default
+                    options.folderid = parseInt(options.folderid, 10);//folderId is sometimes a String but must be a number else the discard buttons thinks this is a missmatch to the defaults
+                    taskModel.set('folder_id', options.folderid, {validate: true});
+                }
+
+                startApp();
+            }
         });
 
         // Popup on close
