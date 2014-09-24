@@ -18,12 +18,13 @@ define(['io.ox/portal/util', 'settings!io.ox/portal'], function (util, settings)
             it('should always return an array', function () {
                 expect(util.getWidgets(undefined)).to.be.an('array');
             });
-            //FIXME: some race condition here... test fails sometimes
-            xit('should return an array of specific length depending on current settings value', function () {
+            it('should return an array of specific length depending on current settings value', function () {
+                //this test used to fail because of some race condition. if this still fails,
+                //make this async? seems to work fine, at the moment
                 var widgets = settings.get('widgets/user'),
                     length = widgets.length || 0,
                     result = util.getWidgets(undefined).length;
-                expect(result).to.equals(length);
+                expect(result).to.equal(length);
             });
         });
         describe('getWidgetsByType function', function () {

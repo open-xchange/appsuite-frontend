@@ -59,7 +59,7 @@ define('io.ox/settings/util',
                     if (obj.code  === 'MAIL_FILTER-0015') {
                         //show custom error message
                         obj.message = gtcore('Unable to load mail filter settings.');
-                    } else if (obj.erro) {
+                    } else if (obj.error) {
                         // show main error message
                         obj.message = /*#, dynamic*/gt(obj.error);
                     }

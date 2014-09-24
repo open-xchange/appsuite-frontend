@@ -11,7 +11,10 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define(['io.ox/settings/util'], function (util) {
+define([
+    'io.ox/settings/util',
+    'waitsFor'
+], function (util, waitsFor) {
 
     describe('Settings Utilities', function () {
 
@@ -34,20 +37,32 @@ define(['io.ox/settings/util'], function (util) {
                     util.destroy();
                 });
 
-                it.skip('with default message (reject without args)', function () {
-                    util.yellOnReject(def.reject());
-                    text = $('.io-ox-alert-error').find('.message').find('div').text();
-                    expect('unknown').to.equal(text);
+                it('with default message (reject without args)', function () {
+                    return util.yellOnReject(def.reject()).then(_.noop, function () {
+                        //yell defers appending of the message, so we need to busy wait
+                        return waitsFor(function () {
+                            return $('.io-ox-alert-error > .message > div').length > 0;
+                        });
+                    }).then(function () {
+                        text = $('.io-ox-alert-error > .message > div').text();
+                        expect(text).to.equal('unknown');
+                    });
                 });
 
                 it('with custom error message for MAIL_FILTER-0015', function () {
                     var e = {
                             code: 'MAIL_FILTER-0015'
                         };
-                    util.yellOnReject(def);
-                    def.reject(e);
-                    text = $('.io-ox-alert-error').find('.message').find('div').text();
-                    expect(text).not.to.equal('unknown');
+                    return util.yellOnReject(def.reject(e)).then(_.noop, function () {
+                        //yell defers appending of the message, so we need to busy wait
+                        return waitsFor(function () {
+                            return $('.io-ox-alert-error > .message > div').length > 0;
+                        });
+                    }).then(function () {
+                        text = $('.io-ox-alert-error').find('.message').find('div').text();
+                        expect(text).not.to.be.empty;
+                        expect(text).not.to.equal('unknown');
+                    });
                 });
             });
         });

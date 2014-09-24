@@ -145,23 +145,6 @@ define([
                    expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(0);
                 });
 
-                //we don't do this, at the moment
-                it.skip('with "opened" list for collections with one item', function () {
-                    var Model = Backbone.Model.extend({
-                            isFileAttachment: sinon.stub().returns(true)
-                        }),
-                        list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model()]),
-                            AttachmentView: Backbone.View.extend({
-                                tagName: 'li'
-                            })
-                        });
-
-                    list.render();
-                    expect(list.$ul.hasClass('open'), 'ul has class .open').to.be.true;
-                    expect(list.$ul.children('li'), 'li items in ul').to.have.length(1);
-                });
-
                 it('a default header', function () {
                     var Model = Backbone.Model.extend({
                             isFileAttachment: sinon.stub().returns(true)
