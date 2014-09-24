@@ -129,7 +129,7 @@ define('plugins/portal/facebook/register',
     var loadFromFacebook = function () {
         return proxy.request({
                 api: 'facebook',
-                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                url: 'https://graph.facebook.com/v2.0/fql?q=' + JSON.stringify({
                     newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
                     profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
                     comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
@@ -242,7 +242,7 @@ define('plugins/portal/facebook/register',
 
             return proxy.request({
                 api: 'facebook',
-                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                url: 'https://graph.facebook.com/v2.0/fql?q=' + JSON.stringify({
                     newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
                     profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
                     comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
