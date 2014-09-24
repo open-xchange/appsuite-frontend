@@ -77,6 +77,7 @@ define('io.ox/files/util', [
 
         //returns previewmode and checks capabilities
         previewMode: function (file) {
+
             var image = '(gif|png|jpe?g|bmp|tiff)',
                 audio = '(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)',
                 office = '(xls|xlb|xlt|ppt|pps|doc|dot|xlsx|xltx|pptx|ppsx|potx|docx|dotx|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',

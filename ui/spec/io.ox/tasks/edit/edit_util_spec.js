@@ -10,16 +10,19 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/edit/util',
-        'io.ox/core/extensions',
-        'io.ox/tasks/model',
-        'io.ox/core/tk/dialogs',
-        'fixture!io.ox/tasks/defaultTestData.json',
-        'io.ox/tasks/edit/view-template'], function (util, ext, model, dialogs, testData, template) {
+define([
+    'io.ox/tasks/edit/util',
+    'io.ox/core/extensions',
+    'io.ox/tasks/model',
+    'io.ox/core/tk/dialogs',
+    'fixture!io.ox/tasks/defaultTestData.json',
+    'io.ox/tasks/edit/view-template'
+], function (util, ext, model, dialogs, testData, template) {
+    'use strict';
 
     var extensionPoints = ext.point('io.ox/tasks/edit/view').list();
 
-    describe('task edit util', function () {
+    describe('Tasks edit utilities', function () {
         describe('splitExtensionsByRow', function () {
             it('should seperate rows', function () {
                 var rows = {};
@@ -90,17 +93,21 @@ define(['io.ox/tasks/edit/util',
                 $(progress.wrapper).find('button')[0].click();//update inputfield
                 expect($(progress.progress).val()).to.equal('0');
             });
-            it.skip(' + button should trigger change event', function () {
-                var progress = util.buildProgress('0');
+            it(' + button should trigger change event', function () {
+                var progress = util.buildProgress('0'),
+                    spy = sinon.spy();
 
-                expect(progress.progress).toTrigger('change');
+                progress.progress.on('change', spy);
                 $(progress.wrapper).find('button')[1].click();//update inputfield
+                expect(spy.called, '"change" event triggered').to.be.true;
             });
-            it.skip(' - button should trigger change event', function () {
-                var progress = util.buildProgress('100');
+            it(' - button should trigger change event', function () {
+                var progress = util.buildProgress('100'),
+                    spy = sinon.spy();
 
-                expect(progress.progress).toTrigger('change');
+                progress.progress.on('change', spy);
                 $(progress.wrapper).find('button')[0].click();//update inputfield
+                expect(spy.called, '"change" event triggered').to.be.true;
             });
         });
         describe('buildExtensionRow', function () {

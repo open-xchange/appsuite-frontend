@@ -37,8 +37,8 @@ define('io.ox/search/quickstart', [
                 extensions.searchfieldLogic.call(win.nodes.facetedsearch.toolbar, baton);
                 // add reference to window
                 win.facetedsearch.view = view;
-                // resolve win.facet
-                def.resolve(win.facetedsearch.ready);
+
+                def.resolve(search);
             });
 
             return def;

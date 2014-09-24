@@ -15,7 +15,7 @@ define(['io.ox/backbone/validation'], function (validation) {
 
     'use strict';
 
-    describe('Backbone validations', function () {
+    describe('Core Backbone validations', function () {
 
         describe('validating the "any float" format', function () {
             it('should accept 123,45', function () {

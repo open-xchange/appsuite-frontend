@@ -184,7 +184,7 @@ define('io.ox/mail/accounts/settings', [
         validateMailaccount = function (data, popup, def) {
 
             myModel.validationCheck(data, { ignoreInvalidTransport: true }).then(
-                function success(response) {
+                function success(response, responseobject) {
                     if (response === true) {
                         myModel.save(data).then(
                             function saveSuccess(response) {
@@ -206,7 +206,7 @@ define('io.ox/mail/accounts/settings', [
                             }
                         );
                     } else {
-                        var message = gt('There was no suitable server found for this mail/password combination');
+                        var message = responseobject.error ? responseobject.error : gt('There was no suitable server found for this mail/password combination');
                         drawAlert(getAlertPlaceholder(popup), message);
                         popup.idle();
                         popup.getBody().find('a.close').focus();

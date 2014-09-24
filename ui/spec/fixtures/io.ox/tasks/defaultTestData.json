@@ -39,6 +39,7 @@
         "folder_id": 121212,
         "user_id": 12345
     },
+    "testUserList": [[1337, 121212, "Mister, Test", "Mister", "Test", null, 1337, "test@example.com", null, 477834]],
     "testSearch": [
     	{"id": 13371,
 	    	"end_date": 1368791630910,

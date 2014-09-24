@@ -100,7 +100,7 @@ define([
         dropdown.first().trigger('click');
     };
 
-    describe('Search', function () {
+    describe.skip('Search', function () {
 
         describe.skip('in-app search:', function () {
             //ensure setup is finished

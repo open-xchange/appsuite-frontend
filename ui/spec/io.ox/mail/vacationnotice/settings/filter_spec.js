@@ -136,7 +136,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             });
         });
 
-        it.skip('should create the filtermodel', function (done) {
+        it('should create the filtermodel', function (done) {
             filter.editVacationtNotice(node, multiValues, 'tester@open-xchange.com').done(function (model) {
                 expect(model.get('id')).to.equal(expextedModel.id);
                 expect(model.get('text')).to.equal(expextedModel.text);

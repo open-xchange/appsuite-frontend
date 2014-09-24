@@ -11,12 +11,13 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/autocomplete/extensions', [
+define('io.ox/search/autocomplete/extensions',[
     'io.ox/core/extensions',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'less!io.ox/search/style'
 ], function (ext, settings, gt) {
+    'use strict';
 
     var POINT = 'io.ox/search/autocomplete';
 
@@ -28,7 +29,6 @@ define('io.ox/search/autocomplete/extensions', [
                 model = baton.model,
                 view = baton.app.view,
                 container = baton.$.container;
-
             // input group and dropdown
             ref.autocomplete({
                 api: app.apiproxy,
@@ -56,8 +56,8 @@ define('io.ox/search/autocomplete/extensions', [
                     return data;
                 },
                 draw: function (value) {
-                    var individual = ext.point(POINT + '/item/' + baton.data.facet);
                     baton.data = value;
+                    var individual = ext.point(POINT + '/item/' + baton.data.facet);
 
                     // use special draw handler
                     if (individual.list().length) {
@@ -77,7 +77,10 @@ define('io.ox/search/autocomplete/extensions', [
                     // apply selected filter
                     var node = $(e.target).closest('.autocomplete-item'),
                         value = node.data();
-                    ref.val('');
+
+                    // empty input field
+                    if (!(model.getOptions().switches || {}).keepinput)
+                        ref.val('');
 
                     // exclusive: define used option (type2 default is index 0 of options)
                     var option = _.find(value.options, function (item) {
@@ -129,9 +132,15 @@ define('io.ox/search/autocomplete/extensions', [
                 });
 
             this.find('.btn-search')
-                .on('click', function (e) {
-                    ref.trigger(e);
-                    view.trigger('button:search');
+                .on('click', function () {
+                    // open autocomplete dropdown
+                    ref.trigger('click');
+                    // trigger ENTER keypress
+                    var keydown = $.Event('keydown');
+                    keydown.which = 13;
+                    ref.trigger(keydown);
+                    // prevent, propagation
+                    return false;
                 });
 
             return this;
@@ -181,17 +190,11 @@ define('io.ox/search/autocomplete/extensions', [
                     .attr({
                         'tabindex': '1',
                         'class': 'btn btn-default btn-search',
-                        'data-toggle': 'tooltip',
-                        'data-placement': 'bottom',
-                        'data-animation': 'false',
-                        'data-container': 'body',
-                        'data-original-title': gt('Search'),
                         'aria-label': gt('Search')
                     })
                     .append(
                         $('<i class="fa fa-search"></i>')
                     )
-                    .tooltip()
                     .on('click', function (e) {
                         e.preventDefault();
                         var e = $.Event('keydown');

@@ -500,8 +500,7 @@ define('io.ox/tasks/main', [
          * Drag and Drop support
          */
         'drag-n-drop': function (app) {
-            if (_.device('!touch')) return;
-            // drag & drop
+            if (_.device('touch')) return;
             app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
                 actions.invoke('io.ox/tasks/actions/move', null, baton);
             });
@@ -521,10 +520,10 @@ define('io.ox/tasks/main', [
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
 
-            require(['io.ox/search/main'], function (facetedsearch) {
-                //register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
-            });
+            win.facetedsearch.ready
+                .done(function (search) {
+                    commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
+                });
         }
     });
 

@@ -31,6 +31,8 @@ define('io.ox/realtime/groups', [
             var error = m.get('', 'error');
             if (error.data && error.data.code === 1008) {
                 self.trigger('error:notMember');
+                clearInterval(heartbeat);
+                heartbeat = null;
             }
             self.trigger('error', error);
         });

@@ -202,7 +202,8 @@ define([], function () {
             //TODO
         //});
 
-        it.skip('_.mythrottle', function () {
+        it('_.mythrottle', function (done) {
+            //TODO: implement using fake timer
             var finished,
                 //now = new Date(),
                 counter = 0,
@@ -228,17 +229,9 @@ define([], function () {
 
             //wait
             setTimeout(function () {
-                finished = true;
-            }, 300);
-
-            waitsFor(function () {
-                return finished;
-            }, 'no data in grid');
-            runs(function () {
-                // console.log('counter: ', counter);
-                // console.log('called: ', counterrepaint);
                 expect(counterrepaint).to.be.equal(3);
-            });
+                done();
+            }, 300);
         });
 
         describe('_.cid', function () {
@@ -344,9 +337,9 @@ define([], function () {
                 expect(_.noI18n.fix('')).to.be.a('string');
                 expect(_.noI18n.fix('abed')).to.be.a('string');
             });
-            it.skip('.text should alway return jquery list', function () {
-                this.expect(_.noI18n.text()).toBeJquery(_.noI18n.text());
-                this.expect(_.noI18n.text('abed', 'troy')).toBeJquery();
+            it('.text should alway return jquery list', function () {
+                expect(_.noI18n.text()).to.be.an.instanceof($);
+                expect(_.noI18n.text('abed', 'troy')).to.be.an.instanceof($);
             });
         });
 

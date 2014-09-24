@@ -10,8 +10,9 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'], function (util, gt, date) {
-    describe('tasks utility', function () {
+define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
+], function (util, gt, date) {
+    describe('Tasks Utilities', function () {
         var options = {
             testData: {
                 'status': 2,
@@ -60,7 +61,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'], function 
             });
 
             it('should add badges if detail parameter is set', function () {
-                var result = util.interpretTask(options.testData, { detail: true });
+                var result = util.interpretTask(options.testData, {detail: true});
                 expect(result.badge).to.equal('badge');
             });
         });
@@ -73,7 +74,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'], function 
             });
 
             it('should only contain full days if parameter is set', function () {
-                var result = _.object(util.buildOptionArray({ daysOnly: true }));
+                var result = _.object(util.buildOptionArray({daysOnly: true}));
                 expect(result[5]).not.to.exist;
                 result = _.object(util.buildOptionArray());
                 expect(result[5]).to.equal(gt('in 5 minutes'));
@@ -101,6 +102,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'], function 
                 result = _.object(util.buildOptionArray());
                 expect(result).not.to.include.key('d2');
                 expect(result).to.include.key('5');
+
 
                 myDate.setHours(19);
                 result = _.object(util.buildOptionArray());
@@ -173,7 +175,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'], function 
             it('should return correct nodeTypes', function () {
                 var result = util.buildDropdownMenu();
                 expect(result[0].is('option')).be.true;
-                result = util.buildDropdownMenu({ bootstrapDropdown: true });
+                result = util.buildDropdownMenu({bootstrapDropdown: true});
                 expect(result[0].is('li')).to.be.true;
             });
         });
@@ -192,23 +194,23 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'], function 
 
             it('should work on a copy', function () {
                 util.sortTasks(options.testDataArray);
-                expect(options.testDataArray[0]).to.deep.equal({ 'status': 3, 'title': 'Top Test' });
+                expect(options.testDataArray[0]).to.deep.equal({'status': 3, 'title': 'Top Test'});
             });
 
             it('should sort overdue tasks to first position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[0]).to.deep.equal({ 'status': 1, 'title': 'Test Title', 'end_date': 1384999200000 });
+                expect(result[0]).to.deep.equal({'status': 1, 'title': 'Test Title', 'end_date': 1384999200000 });
             });
 
             it('should sort done tasks to last position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[3]).to.deep.equal({ 'status': 3, 'title': 'Top Test' });
+                expect(result[3]).to.deep.equal({'status': 3, 'title': 'Top Test'});
             });
 
             it('should sort same dates alphabetically', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[1]).to.deep.equal({ 'end_date': 1895104800000, 'status': 1, 'title': 'Abc' });
-                expect(result[2]).to.deep.equal({ 'end_date': 1895104800000, 'status': 1, 'title': 'Blabla' });
+                expect(result[1]).to.deep.equal({'end_date': 1895104800000, 'status': 1, 'title': 'Abc'});
+                expect(result[2]).to.deep.equal({'end_date': 1895104800000, 'status': 1, 'title': 'Blabla'});
             });
         });
     });

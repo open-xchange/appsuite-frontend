@@ -183,7 +183,7 @@ define('io.ox/tasks/actions', [
 
     // helper
     function isShared(id) {
-        var data = folderAPI.pool.getModel(id);
+        var data = folderAPI.pool.getModel(id).toJSON();
         return folderAPI.is('shared', data);
     }
 
@@ -204,11 +204,14 @@ define('io.ox/tasks/actions', [
         },
         multiple: function (list, baton) {
 
-            var vgrid = baton.grid || (baton.app && baton.app.getGrid()),
-                folder = baton.app ? baton.app.folder.get() : baton.data.folder_id;//when opened from notification area there is no app object
+            var vgrid = baton.grid || (baton.app && baton.app.getGrid());
 
             // shared?
-            if (!folder || isShared(folder) || (baton.target && isShared(baton.target))) {
+            var shared = _([].concat(list)).reduce(function (memo, obj) {
+                return memo || isShared(obj.folder_id);
+            }, false);
+
+            if (shared || (baton.target && isShared(baton.target))) {
                 return notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
             }
 

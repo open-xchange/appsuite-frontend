@@ -62,6 +62,7 @@ module.exports = function (grunt) {
                             'lib/bootstrap-combobox.js',
                             // add mandatory UI sources
                             'apps/io.ox/core/http.js',
+                            'apps/io.ox/core/uuids.js',
                             'apps/io.ox/core/session.js',
                             'apps/io.ox/core/cache.js',
                             'apps/io.ox/core/extensions.js',
@@ -74,6 +75,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/cache/localstorage.js',
                             'apps/io.ox/core/cache/simple.js',
                             'apps/plugins/halo/register.js',
+                            'apps/io.ox/core/settings/defaults.js',
                             // missing for signin
                             'apps/io.ox/core/login-i18n.js',
                             'build/apps/io.ox/core/login.en_US.js',
@@ -97,6 +99,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/api/apps.js',
                             'apps/io.ox/core/extPatterns/stage.js',
                             'apps/io.ox/core/date.js',
+                            'apps/io.ox/core/yell.js',
                             'apps/io.ox/core/notifications.js',
                             'apps/io.ox/core/commons.js',
                             'apps/io.ox/core/upsell.js',
@@ -136,8 +139,6 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/collection.js',
                             'apps/io.ox/core/extPatterns/actions.js',
                             'apps/io.ox/core/api/account.js',
-                            'apps/io.ox/filter/folder.js',
-                            'apps/io.ox/core/tk/folderviews.js',
                             'apps/io.ox/core/tk/selection.js',
                             // core
                             'apps/io.ox/core/main.js',

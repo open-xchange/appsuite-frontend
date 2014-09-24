@@ -165,15 +165,20 @@ define('io.ox/core/import/import', [
                         file = baton.nodes.file_upload.find('input[type=file]'),
                         popup = this,
                         failHandler = function (data) {
-                            var list = [];
-                            _.each(data, function (item) {
-                                if (item && item.code === 'CON-0600') {
-                                    //append first value which caused conversion error (csv import)
-                                    item.error = item.error + '\n' + item.error_stack[0];
-                                }
-                                list.push(item && item.error || gt('An unknown error occurred'));
-                            });
-                            notifications.yell('error', list.join('\n\n'));
+                            var list = _(data).chain()
+                                .map(function (item) {
+                                    if (item && item.code === 'CON-0600') {
+                                        //append first value which caused conversion error (csv import)
+                                        item.error = item.error + '\n' + item.error_stack[0];
+                                    }
+                                    return item && item.error;
+                                })
+                                .compact();
+                            notifications.yell('error', list.length ?
+                                list.join('\n\n') :
+                                //#. Error message if calender import failed
+                                gt('There was no appointment data to import')
+                            );
                             popup.idle();
                         };
 

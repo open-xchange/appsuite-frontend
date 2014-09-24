@@ -14,7 +14,7 @@
 
 define(['io.ox/core/util'], function (util) {
 
-    describe('core/util.js', function () {
+    describe('Core utils', function () {
 
         describe('unified display name', function () {
 

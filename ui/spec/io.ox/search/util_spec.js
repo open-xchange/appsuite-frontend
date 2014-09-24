@@ -55,7 +55,7 @@ define(['io.ox/search/util',
         return def;
     }
 
-    describe('Search', function () {
+    describe.skip('Search', function () {
 
         describe('Utilities for search:', function () {
             beforeEachEnsure(setup);

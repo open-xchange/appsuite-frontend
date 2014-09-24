@@ -39,7 +39,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
     function remove() {
         clearTimeout(timer);
         $('.io-ox-alert').trigger('notification:removed').remove();
-        $(document).off(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
+        $(document).off('.yell');
     }
 
     function click (e) {
@@ -95,8 +95,11 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             //prevent double binding
             //we can not use an event listener that always listens. Otherwise we might run into opening clicks and close our notifications, when they should not. See Bug 34339
             //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although he should not)
-            $(document).off(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
-            $(document).on(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
+            $(document).off('.yell');
+            _.defer(function () {
+                // use defer not to run into drag&drop
+                $(document).on(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
+            });
         } else {
             setTimeout(function () {
                 $('.io-ox-alert-screenreader').remove();

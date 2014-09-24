@@ -520,7 +520,9 @@ define('io.ox/mail/api', [
             api.trigger('update:' + _.ecid(obj), obj);
         });
 
-        update(list, { color_label: label });
+        return http.wait(
+            update(list, { color_label: label })
+        );
     };
 
     /**
@@ -696,6 +698,11 @@ define('io.ox/mail/api', [
         });
     };
 
+    // composition space id
+    api.csid = function () {
+        return _.uniqueId() + '.' + _.now();
+    };
+
     var react = function (action, obj, view) {
 
         // get proper view first
@@ -705,8 +712,8 @@ define('io.ox/mail/api', [
 
         // attach original message on touch devices?
         var attachOriginalMessage = view === 'text' &&
-            Modernizr.touch &&
-            settings.get('attachOriginalMessage', false) === true;
+                Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+            csid = api.csid();
 
         return http.PUT({
             module: 'mail',
@@ -721,8 +728,10 @@ define('io.ox/mail/api', [
             }),
             appendColumns: false
         })
-        .pipe(function (data) {
+        .then(function (data) {
             var text = '', quote = '', tmp = '';
+            // inject csid
+            data.csid = csid;
             // transform pseudo-plain text to real text
             if (data.attachments && data.attachments.length) {
                 if (data.attachments[0].content === '') {

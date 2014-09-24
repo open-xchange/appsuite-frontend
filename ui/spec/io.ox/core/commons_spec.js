@@ -12,8 +12,7 @@
  */
 define(['io.ox/core/commons', 'io.ox/core/tk/vgrid'], function (commons, VGrid) {
 
-    var expect = chai.expect;
-    describe('core commons:', function () {
+    describe('Core commons:', function () {
 
         describe('grid property cache', function () {
             var grid = new VGrid(),

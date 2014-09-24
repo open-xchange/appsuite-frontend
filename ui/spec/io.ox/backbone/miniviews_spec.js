@@ -15,7 +15,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
 
     'use strict';
 
-    describe('Backbone mini-views.', function () {
+    describe('Core Backbone mini-views.', function () {
 
         describe('AbstractView view', function () {
 

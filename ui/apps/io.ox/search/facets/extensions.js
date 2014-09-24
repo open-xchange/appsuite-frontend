@@ -14,9 +14,11 @@
 define('io.ox/search/facets/extensions', [
     'io.ox/core/extensions',
     'settings!io.ox/core',
+    'io.ox/core/date',
     'io.ox/search/util',
     'gettext!io.ox/core'
-], function (ext, settings, util, gt) {
+], function (ext, settings, dateAPI, util, gt) {
+    'use strict';
 
     //var POINT = 'io.ox/search/facets';
 
@@ -39,11 +41,10 @@ define('io.ox/search/facets/extensions', [
                             baton.model.update(facet.id, id, { custom: target, name: label });
                         });
                 },
-                customize: function (baton) {
-                    var data = baton.data,
-                        same = type === 'move' && data.id === id,
+                disable: function (data) {
+                    var same = type === 'move' && data.id === id,
                         create = api.can('create', data);
-                    if (same || !create) this.addClass('disabled');
+                    return same || !create;
                 }
             });
         });
@@ -53,6 +54,10 @@ define('io.ox/search/facets/extensions', [
             current: 1,
             'default': 2,
             standard: 3
+        },
+        LABEL = {
+            hide: gt('Hide advanced filters'),
+            show: gt('Show advanced filters')
         },
         extensions = {
 
@@ -162,7 +167,7 @@ define('io.ox/search/facets/extensions', [
                     this.parent().prepend(
                         $('<nav>').append(
                             $('<a data-action="toggle-adv">')
-                                .text(gt('Show advanced filters'))
+                                .text(baton.model.get('showadv') ? LABEL.hide : LABEL.show)
                                 .attr({
                                     tabindex: 1,
                                     role: 'button',
@@ -170,7 +175,7 @@ define('io.ox/search/facets/extensions', [
                                 })
                                 .on('click ', function () {
                                     var visible = self.is(':visible');
-                                    $(this).text(visible ? gt('Show advanced filters') : gt('Hide advanced filters'));
+                                    $(this).text(visible ? LABEL.show : LABEL.hide);
                                     baton.model.set('showadv', !visible);
                                     self.toggle();
                                 })
@@ -268,26 +273,32 @@ define('io.ox/search/facets/extensions', [
                 this.prepend(
                     node = $('<span class="remove">').attr({
                         'tabindex': '1',
+                        'aria-label': gt('Remove')
+                    })
+                    .append(
+                        $('<i class="fa fa-times action">')
+                    )
+                    .on('click', fn || function () {
+                        baton.model.remove(value.facet || value._compact.facet, value.id);
+                        return false;
+                    })
+
+                );
+                // tooltip
+                if (!_.device('touch')) {
+                    node.attr({
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
                         'data-container': 'body',
-                        'data-original-title': gt('Remove'),
-                        'aria-label': gt('Remove')
+                        'data-original-title': gt('Remove')
                     })
                     .tooltip()
-                    .append(
-                        $('<i class="fa fa-times action">')
-                    )
                     .on('click', function () {
-                        node.tooltip('hide');
-                    })
-                    .on('click', fn || function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        baton.model.remove(value.facet || value._compact.facet, value.id);
-                    })
-                );
+                        if (node.tooltip)
+                            node.tooltip('hide');
+                    });
+                }
             },
 
             facetDropdown: function (baton, value, facet) {
@@ -365,8 +376,9 @@ define('io.ox/search/facets/extensions', [
                 if (_.contains(facet.flags, 'highlander')) {
                     this.on('click', function () {
                         var sidepanel = $(this).closest('.window-sidepanel'),
-                            field = sidepanel.find('.search-field');
-                        field.val((facet.item || facet).name);
+                            field = sidepanel.find('.search-field'),
+                            key = Object.keys(facet.values)[0];
+                        field.val(facet.values[key].name);
                     });
                 }
 
@@ -374,121 +386,138 @@ define('io.ox/search/facets/extensions', [
 
             timeFacet: function (baton, value, facet) {
                 var self = this,
+                    VALUE = 'daterange',
                     isUpdate = !!baton.model.get('pool')['date.custom'],
-                    from, to,
-                    group;
+                    data, from, to, group, current, container;
+
+                // add styles
+                self.addClass('timefacet');
 
                 // add vs update
                 facet = baton.model.get('pool')['date.custom'] || facet;
 
                 // predefined values
-                from = value.options ? value.options[0].from : undefined;
-                to = value.options ? value.options[0].to : undefined;
+                data = value.options && value.options[0] ? value.options[0] : {};
+                from = data.from ? (new dateAPI.Local(data.from)).format(dateAPI.DATE) : undefined;
+                to = data.to ? (new dateAPI.Local(data.to)).format(dateAPI.DATE) : undefined;
+                current = data.id || undefined;
 
+                // data from inputs
                 function getData () {
                     var nodes = group.find('input'),
                         range = [],
-                        rangedates = [],
                         WILDCARD = '*';
-
                     // construct facet custom value
                     _.each(nodes, function (node) {
-                        var value = $(node).val(),
-                            parts;
-                        // use wildcard
-                        value = value !== '' ? value : WILDCARD;
-                        // get date parts
-                        parts =  value.split('/');
-                        range.push(value.toLocaleString().split(',')[0]);
-                        rangedates.push(
-                            parts.length > 1 ? new Date(parts[2], parts[1]-1, parts[0]) : parts[0]
-                        );
-                    });
+                        var value = $(node).val();
 
+                        if (value !== '') {
+                            // standard date format
+                            value = (dateAPI.Local.parse(value, dateAPI.DATE));
+                        } else {
+                            // use wildcard
+                            value = value !== '' ? value : WILDCARD;
+                        }
+
+                        // get date parts
+                        range.push({
+                            value: value.format ? value.valueOf() : value
+                        });
+                    });
                     return {
-                        id: '[' + rangedates[0].valueOf() + ' TO ' + rangedates[1].valueOf() + ']',
-                        name: range.join(' - '),
-                        from: range[0].replace('*', ''),
-                        to: range[1].replace('*', '')
+                        id: '[' + range[0].value + ' TO ' + range[1].value + ']',
+                        from: range[0].value.replace ? null : range[0].value,
+                        to: range[1].value.replace ? null : range[1].value
                     };
                 }
 
-                //
+                // change handler
                 function apply () {
-                    var VALUE = 'daterange',
-                        data = getData();
+                    var data = getData();
 
-                    // update vs add
-                    var tmp = facet.values[VALUE] || facet.values[0];
-                    // set value custom property
-                    tmp.custom = data.id;
-                    // set option
-                    tmp.options = [data];
+                    // update model only on real change
+                    if (current !== data.id) {
+                        // update vs add
+                        var tmp = facet.values[VALUE] || facet.values[0];
+                        // set value custom property
+                        tmp.custom = data.id;
+                        // set option
+                        tmp.options = [data];
 
-                    // update vs app
-                    if (!isUpdate) {
-                        baton.model.add(facet.id, 'daterange', data.id);
-                    } else {
-                        baton.model.update(facet.id, VALUE, { option: data.id, value: VALUE });
+                        // remeber current state
+                        current = data.id;
+
+                        // update vs app
+                        if (!isUpdate) {
+                            baton.model.add(facet.id, 'daterange', data.id);
+                        } else {
+                            baton.model.update(facet.id, VALUE, { option: data.id, value: VALUE });
+                        }
+                        baton.model.trigger('query', baton.model.getApp());
                     }
-                    baton.model.trigger('query', baton.model.getApp());
                 }
 
-                require(['io.ox/core/date'], function (dateAPI) {
-                    var container;
-                    $('body').append(
-                        container = $('<div class="datepicker-container">').hide()
+                //i18n: just localize the picker, use en as default with current languages
+                $.fn.datepicker.dates.en = {
+                    days: dateAPI.locale.days,
+                    daysShort: dateAPI.locale.daysShort,
+                    daysMin: dateAPI.locale.daysStandalone,
+                    months: dateAPI.locale.months,
+                    monthsShort: dateAPI.locale.monthsShort,
+                    today: gt('Today')
+                };
+
+                // used to handle overlow when datepicker is shown
+                $('body>.datepicker-container').remove();
+                $('body').append(
+                    container = $('<div class="datepicker-container">').hide()
+                );
+
+                // input group
+                self.find('label')
+                    .append(
+                        $('<div>')
+                            .addClass('type')
+                            .html(facet.name),
+                        group = $('<div class="input-daterange input-group" id="datepicker">')
+                                    .append(
+                                        $('<input type="text" class="input-sm form-control" name="start" />')
+                                            .attr('placeholder', gt('Starts on'))
+                                            .val(from)
+                                            .on('change', apply),
+                                        $('<span class="input-group-addon">')
+                                            .text('-'),
+                                        $('<input type="text" class="input-sm form-control" name="end" />')
+                                            .attr('placeholder', gt('Ends on'))
+                                            .val(to)
+                                            .on('change', apply)
+                                    )
+                                    .datepicker({
+                                        format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
+                                        parentEl: container,
+                                        weekStar: dateAPI.locale.weekStart,
+                                        //orientation: 'top left auto',
+                                        autoclose: true,
+                                        clearBtn: false,
+                                        todayHighlight: true,
+                                        //insert date when clicked
+                                        todayBtn: 'linked'
+                                    })
+                                    .on('show', function (e) {
+                                        // position container (workaround)
+                                        var offset = $(e.target).offset();
+                                        container.show();
+
+                                        // use samt offset
+                                        container.offset(offset);
+
+                                        // appply child style
+                                        container.find('.datepicker').css({
+                                            top: $(e.target).outerHeight(),
+                                            left: 0
+                                        });
+                                    })
                     );
-
-                    self.addClass('timefacet');
-
-                    // input group
-                    self.find('label')
-                        .append(
-                             $('<div>')
-                                .addClass('type')
-                                .html(facet.name),
-                            group = $('<div class="input-daterange input-group" id="datepicker">')
-                        );
-
-                    group
-                        .append(
-                            $('<input type="text" class="input-sm form-control" name="start" />')
-                                .attr('placeholder', gt('From'))
-                                .on('change', apply)
-                                .val(from),
-                            $('<span class="input-group-addon">')
-                                .text('-'),
-                            $('<input type="text" class="input-sm form-control" name="end" />')
-                                .attr('placeholder', gt('To'))
-                                .on('change', apply)
-                                .val(to)
-                        )
-                        .datepicker({
-                            format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                            parentEl: container,
-                            weekStar: dateAPI.locale.weekStart,
-                            //orientation: 'top left auto',
-                            autoclose: true,
-                            clearBtn: true,
-                            todayHighlight: true,
-                            todayBtn: true
-                        })
-                        .on('show', function (e) {
-                            // position container (workaround)
-                            var offset = $(e.target).offset();
-                            container.show();
-
-                            // use samt offset
-                            container.offset(offset);
-
-                            // appply child style
-                            container.find('.datepicker').css({
-                                top: $(e.target).outerHeight(),
-                                left: 0
-                            });
-                        });
-                });
             },
 
             folderFacet: function (baton, value, facet) {
@@ -517,27 +546,28 @@ define('io.ox/search/facets/extensions', [
 
                 // add 'all folders'
                 var link;
-                // add dropdown entry
-                menu.prepend(
-                    $('<li role="presentation">').append(
-                         link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
-                                    .append(
-                                        $('<i class="fa fa-fw ">'),
-                                        $('<span>').text(gt('All folders'))
-                                    )
-                                    .attr('data-custom', 'custom')
-                                    .attr('title', gt('All folders'))
-                    )
-                );
-                // is active
-                if (!value.custom || value.custom === 'custom') {
-                    // set display name
-                    this.find('.name')
-                        .text(gt('All folders'));
-                    // set fa-check icon
-                    link.find('i')
-                        .addClass('fa-check');
-                    link.attr('aria-checked', true);
+                if (!baton.model.isMandatory('folder')) {
+                    menu.prepend(
+                        $('<li role="presentation">').append(
+                             link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
+                                        .append(
+                                            $('<i class="fa fa-fw ">'),
+                                            $('<span>').text(gt('All folders'))
+                                        )
+                                        .attr('data-custom', 'custom')
+                                        .attr('title', gt('All folders'))
+                        )
+                    );
+                    // is active
+                    if (!value.custom || value.custom === 'custom') {
+                        // set display name
+                        this.find('.name')
+                            .text(gt('All folders'));
+                        // set fa-check icon
+                        link.find('i')
+                            .addClass('fa-check');
+                        link.attr('aria-checked', true);
+                    }
                 }
 
                 // add fodlers

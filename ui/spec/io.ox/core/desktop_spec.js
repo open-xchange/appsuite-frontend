@@ -14,98 +14,100 @@
 define(['io.ox/core/desktop'], function (desktop) {
     'use strict';
 
-    describe('The appsuite desktop', function () {
+    describe('Core', function () {
+        describe('AppSuite desktop', function () {
 
-        describe('provides the Window API which', function () {
-        });
-
-        describe('provides the App API which', function () {
-            var app;
-
-            afterEach(function (done) {
-                //clean up
-                if (app && app.get('state') === 'running') {
-                    app.quit().done(done);
-                } else {
-                    done();
-                }
+            describe('provides the Window API which', function () {
             });
 
-            describe('has simple applications', function () {
-                beforeEach(function () {
-                    app = new ox.ui.App({
-                        name: 'io.ox/testApp'
-                    });
+            describe('provides the App API which', function () {
+                var app;
 
-                    ox.manifests.apps['io.ox/testApp/main'] = {
-                        path: 'spec/io.ox/testApp',
-                        category: 'tests'
-                    };
-                });
-                it('should define global ox.ui.App object', function () {
-                    expect(ox.ui.App).to.exist;
-                });
-
-                it('should launch a test app', function (done) {
-                    expect(app.get('state')).to.equal('ready');
-                    app.launch().then(function () {
-                        expect(ox.ui.apps.models).to.contain(app);
-                        expect(app.get('state')).to.equal('running');
+                afterEach(function (done) {
+                    //clean up
+                    if (app && app.get('state') === 'running') {
+                        app.quit().done(done);
+                    } else {
                         done();
+                    }
+                });
+
+                describe('has simple applications', function () {
+                    beforeEach(function () {
+                        app = new ox.ui.App({
+                            name: 'io.ox/testApp'
+                        });
+
+                        ox.manifests.apps['io.ox/testApp/main'] = {
+                            path: 'spec/io.ox/testApp',
+                            category: 'tests'
+                        };
+                    });
+                    it('should define global ox.ui.App object', function () {
+                        expect(ox.ui.App).to.exist;
+                    });
+
+                    it('should launch a test app', function (done) {
+                        expect(app.get('state')).to.equal('ready');
+                        app.launch().then(function () {
+                            expect(ox.ui.apps.models).to.contain(app);
+                            expect(app.get('state')).to.equal('running');
+                            done();
+                        });
+                    });
+
+                    it('should not launch an unregistered app', function () {
+                        var def;
+                        ox.manifests.disabled['io.ox/testApp/main'] = true;
+
+                        def = app.launch();
+
+                        ox.manifests.disabled = {};
+                        expect(ox.ui.apps.models).not.to.contain(app);
+                        expect(def.state()).to.equal('rejected');
                     });
                 });
 
-                it('should not launch an unregistered app', function () {
-                    var def;
-                    ox.manifests.disabled['io.ox/testApp/main'] = true;
+                describe('should allow to customize the launch method', function () {
+                    var launcher = function (options) {
+                        var def = $.Deferred();
 
-                    def = app.launch();
+                        options.callback();
+                        _.defer(function () {
+                            def.resolve();
+                        });
+                        return def;
+                    }, callback;
 
-                    ox.manifests.disabled = {};
-                    expect(ox.ui.apps.models).not.to.contain(app);
-                    expect(def.state()).to.equal('rejected');
-                });
-            });
-
-            describe('should allow to customize the launch method', function () {
-                var launcher = function (options) {
-                    var def = $.Deferred();
-
-                    options.callback();
-                    _.defer(function () {
-                        def.resolve();
+                    beforeEach(function () {
+                        app = new ox.ui.App({
+                            name: 'io.ox/testApp',
+                            launch: launcher
+                        });
+                        callback = sinon.spy();
                     });
-                    return def;
-                }, callback;
-
-                beforeEach(function () {
-                    app = new ox.ui.App({
-                        name: 'io.ox/testApp',
-                        launch: launcher
+                    afterEach(function () {
+                        expect(callback.calledTwice, 'callback has been called twice').to.be.true;
                     });
-                    callback = sinon.spy();
-                });
-                afterEach(function () {
-                    expect(callback.calledTwice, 'callback has been called twice').to.be.true;
-                });
 
-                it('during initialization', function (done) {
+                    it('during initialization', function (done) {
 
-                    expect(app.get('state')).to.equal('ready');
-                    app.launch({ callback: callback }).done(function () {
-                        expect(ox.ui.apps.models).to.contain(app);
-                        expect(app.get('state')).to.equal('running');
-                        callback();
-                        done();
+                        expect(app.get('state')).to.equal('ready');
+                        app.launch({callback: callback}).done(function () {
+                            expect(ox.ui.apps.models).to.contain(app);
+                            expect(app.get('state')).to.equal('running');
+                            callback();
+                            done();
+                        });
+                        expect(app.get('state')).to.equal('initializing');
                     });
-                    expect(app.get('state')).to.equal('initializing');
-                });
 
-                it('after initialization', function (done) {
-                    app.setLauncher(launcher);
-                    app.launch({ callback: callback }).done(function () {
-                        callback();
-                        done();
+                    it('after initialization', function (done) {
+                        app.setLauncher(launcher);
+                        app.launch({callback: callback}).done(function () {
+                            callback();
+                            done();
+                        });
                     });
                 });
             });

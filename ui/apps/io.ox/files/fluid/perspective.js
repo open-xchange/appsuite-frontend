@@ -375,20 +375,22 @@ define('io.ox/files/fluid/perspective', [
 
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
+
             var file = baton.data,
                 options = _.extend({ version: true, scaletype: 'cover' }, baton.options),
-                mode = util.previewMode(file),
+                mode = util.previewMode(file), url,
                 changed = getDateFormated(baton.data.last_modified),
-                //view mode: icon
+                // view mode: icon
                 iconImage = drawGenericIcon(file.filename),
                 previewImage = $('<div class="preview">').append(iconImage),
-                //view modes: list, tile
+                // view modes: list, tile
                 iconBackground = drawGenericIcon(file.filename),
                 previewBackground = $('<div class="preview-cover not-selectable">').append(iconBackground);
 
             // add preview image
             if (mode) {
                 var url = api.getUrl(file, mode, options);
+                url = url.replace(/format=preview_image/, 'format=thumbnail_image');
                 previewImage.append(
                     $('<img class="img-thumbnail lazy" alt="">')
                         .attr('data-original', url)

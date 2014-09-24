@@ -72,7 +72,7 @@ define('spec/shared/capabilities', [
                     }
 
                     //set
-                    return before.length === data.length ? $.Deferred().resolve() : apply();
+                    return before.length === data.length ? $.Deferred().resolve(data) : apply();
                 };
 
             return {

@@ -33,6 +33,20 @@ define('io.ox/core/tk/flag-picker', [
         YELLOW:     gt('Yellow')
     };
 
+    var order = {
+        NONE:        0,
+        RED:         1,
+        BLUE:        2,
+        GREEN:       3,
+        GRAY:        4,
+        PURPLE:      5,
+        LIGHTGREEN:  6,
+        ORANGE:      7,
+        PINK:        8,
+        LIGHTBLUE:   9,
+        YELLOW:     10
+    };
+
     var colorLabelIconEmpty = 'fa fa-bookmark-o',
         colorLabelIcon = 'fa fa-bookmark';
 
@@ -45,7 +59,7 @@ define('io.ox/core/tk/flag-picker', [
                 $('<ul class="dropdown-menu" role="menu">')
                 .on('click', 'a', { data: data }, that.change)
                 .append(
-                    _(api.COLORS).map(function (index, color) {
+                    _(order).map(function (index, color) { // alternative: api.COLORS for rainbow colors
                         return $('<li>').append(
                             $('<a href="#" tabindex="1" role="menuitem">').append(
                                 index > 0 ? $('<span class="flag-example">').addClass('flag_bg_' + index) : $(),

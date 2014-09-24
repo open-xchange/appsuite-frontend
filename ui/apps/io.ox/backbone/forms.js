@@ -617,16 +617,19 @@ define('io.ox/backbone/forms', [
 
             onFullTimeChange: function () {
                 // toggle time input fields
-                var ft = this.model.get('full_time');
+                var ft = this.model.get('full_time'),
+                    // fallback when no separate timefields exist
+                    timeField = this.nodes.timeField || $(),
+                    timezoneField = this.nodes.timezoneField || $();
                 if (mobileMode) {
                     this.nodes.dayField.mobiscroll('option', {
                         timeWheels: ft ? '' : this.mobileSet.timeWheels,
                         timeFormat: ft ? '' : this.mobileSet.timeFormat
                     });
                 } else {
-                    this.nodes.timeField.css('display', ft ? 'none' : '');
+                    timeField.css('display', ft ? 'none' : '');
                 }
-                this.nodes.timezoneField.css('display', ft ? 'none' : '');
+                timezoneField.css('display', ft ? 'none' : '');
             },
 
             modelEvents: modelEvents

@@ -185,6 +185,36 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         }
     });
 
+    var ErrorView =  AbstractView.extend({
+        tagName: 'div',
+        className: 'inline-error',
+        invalid: function (message) {
+            // check if already invalid to avoid endless focus calls
+            if (this.$el.parent().parent().hasClass('error')) return;
+
+            this.$el.parent().parent().addClass('error')
+                .find('.inline-error').text(message).show().end()
+                .find('input').attr('aria-invalid', true).focus();
+        },
+        valid: function () {
+            this.$el.parent().parent().removeClass('error')
+                .find('.inline-error').text('').hide().end()
+                .find('input').removeAttr('aria-invalid');
+        },
+        render: function () {
+            this.$el.attr({ 'aria-live': 'assertive' }).hide();
+            return this;
+        }
+    });
+
+    var FormView = AbstractView.extend({
+        tagName: 'form',
+        render: function () {
+            if (this.id) this.$el.attr({ id: this.id });
+            return this;
+        }
+    });
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -192,6 +222,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         TextView: TextView,
         CheckboxView: CheckboxView,
         RadioView: RadioView,
-        SelectView: SelectView
+        SelectView: SelectView,
+        ErrorView: ErrorView,
+        FormView: FormView
     };
 });

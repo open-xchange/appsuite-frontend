@@ -57,8 +57,8 @@ define('io.ox/mail/main', [
          */
         'pages-mobile': function (app) {
             if (_.device('!small')) return;
-            var c = app.getWindow().nodes.main,
-                navbar = $('<div class="mobile-navbar">'),
+            var c = app.getWindow().nodes.main;
+            var navbar = $('<div class="mobile-navbar">'),
                 toolbar = $('<div class="mobile-toolbar">');
             app.navbar = navbar;
             app.toolbar = toolbar;
@@ -559,7 +559,7 @@ define('io.ox/mail/main', [
             };
         },
 
-        /*
+           /*
          * Define basic function to show an email
          */
         'show-mail-mobile': function (app) {
@@ -607,7 +607,7 @@ define('io.ox/mail/main', [
             };
         },
 
-        /*
+         /*
          * Define function to reflect multiple selection
          */
         'show-multiple-mobile': function (app) {
@@ -1027,10 +1027,11 @@ define('io.ox/mail/main', [
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
 
-            require(['io.ox/search/main',  'io.ox/core/api/collection-loader'], function (search, CollectionLoader) {
+            win.facetedsearch.ready.done(function (search) {
+                require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
 
-                // define collection loader for search results
-                var collectionLoader = new CollectionLoader({
+                    // define collection loader for search results
+                    var collectionLoader = new CollectionLoader({
                         module: 'mail',
                         mode: 'search',
                         fetch: function () {
@@ -1054,29 +1055,30 @@ define('io.ox/mail/main', [
                         }
                     });
 
-                // events
-                win.facetedsearch.ready.done(function () {
-                    var view = win.facetedsearch.view;
-                    view.on({
-                        'query': _.debounce(function (e, appname) {
-                            if (appname === app.get('name')) {
-                                // connect
-                                if (app.listView.loader.mode !== 'search') {
-                                    app.listView.connect(collectionLoader);
+                    // events
+                    win.facetedsearch.ready.done(function () {
+                        var view = win.facetedsearch.view;
+                        view.on({
+                            'query': _.debounce(function (e, appname) {
+                                if (appname === app.get('name')) {
+                                    // connect
+                                    if (app.listView.loader.mode !== 'search') {
+                                        app.listView.connect(collectionLoader);
+                                    }
+                                    app.listView.load();
+                                    win.facetedsearch.focus();
                                 }
-                                app.listView.load();
-                                win.facetedsearch.focus();
+                            }, 10),
+                            'focus': function () {
+                                // register collection loader
                             }
-                        }, 10),
-                        'focus': function () {
-                            // register collection loader
-                        }
+                        });
                     });
-                });
 
-                win.on('search:cancel', function () {
-                    app.listView.connect(api.collectionLoader);
-                    app.listView.load();
+                    win.on('search:cancel', function () {
+                        app.listView.connect(api.collectionLoader);
+                        app.listView.load();
+                    });
                 });
             });
         }

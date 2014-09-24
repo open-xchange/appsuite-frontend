@@ -76,6 +76,20 @@ define('io.ox/mail/toolbar', [
             drawDisabled: true,
             ref: 'io.ox/mail/actions/delete'
         },
+        'spam': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-ban',
+            label: gt('Mark as spam'),
+            ref: 'io.ox/mail/actions/spam'
+        },
+        'nospam': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-thumbs-up',
+            label: gt('Not spam'),
+            ref: 'io.ox/mail/actions/nospam'
+        },
         'color': {
             prio: 'hi',
             mobile: 'none',

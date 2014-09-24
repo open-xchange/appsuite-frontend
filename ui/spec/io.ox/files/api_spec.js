@@ -14,11 +14,21 @@ define(['io.ox/files/api',
     'shared/examples/for/api',
     'sinon-wrapper',
     'fixture!io.ox/files/file.json',
-    'fixture!io.ox/files/file-versions.json'
-], function (api, sharedExamplesFor, wrapper, unlocked, fileversions) {
+    'fixture!io.ox/files/file-versions.json',
+    'waitsFor'
+], function (api, sharedExamplesFor, wrapper, unlocked, fileversions, waitsFor) {
 
-    var jexpect = this.expect,
-        sinon = wrapper.create(),
+    function isRejected(def) {
+        return waitsFor( function () {
+            return (def.state() === 'rejected');
+        });
+    }
+
+    function isPromise(def) {
+        return (!def.reject && !!def.done);
+    }
+
+    var sinon = wrapper.create(),
         locked = $.extend({}, unlocked, {
             id: '4710',
             //in 3 days
@@ -64,11 +74,7 @@ define(['io.ox/files/api',
             });
         };
 
-    describe.skip('files API', function () {
-
-        //use shared examples
-        sharedExamplesFor(api);
-
+    describe('files API', function () {
         //tracker
         describe('has a tracker', function () {
             var tracker = api.tracker;
@@ -233,41 +239,39 @@ define(['io.ox/files/api',
                     var def = api.caches.versions.clear();
 
                     //wait for caches to be clear, then procceed
-                    waitsFor(function () {
-                        return def.state() === 'resolved';
-                    }, 'cache clear takes too long', 1000);
-                    runs(function () {
+                    return def.then(function () {
                         setupFakeServer(this.server);
-                    });
+                    }.bind(this));
                 });
 
-                xit('and use the provided versions cache', function () {
+                it('and use the provided versions cache', function () {
                     sinon.spy(api.caches.versions, 'add');
                     var def = api.versions(locked),
                         first = $.Deferred();
                     //first: cache add executed
-                    jexpect(def).toResolveWith(function (response) {
+                    def.done(function (response) {
                         var resp = (fileversions.toString() === response.toString()) &&
                             (api.caches.versions.add.callCount === 1);
                         first.resolve();
                         return resp;
                     });
                     //second: cache add not executed
-                    first.done(function () {
+                    return first.done(function () {
                         var second = api.versions(locked);
-                        jexpect(second).toResolveWith(function (response) {
+                        return second.done(function (response) {
                             var resp = (fileversions.toString() === response.toString()) &&
                                 (api.caches.versions.add.callCount === 1);
                             api.caches.versions.add.restore();
-                            return resp;
+                            expect(resp).to.be.true;
                         });
                     });
                 });
                 it('and use promises to finally return data', function () {
-                    jexpect(api.versions(locked)).toBePromise();
-                    jexpect(api.versions()).toReject();
-                    jexpect(api.versions(locked)).toResolveWith(function (data) {
-                        return !_.isEmpty(data);
+                    expect(isPromise(api.versions(locked))).to.be.true;
+                    return isRejected(api.versions()).done(function () {
+                        return api.versions(locked).done(function (data) {
+                            expect(data).to.not.be.empty;
+                        });
                     });
                 });
                 describe('calling api.propagete to update caches and fire events', function () {
@@ -276,37 +280,54 @@ define(['io.ox/files/api',
                     });
                     it('after calling detach', function () {
                         var def = api.detach($.extend({}, locked, { version: '1' }));
-                        jexpect(def).toResolveWith(function () {
-                            return api.propagate.callCount === 1;
+                        return def.then(function () {
+                            expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
-                    xit('after calling lock', function () {
+                    it('after calling lock', function () {
+                        this.server.respondWith('PUT', /api\/files\?action=list/, function (xhr) {
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                                JSON.stringify({
+                                    timestamp: 1368791630910,
+                                    data: locked
+                                })
+                            );
+                        });
                         var def = api.lock(locked);
-                        jexpect(def).toResolveWith(function () {
-                            return api.propagate.callCount === 1;
+                        return def.then(function () {
+                            expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
-                    xit('after calling upload file', function () {
+                    it('after calling upload file', function () {
+                        this.server.respondWith('POST', /\/api\/files\?action=new/, function (xhr) {
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                                JSON.stringify({
+                                    timestamp: 1368791630910,
+                                    data: locked
+                                })
+                            );
+                        });
+                        if (_.device('!phantomjs')) locked.file = new Blob();
                         var def = api.uploadFile(locked);
-                        jexpect(def).toResolveWith(function () {
-                            return api.propagate.callCount === 1;
+                        return def.then(function () {
+                            expect(api.propagate.calledOnce).to.be.true;
                         });
                     });
                 });
             });
             it('that return promises', function () {
-                jexpect(api.detach(locked)).toBePromise();
-                jexpect(api.uploadNewVersion(locked)).toBePromise();
-                jexpect(api.uploadNewVersionOldSchool({ form: $('<div>'), json: '', file: '', id: '' })).toBePromise();
-                jexpect(api.update(locked)).toBePromise();
-                jexpect(api.uploadFile(locked)).toBePromise();
+                expect(isPromise(api.detach(locked))).to.be.true;
+                expect(isPromise(api.uploadNewVersion(locked))).to.be.true;
+                expect(isPromise(api.uploadNewVersionOldSchool({ form: $('<div>'), json: '', file: '', id: '' }))).to.be.true;
+                expect(isPromise(api.update(locked))).to.be.true;
+                expect(isPromise(api.uploadFile(locked))).to.be.true;
             });
             it('that reject on missing arguments', function () {
-                jexpect(api.detach()).toReject();
-                jexpect(api.uploadNewVersion()).toReject();
-                jexpect(api.uploadNewVersionOldSchool()).toReject();
-                jexpect(api.update()).toReject();
-                jexpect(api.uploadFile()).toReject();
+                return $.when(isRejected(api.detach()),
+                              isRejected(api.uploadNewVersion()),
+                              isRejected(api.uploadNewVersionOldSchool()),
+                              isRejected(api.update()),
+                              isRejected(api.uploadFile()));
             });
         });
         describe('has some methods for multiple files', function () {
@@ -317,10 +338,10 @@ define(['io.ox/files/api',
                 //TODO
             });
             it('that return promises', function () {
-                jexpect(api.lock(locked)).toBePromise();
-                jexpect(api.unlock(locked)).toBePromise();
-                jexpect(api.copy(locked)).toBePromise();
-                jexpect(api.move(locked)).toBePromise();
+                expect(isPromise(api.lock(locked))).to.be.true;
+                expect(isPromise(api.unlock(locked))).to.be.true;
+                expect(isPromise(api.copy(locked))).to.be.true;
+                expect(isPromise(api.move(locked))).to.be.true;
             });
             it('that reject on missing arguments', function () {
                 //TODO

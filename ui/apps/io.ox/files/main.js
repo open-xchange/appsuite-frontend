@@ -400,10 +400,9 @@ define('io.ox/files/main', [
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
-
-            require(['io.ox/search/main'], function (facetedsearch) {
+            win.facetedsearch.ready.done(function (search) {
                 //add reference: used in perspective
-                app.searchapi = facetedsearch.apiproxy;
+                app.searchapi = search.apiproxy;
             });
         }
     });

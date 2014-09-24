@@ -377,7 +377,7 @@ define('io.ox/core/desktop', [
          *  triggered once automatically when the application window becomes
          *  visible.
          *
-         * @returns {ox.io.App }
+         * @returns {ox.io.App}
          *  A reference to this application instance.
          */
         registerGlobalEventHandler: function (target, eventType, eventHandler) {
@@ -405,7 +405,7 @@ define('io.ox/core/desktop', [
          *  window. Will be triggered once automatically when the application
          *  window becomes visible.
          *
-         * @returns {ox.io.App }
+         * @returns {ox.io.App}
          *  A reference to this application instance.
          */
         registerWindowResizeHandler: function (resizeHandler) {
@@ -910,6 +910,7 @@ define('io.ox/core/desktop', [
                     // remove item at pos
                     windows.splice(pos, 1);
                 } else if (type === 'window.close' || type === 'window.pre-quit') {
+                    // close?
                     // add/move window to end of stack
                     windows = _(windows).without(win);
                     windows.push(win);
@@ -1045,7 +1046,7 @@ define('io.ox/core/desktop', [
 
                 this.show = function (cont) {
                     var appchange = false;
-                    //use the url app string before the first ':' to exclude parameter additions (see how mail compose adds the current mode here)
+                    //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
                     if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
                     }
@@ -1674,8 +1675,9 @@ define('io.ox/core/desktop', [
                     id: 'container',
                     index: 100,
                     draw: function () {
-                         // init container
-                        ext.point(this.name + '/facetedsearch').invoke('draw', this.facetedsearch, win);
+                        // init container
+                        ext.point(this.name + '/facetedsearch')
+                           .invoke('draw', this.facetedsearch, win);
                     }
                 });
 
@@ -1750,62 +1752,74 @@ define('io.ox/core/desktop', [
                                     $('<i class="fa fa-search"></i>')
                                 )
                                 .tooltip()
-                                .on('click', function (e) {
-                                    e.preventDefault();
-                                    var e = $.Event('keydown');
-                                    e.which = 13;
-                                })
                             )
                         );
                     }
                 });
 
-                // draw searchfield
+                ext.point(win.name + '/facetedsearch/view').extend({
+                    id: 'lazy-load',
+                    index: 400,
+                    draw: function () {
+
+                        var field = this.nodes.facetedsearch.toolbar.find('.search-field'),
+                            run = function () {
+                                require(['io.ox/search/quickstart'], function (quickstart) {
+                                    //if (true) return;
+                                    quickstart.run(win).done(function () {
+                                        //field.off('focus', run);
+                                        // get view
+                                        var view = win.facetedsearch.view;
+
+                                        //events: app resume cancels search mode
+                                        win.app.on('resume', function () {
+                                            if (win.facetedsearch.active) {
+                                                view.trigger('button:cancel');
+                                            }
+                                        });
+
+                                        // events: internal
+                                        view.on({
+                                            'query':
+                                                _.debounce(function (e, appname) {
+                                                    // one search app, one model but multiple views
+                                                    if (win.app.get('name') === appname) {
+                                                        win.facetedsearch.open();
+                                                        if (e.type === 'query') win.trigger('search:query');
+                                                    }
+                                                }, 10
+                                            ),
+                                            'button:clear': function () {
+                                                win.facetedsearch.clear();
+                                            },
+                                            'button:cancel': function () {
+                                                win.facetedsearch.cancel();
+                                            }
+                                        });
+
+                                        // events: redirect
+                                        view.model.on({
+                                            'query': function (appname) {
+                                                view.trigger('query', appname);
+                                            },
+                                            'cancel': function (appname) {
+                                                view.trigger('button:cancel', appname);
+                                            }
+                                        });
+                                        win.trigger('search:loaded');
+                                    });
+                                });
+                            };
+
+                        // lazy load search app when search field gets the focus for the first time
+                        field.one('focus', run);
+
+                    }
+                });
+
+                // draw searchfield and attach lazy load listener
                 ext.point(win.name + '/facetedsearch/view').invoke('draw', win, ext.Baton.ensure({}));
 
-                require(['io.ox/search/quickstart'], function (quickstart) {
-                    quickstart.run(win).done(function () {
-                        // get view
-                        var view = win.facetedsearch.view;
-
-                        //events: app resume cancels search mode
-                        win.app.on('resume', function () {
-                            if (win.facetedsearch.active) {
-                                view.trigger('button:cancel');
-                            }
-                        });
-
-                        // events: internal
-                        view.on({
-                            'query':
-                                _.debounce(function (e, appname) {
-                                    // one search app, one model but multiple views
-                                    if (win.app.get('name') === appname) {
-                                        win.facetedsearch.open();
-                                        if (e.type === 'query') win.trigger('search:query');
-                                    }
-                                }, 10
-                            ),
-                            'button:clear': function () {
-                                win.facetedsearch.clear();
-                            },
-                            'button:cancel': function () {
-                                win.facetedsearch.cancel();
-                            }
-                        });
-
-                        // events: redirect
-                        view.model.on({
-                            'query': function (appname) {
-                                view.trigger('query', appname);
-                            },
-                            'cancel': function (appname) {
-                                view.trigger('button:cancel', appname);
-                            }
-                        });
-                        win.trigger('search:loaded');
-                    });
-                });
             }
 
             // fix height/position/appearance
@@ -2023,5 +2037,4 @@ define('io.ox/core/desktop', [
     });
 
     return {};
-
 });
