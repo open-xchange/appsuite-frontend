@@ -364,8 +364,8 @@ define('io.ox/core/folder/extensions', [
             });
         }
 
-        function openPubSubSettings(e) {
-            var options = { id: 'io.ox/core/pubsub', folder: e.data.folder.id, data: e.data.folder };
+        function openSubSettings(e) {
+            var options = { id: 'io.ox/core/sub', folder: e.data.folder.id, data: e.data.folder };
             ox.launch('io.ox/settings/main', options).done(function () {
                 this.setSettingsPane(options);
             });
@@ -404,17 +404,17 @@ define('io.ox/core/folder/extensions', [
                 }
             },
             {
-                id: 'pubsub',
+                id: 'sub',
                 index: 300,
                 draw: function (baton) {
 
-                    this.find('.folder-pubsub').remove();
+                    this.find('.folder-sub').remove();
 
-                    if (!capabilities.has('publication') || !api.is('published|subscribed', baton.data)) return;
+                    if (!api.is('subscribed', baton.data)) return;
 
                     this.find('.folder-node').append(
-                        $('<i class="fa folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
-                        .on('click', { folder: baton.data }, openPubSubSettings)
+                        $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions'))
+                        .on('click', { folder: baton.data }, openSubSettings)
                     );
                 }
             }

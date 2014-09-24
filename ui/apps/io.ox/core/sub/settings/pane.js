@@ -11,24 +11,23 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/settings/pane', [
+define('io.ox/core/sub/settings/pane', [
     'io.ox/core/extensions',
-    'io.ox/core/pubsub/model',
+    'io.ox/core/sub/model',
     'io.ox/backbone/views',
     'io.ox/core/folder/api',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/dialogs',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
     'io.ox/core/capabilities',
-    'settings!io.ox/core/pubsub',
-    'gettext!io.ox/core/pubsub',
-    'less!io.ox/core/pubsub/style'
-], function (ext, model, views, folderAPI, getBreadcrumb, dialogs, notifications, capabilities, settings, gt) {
+    'gettext!io.ox/core/sub',
+    'less!io.ox/core/sub/style'
+], function (ext, model, views, folderAPI, getBreadcrumb, dialogs, yell, capabilities, gt) {
 
     'use strict';
 
-    var point = views.point('io.ox/core/pubsub/settings/list'),
-        SettingView = point.createView({ className: 'pubsub settings' }),
+    var point = views.point('io.ox/core/sub/settings/list'),
+        SettingView = point.createView({ className: 'sub settings' }),
         filter, folderState, dialog;
 
     function openFileDetailView(popup, e, target) {
@@ -50,7 +49,7 @@ define('io.ox/core/pubsub/settings/pane', [
 
         if (!folder) return $();
 
-        var node = $('<div class="alert alert-info pubsub settings">');
+        var node = $('<div class="alert alert-info sub settings">');
 
         function removeFilter(e) {
             e.preventDefault();
@@ -76,7 +75,7 @@ define('io.ox/core/pubsub/settings/pane', [
         return node;
     }
 
-    ext.point('io.ox/core/pubsub/settings/detail').extend({
+    ext.point('io.ox/core/sub/settings/detail').extend({
         index: 100,
         id: 'extensions',
         draw: function (baton) {
@@ -84,12 +83,10 @@ define('io.ox/core/pubsub/settings/pane', [
             filter = { folder: baton.options.folder };
 
             folderState = {
-                isPublished: folderAPI.is('published', baton.options.data || {}),
                 isSubscribed: folderAPI.is('subscribed', baton.options.data || {})
             };
 
             var view = new SettingView({
-                publications: model.publications(),
                 subscriptions: model.subscriptions()
             });
 
@@ -122,20 +119,8 @@ define('io.ox/core/pubsub/settings/pane', [
             last: false // make last item a link (responding to handler function)
         };
 
-        var folder, entity;
-
-        if (model.has('folder')) {
-            // subscriptions have a folder on top-level
-            folder = model.get('folder');
-        } else {
-            // publications have a property 'entity'
-            entity = model.get('entity');
-            if (entity.id) {
-                // single file
-                options.leaf = $('<a href="#" tabindex="1" class="file-detail-link">').attr('data-cid', _.cid(entity)).text(model.get('displayName'));
-            }
-            folder = entity.folder;
-        }
+        // subscriptions have a folder on top-level
+        var folder = model.get('folder');
 
         return getBreadcrumb(folder, options);
     }
@@ -183,7 +168,7 @@ define('io.ox/core/pubsub/settings/pane', [
         return $();
     }
 
-    ext.point('io.ox/core/pubsub/settings/list/itemview').extend({
+    ext.point('io.ox/core/sub/settings/list/itemview').extend({
         id: 'itemview',
         draw: function (baton) {
 
@@ -210,15 +195,6 @@ define('io.ox/core/pubsub/settings/pane', [
             } else if (data.source && (baton.model.refreshState() !== 'pending')) {
                 // this is a subscription and refresh should be disabled
                 dynamicAction = $('<span>');
-            } else if (data.target) {
-                // this is a publication
-                dynamicAction = $('<a>').attr({
-                    href: '#',
-                    tabindex: '1',
-                    class: 'action',
-                    'data-action': 'edit',
-                    'aria-label': displayName + ', ' + gt('Edit')
-                }).text(gt('Edit'));
             }
 
             url = getUrl(data);
@@ -274,7 +250,7 @@ define('io.ox/core/pubsub/settings/pane', [
         this.remove();
     }
 
-    var PubSubItem = Backbone.View.extend({
+    var SubItem = Backbone.View.extend({
         tagName: 'li',
         className: '',
         initialize: function () {
@@ -284,13 +260,12 @@ define('io.ox/core/pubsub/settings/pane', [
         },
         events: {
             'click [data-action="toggle"]': 'onToggle',
-            'click [data-action="edit"]': 'onEdit',
             'click [data-action="refresh"]': 'onRefresh',
             'click [data-action="remove"]': 'onRemove'
         },
         render: function () {
             var baton = ext.Baton({ model: this.model, view: this });
-            ext.point('io.ox/core/pubsub/settings/list/itemview').invoke('draw', this.$el.empty(), baton);
+            ext.point('io.ox/core/sub/settings/list/itemview').invoke('draw', this.$el.empty(), baton);
             return this;
         },
         onToggle: function (ev) {
@@ -302,17 +277,10 @@ define('io.ox/core/pubsub/settings/pane', [
             });
             this.render();
         },
-        onEdit: function (ev) {
-            var baton = ext.Baton({ model: this.model, view: this });
-            ev.preventDefault();
-            require(['io.ox/core/pubsub/publications'], function (pubsubViews) {
-                pubsubViews.buildPublishDialog(baton);
-            });
-        },
         onRefresh: function (ev) {
             var baton = ext.Baton({ model: this.model, view: this });
             ev.preventDefault();
-            notifications.yell({
+            yell({
                 type: 'info',
                 headline: gt('Subscription refresh'),
                 message: gt(
@@ -333,12 +301,12 @@ define('io.ox/core/pubsub/settings/pane', [
         }
     });
 
-    function createPubSubItem(model) {
-        return new PubSubItem({ model: model });
+    function createSubItem(model) {
+        return new SubItem({ model: model });
     }
 
     /**
-     * Setup a new pubsub collection
+     * Setup a new sub collection
      *
      * @private
      * @param {$element} - jQuery list node element
@@ -356,7 +324,7 @@ define('io.ox/core/pubsub/settings/pane', [
 
         _.each(filteredList, function (model) {
             node.append(
-                createPubSubItem(model).render().el
+                createSubItem(model).render().el
             );
         });
 
@@ -367,7 +335,7 @@ define('io.ox/core/pubsub/settings/pane', [
                 .value();
             if (filteredIndex < 0) { return; }
 
-            var item = createPubSubItem(model).render().el;
+            var item = createSubItem(model).render().el;
 
             if (hintNode) { hintNode.remove(); }
 
@@ -390,26 +358,18 @@ define('io.ox/core/pubsub/settings/pane', [
             filteredList = collection.forFolder(filter);
             var isEmpty = filteredList.length === 0,
                 isFiltered = !!filter.folder,
-                hasPublications = folderState.isPublished && type === 'publication',
                 hasSubscriptions = folderState.isSubscribed && type === 'subscription',
-                notAccessible = isEmpty && (hasPublications || hasSubscriptions);
+                notAccessible = isEmpty && hasSubscriptions;
 
-            if (notAccessible) {
-                if (hasPublications)
-                    return gt('This folder has publications but you are not allowed to view or edit them');
-                if (hasSubscriptions)
-                    return gt('This folder has subscriptions but you are not allowed to view or edit them');
+            if (notAccessible && hasSubscriptions) {
+                return gt('This folder has subscriptions but you are not allowed to view or edit them');
             }
 
             if (isEmpty) {
                 if (isFiltered) {
-                    return type === 'publication' ?
-                        gt('This folder has no publications') :
-                        gt('This folder has no subscriptions');
+                    return gt('This folder has no subscriptions');
                 }
-                return type === 'publication' ?
-                    gt('You don\'t have any publications yet') :
-                    gt('You don\'t have any subscriptions yet');
+                return gt('You don\'t have any subscriptions yet');
             }
 
             return '';
@@ -429,24 +389,11 @@ define('io.ox/core/pubsub/settings/pane', [
         id: 'content',
         render: function () {
 
-            var baton = this.baton, both = capabilities.has('publication') && capabilities.has('subscription');
-
-            if (capabilities.has('publication')) {
-                this.$el.append(
-                    $('<fieldset>').append(
-                        // pub
-                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Publications')) : $(),
-                        baton.pubListNode = $('<ul class="list-unstyled publications list-group widget-list">')
-                    )
-                );
-                setupList(baton.pubListNode.empty(), baton.publications, 'publication');
-            }
+            var baton = this.baton;
 
             if (capabilities.has('subscription')) {
                 this.$el.append(
                     $('<fieldset>').append(
-                        // sub
-                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Subscriptions')) : $(),
                         baton.subListNode = $('<ul class="list-unstyled subscriptions list-group widget-list">')
                     )
                 );

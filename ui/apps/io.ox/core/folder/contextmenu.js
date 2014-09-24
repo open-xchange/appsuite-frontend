@@ -340,55 +340,13 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
-        // Publish folder
-        //
-        publish: (function () {
-
-            function handler(e) {
-                e.preventDefault();
-                require(['io.ox/core/pubsub/publications'], function (publications) {
-                    publications.buildPublishDialog(e.data.baton);
-                });
-            }
-
-            return function (baton) {
-
-                if (!api.can('publish', baton.data) || api.is('trash', baton.data)) return;
-
-                var tempLink, node, self = this;
-
-                node = $('<li>').append(
-                    tempLink = a('publications', gt('Share this folder'))
-                );
-
-                if (capabilities.has('publication')) {
-                    tempLink.on('click', { baton: baton }, handler);
-                    this.append(node);
-                } else {
-                    require(['io.ox/core/upsell'], function (upsell) {
-                        if (upsell.enabled(['publication'])) {
-                            tempLink.on('click', function () {
-                                upsell.trigger({
-                                    type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/default/publications',
-                                    missing: upsell.missing(['publication'])
-                                });
-                            });
-                            self.append(node);
-                        }
-                    });
-                }
-            };
-        }()),
-
-        //
         // Subscribe folder
         //
         subscribe: (function () {
 
             function handler(e) {
                 e.preventDefault();
-                require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
+                require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
                     subscriptions.buildSubscribeDialog(e.data);
                 });
             }

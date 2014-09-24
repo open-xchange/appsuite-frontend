@@ -920,8 +920,8 @@ define('io.ox/core/tk/folderviews', [
         }
     });
 
-    function openPubSubSettings(e) {
-        var options = { id: 'io.ox/core/pubsub', folder: e.data.folder.id, data: e.data.folder };
+    function openSubSettings(e) {
+        var options = { id: 'io.ox/core/sub', folder: e.data.folder.id, data: e.data.folder };
         ox.launch('io.ox/settings/main', options).done(function () {
             this.setSettingsPane(options);
         });
@@ -929,17 +929,17 @@ define('io.ox/core/tk/folderviews', [
 
     ext.point('io.ox/foldertree/folder').extend({
         index: 200,
-        id: 'published',
+        id: 'subscribed',
         customize: function (data, options) {
 
-            this.find('.fa-cloud-download.folder-pubsub').remove();
+            this.find('.fa-cloud-download.folder-sub').remove();
 
             if (!options.app) return;
-            if (!capabilities.has('publication') || !api.is('published|subscribed', data)) return;
+            if (!api.is('subscribed', data)) return;
 
             this.append(
-                $('<i class="fa fa-cloud-download folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
-                .on('click', { folder: data }, openPubSubSettings)
+                $('<i class="fa fa-cloud-download folder-sub">').attr('title', gt('This folder has subscriptions'))
+                .on('click', { folder: data }, openSubSettings)
             );
         }
     });
@@ -955,13 +955,13 @@ define('io.ox/core/tk/folderviews', [
         id: 'shared',
         customize: function (data, options) {
 
-            this.find('.fa-unlock.folder-pubsub').remove();
+            this.find('.fa-unlock.folder-sub').remove();
 
             if (!options.app) return;
             if (!api.is('unlocked', data)) return;
 
             this.append(
-                $('<i class="fa fa-unlock folder-pubsub">').attr('title', gt('You share this folder with other users'))
+                $('<i class="fa fa-unlock folder-sub">').attr('title', gt('You share this folder with other users'))
                 .on('click', { folder: data.id }, openPermissions)
             );
         }

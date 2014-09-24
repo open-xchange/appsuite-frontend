@@ -74,28 +74,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/actions/publish', {
-        capabilities: 'publication',
-        requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return e.collection.has('one') && !_.isEmpty(e.baton.data.filename) && !folderAPI.is('trash', data);
-                };
-            if (e.baton.app) {
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {//continue without foldercheck
-                return check();
-            }
-        },
-        action: function (baton) {
-            require(['io.ox/core/pubsub/publications'], function (publications) {
-                publications.buildPublishDialog(baton);
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
             if (_.device('android')) return false;
@@ -861,16 +839,6 @@ define('io.ox/files/actions', [
     }));
 
     // low
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'publish',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Share this file'),
-        ref: 'io.ox/files/actions/publish',
-        section: 'share'
-    }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'send',

@@ -11,26 +11,26 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/pubsub/subscriptions', [
+define('io.ox/core/sub/subscriptions', [
     'io.ox/core/extensions',
-    'io.ox/core/pubsub/model',
-    'io.ox/core/api/pubsub',
+    'io.ox/core/sub/model',
+    'io.ox/core/api/sub',
     'io.ox/core/folder/api',
     'io.ox/core/notifications',
     'io.ox/core/tk/dialogs',
     'io.ox/keychain/api',
-    'gettext!io.ox/core/pubsub',
+    'gettext!io.ox/core/sub',
     'settings!io.ox/core'
-], function (ext, pubsub, api, folderAPI, notifications, dialogs, keychainAPI, gt) {
+], function (ext, sub, api, folderAPI, notifications, dialogs, keychainAPI, gt) {
 
     'use strict';
 
-    var POINT = 'io.ox/core/pubsub/subscribe',
+    var POINT = 'io.ox/core/sub/subscribe',
 
     // needs id and module (e.g. contacts)
     buildSubscribeDialog = function (options) {
         options = options || {};
-        var model = new pubsub.Subscription({
+        var model = new sub.Subscription({
                 folder: options.folder,
                 entity: { folder: options.folder },
                 entityModule: options.module
@@ -91,7 +91,7 @@ define('io.ox/core/pubsub/subscriptions', [
                                 return model.fetch();
                             })
                             .then(function (model) {
-                                var subscriptions = pubsub.subscriptions();
+                                var subscriptions = sub.subscriptions();
                                 //update the model-(collection)
                                 subscriptions.add(model, { merge: true });
                             })

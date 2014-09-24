@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define([
-    'io.ox/core/api/pubsub',
+    'io.ox/core/api/sub',
     'shared/examples/for/api'
 ], function (api, sharedExamplesFor) {
 
@@ -21,10 +21,7 @@ define([
         }
     };
 
-    describe('Pub/Sub API', function () {
-        describe('publication API', function () {
-            sharedExamplesFor(api.publications, { testData: testData });
-        });
+    describe('Sub API', function () {
 
         describe('subscription API', function () {
             sharedExamplesFor(api.subscriptions, { testData: testData });
