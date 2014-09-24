@@ -80,10 +80,6 @@ define(['io.ox/contacts/util'], function (util) {
             expect(util.getMail(testPerson)).to.equal('georg1@tester.com');
         });
 
-        it.skip('should return a descriptiv string for the contact', function () {
-            expect(util.getDescription(testPerson)).to.equal('company, department, position, city_business, city_home');
-        });
-
         it('should return a combined string of position and company', function () {
             expect(util.getJob(testPerson)).to.equal('company, position');
         });
