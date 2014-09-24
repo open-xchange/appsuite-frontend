@@ -397,16 +397,14 @@ define('io.ox/contacts/edit/view-form',
         });
 
         function drawDefault(options, model) {
-            var input,
-                defer = $.Deferred();
+            var input;
             this.append(
                 $('<label class="control-label col-lg-12 col-md-12 col-sm-12 col-xs-12">').append(
                     $.txt(options.label),
                     input = new mini.InputView({ name: options.field, model: model }).render().$el,
-                    new mini.ErrorView().render(defer).$el
+                    new mini.ErrorView({ name: options.field, model: model }).render().$el
                 )
             );
-            defer.resolve();
 
             // trigger change event on keyup for view updates
             if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {
