@@ -12,12 +12,12 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
+
 define.async('io.ox/core/date',
     ['io.ox/core/gettext',
-     'settings!io.ox/core/settingOptions',
      'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (gettext, settingOptions, settings, gt) {
+    ], function (gettext, settings, gt) {
 
     /*jshint white:false */
 
@@ -964,7 +964,7 @@ define.async('io.ox/core/date',
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
-                D.displayName = settingOptions.get(['availableTimeZones', name], name);
+                D.displayName = name; // just use this for performance reasons
                 return D;
             });
     });

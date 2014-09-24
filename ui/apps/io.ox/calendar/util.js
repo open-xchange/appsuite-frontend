@@ -360,7 +360,7 @@ define('io.ox/calendar/util',
                             // must use outer DIV with "clear: both" here for proper layout in firefox
                             div.append($('<li>').append(
                                 $('<span>')
-                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
+                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, '').replace(/_/g, ' '))),
                                 $('<span>')
                                     .addClass('label label-info')
                                     .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
