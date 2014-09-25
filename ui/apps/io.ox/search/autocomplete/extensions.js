@@ -259,7 +259,7 @@ define('io.ox/search/autocomplete/extensions',
         },
 
         detail: function (baton) {
-            var detail = baton.data.item  && baton.data.item.detail.length ? baton.data.item.detail : undefined,
+            var detail = baton.data.item && baton.data.item.detail && baton.data.item.detail.length ? baton.data.item.detail : undefined,
                 isContact = this.is('.contacts, .contact, .participant, .task_participants');
 
             // contact
