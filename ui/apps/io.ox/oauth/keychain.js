@@ -95,30 +95,8 @@ define.async('io.ox/oauth/keychain',
 
             var def = $.Deferred();
 
-<<<<<<< HEAD
-                // this is far too late not to run into popup blocker
-                var popupWindow = win || window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-
-                http.GET({
-                    module: 'oauth/accounts',
-                    params: params
-                })
-                .done(function (interaction) {
-                    window['callback_' + callbackName] = function (response) {
-                        // TODO handle a possible error object in response
-                        cache[service.id].accounts[response.data.id] = response.data;
-                        def.resolve(response.data);
-                        delete window['callback_' + callbackName];
-                        popupWindow.close();
-                        self.trigger('create', response.data);
-                        self.trigger('refresh.all refresh.list');
-                        ox.trigger('refresh-portal');
-                        notifications.yell('success', gt('Account added successfully'));
-                    };
-=======
             // the popup must exist already, otherwise we run into the popup blocker
             if (!popupWindow) return def.reject();
->>>>>>> d011f70... OAuth: Migrated to new "redirect=true" approach (needs new backend; otherwise popups broken)
 
             require(['io.ox/core/tk/keys']).done(function () {
 
