@@ -186,20 +186,21 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     });
 
     var ErrorView =  AbstractView.extend({
-        tagName: 'div',
-        className: 'inline-error',
+        tagName: 'span',
+        className: 'help-block',
         invalid: function (message) {
+            var container = this.options.container ? this.options.container : this.$el.closest('.row');
             // check if already invalid to avoid endless focus calls
-            if (this.$el.parent().parent().hasClass('error')) return;
-
-            this.$el.parent().parent().addClass('error')
-                .find('.inline-error').text(message).show().end()
-                .find('input').attr('aria-invalid', true).focus();
+            if (container.hasClass('has-error')) return;
+            container.addClass('has-error');
+            this.$el.text(message).show().end();
+            container.find(':input[name="' + this.name + '"]').attr('aria-invalid', true).focus();
         },
         valid: function () {
-            this.$el.parent().parent().removeClass('error')
-                .find('.inline-error').text('').hide().end()
-                .find('input').removeAttr('aria-invalid');
+            var container = this.options.container ? this.options.container : this.$el.closest('.row');
+            container.removeClass('has-error');
+            this.$el.text('').hide().end();
+            container.find(':input[name="' + this.name + '"]').removeAttr('aria-invalid');
         },
         render: function () {
             this.$el.attr({ 'aria-live': 'assertive' }).hide();
@@ -209,6 +210,9 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var FormView = AbstractView.extend({
         tagName: 'form',
+        setup: function () {
+            this.listenTo(this.model, 'change');
+        },
         render: function () {
             if (this.id) this.$el.attr({ id: this.id });
             return this;
