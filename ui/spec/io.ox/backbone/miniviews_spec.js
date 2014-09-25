@@ -262,5 +262,60 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
                 expect(this.model.get('test')).to.equal(-62130585600000); // 0001-02-28Error while detecting browser, using fallback
             });
         });
+
+        describe('ErrorView', function () {
+
+            beforeEach(function () {
+                this.model = new Backbone.Model({ test: '' });
+                this.view = new common.ErrorView({ name: 'test', model: this.model });
+            });
+
+            afterEach(function () {
+                delete this.view;
+                delete this.model;
+            });
+
+            it('is an span container', function () {
+                expect(this.view.$el.prop('tagName')).to.equal('SPAN');
+                expect(this.view.$el.attr('class')).to.equal('help-block');
+            });
+
+            it('has a invalid function', function () {
+                expect(this.view.invalid).to.be.a('function');
+            });
+
+            it('has an valid function', function () {
+                expect(this.view.valid).to.be.a('function');
+            });
+
+            it('should render a aria-live attribute', function () {
+                this.view.render();
+                expect(this.view.$el.attr('aria-live')).to.equal('assertive');
+            });
+
+            it('should render the error message', function () {
+                this.view.render();
+                this.model.trigger('invalid:' + 'test', 'something is wrong here');
+                expect(this.view.$el.text()).to.equal('something is wrong here');
+            });
+
+            it('should disable the error message', function () {
+                this.view.render();
+                this.model.trigger('invalid:' + 'test', 'something is wrong here');
+                expect(this.view.$el.text()).to.equal('something is wrong here');
+                this.model.trigger('valid:' + 'test');
+                expect(this.view.$el.text()).to.equal('');
+            });
+
+            it('has a render function', function () {
+                expect(this.view.render).to.be.a('function');
+            });
+
+            it('has a render function that returns "this"', function () {
+                var result = this.view.render();
+                expect(result).to.equal(this.view);
+            });
+
+        });
     });
 });
