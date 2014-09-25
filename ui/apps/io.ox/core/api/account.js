@@ -224,6 +224,14 @@ define('io.ox/core/api/account',
         return typeHash[id] !== undefined;
     };
 
+    api.getType = function (id) {
+        return typeHash[id];
+    };
+
+    api.getTypes = function () {
+        return typeHash;
+    };
+
     api.inspect = function () {
         return { accounts: idHash, types: typeHash };
     };

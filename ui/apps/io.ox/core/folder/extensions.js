@@ -83,6 +83,7 @@ define('io.ox/core/folder/extensions',
                     return !account.isStandardFolder(model.id);
                 },
                 folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
+                icons: tree.options.icons,
                 model_id: INBOX,
                 parent: tree,
                 title: gt('My folders'),
