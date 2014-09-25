@@ -12,7 +12,6 @@
  */
 
 define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
-
     'use strict';
 
     describe('Contact API', function () {
@@ -94,7 +93,7 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
         it('UPDATE should convert birthday to Gregorian calendar', function (done) {
             var spy = sinon.spy(util, 'gregorianToJulian');
 
-            api.update({ folder: 6, id: 1338, data: { birthday: -62122636800000}}).done(function () {
+            api.update({ folder: 6, id: 1338, data: { birthday: -62122636800000 }}).done(function () {
                 expect(spy.called).to.be.true;
                 spy.restore();
                 done();

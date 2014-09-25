@@ -14,7 +14,8 @@
 define([
     'io.ox/mail/mailfilter/settings/filter',
     'waitsFor',
-    'gettext!io.ox/settings/settings'], function (filters, waitsFor, gt) {
+    'gettext!io.ox/settings/settings'
+], function (filters, waitsFor, gt) {
 
     'use strict';
 
@@ -410,7 +411,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['From'], id: 'header', values: ['sender'] });
                 done();
             });
 
@@ -429,7 +430,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To', 'Cc'], id: 'header', values: ['sender']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To', 'Cc'], id: 'header', values: ['sender'] });
                 done();
             });
 
@@ -448,7 +449,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Subject'], id: 'header', values: ['subject']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Subject'], id: 'header', values: ['subject'] });
                 done();
             });
 
@@ -467,7 +468,12 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], id: 'header', values: ['Listname']});
+                model.get('test').should.be.deep.equal({
+                    comparison: 'matches',
+                    headers: ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
+                    id: 'header',
+                    values: ['Listname']
+                });
                 done();
             });
 
@@ -486,7 +492,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'header', values: ['to value']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'header', values: ['to value'] });
                 done();
             });
 
@@ -505,7 +511,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['CC value']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['CC value'] });
                 done();
             });
 
@@ -525,7 +531,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['name value'], id: 'header', values: ['header value']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['name value'], id: 'header', values: ['header value'] });
                 done();
             });
 
@@ -545,7 +551,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['header value']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['Cc'], id: 'header', values: ['header value'] });
                 done();
             });
 
@@ -564,7 +570,7 @@ define([
                     return true;
                 }
             }).then(function () {
-                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'envelope', values: ['envelope value']});
+                model.get('test').should.be.deep.equal({ comparison: 'matches', headers: ['To'], id: 'envelope', values: ['envelope value'] });
                 done();
             });
 
@@ -755,7 +761,18 @@ define([
                 }
             }).then(function () {
                 model.get('actioncmds').should.be.deep.equal([{ flags: ['$tag'], id: 'addflags' }, { flags: ['$cl_1'], id: 'addflags' }]);
-                model.get('test').should.be.deep.equal({ id: 'allof', tests: [{ comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']}, { comparison: 'over', id: 'size', size: '10' }]});
+                model.get('test').should.be.deep.equal({ id: 'allof', tests: [
+                    {
+                        comparison: 'matches',
+                        headers: ['From'],
+                        id: 'header',
+                        values: ['sender']
+                    }, {
+                        comparison: 'over',
+                        id: 'size',
+                        size: '10'
+                    }]
+                });
                 done();
             });
 

@@ -10,10 +10,13 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['plugins/portal/tasks/register',
-        'io.ox/core/extensions',
-        'io.ox/core/date',
-        'fixture!io.ox/tasks/defaultTestData.json'], function (tasksPlugin, ext, date, testData) {
+define([
+    'plugins/portal/tasks/register',
+    'io.ox/core/extensions',
+    'io.ox/core/date',
+    'fixture!io.ox/tasks/defaultTestData.json'
+], function (tasksPlugin, ext, date, testData) {
+    'use strict';
 
     describe('portal Tasks plugin', function () {
 

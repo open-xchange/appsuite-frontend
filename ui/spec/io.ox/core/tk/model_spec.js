@@ -192,9 +192,9 @@ define(['io.ox/core/tk/model'], function (Model) {
         it('passes save without errors', function () {
             var errorCallback = sinon.spy(),
                 doneCallback = sinon.spy(function () {
-                expect(model.getChanges()).to.be.empty;
-                expect(model.isDirty()).to.be.false;
-            });
+                    expect(model.getChanges()).to.be.empty;
+                    expect(model.isDirty()).to.be.false;
+                });
             model.off().on('error:invalid', errorCallback);
             model.set('familyName', 'B.', { validate: true });
             model.save().done(doneCallback);

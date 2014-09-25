@@ -10,9 +10,10 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/mail/detail/content',
-        'io.ox/core/extensions'], function (content, ext) {
-
+define([
+    'io.ox/mail/detail/content',
+    'io.ox/core/extensions'
+], function (content, ext) {
     'use strict';
 
     describe('Content for mail detail:', function () {
@@ -26,10 +27,11 @@ define(['io.ox/mail/detail/content',
                 function test(source, shouldcontain) {
                     baton.source = source;
                     extension.process(baton);
-                    if (shouldcontain)
+                    if (shouldcontain) {
                         expect(baton.source.indexOf('target="_blank"')).to.be.above(-1);
-                    else
+                    } else {
                         expect(baton.source).to.equal(source);
+                    }
                 }
 
                 //target doesn't changed: no valid href

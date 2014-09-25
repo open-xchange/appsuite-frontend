@@ -42,13 +42,13 @@ define([
                             data: multipleData[action.module][action.action]
                         };
                     });
-                    xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(result));
                 });
                 this.server.respondWith('GET', /api\/attachment\?action=all/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testAttachments) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testAttachments) + '}');
                 });
                 this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testUserList) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testUserList) + '}');
                 });
             });
             //clean up the dom
@@ -57,7 +57,7 @@ define([
             });
 
             it('should draw the whole content', function () {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 expect(node.find('.title')).to.have.length(1);
                 expect(node.find('.priority')).to.have.length(1);
@@ -84,7 +84,7 @@ define([
             });
 
             it('should draw every attachment', function (done) {
-                var baton = ext.Baton({data: testData.testData});
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('.attachments-container').children().length === 4;

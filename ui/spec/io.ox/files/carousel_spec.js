@@ -102,7 +102,7 @@ define(['io.ox/files/carousel'], function (slideshow) {
 
             beforeEach(function () {
                 slideshow.init({
-                    baton: { allIds: [testFiles[1]]},
+                    baton: { allIds: [testFiles[1]] },
                     attachmentMode: false,
                     selector: '#testNode'
                 });

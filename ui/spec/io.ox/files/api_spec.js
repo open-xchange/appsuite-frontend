@@ -17,6 +17,7 @@ define(['io.ox/files/api',
     'fixture!io.ox/files/file-versions.json',
     'waitsFor'
 ], function (api, sharedExamplesFor, wrapper, unlocked, fileversions, waitsFor) {
+    'use strict';
 
     function isRejected(def) {
         return waitsFor( function () {
@@ -44,33 +45,30 @@ define(['io.ox/files/api',
             server.autoRespond = true;
             server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
                 xhr.respond(200, {
-                        'Content-Type': 'text/javascript;charset=UTF-8'
-                    },
-                    JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: fileversions
-                    })
-                );
+                    'Content-Type': 'text/javascript;charset=UTF-8'
+                },
+                JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: fileversions
+                }));
             });
             server.respondWith('GET', /api\/files\?action=get/, function (xhr) {
                 xhr.respond(200, {
-                        'Content-Type': 'text/javascript;charset=UTF-8'
-                    },
-                    JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: locked
-                    })
-                );
+                    'Content-Type': 'text/javascript;charset=UTF-8'
+                },
+                JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: locked
+                }));
             });
             server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
                 xhr.respond(200, {
-                        'Content-Type': 'text/javascript;charset=UTF-8'
-                    },
-                    JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: fileversions
-                    })
-                );
+                    'Content-Type': 'text/javascript;charset=UTF-8'
+                },
+                JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: fileversions
+                }));
             });
         };
 

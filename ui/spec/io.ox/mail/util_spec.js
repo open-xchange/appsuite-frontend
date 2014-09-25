@@ -11,8 +11,10 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/mail/util',
-        'spec/shared/capabilities'], function (util, caputil) {
+define([
+    'io.ox/mail/util',
+    'spec/shared/capabilities'
+], function (util, caputil) {
 
     'use strict';
 
@@ -50,14 +52,14 @@ define(['io.ox/mail/util',
                     .to.deep.equal('017012345678,asdadjaldk,017012345678,asduhadsasd');
                     expect(util.removeChannelSuffix(mail))
                     .to.deep.equal({
-                            from: [
-                                ['017012345678', '017012345678']
-                            ],
-                            to: [
-                                ['017012345678', '017012345678'],
-                                ['017012345678', '017012345678']
-                            ]
-                        });
+                        from: [
+                            ['017012345678', '017012345678']
+                        ],
+                        to: [
+                            ['017012345678', '017012345678'],
+                            ['017012345678', '017012345678']
+                        ]
+                    });
                 });
                 it('should handle empty from fields', function () {
                     var mail = {
@@ -67,7 +69,7 @@ define(['io.ox/mail/util',
                         ]
                     };
                     expect(util.removeChannelSuffix(mail))
-                        .to.deep.equal({ from: [], to: [['017012345678', '017012345678']]});
+                        .to.deep.equal({ from: [], to: [['017012345678', '017012345678']] });
                 });
             });
             describe('work with enabled capability and', function () {
@@ -154,9 +156,9 @@ define(['io.ox/mail/util',
                 expect(util.hasFrom(undefined)).to.be.undefined;
                 expect(util.hasFrom({})).to.be.empty;
                 expect(util.hasFrom([])).to.be.empty;
-                expect(util.hasFrom({ from: [[undefined, '']]})).to.be.false;
+                expect(util.hasFrom({ from: [[undefined, '']] })).to.be.false;
                 //valid
-                expect(util.hasFrom({ from: [[undefined, 'some email']]})).to.be.true;
+                expect(util.hasFrom({ from: [[undefined, 'some email']] })).to.be.true;
             });
 
         });
@@ -248,7 +250,7 @@ define(['io.ox/mail/util',
                 expect(util.isSpam({ flags: 128 }), 'isSpam').is.true;
                 expect(util.isAnswered({ flags: 1 }), 'isAnswered').is.true;
                 expect(util.isForwarded({ flags: 256 }), 'isForwarded').is.true;
-                expect(util.isAttachment({ id: 4711, parent: {}}), 'isAttachment').is.true;
+                expect(util.isAttachment({ id: 4711, parent: {} }), 'isAttachment').is.true;
                 expect(util.hasOtherRecipients({ to: [['', 'some address']], cc: '', bcc: '' }), 'hasOtherRecipients').is.true;
                 //valid: returns false
                 expect(util.isUnseen({ flags: 32 }), 'isUnseen').is.false;
@@ -259,7 +261,7 @@ define(['io.ox/mail/util',
                 expect(util.isForwarded({ flags: 128 }), 'isForwarded').is.false;
             });
             it('should return a number for valid data', function () {
-                expect(util.count([{}, {}, { thread: [1, 2]}]))
+                expect(util.count([{}, {}, { thread: [1, 2] }]))
                     .to.be.a('number').and
                     .to.equal(4);
             });

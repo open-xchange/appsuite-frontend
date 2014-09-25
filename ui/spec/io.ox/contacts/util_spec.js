@@ -12,7 +12,6 @@
  */
 
 define(['io.ox/contacts/util'], function (util) {
-
     'use strict';
 
     var testPerson = {
@@ -31,7 +30,7 @@ define(['io.ox/contacts/util'], function (util) {
     },
     testPersonWOPic = {
         first_name: 'Georg',
-        last_name: 'Tester',
+        last_name: 'Tester'
     };
     /*
     testDistList = {
@@ -51,7 +50,7 @@ define(['io.ox/contacts/util'], function (util) {
         });
 
         it('should return a object containing the format ', function () {
-            expect(util.getFullNameFormat(testPerson)).to.deep.equal({ format : '%2$s, %1$s', params : [ 'Georg', 'Tester' ] });
+            expect(util.getFullNameFormat(testPerson)).to.deep.equal({ format: '%2$s, %1$s', params: [ 'Georg', 'Tester' ] });
         });
 
         it('should return the prepared full name ', function () {
@@ -65,7 +64,7 @@ define(['io.ox/contacts/util'], function (util) {
         });
 
         it('should return a object containing the format ', function () {
-            expect(util.getMailFullNameFormat(testPerson)).to.deep.equal({ format : '%1$s %2$s', params : [ 'Georg', 'Tester' ] });
+            expect(util.getMailFullNameFormat(testPerson)).to.deep.equal({ format: '%1$s %2$s', params: [ 'Georg', 'Tester' ] });
         });
 
         it('should return the display name if available otherwise combine first and last name ', function () {
@@ -73,7 +72,7 @@ define(['io.ox/contacts/util'], function (util) {
         });
 
         it('should return a object containing the format ', function () {
-            expect(util.getMailFormat(testPerson)).to.deep.equal({ format : '%1$s', params : [ 'georg1@tester.com' ] });
+            expect(util.getMailFormat(testPerson)).to.deep.equal({ format: '%1$s', params: [ 'georg1@tester.com' ] });
         });
 
         it('should return the first available mail address ', function () {

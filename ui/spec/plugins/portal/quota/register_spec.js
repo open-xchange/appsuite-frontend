@@ -10,9 +10,12 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['plugins/portal/quota/register',
-        'io.ox/core/extensions',
-        'spec/shared/capabilities'], function (quotaPlugin, ext, caputil) {
+define([
+    'plugins/portal/quota/register',
+    'io.ox/core/extensions',
+    'spec/shared/capabilities'
+], function (quotaPlugin, ext, caputil) {
+    'use strict';
 
     var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
 

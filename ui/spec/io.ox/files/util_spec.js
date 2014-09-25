@@ -15,7 +15,7 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
     function isPromise(def) {
         return (!def.reject && !!def.done);
     }
-    
+
     function isRejected(def) {
         return waitsFor(function () {
             return def.state() === 'rejected';

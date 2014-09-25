@@ -10,12 +10,13 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define(['io.ox/core/extensions',
-        'gettext!io.ox/files',
-        'io.ox/files/settings/pane'
-        ], function (ext, gt) {
+define([
+    'io.ox/core/extensions',
+    'gettext!io.ox/files',
+    'io.ox/files/settings/pane'
+], function (ext, gt) {
 
-	describe('filessettings', function () {
+    describe('filessettings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="filessettingsNode">'));

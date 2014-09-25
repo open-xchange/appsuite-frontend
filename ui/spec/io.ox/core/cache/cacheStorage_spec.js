@@ -13,11 +13,12 @@
  *
  */
 
-define(['io.ox/core/extensions',
-       'io.ox/core/cache/indexeddb',
-       'io.ox/core/cache/localstorage',
-       'io.ox/core/cache/simple'], function (ext, indexeddb, localstorage, simple) {
-
+define([
+    'io.ox/core/extensions',
+    'io.ox/core/cache/indexeddb',
+    'io.ox/core/cache/localstorage',
+    'io.ox/core/cache/simple'
+], function (ext, indexeddb, localstorage, simple) {
     'use strict';
 
     // test objects

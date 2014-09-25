@@ -11,9 +11,12 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define(['io.ox/calendar/main',
+define([
+    'io.ox/calendar/main',
     'fixture!io.ox/calendar/list/calendar-list.json',
-    'waitsFor'], function (main, fixture, waitsFor) {
+    'waitsFor'
+], function (main, fixture, waitsFor) {
+    'use strict';
 
     describe('calendar app and the corresponding listview', function () {
 

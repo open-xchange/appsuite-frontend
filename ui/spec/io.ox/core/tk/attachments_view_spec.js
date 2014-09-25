@@ -65,7 +65,7 @@ define([
             });
 
             describe('has a preview mode toggle', function () {
-                    var Model = Backbone.Model.extend({
+                var Model = Backbone.Model.extend({
                         isFileAttachment: sinon.stub().returns(true)
                     }),
                     list = new Attachments.List({
@@ -115,10 +115,10 @@ define([
                         })
                     });
 
-                 list.collection.reset([model]);
-                 list.render().onToggleDetails({ preventDefault: sinon.stub() });
-                 //render twice, one time with preview, one time without
-                 expect(renderMe.calledTwice, 'render method called twice').to.be.true;
+                list.collection.reset([model]);
+                list.render().onToggleDetails({ preventDefault: sinon.stub() });
+                //render twice, one time with preview, one time without
+                expect(renderMe.calledTwice, 'render method called twice').to.be.true;
             });
 
             describe('renders', function () {
@@ -140,9 +140,9 @@ define([
                             AttachmentView: Backbone.View.extend({})
                         });
 
-                   list.render();
-                   expect(list.$el.hasClass('open'), 'list has class .open').to.be.false;
-                   expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(0);
+                    list.render();
+                    expect(list.$el.hasClass('open'), 'list has class .open').to.be.false;
+                    expect(list.$('ul.preview').children('li'), 'li items in ul').to.have.length(0);
                 });
 
                 it('a default header', function () {
@@ -154,8 +154,8 @@ define([
                             AttachmentView: Backbone.View.extend({})
                         });
 
-                   list.render();
-                   expect(list.$('header'), 'header elements in list').to.have.length(1);
+                    list.render();
+                    expect(list.$('header'), 'header elements in list').to.have.length(1);
                 });
 
                 it('a custom header instead of default one', function () {
@@ -178,15 +178,15 @@ define([
 
                 it('a details toggle', function () {
                     var Model = Backbone.Model.extend({
-                        isFileAttachment: sinon.stub().returns(true)
-                    }),
-                   list = new Attachments.List({
-                       collection: new Backbone.Collection([new Model()]),
-                       AttachmentView: Backbone.View.extend({})
-                   });
+                            isFileAttachment: sinon.stub().returns(true)
+                        }),
+                        list = new Attachments.List({
+                            collection: new Backbone.Collection([new Model()]),
+                            AttachmentView: Backbone.View.extend({})
+                        });
 
-                   list.render();
-                   expect(list.$('header a.toggle-details').length === 1, 'found details toggle link').to.be.true;
+                    list.render();
+                    expect(list.$('header a.toggle-details').length === 1, 'found details toggle link').to.be.true;
                 });
 
                 it('a preview mode toggle', function () {

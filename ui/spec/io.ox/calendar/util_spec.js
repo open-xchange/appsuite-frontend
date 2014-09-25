@@ -12,6 +12,7 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
+    'use strict';
 
     describe('Util for calendar', function () {
 
@@ -22,7 +23,6 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                     full_time: false,
                     start_date: testDate.setHours(0, 0, 0, 0).getTime()
                 };
-
 
             it('last week', function () {
                 data.start_date = testDate.add(-7 * date.DAY).getTime();
@@ -140,29 +140,29 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
 
             it('object', function () {
                 var result = {
-                    '-1' : 'Keine Erinnerung',
-                    0 : '0 Minuten',
-                    5 : '5 Minuten',
-                    10 : '10 Minuten',
-                    15 : '15 Minuten',
-                    30 : '30 Minuten',
-                    45 : '45 Minuten',
-                    60 : '1 Stunde',
-                    120 : '2 Stunden',
-                    240 : '4 Stunden',
-                    360 : '6 Stunden',
-                    480 : '8 Stunden',
-                    720 : '12 Stunden',
-                    1440 : '1 Tag',
-                    2880 : '2 Tage',
-                    4320 : '3 Tage',
-                    5760 : '4 Tage',
-                    7200 : '5 Tage',
-                    8640 : '6 Tage',
-                    10080 : '1 Woche',
-                    20160 : '2 Wochen',
-                    30240 : '3 Wochen',
-                    40320 : '4 Wochen'
+                    '-1': 'Keine Erinnerung',
+                    0: '0 Minuten',
+                    5: '5 Minuten',
+                    10: '10 Minuten',
+                    15: '15 Minuten',
+                    30: '30 Minuten',
+                    45: '45 Minuten',
+                    60: '1 Stunde',
+                    120: '2 Stunden',
+                    240: '4 Stunden',
+                    360: '6 Stunden',
+                    480: '8 Stunden',
+                    720: '12 Stunden',
+                    1440: '1 Tag',
+                    2880: '2 Tage',
+                    4320: '3 Tage',
+                    5760: '4 Tage',
+                    7200: '5 Tage',
+                    8640: '6 Tage',
+                    10080: '1 Woche',
+                    20160: '2 Wochen',
+                    30240: '3 Wochen',
+                    40320: '4 Wochen'
                 };
                 expect(util.getReminderOptions()).to.deep.equal(result);
             });

@@ -71,9 +71,9 @@ define(['io.ox/core/tk/vgrid', 'waitsFor'], function (VGrid, waitsFor) {
         describe('showing a folder with one file', function () {
             beforeEach(function () {
                 this.testData = [{
-                        id: 'lonely',
-                        name: 'lonely item'
-                    }];
+                    id: 'lonely',
+                    name: 'lonely item'
+                }];
                 wireGridAndApiFor(this);
 
                 this.vgrid.addTemplate({

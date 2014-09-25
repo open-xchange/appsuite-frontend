@@ -88,7 +88,7 @@ define([
         var field = this.vars.nodes.toolbar.find('.search-field');
         field.val('t');
         field.trigger(
-            $.Event('keyup', { keyCode: 80})
+            $.Event('keyup', { keyCode: 80 })
         );
 
         //done.call(this);
@@ -134,7 +134,7 @@ define([
                                 var field = getField(this);
                                 field.val('test');
                                 field.trigger(
-                                    $.Event('keyup', { keyCode: 80})
+                                    $.Event('keyup', { keyCode: 80 })
                                 );
                                 dropdownLoaded(done);
                             });

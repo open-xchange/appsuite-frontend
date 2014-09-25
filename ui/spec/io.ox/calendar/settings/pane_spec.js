@@ -10,12 +10,13 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define(['io.ox/core/extensions',
-        'gettext!io.ox/calendar',
-        'io.ox/calendar/settings/pane'
-        ], function (ext, gt) {
+define([
+    'io.ox/core/extensions',
+    'gettext!io.ox/calendar',
+    'io.ox/calendar/settings/pane'
+], function (ext, gt) {
 
-	describe('calendarsettings', function () {
+    describe('calendarsettings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="calendarsettingsNode">'));

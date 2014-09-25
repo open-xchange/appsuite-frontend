@@ -10,11 +10,14 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['plugins/portal/birthdays/register',
-        'io.ox/core/extensions',
-        'io.ox/core/date',
-        'waitsFor',
-        'fixture!plugins/portal/birthdays/birthdaysTestData.json'], function (birthdayPlugin, ext, date, waitsFor, testData) {
+define([
+    'plugins/portal/birthdays/register',
+    'io.ox/core/extensions',
+    'io.ox/core/date',
+    'waitsFor',
+    'fixture!plugins/portal/birthdays/birthdaysTestData.json'
+], function (birthdayPlugin, ext, date, waitsFor, testData) {
+    'use strict';
 
     //update testdata
     testData[0].birthday = new date.UTC().getTime() - date.DAY;//yesterday
@@ -34,11 +37,11 @@ define(['plugins/portal/birthdays/register',
                 var def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton);
 
                 def._wrapped[0].then(function () {
-                        return ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, this.baton);
-                    }.bind(this))
-                    .then(function () {
-                        done();
-                    });
+                    return ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, this.baton);
+                }.bind(this))
+                .then(function () {
+                    done();
+                });
             });
 
             afterEach(function () {

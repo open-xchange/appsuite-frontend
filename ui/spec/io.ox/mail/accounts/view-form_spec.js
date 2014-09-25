@@ -10,12 +10,11 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-define(['io.ox/core/extensions',
-        'gettext!io.ox/calendar',
-        'fixture!io.ox/core/api/user.json'
-
-        ], function (ext, gt, fixtureUser) {
-
+define([
+    'io.ox/core/extensions',
+    'gettext!io.ox/calendar',
+    'fixture!io.ox/core/api/user.json'
+], function (ext, gt, fixtureUser) {
     'use strict';
 
     describe('mailaccountsettings', function () {

@@ -11,35 +11,38 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define(['io.ox/files/main',
-        'io.ox/files/api',
-        'waitsFor',
-        'fixture!io.ox/files/api-all.json'], function (main, api, waitsFor, all) {
+define([
+    'io.ox/files/main',
+    'io.ox/files/api',
+    'waitsFor',
+    'fixture!io.ox/files/api-all.json'
+], function (main, api, waitsFor, all) {
+    'use strict';
 
     describe('files app', function () {
         var loadapp = $.Deferred(),
             suite = {},
             //init app only once
             setup = function () {
-                    //load app
-                    suite.app = main.getApp();
-                    suite.app.launch().then(function () {
-                        //load perspective
-                        return ox.ui.Perspective.show(this, 'fluid:list');
-                    }).done(function (perspective) {
-                        suite.pers = perspective;
-                        suite.sel = perspective.selection;
-                        //load data
-                        perspective.selection.on('update', function () {
-                            loadapp.resolve();
-                        });
+                //load app
+                suite.app = main.getApp();
+                suite.app.launch().then(function () {
+                    //load perspective
+                    return ox.ui.Perspective.show(this, 'fluid:list');
+                }).done(function (perspective) {
+                    suite.pers = perspective;
+                    suite.sel = perspective.selection;
+                    //load data
+                    perspective.selection.on('update', function () {
+                        loadapp.resolve();
                     });
-                };
+                });
+            };
 
         //store data
         suite.data = _.uniq(all.data, function (item) {
-                return item[0];
-            });
+            return item[0];
+        });
 
         beforeEach(function (done) {
             //
