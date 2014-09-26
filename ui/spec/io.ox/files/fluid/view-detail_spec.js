@@ -65,187 +65,220 @@ define(['io.ox/files/fluid/view-detail',
                 delete baton.openedBy;
             });
         });
-        describe('creates a DOM structure', function (done) {
+        describe('creates a DOM structure', function () {
+            var node;
             beforeEach(function () {
-                var node = this.node = view.draw(baton);
-                waitsFor(function () {
-                    return node.find('ul.io-ox-inline-links').children().length > 0;
-                }).done(done);
+                node = view.draw(baton);
+                return waitsFor(function () {
+                    //we expect at least 7 actions to be rendered
+                    return node.find('ul.io-ox-inline-links .io-ox-action-link').length >= 7;
+                });
             });
             describe('with a container that', function () {
                 it('has class file-details', function () {
-                    expect(this.node.hasClass('file-details')).to.be.true;
+                    expect(node.hasClass('file-details')).to.be.true;
                 });
                 it('use folder-id and file id as data-cid', function () {
-                    expect(this.node.attr('data-cid')).to.equal(baton.data.folder_id + '.' + baton.data.id);
+                    expect(node.attr('data-cid')).to.equal(baton.data.folder_id + '.' + baton.data.id);
                 });
             });
-            describe.skip('with action menu that', function () {
+            describe('with action menu that', function () {
                 describe('always', function () {
                     it('has some actions', function () {
-                        var actions = this.node.find('ul.io-ox-inline-links');
+                        var actions = node.find('ul.io-ox-inline-links');
                         expect(actions.children()).to.have.length.above(0);
                     });
-                    it('has a show internal link action if filename is defined', function () {
-                        expect(this.node.find('[data-action="showlink"]')).to.have.length.above(0);
+                    it.skip('has a show internal link action if filename is defined', function () {
+                        //FIXME: not sure, why this doesn't get drawn
+                        expect(node.find('[data-action="showlink"]')).to.have.length.above(0);
                     });
-                    it('has a copy action', function () {
-                        expect(this.node.find('[data-action="copy"]')).to.have.length.above(0);
+                    it.skip('has a copy action', function () {
+                        //FIXME: not sure, why this doesn't get drawn
+                        expect(node.find('[data-action="copy"]')).to.have.length.above(0);
                     });
                 });
                 describe('(if', function () {
                     describe('filename or file_size are defined)', function () {
+                        var mod;
                         beforeEach(function () {
-                            this.mod = modified({
+                            mod = modified({
                                 filename: undefined,
                                 file_size: undefined
                             });
+                            return waitsFor(function () {
+                                return mod.find('ul.io-ox-inline-links .io-ox-action-link').length > 0;
+                            });
                         });
                         it('has a open action', function () {
-                            expect(this.node.find('[data-action="open"]')).to.have.length.above(0);
-                            expect(this.mod.find('[data-action="open"]')).to.have.length(0);
+                            expect(node.find('[data-action="open"]')).to.have.length.above(0);
+                            expect(mod.find('[data-action="open"]')).to.have.length(0);
                         });
                         it('has a download action', function () {
-                            expect(this.node.find('[data-action="download"]')).to.have.length.above(0);
-                            expect(this.mod.find('[data-action="download"]')).to.have.length(0);
+                            expect(node.find('[data-action="download"]')).to.have.length.above(0);
+                            expect(mod.find('[data-action="download"]')).to.have.length(0);
                         });
                     });
                     describe('filename is defined)', function () {
+                        var mod;
                         beforeEach(function () {
-                            this.mod = modified({
+                            mod = modified({
                                 filename: undefined
+                            });
+                            return waitsFor(function () {
+                                return mod.find('ul.io-ox-inline-links .io-ox-action-link').length > 0;
                             });
                         });
                         //TODO: no tests here, since publications have been removed
                         //can this whole part of the suite be removed?
                     });
                     describe('filetype is supported)', function () {
+                        var mod;
                         beforeEach(function () {
-                            this.mod = modified({
+                            mod = modified({
                                 filename: 'something.jpg'
+                            });
+                            return waitsFor(function () {
+                                return mod.find('ul.io-ox-inline-links .io-ox-action-link').length > 0;
                             });
                         });
 
                         it('has a edit action ', function () {
-                            expect(this.node.find('[data-action="editor"]')).to.have.length.above(0);
-                            expect(this.mod.find('[data-action="editor"]')).to.have.length(0);
+                            expect(node.find('[data-action="editor"]')).to.have.length.above(0);
+                            expect(mod.find('[data-action="editor"]')).to.have.length(0);
                         });
                     });
                     describe('file is not locked)', function () {
+                        var mod;
                         beforeEach(function () {
-                            this.mod = modified({
+                            mod = modified({
                                 id: 4712,
                                 modified_by: ox.user_id,
                                 locked_until: _.now() + (604800000 / 2)
                             });
+                            return waitsFor(function () {
+                                return mod.find('ul.io-ox-inline-links .io-ox-action-link').length > 0;
+                            });
                         });
 
                         it('has a rename action', function () {
-                            expect(this.node.find('[data-action="rename"]')).to.have.length.above(0);
+                            expect(node.find('[data-action="rename"]')).to.have.length.above(0);
                         });
                         it('has a edit-description action', function () {
-                            expect(this.node.find('[data-action="edit-description"]')).to.have.length.above(0);
+                            expect(node.find('[data-action="edit-description"]')).to.have.length.above(0);
                         });
-                        it('has a move action', function () {
-                            //TODO: stub read/delete grants
-                            //expect(this.node.find('[data-action="move"]').length).to.have.length.above(0);
-                            expect(this.mod.find('[data-action="move"]')).to.have.length(0);
+                        it.skip('has a move action', function () {
+                            //FIXME: stub read/delete grants
+                            expect(this.node.find('[data-action="move"]').length).to.have.length.above(0);
+                            expect(mod.find('[data-action="move"]')).to.have.length(0);
                         });
                     });
                     describe('file is locked by myself)', function () {
+                        var mod;
                         beforeEach(function () {
-                            this.mod = modified({
+                            mod = modified({
                                 id: 4713,
                                 modified_by: ox.user_id,
                                 locked_until: _.now() + (604800000 / 2)
                             });
+                            return waitsFor(function () {
+                                return mod.find('ul.io-ox-inline-links .io-ox-action-link').length > 0;
+                            });
                         });
                         it('has a rename action', function () {
-                            expect(this.mod.find('[data-action="rename"]')).to.have.length.above(0);
+                            expect(mod.find('[data-action="rename"]')).to.have.length.above(0);
                         });
-                        it('has a unlock action', function () {
-                            expect(this.node.find('[data-action="unlock"]')).to.have.length(0);
-                            //FIXME
-                            //expect(this.mod.find('[data-action="unlock"]')).to.have.length.above(0);
+                        it.skip('has a unlock action', function () {
+                            //FIXME: unlock action of mod node is not drawn
+                            expect(node.find('[data-action="unlock"]')).to.have.length(0);
+                            expect(mod.find('[data-action="unlock"]')).to.have.length.above(0);
                         });
                     });
                     describe('file is locked by another user)', function () {
+                        var mod;
                         beforeEach(function () {
-                            this.mod = modified({
+                            mod = modified({
                                 id: 4714,
                                 locked_until: _.now() + (604800000 / 2)
+                            });
+                            return waitsFor(function () {
+                                return mod.find('ul.io-ox-inline-links .io-ox-action-link').length > 0;
                             });
                         });
 
                         it('has a rename action', function () {
-                            expect(this.mod.find('[data-action="rename"]')).to.have.length(0);
+                            expect(mod.find('[data-action="rename"]')).to.have.length(0);
                         });
                         it('has a edit description action', function () {
-                            expect(this.mod.find('[data-action="edit-description"]')).to.have.length(0);
+                            expect(mod.find('[data-action="edit-description"]')).to.have.length(0);
                         });
                         it('has a unlock action', function () {
-                            expect(this.mod.find('[data-action="unlock"]')).to.have.length(0);
+                            expect(mod.find('[data-action="unlock"]')).to.have.length(0);
                         });
                     });
                     describe('file is unlocked)', function () {
+                        var mod;
                         beforeEach(function () {
-                            this.mod = modified({
+                            mod = modified({
                                 id: 4715,
                                 locked_until: _.now() + (604800000 / 2)
                             });
+                            return waitsFor(function () {
+                                return mod.find('ul.io-ox-inline-links .io-ox-action-link').length > 0;
+                            });
                         });
-                        it('has a lock action', function () {
-                            debugger;
-                            expect(this.mod.find('[data-action="lock"]')).to.have.length.above(0);
+                        it.skip('has a lock action', function () {
+                            //FIXME: lock action is not drown
+                            expect(mod.find('[data-action="lock"]')).to.have.length.above(0);
                         });
                         it('has a edit-description action if file isn not locked', function () {
-                            expect(this.node.find('[data-action="edit-description"]')).to.have.length.above(0);
+                            expect(node.find('[data-action="edit-description"]')).to.have.length.above(0);
                         });
                     });
                 });
             });
 
             describe('that contain a table with information about versions', function () {
+                var mod;
                 beforeEach(function () {
                     if (api.caches.versions.get.restore)
                         api.caches.versions.get.restore();
                     sinon.stub(api.caches.versions, 'get', function () {
                         return $.Deferred().resolve(fileversions);
                     });
-                    this.mod = modified({
+                    mod = modified({
                         id: 4717,
                         number_of_versions: 3
                     });
                 });
                 it('when versions exist', function () {
-                    var mod = modified({
+                    var myMod = modified({
                         id: 4716,
                         number_of_versions: 0
                     });
-                    expect(this.node.find('table.versiontable')).to.have.length.above(0);
-                    expect(mod.find('table.versiontable')).to.have.length(0);
+                    expect(node.find('table.versiontable')).to.have.length.above(0);
+                    expect(myMod.find('table.versiontable')).to.have.length(0);
                 });
                 it('that can be collapsed', function () {
-                    expect(this.mod.find('.versiontable').attr('style')).to.be.empty;
-                    this.mod.find('[data-action="history"]').trigger('click');
-                    expect(this.mod.find('.versiontable').attr('style').trim()).to.equal('display: table;');
+                    expect(mod.find('.versiontable').attr('style')).to.be.empty;
+                    mod.find('[data-action="history"]').trigger('click');
+                    expect(mod.find('.versiontable').attr('style').trim()).to.equal('display: table;');
                 });
                 it('that is initially collapsed', function () {
                     //initially the table is hidden by CSS and made visible using the style attribute (see test above)
-                    expect(this.mod.find('.versiontable').attr('style')).to.be.undefined;
+                    expect(mod.find('.versiontable').attr('style')).to.be.undefined;
                 });
                 it('that shows all versions', function () {
-                    expect(this.mod.find('.versiontable').find('tbody>tr')).to.have.length(3);
+                    expect(mod.find('.versiontable').find('tbody>tr')).to.have.length(3);
                 });
                 it('that highlights current version by adding class "info"', function () {
-                    expect(this.mod.find('.versiontable').find('.info .versionLabel').text()).to.equal('2');
+                    expect(mod.find('.versiontable').find('.info .versionLabel').text()).to.equal('2');
                 });
             });
             it('that shows additional info about the folder', function () {
-                expect(this.node.find('ul.breadcrumb')).to.have.length(1);
+                expect(node.find('ul.breadcrumb')).to.have.length(1);
             });
             it('that allows uploading a new file version', function () {
-                expect(this.node.find('input.file-input')).to.have.length(1);
+                expect(node.find('input.file-input')).to.have.length(1);
             });
         });
     });
