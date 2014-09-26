@@ -399,7 +399,7 @@ define('io.ox/core/tk/autocomplete',
                                 e.preventDefault();
                                 selected.trigger('click');
                             } else {
-                                $(this).val(val = '');
+                                if (o.mode === 'participant') $(this).val(val = '');
                                 close();
                             }
                         }
