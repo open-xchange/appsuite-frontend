@@ -80,19 +80,17 @@ define(['io.ox/files/fluid/view-detail',
                     expect(this.node.attr('data-cid')).to.equal(baton.data.folder_id + '.' + baton.data.id);
                 });
             });
-            describe('with action menu that', function () {
+            describe.skip('with action menu that', function () {
                 describe('always', function () {
                     it('has some actions', function () {
                         var actions = this.node.find('ul.io-ox-inline-links');
                         expect(actions.children()).to.have.length.above(0);
                     });
                     it('has a show internal link action if filename is defined', function () {
-                        //FIXME
-                        //expect(this.node.find('[data-action="showlink"]').length).toBeTruthy();
+                        expect(this.node.find('[data-action="showlink"]')).to.have.length.above(0);
                     });
                     it('has a copy action', function () {
-                        //TODO: stub read grants
-                        //expect(node.find('[data-action="copy"]').length).toBeTruthy();
+                        expect(this.node.find('[data-action="copy"]')).to.have.length.above(0);
                     });
                 });
                 describe('(if', function () {
@@ -118,10 +116,8 @@ define(['io.ox/files/fluid/view-detail',
                                 filename: undefined
                             });
                         });
-                        it('has a publish action if filename is defined', function () {
-                            expect(this.node.find('[data-action="publish"]')).to.have.length.above(0);
-                            expect(this.mod.find('[data-action="publish"]')).to.have.length(0);
-                        });
+                        //TODO: no tests here, since publications have been removed
+                        //can this whole part of the suite be removed?
                     });
                     describe('filetype is supported)', function () {
                         beforeEach(function () {
@@ -199,9 +195,8 @@ define(['io.ox/files/fluid/view-detail',
                             });
                         });
                         it('has a lock action', function () {
-                            //FIXME
-                            //expect(this.node.find('[data-action="lock"]')).to.have.length.above(0);
-                            expect(this.mod.find('[data-action="lock"]')).to.have.length(0);
+                            debugger;
+                            expect(this.mod.find('[data-action="lock"]')).to.have.length.above(0);
                         });
                         it('has a edit-description action if file isn not locked', function () {
                             expect(this.node.find('[data-action="edit-description"]')).to.have.length.above(0);
@@ -231,12 +226,13 @@ define(['io.ox/files/fluid/view-detail',
                     expect(mod.find('table.versiontable')).to.have.length(0);
                 });
                 it('that can be collapsed', function () {
-                    expect(this.mod.find('.versiontable').attr('style')).to.empty;
+                    expect(this.mod.find('.versiontable').attr('style')).to.be.empty;
                     this.mod.find('[data-action="history"]').trigger('click');
                     expect(this.mod.find('.versiontable').attr('style').trim()).to.equal('display: table;');
                 });
                 it('that is initially collapsed', function () {
-                    //TODO: initially hidden via css class; refactor
+                    //initially the table is hidden by CSS and made visible using the style attribute (see test above)
+                    expect(this.mod.find('.versiontable').attr('style')).to.be.undefined;
                 });
                 it('that shows all versions', function () {
                     expect(this.mod.find('.versiontable').find('tbody>tr')).to.have.length(3);

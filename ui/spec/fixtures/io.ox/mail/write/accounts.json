@@ -1,0 +1,8 @@
+{"data":[
+[0,"otto.xentner",null,"imap://ox.open-xchange.com:143","smtp://ox.open-xchange.com:25","E-Mail",
+"otto.xentner@open-xchange.com","NoSpamHandler","Papierkorb","Gesendete Objekte","Entwürfe",
+"Spam","confirmed-spam","confirmed-ham","ox.open-xchange.com",143,"imap",false,"ox.open-xchange.com",
+25,"smtp",false,"otto.xentner",null,false,"default0/INBOX/Papierkorb","default0/INBOX/Gesendete Objekte",
+"default0/INBOX/Entwürfe","default0/INBOX/Spam",null,null,null,false,false,null,"INBOX/EMail",
+"Otto Xentner",null,"otto.xentner@open-xchange.com, alias@open-xchange.com, another.alias@open-xchange.com",null]
+]}
