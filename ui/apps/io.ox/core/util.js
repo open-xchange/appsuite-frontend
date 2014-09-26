@@ -17,7 +17,7 @@ define('io.ox/core/util', function () {
 
     var LENGTH = 30,
         regSeqSoft = /(\S{30,})/g,
-        regSeqHard = /(\S{30 })/g,
+        regSeqHard = /(\S{30})/g,
         regHyphenation = /([^.,;:-=()]+[.,;:-=()])/;
 
     return {
@@ -59,7 +59,7 @@ define('io.ox/core/util', function () {
         },
 
         breakableText: function (text) {
-            return String(text || '').replace(/(\S{20 })/g, '$1\u200B');
+            return String(text || '').replace(/(\S{20})([^$])/g, '$1\u200B$2');
         },
 
         isValidMailAddress: (function () {
@@ -70,7 +70,7 @@ define('io.ox/core/util', function () {
                 regDot = /^\./,
                 regDoubleDots = /\.\./,
                 regDomainIPAddress = /^\[(\d{1,3}\.){3}\d{1,3}\]$/,
-                regDomainIPv6 = /^\[IPv6(:\w{0,4 }){0,8}\]$/i, // yep, vage
+                regDomainIPv6 = /^\[IPv6(:\w{0,4}){0,8}\]$/i, // yep, vage
                 regDomain = /[a-z0-9]$/i;
 
             // email address validation is not trivial
