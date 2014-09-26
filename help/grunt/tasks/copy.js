@@ -2,8 +2,8 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('copy', {
-        help: {
+    grunt.config.merge({ copy: {
+        build_help: {
             files: [
                 {
                     src: ['help/**/*'],
@@ -46,13 +46,7 @@ module.exports = function (grunt) {
                 }
             ]
         }
-    });
-
-    grunt.registerTask('copy_build', [
-        'newer:copy:apps',
-        'newer:copy:themes',
-        'newer:copy:help'
-    ]);
+    }});
 
     // add dist l10n copy tasks
 
@@ -86,7 +80,7 @@ module.exports = function (grunt) {
             ]
         };
 
-        grunt.config.extend('copy', config);
+        grunt.config.merge({ 'copy': config });
         grunt.registerTask('install:' + Lang, 'install language directory into a custom location', function () {
             if (!grunt.option('htdoc')) {
                 grunt.fail.fatal('Need --htdoc option to be set');

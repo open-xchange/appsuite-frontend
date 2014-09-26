@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function (grunt) {
-    grunt.config.extend('less', {
+    grunt.config.merge({ less: {
         bootstrap: {
             options: {
                 lessrc: '.lessrc'
@@ -16,6 +16,6 @@ module.exports = function (grunt) {
                 }
             ]
         }
-    });
+    }});
 };
 
