@@ -360,8 +360,10 @@ define('io.ox/core/tk/autocomplete',
                         close();
                         break;
                     case 39: // cursor right
-                        e.preventDefault();
-                        if (!e.shiftKey) update();
+                        if (!e.shiftKey && o.mode === 'participant') {
+                            e.preventDefault();
+                            update();
+                        }
                         break;
                     case 13: // enter
 
