@@ -188,21 +188,34 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     var ErrorView =  AbstractView.extend({
         tagName: 'span',
         className: 'help-block',
-        invalid: function (message) {
-            var container = this.options.container ? this.options.container : this.$el.closest('.row');
-            // check if already invalid to avoid endless focus calls
-            if (container.hasClass('has-error')) return;
-            container.addClass('has-error');
-            this.$el.text(message).show().end();
-            container.find(':input[name="' + this.name + '"]').attr('aria-invalid', true).focus();
-        },
-        valid: function () {
-            var container = this.options.container ? this.options.container : this.$el.closest('.row');
-            container.removeClass('has-error');
-            this.$el.text('').hide().end();
-            container.find(':input[name="' + this.name + '"]').removeAttr('aria-invalid');
+        getContainer: function () {
+            if (this.options.selector) {
+                if (_.isString(this.options.selector)) return this.$el.closest(this.options.selector);
+                if (_.isObject(this.options.selector)) return this.options.selector;
+            }
+            else {
+                return this.$el.closest('.form-group, [class*="col-"]');
+            }
         },
         render: function () {
+            var self = this;
+            _.defer(function () {
+                var container = self.getContainer();
+                container.on({
+                    invalid: function (e, message) {
+                        // check if already invalid to avoid endless focus calls
+                        if ($(this).hasClass('has-error')) return;
+                        $(this).addClass('has-error');
+                        self.$el.text(message).show().end();
+                        $(this).find('input').attr('aria-invalid', true).focus();
+                    },
+                    valid: function () {
+                        $(this).removeClass('has-error');
+                        self.$el.text('').hide().end();
+                        $(this).find('input').removeAttr('aria-invalid');
+                    }
+                });
+            });
             this.$el.attr({ 'aria-live': 'assertive' }).hide();
             return this;
         }
