@@ -378,7 +378,7 @@ define('io.ox/core/tk/list', [
         },
 
         renderListItem: function (model) {
-            var li = this.scaffold.clone(),
+            var li = this.createListItem(),
                 baton = this.getBaton(model);
             // add cid and full data
             li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
