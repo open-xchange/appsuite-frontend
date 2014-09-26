@@ -2,7 +2,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('copy', {
+    grunt.config.merge({ copy: {
         help: {
             files: [
                 {
@@ -46,13 +46,7 @@ module.exports = function (grunt) {
                 }
             ]
         }
-    });
-
-    grunt.registerTask('copy_build', [
-        'newer:copy:apps',
-        'newer:copy:themes',
-        'newer:copy:help'
-    ]);
+    }});
 
     // add dist l10n copy tasks
 
