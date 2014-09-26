@@ -133,5 +133,26 @@ define(['io.ox/core/util'], function (util) {
                 expect(util.breakableHTML('com.openexchange.0123456789012345678901234567890123456789')).to.equal('com.<wbr>openexchange.<wbr>012345678901234567890123456789<wbr>0123456789');
             });
         });
+
+        describe('breakableText()', function () {
+            it('doesnt change white space', function () {
+                expect(util.breakableText('')).to.be.empty;
+                expect(util.breakableText(' ')).to.equal(' ');
+            });
+
+            it('doesnt change short strings', function () {
+                expect(util.breakableText('Hello World')).to.equal('Hello World');
+            });
+
+            it('does not inseart breaks on text boundaries', function () {
+                expect(util.breakableText('01234567890123456789')).to.equal('01234567890123456789');
+                expect(util.breakableText('0123456789012345678901234567890123456789')).to.equal('01234567890123456789\u200B01234567890123456789');
+                expect(util.breakableText('012345678901234567890123456789012345678901')).to.equal('01234567890123456789\u200B012345678901234567890\u200B1');
+            });
+
+            it('breaks longs strings properly', function () {
+                expect(util.breakableText('com.openexchange.session.contextId=1337')).to.equal('com.openexchange.ses\u200Bsion.contextId=1337');
+            });
+        });
     });
 });
