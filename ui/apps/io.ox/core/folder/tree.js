@@ -113,6 +113,9 @@ define('io.ox/core/folder/tree',
             if (this.flat && options.parent !== this) {
                 options.subfolders = false;
             }
+            if (options.parent.folder === 'virtual/standard') {
+                options.icons = true;
+            }
             return options;
         },
 

@@ -210,7 +210,7 @@ define('io.ox/core/folder/node', [
         getTreeNode: function (model) {
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
-                options = { folder: model.id, icons: o.tree.options.icons, level: level, tree: o.tree, parent: this };
+                options = { folder: model.id, icons: this.options.icons, level: level, tree: o.tree, parent: this };
             return new TreeNodeView(o.tree.getTreeNodeOptions(options, model));
         },
 
