@@ -15,6 +15,7 @@
 
 define('io.ox/contacts/main',
     ['io.ox/contacts/util',
+     'io.ox/core/util',
      'io.ox/contacts/api',
      'io.ox/core/tk/vgrid',
      'io.ox/help/hints',
@@ -34,7 +35,7 @@ define('io.ox/contacts/main',
      'io.ox/contacts/mobile-navbar-extensions',
      'io.ox/contacts/mobile-toolbar-actions',
      'less!io.ox/contacts/style'
-    ], function (util, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+    ], function (util, coreUtil, api, VGrid, hints, viewDetail, ext, actions, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
 
     'use strict';
 
@@ -200,11 +201,14 @@ define('io.ox/contacts/main',
                         fullname = $.trim(util.getFullName(data));
                         if (fullname) {
                             name = fullname;
-                            fullname = util.getFullName(data, true); // use html output
-                            fields.name.html(fullname);
+                            fields.name.empty().append(
+                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }) // use html output
+                            );
                         } else {
                             name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
-                            fields.name.text(_.noI18n(name));
+                            fields.name.empty().append(
+                                coreUtil.renderPersonalName({ name: name })
+                            );
                         }
                         description = $.trim(util.getJob(data));
                         fields.private_flag.get(0).style.display =
