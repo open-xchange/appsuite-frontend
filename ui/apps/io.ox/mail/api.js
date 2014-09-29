@@ -449,7 +449,7 @@ define('io.ox/mail/api',
 
     function allowImages(obj) {
         if (!settings.get('allowHtmlImages', false)) return false;
-        if (accountAPI.is('spam', obj.folder_id || obj.folder)) return false;
+        if (accountAPI.is('spam|trash', obj.folder_id || obj.folder)) return false;
         return true;
     }
 
