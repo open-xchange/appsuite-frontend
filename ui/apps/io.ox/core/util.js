@@ -28,17 +28,6 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
         }
     });
 
-    require('io.ox/core/extensions').point('io.ox/core/person').extend({
-        id: 'presence',
-        index: 200,
-        draw: function () {
-            this.prepend(
-                $('<span class="fa fa-circle" style="display: inline-block; font-size: 90%; float: none; margin-right: 0.5em;">')
-                .css('color', '#c00 #77AC40 #F89406 #ccc'.split(' ')[Math.random() * 4 >> 0])
-            );
-        }
-    });
-
     return {
 
         // render a person's name
