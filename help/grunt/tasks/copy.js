@@ -2,6 +2,10 @@
 
 module.exports = function (grunt) {
 
+    var conf = grunt.config('copy');
+    delete conf.local_install_dynamic;
+    grunt.config('copy', conf);
+
     grunt.config.merge({ copy: {
         build_help: {
             files: [
