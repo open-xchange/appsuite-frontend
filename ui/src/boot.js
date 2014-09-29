@@ -271,21 +271,28 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core', ox.base + '/precore.js'], function (settings) {
+            require(['settings!io.ox/core', 'settings!io.ox/mail', ox.base + '/precore.js'], function (settings, mail) {
 
                 // greedy prefetch for mail app
                 // need to get this request out as soon as possible
                 if (settings.get('autoStart') === 'io.ox/mail/main') {
-                    var params = {
-                        action: 'threadedAll',
-                        folder: 'default0/INBOX',
-                        columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
-                        sort: '610',
-                        order: 'desc',
-                        includeSent: true,
-                        max: 300,
-                        timezone: 'utc',
-                        limit: '0,30'
+                    var folder = 'default0/INBOX',
+                        thread = mail.get(['viewOptions', folder, 'thread'], true),
+                        action = thread ? 'threadedAll' : 'all',
+                        params = {
+                            action: action,
+                            folder: folder,
+                            columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                            sort: mail.get(['viewOptions', folder, 'sort'], 610),
+                            order: mail.get(['viewOptions', folder, 'order'], 'desc')
+                        };
+                    if (thread) {
+                        _.extend(params, {
+                            includeSent: true,
+                            max: 300,
+                            timezone: 'utc',
+                            limit: '0,30'
+                        });
                     };
                     http.GET({ module: 'mail', params: params }).done(function (data) {
                         // the collection loader will check ox.rampup for this data

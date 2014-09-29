@@ -10,9 +10,24 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/files/util'], function (util) {
+define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
 
-    describe.skip('Utilities for files:', function () {
+    function isPromise(def) {
+        return (!def.reject && !!def.done);
+    }
+    
+    function isRejected(def) {
+        return waitsFor(function () {
+            return def.state() === 'rejected';
+        });
+    }
+    function isPending(def) {
+        return waitsFor(function () {
+            return def.state() === 'pending';
+        });
+    }
+
+    describe('Utilities for files:', function () {
         var container = $('<div>'),
             options = {
                 container: container
@@ -24,39 +39,44 @@ define(['io.ox/files/util'], function (util) {
 
         describe('confirmDialog function', function () {
             it('should always return a promise', function () {
-                expect(util.confirmDialog()).toBePromise();
-                expect(util.confirmDialog(undefined)).toBePromise();
-                expect(util.confirmDialog('')).toBePromise();
-                expect(util.confirmDialog([])).toBePromise();
-                expect(util.confirmDialog({})).toBePromise();
-                expect(util.confirmDialog('formfilename.txt', 'serverfilename.txt', options)).toBePromise();
+                expect(isPromise(util.confirmDialog())).to.be.true;
+                expect(isPromise(util.confirmDialog(undefined))).to.be.true;
+                expect(isPromise(util.confirmDialog(''))).to.be.true;
+                expect(isPromise(util.confirmDialog([]))).to.be.true;
+                expect(isPromise(util.confirmDialog({}))).to.be.true;
+                expect(isPromise(util.confirmDialog('formfilename.txt', 'serverfilename.txt', options))).to.be.true;
             });
             describe('returned promise', function () {
                 it('should reject if filename is undefined', function () {
-                    expect(util.confirmDialog(undefined)).toReject();
-                    expect(container.children().length).toBeFalsy();
+                    return isRejected(util.confirmDialog(undefined)).done(function () {
+                        expect(container.children().length).to.equal(0);
+                    });
                 });
                 //do not show confirmation dialog
                 describe('should resolve', function () {
                     it('if file extensions does not change', function () {
-                        expect(util.confirmDialog('nameOne.txt', 'nameTwo.txt')).toResolve();
-                        expect(util.confirmDialog('nameOne', 'nameTwo')).toResolve();
-                        expect(container.children().length).toBeFalsy();
+                        return $.when(util.confirmDialog('nameOne.txt', 'nameTwo.txt'),
+                                util.confirmDialog('nameOne', 'nameTwo')).done(function () {
+                                    expect(container.children().length).to.equal(0);
+                                });
                     });
                     it('if filename on server is not set yet', function () {
-                        expect(util.confirmDialog('nameOne.txt')).toResolve();
-                        expect(container.children().length).toBeFalsy();
+                        return util.confirmDialog('nameOne.txt').done(function () {
+                            expect(container.children().length).to.equal(0);
+                        });
                     });
                 });
                 //show confirmation dialog
                 describe('should stay pending', function () {
                     it('if file extension is removed', function () {
-                        expect(util.confirmDialog('removeExtension', 'removeExtension.md', options)).toStayPending();
-                        expect(container.children().length).toBeTruthy();
+                        return isPending(util.confirmDialog('removeExtension', 'removeExtension.md', options)).done(function () {
+                            expect(container.children().length).to.be.above(0);
+                        });
                     });
                     it('if file extension changes', function () {
-                        expect(util.confirmDialog('changeExtension.txt', 'changeExtension.md', options)).toStayPending();
-                        expect(container.children().length).toBeTruthy();
+                        return isPending(util.confirmDialog('changeExtension.txt', 'changeExtension.md', options)).done(function () {
+                            expect(container.children().length).to.be.above(0);
+                        });
                     });
                 });
             });

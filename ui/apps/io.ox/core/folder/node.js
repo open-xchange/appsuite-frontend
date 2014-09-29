@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extensions', 'gettext!io.ox/core'], function (api, ext, gt) {
+define('io.ox/core/folder/node', [
+    'io.ox/core/folder/api',
+    'io.ox/core/extensions',
+    'io.ox/core/api/account',
+    'gettext!io.ox/core'
+], function (api, ext, account, gt) {
 
     'use strict';
 
@@ -55,13 +60,13 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                 models = _(this.collection.filter(this.getFilter())),
                 exists = {};
 
-            // recycle existing nodes
+            // recycle existing nodes / use detach to keep events
             this.$.subfolders.children().each(function () {
-                exists[$(this).attr('data-id')] = $(this).data('view');
+                exists[$(this).attr('data-id')] = $(this).detach().data('view');
             });
 
-            // empty & append nodes
-            this.$.subfolders.empty().append(
+            // append nodes
+            this.$.subfolders.append(
                 models.map(function (model) {
                     return (exists[model.id] || this.getTreeNode(model).render()).$el;
                 }, this)
@@ -91,9 +96,10 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         },
 
         onRemove: function (model) {
-            var node = this.$.subfolders.children('[data-id="' + $.escape(model.id) + '"]');
-            node.remove();
-            if (this.$.subfolders.children().length === 0) this.model.set('subfolders', false);
+            var children = this.$.subfolders.children();
+            children.filter('[data-id="' + $.escape(model.id) + '"]').remove();
+            if (children.length === 0) this.model.set('subfolders', false);
+            this.renderEmpty();
         },
 
         // respond to changed id
@@ -204,8 +210,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
         getTreeNode: function (model) {
             var o = this.options,
                 level = o.headless || o.indent === false ? o.level : o.level + 1,
-                options = o.tree.getTreeNodeOptions({ folder: model.id, level: level, tree: o.tree, parent: this }, model);
-            return new TreeNodeView(options);
+                options = { folder: model.id, icons: this.options.icons, level: level, tree: o.tree, parent: this };
+            return new TreeNodeView(o.tree.getTreeNodeOptions(options, model));
         },
 
         functions: function () {
@@ -242,6 +248,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                 count: undefined,               // use custom counter
                 empty: true,                    // show if empty, i.e. no subfolders?
                 headless: false,                // show folder row? root folder usually hidden
+                icons: false,                   // show folder icons
                 indent: true,                   // indent subfolders, i.e. increase level by 1
                 level: 0,                       // nesting / left padding
                 model_id: this.folder,          // use this id to load model data and subfolders
@@ -299,7 +306,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
                     this.$.selectable = $('<div class="folder-node" role="presentation">')
                     .css('padding-left', o.level * this.indentation)
                     .append(
-                        this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : $(),
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : [],
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
                         this.$.label = $('<div class="folder-label">'),
                         this.$.counter = $('<div class="folder-counter">')
                     ),
@@ -401,8 +409,15 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
 
         renderEmpty: function () {
             if (this.options.empty !== false) return;
-            // only show if not empty, i.e. has subfolders
+            // only show if not empty, i.e. has subfolder
             this.$el.toggleClass('empty', this.isEmpty());
+        },
+
+        renderIcon: function () {
+            var o = this.options, type;
+            if (!o.icons || o.tree.module !== 'mail') return;
+            type = account.getType(this.folder) || 'default';
+            this.$.icon.addClass('visible ' + type);
         },
 
         render: function () {
@@ -411,14 +426,19 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'io.ox/core/extension
             this.renderTitle();
             this.renderTooltip();
             this.renderCounter();
+            this.renderIcon();
             this.onChangeSubFolders();
             ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
             return this;
         },
 
         destroy: function () {
+            // get parent first
+            var parent = this.options.parent;
+            // remove from DOM now (will trigger this.remove)
             this.$el.remove();
-            this.remove();
+            // check siblings now
+            if (parent.renderEmpty) parent.renderEmpty();
         },
 
         remove: function () {

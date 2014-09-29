@@ -480,6 +480,9 @@ define('io.ox/core/tk/autocomplete',
 
         if (_.isFunction(o.source) && _.isFunction(o.draw)) {
 
+            // input loses focus on scrollbar click
+            var isModalPopup = o.parentSelector.indexOf('.permissions-dialog') > -1;
+
             $.each(this, function () {
                 // bind fundamental handlers
                 $(this)
@@ -495,7 +498,8 @@ define('io.ox/core/tk/autocomplete',
                     });
             });
 
-            if (_.device('!desktop') || _.device('ie')) {//internet explorer needs this fix too or it closes if you try to scroll
+            //internet explorer needs this fix too or it closes if you try to scroll
+            if (_.device('!desktop') || _.device('ie') || isModalPopup) {
                 o.container.on('mousedown', blurOff).on('mouseup', blurOn);
             }
         }

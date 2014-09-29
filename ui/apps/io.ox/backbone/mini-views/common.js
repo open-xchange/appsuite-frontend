@@ -185,6 +185,53 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         }
     });
 
+    var ErrorView =  AbstractView.extend({
+        tagName: 'span',
+        className: 'help-block',
+        getContainer: function () {
+            if (this.options.selector) {
+                if (_.isString(this.options.selector)) return this.$el.closest(this.options.selector);
+                if (_.isObject(this.options.selector)) return this.options.selector;
+            }
+            else {
+                return this.$el.closest('.form-group, [class*="col-"]');
+            }
+        },
+        render: function () {
+            var self = this;
+            _.defer(function () {
+                var container = self.getContainer();
+                container.on({
+                    invalid: function (e, message) {
+                        // check if already invalid to avoid endless focus calls
+                        if ($(this).hasClass('has-error')) return;
+                        $(this).addClass('has-error');
+                        self.$el.text(message).show().end();
+                        $(this).find('input').attr('aria-invalid', true).focus();
+                    },
+                    valid: function () {
+                        $(this).removeClass('has-error');
+                        self.$el.text('').hide().end();
+                        $(this).find('input').removeAttr('aria-invalid');
+                    }
+                });
+            });
+            this.$el.attr({ 'aria-live': 'assertive' }).hide();
+            return this;
+        }
+    });
+
+    var FormView = AbstractView.extend({
+        tagName: 'form',
+        setup: function () {
+            this.listenTo(this.model, 'change');
+        },
+        render: function () {
+            if (this.id) this.$el.attr({ id: this.id });
+            return this;
+        }
+    });
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -192,6 +239,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         TextView: TextView,
         CheckboxView: CheckboxView,
         RadioView: RadioView,
-        SelectView: SelectView
+        SelectView: SelectView,
+        ErrorView: ErrorView,
+        FormView: FormView
     };
 });

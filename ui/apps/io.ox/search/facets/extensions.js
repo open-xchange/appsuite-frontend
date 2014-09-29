@@ -39,11 +39,10 @@ define('io.ox/search/facets/extensions',
                             baton.model.update(facet.id, id, { custom: target, name: label });
                         });
                 },
-                customize: function (baton) {
-                    var data = baton.data,
-                        same = type === 'move' && data.id === id,
+                disable: function (data) {
+                    var same = type === 'move' && data.id === id,
                         create = api.can('create', data);
-                    if (same || !create) this.addClass('disabled');
+                    return same || !create;
                 }
             });
         });
@@ -53,6 +52,10 @@ define('io.ox/search/facets/extensions',
             current: 1,
             'default': 2,
             standard: 3
+        },
+        LABEL = {
+            hide: gt('Hide advanced filters'),
+            show: gt('Show advanced filters')
         },
         extensions = {
 
@@ -162,7 +165,7 @@ define('io.ox/search/facets/extensions',
                     this.parent().prepend(
                         $('<nav>').append(
                             $('<a data-action="toggle-adv">')
-                                .text(gt('Show advanced filters'))
+                                .text(baton.model.get('showadv') ? LABEL.hide : LABEL.show)
                                 .attr({
                                     tabindex: 1,
                                     role: 'button',
@@ -170,7 +173,7 @@ define('io.ox/search/facets/extensions',
                                 })
                                 .on('click ', function () {
                                     var visible = self.is(':visible');
-                                    $(this).text(visible ? gt('Show advanced filters') : gt('Hide advanced filters'));
+                                    $(this).text(visible ? LABEL.show : LABEL.hide);
                                     baton.model.set('showadv', !visible);
                                     self.toggle();
                                 })
@@ -270,26 +273,32 @@ define('io.ox/search/facets/extensions',
                     node = $('<span class="remove">')
                      .attr({
                         'tabindex': '1',
+                        'aria-label': gt('Remove')
+                    })
+                    .append(
+                        $('<i class="fa fa-times action">')
+                    )
+                    .on('click', fn || function () {
+                        baton.model.remove(value.facet || value._compact.facet, value.id);
+                        return false;
+                    })
+
+                );
+                // tooltip
+                if(!_.device('touch')) {
+                    node.attr({
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
                         'data-container': 'body',
-                        'data-original-title': gt('Remove'),
-                        'aria-label': gt('Remove')
-                    })
-                    .tooltip()
-                    .append(
-                        $('<i class="fa fa-times action">')
-                    )
-                    .on('click', function () {
-                        node.tooltip('hide');
-                    })
-                    .on('click', fn || function (e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        baton.model.remove(value.facet || value._compact.facet, value.id);
-                    })
-                );
+                        'data-original-title': gt('Remove')
+                        })
+                        .tooltip()
+                        .on('click', function () {
+                            if (node.tooltip)
+                                node.tooltip('hide');
+                        });
+                }
             },
 
             facetDropdown: function (baton, value, facet) {
@@ -369,8 +378,9 @@ define('io.ox/search/facets/extensions',
                 if (_.contains(facet.flags, 'highlander')) {
                     this.on('click', function () {
                         var sidepanel = $(this).closest('.window-sidepanel'),
-                            field = sidepanel.find('.search-field');
-                        field.val((facet.item || facet).name);
+                            field = sidepanel.find('.search-field'),
+                            key = Object.keys(facet.values)[0];
+                        field.val(facet.values[key].name);
                     });
                 }
 
@@ -461,6 +471,7 @@ define('io.ox/search/facets/extensions',
                 };
 
                 // used to handle overlow when datepicker is shown
+                $('body>.datepicker-container').remove();
                 $('body').append(
                     container = $('<div class="datepicker-container">').hide()
                 );
@@ -490,9 +501,10 @@ define('io.ox/search/facets/extensions',
                                         weekStar: dateAPI.locale.weekStart,
                                         //orientation: 'top left auto',
                                         autoclose: true,
-                                        clearBtn: true,
+                                        clearBtn: false,
                                         todayHighlight: true,
-                                        todayBtn: true
+                                        //insert date when clicked
+                                        todayBtn: 'linked'
                                     })
                                     .on('show', function (e) {
                                         // position container (workaround)
@@ -537,27 +549,28 @@ define('io.ox/search/facets/extensions',
 
                 // add 'all folders'
                 var link;
-                // add dropdown entry
-                menu.prepend(
-                    $('<li role="presentation">').append(
-                         link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
-                                    .append(
-                                        $('<i class="fa fa-fw ">'),
-                                        $('<span>').text(gt('All folders'))
-                                    )
-                                    .attr('data-custom', 'custom')
-                                    .attr('title', gt('All folders'))
-                    )
-                );
-                // is active
-                if (!value.custom || value.custom === 'custom') {
-                    // set display name
-                    this.find('.name')
-                        .text(gt('All folders'));
-                    // set fa-check icon
-                    link.find('i')
-                        .addClass('fa-check');
-                    link.attr('aria-checked', true);
+                if (!baton.model.isMandatory('folder')) {
+                    menu.prepend(
+                        $('<li role="presentation">').append(
+                             link = $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
+                                        .append(
+                                            $('<i class="fa fa-fw ">'),
+                                            $('<span>').text(gt('All folders'))
+                                        )
+                                        .attr('data-custom', 'custom')
+                                        .attr('title', gt('All folders'))
+                        )
+                    );
+                    // is active
+                    if (!value.custom || value.custom === 'custom') {
+                        // set display name
+                        this.find('.name')
+                            .text(gt('All folders'));
+                        // set fa-check icon
+                        link.find('i')
+                            .addClass('fa-check');
+                        link.attr('aria-checked', true);
+                    }
                 }
 
                 // add fodlers

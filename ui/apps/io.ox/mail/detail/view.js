@@ -205,7 +205,7 @@ define('io.ox/mail/detail/view',
         draw: function (baton) {
             var data = content.get(baton.data),
                 node = data.content;
-            if (!data.processedEmoji && data.type === 'text/html') {
+            if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.html(), function (text, lib) {
                     baton.processedEmoji = !lib.loaded;
                     if (baton.processedEmoji) return;
@@ -308,7 +308,7 @@ define('io.ox/mail/detail/view',
             var $li = this.$el;
 
             if (state === undefined) {
-                $li.toggleClass('expanded'); 
+                $li.toggleClass('expanded');
                 $li.attr('aria-expanded', !$li.attr('aria-expanded'));
             } else {
                 $li.toggleClass('expanded', state);

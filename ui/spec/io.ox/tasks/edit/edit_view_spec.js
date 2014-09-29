@@ -11,10 +11,13 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define(['io.ox/tasks/edit/main',
-        'io.ox/core/date',
-        'gettext!io.ox/tasks/edit',
-        'spec/shared/capabilities'], function (edit, date, gt, caputil) {
+define([
+    'io.ox/tasks/edit/main',
+    'io.ox/core/date',
+    'gettext!io.ox/tasks/edit',
+    'spec/shared/capabilities',
+    'waitsFor'
+], function (edit, date, gt, caputil, waitsFor) {
 
     var app,
         view,
@@ -32,14 +35,17 @@ define(['io.ox/tasks/edit/main',
 
                 return def;
             }),
-        capabilities = caputil.preset('common').init('io.ox/tasks/edit/main', edit);
+        capabilities = caputil
+            .preset('common')
+            .init('io.ox/tasks/edit/main', edit)
+            .apply();
 
     describe('Tasks edit view', function () {
-        beforeEach(function (done) {
+        beforeEach(function () {
             //set capabilities
-            capabilities.enable(['delegate_tasks', 'infostore']).then(function () {
+            return capabilities.then(function (data) {
                 return setup();
-            }).done(done);
+            });
         });
         describe('should contain', function () {
             it('a headline', function () {
@@ -87,9 +93,14 @@ define(['io.ox/tasks/edit/main',
                 expect(node.find('.private-flag').length).to.equal(1);
                 expect(node.find('.private-flag input[type="checkbox"]').length).to.equal(1);
             });
-            it('a correct participants tab', function () {//needs tasks delegate capability
-                expect(node.find('.task-participant-input-field').length).to.equal(1);
-                expect(node.find('.participantsrow').length).to.equal(1);
+            it('a correct participants tab', function () {
+                //wait a little, until everything is painted (paint is async)
+                return waitsFor(function () {
+                    return node.find('.task-participant-input-field').length;
+                }).then(function () {
+                    expect(node.find('.task-participant-input-field').length, 'input field elements').to.equal(1);
+                    expect(node.find('.participantsrow').length, 'row elements').to.equal(1);
+                });
             });
             it('a correct details tab', function () {
                 expect(node.find('[data-extension-id="target_duration"]').length).to.equal(1);
@@ -132,9 +143,8 @@ define(['io.ox/tasks/edit/main',
                 link.click();
                 expect(link.text()).to.equal(gt('Expand form'));
             });
-            it.skip('should be collapsed on init', function () {
-                //FIXME: this sometimes (?) fails
-                expect(node.find('.collapsed').length).to.equal(16);
+            it('should be collapsed on init', function () {
+                expect(node.find('.collapsed').length).to.be.above(0);
                 expect(node.find('.collapsed:visible').length).to.equal(0);
             });
         });
@@ -159,12 +169,11 @@ define(['io.ox/tasks/edit/main',
             });
         });
         describe('reminder selector', function () {
-            it.skip('should set alarmtime', function () {
+            it('should set alarmtime', function () {
                 expect(model.get('alarm')).to.equal(undefined);
                 var testtime = new date.Local();
-                testtime.setHours(0, 0, 0, 0).
                 node.find('#task-edit-reminder-select').val('t').trigger('change');//tomorrow
-                expect(model.get('alarm')).to.equal(testtime.getTime());
+                expect(model.get('alarm')).to.be.above(testtime.getTime());
             });
             it('should remove alarmtime', function () {
                 expect(model.get('alarm')).not.to.be.null;

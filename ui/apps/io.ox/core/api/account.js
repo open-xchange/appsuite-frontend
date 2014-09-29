@@ -158,6 +158,10 @@ define('io.ox/core/api/account',
         });
     };
 
+    api.getInbox = function () {
+        return settings.get('folder/inbox');
+    };
+
     /**
      * check folder type
      * @param  {string} type (foldertype, example is 'drafts')
@@ -218,6 +222,14 @@ define('io.ox/core/api/account',
 
     api.isStandardFolder = function (id) {
         return typeHash[id] !== undefined;
+    };
+
+    api.getType = function (id) {
+        return typeHash[id];
+    };
+
+    api.getTypes = function () {
+        return typeHash;
     };
 
     api.inspect = function () {
@@ -447,8 +459,9 @@ define('io.ox/core/api/account',
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
                 _('sent drafts trash spam archive'.split(' ')).each(function (type) {
-                    // only add if account[type] is not null, i.e. if the folder exists
-                    if (account[type]) typeHash[account[type + '_fullname']] = type;
+                    // fullname is favored over short name
+                    var short_name = account[type], full_name = account[type + '_fullname'];
+                    typeHash[full_name || short_name] = type;
                 });
             });
         });

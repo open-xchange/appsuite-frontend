@@ -65,7 +65,7 @@ define('plugins/portal/rss/register',
         preview: function (baton) {
 
             var data = baton.data,
-                count = _.device('small') ? 1 : 10,
+                count = _.device('smartphone') ? 5 : 10,
                 $content = $('<ul class="content pointer list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the rss stream.') + '">');
 
             if (data.items.length === 0) {

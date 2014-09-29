@@ -11,9 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api'], function (api, mailAPI) {
+define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/yell'], function (api, mailAPI, yell) {
 
     'use strict';
+
+    // export global callback; used by server response
+    window.callback_yell = yell;
 
     function map(o) {
         return { id: o.id, folder_id: o.folder_id };
@@ -23,6 +26,7 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api'], function (a
     // window.open(url); might leave open tabs or provoke popup-blocker
     // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
     function iframe(url) {
+        url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=yell';
         $('#tmp').append(
             $('<iframe>', { src: url, 'class': 'hidden download-frame' })
         );

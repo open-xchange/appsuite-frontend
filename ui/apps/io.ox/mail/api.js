@@ -848,7 +848,8 @@ define('io.ox/mail/api',
             api.trigger('update:' + _.ecid(obj), obj);
         });
 
-        return tracker.update(list, function (obj) {
+        return http.wait(
+            tracker.update(list, function (obj) {
                 obj.color_label = label;
                 tracker.setColorLabel(obj);
             })
@@ -857,8 +858,9 @@ define('io.ox/mail/api',
             })
             .done(function () {
                 api.trigger('refresh.color', list);
-                api.trigger('refresh.list');
-            });
+                api.trigger('refresh.all');
+            })
+        );
     };
 
     /**
@@ -983,42 +985,28 @@ define('io.ox/mail/api',
      */
     api.markSpam = function (list) {
 
-        var collection = pool.get('detail');
+        prepareRemove(list);
 
-        api.trigger('beforedelete', list);
-
-        _(list).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
+        // reset spam folder
+        // we assume that the spam handler will move the message to the spam folder
+        _(pool.getByFolder(accountAPI.getFoldersByType('spam'))).each(function (collection) {
+            collection.expired = true;
         });
 
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: true })
-            .then(
-                function sucess() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+        return update(list, { flags: api.FLAGS.SPAM, value: true }).fail(notifications.yell);
     };
 
     api.noSpam = function (list) {
-        this.trigger('refresh.pending');
-        tracker.clear();
-        return update(list, { flags: api.FLAGS.SPAM, value: false })
-            .then(
-                function success() {
-                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-                },
-                notifications.yell
-            )
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+
+        prepareRemove(list);
+
+        // reset inbox
+        // we assume that the spam handler will move the message (back) to the inbox
+        _(pool.getByFolder(accountAPI.getFoldersByType('inbox'))).each(function (collection) {
+            collection.expired = true;
+        });
+
+        return update(list, { flags: api.FLAGS.SPAM, value: false }).fail(notifications.yell);
     };
 
     /**
@@ -1102,6 +1090,11 @@ define('io.ox/mail/api',
         });
     };
 
+    // composition space id
+    api.csid = function () {
+        return _.uniqueId() + '.' + _.now();
+    };
+
     var react = function (action, obj, view) {
 
         // get proper view first
@@ -1111,8 +1104,8 @@ define('io.ox/mail/api',
 
         // attach original message on touch devices?
         var attachOriginalMessage = view === 'text' &&
-            Modernizr.touch &&
-            settings.get('attachOriginalMessage', false) === true;
+                Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+            csid = api.csid();
 
         return http.PUT({
                 module: 'mail',
@@ -1120,15 +1113,18 @@ define('io.ox/mail/api',
                     action: action || '',
                     attachOriginalMessage: attachOriginalMessage,
                     view: view,
-                    setFrom: (/reply|replyall|forward/.test(action))
+                    setFrom: (/reply|replyall|forward/.test(action)),
+                    csid: csid
                 },
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
                 }),
                 appendColumns: false
             })
-            .pipe(function (data) {
+            .then(function (data) {
                 var text = '', quote = '', tmp = '';
+                // inject csid
+                data.csid = csid;
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {

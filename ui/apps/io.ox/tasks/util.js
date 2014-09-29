@@ -323,7 +323,7 @@ define('io.ox/tasks/util',
 
             getPriority: function (data) {
                 if (data) {
-                    var p = data.priority || 0,
+                    var p = parseInt(data.priority, 10) || 0,
                         $span = $('<span>');
                     switch (p) {
                         case 0:

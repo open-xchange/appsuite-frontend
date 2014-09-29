@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-09 13:17+0000\n"
-"Last-Translator: testuser <mk@open-xchange.com>\n"
+"PO-Revision-Date: 2014-09-22 12:38+0100\n"
+"Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.5.1.1\n"
+"X-Generator: Poedit 1.6.5\n"
 "X-POOTLE-MTIME: 1410268670.000000\n"
 
 #. File size
@@ -813,6 +813,8 @@ msgstr "Alle Ordner"
 #: apps/io.ox/core/folder/actions/archive.js:39 module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
 msgstr ""
+"Nachrichten, die älter als %1$d Tage sind, werden in den Archiv-Ordner "
+"verschoben"
 
 #: apps/io.ox/mail/settings/pane.js:287 module:io.ox/mail
 msgid "Allow html formatted emails"
@@ -956,27 +958,25 @@ msgstr "April"
 #: apps/io.ox/mail/accounts/view-form.js:539 module:io.ox/settings
 msgctxt "folder"
 msgid "Archive"
-msgstr ""
+msgstr "Archiv"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js:42 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:106
 msgctxt "verb"
 msgid "Archive"
-msgstr ""
+msgstr "Archivieren"
 
 #: apps/io.ox/core/folder/actions/archive.js:36 module:io.ox/core
-#, fuzzy
 #| msgid "Your messages"
 msgid "Archive messages"
-msgstr "Ihre Nachrichten"
+msgstr "Nachrichten archivieren"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:27 module:io.ox/core
-#, fuzzy
 #| msgid "Your messages"
 msgid "Archiving messages"
-msgstr "Ihre Nachrichten"
+msgstr "Nachrichten werden archiviert"
 
 #: apps/plugins/portal/twitter/util.js:395 module:plugins/portal
 msgid "Are you sure you want to delete this Tweet?"
@@ -1093,7 +1093,7 @@ msgstr "E-Mail-Benachrichtigung nach Bestätigen/Ablehnen automatisch löschen?"
 #. It's a label for an inputfield with a number
 #: apps/io.ox/mail/settings/pane.js:244 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
-msgstr "Automatischer Textumbruch nach Zeichen:"
+msgstr "Automatischer Zeilenumbruch in Klartextnachrichten nach Zeichen:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:133 module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -1846,10 +1846,9 @@ msgstr "Liste anlegen"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/plugins/portal/xing/register.js:267 module:plugins/portal
-#, fuzzy
 #| msgid "Create new rule"
 msgid "Create new %1$s account"
-msgstr "Neue Regel erstellen"
+msgstr "Neuen %1$s-Account anlegen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:53 module:io.ox/mail
 msgid "Create new rule"
@@ -3209,12 +3208,10 @@ msgid "Get free upgrade"
 msgstr "Freies Upgrade holen"
 
 #: apps/io.ox/portal/main.js:389 module:io.ox/portal
-#, fuzzy
 msgid "Get started here"
 msgstr "Einstieg"
 
 #: apps/io.ox/portal/main.js:366 module:io.ox/portal
-#, fuzzy
 msgid "Get started here!"
 msgstr "Einstieg"
 
@@ -3306,7 +3303,6 @@ msgid "Hide QR code"
 msgstr "QR Code ausblenden"
 
 #: apps/io.ox/search/facets/extensions.js:213 module:io.ox/core
-#, fuzzy
 #| msgid "Hide Advanced Filters"
 msgid "Hide advanced filters"
 msgstr "Erweiterte Filter ausblenden"
@@ -5162,7 +5158,6 @@ msgid "Press to hide all task reminders."
 msgstr "Zum Ausblenden aller Aufgaben-Erinnerungen hier drücken."
 
 #: apps/io.ox/files/carousel.js:56 module:io.ox/files
-#, fuzzy
 msgid "Prev"
 msgstr "Vorschau"
 
@@ -5744,7 +5739,7 @@ msgstr "Gespeichert unter"
 
 #: apps/io.ox/mail/api.js:1448 module:io.ox/mail
 msgid "Saved mail attachment"
-msgstr "E-Mail-Anlage gespeichert"
+msgstr "E-Mail-Anlage wurde gespeichert"
 
 #: apps/io.ox/core/api/attachment.js:204 module:io.ox/core
 msgid "Saved task attachment"
@@ -5997,7 +5992,6 @@ msgstr "QR Code anzeigen"
 
 #: apps/io.ox/search/facets/extensions.js:210 module:io.ox/core
 #: apps/io.ox/search/facets/extensions.js:213
-#, fuzzy
 #| msgid "Show Advanced Filters"
 msgid "Show advanced filters"
 msgstr "Erweiterte Filter anzeigen"
@@ -6019,12 +6013,10 @@ msgid "Show appointment details"
 msgstr "Termindetails anzeigen"
 
 #: apps/io.ox/mail/compose/extensions.js:182 module:io.ox/mail
-#, fuzzy
 msgid "Show blind carbon copy input field"
 msgstr "Bcc-Eingabefeld anzeigen"
 
 #: apps/io.ox/mail/compose/extensions.js:174 module:io.ox/mail
-#, fuzzy
 msgid "Show carbon copy input field"
 msgstr "Cc-Eingabefeld anzeigen"
 
@@ -6470,7 +6462,6 @@ msgid "Tasks"
 msgstr "Aufgaben"
 
 #: apps/io.ox/tasks/actions.js:204 module:io.ox/tasks
-#, fuzzy
 msgid "Tasks can not be moved to or out of shared folders"
 msgstr ""
 "Aufgaben können nicht in freigegebene Ordner oder daraus verschoben werden"
@@ -6579,7 +6570,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:539
 #: module:io.ox/calendar/edit/main
-#, fuzzy
 msgid ""
 "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
 "attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
@@ -6791,7 +6781,6 @@ msgid "The person %1$s is already in the list"
 msgstr "Die Person %1$s befindet sich bereits in der Liste."
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:545 module:io.ox/mail
-#, fuzzy
 msgid "The positions of vacation notice and auto forward cannot be changed"
 msgstr ""
 "Die Abwesenheitsbenachrichtigung und die automatische Weiterleitung können "
@@ -6848,7 +6837,6 @@ msgstr ""
 "aktiviert."
 
 #: apps/io.ox/core/settings/pane.js:53 module:io.ox/core
-#, fuzzy
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Zum Aktivieren der Einstellung ist ein erneutes Laden oder Anmelden "
@@ -6968,13 +6956,11 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js:412 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:423
-#, fuzzy
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Diese E-Mail wurde gelesen. Zum Markieren als ungelesen bitte drücken."
 
 #: apps/io.ox/mail/common-extensions.js:415 module:io.ox/mail
 #: apps/io.ox/mail/common-extensions.js:423
-#, fuzzy
 msgid "This E-mail is unread, press to mark it as read."
 msgstr ""
 "Diese E-Mail wurde nicht gelesen. Zum Markieren als gelesen bitte drücken."
@@ -7150,10 +7136,9 @@ msgid "This mail has no content"
 msgstr "Diese E-Mail hat keinen Inhalt"
 
 #: apps/io.ox/core/yell.js:151 module:io.ox/core
-#, fuzzy
 #| msgid "Adding subscription. This may take some seconds..."
 msgid "This may take some seconds"
-msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern..."
+msgstr "Dies kann eine Weile dauern..."
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -7533,9 +7518,8 @@ msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 
 #. Auth type. Use separate username and password
 #: apps/io.ox/mail/accounts/view-form.js:49 module:io.ox/settings
-#, fuzzy
 msgid "Use separate username and password"
-msgstr "Benutzername und Passwort verwenden"
+msgstr "Separaten Benutzernamen und Passwort verwenden"
 
 #: apps/io.ox/mail/accounts/view-form.js:599 module:io.ox/settings
 msgid "Use unified mail for this account"
@@ -7851,10 +7835,9 @@ msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Sie können Ihre Änderung mit Strg+Enter speichern"
 
 #: apps/io.ox/core/folder/actions/move.js:58 module:io.ox/core
-#, fuzzy
 #| msgid "Cannot move default folders."
 msgid "You cannot move items to virtual folders"
-msgstr "Standardordner können nicht verschoben werden"
+msgstr "Objekte können nicht in virtuelle Ordner verschoben werden"
 
 #: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You declined this appointment"
@@ -8461,7 +8444,7 @@ msgstr "keine Leseberechtigungen"
 #: apps/io.ox/mail/write/view-main.js:117 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:169
 msgid "open"
-msgstr ""
+msgstr "öffnen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:170 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:175

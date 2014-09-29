@@ -66,7 +66,7 @@ define('io.ox/search/util',
 
             // standard folders for mail
             if (module === 'mail') {
-                _.each(accountAPI.getStandardFolders(), function (id) {
+                _.each(folderAPI.getStandardMailFolders(), function (id) {
                     mapping[id] = 'standard';
                 });
                 req.push(accountAPI.all());

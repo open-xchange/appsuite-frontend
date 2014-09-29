@@ -402,23 +402,9 @@ define('io.ox/contacts/edit/view-form',
                 $('<label class="control-label col-lg-12 col-md-12 col-sm-12 col-xs-12">').append(
                     $.txt(options.label),
                     input = new mini.InputView({ name: options.field, model: model }).render().$el,
-                    $('<div class="inline-error" aria-live="assertive">').hide()
+                    new mini.ErrorView({ selector: '.row' }).render().$el
                 )
-            )
-            .on({
-                invalid: function (e, message) {
-                    // check if already invalid to avoid endless focus calls
-                    if ($(this).hasClass('error')) return;
-                    $(this).addClass('error')
-                        .find('.inline-error').text(message).show().end()
-                        .find('input').attr('aria-invalid', true).focus();
-                },
-                valid: function () {
-                    $(this).removeClass('error')
-                        .find('.inline-error').text('').hide().end()
-                        .find('input').removeAttr('aria-invalid');
-                }
-            });
+            );
 
             // trigger change event on keyup for view updates
             if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {

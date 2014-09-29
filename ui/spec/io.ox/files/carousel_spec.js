@@ -83,14 +83,18 @@ define(['io.ox/files/carousel'], function (slideshow) {
                 expect(this.node.find('.carousel')).to.have.length(0);
             });
 
-            it.skip('should trigger "slideshow:start" on global ox object', function () {
-                expect(ox).toTrigger('slideshow:start');
+            it('should trigger "slideshow:start" on global ox object', function () {
+                var spy;
+                ox.on('slideshow:start', spy = sinon.spy());
                 slideshow.show();
+                expect(spy.called).to.be.true;
             });
 
-            it.skip('should trigger "slideshow:end" event on global ox object', function () {
-                expect(ox).toTrigger('slideshow:end');
+            it('should trigger "slideshow:end" event on global ox object', function () {
+                var spy;
+                ox.on('slideshow:end', spy = sinon.spy());
                 slideshow.close();
+                expect(spy.called).to.be.true;
             });
         });
 

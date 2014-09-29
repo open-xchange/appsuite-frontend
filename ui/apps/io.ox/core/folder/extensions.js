@@ -83,6 +83,7 @@ define('io.ox/core/folder/extensions',
                     return !account.isStandardFolder(model.id);
                 },
                 folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
+                icons: tree.options.icons,
                 model_id: INBOX,
                 parent: tree,
                 title: gt('My folders'),
@@ -380,6 +381,8 @@ define('io.ox/core/folder/extensions',
                     if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
 
+                    this.find('.owner').remove();
+
                     this.addClass('shared').find('.folder-node').append(
                         $('<div class="owner">').append(
                             userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
@@ -391,9 +394,10 @@ define('io.ox/core/folder/extensions',
                 id: 'shared',
                 index: 200,
                 draw: function (baton) {
-                    if (_.device('smartphone')) return;
 
                     this.find('.folder-shared').remove();
+
+                    if (_.device('smartphone')) return;
                     if (!api.is('unlocked', baton.data)) return;
 
                     this.find('.folder-node').append(
@@ -409,6 +413,7 @@ define('io.ox/core/folder/extensions',
 
                     this.find('.folder-pubsub').remove();
 
+                    if (api.is('shared', baton.data)) return; // ignore shared folders
                     if (!capabilities.has('publication') || !api.is('published|subscribed', baton.data)) return;
 
                     this.find('.folder-node').append(

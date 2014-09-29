@@ -21,41 +21,45 @@ define(['shared/examples/for/api',
 
     var setupFakeServer = function (server) {
 
-        //sends a default folder for get calls
-        server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
-            var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
-                .replace('/api/folders?', '')
-                .replace(/"/g, '\\"').replace(/&/g, '","')
-                .replace(/=/g, '":"') + '"}'),
-                parentFolderIDs = {'2': '1',
-                    '3' : '2',
-                    '4' : '2',
-                    '5' : '2',
-                    '21' : '2'
-                },
-                data = _.extend({
-                    id: sendObject.id,
-                    folder_id: parentFolderIDs[sendObject.id]
-                }, fakeFolders[sendObject.id] || {});
+        server.respondWith('GET', /api\/folders\?action=get.+id=2&/,
+            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                timestamp: 1368791630910,
+                data: { id: '2', folder_id: '1', module: 'infostore', title: 'two' }
+            })]
+        );
 
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: data})
-            );
-        });
+        server.respondWith('GET', /api\/folders\?action=get.+id=21&/,
+            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                timestamp: 1368791630910,
+                data: { id: '21', folder_id: '2', module: 'infostore', title: '.twenty-one' }
+            })]
+        );
+
+        server.respondWith('GET', /api\/folders\?action=get.+id=13&/,
+            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                timestamp: 1368791630910,
+                data: { id: '13', folder_id: '2', module: 'infostore', title: '.thirteen' }
+            })]
+        );
 
         //sends a list of subfolders
-        server.respondWith('GET', /api\/folders\?action=list.+parent=2/, function (xhr) {
-            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({
-                    timestamp: 1368791630910,
-                    data: [
-                        {id: '3', folder_id: '2', title: 'Three' },
-                        {id: '4', folder_id: '2', title: 'Four' },
-                        {id: '5', folder_id: '2', title: 'Five' }
-                    ]
-                })
-            );
-        });
+        server.respondWith('GET', /api\/folders\?action=list.+parent=2&/,
+            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                timestamp: 1368791630910,
+                data: [
+                    {id: '3', folder_id: '2', title: 'three' },
+                    {id: '4', folder_id: '2', title: 'four' },
+                    {id: '5', folder_id: '2', title: 'five' }
+                ]
+            })]
+        );
+
+        server.respondWith('GET', /api\/folders\?action=list.+parent=13&/,
+            [200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                timestamp: 1368791630910,
+                data: []
+            })]
+        );
 
         //sends a path from a folder
         server.respondWith('GET', /api\/folders\?action=path/, function (xhr) {
@@ -97,21 +101,28 @@ define(['shared/examples/for/api',
                 }
             };
 
-        //sharedExamplesFor(api, options);
+        describe('default folders', function () {
 
-        describe.skip('default folders', function () {
             it('should provide the mail folder as default', function () {
+                require('settings!io.ox/mail').set('folder/inbox', 'default0/INBOX');
                 var folder_id = api.getDefaultFolder();
                 expect(folder_id).to.equal('default0/INBOX');
             });
 
             it('should know about the mail folder', function () {
+                require('settings!io.ox/mail').set('folder/inbox', 'default0/INBOX');
                 var folder_id = api.getDefaultFolder('mail');
                 expect(folder_id).to.equal('default0/INBOX');
             });
+
+            it('should get default folder for specific type from settings', function () {
+                require('settings!io.ox/core').set('folder/myType', 'testFolder');
+                var folder_id = api.getDefaultFolder('myType');
+                expect(folder_id).to.equal('testFolder');
+            });
         });
 
-        describe.skip('requests some folders from the server', function () {
+        describe('requests some folders from the server', function () {
 
             beforeEach(function () {
                 // reset pool
@@ -129,7 +140,7 @@ define(['shared/examples/for/api',
 
             it('should return a list of subfolders with correct parent ids', function (done) {
 
-                api.list('2').done(function (data) {
+                api.list('2', { cache: false }).done(function (data) {
                     expect(data).to.be.an('array');
                     _(data).each(function (folder) {
                         expect(folder.folder_id).to.equal('2');
@@ -152,11 +163,13 @@ define(['shared/examples/for/api',
                 });
             });
 
-            it.skip('should trigger a create event', function (done) {
+            it('should trigger a create event', function (done) {
 
-                expect(api).toTrigger('create');
+                var spy = sinon.spy();
+                api.on('create', spy);
 
                 var result = api.create('2').done(function () {
+                    expect(spy.called).to.be.true;
                     done();
                 });
             });
@@ -181,9 +194,13 @@ define(['shared/examples/for/api',
                 });
             });
 
-            it.skip('should trigger a delete event', function (done) {
-                expect(api).toTrigger('delete');
+            it('should trigger a remove event', function (done) {
+
+                var spy = sinon.spy();
+                api.on('remove', spy);
+
                 api.remove('2').done(function () {
+                    expect(spy.called).to.be.true;
                     done();
                 });
             });
@@ -326,43 +343,45 @@ define(['shared/examples/for/api',
             describe('with "show hidden files" option disabled (default)', function () {
 
                 describe('when naming folders with filtered names', function () {
+
                     beforeEach(function () {
                         this.server.responses = _(this.server.responses).reject(function (response) {
                             return 'api/folders?action=get'.search(response.url) === 0;
                         });
                         setupFakeServer(this.server);
                         fakeFolders['31337'] = {
-                            id: '31337',
                             folder_id: '13',
+                            id: '31337',
+                            module: 'infostore',
                             title: 'secret'
                         };
                     });
 
-                    it.skip('should trigger "warn:hidden" event during create', function (done) {
-                        fakeFolders['21'] = {
-                            id: '21',
-                            folder_id: '13',
-                            title: '.secret'
-                        };
+                    it('should trigger "warn:hidden" event during create', function (done) {
+
+                        var spy = sinon.spy();
+
                         require([
                             'settings!io.ox/core',
                             'settings!io.ox/files'
                         ])
                         .done(function (settings, fileSettings) {
                             settings.set('folder/blacklist');
-                            fileSettings.set('showHidden');
+                            fileSettings.set('showHidden', false);
                             api.pool.unfetch();
                         })
                         .then(function () {
-                            expect(api).toTrigger('warn:hidden');
+                            api.on('warn:hidden', spy);
                             return api.create('13', { title: '.secret' });
                         })
                         .done(function () {
+                            expect(spy.called).to.equal(true);
                             done();
                         });
                     });
 
-                    it.skip('should trigger "warn:hidden" event during update', function (done) {
+                    it('should trigger "warn:hidden" event during update', function (done) {
+
                         this.server.respondWith('PUT', /api\/folders\?action=update/, function (xhr) {
                             var idPos = xhr.url.indexOf('&id='),
                                 id = xhr.url.slice(idPos + 4, xhr.url.indexOf('&', idPos + 1)),
@@ -373,20 +392,24 @@ define(['shared/examples/for/api',
                                 JSON.stringify({'timestamp': 1386862269412, 'data': id})
                             );
                         });
+
+                        var spy = sinon.spy();
+
                         require([
                             'settings!io.ox/core',
                             'settings!io.ox/files'
                         ])
                         .done(function (settings, fileSettings) {
                             settings.set('folder/blacklist');
-                            fileSettings.set('showHidden');
+                            fileSettings.set('showHidden', false);
                             api.pool.unfetch();
                         })
                         .then(function () {
-                            expect(api).toTrigger('warn:hidden');
-                            return api.update('31337', { title: '.secret' });
+                            api.on('warn:hidden', spy);
+                            return api.update('31337', { title: '.secret', module: 'infostore' });
                         })
                         .done(function () {
+                            expect(spy.called).to.equal(true);
                             done();
                         });
                     });
