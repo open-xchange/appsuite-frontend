@@ -3,7 +3,7 @@
 module.exports = function (grunt) {
 
     grunt.config.merge({ copy: {
-        help: {
+        build_help: {
             files: [
                 {
                     src: ['help/**/*'],
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
             ]
         };
 
-        grunt.config.extend('copy', config);
+        grunt.config.merge({ copy: config });
         grunt.registerTask('install:' + Lang, 'install language directory into a custom location', function () {
             if (!grunt.option('htdoc')) {
                 grunt.fail.fatal('Need --htdoc option to be set');
