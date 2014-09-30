@@ -668,8 +668,7 @@
         @width: 200px;
         @gap: 20px;
 
-        -webkit-column-width: @width;
-        -webkit-column-gap: @gap;
+        // no -webkit for safari any more; browser bug since version 7.1 (see bug 34604)
         -moz-column-width: @width;
         -moz-column-gap: @gap;
         column-width: @width;
