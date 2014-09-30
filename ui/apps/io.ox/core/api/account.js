@@ -175,6 +175,8 @@ define('io.ox/core/api/account',
             if (api.isUnified(id)) {
                 var re = unifiedFolders[type];
                 return Boolean(re && re.test(id));
+            } else if (type === 'inbox') {
+                return typeHash[id] === type;
             } else {
                 // loop of all types to also check if a subfolder is of a type
                 return _(typeHash).some(function (defaultType, defaultId) {
