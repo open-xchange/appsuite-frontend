@@ -57,10 +57,6 @@ define('io.ox/files/fluid/perspective',
         return node.addClass('not-selectable');
     }
 
-    function iconError() {
-        $(this).remove();
-    }
-
     function cut(str, maxLen, cutPos) {
         return _.ellipsis(str, {
                 max: maxLen || 70,
@@ -368,7 +364,36 @@ define('io.ox/files/fluid/perspective',
         }
     });
 
+    function iconLoad() {
+        // 1x1 dummy or final image?
+        if (this.width === 1 && this.height === 1) iconReload.call(this); else iconFinalize.call(this);
+    }
+
+    function iconFinalize() {
+        var img = $(this), cell = img.closest('.file-cell'), url = img.attr('src');
+        // remove placeholder
+        cell.find('i.fa').remove();
+        // use background for list/tile view
+        cell.find('.preview-cover').css('backgroundImage', 'url(' + url + ')');
+        // use icon for icon view
+        img.fadeIn().removeClass('lazy');
+    }
+
+    function iconReload() {
+        var img = $(this), url = img.attr('src'), retry = img.data('retry');
+        setTimeout(function () {
+            img.off('load error')
+                .one({ load: iconLoad, error: iconError })
+                .attr({ 'src': url + '&retry=' + retry, 'data-retry': retry++ });
+        }, 5000);
+    }
+
+    function iconError() {
+        $(this).remove();
+    }
+
     ext.point('io.ox/files/icons/file').extend({
+
         draw: function (baton) {
 
             var file = baton.data,
@@ -382,7 +407,7 @@ define('io.ox/files/fluid/perspective',
                 iconBackground = drawGenericIcon(file.filename),
                 previewBackground = $('<div class="preview-cover not-selectable">').append(iconBackground);
 
-            //add preview image
+            // add preview image
             if (mode) {
 
                 // go for fast thumbnails (see bug 34002)
@@ -391,18 +416,8 @@ define('io.ox/files/fluid/perspective',
 
                 previewImage.append(
                     $('<img alt="" class="img-thumbnail lazy">')
-                    .attr('data-src', url)
-                    .one({
-                        load: function () {
-                            //list/tile view
-                            iconBackground.remove();
-                            previewBackground.css('backgroundImage', 'url(' + url + ')');
-                            //icon view
-                            iconImage.remove();
-                            $(this).fadeIn().removeClass('lazy');
-                        },
-                        error: iconError
-                    })
+                    .attr({ 'data-src': url, 'data-retry': 0 })
+                    .one({ load: iconLoad, error: iconError })
                 );
             }
 
