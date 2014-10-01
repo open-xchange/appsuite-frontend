@@ -414,7 +414,6 @@ define('io.ox/files/fluid/perspective',
             if (mode) {
 
                 url = api.getUrl(file, mode, options);
-                console.log('update?', baton.update, url);
                 if (!baton.update) {
                     // go for fast thumbnails (see bug 34002)
                     url = url.replace(/format=preview_image/, 'format=thumbnail_image');
