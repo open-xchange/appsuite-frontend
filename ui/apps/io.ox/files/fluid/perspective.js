@@ -380,11 +380,14 @@ define('io.ox/files/fluid/perspective',
     }
 
     function iconReload() {
-        var img = $(this), url = img.attr('src'), retry = img.data('retry');
+        var img = $(this),
+            retry = (img.data('retry') || 0) + 1,
+            url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry;
+        if (retry > 3) return; // stop trying
         setTimeout(function () {
             img.off('load error')
                 .one({ load: iconLoad, error: iconError })
-                .attr({ 'src': url + '&retry=' + retry, 'data-retry': retry++ });
+                .attr({ 'src': url, 'data-retry': retry });
         }, 5000);
     }
 
