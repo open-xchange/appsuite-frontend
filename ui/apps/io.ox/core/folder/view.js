@@ -74,6 +74,8 @@ define('io.ox/core/folder/view',
 
         app.folderView = {
 
+            tree: tree,
+
             isVisible: function () {
                 return visible;
             },
