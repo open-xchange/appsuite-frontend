@@ -92,7 +92,8 @@ define('io.ox/search/autocomplete/extensions',
                             value = node.data(),
                             baton = ext.Baton.ensure({
                                 deferred: $.Deferred().resolve(value),
-                                model: model
+                                model: model,
+                                view: view
                             });
 
                         // empty input field
