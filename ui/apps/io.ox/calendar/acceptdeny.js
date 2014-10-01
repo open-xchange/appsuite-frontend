@@ -155,7 +155,7 @@ define('io.ox/calendar/acceptdeny',
                                         }
                                     );
                             };
-                            if (checkConflicts) {
+                            if (checkConflicts && action !== 'declined') {//no conflicts possible if you decline the appointment
                                 var confirmAction = action;
                                 api.checkConflicts(appointmentData).done(function (conflicts) {
                                     if (conflicts.length === 0) {
