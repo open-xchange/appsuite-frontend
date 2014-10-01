@@ -254,6 +254,9 @@ define('io.ox/mail/detail/view',
             // ignore click on/inside <a> tags
             if ($(e.target).closest('a').length) return;
 
+            // ignore click on dropdowns
+            if ($(e.target).hasClass('dropdown-menu')) return;
+
             // don't toggle single messages
             if (this.$el.siblings().length === 0) return;
 
