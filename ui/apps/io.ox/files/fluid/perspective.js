@@ -413,9 +413,12 @@ define('io.ox/files/fluid/perspective',
             // add preview image
             if (mode) {
 
-                // go for fast thumbnails (see bug 34002)
                 url = api.getUrl(file, mode, options);
-                url = url.replace(/format=preview_image/, 'format=thumbnail_image');
+                console.log('update?', baton.update, url);
+                if (!baton.update) {
+                    // go for fast thumbnails (see bug 34002)
+                    url = url.replace(/format=preview_image/, 'format=thumbnail_image');
+                }
 
                 previewImage.append(
                     $('<img alt="" class="img-thumbnail lazy">')
@@ -625,10 +628,10 @@ define('io.ox/files/fluid/perspective',
                 filesContainer.trigger('dialog:closed');
             });
 
-            drawFile = function (file) {
+            drawFile = function (file, update) {
                 var node = $('<a>');
                 ext.point('io.ox/files/icons/file').invoke(
-                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options) })
+                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options), update: update })
                 );
                 return node;
             };
@@ -858,7 +861,7 @@ define('io.ox/files/fluid/perspective',
                 if (icon.length) {
                     icon.replaceWith(
                         // draw file ...
-                        drawFile(obj)
+                        drawFile(obj, true)
                         // ... and reset lazy loader
                         .find('img.img-thumbnail.lazy').imageloader({ timeout: 60000 }).end()
                     );
