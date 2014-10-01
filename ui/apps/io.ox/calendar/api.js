@@ -396,6 +396,45 @@ define('io.ox/calendar/api',
         copy: function (list, targetFolderId) {
             return copymove(list, 'copy', targetFolderId);
         },
+        /**
+         * check if you have appointments confirmed that conflict with the given appointment and returns them
+         * @param  {object} appointment
+         * @return {deferred}
+         */
+        checkConflicts: function (appointment) {
+            var data = appointment;
+
+            return http.GET({
+                module: 'calendar',
+                params: {
+                    action: 'all',
+                    // id, created_by, folder_id, private_flag, title, start_date, end_date,users, location, shown_as
+                    columns: '1,2,20,101,200,201,202,221,400,402',
+                    start: appointment.start_date,
+                    end: appointment.end_date,
+                    showPrivate: true,
+                    recurrence_master: false,
+                    sort: '201',
+                    order: 'asc',
+                    timezone: 'UTC'
+                }
+            }).then(function (items) {
+                var conflicts = [];
+
+                _(items).each(function (obj) {
+                    if (obj.id !== data.id) {//no conflict with itself
+                        if (obj.shown_as !== 4) {//4 = free
+                            _(obj.users).each(function (user) {
+                               if (user.id === ox.user_id && (user.confirmation === 1 || user.confirmation === 3)) {//confirmed or tentative
+                                   conflicts.push(obj);
+                               } 
+                            });
+                        }
+                    }
+                });
+                return conflicts;
+            });
+        },
 
         /**
          * change confirmation status
@@ -417,7 +456,7 @@ define('io.ox/calendar/api',
                     timestamp: _.now(),
                     timezone: 'UTC'
                 };
-
+            debugger;
             // contains alarm?
             if ('alarm' in o.data) {
                 alarm = o.data.alarm;
