@@ -601,10 +601,11 @@ $(window).load(function () {
                                 $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
                             // theme
-                            themes.set(_.url.hash('theme') || ox.serverConfig.signinTheme || 'login');
-                            // continue
-                            gettext.setLanguage('en_US');
-                            require(['io.ox/core/login-i18n']).done(initialize);
+                            themes.set(_.url.hash('theme') || ox.serverConfig.signinTheme || 'login').then(function () {
+                                // continue
+                                gettext.setLanguage('en_US');
+                                return require(['io.ox/core/login-i18n']);
+                            }).done(initialize);
                         },
                         function fail() {
                             // nope, had some stuff in the caches but server is down
