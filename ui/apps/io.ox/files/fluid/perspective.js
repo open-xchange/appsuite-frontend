@@ -381,7 +381,7 @@ define('io.ox/files/fluid/perspective',
 
     function iconReload() {
         var img = $(this),
-            retry = (img.data('retry') || 0) + 1,
+            retry = (parseInt(img.attr('data-retry'), 10) || 0) + 1,
             url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry;
         if (retry >= 3) return; // stop trying
         setTimeout(function () {
