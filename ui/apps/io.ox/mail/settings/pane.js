@@ -22,9 +22,8 @@ define('io.ox/mail/settings/pane',
      'io.ox/core/notifications',
      'gettext!io.ox/mail',
      'io.ox/core/api/account',
-     'io.ox/backbone/mini-views',
-     'io.ox/core/folder/api'
-    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini, folderAPI) {
+     'io.ox/backbone/mini-views'
+    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini) {
 
     'use strict';
 
@@ -323,32 +322,16 @@ define('io.ox/mail/settings/pane',
 
             if (_.device('smartphone')) return;
 
-            var container = $('<fieldset>');
-            this.append(container );
-
-            folderAPI.multiple(api.getFoldersByType('inbox')).then(function (folders) {
-
-                var subscriptionPossible = _(folders)
-                    .chain()
-                    .map(function (folder) {
-                        return folderAPI.can('subscribe:imap', folder);
-                    })
-                    .reduce(function (acc, value) {
-                        return acc || value; // enough if one of the folders can subscribe
-                    }, false)
-                    .value();
-
-                if (!subscriptionPossible) return;
-
-                container.append(
+            this.append(
+                $('<fieldset>').append(
                     $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
                     $('<div class="sectioncontent">').append(
                         $('<button type="button" class="btn btn-primary" tabindex="1">')
                         .on('click', changeIMAPSubscription)
                         .text(gt('Change subscription'))
                     )
-                );
-            });
+                )
+            );
         }
     });
 

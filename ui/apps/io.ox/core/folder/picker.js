@@ -40,6 +40,7 @@ define('io.ox/core/folder/picker',
     //     module       {string}    module, e.g. 'mail'
     //     persistent   {string}    If string, this path is used to store open and last nodes; needs settings
     //     root         {string}    tree root id, e.g. '1'
+    //     selection    {bool}      "Done" callback needs selected item (true/false)
     //     settings     {object}    app-specific settings
     //     title        {string}    dialog title / can also be DOM element(s)
     //     width        {number}    dialog width in px
@@ -67,6 +68,7 @@ define('io.ox/core/folder/picker',
             module: 'mail',
             persistent: false,
             root: '1',
+            selection: true,
             title: gt('Select folder'),
             width: 500,
             // callbacks
@@ -126,12 +128,15 @@ define('io.ox/core/folder/picker',
         }
 
         // respond to invalid selection
-        tree.on('change virtual', function (id) {
-            var model = api.pool.getModel(id), data = model.toJSON();
-            dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data));
-        });
+        if (o.selection) {
 
-        dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', true);
+            tree.on('change virtual', function (id) {
+                var model = api.pool.getModel(id), data = model.toJSON();
+                dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data));
+            });
+
+            dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', true);
+        }
 
         o.initialize(dialog, tree);
 

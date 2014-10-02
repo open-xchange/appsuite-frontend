@@ -303,7 +303,7 @@ define('io.ox/core/folder/api',
         if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
 
         // use rampup data?
-        if (rampup[id]) {
+        if (rampup[id] && !options.all) {
             var array = processListResponse(id, rampup[id]);
             pool.addCollection(id, array);
             delete rampup[id];
