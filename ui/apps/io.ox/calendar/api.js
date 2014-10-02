@@ -456,7 +456,7 @@ define('io.ox/calendar/api',
                     timestamp: _.now(),
                     timezone: 'UTC'
                 };
-            debugger;
+
             // contains alarm?
             if ('alarm' in o.data) {
                 alarm = o.data.alarm;
