@@ -165,7 +165,7 @@ define('plugins/notifications/calendar/register',
         onClickAccept: function (e) {
             e.stopPropagation();
             var o = calAPI.reduce(this.model.get('data')),
-                appointmentData = this.model.attributes;
+                appointmentData = this.model.get('data');
                 require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
                     folderAPI.get(o.folder).done(function (folder) {
                     o.data = {
