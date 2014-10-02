@@ -476,6 +476,9 @@ define('io.ox/files/fluid/view-detail',
         return function (e, data) {
             var replacement = draw(data, app);
             if ('former_id' in data) replacement.attr('former-id', data.former_id);
+            if (node.find('.versiontable:visible')) {//keep versionhistory status (expanded/collapsed)
+                replacement.find('[data-action="history"]').click();
+            }
             node.replaceWith(replacement);
         };
     };
