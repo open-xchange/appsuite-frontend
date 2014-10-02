@@ -383,7 +383,7 @@ define('io.ox/files/fluid/perspective',
         var img = $(this),
             retry = (img.data('retry') || 0) + 1,
             url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry;
-        if (retry > 3) return; // stop trying
+        if (retry >= 3) return; // stop trying
         setTimeout(function () {
             img.off('load error')
                 .one({ load: iconLoad, error: iconError })
