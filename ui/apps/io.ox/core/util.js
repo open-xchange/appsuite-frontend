@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/util', function () {
+define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -20,7 +20,48 @@ define('io.ox/core/util', function () {
         regSeqHard = /(\S{30})/g,
         regHyphenation = /([^.,;:-=()]+[.,;:-=()])/;
 
+    ext.point('io.ox/core/person').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+            if (baton.html !== false) this.append(baton.html); else this.text(baton.data.name);
+        }
+    });
+
     return {
+
+        // render a person's name
+        renderPersonalName: function (options) {
+
+            options = _.extend({
+                $el: undefined,
+                html: false, // must be properly escaped!
+                tagName: 'span' // to support different tags
+            }, options);
+
+            var data = {
+                // alternative fields to get the name
+                name: options.full_name || options.display_name || options.name,
+                // halo view looks for email1
+                email: options.email,
+                email1: options.email,
+                // user id
+                user_id: options.user_id
+            };
+
+            var baton = new ext.Baton({ data: data, html: options.html });
+
+            // get node
+            var node = options.$el || (
+                data.email || data.user_id ?
+                $('<a href="#" class="halo-link" tabindex="1">').attr('title', data.email).data(data) :
+                $('<' + options.tagName + '>')
+            );
+
+            ext.point('io.ox/core/person').invoke('draw', node.empty(), baton);
+
+            return node;
+        },
 
         // remove unwanted quotes from display names
         // "World, Hello" becomes World, Hello

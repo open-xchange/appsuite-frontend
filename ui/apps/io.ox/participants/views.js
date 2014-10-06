@@ -12,9 +12,10 @@
 
 define('io.ox/participants/views', [
     'io.ox/contacts/api',
+    'io.ox/core/util',
     'gettext!io.ox/calendar/edit/main',
     'less!io.ox/participants/participants'
-], function (api, gt) {
+], function (api, util, gt) {
 
     'use strict';
 
@@ -77,10 +78,10 @@ define('io.ox/participants/views', [
         },
 
         setDisplayName: function () {
-            var text = this.model.getDisplayName();
+            var name = this.model.getDisplayName();
             //display name: 'email only' participant
-            text = text === '...' && this.model.getEmail() !== '' ? this.model.getEmail().split('@')[0] : text;
-            this.nodes.$text.text(text);
+            name = name === '...' && this.model.getEmail() !== '' ? this.model.getEmail().split('@')[0] : name;
+            util.renderPersonalName({ $el: this.nodes.$text, name: name });
         },
 
         setCustomImage: function () {

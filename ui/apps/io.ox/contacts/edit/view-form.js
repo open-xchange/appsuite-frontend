@@ -417,7 +417,7 @@ define('io.ox/contacts/edit/view-form', [
                 $('<label class="control-label col-lg-12 col-md-12 col-sm-12 col-xs-12">').append(
                     $.txt(options.label),
                     input = new mini.InputView({ name: options.field, model: model }).render().$el,
-                    new mini.ErrorView({ name: options.field, model: model }).render().$el
+                    new mini.ErrorView({ selector: '.row' }).render().$el
                 )
             );
 

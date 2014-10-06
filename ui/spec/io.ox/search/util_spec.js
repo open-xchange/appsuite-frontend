@@ -17,51 +17,23 @@ define([
     'settings!io.ox/mail',
     'settings!io.ox/core',
     'io.ox/mail/main',
+    'spec/shared/io.ox/search/util',
     'beforeEachEnsure'
-], function (util, settingsFixture, caputil, mailSettings, settings, main, beforeEachEnsure) {
+], function (util, settingsFixture, caputil, mailSettings, settings, main, testutil, beforeEachEnsure) {
     'use strict';
 
     function isPromise(def) {
         return (!def.reject && !!def.done);
-    }
-    function isDeferred(def) {
-        return (!!def.reject && !!def.done);
     }
 
     function failed() {
         expect(false).to.be.true;
     }
 
-    //aync setup loads app and and add some variables to test context
-    function setup (context) {
-        var def = $.Deferred(),
-            self = this,
-            setCaps =  caputil.preset('common').init('io.ox/mail/main', main).apply;
-        setCaps()
-            .done(function () {
-                main.getApp().launch().done(function () {
-                    //console.warn('%c' + 'getAppDone', 'color: green; background-color: black');
-                    var win = main.getApp().getWindow();
-                    self.vars = {
-                        win: win,
-                        nodes: win.nodes.facetedsearch,
-                        api: win.facetedsearch
-                    };
-                    win.on('search:loaded', function () {
-                        //console.log('%c' + 'search:loaded', 'color: red; background-color: black');
-                        self.vars.view = self.vars.api.view;
-                        self.vars.model = self.vars.api.view.model;
-                        def.resolve();
-                    });
-                });
-            });
-        return def;
-    }
-
     describe.skip('Search', function () {
 
         describe('Utilities for search:', function () {
-            beforeEachEnsure(setup);
+            beforeEachEnsure(testutil.startApp);
 
             describe('getFolders', function () {
                 it('should always return a promise', function () {

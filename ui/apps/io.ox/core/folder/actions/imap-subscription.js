@@ -50,6 +50,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
             context: 'subscribe',
             height: 300,
             module: 'mail',
+            selection: false,
             title: gt('Subscribe IMAP folders'),
 
             always: function () {

@@ -21,10 +21,11 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/extPatterns/links',
     'io.ox/core/date',
+    'io.ox/core/util',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, getBreadcrumb, links, date, gt, settings) {
+], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, gt, settings) {
 
     'use strict';
 
@@ -137,17 +138,19 @@ define('io.ox/contacts/view-detail', [
         id: 'contact-title',
         draw: function (baton) {
 
-            var name = createText(util.getFullNameFormat(baton.data),
-                    ['first_name', 'last_name', 'title', 'display_name']),
-                job = createText(getDescription(baton.data),
-                    ['position', 'profession', 'type']),
+            var name = coreUtil.renderPersonalName({
+                html: util.getFullName(baton.data, true),
+                tagName: 'h1'
+            });
+
+            var job = createText(getDescription(baton.data), ['position', 'profession', 'type']),
                 company = $.trim(baton.data.company);
 
             this.append(
                 $('<div class="next-to-picture">').append(
                     // right side
                     $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
-                    name.length ? $('<h1 class="header-name">').append(name) : [],
+                    name.children().length ? name.addClass('header-name') : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],
                     $('<section class="attachments-container clear-both">')
@@ -229,7 +232,10 @@ define('io.ox/contacts/view-detail', [
                         $('<div class="member-picture">'),
                         $.extend(data, { width: 48, height: 48, scaleType: 'cover' })
                     ),
-                    $('<div class="member-name">').text(data.display_name),
+                    coreUtil.renderPersonalName({
+                        $el: $('<div class="member-name">'),
+                        name: data.display_name
+                    }),
                     $('<a href="#" class="halo-link">').data({ email1: data.mail }).text(data.mail)
                 )
             );

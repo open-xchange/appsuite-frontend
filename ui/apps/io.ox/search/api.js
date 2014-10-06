@@ -30,8 +30,9 @@ define('io.ox/search/api', [
                     params: {
                         action: 'autocomplete',
                         module: '',
-                        // max. number of values for each facet
-                        limit: 3
+                        // max. number of values for each facet;
+                        // serverside default/fallback is 10
+                        limit: 6
                     },
                     data: {
                         prefix: '',

@@ -384,7 +384,7 @@ define('io.ox/core/permissions/permissions', [
                         .pluck('entity')
                         .value();
 
-                    dialog.getContentNode().busy();
+                    dialog.getContentNode().addClass('scrollpane').busy();
 
                     userAPI.getList(ids, true, { allColumns: true }).done(function () {
                         // stop being busy

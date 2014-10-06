@@ -187,7 +187,7 @@ define('io.ox/contacts/api', [
                     _(opt).each(function (value, key) {
                         if (_(queryFields).chain().keys().contains(key).value() && value === 'on') {
                             _(queryFields[key]).each(function (name) {
-                                filter.push(['=',  { 'field': name }, query]);
+                                filter.push(['=', { 'field': name }, query]);
                             });
                             defaultBehaviour = false;
                         }
@@ -195,7 +195,7 @@ define('io.ox/contacts/api', [
 
                     if (defaultBehaviour) {
                         _(queryFields.names).each(function (name) {
-                            filter.push(['=',  { 'field': name }, query]);
+                            filter.push(['=', { 'field': name }, query]);
                         });
                     }
                     data = { 'filter': filter };
@@ -262,7 +262,7 @@ define('io.ox/contacts/api', [
      * fix backend WAT
      * @param  {object} data
      * @param  {string} id (data object property)
-     * @return { object} data (cleaned)
+     * @return {object} data (cleaned)
      */
     function wat(data, id) {
         if (data[id] === '' || data[id] === undefined) {
@@ -276,7 +276,7 @@ define('io.ox/contacts/api', [
      * @param  {object} file (image) [optional]
      * @fires  api#create (object)
      * @fires  api#refresh.all
-     * @return { deferred} returns contact object
+     * @return {deferred} returns contact object
      */
     api.create = function (data, file) {
 
@@ -348,7 +348,7 @@ define('io.ox/contacts/api', [
      * @fires  api#update: + cid
      * @fires  api#update (data)
      * @fires  api#refresh.all
-     * @return { deferred} returns
+     * @return {deferred} returns
      */
     api.update =  function (o) {
 
@@ -414,8 +414,8 @@ define('io.ox/contacts/api', [
      * @param  {object} changes (target values)
      * @param  {object} file
      * @fires  api#refresh.list
-     * @fires  api#update:image ({id,folder })
-     * @return { deferred} object with timestamp
+     * @fires  api#update:image ({id,folder})
+     * @return {deferred} object with timestamp
      */
     api.editNewImage = function (o, changes, file) {
 
@@ -466,7 +466,7 @@ define('io.ox/contacts/api', [
      * @fires  api#refresh.all
      * @fires  api#delete + cid
      * @fires  api#delete (data)
-     * @return { promise }
+     * @return {promise}
      */
     api.remove =  function (list) {
         api.trigger('beforedelete', list);
@@ -509,7 +509,7 @@ define('io.ox/contacts/api', [
 
     /**
      * clear fetching cache
-     * @return { deferred }
+     * @return {deferred}
      */
     api.clearFetchCache = function () {
         return fetchCache.clear();
@@ -518,7 +518,7 @@ define('io.ox/contacts/api', [
     /**
     * get contact redced/filtered contact data; manages caching
     * @param  {string} address (emailaddress)
-    * @return { deferred} returns exactyl one contact object
+    * @return {deferred} returns exactyl one contact object
     */
     api.getByEmailaddress = function (address) {
 
@@ -580,143 +580,151 @@ define('io.ox/contacts/api', [
         });
     };
 
-    // local hash to recognize URLs that have been fetched already
-    var cachesURLs = {}, uniq = ox.t0;
+    api.pictureHalo = (function () {
 
-    // update uniq on picture change
-    api.on('update:image', function () {
-        uniq = _.now();
-    });
+        // local hash to recognize URLs that have been fetched already
+        var cachesURLs = {},
+            uniq = ox.t0,
+            fallback = ox.base + '/apps/themes/default/dummypicture.png';
 
-    // node is optional. if missing function returns just the URL
-    api.pictureHalo = function (/* [node], options */) {
-        var args = _(arguments).toArray(), node, options, params, fallback = ox.base + '/apps/themes/default/dummypicture.png', url;
+        // update uniq on picture change
+        api.on('update:image', function () {
+            uniq = _.now();
+        });
 
-        // use copy of data object because of delete-statements
-        if (args.length === 1) {
-            options = _.clone(args[0]);
-        } else {
-            node = args[0];
-            options = _.clone(args[1]);
+        function load(node, url, options) {
+            var hideOnFallback = options.hideOnFallback || false;
+            _.defer(function () {
+                // use lazyload?
+                var scrollpane = node.closest('.scrollpane');
+                if (scrollpane.length) {
+                    node.attr('data-original', url).lazyload({
+                        container: scrollpane,
+                        effect: 'show',
+                        error: function () {
+                            node.css('background-image', 'url(' + fallback + ')');
+                            if (hideOnFallback) node.hide();
+                            node = scrollpane = null;
+                        },
+                        load: function (elements_left, settings, image) {
+                            if (image.width === 1) {
+                                node.css('background-image', 'url(' + fallback + ')');
+                            } else {
+                                cachesURLs[url] = url;
+                            }
+                            node = scrollpane = null;
+                        }
+                    });
+                } else {
+                    $(new Image()).one('load error', function (e) {
+                        var fail = this.width === 1 || e.type === 'error';
+                        if (!fail) cachesURLs[url] = url;
+                        if (fail && hideOnFallback) node.hide();
+                        node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                        node = null;
+                    })
+                    .attr('src', url);
+                }
+            });
+            return node;
         }
 
-        // duck checks
-        if (api.looksLikeResource(options)) {
+        // node is optional. if missing function returns just the URL
+        return function (/* [node], options */) {
 
-            url = ox.base + '/apps/themes/default/dummypicture_resource.png';
+            var args = _(arguments).toArray(), node, options, params, url;
 
-        } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+            // use copy of data object because of delete-statements
+            if (args.length === 1) {
+                options = _.clone(args[0]);
+            } else {
+                node = args[0];
+                options = _.clone(args[1]);
+            }
 
-            url = ox.base + '/apps/themes/default/dummypicture_group.png';
+            // duck checks
+            if (api.looksLikeResource(options)) {
 
-        } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+                url = ox.base + '/apps/themes/default/dummypicture_resource.png';
 
+            } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+
+                url = ox.base + '/apps/themes/default/dummypicture_group.png';
+
+            } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+
+                params = $.extend({}, {
+                    // scale
+                    width: options.width,
+                    height: options.height,
+                    scaleType: options.scaleType
+                });
+                url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+
+            } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
+                url = fallback;
+            }
+
+            // already done?
+            if (url) return node ? load(node, url, options) : url;
+
+            // preference; internal_userid must not be undefined, null, or zero
+            if (options.internal_userid || options.userid || options.user_id) {
+                delete options.contact_id;
+                delete options.folder_id;
+                delete options.folder;
+                delete options.id;
+            } else {
+                delete options.internal_userid;
+                delete options.userid;
+                delete options.user_id;
+            }
+
+            // empty extend trick to restrict to non-undefined values
             params = $.extend({}, {
+                // identifier
+                email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
+                folder: options.folder_id || options.folder,
+                id: options.contact_id || options.id,
+                internal_userid: options.internal_userid || options.userid || options.user_id,
                 // scale
                 width: options.width,
                 height: options.height,
-                scaleType: options.scaleType
+                scaleType: options.scaleType,
+                uniq: uniq
             });
-            url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
-        } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
-            url = fallback;
-        }
-
-        // already done?
-        if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
-
-        // preference; internal_userid must not be undefined, null, or zero
-        if (options.internal_userid || options.userid || options.user_id) {
-            delete options.contact_id;
-            delete options.folder_id;
-            delete options.folder;
-            delete options.id;
-        } else {
-            delete options.internal_userid;
-            delete options.userid;
-            delete options.user_id;
-        }
-
-        // empty extend trick to restrict to non-undefined values
-        params = $.extend({}, {
-            // identifier
-            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
-            folder: options.folder_id || options.folder,
-            id: options.contact_id || options.id,
-            internal_userid: options.internal_userid || options.userid || options.user_id,
-            // scale
-            width: options.width,
-            height: options.height,
-            scaleType: options.scaleType,
-            uniq: uniq
-        });
-
-        // remove empty values
-        for (var k in params) {
-            if (params.hasOwnProperty(k) && !params[k]) {
-                delete params[k];
+            // remove empty values
+            for (var k in params) {
+                if (params.hasOwnProperty(k) && !params[k]) {
+                    delete params[k];
+                }
             }
-        }
 
-        url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
+            url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
 
-        // just return URL
-        if (!node) return url;
+            // just return URL
+            if (!node) return url;
 
-        // cached?
-        if (cachesURLs[url]) {
-            return node.css('background-image', 'url(' + cachesURLs[url] + ')');
-        }
-        var hideOnFallback = options.hideOnFallback || false;
-        // load image
-        _.defer(function () {
-            // use lazyload?
-            var scrollpane = node.closest('.scrollpane');
-            if (scrollpane.length) {
-                node.attr('data-original', url).lazyload({
-                    container: scrollpane,
-                    effect: 'show',
-                    error: function () {
-                        node.css('background-image', 'url(' + fallback + ')');
-                        if (hideOnFallback) {
-                            node.hide();
-                        }
-                        node = scrollpane = null;
-                    },
-                    load: function (elements_left, settings, image) {
-                        if (image.width === 1) {
-                            node.css('background-image', 'url(' + fallback + ')');
-                        } else {
-                            cachesURLs[url] = url;
-                        }
-                        node = scrollpane = null;
-                    }
-                });
-            } else {
-                $(new Image()).one('load error', function (e) {
-                    var fail = this.width === 1 || e.type === 'error';
-                    if (!fail) cachesURLs[url] = url;
-                    if (fail && hideOnFallback) {
-                        node.hide();
-                    }
-                    node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-                    node = null;
-                })
-                .attr('src', url);
+            // cached?
+            if (cachesURLs[url]) {
+                return node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
-        });
 
-        // remove options
-        options = null;
+            load(node, url, options);
 
-        return node;
-    };
+            // remove options
+            options = null;
+
+            return node;
+        };
+
+    }());
 
     /**
     * get div node with callbacks managing fetching/updating
     * @param  {object} obj ('display_name' and 'email')
-    * @return { object} div node with callbacks
+    * @return {object} div node with callbacks
     */
     api.getDisplayName = function (data, options) {
 
@@ -770,18 +778,16 @@ define('io.ox/contacts/api', [
             }
         };
 
-        // has full_name?
         if (data && data.full_name) {
+            // has full_name?
             cont(data.full_name);
             clear();
-
-        // looks like a full object?
         } else if (data && (data.last_name || data.first_name)) {
+            // looks like a full object?
             cont(data);
             clear();
-
-        // load data
         } else {
+            // load data
             api.getByEmailaddress(data.email).done(cont).fail(clear);
         }
 
@@ -841,7 +847,7 @@ define('io.ox/contacts/api', [
      * move contact to a folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @return { deferred }
+     * @return {deferred}
      */
     api.move = function (list, targetFolderId) {
         return copymove(list, 'update', targetFolderId);
@@ -851,7 +857,7 @@ define('io.ox/contacts/api', [
      * copy contact to a folder
      * @param  {array} list
      * @param  {string} targetFolderId
-     * @return { deferred }
+     * @return {deferred}
      */
     api.copy = function (list, targetFolderId) {
         return copymove(list, 'copy', targetFolderId);
@@ -860,7 +866,7 @@ define('io.ox/contacts/api', [
     /**
      * get birthday ordered list of contacts
      * @param  {object} options
-     * @return { deferred }
+     * @return {deferred}
      */
     api.birthdays = function (options) {
 
@@ -882,7 +888,7 @@ define('io.ox/contacts/api', [
     /**
      * is ressource (duck check)
      * @param  {object} obj (contact)
-     * @return { boolean }
+     * @return {boolean}
      */
     api.looksLikeResource = function (obj) {
         return 'mailaddress' in obj && 'description' in obj;
@@ -891,7 +897,7 @@ define('io.ox/contacts/api', [
     /**
      * is ressource (duck check)
      * @param  {object} obj (contact)
-     * @return { boolean }
+     * @return {boolean}
      */
     api.looksLikeGroup = function (obj) {
         return 'members' in obj;
@@ -900,7 +906,7 @@ define('io.ox/contacts/api', [
     /**
      * is distribution list
      * @param  {object} obj (contact)
-     * @return { boolean }
+     * @return {boolean}
      */
     api.looksLikeDistributionList = function (obj) {
         return !!obj.mark_as_distributionlist;
@@ -909,7 +915,7 @@ define('io.ox/contacts/api', [
     /**
      * ask if this contact has attachments uploading at the moment (busy animation in detail View)
      * @param  {string} key (task id)
-     * @return { boolean }
+     * @return {boolean}
      */
     api.uploadInProgress = function (key) {
         return uploadInProgress[key] || false;//return true boolean
@@ -918,7 +924,7 @@ define('io.ox/contacts/api', [
     /**
      * add contact to the list
      * @param {string} key (task id)
-     * @return { undefined }
+     * @return {undefined}
      */
     api.addToUploadList = function (key) {
         uploadInProgress[key] = true;
@@ -928,7 +934,7 @@ define('io.ox/contacts/api', [
      * remove contact from the list
      * @param  {string} key (task id)
      * @fires  api#update: + key
-     * @return { undefined }
+     * @return {undefined}
      */
     api.removeFromUploadList = function (key) {
         delete uploadInProgress[key];

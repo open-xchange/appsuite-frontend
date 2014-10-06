@@ -349,27 +349,29 @@ define('io.ox/calendar/util', [
             function getContent() {
                 // hard coded for demo purposes
                 var div = $('<ul class="list-unstyled">');
+
                 $.when.apply($, _.map([
                     'America/Los_Angeles',
                     'America/New_York',
                     'Europe/London',
                     'Europe/Berlin',
                     'Australia/Sydney'
-                ], date.getTimeZone)).done(function () {
-                    _(Array.prototype.slice.call(arguments)).each(function (zone) {
-                        // must use outer DIV with "clear: both" here for proper layout in firefox
-                        div.append($('<li>').append(
-                            $('<span>')
-                                .text(gt.noI18n(zone.displayName.replace(/^.*?\//, '').replace(/_/g, ' '))),
-                            $('<span>')
-                                .addClass('label label-info')
-                                .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
-                            $('<span>')
-                                .addClass('time')
-                                .text(gt.noI18n(that.getTimeInterval(data, zone)))
-                        ));
+                ], date.getTimeZone))
+                    .done(function () {
+                        _(Array.prototype.slice.call(arguments)).each(function (zone) {
+                            // must use outer DIV with "clear: both" here for proper layout in firefox
+                            div.append($('<li>').append(
+                                $('<span>')
+                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, '').replace(/_/g, ' '))),
+                                $('<span>')
+                                    .addClass('label label-info')
+                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
+                                $('<span>')
+                                    .addClass('time')
+                                    .text(gt.noI18n(that.getTimeInterval(data, zone)))
+                            ));
+                        });
                     });
-                });
 
                 return div;
             }

@@ -84,6 +84,7 @@ define('io.ox/core/folder/extensions', [
                     return !account.isStandardFolder(model.id);
                 },
                 folder: 'virtual/default0', // convention! virtual folders are identified by their id starting with "virtual"
+                icons: tree.options.icons,
                 model_id: INBOX,
                 parent: tree,
                 title: gt('My folders'),
@@ -212,7 +213,6 @@ define('io.ox/core/folder/extensions', [
         },
         {
             id: 'other',
-            index: INDEX += 100,
             draw: extensions.otherFolders
         }
     );
@@ -220,12 +220,8 @@ define('io.ox/core/folder/extensions', [
     // looks identical to popup but has no favorites
     ext.point('io.ox/core/foldertree/mail/subscribe').extend(
         {
-            id: 'standard-folders',
-            draw: extensions.standardFolders
-        },
-        {
-            id: 'remote-accounts',
-            draw: extensions.remoteAccounts
+            id: 'root-folders',
+            draw: extensions.rootFolders
         }
     );
 

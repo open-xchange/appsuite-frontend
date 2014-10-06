@@ -12,14 +12,14 @@
  */
 
 define('io.ox/core/folder/tree', [
-    'io.ox/core/folder/node',
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
+    'settings!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions',
     'less!io.ox/core/folder/style'
-], function (TreeNodeView, Selection, api, ext) {
+], function (Selection, api, ext, settings) {
 
     'use strict';
 
@@ -35,15 +35,23 @@ define('io.ox/core/folder/tree', [
 
         initialize: function (options) {
 
-            options = _.extend({ contextmenu: false, customize: $.noop, disable: $.noop }, options);
+            options = _.extend({
+                context: 'app',
+                contextmenu: false,
+                customize: $.noop,
+                disable: $.noop,
+                icons: settings.get('features/folderIcons', false),
+                root: 'default0/INBOX'
+            }, options);
 
+            this.all = !!options.all;
             this.app = options.app;
-            this.root = options.root || 'default0/INBOX';
+            this.context = options.context;
+            this.flat = !!options.flat;
             this.module = options.module;
             this.open = options.open;
-            this.flat = !!options.flat;
-            this.context = options.context || 'app';
-            this.all = !!options.all;
+            this.root = options.root;
+
             this.$el.data('view', this);
             this.$container = $('<ul class="tree-container f6-target" role="tree">');
             this.$dropdown = $();
@@ -105,6 +113,9 @@ define('io.ox/core/folder/tree', [
             }
             if (this.flat && options.parent !== this) {
                 options.subfolders = false;
+            }
+            if (options.parent.folder === 'virtual/standard') {
+                options.icons = true;
             }
             return options;
         },

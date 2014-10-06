@@ -1099,28 +1099,34 @@ define('io.ox/core/tk/selection', [
                 var deltaX = Math.abs(e.pageX - e.data.x),
                     deltaY = Math.abs(e.pageY - e.data.y);
                 if (deltaX > 15 || deltaY > 15) {
-                    $(document).off('mousemove.dnd').on('mousemove.dnd', drag);
+                    // get data now
+                    data = self.unique(self.unfold());
+                    // empty?
+                    if (data.length === 0) {
+                        var cid = source.attr('data-obj-id');
+                        data = cid ? [_.cid(cid)] : [];
+                    }
+                    // check permissions - need 'delete' access for a move
+                    var collection = new Collection(data);
+                    collection.getProperties();
+                    if (collection.isResolved() && !collection.has('delete')) {
+                        $(document).off('mousemove.dnd mouseup.dnd');
+                    } else {
+                        // bind events
+                        $('.dropzone').each(function () {
+                            var node = $(this), selector = node.attr('data-dropzones');
+                            (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
+                        });
+                        $(document).off('mousemove.dnd').on('mousemove.dnd', drag);
+                    }
                 }
             }
 
             function start(e) {
+                e.preventDefault();
+                // remember source now
                 source = $(this);
-                // get data now
-                data = self.unique(self.unfold());
-                // empty?
-                if (data.length === 0) {
-                    var cid = source.attr('data-obj-id');
-                    data = cid ? [_.cid(cid)] : [];
-                }
-                // check permissions - need 'delete' access for a move
-                var collection = new Collection(data);
-                collection.getProperties();
-                if (collection.isResolved() && !collection.has('delete')) return;
-                // bind events
-                $('.dropzone').each(function () {
-                    var node = $(this), selector = node.attr('data-dropzones');
-                    (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
-                });
+                // bind new events
                 $(document)
                     .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
                     .on('mouseup.dnd', stop);
@@ -1128,7 +1134,6 @@ define('io.ox/core/tk/selection', [
                 if (!_.browser.IE) { // Not needed in IE - See #27981
                     (options.focus ? container.find(options.focus).first() : container).focus();
                 }
-                e.preventDefault();
             }
 
             // drag & drop

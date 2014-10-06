@@ -65,7 +65,7 @@ define('io.ox/core/session', [
                     action: 'autologin',
                     client: that.client(),
                     rampup: true,
-                    rampUpFor: 'open-xchange-appsutie',
+                    rampupFor: 'open-xchange-appsutie',
                     version: that.version()
                 }
             })
@@ -193,7 +193,7 @@ define('io.ox/core/session', [
                 params: {
                     action: 'rampup',
                     rampup: true,
-                    rampUpFor: 'open-xchange-appsuite'
+                    rampupFor: 'open-xchange-appsuite'
                 },
                 appendColumns: false,
                 processResponse: false

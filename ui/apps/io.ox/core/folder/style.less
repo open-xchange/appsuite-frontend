@@ -134,6 +134,25 @@
             }
         }
 
+        .folder-icon {
+            display: none;
+            &.visible {
+                display: inline-block;
+                margin: 0 12px 0 0; // yep, 12
+            }
+            i {
+                text-align: left;
+                &:before { content: '\f114'; } // fa-folder-o
+            }
+            &.inbox { i:before { content: '\f01c'; }} // fa-inbox
+            &.sent { i:before { content: '\f1d8'; }} // fa-paper-plane
+            &.drafts { i:before { content: '\f15b'; }} // fa-file
+            &.trash { i:before { content: '\f1f8'; }} // fa-trash
+            &.spam { i:before { content: '\f05e'; }} // fa-ban
+            &.archive { i:before { content: '\f187'; }} // fa-archive
+            &.default { i { color: #aaa; }}
+        }
+
         .folder-checkbox {
             display: inline-block;
             margin: 0 14px 0 0;
@@ -148,6 +167,10 @@
             color: rgba(0, 0, 0, 0.30);
             &:before { content: '\f0c2'; } // fa-cloud
         }
+    }
+
+    .folder.open > .folder-node > .folder-icon.default {
+        i:before { content: '\f115'; } // fa-folder-open-o
     }
 
     .shared {

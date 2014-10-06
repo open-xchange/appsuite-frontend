@@ -201,6 +201,7 @@ define('io.ox/mail/detail/content', [
         id: 'white-space',
         index: 600,
         process: function (baton) {
+            if (baton.isLarge) return; // espeically firefox doesn't like those regex for large messages
             baton.source = baton.source
                 // remove leading white-space
                 .replace(/^(<div[^>]+>)(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '$1')

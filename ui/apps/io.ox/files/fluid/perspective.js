@@ -373,7 +373,39 @@ define('io.ox/files/fluid/perspective', [
         }
     });
 
+    function iconLoad() {
+        // 1x1 dummy or final image?
+        if (this.width === 1 && this.height === 1) iconReload.call(this); else iconFinalize.call(this);
+    }
+
+    function iconFinalize() {
+        var img = $(this), cell = img.closest('.file-cell'), url = img.attr('src');
+        // remove placeholder
+        cell.find('i.fa').remove();
+        // use background for list/tile view
+        cell.find('.preview-cover').css('backgroundImage', 'url(' + url + ')');
+        // use icon for icon view
+        img.fadeIn().removeClass('lazy');
+    }
+
+    function iconReload() {
+        var img = $(this),
+            retry = (parseInt(img.attr('data-retry'), 10) || 0) + 1,
+            url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry;
+        if (retry >= 3) return; // stop trying
+        setTimeout(function () {
+            img.off('load error')
+                .one({ load: iconLoad, error: iconError })
+                .attr({ 'src': url, 'data-retry': retry });
+        }, 5000);
+    }
+
+    function iconError() {
+        $(this).remove();
+    }
+
     ext.point('io.ox/files/icons/file').extend({
+
         draw: function (baton) {
 
             var file = baton.data,
@@ -390,7 +422,9 @@ define('io.ox/files/fluid/perspective', [
             // add preview image
             if (mode) {
                 var url = api.getUrl(file, mode, options);
-                url = url.replace(/format=preview_image/, 'format=thumbnail_image');
+                if (!baton.update) {
+                    url = url.replace(/format=preview_image/, 'format=thumbnail_image');
+                }
                 previewImage.append(
                     $('<img class="img-thumbnail lazy" alt="">')
                         .attr('data-original', url)
@@ -616,10 +650,10 @@ define('io.ox/files/fluid/perspective', [
                 filesContainer.trigger('dialog:closed');
             });
 
-            drawFile = function (file) {
+            drawFile = function (file, update) {
                 var node = $('<a>');
                 ext.point('io.ox/files/icons/file').invoke(
-                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options) })
+                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options), update: update })
                 );
                 return node;
             };
@@ -844,7 +878,7 @@ define('io.ox/files/fluid/perspective', [
                 if (icon.length) {
                     icon.replaceWith(
                         // draw file ...
-                        drawFile(obj)
+                        drawFile(obj, true)
                         // ... and reset lazy loader
                         .find('img.lazy').lazyload({ container: wrapper, event: 'scrollstop' }).end()
                     );

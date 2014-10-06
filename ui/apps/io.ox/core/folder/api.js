@@ -304,7 +304,7 @@ define('io.ox/core/folder/api', [
         if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
 
         // use rampup data?
-        if (rampup[id]) {
+        if (rampup[id] && !options.all) {
             var array = processListResponse(id, rampup[id]);
             pool.addCollection(id, array);
             delete rampup[id];
@@ -753,10 +753,27 @@ define('io.ox/core/folder/api', [
     // Change unseen count
     //
 
-    function changeUnseenCounter(id, delta) {
-        var model = pool.getModel(id);
-        model.set('unread', Math.max(0, model.get('unread') + delta));
-    }
+    var changeUnseenCounter = (function () {
+
+        var hash = {}, wait = 500;
+
+        function cont(id) {
+            delete hash[id];
+            reload(id);
+        }
+
+        function fetch(id) {
+            if (hash[id]) clearTimeout(hash[id]);
+            hash[id] = setTimeout(cont, wait, id);
+        }
+
+        return function changeUnseenCounter(id, delta) {
+            var model = pool.getModel(id);
+            model.set('unread', Math.max(0, model.get('unread') + delta));
+            fetch(id);
+        };
+
+    }());
 
     //
     // Refresh all folders
@@ -775,6 +792,32 @@ define('io.ox/core/folder/api', [
     }
 
     ox.on('please:refresh refresh^', refresh);
+
+    //
+    // Get standard mail folders
+    //
+    // We cannot rely on account API because folders might not yet exist, especially Archive.
+    // We assume that all folders for external accounts exist; we furhter assume that standard folders
+    // for primary account are located below inbox. Therefore, we fetch subfolders and look for
+    // standard folders based on account data. I think that someone someday will report "Folder not found"
+    // for external accounts; then we take another round. Would be cool if backend whould just
+    // provide a list of existing standard folders but that seems to be rocket science.
+
+    function getStandardMailFolders() {
+
+        // get all external standard folders
+        var external = _(account.getStandardFolders()).filter(function (id) {
+            return !/^default0/.test(id);
+        });
+
+        // get inbox' subfolders
+        var inbox = account.getInbox(), collection = pool.getCollection(inbox);
+
+        // get all internal standard folders (_.chain() doesn't work here for whatever reason)
+        var internal = _(collection.pluck('id')).filter(account.isStandardFolder);
+
+        return internal.concat(external);
+    }
 
     // publish api
     _.extend(api, {
@@ -803,6 +846,7 @@ define('io.ox/core/folder/api', [
         isFlat: isFlat,
         getFlatCollection: getFlatCollection,
         getDefaultFolder: util.getDefaultFolder,
+        getStandardMailFolders: getStandardMailFolders,
         getTextNode: getTextNode,
         getFolderTitle: getFolderTitle,
         ignoreSentItems: ignoreSentItems,

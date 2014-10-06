@@ -1,4 +1,3 @@
-// NOJSHINT
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -17,8 +16,6 @@ define.async('io.ox/core/date', [
     'settings!io.ox/core',
     'gettext!io.ox/core'
 ], function (gettext, settings, gt) {
-
-    /*jshint white:false */
 
     'use strict';
 
