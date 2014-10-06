@@ -57,9 +57,7 @@ define('io.ox/search/model',
         // show advanced facets block initially
         showadv: false,
         // data container for extensions/plugins
-        extensions: {
-            history: []
-        }
+        extensions: {}
     };
 
     // resolve conflicting facets
