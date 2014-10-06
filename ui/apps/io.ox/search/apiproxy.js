@@ -259,7 +259,7 @@ define('io.ox/search/apiproxy',
                         };
                         app.view.trigger('query:start');
                         return model.getFacets()
-                            .done(filterFacets.bind(this, opt))
+                            .done(filterFacets.bind(this, opt, app.view))
                             .then(getResults.bind(this, opt))
                             .then(
                                 // success
