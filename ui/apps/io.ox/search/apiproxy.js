@@ -216,8 +216,9 @@ define('io.ox/search/apiproxy',[
                 },
                 query: (function () {
 
-                    function filterFacets(opt, facets) {
+                    function filterFacets(opt, view, facets) {
                         // extend options
+                        view.trigger('query:running');
                         opt.data.facets = _.filter(facets, function (facet) {
                             // TODO: remove hack to ingore folder facet when empty
                             return !('value' in facet) || (facet.value !== 'custom');
@@ -259,7 +260,7 @@ define('io.ox/search/apiproxy',[
                         };
                         app.view.trigger('query:start');
                         return model.getFacets()
-                            .done(filterFacets.bind(this, opt))
+                            .done(filterFacets.bind(this, opt, app.view))
                             .then(getResults.bind(this, opt))
                             .then(
                                 // success

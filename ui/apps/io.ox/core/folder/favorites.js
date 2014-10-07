@@ -64,7 +64,7 @@ define('io.ox/core/folder/favorites', [
                         open: false,
                         parent: tree,
                         sortable: true,
-                        title: 'Favorites',
+                        title: gt('Favorites'),
                         tree: tree
                     })
                     .render().$el.addClass('favorites')

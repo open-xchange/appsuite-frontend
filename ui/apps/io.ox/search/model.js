@@ -57,9 +57,7 @@ define('io.ox/search/model', [
         // show advanced facets block initially
         showadv: false,
         // data container for extensions/plugins
-        extensions: {
-            history: []
-        }
+        extensions: {}
     };
 
     // resolve conflicting facets
@@ -188,7 +186,7 @@ define('io.ox/search/model', [
             getModule: function () {
                 return this.getApp().split('/')[1];
             },
-            add: function (facet, value, option) {
+            add: function (facet, value, option, silent) {
                 var pool = this.get('pool'),
                     list = this.get('poollist');
 
@@ -250,7 +248,7 @@ define('io.ox/search/model', [
 
                 this.trigger('facet:add', facet, value, option);
 
-                if (facet !== 'folder')
+                if (facet !== 'folder' && !silent)
                     this.trigger('query', this.getApp());
             },
             remove: function (facet, value) {

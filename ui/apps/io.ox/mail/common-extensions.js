@@ -304,7 +304,7 @@ define('io.ox/mail/common-extensions', [
                         noCaret: true,
                         ref: 'io.ox/mail/attachment/links'
                     })
-                    .draw.call(node, ext.Baton({ data: data, $el: node }));
+                    .draw.call(node, ext.Baton({ context: this.model.collection.toJSON(), data: data, $el: node }));
 
                     // support for fixed position
                     // TODO: introduce as general solution

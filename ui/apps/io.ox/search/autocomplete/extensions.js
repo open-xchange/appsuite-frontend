@@ -21,6 +21,21 @@ define('io.ox/search/autocomplete/extensions',[
 
     var POINT = 'io.ox/search/autocomplete';
 
+    ext.point(POINT + '/handler/click').extend({
+        id: 'default',
+        index: 'last',
+        flow: function (baton) {
+            baton.data.deferred.done(function (value) {
+                // exclusive: define used option (type2 default is index 0 of options)
+                var option = _.find(value.options, function (item) {
+                    return item.id === value.id;
+                });
+
+                baton.data.model.add(value.facet, value.id, (option || {}).id);
+            });
+        }
+    });
+
     var extensions = {
 
         searchfieldLogic: function (baton) {
@@ -76,18 +91,18 @@ define('io.ox/search/autocomplete/extensions',[
 
                     // apply selected filter
                     var node = $(e.target).closest('.autocomplete-item'),
-                        value = node.data();
+                        value = node.data(),
+                        baton = ext.Baton.ensure({
+                            deferred: $.Deferred().resolve(value),
+                            model: model,
+                            view: view
+                        });
 
                     // empty input field
                     if (!(model.getOptions().switches || {}).keepinput)
                         ref.val('');
 
-                    // exclusive: define used option (type2 default is index 0 of options)
-                    var option = _.find(value.options, function (item) {
-                        return item.id === value.id;
-                    });
-
-                    model.add(value.facet, value.id, (option || {}).id);
+                    ext.point(POINT + '/handler/click').invoke('flow', this, baton);
                 }
             })
             .on('focus focus:custom click', function (e, opt) {

@@ -323,7 +323,8 @@ define('io.ox/core/tk/autocomplete', [
             },
 
             autoSelectFirst = function () {
-                scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
+                scrollpane.find('.autocomplete-item:visible:not(.unselectable),' +
+                                '.autocomplete-item.default').first().click();
             },
 
             //waits for finished server call/drawn dropdown

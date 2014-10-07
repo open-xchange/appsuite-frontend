@@ -153,6 +153,12 @@
         &.unread {
             .from span.person, .subject, .date { .fontWeight(bold); }
         }
+
+        .date {
+            display: block;
+            float: none;
+            .ellipsis();
+        }
     }
 
     &.unread {
