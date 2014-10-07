@@ -566,7 +566,7 @@ define('io.ox/mail/api',
             var cid = _.cid(item), model = collection.get(cid);
             if (model) collection.remove(model);
         });
-    }
+    };
 
     /**
      * wrapper for factories remove to update counters
