@@ -42,12 +42,17 @@ define('io.ox/tasks/edit/main', [
             'CLEAN': 1,
             'DIRTY': 2
         };
+
         app.getState = function () {
             return taskState;
         };
 
         app.markDirty = function () {
             taskState = app.STATES.DIRTY;
+        };
+
+        app.markClean = function () {
+            taskState = app.STATES.CLEAN;
         };
 
         app.isDirty = function () {
@@ -72,10 +77,6 @@ define('io.ox/tasks/edit/main', [
                 check = true;
             }
             return check;
-        };
-
-        app.markClean = function () {
-            taskState = app.STATES.CLEAN;
         };
 
         // launcher
@@ -196,7 +197,6 @@ define('io.ox/tasks/edit/main', [
         };
 
         app.failRestore = function (point) {
-            var df = $.Deferred();
             this.markDirty();
             if (_.isUndefined(point.id)) {
                 this.model.set(point);
@@ -207,8 +207,7 @@ define('io.ox/tasks/edit/main', [
                 this.cid = 'io.ox/tasks:edit.' + _.cid(point);
                 this.setTitle(point.title || gt('Edit task'));
             }
-            df.resolve();
-            return df;
+            return $.when();
         };
 
         return app;

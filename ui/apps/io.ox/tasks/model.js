@@ -17,9 +17,8 @@ define('io.ox/tasks/model', [
     'io.ox/backbone/validation',
     'io.ox/core/extensions',
     'io.ox/participants/model',
-    'io.ox/core/date',
     'gettext!io.ox/tasks'
-], function (api, ModelFactory, Validations, ext, pModel, date, gt) {
+], function (api, ModelFactory, Validations, ext, pModel, gt) {
 
     'use strict';
 
@@ -113,6 +112,7 @@ define('io.ox/tasks/model', [
             }
         }
     });
+
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'target-costs-out-of-limits',
         validate: function (attributes) {

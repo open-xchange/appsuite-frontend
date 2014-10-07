@@ -16,6 +16,7 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/backbone/views',
     'io.ox/core/notifications',
     'io.ox/backbone/forms',
+    'io.ox/backbone/mini-views/datepicker',
     'io.ox/calendar/util',
     'io.ox/tasks/edit/util',
     'io.ox/calendar/edit/recurrence-view',
@@ -25,7 +26,7 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/core/extensions',
     'io.ox/tasks/util',
     'settings!io.ox/tasks'
-], function (gt, views, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
+], function (gt, views, notifications, forms, DatePicker, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
 
     'use strict';
 
@@ -153,7 +154,7 @@ define('io.ox/tasks/edit/view-template', [
     });
 
     // start date
-    point.extend(new forms.DatePicker({
+    point.extend(new DatePicker({
         id: 'start_date',
         index: 500,
         labelClassName: 'task-edit-label',
@@ -169,7 +170,7 @@ define('io.ox/tasks/edit/view-template', [
     });
 
     // due date
-    point.extend(new forms.DatePicker({
+    point.extend(new DatePicker({
         id: 'end_date',
         index: 600,
         labelClassName: 'task-edit-label',
@@ -201,7 +202,7 @@ define('io.ox/tasks/edit/view-template', [
         row: '6',
         draw: function (baton) {
             var selector;
-            this.append($('<div class="col-sm-5 collapsed">').append(
+            this.append($('<div class="col-sm-6 collapsed">').append(
                     $('<label>').text(gt('Remind me')).attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('form-control')
                     .append($('<option>')
                     .text(''), taskUtil.buildDropdownMenu())
@@ -218,10 +219,10 @@ define('io.ox/tasks/edit/view-template', [
     });
 
     // reminder date
-    point.extend(new forms.DatePicker({
+    point.extend(new DatePicker({
         id: 'alarm',
         index: 900,
-        className: 'col-sm-6 col-sm-offset-1 collapsed',
+        className: 'col-sm-6 collapsed',
         display: 'DATETIME',
         attribute: 'alarm',
         label: gt('Reminder date'),

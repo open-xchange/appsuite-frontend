@@ -16,21 +16,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
     'use strict';
 
     var util = {
-        splitExtensionsByRow: function (extensions, rows) {
-            _(extensions).each(function (extension) {
-                if (extension.row) {//seperate extensions with rows
-                    if (!rows[extension.row]) {
-                        rows[extension.row] = [];
-                    }
-                    rows[extension.row].push(extension);
-                } else {//all the rest
-                    if (!rows.rest) {//rest is used for extension points without row
-                        rows.rest = [];
-                    }
-                    rows.rest.push(extension);
-                }
-            });
-        },
         //build progressField and buttongroup
         buildProgress: function (val) {
             var val = val || 0,
@@ -72,50 +57,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
                 );
 
             return { progress: progress, wrapper: wrapper };
-        },
-        buildExtensionRow: function (parent, extensions, baton) {
-            var row = $('<div class="row">').appendTo(parent);
-            for (var i = 0; i < extensions.length; i++) {
-                extensions[i].invoke('draw', row, baton);
-            }
-            //find labels and make them focus the inputfield
-            /*row.find('label').each(function () {
-                if (this) {
-                    $(this).attr('for', $(this).next().attr('id'));
-                }
-            });*/
-            return row;
-        },
-        buildRow: function (parent, nodes, widths, fillGrid) {
-
-            //check for impossible number of rows to avoid dividing by 0 or overflowing rows
-            if (!nodes || nodes.length === 0 || nodes.length > 12) {
-                return;
-            }
-
-            //check for valid widths
-            if (!widths || nodes.length !== widths.length) {
-                var temp = 12 / nodes.length;
-                temp = parseInt(temp, 10); //we don't want floats
-                widths = [];
-                for (var i = 0; i < nodes.length; i++) {
-                    widths.push(temp);
-                }
-            }
-
-            var row = $('<div class="row">').appendTo(parent);
-            for (var i = 0; i < nodes.length; i++) {
-                if (_.isArray(widths[i])) {
-                    $('<div>').addClass('span' + widths[i][0] + ' offset' + widths[i][1]).append(nodes[i]).appendTo(row);
-                } else {
-                    $('<div>').addClass('span' + widths[i]).append(nodes[i]).appendTo(row);
-                }
-            }
-
-            //fillout gridCells
-            if (fillGrid || fillGrid === undefined) {
-                row.children().children().not('label').addClass('col-md-12');
-            }
         }
     };
 

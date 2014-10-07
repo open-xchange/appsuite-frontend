@@ -11,19 +11,32 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-.io-ox-tasks-edit-main {
+.io-ox-tasks-edit {
 
     label, legend , .sectiontitle{
 		margin-bottom: 5px;
 		font-size: 13px;
-		font-weight: 700;
-		font-family: @normal-font-family;
 		color: #888;
+    }
+
+    legend {
+        padding-top: 8px;
 		border: 0;
     }
-    .row legend {
-        padding-top: 8px;
+
+    h1.clear-title {
+        line-height:0;
+        font-size: 20px;
+        float: left;
+        padding-bottom: 10px;
     }
+
+    .task-edit-cancel { float: right; }
+
+    .task-edit-save{
+        margin-left: 13px;
+        float: right;
+     }
 
     .form-inline input{
         width: 90px;
@@ -46,35 +59,22 @@
 
     }
 
-    .nav-tabs { margin-top: 20px; }
-    .tab-content { margin-top: 13px; }
-
-    .collapsed, .task-edit-details {//hide collapsed and details on startup
+    //hide collapsed and details on startup
+    .collapsed, .task-edit-details {
         display: none;
-        }
-    .cancel         { float: right;       }
+    }
+
     .progress-field { text-align: center; }
 
     .private-flag {
-        margin: 0 5px 0 0;
-        top: 26px;
         position: relative;
-    }
-    .io-ox-tasks-edit {
-
-        .participantsrow {
-            margin-bottom: 30px;
-        }
-        h1.clear-title {
-            line-height:0;
-            font-size: 20px;
-            float: left;
-            padding-bottom: 10px;
+        top: 16px;
+        @media (max-width: 767px) {
+            top: 0px;
         }
     }
 
-    .attachment-edit-row,
-    .task-edit-row { margin-bottom: 9px; }
+    .participantsrow { margin-bottom: 30px; }
 
     .expand-link, .expand-details-link {
         margin-bottom: 9px;
@@ -82,81 +82,28 @@
         display: block;
     }
 
-    .tab-pane { margin-bottom: 85px; }
-
-    .tab-content {
-        min-height: 364px;
-        overflow: visible;
-    }
-
     .note-field {
-        height: 120px;
-        min-height: 120px;
         resize: vertical;
-    }
-    .task-edit-save{
-        margin-left: 13px;
-        float: right;
-        @media (max-device-width: 480px), (max-width: 480px) {
-            float: none;
-        }
-     }
-
-    .info-wrapper .task-attachment-link { margin-bottom: 9px; }
-    .tab-link {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        padding: 10px;
+        min-height: 120px;
     }
 
-    .task-add-attachments-button,
-    .task-add-attachments-input {
-        position: relative;
-        display: inline;
-    }
-
-    .task-add-attachments-input { margin-left: 10px; }
-
-    /* Mobile */
-    @media all and (max-width: 980px) {
-        .progress-field { width: 49px; }
-    }
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
-    	.form-control[readonly] {//datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
-    		background-color: #fff;//white
-    	}
+        margin-top: 0;
+        padding-bottom: 40px;
 
-        .clear-title {
-            width: 100%; //to push the buttons under the title
-        }
-        .cancel {
-            float: none;
-        }
-        .task-edit-headline {
-            margin-bottom: 9px;
-        }
-        .tab-content {
-            min-height: 0;
-        }
-        .io-ox-tasks-edit {
-            margin-top: 0;
-            padding-bottom: 40px;
-        }
+        //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
+        .form-control[readonly] { background-color: #fff; }
 
-        .participant-wrapper {
-            .participant-email {
-                display: block;
-            }
-        }
+        .clear-title { width: 100%; } //to push the buttons under the title
+
+        .task-edit-cancel { float: none; }
+
+        .task-edit-headline { margin-bottom: 9px; }
+
+        .participant-wrapper .participant-email { display: block; }
+
     }
 }
 
-@media (max-width: 767px) {
-    .col-md-3.btn.fluid-grid-fix {
-        width: auto;
-    }
-    .io-ox-tasks-edit-main .private-flag {
-        top: 5px;
-    }
-}
