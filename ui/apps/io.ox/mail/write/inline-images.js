@@ -86,11 +86,15 @@ define('io.ox/mail/write/inline-images',
 
             var noBusy = (_.browser.IE && _.browser.IE < 10),//IE9 upload fails if window becomes busy
                 dialog = new dialogs.ModalDialog({async: true, noBusy: noBusy}),
-                iframe = $(document).find('iframe'),
-                tinymce_input_src = $(iframe[1].contentDocument).find('input#src'),
+                iframes =  $(document).find('iframe'),
+                iframe = _.find(iframes, function (node) {
+                    // unfortunately tmce iframe ids are dynamic
+                    return $(node.contentDocument).find('input#src').length > 0;
+                }),
+                tinymce_input_src = $(iframe.contentDocument).find('input#src'),
                 baton =  new ext.Baton({$: {}}),
                 form;
-            
+
             dialog.build(function () {
                 form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                 this.getContentNode().append(form);

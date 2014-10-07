@@ -282,11 +282,10 @@ define('plugins/portal/twitter/register',
 
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('twitter', win)
-                .then(function () {
-                    baton.model.node.removeClass('requires-setup');
-                    ox.trigger('refresh^');
-                });
+            return keychain.createInteractively('twitter', win).done(function () {
+                baton.model.node.removeClass('requires-setup');
+                ox.trigger('refresh^');
+            });
         },
 
         load: function (baton) {
