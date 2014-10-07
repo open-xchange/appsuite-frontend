@@ -17,14 +17,15 @@ define('io.ox/calendar/edit/template', [
     'io.ox/calendar/util',
     'io.ox/contacts/util',
     'io.ox/backbone/views',
-    'io.ox/backbone/forms',
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/datepicker',
     'io.ox/core/tk/attachments',
     'io.ox/calendar/edit/recurrence-view',
     'io.ox/calendar/api',
     'io.ox/participants/views',
     'settings!io.ox/calendar',
     'io.ox/core/capabilities'
-], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, capabilities) {
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, settings, capabilities) {
 
     'use strict';
 
@@ -94,30 +95,41 @@ define('io.ox/calendar/edit/template', [
     });
 
     // title
-    point.extend(new forms.InputField({
+    point.extend({
         id: 'title',
         index: 200,
-        className: 'col-xs-12',
-        labelClassName: 'control-label',
-        control: '<input type="text" class="form-control">',
-        attribute: 'title',
-        label: gt('Subject'),
-        changeAppTitleOnKeyUp: true
-    }));
+        render: function () {
+            var self = this, input;
+            this.$el.append(
+                $('<label class="control-label col-xs-12">').append(
+                    $.txt(gt('Subject')),
+                    input = new mini.InputView({ name: 'title', model: self.model }).render().$el,
+                    new mini.ErrorView({ name: 'title', model: self.model }).render().$el
+                )
+            );
+            input.on('keyup', function () {
+                // update title on keyup
+                self.model.set('title', $(this).val());
+            });
+        }
+    });
 
     // location input
-    point.extend(new forms.InputField({
+    point.extend({
         id: 'location',
-        className: 'col-xs-12',
-        labelClassName: 'control-label',
         index: 300,
-        control: '<input type="text" class="form-control">',
-        attribute: 'location',
-        label: gt('Location')
-    }));
+        render: function () {
+            this.$el.append(
+                $('<label class="control-label col-xs-12">').append(
+                    $.txt(gt('Location')),
+                    new mini.InputView({ name: 'location', model: this.model }).render().$el
+                )
+            );
+        }
+    });
 
     // start date
-    point.extend(new forms.DatePicker({
+    point.extend(new DatePicker({
         id: 'start-date',
         index: 400,
         className: 'dateinput col-xs-6 col-sm-6 col-md-4',
@@ -128,7 +140,7 @@ define('io.ox/calendar/edit/template', [
     }));
 
     // end date
-    point.extend(new forms.DatePicker({
+    point.extend(new DatePicker({
         id: 'end-date',
         className: 'dateinput col-xs-6 col-sm-6 col-md-4',
         labelClassName: 'control-label',
@@ -147,20 +159,25 @@ define('io.ox/calendar/edit/template', [
         nextTo: 'end-date',
         draw: function () {
             this.append(
-                $('<div class="hidden-xs col-sm-12 col-md-4 find-free-time-top"></div>')
+                $('<div class="hidden-xs col-sm-12 col-md-4 find-free-time"></div>')
             );
         }
     });
 
     // full time
-    point.extend(new forms.CheckBoxField({
+    point.extend({
         id: 'full_time',
+        index: 600,
         className: 'col-xs-12',
-        labelClassName: 'control-label',
-        label: gt('All day'),
-        attribute: 'full_time',
-        index: 600
-    }));
+        render: function () {
+            this.$el.append(
+                $('<label class="control-label checkbox">').append(
+                    new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                    $.txt(gt('All day'))
+                )
+            );
+        }
+    });
 
     // move recurrence view to collapsible area on mobile devices
     var recurrenceIndex = _.device('small') ? 950 : 650;
@@ -174,15 +191,18 @@ define('io.ox/calendar/edit/template', [
     });
 
     // note
-    point.extend(new forms.InputField({
+    point.extend({
         id: 'note',
         index: 700,
         className: 'col-xs-12',
-        labelClassName: 'control-label',
-        control: '<textarea class="note form-control">',
-        attribute: 'note',
-        label: gt('Description')
-    }));
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                $('<label class="control-label">').text(gt('Description')).attr({ for: guid }),
+                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid })
+            );
+        }
+    });
 
     // separator or toggle
     point.basicExtend({
@@ -212,62 +232,103 @@ define('io.ox/calendar/edit/template', [
     });
 
     // alarms
-    (function () {
-        point.extend(new forms.SelectBoxField({
-            id: 'alarm',
-            index: 800,
-            labelClassName: 'control-label',
-            className: 'col-md-4',
-            attribute: 'alarm',
-            label: gt('Reminder'),
-            selectOptions: calendarUtil.getReminderOptions()
-        }), {
-            rowClass: 'collapsed'
-        });
-    }());
+    point.extend({
+        id: 'alarm',
+        index: 800,
+        // labelClassName: 'control-label',
+        // className: 'col-md-4',
+        // attribute: 'alarm',
+        // label: gt('Reminder'),
+        // selectOptions: calendarUtil.getReminderOptions()
+        render: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.addClass('col-md-4').append(
+                $('<label>').attr({
+                    class: 'control-label',
+                    for: guid
+                }).text(gt('Reminder')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
+                $('<div>').append(
+                    new mini.SelectView({
+                        list: _.map(calendarUtil.getReminderOptions(), function (key, val) { return { label: key, value: val }; }),
+                        name: 'alarm',
+                        model: this.baton.model,
+                        id: guid,
+                        className: 'form-control'
+                    }).render().$el
+                )
+            );
+        }
+    }, {
+        rowClass: 'collapsed'
+    });
 
     // shown as
-    point.extend(new forms.SelectBoxField({
+    point.extend({
         id: 'shown_as',
         index: 900,
-        className: 'col-md-4',
-        attribute: 'shown_as',
-        label: //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-               gt('Shown as'),
-        labelClassName: 'control-label',
-        selectOptions: {
-            1: gt('Reserved'),
-            2: gt('Temporary'),
-            3: gt('Absent'),
-            4: gt('Free')
+        render: function () {
+            var guid = _.uniqueId('form-control-label-'),
+                options = [
+                    { label: gt('Reserved'), value: 1 },
+                    { label: gt('Temporary'), value: 2 },
+                    { label: gt('Absent'), value: 3 },
+                    { label: gt('Free'), value: 4 }
+                ];
+            this.$el.addClass('col-md-4').append(
+                $('<label>').attr({
+                    class: 'control-label',
+                    for: guid
+                }).text(gt('Shown as')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
+                $('<div>').append(
+                    new mini.SelectView({
+                        list: options,
+                        name: 'shown_as',
+                        model: this.baton.model,
+                        id: guid,
+                        className: 'form-control'
+                    }).render().$el
+                )
+            );
         }
-    }), {
+    }, {
         nextTo: 'alarm',
         rowClass: 'collapsed'
     });
 
-    // private?
-    point.extend(new forms.CheckBoxField({
+    // private checkbox
+    point.extend({
         id: 'private_flag',
-        labelClassName: 'control-label',
-        headerClassName: 'control-label',
-        className: 'col-md-4 privateflag',
-        header: gt('Type'),
-        label: gt('Private'),
-        attribute: 'private_flag',
-        index: 1000
-    }), {
+        index: 1000,
+        className: 'col-md-4',
+        render: function () {
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Type')),
+                    $('<label class="checkbox-inline control-label">').append(
+                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
+                        $.txt(gt('Private'))
+                    )
+                )
+            );
+        }
+    }, {
         nextTo: 'shown_as',
         rowClass: 'collapsed'
     });
 
     // participants label
-    point.extend(new forms.SectionLegend({
+    point.extend({
         id: 'participants_legend',
-        className: 'col-md-12 find-free-time',
-        label: gt('Participants'),
-        index: 1300
-    }), {
+        index: 1300,
+        className: 'col-md-12',
+        render: function () {
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Participants')).addClass('find-free-time')
+                )
+            );
+        }
+    }, {
         rowClass: 'collapsed'
     });
 
@@ -395,17 +456,20 @@ define('io.ox/calendar/edit/template', [
         }
     });
 
-    point.extend(new forms.CheckBoxField({
+    // email notification
+    point.extend({
         id: 'notify',
-        labelClassName: 'control-label',
-        className: 'col-md-6',
-        label: gt('Notify all participants by email.'),
-        attribute: 'notification',
         index: 1510,
-        customizeNode: function () {
-            this.$el.css({ 'top': '-12px' });
+        className: 'col-md-6',
+        render: function () {
+            this.$el.append(
+                $('<label class="checkbox-inline control-label">').append(
+                    new mini.CheckboxView({ name: 'notification', model: this.model }).render().$el,
+                    $.txt(gt('Notify all participants by email.'))
+                )
+            );
         }
-    }), {
+    }, {
         nextTo: 'add-participant',
         rowClass: 'collapsed'
     });
@@ -413,12 +477,18 @@ define('io.ox/calendar/edit/template', [
     // Attachments
 
     // attachments label
-    point.extend(new forms.SectionLegend({
+    point.extend({
         id: 'attachments_legend',
+        index: 1600,
         className: 'col-md-12',
-        label: gt('Attachments'),
-        index: 1600
-    }), {
+        render: function () {
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Attachments'))
+                )
+            );
+        }
+    }, {
         rowClass: 'collapsed'
     });
 
@@ -526,8 +596,7 @@ define('io.ox/calendar/edit/template', [
         draw: function (baton) {
             // because that works
             if (capabilities.has('freebusy !alone')) {
-                var selector = '.find-free-time-top, .find-free-time legend';
-                this.parent().find(selector).append(
+                this.parent().find('.find-free-time').append(
                     $('<button type="button" class="btn btn-link pull-right hidden-xs" tabindex="1">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );

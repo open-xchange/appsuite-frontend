@@ -181,7 +181,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     }
                 });
 
-                // point.extend(new forms.DatePicker({
+                // point.extend(new DatePicker({
                 //     id: ref + '/edit/view/end_date',
                 //     index: 500,
                 //     className: 'col-md-2',

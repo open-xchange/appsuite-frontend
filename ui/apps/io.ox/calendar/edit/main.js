@@ -291,7 +291,7 @@ define('io.ox/calendar/edit/main', [
                     self.getWindow().setTitle(self.model.get('title'));
                     self.setTitle(self.model.get('title'));
                 }
-                self.model.on('keyup:title', function (model, value) {
+                self.model.on('change:title', function (model, value) {
                     if (!value) {
                         if (model.get('id')) {
                             value = gt('Edit appointment');
