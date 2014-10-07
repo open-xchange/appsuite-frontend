@@ -441,6 +441,7 @@ define('io.ox/core/tk/attachments', [
         id: 'slideshow',
         index: 100,
         label: gt('Slideshow'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
     }));
 
@@ -455,6 +456,7 @@ define('io.ox/core/tk/attachments', [
         id: 'open',
         index: 150,
         label: gt('Open in browser'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/open-attachment'
     }));
 
@@ -462,6 +464,7 @@ define('io.ox/core/tk/attachments', [
         id: 'download',
         index: 200,
         label: gt('Download'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/download-attachment'
     }));
 
@@ -469,6 +472,7 @@ define('io.ox/core/tk/attachments', [
         id: 'save',
         index: 400,
         label: gt('Save to Drive'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/save-attachment'
     }));
 
@@ -557,7 +561,9 @@ define('io.ox/core/tk/attachments', [
     //attachments api currently doesn't support zip download
     new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
         id: 'download',
-        requires: 'one',
+        requires: function (e) {
+            return e.collection.has('one') && _.device('!ios');
+        },
         action: function (baton) {
             require(['io.ox/core/download'], function (download) {
                 var url = attachmentAPI.getUrl(baton.data, 'download');

@@ -390,7 +390,7 @@ define('io.ox/tasks/actions', [
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentAPI.getUrl(data, 'open');
+                    var url = attachmentAPI.getUrl(data, 'view');
                     window.open(url);
                 });
             });
@@ -399,7 +399,9 @@ define('io.ox/tasks/actions', [
 
     new Action('io.ox/tasks/actions/download-attachment', {
         id: 'download',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && _.device('!ios');
+        },
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {
                 _(list).each(function (data) {
@@ -625,6 +627,7 @@ define('io.ox/tasks/actions', [
         id: 'slideshow',
         index: 100,
         label: gt('Slideshow'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/slideshow-attachment'
     }));
 
@@ -639,6 +642,7 @@ define('io.ox/tasks/actions', [
         id: 'open',
         index: 200,
         label: gt('Open in browser'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/open-attachment'
     }));
 
@@ -646,6 +650,7 @@ define('io.ox/tasks/actions', [
         id: 'download',
         index: 300,
         label: gt('Download'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/download-attachment'
     }));
 
@@ -653,6 +658,7 @@ define('io.ox/tasks/actions', [
         id: 'save',
         index: 400,
         label: gt('Save to Drive'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/save-attachment'
     }));
 });

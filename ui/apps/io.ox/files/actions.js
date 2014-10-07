@@ -140,6 +140,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
+            if (_.device('ios')) return false; // no file-system, no download
             if (e.collection.has('multiple')) return true;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
@@ -166,6 +167,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/downloadversion', {
         requires: function (e) {
+            if (_.device('ios')) return false; // no file-system, no download
             if (e.collection.has('multiple')) return true;
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
