@@ -3,6 +3,21 @@
 module.exports = function (grunt) {
 
     grunt.config.merge({ copy: {
+        build_thirdparty: {
+            files: [
+                {
+                    src: ['bootstrap.min.js'],
+                    expand: true,
+                    cwd: 'bower_components/bootstrap/dist/js',
+                    dest: 'build/help'
+                }, {
+                    src: ['jquery.min.js'],
+                    expand: true,
+                    cwd: 'bower_components/jquery/dist',
+                    dest: 'build/help'
+                }
+           ]
+        },
         build_help: {
             files: [
                 {
