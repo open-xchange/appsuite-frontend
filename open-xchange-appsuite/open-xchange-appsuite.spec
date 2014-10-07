@@ -537,6 +537,10 @@ if [ -x %{update} ]; then %{update}; fi
 %changelog
 * Thu Oct 02 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Third candidate for 7.6.1 release
+* Tue Sep 30 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-10-06
+* Tue Sep 23 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-10-02
 * Tue Sep 16 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Second candidate for 7.6.1 release
 * Thu Sep 11 2014 Markus Wagner <markus.wagner@open-xchange.com>
