@@ -1485,7 +1485,7 @@ h4.mail-attachment-preview {
     .thread-view-list {
         padding: 0;
         & > h1 {
-            font-size: 16px;
+            font-size: @phone-font-size + 2;
         }
         .thread-view {
             header {
@@ -1502,7 +1502,10 @@ h4.mail-attachment-preview {
     .mail-item .unread-toggle {
         display: none;
     }
-
+    .mail-item .attachments .io-ox-inline-links {
+        font-size: @phone-font-size;
+        margin-left: 0;
+    }
     .mail-detail {
 
         list-style-type: none;
@@ -1513,7 +1516,7 @@ h4.mail-attachment-preview {
         }
 
         .subject {
-            font-size: 14px;
+            font-size: @phone-font-size;
             padding: 10px 20px;
         }
 
@@ -1528,10 +1531,15 @@ h4.mail-attachment-preview {
             border-bottom-width: 0;
         }
 
-        .mail-attachment-list ul.inline-items li.item {
+        .mail-attachment-list .ul.inline-items li.item {
             line-height: 35px;
             .file a {
                 color: @link-color;
+            }
+        }
+        .mail-attachment-list {
+            .toggle-details {
+                display: block;
             }
         }
 

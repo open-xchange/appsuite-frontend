@@ -1079,6 +1079,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'vcard',
+        mobile: 'high',
         index: 50,
         label: gt('Add to address book'),
         ref: 'io.ox/mail/actions/vcard'
@@ -1086,6 +1087,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'ical',
+        mobile: 'high',
         index: 50,
         label: gt('Add to calendar'),
         ref: 'io.ox/mail/actions/ical'
@@ -1094,6 +1096,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'slideshow',
         index: 100,
+        mobile: 'high',
         label: gt('Slideshow'),
         ref: 'io.ox/mail/actions/slideshow-attachment'
     }));
@@ -1101,6 +1104,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'preview',
         index: 200,
+        mobile: 'high',
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
     }));
@@ -1108,6 +1112,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'open',
         index: 300,
+        mobile: 'high',
         label: gt('Open in browser'),
         ref: 'io.ox/mail/actions/open-attachment'
     }));
@@ -1115,6 +1120,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
         index: 400,
+        mobile: 'high',
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     }));
@@ -1122,6 +1128,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
         index: 500,
+        mobile: 'high',
         label: gt('Save to Drive'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
