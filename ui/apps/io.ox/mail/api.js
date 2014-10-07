@@ -449,7 +449,7 @@ define('io.ox/mail/api',
 
     function allowImages(obj) {
         if (!settings.get('allowHtmlImages', false)) return false;
-        if (accountAPI.is('spam', obj.folder_id || obj.folder)) return false;
+        if (accountAPI.is('spam|trash', obj.folder_id || obj.folder)) return false;
         return true;
     }
 
@@ -520,6 +520,33 @@ define('io.ox/mail/api',
     };
 
     function prepareRemove(ids, all) {
+
+        var collection = pool.get('detail');
+
+        // fallback
+        all = all || ids;
+
+        if (all.length === 1) {
+            api.threads.touch(all[0]);
+        }
+
+        // we need the original list of ids "all" to also catch threads
+        // that start with an email from the sent folder
+        api.trigger('beforedelete', all);
+
+        _(all).each(function (item) {
+            var cid = _.cid(item), model = collection.get(cid);
+            if (model) collection.remove(model);
+        });
+    }
+
+    /**
+     * wrapper for factories remove to update counters
+     * @param  {array} ids
+     * @param  {object} options [see api factory]
+     * @return {deferred} resolves as array
+     */
+    api.remove = function (ids, all) {
 
         var collection = pool.get('detail');
 
@@ -987,8 +1014,9 @@ define('io.ox/mail/api',
 
         prepareRemove(list);
 
-        // reset spam folder
-        // we assume that the spam handler will move the message to the spam folder
+        this.trigger('refresh.pending');
+        tracker.clear();
+
         _(pool.getByFolder(accountAPI.getFoldersByType('spam'))).each(function (collection) {
             collection.expired = true;
         });
@@ -1000,8 +1028,9 @@ define('io.ox/mail/api',
 
         prepareRemove(list);
 
-        // reset inbox
-        // we assume that the spam handler will move the message (back) to the inbox
+        this.trigger('refresh.pending');
+        tracker.clear();
+
         _(pool.getByFolder(accountAPI.getFoldersByType('inbox'))).each(function (collection) {
             collection.expired = true;
         });

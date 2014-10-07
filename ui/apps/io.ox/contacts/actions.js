@@ -228,9 +228,9 @@ define('io.ox/contacts/actions',
 
         multiple: function (list) {
             tentativeLoad(list).then(function (list) {
-                return api.getList(list);
+                return api.getList(list, false, { allColumns: true });
             }).then(function (list) {
-                return {contacts_ids: list};
+                return { contacts_ids: list };
             }).done(function(data) {
                 ox.registry.call('mail-compose', 'compose', data);
             });

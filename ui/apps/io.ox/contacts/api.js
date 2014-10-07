@@ -580,135 +580,143 @@ define('io.ox/contacts/api',
         });
     };
 
-    // local hash to recognize URLs that have been fetched already
-    var cachesURLs = {}, uniq = ox.t0;
+    api.pictureHalo = (function () {
 
-    // update uniq on picture change
-    api.on('update:image', function () {
-        uniq = _.now();
-    });
+        // local hash to recognize URLs that have been fetched already
+        var cachesURLs = {},
+            uniq = ox.t0,
+            fallback = ox.base + '/apps/themes/default/dummypicture.png';
 
-    // node is optional. if missing function returns just the URL
-    api.pictureHalo = function (/* [node], options */) {
-        var args = _(arguments).toArray(), node, options, params, fallback = ox.base + '/apps/themes/default/dummypicture.png', url;
+        // update uniq on picture change
+        api.on('update:image', function () {
+            uniq = _.now();
+        });
 
-        // use copy of data object because of delete-statements
-        if (args.length === 1) {
-            options = _.clone(args[0]);
-        } else {
-            node = args[0];
-            options = _.clone(args[1]);
+        function load(node, url, options) {
+            var hideOnFallback = options.hideOnFallback || false;
+            _.defer(function () {
+                // use lazyload?
+                var scrollpane = node.closest('.scrollpane');
+                if (scrollpane.length) {
+                    node.attr('data-original', url).lazyload({
+                        container: scrollpane,
+                        effect: 'show',
+                        error: function () {
+                            node.css('background-image', 'url(' + fallback + ')');
+                            if (hideOnFallback) node.hide();
+                            node = scrollpane = null;
+                        },
+                        load: function (elements_left, settings, image) {
+                            if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
+                            else cachesURLs[url] = url;
+                            node = scrollpane = null;
+                        }
+                    });
+                } else {
+                    $(new Image()).one('load error', function (e) {
+                        var fail = this.width === 1 || e.type === 'error';
+                        if (!fail) cachesURLs[url] = url;
+                        if (fail && hideOnFallback) node.hide();
+                        node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                        node = null;
+                    })
+                    .attr('src', url);
+                }
+            });
+            return node;
         }
 
-        // duck checks
-        if (api.looksLikeResource(options)) {
+        // node is optional. if missing function returns just the URL
+        return function (/* [node], options */) {
 
-            url = ox.base + '/apps/themes/default/dummypicture_resource.png';
+            var args = _(arguments).toArray(), node, options, params, url;
 
-        } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+            // use copy of data object because of delete-statements
+            if (args.length === 1) {
+                options = _.clone(args[0]);
+            } else {
+                node = args[0];
+                options = _.clone(args[1]);
+            }
 
-            url = ox.base + '/apps/themes/default/dummypicture_group.png';
+            // duck checks
+            if (api.looksLikeResource(options)) {
 
-        } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+                url = ox.base + '/apps/themes/default/dummypicture_resource.png';
 
+            } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+
+                url = ox.base + '/apps/themes/default/dummypicture_group.png';
+
+            } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+
+                params = $.extend({}, {
+                    // scale
+                    width: options.width,
+                    height: options.height,
+                    scaleType: options.scaleType
+                });
+                url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+
+            } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
+                url = fallback;
+            }
+
+            // already done?
+            if (url) return node ? load(node, url, options) : url;
+
+            // preference; internal_userid must not be undefined, null, or zero
+            if (options.internal_userid || options.userid || options.user_id) {
+                delete options.contact_id;
+                delete options.folder_id;
+                delete options.folder;
+                delete options.id;
+            } else {
+                delete options.internal_userid;
+                delete options.userid;
+                delete options.user_id;
+            }
+
+            // empty extend trick to restrict to non-undefined values
             params = $.extend({}, {
+                // identifier
+                email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
+                folder: options.folder_id || options.folder,
+                id: options.contact_id || options.id,
+                internal_userid: options.internal_userid || options.userid || options.user_id,
                 // scale
                 width: options.width,
                 height: options.height,
-                scaleType: options.scaleType
+                scaleType: options.scaleType,
+                uniq: uniq
             });
-            url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
-        } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
-            url = fallback;
-        }
-
-        // already done?
-        if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
-
-        // preference; internal_userid must not be undefined, null, or zero
-        if (options.internal_userid || options.userid || options.user_id) {
-            delete options.contact_id;
-            delete options.folder_id;
-            delete options.folder;
-            delete options.id;
-        } else {
-            delete options.internal_userid;
-            delete options.userid;
-            delete options.user_id;
-        }
-
-        // empty extend trick to restrict to non-undefined values
-        params = $.extend({}, {
-            // identifier
-            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
-            folder: options.folder_id || options.folder,
-            id: options.contact_id || options.id,
-            internal_userid: options.internal_userid || options.userid || options.user_id,
-            // scale
-            width: options.width,
-            height: options.height,
-            scaleType: options.scaleType,
-            uniq: uniq
-        });
-
-        // remove empty values
-        for (var k in params) {
-            if (params.hasOwnProperty(k) && !params[k]) {
-                delete params[k];
+            // remove empty values
+            for (var k in params) {
+                if (params.hasOwnProperty(k) && !params[k]) {
+                    delete params[k];
+                }
             }
-        }
 
-        url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
+            url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
 
-        // just return URL
-        if (!node) return url;
+            // just return URL
+            if (!node) return url;
 
-        // cached?
-        if (cachesURLs[url]) {
-            return node.css('background-image', 'url(' + cachesURLs[url] + ')');
-        }
-        var hideOnFallback = options.hideOnFallback || false;
-        // load image
-        _.defer(function () {
-            // use lazyload?
-            var scrollpane = node.closest('.scrollpane');
-            if (scrollpane.length) {
-                node.attr('data-original', url).lazyload({
-                    container: scrollpane,
-                    effect: 'show',
-                    error: function () {
-                        node.css('background-image', 'url(' + fallback + ')');
-                        if (hideOnFallback) {
-                            node.hide();
-                        }
-                        node = scrollpane = null;
-                    },
-                    load: function (elements_left, settings, image) {
-                        if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
-                        else cachesURLs[url] = url;
-                        node = scrollpane = null;
-                    }
-                });
-            } else {
-                $(new Image()).one('load error', function (e) {
-                    var fail = this.width === 1 || e.type === 'error';
-                    if (!fail) cachesURLs[url] = url;
-                    if (fail && hideOnFallback) {
-                        node.hide();
-                    }
-                    node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-                    node = null;
-                })
-                .attr('src', url);
+            // cached?
+            if (cachesURLs[url]) {
+                return node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
-        });
 
-        // remove options
-        options = null;
+            load(node, url, options);
 
-        return node;
-    };
+            // remove options
+            options = null;
+
+            return node;
+        };
+
+    }());
 
     /**
     * get div node with callbacks managing fetching/updating

@@ -330,7 +330,11 @@ define('io.ox/tasks/api',
      * @return {[type]}
      */
     api.update = function (task, newFolder) {
-        var obj, attachmentHandlingNeeded = task.tempAttachmentIndicator;
+        var obj,
+            attachmentHandlingNeeded = task.tempAttachmentIndicator,
+            useFolder = task.folder_id,
+            move = false;
+
         delete task.tempAttachmentIndicator;
 
         //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
@@ -347,10 +351,9 @@ define('io.ox/tasks/api',
             delete task.folder;
         }
 
-        var useFolder = task.folder_id;
-
         if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
             task.folder_id = newFolder;
+            move = true;
         }
         task.notification = true;//set always (OX6 does this too)
 
@@ -404,8 +407,12 @@ define('io.ox/tasks/api',
         }).done(function () {
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
-            api.trigger('update', { id: task.id, folder_id: useFolder });
-            api.trigger('update:' + _.ecid({ id: task.id, folder_id: useFolder }));
+            if (move) {
+                api.trigger('move:' + _.ecid({ id: task.id, folder_id: useFolder }), task.folder_id);
+            } else {
+                api.trigger('update', { id: task.id, folder_id: useFolder });
+                api.trigger('update:' + _.ecid({ id: task.id, folder_id: useFolder }));
+            }
             refreshPortal();
         });
 

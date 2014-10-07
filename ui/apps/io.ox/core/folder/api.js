@@ -303,7 +303,7 @@ define('io.ox/core/folder/api',
         if (collection.fetched && options.cache === true) return $.when(collection.toJSON());
 
         // use rampup data?
-        if (rampup[id]) {
+        if (rampup[id] && !options.all) {
             var array = processListResponse(id, rampup[id]);
             pool.addCollection(id, array);
             delete rampup[id];
@@ -753,10 +753,27 @@ define('io.ox/core/folder/api',
     // Change unseen count
     //
 
-    function changeUnseenCounter(id, delta) {
-        var model = pool.getModel(id);
-        model.set('unread', Math.max(0, model.get('unread') + delta));
-    }
+    var changeUnseenCounter = (function () {
+
+        var hash = {}, wait = 500;
+
+        function cont(id) {
+            delete hash[id];
+            reload(id);
+        }
+
+        function fetch(id) {
+            if (hash[id]) clearTimeout(hash[id]);
+            hash[id] = setTimeout(cont, wait, id);
+        }
+
+        return function changeUnseenCounter(id, delta) {
+            var model = pool.getModel(id);
+            model.set('unread', Math.max(0, model.get('unread') + delta));
+            fetch(id);
+        };
+
+    }());
 
     //
     // Refresh all folders

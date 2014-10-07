@@ -19,7 +19,8 @@ define('io.ox/calendar/participants',
      'io.ox/core/api/group',
      'io.ox/core/api/resource',
      'io.ox/core/extensions',
-     'io.ox/contacts/util'], function (util, gt, userAPI, groupAPI, resourceAPI, ext, contactsUtil) {
+     'io.ox/contacts/util',
+     'io.ox/core/util'], function (util, gt, userAPI, groupAPI, resourceAPI, ext, contactsUtil, coreUtil) {
 
     'use strict';
 
@@ -60,19 +61,25 @@ define('io.ox/calendar/participants',
             text = obj.full_name || $.txt(name);
         }
 
-        node = $('<li class="participant">')
-            .addClass(looksLikeResource(obj) ? 'halo-resource-link' : 'halo-link')
-            .append(
-                $('<a href="#">').addClass(personClass + ' ' + statusClass).append(text),
+        var isResource = looksLikeResource(obj);
+        node = $('<li class="participant">').addClass(isResource ? 'halo-resource-link' : 'halo-link');
+
+        if (isResource) {
+            node.append(
+                $('<a href="#">').addClass(personClass + ' ' + statusClass).append(text)
+            );
+        } else {
+            node.append(
+                coreUtil.renderPersonalName({ email: mail_lc, html: text }).addClass(personClass + ' ' + statusClass),
                 // has confirmation icon?
                 confirm !== '' ? $('<span>').addClass('status ' + statusClass).append(confirm) : '',
                 // has confirmation comment?
                 comment !== '' ? $('<div>').addClass('comment').text(gt.noI18n(conf.comment)) : ''
-            )
-            .data(_.extend(obj, { display_name: display_name, email1: mail_lc }));
-        if (comment !== '') {
-            node.append();
+            );
         }
+
+        node.data(_.extend(obj, { display_name: display_name, email1: mail_lc }));
+
         return node;
     }
 
