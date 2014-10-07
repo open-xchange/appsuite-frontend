@@ -82,6 +82,17 @@ define('plugins/portal/linkedIn/register', [
             .on('click', person, fnClick);
     };
 
+    function filterActivity(activity) {
+        if (!activity.updateContent || !activity.updateContent.person) return false;
+        if (activity.updateType === 'CONN' && activity.updateContent.person.connections) return true;
+        if (activity.updateType === 'NCON' && activity.updateContent.person) return true;
+        return false;
+    }
+
+    function hasActivities(list) {
+        return _(list).some(filterActivity);
+    }
+
     ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
         id: 'CONN',
         draw: function (activity) {
@@ -297,15 +308,17 @@ define('plugins/portal/linkedIn/register', [
                     params: { action: 'updates' }
                 })
                 .done(function (activities) {
-                    if (_.isArray(activities.values) && activities.values.length > 0) {
+                    var list = activities.values;
+                    if (hasActivities(list)) {
                         node.append(
                             $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
                         );
-                        _(activities.values).each(function (activity) {
+                        _(list).each(function (activity) {
                             ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
                         });
                     }
                 });
+
                 this.append(node);
 
             } else {
