@@ -4256,7 +4256,7 @@ input.flat-input {
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
         z-index: 65500;
-        /*max-height: 90%; Bug 34487: iOS 8 has problems on pre iPhone 6 devices with max-height, position fixed and bottom: 0 */
+        max-height: 90%; /* Fixed with iOS 8.0.2 -> Reverted changes for Bug 34487: iOS 8 has problems on pre iPhone 6 devices with max-height, position fixed and bottom: 0 */
         min-width: initial;
         .overflow-y();
         position: fixed;
