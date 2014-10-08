@@ -202,12 +202,12 @@ define('io.ox/contacts/main',
                         if (fullname) {
                             name = fullname;
                             fields.name.empty().append(
-                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }) // use html output
+                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }, data) // use html output
                             );
                         } else {
                             name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
                             fields.name.empty().append(
-                                coreUtil.renderPersonalName({ name: name })
+                                coreUtil.renderPersonalName({ name: name }, data)
                             );
                         }
                         description = $.trim(util.getJob(data));

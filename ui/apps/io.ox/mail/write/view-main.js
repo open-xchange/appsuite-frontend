@@ -1107,10 +1107,13 @@ define('io.ox/mail/write/view-main',
         index: 100,
         draw: function (baton) {
             this.append(
-                util.renderPersonalName({
-                    $el: $('<div class="recipient-name">'),
-                    name: contactsUtil.getMailFullName(baton.data)
-                })
+                util.renderPersonalName(
+                    {
+                        $el: $('<div class="recipient-name">'),
+                        name: contactsUtil.getMailFullName(baton.data)
+                    },
+                    baton.data
+                )
             );
         }
     });
