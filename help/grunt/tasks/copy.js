@@ -39,17 +39,6 @@ module.exports = function (grunt) {
                 }
             ]
         },
-        local_install_dynamic: {
-            files: [
-                {
-                    src: [],
-                    expand: true,
-                    filter: 'isFile',
-                    cwd: 'dist/',
-                    dest: grunt.option('prefix')
-                }
-            ]
-        },
         local_install_static: {
             files: [
                 {
