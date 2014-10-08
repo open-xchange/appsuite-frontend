@@ -381,14 +381,13 @@ define('io.ox/files/fluid/perspective',
 
     function iconReload() {
         var img = $(this),
-            retry = (parseInt(img.attr('data-retry'), 10) || 0) + 1,
-            url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry;
-        if (retry >= 3) return; // stop trying
+            retry = img.data('retry') + 1,
+            url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry,
+            wait = Math.pow(retry - 1) * 3; // 3 6 12
+        if (retry > 3) return; // stop trying after three retries
         setTimeout(function () {
-            img.off('load error')
-                .one({ load: iconLoad, error: iconError })
-                .attr({ 'src': url, 'data-retry': retry });
-        }, 5000);
+            img.off('load error').one({ load: iconLoad, error: iconError }).attr('src', url).data('retry', retry);
+        }, wait);
     }
 
     function iconError() {
@@ -421,7 +420,7 @@ define('io.ox/files/fluid/perspective',
 
                 previewImage.append(
                     $('<img alt="" class="img-thumbnail lazy">')
-                    .attr({ 'data-src': url, 'data-retry': 0 })
+                    .attr('data-src', url).data('retry', 0)
                     .one({ load: iconLoad, error: iconError })
                 );
             }
