@@ -118,7 +118,7 @@ define('io.ox/tasks/edit/view-template', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Description')).attr({ for: guid }),
-                new mini.InputView({ name: 'note', model: this.model }).render().$el.attr({ id: guid })
+                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid }).addClass('note-field')
             );
         }
     }, { row: '2' });
