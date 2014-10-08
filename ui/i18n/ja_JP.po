@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-24 09:30+0900\n"
+"PO-Revision-Date: 2014-10-08 09:12+0900\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -1398,10 +1398,9 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "クリーン アップしています... 数秒かかる場合があります。"
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
 #| msgid "User fields"
 msgid "Clear field"
-msgstr "ユーザ フィールド"
+msgstr "フィールドをクリア"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1419,6 +1418,8 @@ msgstr "ヘルプ センターを終了するには、ここをクリックし�
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
+"アクティビティを閲覧するには、こちらをクリックし Xing アカウントへ接続し直し"
+"てください。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -2882,10 +2883,9 @@ msgid "Favorited"
 msgstr "お気に入り"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
 #| msgid "Favorite"
 msgid "Favorites"
-msgstr "お気に入りに登録"
+msgstr "お気に入り"
 
 #: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
 msgid "Fax"
@@ -4112,10 +4112,9 @@ msgid "My contact data"
 msgstr "マイ連絡先データ"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
 #| msgid "All folders"
 msgid "My folders"
-msgstr "すべてのフォルダ"
+msgstr "マイ フォルダ"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -6211,10 +6210,9 @@ msgstr "稼働時間の開始時刻"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
 #| msgid "Search"
 msgid "Start search"
-msgstr "検索"
+msgstr "検索を開始"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6865,10 +6863,9 @@ msgstr "XING に問題があります。エラー メッセージ: \"%s\""
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
 #| msgid "The following appointment already started:"
 msgid "There was no appointment data to import"
-msgstr "次のアポイントは既に開始しています:"
+msgstr "インポートするアポイント データがありません。"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -7564,31 +7561,27 @@ msgstr "%s へようこそ"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
 #| msgid "Delete your entry"
 msgid "Welcome to your calendar"
-msgstr "エントリを削除"
+msgstr "予定表へようこそ"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "%s へようこそ"
+msgstr "ファイルへようこそ"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
 #| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "受信トレイにメールがありません。"
+msgstr "受信トレイへようこそ"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "%s へようこそ"
+msgstr "仕事へようこそ"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"
