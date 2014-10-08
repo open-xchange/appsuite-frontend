@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-07 14:16+0100\n"
+"PO-Revision-Date: 2014-10-08 12:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -739,10 +739,9 @@ msgstr "Widget hinzufügen"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:387 module:io.ox/portal
-#, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
-msgstr "Fügen Sie Ihren Account hinzu"
+msgstr "Fügen Sie Ihren %1$s-Account hinzu"
 
 #: apps/plugins/portal/facebook/register.js:352 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:359
@@ -7659,7 +7658,6 @@ msgstr "Wöchentlich am %1$s"
 
 #. %1$s is social media name, e.g. Facebook
 #: apps/io.ox/portal/main.js:377 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"
 msgstr "Willkommen bei %s"
