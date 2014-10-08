@@ -224,7 +224,7 @@ define('io.ox/core/tk/autocomplete',
                         node.appendTo(scrollpane);
                     });
                 } else {
-                    var count = 0, regular, childs;
+                    var regular, childs;
 
                     //apply style
                     o.container
@@ -239,19 +239,19 @@ define('io.ox/core/tk/autocomplete',
                     _(list).each(function (facet) {
                         regular = facet.style !== 'simple' && !!facet.name;
                         childs = facet.values && facet.values.length > 0;
-                        //facet
-                        count++;
+                        //facet separator
                         if (facet.name && childs && regular) {
-                            $('<div class="autocomplete-item unselectable dropdown-header">')
+                            $('<div class="autocomplete-item dropdown-header unselectable">')
                                 .html(facet.name)
                                 .data({
-                                    index: count,
                                     id: facet.id,
                                     label: facet.name,
                                     type: 'group'
                                 })
-                                //delimiter
-                                .appendTo(scrollpane);
+                                // delimiter
+                                .appendTo(scrollpane)
+                                // kepp open on click
+                                .on('mousedown click', fnIgnore);
                         }
                         //values
                         _([].concat(facet.values || facet)).each(function (value) {
@@ -270,9 +270,16 @@ define('io.ox/core/tk/autocomplete',
 
             fnSelectItem = function (e) {
                 e.data = $(this).data();
-                select(e.data.index);
+                if (o.mode === 'participant')
+                    select(e.data.index);
                 o.click.call(self.get(0), e);
                 close();
+            },
+
+            fnIgnore = function () {
+                // kepp dropdown open
+                // stopPropagation, preventDefault
+                return false;
             },
 
             // handle search result
