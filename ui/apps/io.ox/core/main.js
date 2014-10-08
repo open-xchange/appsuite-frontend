@@ -853,7 +853,7 @@ define('io.ox/core/main',
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
-                                currentType = currentApp.attributes.name,
+                                currentType = currentApp && currentApp.attributes && currentApp.attributes.name,
                                 target = currentType in startingPoints ? startingPoints[currentType] : 'index.html';
                             e.preventDefault();
                             window.open(helpDir + target);
