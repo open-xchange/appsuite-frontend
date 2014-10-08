@@ -482,16 +482,23 @@ define('io.ox/mail/api',
     };
 
     api.getAll = function (options, useCache) {
+
         // use cache?
         var cid = api.cid(options);
         if (useCache === 'auto') {
             useCache = (cacheControl[cid] !== false);
         }
-        // support for from-to
+
         options = options || {};
+
+        // special handling for top-level mail account folders
+        if (/^default\d+$/.test(options.folder)) return $.when([]);
+
+        // support for from-to
         if (options.sort === 'from-to') {
             options.sort = accountAPI.is('sent|drafts', options.folder) ? 604 : 603;
         }
+
         return getAll.call(this, options, useCache).done(function () {
             cacheControl[cid] = true;
         });
@@ -2014,6 +2021,11 @@ define('io.ox/mail/api',
 
         // add full models to pool
         api.pool.add('detail', thread);
+    };
+
+    api.collectionLoader.virtual = function (options) {
+        // special handling for top-level mail account folders (e.g. bug 34818)
+        if (/^default\d+$/.test(options.folder)) return [];
     };
 
     api.collectionLoader.each = function (obj, index, offset, params) {
