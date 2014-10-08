@@ -1274,6 +1274,12 @@ textarea.inplace-editor {
 
         a {
             word-break: break-word; // fix long links
+            text-decoration: none;
+            color: inherit;
+            &:hover { color: inherit; }
+        }
+
+        a[href] {
             color: #007dbc; // not @linkColor!
             text-decoration: underline;
             &:hover { color: #08c; }
