@@ -433,6 +433,8 @@ define('io.ox/search/facets/extensions',
                         to: range[1].value.replace ? null : range[1].value
                     };
                 }
+                // datepicker range automatically corrects dates so whe delay a little bit
+                var lazyApply = _.debounce(apply, 200);
 
                 // change handler
                 function apply () {
@@ -487,13 +489,13 @@ define('io.ox/search/facets/extensions',
                                         $('<input type="text" class="input-sm form-control" name="start" />')
                                             .attr('placeholder', gt('Starts on'))
                                             .val(from)
-                                            .on('change', apply),
+                                            .on('change', lazyApply),
                                         $('<span class="input-group-addon">')
                                             .text('-'),
                                         $('<input type="text" class="input-sm form-control" name="end" />')
                                             .attr('placeholder', gt('Ends on'))
                                             .val(to)
-                                            .on('change', apply)
+                                            .on('change', lazyApply)
                                     )
                                     .datepicker({
                                         format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
