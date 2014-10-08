@@ -96,7 +96,6 @@ $(window).load(function () {
         setTimeout(function () {
             _.recheckDevice();
         }, 10);
-
     }
 
     // continuation
@@ -115,6 +114,13 @@ $(window).load(function () {
         // free closures
         cleanUp = fnChangeLanguage = initialize = $.noop;
     };
+
+    if (_.device('touch')) {
+        // disable tooltips for touch devices
+        $.fn.tooltip = function () {
+            return this;
+        }
+    }
 
     if (_.device('iOS')) {
         $('html').addClass('ios');
