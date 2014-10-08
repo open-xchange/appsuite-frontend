@@ -5,13 +5,16 @@
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
-<link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Chapter 7. 日历">
-<link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Chapter 7. 日历">
+<link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Chapter 7.  日历">
+<link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Chapter 7.  日历">
 <link rel="next" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. 检视约会">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -32,8 +35,9 @@
 				<span class="guilabel"><strong>日历</strong></span>
 			</span>
 			
+			
 			元件</h2></div></div></div>
-<a class="indexterm" name="idm140621582371824"></a><div class="reference">
+<a class="indexterm" name="idm139933758034848"></a><div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.hint"></a><p>用户界面的介绍可以在<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. 用户界面">用户界面</a>找到。</p>
 </div>
 <div class="reference">
@@ -41,7 +45,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>如果单击一个文件夹，会显示文件夹里的约会。</p></li>
 <li class="listitem"><p>当前选择文件夹旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>提供<a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">组织数据</a>和<a class="link" href="ox.appsuite.user.chap.datainterchange.html#ox.appsuite.user.concept.datainterchange">交换数据</a>的功能。</p></li>
-<li class="listitem"><p>文件夹树里的按钮提供<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create">创建文件夹</a>的功能。</p></li>
+<li class="listitem"><p>文件夹里的按钮提供<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create">创建文件夹</a>功能。</p></li>
 <li class="listitem"><p>如果您使用多个个人日历文件夹，会显示<span class="guibutton"><strong>显示来自私人日历的约会</strong></span>选择框。它指定显示当前日历文件夹的约会，还是所有个人日历文件夹的约会。</p></li>
 </ul></div>
 <p>
@@ -70,7 +74,7 @@
 <li class="listitem"><p><span class="guibutton"><strong>编辑</strong></span>按键。编辑一个<a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit">约会数据</a>。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>状态</strong></span>按钮。为约会确认<a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.task.calendar.changestatus" title="如何更改您的约会状态：">更改状态</a>。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>按钮。把您选择的<a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete">约会删除</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>更多</strong></span>按钮。使用以下项目打开菜单：<a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print">打印</a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"><span class="guibutton"><strong>移动</strong></span></a>。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>更多</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>。使用以下项目打开菜单：<a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print">打印</a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"><span class="guibutton"><strong>移动</strong></span></a>。</p></li>
 </ul></div>
 <p>
       </p>
@@ -113,10 +117,10 @@
 <li class="listitem"><p>如果单击一个约会，会在<a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.detailview" title="详细信息视图">详细视图</a>显示数据。</p></li>
 <li class="listitem">
 <p>您可以选择多个约会<a class="link" href="ox.appsuite.user.sect.calendar.manage.multiple.html#ox.appsuite.user.concept.calendar.multiple">一次编辑它们</a>。为此启用在<span class="guibutton"><strong>选择框</strong></span>选项（可从工具条下拉的<span class="guibutton"><strong>视图</strong></span>找到），以启用约会旁边的选择框。</p>
-<p>您也可以使用您系统的多重选定功能。</p>
+<p>您可以使用您系统的多重选择功能：</p>
 <p>为了选择当前选择文件夹的所有约会，启用在列表上面的<span class="guibutton"><strong>选择所有</strong></span>选择框。</p>
 </li>
-<li class="listitem"><p>列表上面的文本包含选择文件夹的名字。数值对应在选择未文件夹里的对象数目。</p></li>
+<li class="listitem"><p>列表上面的文本包含选择文件夹的名字。数值对应选择文件夹里的对象数量。</p></li>
 <li class="listitem"><p>如果单击列表上的<span class="guibutton"><strong>排序</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span>，会打开一个菜单允许您排序约会。</p></li>
 </ul></div>
 <p>

@@ -6,11 +6,14 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="index.html" title="OX App Suite">
-<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Capítulo 14. Preguntas y respuestas">
+<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Capítulo 13. Preguntas y respuestas">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -41,7 +44,7 @@
 </dt>
 <dt>Libreta de direcciones, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Ajustes de la libreta de direcciones</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Ajustes de Tareas</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Ajustes de Tareas</a>
 </dt>
 <dt>Widgets del portal, <a class="indexterm" href="ox.appsuite.user.sect.portal.customize.settings.html">Cambio de los ajustes de los widgets del portal</a>
 </dt>
@@ -91,6 +94,8 @@
 </dt>
 <dt>Líneas citadas con colores, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
 </dt>
+<dt>Mostrar las solicitudes de confirmación de lectura, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
+</dt>
 <dt>Permitir la precarga de imágenes externas enlazadas, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
 </dt>
 <dt>Recopilar contactos automáticamente al enviar, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
@@ -98,8 +103,6 @@
 <dt>Recopilar contactos automáticamente al leer, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
 </dt>
 <dt>Reenviar correos como, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
-</dt>
-<dt>Solicitar confirmación de entrega, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
 </dt>
 <dt>Suscripción a carpeta IMAP, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">Ajustes de correo electrónico</a>
 </dt>
@@ -171,31 +174,27 @@
 <dt>Aplicación</dt>
 <dd><dl><dt>definición, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt></dl></dd>
-<dt>Aplicación Bloc de notas simple  , <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Bloc de notas simple   </a>
+<dt>Aplicación Bloc de notas simple, <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Bloc de notas simple</a>
 </dt>
 <dt>Aplicación Calendario, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Calendario</a>
 </dt>
 <dt>Aplicación Correo electrónico, <a class="indexterm" href="ox.appsuite.user.chap.email.html">Correo electrónico</a>
 </dt>
-<dt>Aplicación Documentos, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documentos</a>
-</dt>
 <dt>Aplicación Ficheros, <a class="indexterm" href="ox.appsuite.user.chap.files.html">Ficheros</a>
 </dt>
 <dt>Aplicación Libreta de direcciones, <a class="indexterm" href="ox.appsuite.user.chap.contacts.html">Libreta de direcciones</a>
 </dt>
+<dt>Aplicación Tareas, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Tareas</a>
+</dt>
 <dt>Aplicaciones</dt>
 <dd><dl>
-<dt>Bloc de notas simple   , <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Bloc de notas simple   </a>
+<dt>Bloc de notas simple, <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Bloc de notas simple</a>
 </dt>
 <dt>Calendario, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Calendario</a>
-</dt>
-<dt>Documentos, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documentos</a>
 </dt>
 <dt>Ficheros, <a class="indexterm" href="ox.appsuite.user.chap.files.html">Ficheros</a>
 </dt>
 </dl></dd>
-<dt>App Tareas, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Tareas</a>
-</dt>
 <dt>Apps</dt>
 <dd><dl>
 <dt>Correo electrónico, <a class="indexterm" href="ox.appsuite.user.chap.email.html">Correo electrónico</a>
@@ -211,9 +210,14 @@
 </dt>
 <dt>cambiar el ancho, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navegación por el árbol de carpetas</a>
 </dt>
+<dt>favoritos, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Añadir carpetas a favoritos</a>
+</dt>
 <dt>ocultar carpetas, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ocultar carpetas</a>
 </dt>
 </dl></dd>
+<dt>Archivar</dt>
+<dd><dl><dt>Correos electrónicos, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">Archivado de correos</a>
+</dt></dl></dd>
 <dt>Archivos</dt>
 <dd><dl>
 <dt>abrir, <a class="indexterm" href="ox.appsuite.user.sect.files.open.html">Abrir archivos y mostrar contenidos</a>
@@ -224,7 +228,9 @@
 </dt>
 <dt>bloquear, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.lock.html">Bloqueo o desbloqueo de archivos</a>
 </dt>
-<dt>Borrar, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Borrado de archivos</a>
+<dt>borrar, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Borrado de archivos</a>
+</dt>
+<dt>buscar, <a class="indexterm" href="ox.appsuite.user.sect.files.search.html">Búsqueda de archivos</a>
 </dt>
 <dt>compartir (publicar), <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">Publicación de datos</a>
 </dt>
@@ -250,7 +256,7 @@
 </dt>
 <dt>mover, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.move.html">Traslado de archivos</a>
 </dt>
-<dt>organizar, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.html">Gestión de archivos</a>
+<dt>organizar, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.html">Administración de archivos</a>
 </dt>
 <dt>renombrar archivo, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.rename.html">Edición de nombres de archivos</a>
 </dt>
@@ -267,9 +273,6 @@
 <dt>WebDAV bajo Windows XP, <a class="indexterm" href="ox.appsuite.user.sect.files.webdav.winxp.html">Configuración de WebDAV bajo Windows XP</a>
 </dt>
 </dl></dd>
-<dt>Archivos de texto</dt>
-<dd><dl><dt>editar, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Edición de archivos de texto</a>
-</dt></dl></dd>
 <dt>Aviso de ausencia, <a class="indexterm" href="ox.appsuite.user.sect.email.send.vacationnotice.html">Envío de un aviso de ausencia</a>
 </dt>
 </dl>
@@ -277,36 +280,40 @@
 <div class="indexdiv">
 <h3>B</h3>
 <dl>
-<dt>Bloc de notas simple   , <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Bloc de notas simple   </a>
+<dt>Bloc de notas simple, <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Bloc de notas simple</a>
 </dt>
 <dt>Bloquear</dt>
 <dd><dl><dt>Archivos, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.lock.html">Bloqueo o desbloqueo de archivos</a>
 </dt></dl></dd>
-<dt>Borrar</dt>
+<dt>borrar</dt>
 <dd><dl>
 <dt>Archivos, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Borrado de archivos</a>
 </dt>
-<dt>Carpetas, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Borrado de carpetas</a>
+<dt>citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Borrado de citas</a>
 </dt>
-<dt>Citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Borrado de citas</a>
-</dt>
-<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Borrado de contactos</a>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Borrado de contactos</a>
 </dt>
 <dt>Correo electrónico, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">Borrado de mensajes de correo</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Eliminar tareas</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Eliminar tareas</a>
 </dt>
 </dl></dd>
+<dt>Borrar</dt>
+<dd><dl><dt>Carpetas, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Borrado de carpetas</a>
+</dt></dl></dd>
 <dt>botón derecho del ratón, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">El interfaz de usuario</a>
 </dt>
-<dt>Buscar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.html">Buscar</a>
-</dt>
+<dt>Buscar</dt>
 <dd><dl>
-<dt>búsqueda de objetos, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.objects.html">Búsqueda de objetos</a>
+<dt>Archivos, <a class="indexterm" href="ox.appsuite.user.sect.files.search.html">Búsqueda de archivos</a>
 </dt>
-<dt>propiedades, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.searchmenu.html">¿Qué opciones de búsqueda hay?</a>
+<dt>citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Búsqueda de citas</a>
 </dt>
-<dt>ventana de búsqueda, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.gui.html">Los componentes de la ventana de búsqueda</a>
+<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Búsqueda de contactos</a>
+</dt>
+<dt>Correos electrónicos, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">Búsqueda de correos electrónicos</a>
+</dt>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Búsqueda de tareas</a>
 </dt>
 </dl></dd>
 </dl>
@@ -327,7 +334,9 @@
 <dd><dl>
 <dt>abrir, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navegación por el árbol de carpetas</a>
 </dt>
-<dt>Borrar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Borrado de carpetas</a>
+<dt>añadir carpetas a favoritos, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Añadir carpetas a favoritos</a>
+</dt>
+<dt>borrar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Borrado de carpetas</a>
 </dt>
 <dt>carpetas compartidas, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">Tipos de carpeta</a>
 </dt>
@@ -369,7 +378,9 @@
 <dd><dl>
 <dt>administrar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.html">Gestión de citas</a>
 </dt>
-<dt>Borrar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Borrado de citas</a>
+<dt>borrar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Borrado de citas</a>
+</dt>
+<dt>buscar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Búsqueda de citas</a>
 </dt>
 <dt>cambiar estado, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Modificación del estado de la cita</a>
 </dt>
@@ -399,6 +410,8 @@
 </dt>
 <dt>exportar, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Exportación de datos</a>
 </dt>
+<dt>guardar adjuntos, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Visualización y guardado de adjuntos de citas</a>
+</dt>
 <dt>importar, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.ical.html">Importación de citas y tareas en formato iCal</a>
 </dt>
 <dt>importar de otros calendarios, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.subscribe.html">Suscribirse a citas de otros calendarios</a>
@@ -418,6 +431,8 @@
 <dt>resolver conflictos, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">Resolución de conflictos de citas</a>
 </dt>
 <dt>traslado de carpetas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.move.html">Traslado de citas a otra carpeta</a>
+</dt>
+<dt>ver adjuntos, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Visualización y guardado de adjuntos de citas</a>
 </dt>
 <dt>visualizar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Visualización de citas</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">¿Cómo se muestran las citas?</a>
 </dt>
@@ -442,6 +457,8 @@
 </dt>
 <dt>datos de contacto personales, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.personaldata.html">Cambio de los datos de contacto personales </a>
 </dt>
+<dt>instalación de clientes para estaciones de trabajo o dispositivos celulares, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.clients.html">Instalación de clientes para estaciones de trabajo o dispositivos celulares</a>
+</dt>
 <dt>Modificación de la contraseña, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.changepassword.html">Modificación de la contraseña</a>
 </dt>
 </dl></dd>
@@ -457,6 +474,10 @@
 </dt>
 <dt>borrar, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Borrado de contactos</a>
 </dt>
+<dt>buscar, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Búsqueda de contactos</a>
+</dt>
+<dt>copiar, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.copy.html">Copia de contactos</a>
+</dt>
 <dt>crear, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.create.html">Creación de un nuevo contacto</a>
 </dt>
 <dt>Editar, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.edit.html">Edición de contactos</a>
@@ -468,6 +489,8 @@
 <dt>enviar correo electrónico a , <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendmail.html">Envío de correos electrónicos desde una libreta de direcciones</a>
 </dt>
 <dt>exportar, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Exportación de datos</a>
+</dt>
+<dt>guardar adjuntos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Visualización o guardado de adjuntos de contactos</a>
 </dt>
 <dt>importación en formato CSV, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">Importación de contactos en formato CSV</a>
 </dt>
@@ -491,12 +514,11 @@
 </dt>
 <dt>suscríbase a redes sociales, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.subscribe.html">Importación de contactos de las redes sociales</a>
 </dt>
+<dt>ver adjuntos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Visualización o guardado de adjuntos de contactos</a>
+</dt>
 <dt>visualizar, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Visualización de contactos</a>
 </dt>
 </dl></dd>
-<dt>contactos</dt>
-<dd><dl><dt>copiar, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.copy.html">Copia de contactos</a>
-</dt></dl></dd>
 <dt>Copiar</dt>
 <dd><dl>
 <dt>Archivos, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.copy.html">Copiado de archivos</a>
@@ -513,9 +535,13 @@
 </dt>
 <dt>añadir al portal, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.addportal.html">Añadir un correo electrónico al portal</a>
 </dt>
+<dt>archivar, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">Archivado de correos</a>
+</dt>
 <dt>borradores, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.draft.html">Trabajo con borradores de correo electrónico</a>
 </dt>
-<dt>Borrar, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">Borrado de mensajes de correo</a>
+<dt>borrar, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">Borrado de mensajes de correo</a>
+</dt>
+<dt>buscar, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">Búsqueda de correos electrónicos</a>
 </dt>
 <dt>clasificar con etiquetas coloreadas, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.label.html">Clasificación de correos electrónicos con etiquetas coloreadas</a>
 </dt>
@@ -642,7 +668,7 @@
 </dt>
 <dt>elementos, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
-<dt>función, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
+<dt>Función, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
 <dt>Hilo de correo, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
@@ -662,7 +688,7 @@
 </dt>
 <dt>usuario, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
-<dt>ventanas del sistema, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
+<dt>Ventanas del sistema, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
 </dl></dd>
 <dt>Desbloquear</dt>
@@ -680,30 +706,9 @@
 <dt>público objetivo, <a class="indexterm" href="ox.appsuite.user.sect.about.target.html">¿Cuál es el público objetivo de esta documentación?</a>
 </dt>
 </dl></dd>
-<dt>Documentos, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documentos</a>
-</dt>
-<dd><dl>
-<dt>buscar y reemplazar, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Edición de documentos</a>
-</dt>
-<dt>Componentes, <a class="indexterm" href="ox.appsuite.user.sect.documents.gui.html">Los componentes de Documentos</a>
-</dt>
-<dt>creación de documentos, <a class="indexterm" href="ox.appsuite.user.sect.documents.add.html">Creación de documentos</a>
-</dt>
-<dt>crear, <a class="indexterm" href="ox.appsuite.user.sect.documents.add.html">Creación de documentos</a>
-</dt>
-<dt>descargar, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Edición de documentos</a>
-</dt>
-<dt>Editar, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Edición de documentos</a>
-</dt>
-<dt>editar, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Edición de documentos</a>
-</dt>
-<dt>editar con un nuevo nombre, <a class="indexterm" href="ox.appsuite.user.sect.documents.editasnew.html">Edición de documentos con un nuevo nombre.</a>
-</dt>
-<dt>imprimir, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Edición de documentos</a>
-</dt>
-<dt>mostrar contenidos, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Visualización del contenido de los documentos</a>
-</dt>
-</dl></dd>
+<dt>Documentos</dt>
+<dd><dl><dt>mostrar contenidos, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Visualización del contenido de los documentos</a>
+</dt></dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -711,17 +716,15 @@
 <dl>
 <dt>Editar</dt>
 <dd><dl>
-<dt>archivos de texto, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Edición de archivos de texto</a>
+<dt>citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.edit.html">Edición de citas</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">Edición de citas con arrastrar y soltar</a>
 </dt>
-<dt>Citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.edit.html">Edición de citas</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">Edición de citas con arrastrar y soltar</a>
-</dt>
-<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.edit.html">Edición de contactos</a>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.edit.html">Edición de contactos</a>
 </dt>
 <dt>descripción del archivo, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.editdescription.html">Edición de descripciones</a>
 </dt>
-<dt>Documentos, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Edición de documentos</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.editasnew.html">Edición de documentos con un nuevo nombre.</a>
+<dt>Ficheros de texto, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Edición de archivos de texto</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.edit.html">Edición de tareas</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.edit.html">Edición de tareas</a>
 </dt>
 <dt>versiones, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.versions.html">Trabajo con versiones</a>
 </dt>
@@ -743,17 +746,19 @@
 </dt></dl></dd>
 <dt>Equipo de trabajo</dt>
 <dd><dl>
-<dt>Citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.html">Citas en equipos</a>
+<dt>citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.html">Citas en equipos</a>
 </dt>
-<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.share.html">Contactos en equipos</a>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.share.html">Contactos en equipos</a>
 </dt>
 <dt>Correos electrónicos, <a class="indexterm" href="ox.appsuite.user.sect.email.share.html">Correos electrónicos dentro de un equipo</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.html">Tareas en equipo</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.html">Tareas en equipo</a>
 </dt>
 </dl></dd>
 <dt>Estructura de carpetas</dt>
 <dd><dl>
+<dt>favoritos, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Añadir carpetas a favoritos</a>
+</dt>
 <dt>navegar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navegación por el árbol de carpetas</a>
 </dt>
 <dt>ocultar carpeta, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ocultar carpetas</a>
@@ -784,6 +789,9 @@
 </dt>
 <dd><dl><dt>Componentes, <a class="indexterm" href="ox.appsuite.user.sect.files.gui.html">Los componentes de Ficheros</a>
 </dt></dl></dd>
+<dt>Ficheros de texto</dt>
+<dd><dl><dt>Editar, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Edición de archivos de texto</a>
+</dt></dl></dd>
 <dt>Filtros de correo, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.mailfilter.html">Uso de filtros de correo</a>
 </dt>
 <dt>Función</dt>
@@ -804,9 +812,6 @@
 <dl>
 <dt>Hilo de correo</dt>
 <dd><dl><dt>definición, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
-</dt></dl></dd>
-<dt>Hoja de cálculo</dt>
-<dd><dl><dt>Componentes, <a class="indexterm" href="ox.appsuite.user.sect.documents.docportal.gui.html">Los componentes de Texto y Hoja de cálculo</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.spreadsheet.gui.html">Los componentes de la página Editar de Hoja de cálculo</a>
 </dt></dl></dd>
 </dl>
 </div>
@@ -838,31 +843,32 @@
 </dl></dd>
 <dt>Importar desde archivo</dt>
 <dd><dl>
-<dt>Citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.import.html">Importar citas desde archivos</a>
+<dt>citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.import.html">Importar citas desde archivos</a>
 </dt>
-<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.import.html">Importación de contactos desde archivos</a>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.import.html">Importación de contactos desde archivos</a>
 </dt>
 </dl></dd>
 <dt>imprimir</dt>
 <dd><dl>
-<dt>Citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Impresión de citas</a>
+<dt>citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Impresión de citas</a>
+</dt>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Impresión de contactos</a>
 </dt>
 <dt>Correo electrónico, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.print.html">Impresión de correos electrónicos</a>
 </dt>
 <dt>hoja de calendario, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Impresión de citas</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Impresión de tareas</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Impresión de tareas</a>
 </dt>
 </dl></dd>
-<dt>Imprimir</dt>
-<dd><dl><dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Impresión de contactos</a>
-</dt></dl></dd>
+<dt>instalación de clientes para estaciones de trabajo o dispositivos celulares, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.clients.html">Instalación de clientes para estaciones de trabajo o dispositivos celulares</a>
+</dt>
 <dt>Intercambio de datos, <a class="indexterm" href="ox.appsuite.user.chap.datainterchange.html">Intercambio de datos</a>
 </dt>
 <dd><dl>
-<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.datainterchange.html">Intercambio de contactos con otras aplicaciones</a>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.datainterchange.html">Intercambio de contactos con otras aplicaciones</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.datainterchange.html">Intercambio de tareas con otras aplicaciones</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.datainterchange.html">Intercambio de tareas con otras aplicaciones</a>
 </dt>
 </dl></dd>
 <dt>Interfaz de usuario</dt>
@@ -872,6 +878,8 @@
 <dt>área de notificación, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">El interfaz de usuario</a>
 </dt>
 <dt>Área de visualización, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">El interfaz de usuario</a>
+</dt>
+<dt>barra de búsqueda, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">El interfaz de usuario</a>
 </dt>
 <dt>Barra de funciones, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">El interfaz de usuario</a>
 </dt>
@@ -936,6 +944,13 @@
 </dt>
 <dt>Modificación del estado de la cita, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Modificación del estado de la cita</a>
 </dt>
+<dt>Mostrar</dt>
+<dd><dl>
+<dt>adjunto de cita, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Visualización y guardado de adjuntos de citas</a>
+</dt>
+<dt>adjunto de tarea, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Visualización o almacenamiento de adjuntos de tarea</a>
+</dt>
+</dl></dd>
 <dt>Mostrar contenidos</dt>
 <dd><dl><dt>Archivos, <a class="indexterm" href="ox.appsuite.user.sect.files.open.view.html">Visualización del contenido de un archivo</a>
 </dt></dl></dd>
@@ -947,11 +962,11 @@
 </dt>
 <dt>citas a carpeta, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.move.html">Traslado de citas a otra carpeta</a>
 </dt>
-<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.move.html">Mover contactos</a>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.move.html">Mover contactos</a>
 </dt>
 <dt>Correo electrónico, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.move.html">Traslado de correos electrónicos</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Mover tareas</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Mover tareas</a>
 </dt>
 </dl></dd>
 <dt>Multimedia</dt>
@@ -977,7 +992,7 @@
 <dt>Objetos</dt>
 <dd><dl><dt>definición, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt></dl></dd>
-<dt>organización de datos, <a class="indexterm" href="ox.appsuite.user.chap.dataorganisation.html">Organización de los datos</a>
+<dt>Organización de datos, <a class="indexterm" href="ox.appsuite.user.chap.dataorganisation.html">Organización de los datos</a>
 </dt>
 <dt>Organizar</dt>
 <dd><dl><dt>Correos electrónicos, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.html">Organización de correos electrónicos</a>
@@ -1027,7 +1042,7 @@
 </dt>
 <dt>calendario, uso de citas recurrentes, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Preguntas y respuestas</a>
 </dt>
-<dt>Cambio de la contraseña, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Preguntas y respuestas</a>
+<dt>Cambiar contraseña, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Preguntas y respuestas</a>
 </dt>
 <dt>compartición de documentos con colaboradores externos, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Preguntas y respuestas</a>
 </dt>
@@ -1149,9 +1164,11 @@
 <dt>Tareas, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Tareas</a>
 </dt>
 <dd><dl>
-<dt>administrar, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.html">Gestión de tareas</a>
+<dt>administrar, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.html">Administración de tareas</a>
 </dt>
-<dt>Borrar, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Eliminar tareas</a>
+<dt>borrar, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Eliminar tareas</a>
+</dt>
+<dt>buscar, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Búsqueda de tareas</a>
 </dt>
 <dt>cambiar fecha de vencimiento, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">Cambio de la fecha de vencimiento de una tarea</a>
 </dt>
@@ -1171,13 +1188,17 @@
 </dt>
 <dt>editar, múltiple -, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.multiple.html">Edición de varias tareas de una vez</a>
 </dt>
+<dt>etiquetar como realizada, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.markasdone.html">Etiquetado de tareas como realizadas</a>
+</dt>
 <dt>exportar, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Exportación de datos</a>
+</dt>
+<dt>guardar adjuntos, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Visualización o almacenamiento de adjuntos de tarea</a>
 </dt>
 <dt>imprimir, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Impresión de tareas</a>
 </dt>
-<dt>marcar como realizada, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.markasdone.html">Marcado de tareas como realizadas</a>
-</dt>
 <dt>mover, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Mover tareas</a>
+</dt>
+<dt>ver adjuntos, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Visualización o almacenamiento de adjuntos de tarea</a>
 </dt>
 <dt>visualizar, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Visualización de tareas</a>
 </dt>
@@ -1187,14 +1208,11 @@
 </dt></dl></dd>
 <dt>Terminología, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html">Terminología</a>
 </dt>
-<dt>Texto</dt>
-<dd><dl><dt>Componentes, <a class="indexterm" href="ox.appsuite.user.sect.documents.docportal.gui.html">Los componentes de Texto y Hoja de cálculo</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.text.gui.html">Los componentes de la página Editar de Texto</a>
-</dt></dl></dd>
 <dt>Textos</dt>
 <dd><dl>
-<dt>crear, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Creación de archivos de texto</a>
+<dt>Creación de ficheros de texto, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Creación de ficheros de texto</a>
 </dt>
-<dt>crear archivos de texto, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Creación de archivos de texto</a>
+<dt>crear, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Creación de ficheros de texto</a>
 </dt>
 <dt>descargar, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Edición de archivos de texto</a>
 </dt>
@@ -1217,7 +1235,7 @@
 <div class="indexdiv">
 <h3>V</h3>
 <dl>
-<dt>ventanas del sistema</dt>
+<dt>Ventanas del sistema</dt>
 <dd><dl><dt>definición, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt></dl></dd>
 <dt>Visor de documentos, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Visualización del contenido de los documentos</a>
@@ -1232,18 +1250,22 @@
 </dt></dl></dd>
 <dt>visualizar</dt>
 <dd><dl>
-<dt>Citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Visualización de citas</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Visualización de citas en la vista de calendario</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Mostrar citas en la vista Lista</a>
+<dt>citas, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Visualización de citas</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Visualización de citas en la vista de calendario</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Mostrar citas en la vista Lista</a>
 </dt>
-<dt>contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Visualización de contactos</a>
+<dt>Contactos, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Visualización de contactos</a>
 </dt>
 <dt>Correos electrónicos, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">Visualización de correos electrónicos</a>
 </dt>
-<dt>tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Visualización de tareas</a>
+<dt>Tareas, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Visualización de tareas</a>
 </dt>
 </dl></dd>
 <dt>Visualizar</dt>
-<dd><dl><dt>adjunto de correo electrónico, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">Visualización y guardado de adjuntos de correo electrónico</a>
-</dt></dl></dd>
+<dd><dl>
+<dt>adjunto de contacto, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Visualización o guardado de adjuntos de contactos</a>
+</dt>
+<dt>adjunto de correo electrónico, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">Visualización y guardado de adjuntos de correo electrónico</a>
+</dt>
+</dl></dd>
 <dt>Visualizar documentos PDF, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Visualización del contenido de los documentos</a>
 </dt>
 </dl>

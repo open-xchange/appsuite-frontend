@@ -7,11 +7,14 @@
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Chapter 5. 电子邮件">
 <link rel="prev" href="ox.appsuite.user.chap.email.html" title="Chapter 5. 电子邮件">
-<link rel="next" href="ox.appsuite.user.sect.email.view.html" title="5.2. 检视电子邮件">
+<link rel="next" href="ox.appsuite.user.sect.email.view.html" title="5.2. 显示电子邮件">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -32,8 +35,9 @@
 				<span class="guilabel"><strong>电子邮件</strong></span>
 			</span>
 			
+			
 			元件</h2></div></div></div>
-<a class="indexterm" name="idm140621586254784"></a><div class="reference">
+<a class="indexterm" name="idm139933758903424"></a><div class="reference">
 <a name="ox.appsuite.user.reference.email.gui.hint"></a><p>用户界面的介绍可以在<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. 用户界面">用户界面</a>找到。</p>
 </div>
 <div class="reference">
@@ -42,7 +46,7 @@
 <li class="listitem"><p>要显示一个文件夹里电子邮件的数目，在文件夹名称上悬停。一个工具提示显示电子邮件的数目。</p></li>
 <li class="listitem"><p>如果单击一个文件夹会显示里面的电子邮件。</p></li>
 <li class="listitem"><p>当前选择文件夹旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>提供<a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">组织数据</a>和应用程序指定文件夹功能。</p></li>
-<li class="listitem"><p>文件夹树下面的按钮提供<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create">创建文件夹</a>和<a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">添加电子邮件户口</a>的功能。</p></li>
+<li class="listitem"><p>文件夹下面有一个 <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html#ox.appsuite.user.concept.email.externalaccounts">添加电子邮件户口</a> 按钮。</p></li>
 </ul></div>
 <p>
       </p>
@@ -56,7 +60,7 @@
 <li class="listitem"><p><span class="guibutton"><strong>转发</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.forward"></a><img src="../../images/appsuite_user_icon_forward.png"></span>。<a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply">转发电子邮件给其他收件人</a>。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.delete"></a><img src="../../images/appsuite_user_icon_functionbar_trash.png"></span>。<a class="link" href="ox.appsuite.user.sect.email.manage.delete.html#ox.appsuite.user.concept.email.delete">删除</a>您选择的电子邮件。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>设置颜色</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.label"></a><img src="../../images/appsuite_user_icon_label.png"></span>。打开菜单允许您<a class="link" href="ox.appsuite.user.sect.email.manage.label.html#ox.appsuite.user.concept.email.label">用颜色标签</a>到电子邮件上。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>更多</strong></span>按钮。打开带有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.email.manage.mark.html#ox.appsuite.user.concept.email.mark"><span class="guibutton"><strong>标记成未读</strong></span>、<span class="guibutton"><strong>标记成已读</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.move.html#ox.appsuite.user.concept.email.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.copy.html#ox.appsuite.user.concept.email.copy"><span class="guibutton"><strong>复制</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.print.html#ox.appsuite.user.concept.email.print"><span class="guibutton"><strong>打印</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.save.html#ox.appsuite.user.concept.email.save"><span class="guibutton"><strong>保存成文件</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source"><span class="guibutton"><strong>检视原始码</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder"><span class="guibutton"><strong>提醒</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.addportal.html#ox.appsuite.user.concept.email.addportal"><span class="guibutton"><strong>添加到门户</strong></span></a>。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>更多</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>。打开带有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.email.manage.mark.html#ox.appsuite.user.concept.email.mark"><span class="guibutton"><strong>标记成未读</strong></span>、<span class="guibutton"><strong>标记成已读</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.move.html#ox.appsuite.user.concept.email.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.copy.html#ox.appsuite.user.concept.email.copy"><span class="guibutton"><strong>复制</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.print.html#ox.appsuite.user.concept.email.print"><span class="guibutton"><strong>打印</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.save.html#ox.appsuite.user.concept.email.save"><span class="guibutton"><strong>保存成文件</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source"><span class="guibutton"><strong>检视原始码</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder"><span class="guibutton"><strong>提醒</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.addportal.html#ox.appsuite.user.concept.email.addportal"><span class="guibutton"><strong>添加到门户</strong></span></a>。</p></li>
 <li class="listitem">
 <p><span class="guibutton"><strong>视图</strong></span>按钮。使用以下项目打开菜单：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
@@ -73,6 +77,7 @@
 <p><span class="guibutton"><strong>联系人图像</strong></span>选择框。列表里每一个电子邮件的旁边，假若发信人有保存在地址簿里，就会显示一个发送人的联系人图像。</p>
 <p><span class="phrase"><strong>备注：</strong></span>布局选项<span class="guibutton"><strong>水平</strong></span>和<span class="guibutton"><strong>列表</strong></span>不允许显示联系人图像。</p>
 </li>
+<li class="listitem"><p><span class="guibutton"><strong>确实日期</strong></span>选择框。收到电子邮件时，显示确实日期和时间。</p></li>
 </ul></div>
 <p>
           </p>
@@ -87,7 +92,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p>您可以选择多个电子邮件<a class="link" href="ox.appsuite.user.sect.email.manage.multiple.html#ox.appsuite.user.concept.email.multiple">一次编辑</a>。为此启用在<span class="guibutton"><strong>选择框</strong></span>选项（可从工具条下拉的<span class="guibutton"><strong>视图</strong></span>找到），以启用电子邮件旁边的选择框。</p>
-<p>您也可以使用您系统的多重选定功能。</p>
+<p>您可以使用您系统的多重选择功能：</p>
 <p>为了选择当前选择文件夹的所有可见电子邮件，启用在列表上面的<span class="guibutton"><strong>选择所有</strong></span>选择框。</p>
 <p><span class="phrase"><strong>备注：</strong></span><span class="guibutton"><strong>选择所有</strong></span>选择框只会选择一个文件夹里所有可见电子邮件。要减少延迟，如果一个文件夹里的电子邮件超出一个预定限制，服务器将会只加载某百分比的电子邮件。要显示一个文件夹里的所有电子邮件，浏览到列表的底部。等待直至服务器加载了所有电子邮件。</p>
 </li>
@@ -126,12 +131,21 @@
 <p>如果单击一个约会或电子邮件，会打开更多弹出窗口。</p>
 </li>
 <li class="listitem"><p>收件日期</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>图标。如果单击图表，会打开一个有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply"><span class="guibutton"><strong>回复</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply"><span class="guibutton"><strong>回复全部</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.send.forward.html#ox.appsuite.user.concept.email.forward"><span class="guibutton"><strong>转发</strong></span></a>、 <a class="link" href="ox.appsuite.user.sect.email.manage.delete.html#ox.appsuite.user.concept.email.delete"><span class="guibutton"><strong>删除</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.mark.html#ox.appsuite.user.concept.email.mark"><span class="guibutton"><strong>标记未读</strong></span>、<span class="guibutton"><strong>标记已读</strong></span></a><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.concept.email.new"><span class="guibutton"><strong>发送新邮件</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.share.recipient_appointment.html#ox.appsuite.user.concept.email.share.recipient_appointment"><span class="guibutton"><strong>邀请到约会</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html#ox.appsuite.user.concept.email.share.recipient_distributionlist"><span class="guibutton"><strong>保存成通讯组列表</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.move.html#ox.appsuite.user.concept.email.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.copy.html#ox.appsuite.user.concept.email.copy"><span class="guibutton"><strong>复制</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.print.html#ox.appsuite.user.concept.email.print"><span class="guibutton"><strong>打印</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.save.html#ox.appsuite.user.concept.email.save"><span class="guibutton"><strong>保存成文件</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source"><span class="guibutton"><strong>检视原始码</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder"><span class="guibutton"><strong>提醒</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.addportal.html#ox.appsuite.user.concept.email.addportal"><span class="guibutton"><strong>添加到门户</strong></span></a>。</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.label.html#ox.appsuite.user.concept.email.label"> <span class="guibutton"><strong>标签</strong></span></a>按钮<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.label"></a><img src="../../images/appsuite_user_icon_label.png"></span>。打开菜单允许您用颜色标签到电子邮件上。</p></li>
-<li class="listitem"><p>如果电子邮件包含附件，会显示<a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">电子邮件附件</a>名称要套用一个功能到一个附件，单击功能或附件名称。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.gui.detailview.actions"></a><img src="../../images/appsuite_user_icon_actions.png"></span>。如果单击图表，会打开一个有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply"><span class="guibutton"><strong>回复</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.send.reply.html#ox.appsuite.user.concept.email.reply"><span class="guibutton"><strong>回复全部</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.send.forward.html#ox.appsuite.user.concept.email.forward"><span class="guibutton"><strong>转发</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.delete.html#ox.appsuite.user.concept.email.delete"><span class="guibutton"><strong>删除</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.mark.html#ox.appsuite.user.concept.email.mark"><span class="guibutton"><strong>标记成未读</strong></span>、<span class="guibutton"><strong>标记成已读</strong></span></a><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.concept.email.new"><span class="guibutton"><strong>发送新邮件</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.share.recipient_appointment.html#ox.appsuite.user.concept.email.share.recipient_appointment"><span class="guibutton"><strong>邀请到约会</strong></span></a><a class="link" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html#ox.appsuite.user.concept.email.share.recipient_distributionlist"><span class="guibutton"><strong>保存成通讯组列表</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.move.html#ox.appsuite.user.concept.email.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.copy.html#ox.appsuite.user.concept.email.copy"><span class="guibutton"><strong>复制</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.print.html#ox.appsuite.user.concept.email.print"><span class="guibutton"><strong>打印</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.save.html#ox.appsuite.user.concept.email.save"><span class="guibutton"><strong>保存成文件</strong></span></a><a class="link" href="ox.appsuite.user.sect.email.manage.source.html#ox.appsuite.user.concept.email.source"><span class="guibutton"><strong>检视原始码</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder"><span class="guibutton"><strong>提醒</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.email.manage.addportal.html#ox.appsuite.user.concept.email.addportal"><span class="guibutton"><strong>添加到门户</strong></span></a>。</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.label.html#ox.appsuite.user.concept.email.label"><span class="guibutton"><strong>设置颜色</strong></span></a> 图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.label"></a><img src="../../images/appsuite_user_icon_label.png"></span>。打开菜单允许您用颜色标签到电子邮件上。</p></li>
+<li class="listitem">
+<p>如果电子邮件包含附件，则显示以下元素：</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>一个带有一个图标和附件数的按钮。如果单击它，附件会显示成图标或列表。</p></li>
+<li class="listitem"><p>允许一次套用一个<a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">功能</a>到所有电子邮件附件的按钮。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>方块</strong></span> 或 <span class="guibutton"><strong>列表</strong></span> 图标。如果单击图标，附件会显示成图标或列表。要套用一个<a class="link" href="ox.appsuite.user.sect.email.attachments.html#ox.appsuite.user.concept.email.view.attachments">功能</a>到一个指定附件， 单击附件名称。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
 <li class="listitem">
 <p>电子邮件文本。</p>
-<p>之前电子邮件的引用会以垂直线加入。如果单击 <span class="guibutton"><strong>显示更多</strong></span>，会显示整个引用。</p>
+<p>之前电子邮件的引用会以垂直线加入。如果单击<span class="guibutton"><strong>显示更多</strong></span>之上，会显示完整引用。</p>
 </li>
 </ul></div>
 <p>

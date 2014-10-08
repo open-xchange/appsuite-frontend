@@ -1,17 +1,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>6.7. Kontakty w ramach zespołu</title>
+<title>6.9. Kontakty w ramach zespołu</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.chap.contacts.html" title="Rozdział 6. Książka adresowa">
-<link rel="prev" href="ox.appsuite.user.sect.contacts.manage.multiple.html" title="6.6.11. Edycja wielu kontaktów jednocześnie">
-<link rel="next" href="ox.appsuite.user.sect.contacts.datainterchange.html" title="6.8. Wymienianie kontaktów między aplikacjami">
+<link rel="prev" href="ox.appsuite.user.sect.contacts.search.html" title="6.8. Wyszukiwanie kontaktów">
+<link rel="next" href="ox.appsuite.user.sect.contacts.datainterchange.html" title="6.10. Wymienianie kontaktów między aplikacjami">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -19,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.contacts.manage.multiple.html">Poprzedni</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.contacts.search.html">Poprzedni</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Spis treści</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Spis treści</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.contacts.datainterchange.html">Następny</a></li>
@@ -28,8 +31,8 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.contacts.share"></a>6.7. Kontakty w ramach zespołu</h2></div></div></div>
-<a class="indexterm" name="idm139943750711792"></a><div class="concept">
+<a name="ox.appsuite.user.sect.contacts.share"></a>6.9. Kontakty w ramach zespołu</h2></div></div></div>
+<a class="indexterm" name="idm139961880405680"></a><div class="concept">
 <a name="ox.appsuite.user.concept.contacts.share"></a><p>Istnieje możliwość udostępniania kontaktów partnerom wewnętrznym i zewnętrznym. Można to robić na różne sposoby, zależnie od wymagań. </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><span class="guilabel"><strong>Globalna książka adresowa</strong></span> udostępnia dane kontaktów wszystkim użytkownikom. Każdy użytkownik może skorzystać z tych kontaktów.</p></li>
@@ -37,11 +40,11 @@
 <p>Aby udostępnić użytkownikom wewnętrznym dodatkowe kontakty, zrób tak:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>Utwórz nowy folder osobisty lub publiczny, do którego skopiujesz lub przeniesiesz odpowiednie kontakty.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Udostępnij ten folder wszystkim lub tylko wybranym użytkownikom.</p></li>
+<li class="listitem" style="list-style-type: none"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html#ox.appsuite.user.concept.rights.share">Udostępnij ten folder</a> wszystkim lub tylko wybranym użytkownikom.</p></li>
 </ul></div>
 <p>
           </p>
-<p>Możesz też udostępnić istniejący już folder z uprawnieniami do odczytu lub zapisu. Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="12.3. Uprawnienia">Uprawnienia</a>.</p>
+<p>Możesz też udostępnić istniejący już folder z uprawnieniami do odczytu lub zapisu. Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Uprawnienia">Uprawnienia</a>.</p>
 </li>
 <li class="listitem">
 <p>Aby udostępnić kontakty partnerom zewnętrznym, zrób tak: </p>
@@ -51,10 +54,10 @@
 </ul></div>
 <p>
           </p>
-<p>Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html" title="12.4.2. Publikowanie danych">Publikowanie danych</a>.</p>
+<p>Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html" title="11.3.2. Publikowanie danych">Publikowanie danych</a>.</p>
 </li>
-<li class="listitem"><p>Jeśli inny użytkownik opublikował folder kontaktów, możesz uzyskać do nich dostęp, subskrybując ten folder. Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html" title="12.4.1. Subskrybowanie danych">Subskrybowanie danych</a>.</p></li>
-<li class="listitem"><p>Jeśli inny użytkownik udostępni Ci folder kontaktów, możesz korzystać z tych kontaktów. Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="12.3. Uprawnienia">Uprawnienia</a>.</p></li>
+<li class="listitem"><p>Jeśli inny użytkownik opublikował folder kontaktów, możesz uzyskać do nich dostęp, subskrybując ten folder. Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html" title="11.3.1. Subskrybowanie danych">Subskrybowanie danych</a>.</p></li>
+<li class="listitem"><p>Jeśli inny użytkownik udostępni Ci folder kontaktów, możesz korzystać z tych kontaktów. Bliższe informacje można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Uprawnienia">Uprawnienia</a>.</p></li>
 </ul></div>
 <p>
     </p>

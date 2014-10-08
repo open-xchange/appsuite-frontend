@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -30,6 +33,7 @@
 <div class="titlepage"><div><div><h1 class="title">
 <a name="ox.appsuite.user.chap.email"></a>Chapter 5. <span class="phrase">电子邮件</span>
 		
+		
 		</h1></div></div></div>
 <div class="toc">
 <p><b>Table of Contents</b></p>
@@ -38,8 +42,9 @@
 				<span class="guilabel"><strong>电子邮件</strong></span>
 			</span>
 			
+			
 			元件</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 检视电子邮件</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 显示电子邮件</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 检视或保存电子邮件附件</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 发送电子邮件</a></span></dt>
 <dd><dl>
@@ -63,31 +68,34 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 保存电子邮件</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 汇入电子邮件</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.print.html">5.5.12 打印电子邮件</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.13 删除电子邮件</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.14 清理电子邮件文件夹</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.15 同时编辑多个电子邮件</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.16 使用统一邮件</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.17 使用电子邮件过滤器</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.5.13 电子邮件归档中</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.14 删除电子邮件</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.15 清理电子邮件文件夹</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.16 同时编辑多个电子邮件</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.17 使用统一邮件</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.18 使用电子邮件过滤器</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.6 团队里电子邮件</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.search.html">5.6 搜寻电子邮件</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.7 团队里电子邮件</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.6.1 分享电子邮件</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.6.2 订阅电子邮件文件夹</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.6.3 邀请电子邮件收件人到一个约会</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.6.4 保存电子邮件的所有收件人成通讯组列表</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.7.1 分享电子邮件</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.7.2 订阅电子邮件文件夹</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.7.3 邀请电子邮件收件人到一个约会</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.7.4 保存电子邮件的所有收件人成通讯组列表</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.7 电子邮件账户</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.8 电子邮件账户</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.7.1 设置和编辑电子邮件户口</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.7.2 使用一个外部电子邮件户口</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.8.1 设置和编辑电子邮件户口</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.8.2 使用一个外部电子邮件户口</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.8 电子邮件设置</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.9 电子邮件设置</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm140621590839824"></a><a class="indexterm" name="idm140621586690144"></a><a class="indexterm" name="idm140621586053392"></a><a class="indexterm" name="idm140621583809744"></a><div class="concept">
+<a class="indexterm" name="idm139933757363360"></a><a class="indexterm" name="idm139933759517728"></a><a class="indexterm" name="idm139933760054848"></a><a class="indexterm" name="idm139933758345600"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email"></a><p>学习如何与<span class="phrase">
 			<span class="guilabel"><strong>电子邮件</strong></span>
 		</span>
+		
 		
 		应用程序工作。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -95,17 +103,20 @@
 							<span class="guilabel"><strong>电子邮件</strong></span>
 						</span>
 						
+						
 						元件</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. 检视电子邮件">搜索和检视</a>电子邮件</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. 显示电子邮件">显示</a> 电子邮件</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.html" title="5.4. 发送电子邮件">发送</a>电子邮件</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.html" title="5.5. 组织电子邮件">管理</a>电子邮件</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.6. 团队里电子邮件">和其他<span class="guilabel"><strong>用户</strong></span>分享电子邮件。</a></p></li>
-<li class="listitem"><p>访问您和其他提供者设置的<a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.7. 电子邮件账户">外部邮件户口</a></p></li>
-<li class="listitem"><p>使用<a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.8. 电子邮件设置"><span class="phrase">
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. 搜寻电子邮件">搜寻</a> 电子邮件</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.7. 团队里电子邮件">和其他<span class="guilabel"><strong>用户</strong></span>分享电子邮件。</a></p></li>
+<li class="listitem"><p>访问您和其他提供者设置的<a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.8. 电子邮件账户">外部邮件户口</a></p></li>
+<li class="listitem"><p>使用<a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. 电子邮件设置"><span class="phrase">
 							<span class="guilabel"><strong>电子邮件</strong></span>
 						</span>
 						
-						设置</a></p></li>
+						
+						 设置</a></p></li>
 </ul></div>
 <p>
   </p>
@@ -115,12 +126,14 @@
 				<span class="guilabel"><strong>电子邮件</strong></span>
 			</span>
 			
+			
 			应用程序：</b></p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>单击菜单条里的<span class="phrase">
+<div class="procedure"><ul class="procedure"><li class="step"><p>单击菜单栏里的<span class="phrase">
 						<span class="guimenu"><strong>电子邮件</strong></span>
 					</span>
 					
-					</p></li></ul></div>
+					
+					。</p></li></ul></div>
 </div>
 </div>
 </body>

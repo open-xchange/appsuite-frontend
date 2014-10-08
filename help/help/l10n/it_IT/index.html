@@ -10,6 +10,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -26,14 +29,14 @@
   <div lang="it-IT" class="book"><div class="titlepage">
 <div>
 <div><h1 class="title">
-<a name="idm140628526989808"></a>OX App Suite</h1></div>
+<a name="idm140204158277168"></a>OX App Suite</h1></div>
 <div><h2 class="subtitle">Manuale utente </h2></div>
 <div><div class="author"><h3 class="author">
 <span class="firstname">Vincenzo</span> <span class="surname">Reale</span>
 </h3></div></div>
 <div><p class="copyright">Diritto d'autore © 2006-2014 OPEN-XCHANGE Inc. , Questo documento è proprietà intellettuale di Open-Xchange Inc.</p></div>
 <div><a href="ox.appsuite.user.legalnotice.html">Nota Legale</a></div>
-<div><p class="pubdate">martedì, 24. giugno 2014 Version 7.6.0 </p></div>
+<div><p class="pubdate">mercoledì, 08. ottobre 2014 Version 7.6.1 </p></div>
 <div><div class="abstract">
 <p class="title"><b></b></p>
 <p><a name="ox.appsuite.user.startpage"></a>
@@ -67,7 +70,7 @@
         <a class="link" href="ox.appsuite.user.sect.about.definitions.html" title="1.4. Terminologia"><span class="bold"><strong>Glossario</strong></span></a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.chap.bestpractices.html" title="Capitolo 14. Domande e risposte"><span class="bold"><strong>Domande frequenti</strong></span></a>
+        <a class="link" href="ox.appsuite.user.chap.bestpractices.html" title="Capitolo 13. Domande e risposte"><span class="bold"><strong>Domande frequenti</strong></span></a>
       </p>
 <p>
         <a class="link" href="ox.appsuite.user.sect.firststeps.socialaccounts.html#ox.appsuite.user.task.socialaccounts.add" title="Come configurare un account per accedere alle reti sociali:"><span class="bold"><strong>Aggiungere account sociali</strong></span></a>
@@ -96,10 +99,13 @@
         <a class="link" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Organizzare i messaggi di posta">Organizzare i messaggi di posta</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.6. Messaggi di posta in una squadra">Messaggi di posta in una squadra</a>
+        <a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. Cercare messaggi di posta">Cercare i messaggi di posta</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.6. Messaggi di posta in una squadra">Account di posta elettronica esterni</a>
+        <a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.7. Messaggi di posta in una squadra">Messaggi di posta all'interno di una squadra</a>
+      </p>
+<p>
+        <a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.7. Messaggi di posta in una squadra">Account di posta elettronica esterni</a>
       </p>
 </li>
 <li class="listitem" style="list-style-type: none">
@@ -113,16 +119,19 @@
         <a class="link" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. Visualizzare i contatti">Visualizzare i contatti</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.contacts.add.html" title="6.4. Creare i contatti">Creare contatti</a>
+        <a class="link" href="ox.appsuite.user.sect.contacts.add.html" title="6.5. Creare i contatti">Creare contatti</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html" title="6.5. Creare liste di distribuzione">Creare liste di distribuzione</a>
+        <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html" title="6.6. Creare liste di distribuzione">Creare liste di distribuzione</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.contacts.manage.html" title="6.6. Organizzare i contatti">Organizzare i contatti</a>
+        <a class="link" href="ox.appsuite.user.sect.contacts.manage.html" title="6.7. Organizzare i contatti">Organizzare i contatti</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.contacts.share.html" title="6.7. Contatti in squadre">Contatti in squadre</a>
+        <a class="link" href="ox.appsuite.user.sect.contacts.search.html" title="6.8. Ricercare i contatti">Ricercare i contatti</a>
+      </p>
+<p>
+        <a class="link" href="ox.appsuite.user.sect.contacts.share.html" title="6.9. Contatti in squadre">Contatti in squadre</a>
       </p>
 </li>
 <li class="listitem" style="list-style-type: none">
@@ -136,16 +145,19 @@
         <a class="link" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Visualizzare gli appuntamenti">Visualizzare gli appuntamenti</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.calendar.add.html" title="7.3. Creare appuntamenti">Creare appuntamenti</a>
+        <a class="link" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Creare appuntamenti">Creare appuntamenti</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.4. Rispondere agli inviti di appuntamenti">Rispondere agli inviti di appuntamenti</a>
+        <a class="link" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.5. Rispondere agli inviti di appuntamenti">Rispondere agli inviti di appuntamenti</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.6. Appuntamenti in squadre">Organizzare il calendario</a>
+        <a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Appuntamenti in squadre">Organizzare il calendario</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.6. Appuntamenti in squadre">Appuntamenti in squadre</a>
+        <a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Ricercare gli appuntamenti">Ricercare gli appuntamenti</a>
+      </p>
+<p>
+        <a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Appuntamenti in squadre">Appuntamenti in squadre</a>
       </p>
 </li>
 <li class="listitem" style="list-style-type: none">
@@ -159,16 +171,19 @@
         <a class="link" href="ox.appsuite.user.sect.tasks.view.html" title="8.2. Visualizzare le attività">Visualizzare le attività</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.tasks.add.html" title="8.3. Creare le attività">Creare attività</a>
+        <a class="link" href="ox.appsuite.user.sect.tasks.add.html" title="8.4. Creare le attività">Creare attività</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.tasks.invitation.html" title="8.4. Rispondere agli inviti di attività">Rispondere agli inviti di attività</a>
+        <a class="link" href="ox.appsuite.user.sect.tasks.invitation.html" title="8.5. Rispondere agli inviti di attività">Rispondere agli inviti di attività</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.tasks.manage.html" title="8.5. Gestire le attività">Organizzare le attività</a>
+        <a class="link" href="ox.appsuite.user.sect.tasks.manage.html" title="8.6. Gestire le attività">Organizzare le attività</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.tasks.share.html" title="8.6. Attività in squadre">Attività in squadre</a>
+        <a class="link" href="ox.appsuite.user.sect.tasks.search.html" title="8.7. Ricercare le attività">Ricercare le attività</a>
+      </p>
+<p>
+        <a class="link" href="ox.appsuite.user.sect.tasks.share.html" title="8.8. Attività in squadre">Attività in squadre</a>
       </p>
 </li>
 </ul>
@@ -177,26 +192,6 @@
   </p>
 <div class="itemizedlist">
 <a name="ox.appsuite.user.startpage.block03"></a><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p><a name="ox.appsuite.user.startpage.block03.col01"></a><span class="bold"><strong>
-          <a class="link" href="ox.appsuite.user.chap.documents.html" title="Capitolo 10. Documenti"><span class="phrase">Testo</span>  and<span class="phrase">Foglio elettronico</span>  </a>
-        </strong></span></p>
-<p>
-        <a class="link" href="ox.appsuite.user.sect.documents.gui.html" title="10.1. I componenti di Documenti">Componenti</a>
-      </p>
-<p>
-        <a class="link" href="ox.appsuite.user.sect.files.open.view.html" title="9.3.1. Visualizzare il contenuto di un file">Leggere i contenuti</a>
-      </p>
-<p>
-        <a class="link" href="ox.appsuite.user.sect.documents.add.html" title="10.2. Creare documenti">Creare documenti</a>
-      </p>
-<p>
-        <a class="link" href="ox.appsuite.user.sect.documents.edit.html" title="10.3. Modificare documenti">Modificare documenti</a>
-      </p>
-<p>
-        <a class="link" href="ox.appsuite.user.sect.documents.editasnew.html" title="10.4. Modificare documenti con un nuovo nome">Modificare i documenti come copia</a>
-      </p>
-</li>
 <li class="listitem" style="list-style-type: none">
 <p><a name="ox.appsuite.user.startpage.block03.col02"></a><span class="bold"><strong>
           <a class="link" href="ox.appsuite.user.chap.files.html" title="Capitolo 9. File"><span class="phrase">File</span>    </a>
@@ -214,27 +209,27 @@
         <a class="link" href="ox.appsuite.user.sect.files.manage.html" title="9.5. Gestire i file">Gestire i file</a>
       </p>
 <p>
+        <a class="link" href="ox.appsuite.user.sect.files.search.html" title="9.6. Cercare i file">Ricercare i file</a>
+      </p>
+<p>
         <a class="link" href="ox.appsuite.user.sect.files.open.multimedia.html" title="9.3.3. Riprodurre i file multimediali">Riprodurre file multimediali</a>
       </p>
 </li>
 <li class="listitem" style="list-style-type: none">
 <p><a name="ox.appsuite.user.startpage.block03.col03"></a><span class="bold"><strong>
-          <a class="link" href="ox.appsuite.user.chap.dataorganisation.html" title="Capitolo 12. Organizzare i dati">Organizzare i dati</a>
+          <a class="link" href="ox.appsuite.user.chap.dataorganisation.html" title="Capitolo 11. Organizzare i dati">Organizzare i dati</a>
         </strong></span></p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.html" title="12.1. Ricerca">Ricercare elementi</a>
+        <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="11.1.2. Navigare all'interno della struttura delle cartelle">Navigare all'interno dell'albero delle cartelle</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html" title="12.2.2. Navigare all'interno della struttura delle cartelle">Navigare all'interno dell'albero delle cartelle</a>
+        <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="11.1.5. Creare cartelle">Creare cartelle</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html" title="12.2.4. Creare cartelle">Creare cartelle</a>
+        <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="11.1.6. Rinominare le cartelle">Rinominare le cartelle</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html" title="12.2.5. Rinominare le cartelle">Rinominare le cartelle</a>
-      </p>
-<p>
-        <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="12.3.4. Condividere le cartelle">Condividere le cartelle</a>
+        <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html" title="11.2.4. Condividere le cartelle">Condividere le cartelle</a>
       </p>
 </li>
 <li class="listitem" style="list-style-type: none">
@@ -245,16 +240,16 @@
         <a class="link" href="ox.appsuite.user.sect.portal.customize.html" title="4.2. Personalizzare Portale">Portale</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.8. Impostazioni di posta">Posta elettronica</a>
+        <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. Impostazioni di posta">Posta elettronica</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.7. Impostazioni del calendario">Calendario</a>
+        <a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.9. Impostazioni del calendario">calendario</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.tasks.settings.html" title="8.8. Impostazioni delle attività">Attività</a>
+        <a class="link" href="ox.appsuite.user.sect.tasks.settings.html" title="8.10. Impostazioni delle attività">Attività</a>
       </p>
 <p>
-        <a class="link" href="ox.appsuite.user.sect.files.settings.html" title="9.8. Impostazioni di Drive">File</a>
+        <a class="link" href="ox.appsuite.user.sect.files.settings.html" title="9.9. Impostazioni di Drive">File</a>
       </p>
 </li>
 </ul>

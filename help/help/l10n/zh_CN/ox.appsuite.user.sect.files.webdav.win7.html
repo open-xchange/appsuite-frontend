@@ -1,17 +1,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6.4. 在 Windows 7 下设置 WebDAV</title>
+<title>9.7.4. 在 视窗 7 下设置 WebDAV</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
-<link rel="up" href="ox.appsuite.user.sect.files.webdav.html" title="9.6. 以 WebDAV 访问文件">
-<link rel="prev" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="9.6.3. 在 Windows Vista 下设置 WebDAV">
-<link rel="next" href="ox.appsuite.user.sect.files.share.html" title="9.7. 档案和团队">
+<link rel="up" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. 用 WebDAV 访问文件">
+<link rel="prev" href="ox.appsuite.user.sect.files.webdav.winvista.html" title="9.7.3. 在 视窗 Vista 下设置 WebDAV">
+<link rel="next" href="ox.appsuite.user.sect.files.share.html" title="9.8. 档案和团队">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -28,10 +31,10 @@
 <div class="oxhelp-content">
   <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.webdav.win7"></a>9.6.4. 在 Windows 7 下设置 WebDAV</h3></div></div></div>
-<a class="indexterm" name="idm140621576576512"></a><a class="indexterm" name="idm140621576575120"></a><p><a name="ox.appsuite.user.concept.files.webdav.win7"></a>为了在视窗 7 下设置 WebDAV 访问，使用以下选项之一：</p>
+<a name="ox.appsuite.user.sect.files.webdav.win7"></a>9.7.4. 在 视窗 7 下设置 WebDAV</h3></div></div></div>
+<a class="indexterm" name="idm139933748570400"></a><a class="indexterm" name="idm139933748569008"></a><p><a name="ox.appsuite.user.concept.files.webdav.win7"></a>为了设置在 Windows 7 下设置 WebDAV 访问，请使用以下选项之一：</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>使用 OX 更新器。在 OX 更新器用户文件里可以找到信息。</p></li>
+<li class="listitem"><p>使用 OX 更新器。可在 OX 更新器用户文件里找到说明。</p></li>
 <li class="listitem"><p>然后，手动设置 <a class="link" href="ox.appsuite.user.sect.files.webdav.win7.html#ox.appsuite.user.task.webdav.win7" title="如何在视窗 7 下手动设置 WebDAV 访问：">WebDav 访问</a>。</p></li>
 </ul></div>
 <p><span class="phrase"><strong>备注：</strong></span>视 Windows 7 设置而定，在访问 WebDAV 文件夹时可以出现延迟。如是者，依据此文章里的指示：<code class="uri">http://support.microsoft.com/kb/2445570</code>。</p>
@@ -41,19 +44,20 @@
           <p><span class="phrase"><strong>先决条件：</strong></span>在 Windows 注册数据库里的注册键<span class="guilabel"><strong>BasicAuthLevel</strong></span>必须设置成<span class="guilabel"><strong>2</strong></span>。可以在 Microsoft 文章 <a class="ulink" href="http://support.microsoft.com/kb/928692" target="_top">http://support.microsoft.com/kb/928692</a> 和<a class="ulink" href="https://support.microsoft.com/kb/841215" target="_top">https://support.microsoft.com/kb/841215</a> 找到更多信息。</p>
         </div>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>在 Windows 资源管理器的导航区域里选择<span class="guibutton"><strong>计算机</strong></span>。</p></li>
-<li class="step"><p>在图标条里单击<span class="guibutton"><strong>连接硬盘</strong></span>。<span class="guilabel"><strong>连接磁盘</strong></span>窗口打开。</p></li>
-<li class="step"><p>单击<span class="guibutton"><strong>链接到一个您能够用作储存您文档的网站</strong></span>。<span class="guilabel"><strong>添加网路地址</strong></span>窗口打开。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
-<li class="step"><p>选择<span class="guibutton"><strong>选择自定义网路地址</strong></span>。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
-<li class="step"><p>在<span class="guilabel"><strong>添加网络位置</strong></span>对话窗口中输入以下地址：https://&lt;地址&gt;/servlet/webdav.infostore其中&lt;地址&gt;必须要用组件服务器的 IP 地址或 URL 代替。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
-<li class="step"><p>输入用于登录组件服务器的用户名和密码。单击 <span class="guibutton"><strong>确定</strong></span>。</p></li>
-<li class="step"><p>在下一页上面，您可以向网路地址分配一个名称。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
+<li class="step"><p>在 Windows 资源管理器的导航区域里打开<span class="guibutton"><strong>计算机</strong></span>。</p></li>
+<li class="step"><p>在图标条里单击<span class="guibutton"><strong>链接盘</strong></span>。<span class="guilabel"><strong>连接硬盘</strong></span>窗口打开。</p></li>
+<li class="step"><p>单击<span class="guibutton"><strong>连接一个您可以使用作储存您的文档的网站</strong></span>。会打开<span class="guilabel"><strong>添加网路地址</strong></span>窗口。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
+<li class="step"><p>选择<span class="guibutton"><strong>选择自定义网络地址</strong></span> 。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
+<li class="step"><p>在<span class="guilabel"><strong>添加网络位置</strong></span>对话窗口中输入以下地址： https://&lt;地址&gt;/servlet/webdav.infostore 其中&lt;地址&gt;必须要用组建服务器的 IP 地址或 URL 代替。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
+<li class="step"><p>输入用于访问组件服务器的用户名和密码。单击 <span class="guibutton"><strong>确定</strong></span>。</p></li>
+<li class="step"><p>在下一页您可以分配一个名称给网路地址。单击<span class="guibutton"><strong>下一步</strong></span>。</p></li>
 <li class="step"><p>单击<span class="guibutton"><strong>结束</strong></span>。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p class="order.result"><span class="phrase"><strong>结果：</strong></span>在<span class="guibutton"><strong>计算机</strong></span>下面，您可以访问您的 <span class="phrase">
 							<span class="guilabel"><strong>磁盘</strong></span>
 						</span>
+						
 						
 						应用程序文件。</p>
         </div>
