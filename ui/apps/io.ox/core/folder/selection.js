@@ -61,6 +61,11 @@ define('io.ox/core/folder/selection', [], function () {
             return this.check(this.byId(id)).length > 0;
         },
 
+        scrollIntoView: function (id) {
+            var node = this.byId(id);
+            if (node.length) node[0].scrollIntoView(false);
+        },
+
         onClick: function (e) {
 
             // ignore native checkbox

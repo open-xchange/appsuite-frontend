@@ -199,6 +199,9 @@ define('io.ox/core/folder/view',
         // apply
         tree.open = open;
 
+        // set initial folder?
+        var id = app.folder.get();
+
         if (_.device('smartphone')) {
             // respond to tab event for better responsiveness
             // does not work reliable on iOS, use click instead
@@ -215,9 +218,42 @@ define('io.ox/core/folder/view',
                 app.pages.changePage(options.firstResponder); // default 'listView'
                 if (options.respondCallback) options.respondCallback(); // callback for custom actions after pagechange
             }, 10));
+
+            if (id) {
+                // defer so that favorite folders are drawn already
+                _.defer(tree.selection.preselect.bind(tree.selection, id));
+            }
+
         } else {
+
             // add border & render tree and add to DOM
-            sidepanel.addClass('border-right').append(tree.render().$el);
+            sidepanel.addClass('border-right').append(tree.$el);
+
+            if (id) {
+                // defer so that favorite folders are drawn already
+                _.defer(function () {
+                    api.path(id).done(function (path) {
+                        var ids = _(path).pluck('id');
+                        tree.open = _(tree.open.concat(ids)).uniq();
+                    })
+                    .always(function () {
+                        // try now
+                        if (tree.selection.preselect(id)) {
+                            tree.selection.scrollIntoView(id);
+                            return;
+                        }
+                        // and on appear
+                        tree.once('appear:' + id, function () {
+                            tree.selection.preselect(id);
+                            tree.selection.scrollIntoView(id);
+                        });
+                        // render now
+                        tree.render();
+                    });
+                });
+            } else {
+                tree.render();
+            }
         }
 
         // a11y adjustments
@@ -249,20 +285,6 @@ define('io.ox/core/folder/view',
 
         }());
 
-        // set initial folder
-        var id = app.folder.get();
-        if (id) {
-            // defer so that favorite folders are drawn already
-            _.defer(function () {
-                // try now
-                if (tree.selection.preselect(id)) return;
-                // and on appear
-                tree.once('appear:' + id, function () {
-                    tree.selection.preselect(id);
-                });
-            });
-        }
-
         // respond to folder removal
         api.on('remove:prepare', function (e, data) {
             // select parent or default folder
@@ -280,6 +302,9 @@ define('io.ox/core/folder/view',
             var open = this.getOpenFolders();
             app.settings.set('folderview/open/' + _.display(), open).save();
         });
+
+        // debug
+        window.tree = tree;
 
         // show
         if (options.visible) app.folderView.show();

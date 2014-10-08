@@ -84,9 +84,7 @@ define('io.ox/core/folder/tree',
             if (id === undefined) return;
             this.onAppear(id, function () {
                 // defer selection; might be too fast otherwise
-                _.defer(function () {
-                    this.selection.set(id);
-                }.bind(this));
+                _.defer(this.selection.set.bind(this.selection, id));
             });
         },
 
