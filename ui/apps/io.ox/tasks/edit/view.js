@@ -95,7 +95,7 @@ define('io.ox/tasks/edit/view', [
 
             //now draw the rest
             _(rows.rest).each(function (extension) {
-                extension.invoke('draw', this.$el, self.baton);
+                extension.invoke('draw', self.$el, self.baton);
             });
 
             if (_.device('smartphone')) {
