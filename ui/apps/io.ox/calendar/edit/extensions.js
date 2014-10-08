@@ -11,7 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/calendar/edit/template', [
+define('io.ox/calendar/edit/extensions', [
     'io.ox/core/extensions',
     'gettext!io.ox/calendar/edit/main',
     'io.ox/calendar/util',
@@ -23,25 +23,12 @@ define('io.ox/calendar/edit/template', [
     'io.ox/calendar/edit/recurrence-view',
     'io.ox/calendar/api',
     'io.ox/participants/views',
-    'settings!io.ox/calendar',
     'io.ox/core/capabilities'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, settings, capabilities) {
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, capabilities) {
 
     'use strict';
 
-    var point = views.point('io.ox/calendar/edit/section'),
-        collapsed = false;
-
-    // create blacklist
-    var blackList = null,
-        blackListStr = settings.get('participantBlacklist') || '';
-
-    if (blackListStr) {
-        blackList = {};
-        _(blackListStr.split(',')).each(function (item) {
-            blackList[item.trim()] = true;
-        });
-    }
+    var point = views.point('io.ox/calendar/edit/section');
 
     point.basicExtend({
         id: 'header',
@@ -213,16 +200,16 @@ define('io.ox/calendar/edit/template', [
                 this.append(
                     $('<a href="#">')
                         .text(gt('Expand form'))
-                        .addClass('btn btn-link actionToggle spacer')
+                        .addClass('btn btn-link actionToggle')
                         .on('click', function (e) {
                             e.preventDefault();
                             $('.row.collapsed', baton.parentView.$el).toggle();
-                            if (collapsed) {
-                                $(this).text(gt('Expand form')).addClass('spacer');
+                            if (baton.parentView.collapsed) {
+                                $(this).text(gt('Expand form'));
                             } else {
-                                $(this).text(gt('Collapse form')).removeClass('spacer');
+                                $(this).text(gt('Collapse form'));
                             }
-                            collapsed = !collapsed;
+                            baton.parentView.collapsed = !baton.parentView.collapsed;
                         })
                 );
             } else {
@@ -235,11 +222,6 @@ define('io.ox/calendar/edit/template', [
     point.extend({
         id: 'alarm',
         index: 800,
-        // labelClassName: 'control-label',
-        // className: 'col-md-4',
-        // attribute: 'alarm',
-        // label: gt('Reminder'),
-        // selectOptions: calendarUtil.getReminderOptions()
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.addClass('col-md-4').append(
@@ -381,6 +363,7 @@ define('io.ox/calendar/edit/template', [
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
                 var collection = baton.model.getParticipants(),
+                    blackList = baton.parentView.blackList,
                     autocomplete = new AddParticipantsView({ el: pNode, blackList: blackList });
 
                 if (blackList) {
@@ -567,12 +550,12 @@ define('io.ox/calendar/edit/template', [
         rowClass: 'collapsed'
     });
 
+    // spacer for mobile
     point.basicExtend({
         id: 'dummy_spacer',
         index: 10000,
-        rowClass: 'collapsed',
         draw: function () {
-            this.append('<div>').css('height', '100px');
+            this.addClass('spacer');
         }
     });
 

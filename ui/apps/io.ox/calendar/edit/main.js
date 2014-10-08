@@ -15,12 +15,12 @@ define('io.ox/calendar/edit/main', [
     'io.ox/calendar/model',
     'io.ox/calendar/api',
     'io.ox/core/extPatterns/dnd',
-    'io.ox/calendar/edit/view-main',
+    'io.ox/calendar/edit/view',
     'io.ox/core/notifications',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/edit/style'
-], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
+], function (appointmentModel, api, dnd, EditView, notifications, gt, settings) {
 
     'use strict';
 
@@ -80,7 +80,7 @@ define('io.ox/calendar/edit/main', [
 
                         var baton = { model: self.model, mode: opt.mode, app: self, callbacks: {} };
                         baton.callbacks.extendDescription = app.extendDescription;
-                        app.view = self.view = new MainView(baton);
+                        app.view = self.view = new EditView(baton);
 
                         //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
                         if (_.browser.IE === undefined || _.browser.IE > 9) {

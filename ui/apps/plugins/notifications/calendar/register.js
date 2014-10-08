@@ -217,7 +217,6 @@ define('plugins/notifications/calendar/register', [
             var self = this;
             require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
                 acceptdeny(self.model.get('data')).done(function (status) {
-                    debugger;
                     if (status !== 'cancel') {
                         self.collection.remove(self.model);
                     }

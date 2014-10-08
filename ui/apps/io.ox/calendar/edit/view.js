@@ -10,19 +10,36 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/calendar/edit/view-main', [
-    'io.ox/core/extensions',
+define('io.ox/calendar/edit/view', [
     'io.ox/backbone/views',
-    'io.ox/calendar/edit/template'
-], function (ext, views) {
+    'settings!io.ox/calendar',
+    'io.ox/calendar/edit/extensions'
+], function (views, settings) {
 
     'use strict';
 
-    var CommonView = views.point('io.ox/calendar/edit/section').createView({
+    var CalendarEditView = views.point('io.ox/calendar/edit/section').createView({
 
         tagName: 'form',
 
         className: 'io-ox-calendar-edit container default-content-padding',
+
+        init: function () {
+
+            this.blackList = null;
+            this.collapsed = false;
+
+            var self = this,
+                blackListStr = settings.get('participantBlacklist') || '';
+
+            // create blacklist
+            if (blackListStr) {
+                this.blackList = {};
+                _(blackListStr.split(',')).each(function (item) {
+                    self.blackList[item.trim()] = true;
+                });
+            }
+        },
 
         render: function () {
             var self = this,
@@ -58,5 +75,5 @@ define('io.ox/calendar/edit/view-main', [
 
     });
 
-    return CommonView;
+    return CalendarEditView;
 });
