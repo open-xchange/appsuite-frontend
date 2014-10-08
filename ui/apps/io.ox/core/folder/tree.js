@@ -126,7 +126,10 @@ define('io.ox/core/folder/tree',
             if (isOpen || _.device('smartphone')) return;
 
             // copy contextmenu id
-            this.$dropdown.attr('data-contextmenu', target.attr('data-contextmenu'));
+            var contextmenu = target.is('.contextmenu-control') ?
+                target.attr('data-contextmenu') :
+                target.find('.contextmenu-control').first().attr('data-contextmenu');
+            this.$dropdown.attr('data-contextmenu', contextmenu);
 
             _.defer(function () {
 
@@ -150,7 +153,7 @@ define('io.ox/core/folder/tree',
         },
 
         onContextMenu: function (e) {
-            e.preventDefault();
+            e.stopPropagation(); // clicks bubbles. right-click not
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
             this.toggleContextMenu(target, top, left);
         },

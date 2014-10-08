@@ -20,7 +20,7 @@ define('io.ox/core/folder/selection', [], function () {
         this.view = view;
 
         this.view.$el
-            .on('click', '.selectable', $.proxy(this.onClick, this))
+            .on('click contextmenu', '.selectable', $.proxy(this.onClick, this))
             .on('keydown', '.selectable', $.proxy(this.onKeydown, this));
 
         this.view.$el.addClass('dropzone')
@@ -68,6 +68,8 @@ define('io.ox/core/folder/selection', [], function () {
 
             // avoid double selections
             if (e.isDefaultPrevented()) return; else e.preventDefault();
+
+            if (e.type === 'contextmenu') e.stopPropagation();
 
             var items = this.getItems(),
                 current = $(e.currentTarget),
