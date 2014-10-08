@@ -12,24 +12,27 @@
   ],
   "dependencies": {
     "jquery": "2.1.1",
-    "underscore": "1.6.0",
-    "mediaelement": "2.15.0",
-    "bootstrap": "3.1.1",
+    "underscore": "1.7.0",
+    "mediaelement": "2.15.1",
+    "bootstrap": "3.2.0",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#1cba48a2b711d4288f641a5a15e6508b8e3b2bde",
     "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git#304421b880ed990bada46c858b6fbdeec662dee3",
     "font-awesome": "4.2.0",
     "open-sans-fontface": "1.1.0",
-    "backbone": "1.0.0",
+    "backbone": "1.1.2",
     "backbone-validation": "0.9.1",
     "Chart.js": "https://github.com/nnnick/Chart.js.git#8f025f33c08c66991a12f02f908bab156a963aef",
     "bigscreen": "2.0.4",
     "jquery-placeholder": "2.0.8",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
-    "requirejs": "2.1.14",
+    "requirejs": "2.1.15",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#3c5d87c422d0f2eaada6216c30ce19028a6cdbe6",
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
     "bootstrap-tokenfield": "https://github.com/sliptree/bootstrap-tokenfield.git#481c1b883707620bb02861e3f83891bcebc379cc",
     "typeahead.js": "~0.10.5"
+  },
+  "resolutions": {
+    "bootstrap": "3.2.0"
   }
 }

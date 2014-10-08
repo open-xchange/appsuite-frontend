@@ -28,6 +28,10 @@ define('io.ox/participants/views', [
             'keydown': 'fnKey'
         },
 
+        initialize: function (options) {
+            this.options = options;
+        },
+
         render: function () {
 
             var self = this;
@@ -202,6 +206,7 @@ define('io.ox/participants/views', [
         initialize: function (options) {
             _.extend({ halo: true }, options);
             options.collection.on('add remove reset', _.bind(this.updateContainer, this));
+            this.options = options;
         },
         render: function () {
             var self = this,

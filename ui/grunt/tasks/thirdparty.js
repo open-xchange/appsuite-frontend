@@ -22,7 +22,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'bootstrap/less/*.less',
+                            'bootstrap/less/**/*.less',
                             'bootstrap-datepicker/less/datepicker3.less',
                             'font-awesome/{less,fonts}/*',
                             'open-sans-fontface/fonts/Light/*',

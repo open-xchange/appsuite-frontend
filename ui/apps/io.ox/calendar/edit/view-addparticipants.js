@@ -30,6 +30,7 @@ define('io.ox/calendar/edit/view-addparticipants', [
             },
 
             initialize: function (opt) {
+                this.options = opt;
                 blackList = opt.blackList || {};
             },
 

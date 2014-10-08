@@ -233,7 +233,7 @@ define('io.ox/calendar/edit/extensions', [
                     new mini.SelectView({
                         list: _.map(calendarUtil.getReminderOptions(), function (key, val) { return { label: key, value: val }; }),
                         name: 'alarm',
-                        model: this.baton.model,
+                        model: this.model,
                         id: guid,
                         className: 'form-control'
                     }).render().$el
@@ -265,7 +265,7 @@ define('io.ox/calendar/edit/extensions', [
                     new mini.SelectView({
                         list: options,
                         name: 'shown_as',
-                        model: this.baton.model,
+                        model: this.model,
                         id: guid,
                         className: 'form-control'
                     }).render().$el

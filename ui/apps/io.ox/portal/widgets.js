@@ -442,8 +442,11 @@ define('io.ox/portal/widgets', [
         }
     };
 
+    // Note: Instead of returning this, collection.reset() now returns the changed (added, removed or updated) model or list of models.
     collection
-        .reset(api.getSettingsSorted())
+        .reset(api.getSettingsSorted());
+
+    collection
         .on('change', _.debounce(function (model) {
             widgets[model.get('id')] = model.attributes;//update widgets object
             settings.set('widgets/user', api.toJSON()).set('settings' + widgetSet, api.extraSettingsToJSON()).saveAndYell();

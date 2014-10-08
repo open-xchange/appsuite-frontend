@@ -60,7 +60,8 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         delete options.id;
 
         // A few overridable default implementations
-        options.initialize = options.initialize || function () {
+        options.initialize = options.initialize || function (o) {
+            this.options = o;
             var self = this;
             if (this.update) {
                 self.observeModel('change', function () {
@@ -191,8 +192,9 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 return this;
             };
 
-            options.initialize = options.initialize || function () {
+            options.initialize = options.initialize || function (o) {
                 Events.extend(this);
+                this.options = o;
                 this.baton = ext.Baton(_.extend({}, this.options, { parentView: this }));
                 if (this.init) {
                     this.init.apply(this, $.makeArray(arguments));
