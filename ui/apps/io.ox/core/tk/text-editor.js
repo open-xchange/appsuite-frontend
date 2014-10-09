@@ -61,6 +61,7 @@ define('io.ox/core/tk/text-editor', function () {
 
             set = function (str) {
                 val.call(textarea, trimEnd(str));
+                this.setCaretPosition();
             },
 
             clear = function () {
@@ -105,16 +106,13 @@ define('io.ox/core/tk/text-editor', function () {
             }
         };
 
-        this.setCaretPosition = function (pos) {
+        this.setCaretPosition = function () {
             var el = textarea.get(0);
             if (el.setSelectionRange) {
-                el.focus();
-                el.setSelectionRange(pos, pos);
+                el.setSelectionRange(0, 0);
             } else if (el.createTextRange) {
                 var range = el.createTextRange();
-                range.collapse(true);
-                range.moveEnd('character', pos);
-                range.moveStart('character', pos);
+                range.moveStart('character', 0);
                 range.select();
             }
         };
