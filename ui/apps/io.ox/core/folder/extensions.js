@@ -32,8 +32,9 @@ define('io.ox/core/folder/extensions',
         return api.virtual.concat(
             // inbox
             api.get(INBOX),
-            // sent, drafts, spam, trash
-            api.list(INBOX)
+            // sent, drafts, spam, trash, archive
+            // default0 is alternative for IMAP server that list standard folders below INBOX
+            api.list(INBOX), api.list('default0')
         );
     });
 
@@ -135,8 +136,8 @@ define('io.ox/core/folder/extensions',
                 new TreeNodeView({
                     //empty: false,
                     filter: function (id, model) {
-                        // exclude INBOX
-                        return model.get('id') !== INBOX;
+                        // exclude standard folder
+                        return !account.isStandardFolder(model.id);
                     },
                     folder: 'default0',
                     headless: true,
