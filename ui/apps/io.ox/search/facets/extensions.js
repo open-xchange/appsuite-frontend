@@ -240,7 +240,7 @@ define('io.ox/search/facets/extensions',
                     this.find('label').prepend(
                         $('<span>')
                             .addClass('type')
-                            .html(type || facet.name)
+                            .text(type || facet.name)
 
                     );
                 }
@@ -259,7 +259,7 @@ define('io.ox/search/facets/extensions',
                 this.find('label').append(
                     $('<span>')
                         .addClass('name')
-                        .html(type || value.name || (value.item || {}).name || gt('All'))
+                        .text(type || value.name || (value.item || {}).name || gt('All'))
                 );
             },
 
@@ -332,7 +332,7 @@ define('io.ox/search/facets/extensions',
                                     .append(
                                         $('<i class="fa fa-fw">')
                                             .addClass(current === '' ? 'fa-check': 'fa-none'),
-                                        $('<span>').html(gt('All'))
+                                        $('<span>').text(gt('All'))
                                     )
                                     //.addClass('option')
                                     .attr({
@@ -354,7 +354,7 @@ define('io.ox/search/facets/extensions',
                                          $('<a role="menuitemcheckbox" tabindex="-1" href="#">')
                                             .append(
                                                 $('<i class="fa fa-fw fa-none">'),
-                                                $('<span>').html(item.name || item.item.name)
+                                                $('<span>').text(item.name || item.item.name)
                                             )
                                             .addClass('option')
                                             .attr({
@@ -483,7 +483,7 @@ define('io.ox/search/facets/extensions',
                     .append(
                         $('<div>')
                             .addClass('type')
-                            .html(facet.name),
+                            .text(facet.name),
                         group = $('<div class="input-daterange input-group" id="datepicker">')
                                     .append(
                                         $('<input type="text" class="input-sm form-control" name="start" />')
