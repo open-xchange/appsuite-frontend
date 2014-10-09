@@ -565,6 +565,10 @@ define('io.ox/mail/write/view-main',
 
             $input.on('change', changeHandler);
 
+            $input.on('reset.fileupload', function () {
+                $(this).val('');
+            });
+
             $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
                 e.preventDefault();
                 require(['io.ox/files/filepicker']).done(function (Picker) {
