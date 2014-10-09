@@ -21,8 +21,9 @@ define('io.ox/mail/actions/vcard', [
     'use strict';
 
     return function (baton) {
-        debugger;
-        var attachment = baton.data;
+
+        var attachment = _.isArray(baton.data) ? _.first(baton.data) : baton.data;
+
         require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
             conversionAPI.convert({
                 identifier: 'com.openexchange.mail.vcard',

@@ -18,15 +18,10 @@ define('io.ox/mail/actions', [
     'io.ox/mail/api',
     'io.ox/mail/util',
     'gettext!io.ox/mail',
-    'settings!io.ox/core',
     'io.ox/core/folder/api',
-    'io.ox/core/notifications',
     'io.ox/core/print',
-    'io.ox/contacts/api',
-    'io.ox/core/api/account',
-    'io.ox/core/extPatterns/actions',
-    'settings!io.ox/mail'
-], function (ext, links, api, util, gt, coreConfig, folderAPI, notifications, print, contactAPI, account, actions, settings) {
+    'io.ox/core/api/account'
+], function (ext, links, api, util, gt, folderAPI, print, account) {
 
     'use strict';
 
@@ -179,20 +174,13 @@ define('io.ox/mail/actions', [
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
-
-                require(['io.ox/core/folder/actions/move'], function (move) {
-                    move.item({
-                        all: list,
-                        api: api,
-                        button: label,
-                        list: folderAPI.ignoreSentItems(list),
-                        module: 'mail',
-                        root: '1',
-                        settings: settings,
-                        success: success,
-                        target: baton.target,
-                        title: label,
-                        type: type
+                require(['io.ox/mail/actions/copyMove'], function (action) {
+                    action.multiple({
+                        list: list,
+                        baton: baton,
+                        type: type,
+                        label: label,
+                        success: success
                     });
                 });
             }
@@ -366,7 +354,6 @@ define('io.ox/mail/actions', [
         id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
-            console.log(e.collection.has('one'));
             var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = (/\.vcf$/i).test(context.filename),
                 isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
@@ -384,34 +371,15 @@ define('io.ox/mail/actions', [
         id: 'ical',
         capabilities: 'calendar',
         requires: function (e) {
-            var context = e.context,
+            var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
                 isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
                 isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
-            var attachment = baton.data;
-            require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
-                conversionAPI.convert({
-                    identifier: 'com.openexchange.mail.ical',
-                    args: [
-                        { 'com.openexchange.mail.conversion.fullname': attachment.parent.folder_id },
-                        { 'com.openexchange.mail.conversion.mailid': attachment.parent.id },
-                        { 'com.openexchange.mail.conversion.sequenceid': attachment.id }
-                    ]
-                },
-                {
-                    identifier: 'com.openexchange.ical',
-                    args: [
-                        { 'com.openexchange.groupware.calendar.folder': coreConfig.get('folder/calendar') },
-                        { 'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks') }
-                    ]
-                })
-                .done(function () {
-                    notifications.yell('success', gt('The appointment has been added to your calendar'));
-                })
-                .fail(notifications.yell);
+            require(['io.ox/mail/actions/ical'], function (action) {
+                action(baton);
             });
         }
     });
@@ -423,28 +391,8 @@ define('io.ox/mail/actions', [
             return _.device('!ios') && e.collection.has('some', 'read');
         },
         multiple: function (data) {
-
-            require(['io.ox/core/download'], function (download) {
-
-                var url, first = _(data).first();
-
-                // download plain EML?
-                if (!_.isObject(first.parent)) {
-                    return data.length === 1 ? download.mail(first) : download.mails(data);
-                }
-
-                if (first.msgref && _.isObject(first.parent)) {
-                    // using msgref reference if previewing during compose (forward previewed mail as attachment)
-                    url = api.getUrl(data, 'eml:reference');
-                } else {
-                    // adjust attachment id for previewing nested email within compose view
-                    var adjustFn = first.parent.adjustid || '';
-                    first.id = _.isFunction(adjustFn) ? adjustFn(first.id) : first.id;
-                    // download attachment eml
-                    url = api.getUrl(first, 'download');
-                }
-
-                download.url(url);
+            require(['io.ox/mail/actions/save'], function (action) {
+                action.multiple(data);
             });
         }
     });
@@ -453,17 +401,8 @@ define('io.ox/mail/actions', [
         capabilities: 'portal',
         requires: 'one toplevel',
         action: function (baton) {
-            require(['io.ox/portal/widgets'], function (widgets) {
-                //using baton.data.parent if previewing during compose (forward mail as attachment)
-                widgets.add('stickymail', {
-                    plugin: 'mail',
-                    props: $.extend({
-                        id: baton.data.id,
-                        folder_id: baton.data.folder_id,
-                        title: baton.data.subject
-                    }, baton.data.parent || {})
-                });
-                notifications.yell('success', gt('This mail has been added to the portal'));
+            require(['io.ox/mail/actions/addToPortal'], function (action) {
+                action(baton);
             });
         }
     });
