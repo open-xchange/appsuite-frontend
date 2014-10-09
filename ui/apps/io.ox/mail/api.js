@@ -845,11 +845,9 @@ define('io.ox/mail/api',
             },
             data: [id]
         })
-        .then(function (data) {
-            return api.caches.all.grepRemove(id + DELIM).pipe(function () {
-                api.trigger('refresh.all');
-                return data;
-            });
+        .done(function () {
+            folderAPI.reload(id);
+            api.trigger('refresh.all');
         })
         .then(function () {
             return resetTrashFolders();
