@@ -70,6 +70,7 @@ define('io.ox/core/tk/selection', [
             changed,
             apply,
             clickHandler,
+            dblClickHandler,
             mouseupHandler,
             mousedownHandler,
             touchHandler,
@@ -259,6 +260,15 @@ define('io.ox/core/tk/selection', [
                 if (id !== undefined && isCheckbox(e) && isSelectable(e)) {
                     apply(id, e);
                 }
+            }
+        };
+
+        dblClickHandler = function (e) {
+            var node, key;
+            if (!e.isDefaultPrevented()) {
+                node = $(this);
+                key = node.attr('data-obj-id');
+                self.trigger('selection:doubleclick', key);
             }
         };
 
@@ -931,6 +941,7 @@ define('io.ox/core/tk/selection', [
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
             .on('click', '.selectable', clickHandler)
+            .on('dblclick', '.selectable', dblClickHandler)
             .on('tap', '.selectable', touchHandler)
             .on('focus', '.selectable', function () {
                 container.addClass('has-focus');
