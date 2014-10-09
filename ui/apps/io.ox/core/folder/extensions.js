@@ -34,7 +34,7 @@ define('io.ox/core/folder/extensions',
             api.get(INBOX),
             // sent, drafts, spam, trash, archive
             // default0 is alternative for IMAP server that list standard folders below INBOX
-            api.list(INBOX), api.list('default0')
+            api.list('default0'), api.list(INBOX)
         );
     });
 
@@ -137,7 +137,7 @@ define('io.ox/core/folder/extensions',
                     //empty: false,
                     filter: function (id, model) {
                         // exclude standard folder
-                        return !account.isStandardFolder(model.id);
+                        return !account.isStandardFolder(model.id) && model.id !== 'default0/virtual'; // dovecot's special "all" folder
                     },
                     folder: 'default0',
                     headless: true,
