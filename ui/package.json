@@ -8,18 +8,18 @@
   "optionalDependencies": {
     "assemble": "^0.4.17",
     "grunt-jscs": "^0.7.1",
-    "open-xchange-shared-grunt-config": "^0.7.0",
+    "open-xchange-shared-grunt-config": "^0.8.0",
     "underscore": "^1.6.0"
   },
   "devDependencies": {
     "appserver": "^0.3.0",
-    "grunt-contrib-connect": "^0.7.1",
+    "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-curl": "~1.4.0",
+    "grunt-curl": "~2.0.3",
     "grunt-devtools": "~0.2.0",
     "grunt-karma": "^0.8.2",
-    "grunt-modernizr": "~0.5.2",
-    "grunt-zip": "~0.13.0",
+    "grunt-modernizr": "~0.6.0",
+    "grunt-zip": "~0.15.0",
     "karma": "^0.12.2",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.2",
@@ -32,7 +32,7 @@
     "mocha": "^1.18.2",
     "q": "~1.0.0",
     "sinon": "~1.10.0",
-    "time-grunt": "^0.3.1"
+    "time-grunt": "^1.0.0"
   },
   "engines": {
     "node": ">=0.10"
