@@ -158,7 +158,7 @@ define('io.ox/contacts/mobile-toolbar-actions',
             });
 
             //single select
-            app.grid.selection.on('select', function () {
+            app.grid.selection.on('select pagechange:detailView', function () {
                 var data = app.grid.selection.get();
                 app.updateToolbar(data[0]);
             });
