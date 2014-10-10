@@ -50,11 +50,11 @@ define([
             node.find('input[name="removeDeletedPermanently"]').length.should.be.equal(1);
             node.find('input[name="removeDeletedPermanently"]').parent().text().should.be.equal(gt('Permanently remove deleted emails'));
 
-            node.find('input[name="contactCollectOnMailTransport"]').length.should.be.equal(1);
-            node.find('input[name="contactCollectOnMailTransport"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while sending'));
+            // node.find('input[name="contactCollectOnMailTransport"]').length.should.be.equal(1);
+            // node.find('input[name="contactCollectOnMailTransport"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while sending'));
 
-            node.find('input[name="contactCollectOnMailAccess"]').length.should.be.equal(1);
-            node.find('input[name="contactCollectOnMailAccess"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while reading'));
+            // node.find('input[name="contactCollectOnMailAccess"]').length.should.be.equal(1);
+            // node.find('input[name="contactCollectOnMailAccess"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while reading'));
 
             node.find('input[name="useFixedWidthFont"]').length.should.be.equal(1);
             node.find('input[name="useFixedWidthFont"]').parent().text().should.be.equal(gt('Use fixed-width font for text mails'));
