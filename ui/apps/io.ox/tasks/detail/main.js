@@ -28,7 +28,7 @@ define('io.ox/tasks/detail/main', [
         'show-task': function (app) {
             app.showTask = function (task) {
                 api.get(task).done(function (data) {
-                    var baton = ext.Baton({ data: data, noInlineLinks: true }),
+                    var baton = ext.Baton({ data: data, app: app }),
                         handleDelete = function (e, tasks) {
                             _(tasks).each(function (taskObj) {
                                 if (taskObj.id === baton.data.id && taskObj.folder_id === baton.data.folder_id) {
@@ -42,7 +42,7 @@ define('io.ox/tasks/detail/main', [
                         api.off('delete', handleDelete);
                     });
 
-                    app.getWindowNode().append($('<div class="default-content-padding f6-target container">').attr({
+                    app.getWindowNode().append($('<div class="default-content-padding f6-target task-view-container">').attr({
                         'tabindex': 1,
                         'role': 'complementary',
                         'aria-label': gt('Task Details')
@@ -78,6 +78,7 @@ define('io.ox/tasks/detail/main', [
             if (cid !== undefined) {
                 // called from tasks app
                 obj = _.cid(cid);
+                app.folder.set(obj.folder_id);//needed for inline links to work correctly
                 app.setState({ folder: obj.folder_id, id: obj.id });
                 app.showTask(obj);
                 return;
@@ -85,9 +86,9 @@ define('io.ox/tasks/detail/main', [
 
             // deep-link
             obj = app.getState();
-            cid = _.cid(obj);
 
             if (obj.folder && obj.id) {
+                app.folder.set(obj.folder);//needed for inline links to work correctly
                 app.showTask(obj);
             }
         });

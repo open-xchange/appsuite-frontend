@@ -204,7 +204,7 @@ define('io.ox/tasks/actions', [
         },
         multiple: function (list, baton) {
 
-            var vgrid = baton.grid || (baton.app && baton.app.getGrid());
+            var vgrid = baton.grid || (baton.app && baton.app.getGrid && baton.app.getGrid());
 
             // shared?
             var shared = _([].concat(list)).reduce(function (memo, obj) {

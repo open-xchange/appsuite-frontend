@@ -45,10 +45,10 @@ define('io.ox/tasks/view-detail', [
                 })
                 .addClass('tasks-detailview');
             baton.interpretedData = task;
-            if (!baton.noInlineLinks) {
-                // inline links
-                ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
-            }
+
+            // inline links
+            ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
+
             //content
             ext.point('io.ox/tasks/detail-view').invoke('draw', node, baton);
 
