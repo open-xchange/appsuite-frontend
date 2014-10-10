@@ -46,11 +46,9 @@ define('plugins/portal/xing/activities', [
     };
 
     very_short_middle_ellipsis = function (text, options) {
-        console.log('very_short_middle_ellipsis', text, options);
         if (!options || !options.limitLength) {
             return text;
         }
-        console.log('Shortened: ', _.ellipsis(text, { max: 20, charpos: 'middle' }));
         return _.ellipsis(text, { max: 30, charpos: 'middle' });
 
     };
