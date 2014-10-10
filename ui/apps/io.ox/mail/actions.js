@@ -477,14 +477,15 @@ define('io.ox/mail/actions',
         id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
-            var context = e.context,
+            var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = (/\.vcf$/i).test(context.filename),
                 isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
                 isDirectoryType = (/^text\/directory/i).test(context.content_type);
             return  (hasRightSuffix && isDirectoryType) || isVCardType;
         },
         action: function (baton) {
-            var attachment = baton.data;
+            var attachment = _.isArray(baton.data) ? _.first(baton.data) : baton.data;
+
             require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
                 conversionAPI.convert({
                     identifier: 'com.openexchange.mail.vcard',
@@ -537,14 +538,15 @@ define('io.ox/mail/actions',
         id: 'ical',
         capabilities: 'calendar',
         requires: function (e) {
-            var context = e.context,
+            var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
                 isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
                 isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
-            var attachment = baton.data;
+            var attachment = _.isArray(baton.data) ? _.first(baton.data) : baton.data;
+
             require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
                 conversionAPI.convert({
                     identifier: 'com.openexchange.mail.ical',
