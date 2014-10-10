@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-22 17:14+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2014-10-10 08:16+0000\n"
+"Last-Translator: testuser <mk@open-xchange.com>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.5\n"
-"X-POOTLE-MTIME: 1410268670.000000\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1412929005.000000\n"
 
 #. File size
 #. %1$d is the number
@@ -695,10 +695,9 @@ msgstr "Teilnehmer/Ressource hinzufügen"
 
 #: apps/io.ox/files/share/view.js:152 module:io.ox/files
 #: apps/io.ox/files/share/view.js:159
-#, fuzzy
 #| msgid "No recipients"
 msgid "Add recipients ..."
-msgstr "Keine Empfänger"
+msgstr "Empfänder hinzufügen ..."
 
 #: apps/io.ox/mail/settings/signatures/register.js:102 module:io.ox/mail
 msgid "Add signature"
@@ -783,7 +782,6 @@ msgid "Advanced Settings"
 msgstr "Erweiterte Einstellungen"
 
 #: apps/io.ox/files/share/view.js:257 module:io.ox/files
-#, fuzzy
 #| msgid "Advanced Settings"
 msgid "Advanced options"
 msgstr "Erweiterte Einstellungen"
@@ -1414,10 +1412,9 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "Es wird aufgeräumt... Dies kann eine Weile dauern."
 
 #: apps/io.ox/search/autocomplete/extensions.js:192 module:io.ox/core
-#, fuzzy
 #| msgid "User fields"
 msgid "Clear field"
-msgstr "Benutzerdefinierte Felder"
+msgstr "Feld leeren"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1434,7 +1431,7 @@ msgstr "Zum Verlassen der Hilfeseiten klicken Sie hier"
 
 #: apps/plugins/portal/xing/register.js:306 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
-msgstr ""
+msgstr "Hier klicken, um mit Xing wieder zu verbinden und Aktivitäten zu sehen."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:501
 #: module:io.ox/calendar/edit/main
@@ -1818,6 +1815,9 @@ msgid ""
 "Create a link to copy and paste in an email, instant messenger or social "
 "network. Please note that anyone who gets the link can access the share."
 msgstr ""
+"Link zum Kopieren und Einfügen in EMails, Instant Messenger oder Sozialen "
+"Netzwerken anlegen. Bitte beachten Sie, dass jeder mit dem Link auf die "
+"Freigabe zugreifen kann."
 
 #: apps/io.ox/calendar/edit/extensions.js:49 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:148 apps/io.ox/calendar/edit/main.js:299
@@ -2648,10 +2648,9 @@ msgstr "Endet am"
 
 #: apps/io.ox/files/share/view.js:305 module:io.ox/files
 #: apps/io.ox/files/share/view.js:308
-#, fuzzy
 #| msgid "Password"
 msgid "Enter Password"
-msgstr "Passwort"
+msgstr "Passwort eingeben"
 
 #: apps/io.ox/editor/main.js:142 module:io.ox/editor
 #: apps/io.ox/editor/main.js:145
@@ -2790,7 +2789,7 @@ msgstr "Zeitrahmen um einen Monat erweitern"
 
 #: apps/io.ox/files/share/view.js:349 module:io.ox/files
 msgid "Expires in"
-msgstr ""
+msgstr "Läuft ab nach"
 
 #: apps/io.ox/core/export/export.js:103 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:281
@@ -2910,7 +2909,6 @@ msgid "Favorited"
 msgstr "Bevorzugt"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
 #| msgid "Favorite"
 msgid "Favorites"
 msgstr "Favoriten"
@@ -3202,10 +3200,9 @@ msgid "Get %s"
 msgstr "%s abrufen"
 
 #: apps/io.ox/files/share/view.js:47 module:io.ox/files
-#, fuzzy
 #| msgid "Direct link"
 msgid "Get a link"
-msgstr "Direkter Link"
+msgstr "Link erzeugen"
 
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
@@ -3535,16 +3532,17 @@ msgid "Invite"
 msgstr "Einladen"
 
 #: apps/io.ox/files/share/view.js:46 module:io.ox/files
-#, fuzzy
 #| msgid "Invite to %s"
 msgid "Invite people"
-msgstr "Einladen zu %s"
+msgstr "Leute einladen"
 
 #: apps/io.ox/files/share/view.js:34 module:io.ox/files
 msgid ""
 "Invite people via email. Every recipient will get an individual link to "
 "access the shared files."
 msgstr ""
+"Leute per E-Mail einladen. Jeder Empfänger erhält einen individuellen Link "
+"für den Zugriff auf die freigegebenen Dateien."
 
 #: apps/plugins/xing/main.js:123 module:plugins/portal
 #: apps/plugins/xing/main.js:130 apps/plugins/xing/main.js:138
@@ -4008,10 +4006,9 @@ msgstr "Mittlere Priorität"
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/view.js:229 module:io.ox/files
 #: apps/io.ox/files/share/view.js:237
-#, fuzzy
 #| msgid "Description (optional)"
 msgid "Message (optional)"
-msgstr "Beschreibung (optional)"
+msgstr "Nachricht (optional)"
 
 #: apps/io.ox/contacts/edit/view-form.js:119 module:io.ox/contacts
 msgid "Messaging"
@@ -4141,10 +4138,9 @@ msgid "My contact data"
 msgstr "Meine Kontaktdaten"
 
 #: apps/io.ox/core/folder/extensions.js:90 module:io.ox/core
-#, fuzzy
 #| msgid "All folders"
 msgid "My folders"
-msgstr "Alle Ordner"
+msgstr "Meine Ordner"
 
 #: apps/plugins/portal/recentfiles/register.js:35 module:plugins/portal
 msgid "My latest files"
@@ -4745,10 +4741,9 @@ msgid "Password length must be between %1$d and %2$d characters."
 msgstr "Passwortlänge muss zwischen %1$d und %2$d Zeichen liegen."
 
 #: apps/io.ox/files/share/view.js:298 module:io.ox/files
-#, fuzzy
 #| msgid "Upgrade required"
 msgid "Password required"
-msgstr "Upgrade erforderlich"
+msgstr "Password erforderlich"
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
 msgid "Password strength: Good"
@@ -5321,10 +5316,9 @@ msgid "Recently used"
 msgstr "Kürzlich verwendet"
 
 #: apps/io.ox/files/share/view.js:277 module:io.ox/files
-#, fuzzy
 #| msgid "Recipient"
 msgid "Recipients can edit"
-msgstr "Empfänger"
+msgstr "Empfänger darf bearbeiten"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:38 module:io.ox/keychain
 msgid "Recover"
@@ -5863,12 +5857,11 @@ msgstr "Teilen"
 
 #. if only one item -> insert filename / on more than one item -> item count
 #: apps/io.ox/files/actions.js:1052 module:io.ox/files
-#, fuzzy
 #| msgid "Share this file"
 msgid "Share the file \"%1$d\""
 msgid_plural "Share %1$d items"
-msgstr[0] "Datei freigeben"
-msgstr[1] "Datei freigeben"
+msgstr[0] "Datei \"%1$d\" freigeben"
+msgstr[1] "%1$d Elemente freigeben"
 
 #: apps/io.ox/files/actions.js:1226 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:72
@@ -6176,10 +6169,9 @@ msgstr "Arbeitszeit beginnt um"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
 #| msgid "Search"
 msgid "Start search"
-msgstr "Suchen"
+msgstr "Suche starten"
 
 #: apps/io.ox/calendar/edit/extensions.js:126 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:485 module:io.ox/core
@@ -6807,10 +6799,9 @@ msgstr "Es trat ein Problem mit Xing auf. Die Fehlermeldung lautet: \"%s\""
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
 #| msgid "Show appointment details"
 msgid "There was no appointment data to import"
-msgstr "Termindetails anzeigen"
+msgstr "Es gab keine importierbaren Termindaten"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -6961,10 +6952,9 @@ msgstr "Dieser Ordner enthält keine Abonnements"
 
 #: apps/io.ox/core/folder/extensions.js:416 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:941
-#, fuzzy
 #| msgid "This folder has no subscriptions"
 msgid "This folder has subscriptions"
-msgstr "Dieser Ordner enthält keine Abonnements"
+msgstr "Dieser Ordner enthält Abonnements"
 
 #: apps/io.ox/core/sub/settings/pane.js:365 module:io.ox/core/sub
 msgid ""
@@ -7512,31 +7502,27 @@ msgstr "Willkommen bei %s"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
 #| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "Zum Kalender hinzufügen"
+msgstr "Willkommen zu Ihrem Kalender"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "Willkommen bei %s"
+msgstr "Willkommen zu Ihren Dateien"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
 #| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "Die Inbox enthält keine E-Mails"
+msgstr "Willkommen zu Ihrem Posteingang"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "Willkommen bei %s"
+msgstr "Willkommen zu Ihren Aufgaben"
 
 #: apps/plugins/core/feedback/register.js:140 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"
@@ -8278,28 +8264,24 @@ msgid "no read permissions"
 msgstr "keine Leseberechtigungen"
 
 #: apps/io.ox/files/share/view.js:329 module:io.ox/files
-#, fuzzy
 #| msgid "Whole day"
 msgid "one day"
-msgstr "Ganzer Tag"
+msgstr "ein Tag"
 
 #: apps/io.ox/files/share/view.js:331 module:io.ox/files
-#, fuzzy
 #| msgid "every month"
 msgid "one month"
-msgstr "jeden Monat"
+msgstr "ein Monat"
 
 #: apps/io.ox/files/share/view.js:330 module:io.ox/files
-#, fuzzy
 #| msgid "in one week"
 msgid "one week"
-msgstr "in einer Woche"
+msgstr "eine Woche"
 
 #: apps/io.ox/files/share/view.js:334 module:io.ox/files
-#, fuzzy
 #| msgid "Phone (car)"
 msgid "one year"
-msgstr "Autotelefon"
+msgstr "ein Jahr"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:169 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:174
@@ -8347,10 +8329,9 @@ msgid "show image"
 msgstr "Bild anzeigen"
 
 #: apps/io.ox/files/share/view.js:333 module:io.ox/files
-#, fuzzy
 #| msgid "Months"
 msgid "six months"
-msgstr "Monate"
+msgstr "sechs Monate"
 
 #: apps/io.ox/core/tk/reminder-util.js:76 module:io.ox/core
 msgid "status"
@@ -8383,10 +8364,9 @@ msgid "this morning"
 msgstr "heute Morgen"
 
 #: apps/io.ox/files/share/view.js:332 module:io.ox/files
-#, fuzzy
 #| msgid "every month"
 msgid "three months"
-msgstr "jeden Monat"
+msgstr "drei Monate"
 
 #: apps/io.ox/tasks/util.js:195 module:io.ox/tasks
 msgid "tomorrow"
