@@ -562,6 +562,18 @@ define('io.ox/contacts/main', [
             });
         },
 
+        /*
+         * Add support for selection:
+         */
+        'selection-doubleclick': function (app) {
+            // detail app does not make sense on small devices
+            // they already see tasks in full screen
+            if (_.device('small')) return;
+            app.grid.selection.on('selection:doubleclick', function (e, key) {
+                ox.launch('io.ox/contacts/detail/main', { cid: key });
+            });
+        },
+
         'delete:contact-mobile': function (app) {
             if (_.device('!small')) return;
             api.on('delete', function () {
