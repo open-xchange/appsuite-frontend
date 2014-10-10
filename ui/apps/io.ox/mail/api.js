@@ -672,7 +672,7 @@ define('io.ox/mail/api', [
 
         prepareRemove(list, all);
 
-        return transfer('move', list, targetFolderId);
+        return transfer('update', list, targetFolderId);
     };
 
     /**
