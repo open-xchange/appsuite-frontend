@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-10 08:16+0000\n"
+"PO-Revision-Date: 2014-10-10 08:19+0000\n"
 "Last-Translator: testuser <mk@open-xchange.com>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1412929005.000000\n"
+"X-POOTLE-MTIME: 1412929140.000000\n"
 
 #. File size
 #. %1$d is the number
@@ -1081,7 +1081,7 @@ msgstr "E-Mail-Benachrichtigung nach Bestätigen/Ablehnen automatisch löschen?"
 #. This only applies for plain text messages, so please keep this information in translations
 #: apps/io.ox/mail/settings/pane.js:244 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
-msgstr "Automatischer Zeilenumbruch in Klartextnachrichten nach Zeichen:"
+msgstr "Automatischer Textumbruch in Klartextnachrichten nach Zeichen:"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:133 module:io.ox/core
 msgid "Average time: %1$s ms"
@@ -5657,7 +5657,7 @@ msgstr "Gespeichert unter"
 
 #: apps/io.ox/mail/api.js:1046 module:io.ox/mail
 msgid "Saved mail attachment"
-msgstr "E-Mail-Anlage wurde gespeichert"
+msgstr "E-Mail-Anlage gespeichert"
 
 #: apps/io.ox/core/api/attachment.js:208 module:io.ox/core
 msgid "Saved task attachment"
