@@ -160,6 +160,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
             className: 'io-ox-mailfilter-edit',
+
+            initialize: function (opt) {
+                this.listView = opt.listView;
+            },
+
             render: function () {
 
                 var baton = ext.Baton({ model: this.model, view: this });
@@ -292,7 +297,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id)) {
                         self.model.set('id', id);
-                        self.options.listView.collection.add(self.model);
+                        self.listView.collection.add(self.model);
                     }
                     self.dialog.close();
                 }, self.dialog.idle);
