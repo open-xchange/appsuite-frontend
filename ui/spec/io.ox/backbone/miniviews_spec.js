@@ -393,7 +393,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
             });
 
             it('has a getContainer function ', function () {
-                 expect(this.view.getContainer).to.be.a('function');
+                expect(this.view.getContainer).to.be.a('function');
             });
 
             it('should listen to the custom container', function () {
