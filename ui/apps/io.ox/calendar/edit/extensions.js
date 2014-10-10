@@ -96,7 +96,7 @@ define('io.ox/calendar/edit/extensions', [
             );
             input.on('keyup', function () {
                 // update title on keyup
-                self.model.set('title', $(this).val());
+                self.model.trigger('keyup:title', $(this).val());
             });
         }
     });
@@ -233,7 +233,7 @@ define('io.ox/calendar/edit/extensions', [
                     new mini.SelectView({
                         list: _.map(calendarUtil.getReminderOptions(), function (key, val) { return { label: key, value: val }; }),
                         name: 'alarm',
-                        model: this.model,
+                        model: this.baton.model,
                         id: guid,
                         className: 'form-control'
                     }).render().$el
@@ -265,7 +265,7 @@ define('io.ox/calendar/edit/extensions', [
                     new mini.SelectView({
                         list: options,
                         name: 'shown_as',
-                        model: this.model,
+                        model: this.baton.model,
                         id: guid,
                         className: 'form-control'
                     }).render().$el
