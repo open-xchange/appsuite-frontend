@@ -18,6 +18,7 @@ define('io.ox/calendar/edit/template',
      'io.ox/contacts/util',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
+     'io.ox/backbone/mini-views',
      'io.ox/backbone/mini-views/datepicker',
      'io.ox/core/tk/attachments',
      'io.ox/calendar/edit/recurrence-view',
@@ -25,7 +26,7 @@ define('io.ox/calendar/edit/template',
      'io.ox/participants/views',
      'settings!io.ox/calendar',
      'io.ox/core/capabilities'
-    ], function (ext, gt, calendarUtil, contactUtil, views, forms, DatePicker, attachments, RecurrenceView, api, pViews, settings, capabilities) {
+    ], function (ext, gt, calendarUtil, contactUtil, views, forms, mini, DatePicker, attachments, RecurrenceView, api, pViews, settings, capabilities) {
 
     'use strict';
 
@@ -112,12 +113,20 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.InputField({
         id: 'title',
         index: 200,
-        className: 'col-xs-12',
-        labelClassName: 'control-label',
-        control: '<input type="text" class="form-control">',
-        attribute: 'title',
-        label: gt('Subject'),
-        changeAppTitleOnKeyUp: true
+        render: function () {
+            var self = this, input;
+            this.$el.append(
+                $('<label class="control-label col-xs-12">').append(
+                    $.txt(gt('Subject')),
+                    input = new mini.InputView({ name: 'title', model: self.model }).render().$el,
+                    new mini.ErrorView({ name: 'title', model: self.model }).render().$el
+                )
+            );
+            input.on('keyup', function () {
+                // update title on keyup
+                self.model.trigger('keyup:title', $(this).val());
+            });
+        }
     }));
 
     // location input
