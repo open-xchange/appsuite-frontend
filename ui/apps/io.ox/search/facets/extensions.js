@@ -247,20 +247,25 @@ define('io.ox/search/facets/extensions',
             },
 
             facetName: function (baton, value, facet) {
-                var type;
+                var node = $('<span>').addClass('name'),
+                    detail = (value.item || {}).detail,
+                    label = value.name || (value.item || {}).name,
+                    optionslabel;
 
-                // TYPE 3: use option label instead of value label
-                if (facet.style === 'exclusive' && value._compact)
-                    type = util.getOptionLabel(value.options, value._compact.option);
+                if (detail) {
+                    // example: searchtem <i>in description</i>
+                    node.append(
+                        $.txt(value.item.name + '\u00A0'),
+                        $('<i>').text(detail)
+                    );
+                } else {
+                    // TYPE 3: use option label instead of value label
+                    if (facet.style === 'exclusive' && value._compact)
+                        optionslabel = util.getOptionLabel(value.options, value._compact.option);
+                    node.text(optionslabel || label || gt('All'));
+                }
 
-                if ((value.item || {}).detail)
-                    type = value.item.name +  ' <i>' + value.item.detail + '</i>';
-
-                this.find('label').append(
-                    $('<span>')
-                        .addClass('name')
-                        .text(type || value.name || (value.item || {}).name || gt('All'))
-                );
+                this.find('label').append(node);
             },
 
             facetRemove: function (baton, value, facet, fn) {
