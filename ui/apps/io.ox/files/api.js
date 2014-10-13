@@ -326,23 +326,6 @@ define('io.ox/files/api', [
     // publish tracker
     api.tracker = tracker;
 
-    // deprecated/unused? (31f5a4a, b856ca5)
-    // api.getUpdates = function (options) {
-    //     var params = {
-    //         action: 'updates',
-    //         columns: '20,23,1,700,702,703,706',
-    //         folder: options.folder,
-    //         timestamp: options.timestamp,
-    //         ignore: 'deleted'
-    //         /*sort: '700',
-    //         order: 'asc'*/
-    //     };
-    //     return http.GET({
-    //         module: 'files',
-    //         params: params
-    //     });
-    // };
-
     api.caches.versions = new cache.SimpleCache('files-versions');
 
     /**
