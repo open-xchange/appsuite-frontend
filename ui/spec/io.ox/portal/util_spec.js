@@ -21,7 +21,7 @@ define(['io.ox/portal/util', 'settings!io.ox/portal'], function (util, settings)
             it('should return an array of specific length depending on current settings value', function () {
                 //this test used to fail because of some race condition. if this still fails,
                 //make this async? seems to work fine, at the moment
-                var widgets = settings.get('widgets/user'),
+                var widgets = settings.get('widgets/user', {}),
                     length = widgets.length || 0,
                     result = util.getWidgets(undefined).length;
                 expect(result).to.equal(length);

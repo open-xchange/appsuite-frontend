@@ -45,6 +45,8 @@ define('plugins/portal/oxdriveclients/register', [
         if (isAndroid) return ['Windows', 'iOS', 'Mac OS'];
         if (isIOS) return ['Mac OS', 'Windows', 'Android'];
         if (isMac) return ['iOS', 'Android', 'Windows'];
+        // fallback for others
+        return ['Android', 'iOS', 'Mac OS', 'Windows'];
     }
 
     function getShopLinkWithImage(platform, url) {

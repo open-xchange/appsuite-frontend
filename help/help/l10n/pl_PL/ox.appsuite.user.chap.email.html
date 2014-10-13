@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -38,7 +41,7 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 Wyświetlanie lub zapisywanie załączników wiadomości e-mail</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 Wysyłanie wiadomości e-mail</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.new.html">5.4.1 Wysyłanie nowej wiadomości e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.new.html">5.4.1 Wysyłanie nowej wiadomości e-mail.</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.reply.html">5.4.2 Odpowiadanie na wiadomości e-mail</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.forward.html">5.4.3 Przesyłanie wiadomości e-mail dalej</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.send.autoforward.html">5.4.4 Automatyczne przesyłanie wiadomości e-mail dalej</a></span></dt>
@@ -58,37 +61,40 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 Zapisywanie wiadomości</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 Importowanie wiadomości e-mail</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.print.html">5.5.12 Drukowanie wiadomości e-mail</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.13 Usuwanie wiadomości e-mail</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.14 Czyszczenie folderów poczty e-mail</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.15 Edycja wielu wiadomości e-mail jednocześnie</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.16 Korzystanie z ujednoliconej poczty</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.17 Korzystanie z filtrów poczty e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.5.13 Archiwizacja wiadomości e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.14 Usuwanie wiadomości e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.15 Czyszczenie folderów poczty e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.16 Edycja wielu wiadomości e-mail jednocześnie</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.17 Korzystanie z ujednoliconej poczty</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.18 Korzystanie z filtrów poczty e-mail</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.6 Wiadomości e-mail w ramach zespołu</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.search.html">5.6 Wyszukiwanie wiadomości e-mail</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.7 Wiadomości e-mail w ramach zespołu</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.6.1 Udostępnianie wiadomości e-mail</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.6.2 Subskrybowanie folderów wiadomości e-mail</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.6.3 Zapraszanie wszystkich adresatów wiadomości e-mail na spotkanie</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.6.4 Zapisywanie wszystkich adresatów wiadomości e-mail jako listy dystrybucyjnej</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.7.1 Udostępnianie wiadomości e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.7.2 Subskrybowanie folderów wiadomości e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.7.3 Zapraszanie wszystkich adresatów wiadomości e-mail na spotkanie</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.7.4 Zapisywanie wszystkich adresatów wiadomości e-mail jako listy dystrybucyjnej</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.7 Konta e-mail</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.8 Konta e-mail</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.7.1 Konfiguracja i edycja ustawień kont e-mail</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.7.2 Korzystanie z zewnętrznego konta e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.8.1 Konfiguracja i edycja ustawień kont e-mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.8.2 Korzystanie z zewnętrznego konta e-mail</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.8 Ustawienia poczty e-mail</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.9 Ustawienia poczty e-mail</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm139943755953152"></a><a class="indexterm" name="idm139943756822464"></a><a class="indexterm" name="idm139943752868384"></a><a class="indexterm" name="idm139943757263520"></a><div class="concept">
-<a name="ox.appsuite.user.concept.email"></a><p>Dowiedz się, jak używać aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span>.</p>
+<a class="indexterm" name="idm139961883715792"></a><a class="indexterm" name="idm139961883605136"></a><a class="indexterm" name="idm139961882215712"></a><a class="indexterm" name="idm139961883858096"></a><div class="concept">
+<a name="ox.appsuite.user.concept.email"></a><p>Dowiedz się, jak pracować z aplikacją <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span>.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail">Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. Wyświetlanie wiadomości e-mail">Wyszukiwanie i wyświetlanie</a> wiadomości e-mail</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Składniki aplikacji E-mail"><span class="phrase">Składniki aplikacji <span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. Wyświetlanie wiadomości e-mail">Wyświetlanie</a> wiadomości e-mail</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.html" title="5.4. Wysyłanie wiadomości e-mail">Wysyłanie</a> wiadomości e-mail</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.html" title="5.5. Porządkowanie wiadomości e-mail">Zarządzanie</a> wiadomościami e-mail</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.6. Wiadomości e-mail w ramach zespołu">Udostępnianie wiadomości e-mail innym <span class="guilabel"><strong>użytkownikom</strong></span></a></p></li>
-<li class="listitem"><p>Uzyskiwanie dostępu do <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.7. Konta e-mail">zewnętrznych kont pocztowych</a> założonych u innych usługodawców</p></li>
-<li class="listitem"><p>Korzystanie z <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.8. Ustawienia poczty e-mail">ustawień aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. Wyszukiwanie wiadomości e-mail">Wyszukiwanie</a> wiadomości e-mail</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.7. Wiadomości e-mail w ramach zespołu">Udostępnianie wiadomości e-mail innym <span class="guilabel"><strong>użytkownikom</strong></span></a></p></li>
+<li class="listitem"><p>Uzyskiwanie dostępu do <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.8. Konta e-mail">zewnętrznych kont pocztowych</a> założonych u innych usługodawców</p></li>
+<li class="listitem"><p>Używanie <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. Ustawienia poczty e-mail">ustawień aplikacji <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span></a></p></li>
 </ul></div>
 <p>
   </p>

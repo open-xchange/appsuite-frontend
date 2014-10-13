@@ -160,15 +160,24 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             this.after(offset, params, data);
         },
 
+        virtual: function () {
+            return false;
+        },
+
         fetch: function (params) {
 
             var module = this.module,
                 key = module + '/' + $.param(params) + '&session=' + ox.session,
-                rampup = ox.rampup[key];
+                rampup = ox.rampup[key],
+                virtual = this.virtual(params);
 
             if (rampup) {
                 delete ox.rampup[key];
-                return $.Deferred().resolve(rampup);
+                return $.when(rampup);
+            }
+
+            if (virtual) {
+                return $.when(virtual);
             }
 
             return http.wait().then(function () {

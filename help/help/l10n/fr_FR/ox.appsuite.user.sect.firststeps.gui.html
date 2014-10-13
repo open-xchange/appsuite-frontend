@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -29,20 +32,21 @@
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.firststeps.gui"></a>3.1. L'interface utilisateur</h2></div></div></div>
-<a class="indexterm" name="idm139841089442112"></a><div class="concept">
+<a class="indexterm" name="idm140291081196736"></a><div class="concept">
 <a name="ox.appsuite.user.reference.gui"></a><p>L'interface utilisateur inclut les composants suivants :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Une <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.menubar" title="Barre de menu">barre de menu</a> en haut.</p></li>
+<li class="listitem"><p>Du côté gauche, sous la barre de menu, apparaît la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.searchbar" title="Barre de recherche">barre de recherche</a>. Elle peut être activée ou désactivée conjointement avec l'arborescence des dossiers.</p></li>
 <li class="listitem"><p>L'<a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.foldertree" title="Arborescence des dossiers">arborescence des dossiers</a> peut être activée sur le côté gauche.</p></li>
-<li class="listitem"><p>À droite, sous la barre de menu, une <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.toolbar" title="Barre d'outils">barre d'outils</a> est affichée. Elle contient des fonctions spécifiques à l'application et des fonctions permettant de choisir la vue dans la zone d'affichage.</p></li>
-<li class="listitem"><p>L'espace restant est utilisé pour la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.content" title="Zone d'affichage">zone d'affichage</a>.</p></li>
-<li class="listitem"><p>Selon l'action réalisée, une <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Fenêtres">nouvelle fenêtre</a> ou la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.notificationarea" title="Zone de notification">zone de notification</a> recouvrent la zone d'affichage.</p></li>
-<li class="listitem"><p>Un texte cliquable apparaît en bleu.</p></li>
+<li class="listitem"><p>À droite, sous la barre de menu, apparaît une <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.toolbar" title="Barre d'outils">barre d'outils</a>. Elle contient des fonctions spécifiques à l'application et des fonctions permettant de choisir la vue dans la zone d'affichage.</p></li>
+<li class="listitem"><p>L'espace restant est consacré à la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.content" title="Zone d'affichage">zone d'affichage</a>.</p></li>
+<li class="listitem"><p>Suivant l'action réalisée, la zone d'affichage peut être recouverte par une <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Fenêtres">nouvelle fenêtre</a> ou la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.notificationarea" title="Zone de notification">zone de notification</a>.</p></li>
+<li class="listitem"><p>Un texte sur lequel vous pouvez cliquer apparaît en bleu.</p></li>
 <li class="listitem"><p>Vous pouvez également utiliser le <a class="link" href="ox.appsuite.user.sect.firststeps.keyboard.html#ox.appsuite.user.reference.keyboard">clavier</a> pour accéder aux fonctions de l'interface utilisateur.</p></li>
 </ul></div>
-<p> Les captures d'écran suivantes illustrent l'interface utilisateur en prenant l'application <span class="phrase"><span class="guilabel"><strong>Courriel</strong></span></span> comme exemple.</p>
+<p> Les captures d'écran suivantes illustrent l'interface utilisateur en prenant comme exemplel'application <span class="phrase"><span class="guilabel"><strong>Courriel</strong></span></span>.</p>
 </div>
-<a class="indexterm" name="idm139841090416096"></a><a class="indexterm" name="idm139841090414480"></a><a class="indexterm" name="idm139841090412864"></a><div class="reference">
+<a class="indexterm" name="idm140291080383936"></a><a class="indexterm" name="idm140291080382320"></a><a class="indexterm" name="idm140291082560064"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.menubar"></a><p><b>Barre de menu </b>
         </p>
 <div class="informalfigure">
@@ -50,11 +54,10 @@
 </div>
 <p>Contient les icônes et les boutons suivants :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Des boutons pour lancer des applications comme <span class="phrase"><span class="guilabel"><strong>Courriel</strong></span></span> ou <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span></p></li>
+<li class="listitem"><p>Boutons de lancement d'applications telles que <span class="phrase"><span class="guilabel"><strong>Courriel</strong></span></span> or <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span></p></li>
 <li class="listitem"><p>Selon ce que l'on est en train de faire, des boutons supplémentaires peuvent apparaître, par exemple lorsque l'on rédige un courriel ou lorsque l'on modifie un rendez-vous. </p></li>
-<li class="listitem"><p>L'icône <span class="guibutton"><strong>Chercher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.menubar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> . Ouvre une <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.html#ox.appsuite.user.concept.search">Recherche</a> dans une nouvelle fenêtre. </p></li>
-<li class="listitem"><p>L'icône <span class="guibutton"><strong>Non lus</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span>. L'icône vous informe du nombre de nouveaux objets, par exemple des courriels non lus ou des invitations programmées à des rendez-vous. En cliquant dessus, la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.notificationarea" title="Zone de notification">zone de notification</a> s'ouvre.</p></li>
-<li class="listitem"><p>L'icône <span class="guibutton"><strong>Actualiser</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.refresh"></a><img src="../../images/appsuite_user_icon_refresh.png"></span> . Recharge des objets depuis le serveur. Même sans faire appel à cette fonctionnalité, les objets sont actualisés à intervalles réguliers.</p></li>
+<li class="listitem"><p>L'icône <span class="guibutton"><strong>Non lus</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span>. L'icône vous informe du nombre de nouveaux objets, par exemple les courriels non lus ou les invitations à des rendez-vous programmés. Lorsque vous cliquez dessus, la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.notificationarea" title="Zone de notification">zone de notification</a> s'ouvre.</p></li>
+<li class="listitem"><p>L'icône <span class="guibutton"><strong>Actualiser</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.refresh"></a><img src="../../images/appsuite_user_icon_refresh.png"></span>. Recharge les objets depuis le serveur. Même si vous ne faites pas appel à cette fonctionnalité, les objets sont actualisés à intervalles réguliers.</p></li>
 <li class="listitem">
 <p>L'icône <span class="guibutton"><strong>Menu système</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span>. Ouvre un menu contenant les éléments suivants :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
@@ -70,7 +73,20 @@
 <p>
       </p>
 </div>
-<a class="indexterm" name="idm139841089073248"></a><div class="reference">
+<a class="indexterm" name="idm140291080237040"></a><div class="reference">
+<a name="ox.appsuite.user.reference.gui.searchbar"></a><p><b>Barre de recherche </b>
+        </p>
+<div class="informalfigure">
+<a name="ox.appsuite.user.fig.firststeps.gui.searchbar"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_gui_searchbar.png"></div></div>
+</div>
+<p>Pour afficher la barre de recherche, cliquez sur <span class="guibutton"><strong>Vue</strong></span> dans la barre de fonctions. Activez la <span class="guibutton"><strong>Vue en dossiers</strong></span>. La barre de recherche se situe du côté gauche, sous la barre de menus. Elle comporte les éléments suivants :</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Champ de saisie du terme à rechercher</p></li>
+<li class="listitem"><p>Icône <span class="guilabel"><strong>Chercher</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.searchbar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>. Lance une recherche.</p></li>
+</ul></div>
+<p> Dès que la recherche est activée, l'arborescence des dossiers est partiellement recouverte par les fonctions de recherche. Le résultat de la recherche est présenté dans la liste qui apparaît dans la zone d'affichage. Afin de terminer la recherche, cliquez sur <span class="guibutton"><strong>Fermer la recherche</strong></span>.</p>
+</div>
+<a class="indexterm" name="idm140291080220176"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.toolbar"></a><p><b>Barre d'outils </b>
         </p>
 <div class="informalfigure">
@@ -78,16 +94,19 @@
 </div>
 <p>La barre d'outils est sous la barre de menus. Elle contient les fonctions suivantes : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Boutons pour créer de nouveaux objets, ex : un nouveau courriel ou un nouveau contact.</p></li>
+<li class="listitem">
+<p>Boutons pour créer de nouveaux objets, ex : un nouveau courriel ou un nouveau contact.</p>
+<p>Si vous n'avez pas les droits requis pour créer des objets dans le dossier courant, le bouton est désactivé.</p>
+</li>
 <li class="listitem"><p>Boutons ou icônes d'édition d'objets.</p></li>
 <li class="listitem"><p>En fonction de l'app, plusieurs boutons ou icônes spécifiques à l'app peuvent être disponibles.</p></li>
-<li class="listitem"><p>Bouton <span class="guilabel"><strong>Plus</strong></span>. Contient les fonctions spécifiques à l'app pour l'organisation des objets.</p></li>
-<li class="listitem"><p>Bouton <span class="guilabel"><strong>Vue</strong></span>. Contient les fonctions de contrôle de la vue dans la <a class="link" href="ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.content" title="Zone d'affichage">zone d'affichage</a> et d'ouverture ou de fermeture de l'<a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.foldertree" title="Arborescence des dossiers">arborescence des dossiers</a>.</p></li>
+<li class="listitem"><p>L'icône <span class="guilabel"><strong>Plus</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>. Contient des fonctions spécifiques à l'application pour organiser les objets.</p></li>
+<li class="listitem"><p>Bouton <span class="guilabel"><strong>Vue</strong></span>. Contient les fonctions de contrôle de la vue dans la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.content" title="Zone d'affichage">zone d'affichage</a> et d'ouverture ou de fermeture de l'<a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.foldertree" title="Arborescence des dossiers">arborescence des dossiers</a>.</p></li>
 </ul></div>
 <p> 
       </p>
 </div>
-<a class="indexterm" name="idm139841089057200"></a><a class="indexterm" name="idm139841089055568"></a><a class="indexterm" name="idm139841089053936"></a><div class="reference">
+<a class="indexterm" name="idm140291080200304"></a><a class="indexterm" name="idm140291080198672"></a><a class="indexterm" name="idm140291080197040"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.foldertree"></a><p><b>Arborescence des dossiers </b>
         </p>
 <div class="informalfigure">
@@ -95,13 +114,13 @@
 </div>
 <p>Afin d'afficher l'arborescence des dossiers, cliquez sur <span class="guibutton"><strong>Vue</strong></span> dans la barre de fonctions. Activez la <span class="guibutton"><strong>Vue dossier</strong></span>. Les informations suivantes sont affichées dans l'arborescence des dossiers :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>une liste triée par ordre alphabétique des dossiers propres aux différentes applications</p></li>
+<li class="listitem"><p>les dossiers spécifiques à l'application</p></li>
 <li class="listitem">
 <p>en fonction de l'application, des sections pour les dossiers privés, publics et partagés</p>
 <p><span class="phrase"><strong>Remarque :</strong></span> selon la façon dont le logiciel de travail collaboratif a été configuré, il se peut que ces sections ne soient pas affichées s'il n'y a pas de dossier public ou partagé.</p>
 </li>
 <li class="listitem">
-<p>L'icône <span class="guibutton"><strong>Actions sur le dossier</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> à côté du dossier sélectionné. Elle renferme des fonctions permettant d'<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="12.2. Dossiers">organiser les dossiers</a>. En fonction du dossier, d'autres fonctionnalités peuvent être offertes.</p>
+<p>L'icône <span class="guibutton"><strong>Actions sur le dossier</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> à côté du dossier sélectionné. Elle renferme des fonctions permettant d'<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Dossiers">organiser les dossiers</a>. Suivant le dossier, d'autres fonctionnalités peuvent être offertes.</p>
 <p><span class="phrase"><strong>Conseil :</strong></span> vous pouvez également accéder aux actions sur le dossier en cliquant avec le bouton droit de la souris sur un dossier.</p>
 </li>
 <li class="listitem"><p>En fonction de l'app, des fonctions supplémentaires peuvent être disponibles.</p></li>
@@ -110,7 +129,7 @@
 <p>
       </p>
 </div>
-<a class="indexterm" name="idm139841089025104"></a><a class="indexterm" name="idm139841089023488"></a><div class="reference">
+<a class="indexterm" name="idm140291080168080"></a><a class="indexterm" name="idm140291080166464"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.content"></a><p><b>Zone d'affichage </b>
         </p>
 <div class="informalfigure">
@@ -123,7 +142,7 @@
 </ul></div>
 <p>Vous pouvez modifier la vue dans la zone d'affichage en utilisant le bouton <span class="guibutton"><strong>Vue</strong></span> dans la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.toolbar" title="Barre d'outils">barre d'outils</a>. Un clic sur un objet dans la zone d'affichage ouvre une <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Fenêtres">fenêtre</a>.</p>
 </div>
-<a class="indexterm" name="idm139841089010432"></a><a class="indexterm" name="idm139841089008816"></a><div class="reference">
+<a class="indexterm" name="idm140291080153408"></a><a class="indexterm" name="idm140291080151792"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.popup"></a><p><b>Fenêtres </b>
         </p>
 <div class="informalfigure">
@@ -138,7 +157,7 @@
 </ul></div>
 <p> Ces données relatives à cette personnes sont désignées par le terme <span class="guilabel"><strong>vue en halo</strong></span>. En cliquant sur certains éléments de la fenêtre, une fenêtre supplémentaire peut apparaître. Pour fermer cette fenêtre, cliquez sur <span class="guibutton"><strong>Fermer</strong></span> dans le coin en haut à droite. Pour fermer toutes les fenêtres qui sont apparues, cliquez sur <span class="guibutton"><strong>Tout fermer</strong></span>.</p>
 </div>
-<a class="indexterm" name="idm139841088992800"></a><div class="reference">
+<a class="indexterm" name="idm140291080135776"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.notificationarea"></a><p><b>Zone de notification </b>
         </p>
 <div class="informalfigure">
@@ -151,14 +170,14 @@
 <li class="listitem"><p>les tâches en attente</p></li>
 <li class="listitem"><p>les tâches dont la date d'échéance est passée</p></li>
 </ul></div>
-<p> Pour ouvrir la zone de notification, cliquez sur l'icône <span class="guibutton"><strong>Non lus</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.notificationarea.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span> à droite de la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.menubar" title="Barre de menu">barre de menu</a>. Les actions suivantes sont possibles : </p>
+<p> Pour ouvrir la zone de notification, cliquez sur l'icône <span class="guibutton"><strong>Badge « Non lus »</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.notificationarea.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span> à droite de la <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.menubar" title="Barre de menu">barre de menu</a>. Les actions suivantes sont possibles : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Pour lire un nouveau courriel, cliquez dessus.</p></li>
 <li class="listitem"><p>Pour ouvrir la boîte de réception, cliquez sur <span class="guilabel"><strong>Afficher la boîte de réception</strong></span>.</p></li>
 <li class="listitem"><p>Pour confirmer de nouveaux rendez-vous, cliquez sur le bouton <span class="guibutton"><strong>Confirmer</strong></span>.</p></li>
 <li class="listitem"><p>Pour cacher les informations relatives à certains objets, cliquez sur l'icône <span class="guibutton"><strong>Fermer</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.notification.close"></a><img src="../../images/appsuite_user_icon_notification_close.png"></span> à côté du groupe.</p></li>
 </ul></div>
-<p> Pour fermer la zone de notification, cliquez à nouveau sur l'icône <span class="guibutton"><strong>Non lus</strong></span>.</p>
+<p> Pour fermer la zone de notification, cliquez à nouveau sur l'icône <span class="guibutton"><strong>Badge « Non lus »</strong></span>.</p>
 </div>
 </div>
 </body>

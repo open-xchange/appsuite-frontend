@@ -249,11 +249,16 @@ define('io.ox/mail/api', [
     };
 
     api.getAll = function (options, useCache) {
-        // support for from-to
         options = options || {};
+
+        // special handling for top-level mail account folders
+        if (/^default\d+$/.test(options.folder)) return $.when([]);
+
+        // support for from-to
         if (options.sort === 'from-to') {
             options.sort = accountAPI.is('sent|drafts', options.folder) ? 604 : 603;
         }
+
         return getAll.call(this, options, useCache);
     };
 
@@ -493,6 +498,10 @@ define('io.ox/mail/api', [
                 tree: '1'
             },
             data: [id]
+        })
+        .done(function () {
+            folderAPI.reload(id);
+            api.trigger('refresh.all');
         });
     };
 
@@ -1483,6 +1492,11 @@ define('io.ox/mail/api', [
 
         // add full models to pool
         api.pool.add('detail', thread);
+    };
+
+    api.collectionLoader.virtual = function (options) {
+        // special handling for top-level mail account folders (e.g. bug 34818)
+        if (/^default\d+$/.test(options.folder)) return [];
     };
 
     api.collectionLoader.each = function (obj, index, offset, params) {

@@ -162,9 +162,7 @@ define('io.ox/core/tk/dialogs', [
                 }
 
                 // Fix for #33214 - TypeError: Attempted to assign to readonly property.
-                if (!_.browser.Safari) {
-                    e.processed = true;
-                }
+                if (_.isObject(e) && !_.browser.Safari) e.processed = true;
             },
 
             fnKey = function (e) {

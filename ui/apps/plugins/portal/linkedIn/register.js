@@ -93,6 +93,20 @@ define('plugins/portal/linkedIn/register', [
         return _(list).some(filterActivity);
     }
 
+    function renderActivities(node, list) {
+
+        if (!_.isArray(list)) return;
+        if (!hasActivities(list)) return;
+
+        node.append(
+            $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
+        );
+
+        _(list).each(function (activity) {
+            ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
+        });
+    }
+
     ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
         id: 'CONN',
         draw: function (activity) {
@@ -308,15 +322,7 @@ define('plugins/portal/linkedIn/register', [
                     params: { action: 'updates' }
                 })
                 .done(function (activities) {
-                    var list = activities.values;
-                    if (hasActivities(list)) {
-                        node.append(
-                            $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                        );
-                        _(list).each(function (activity) {
-                            ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                        });
-                    }
+                    renderActivities(node, activities.values);
                 });
 
                 this.append(node);
@@ -339,16 +345,7 @@ define('plugins/portal/linkedIn/register', [
                     });
                 });
 
-                if (_.isArray(baton.data) && baton.data.length > 0) {
-
-                    node.append(
-                        $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                    );
-
-                    _(baton.data).each(function (activity) {
-                        ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                    });
-                }
+                renderActivities(node, baton.data);
 
                 this.append(node);
             }

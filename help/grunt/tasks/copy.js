@@ -7,6 +7,21 @@ module.exports = function (grunt) {
     grunt.config('copy', conf);
 
     grunt.config.merge({ copy: {
+        build_thirdparty: {
+            files: [
+                {
+                    src: ['bootstrap.min.js'],
+                    expand: true,
+                    cwd: 'bower_components/bootstrap/dist/js',
+                    dest: 'build/help'
+                }, {
+                    src: ['jquery.min.js'],
+                    expand: true,
+                    cwd: 'bower_components/jquery/dist',
+                    dest: 'build/help'
+                }
+           ]
+        },
         build_help: {
             files: [
                 {
@@ -25,17 +40,6 @@ module.exports = function (grunt) {
                     filter: 'isFile',
                     cwd: 'build/',
                     dest: 'dist/appsuite/'
-                }
-            ]
-        },
-        local_install_dynamic: {
-            files: [
-                {
-                    src: [],
-                    expand: true,
-                    filter: 'isFile',
-                    cwd: 'dist/',
-                    dest: grunt.option('prefix')
                 }
             ]
         },

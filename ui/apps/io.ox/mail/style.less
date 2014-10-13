@@ -1229,6 +1229,12 @@ textarea.inplace-editor {
 
         a {
             word-break: break-word; // fix long links
+            text-decoration: none;
+            color: inherit;
+            &:hover { color: inherit; }
+        }
+
+        a[href] {
             color: #007dbc; // not @linkColor!
             text-decoration: underline;
             &:hover { color: #08c; }
@@ -1450,12 +1456,20 @@ h4.mail-attachment-preview {
     }
 
     .mail-item.unread .unread-toggle {
-        display: block;
-        left: 7px;
-        top: 69px;
+        display: inline-block;
+        position: relative;
+        left: -35px;
+        bottom: 22px;
     }
+
     .mail-item .unread-toggle {
         display: none;
+        width: auto;
+        height: auto;
+    }
+    .mail-item .attachments .io-ox-inline-links {
+        font-size: @phone-font-size;
+        margin-left: 0;
     }
     .mail-item .attachments .io-ox-inline-links {
         font-size: @phone-font-size;

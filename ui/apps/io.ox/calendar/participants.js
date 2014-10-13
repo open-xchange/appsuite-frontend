@@ -71,7 +71,7 @@ define('io.ox/calendar/participants', [
             );
         } else {
             node.append(
-                coreUtil.renderPersonalName({ email: mail_lc, html: text }).addClass(personClass + ' ' + statusClass),
+                coreUtil.renderPersonalName({ email: mail_lc, html: text }, obj).addClass(personClass + ' ' + statusClass),
                 // has confirmation icon?
                 confirm !== '' ? $('<span>').addClass('status ' + statusClass).append(confirm) : '',
                 // has confirmation comment?
@@ -289,7 +289,7 @@ define('io.ox/calendar/participants', [
                                                 } else {
                                                     $('.participant', participants)
                                                         .show()
-                                                        .find('a.person:not(.' + res.css + ')')
+                                                        .find('span.person:not(.' + res.css + ')')
                                                         .parent()
                                                         .toggle();
                                                     $('.countgroup', participants).removeClass('badge');

@@ -141,7 +141,7 @@ define('io.ox/contacts/view-detail', [
             var name = coreUtil.renderPersonalName({
                 html: util.getFullName(baton.data, true),
                 tagName: 'h1'
-            });
+            }, baton.data);
 
             var job = createText(getDescription(baton.data), ['position', 'profession', 'type']),
                 company = $.trim(baton.data.company);
@@ -235,7 +235,7 @@ define('io.ox/contacts/view-detail', [
                     coreUtil.renderPersonalName({
                         $el: $('<div class="member-name">'),
                         name: data.display_name
-                    }),
+                    }, data),
                     $('<a href="#" class="halo-link">').data({ email1: data.mail }).text(data.mail)
                 )
             );

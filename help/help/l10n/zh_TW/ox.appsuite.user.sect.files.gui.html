@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -32,8 +35,9 @@
 				<span class="guilabel"><strong>雲端硬碟</strong></span>
 			</span>
 			
+			
 			 元件</h2></div></div></div>
-<a class="indexterm" name="idm140128955264192"></a><div class="reference">
+<a class="indexterm" name="idm139948255132208"></a><div class="reference">
 <a name="ox.appsuite.user.reference.files.gui.hint"></a><p>關於使用者介面的簡介可在 <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. 使用者介面">使用者介面</a> 找到。</p>
 </div>
 <div class="reference">
@@ -53,8 +57,8 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><span class="guibutton"><strong>上傳新檔案</strong></span>。建立 <a class="link" href="ox.appsuite.user.sect.files.add.html#ox.appsuite.user.concept.files.new">新檔案</a>.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>新增筆記</strong></span>。建立簡單地 <a class="link" href="ox.appsuite.user.sect.pad.add.html#ox.appsuite.user.concept.pad.new">純文字檔案</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>新增文字文件</strong></span>。建立 <a class="link" href="ox.appsuite.user.sect.documents.add.html#ox.appsuite.user.concept.documents.new">新文字文件</a>。</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>新增試算表</strong></span> 建立 <a class="link" href="ox.appsuite.user.sect.documents.add.html#ox.appsuite.user.concept.documents.new">新文字文件</a>。</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>新增文字文件</strong></span>。建立 新文字文件.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>新增試算表</strong></span> 建立新試算表。</p></li>
 </ul></div>
 <p>
             </p>
@@ -64,7 +68,7 @@
 <li class="listitem"><p>若選擇檔案，將會顯示 <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>下載</strong></span></a> 圖示。</p></li>
 <li class="listitem"><p>若選擇檔案，將會顯示 <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>刪除</strong></span></a><span class="guibutton"><strong>更多</strong></span> 圖示。</p></li>
 <li class="listitem">
-<p>若選擇檔案，將會顯示 <span class="guibutton"><strong>更多</strong></span>按鈕。點選圖示時，含有下列功能的選單將開啟: <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"> <span class="guibutton"><strong>以郵件傳送</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"> <span class="guibutton"><strong>以內部連結傳送</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"> <span class="guibutton"><strong>顯示內部連結</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"> <span class="guibutton"><strong>新增至入口</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"> <span class="guibutton"><strong>移動</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"> <span class="guibutton"><strong>複製</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>鎖定</strong></span></a>。</p>
+<p>若選擇檔案，將會顯示 <span class="guibutton"><strong>更多</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> 圖示。點選圖示時，含有下列功能的選單將開啟: <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>以郵件傳送</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"> <span class="guibutton"><strong>以內部連結傳送</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"> <span class="guibutton"><strong>顯示內部連結</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"> <span class="guibutton"><strong>新增至入口</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"> <span class="guibutton"><strong>移動</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"> <span class="guibutton"><strong>複製</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>鎖定</strong></span></a>。</p>
 <p><span class="phrase"><strong>註:</strong></span> 您可以選擇多個檔案 一次編輯。</p>
 </li>
 <li class="listitem">
@@ -108,13 +112,13 @@
 <p><a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>開啟</strong></span></a>按鈕。</p>
 <p>若點選文件，<a class="link" href="ox.appsuite.user.sect.files.open.office.html#ox.appsuite.user.concept.files.open.office"><span class="guibutton"><strong>檢視</strong></span></a> 按鈕將取代 <span class="guibutton"><strong>開啟</strong></span> 按鈕。</p>
 </li>
-<li class="listitem"><p>若點選可編輯的文件，將顯示 <a class="link" href="ox.appsuite.user.sect.documents.edit.html#ox.appsuite.user.concept.documents.edit"><span class="guibutton"><strong>編輯</strong></span></a> 按鈕。</p></li>
+<li class="listitem"><p>若點選可編輯的文件，將顯示 <span class="guibutton"><strong>編輯</strong></span> 按鈕。</p></li>
 <li class="listitem"><p>按鈕: <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"> <span class="guibutton"><strong>下載</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"> <span class="guibutton"><strong>刪除</strong></span> </a>。</p></li>
 <li class="listitem">
-<p>點選 <span class="guibutton"><strong>更多</strong></span>，含有下列功能的選單將開啟: <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish"> <span class="guibutton"><strong>分享此檔案</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"> <span class="guibutton"><strong>以郵件傳送</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"> <span class="guibutton"><strong>以內部連結傳送</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"> <span class="guibutton"><strong>顯示內部連結</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"> <span class="guibutton"><strong>新增至入口</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.files.manage.rename.html#ox.appsuite.user.concept.files.rename"> <span class="guibutton"><strong>更名</strong></span> </a>、<span class="phrase"><a class="link" href="ox.appsuite.user.sect.files.manage.editdescription.html#ox.appsuite.user.concept.files.editdescription"> <span class="guibutton"><strong>編輯描述</strong></span> </a></span>、<a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>移動</strong></span></a>、 <a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>複製</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>鎖定</strong></span></a>。</p>
+<p>點選 <span class="guibutton"><strong>更多</strong></span> 圖示<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.popup.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>，含有下列功能的選單將開啟: <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish"><span class="guibutton"><strong>分享此檔案</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>以郵件傳送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>以內部連結傳送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>顯示內部連結</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>新增至入口</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.rename.html#ox.appsuite.user.concept.files.rename"><span class="guibutton"><strong>更名</strong></span></a>、<span class="phrase"><a class="link" href="ox.appsuite.user.sect.files.manage.editdescription.html#ox.appsuite.user.concept.files.editdescription"><span class="guibutton"><strong></strong></span>編輯描述</a></span><a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong></strong></span></a>、移動、<a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>複製</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>鎖定</strong></span></a>。</p>
 <p><span class="phrase"><strong>註:</strong></span> 若您沒有某些權限，將不會顯示某些按鈕。</p>
 </li>
-<li class="listitem"><p>若點選文件，<a class="link" href="ox.appsuite.user.sect.documents.editasnew.html#ox.appsuite.user.concept.documents.editasnew"><span class="guibutton"><strong>編輯為新檔案</strong></span></a> 按鈕將顯示於 <span class="guibutton"><strong>更多</strong></span> 下方的選單。</p></li>
+<li class="listitem"><p>若點選文件，<span class="guibutton"><strong>編輯為新檔案</strong></span> 按鈕將顯示於 <span class="guibutton"><strong>更多</strong></span> 下方的選單。</p></li>
 <li class="listitem"><p>檔案名稱</p></li>
 <li class="listitem"><p>檔案預覽，若可用</p></li>
 <li class="listitem"><p>檔案註釋</p></li>

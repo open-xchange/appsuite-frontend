@@ -57,12 +57,6 @@ define('io.ox/mail/detail/mobileView', [
     });
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
-        id: 'unread-toggle',
-        index: INDEX_header += 100,
-        draw: extensions.unreadToggle
-    });
-
-    ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'actions',
         index: INDEX_header += 100,
         draw: extensions.actions
@@ -113,6 +107,12 @@ define('io.ox/mail/detail/mobileView', [
         id: 'date',
         index: INDEX_header += 100,
         draw: extensions.fulldate
+    });
+
+    ext.point('io.ox/mail/mobile/detail/header').extend({
+        id: 'unread-toggle',
+        index: INDEX_header += 100,
+        draw: extensions.unreadToggle
     });
 
     ext.point('io.ox/mail/mobile/detail/header').extend({

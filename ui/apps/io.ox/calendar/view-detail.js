@@ -183,7 +183,8 @@ define('io.ox/calendar/view-detail', [
                         } : {
                             name: baton.data.organizer,
                             email: baton.data.organizer
-                        }
+                        },
+                        baton.data
                     )
                 )
             );
@@ -279,7 +280,7 @@ define('io.ox/calendar/view-detail', [
                         coreUtil.renderPersonalName({
                             html: baton.data.created_by ? userAPI.getTextNode(baton.data.created_by) : '',
                             user_id: baton.data.created_by
-                        })
+                        }, baton.data)
                     )
                  );
             }
@@ -302,7 +303,7 @@ define('io.ox/calendar/view-detail', [
                         coreUtil.renderPersonalName({
                             html: baton.data.modified_by ? userAPI.getTextNode(baton.data.modified_by) : '',
                             user_id: baton.data.modified_by
-                        })
+                        }, baton.data)
                     )
                  );
             }

@@ -860,13 +860,15 @@ define('io.ox/files/api', [
                 module: 'files',
                 params: {
                     action: action || 'update',
+                    extendedResponse: true,
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     timestamp: o.timestamp || _.then() // mandatory for 'update'
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
-            }).then(function () {
+            }).then(function (response) {
+                return handleExtendedResponse(o, response, { silent: true });
             }, function (errorObj) {
                 errors.push(errorObj);
             });

@@ -9,6 +9,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -48,11 +51,12 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.personaldata.html">3.4 Modifier les données de contact personnelles</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.changepassword.html">3.5 Modification du mot de passe</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.socialaccounts.html">3.6 Configurer des comptes de réseaux sociaux</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.clients.html">3.7 Installer des clients pour les stations de travail et appareils mobiles</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.portal.html">4 <span class="phrase">Portail</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.portal.gui.html">4.1 Les composants <span class="phrase"><span class="guilabel"><strong>Portail</strong></span></span></a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.portal.customize.html">4.2 Personnaliser <span class="phrase">Portail</span></a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.portal.customize.html">4.2 Personnalisation de <span class="phrase">Portail</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.portal.customize.sequence.html">4.2.1 Changement de l'ordre des composants</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.portal.customize.close.html">4.2.2 Suppression des composants du portail</a></span></dt>
@@ -64,7 +68,7 @@
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.email.html">5 <span class="phrase">Courriel</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 Les composants <span class="phrase"><span class="guilabel"><strong>Courriel</strong></span></span></a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 Affichage des courriels</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 Afficher des courriels</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 Afficher ou enregistrer les pièces jointes à un courriel</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 Envoyer des messages électroniques</a></span></dt>
 <dd><dl>
@@ -88,119 +92,127 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 Enregistrement des courriels</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 Importer des courriels</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.print.html">5.5.12 Imprimer des courriels</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.13 Suppression des courriels</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.14 Nettoyer les dossiers de courrier électronique</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.15 Modifier plusieurs messages à la fois</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.16 Utiliser la messagerie unifiée</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.17 Utiliser les filtres de courriel</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.5.13 Archiver des courriels</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.14 Suppression des courriels</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.15 Nettoyer les dossiers de courrier électronique</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.16 Modifier plusieurs messages à la fois</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.17 Utiliser la messagerie unifiée</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.18 Utiliser les filtres de courriel</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.6 Courriels au sein d'une équipe</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.search.html">5.6 Rechercher des courriels</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.7 Courriels au sein d'une équipe</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.6.1 Partager des courriels</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.6.2 S'abonner à des dossiers de courrier</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.6.3 Inviter tous les destinataires d'un courriel à un rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.6.4 Enregistrer tous les destinataires d'un message en tant que liste de diffusion.</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.7.1 Partager des courriels</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.7.2 S'abonner à des dossiers de courrier</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.7.3 Inviter tous les destinataires d'un courriel à un rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.7.4 Enregistrer tous les destinataires d'un message en tant que liste de diffusion.</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.7 Comptes de courriel</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.8 Comptes de courriel</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.7.1 Configurer et modifier la configuration des comptes de courrier électronique</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.7.2 Utiliser un compte de courrier externe</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.8.1 Configurer et modifier la configuration des comptes de courrier électronique</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.8.2 Utiliser un compte de courrier externe</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.8 Réglages des courriels</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.9 Réglages des courriels</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.contacts.html">6 <span class="phrase">Carnet d'adresses</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.gui.html">6.1 Les composants de <span class="phrase"><span class="guilabel"><strong>Carnet d'adresses</strong></span></span></a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.view.html">6.2 Affichage des contacts</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.haloview.html">6.3 La vue en halo</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.add.html">6.4 Création des contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.view.html">6.2 Afficher des contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.attachments.html">6.3 Affichage ou enregistrement des pièces jointes du contact</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.haloview.html">6.4 La vue en halo</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.add.html">6.5 Création des contacts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.create.html">6.4.1 Créer un nouveau contact</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">6.4.2 Ajouter un contact depuis une vCard</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.import.html">6.4.3 Importer des contacts depuis des fichiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.subscribe.html">6.4.4 Importer des contacts depuis des réseaux sociaux</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.create.html">6.5.1 Créer un nouveau contact</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">6.5.2 Ajouter un contact depuis une vCard</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.import.html">6.5.3 Importer des contacts depuis des fichiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.subscribe.html">6.5.4 Importer des contacts depuis des réseaux sociaux</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.distributionlist.html">6.5 Création des listes de distribution</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.manage.html">6.6 Organisation des contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.distributionlist.html">6.6 Création des listes de distribution</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.manage.html">6.7 Organisation des contacts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.6.1 Envoyer des courriels à partir du carnet d'adresses</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.6.2 Invitation des contacts à un rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.edit.html">6.6.3 Modification des contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.move.html">6.6.4 Déplacement des contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.copy.html">6.6.5 Copie des contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.6.6 Envoyer des contacts sous forme de vCard</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.6.7 Ajouter des contacts en tant que contacts Xing</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.6.8 Inviter des contacts sur Xing</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.6.9 Impression des contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.6.10 Suppression des contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.multiple.html">6.6.11 Modifier plusieurs contacts à la fois</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.7.1 Envoyer des courriels à partir du carnet d'adresses</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.7.2 Invitation des contacts à un rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.edit.html">6.7.3 Modification des contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.move.html">6.7.4 Déplacement des contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.copy.html">6.7.5 Copie des contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.7.6 Envoyer des contacts sous forme de vCard</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.7.7 Ajouter des contacts en tant que contacts Xing</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.7.8 Inviter des contacts sur Xing</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.7.9 Impression des contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.7.10 Suppression des contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.multiple.html">6.7.11 Modifier plusieurs contacts à la fois</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.share.html">6.7 Contacts au sein d'une équipe</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.datainterchange.html">6.8 Échanger des contacts avec d'autres applications</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.settings.html">6.9 Réglages du carnet d'adresses</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.search.html">6.8 Recherche de contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.share.html">6.9 Contacts au sein d'une équipe</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.datainterchange.html">6.10 Échanger des contacts avec d'autres applications</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.settings.html">6.11 Réglages du carnet d'adresses</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.calendar.html">7 <span class="phrase">Agenda</span></a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.gui.html">7.1 Les composants de <span class="phrase"> <span class="guilabel"><strong>Agenda</strong></span> </span>  </a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.gui.html">7.1 Les composants de <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span></a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.view.html">7.2 Vues des rendez-vous</a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.calendar.html">7.2.1 Afficher les rendez-vous dans une vue en calendrier</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.2 Afficher des rendez-vous dans la vue en liste</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.3 Comment les rendez-vous sont-ils affichés ?</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.3 Créer des rendez-vous</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.attachments.html">7.3 Affichage ou enregistrement des pièces jointes de rendez-vous</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.4 Créer des rendez-vous</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.3.1 Créer de nouveaux rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.3.2 Créer des rendez-vous à partir de pièces jointes au format iCal</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.3.3 Importer des rendez-vous depuis des fichiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.3.4 S'abonner à des rendez-vous d'autres agendas</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.3.5 Résoudre les conflits de rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.4.1 Créer de nouveaux rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.4.2 Créer des rendez-vous à partir de pièces jointes au format iCal</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.4.3 Importer des rendez-vous depuis des fichiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.4.4 S'abonner à des rendez-vous d'autres agendas</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.4.5 Résoudre les conflits de rendez-vous</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.4 Répondre aux invitations à des rendez-vous</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.5 Gérer les rendez-vous</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.5 Répondre aux invitations à des rendez-vous</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.6 Gérer les rendez-vous</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.5.1 Modifier un rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.5.2 Modifier des rendez-vous par glisser-déposer</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.5.3 Changer l'état d'un rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.5.4 Déplacer des rendez-vous vers un autre dossier</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.5.5 Imprimer des rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.5.6 Supprimer des rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.5.7 Modifier plusieurs rendez-vous à la fois</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.6.1 Modifier un rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.6.2 Modifier des rendez-vous par glisser-déposer</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.6.3 Changer l'état d'un rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.4 Déplacer des rendez-vous vers un autre dossier</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.5 Imprimer des rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.6 Supprimer des rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.7 Modifier plusieurs rendez-vous à la fois</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.6 Rendez-vous en équipe</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.search.html">7.7 Recherche de rendez-vous</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.8 Rendez-vous en équipe</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.6.1 Partager des rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.6.2 Envoyer un courriel aux participants</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.6.3 Inviter des participants à un nouveau rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.6.4 Créer une liste de diffusion à partir de la liste de participants</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.6.5 Planifier des rendez-vous avec plusieurs participants</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.8.1 Partager des rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.8.2 Envoyer un courriel aux participants</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.8.3 Inviter des participants à un nouveau rendez-vous</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.8.4 Créer une liste de diffusion à partir de la liste de participants</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.8.5 Planifier des rendez-vous avec plusieurs participants</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.7 Réglages de l'agenda</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.9 Réglages de l'agenda</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.tasks.html">8 <span class="phrase">Tâches</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.gui.html">8.1 Les composants de <span class="phrase"><span class="guilabel"><strong>Tâches</strong></span></span></a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.view.html">8.2 Afficher les tâches</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.add.html">8.3 Créer des tâches</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.invitation.html">8.4 Répondre à des invitations à des tâches</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.manage.html">8.5 Gérer les tâches</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.attachments.html">8.3 Afficher ou enregistrer les pièces jointes à des tâches</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.add.html">8.4 Créer des tâches</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.invitation.html">8.5 Répondre à des invitations à des tâches</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.manage.html">8.6 Gérer les tâches</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.edit.html">8.5.1 Modifier des tâches</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.5.2 Marquer des tâches comme terminées</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.5.3 Changer la date d'échéance d'une tâche</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.5.4 Déplacer des tâches</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.5.5 Modifier les confirmations de tâches</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.5.6 Imprimer des tâches</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.5.7 Supprimer des tâches</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.multiple.html">8.5.8 Modifier plusieurs tâches à la fois</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.edit.html">8.6.1 Modifier des tâches</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.6.2 Marquer des tâches comme terminées</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.6.3 Changer la date d'échéance d'une tâche</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.6.4 Déplacer des tâches</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.6.5 Modifier les confirmations de tâches</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.6.6 Imprimer des tâches</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.6.7 Supprimer des tâches</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.multiple.html">8.6.8 Modifier plusieurs tâches à la fois</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.share.html">8.6 Tâches en équipe</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.search.html">8.7 Rechercher des tâches</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.share.html">8.8 Tâches en équipe</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.tasks.html">8.6.1 Partager des tâches</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.delegate.html">8.6.2 Déléguer des tâches</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.tasks.html">8.8.1 Partager des tâches</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.delegate.html">8.8.2 Déléguer des tâches</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.datainterchange.html">8.7 Échanger des tâches avec d'autres applications</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.settings.html">8.8 Réglages des tâches</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.datainterchange.html">8.9 Échanger des tâches avec d'autres applications</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.settings.html">8.10 Réglages des tâches</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.files.html">9 <span class="phrase">Fichiers</span></a></span></dt>
 <dd><dl>
@@ -228,81 +240,65 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.11 Travailler avec des versions</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.12 Modifier plusieurs fichiers à la fois</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.6 Accéder aux fichiers avec WebDAV</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.search.html">9.6 Recherche de fichiers</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.7 Accéder aux fichiers avec WebDAV</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.6.1 Configurer WebDAV sous Linux</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.6.2 Configurer WebDAV sous Windows XP</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.6.3 Configurer WebDAV sous Windows Vista</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.6.4 Configurer WebDAV sous Windows 7</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.7.1 Configurer WebDAV sous Linux</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.7.2 Configurer WebDAV sous Windows XP</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.7.3 Configurer WebDAV sous Windows Vista</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.7.4 Configurer WebDAV sous Windows 7</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.7 Fichiers et équipes</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.8 Réglages de Drive</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.8 Fichiers et équipes</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.9 Réglages de Drive</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.documents.html">10 <span class="phrase">Documents</span></a></span></dt>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.pad.html">10 <span class="phrase">Bloc-notes simple</span></a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.gui.html">10.1 Les composants de <span class="phrase"><span class="guilabel"><strong>Documents</strong></span></span></a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.add.html">10.1 Créer des fichiers de texte</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.edit.html">10.2 Modifier des fichiers de texte</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">11 Organiser les données</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.docportal.gui.html">10.1.1 Les composants de <span class="phrase"><span class="guilabel"><strong>Texte</strong></span></span> et <span class="phrase"><span class="guilabel"><strong>Feuille de calcul</strong></span></span></a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.text.gui.html">10.1.2 Les composants de la page d'édition <span class="phrase"><span class="guilabel"><strong>Texte</strong></span></span></a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.spreadsheet.gui.html">10.1.3 Les composants de la page d'édition <span class="phrase"><span class="guilabel"><strong>Feuille de calcul</strong></span></span></a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.add.html">10.2 Créer des documents</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.edit.html">10.3 Modifier des documents</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.editasnew.html">10.4 Modifier des documents sous un nouveau nom</a></span></dt>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.pad.html">11 <span class="phrase">Bloc-notes simple</span>   </a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">11.1 Dossiers</a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.add.html">11.1 Créer des fichiers de texte</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.edit.html">11.2 Modifier des fichiers de texte</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">11.1.1 Types de dossier</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">11.1.2 Naviguer dans la structure des dossiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">11.1.3 Cacher des dossiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">11.1.4 Ajout des dossiers aux favoris</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.create.html">11.1.5 Créer des dossiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">11.1.6 Renommer des dossiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">11.1.7 Déplacer des dossiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">11.1.8 Supprimer des dossiers</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">12 Organiser les données</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.rights.html">11.2 Droits</a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.search.html">12.1 Recherche</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.defined.html">11.2.1 Quels droits peuvent être accordés ?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">11.2.2 Droits sur les dossiers existants</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">11.2.3 Droits sur les nouveaux dossiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">11.2.4 Partager des dossiers</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.html">11.3 Publier et s'abonner</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.gui.html">12.1.1 Les composants de la fenêtre de recherche</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.searchmenu.html">12.1.2 Quelles options de recherche existent ?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.objects.html">12.1.3 Rechercher des objets</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">11.3.1 S'abonner à des données</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">11.3.2 Publier des données</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html">11.3.3 Gérer les dossiers auxquels vous êtes abonné et que vous avez publiés</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">12.2 Dossiers</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.datainterchange.html">12 Échange de Données</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">12.2.1 Types de dossier</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">12.2.2 Naviguer dans la structure des dossiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">12.2.3 Cacher des dossiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.create.html">12.2.4 Créer des dossiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">12.2.5 Renommer des dossiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">12.2.6 Déplacer des dossiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">12.2.7 Supprimer des dossiers</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.rights.html">12.3 Droits</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.import.html">12.1 Importer des Données</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.defined.html">12.3.1 Quels droits peuvent être accordés ?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">12.3.2 Droits sur les dossiers existants</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">12.3.3 Droits sur les nouveaux dossiers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">12.3.4 Partager des dossiers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.ical.html">12.1.1 Importer des rendez-vous et des tâches au format iCal</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">12.1.2 Importer des contacts au format vCard</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">12.1.3 Importer des contacts au format CSV</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.html">12.4 Publier et s'abonner</a></span></dt>
-<dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">12.4.1 S'abonner à des données</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">12.4.2 Publier des données</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html">12.4.3 Gérer les dossiers auxquels vous êtes abonné et que vous avez publiés</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.export.html">12.2 Exporter des données</a></span></dt>
+<dd><dl><dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.export.folder.html">12.2.1 Exporter des données depuis un dossier</a></span></dt></dl></dd>
 </dl></dd>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.datainterchange.html">13 Échange de Données</a></span></dt>
-<dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.import.html">13.1 Importer des Données</a></span></dt>
-<dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.ical.html">13.1.1 Importer des rendez-vous et des tâches au format iCal</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">13.1.2 Importer des contacts au format vCard</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">13.1.3 Importer des contacts au format CSV</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.export.html">13.2 Exporter des données</a></span></dt>
-<dd><dl><dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.export.folder.html">13.2.1 Exporter des données depuis un dossier</a></span></dt></dl></dd>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.bestpractices.html">14 Foire Aux Questions</a></span></dt>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.bestpractices.html">13 Foire Aux Questions</a></span></dt>
 <dd><dl>
 <dt><span class="qandaset"><a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice">Questions fréquemment posées</a></span></dt>
 <dd><dl>
-<dt>14.1  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">Questions générales</a>
+<dt>13.1  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">Questions générales</a>
 </dt>
 <dd><dl>
 <dt>Q : <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.personaldata">Où puis-je trouver mes données et réglages personnels ?</a>
@@ -316,7 +312,7 @@
 <dt>Q : <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.socialmessaging">Comment puis-je lire les messages récents en provenance des réseaux sociaux ou les pages d'actualités ?</a>
 </dt>
 </dl></dd>
-<dt>14.2  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">Questions à propos des courriels et des contacts</a>
+<dt>13.2  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">Questions à propos des courriels et des contacts</a>
 </dt>
 <dd><dl>
 <dt>Q : <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.recipients">Comment puis-je envoyer un courriel à plusieurs adresses à la fois ?</a>
@@ -336,7 +332,7 @@
 <dt>Q : <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">Comment puis-je utiliser mes contacts dans les réseaux sociaux auxquels je participe ?</a>
 </dt>
 </dl></dd>
-<dt>14.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">Questions sur les tâches, les agendas et les rendez-vous</a>
+<dt>13.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">Questions sur les tâches, les agendas et les rendez-vous</a>
 </dt>
 <dd><dl>
 <dt>Q : <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.task_or_appointment">Quand dois-je utiliser une tâche et quand dois-je utiliser un rendez-vous ?</a>
@@ -352,7 +348,7 @@
 <dt>Q : <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.scheduling">Comment trouver des créneaux libres quand on crée des rendez-vous ? </a>
 </dt>
 </dl></dd>
-<dt>14.4  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">Questions sur l'organisation des données et le travail en équipe</a>
+<dt>13.4  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">Questions sur l'organisation des données et le travail en équipe</a>
 </dt>
 <dd><dl>
 <dt>Q : <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">Comment puis-je mettre certains contacts à disposition de mes partenaires externes ?</a>

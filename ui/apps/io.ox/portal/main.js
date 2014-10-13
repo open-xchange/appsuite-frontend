@@ -381,7 +381,7 @@ define('io.ox/portal/main', [
                 $('<div class="paragraph" style="min-height: 40px">').append(
                     $.txt(
                         //#. %1$s is social media name, e.g. Facebook
-                        gt.format('Welcome to %1$s', title) + '!'
+                        gt('Welcome to %1$s', title) + '!'
                     ),
                     $('<br>'),
                     $.txt(
@@ -391,7 +391,7 @@ define('io.ox/portal/main', [
                 // button
                 $('<a href="#" class="action" tabindex="1" role="button">').text(
                     //#. %1$s is social media name, e.g. Facebook
-                    gt.format('Add your %1$s account', title)
+                    gt('Add your %1$s account', title)
                 )
                 .on('click', { baton: baton }, setup)
             )

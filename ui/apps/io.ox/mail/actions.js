@@ -68,7 +68,7 @@ define('io.ox/mail/actions', [
         id: 'reply-all',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -85,7 +85,7 @@ define('io.ox/mail/actions', [
         id: 'reply',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
