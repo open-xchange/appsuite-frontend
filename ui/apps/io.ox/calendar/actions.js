@@ -201,7 +201,6 @@ define('io.ox/calendar/actions', [
         },
         multiple: function (list) {
             ox.load(['io.ox/core/print']).done(function (print) {
-                debugger;
                 print.request('io.ox/calendar/print', list);
             });
         }
