@@ -42,7 +42,7 @@ define('io.ox/core/print', [
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
                     title = (options.title  || '').trim();
 
-                $(document.body).html(_.template(template, it));
+                $(document.body).html(_.template(template)(it));
                 //hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename
                 document.title = escapeTitle(ox.serverConfig.pageTitle) + escapeTitle(title.length ? ' ' + title : '') + ' ' + gt('Printout');
             } catch (e) {
