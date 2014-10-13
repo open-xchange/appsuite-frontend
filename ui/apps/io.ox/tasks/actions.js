@@ -256,7 +256,7 @@ define('io.ox/tasks/actions', [
         },
         action: function (baton) {
             var data = baton.data;
-            ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
+            ox.load(['io.ox/calendar/actions/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
                 acceptdeny(data, {
                     taskmode: true,
                     api: api,

@@ -615,7 +615,7 @@ define('plugins/notifications/tasks/register', [
             if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
 
             var data = this.model.attributes;
-            ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
+            ox.load(['io.ox/calendar/actions/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
                 acceptdeny(data, { taskmode: true, api: api, callback: function () {
                     //update detailview
                     api.trigger('update:' + _.ecid({ id: data.id, folder_id: data.folder_id }));

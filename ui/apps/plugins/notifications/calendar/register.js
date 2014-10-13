@@ -215,7 +215,7 @@ define('plugins/notifications/calendar/register', [
             // stopPropagation could be prevented by another markup structure
             e.stopPropagation();
             var self = this;
-            require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
+            require(['io.ox/calendar/actions/acceptdeny']).done(function (acceptdeny) {
                 acceptdeny(self.model.get('data')).done(function (status) {
                     if (status !== 'cancel') {
                         self.collection.remove(self.model);

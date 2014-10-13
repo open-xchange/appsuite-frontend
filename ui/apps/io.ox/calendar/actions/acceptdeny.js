@@ -11,7 +11,7 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/calendar/acceptdeny', [
+define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/calendar/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/folder/api',

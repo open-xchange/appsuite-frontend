@@ -64,7 +64,6 @@ define('io.ox/calendar/edit/main', [
             edit: function (data, opt) {
 
                 var self = this;
-
                 data = data || {};
                 opt = _.extend({
                     mode: 'edit'
@@ -72,15 +71,27 @@ define('io.ox/calendar/edit/main', [
 
                 app.cid = 'io.ox/calendar:' + opt.mode + '.' + _.cid(data);
 
-                function cont(data) {
-                    self.model = appointmentModel.factory.create(data);
+                function cont() {
+                    // create app window
+                    var win = ox.ui.createWindow({
+                        name: 'io.ox/calendar/edit',
+                        chromeless: true
+                    });
+
+                    self.setWindow(win);
+
                     appointmentModel.applyAutoLengthMagic(self.model);
                     appointmentModel.fullTimeChangeBindings(self.model);
                     appointmentModel.setDefaultParticipants(self.model, { create: opt.mode === 'create' }).done(function () {
 
-                        var baton = { model: self.model, mode: opt.mode, app: self, callbacks: {} };
-                        baton.callbacks.extendDescription = app.extendDescription;
-                        app.view = self.view = new EditView(baton);
+                        app.view = self.view = new EditView({
+                            model: self.model,
+                            mode: opt.mode,
+                            app: self,
+                            callbacks: {
+                                extendDescription: app.extendDescription
+                            }
+                        });
 
                         //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
                         if (_.browser.IE === undefined || _.browser.IE > 9) {
@@ -89,7 +100,12 @@ define('io.ox/calendar/edit/main', [
                             });
                         }
 
+                        self.considerSaved = true;
+
                         self.model
+                            .on('change', function () {
+                                self.considerSaved = false;
+                            })
                             .on('backendError', function (response) {
                                 try {
                                     self.getWindow().idle();
@@ -146,14 +162,6 @@ define('io.ox/calendar/edit/main', [
                             });
 
                         self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
-
-                        // create app window
-                        var win = ox.ui.createWindow({
-                            name: 'io.ox/calendar/edit',
-                            chromeless: true
-                        });
-
-                        self.setWindow(win);
 
                         if (app.dropZone) {
                             win.on('show', function () {
@@ -218,11 +226,6 @@ define('io.ox/calendar/edit/main', [
 
                         }
 
-                        self.considerSaved = true;
-                        self.model.on('change', function () {
-                            self.considerSaved = false;
-                        });
-
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
                         $(app).trigger('finishedCreating');//used by guided tours so they can show the next step when everything is ready
@@ -233,15 +236,25 @@ define('io.ox/calendar/edit/main', [
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
-                    cont(data);
+                    // self.model = appointmentModel.factory.realm('edit').create(data);
+                    // cont();
+                    appointmentModel.factory.realm('edit').retain().get({
+                        id: data.id,
+                        folder: data.folder_id
+                    })
+                    .done(function (model) {
+                        self.model = model;
+                        cont();
+                    });
                 } else {
+                    self.model = appointmentModel.factory.create(data);
                     if (!data.folder_id) {
                         require(['io.ox/core/folder/api']).done(function (api) {
                             data.folder_id = api.getDefaultFolder('calendar');
-                            cont(data);
+                            cont();
                         });
                     } else {
-                        cont(data);
+                        cont();
                     }
                 }
             },
