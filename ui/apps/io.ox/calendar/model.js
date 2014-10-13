@@ -40,6 +40,7 @@ define('io.ox/calendar/model', [
             return api.remove(options);
         },
         model: {
+            idAttribute: 'id',
             defaults: {
                 recurrence_type: 0,
                 notification: true,
