@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -30,7 +33,7 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.files.gui"></a>9.1. Los componentes de <span class="phrase"><span class="guilabel"><strong>Ficheros</strong></span></span>
 </h2></div></div></div>
-<a class="indexterm" name="idm140719470954944"></a><div class="reference">
+<a class="indexterm" name="idm140640906028192"></a><div class="reference">
 <a name="ox.appsuite.user.reference.files.gui.hint"></a><p>Se puede encontrar una introducción a la interfaz de usuario en <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. El interfaz de usuario">El interfaz de usuario</a>.</p>
 </div>
 <div class="reference">
@@ -43,28 +46,28 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.files.gui.toolbar"></a><p><b>Barra de herramientas </b>Contiene los botones siguientes:</p>
+<a name="ox.appsuite.user.reference.files.gui.toolbar"></a><p><b>Barra de herramientas </b>Contiene los siguientes botones:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Botón <span class="guibutton"><strong>Nuevo</strong></span>. Contiene las siguientes funciones: </p>
+<p>Botón <span class="guibutton"><strong>Nuevo</strong></span>. Contiene las siguientes funciones:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p><span class="guibutton"><strong>Subir nuevo archivo</strong></span>. Crea un <a class="link" href="ox.appsuite.user.sect.files.add.html#ox.appsuite.user.concept.files.new">archivo nuevo</a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Subir nuevo archivo</strong></span>. Crea un <a class="link" href="ox.appsuite.user.sect.files.add.html#ox.appsuite.user.concept.files.new">nuevo archivo</a>.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Añadir nota</strong></span>. Crea un <a class="link" href="ox.appsuite.user.sect.pad.add.html#ox.appsuite.user.concept.pad.new">archivo de texto</a> sencillo.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Nuevo documento de texto</strong></span>. Crea un <a class="link" href="ox.appsuite.user.sect.documents.add.html#ox.appsuite.user.concept.documents.new">nuevo documento de texto</a>.</p></li>
-<li class="listitem"><p><span class="guibutton"><strong>Nueva hoja de cálculo</strong></span> Crea una <a class="link" href="ox.appsuite.user.sect.documents.add.html#ox.appsuite.user.concept.documents.new">nueva hoja de cálculo</a>.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Nuevo documento de texto</strong></span>. Crea un nuevo documento de texto.</p></li>
+<li class="listitem"><p><span class="guibutton"><strong>Nueva hoja de cálculo</strong></span>Crea una nueva hoja de cálculo.</p></li>
 </ul></div>
 <p> </p>
 </li>
-<li class="listitem"><p>Si se ha abierto una carpeta personal, el botón <span class="guibutton"><strong>Compartir carpeta</strong></span> se muestra. Si se presiona dicho botón, se creará una <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish">publicación</a> de esta carpeta.</p></li>
-<li class="listitem"><p>Si la carpeta contiene imágenes, o archivos de audio o vídeo, se muestran iconos para <a class="link" href="ox.appsuite.user.sect.files.open.multimedia.html#ox.appsuite.user.concept.files.open.multimedia">reproducir archivos multimedia</a>.</p></li>
+<li class="listitem"><p>Si ha abierto una carpeta personal, se muestra el botón <span class="guibutton"><strong>Compartir carpeta</strong></span>. Si se presiona este botón, se creará una <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish">publicación</a> de dicha carpeta.</p></li>
+<li class="listitem"><p>Si la carpeta contiene imágenes, se mostrarán iconos para <a class="link" href="ox.appsuite.user.sect.files.open.multimedia.html#ox.appsuite.user.concept.files.open.multimedia">reproducir archivos multimedia</a>.</p></li>
 <li class="listitem"><p>Si se ha seleccionado un archivo, se mostrará el icono <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>Descargar</strong></span></a>.</p></li>
-<li class="listitem"><p>Si se ha seleccionado un archivo, el icono <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>Borrar</strong></span></a><span class="guibutton"><strong>Más</strong></span> se mostrará.</p></li>
+<li class="listitem"><p>Si se ha seleccionado un archivo, se mostrará el icono <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>Borrar</strong></span></a>.</p></li>
 <li class="listitem">
-<p>Si se ha seleccionado un archivo, se mostrará el botón <span class="guibutton"><strong>Más</strong></span>. Si se presiona el icono, se abre un menú con los siguientes elementos: <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>Enviar por correo</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>Enviar como enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>Mostrar enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>Añadir al portal</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>Mover</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>Copiar</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>Bloquear</strong></span></a>.</p>
-<p><span class="phrase"><strong>Nota:</strong></span> Si ha seleccionado varios archivos, algunas funciones no están disponibles.</p>
+<p>Si se ha seleccionado un archivo, se mostrará el icono <span class="guibutton"><strong>Más</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>. Si se presiona en el icono, se abre un menú con los siguientes elementos: <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>Enviar por correo</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>Enviar como enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>Mostrar enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>Añadir al portal</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>Mover</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>Copiar</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>Bloquear</strong></span></a>.</p>
+<p><span class="phrase"><strong>Nota:</strong></span> Si se han seleccionado varios archivos, algunas funciones no están disponibles.</p>
 </li>
 <li class="listitem">
-<p>Botón <span class="guibutton"><strong>Vista</strong></span>. Selecciona una de las siguientes vistas para las vista de detalle:</p>
+<p>Botón <span class="guibutton"><strong>Vista</strong></span>. Seleccione una de las siguientes vistas para la vista de detalle:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.list" title="Área de visualización en la vista Lista">Lista</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.detailview.icons" title="Área de visualización en la vista Iconos">Iconos</a></p></li>
@@ -73,7 +76,7 @@
 <p> </p>
 </li>
 </ul></div>
-<p><span class="phrase"><strong>Nota:</strong></span> Algunos botones solo se muestran si la carpeta seleccionada contiene archivos.</p>
+<p><span class="phrase"><strong>Nota:</strong></span> Algunos botones sólo se muestran si la carpeta seleccionada contiene archivos.</p>
 </div>
 <div class="reference">
 <a name="ox.appsuite.user.reference.files.gui.detailview.list"></a><p><b>Área de visualización en la vista <span class="guilabel"><strong>Lista</strong></span> </b>Por cada archivo se muestra una fila con el siguiente contenido. </p>
@@ -103,13 +106,13 @@
 <p>el botón <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"> <span class="guibutton"><strong>Abrir</strong></span></a></p>
 <p>Si se presiona en un documento, se muestra el botón <a class="link" href="ox.appsuite.user.sect.files.open.office.html#ox.appsuite.user.concept.files.open.office"><span class="guibutton"><strong>Ver</strong></span></a> en lugar del botón <span class="guibutton"><strong>Abrir</strong></span>.</p>
 </li>
-<li class="listitem"><p>Si se presiona sobre un área editable, se muestra el botón <a class="link" href="ox.appsuite.user.sect.documents.edit.html#ox.appsuite.user.concept.documents.edit"><span class="guibutton"><strong>Editar</strong></span></a>.</p></li>
+<li class="listitem"><p>Si se presiona sobre un archivo editable, se muestra el botón <span class="guibutton"><strong>Editar</strong></span>.</p></li>
 <li class="listitem"><p>Botones <a class="link" href="ox.appsuite.user.sect.files.open.html#ox.appsuite.user.concept.files.open"><span class="guibutton"><strong>Descargar</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.delete.html#ox.appsuite.user.concept.files.delete"><span class="guibutton"><strong>Borrar</strong></span></a></p></li>
 <li class="listitem">
-<p>Si se presiona en <span class="guibutton"><strong>Más</strong></span>, se abre un menú con las siguientes funciones: <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish"><span class="guibutton"><strong>Compartir este archivo</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>Enviar por correo electrónico</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>Enviar como enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"> <span class="guibutton"><strong>Mostrar enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>Añadir al portal</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.files.manage.rename.html#ox.appsuite.user.concept.files.rename"><span class="guibutton"><strong>Renombrar</strong></span></a>, <span class="phrase"><a class="link" href="ox.appsuite.user.sect.files.manage.editdescription.html#ox.appsuite.user.concept.files.editdescription"><span class="guibutton"><strong>Editar descripción</strong></span></a></span>, <a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>Mover</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>Copiar</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>Bloquear</strong></span></a>.</p>
+<p>Si se presiona el icono <span class="guibutton"><strong>Más</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.gui.popup.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> se abre un menú con los siguientes elementos: <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html#ox.appsuite.user.concept.pubsub.publish"><span class="guibutton"><strong>Compartir este archivo</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.send.html#ox.appsuite.user.concept.files.send"><span class="guibutton"><strong>Enviar por correo</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.sendlink.html#ox.appsuite.user.concept.files.sendlink"><span class="guibutton"><strong>Enviar como enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.showlink.html#ox.appsuite.user.concept.files.showlink"><span class="guibutton"><strong>Mostrar enlace interno</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.addportal.html#ox.appsuite.user.concept.files.addportal"><span class="guibutton"><strong>Añadir al portal</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.rename.html#ox.appsuite.user.concept.files.rename"><span class="guibutton"><strong>Renombrar</strong></span></a>, <span class="phrase"><a class="link" href="ox.appsuite.user.sect.files.manage.editdescription.html#ox.appsuite.user.concept.files.editdescription"><span class="guibutton"><strong>Editar descripción</strong></span></a></span>, <a class="link" href="ox.appsuite.user.sect.files.manage.move.html#ox.appsuite.user.concept.files.move"><span class="guibutton"><strong>Mover</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.copy.html#ox.appsuite.user.concept.files.copy"><span class="guibutton"><strong>Copiar</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.files.manage.lock.html#ox.appsuite.user.concept.files.lock"><span class="guibutton"><strong>Bloquear</strong></span></a>.</p>
 <p><span class="phrase"><strong>Nota:</strong></span> Algunos botones podrían no mostrarse si no se tienen los permisos adecuados.</p>
 </li>
-<li class="listitem"><p>Si se presiona en un documento, el botón <a class="link" href="ox.appsuite.user.sect.documents.editasnew.html#ox.appsuite.user.concept.documents.editasnew"><span class="guibutton"><strong>Editar como nuevo</strong></span></a> se muestra en el submenú <span class="guibutton"><strong>Más</strong></span>.</p></li>
+<li class="listitem"><p>Si se presiona en un documento, el botón <span class="guibutton"><strong>Editar como nuevo</strong></span> se muestra en el submenú <span class="guibutton"><strong>Más</strong></span>.</p></li>
 <li class="listitem"><p>nombre del archivo</p></li>
 <li class="listitem"><p>una vista previa del archivo, si está disponible</p></li>
 <li class="listitem"><p>comentarios del archivo</p></li>

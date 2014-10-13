@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -29,7 +32,7 @@
   <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.email.send.new"></a>5.4.1. Envoyer un nouveau message électronique</h3></div></div></div>
-<a class="indexterm" name="idm139841087779888"></a><a class="indexterm" name="idm139841087778272"></a><a class="indexterm" name="idm139841087776688"></a><div class="concept">
+<a class="indexterm" name="idm140291079419072"></a><a class="indexterm" name="idm140291079417456"></a><a class="indexterm" name="idm140291079415872"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.new"></a><p>Pour rédiger un nouveau message, vous pouvez : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.new.html#ox.appsuite.user.task.email.send" title="Pour envoyer un nouveau message :">Rédiger un message</a> en saisissant le destinataire, le sujet et le corps du message</p></li>
@@ -45,7 +48,7 @@
 <li class="step">
 <p>Saisissez l'adresse de courriel du destinataire dans le champ <span class="guilabel"><strong>À</strong></span> de la barre latérale. Appuyez sur [Entrée].</p>
 <p>S'il y a plusieurs destinataires, répétez cette action. Vous pouvez également saisir le nom d'une <a class="link" href="ox.appsuite.user.sect.contacts.distributionlist.html#ox.appsuite.user.concept.distributionlist.new">liste de diffusion</a>.</p>
-<p>Pour supprimer un destinataire, cliquez sur l'icône <span class="guibutton"><strong>Supprimer</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.recipient"></a><img src="../../images/appsuite_user_icon_trash.png"></span> .</p>
+<p>Pour supprimer un destinataire, cliquez sur l'icône <span class="guibutton"><strong>Supprimer</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.recipient"></a><img src="../../images/appsuite_user_icon_trash.png"></span>  .</p>
 <div class="more">
 <a name="ox.appsuite.user.task.email.send.recipient.more"></a><p><span class="phrase"><strong>Conseil :</strong></span> pendant que vous saisissez l'adresse de courrier électronique, plusieurs adresses sont suggérées. Pour accepter une suggestion, utilisez l'une des possibilités suivantes : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
@@ -103,7 +106,7 @@
 </li>
 <li class="step">
 <p>Si vous souhaitez joindre des pièces au message, cliquez sur <span class="guibutton"><strong>Pièces jointes</strong></span>. Cliquez sur <span class="guibutton"><strong>Joindre une pièce</strong></span>. Sélectionnez un ou plusieurs fichiers.</p>
-<p>Pour utiliser la version actuelle d'un fichier de l'app <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span> en tant que pièce jointe, cliquez sur <span class="guibutton"><strong>Fichiers</strong></span>. Ouvrez un dossier dans la fenêtre <span class="guilabel"><strong>Ajouter des fichiers</strong></span>. Cochez les cases en face des fichiers que vous souhaitez joindre. Cliquez sur <span class="guibutton"><strong>Ajouter</strong></span>.</p>
+<p>Pour utiliser en tant que pièce jointe la version courante d'un fichier de l'app <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span>, cliquez sur <span class="guibutton"><strong>Fichiers</strong></span>. Ouvrez un dossier dans la fenêtre <span class="guilabel"><strong>Ajouter des fichiers</strong></span>. Cochez les cases correspondant aux fichiers que vous souhaitez joindre. Cliquez sur <span class="guibutton"><strong>Ajouter</strong></span>.</p>
 <p>Pour supprimer une pièce jointe, cliquez sur l'icône <span class="guibutton"><strong>Supprimer</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.delete.attachment"></a><img src="../../images/appsuite_user_icon_trash.png"></span> .</p>
 <p>Pour cacher les champs de saisie, cliquez sur <span class="guibutton"><strong>Pièces jointes</strong></span>. Les pièces jointes seront conservées.</p>
 <div class="more">
@@ -122,7 +125,7 @@
 <p> Pour masquer la liste, cliquez à nouveau sur <span class="guibutton"><strong>Signatures</strong></span>.</p>
 </li>
 <li class="step">
-<p>Pour afficher des options supplémentaires, cliquez sur <span class="guibutton"><strong>Plus</strong></span> dans la barre latérale. Vous pouvez utiliser les fonctionnalités suivantes :</p>
+<p>Pour afficher davantage d'options, cliquez sur l'icône <span class="guibutton"><strong>Plus</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> dans la barre latérale. Vous pourrez y utiliser les options suivantes :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>régler la priorité</p></li>
 <li class="listitem"><p>joindre votre vCard</p></li>
@@ -131,6 +134,7 @@
 <p>
             </p>
 <p>Pour cacher les options, cliquez sur <span class="guibutton"><strong>Options</strong></span>. Les réglages seront conservés.</p>
+<p><span class="phrase"><strong>Conseil :</strong></span> vous pouvez définir la priorité en cliquant sur l'icône qui figure à droite dans le champ <span class="guibutton"><strong>Sujet</strong></span>.</p>
 </li>
 </ol></div>
 </div>

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-22 22:46+0800\n"
+"PO-Revision-Date: 2014-10-08 00:37+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -1407,10 +1407,8 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "正在清理... 可能需要幾秒鐘。"
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
-#| msgid "User fields"
 msgid "Clear field"
-msgstr "用戶定義欄位"
+msgstr "清除欄位"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1427,7 +1425,7 @@ msgstr "點擊此處離開說明中心"
 
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
-msgstr ""
+msgstr "點擊此處重新連線至您的 XING 帳號以檢視活動。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -2869,8 +2867,6 @@ msgid "Favorited"
 msgstr "已加入最愛"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
-#| msgid "Favorite"
 msgid "Favorites"
 msgstr "最愛"
 
@@ -4086,10 +4082,8 @@ msgid "My contact data"
 msgstr "我的聯絡人資料"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
-#| msgid "All folders"
 msgid "My folders"
-msgstr "所有資料夾"
+msgstr "我的資料夾"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -6176,10 +6170,8 @@ msgstr "工作時間開始"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
-#| msgid "Search"
 msgid "Start search"
-msgstr "搜索"
+msgstr "開始搜尋"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6809,10 +6801,8 @@ msgstr "XING 有點問題。錯誤訊息為:「%s」"
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
-#| msgid "Show appointment details"
 msgid "There was no appointment data to import"
-msgstr "顯示約會詳情"
+msgstr "沒有約會資料可匯入"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -7497,31 +7487,23 @@ msgstr "歡迎使用 %s"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
-#| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "新增至行事曆"
+msgstr "歡迎來到您的行事曆"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "歡迎使用 %s"
+msgstr "歡迎檢視您的檔案"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
-#| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "您的收件匣中沒有郵件"
+msgstr "歡迎來到您的收件匣"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "歡迎使用 %s"
+msgstr "歡迎使用任務程式"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"

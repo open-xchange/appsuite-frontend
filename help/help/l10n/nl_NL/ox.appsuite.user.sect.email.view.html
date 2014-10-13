@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.2. Tonen e-mailberichten</title>
+<title>5.2. E-mailberichten tonen</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -28,8 +31,8 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.email.view"></a>5.2. Tonen e-mailberichten</h2></div></div></div>
-<a class="indexterm" name="idm140333164143104"></a><a class="indexterm" name="idm140333164141488"></a><div class="concept">
+<a name="ox.appsuite.user.sect.email.view"></a>5.2. E-mailberichten tonen</h2></div></div></div>
+<a class="indexterm" name="idm139883531065584"></a><a class="indexterm" name="idm139883531063968"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.view"></a><p>Standaard wordt de inhoud van Postvak IN getoond. Andere e-mailmappen kunnen geopend worden vanuit de mappenboom. Om vertraging te voorkomen wordt maar beperkt deel van de e-mailberichten in een map geladen als deze boven een bepaalde limiet uit komt. Als u naar het einde van de lijst bladert, wordt het volgende deel geladen.</p>
 </div>
 <div class="task">
@@ -39,7 +42,7 @@
 <li class="step">
 <p>Om snel een specifiek e-mailbericht te vinden kan u één van de volgende methoden gebruiken: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Om e-mailberichten te vinden door te zoeken gebruikt u de <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.objects.html#ox.appsuite.user.task.search" title="Zoeken naar objecten gaat als volgt:">zoek functie</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om e-mailberichten te vinden door te zoeken gebruikt u de <a class="link" href="ox.appsuite.user.sect.email.search.html#ox.appsuite.user.task.email.search" title="E-mailberichten zoeken gaat als volgt:">zoek functie</a>.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Om de e-mailberichtenlijst te sorteren klikt u op <span class="guibutton"><strong>Sorteren op</strong></span> boven de lijst. Selecteer een sorteercriteria uit het menu.</p></li>
 </ul></div>
 <p>
@@ -50,9 +53,9 @@
 <p>Klik op een e-mailbericht in de lijst. De inhoud van het e-mailbericht wordt weergegeven in het detailoverzicht. Als het e-mailbericht onderdeel is van een conversatie, worden alle e-mailberichten in de conversatie onder elkaar getoond.</p>
 <p>Als u <span class="guibutton"><strong>Lijst</strong></span> heeft gekozen uit het <span class="guibutton"><strong>Overzicht</strong></span> drop-down uit de werkbalk, wordt de lijst vervangen door een detailoverzicht van het geselecteerde e-mailbericht. In dit geval zijn de volgende functies beschikbaar boven het detailoverzicht.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Om de lijst opnieuw te openen, klikt u op de knop of het <span class="guibutton"><strong>Terug</strong></span> pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.back"></a><img src="../../images/appsuite_user_icon_view_back.png"></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Om het volgende e-mailbericht te tonen, klikt u op het <span class="guibutton"><strong>Toon volgende</strong></span> pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.next"></a><img src="../../images/appsuite_user_icon_view_next.png"></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Om het vorige e-mailbericht te tonen, klikt u op het <span class="guibutton"><strong>Toon vorige</strong></span> pictogram <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.previous"></a><img src="../../images/appsuite_user_icon_view_previous.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om de lijst opnieuw te openen, klikt u op de knop of het <span class="guibutton"><strong>Terug</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.back"></a><img src="../../images/appsuite_user_icon_view_back.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om het volgende e-mailbericht te tonen, klikt u op het <span class="guibutton"><strong>Toon volgende</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.next"></a><img src="../../images/appsuite_user_icon_view_next.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Om het vorige e-mailbericht te tonen, klikt u op het <span class="guibutton"><strong>Toon vorige</strong></span> pictogram<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.previous"></a><img src="../../images/appsuite_user_icon_view_previous.png"></span>.</p></li>
 </ul></div>
 <p>
           </p>

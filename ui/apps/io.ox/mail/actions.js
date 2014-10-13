@@ -121,7 +121,7 @@ define('io.ox/mail/actions',
         id: 'reply-all',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -138,7 +138,7 @@ define('io.ox/mail/actions',
         id: 'reply',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return;
             // multiple and not a thread?
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
@@ -477,14 +477,15 @@ define('io.ox/mail/actions',
         id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
-            var context = e.context,
+            var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = (/\.vcf$/i).test(context.filename),
                 isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
                 isDirectoryType = (/^text\/directory/i).test(context.content_type);
             return  (hasRightSuffix && isDirectoryType) || isVCardType;
         },
         action: function (baton) {
-            var attachment = baton.data;
+            var attachment = _.isArray(baton.data) ? _.first(baton.data) : baton.data;
+
             require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
                 conversionAPI.convert({
                     identifier: 'com.openexchange.mail.vcard',
@@ -537,14 +538,15 @@ define('io.ox/mail/actions',
         id: 'ical',
         capabilities: 'calendar',
         requires: function (e) {
-            var context = e.context,
+            var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
                 isCalendarType = context.content_type  && !!context.content_type.match(/^text\/calendar/i),
                 isAppType = context.content_type  && !!context.content_type.match(/^application\/ics/i);
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
-            var attachment = baton.data;
+            var attachment = _.isArray(baton.data) ? _.first(baton.data) : baton.data;
+
             require(['io.ox/core/api/conversion']).done(function (conversionAPI) {
                 conversionAPI.convert({
                     identifier: 'com.openexchange.mail.ical',
@@ -1079,6 +1081,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'vcard',
+        mobile: 'high',
         index: 50,
         label: gt('Add to address book'),
         ref: 'io.ox/mail/actions/vcard'
@@ -1086,6 +1089,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'ical',
+        mobile: 'high',
         index: 50,
         label: gt('Add to calendar'),
         ref: 'io.ox/mail/actions/ical'
@@ -1094,6 +1098,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'slideshow',
         index: 100,
+        mobile: 'high',
         label: gt('Slideshow'),
         ref: 'io.ox/mail/actions/slideshow-attachment'
     }));
@@ -1101,6 +1106,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'preview',
         index: 200,
+        mobile: 'high',
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
     }));
@@ -1108,6 +1114,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'open',
         index: 300,
+        mobile: 'high',
         label: gt('Open in browser'),
         ref: 'io.ox/mail/actions/open-attachment'
     }));
@@ -1115,6 +1122,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
         index: 400,
+        mobile: 'high',
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     }));
@@ -1122,6 +1130,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
         index: 500,
+        mobile: 'high',
         label: gt('Save to Drive'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));

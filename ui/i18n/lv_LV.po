@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-24 10:14+0200\n"
+"PO-Revision-Date: 2014-10-08 11:02+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -1443,10 +1443,8 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "Notiek tīrīšana.. Tas var aizņemt vairākas sekundes."
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
-#| msgid "User fields"
 msgid "Clear field"
-msgstr "Lietotāja definēts"
+msgstr "Tīrīt lauku"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1464,6 +1462,8 @@ msgstr "Noklikšķiniet šeit lai aizvērt palīdzības centru"
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
+"Noklikšķiniet šeit lai no jauna pieslēgtos savam Xing kontam un skatītu "
+"aktivitātes."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -2929,8 +2929,6 @@ msgid "Favorited"
 msgstr "Pievienots izlasē"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
-#| msgid "Favorite"
 msgid "Favorites"
 msgstr "Izlase"
 
@@ -4157,10 +4155,8 @@ msgid "My contact data"
 msgstr "Mani kontakta dati"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
-#| msgid "All folders"
 msgid "My folders"
-msgstr "Visas mapes"
+msgstr "Manas mapes"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -6269,10 +6265,8 @@ msgstr "Darbalaika sākums"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
-#| msgid "Search"
 msgid "Start search"
-msgstr "Meklēšana"
+msgstr "Sākt meklēšanu"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6933,10 +6927,8 @@ msgstr "Reģistrēta problēma ar XING. Kļūdas paziņojums ir: \"%s\""
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
-#| msgid "The following appointment already started:"
 msgid "There was no appointment data to import"
-msgstr "Sekojoša tikšanās jau ir sākusies:"
+msgstr "Nav importējamu tikšanās datu"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -7642,31 +7634,23 @@ msgstr "Esiet sveicināti %s"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
-#| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "Pievienot kalendāram"
+msgstr "Esiet sveicināti sava kalendāra vietnē"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "Esiet sveicināti %s"
+msgstr "Esiet sveicināti savu failu vietnē"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
-#| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "Jūsu pasta kastē nav vēstuļu"
+msgstr "Esiet sveicināti sava e-pasta vietnē"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "Esiet sveicināti %s"
+msgstr "Esiet sveicināti savu uzdevumu vietnē"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"

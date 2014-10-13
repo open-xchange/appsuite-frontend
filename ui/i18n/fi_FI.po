@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-22 12:10+0100\n"
+"PO-Revision-Date: 2014-10-09 12:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -951,10 +951,9 @@ msgstr "Arkisto"
 #: apps/io.ox/core/folder/contextmenu.js:106
 msgctxt "verb"
 msgid "Archive"
-msgstr "Arkisto"
+msgstr "Arkistoi"
 
 #: apps/io.ox/core/folder/actions/archive.js:36 module:io.ox/core
-#, fuzzy
 msgid "Archive messages"
 msgstr "Arkistoi viestit"
 
@@ -1418,10 +1417,8 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "Siivotaan... Tämä voi kestää muutaman sekunnin."
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
-#| msgid "User fields"
 msgid "Clear field"
-msgstr "Käyttäjän kentät"
+msgstr "Tyhjennä kenttä"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1439,6 +1436,7 @@ msgstr "Napsauta tästä sulkeaksesi help center"
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
+"Napsauta tästä luodaksesi uusi yhteys Xing-tilillesi, jotta näet tapahtumat."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -1563,7 +1561,7 @@ msgstr "Huomautukset ja ehdotukset"
 
 #: apps/io.ox/contacts/model.js:254 module:io.ox/contacts
 msgid "Commercial Register"
-msgstr "kaupparekisteri"
+msgstr "Kaupparekisteri"
 
 #: apps/io.ox/mail/settings/pane.js:170 module:io.ox/mail
 msgid "Common"
@@ -1573,7 +1571,7 @@ msgstr "Yleiset"
 #. Japanese: 他社共通絵文字
 #: apps/io.ox/emoji/categories.js:124 module:io.ox/mail/emoji
 msgid "Common Emoji"
-msgstr "Yleiset emoji merkit"
+msgstr "Yleiset emoji-merkit"
 
 #: apps/io.ox/mail/toolbar.js:232 module:io.ox/mail
 msgid "Compact"
@@ -2799,7 +2797,7 @@ msgstr "Ulkoinen yhteystieto"
 #: apps/io.ox/mail/common-extensions.js:456 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
-msgstr "Sinun roskapostilta suojaamiseksesi ulkoiset kuvat on estetty."
+msgstr "Viestissä olevia kuvia ei näytetä yksityisyytesi suojaamiseksi."
 
 #: apps/plugins/portal/birthdays/register.js:128 module:plugins/portal
 msgid "External link"
@@ -2889,10 +2887,8 @@ msgid "Favorited"
 msgstr "Suosikit"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
-#| msgid "Favorite"
 msgid "Favorites"
-msgstr "Suosikki"
+msgstr "Suosikit"
 
 #: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
 msgid "Fax"
@@ -4115,10 +4111,8 @@ msgid "My contact data"
 msgstr "Omat yhteystietoni"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
-#| msgid "All folders"
 msgid "My folders"
-msgstr "Kaikki kansiot"
+msgstr "Omat kansiot"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -5561,7 +5555,7 @@ msgstr "Keskeneräisiä toimintoja"
 
 #: apps/io.ox/core/commons.js:382 module:io.ox/core
 msgid "Results"
-msgstr ""
+msgstr "Tulokset"
 
 #: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
@@ -6221,10 +6215,8 @@ msgstr "Työajan alku"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
-#| msgid "Search"
 msgid "Start search"
-msgstr "Etsi"
+msgstr "Aloita haku"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6879,10 +6871,8 @@ msgstr "Tapahtui XING-virhe. Virheviesti oli:\"%s\""
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
-#| msgid "Show appointment details"
 msgid "There was no appointment data to import"
-msgstr "Näytä tapaamisen yksityiskohdat"
+msgstr "Tuotavia tapaamistietoja ei ole"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -6989,7 +6979,6 @@ msgstr[0] "Tätä tiedostoa ei ole poistettu"
 msgstr[1] "Näitä tiedostoja ei ole poistettu"
 
 #: apps/io.ox/files/actions.js:364 module:io.ox/files
-#, fuzzy
 msgid "This file has not been deleted, as it is locked by its owner."
 msgid_plural ""
 "These files have not been deleted, as they are locked by their owner."
@@ -7081,7 +7070,6 @@ msgid "This mail has no content"
 msgstr "Tässä viestissä ei ole sisältöä"
 
 #: apps/io.ox/core/yell.js:159 module:io.ox/core
-#, fuzzy
 msgid "This may take some seconds"
 msgstr "Tämä voi kestää muutaman sekunnin"
 
@@ -7582,31 +7570,23 @@ msgstr "Tervetuloa %s järjestelmään"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
-#| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "Lisää kalenteriin"
+msgstr "Tervetuloa kalenteriisi"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "Tervetuloa %s järjestelmään"
+msgstr "Tervetuloa tiedostoihisi"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
-#| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "Ei viestejä saapuneet laatikossasi"
+msgstr "Tervetuloa saapuneen postin postilaatikkoosi"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "Tervetuloa %s järjestelmään"
+msgstr "Tervetuloa tehtäviisi"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"

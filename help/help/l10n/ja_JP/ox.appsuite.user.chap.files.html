@@ -6,12 +6,15 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="index.html" title="OX App Suite">
-<link rel="prev" href="ox.appsuite.user.sect.tasks.share.delegate.html" title="8.6.2. 仕事の委任">
+<link rel="prev" href="ox.appsuite.user.sect.tasks.settings.html" title="8.10. 仕事の設定">
 <link rel="next" href="ox.appsuite.user.sect.files.gui.html" title="9.1. Drive の画面構成">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -19,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.tasks.share.delegate.html">戻る</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.tasks.settings.html">戻る</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.gui.html">次へ</a></li>
@@ -57,30 +60,33 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.11 バージョンの操作</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.12 複数のファイルを一度に編集</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.6 WebDAV によるファイルへのアクセス</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.search.html">9.6 ファイルの検索</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.7 WebDAV によるファイルへのアクセス</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.6.1 Linux 環境での WebDAV のセットアップ</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.6.2 Windows XP 環境での WebDAV のセットアップ</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.6.3 Windows Vista 環境での WebDAV のセットアップ</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.6.4 Windows 7 環境での WebDAV のセットアップ</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.7.1 Linux 環境での WebDAV のセットアップ</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.7.2 Windows XP 環境での WebDAV のセットアップ</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.7.3 Windows Vista 環境での WebDAV のセットアップ</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.7.4 Windows 7 環境での WebDAV のセットアップ</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.7 ファイルとチーム</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.8 Drive の設定</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.8 ファイルとチーム</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.9 Drive の設定</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm139785064354080"></a><a class="indexterm" name="idm139785065513920"></a><a class="indexterm" name="idm139785063776784"></a><div class="concept">
-<a name="ox.appsuite.user.concept.files"></a><p><span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> アプリケーションの使用方法を次のトピックごとに説明します。</p>
+<a class="indexterm" name="idm140389702888608"></a><a class="indexterm" name="idm140389696671552"></a><a class="indexterm" name="idm140389700110288"></a><div class="concept">
+<a name="ox.appsuite.user.concept.files"></a><p><span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> アプリケーションの使用方法を次のトピックごとに説明します。 </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.gui.html" title="9.1. Drive の画面構成"><span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> の画面構成</a></p></li>
 <li class="listitem"><p>ファイルの <a class="link" href="ox.appsuite.user.sect.files.view.html" title="9.2. ファイルの表示">検索と表示</a></p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.open.html" title="9.3. ファイルを開く、内容の表示">ファイルを開く、内容の表示</a></p></li>
 <li class="listitem"><p>マルチメディア ファイルの <a class="link" href="ox.appsuite.user.sect.files.open.multimedia.html" title="9.3.3. マルチメディア ファイルの再生">表示や再生</a></p></li>
-<li class="listitem"><p>ファイルの <a class="link" href="ox.appsuite.user.sect.files.add.html" title="9.4. ファイルの作成">作成 </a></p></li>
+<li class="listitem"><p>ファイルの <a class="link" href="ox.appsuite.user.sect.files.add.html" title="9.4. ファイルの作成">作成</a></p></li>
 <li class="listitem"><p>ファイルの <a class="link" href="ox.appsuite.user.sect.files.manage.html" title="9.5. ファイルの管理">整理</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.webdav.html" title="9.6. WebDAV によるファイルへのアクセス">WebDAV</a> を使用したデータへのアクセス </p></li>
-<li class="listitem"><p>他のユーザや外部のパートナーとのファイルの <a class="link" href="ox.appsuite.user.sect.files.share.html" title="9.7. ファイルとチーム">共有</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.settings.html" title="9.8. Drive の設定"><span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> の設定</a> の使用</p></li>
+<li class="listitem"><p>ファイルの <a class="link" href="ox.appsuite.user.sect.files.search.html" title="9.6. ファイルの検索">検索</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. WebDAV によるファイルへのアクセス">WebDAV</a> を使用したデータへのアクセス</p></li>
+<li class="listitem"><p>他のユーザや外部のパートナーとのファイルの <a class="link" href="ox.appsuite.user.sect.files.share.html" title="9.8. ファイルとチーム">共有</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.settings.html" title="9.9. Drive の設定"><span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> 設定の使用</a></p></li>
 </ul></div>
+<p>デスクトップまたはモバイル デバイスでのローカル クライアントの使用方法の詳細は、<span class="phrase">OX Drive</span> クライアントのユーザ ガイドを参照してください。</p>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.files.start"></a><p class="title"><b><span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> アプリケーションを起動する</b></p>

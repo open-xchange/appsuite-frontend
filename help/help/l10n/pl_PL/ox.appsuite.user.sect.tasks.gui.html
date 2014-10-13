@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -28,8 +31,9 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.tasks.gui"></a>8.1. Składniki aplikacji <span class="phrase"> <span class="guilabel"><strong>Zadania</strong></span> </span>  </h2></div></div></div>
-<a class="indexterm" name="idm139943753243392"></a><div class="reference">
+<a name="ox.appsuite.user.sect.tasks.gui"></a>8.1. Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Zadania</strong></span></span>
+</h2></div></div></div>
+<a class="indexterm" name="idm139961879794352"></a><div class="reference">
 <a name="ox.appsuite.user.reference.tasks.gui.hint"></a><p>Wprowadzenie do interfejsu użytkownika można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. Interfejs użytkownika">Interfejs użytkownika</a>.</p>
 </div>
 <div class="reference">
@@ -50,9 +54,9 @@
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Termin</strong></span>. Zmienia <a class="link" href="ox.appsuite.user.sect.tasks.manage.changeduedate.html#ox.appsuite.user.concept.tasks.changeduedate">termin zadania</a>.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Wykonane</strong></span>. Umożliwia oznaczenie <a class="link" href="ox.appsuite.user.sect.tasks.manage.markasdone.html#ox.appsuite.user.concept.tasks.markasdone">zadania jako wykonanego</a>.</p></li>
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Usuń</strong></span>. <a class="link" href="ox.appsuite.user.sect.tasks.manage.delete.html#ox.appsuite.user.concept.tasks.delete">Usuwa zadanie</a> wskazane przez użytkownika.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Więcej</strong></span>. Otwiera menu z następującymi pozycjami: <a class="link" href="ox.appsuite.user.sect.tasks.manage.print.html#ox.appsuite.user.concept.tasks.print"><span class="guibutton"><strong>Drukuj</strong></span>, </a><a class="link" href="ox.appsuite.user.sect.tasks.manage.move.html#ox.appsuite.user.concept.tasks.move"><span class="guibutton"><strong>Przenieś</strong></span></a>.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Więcej</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.tasks.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>. Otwiera menu z następującymi pozycjami: <a class="link" href="ox.appsuite.user.sect.tasks.manage.print.html#ox.appsuite.user.concept.tasks.print"><span class="guibutton"><strong>Drukuj</strong></span>, </a><a class="link" href="ox.appsuite.user.sect.tasks.manage.move.html#ox.appsuite.user.concept.tasks.move"><span class="guibutton"><strong>Przenieś</strong></span></a>.</p></li>
 <li class="listitem">
-<p>Przycisk <span class="guibutton"><strong>Widok</strong></span>. Otwiera menu z następującymi pozycjami:</p>
+<p>Przycisk <span class="guibutton"><strong>Widok</strong></span>. Umożliwia otwarcie menu z następującymi pozycjami:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Widok folderu</strong></span>. Otwiera lub zamyka <a class="link" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.foldertree" title="Drzewo folderów">drzewo folderów</a>.</p></li>
 <li class="listitem"><p>Pole wyboru <span class="guibutton"><strong>Pola wyboru</strong></span>. Wyświetla pole wyboru obok każdej zadania na liście. Pozwala to na wybranie wielu zadań i ich <a class="link" href="ox.appsuite.user.sect.contacts.manage.multiple.html#ox.appsuite.user.concept.contacts.multiple">jednoczesną edycję</a>.</p></li>
@@ -100,13 +104,13 @@
 <p>Nazwy uczestników, jeśli są dostępne. Po kliknięciu nazwy pojawi się <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Wyskakujące okienko">wyskakujące okienko</a> z następującymi składnikami:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>Dane kontaktowe danej osoby.</p></li>
-<li class="listitem"><p>Jeśli istnieje historia korespondencji e-mail z tą osobą, będzie można ją przeczytać w sekcji <span class="guilabel"><strong>Ostatnie rozmowy</strong></span>.</p></li>
+<li class="listitem"><p>Jeśli z tą osobą była już prowadzona korespondencja e-mail, zostanie ona wyświetlona w obszarze <span class="guilabel"><strong>Ostatnie konwersacje</strong></span>.</p></li>
 <li class="listitem"><p>Jeśli są zaplanowane spotkania z tą osobą, będzie można je zobaczyć w sekcji <span class="guilabel"><strong>Wspólne spotkania</strong></span>.</p></li>
-<li class="listitem"><p>dane tej osoby z sieci społecznościowych, takich jak Xing lub LinkedIn. Za pomocą dostępnych przycisków można otworzyć profil tej osoby.</p></li>
+<li class="listitem"><p>Dane tej osoby z sieci społecznościowych, takich jak Xing czy LinkedIn. Możesz otworzyć profil tej osoby za pomocą dostępnych przycisków.</p></li>
 </ul></div>
 <p>
             </p>
-<p>Kliknięcie spotkania lub adresu e-mail spowoduje otwarcie dodatkowego wyskakującego okienka.</p>
+<p>Kliknięcie nazwiska uczestnika powoduje otwarcie dodatkowego wyskakującego okienka.</p>
 </li>
 <li class="listitem"><p>Jeśli spotkanie obejmuje uczestników zewnętrznych, ich nazwiska będą wyświetlane w obszarze <span class="guilabel"><strong>Uczestnicy zewnętrzni</strong></span>.</p></li>
 </ul></div>

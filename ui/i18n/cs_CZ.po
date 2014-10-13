@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-28 11:35+0200\n"
+"PO-Revision-Date: 2014-10-09 19:39+0200\n"
 "Last-Translator: Robert Krátký <rkratky@gmail.com>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1438,10 +1438,9 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "Pročišťuji... To může několik sekund trvat."
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
 #| msgid "User fields"
 msgid "Clear field"
-msgstr "Uživatelská pole"
+msgstr "Vyprázdnit pole"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1459,6 +1458,7 @@ msgstr "Klikněte sem pro opuštění centra nápověda"
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
+"Klikněte sem pro opětovné přihlášení ke službě Xing pro zobrazení aktivit."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -2909,7 +2909,6 @@ msgid "Favorited"
 msgstr "Označené jaké oblíbené"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
 #| msgid "Favorite"
 msgid "Favorites"
 msgstr "Oblíbené"
@@ -4136,10 +4135,9 @@ msgid "My contact data"
 msgstr "Moje kontaktní údaje"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
 #| msgid "All folders"
 msgid "My folders"
-msgstr "Všechny složky"
+msgstr "Moje složky"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -6247,10 +6245,9 @@ msgstr "Začátek pracovní doby"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
 #| msgid "Search"
 msgid "Start search"
-msgstr "Hledat"
+msgstr "Spustit vyhledávání"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6901,10 +6898,9 @@ msgstr "Vyskytl se problém se službou XING. Chybová zpráva byla: „%s“"
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
 #| msgid "The following appointment already started:"
 msgid "There was no appointment data to import"
-msgstr "Následující schůzka již začala:"
+msgstr "Žádné údaje o schůzkách k importování"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -7616,31 +7612,27 @@ msgstr "Vítejte v %s"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
 #| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "Přidat do kalendáře"
+msgstr "Vítejte ve svém kalendáři"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "Vítejte v %s"
+msgstr "Vítejte u svých souborů"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
 #| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "Vaše složka příchozích zpráv je prázdná"
+msgstr "Vítejte ve své složce příchozích zpráv"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "Vítejte v %s"
+msgstr "Vítejte u svých úkolů"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"

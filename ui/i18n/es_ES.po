@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-28 01:02+0200\n"
+"PO-Revision-Date: 2014-10-08 00:47+0200\n"
 "Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
 "Language-Team: Spanish <es@bureau-cornavin.com>\n"
 "Language: es_ES\n"
@@ -1427,10 +1427,9 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "Limpiando... Esto puede tardar unos segundos."
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
 #| msgid "User fields"
 msgid "Clear field"
-msgstr "Campos de usuario"
+msgstr "Borrar campo"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1447,7 +1446,7 @@ msgstr "Haga clic aquí para salir del centro de ayuda"
 
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
-msgstr ""
+msgstr "Pulse aquí para reconectar a su cuenta de Xing para ver actividades."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -2910,10 +2909,9 @@ msgid "Favorited"
 msgstr "Marcado como favorito"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
 #| msgid "Favorite"
 msgid "Favorites"
-msgstr "Favorito"
+msgstr "Favoritos"
 
 #: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
 msgid "Fax"
@@ -4138,10 +4136,9 @@ msgid "My contact data"
 msgstr "Mis datos de contacto"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
 #| msgid "All folders"
 msgid "My folders"
-msgstr "Todas las carpetas"
+msgstr "Mis carpetas"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -6257,10 +6254,9 @@ msgstr "Comienzo de jornada laboral"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
 #| msgid "Search"
 msgid "Start search"
-msgstr "Buscar"
+msgstr "Comenzar búsqueda"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6918,10 +6914,9 @@ msgstr "Hubo un problema con XING. El mensaje de error fue: \"%s\""
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
 #| msgid "The following appointment already started:"
 msgid "There was no appointment data to import"
-msgstr "La siguiente cita ya comenzó:"
+msgstr "No había datos de citas para importar"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -7628,31 +7623,27 @@ msgstr "Bienvenido a %s"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
 #| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "Añadir al calendario"
+msgstr "Bienvenido/a a su calendario"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "Bienvenido a %s"
+msgstr "Bienvenido/a a sus ficheros"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
 #| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "No hay correos en su bandeja de entrada"
+msgstr "Bienvenido/a a su bandeja de entrada"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "Bienvenido a %s"
+msgstr "Bienvenido/a a sus tareas"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"

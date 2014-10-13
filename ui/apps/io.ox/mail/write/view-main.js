@@ -565,6 +565,10 @@ define('io.ox/mail/write/view-main',
 
             $input.on('change', changeHandler);
 
+            $input.on('reset.fileupload', function () {
+                $(this).val('');
+            });
+
             $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
                 e.preventDefault();
                 require(['io.ox/files/filepicker']).done(function (Picker) {
@@ -922,8 +926,6 @@ define('io.ox/mail/write/view-main',
                     this.priorityOverlay = $('<div class="priority-overlay">')
                         .attr('title', 'Priority')
                         .append(
-                            $('<i class="fa fa-exclamation">'),
-                            $('<i class="fa fa-exclamation">'),
                             $('<i class="fa fa-exclamation">')
                         )
                         .on('click', $.proxy(togglePriority, this))
@@ -1107,10 +1109,13 @@ define('io.ox/mail/write/view-main',
         index: 100,
         draw: function (baton) {
             this.append(
-                util.renderPersonalName({
-                    $el: $('<div class="recipient-name">'),
-                    name: contactsUtil.getMailFullName(baton.data)
-                })
+                util.renderPersonalName(
+                    {
+                        $el: $('<div class="recipient-name">'),
+                        name: contactsUtil.getMailFullName(baton.data)
+                    },
+                    baton.data
+                )
             );
         }
     });

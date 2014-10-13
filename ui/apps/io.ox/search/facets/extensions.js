@@ -240,27 +240,32 @@ define('io.ox/search/facets/extensions',
                     this.find('label').prepend(
                         $('<span>')
                             .addClass('type')
-                            .html(type || facet.name)
+                            .text(type || facet.name)
 
                     );
                 }
             },
 
             facetName: function (baton, value, facet) {
-                var type;
+                var node = $('<span>').addClass('name'),
+                    detail = (value.item || {}).detail,
+                    label = value.name || (value.item || {}).name,
+                    optionslabel;
 
-                // TYPE 3: use option label instead of value label
-                if (facet.style === 'exclusive' && value._compact)
-                    type = util.getOptionLabel(value.options, value._compact.option);
+                if (detail) {
+                    // example: searchtem <i>in description</i>
+                    node.append(
+                        $.txt(value.item.name + '\u00A0'),
+                        $('<i>').text(detail)
+                    );
+                } else {
+                    // TYPE 3: use option label instead of value label
+                    if (facet.style === 'exclusive' && value._compact)
+                        optionslabel = util.getOptionLabel(value.options, value._compact.option);
+                    node.text(optionslabel || label || gt('All'));
+                }
 
-                if ((value.item || {}).detail)
-                    type = value.item.name +  ' <i>' + value.item.detail + '</i>';
-
-                this.find('label').append(
-                    $('<span>')
-                        .addClass('name')
-                        .html(type || value.name || (value.item || {}).name || gt('All'))
-                );
+                this.find('label').append(node);
             },
 
             facetRemove: function (baton, value, facet, fn) {
@@ -332,7 +337,7 @@ define('io.ox/search/facets/extensions',
                                     .append(
                                         $('<i class="fa fa-fw">')
                                             .addClass(current === '' ? 'fa-check': 'fa-none'),
-                                        $('<span>').html(gt('All'))
+                                        $('<span>').text(gt('All'))
                                     )
                                     //.addClass('option')
                                     .attr({
@@ -354,7 +359,7 @@ define('io.ox/search/facets/extensions',
                                          $('<a role="menuitemcheckbox" tabindex="-1" href="#">')
                                             .append(
                                                 $('<i class="fa fa-fw fa-none">'),
-                                                $('<span>').html(item.name || item.item.name)
+                                                $('<span>').text(item.name || item.item.name)
                                             )
                                             .addClass('option')
                                             .attr({
@@ -433,6 +438,8 @@ define('io.ox/search/facets/extensions',
                         to: range[1].value.replace ? null : range[1].value
                     };
                 }
+                // datepicker range automatically corrects dates so whe delay a little bit
+                var lazyApply = _.debounce(apply, 200);
 
                 // change handler
                 function apply () {
@@ -481,19 +488,19 @@ define('io.ox/search/facets/extensions',
                     .append(
                         $('<div>')
                             .addClass('type')
-                            .html(facet.name),
+                            .text(facet.name),
                         group = $('<div class="input-daterange input-group" id="datepicker">')
                                     .append(
                                         $('<input type="text" class="input-sm form-control" name="start" />')
                                             .attr('placeholder', gt('Starts on'))
                                             .val(from)
-                                            .on('change', apply),
+                                            .on('change', lazyApply),
                                         $('<span class="input-group-addon">')
                                             .text('-'),
                                         $('<input type="text" class="input-sm form-control" name="end" />')
                                             .attr('placeholder', gt('Ends on'))
                                             .val(to)
-                                            .on('change', apply)
+                                            .on('change', lazyApply)
                                     )
                                     .datepicker({
                                         format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),

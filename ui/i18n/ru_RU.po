@@ -1,9 +1,8 @@
-# Antje Faber, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-23 20:57+0000\n"
+"PO-Revision-Date: 2014-10-09 11:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: Russian <kde-i18n-doc@kde.org>\n"
 "Language: ru_RU\n"
@@ -12,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Poedit 1.6.9\n"
 
 #. File size
 #. %1$d is the number
@@ -547,7 +546,7 @@ msgstr "Доступ к глобальной адресной книге не р
 #: apps/io.ox/core/pubsub/subscriptions.js:237 module:io.ox/core/pubsub
 #: apps/plugins/portal/mail/register.js:199 module:plugins/portal
 msgid "Account"
-msgstr "Аккаунт"
+msgstr "Учетная запись"
 
 #: apps/io.ox/oauth/settings.js:66 module:io.ox/settings/oauth
 msgid "Account Settings"
@@ -1437,10 +1436,8 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "Очистка... Это может занять несколько секунд."
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
-#| msgid "User fields"
 msgid "Clear field"
-msgstr "Поля пользователя"
+msgstr "Очистить поле"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1458,6 +1455,8 @@ msgstr "Нажмите для выхода из справочного цент�
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
+"Нажмите здесь, чтобы снова подключиться к учетной записи Xing и просмотреть "
+"действия."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -2913,8 +2912,6 @@ msgid "Favorited"
 msgstr "В избранном"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
-#| msgid "Favorite"
 msgid "Favorites"
 msgstr "Избранное"
 
@@ -4139,10 +4136,8 @@ msgid "My contact data"
 msgstr "Мои контактные данные"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
-#| msgid "All folders"
 msgid "My folders"
-msgstr "Все папки"
+msgstr "Мои папки"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -6244,10 +6239,8 @@ msgstr "Начало рабочего дня"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
-#| msgid "Search"
 msgid "Start search"
-msgstr "Поиск"
+msgstr "Найти"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6893,10 +6886,8 @@ msgstr "Ошибка XING: «%s»"
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
-#| msgid "Show appointment details"
 msgid "There was no appointment data to import"
-msgstr "Показать данные встречи"
+msgstr "Данные о встречах не найдены"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -7599,31 +7590,23 @@ msgstr "Добро пожаловать в %s"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
-#| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "Добавить в календарь"
+msgstr "Добро пожаловать в календарь"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "Добро пожаловать в %s"
+msgstr "Добро пожаловать в список файлов"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
-#| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "Нет входящих сообщений."
+msgstr "Добро пожаловать во входящие"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
-#| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "Добро пожаловать в %s"
+msgstr "Добро пожаловать в задачи"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"

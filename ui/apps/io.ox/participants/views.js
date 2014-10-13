@@ -81,7 +81,7 @@ define('io.ox/participants/views',
             var name = this.model.getDisplayName();
             //display name: 'email only' participant
             name = name === '...' && this.model.getEmail() !== '' ? this.model.getEmail().split('@')[0] : name;
-            util.renderPersonalName({ $el: this.nodes.$text, name: name });
+            util.renderPersonalName({ $el: this.nodes.$text, name: name }, this.model.toJSON());
         },
 
         setCustomImage: function () {

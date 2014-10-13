@@ -6,9 +6,9 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-23 18:33+0200\n"
+"PO-Revision-Date: 2014-10-08 18:24+0200\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
-"Language-Team: Swedish <ox@bureau-cornavin.com>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1421,10 +1421,9 @@ msgid "Cleaning up... This may take a few seconds."
 msgstr "Städar... Det kan ta ett par sekunder."
 
 #: apps/io.ox/search/autocomplete/extensions.js:175 module:io.ox/core
-#, fuzzy
 #| msgid "User fields"
 msgid "Clear field"
-msgstr "Användarfält"
+msgstr "Rensa fält"
 
 #: apps/io.ox/calendar/week/view.js:803 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:807
@@ -1442,6 +1441,7 @@ msgstr "Klicka här för att avsluta hjälpcentralen"
 #: apps/plugins/portal/xing/register.js:309 module:plugins/portal
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
+"Klicka här för att återansluta till ditt xing-konto för att se aktiviteter."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:503
 #: module:io.ox/calendar/edit/main
@@ -2896,10 +2896,9 @@ msgid "Favorited"
 msgstr "Favoritmärkt"
 
 #: apps/io.ox/core/folder/favorites.js:67 module:io.ox/core
-#, fuzzy
 #| msgid "Favorite"
 msgid "Favorites"
-msgstr "Favorit"
+msgstr "Favoriter"
 
 #: apps/io.ox/contacts/model.js:266 module:io.ox/contacts
 msgid "Fax"
@@ -4123,10 +4122,9 @@ msgid "My contact data"
 msgstr "Min kontaktdata"
 
 #: apps/io.ox/core/folder/extensions.js:89 module:io.ox/core
-#, fuzzy
 #| msgid "All folders"
 msgid "My folders"
-msgstr "Alla mappar"
+msgstr "Mina mappar"
 
 #: apps/plugins/portal/recentfiles/register.js:34 module:plugins/portal
 msgid "My latest files"
@@ -6227,10 +6225,9 @@ msgstr "Arbetstid startar"
 
 #: apps/io.ox/core/desktop.js:1748 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1749
-#, fuzzy
 #| msgid "Search"
 msgid "Start search"
-msgstr "Sök"
+msgstr "Börja sök"
 
 #: apps/io.ox/calendar/edit/template.js:139 module:io.ox/calendar/edit/main
 #: apps/io.ox/search/facets/extensions.js:488 module:io.ox/core
@@ -6881,10 +6878,9 @@ msgstr "Ett problem uppstod med XING. Felmeddelandet var: \"%s\""
 
 #. Error message if calender import failed
 #: apps/io.ox/core/import/import.js:180 module:io.ox/core
-#, fuzzy
 #| msgid "Show appointment details"
 msgid "There was no appointment data to import"
-msgstr "Visa detaljer om möte"
+msgstr "Det fanns ingen mötesinformation att importera"
 
 #: apps/io.ox/mail/accounts/settings.js:209
 #: module:io.ox/mail/accounts/settings
@@ -7587,31 +7583,27 @@ msgstr "Välkommen till %s"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:36 module:io.ox/portal
-#, fuzzy
 #| msgid "Add to calendar"
 msgid "Welcome to your calendar"
-msgstr "Lägg till i kalendern"
+msgstr "Välkommen till din kalender"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:40 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your files"
-msgstr "Välkommen till %s"
+msgstr "Välkommen till dina filer"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
-#, fuzzy
 #| msgid "No mails in your inbox"
 msgid "Welcome to your inbox"
-msgstr "Ingen e-post i din inkorg"
+msgstr "Välkommen till din inkorg"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
-#, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to your tasks"
-msgstr "Välkommen till %s"
+msgstr "Välkommen till dina uppgifter"
 
 #: apps/plugins/core/feedback/register.js:139 module:io.ox/core
 msgid "Welcome. Please provide your feedback about this product"

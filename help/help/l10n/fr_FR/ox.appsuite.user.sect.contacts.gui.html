@@ -7,11 +7,14 @@
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.chap.contacts.html" title="Chapitre 6. Carnet d'adresses">
 <link rel="prev" href="ox.appsuite.user.chap.contacts.html" title="Chapitre 6. Carnet d'adresses">
-<link rel="next" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. Affichage des contacts">
+<link rel="next" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. Afficher des contacts">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -30,7 +33,7 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.contacts.gui"></a>6.1. Les composants de <span class="phrase"><span class="guilabel"><strong>Carnet d'adresses</strong></span></span>
 </h2></div></div></div>
-<a class="indexterm" name="idm139841092628736"></a><div class="reference">
+<a class="indexterm" name="idm140291084603488"></a><div class="reference">
 <a name="ox.appsuite.user.reference.contacts.gui.hint"></a><p>Vous trouverez une introduction à l'interface graphique dans <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. L'interface utilisateur">L'interface utilisateur</a>.</p>
 </div>
 <div class="reference">
@@ -55,7 +58,7 @@
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Modifier</strong></span>. Modifie les <a class="link" href="ox.appsuite.user.sect.contacts.manage.edit.html#ox.appsuite.user.concept.contacts.edit">données d'un contact</a>.</p></li>
 <li class="listitem"><p>Bouton <span class="guibutton"><strong>Supprimer</strong></span>. <a class="link" href="ox.appsuite.user.sect.contacts.manage.delete.html#ox.appsuite.user.concept.contacts.delete">Supprime les contacts</a> que vous avez sélectionnés.</p></li>
 <li class="listitem">
-<p>Bouton <span class="guibutton"><strong>Plus</strong></span>. Ouvre un menu contenant les entrées suivantes :<a class="link" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html#ox.appsuite.user.concept.contacts.sendvcard"><span class="guibutton"><strong>Envoyer comme vCard</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.print.html#ox.appsuite.user.concept.contacts.print"><span class="guibutton"><strong>Imprimer</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.move.html#ox.appsuite.user.concept.contacts.move"><span class="guibutton"><strong>Déplacer</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.copy.html#ox.appsuite.user.concept.contacts.copy"><span class="guibutton"><strong>Copier</strong></span></a>.</p>
+<p>Bouton <span class="guibutton"><strong>Plus</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>. Ouvre un menu contenant les entrées suivantes :<a class="link" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html#ox.appsuite.user.concept.contacts.sendvcard"><span class="guibutton"><strong>Envoyer comme vCard</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.print.html#ox.appsuite.user.concept.contacts.print"><span class="guibutton"><strong>Imprimer</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.move.html#ox.appsuite.user.concept.contacts.move"><span class="guibutton"><strong>Déplacer</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.copy.html#ox.appsuite.user.concept.contacts.copy"><span class="guibutton"><strong>Copier</strong></span></a>.</p>
 <p><span class="phrase"><strong>Remarque :</strong></span> certains boutons peuvent ne pas être affichés si vous n'avez pas les droits nécessaires. </p>
 <p><span class="phrase"><strong>Remarque :</strong></span> en fonction du carnet d'adresses ou des données du contact, certains boutons peuvent être organisés différemment ou ne pas être disponibles.</p>
 </li>

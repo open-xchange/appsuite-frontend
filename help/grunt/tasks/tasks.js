@@ -21,4 +21,6 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['copy_build', 'less']);
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'copy_dist']);
+    //remove install:dynamic task (make it a noop)
+    grunt.registerTask('install:dynamic', []);
 };

@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.2. Affichage des courriels</title>
+<title>5.2. Afficher des courriels</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -28,8 +31,8 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.email.view"></a>5.2. Affichage des courriels</h2></div></div></div>
-<a class="indexterm" name="idm139841087866896"></a><a class="indexterm" name="idm139841087865280"></a><div class="concept">
+<a name="ox.appsuite.user.sect.email.view"></a>5.2. Afficher des courriels</h2></div></div></div>
+<a class="indexterm" name="idm140291079506848"></a><a class="indexterm" name="idm140291079505232"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.view"></a><p>Par défaut, le contenu de la boîte de réception est affiché. Les autres dossiers de courriers peuvent être ouverts depuis l'arborescence des dossiers. Afin de réduire la latence, seul un certain pourcentage des courriels d'un dossier sont chargés par le serveur, si leur nombre dépasse une limite prédéfinie. En naviguant vers le bas de la liste, la partie suivante sera chargée.</p>
 </div>
 <div class="task">
@@ -39,7 +42,7 @@
 <li class="step">
 <p>Pour trouver rapidement un message donné, utilisez une des méthodes suivantes : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Pour trouver des messages à partir d'un terme de recherche, utilisez la <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.objects.html#ox.appsuite.user.task.search" title="Pour chercher un objet :">fonctionnalité de recherche</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour trouver des messages à partir d'un terme de recherche, utilisez la <a class="link" href="ox.appsuite.user.sect.email.search.html#ox.appsuite.user.task.email.search" title="Pour rechercher un courriel :">fonctionnalité de recherche</a>.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Pour trier la liste de courriels, cliquez sur <span class="guibutton"><strong>Trier par</strong></span> au-dessus de la liste. Sélectionnez le critère de tri dans le menu.</p></li>
 </ul></div>
 <p>
@@ -51,7 +54,7 @@
 <p>Si vous avez sélectionné <span class="guibutton"><strong>Liste</strong></span> dans la liste déroulante <span class="guibutton"><strong>Vue</strong></span> de la barre d'outils, la liste est remplacée par une vue détaillée du courriel sélectionné. Dans ce cas, les fonctions suivantes sont disponibles au-dessus de la vue détaillée.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>Pour ouvrir à nouveau la liste, cliquez sur le bouton ou l'icône <span class="guibutton"><strong>Retour</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.back"></a><img src="../../images/appsuite_user_icon_view_back.png"></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour afficher le courriel suivant, cliquez sur l'icône <span class="guibutton"><strong>Afficher le suivant</strong></span> icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.next"></a><img src="../../images/appsuite_user_icon_view_next.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour afficher le courriel suivant, cliquez sur l'icône <span class="guibutton"><strong>Afficher le suivant</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.next"></a><img src="../../images/appsuite_user_icon_view_next.png"></span>.</p></li>
 <li class="listitem" style="list-style-type: none"><p>Pour afficher le message précédent, cliquez sur l'icône <span class="guibutton"><strong>Afficher le précédent</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.previous"></a><img src="../../images/appsuite_user_icon_view_previous.png"></span>.</p></li>
 </ul></div>
 <p>

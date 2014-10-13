@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -29,7 +32,7 @@
   <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.portal.customize.settings"></a>4.2.5. 更改门户小部件设置</h3></div></div></div>
-<a class="indexterm" name="idm140621582583264"></a><div class="task">
+<a class="indexterm" name="idm139933754356960"></a><div class="task">
 <a name="ox.appsuite.user.task.portal.customize.settings"></a><p class="title"><b>如何使用门户小部件设置：</b></p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>单击在菜单栏右边的<span class="guibutton"><strong>系统菜单</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.portal.customize.settings.systemmenu"></a><img src="../../images/appsuite_user_icon_settings.png"></span>。单击 <span class="guibutton"><strong>设置</strong></span> 菜单项目。</p></li>
@@ -37,13 +40,16 @@
 <li class="step"><p>更改<a class="link" href="ox.appsuite.user.sect.portal.customize.settings.html#ox.appsuite.user.concept.portal.customize.settings">设置</a>。</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p><span class="phrase"><strong>提示：</strong></span>您也可以单击<span class="guibutton"><strong>自定义此页面</strong></span>在<span class="guilabel"><strong>门户</strong></span>
+          <p><span class="phrase"><strong>提示：</strong></span>您也可以单击<span class="guibutton"><strong>自定义此页面</strong></span>（在<span class="phrase">
+							<span class="guilabel"><strong>门户</strong></span>
+						</span>
+						
 						
 						应用程序里）显示门户小部件设定。</p>
         </div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.portal.customize.settings"></a><p>有以下设置：</p>
+<a name="ox.appsuite.user.concept.portal.customize.settings"></a><p>默认视图 . 设置联系人模块的默认视图。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.portal.customize.settings.html#ox.appsuite.user.reference.portal.customize.settings.edit" title="编辑按键"><span class="guibutton"><strong>编辑</strong></span>按键</a></p></li>
 <li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.portal.customize.settings.html#ox.appsuite.user.reference.portal.customize.settings.color" title="颜色按钮"><span class="guibutton"><strong>颜色</strong></span>按钮</a></p></li>
@@ -55,19 +61,19 @@
       </p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.portal.customize.settings.edit"></a><p><b><span class="guibutton"><strong>编辑</strong></span>按键 </b><a class="indexterm" name="idm140621582553376"></a>允许编辑一个小部件设定，例如：URL 或描述。 <span class="phrase"><strong>备注：</strong></span>此按钮只在某些小部件可用。</p>
+<a name="ox.appsuite.user.reference.portal.customize.settings.edit"></a><p><b><span class="guibutton"><strong>编辑</strong></span>按键 </b><a class="indexterm" name="idm139933754326384"></a>允许编辑一个小部件设定，例如：URL 或描述。 <span class="phrase"><strong>备注：</strong></span>此按钮只在某些小部件可用。</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.portal.customize.settings.color"></a><p><b><span class="guibutton"><strong>颜色</strong></span>按钮 </b><a class="indexterm" name="idm140621582547712"></a>定义显示一个小部件名称使用的颜色。</p>
+<a name="ox.appsuite.user.reference.portal.customize.settings.color"></a><p><b><span class="guibutton"><strong>颜色</strong></span>按钮 </b><a class="indexterm" name="idm139933754320720"></a>定义显示一个小部件名称使用的颜色。</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.portal.customize.settings.activate"></a><p><b><span class="guibutton"><strong>关闭</strong></span>按钮 </b><a class="indexterm" name="idm140621582543152"></a><a class="indexterm" name="idm140621582541136"></a>您可以从门户移除一个小部件。要再显示小部件，单击<span class="guibutton"><strong>启用</strong></span>按钮。</p>
+<a name="ox.appsuite.user.reference.portal.customize.settings.activate"></a><p><b><span class="guibutton"><strong>关闭</strong></span>按钮 </b><a class="indexterm" name="idm139933754316160"></a><a class="indexterm" name="idm139933754314144"></a>您可以从门户移除一个小部件。要再显示小部件，单击<span class="guibutton"><strong>启用</strong></span>按钮。</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.portal.customize.settings.remove"></a><p><b><span class="guibutton"><strong>删除</strong></span> 图标 </b><a class="indexterm" name="idm140621582535856"></a><span class="phrase"><strong>警告：</strong></span>如果删除一个小部件，此小部件中的所有设置也会被删除。此 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.portal.settings.remove"></a><img src="../../images/appsuite_user_icon_trash.png"></span> 图标从门户和设定页上的小部件列表，删除一个小部件。</p>
+<a name="ox.appsuite.user.reference.portal.customize.settings.remove"></a><p><b><span class="guibutton"><strong>删除</strong></span> 图标 </b><a class="indexterm" name="idm139933754308864"></a><span class="phrase"><strong>警告：</strong></span>如果删除一个小部件，此小部件中的所有设置也会被删除。此 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.portal.settings.remove"></a><img src="../../images/appsuite_user_icon_trash.png"></span> 图标从门户和设定页上的小部件列表，删除一个小部件。</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.portal.customize.settings.mobilesummary"></a><p><b><span class="guibutton"><strong>只显示在行动装置上的小部件摘要</strong></span>选择框 </b><a class="indexterm" name="idm140621582526960"></a>定义一个小部件的完整内容要否显示在行动装置上，或只显示一个概观。有效的小部件比如有<span class="guilabel"><strong>最近更改文件</strong></span>、<span class="guilabel"><strong>约会</strong></span>、<span class="guilabel"><strong>收件箱</strong></span>。为了检视小部件的完整内容，点下概观文本。<span class="phrase"><strong>备注：</strong></span>您必须重新登陆以激活新设置。</p>
+<a name="ox.appsuite.user.reference.portal.customize.settings.mobilesummary"></a><p><b><span class="guibutton"><strong>只显示在行动装置上的小部件摘要</strong></span>选择框 </b><a class="indexterm" name="idm139933754299968"></a>定义一个小部件的完整内容要否显示在行动装置上，或只显示一个概观。有效的小部件比如有<span class="guilabel"><strong>最近更改文件</strong></span>、<span class="guilabel"><strong>约会</strong></span>、<span class="guilabel"><strong>收件箱</strong></span>。为了检视小部件的完整内容，点下概观文本。<span class="phrase"><strong>备注：</strong></span>您必须重新登陆以激活新设置。</p>
 </div>
 </div>
 </body>

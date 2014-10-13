@@ -262,13 +262,13 @@ define('io.ox/search/autocomplete/extensions',
         },
 
         name: function (baton) {
-            var name = (baton.data.item && baton.data.item.name ? baton.data.item.name : baton.data.name) || '&nbsp;';
+            var name = (baton.data.item && baton.data.item.name ? baton.data.item.name : baton.data.name) || '\u00A0';
 
             this
                 .data(baton.data)
                 .append(
                     //use html for the umlauts
-                    $('<div class="name">').html(name)
+                    $('<div class="name">').text(name)
                 );
 
         },
@@ -281,12 +281,13 @@ define('io.ox/search/autocomplete/extensions',
             if (isContact) {
                 this.removeClass('indent');
                 this.append(
-                    $('<div class="detail">').html(detail || '&nbsp;')
+                    $('<div class="detail">').text(detail || '\u00A0')
                 );
             } else if (detail) {
                 var node = this.find('.name');
-                node.html(node.text() + ' <i>' + detail + '</i>');
-
+                node.append(
+                    $('<i>').text('\u00A0' + detail)
+                );
             }
 
         }

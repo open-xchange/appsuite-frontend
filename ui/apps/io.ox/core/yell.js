@@ -145,7 +145,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         // put at end of stack not to run into opening click
         setTimeout(function () {
 
-            node.addClass('appear'); // might be already added
+            node.trigger('notification:appear').addClass('appear'); // might be already added
             if (o.focus) node.attr('tabindex', 1).focus();
 
         }, _.device('touch') ? 300 : 0);
