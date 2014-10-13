@@ -934,11 +934,7 @@ define('io.ox/mail/api', [
         api.trigger('beforesend', { data: data, files: files, form: form });
         ox.trigger('mail:send:start', data, files);
 
-        if (Modernizr.filereader && 'FormData' in window) {
-            deferred = handleSendXHR2(data, files, deferred);
-        } else {
-            deferred = handleSendTheGoodOldWay(data, form);
-        }
+        deferred = handleSendXHR2(data, files, deferred);
 
         return deferred
             .done(function () {
@@ -1005,17 +1001,6 @@ define('io.ox/mail/api', [
             },
             data: form,
             dataType: 'text'
-        });
-    }
-
-    function handleSendTheGoodOldWay(data, form) {
-
-        return http.FORM({
-            module: 'mail',
-            action: 'new',
-            data: data,
-            form: form,
-            field: 'json_0'
         });
     }
 
