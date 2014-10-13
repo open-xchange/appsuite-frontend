@@ -1004,7 +1004,7 @@ define('io.ox/contacts/api', [
 
             // default: standard columns plus cell phone for MSISDN support
             var columns = '1,2,5,20,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,551,552';
-            options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true }, options);
+            options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true, limit: 0 }, options);
 
             // try local cache
             var cache = options.cache && get(query);
@@ -1019,7 +1019,8 @@ define('io.ox/contacts/api', [
                     admin: options.admin,
                     email: options.email,
                     sort: options.sort,
-                    columns: options.columns
+                    columns: options.columns,
+                    right_hand_limit: options.limit
                 }
             }));
 
