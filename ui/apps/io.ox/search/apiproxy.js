@@ -231,6 +231,12 @@ define('io.ox/search/apiproxy',
                         return folderOnly ? $.Deferred().resolve(undefined) : api.query(opt);
                     }
 
+                    function enrich(opt, result) {
+                        // add requst params to result
+                        result.request = opt;
+                        return result;
+                    }
+
                     function drawResults(result) {
                         var start = Date.now();
                         if (result) {
@@ -261,6 +267,7 @@ define('io.ox/search/apiproxy',
                         return model.getFacets()
                             .done(filterFacets.bind(this, opt, app.view))
                             .then(getResults.bind(this, opt))
+                            .then(enrich.bind(this, opt))
                             .then(
                                 // success
                                 sync ? drawResults : _.lfo(drawResults),
