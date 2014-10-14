@@ -54,51 +54,8 @@ define('io.ox/tasks/actions', [
     new Action('io.ox/tasks/actions/delete', {
         requires: 'some delete',
         action: function (baton) {
-            var data = baton.data,
-                numberOfTasks = data.length || 1;
-            ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
-                //build popup
-                var popup = new dialogs.ModalDialog({ async: true })
-                    .addPrimaryButton('deleteTask', gt('Delete'), 'deleteTask', { tabIndex: 1 })
-                    .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 });
-                //Header
-                popup.getBody()
-                    .append($('<h4>')
-                            .text(gt.ngettext('Do you really want to delete this task?',
-                                              'Do you really want to delete this tasks?', numberOfTasks)));
-                //go
-                popup.show();
-                popup.on('deleteTask', function () {
-                    require(['io.ox/tasks/api'], function (api) {
-                        api.remove(data)
-                            .done(function () {
-                                notifications.yell('success', gt.ngettext('Task has been deleted!',
-                                                                          'Tasks have been deleted!', numberOfTasks));
-                                popup.close();
-                            }).fail(function (result) {
-                                if (result.code === 'TSK-0019') { //task was already deleted somewhere else. everythings fine, just show info
-                                    notifications.yell('info', gt('Task was already deleted!'));
-                                    popup.close();
-                                } else if (result.error) {//there is an error message from the backend
-                                    popup.idle();
-                                    popup.getBody().empty().append($.fail(result.error, function () {
-                                        popup.trigger('deleteTask', data);
-                                    })).find('h4').remove();
-                                } else {//show generic error message
-                                    //show retrymessage and enable buttons again
-                                    popup.idle();
-                                    popup.getBody().empty().append($.fail(
-                                        gt.ngettext(
-                                            'The task could not be deleted.',
-                                            'The tasks could not be deleted.',
-                                            numberOfTasks
-                                        ), function () {
-                                            popup.trigger('deleteTask', data);
-                                        })).find('h4').remove();
-                                }
-                            });
-                    });
-                });
+            ox.load(['io.ox/tasks/actions/delete']).done(function (action) {
+                action(baton);
             });
         }
     });
@@ -111,7 +68,9 @@ define('io.ox/tasks/actions', [
             return (e.baton.data.status !== 3);
         },
         action: function (baton) {
-            changeState(baton, 1);
+            ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
+                action(baton, 1);
+            });
         }
     });
 
@@ -123,63 +82,11 @@ define('io.ox/tasks/actions', [
             return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
-            changeState(baton, 3);
+            ox.load(['io.ox/tasks/actions/doneUndone']).done(function (action) {
+                action(baton, 3);
+            });
         }
     });
-
-    function changeState(baton, state) {
-        var mods,
-            data = baton.data;
-        if (state === 3) {
-            mods = {
-                label: gt('Undone'),
-                data: {
-                    status: 1,
-                    percent_completed: 0,
-                    date_completed: null
-                }
-            };
-        } else {
-            mods = {
-                label: gt('Done'),
-                data: {
-                    status: 3,
-                    percent_completed: 100,
-                    date_completed: _.now()
-                }
-            };
-        }
-        require(['io.ox/tasks/api'], function (api) {
-            if (data.length > 1) {
-                api.updateMultiple(data, mods.data)
-                    .done(function () {
-                        _(data).each(function (item) {
-                            //update detailview
-                            api.trigger('update:' + _.ecid(item));
-                        });
-
-                        notifications.yell('success', mods.label);
-                    })
-                    .fail(function (result) {
-                        notifications.yell('error', gt.noI18n(result));
-                    });
-            } else {
-                mods.data.id = data.id;
-                mods.data.folder_id = data.folder_id || data.folder;
-                api.update(mods.data)
-                    .done(function () {
-                        notifications.yell('success', mods.label);
-                    })
-                    .fail(function (result) {
-                        var errorMsg = gt('A severe error occurred!');
-                        if (result.code === 'TSK-0007') {//task was modified before
-                            errorMsg = gt('Task was modified before, please reload');
-                        }
-                        notifications.yell('error', errorMsg);
-                    });
-            }
-        });
-    }
 
     // helper
     function isShared(id) {
@@ -203,38 +110,8 @@ define('io.ox/tasks/actions', [
             return true;
         },
         multiple: function (list, baton) {
-
-            var vgrid = baton.grid || (baton.app && baton.app.getGrid && baton.app.getGrid());
-
-            // shared?
-            var shared = _([].concat(list)).reduce(function (memo, obj) {
-                return memo || isShared(obj.folder_id);
-            }, false);
-
-            if (shared || (baton.target && isShared(baton.target))) {
-                return notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
-            }
-
-            require(['io.ox/core/folder/actions/move'], function (move) {
-
-                move.item({
-                    api: api,
-                    button: gt('Move'),
-                    flat: true,
-                    indent: false,
-                    list: list,
-                    module: 'tasks',
-                    root: '1',
-                    settings: settings,
-                    success: {
-                        single: 'Task has been moved',
-                        multiple: 'Tasks have been moved'
-                    },
-                    target: baton.target,
-                    title: gt('Move'),
-                    type: 'move',
-                    vgrid: vgrid
-                });
+            ox.load(['io.ox/tasks/actions/move']).done(function (action) {
+                action.multiple(list, baton);
             });
         }
     });
@@ -284,32 +161,9 @@ define('io.ox/tasks/actions', [
             return _.device('!small');
         },
         multiple: function (list) {
-            if (list.length === 1) {
-                print.open('tasks', list[0], { template: 'infostore://12496', id: list[0].id, folder: list[0].folder_id || list[0].folder }).print();
-            } else if (list.length > 1) {
-                ox.load(['io.ox/core/http']).done(function (http) {
-                    var win = print.openURL();
-                    win.document.title = gt('Print tasks');
-                    http.PUT({
-                        module: 'tasks',
-                        params: {
-                            action: 'list',
-                            template: 'infostore://12500',
-                            format: 'template',
-                            columns: '200,201,202,203,220,300,301,302,303,305,307,308,309,312,313,314,315,221,226',
-                            timezone: 'UTC'
-                        },
-                        data: http.simplify(list)
-                    }).done(function (result) {
-                        var content = $('<div>').append(result),
-                            head = $('<div>').append(content.find('style')),
-                            body = $('<div>').append(content.find('.print-tasklist'));
-                        win.document.write(head.html() + body.html());
-                        win.print();
-                    });
-                });
-
-            }
+            ox.load(['io.ox/tasks/actions/printDisabled']).done(function (action) {
+                action.multiple(list);
+            });
         }
     });
 
