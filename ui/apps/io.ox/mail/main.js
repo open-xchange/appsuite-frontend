@@ -1039,9 +1039,17 @@ define('io.ox/mail/main',
                                 module: 'mail',
                                 mode: 'search',
                                 fetch: function () {
+                                    var self = this;
                                     var params = { sort: app.props.get('sort'), order: app.props.get('order') };
                                     return search.apiproxy.query(true, params).then(function (response) {
-                                        return response && response.results ? response.results : [];
+                                        response = response || {};
+                                        var list = response.results || [],
+                                            request = response.request || {};
+                                        // add 'more results' info to collection (compare request limits and result)
+                                        self.collection.search = {
+                                            next: list.length !== 0 && list.length === request.data.size
+                                        };
+                                        return list;
                                     });
                                 },
                                 getQueryParams: function (params) {
@@ -1059,6 +1067,18 @@ define('io.ox/mail/main',
                                 }
                             });
 
+                        var register = function () {
+                            var view = win.facetedsearch.view,
+                                // remember original setCollection
+                                setCollection = app.listView.setCollection;
+                            app.listView.connect(collectionLoader);
+                            // wrap setCollection
+                            app.listView.setCollection = function (collection) {
+                                view.stopListening();
+                                view.listenTo(collection, 'add reset remove', view.trigger.bind(view, 'query:resultready', collection));
+                                return setCollection.apply(this, arguments);
+                            };
+                        };
                         // events
                         win.facetedsearch.ready
                             .done(function () {
@@ -1066,10 +1086,9 @@ define('io.ox/mail/main',
                                 view.on({
                                     'query': _.debounce(function (e, appname) {
                                         if (appname === app.get('name')) {
-                                            // connect
-                                            if (app.listView.loader.mode !== 'search') {
-                                                app.listView.connect(collectionLoader);
-                                            }
+                                            // register/connect once
+                                            if (app.listView.loader.mode !== 'search') register();
+                                            // load
                                             app.listView.load();
                                             win.facetedsearch.focus();
                                         }
