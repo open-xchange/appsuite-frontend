@@ -34,7 +34,8 @@ img.emoji {
 
         .mceIcon.mce_emoji { background-position:-60px -20px; }
 
-        .mceEmojiPane {
+        //work-around for Bug 34943 - the second rule can be removed for 7.8.0
+        .mceEmojiPane, .mce-container *.mce-container-body .mceEmojiPane {
 
             @background: #f5f5f5;
             @emojiTabHeight: 34px;
