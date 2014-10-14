@@ -733,7 +733,7 @@ define('io.ox/contacts/main', [
          */
         'folderview-toolbar': function (app) {
             if (_.device('small')) return;
-            commons.mediateFolderView(app, true);
+            commons.mediateFolderView(app);
         },
 
         'api-events': function (app) {

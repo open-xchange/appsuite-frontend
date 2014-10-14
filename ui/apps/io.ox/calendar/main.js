@@ -443,14 +443,6 @@ define('io.ox/calendar/main', [
         },
 
         /*
-         * Folerview toolbar
-         */
-        'folderview-toolbar': function (app) {
-            if (_.device('smartphone')) return;
-            commons.mediateFolderView(app);
-        },
-
-        /*
          * Respond to layout change
          */
         'change:layout': function (app) {

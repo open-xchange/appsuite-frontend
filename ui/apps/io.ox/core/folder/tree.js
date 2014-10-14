@@ -17,8 +17,7 @@ define('io.ox/core/folder/tree', [
     'io.ox/core/extensions',
     'settings!io.ox/core',
     'io.ox/core/folder/favorites',
-    'io.ox/core/folder/extensions',
-    'less!io.ox/core/folder/style'
+    'io.ox/core/folder/extensions'
 ], function (Selection, api, ext, settings) {
 
     'use strict';

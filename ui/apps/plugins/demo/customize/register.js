@@ -161,15 +161,13 @@ define('plugins/demo/customize/register', [
             // selection
             '.list-view.visible-selection.has-focus .list-item.selected,\n' +
             '.folder-tree .folder .selectable:focus,\n' +
-            '.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected,\n' +
-            '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder:focus.selected {\n' +
+            '.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected {\n' +
             '  background-color: ' + model.get('selectionColor') + ';\n' +
             '}\n' +
             // link color
             'a, a:hover, a:active, a:focus, .primary-btn,\n' +
             '.mail-detail .content a, .mail-detail .content a:hover,\n' +
-            '.mail-item div.subject i.icon-unread, .mail-item.unread .unread-toggle,\n' +
-            '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder-arrow  { ' +
+            '.mail-item div.subject i.icon-unread, .mail-item.unread .unread-toggle {\n' +
             '  color: ' + model.get('linkColor') + ';\n' +
             '}\n' +
             // buttons

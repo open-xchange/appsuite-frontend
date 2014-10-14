@@ -1412,10 +1412,6 @@ div.hopscotch-bubble {
     display: block;
     margin: 0;
 
-    .folderview-toggle {
-        color: @link-on-dark;
-    }
-
     .badge {
         position: relative;
         display: inline-block;
@@ -2967,442 +2963,6 @@ ul.io-ox-inline-links + header {
         }
     }
 }
-/* only for mobile use */
-.foldertree-click-intercept {
-    background: rgba(0, 0, 0, 0);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 10%;
-    right: 0;
-    z-index: 1000;
-}
-
-/* folder tree */
-.io-ox-foldertree {
-
-    overflow: auto;
-    outline: 0;
-    padding: 7px 0 4px 0;
-    .user-select(none);
-
-    .folder-root {
-        display: table;
-        min-width: 100%;
-    }
-
-    .subfolders {
-        width: 100%;
-    }
-
-    .hidden-folders-link {
-        cursor: pointer;
-    }
-
-    .hidden-folders-icon {
-        padding: 1px 0px 0px 6px;
-        position: absolute;
-    }
-
-    .folder {
-
-        line-height: 30px;
-        padding: 0 13px 0 0;
-        overflow: visible;
-        white-space: nowrap;
-        width: 100%;
-        display: block;
-
-        &.selectable, &.expandable {
-            cursor: pointer;
-        }
-
-        &.selectable.dnd-over, &.selectable:hover {
-            background-color: #efefef;
-        }
-
-        &.selected, &.selected:hover {
-
-            background-color: @foldertree-selected-background;
-
-            * {
-                color: @foldertree-selected-label-color;
-            }
-        }
-
-        &.disabled {
-            color: #bbb;
-            font-style: italic;
-        }
-
-        &:focus {
-
-            &.selected {
-
-                background-color: @foldertree-selected-focus-background;
-
-                * {
-                    color: @foldertree-focused-label-color;
-                }
-
-            }
-
-        }
-
-        .subscribe-wrapper {
-
-            display: inline-block;
-            padding: 0 4px;
-
-            input {
-                margin: 0;
-            }
-
-        }
-
-        .folder-label {
-
-            font-weight: 300;
-            display: inline-block;
-            margin: 0 7px 0 0;
-
-            i {
-                color: @foldertree-passive-label-color;
-            }
-
-            .long-title {
-                display: inline;
-            }
-
-            .short-title {
-                display: none;
-            }
-
-        }
-
-        &.selected>.folder-label {
-
-            .long-title {
-                display: none;
-            }
-
-            .short-title {
-                display: inline;
-            }
-
-        }
-
-        .folder-sub {
-
-            margin-right: 7px;
-            color: rgba(0, 0, 0, 0.30);
-            font-size: 20px;
-            line-height: 18px;
-            position: relative;
-            top: 3px;
-
-            &:hover {
-                color: rgba(0, 0, 0, 0.50);
-            }
-
-        }
-
-        &.selected .folder-sub:hover {
-            color: rgba(0, 0, 0, 0.50);
-        }
-
-        .folder-counter, .folder-options {
-            display: none;
-            margin-right: 7px;
-        }
-
-        &.show-counter {
-            .folder-counter {
-                display: inline-block;
-            }
-        }
-
-        &.selected {
-            .folder-options {
-                display: inline-block;
-            }
-        }
-
-    }
-
-    // more space for fat fingers
-    .touch & .folder {
-        line-height: 34px;
-    }
-
-    .subfolders.io-ox-busy {
-        min-height: 70px;
-    }
-
-    .folder-arrow, .folder-icon {
-
-        display: inline-block;
-        width: 50px;
-        text-align: center;
-        color: #aaa;
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        i {
-            display: block;
-            width: 50px;
-        }
-
-    }
-
-    &.folder-icons {
-        .folder-icon {
-            width: 30px;
-            text-align: left;
-            i {
-                width: 30px;
-                font-size: 14px;
-                position: relative;
-                top: 1px;
-                color: rgba(0, 0, 0, 0.25);
-                &.special {
-                    color: #333; // @hc-link-color;
-                }
-            }
-        }
-        .folder.selected:focus .folder-icon i {
-            color: rgba(255, 255, 255, 0.5);
-        }
-    }
-
-    .folder-counter-badge {
-
-        color: #08c;
-        padding: 0 7px;
-        margin: 2px 0;
-        display: inline-block;
-        line-height: 24px;
-
-        html.high-contrast & {
-            color: @hc-link-color;
-        }
-
-    }
-
-    .folder-options-badge {
-
-        padding: 0 0.75em 0 0.75em;
-        margin-top: 2px;
-        margin-bottom: 2px;
-        display: inline-block;
-        background-color: #f0f0f0;
-        border-radius: 5px;
-
-        &:focus i, &:hover i {
-            text-decoration: none;
-        }
-    }
-
-    .folder-options-badge {
-        color: #888;
-        line-height: 26px;
-    }
-
-    // more space for fat fingers
-    .touch & {
-
-        .folder-counter-badge, .folder-options-badge {
-            margin-top: 4px;
-            margin-bottom: 4px;
-        }
-
-    }
-
-    .folder-options-badge {
-        cursor: pointer;
-    }
-
-    .folder .shared-by {
-        font-weight: 300;
-        padding-left: 22px;
-    }
-
-    .section {
-
-        margin-bottom: 21px;
-
-        .section-title {
-            font-size: 22px;
-            line-height: 26px;
-            font-weight: 100;
-            color: #ccc;
-            padding: 4px 13px 8px 21px;
-        }
-
-        .folder {
-            padding-left: 21px; // same as folder links
-        }
-
-        .folder .shared-by {
-            margin-top: -7px;
-        }
-    }
-}
-
-.foldertree-links, .folder-section-links {
-
-    padding: 14px 0 0 21px;
-    font-weight: 300;
-
-    & > div {
-        margin-bottom: 7px;
-    }
-
-    &:empty {
-        padding: 0;
-    }
-
-}
-
-/* tweaks for mobile mail edit mode */
-.io-ox-pagecontroller {
-    .io-ox-foldertree {
-        .folder.selected {
-            .folder-options {
-                display: none;
-            }
-        }
-    }
-}
-.mobile-edit-mode {
-    .foldertree-sidepanel {
-        .foldertree-container {
-            .io-ox-foldertree {
-                .folder.selected, .folder{
-                    .folder-label *{
-                        color: @link-color;
-                        text-decoration: underline;
-                    }
-                }
-                .folder:focus.selected {
-                    .folder-label *{
-                        color: #fff;
-                        text-decoration: none;
-                    }
-                }
-            }
-        }
-    }
-}
-
-/* DARK VARIANT */
-
-.foldertree-sidepanel {
-
-    left: @window-head-width;
-    background-color: @foldertree-sidepanel-background;
-
-    html.high-contrast & {
-        background: none; // HC
-    }
-
-    .foldertree-container {
-
-        overflow: auto;
-
-        &.top-toolbar { top: 45px; }
-        &.bottom-toolbar { bottom: 45px; }
-
-        .io-ox-foldertree {
-
-            overflow: visible;
-
-            .section .section-title {
-                color: @foldertree-section-title-color;
-            }
-
-            .folder {
-
-                &.selectable .folder-label {
-                    color: @foldertree-active-label-color;
-                }
-
-                &.unreadable .folder-label {
-                    color: @foldertree-passive-label-color;
-                }
-
-                &.selectable.dnd-over, &.selectable:hover {
-                    background-color: @foldertree-hover-background;
-                }
-
-                &.selected {
-
-                    background-color: @foldertree-selected-background;
-
-                    .folder-label {
-                        color: @foldertree-selected-label-color;
-                        font-weight: 500;
-                        text-shadow: none;
-                    }
-                }
-
-                .shared-by {
-                    padding-left: 0;
-                    font-size: 12px;
-                }
-
-                .folder-options-badge {
-                    background-color: darken(@foldertree-selected-background, 10%);
-                    color: darken(@foldertree-selected-background, 20%);
-                }
-
-                &:focus {
-
-                    outline: none;
-
-                    &.selected {
-
-                        background-color: @foldertree-selected-focus-background;
-
-                        .folder-options-badge {
-                            background-color: @foldertree-badge-focus-background;
-                        }
-
-                        .folder-label {
-                            color: @foldertree-focused-label-color;
-                        }
-
-                    }
-
-                }
-
-            }
-
-            .folder-icon {
-                display: inline-block;
-            }
-
-            .io-ox-fail {
-                background-color: rgba(0, 0, 0, 0.05);
-                padding: 1em;
-            }
-
-            .folder-arrow {
-                font-size: 13px;
-                color: @link-color;
-            }
-
-        }
-
-    }
-
-    .generic-toolbar.bottom {
-        border-color: rgba(0, 0, 0, 0.10);
-        background-color: rgba(0, 0, 0, 0.015);
-    }
-}
 
 //
 // Generic toolbar
@@ -3481,7 +3041,6 @@ ul.io-ox-inline-links + header {
         padding: 7px 10px;
         line-height: 20px;
         z-index: 10;
-        //background-color: @foldertree-sidepanel-background;
     }
     .search-field {
         //space for fa-times
@@ -3908,11 +3467,6 @@ input.flat-input {
         }
 
     }
-
-    .foldertree-sidepanel {
-        left: 50px;
-    }
-
 }
 
 @media (min-width: 1300px) {
@@ -4074,10 +3628,6 @@ input.flat-input {
     .input-medium.search-query {
         width: 80px;
     }
-
-    .foldertree-sidepanel {
-        left: 0;
-    }
 }
 
 // landscape fullscreen on iPhone
@@ -4187,12 +3737,6 @@ input.flat-input {
         margin: 8px 0 0 10px;
     }
 
-    .ios {
-        .foldertree-container {
-            .overflow();
-        }
-    }
-
     #io-ox-notifications-popups {
         top: -80px;
         left: 10px;
@@ -4203,10 +3747,6 @@ input.flat-input {
 
     .clear-title {
         font-size: 15pt;
-    }
-
-    .foldertree-sidepanel {
-        left: 0;
     }
 
     .core-boot-dialog {
@@ -4490,4 +4030,273 @@ wbr:after {
 /* see http://stackoverflow.com/questions/19661001/firefox-bug-font-is-sloppy-when-transformed#19684395 */
 .fix-spin .fa-spin {
     filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'1\'/></filter></svg>#grayscale");
+}
+
+//
+// Folder view
+//
+
+.folder-tree {
+
+    padding: 7px 0;
+    overflow: auto;
+    background-color: @foldertree-sidepanel-background;
+    .user-select(none);
+
+    // font weights
+    @normal : 300;
+    @bold   : 700;
+
+    // custom mobile values
+    @mobile-line-height: 40px;
+    @mobile-arrow-size: 20px;
+    @mobile-label-size: 15px;
+
+    // width fix
+    .tree-container {
+        min-width: 100%;
+        display: table;
+        padding: 0;
+        margin: 0;
+        outline: 0;
+    }
+
+    .folder {
+
+        line-height: 30px;
+        overflow: visible;
+        white-space: nowrap;
+        width: 100%;
+        display: block;
+        cursor: pointer;
+        outline: 0;
+
+        &.selected > .folder-node > .folder-options {
+            display: inline-block;
+        }
+
+        &.empty {
+            display: none;
+        }
+
+        &.disabled > .folder-node > .folder-label {
+            opacity: 0.5;
+            font-style: italic;
+        }
+    }
+
+    &.visible-selection {
+
+        .selected > .folder-node {
+            background-color: @foldertree-selected-background;
+            * {
+                color: @foldertree-selected-label-color;
+            }
+        }
+
+        .selectable > .folder-node:hover, .selectable.dnd-over > .folder-node {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .selectable:focus > .folder-node {
+
+            background-color: @foldertree-selected-focus-background;
+            * {
+                color: @foldertree-focused-label-color;
+            }
+            .folder-counter {
+                color: rgba(255, 255, 255, 0.50);
+            }
+            .folder-options {
+                background-color: rgba(0, 0, 0, 0.20);
+            }
+        }
+    }
+
+    .folder-node {
+
+        .folder-arrow {
+
+            color: #777;
+            display: inline-block;
+            padding-left: 14px;
+            width: 40px;
+        }
+
+        .folder-label, .folder-counter, .folder-options {
+            font-weight: @normal;
+            display: inline-block;
+            -webkit-font-smoothing: antialiased;
+            margin: 0 14px 0 0;
+            &:empty { margin: 0; }
+        }
+
+        .folder-label {
+
+            &:first-child { // needed when arrows are hidden
+                margin-left: 14px;
+            }
+        }
+
+        .folder-counter {
+            color: #08c;
+            font-weight: @bold;
+        }
+
+        .folder-options {
+
+            padding: 0 12px;
+            line-height: 30px;
+            background-color: rgba(0, 0, 0, 0.05);
+            outline: 0;
+            display: none;
+
+            i { line-height: inherit; }
+
+            &:focus {
+                i { color: white; }
+                background-color: @foldertree-selected-focus-background;
+            }
+        }
+
+        .folder-icon {
+            display: none;
+            &.visible {
+                display: inline-block;
+                margin: 0 12px 0 0; // yep, 12
+            }
+            i {
+                text-align: left;
+                &:before { content: '\f114'; } // fa-folder-o
+            }
+            &.inbox { i:before { content: '\f01c'; }} // fa-inbox
+            &.sent { i:before { content: '\f1d8'; }} // fa-paper-plane
+            &.drafts { i:before { content: '\f15b'; }} // fa-file
+            &.trash { i:before { content: '\f1f8'; }} // fa-trash
+            &.spam { i:before { content: '\f05e'; }} // fa-ban
+            &.archive { i:before { content: '\f187'; }} // fa-archive
+            &.default { i { color: #aaa; }}
+        }
+
+        .folder-checkbox {
+            display: inline-block;
+            margin: 0 14px 0 0;
+        }
+
+        .folder-shared {
+            color: rgba(0, 0, 0, 0.30);
+            &:before { content: '\f007'; } // fa-user
+        }
+
+        .folder-sub {
+            color: rgba(0, 0, 0, 0.30);
+            &:before { content: '\f0c2'; } // fa-cloud
+        }
+    }
+
+    .folder.open > .folder-node > .folder-icon.default {
+        i:before { content: '\f115'; } // fa-folder-open-o
+    }
+
+    .shared {
+
+        .folder-options {
+            line-height: 24px;
+            margin-top: 3px;
+        }
+
+        .owner {
+            font-size: 12px;
+            padding-left: 40px;
+            margin-top: -7px;
+        }
+    }
+
+    .subfolders {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        display: none;
+    }
+
+    .folder.open > .subfolders {
+        display: block;
+    }
+
+    .unified-folders, .standard-folders, .favorites, .remote-accounts {
+        margin-bottom: 14px;
+    }
+
+    .favorites > .folder-node > .folder-label {
+        font-weight: 500;
+    }
+
+    // sections in flat folder views
+    .folder.section {
+
+        &.open {
+            margin-bottom: 20px;
+        }
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        & > .folder-node > .folder-label {
+            font-weight: @bold;
+        }
+    }
+
+    // links
+    .links {
+
+        margin: -14px 0 0 0;
+        padding: 0 14px 14px 40px;
+        line-height: 30px;
+        font-weight: @normal;
+
+        &:empty {
+            margin: 0;
+            padding: 0;
+        }
+
+        & > div {
+            margin-bottom: 7px;
+        }
+    }
+
+    .folder.section + .links {
+        margin: 14px 0 20px 40px;
+        padding: 0;
+        line-height: 20px;
+    }
+
+    .mobile-edit-mode & {
+        .selectable:not(.virtual) {
+            .folder-label {
+                color: @link-color;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .window-sidepanel.top-toolbar & { top: 45px; }
+    .window-sidepanel.bottom-toolbar & { bottom: 45px; }
+
+    @media(max-width: 480px), (max-device-width: 480px) {
+
+        .folder {
+            line-height: @mobile-line-height;
+        }
+
+        .folder-node {
+            .folder-arrow {
+                font-size: @mobile-arrow-size;
+            }
+
+            .folder-label, .folder-counter, .folder-options {
+                font-size: @mobile-label-size;
+            }
+        }
+    }
 }

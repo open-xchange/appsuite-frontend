@@ -639,17 +639,6 @@ define('io.ox/core/commons', [
             });
         },
 
-        addFolderView: function (app, options) {
-            if (ox.debug) console.warn('Deprecated: common.addFolderView()', app, options);
-            // var view = new FolderView(app, options);
-            // view.handleFolderChange();
-            // view.resizable();
-            // view.actionLink();
-            // view.handleDrag();
-            // view.start();
-            // return view;
-        },
-
         vsplit: (function () {
             var selectionInProgress = false;
 
@@ -704,7 +693,7 @@ define('io.ox/core/commons', [
             };
         }()),
 
-        mediateFolderView: function (app, flat) {
+        mediateFolderView: function (app) {
 
             function toggleFolderView(e) {
                 e.preventDefault();
@@ -733,17 +722,9 @@ define('io.ox/core/commons', [
                 }
             });
 
-            var side = app.getWindow().nodes.sidepanel, target;
+            var side = app.getWindow().nodes.sidepanel;
 
-            if (flat) {
-                side.addClass('bottom-toolbar');
-                target = side;
-            } else {
-                side.find('.foldertree-container').addClass('bottom-toolbar');
-                target = side.find('.foldertree-sidepanel');
-            }
-
-            target.append(
+            side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
                     .append(

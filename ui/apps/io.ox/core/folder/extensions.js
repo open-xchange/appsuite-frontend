@@ -20,8 +20,7 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/user',
     'io.ox/mail/api',
     'gettext!io.ox/core',
-    'io.ox/core/folder/favorites',
-    'less!io.ox/core/folder/style'
+    'io.ox/core/folder/favorites'
 ], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt) {
 
     'use strict';

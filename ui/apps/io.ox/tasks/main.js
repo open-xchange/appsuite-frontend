@@ -493,7 +493,7 @@ define('io.ox/tasks/main', [
          */
         'folderview-toolbar': function (app) {
             if (_.device('smartphone')) return;
-            commons.mediateFolderView(app, true);
+            commons.mediateFolderView(app);
         },
 
         /*
