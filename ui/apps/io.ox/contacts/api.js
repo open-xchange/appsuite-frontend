@@ -20,8 +20,9 @@ define('io.ox/contacts/api', [
     'io.ox/contacts/util',
     'l10n/ja_JP/io.ox/collation',
     'settings!io.ox/contacts',
-    'io.ox/core/date'
-], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date) {
+    'io.ox/core/date',
+    'io.ox/core/capabilities'
+], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date, capabilities) {
 
     'use strict';
 
@@ -237,6 +238,26 @@ define('io.ox/contacts/api', [
             advancedsearch: convertResponseToGregorian
         }
     });
+
+    // override/wrap api.getList call to inject check function
+    var apiGetList = api.getList;
+
+    api.getList = function (list, useCache, opt) {
+        // check for valid option param and existing filter function
+        if (!capabilities.has('gab') && opt && opt.check && _.isFunction(opt.check)) {
+            var missingData = _(list).any(function (item) {
+                return !opt.check(item);
+            });
+            // if some required data is missing, try to get fresh values
+            if (missingData) {
+                delete opt.check;
+                return apiGetList.apply(this, arguments);
+            } else {
+                return new $.Deferred().resolve(list);
+            }
+        }
+        return apiGetList.apply(this, arguments);
+    };
 
     /**
      * clear userapi cache
