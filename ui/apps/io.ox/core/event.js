@@ -120,8 +120,5 @@ define('io.ox/core/event', function () {
         return obj;
     };
 
-    // add global event hub
-    Events.extend(ox);
-
     return Events;
 });

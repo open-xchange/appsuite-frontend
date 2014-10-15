@@ -95,15 +95,16 @@ define('io.ox/mail/api', [
             return (o.action || 'all') + ':' + o.folder + DELIM + [o.sort, o.order, o.max || 0, !!o.unseen, !!o.deleted].join('.');
         },
 
-        fail: {
-            get: function (e, ids) {
-                if (e.code === 'MSG-0032') {
-                    // mail no longer exists, so we remove it from caches
-                    // we don't trigger any event here, as it might run into cyclic event chains
-                    api.updateCaches([ids]);
-                }
-            }
-        },
+        // fail: {
+        //     get: function (e, ids) {
+        //         if (e.code === 'MSG-0032') {
+        //             // mail no longer exists, so we remove it from caches
+        //             // we don't trigger any event here, as it might run into cyclic event chains
+        //             api.updateCaches([ids]);
+        //         }
+        //     }
+        // },
+
         // filter list request (special fix for nested messages; don't have folder; inline action checks fail)
         filter: function (obj) {
             return obj.folder_id !== undefined || obj.folder !== undefined;

@@ -477,6 +477,11 @@ define('io.ox/tasks/api', [
      * @return { deferred} done returns object with properties folder_id and task id
      */
     api.move = function (task, newFolder) {
+
+        // api.caches.all.grepRemove(targetFolderId + api.DELIM),
+        // api.caches.all.grepRemove(o.folder_id + api.DELIM),
+        // api.caches.list.remove({ id: o.id, folder: o.folder_id })
+
         // call updateCaches (part of remove process) to be responsive
         return api.updateCaches(task).pipe(function () {
             // trigger visual refresh
