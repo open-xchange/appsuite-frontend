@@ -15,7 +15,7 @@ define(['io.ox/core/fluent'], function (FluentCache) {
 
     'use strict';
 
-    describe.only('Fluent cache.', function () {
+    describe('Fluent cache.', function () {
 
         beforeEach(function () {
             this.cache = new FluentCache();
