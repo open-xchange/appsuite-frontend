@@ -13,17 +13,14 @@
 
 define('io.ox/tasks/actions', [
     'io.ox/core/extensions',
-    'io.ox/tasks/api',
-    'io.ox/tasks/util',
     'io.ox/core/extPatterns/links',
-    'settings!io.ox/tasks',
     'gettext!io.ox/tasks',
     'io.ox/core/notifications',
     'io.ox/core/print',
     'io.ox/core/extPatterns/actions',
     'io.ox/tasks/common-extensions',
     'io.ox/core/folder/api'
-], function (ext, api, util, links, settings, gt, notifications, print, actions, extensions, folderAPI) {
+], function (ext, links, gt, notifications, print, actions, extensions, folderAPI) {
 
     'use strict';
 
