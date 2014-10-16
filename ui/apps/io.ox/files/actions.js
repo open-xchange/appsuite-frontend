@@ -15,21 +15,17 @@ define('io.ox/files/actions', [
     'io.ox/files/api',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/core/extPatterns/actions',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/files',
     'settings!io.ox/files'
-], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
+], function (api, ext, links, capabilities, notifications, util, folderAPI, gt, settings) {
 
     'use strict';
 
-    var Action = links.Action,
-        ActionGroup = links.ActionGroup,
-        ActionLink = links.ActionLink,
-        POINT = 'io.ox/files';
+    var Action = links.Action;
 
     // actions
     new Action('io.ox/files/actions/upload', {
@@ -684,8 +680,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    //guidance
-
+    // Guidance
     new Action('io.ox/files/actions/guidance', {
         action: function (baton) {
             require(['io.ox/files/guidance/main'], function (guidance) {
@@ -702,99 +697,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    // groups
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'default',
-        index: 100,
-        icon: function () {
-            return $('<i class="fa fa-plus accent-color">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/default', {
-        index: 100,
-        id: 'upload',
-        label: gt('Upload new file'),
-        ref: POINT + '/actions/upload'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/default', {
-        index: 200,
-        id: 'note',
-        label:
-            //#. Please translate like "take a note", "Notiz" in German, for example.
-            //#. more like "to notice" than "to notify".
-            gt('Add note'),
-        ref: POINT + '/actions/editor-new'
-    });
-
-    // VIEWS
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'view',
-        index: 400,
-        icon: function () {
-            return $('<i class="fa fa-eye">').attr('aria-label', gt('Change View'));
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'list',
-        index: 100,
-        label: gt('List'),
-        ref: 'io.ox/files/actions/layout-list'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'icon',
-        index: 200,
-        label: gt('Icons'),
-        ref: 'io.ox/files/actions/layout-icon'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'tile',
-        index: 300,
-        label: gt('Tile'),
-        ref: 'io.ox/files/actions/layout-tile'
-    });
-
-    //guidance
-
-    new links.ActionGroup(POINT + '/links/toolbar', {
-        id: 'guidance',
-        index: 500,
-        icon: function () {
-            return $('<i class="fa fa-question-circle">');
-        }
-    });
-
-    new links.ActionLink(POINT + '/links/toolbar/guidance', {
-        label: gt('Guidance'),
-        ref: POINT + '/actions/guidance'
-    });
-
-    // PUBLISH
-
-    // disabled until we have full pub/sub support
-    // new ActionGroup(POINT + '/links/toolbar', {
-    //     id: 'publish',
-    //     index: 150,
-    //     label: gt('Publish'),
-    //     icon: function () {
-    //         return $('<i class="fa fa-rss">');
-    //     }
-    // });
-
-    // new ActionLink(POINT + '/links/toolbar/publish', {
-    //     id: 'publish',
-    //     label: gt('Publish current folder'),
-    //     ref: 'io.ox/files/actions/publish'
-    // });
-
     // INLINE
-
     var index = 100;
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({

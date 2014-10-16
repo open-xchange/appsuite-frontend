@@ -441,25 +441,7 @@ define('io.ox/mail/actions', [
         }
     });
 
-    // toolbar
-
-    new links.ActionGroup('io.ox/mail/links/toolbar', {
-        id: 'default',
-        index: 100,
-        icon: function () {
-            return $('<i class="fa fa-pencil accent-color">');
-        }
-    });
-
-    new links.ActionLink('io.ox/mail/links/toolbar/default', {
-        index: 100,
-        id: 'compose',
-        label: gt('Compose new mail'),
-        ref: 'io.ox/mail/actions/compose'
-    });
-
     // inline links
-
     var INDEX = 0;
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({

@@ -22,11 +22,7 @@ define('io.ox/calendar/actions', [
 
     'use strict';
 
-    var Action = links.Action,
-        ActionGroup = links.ActionGroup,
-        ActionLink = links.ActionLink,
-
-        POINT = 'io.ox/calendar';
+    var Action = links.Action;
 
     // Actions
     new Action('io.ox/calendar/actions/switch-to-list-view', {
@@ -289,9 +285,7 @@ define('io.ox/calendar/actions', [
         }
     });
 
-    /* new actions for mobile */
-
-    // Actions
+    // Actions mobile
     new Action('io.ox/calendar/actions/dayview/showNext', {
         requires: true,
         action: function (baton) {
@@ -302,7 +296,6 @@ define('io.ox/calendar/actions', [
         }
     });
 
-     // Actions
     new Action('io.ox/calendar/actions/dayview/showPrevious', {
         requires: true,
         action: function (baton) {
@@ -313,7 +306,6 @@ define('io.ox/calendar/actions', [
         }
     });
 
-     // Actions
     new Action('io.ox/calendar/actions/dayview/showToday', {
         requires: true,
         action: function (baton) {
@@ -324,7 +316,6 @@ define('io.ox/calendar/actions', [
         }
     });
 
-   // Actions
     new Action('io.ox/calendar/actions/month/showToday', {
         requires: true,
         action: function (baton) {
@@ -381,97 +372,6 @@ define('io.ox/calendar/actions', [
                 )
             );
         }
-    });
-
-    // Links - toolbar
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'default',
-        index: 100,
-        icon: function () {
-            return $('<i class="fa fa-plus accent-color">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/default', {
-        index: 100,
-        id: 'create',
-        label: gt('New appointment'),
-        ref: 'io.ox/calendar/detail/actions/create'
-    });
-
-    // VIEWS
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'view',
-        index: 400,
-        icon: function () {
-            return $('<i class="fa fa-eye">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'day',
-        index: 100,
-        label: gt('Day'),
-        ref: 'io.ox/calendar/actions/switch-to-day-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'week',
-        index: 200,
-        label: gt('Workweek'),
-        ref: 'io.ox/calendar/actions/switch-to-week-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'fullweek',
-        index: 300,
-        label: gt('Week'),
-        ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'month',
-        index: 400,
-        label: gt('Month'),
-        ref: 'io.ox/calendar/actions/switch-to-month-view'
-    });
-
-    new ActionLink(POINT + '/links/toolbar/view', {
-        id: 'list',
-        index: 500,
-        label: gt('List'),
-        ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
-
-    // scheduling
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'freebusy',
-        index: 500,
-        icon: function () {
-            return $('<i class="fa fa-group">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/freebusy', {
-        label: gt('Scheduling'),
-        ref: 'io.ox/calendar/actions/freebusy'
-    });
-
-    // print
-
-    new ActionGroup(POINT + '/links/toolbar', {
-        id: 'print',
-        index: 600,
-        icon: function () {
-            return $('<i class="fa fa-print">');
-        }
-    });
-
-    new ActionLink(POINT + '/links/toolbar/print', {
-        label: gt('Print'),
-        ref: 'io.ox/calendar/detail/actions/print'
     });
 
     // FIXME: should only be visible if rights are ok

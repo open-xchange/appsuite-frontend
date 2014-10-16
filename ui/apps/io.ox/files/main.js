@@ -409,18 +409,6 @@ define('io.ox/files/main', [
 
         commons.wirePerspectiveEvents(app);
 
-        // doesn't work anymore
-        // might be better to revoke 'create' right on trash folder
-        // ------------------------------------------------------------
-        // app.on('folder:change', function (id, data) {
-        //     if (folderAPI.is('trash', data)) {//no new files in trash folders
-        //         ext.point('io.ox/files/links/toolbar').disable('default');//that's the plus sign
-        //     } else {
-        //         ext.point('io.ox/files/links/toolbar').enable('default');//that's the plus sign
-        //     }
-        //     win.updateToolbar();
-        // });
-
         win.nodes.outer.on('selection:drop', function (e, baton) {
             actions.invoke('io.ox/files/actions/move', null, baton);
         });

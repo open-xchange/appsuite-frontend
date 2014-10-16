@@ -24,7 +24,8 @@ define('io.ox/contacts/actions', [
     'use strict';
 
     //  actions
-    var Action = links.Action;
+    var Action = links.Action,
+        ActionLink = links.ActionLink;
 
     new Action('io.ox/contacts/actions/delete', {
         index: 100,
@@ -408,6 +409,21 @@ define('io.ox/contacts/actions', [
                 )
             );
         }
+    });
+
+    // Toolbar actions
+    new ActionLink('io.ox/contacts/links/toolbar/default', {
+        index: 100,
+        id: 'create',
+        label: gt('Add contact'),
+        ref: 'io.ox/contacts/actions/create'
+    });
+
+    new ActionLink('io.ox/contacts/links/toolbar/default', {
+        index: 200,
+        id: 'create-dist',
+        label: gt('Add distribution list'),
+        ref: 'io.ox/contacts/actions/distrib'
     });
 
     //  points

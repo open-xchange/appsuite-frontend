@@ -278,23 +278,6 @@ define('io.ox/tasks/actions', [
         }
     });
 
-    // toolbar
-
-    new links.ActionGroup('io.ox/tasks/links/toolbar', {
-        id: 'default',
-        index: 100,
-        icon: function () {
-            return $('<i class="fa fa-plus accent-color">');
-        }
-    });
-
-    new links.ActionLink('io.ox/tasks/links/toolbar/default', {
-        index: 100,
-        id: 'create',
-        label: gt('Create new task'),
-        ref: 'io.ox/tasks/actions/create'
-    });
-
     //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'edit',
