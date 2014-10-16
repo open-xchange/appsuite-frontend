@@ -24,8 +24,9 @@ define('io.ox/files/fluid/perspective', [
     'io.ox/files/util',
     'gettext!io.ox/files',
     'io.ox/core/tk/selection',
-    'io.ox/core/notifications'
-], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, actions, util, gt, Selection, notifications) {
+    'io.ox/core/notifications',
+    'io.ox/files/upload/main'
+], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, actions, util, gt, Selection, notifications, fileUpload) {
 
     'use strict';
 
@@ -402,6 +403,46 @@ define('io.ox/files/fluid/perspective', [
         $(this).remove();
     }
 
+    /*
+     * This extension point adds a toolbar, which displays the upload progess of all files.
+     * If several files are loaded this toolbar provides links to open an overview of all currently uploaded files.
+     */
+    ext.point('io.ox/files/upload/toolbar').extend({
+        draw: function () {
+            this.append($('<div class="upload-wrapper">').append(
+                $('<div class="upload-title">').append(
+                    $('<span class="file-name">'),
+                    $('<span class="estimated-time">')
+                ),
+                $('<div class="upload-details">').append(
+                    $('<a href=#>').text(gt('Details')).click(function (e) {
+                        e.preventDefault();
+
+                        require(['io.ox/files/upload/view'], function (uploadView) {
+                            uploadView.show();
+                        });
+                    })
+                ),
+                $('<div class="progress">').append(
+                    $('<div class="progress-bar progress-bar-striped active">')
+                        .attr({
+                            'role': 'progressbar',
+                            'aria-valuenow': '0',
+                            'aria-valuemin': '0',
+                            'aria-valuemax': '100'
+                        })
+                        .css({ 'width': '0%' })
+                        .append(
+                            $('<span class="sr-only">').text(
+                                //#. %1$s progress of currently uploaded files in percent
+                                gt('%1$s Complete', '0%')
+                            )
+                        )
+                )
+            ));
+        }
+    });
+
     ext.point('io.ox/files/icons/file').extend({
 
         draw: function (baton) {
@@ -740,6 +781,11 @@ define('io.ox/files/fluid/perspective', [
                         baton.allIds = allIds = ids;
                         ext.point('io.ox/files/icons').invoke('draw', scrollpane, baton);
 
+                        //draw upload toolbar if there are uploads
+                        if (fileUpload.collection.length > 0) {
+                            ext.point('io.ox/files/upload/toolbar').invoke('draw', self.main, baton);
+                        }
+
                         //anchor node
                         if (!breadcrumb) scrollpane.prepend(breadcrumb = $('<div>'));
 
@@ -798,33 +844,45 @@ define('io.ox/files/fluid/perspective', [
             };
 
             app.queues = {};
+            app.queues.create = upload.createQueue(fileUpload)
+                .on('start', function () {
+                    $('.files-wrapper').addClass('margin-bottom');
+                    ext.point('io.ox/files/upload/toolbar').invoke('draw', self.main, baton);
+                })
+                .on('progress', function (e, def, file) {
+                    $('.upload-wrapper').find('.file-name').text(
+                        //#. the name of the file, which is currently uploaded
+                        gt('Uploading %1$s', file.file.name)
+                    );
+                })
+                .on('stop', function () {
+                    $('.files-wrapper').removeClass('margin-bottom');
+                    $('.upload-wrapper').remove();
+                });
 
-            app.queues.create = upload.createQueue({
-                start: function () {
-                    win.busy(0);
-                },
-                progress: function (item, position, files) {
-                    // set initial progress
-                    win.busy(position / files.length, 0);
-                    return api.uploadFile(
-                        _.extend({ file: item.file }, item.options)
-                    )
-                    .progress(function (e) {
-                        // update progress
-                        var sub = e.loaded / e.total;
-                        win.busy((position + sub) / files.length, sub);
-                    })
-                    .fail(function (e) {
-                        if (e && e.data && e.data.custom) {
-                            notifications.yell(e.data.custom.type, e.data.custom.text);
-                        }
-                    });
-                },
-                stop: function () {
-                    api.trigger('refresh.all');
-                    win.idle();
-                }
-            });
+            fileUpload.collection
+                .on('progress', function (baton) {
+                    var progressWrapper = $('.upload-wrapper'),
+                        progressBar = progressWrapper.find('.progress-bar'),
+                        progressText = progressWrapper.find('.sr-only'),
+                        val = Math.round(baton.progress * 100);
+
+                    progressBar
+                        .attr({ 'aria-valuenow': val })
+                        .css({ 'width': val + '%' });
+                    progressText.text(
+                        //#. %1$s progress of currently uploaded files in percent
+                        gt('%1$s Complete', val + '%')
+                    );
+
+                    progressWrapper.find('.estimated-time').text(
+                        //#. %1$s remaining upload time
+                        gt('Remaining time: %1$s', baton.estimatedTime)
+                    );
+                })
+                .on('remove', function (model, collection, options) {
+                    app.queues.create.remove(options.index);
+                });
 
             app.queues.update = upload.createQueue({
                 start: function () {

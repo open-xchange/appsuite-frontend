@@ -432,7 +432,7 @@ define('io.ox/files/api', [
         function success(data) {
             // clear folder cache
             var fid = String(options.json.folder_id);
-            return api.propagate('new', { folder_id: fid }, true).pipe(function () {
+            return api.propagate('new', { folder_id: fid }, true).then(function () {
                 api.trigger('create.file');
                 return { folder_id: fid, id: parseInt(data.data, 10) };
             });
@@ -440,7 +440,10 @@ define('io.ox/files/api', [
 
         if ('FormData' in window) {
 
-            var formData = new FormData();
+            var formData = new FormData(),
+                uploadRequest,
+                def;
+
             if ('filename' in options) {
                 formData.append('file', options.file, options.filename);
             } else {
@@ -450,14 +453,18 @@ define('io.ox/files/api', [
             fixOptions();
             formData.append('json', JSON.stringify(options.json));
 
-            return http.UPLOAD({
+            uploadRequest = http.UPLOAD({
                 module: 'files',
                 params: { action: 'new', filename: options.filename },
                 data: formData,
                 fixPost: true
-            })
-            .pipe(success, failedUpload);
+            });
 
+            //append abort function to returning object
+            def =  uploadRequest.then(success, failedUpload);
+            def.abort = uploadRequest.abort;
+
+            return def;
         } else {
 
             // good old form post

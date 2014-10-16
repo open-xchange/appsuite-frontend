@@ -452,6 +452,41 @@
     }
 }
 
+.margin-bottom {
+    bottom: 68px;
+}
+
+.upload-wrapper {
+    border-top: rgb(221, 221, 221) 1px solid;
+    background-color: white;
+    margin: 0;
+    padding: 10px 40px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    .upload-title {
+        margin-bottom: 8px;
+
+        .file-name {
+            white-space: nowrap;
+        }
+
+        .estimated-time {
+            float: right;
+        }
+    }
+
+    .upload-details {
+        float: right;
+        margin-left: 10px;
+    }
+
+    .progress {
+        margin: 0;
+    }
+}
+
 .has-publications {
     width: 27px;
     height: 17px;
@@ -743,6 +778,24 @@ ul.breadcrumb li.prefix {
             }
         }
     }
+
+    .margin-bottom {
+        bottom: 116px;
+    }
+
+    .upload-wrapper {
+        margin-bottom: 45px;
+
+        .upload-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .estimated-time {
+            display: none;
+        }
+    }
+
     body > .io-ox-dialog-wrapper .io-ox-dialog-popup {
         top: 40px;
         margin-top: 0;

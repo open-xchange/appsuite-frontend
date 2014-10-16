@@ -200,6 +200,7 @@ define('io.ox/core/tk/upload', [
         delegate = _.extend({
             start: $.noop,
             stop: $.noop,
+            changed: $.noop,
             progress: function () { return $.when(); },
             type: false
         }, delegate || {});
@@ -273,9 +274,19 @@ define('io.ox/core/tk/upload', [
 
         this.length = 0;
 
+        this.remove = function (index) {
+            files.splice(index, 1);
+
+            //if current file is removed, decrement position
+            if (index === position) {
+                position--;
+            }
+        };
+
         this.queueChanged = function () {
             this.length = files.length;
-            this.trigger('changed', this);
+            delegate.changed(files[position], position, files);
+            this.trigger('changed', files[position], position, files);
             this.next();
         };
 
