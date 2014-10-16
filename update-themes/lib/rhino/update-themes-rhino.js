@@ -44,7 +44,7 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     newFileInfo.filename = href;
 
     var paths = env.paths || ['.'];
-    paths.push(path);
+    if (paths.indexOf(path) < 0) paths.push(path);
     var data = '';
     paths.forEach(function (path) {
         try {
