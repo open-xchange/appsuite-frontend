@@ -233,7 +233,7 @@ define('io.ox/search/apiproxy',
 
                     function enrich(opt, result) {
                         // add requst params to result
-                        result.request = opt;
+                        if (result) result.request = opt;
                         return result;
                     }
 
