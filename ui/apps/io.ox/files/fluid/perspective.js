@@ -20,13 +20,12 @@ define('io.ox/files/fluid/perspective', [
     'io.ox/core/date',
     'io.ox/core/tk/upload',
     'io.ox/core/extPatterns/dnd',
-    'io.ox/core/extPatterns/shortcuts',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/util',
     'gettext!io.ox/files',
     'io.ox/core/tk/selection',
     'io.ox/core/notifications'
-], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
+], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, actions, util, gt, Selection, notifications) {
 
     'use strict';
 
@@ -854,20 +853,12 @@ define('io.ox/files/fluid/perspective', [
                 }
             });
 
-            var shortcutPoint = new shortcuts.Shortcuts({
-                ref: 'io.ox/files/shortcuts'
-            });
-
             $(window).resize(_.debounce(recalculateLayout, 300));
 
             win.on('search:query search:cancel', function () {
                 breadcrumb = undefined;
                 allIds = [];
                 drawFirst();
-            });
-
-            win.on('hide', function () {
-                shortcutPoint.deactivate();
             });
 
             api.on('update', function (e, obj) {
