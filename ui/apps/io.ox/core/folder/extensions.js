@@ -271,19 +271,33 @@ define('io.ox/core/folder/extensions',
                     baton = ext.Baton({ module: module, view: tree, context: tree.context }),
                     folder = 'virtual/flat/' + module,
                     model_id = 'flat/' + module,
-                    defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree };
+                    defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree },
+                    privateFolders,
+                    publicFolders;
 
                 ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
 
+                privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }));
+
+                // open private folder whenever a folder is added to it
+                api.pool.getCollection('flat/' + module + '/private').on('add', function () {
+                    privateFolders.toggle(true);
+                });
+
+                // open public folder whenever a folder is added to it
+                api.pool.getCollection('flat/' + module + '/public').on('add', function () {
+                    privateFolders.toggle(true);
+                });
+
+                publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: gt('Public') }));
+
                 this.append(
                     // private folders
-                    new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private'), virtual: true }))
-                    .render().$el.addClass('section'),
+                    privateFolders.render().$el.addClass('section'),
                     // links
                     links,
                     // public folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: gt('Public') }))
-                    .render().$el.addClass('section'),
+                    publicFolders.render().$el.addClass('section'),
                     // shared with me
                     new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: gt('Shared') }))
                     .render().$el.addClass('section'),
