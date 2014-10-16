@@ -187,10 +187,11 @@ define('io.ox/search/main',
                 app.busy();
             },
             'query:stop': function () {
+                app.view.repaint('info');
                 app.idle();
             },
             'query:result': function () {
-                app.view.repaint('info items');
+                app.view.repaint('items');
                 app.idle();
             },
             'button:app': function () {
