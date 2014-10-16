@@ -35,9 +35,17 @@ define('io.ox/core/main', [
     var DURATION = 250;
 
     // enable special logging to investigate why boot fails
-    var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
+    var debug = $.noop;
 
-    debug('core: Loaded');
+    if (/\bcore/.test(_.url.hash('debug'))) {
+        debug = function () {
+            var args = _(arguments).toArray(), t = _.now() - ox.t0;
+            args.unshift('core (' + (t / 1000).toFixed(1) + 's): ');
+            console.log.apply(console, args);
+        };
+    }
+
+    debug('Code loaded');
 
     _.stepwiseInvoke = function (list, method, context) {
         if (!_.isArray(list)) return $.when();
@@ -175,23 +183,20 @@ define('io.ox/core/main', [
         $('#io-ox-offline').stop().animate({ bottom: '-41px' }, 200, function () { $(this).hide(); });
     }
 
-    ox.on('connection:online connection:offline', function (e) {
-        if (e.type === 'connection:offline') {
-            showIndicator(gt('Offline'));
-            ox.online = false;
-        } else {
+    ox.on({
+        'connection:online': function () {
             hideIndicator();
             ox.online = true;
-        }
-    });
-
-    ox.on('connection:up connection:down', function (e) {
-        if (ox.online) {
-            if (e.type === 'connection:down') {
-                showIndicator(gt('Server unreachable'));
-            } else {
-                hideIndicator();
-            }
+        },
+        'connection:offline': function () {
+            showIndicator(gt('Offline'));
+            ox.online = false;
+        },
+        'connection:up': function () {
+            if (ox.online) hideIndicator();
+        },
+        'connection:down': function () {
+            if (ox.online) showIndicator(gt('Server unreachable'));
         }
     });
 
@@ -550,7 +555,7 @@ define('io.ox/core/main', [
 
     function launch() {
 
-        debug('core: launch()');
+        debug('Launching ...');
 
         /**
          * Listen to events on apps collection
@@ -1218,7 +1223,7 @@ define('io.ox/core/main', [
             id: 'first',
             index: 100,
             run: function () {
-                debug('core: Stage "first"');
+                debug('Stage "first"');
             }
         });
 
@@ -1227,7 +1232,7 @@ define('io.ox/core/main', [
         //     index: 200,
         //     run: function () {
 
-        //         debug('core: Stage "update-tasks"');
+        //         debug('Stage "update-tasks"');
 
         //         require(['io.ox/core/updates/updater']).then(
         //             function success(updater) {
@@ -1269,7 +1274,7 @@ define('io.ox/core/main', [
             index: 300,
             run: function (baton) {
 
-                debug('core: Stage "restore-check"');
+                debug('Stage "restore-check"');
 
                 return ox.ui.App.canRestore().done(function (canRestore) {
                     baton.canRestore = canRestore;
@@ -1282,7 +1287,7 @@ define('io.ox/core/main', [
             index: 400,
             run: function (baton) {
 
-                debug('core: Stage "restore-confirm"');
+                debug('Stage "restore-confirm"');
 
                 if (baton.canRestore) {
 
@@ -1384,7 +1389,7 @@ define('io.ox/core/main', [
             index: 500,
             run: function (baton) {
 
-                debug('core: Stage "restore"');
+                debug('Stage "restore"');
 
                 if (baton.canRestore) {
                     // clear auto start stuff (just conflicts)
@@ -1404,11 +1409,11 @@ define('io.ox/core/main', [
             index: 600,
             run: function (baton) {
 
-                debug('core: Stage "load"', baton);
+                debug('Stage "load"', baton);
 
                 return baton.loaded.done(function (instantFadeOut) {
 
-                    debug('core: Stage "load" > loaded.done');
+                    debug('Stage "load" > loaded.done');
 
                     // draw top bar now
                     ext.point('io.ox/core/topbar').invoke('draw');
@@ -1421,7 +1426,7 @@ define('io.ox/core/main', [
                     //draw plugins
                     ext.point('io.ox/core/plugins').invoke('draw');
 
-                    debug('core: Stage "load" > autoLaunch ...');
+                    debug('Stage "load" > autoLaunch ...');
 
                     // auto launch
                     _(baton.autoLaunch)
@@ -1439,7 +1444,7 @@ define('io.ox/core/main', [
                         if (_.device('smartphone') && index > 0) return;
                         // split app/call
                         var launch, method;
-                        debug('core: autoLaunching', details.app);
+                        debug('Auto launch:', details.app);
                         launch = ox.launch(details.app);
                         method = details.method;
                         // explicit call?
@@ -1467,7 +1472,7 @@ define('io.ox/core/main', [
             index: 700,
             run: function (baton) {
 
-                debug('core: Stage "curtain"');
+                debug('Stage "curtain"');
 
                 if (baton.instantFadeOut) {
                     // instant fade out
@@ -1481,7 +1486,15 @@ define('io.ox/core/main', [
             }
         });
 
-        debug('core: launch > run stages');
+        new Stage('io.ox/core/stages', {
+            id: 'last',
+            index: 'last',
+            run: function () {
+                debug('DONE!');
+            }
+        });
+
+        debug('Run stages ...');
         Stage.run('io.ox/core/stages', baton);
     }
 

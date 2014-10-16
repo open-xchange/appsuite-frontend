@@ -14,12 +14,14 @@
 define('io.ox/core/boot/load', [
     'themes',
     'io.ox/core/boot/util',
-    'io.ox/core/http'
-], function (themes, util, http) {
+    'io.ox/core/http',
+    'settings!io.ox/core',
+    'settings!io.ox/mail'
+], function (themes, util, http, coreSettings, mailSettings) {
 
     'use strict';
 
-    return function () {
+    return function load() {
 
         // remove unnecessary stuff
         util.cleanUp();
@@ -28,114 +30,99 @@ define('io.ox/core/boot/load', [
         $('#io-ox-login-screen').hide();
         $(this).busy();
 
-        util.debug('loadCore > load settings ...');
+        prefetch();
+        applyHighContrast();
+        loadUserTheme();
 
-        var continuation = $.Deferred();
+        ox.once('boot:done', function () {
+            // final step: launch
+            require('io.ox/core/main').launch();
+        });
+    };
 
-        function success(settings, mail) {
-            // greedy prefetch for mail app
-            // need to get this request out as soon as possible
-            if (settings.get('autoStart') === 'io.ox/mail/main') {
-                var folder = 'default0/INBOX',
-                    thread = mail.get(['viewOptions', folder, 'thread'], true),
-                    action = thread ? 'threadedAll' : 'all',
-                    params = {
-                        action: action,
-                        folder: folder,
-                        columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
-                        sort: mail.get(['viewOptions', folder, 'sort'], 610),
-                        order: mail.get(['viewOptions', folder, 'order'], 'desc')
-                    };
-                if (thread) {
-                    _.extend(params, {
-                        includeSent: true,
-                        max: 300,
-                        timezone: 'utc',
-                        limit: '0,30'
-                    });
-                }
-                http.GET({ module: 'mail', params: params }).done(function (data) {
-                    // the collection loader will check ox.rampup for this data
-                    ox.rampup['mail/' + $.param(params)] = data;
-                });
-            }
+    function loadUserTheme() {
 
-            var theme = _.url.hash('theme') || settings.get('theme') || 'default';
+        var theme = _.url.hash('theme') || coreSettings.get('theme') || 'default',
+            loadCore = require(['io.ox/core/main']),
+            loadTheme = themes.set(theme);
 
-            $('html').toggleClass('high-contrast', settings.get('highcontrast', false));
+        util.debug('Load UI > require [core/main] and set theme', theme);
 
-            util.debug('loadCore > load config ...');
-            util.debug('loadCore > require "main" & set theme', theme);
+        $.when(loadCore, loadTheme).then(
+            launch.bind(null, loadCore),
+            loadDefaultTheme.bind(null, theme, loadCore, loadTheme)
+        );
+    }
 
-            var def1 = require(['io.ox/core/main']),
-                def2 = themes.set(theme);
-
-            function cont() {
-                def1.then(
-                    function success(core) {
-                        // go!
-                        util.debug('core.launch()');
-                        //trigger load event so custom dropdown can add event listeners (loading to early causes js errors on mobile devices during login)
-                        $(document).trigger('core-main-loaded');
-                        continuation.resolve(core);
-                    },
-                    function fail(e) {
-                        console.error('Cannot launch core!', e);
-                    }
-                );
-            }
-
-            function fail() {
-                console.error('Could not load theme: ' + theme);
-                continuation.reject('autologin=false');
-            }
-
-            $.when(def1, def2).always(function () {
-                // failed to load theme?
-                if (def2.state() === 'rejected') {
-                    // give up if it was the default theme
-                    if (theme === 'default') return fail();
-                    // otherwise try to load default theme now
-                    console.error('Could not load custom theme: ' + theme);
-                    themes.set('default').then(cont, fail);
-                } else {
-                    cont();
-                }
-            });
-        }
+    function loadDefaultTheme(theme, loadCore, loadTheme) {
 
         function fail() {
-
-            util.debug('loadCore > load config failed, using default ...');
-
-            var def1 = require(['io.ox/core/main']),
-                def2 = themes.set('default');
-
-            function cont() {
-                util.debug('loadCore def1 and def2 resolved');
-                def1.then(
-                    function success(core) {
-                        // go!
-                        util.debug('core.launch()');
-                        continuation.resolve(core);
-                    },
-                    function fail(e) {
-                        console.error('Cannot launch core!', e);
-                    }
-                );
-            }
-
-            function fail() {
-                console.error('Could not load theme: default');
-                continuation.reject('autologin=false');
-            }
-
-            $.when(def2, def1).then(cont, fail);
+            console.error('Could not load theme: ' + theme);
+            ox.trigger('boot:fail');
         }
 
-        // get configuration & core
-        require(['settings!io.ox/core', 'settings!io.ox/mail', ox.base + '/precore.js'], success, fail);
+        util.debug('Theme failed');
 
-        return continuation.promise();
-    };
+        // failed to load theme?
+        if (loadTheme.state() === 'rejected') {
+            // give up if it was the default theme
+            if (theme === 'default') return fail();
+            // otherwise try to load default theme now
+            console.error('Could not load custom theme: ' + theme);
+            themes.set('default').then(launch.bind(null, loadCore), fail);
+        }
+    }
+
+    function launch(loadCore) {
+
+        util.debug('Load UI > launch ...');
+
+        loadCore.then(
+            function success() {
+                // trigger load event so custom dropdown can add event listeners
+                // (loading to early causes js errors on mobile devices during login)
+                $(document).trigger('core-main-loaded');
+                util.debug('DONE!');
+                ox.trigger('boot:done');
+            },
+            function fail(e) {
+                console.error('Cannot launch core!', e);
+                ox.trigger('boot:fail');
+            }
+        );
+    }
+
+    function prefetch() {
+
+        // greedy prefetch for mail app
+        // need to get this request out as soon as possible
+        if (coreSettings.get('autoStart') === 'io.ox/mail/main') {
+            var folder = 'default0/INBOX',
+                thread = mailSettings.get(['viewOptions', folder, 'thread'], true),
+                action = thread ? 'threadedAll' : 'all',
+                params = {
+                    action: action,
+                    folder: folder,
+                    columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                    sort: mailSettings.get(['viewOptions', folder, 'sort'], 610),
+                    order: mailSettings.get(['viewOptions', folder, 'order'], 'desc')
+                };
+            if (thread) {
+                _.extend(params, {
+                    includeSent: true,
+                    max: 300,
+                    timezone: 'utc',
+                    limit: '0,30'
+                });
+            }
+            http.GET({ module: 'mail', params: params }).done(function (data) {
+                // the collection loader will check ox.rampup for this data
+                ox.rampup['mail/' + $.param(params)] = data;
+            });
+        }
+    }
+
+    function applyHighContrast() {
+        $('html').toggleClass('high-contrast', coreSettings.get('highcontrast', false));
+    }
 });

@@ -19,10 +19,9 @@ define('io.ox/core/boot/main', [
     'io.ox/core/boot/autologin',
     'io.ox/core/boot/form',
     'io.ox/core/boot/config',
-    'io.ox/core/boot/load',
     'io.ox/core/manifests'
 
-], function (themes, gettext, util, autologin, form, config, load, manifests) {
+], function (themes, gettext, util, autologin, form, config, manifests) {
 
     'use strict';
 
@@ -99,12 +98,25 @@ define('io.ox/core/boot/main', [
         loadUI: function () {
 
             util.debug('Load UI ...');
+            util.debug('Load UI > load core plugins and current language', ox.language);
 
-            // Load core plugins
-            gettext.setLanguage(ox.language);
-            manifests.manager.loadPluginsFor('core')
-                .always(gettext.enable)
-                .done(load);
+            // signin phase is over (important for gettext)
+            ox.signin = false;
+
+            // make sure we have loaded precore.js now
+            $.when(
+                require(['io.ox/core/boot/load', ox.base + '/precore.js']),
+                gettext.setLanguage(ox.language),
+                manifests.manager.loadPluginsFor('core')
+            )
+            .then(function (response) {
+                return response[0];
+            })
+            .done(function (load) {
+                util.debug('Load UI > current language and core plugins DONE.');
+                gettext.enable();
+                load();
+            });
         }
     };
 

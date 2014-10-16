@@ -86,7 +86,7 @@ define('io.ox/core/boot/util', [], function () {
     // Debug?
     //
 
-    if (_.url.hash('debug') === 'boot') {
+    if (/\bboot/.test(_.url.hash('debug'))) {
         exports.debug = function () {
             var args = _(arguments).toArray(), t = _.now() - ox.t0;
             args.unshift('boot (' + (t / 1000).toFixed(1) + 's): ');
