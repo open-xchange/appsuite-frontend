@@ -252,7 +252,7 @@ define('io.ox/search/main',
     // extend app
     app.apiproxy = apiproxy.init(app);
 
-    ext.point('io.ox/search').invoke('config', app);
+    ext.point('io.ox/search').invoke('config', model, app);
 
     // run app
     run = function () {
