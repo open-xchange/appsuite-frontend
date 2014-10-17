@@ -29,19 +29,17 @@ define('io.ox/core/settings/pane',
 
     var point = views.point('io.ox/core/settings/entry'),
         SettingView = point.createView({ tagName: 'form', className: 'form-horizontal'}),
-        reloadMe = ['language', 'timezone', 'theme', 'refreshInterval', 'autoOpenNotification'];
+        reloadMe = ['language', 'timezone', 'theme'];
 
     ext.point('io.ox/core/settings/detail').extend({
         index: 50,
         id: 'extensions',
         draw: function () {
             var model = settings.createModel(BasicModel);
+            model.on('change:highcontrast', function (m, value) {
+                $('html').toggleClass('high-contrast', value);
+            });
             model.on('change', function (model) {
-
-                if ('highcontrast' in model.changed) {
-                    $('html').toggleClass('high-contrast', model.changed.highcontrast);
-                }
-
                 settings.saveAndYell().then(
                     function success() {
 
@@ -49,22 +47,10 @@ define('io.ox/core/settings/pane',
                             return model.changed[attr];
                         });
 
-                        // if (model.changed.autoOpenNotification) {//AutonOpenNotification updates directly
-                        //     notifications.yell(
-                        //         'success',
-                        //         gt('The setting has been saved.')
-                        //     );
-                        // } else if (showNotice) {
-                        //     notifications.yell(
-                        //         'success',
-                        //         gt('The setting has been saved and will become active when you enter the application the next time.')
-                        //     );
-                        // }
-
                         if (showNotice) {
                             notifications.yell(
                                 'success',
-                                gt('The setting has been saved and will become active when you enter the application the next time.')
+                                gt('The setting requires a reload or relogin to take effect.')
                             );
                         }
                     }
@@ -77,16 +63,51 @@ define('io.ox/core/settings/pane',
         }
     });
 
+    //
+    // My contact data
+    //
+
+    point.basicExtend({
+        id: 'my-contact-data',
+        index: '10000',
+        draw: function () {
+            this.append(
+                $('<div data-extension-id="my-contact-data">').append(
+                    $('<div class="form-group">').append(
+                        $('<label class="control-label col-sm-4">'),
+                        $('<div class="col-sm-4">').append(
+                            $('<button type="button" class="btn btn-default" tabindex="1">')
+                            .text(gt('My contact data') + ' ...')
+                            .on('click', function () {
+                                require(['io.ox/core/settings/user'], function (userSettings) {
+                                    userSettings.openModalDialog();
+                                });
+                            })
+                        )
+                    )
+                )
+            );
+        }
+    });
+
+    //
+    // Change password
+    //
+
     if (capabilities.has('edit_password')) {
         point.basicExtend({
             id: 'change-password',
-            index: 'last',
+            index: '11000',
             draw: function () {
                 this.append(
-                    $('<div class="control-group">').append(
-                        $('<div class="controls">').append(
-                            $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Change password'))
-                            .on('click', userSettings.changePassword)
+                    $('<div data-extension-id="change-password">').append(
+                        $('<div class="form-group">').append(
+                            $('<label class="control-label col-sm-4">'),
+                            $('<div class="col-sm-4">').append(
+                                $('<button type="button" class="btn btn-default" tabindex="1">')
+                                .text(gt('Change password') + ' ...')
+                                .on('click', userSettings.changePassword)
+                            )
                         )
                     )
                 );

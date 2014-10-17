@@ -47,12 +47,14 @@ define('io.ox/mail/write/main',
     // actions (define outside of multi-instance app)
     ext.point(ACTIONS + '/draft').extend({
         action: function (baton) {
-            var self = this;
-            self.busy();
+            if (baton.app.isSaving === true) return;
+            baton.app.isSaving = true;
             baton.app.saveDraft()
                 .done(function (data) {
-                    baton.app.refId = data.id;
-                    self.idle();
+                    baton.app.refId = data.msgref;
+                    baton.app.isSaving = false;
+                }).fail(function () {
+                    baton.app.isSaving = false;
                 });
         }
     });
@@ -117,7 +119,7 @@ define('io.ox/mail/write/main',
         delay();
     }
 
-    function attachmentsExceedQouta(mail) {
+    function attachmentsExceedQuota(mail) {
         var allAttachmentsSizes = [].concat(mail.files).concat(mail.data.attachments)
                 .map(function (m) {
                     return m.size || 0;
@@ -170,7 +172,8 @@ define('io.ox/mail/write/main',
             prioActive = false,
             view,
             model,
-            previous;
+            previous,
+            intervals = [];
 
         // don’t force text on phantomjs, because phantomjs reports as a touch device
         // see https://github.com/ariya/phantomjs/issues/10375
@@ -216,6 +219,15 @@ define('io.ox/mail/write/main',
 
         app.getView = function () {
             return view;
+        };
+
+        app.addKeepalive = function (id) {
+            var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
+            intervals.push(setInterval(mailAPI.keepalive, timeout, id));
+        };
+
+        app.clearKeepalive = function () {
+            _(intervals).each(clearInterval);
         };
 
         window.newmailapp = function () { return app; };
@@ -300,10 +312,11 @@ define('io.ox/mail/write/main',
                 currentSignature = text;
             }
 
-            ed.focus();
+            if (_.device('!smartphone')) ed.focus();
         };
 
         function focus(name) {
+            if (_.device('smartphone')) return;
             app.getWindowNode().find('input[name="' + name + '"], input[data-type="' + name + '"]').focus().select();
         }
 
@@ -322,19 +335,12 @@ define('io.ox/mail/write/main',
             view.render();
 
             // add panels to windows
-            win.nodes.main
-            .addClass('io-ox-mail-write')
-            .append(
-                view.form = $('<form>', {
-                    name: 'compose',
-                    method: 'post',
-                    enctype: 'multipart/form-data'
-                })
-                .addClass('form-inline')
-                .append(
-                    $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
-                    $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
-                    $('<input>', { type: 'hidden', name: 'headers', value: '' }),
+            win.nodes.main.addClass('io-ox-mail-write').append(
+                view.form = $('<form name="compose method="post" enctype="multipart/form-data" class="form-inline">').append(
+                    $('<input type="hidden" name="csid" value="">'),
+                    $('<input type="hidden" name="msgref" value="">'),
+                    $('<input type="hidden" name="sendtype" value="">').val(mailAPI.SENDTYPE.NORMAL),
+                    $('<input type="hidden" name="headers" value="">'),
                     view.leftside,
                     view.rightside
                 )
@@ -377,6 +383,9 @@ define('io.ox/mail/write/main',
                             app.setEditor(editorHash[mode]);
                             app.getEditor().setPlainText(content);
                             app.getEditor().handleShow();
+                            app.getEditor().getContainer().parent().on('addInlineImage', function (e, id) {
+                                app.addKeepalive(id);
+                            });
                         });
                 });
             }
@@ -629,9 +638,13 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=priority][value=' + prio + ']').prop('checked', true);
             // high or low priority?
             if (prio === 1) {
-                view.priorityOverlay.attr('class', 'priority-overlay high');
+                view.priorityOverlay
+                    .html('<i class="fa fa-exclamation"></i>')
+                    .attr('class', 'priority-overlay high');
             } else if (prio === 3) {
-                view.priorityOverlay.attr('class', 'priority-overlay');
+                view.priorityOverlay
+                    .html('<i class="fa fa-exclamation"></i>')
+                    .attr('class', 'priority-overlay');
                 if (prioActive) {
                     prioActive = false;
                     view.priorityOverlay.addClass('normal');
@@ -639,13 +652,19 @@ define('io.ox/mail/write/main',
                     prioActive = true;
                 }
             } else if (prio === 5) {
-                view.priorityOverlay.attr('class', 'priority-overlay low');
+                view.priorityOverlay
+                    .html('<i class="fa fa-minus"></i>')
+                    .attr('class', 'priority-overlay low');
             }
         };
 
         app.setAttachVCard = function (bool) {
             // set
             view.form.find('input[name=vcard]').prop('checked', !!bool);
+        };
+
+        app.setCSID = function (id) {
+            view.form.find('input[name=csid]').val(id || '');
         };
 
         app.setMsgRef = function (ref) {
@@ -689,21 +708,23 @@ define('io.ox/mail/write/main',
         };
 
         app.setMail = function (mail) {
-            // be robust
-            mail = mail || {};
-            mail.data = mail.data || {};
-            mail.mode = mail.mode || 'compose';
-            mail.format = mail.format || getDefaultEditorMode();
-            mail.initial = mail.initial || false;
 
-            //config settings
-            mail.data.vcard = mail.data.vcard || settings.get('appendVcard');
+            // defaults
+            mail = _.extend({
+                data: {},
+                mode: 'compose',
+                format: getDefaultEditorMode(),
+                initial: false
+            }, mail);
+
+            // default data
+            var data = mail.data = _.extend({
+                vcard: settings.get('appendVcard'),
+                csid: mailAPI.csid() // composition space id
+            }, mail.data);
 
             // Allow extensions to have a go at the data
             ext.point('io.ox/mail/write/initializers/before').invoke('modify', app, new ext.Baton({mail: mail, app: this}));
-
-            // call setters
-            var data = mail.data;
 
             this.setFrom(data);
             this.setSubject(convertAllToUnified(data.subject));
@@ -715,6 +736,7 @@ define('io.ox/mail/write/main',
             this.setNestedMessages(data);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : settings.get('vcard', false));
+            this.setCSID(data.csid);
             this.setMsgRef(data.msgref);
             this.setSendType(data.sendtype);
             this.setHeaders(data.headers);
@@ -771,7 +793,7 @@ define('io.ox/mail/write/main',
                 app.setMail(point).done(function () {
                     app.dirty(true);
                     win.idle();
-                    app.getEditor().focus();
+                    if (_.device('!smartphone')) app.getEditor().focus();
                     def.resolve();
                 });
             });
@@ -826,13 +848,17 @@ define('io.ox/mail/write/main',
                     // drawn, when setMail is called
                     app.setFrom(data || {});
                     // set to idle now; otherwise firefox doesn't set the focus
+                    var ed = app.getEditor();
                     win.idle();
-                    if (mailto) {
-                        app.getEditor().focus();
-                    } else if (data && data.to) {
-                        focus('subject');
-                    } else {
-                        focus('to');
+                    if (_.device('!smartphone')) {
+                        ed.setCaretPosition(0);
+                        if (mailto) {
+                            ed.focus();
+                        } else if (data && data.to) {
+                            focus('subject');
+                        } else {
+                            focus('to');
+                        }
                     }
                     def.resolve({app: app});
                 })
@@ -868,7 +894,7 @@ define('io.ox/mail/write/main',
                                 var ed = app.getEditor();
                                 ed.setCaretPosition(0);
                                 win.idle();
-                                ed.focus();
+                                if (_.device('!smartphone')) ed.focus();
                                 view.scrollpane.scrollTop(0);
                                 def.resolve({app: app});
                                 if (_.device('smartphone')) {
@@ -881,7 +907,7 @@ define('io.ox/mail/write/main',
                                     }
                                     // add some blank lines to textarea
                                     addBlankLineSimple(1);
-                                    view.textarea.focus();
+                                    if (_.device('!ios')) view.textarea.focus();
                                     app.getWindow().nodes.main.scrollTop(0);
                                 }
                             });
@@ -930,7 +956,7 @@ define('io.ox/mail/write/main',
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
                         win.idle();
-                        focus('to');
+                        if (_.device('!smartphone')) focus('to');
                         def.resolve();
 
                     });
@@ -990,7 +1016,7 @@ define('io.ox/mail/write/main',
                         .done(function () {
                             app.setFrom(data || {});
                             win.idle();
-                            app.getEditor().focus();
+                            if (_.device('!smartphone')) app.getEditor().focus();
                             def.resolve();
                         });
                     },
@@ -1081,7 +1107,8 @@ define('io.ox/mail/write/main',
             };
             // add disp_notification_to?
             if (data.disp_notification_to) mail.disp_notification_to = true;
-            // add msgref?
+            // add csid/msgref?
+            if (data.csid) mail.csid = data.csid;
             if (data.msgref) mail.msgref = data.msgref;
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
@@ -1139,7 +1166,7 @@ define('io.ox/mail/write/main',
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
 
-                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQouta(mail)) {
+                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQuota(mail)) {
                     notifications.yell({
                         type: 'info',
                         message: gt(
@@ -1225,7 +1252,7 @@ define('io.ox/mail/write/main',
             if ($.trim(mail.data.subject) === '' || noRecipient) {
                 if (noRecipient) {
                     notifications.yell('error', gt('Mail has no recipient.'));
-                    focus('to');
+                    if (_.device('!smartphone')) focus('to');
                     def.reject();
                 } else if ($.trim(mail.data.subject) === '') {
                     // show dialog
@@ -1241,7 +1268,7 @@ define('io.ox/mail/write/main',
                                 if (action === 'send') {
                                     cont();
                                 } else {
-                                    focus('subject');
+                                    if (_.device('!smartphone')) focus('subject');
                                     def.reject();
                                 }
                             });
@@ -1274,7 +1301,6 @@ define('io.ox/mail/write/main',
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    app.setMsgRef(result);
                     app.dirty(false);
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
@@ -1313,7 +1339,7 @@ define('io.ox/mail/write/main',
             // fix inline images
             mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
-            mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
+            var defSend = mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
                     if (result.error) {
                         notifications.yell(result);
@@ -1328,7 +1354,7 @@ define('io.ox/mail/write/main',
 
             _.defer(initAutoSaveAsDraft, this);
 
-            return def.then(function (result) {
+            def.then(function (result) {
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
@@ -1347,6 +1373,9 @@ define('io.ox/mail/write/main',
                     });
                 return def;
             });
+
+            return $.when.apply($, [def, defSend]);
+
         };
 
         /**
@@ -1374,6 +1403,7 @@ define('io.ox/mail/write/main',
                 }
                 // clear timer for autosave
                 stopAutoSave(app);
+                app.clearKeepalive();
                 // clear all private vars
                 app = win = editor = currentSignature = editorHash = null;
             };

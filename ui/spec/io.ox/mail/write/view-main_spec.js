@@ -17,20 +17,18 @@ define(['io.ox/mail/write/main'], function (main) {
 
         describe('define some methods to manipulate DOM', function () {
             it('for general purposes', function () {
-                expect(view.initialize).to.be.a('function');
-                expect(view.focusSection).to.be.a('function');
-                expect(view.createSection).to.be.a('function');
-                expect(view.addSection).to.be.a('function');
-                expect(view.showSection).to.be.a('function');
-                expect(view.hideSection).to.be.a('function');
-                expect(view.createLink).to.be.a('function');
-                expect(view.addLink).to.be.a('function');
-                expect(view.createField).to.be.a('function');
-                expect(view.createSenderField).to.be.a('function');
-                expect(view.createReplyToField).to.be.a('function');
-                expect(view.createRecipientList).to.be.a('function');
-                expect(view.addRecipients).to.be.a('function');
-                expect(view.render).to.be.a('function');
+                expect(view.initialize, 'initialize').to.be.a('function');
+                expect(view.createSection, 'createSection').to.be.a('function');
+                expect(view.addSection, 'addSection').to.be.a('function');
+                expect(view.showSection, 'showSection').to.be.a('function');
+                expect(view.hideSection, 'hideSection').to.be.a('function');
+                expect(view.createLink, 'createLink').to.be.a('function');
+                expect(view.createField, 'createField').to.be.a('function');
+                expect(view.createSenderField, 'createSenderField').to.be.a('function');
+                expect(view.createReplyToField, 'createReplyToField').to.be.a('function');
+                expect(view.createRecipientList, 'createRecipientList').to.be.a('function');
+                expect(view.addRecipients, 'addRecipients').to.be.a('function');
+                expect(view.render, 'render').to.be.a('function');
             });
             it('for emoji', function () {
                 expect(view.onInsertEmoji).to.be.a('function');

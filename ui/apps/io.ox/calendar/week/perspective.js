@@ -31,7 +31,7 @@ define('io.ox/calendar/week/perspective',
 
         collection:     {},     // collection of all appointments
         dialog:         null,   // sidepopup
-        app:            null,   // the app
+        app:            null,   // the appf
         view:           null,   // the current view obj
         views:          {},     // containing all views
         activeElement:  null,   // current focus in perspektive
@@ -44,16 +44,31 @@ define('io.ox/calendar/week/perspective',
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
+            if (_.device('smartphone')) {
+                self.app.pages.changePage('detailView');
+                self.app.pages.getPage('detailView').busy();
+            }
             api.get(obj).then(
                 function success(data) {
-                    self.dialog.show(e, function (popup) {
-                        popup
-                        .append(detailView.draw(data))
-                        .attr({
-                            'role': 'complementary',
-                            'aria-label': gt('Appointment Details')
+
+                    if (_.device('smartphone')) {
+                        var p = self.app.pages.getPage('detailView'),
+                            b = new ext.Baton({data: data});
+                        // draw details to page
+                        p.idle().empty().append(detailView.draw(data));
+                        // update toolbar with new baton
+                        self.app.pages.getToolbar('detailView').setBaton(b);
+
+                    } else {
+                        self.dialog.show(e, function (popup) {
+                            popup
+                            .append(detailView.draw(data))
+                            .attr({
+                                'role': 'complementary',
+                                'aria-label': gt('Appointment Details')
+                            });
                         });
-                    });
+                    }
                     if (self.setNewStart) {//if view should change week to the start of this appointment(used by deeplinks)
                         self.setNewStart = false;//one time only
                         self.app.refDate.setTime(data.start_date);
@@ -61,10 +76,15 @@ define('io.ox/calendar/week/perspective',
                             self.view.setStartDate(data.start_date);
                         }
                     }
+
                 },
                 function fail() {
                     notifications.yell('error', gt('An error occurred. Please try again.'));
                     $('.appointment', self.main).removeClass('opac current');
+                    if (_.device('smartphone')) {
+                        self.app.pages.getPage('detailView').idle();
+                        self.app.pages.goBack();
+                    }
                 }
             );
         },
@@ -241,6 +261,14 @@ define('io.ox/calendar/week/perspective',
                 });
             });
         },
+        /**
+         * receives an event from the nested Backbone view
+         * and passes it up to the page controller for mobile use
+         * @param  {Object} d some data
+         */
+        changeNavbarDate: function (d) {
+            $(this.main).trigger('change:navbar:date', d);
+        },
 
         /**
          * handle different views in this perspective
@@ -287,7 +315,8 @@ define('io.ox/calendar/week/perspective',
                     .on('openCreateAppointment', this.openCreateAppointment, this)
                     .on('openEditAppointment', this.openEditAppointment, this)
                     .on('updateAppointment', this.updateAppointment, this)
-                    .on('onRefresh', this.refresh, this);
+                    .on('onRefresh', this.refresh, this)
+                    .on('change:navbar:date', this.changeNavbarDate, this);
 
                 this.views[opt.perspective] = this.view.render();
                 this.main.append(this.view.$el.show());

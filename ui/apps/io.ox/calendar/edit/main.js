@@ -26,49 +26,10 @@ define('io.ox/calendar/edit/main',
 
     function createInstance() {
 
-        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true, closable: true }),
+        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true, closable: true });
 
-        controller = _.extend(app, {
+        _.extend(app, {
 
-            start: function () {
-                if (_.browser.IE === undefined || _.browser.IE > 9) {
-                    this.dropZone = new dnd.UploadZone({
-                        ref: 'io.ox/calendar/edit/dnd/actions'
-                    }, this);
-                }
-            },
-
-            stop: function () {
-                var self = this,
-                    df = new $.Deferred();
-
-                //be gently
-                if (self.getDirtyStatus()) {
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(gt('Do you really want to discard your changes?'))
-                            //#. "Discard changes" appears in combination with "Cancel" (this action)
-                            //#. Translation should be distinguishable for the user
-                            .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
-                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
-                            .show()
-                            .done(function (action) {
-                                if (action === 'delete') {
-                                    self.dispose();
-                                    df.resolve();
-                                } else {
-                                    df.reject();
-                                }
-                            });
-                    });
-                } else {
-                    //just let it go
-                    self.dispose();
-                    df.resolve();
-                }
-                app.getWindow().nodes.main.find('input')[0].focus();
-                return df;
-            },
             /*
             * should cleanly remove every outbounding reference
             * of all objects created. this could be a awkward task
@@ -107,7 +68,7 @@ define('io.ox/calendar/edit/main',
                 app.cid = 'io.ox/calendar:' + opt.mode + '.' + _.cid(data);
 
                 function cont(data) {
-                    app.model = self.model = appointmentModel.factory.create(data);
+                    self.model = appointmentModel.factory.create(data);
                     appointmentModel.applyAutoLengthMagic(self.model);
                     appointmentModel.fullTimeChangeBindings(self.model);
                     appointmentModel.setDefaultParticipants(self.model, { create: opt.mode === 'create' }).done(function () {
@@ -131,8 +92,11 @@ define('io.ox/calendar/edit/main',
                                     if (response.code === 'UPL-0005') {//uploadsize to big
                                         api.removeFromUploadList(_.ecid(this.attributes));//remove busy animation
                                     }
-                                    notifications.yell('error', response.error);
                                 }
+                                if (response.conflicts) {
+                                    return;
+                                }
+                                notifications.yell('error', response.error);
                             })
                             .on('conflicts', function (con) {
                                 var hardConflict = false;
@@ -150,8 +114,9 @@ define('io.ox/calendar/edit/main',
                                             center: false,
                                             container: self.getWindowNode()
                                         })
-                                        .header(conflictView.drawHeader())
-                                        .append(conflictView.drawList(con).addClass('additional-info'));
+                                        .header(conflictView.drawHeader());
+
+                                        dialog.append(conflictView.drawList(con, dialog).addClass('additional-info'));
                                     if (hardConflict) {
                                         dialog.prepend(
                                             $('<div class="alert alert-info hard-conflict">')
@@ -168,9 +133,7 @@ define('io.ox/calendar/edit/main',
                                             }
                                             if (action === 'ignore') {
                                                 self.model.set('ignore_conflicts', true, { validate: true });
-                                                self.model.save().done(function () {
-                                                    self.onSave();
-                                                });
+                                                self.model.save().then(_.bind(self.onSave, self));
                                             }
                                         });
                                 });
@@ -264,7 +227,7 @@ define('io.ox/calendar/edit/main',
                     cont(data);
                 } else {
                     if (!data.folder_id) {
-                        require(['io.ox/core/api/folder']).done(function (api) {
+                        require(['io.ox/core/folder/api']).done(function (api) {
                             data.folder_id = api.getDefaultFolder('calendar');
                             cont(data);
                         });
@@ -366,15 +329,51 @@ define('io.ox/calendar/edit/main',
             }
         });
 
-        controller.setLauncher(_.bind(controller.start, controller));
-        controller.setQuit(_.bind(controller.stop, controller));
-        return controller;
+        app.setLauncher(function () {
+            if (_.browser.IE === undefined || _.browser.IE > 9) {
+                this.dropZone = new dnd.UploadZone({
+                    ref: 'io.ox/calendar/edit/dnd/actions'
+                }, this);
+            }
+        });
+
+        app.setQuit(function () {
+            var self = this,
+                df = new $.Deferred();
+
+            //be gently
+            if (self.getDirtyStatus()) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt('Do you really want to discard your changes?'))
+                        //#. "Discard changes" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', { 'tabIndex': '1' })
+                        .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                self.dispose();
+                                df.resolve();
+                            } else {
+                                df.reject();
+                            }
+                        });
+                });
+            } else {
+                //just let it go
+                self.dispose();
+                df.resolve();
+            }
+            if (_.device('!smartphone')) app.getWindow().nodes.main.find('input')[0].focus();
+            return df;
+        });
+
+        return app;
     }
 
     return {
-
         getApp: createInstance,
-
         reuse: function (type, data) {
             if (type === 'edit') {
                 return ox.ui.App.reuse('io.ox/calendar:edit.' + _.cid(data));

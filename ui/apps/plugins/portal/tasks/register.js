@@ -68,6 +68,7 @@ define('plugins/portal/tasks/register',
                                     gt('Due on %1$s', _.noI18n(task.end_date))
                                 ),
                             $.txt(' '),
+                            $('<span class="status pull-right">').text(task.status).addClass(task.badge),
                             $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, {max: 100})))
                         )
                 );
@@ -110,6 +111,7 @@ define('plugins/portal/tasks/register',
                                 gt('Due on %1$s', _.noI18n(task.end_date))
                             ),
                         $.txt(' '),
+                        $('<span class="pull-right">').text(task.status).addClass(task.badge),
                         $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, {max: 100})))
                     )
                 );

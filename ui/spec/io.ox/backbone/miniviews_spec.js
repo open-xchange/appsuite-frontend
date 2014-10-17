@@ -15,7 +15,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
 
     'use strict';
 
-    describe('Backbone mini-views.', function () {
+    describe('Core Backbone mini-views.', function () {
 
         describe('AbstractView view', function () {
 
@@ -181,6 +181,87 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
             });
         });
 
+        describe('PasswordView', function () {
+
+            beforeEach(function () {
+                this.model = new Backbone.Model({ test: '' });
+                this.view = new common.PasswordView({ name: 'test', model: this.model });
+            });
+
+            afterEach(function () {
+                delete this.view;
+                delete this.model;
+            });
+
+            it('is an input field', function () {
+                expect(this.view.$el.prop('tagName')).to.equal('INPUT');
+                expect(this.view.$el.attr('type')).to.equal('password');
+            });
+
+            it('has a setup function', function () {
+                expect(this.view.setup).to.be.a('function');
+            });
+
+            it('has an update function', function () {
+                expect(this.view.update).to.be.a('function');
+            });
+
+            it('has a render function', function () {
+                expect(this.view.render).to.be.a('function');
+            });
+
+            it('has a render function that returns "this"', function () {
+                var result = this.view.render();
+                expect(result).to.equal(this.view);
+            });
+
+            it('has a render function that calls update', function () {
+                var spy = sinon.spy(this.view, 'update');
+                this.view.render();
+                expect(spy).to.have.been.called;
+            });
+
+            it('should render a name attribute', function () {
+                this.view.render();
+                expect(this.view.$el.attr('name')).to.equal('test');
+            });
+
+            it('should have a default tabindex of 1', function () {
+                this.view.render();
+                expect(this.view.$el.attr('tabindex')).to.equal('1');
+            });
+
+            it('should have a autocomplete attribute set to off', function () {
+                this.view.render();
+                expect(this.view.$el.attr('autocomplete')).to.equal('off');
+            });
+
+            it('should have a autocorrect attribute set to off', function () {
+                this.view.render();
+                expect(this.view.$el.attr('autocorrect')).to.equal('off');
+            });
+
+            it('should be empty', function () {
+                expect(this.view.$el.val()).to.be.empty;
+                expect(this.model.get('test')).to.be.empty;
+            });
+
+            it('should show stars if no value is set', function () {
+                this.model.set('test', null);
+                expect(this.view.$el.val()).to.equal('********');
+            });
+
+            it('reflects model changes', function () {
+                this.model.set('test', '1337');
+                expect(this.view.$el.val()).to.equal('1337');
+            });
+
+            it('updates the model', function () {
+                this.view.$el.val('new password').trigger('change');
+                expect(this.model.get('test')).to.equal('new password');
+            });
+        });
+
         describe('DateView', function () {
 
             beforeEach(function () {
@@ -261,6 +342,76 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
                 expect(this.view.value()).to.equal('0001-02-28');
                 expect(this.model.get('test')).to.equal(-62130585600000); // 0001-02-28Error while detecting browser, using fallback
             });
+        });
+
+        describe('ErrorView', function () {
+
+            beforeEach(function () {
+                this.model = new Backbone.Model({ test: '' });
+                this.container = $('<div class="row">');
+                this.containerDefault = $('<div class="form-group">');
+                this.inputView = new common.InputView({ name: 'test', model: this.model });
+                this.view = new common.ErrorView({ selector: '.row' });
+                this.viewSecond = new common.ErrorView();
+            });
+
+            afterEach(function () {
+
+                delete this.model;
+                delete this.container;
+                delete this.containerTop;
+                delete this.inputView;
+                delete this.view;
+                delete this.viewSecond;
+            });
+
+            it('is an span container', function () {
+                expect(this.view.$el.prop('tagName')).to.equal('SPAN');
+                expect(this.view.$el.attr('class')).to.equal('help-block');
+            });
+
+            it('has a invalid function', function () {
+                expect(this.view.invalid).to.be.a('function');
+            });
+
+            it('has an valid function', function () {
+                expect(this.view.valid).to.be.a('function');
+            });
+
+            it('should render a aria-live attribute', function () {
+                this.view.render();
+                expect(this.view.$el.attr('aria-live')).to.equal('assertive');
+            });
+
+            it('has a render function', function () {
+                expect(this.view.render).to.be.a('function');
+            });
+
+            it('has a render function that returns "this"', function () {
+                var result = this.view.render();
+                expect(result).to.equal(this.view);
+            });
+
+            it('has a getContainer function ', function () {
+                 expect(this.view.getContainer).to.be.a('function');
+            });
+
+            it('should listen to the custom container', function () {
+                this.container.append(
+                    this.inputView.render().$el,
+                    this.view.render().$el
+                );
+                expect(this.view.getContainer().empty()[0]).to.equal(this.container[0]);
+            });
+
+            it('should listen to the default container', function () {
+                this.containerDefault.append(
+                    this.inputView.render().$el,
+                    this.viewSecond.render().$el
+                );
+                expect(this.viewSecond.getContainer().empty()[0]).to.equal(this.containerDefault[0]);
+            });
+
         });
     });
 });

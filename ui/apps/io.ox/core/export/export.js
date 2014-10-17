@@ -15,7 +15,7 @@ define('io.ox/core/export/export',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/core/api/export',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'io.ox/formats/vcard',
      'gettext!io.ox/core'
@@ -156,7 +156,7 @@ define('io.ox/core/export/export',
                 dialog = new dialogs.ModalDialog({ width: 500 }),
                 baton = new ext.Baton({module: module, folder: folder});
             // get folder and build dialog
-            folderAPI.get({ folder: folder}).done(function () {
+            folderAPI.get(folder).done(function () {
                 dialog
                     .build(function () {
                         //header

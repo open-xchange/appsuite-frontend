@@ -17,10 +17,9 @@ define('io.ox/search/main',
      'io.ox/core/extensions',
      'io.ox/search/model',
      'io.ox/search/view',
-     'io.ox/search/api',
-     'io.ox/core/notifications',
+     'io.ox/search/apiproxy',
      'less!io.ox/search/style'
-    ], function (gt, settings, ext, SearchModel, SearchView, api, notifications) {
+    ], function (gt, settings, ext, SearchModel, SearchView, apiproxy) {
 
     'use strict';
 
@@ -28,6 +27,7 @@ define('io.ox/search/main',
         index: 100,
         id: 'default',
         config: function (data) {
+            // used only for search app
             data.defaultApp =  settings.get('search/default', 'io.ox/mail');
         }
     });
@@ -45,9 +45,9 @@ define('io.ox/search/main',
         index: 400,
         id: 'mapping',
         config: function (data) {
-            //active app : app searched in
+            // active app : app searched in
             data.mapping = {
-                //name mapping
+                // name mapping
                 'io.ox/mail/write' : 'io.ox/mail',
                 'com.voiceworks/ox-messenger' : data.defaultApp,
                 'io.ox/drive' : 'io.ox/files',
@@ -63,6 +63,18 @@ define('io.ox/search/main',
         }
     });
 
+    // ext.point('io.ox/search/main').extend({
+    //     index: 500,
+    //     id: 'flags',
+    //     config: function (data) {
+    //         // limit active facets to 1
+    //         data.flags = (data.flags || []).concat('singleton');
+    //         // keep input value after selecting facet from dropdown
+    //         data.switches = (data.switches || {});
+    //         data.switches.keepinput = true;
+    //     }
+    // });
+
     function openSidePopup(popup, e, target) {
         var id = target.attr('data-id'),
             item = model.get('items').get(id),
@@ -76,13 +88,15 @@ define('io.ox/search/main',
         });
     }
 
-    //TODO: use custom node for autocomplete (autocomplete items appended here)
-        //init window
+    // TODO: use custom node for autocomplete (autocomplete items appended here)
+        // init window
     var win = ox.ui.createWindow({
             name: 'io.ox/search',
             title: 'Search',
             toolbar: true,
-            search: false
+            search: false,
+            // important
+            facetedsearch: false
         }),
         app = ox.ui.createApp({
             name: 'io.ox/search',
@@ -90,15 +104,11 @@ define('io.ox/search/main',
             closable: true,
             window: win
         }),
-        yell = function (error) {
-            //add custom exception handling here
-            notifications.yell(error);
-        },
         sidepopup,
         win, model, run;
 
 
-    //hide/show topbar search field
+    // hide/show topbar search field
     win.on('show', function () {
         $('#io-ox-search-topbar')
             .addClass('hidden')
@@ -108,7 +118,7 @@ define('io.ox/search/main',
         $('#io-ox-search-topbar')
             .removeClass('hidden');
     });
-    //ensure launchbar entry
+    // ensure launchbar entry
     win.on('show', function () {
         if (!ox.ui.apps.get(app))
             ox.ui.apps.add(app);
@@ -130,11 +140,11 @@ define('io.ox/search/main',
         return model;
     };
 
-    //reduced version of app.quit to ensure app/window is reusable
+    // reduced version of app.quit to ensure app/window is reusable
     app.quit = function () {
         // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
         if ((app.getWindow() && app.getWindow().state.visible) && (!_.url.hash('app') || app.getName() === _.url.hash('app').split(':', 1)[0])) {
-            //we are still in the app to close so we can clear the URL
+            // we are still in the app to close so we can clear the URL
             _.url.hash({ app: null, folder: null, perspective: null, id: null });
         }
 
@@ -149,12 +159,14 @@ define('io.ox/search/main',
 
         // mark as not running
         app.trigger('quit');
-        //reset
+        // reset
         model.reset({silent: true});
     };
-    //define launcher callback
+
+    // define launcher callback
     app.setLauncher(function (options) {
-        var opt = $.extend({}, options || {});
+        var opt = $.extend({}, options || {}),
+            current = ox.ui.App.getCurrentApp();
 
         win.nodes.main.addClass('io-ox-search f6-target').attr({
             'tabindex': '1',
@@ -162,199 +174,104 @@ define('io.ox/search/main',
             'aria-label': gt('Search')
         });
 
-
         app.setWindow(win);
 
-        //use application view
+        // use application view
         app.view = SearchView.factory
                     .create(app, model, win.nodes.main);
 
-        //register model item
-        model.get('items').on('needs-redraw', function () {
-            this.render(app.view.getBaton());
+        // mediator: view
+        app.view.on({
+            'query:start': function () {
+                app.view.repaint('facets');
+                app.busy();
+            },
+            'query:stop': function () {
+                app.idle();
+            },
+            'query:result': function () {
+                app.view.repaint('info items');
+                app.idle();
+            },
+            'button:app': function () {
+                app.view.repaint('apps');
+                app.idle();
+            },
+            'button:clear': function () {
+                app.view.$('.search-field').val('');
+            }
         });
 
-        //update model
+        // mediator: model
+        model.on({
+            'query': function () {
+                app.apiproxy.query();
+            },
+            'change:start': function () {
+                app.apiproxy.query();
+            },
+            'change:size': function () {
+                app.apiproxy.query();
+            },
+            'reset': function () {
+                app.view.repaint('facets info items apps');
+            }
+        });
+
+        // mediator: submodel
+        model.get('items').on({
+            'needs-redraw': function () {
+                this.render(app.view.getBaton());
+            }
+        });
+
+        // init model
         model.set({
-            mode: 'window',
-            query: opt.query
+            query: opt.query,
+            app: current ? current.get('name') : model.defaults.options.defaultApp
         });
 
         app.setTitle(gt('Search'));
 
-        // return deferred
+        // returns deferred
         win.show(function () {
-            //detail view sidepopo
+            // detail view sidepopo
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 sidepopup = new dialogs.SidePopup({tabTrap: true})
                             .delegate(app.view.$el, '.item', openSidePopup);
             });
         });
+
+        //draw
+        app.view.redraw().focus();
     });
 
-    //extend app
-    app = $.extend(true, app, {
+    // init model and listeners
+    model = SearchModel.factory.create();
 
-        //use proxy for managing model (called via autocomplete)
-        apiproxy: {
-            //alias for autocomplete tk
-            search: function (query, options) {
-                var standard = {
-                    params: {
-                        module: model.getModule()
-                    },
-                    data: {
-                        prefix: query
-                    }
-                };
+    // extend app
+    app.apiproxy = apiproxy.init(app);
 
-                return model.getFacets()
-                        .then(function (facets) {
-                            //extend standard options
-                            standard.data.facets = facets;
-                        })
-                        .then(function () {
-                            //call server
-                            return api.autocomplete($.extend({}, standard, options));
-                        })
-                        .then(undefined, function (error) {
-                            //fallback when app doesn't support search
-                            if (error.code === 'SVL-0010') {
-                                var app = model.getApp();
-                                //add temporary mapping (default app)
-                                model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
-                                return api.autocomplete($.extend(
-                                                            standard, options, { params: {module: model.getModule()} }
-                                                        ));
-                            }
-                            return error;
-                        })
-                        .then(function (obj) {
+    ext.point('io.ox/search').invoke('config', model);
 
-                            var whitelist = {
-                                style: ['simple'],
-                                id: ['contacts', 'contact', 'participant', 'participant']
-                            };
-
-                            // flag facets as 'highlander'
-                            _.each(obj.facets, function (facet) {
-                                var style = _.contains(whitelist.style, facet.style);
-                                if (style)
-                                    facet.flags.push('highlander');
-                            });
-
-                            return obj;
-                        })
-                        .then(function (obj) {
-                            //TODO: remove when backend is ready
-                            _.each(obj.facets.values, function (value) {
-                                //multifilter facet
-                                if (value.options)
-                                    value.options = value.options[0];
-
-                            });
-
-                            //match convention in autocomplete tk
-                            var data = {
-                                list: obj.facets,
-                                hits: 0
-                            };
-                            model.set({
-                                query: query,
-                                autocomplete: data.list
-                            }, {
-                                silent: true
-                            });
-                            return data;
-                        }, yell);
-            },
-            query: (function () {
-
-                function filterFacets(opt, facets) {
-                    // extend options
-                    opt.data.facets = _.filter(facets, function (facet) {
-                        // TODO: remove hack to ingore folder facet when empty
-                        return !('value' in facet) || (facet.value !== 'custom');
-                    });
-                }
-
-                function getResults(opt) {
-                    // TODO: better solution needed
-                    var folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
-                    //call server
-                    return folderOnly ? $.Deferred().resolve(undefined) : api.query(opt);
-                }
-
-                function drawResults(result) {
-                    var start = Date.now();
-                    if (result) {
-                        model.setItems(result, start);
-                        run();
-                    }
-                    app.idle();
-                }
-
-                function fail(result) {
-                    yell(result);
-                    app.idle();
-                }
-
-                return function () {
-                    var opt = {
-                        params: {
-                            //translate app to module param
-                            module: model.getModule()
-                        },
-                        data: {
-                            start: model.get('start'),
-                            //workaround: more searchresults?
-                            size: model.get('size') + model.get('extra')
-                        }
-                    };
-                    run();
-                    app.busy();
-                    return model.getFacets()
-                        .done(filterFacets.bind(this, opt))
-                        .then(getResults.bind(this, opt))
-                        .then(_.lfo(drawResults), _.lfo(fail));
-                };
-            }())
-        }
-    });
-
-    //init model and listeners
-    model = SearchModel.factory.create({mode: 'widget'})
-            .on('query change:start change:size', app.apiproxy.query)
-            .on('reset change', function () {
-                app.view.redraw()
-                         .focus()
-                         .idle();
-                app.view.trigger('redraw');
-            });
-
-    //run app
-    run = function (options) {
+    // run app
+    run = function () {
         var current;
 
-        //ensure
-        options = options || {};
-
         if (app.is('ready')) {
-            //not started yet use app callback for inital stuff
+            // not started yet use app callback for inital stuff
             app.launch.call(app);
-        } else if (options.reset) {
-            //reset model and update current app
+        } else  {
+            // reset model and update current app
             model.reset({silent: true});
             current = ox.ui.App.getCurrentApp().get('name');
             if (current !== 'io.ox/search')
                 model.set('app', current, {silent: true});
-            //update state
+            // update state
             app.set('state', 'running');
-            //reset view
+            // reset view
             app.launch();
             app.view.redraw({closeSidepanel: true});
-        } else if (app.is('running')) {
-            app.view.redraw();
         }
         app.view.focus();
         app.idle();
@@ -362,13 +279,17 @@ define('io.ox/search/main',
     };
 
     return {
+
         getApp: app.getInstance,
+
         run: run,
-        init: function () {
-            app.view = SearchView.factory
-                        .create(app, model)
-                        .render();
-            return model.get('mode') === 'widget' ? app.view.$el.find('.input-group') : app.view.$el;
-        }
+
+        getView: function () {
+            return app.view = SearchView.factory.create(app, model);
+        },
+
+        model: model,
+
+        apiproxy: app.apiproxy
     };
 });

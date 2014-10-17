@@ -204,8 +204,35 @@ define.async('io.ox/realtime/rt',
         }
     };
 
+    function someoneIsListeningForRemoveEvents() {
+        if (!api.events) {
+            return;
+        }
+        var listeners = api.events.list();
+        if (!listeners) {
+            return false;
+        }
+
+        var found = false;
+        _(listeners).each(function (listeners, evt) {
+            if (found) {
+                return;
+            }
+            if (/^receive/.test(evt) && listeners.length > 0) {
+                found = true;
+            }
+        });
+
+        return found;
+    }
+
     // Periodically poll
     actions.poll = function () {
+        // no need to poll if no one is listening for events
+        if (! someoneIsListeningForRemoveEvents()) {   
+            return;
+        }
+
         var lastFetchInterval = _.now() - lastCheck;
         var interval = _.now() - lastDelivery;
         if (lastFetchInterval >= intervals[mode] && !purging && !transmitting) {
@@ -435,7 +462,6 @@ define.async('io.ox/realtime/rt',
                     console.log('Enqueueing receipt ' + stanza.seq);
                 }
                 ackBuffer[Number(stanza.seq)] = 1;
-                purge();
             }
             if (serverSequenceThreshhold === -1 && stanza.seq > 0) {
                 serverSequenceThreshhold = stanza.seq - 1;
@@ -534,9 +560,11 @@ define.async('io.ox/realtime/rt',
 
         if (resp.stanzas && !_.isEmpty(resp.stanzas)) {
             lastDelivery = _.now();
+
             _(resp.stanzas).each(function (s) {
                 received(new RealtimeStanza(s));
             });
+            purge();
         }
 
         if (resp.result) {

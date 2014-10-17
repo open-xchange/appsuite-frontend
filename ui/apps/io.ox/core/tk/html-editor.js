@@ -477,11 +477,18 @@ define.async('io.ox/core/tk/html-editor',
 
                 //suppress firefox dnd inline image support
                 var iframe = textarea.parent().find('iframe'),
-                    html = $(iframe[0].contentDocument).find('html');
+                    html = $(iframe[0].contentDocument).find('html'),
+                    smallPara = settings.get('features/mailComposeSmallParagraphs', 1);
+
+                //UGLY: work around issue with scrolling not working after switching
+                //to another app and back to editor in chrome
+                iframe.on('mousewheel', function () { return true; });
 
                 // small paragraphs option
-                if (settings.get('features/mailComposeSmallParagraphs', false)) {
-                    html.find('head').append('<style type="text/css">body>p{margin:.5em 0;}</style>');
+                if (_.isBoolean(smallPara)) smallPara = smallPara ? 0.5 : 1;
+                smallPara = parseFloat(smallPara);
+                if (smallPara >= 0 && smallPara <= 1) {
+                    html.find('head').append('<style type="text/css">body>p{margin:' + smallPara + 'em 0;}</style>');
                 }
 
                 html.on('dragover drop', function (e) {
@@ -503,6 +510,8 @@ define.async('io.ox/core/tk/html-editor',
             paste_preprocess: paste_preprocess,
             // post processing (DOM-based)
             paste_postprocess: paste_postprocess,
+
+            paste_data_images: true,
 
             setup: function (ed) {
                 ed.on('keydown', function (e) {
@@ -528,67 +537,60 @@ define.async('io.ox/core/tk/html-editor',
             return String(str || '').replace(/[\s\xA0]+$/g, '');
         }
 
-        var resizeEditor = _.debounce(function () {
+        var resizeEditor = function () {
             if (textarea === null) return;
-                var p = textarea.parent(),
-                    h = p.height(),
-                    toolbar = p.find('.mce-toolbar-grp').outerHeight(),
-                    iframeHeight = h - toolbar - 2;
-                p.find('.mce-tinymce.mce-container.mce-panel').css({ height: iframeHeight });
-                p.find('iframe').css('height', iframeHeight);
+            var p = textarea.parent(),
+                h = p.height(),
+                toolbar = p.find('.mce-toolbar-grp').outerHeight(),
+                iframeHeight = h - toolbar - 2;
 
-                return;
-            }, 50),
+            p.find('.mce-tinymce.mce-container.mce-panel').css({ height: iframeHeight });
+            p.find('iframe').css('height', iframeHeight);
 
-            trimIn = function (str) {
-                return trimEnd(str);
-            },
+            return;
+        },
 
-            trimOut = function (str) {
-                return trimEnd(str).replace(/[\r\n]+/g, '');
-            },
+        quote = function (str) {
+            return '> ' + $.trim(str).replace(/\n/g, '\n> ');
+        },
 
-            quote = function (str) {
-                return '> ' + $.trim(str).replace(/\n/g, '\n> ');
-            },
-
-            set = function (str) {
-                var text = emoji.processEmoji(str, function (text, lib) {
-                    if (!lib.loaded) return;
-                    ed.setContent(text);
-                });
+        set = function (str) {
+            var text = emoji.processEmoji(str, function (text, lib) {
+                if (!lib.loaded) return;
                 ed.setContent(text);
-            },
+            });
+            ed.setContent(text);
+        },
 
-            clear = function () {
-                set('');
-            },
+        clear = function () {
+            set('');
+        },
 
-            ln2br = function (str) {
-                return String(str || '').replace(/\r/g, '')
-                    .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
-            },
+        ln2br = function (str) {
+            return String(str || '').replace(/\r/g, '')
+                .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
+        },
 
-            // get editor content
-            // trim white-space and clean up pseudo XHTML
-            // remove empty paragraphs at the end
-            get = function () {
-                // remove tinyMCE resizeHandles
-                $(ed.getBody()).find('.mce-resizehandle').remove();
+        // get editor content
+        // trim white-space and clean up pseudo XHTML
+        // remove empty paragraphs at the end
+        get = function () {
+            // remove tinyMCE resizeHandles
+            $(ed.getBody()).find('.mce-resizehandle').remove();
 
-                // get raw content
-                var content = ed.getContent({ format: 'raw' });
-                // convert emojies
-                content = emoji.imageTagsToUnified(content);
-                // clean up
-                content = content
-                    // remove custom attributes (incl. bogus attribute)
-                    .replace(/\sdata-[^=]+="[^"]*"/g, '')
-                    .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
-                // remove trailing white-space
-                return trimOut(content);
-            };
+            // get raw content
+            var content = ed.getContent({ format: 'raw' });
+            // convert emojies
+            content = emoji.imageTagsToUnified(content);
+            // clean up
+            content = content
+                // remove custom attributes (incl. bogus attribute)
+                .replace(/\sdata-[^=]+="[^"]*"/g, '')
+                .replace(/<(\w+)[ ]?\/>/g, '<$1>')
+                .replace(/(<p>(<br>)?<\/p>)+$/, '');
+            // remove trailing white-space
+            return trimEnd(content);
+        };
 
         // publish internal 'done'
         this.done = function (fn) {
@@ -650,7 +652,7 @@ define.async('io.ox/core/tk/html-editor',
         this.setPlainText = function (str) {
             var text = '', quote = false, tmp = '', lTag, rTag;
             // clean up
-            str = trimIn(str);
+            str = trimEnd(str);
             // needs leading empty paragraph?
             if (str.substr(0, 2) === '\n\n') {
                 text += '<p></p>';
@@ -777,12 +779,12 @@ define.async('io.ox/core/tk/html-editor',
             textarea.prop('disabled', false).idle();
             textarea.parents('.window-content').find('.mce-tinymce').show();
             textarea.hide();
-            resizeEditor();
-            $(window).on('resize.tinymce', resizeEditor);
+            setTimeout(function () { resizeEditor(); }, 150);//wait a bit or some browsers have problems calculating the correct toolbar height (see Bug 34607)
+            $(window).on('resize.tinymce', _.debounce(resizeEditor, 50));
         };
 
         this.handleHide = function () {
-            $(window).off('resize.tinymce', resizeEditor);
+            $(window).off('resize.tinymce');
         };
 
         this.getContainer = function () {

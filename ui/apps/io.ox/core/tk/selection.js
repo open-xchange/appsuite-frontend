@@ -15,15 +15,17 @@
 define('io.ox/core/tk/selection',
     ['io.ox/core/event',
      'io.ox/core/extensions',
+     'io.ox/core/collection',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'
-    ], function (Events, ext, notifications, gt) {
+     'gettext!io.ox/core',
+     'io.ox/core/tk/draghelper'
+    ], function (Events, ext, Collection, notifications, gt) {
 
     'use strict';
 
     function joinTextNodes(nodes, delimiter) {
         nodes = nodes.map(function () {
-            return $.trim($(this).attr('title') || $(this).text());
+            return $.trim($(this).attr('title') || $(this).text());
         });
         return $.makeArray(nodes).join(delimiter || '');
     }
@@ -45,7 +47,7 @@ define('io.ox/core/tk/selection',
             dropType: '',
             scrollpane: container,
             focus: '[tabindex]',
-            tabFix: false
+            tabFix: 1
         }, options);
 
         this.classFocus = 'focussed';
@@ -261,18 +263,14 @@ define('io.ox/core/tk/selection',
         };
 
         mousedownHandler = function (e) {
-            var node, key, id;
+            var node, key, id, handleMouseDown;
             // we check for isDefaultPrevented because elements inside .selectable
             // might also react on mousedown/click, e.g. folder tree open/close toggle
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // adding timeouts to avoid strange effect that occurs across different browsers.
-                // if we do too much inside these event handlers, the mousedown and mouseup events
-                // do not trigger a click. this still happens if timeout interval if too short,
-                // for example, 10 msecs. (see Bug 27794 - Sorting menu remains open)
-                setTimeout(function () {
+                handleMouseDown = function () {
                     // exists?
                     if (id !== undefined && !isCheckbox(e)) {
                         // explicit multiple?
@@ -291,18 +289,27 @@ define('io.ox/core/tk/selection',
                             apply(id, e);
                         }
                     }
-                }, 50);
+                };
+                if (_.device('!smartphone')) {
+                    // adding timeouts to avoid strange effect that occurs across different browsers.
+                    // if we do too much inside these event handlers, the mousedown and mouseup events
+                    // do not trigger a click. this still happens if timeout interval if too short,
+                    // for example, 10 msecs. (see Bug 27794 - Sorting menu remains open)
+                    setTimeout(handleMouseDown, 50);
+                } else {
+                    //no timeouts on smartphones otherwise mobile toolbars are drawn with no or previous selection see bug 34488
+                    handleMouseDown();
+                }
             }
         };
 
         mouseupHandler = function (e) {
-            var node, key, id;
+            var node, key, id, handleMouseUp;
             if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                // see above (mousedownHandler)
-                setTimeout(function () {
+                handleMouseUp = function () {
                     // exists?
                     if (id !== undefined) {
                         if (node.hasClass('pending-select') && isSelectable(e)) {
@@ -312,7 +319,14 @@ define('io.ox/core/tk/selection',
                     }
                     // remove helper classes
                     container.find('.pending-select').removeClass('pending-select');
-                }, 50);
+                };
+                if (_.device('!smartphone')) {
+                    // see above (mousedownHandler)
+                    setTimeout(handleMouseUp, 50);
+                } else {
+                    // see above (mousedownHandler)
+                    handleMouseUp();
+                }
             }
         };
 
@@ -493,7 +507,7 @@ define('io.ox/core/tk/selection',
                 } else {
                     $('input.reflect-selection', node).prop('checked', false);
                     node.removeClass(self.classSelected).attr({
-                        'aria-selected': 'true',
+                        'aria-selected': 'false',
                         'tabindex': options.tabFix !== false ? -1 : null
                     });
                 }
@@ -917,7 +931,17 @@ define('io.ox/core/tk/selection',
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
             .on('click', '.selectable', clickHandler)
-            .on('tap', '.selectable', touchHandler);
+            .on('tap', '.selectable', touchHandler)
+            .on('focus', '.selectable', function () {
+                container.addClass('has-focus');
+            })
+            .on('blur', '.selectable', function () {
+                _.delay(function () {
+                    if (container.find(':focus').length === 0) {
+                        container.removeClass('has-focus');
+                    }
+                }, 10);
+            });
 
         /*
         * DND
@@ -952,78 +976,24 @@ define('io.ox/core/tk/selection',
                 container.trigger('selection:dragstart');
             }
 
-            function over() {
-                var self = this,
-                ft = $(this).closest('.foldertree-container'),
-                node = ft[0],
-                interval,
-                scrollSpeed = 0,
-                yMax,
-                RANGE = 3 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
-                MAX = 1, // Maximal scrolling speed in px/ms.
-                scale = MAX / RANGE,
-                nodeOffsetTop = 0;
+            function toggle() {
+                this.trigger('click');
+            }
 
+            function over(e) {
+
+                // avoid handling bubbling events
+                if (e.isDefaultPrevented()) return; else e.preventDefault();
+
+                var arrow = $(this).find('.folder-arrow');
+
+                // css hover doesn't work!
                 $(this).addClass('dnd-over');
 
-                if ($(this).hasClass('expandable')) {
+                if (arrow.length) {
                     clearTimeout(expandTimer);
-                    expandTimer = setTimeout(function () {
-                        $(self).find('.folder-arrow').trigger('mousedown');
-                    }, 1500);
+                    expandTimer = setTimeout(toggle.bind(arrow), 1500);
                 }
-
-                function canScroll() {
-                    var scrollTop = node.scrollTop;
-                    return scrollSpeed < 0 && scrollTop > 0 ||
-                           scrollSpeed > 0 && scrollTop < yMax;
-                }
-
-                // The speed is specified in px/ms. A range of 1 to 10 results
-                // in a speed of 100 to 1000 px/s.
-                function scroll() {
-                    if (canScroll()) {
-                        var t0 = new Date().getTime(), y0 = node.scrollTop;
-                        if (interval !== undefined) clearInterval(interval);
-                        interval = setInterval(function () {
-                            if (canScroll()) {
-                                var dt = new Date().getTime() - t0,
-                                y = y0 + scrollSpeed * dt;
-                                if (y < 0) y = 0;
-                                else if (y > yMax) y = yMax;
-                                else {
-                                    node.scrollTop = y;
-                                    return;
-                                }
-                            }
-                            clearInterval(interval);
-                            interval = undefined;
-                        }, 10);
-                    } else {
-                        if (interval !== undefined) clearInterval(interval);
-                        interval = undefined;
-                    }
-                }
-
-                $(node).on('mousemove.dnd', function (e) {
-                    if (helper === null) return;
-                    if (!nodeOffsetTop) { nodeOffsetTop = $(node).offset().top; }
-                    var y = e.pageY - nodeOffsetTop;
-                    yMax = node.scrollHeight - node.clientHeight;
-
-                    if (y < RANGE) {
-                        scrollSpeed = (y - RANGE) * scale;
-                    } else if (node.clientHeight - y < RANGE) {
-                        scrollSpeed = (RANGE - node.clientHeight + y) * scale;
-                    } else {
-                        scrollSpeed = 0;
-                    }
-                    scroll();
-                }).on('mouseleave.dnd', function () {
-                    scrollSpeed = 0;
-                    scroll();
-                    $(node).off('mousemove.dnd mouseleave.dnd');
-                });
             }
 
             function out() {
@@ -1031,21 +1001,48 @@ define('io.ox/core/tk/selection',
                 $(this).removeClass('dnd-over');
             }
 
+            //
+            // Auto-Scroll
+            //
+
+            var scroll = (function () {
+
+                var y = 0, timer = null;
+
+                return {
+                    move: function (e) {
+                        y = e.pageY - $(this).offset().top;
+                    },
+                    out: function () {
+                        clearInterval(timer);
+                        timer = null;
+                    },
+                    over: function () {
+                        if (timer) return;
+                        var height = this.clientHeight;
+                        timer = setInterval(function () {
+                            var threshold = Math.round(y / height * 10) - 5,
+                                sign = threshold < 0 ? -1 : +1,
+                                abs = Math.abs(threshold);
+                            if (abs > 2) this.scrollTop += sign * (abs - 2) * 2;
+                        }.bind(this), 5);
+                    }
+                };
+
+            }());
+
             function drag(e) {
                 // unbind
                 $(document).off('mousemove.dnd', drag);
-                // get data now
-                data = self.unique(self.unfold());
-                // empty?
-                if (data.length === 0) {
-                    var cid = source.attr('data-obj-id');
-                    data = cid ? [_.cid(cid)] : [];
-                }
                 // create helper
-                helper = $('<div class="drag-helper">').append(
-                    $('<span class="drag-counter">').text(data.length),
-                    $('<span>').text(options.dragMessage.call(container, data, source))
-                );
+                helper = $('<div class="drag-helper">');
+                ext.point('io.ox/core/tk/draghelper').invoke('draw', helper,
+                    new ext.Baton({
+                        container: container,
+                        data: data,
+                        source: source,
+                        dragMessage: options.dragMessage
+                    }));
                 // get fast access
                 fast = helper[0].style;
                 // initial move
@@ -1056,8 +1053,11 @@ define('io.ox/core/tk/selection',
                 // bind
                 $(document).on('mousemove.dnd', move)
                     .one('mousemove.dnd', firstMove)
+                    .on('mouseover.dnd', '.folder-tree', scroll.over)
+                    .on('mouseout.dnd',  '.folder-tree', scroll.out)
+                    .on('mousemove.dnd', '.folder-tree', scroll.move)
                     .on('mouseover.dnd', '.selectable', over)
-                    .on('mouseout.dnd', '.selectable', out);
+                    .on('mouseout.dnd',  '.selectable', out);
             }
 
             function remove() {
@@ -1068,6 +1068,8 @@ define('io.ox/core/tk/selection',
             }
 
             function stop() {
+                // stop auto-scroll
+                scroll.out();
                 // unbind handlers
                 $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd');
                 $('.dropzone').each(function () {
@@ -1083,9 +1085,12 @@ define('io.ox/core/tk/selection',
                 }
             }
 
-            function drop() {
+            function drop(e) {
+                // avoid multiple events on parent tree nodes
+                if (e.isDefaultPrevented()) return; else e.preventDefault();
+                // process drop
                 clearTimeout(expandTimer);
-                var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
+                var target = $(this).attr('data-obj-id') || $(this).attr('data-cid') || $(this).attr('data-id'),
                     baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
                 $(this).trigger('selection:drop', [baton]);
             }
@@ -1094,18 +1099,34 @@ define('io.ox/core/tk/selection',
                 var deltaX = Math.abs(e.pageX - e.data.x),
                     deltaY = Math.abs(e.pageY - e.data.y);
                 if (deltaX > 15 || deltaY > 15) {
-                    $(document).off('mousemove.dnd').on('mousemove.dnd', drag);
+                    // get data now
+                    data = self.unique(self.unfold());
+                    // empty?
+                    if (data.length === 0) {
+                        var cid = source.attr('data-obj-id');
+                        data = cid ? [_.cid(cid)] : [];
+                    }
+                    // check permissions - need 'delete' access for a move
+                    var collection = new Collection(data);
+                    collection.getProperties();
+                    if (collection.isResolved() && !collection.has('delete')) {
+                        $(document).off('mousemove.dnd mouseup.dnd');
+                    } else {
+                        // bind events
+                        $('.dropzone').each(function () {
+                            var node = $(this), selector = node.attr('data-dropzones');
+                            (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
+                        });
+                        $(document).off('mousemove.dnd').on('mousemove.dnd', drag);
+                    }
                 }
             }
 
             function start(e) {
+                e.preventDefault();
+                // remember source now
                 source = $(this);
-                data = [];
-                // bind events
-                $('.dropzone').each(function () {
-                    var node = $(this), selector = node.attr('data-dropzones');
-                    (selector ? node.find(selector) : node).on('mouseup.dnd', drop);
-                });
+                // bind new events
                 $(document)
                     .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
                     .on('mouseup.dnd', stop);
@@ -1113,7 +1134,6 @@ define('io.ox/core/tk/selection',
                 if (!_.browser.IE) { // Not needed in IE - See #27981
                     (options.focus ? container.find(options.focus).first() : container).focus();
                 }
-                e.preventDefault();
             }
 
             // drag & drop

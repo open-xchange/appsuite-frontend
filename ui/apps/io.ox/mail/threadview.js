@@ -20,11 +20,12 @@ define('io.ox/mail/threadview',
      'io.ox/mail/detail/view',
      'io.ox/mail/detail/mobileView',
      'io.ox/core/tk/list-dnd',
+     'io.ox/core/emoji/util',
      'io.ox/core/http',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style',
      'io.ox/mail/listview'
-     ], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, http, gt) {
+     ], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, emoji, http, gt) {
 
     'use strict';
 
@@ -56,7 +57,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view f6-target" role="listbox">')
+                    this.$ul = $('<ul class="thread-view list-view" role="listbox">')
                 )
             );
         }
@@ -87,10 +88,13 @@ define('io.ox/mail/threadview',
         index: 200,
         draw: function (baton) {
             var keepFirstPrefix = baton.view.collection.length === 1,
-                subject = util.getSubject(baton.view.collection.at(0).toJSON(), keepFirstPrefix);
-            this.append(
-                $('<div class="subject">').text(subject)
-            );
+                subject = util.getSubject(baton.view.collection.at(0).toJSON(), keepFirstPrefix),
+                node = $('<div class="subject">').text(subject);
+
+            this.append(node);
+            emoji.processEmoji(node.html(), function (text) {
+                node.html(text);
+            });
         }
     });
 
@@ -202,9 +206,9 @@ define('io.ox/mail/threadview',
             }
         },
 
-        show: function (cid) {
+        show: function (cid, threaded) {
             // strip 'thread.' prefix
-            cid = String(cid).replace(/^thread\.(.+)$/, '$1');
+            cid = String(cid).replace(/^thread\./, '');
             // no change?
             if (this.model && this.model.cid === cid) return;
             // get new model
@@ -214,6 +218,7 @@ define('io.ox/mail/threadview',
             if (this.model) this.stopListening(this.model);
             // use new model
             this.model = model;
+            this.threaded = !!threaded;
             // listen for changes
             this.listenTo(this.model, 'change:thread', this.onChangeModel);
             // reset collection
@@ -225,7 +230,7 @@ define('io.ox/mail/threadview',
             // has model?
             if (!this.model) return;
             // get thread items
-            var thread = api.threads.get(this.model.cid);
+            var thread = this.threaded ? api.threads.get(this.model.cid) : [this.model.toJSON()];
             if (!thread.length) return;
             // reset collection
             var type = this.collection.length === 0 ? 'reset' : 'set';
@@ -333,6 +338,7 @@ define('io.ox/mail/threadview',
         initialize: function () {
 
             this.model = null;
+            this.threaded = true;
             this.collection = new backbone.Collection();
 
             this.listenTo(this.collection, {
@@ -378,7 +384,7 @@ define('io.ox/mail/threadview',
         // update zIndex for all list-items (descending)
         zIndex: function () {
             var items = this.getItems(), length = items.length;
-            items.each(function (index) {
+            items.each(function (index) {
                 $(this).css('zIndex', length - index);
             });
         }
@@ -392,7 +398,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list scrollable abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view f6-target" role="wurstblinker">')
+                    this.$ul = $('<ul class="thread-view list-view">')
                 )
             );
         }
@@ -436,8 +442,8 @@ define('io.ox/mail/threadview',
                 tagName: 'li',
                 data: model.toJSON(),
                 disable: {
-                    'io.ox/mail/detail': 'subject',
-                    'io.ox/mail/detail/header': ['flag-picker', 'actions', 'unread-toggle']
+                    'io.ox/mail/detail': ['subject', 'actions'],
+                    'io.ox/mail/detail/header': ['flag-picker', 'unread-toggle']
                 }
             });
 

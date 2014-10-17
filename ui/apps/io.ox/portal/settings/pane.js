@@ -89,16 +89,19 @@ define('io.ox/portal/settings/pane',
     }
 
     function drawAddButton() {
+        var button;
         this.append(
             $('<div class="btn-group-portal pull-right">').append(
-                $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" tabindex="1">').append(
-                    $.txt(gt('Add widget')), $.txt(' '),
-                    $('<span class="caret">')
+                button = $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" tabindex="1">').append(
+                    $.txt(gt('Add widget')),
+                    $.txt(' '),
+                    $('<i class="fa fa-caret-down" aria-hidden="true">')
                 ),
                 $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget)
             ),
             $('<div class="clearfix">')
         );
+        button.dropdown();
         repopulateAddButton();
     }
 

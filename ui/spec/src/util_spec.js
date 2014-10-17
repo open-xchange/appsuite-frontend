@@ -202,7 +202,8 @@ define([], function () {
             //TODO
         //});
 
-        it.skip('_.mythrottle', function () {
+        it('_.mythrottle', function (done) {
+            //TODO: implement using fake timer
             var finished,
                 //now = new Date(),
                 counter = 0,
@@ -228,17 +229,9 @@ define([], function () {
 
             //wait
             setTimeout(function () {
-                finished = true;
-            }, 300);
-
-            waitsFor(function () {
-                return finished;
-            }, 'no data in grid');
-            runs(function () {
-                // console.log('counter: ', counter);
-                // console.log('called: ', counterrepaint);
                 expect(counterrepaint).to.be.equal(3);
-            });
+                done();
+            }, 300);
         });
 
         describe('_.cid', function () {
@@ -259,9 +252,9 @@ define([], function () {
             it('should return identify recurrence_position', function () {
                 result = _.cid(str);
                 expect(result).to.be.an('object');
-                expect(result.folder_id).to.equals('1');
-                expect(result.id).to.equals('2');
-                expect(result.recurrence_position).to.equals('3');
+                expect(result.folder_id).to.equal('1');
+                expect(result.id).to.equal('2');
+                expect(result.recurrence_position).to.equal(3);
 
             });
         });
@@ -344,9 +337,9 @@ define([], function () {
                 expect(_.noI18n.fix('')).to.be.a('string');
                 expect(_.noI18n.fix('abed')).to.be.a('string');
             });
-            it.skip('.text should alway return jquery list', function () {
-                this.expect(_.noI18n.text()).toBeJquery(_.noI18n.text());
-                this.expect(_.noI18n.text('abed', 'troy')).toBeJquery();
+            it('.text should alway return jquery list', function () {
+                expect(_.noI18n.text()).to.be.an.instanceof($);
+                expect(_.noI18n.text('abed', 'troy')).to.be.an.instanceof($);
             });
         });
 

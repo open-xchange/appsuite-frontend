@@ -9,7 +9,7 @@
 'use strict';
 
 module.exports = function (grunt) {
-    grunt.loadNpmTasks('shared-grunt-config');
+    grunt.loadNpmTasks('open-xchange-shared-grunt-config');
 
     // load custom tasks
     // those can be used to override configuration from shared-grunt-config

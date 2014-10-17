@@ -20,7 +20,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
         beforeEach(function () {
 
             this.collection = new api.Collection();
-            this.list = new ListView();
+            this.list = new ListView({ threaded: true });
             this.list.model.set({ folder: 'default0/INBOX', limit: 30 });
             this.list.setCollection(this.collection);
 
@@ -94,9 +94,9 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
 
             beforeEach(function () {
                 this.collection.reset([
-                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"1","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"1","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}'),
-                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":0,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":true,"account_name":"E-Mail","id":"2","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"2","folder_id":"default0/INBOX","flags":0,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}'),
-                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":34,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"3","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"3","folder_id":"default0/INBOX","flags":34,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
+                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email #1","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"1","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"1","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}'),
+                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email #2","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":true,"account_name":"E-Mail","id":"2","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"2","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}'),
+                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":34,"account_id":0,"subject":"A simple text email #3","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"3","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"3","folder_id":"default0/INBOX","flags":34,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
                 ]);
             });
 
@@ -106,26 +106,22 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 expect(this.list.$el.children('.deleted').length).to.equal(1);
             });
 
-            it('should have one unread item', function () {
-                expect(this.list.$el.find('.icon-unread.fa-envelope').length).to.equal(1);
-            });
-
             it('should have one item with attachments', function () {
-                expect(this.list.$el.find('.fa-paperclip').length).to.equal(1);
+                expect(this.list.$('.fa-paperclip').length).to.equal(1);
             });
 
             it('should reflect unread updates via model change', function () {
-                // set first mail to unread
-                this.collection.at(0).set('flags', 0);
-                expect(this.list.$el.find('.icon-unread.fa-envelope').length).to.equal(2);
+                // set first mail to deleted
+                this.collection.at(1).set('flags', 34);
+                expect(this.list.$el.children('.deleted').length).to.equal(2);
             });
 
             it('should reflect unread updates via collection change', function () {
                 // set first mail to unread via collection
                 this.collection.add([
-                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":0,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"1","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"1","folder_id":"default0/INBOX","flags":0,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
+                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":34,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"1","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"1","folder_id":"default0/INBOX","flags":34,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
                 ], { merge: true });
-                expect(this.list.$el.find('.icon-unread.fa-envelope').length).to.equal(2);
+                expect(this.list.$el.children('.deleted').length).to.equal(2);
             });
 
             it('should reflect an item removal', function () {
@@ -207,22 +203,22 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
 
             it('should handle click events correctly', function () {
 
-                var type = Modernizr.touch ? 'click' : 'mousedown', // not tap?
+                var type = _.device('touch') ? 'tap' : 'click',
                     nodes = this.list.$el.children(), e;
 
                 // start with empty selection
-                expect(this.list.selection.get().length).to.equal(0);
+                expect(this.list.selection.get(), 'with empty selection').to.have.length(0);
 
                 // click on first item
                 e = $.Event(type);
                 nodes.eq(0).trigger(e);
-                expect(this.list.selection.get().length).to.equal(1);
+                expect(this.list.selection.get(), 'click on first item').to.have.length(1);
                 expect(nodes.eq(0).is('.selected')).to.be.true;
 
                 // click on second item
                 e = $.Event(type);
                 nodes.eq(1).trigger(e);
-                expect(this.list.selection.get().length).to.equal(1);
+                expect(this.list.selection.get(), 'click on second item').to.have.length(1);
                 expect(nodes.eq(1).is('.selected')).to.be.true;
 
                 // click on first item and shift click on third
@@ -230,13 +226,13 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 nodes.eq(0).trigger(e);
                 e = $.Event(type, { shiftKey: true });
                 nodes.eq(2).trigger(e);
-                expect(this.list.selection.get().length).to.equal(3);
+                expect(this.list.selection.get(), 'click on first item and shift + click on third').to.have.length(3);
                 expect(nodes.filter('.selected').length).to.equal(3);
 
                 // click on second item with cmd/ctrl click
                 e = $.Event(type, { metaKey: true });
                 nodes.eq(1).trigger(e);
-                expect(this.list.selection.get().length).to.equal(2);
+                expect(this.list.selection.get(), 'click on second item with meta key pressed').to.have.length(2);
                 expect(nodes.eq(0).is('.selected')).to.be.true;
                 expect(nodes.eq(1).is('.selected')).to.equal(false);
                 expect(nodes.eq(2).is('.selected')).to.be.true;
@@ -244,7 +240,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 // invert selection by another click
                 e = $.Event(type);
                 nodes.eq(1).trigger(e);
-                expect(this.list.selection.get().length).to.equal(1);
+                expect(this.list.selection.get(), 'invert selection').to.have.length(1);
                 expect(nodes.eq(0).is('.selected')).to.equal(false);
                 expect(nodes.eq(1).is('.selected')).to.be.true;
                 expect(nodes.eq(2).is('.selected')).to.equal(false);
@@ -434,7 +430,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
             });
         });
 
-        describe.skip('traversing', function () {
+        describe('traversing', function () {
 
             beforeEach(function () {
                 // three undeleted, seen mails
@@ -443,54 +439,56 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                     JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":true,"account_name":"E-Mail","id":"2","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"2","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}'),
                     JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"3","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"3","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
                 ]);
+                this.list.selection.select(0);
+                this.list.toggleComplete(true);
             });
 
             it('should return correct position', function () {
-                expect(this.list.selection.getPosition()).to.equal(0);
+                expect(this.list.getPosition()).to.equal(0);
             });
 
             it('should indicate no previous item', function () {
-                expect(this.list.selection.hasPrevious()).to.be.false;
+                expect(this.list.hasPrevious()).to.be.false;
             });
 
             it('should indicate next item', function () {
-                expect(this.list.selection.hasNext()).to.be.true;
+                expect(this.list.hasNext()).to.be.true;
             });
 
             it('should move to next item', function () {
                 this.list.selection.next();
-                expect(this.list.selection.getPosition(), 'position').to.equal(1);
-                expect(this.list.selection.hasNext(), 'next').to.be.true;
+                expect(this.list.getPosition(), 'position').to.equal(1);
+                expect(this.list.hasNext(), 'next').to.be.true;
             });
 
             it('should should indicate previous item', function () {
-                this.list.selection.next();
-                expect(this.list.selection.hasPrevious()).to.be.true;
+                this.list.next();
+                expect(this.list.hasPrevious()).to.be.true;
             });
 
             it('should should indicate no next item', function () {
-                this.list.selection.next();
-                this.list.selection.next();
-                expect(this.list.selection.getPosition(), 'position').to.equal(2);
-                expect(this.list.selection.hasPrevious(), 'previous').to.be.true;
-                expect(this.list.selection.hasNext(), 'next').to.be.false;
+                this.list.next();
+                this.list.next();
+                expect(this.list.getPosition(), 'position').to.equal(2);
+                expect(this.list.hasPrevious(), 'previous').to.be.true;
+                expect(this.list.hasNext(), 'next').to.be.false;
             });
 
             it('should move around correctly', function () {
-                expect(this.list.selection.getPosition(), 'position #1').to.equal(0);
-                this.list.selection.previous();
-                this.list.selection.previous();
-                expect(this.list.selection.getPosition(), 'position #2').to.equal(0);
-                this.list.selection.next();
-                expect(this.list.selection.getPosition(), 'position #3').to.equal(1);
-                this.list.selection.next();
-                expect(this.list.selection.getPosition(), 'position #4').to.equal(2);
-                this.list.selection.next();
-                expect(this.list.selection.getPosition(), 'position #5').to.equal(2);
-                this.list.selection.previous();
-                expect(this.list.selection.getPosition(), 'position #6').to.equal(1);
-                this.list.selection.previous();
-                expect(this.list.selection.getPosition(), 'position #7').to.equal(0);
+                expect(this.list.getPosition(), 'position #1').to.equal(0);
+                this.list.previous();
+                this.list.previous();
+                expect(this.list.getPosition(), 'position #2').to.equal(0);
+                this.list.next();
+                expect(this.list.getPosition(), 'position #3').to.equal(1);
+                this.list.next();
+                expect(this.list.getPosition(), 'position #4').to.equal(2);
+                this.list.next();
+                expect(this.list.getPosition(), 'position #5').to.equal(2);
+                this.list.previous();
+                expect(this.list.getPosition(), 'position #6').to.equal(1);
+                this.list.previous();
+                expect(this.list.getPosition(), 'position #7').to.equal(0);
             });
         });
 
@@ -531,19 +529,6 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
             it('should indicate item as seen', function () {
                 var first = this.list.$el.children().first();
                 expect(first.find('.icon-unread.fa-envelope').length).to.equal(0);
-            });
-
-            it('should indicate item as unseen', function () {
-                var first = this.list.$el.children().first();
-                this.collection.at(0).set('flags', 0);
-                expect(first.find('.icon-unread.fa-envelope').length).to.equal(1);
-            });
-
-            it('should show proper color label', function () {
-                var first = this.list.$el.children().first();
-                expect(first.find('.flag.icon-bookmark').length).to.equal(0);
-                this.collection.at(0).set('color_label', 1);
-                expect(first.find('.flag.flag_1.fa-bookmark').length).to.equal(1);
             });
 
             it('should show attachment icon', function () {
@@ -594,6 +579,10 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 item.thread = _.range(N + 1, 1, -1).map(function (index) {
                     return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
                 });
+                item.thread.forEach(function (m) {
+                    api.threads.add(m);
+                });
+                api.threads.add(item);
                 this.collection.reset([createItem(12, 0), item, createItem(1, 2)]);
             });
 
@@ -622,6 +611,11 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 // update thread
                 var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
                 tmp[1].thread = tmp[1].thread.slice(2);
+                api.threads.clear();
+                tmp[1].thread.forEach(function (m) {
+                    api.threads.add(m);
+                });
+                api.threads.add(tmp[1]);
                 // update via set() - not reset()!
                 this.collection.set(tmp);
                 // check

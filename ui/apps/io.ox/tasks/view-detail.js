@@ -18,9 +18,10 @@ define('io.ox/tasks/view-detail',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/tasks/api',
-     'io.ox/backbone/mini-views/participants',
+     'io.ox/calendar/participants',
      'io.ox/tasks/actions',
-     'less!io.ox/tasks/style'
+     'less!io.ox/tasks/style',
+     'less!io.ox/calendar/style'//participantsview needs this
     ], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
@@ -35,7 +36,7 @@ define('io.ox/tasks/view-detail',
 
             if (!data) return $('<div>');
 
-            var task = util.interpretTask(data, true), self = this;
+            var task = util.interpretTask(data, {detail: true}), self = this;
 
             var node = $.createViewContainer(data, api)
                 .on('redraw', function (e, tmp) {
@@ -100,7 +101,7 @@ define('io.ox/tasks/view-detail',
         draw: function (baton) {
             this.append(
                 $('<div class="note">').html(
-                    gt.noI18n(_.escape($.trim(baton.interpretedData.note)).replace(/\n/g, '<br>'))
+                    calendarUtil.getNote(baton.interpretedData)
                 )
             );
         }

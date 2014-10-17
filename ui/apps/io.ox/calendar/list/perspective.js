@@ -45,18 +45,30 @@ define('io.ox/calendar/list/perspective',
             optDropdown = null,
             months = 1; // how many months do we display
 
-        this.main.addClass('calendar-list-view vsplit').append(
-            app.left.addClass('border-right'),
+        if (_.device('smartphone')) {
+            app.left.addClass('calendar-list-view vsplit');
             app.right.addClass('default-content-padding calendar-detail-pane f6-target')
-            .attr({
-                'tabindex': 1,
-                'role': 'complementary',
-                'aria-label': gt('Appointment Details')
-            })
-        );
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Appointment Details')
+                });
+            left = app.left;
+            right = app.right;
+        } else {
+            this.main.addClass('calendar-list-view vsplit').append(
+                app.left.addClass('border-right'),
+                app.right.addClass('default-content-padding calendar-detail-pane f6-target')
+                .attr({
+                    'tabindex': 1,
+                    'role': 'complementary',
+                    'aria-label': gt('Appointment Details')
+                })
+            );
+            left = app.left;
+            right = app.right.scrollable();
+        }
 
-        left = app.left;
-        right = app.right.scrollable();
         this.grid = grid = app.getGrid();
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
@@ -81,13 +93,7 @@ define('io.ox/calendar/list/perspective',
         grid.addLabelTemplate(tmpl.label);
 
         // requires new label?
-        grid.requiresLabel = function (i, data, current) {
-            // disable labels in search mode
-            if (grid.getMode() === 'search') {
-                return false;
-            }
-            return tmpl.requiresLabel(i, data, current);
-        };
+        grid.requiresLabel = tmpl.requiresLabel;
 
         api.on('create', function (e, data) {
             if (app.folder.get() === data.folder) {
@@ -110,6 +116,7 @@ define('io.ox/calendar/list/perspective',
             }
         }
         function showAppointment(obj, directlink) {
+            if (_.device('smartphone') && app.props.get('checkboxes') === true) return;
             // be busy
             right.busy(true);
 
@@ -144,8 +151,19 @@ define('io.ox/calendar/list/perspective',
 
         function drawAppointment(data) {
             var baton = ext.Baton({ data: data });
-            if (_.device('!small')) baton.disable('io.ox/calendar/detail', 'inline-actions');
-            right.idle().empty().append(viewDetail.draw(baton));
+            if (_.device('smartphone')) {
+                app.pages.changePage('detailView');
+                var p = app.pages.getPage('detailView');
+                // draw details to page
+
+                p.idle().empty().append(viewDetail.draw(data));
+                // update toolbar with new baton
+                app.pages.getToolbar('detailView').setBaton(baton);
+
+
+            } else {
+                right.idle().empty().append(viewDetail.draw(baton));
+            }
         }
 
         function drawFail(obj) {
@@ -157,7 +175,14 @@ define('io.ox/calendar/list/perspective',
         }
 
         function buildOption(value, text) {
-            return $('<li>').append($('<a href="#"><i/></a>').attr('data-option', value).append($.txt(text)));
+            return $('<li role="presentation">')
+                .append(
+                    $('<a>').attr({
+                        href: '#',
+                        role: 'menuitem',
+                        'data-option': value
+                    }).text(text)
+                );
         }
 
         this.updateGridOptions = function () {
@@ -190,10 +215,16 @@ define('io.ox/calendar/list/perspective',
                 this.prepend(
                     optDropdown = $('<div class="grid-options dropdown">')
                         .append(
-                            $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">').attr('aria-label', gt('Sort options'))
-                                .append(
-                                    $('<i class="fa fa-arrow-down">'),
-                                    $('<i class="fa fa-arrow-up">')
+                            $('<a>').attr({
+                                    href: '#',
+                                    tabindex: 1,
+                                    'data-toggle': 'dropdown',
+                                    'aria-haspopup': true,
+                                    'aria-expandet': false,
+                                    'aria-label': gt('Sort options')
+                                }).append(
+                                    $('<i class="fa fa-arrow-down" aria-hidden="true">'),
+                                    $('<i class="fa fa-arrow-up" aria-hidden="true">')
                                 )
                                 .dropdown(),
                             $('<ul class="dropdown-menu" role="menu">')

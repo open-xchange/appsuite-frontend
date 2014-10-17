@@ -15,11 +15,11 @@ define('io.ox/mail/actions/attachmentSave',
     ['io.ox/mail/api',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/tk/folderviews',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/picker',
+     'io.ox/core/folder/api',
      'settings!io.ox/files', // yep, files not mail!
      'settings!io.ox/core',
-     'gettext!io.ox/mail'], function (api, notifications, dialogs, views, folderAPI, settings, settingsCore, gt) {
+     'gettext!io.ox/mail'], function (api, notifications, dialogs, picker, folderAPI, settings, settingsCore, gt) {
 
     'use strict';
 
@@ -60,43 +60,26 @@ define('io.ox/mail/actions/attachmentSave',
     return {
 
         multiple: function (list) {
-            var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(gt('Save attachment')))
-                .addPrimaryButton('ok', gt('Save'), 'ok', {tabIndex: '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
-            dialog.getBody().css({ height: '250px' });
+            var id = settings.get('folderpopup/last') || settingsCore.get('folder/infostore');
 
-            var folderId = settingsCore.get('folder/infostore'),
-                id = settings.get('folderpopup/last') || folderId,
-                tree = new views.FolderTree(dialog.getBody(), {
-                    type: 'infostore',
-                    rootFolderId: '9',
-                    open: settings.get('folderpopup/open', []),
-                    tabindex: 0,
-                    toggle: function (open) {
-                        settings.set('folderpopup/open', open).save();
-                    },
-                    select: function (id) {
-                        settings.set('folderpopup/last', id).save();
-                    }
-                });
+            picker({
 
-            dialog.show(function () {
-                tree.paint().done(function () {
-                    tree.select(id).done(function () {
-                        dialog.getBody().focus();
-                    });
-                });
-            })
-            .done(function (action) {
-                if (action === 'ok') {
-                    var target = _(tree.selection.get()).first();
-                    if (target) commit(list, target);
+                button: gt('Save'),
+                folder: id,
+                module: 'infostore',
+                persistent: 'folderpopup',
+                root: '9',
+                settings: settings,
+                title: gt('Save attachment'),
+
+                done: function (target) {
+                    commit(list, target);
+                },
+
+                disable: function (data) {
+                    return !folderAPI.can('create', data);
                 }
-                tree.destroy().done(function () {
-                    tree = dialog = null;
-                });
             });
         }
     };

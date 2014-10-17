@@ -23,9 +23,8 @@ define('io.ox/calendar/edit/template',
      'io.ox/calendar/api',
      'io.ox/participants/views',
      'settings!io.ox/calendar',
-     'io.ox/core/notifications',
      'io.ox/core/capabilities'
-    ], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, notifications, capabilities) {
+    ], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, capabilities) {
 
     'use strict';
 
@@ -80,9 +79,7 @@ define('io.ox/calendar/edit/template',
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
                         baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                     }
-                    baton.model.save().done(function () {
-                        baton.app.onSave();
-                    });
+                    baton.model.save().then(_.bind(baton.app.onSave, baton.app));
                 })
             );
 
@@ -107,24 +104,6 @@ define('io.ox/calendar/edit/template',
         id: 'io.ox/calendar/edit/conflicts/main',
         tagName: 'div'
     });
-
-    // alert error
-    point.extend(new forms.ErrorAlert({
-        id: 'error',
-        index: 100,
-        className: 'error-alerts col-xs-12',
-        isRelevant: function (response, xhr) {
-            // don't handle conflicts as error
-            if (response.conflicts) {
-                return false;
-            }
-            if (xhr.status === 404 || xhr.status === 0) {
-                notifications.yell(response);
-                return false;
-            }
-            return true;
-        }
-    }));
 
     // title
     point.extend(new forms.InputField({
@@ -329,13 +308,13 @@ define('io.ox/calendar/edit/template',
             this.append(
                 $('<div class="col-md-6">').append(
                     pNode = $('<div class="input-group">').append(
-                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
                         $('<input class="add-participant form-control">').attr({
                             type: 'text',
                             tabindex: 1,
                             id: guid,
                             placeholder: gt('Add participant/resource')
                         }),
+                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
                         $('<span class="input-group-btn">').append(
                             $('<button class="btn btn-default">')
                                 .attr({
@@ -396,7 +375,7 @@ define('io.ox/calendar/edit/template',
 
                     if (!alreadyParticipant) {
                         if (blackList && blackList[contactUtil.getMail(data)]) {
-                            notifications.yell('warning', gt('This email address cannot be used for appointments'));
+                            require('io.ox/core/yell')('warning', gt('This email address cannot be used for appointments'));
                         } else {
                             if (data.type !== 5) {
 
@@ -579,10 +558,10 @@ define('io.ox/calendar/edit/template',
             node.append(toolbar = $('<div class="app-bottom-toolbar">'));
             ext.point('io.ox/calendar/edit/section/buttons').replace({
                 id: 'save',
-                index: 200
+                index: 100
             }).replace({
                 id: 'discard',
-                index: 100
+                index: 200
             });
             ext.point('io.ox/calendar/edit/section/buttons').enable('save').enable('discard').invoke('draw', toolbar, baton);
         }

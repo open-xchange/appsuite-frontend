@@ -18,7 +18,8 @@ define('plugins/portal/linkedIn/register',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'io.ox/core/capabilities',
-     'gettext!plugins/portal'
+     'gettext!plugins/portal',
+     'less!io.ox/linkedIn/style'
     ], function (ext, http, proxy, strings, keychain, capabilities, gt) {
 
     'use strict';
@@ -80,6 +81,31 @@ define('plugins/portal/linkedIn/register',
             .text(dname)
             .on('click', person, fnClick);
     };
+
+    function filterActivity(activity) {
+        if (!activity.updateContent || !activity.updateContent.person) return false;
+        if (activity.updateType === 'CONN' && activity.updateContent.person.connections) return true;
+        if (activity.updateType === 'NCON' && activity.updateContent.person) return true;
+        return false;
+    }
+
+    function hasActivities(list) {
+        return _(list).some(filterActivity);
+    }
+
+    function renderActivities(node, list) {
+
+        if (!_.isArray(list)) return;
+        if (!hasActivities(list)) return;
+
+        node.append(
+            $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
+        );
+
+        _(list).each(function (activity) {
+            ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
+        });
+    }
 
     ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
         id: 'CONN',
@@ -168,13 +194,17 @@ define('plugins/portal/linkedIn/register',
             return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
         },
 
+        drawDefaultSetup: function () {
+            this.find('h2 .title').replaceWith('<i class="fa fa-linkedin">');
+            this.addClass('widget-color-custom color-linkedin');
+        },
+
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('linkedin', win)
-                .then(function () {
-                    baton.model.node.removeClass('requires-setup');
-                    ox.trigger('refresh^');
-                });
+            return keychain.createInteractively('linkedin', win).done(function () {
+                baton.model.node.removeClass('requires-setup widget-color-custom color-linkedin');
+                ox.trigger('refresh^');
+            });
         },
 
         load: function (baton) {
@@ -292,15 +322,9 @@ define('plugins/portal/linkedIn/register',
                     params: { action: 'updates' }
                 })
                 .done(function (activities) {
-                    if (_.isArray(activities.values) && activities.values.length > 0) {
-                        node.append(
-                            $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                        );
-                        _(activities.values).each(function (activity) {
-                            ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                        });
-                    }
+                    renderActivities(node, activities.values);
                 });
+
                 this.append(node);
 
             } else {
@@ -321,16 +345,7 @@ define('plugins/portal/linkedIn/register',
                     });
                 });
 
-                if (_.isArray(baton.data) && baton.data.length > 0) {
-
-                    node.append(
-                        $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                    );
-
-                    _(baton.data).each(function (activity) {
-                        ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                    });
-                }
+                renderActivities(node, baton.data);
 
                 this.append(node);
             }

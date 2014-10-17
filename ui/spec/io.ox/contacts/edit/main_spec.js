@@ -146,8 +146,6 @@ define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], functio
 
     describe('Contact edit', function () {
 
-        var app = null;
-
         beforeEach(function () {
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
@@ -159,36 +157,24 @@ define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], functio
 
         });
 
-        it('should provide a getApp function ', function () {
+        it('should provide a getApp function', function () {
             expect(main.getApp).to.be.a('function');
         });
 
-        it('should provide a launch function ', function () {
+        it('should provide a launch function', function () {
             var app = main.getApp();
             expect(app.launch).to.be.a('function');
         });
 
-        it('opens contact app ', function (done) {
-            main.getApp().launch().done(function () {
-                app = this;
-                expect(app.get('state')).to.equal('running');
-                done();
-            });
-        });
+        it('creates a fresh obj', function () {
+            var spy = sinon.spy();
 
-        it('creates a fresh obj', function (done) {
+            api.on('create', spy);
 
-            var flag, value;
-
-            api.on('create', function (e, obj)  {
-                value = obj.id;
-                flag = true;
-            });
-
-            flag = false;
-            api.create(testObject).done(function () {
-                expect(value).to.equal(response.data.id);
-                done();
+            return api.create(testObject).then(function (obj) {
+                expect(obj.id).to.equal(response.data.id);
+                expect(spy.calledOnce, 'spy called once, due to create event').to.be.true;
+                api.off('create', spy);
             });
         });
 

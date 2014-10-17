@@ -1,4 +1,4 @@
 {
     "namespace": "plugins/halo",
-    "requires": "oauth xingjson"
+    "requires": "oauth xingjson xing"
 }

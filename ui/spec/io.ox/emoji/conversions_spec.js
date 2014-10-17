@@ -23,6 +23,12 @@ define([
         });
 
         describe('can convert different encodings', function () {
+            var testIcons = {
+                japan_carrier: '\ud83d\ude09', // winking face - available in all collections
+                softbank: '\ud83d\ude37', // face with medical mask - only available in unified and softbank
+                unified: '\ud83d\udcb3' // 'credit card - only available in unified
+            };
+
             it('should provide a converterFor generator method', function () {
                 expect(emoji.converterFor).to.be.a('function');
             });
@@ -36,48 +42,40 @@ define([
             });
 
             describe('unified -> pua', function () {
-                beforeEach(function () {
-                    this.emoji = emoji.getInstance();
-                    this.testIcons = {
-                        japan_carrier: '\ud83d\ude09', // winking face - available in all collections
-                        softbank: '\ud83d\ude37', // face with medical mask - only available in unified and softbank
-                        unified: '\ud83d\udcb3' // 'credit card - only available in unified
-                    };
-                    this.convert = emoji.converterFor({from: 'unified', to: 'pua'});
-                });
+                var convert = emoji.converterFor({from: 'unified', to: 'pua'});
 
                 it('should provide a converter', function () {
-                    expect(this.convert).to.be.a('function');
+                    expect(convert).to.be.a('function');
                 });
 
                 it('should convert from unicode6 encoding to pua', function () {
-                    expect(this.convert('\u2600')).to.equal('\ue04a');
+                    expect(convert('\u2600')).to.equal('\ue04a');
                 });
 
                 it('should fall back to unified if no PUA encoding available', function () {
-                    expect(this.convert(this.testIcons.unified)).to.equal(this.testIcons.unified);
+                    expect(convert(testIcons.unified)).to.equal(testIcons.unified);
                 });
 
                 it('should leave non-emoji characters intact in text format', function () {
-                    expect(this.convert('> \u2600')).to.equal('> \ue04a');
+                    expect(convert('> \u2600')).to.equal('> \ue04a');
                 });
 
                 it('should leave embedded HTML intact', function () {
                     //TODO: converting <img src="test.png" /> will be converted to <img src="test.png">
                     //this is because of jQuery doing to much magic, may be this can break stuff :\
-                    expect(this.convert('<img src="test.png">\u2600')).to.equal('<img src="test.png">\ue04a');
+                    expect(convert('<img src="test.png">\u2600')).to.equal('<img src="test.png">\ue04a');
                 });
 
                 it('should leave "<" or ">" characters embedded in text intact', function () {
                     var testStr = 'On Tuesday "Some Body" <somebody@example.com> wrote:';
-                    expect(this.convert(testStr)).to.equal(testStr);
+                    expect(convert(testStr)).to.equal(testStr);
                 });
 
                 it('should also convert on emoji enabled devices', function () {
                     var stub = sinon.stub(_, 'device');
                     stub.withArgs('emoji').returns(true);
 
-                    expect(this.convert('> \u2600')).to.equal('> \ue04a');
+                    expect(convert('> \u2600')).to.equal('> \ue04a');
                     stub.restore();
                 });
 
@@ -89,9 +87,9 @@ define([
                     });
 
                     it('should fall back to unified if no PUA encoding available', function () {
-                        var text = emoji.unifiedToImageTag(this.testIcons.unified);
+                        var text = emoji.unifiedToImageTag(testIcons.unified);
 
-                        expect(emoji.imageTagsToPUA(text)).to.equal(this.testIcons.unified);
+                        expect(emoji.imageTagsToPUA(text)).to.equal(testIcons.unified);
                     });
                 });
             });
@@ -107,18 +105,15 @@ define([
             });
 
             describe('all -> unified', function () {
-                beforeEach(function () {
-                    this.emoji = emoji.getInstance();
-                    this.convert = emoji.converterFor({from: 'all', to: 'unified'});
-                });
+                var convert = emoji.converterFor({from: 'all', to: 'unified'});
 
                 it('should convert all known encodings to unified', function () {
                     var text = 'softbank: \ue04a; shift_jis: \uf98b; unified: \u2600';
-                    expect(this.convert(text)).to.equal('softbank: \u2600; shift_jis: \u2600; unified: \u2600');
+                    expect(convert(text)).to.equal('softbank: \u2600; shift_jis: \u2600; unified: \u2600');
                 });
 
                 it('should not fail with undefined parameter', function () {
-                    expect(this.convert()).to.equal('');
+                    expect(convert()).to.equal('');
                 });
             });
             // everything else should be tested by emoji lib

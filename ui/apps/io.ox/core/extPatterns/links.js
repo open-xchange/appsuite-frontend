@@ -65,7 +65,9 @@ define('io.ox/core/extPatterns/links',
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
-                        'data-container': 'body'
+                        'data-container': 'body',
+                        // tooltip removes title attribute
+                        'aria-label': self.title || self.label || ''
                     })
                     .tooltip()
                     .on('dispose', function () {
@@ -124,10 +126,12 @@ define('io.ox/core/extPatterns/links',
             draw: function (baton) {
                 baton = ext.Baton.ensure(baton);
                 this.append(
-                    $('<li>').append(
-                        $('<a href="#" tabindex="1">').attr({
+                    $('<li>').attr({ role: 'presentation' }).append(
+                        $('<a>').attr({
                             'data-action': extension.ref,
-                            'role': 'menuitem'
+                            role: 'menuitem',
+                            href: '#',
+                            tabindex: 1
                         }).text(extension.label)
                         .on('click', { baton: baton, extension: extension }, actionClick)
                     )
@@ -157,7 +161,13 @@ define('io.ox/core/extPatterns/links',
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
-            var attr = { href: '#', 'class': 'btn btn-default', 'data-action': self.id, tabIndex: self.tabIndex };
+            var attr = {
+                href: '#',
+                role: 'button',
+                'class': 'btn btn-default',
+                'data-action': self.id,
+                tabindex: self.tabIndex
+            };
             if (tag === 'button') attr.type = 'button';
             this.append(
                 node = $('<' + tag + '>', attr)
@@ -178,8 +188,8 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
-    var getLinks = function (self, collection, baton, args) {
-        return actions.applyCollection(self.ref, collection, baton, args);
+    var getLinks = function (extension, collection, baton, args) {
+        return actions.applyCollection(extension.ref, collection, baton, args);
     };
 
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
@@ -201,12 +211,12 @@ define('io.ox/core/extPatterns/links',
                     var link = item.link;
                     if (item.state === false) {
                         if (_.isFunction(link.drawDisabled)) {
-                            link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
+                            link.drawDisabled.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
                             count++;
                         }
                     }
                     else if (_.isFunction(link.draw)) {
-                        link.draw.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
+                        link.draw.call(bootstrapMode ? $('<li role="presentation">').appendTo(nav) : nav, baton);
                         count++;
                     }
                 });
@@ -299,11 +309,12 @@ define('io.ox/core/extPatterns/links',
 
     /**
      * @param {object}  options
-     * @param {boolean} options.forcelimit force usage of 'more...'
+     * @param {boolean} options.dropdown force usage of 'more...'
      * @param {string} add options.title for better accessibility (add context to 'Inline menu')
      */
     var InlineLinks = function (options) {
 
+        // don't use options inside this class; only "this" gets replaced properties
         var extension = _.extend(this, {
             classes: 'io-ox-inline-links',
             attributes: {
@@ -312,7 +323,7 @@ define('io.ox/core/extPatterns/links',
             }
         }, options);
 
-        function processItems(baton, nav) {
+        function processItems(baton, nav) {
 
             // add toggle unless multi-selection
             var multiple = _.isArray(baton.data) && baton.data.length > 1,
@@ -325,33 +336,46 @@ define('io.ox/core/extPatterns/links',
             // remove unimportant links on smartphone (prio='none')
             if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
 
-            if (lo.length > 1 && !allDisabled && (!multiple || options.forcelimit)) {
+            if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
+                var dd;
                 nav.append(
                     $('<li class="dropdown">').append(
-                        $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
-                        .append(
-                            $.txt(isSmall ? gt('Actions') : gt('More')),
-                            $('<i class="fa fa-caret-down">')
+                        dd = $('<a>').addClass('actionlink').attr({
+                            href: '#',
+                            tabindex: 1,
+                            role: 'menuitem',
+                            'data-toggle': 'dropdown',
+                            'data-action': 'more',
+                            'aria-haspopup': true,
+                            'aria-label': isSmall ? gt('Actions') : gt('More')
+                        }).append(
+                            isSmall ? $.txt(gt('Actions')) : $('<span class="sr-only">' + gt('Actions') + '</span><i aria-hidden="true" class="fa fa-bars">'),
+                            $('<i aria-hidden="true" class="fa fa-caret-down">')
                         )
                         .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                             // fix dropdown position on-the-fly
                             var left = $(this).parent().position().left;
-                            $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' pull-right'));
+                            $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
                         }),
                         $('<ul class="dropdown-menu pull-right" role="menu">')
-                        .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
-                        .append(lo)
+                            .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
+                            .append(lo)
                     )
                 );
+                dd.dropdown();
                 injectDividers(nav.find('ul'));
             }
 
             // hide if all links are disabled
             if (allDisabled) lo.hide();
-            if (options.customizeNode) options.customizeNode(nav);
+            if (extension.customizeNode) extension.customizeNode(nav); // deprecated!
+            if (extension.customize) extension.customize.call(nav, baton);
 
-            // move to real target node
-            if (baton.$.target) baton.$.target.append(nav.children());
+            // move to real target node at dummy's position
+            if (baton.$.positionDummy) {
+                baton.$.positionDummy.before(nav.children());
+                baton.$.positionDummy.remove();//remove dummy
+            }
 
             // clear
             all = lo = null;
@@ -364,7 +388,8 @@ define('io.ox/core/extPatterns/links',
             // use temporary container and remember real target node
             if (baton.$el) {
                 baton.$.temp = $('<div>');
-                baton.$.target = baton.$el;
+                baton.$.positionDummy = $('<div class="position-dummy">').hide();//needed to keep the position or extensionpoint index would be ignored
+                baton.$el.append(baton.$.positionDummy);
                 baton.$el = null;
             }
 
@@ -387,11 +412,20 @@ define('io.ox/core/extPatterns/links',
     };
 
     var drawDropDownItems = function (options, baton, args) {
-        var ul = this.data('ul');
+        var ul = this.data('ul'), closer;
         if (!ul) return; // race-condition
+        // special handling for mobile menus, otherwise the "closer"
+        // may be removed from menu
+        if (ul.find('[data-action="close-menu"]')) {
+            closer = ul.find('[data-action="close-menu"]').parent().clone(true);
+        }
         baton.$el = ul.empty();
+        // reappend the closer
+        if (closer) baton.$el.append(closer);
         drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
             injectDividers(baton.$el);
+            // remove items with 'none' prio
+            if (_.device('smartphone')) baton.$el.find('[data-prio="none"]').closest('li').remove();
         });
     };
 
@@ -404,23 +438,30 @@ define('io.ox/core/extPatterns/links',
 
     var drawDropDown = function (options, baton) {
 
-        var label = options.label, args = $.makeArray(arguments), node, ul;
+        var label = baton.label || options.label,
+            args = $.makeArray(arguments),
+            node = baton.$el || $('<div>'),
+            ul, toggle;
 
         // label: Use baton or String or DOM node
-        label = baton.label || label;
         label = _.isString(label) ? $.txt(label) : label;
-
-        node = baton.$el || $('<div>');
-
         // build dropdown
         this.append(
             node.addClass('dropdown').append(
-                $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
-                .append(label, $('<i class="fa fa-caret-down">')),
+                toggle = $('<a>').attr({
+                    href: '#',
+                    tabindex: 1,
+                    'data-toggle': 'dropdown',
+                    'aria-haspopup': true,
+                    'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
+                }).append(
+                    options.icon ? $('<i>').addClass(options.icon).attr({ title: label.textContent, 'aria-hidden': true }) : label,
+                    options.noCaret ? $() : $('<i class="fa fa-caret-down">').attr({ 'aria-hidden': true })
+                ),
                 ul = $('<ul class="dropdown-menu" role="menu">')
             )
         );
-
+        toggle.dropdown();
         // store reference to <ul>; we need that for mobile drop-downs
         node.data('ul', ul);
 

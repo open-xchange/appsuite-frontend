@@ -55,7 +55,7 @@ define('io.ox/mail/detail/content',
     };
 
     var regHTML = /^text\/html$/i,
-        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
+        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var insertEmoticons = (function () {
@@ -121,7 +121,6 @@ define('io.ox/mail/detail/content',
                 if (isURL.test(line)) return line;
                 // process plain text
                 line = insertEmoticons(line);
-                line = emoji.processEmoji(line);
                 return line;
             })
             .join('');
@@ -129,34 +128,6 @@ define('io.ox/mail/detail/content',
         text = markupQuotes(text);
 
         return text;
-    };
-
-    var mailTo = function (e) {
-        e.preventDefault();
-        var node = $(this),
-            email = node.attr('href').substr(7), // cut off leading "mailto:"
-            text = node.text(),
-            tmp,
-            params,
-            data;
-
-        //check for additional parameters
-        tmp = email.split(/\?/, 2);
-        params = _.deserialize(tmp[1]);
-        // Bug: 31345
-        for (var key in params) {
-            params[key.toLowerCase()] = params[key];
-        }
-        email = tmp[0];
-        // save data
-        data = {
-            to: [[text, email]],
-            subject: params.subject,
-            attachments: [{ content: params.body || '' }]
-        };
-        ox.launch('io.ox/mail/write/main').done(function () {
-            this.compose(data);
-        });
     };
 
     // source
@@ -186,10 +157,10 @@ define('io.ox/mail/detail/content',
         id: 'emoji',
         index: 300,
         process: function (baton) {
-            if (!baton.isHTML || baton.isLarge) return;
             baton.processedEmoji = false;
             baton.source = emoji.processEmoji(baton.source, function (text, lib) {
                 baton.processedEmoji = !lib.loaded;
+                baton.source = text;
             });
         }
     });
@@ -230,6 +201,7 @@ define('io.ox/mail/detail/content',
         id: 'white-space',
         index: 600,
         process: function (baton) {
+            if (baton.isLarge) return; // espeically firefox doesn't like those regex for large messages
             baton.source = baton.source
                 // remove leading white-space
                 .replace(/^(<div[^>]+>)(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '$1')
@@ -265,6 +237,10 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    // Both fixes, images and tables were moved to the backend
+    // sanitizer on 01.08.2014
+
+    /*
     ext.point('io.ox/mail/detail/content').extend({
         id: 'images',
         index: 300,
@@ -281,7 +257,8 @@ define('io.ox/mail/detail/content',
             });
         }
     });
-
+    */
+    /*
     ext.point('io.ox/mail/detail/content').extend({
         id: 'tables',
         index: 400,
@@ -292,21 +269,25 @@ define('io.ox/mail/detail/content',
                 var node = $(this), bgcolor = node.attr('bgcolor');
                 node.css('background-color', bgcolor);
             });
-            this.find('table[cellpadding]').each(function () {
+            // loop over tables in reverse order
+            // so that tables are processed inside-out
+            $.each(this.find('table[cellpadding]').get().reverse(), function () {
                 var node = $(this), cellpadding = node.attr('cellpadding');
                 if (node.attr('cellspacing') === '0') {
                     node.css('border-collapse', 'collapse');
                 }
                 node.find('th, td').each(function () {
-                    var node = $(this), style = node.attr('style');
+                    var node = $(this), style = node.attr('style') || '';
                     // style might already contain padding or padding-top/right/bottom/left.
+                    if (style.indexOf('padding:') > -1) return;
                     // So we add the cellpadding at the beginning so that it doesn't overwrite existing paddings
-                    node.attr('style', 'padding: ' + cellpadding + 'px; ' + style);
+                    if (style) style = ' ' + style;
+                    node.attr('style', 'padding: ' + cellpadding + 'px;' + style);
                 });
             });
         }
     });
-
+    */
     ext.point('io.ox/mail/detail/content').extend({
         id: 'nested',
         index: 500,
@@ -368,7 +349,7 @@ define('io.ox/mail/detail/content',
             _(this.get(0).getElementsByTagName('A')).each(function (node) {
                 var link = $(node)
                         .filter('[href^="mailto:"]')
-                        .on('click', mailTo)
+                        .addClass('mailto-link')
                         .attr('target', '_blank'), // to be safe
                     text = link.text();
                 // trim text if it contains mailto:...
@@ -510,11 +491,12 @@ define('io.ox/mail/detail/content',
                     // plain TEXT
                     content = $('<div class="content plain-text noI18n">');
                     content.html(beautifyText(baton.source));
-                    emoji.processEmoji(baton.source, function (text, lib) {
-                        baton.processedEmoji = !lib.loaded;
-                        if (baton.processedEmoji) return;
-                        content.html(beautifyText(text));
-                    });
+                    if (!baton.processedEmoji) {
+                        emoji.processEmoji(baton.source, function (text, lib) {
+                            baton.processedEmoji = !lib.loaded;
+                            content.html(beautifyText(text));
+                        });
+                    }
                 }
 
                 // process content unless too large

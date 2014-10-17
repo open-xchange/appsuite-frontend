@@ -113,7 +113,14 @@ define('io.ox/mail/vacationnotice/settings/filter',
 
                 ext.point('io.ox/core/vacationnotice/model').invoke('triggerChange', vacationNotice, vacationNotice);
 
-                deferred.resolve(vacationNotice.model);
+                api.getRules().done(function (data) {
+                    if (!_.isEmpty(data)) {
+                        // vacation notice is always on top
+                        vacationNotice.model.set('position', 0);
+                    }
+                    deferred.resolve(vacationNotice.model);
+                });
+
 
             }).fail(function (error) {
                 deferred.reject(error);

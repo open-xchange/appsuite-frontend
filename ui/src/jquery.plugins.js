@@ -187,14 +187,33 @@
             classes: 'alert-danger',
             dismissable: false
         }, o);
-        return $('<div class="alert fade in">')
+
+        var alert = $('<div class="alert fade in">')
             .addClass(o.classes)
-            .addClass(o.dismissable ? 'alert-dismissable' : '')
-                .append(
-                    o.dismissable ? $('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">').html('&times;') : $(),
-                    o.title ? $('<h4 class="alert-heading">').text(o.title) : $(),
-                    o.message ? $('<p>').text(o.message) : $()
-                );
+            .addClass(o.dismissable ? 'alert-dismissable' : '');
+
+        if (o.dismissable) {
+            alert.append(
+                $('<button type="button" class="close" data-dismiss="alert">').append(
+                    $('<span aria-hidden="true">&times;</span>'),
+                    $('<span class="sr-only">Close</span>')
+                )
+            );
+        }
+
+        if (o.title) {
+            alert.append(
+                $('<h4 class="alert-heading">').text(o.title)
+            );
+        }
+
+        if (o.message) {
+            alert.append(
+                $('<p>').text(o.message)
+            );
+        }
+
+        return alert.alert();
     };
 
 }());

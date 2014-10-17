@@ -13,7 +13,7 @@
 
 define('io.ox/core/tk/flag-picker',
     ['io.ox/mail/api',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'gettext!io.ox/mail'
     ], function (api, folderAPI, gt) {
 
@@ -89,9 +89,11 @@ define('io.ox/core/tk/flag-picker',
 
             node.append(
                 $('<div>').append(
-                    link = $('<a href="#" tabindex="1">').append(
-                        $('<i class="flag-dropdown-icon">')
-                        .attr('data-color', color)
+                    link = $('<a href="#" tabindex="1" title="' + gt('Set color') + '">').append(
+                        $('<i class="flag-dropdown-icon">').attr({
+                            'data-color': color,
+                            'title': gt('Set color')
+                        })
                         .addClass('flag_' + color + ' ' + (color ? colorLabelIcon : colorLabelIconEmpty))
                     )
                 )

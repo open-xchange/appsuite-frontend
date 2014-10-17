@@ -47,7 +47,21 @@ define('io.ox/mail/autoforward/settings/filter',
                         }
                     });
 
-                    deferred.resolve(autoForward.model);
+                    api.getRules().done(function (data) {
+                        var isVacation = false;
+                        _.each(data, function (single) {
+                            if (_.contains(single.flags, 'vacation')) {
+                                isVacation = true;
+                            }
+                        });
+
+                        if (isVacation && data.length > 1) {
+                            autoForward.model.set('position', 1);
+                        } else if (!isVacation && !_.isEmpty(data)) {
+                            autoForward.model.set('position', 0);
+                        }
+                        deferred.resolve(autoForward.model);
+                    });
 
                 } else {
                     var autoForwardData = {},
@@ -82,7 +96,17 @@ define('io.ox/mail/autoforward/settings/filter',
                             }
                         }
                     });
-                    deferred.resolve(autoForward.model);
+
+                    api.getRules('vacation').done(function (data) {
+                        if (_.isEmpty(data)) {
+                            autoForward.model.set('position', 0);
+                        } else {
+                            autoForward.model.set('position', 1);
+                        }
+                        deferred.resolve(autoForward.model);
+                    });
+
+
 
                 }
 

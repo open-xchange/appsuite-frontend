@@ -12,107 +12,85 @@
  */
 define(['io.ox/search/util',
         'fixture!io.ox/core/settings.json',
+        'spec/shared/capabilities',
         'settings!io.ox/mail',
         'settings!io.ox/core',
-        'beforeEachEnsure'], function (util, settingsFixture, mailSettings, settings, beforeEachEnsure) {
+        'io.ox/mail/main',
+        'spec/shared/io.ox/search/util',
+        'beforeEachEnsure'], function (util, settingsFixture, caputil, mailSettings, settings, main, testutil, beforeEachEnsure) {
 
     function isPromise(def) {
         return (!def.reject && !!def.done);
-    }
-    function isDeferred(def) {
-        return (!!def.reject && !!def.done);
     }
 
     function failed() {
         expect(false).to.be.true;
     }
 
-    //aync setup loads app and and add some variables to test context
-    function setup (context) {
-        var def = $.Deferred(),
-            self = this;
+    describe.skip('Search', function () {
 
-        //apply relevant setting fixtures
-        mailSettings.set('folder', settingsFixture['io.ox/mail'].folder);
-        settings.set('folder', settingsFixture['io.ox/core'].folder);
-        settings.set('search', settingsFixture['io.ox/core'].search);
-        _.each(settings.get('search/modules'), function (module) {
-            var id = 'io.ox/' + module + '/main';
-            ox.manifests.apps[id] = {title: module};
-        });
+        describe('Utilities for search:', function () {
+            beforeEachEnsure(testutil.startApp);
 
-        //load app
-        require(['io.ox/search/main'], function (main) {
-            main.init();
-            var app = main.run();
-            self.vars = {
-                app: app,
-                model: app.getModel(),
-                node: $(document.body, '.io-ox-search-window').find('.window-content')
-            };
-            def.resolve();
-        });
-        return def;
-    }
-
-    describe('Utilities for search:', function () {
-        beforeEachEnsure(setup);
-
-        describe('getFolders', function () {
-            it('should always return a promise', function () {
-                var def = util.getFolders(this.vars.model);
-                expect(isPromise(def)).to.be.true;
-            });
-
-            describe('returned promise', function () {
-                it('should resolve with an object', function () {
+            describe('getFolders', function () {
+                it('should always return a promise', function () {
                     var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(_.isObject(data)).to.be.true;
-                    }, failed);
+                    expect(isPromise(def)).to.be.true;
                 });
-                it('should always resolve with an object', function () {
-                    var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(_.isObject(data)).to.be.true;
-                    }, failed);
-                });
-                it('should always resolve with at least the default account', function () {
-                    var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(data).to.have.property('0').that.is.an('object');
-                    }, failed);
-                });
-                it('should always resolve with minimal account data', function () {
-                    var def = util.getFolders(this.vars.model);
-                    def.then(function (data) {
-                        expect(data[0]).to.have.property('list').that.is.an('array');
-                        expect(data[0].list).to.not.be.empty;
-                    }, failed);
+
+                describe('returned promise', function () {
+                    it('should resolve with an object', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(_.isObject(data)).to.be.true;
+                        }, failed);
+                    });
+                    it('should always resolve with an object', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(_.isObject(data)).to.be.true;
+                        }, failed);
+                    });
+                    it('should always resolve with at least the default account', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(data).to.have.property('0').that.is.an('object');
+                        }, failed);
+                    });
+                    it('should always resolve with minimal account data', function () {
+                        var def = util.getFolders(this.vars.model);
+                        def.then(function (data) {
+                            expect(data[0]).to.have.property('list').that.is.an('array');
+                            expect(data[0].list).to.not.be.empty;
+                        }, failed);
+                    });
                 });
             });
-        });
 
-        describe('getFirstChoice', function () {
-            it('should always return a promise', function () {
-                var def = util.getFirstChoice(this.vars.model);
-                expect(isPromise(def)).to.be.true;
-            });
-            describe('returned promise', function () {
-                it('should always resolve with an object', function () {
+            describe('getFirstChoice', function () {
+                it('should always return a promise', function () {
                     var def = util.getFirstChoice(this.vars.model);
-                    def.then(function (data) {
-                        expect(_.isObject(data)).to.be.true;
-                    }, failed);
+                    expect(isPromise(def)).to.be.true;
                 });
-                it('should always resolve with custom and display_name', function () {
-                    var def = util.getFirstChoice(this.vars.model);
-                    def.then(function (data) {
-                        expect(data).to.have.property('custom').that.is.equal('default0%2FINBOX');
-                        expect(data).to.have.property('display_name').that.is.equal('default0/INBOX');
-                    }, failed);
+                describe('returned promise', function (done) {
+                    it('should always resolve with an object', function () {
+                        var def = util.getFirstChoice(this.vars.model);
+                        def.then(function (data) {
+                            expect(_.isObject(data)).to.be.true;
+                        }, failed)
+                        .always(done);
+                    });
+
+                    it('should always resolve with custom and display_name', function (done) {
+                        var def = util.getFirstChoice(this.vars.model);
+                        def.then(function (data) {
+                            expect(data).to.be.an('object');
+                        }, failed)
+                        .always(done);
+                    });
                 });
             });
+
         });
 
     });

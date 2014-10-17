@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -34,7 +37,7 @@
 <p><b>Inhoudsopgave</b></p>
 <dl class="toc">
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 De <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> Componenten</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 Tonen e-mailberichten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 E-mailberichten tonen</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 Tonen of opslaan van e-mailbijlagen</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 E-mailberichten versturen</a></span></dt>
 <dd><dl>
@@ -58,37 +61,40 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 E-mailberichten opslaan</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 E-mailberichten importeren</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.print.html">5.5.12 E-mailberichten Afdrukken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.13 E-mailberichten verwijderen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.14 E-mailmappen opschonen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.15 Bewerken van meerdere e-mailberichten in één keer</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.16 Verzamelde Mail gebruiken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.17 E-mailfilters gebruiken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.5.13 E-mailberichten Archiveren</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.14 E-mailberichten verwijderen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.15 E-mailmappen opschonen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.16 Bewerken van meerdere e-mailberichten in één keer</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.17 Verzamelde Mail gebruiken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.18 E-mailfilters gebruiken</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.6 E-mailberichten binnen een Team</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.search.html">5.6 Zoeken naar E-mailberichten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.7 E-mailberichten binnen een Team</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.6.1 E-mailberichten delen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.6.2 Abonneren op e-mailmappen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.6.3 Uitnodigen van e-mailontvangers voor een afspraak</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.6.4 Alle ontvangers van het e-mailbericht opslaan als distributielijst.</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.7.1 E-mailberichten delen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.7.2 Abonneren op e-mailmappen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.7.3 Uitnodigen van e-mailontvangers voor een afspraak</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.7.4 Alle ontvangers van het e-mailbericht opslaan als distributielijst.</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.7 E-mailaccounts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.8 E-mailaccounts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.7.1 Aanmaken en bewerken van e-mailaccounts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.7.2 Aanpassen van een extra e-mailaccount</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.8.1 Aanmaken en bewerken van e-mailaccounts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.8.2 Aanpassen van een extra e-mailaccount</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.8 E-mailinstellingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.9 E-mailinstellingen</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm140333169863584"></a><a class="indexterm" name="idm140333169851728"></a><a class="indexterm" name="idm140333168112176"></a><a class="indexterm" name="idm140333165410160"></a><div class="concept">
+<a class="indexterm" name="idm139883532659488"></a><a class="indexterm" name="idm139883535815984"></a><a class="indexterm" name="idm139883531818416"></a><a class="indexterm" name="idm139883534695040"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email"></a><p>Leer hoe u de <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> applicatie kan gebruiken.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>de <a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. De E-mail Componenten"><span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> componenten</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. Tonen e-mailberichten">zoek en toon</a> e-mailberichten</p></li>
+<li class="listitem"><p>De <a class="link" href="ox.appsuite.user.sect.email.gui.html" title="5.1. De E-mail Componenten"><span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> Componenten</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.view.html" title="5.2. E-mailberichten tonen">toon</a> e-mailberichten</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.send.html" title="5.4. E-mailberichten versturen">verstuur</a> e-mailberichten</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.manage.html" title="5.5. E-mailberichten organiseren">beheren</a> e-mailberichten</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.6. E-mailberichten binnen een Team">deel e-mailberichten met andere <span class="guilabel"><strong>gebruikers</strong></span></a></p></li>
-<li class="listitem"><p>benader uw <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.7. E-mailaccounts">externe e-mailaccounts</a> welke u heeft aangemaakt bij andere aanbieders</p></li>
-<li class="listitem"><p>gebruik de <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.8. E-mailinstellingen"><span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> instellingen</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.search.html" title="5.6. Zoeken naar E-mailberichten">zoek</a> e-mailberichten</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.email.share.html" title="5.7. E-mailberichten binnen een Team">deel e-mailberichten met andere <span class="guilabel"><strong>gebruikers</strong></span></a></p></li>
+<li class="listitem"><p>benader uw <a class="link" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.8. E-mailaccounts">externe e-mailaccounts</a> welke u heeft aangemaakt bij andere aanbieders</p></li>
+<li class="listitem"><p>gebruik de <a class="link" href="ox.appsuite.user.sect.email.settings.html" title="5.9. E-mailinstellingen"><span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> instellingen</a></p></li>
 </ul></div>
 <p>
   </p>

@@ -39,7 +39,7 @@ define('io.ox/portal/feed', function () {
             jsonp: false,
             jsonpCallback: callback
         })
-        .pipe(function (data) {
+        .then(function (data) {
             return self.process(data);
         });
     };

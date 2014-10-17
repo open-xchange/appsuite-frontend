@@ -317,7 +317,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             '1037': 'personal',
             '1038': 'reply_to',
             '1039': 'addresses',
-            '1040': 'meta'
+            '1040': 'meta',
+            '1041': 'archive',
+            '1042': 'archive_fullname',
+            '1043': 'transport_auth'
         },
         'attachment': {
             '1': 'id',
@@ -396,7 +399,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         data: options.data,
                         index: log.collection.length,
                         timestamp: _.now(),
-                        url: options.url
+                        url: options._url
                     })
                 );
             }
@@ -513,8 +516,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // store type for retry
         o.type = type;
         // prepend root
-        o.url = ox.apiRoot + '/' + o.module;
-        if (o.jsessionid) o.url += ';jsessionid=' + o.jsessionid;
+        o._url = o.url || (ox.apiRoot + '/' + o.module);
+        if (o.jsessionid) o._url += ';jsessionid=' + o.jsessionid;
         // add session
         if (o.appendSession === true) {
             o.params.session = ox.session || 'unset';
@@ -537,14 +540,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         }
         else if (type === 'PUT' || type === 'DELETE') {
             // PUT & DELETE
-            o.url += '?' + _.serialize(o.params);
+            o._url += '?' + _.serialize(o.params);
             o.original = o.data;
             o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
             o.contentType = 'text/javascript; charset=UTF-8';
         }
         else if (type === 'UPLOAD') {
             // POST with FormData object
-            o.url += '?' + _.serialize(o.params);
+            o._url += '?' + _.serialize(o.params);
             o.contentType = false;
             o.processData = false;
             o.processResponse = false;
@@ -889,7 +892,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     // type (GET, POST, PUT, ...)
                     type: type === 'UPLOAD' ? 'POST' : type,
                     // url
-                    url: o.url,
+                    url: o._url,
                     // data
                     data: o.data,
                     dataType: o.dataType,
@@ -906,7 +909,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             function cont() {
                 if ((ox.fail || fail) && o.module !== 'login' && Math.random() < Number(ox.fail || _.url.hash('fail') || 0)) {
                     // simulate broken connection
-                    console.error('HTTP fail', r.o.url, r.xhr);
+                    console.error('HTTP fail', r.o._url, r.xhr);
                     r.def.reject({ error: '0 simulated fail' });
                     that.trigger('stop fail', r.xhr);
                 } else {
@@ -923,6 +926,17 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 cont();
             }
             return def;
+        };
+    }());
+
+
+    var wait = (function () {
+
+        var wait = $.when();
+
+        return function (def) {
+            if (def) def.always((wait = $.Deferred()).resolve);
+            return wait.promise();
         };
     }());
 
@@ -1045,6 +1059,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
             return def;
         },
+
+        // simple utility function to wait for other requests
+        wait: wait,
 
         /**
          * Get all columns of a module
@@ -1181,13 +1198,14 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     })
                     .done(function (data) {
                         // orchestrate callbacks and their data
-                        for (i = 0, $l = q.length; i < $l; i++) {
-                            if (data[i].data && data[i].timestamp) {
-                                q[i].deferred.resolve(data[i].data, data[i].timestamp);
-                            } else if (data[i].error) {
-                                q[i].deferred.reject(data[i].error);
+                        for (var i = 0, $l = q.length, item; i < $l; i++) {
+                            item = data[i];
+                            if (_.isObject(item) && 'data' in item && 'timestamp' in item) {
+                                q[i].deferred.resolve(item.data, item.timestamp);
+                            } else if (item.error) {
+                                q[i].deferred.reject(item.error);
                             } else {
-                                q[i].deferred.resolve(data[i]);
+                                q[i].deferred.resolve(item);
                             }
                         }
                         // continuation

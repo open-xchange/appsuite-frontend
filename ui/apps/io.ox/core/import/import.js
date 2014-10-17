@@ -16,12 +16,13 @@ define('io.ox/core/import/import',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
      'io.ox/core/tk/attachments',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/api/import',
      'io.ox/core/notifications',
      'gettext!io.ox/core',
      'less!io.ox/core/import/style'
-    ], function (ext, dialogs, attachments, folderAPI, api, notifications, gt) {
+    ], function (ext, dialogs, attachments, folderAPI, getBreadcrumb, api, notifications, gt) {
 
     'use strict';
 
@@ -30,7 +31,7 @@ define('io.ox/core/import/import',
         id: 'default',
         draw: function (id, prefix) {
             this.append(
-                folderAPI.getBreadcrumb(id, { prefix: prefix || '' }),
+                getBreadcrumb(id, { prefix: prefix || '' }),
                 $('<input type="hidden" name="folder">').val(id)
             );
         }
@@ -139,7 +140,7 @@ define('io.ox/core/import/import',
                 form;
 
             //get folder and process
-            folderAPI.get({ folder: id }).done(function () {
+            folderAPI.get(id).done(function () {
                 dialog.build(function () {
                     form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                     this.getContentNode().append(form);
@@ -164,15 +165,20 @@ define('io.ox/core/import/import',
                         file = baton.nodes.file_upload.find('input[type=file]'),
                         popup = this,
                         failHandler = function (data) {
-                            var list = [];
-                            _.each(data, function (item) {
-                                if (item && item.code === 'CON-0600') {
-                                    //append first value which caused conversion error (csv import)
-                                    item.error = item.error + '\n' + item.error_stack[0];
-                                }
-                                list.push(item && item.error || gt('An unknown error occurred'));
-                            });
-                            notifications.yell('error', list.join('\n\n'));
+                            var list = _(data).chain()
+                                .map(function (item) {
+                                    if (item && item.code === 'CON-0600') {
+                                        //append first value which caused conversion error (csv import)
+                                        item.error = item.error + '\n' + item.error_stack[0];
+                                    }
+                                    return item && item.error;
+                                })
+                                .compact();
+                            notifications.yell('error', list.length ?
+                                list.join('\n\n') :
+                                //#. Error message if calender import failed
+                                gt('There was no appointment data to import')
+                            );
                             popup.idle();
                         };
 

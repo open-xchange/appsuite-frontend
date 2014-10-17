@@ -15,11 +15,13 @@ define('io.ox/mail/common-extensions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
+     'io.ox/core/emoji/util',
      'io.ox/mail/util',
      'io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/date',
      'io.ox/core/strings',
+     'io.ox/core/folder/title',
      'io.ox/core/notifications',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
@@ -27,11 +29,27 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
+    ], function (ext, links, actions, emoji, util, api, account, date, strings, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
     var extensions = {
+
+        a11yLabel: function (baton) {
+            var data = baton.data,
+                size = api.threads.size(data),
+                threadSize = size <= 1 ? '' :  ', ' + gt.format('Thread contains %1$d messages', gt.noI18n(size)),
+                fromlist = data.from || [['', '']],
+                subject = _.escape($.trim(data.subject)),
+                unread = util.isUnseen(data) ? gt('Unread') + ', ' : '',
+                a11yLabel = unread + util.getDisplayName(fromlist[0]) + ', ' + subject + ', ' + util.getTime(data.received_date) + threadSize;
+
+            this.attr({
+                'aria-hidden': true
+            }).parent().attr({
+                'aria-label': _.escape(a11yLabel)
+            });
+        },
 
         picture: function (baton) {
             var data = baton.data, from = data.from,
@@ -103,13 +121,15 @@ define('io.ox/mail/common-extensions',
 
         threadSize: function (baton) {
 
-            var data = baton.data;
-            if (!_.isNumber(data.threadSize)) return;
-            if (data.threadSize <= 1) return;
+            // only consider thread-size if app is in thread-mode
+            if (baton.options.threaded !== true && (!baton.app || baton.app.props.get('thread') === false)) return;
+
+            var size = api.threads.size(baton.data);
+            if (size <= 1) return;
 
             this.append(
                 $('<div class="thread-size" aria-hidden="true">').append(
-                    $('<span class="number drag-count">').text(_.noI18n(data.threadSize))
+                    $('<span class="number drag-count">').text(_.noI18n(size))
                 )
             );
         },
@@ -155,14 +175,19 @@ define('io.ox/mail/common-extensions',
 
             var data = baton.data,
                 keepFirstPrefix = baton.data.threadSize === 1,
-                subject = util.getSubject(data, keepFirstPrefix);
+                subject = util.getSubject(data, keepFirstPrefix),
+                node;
 
             this.append(
                 $('<div class="subject">').append(
                     $('<span class="flags">'),
-                    $('<span class="drag-title">').text(subject)
+                    node = $('<span class="drag-title">').text(subject)
                 )
             );
+
+            emoji.processEmoji(_.escape(subject), function (html) {
+                node.html(html);
+            });
         },
 
         // a11y: set title attribute on outer list item
@@ -257,154 +282,117 @@ define('io.ox/mail/common-extensions',
             };
         }()),
 
-        attachmentList: (function () {
-
-            var getContentType = function (type) {
-                // might be: image/jpeg; name=Foto.JPG", so ...
-                var split = (type || 'unknown').split(/;/);
-                return split[0];
-            };
-
-            var drawAttachmentDropDown = function (node, label, data) {
-                // use extension pattern
-                var dd = new links.Dropdown({
-                        label: label,
-                        classes: 'attachment-link',
-                        ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(node, ext.Baton({ data: data, $el: $('<span>') })),
-                    contentType = getContentType(data.content_type),
-                    url,
-                    filename;
-                // make draggable (drag-out)
-                if (_.isArray(data)) {
-                    url = api.getUrl(data, 'zip');
-                    filename = (data.subject || 'mail') + '.zip'; // yep, array prop
-                } else {
-                    url = api.getUrl(data, 'download');
-                    filename = String(data.filename || '');
-                }
-                dd.find('a')
-                    .attr({
-                        title: data.title,
-                        draggable: true,
-                        'data-downloadurl': contentType + ':' + filename.replace(/:/g, '') + ':' + ox.abs + url
-                    })
-                    .on('dragstart', function (e) {
-                        $(this).css({ display: 'inline-block' });
-                        e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
-                    });
-                return dd;
-            };
+        attachmentList: (function attachmentList() {
 
             function drawInlineLinks(node, data) {
                 var extension = new links.InlineLinks({
+                    dropdown: false,
                     ref: 'io.ox/mail/attachment/links'
                 });
                 return extension.draw.call(node, ext.Baton({ data: data }));
             }
 
-            function showAllAttachments() {
-                $(this).closest('.attachment-list').children().css('display', 'inline-block');
-                $(this).remove();
-            }
+            var CustomAttachmentView,
+                renderContent = function () {
 
-            return function (baton) {
+                    var node = this.$('.file'),
+                        data = this.model.toJSON(),
+                        url, contentType;
 
-                var attachments = baton.attachments,
-                    length = attachments.length,
-                    list;
+                    new links.Dropdown({
+                        label: this.model.getShortTitle(),
+                        noCaret: true,
+                        ref: 'io.ox/mail/attachment/links'
+                    })
+                    .draw.call(node, ext.Baton({ data: data, $el: node }));
 
-                if (!length) return;
-
-                list = $('<div class="attachment-list">');
-
-                _(attachments).each(function (a, i) {
-                    try {
-                        var label = (a.filename || ('Attachment #' + i))
-                            // lower case file extensions for better readability
-                            .replace(/\.(\w+)$/, function (match) {
-                                return match.toLowerCase();
-                            });
-                        // draw
-                        var dd = drawAttachmentDropDown(list, _.noI18n(label), a);
-                        dd.find('a').first().addClass('attachment-link').prepend(
-                            $('<i class="fa fa-paperclip">'),
-                            $.txt('\u00A0')
-                        );
-                        // cut off long lists?
-                        if (i > 1 && length > 3) dd.hide();
-
-                    } catch (e) {
-                        console.error('mail.drawAttachment', e.message);
-                    }
-                });
-
-                // add "[n] more ..."
-                if (length > 3) {
-                    list.append(
-                        $('<a href="#" class="n-more">').text(
-                            //#. %1$d - number of attachments not shown (will be shown when string is clicked)
-                            gt('and %1$d others ...', length - 2)
-                        )
-                        .click(showAllAttachments)
-                    );
-                }
-
-                // show actions for 'all' attachments
-                attachments.subject = baton.data.subject;
-                list.append('<br>');
-                drawInlineLinks(list, attachments);
-
-                this.append(list);
-            };
-        }()),
-
-        attachmentPreview: (function () {
-
-            var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
-                regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
-
-            return function (baton) {
-
-                var attachments = baton.attachments,
-                    supportsDocumentPreview = capabilities.has('document_preview'),
-                    list = _(attachments).filter(function (attachment) {
-                        if (attachment.disp !== 'attachment') return false;
-                        if (regIsImage.test(attachment.filename)) return true;
-                        if (supportsDocumentPreview && regIsDocument.test(attachment.filename)) return true;
-                        return false;
-                    }),
-                    $ul;
-
-                if (!list.length) return;
-
-                this.append(
-                    $ul = $('<ul class="attachment-preview" role="presentation" aria-hidden="true">').append(
-                        _(list).map(function (attachment) {
-                            // consider retina displays
-                            var size = _.device('retina') ? 240 : 120,
-                                // get URL of preview image
-                                url = api.getUrl(attachment, 'view') + '&scaleType=cover&width=' + size + '&height=' + size;
-                            // non-image files need special format parameter
-                            if (!regIsImage.test(attachment.filename)) url += '&format=preview_image&session=' + ox.session;
-                            // create list item
-                            return $('<li class="lazy">').attr('data-original', url).data(attachment);
-                        })
-                    )
-                );
-
-                $ul.on('click', 'li', function () {
-                    var baton = ext.Baton({ data: [$(this).data()] });
-                    actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
-                });
-
-                _.defer(function () {
-                    $ul.find('li.lazy').lazyload({
-                        container: $ul,
-                        effect : 'fadeIn'
+                    // support for fixed position
+                    // TODO: introduce as general solution
+                    node.on('show.bs.dropdown', function (e) {
+                        var link = $(e.relatedTarget), offset = link.offset(), menu = link.next(), top, overlay;
+                        top = offset.top + link.height();
+                        menu.css({ top: offset.top + link.height(), bottom: 'auto', left: offset.left });
+                        if ((top + menu.height()) > $(window).height()) menu.css({ top: 'auto', bottom: '20px' });
+                        overlay = $('<div class="dropdown-overlay">').append(menu);
+                        link.data('overlay', overlay);
+                        $('body').append(overlay);
                     });
-                    $ul = null;
-                });
+
+                    node.on('hide.bs.dropdown', function (e) {
+                        var link = $(e.relatedTarget), overlay = link.data('overlay');
+                        link.parent().append(overlay.children());
+                        overlay.remove();
+                    });
+
+                    url = api.getUrl(data, 'download');
+                    contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
+
+                    this.$el.attr({
+                        title: this.model.getTitle(),
+                        draggable: true,
+                        'data-downloadurl': contentType + ':' + this.model.getTitle().replace(/:/g, '') + ':' + ox.abs + url
+                    })
+                    .on('dragstart', function (e) {
+                        $(this).css({ display: 'inline-block' });
+                        e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+                    });
+                };
+
+            return function (baton) {
+
+                if (baton.attachments.length === 0) return $.when();
+
+                var $el = this,
+                    def = $.Deferred();
+
+                require(['io.ox/core/attachments/view'], function (attachment) {
+
+                    _.once(function () {
+                        CustomAttachmentView = attachment.View.extend({
+                            renderContent: renderContent
+                        });
+                    })();
+
+                    var list = baton.attachments.map(function (m) {
+                            m.group = 'mail';
+                            return m;
+                        }),
+                        collection = new attachment.Collection(list),
+                        view = new attachment.List({
+                            AttachmentView: CustomAttachmentView,
+                            collection: collection,
+                            el: $el,
+                            preview: baton.preview
+                        });
+
+                    $el.append(view.render().$el);
+
+                    view.renderInlineLinks = function () {
+                        var models = this.getValidModels(), $links = this.$header.find('.links').empty();
+                        if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'));
+                    };
+
+                    view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
+                    view.renderInlineLinks();
+
+                    view.$el.on('click', 'li.item', function (e) {
+
+                        var node = $(e.currentTarget), id, data, baton;
+
+                        // skip attachments without preview
+                        if (!node.attr('data-original')) return;
+
+                        id = node.attr('data-id');
+                        data = collection.get(id).toJSON();
+                        baton = ext.Baton({ startItem: data, data: list });
+
+                        actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
+                    });
+
+                    def.resolve(view);
+                }, def.reject);
+
+                return def;
             };
         }()),
 
@@ -416,18 +404,25 @@ define('io.ox/mail/common-extensions',
 
             function toggle(e) {
                 e.preventDefault();
-                var view = e.data.view, data = view.model.toJSON();
+                var view = e.data.view, data = view.model.toJSON(), node = e.data.node;
                 // toggle 'unseen' bit
-                if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
+
+                if (util.isUnseen(data)) {
+                    api.markRead(data);
+                    node.attr('aria-label', gt('This E-mail is read, press to mark it as unread.'));
+                } else {
+                    api.markUnread(data);
+                    node.attr('aria-label', gt('This E-mail is unread, press to mark it as read.'));
+                }
             }
 
             return function (baton) {
 
                 if (util.isEmbedded(baton.data)) return;
 
-                this.append(
-                    $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa"/></a>')
-                    .on('click', { view: baton.view }, toggle)
+                var a11y = util.isUnseen(baton.data) ? gt('This E-mail is unread, press to mark it as read.') : gt('This E-mail is read, press to mark it as unread.'),
+                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa" aria-hidden="true"/></a>');
+                this.append(button.on('click', { view: baton.view, node: button }, toggle)
                 );
             };
         }()),
@@ -456,7 +451,7 @@ define('io.ox/mail/common-extensions',
                 }
 
                 this.append(
-                    $('<div class="alert alert-info external-images">').append(
+                    $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
                         $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
                     )
@@ -510,8 +505,8 @@ define('io.ox/mail/common-extensions',
                 api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
                     notifications.yell(
                         'success',
-                        //#. delivery receipt; German "Lesebestätigung"
-                        gt('A return receipt has been sent')
+                        //#. read receipt; German "Lesebestätigung"
+                        gt('A read receipt has been sent')
                     );
                 });
             }
@@ -540,8 +535,8 @@ define('io.ox/mail/common-extensions',
                     $('<div class="alert alert-info disposition-notification">').append(
                         $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
                         $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(
-                            //#. Respond to delivery receipt; German "Lesebestätigung senden"
-                            gt('Send a return receipt')
+                            //#. Respond to a read receipt request; German "Lesebestätigung senden"
+                            gt('Send a read receipt')
                         ),
                         $('<div class="comment">').text(
                             gt('The sender wants to get notified when you have read this email')

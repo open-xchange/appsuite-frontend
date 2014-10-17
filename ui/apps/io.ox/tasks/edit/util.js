@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/util', [], function () {
+define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
 
     'use strict';
 
@@ -39,7 +39,8 @@ define('io.ox/tasks/edit/util', [], function () {
                     progress,
                     $('<div class="input-group-btn">').append(
                         $('<button type="button" tabindex="1" class="btn btn-default" data-action="minus">').append(
-                            $('<i class="fa fa-minus">')
+                            $('<i class="fa fa-minus" aria-hidden="true">'),
+                            $('<span class="sr-only">').text(gt('Minus'))
                         )
                         .on('click', function () {
                             var temp = parseInt(progress.val(), 10);
@@ -53,7 +54,8 @@ define('io.ox/tasks/edit/util', [], function () {
                             }
                         }),
                         $('<button type="button" tabindex="1" class="btn btn-default" data-action="plus">').append(
-                            $('<i class="fa fa-plus">')
+                            $('<i class="fa fa-plus" aria-hidden="true">'),
+                            $('<span class="sr-only">').text(gt('Plus'))
                         )
                         .on('click', function () {
                             var temp = parseInt(progress.val(), 10);

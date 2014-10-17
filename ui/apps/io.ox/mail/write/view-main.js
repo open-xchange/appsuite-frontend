@@ -107,81 +107,74 @@ define('io.ox/mail/write/view-main',
             });
         },
 
-        focusSection: function (id) {
-            this.sections[id].find('input[type!=hidden], select').eq(0).focus();
+        createLink: function (id, label, show) {
+            return (this.sections[id + 'Link'] = $('<div>'))
+                .addClass('section-link')
+                .append(
+                    $('<a>', { href: '#', tabindex: '7', role: 'button' })
+                    .attr({
+                        'data-section-link': id,
+                        'aria-label': (!show ? gt('open') : gt('close')) + ' ' + label
+                    })
+                    .data('label', label)
+                    .text(label)
+                    .on('click', { id: id }, $.proxy(this.fnToggleSection, this))
+                );
         },
 
-        createSection: function (id, label, show, collapsable) {
-
-            if (label) {
-                this.sections[id + 'Label'] = $('<div>')
-                    .attr('data-section-label', id)
-                    .addClass('io-ox-label')
-                    .text(label)
-                    .prepend(
-                        collapsable ?
-                            $('<a>', { href: '#', tabindex: '7' })
-                            .addClass('collapse').text(gt('Hide'))
-                            .on('click', $.preventDefault) :
-                            $()
-                    );
-            } else {
-                this.sections[id + 'Label'] = $();
-            }
-
-            if (collapsable) {
-                this.sections[id + 'Label'].on('click', { id: id }, $.proxy(fnToggleSection, this));
-            } else {
-                this.sections[id + 'Label'].css('cursor', 'default');
-            }
-
+        createSection: function (id, show, label) {
             this.sections[id] = $('<div>').addClass('section').attr('data-section', id);
-
+            if (label) {
+                this.sections[id].append(
+                    $('<span>')
+                        .text(label)
+                        .attr('data-section-label', id)
+                        .addClass('io-ox-label')
+                );
+            }
             if (show === false) {
-                this.sections[id + 'Label'].hide();
                 this.sections[id].hide();
             }
-
-            return { label: $(this.sections[id + 'Label']), section: this.sections[id] };
+            return this.sections[id];
         },
 
-        addSection: function (id, label, show, collapsable) {
-            this.createSection(id, label, show, collapsable);
-            this.scrollpane.append(this.sections[id + 'Label'], this.sections[id]);
+        addSection: function (id, show, label, collapsible) {
+            if (collapsible) {
+                this.scrollpane.append(this.createLink(id, label, show));
+                label = null;
+            }
+            this.scrollpane.append(this.createSection(id, show, label));
             return this.sections[id];
         },
 
         showSection: function (id, focus) {
-            var sec = this.sections[id];
-            if (sec) {
-                sec.show().trigger('show');
-                if (focus !== false) {
-                    this.focusSection(id);
+            if (this.sections[id]) {
+                this.sections[id].show().trigger('show');
+                if (focus !== false && _.device('!smartphone')) {
+                    this.sections[id].find('input[type!=hidden], select').eq(0).focus();
                 }
             }
         },
 
         hideSection: function (id, node) {
-            this.sections[id + 'Label'].add(this.sections[id]).hide();
+            this.sections[id].hide();
             $(node).trigger('hide');
         },
 
-        createLink: function (id, label) {
-            return (this.sections[id + 'Link'] = $('<div>'))
-                .addClass('section-link')
-                .append(
-                    $('<a>', { href: '#', tabindex: '7' })
-                    .attr('data-section-link', id)
-                    .text(label)
-                    .on('click', { id: id }, $.proxy(fnToggleSection, this))
-                );
+        fnToggleSection: function(e) {
+            e.preventDefault();
+            var id = e.data.id,
+                link = this.sections[id + 'Link'].find('a');
+            if (this.sections[id].is(':visible')) {
+                link.attr('aria-label', gt('open') + ' ' + link.data('label'));
+                this.hideSection(id, e.target);
+            } else {
+                link.attr('aria-label', gt('close') + ' ' + link.data('label'));
+                this.showSection(id, e.target);
+            }
         },
 
-        addLink: function (id, label) {
-            return this.createLink(id, label).appendTo(this.scrollpane);
-        },
-
-        createField: function (id) {
+        createField: function (id, label) {
 
             var self = this, node = self.app.getWindowNode();
 
@@ -256,7 +249,8 @@ define('io.ox/mail/write/view-main',
                                 self.showSection('bcc');
                             }
                         }
-                    })
+                    }),
+                    label ? $('<span class="sr-only">').text(label) : $()
                 )
             );
         },
@@ -503,29 +497,27 @@ define('io.ox/mail/write/view-main',
             // TO
             this.addSection('to').append(
                 this.createRecipientList('to'),
-                this.createField('to')
+                this.createField('to', gt('To'))
                     .find('input').attr('placeholder', gt.format('%1$s ...', gt('To'))).placeholder().end()
             );
 
             // CC
-            this.addLink('cc', gt('Copy (CC) to'));
-            this.addSection('cc', gt('Copy (CC) to'), false, true)
+            this.addSection('cc', false, gt('Copy (CC) to'), true)
                 .append(this.createRecipientList('cc'))
-                .append(this.createField('cc')
+                .append(this.createField('cc', gt('in copy'))
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in copy'))).placeholder().end()
                     );
 
             // BCC
-            this.addLink('bcc', gt('Blind copy (BCC) to'));
-            this.addSection('bcc', gt('Blind copy (BCC) to'), false, true)
+            this.addSection('bcc', false, gt('Blind copy (BCC) to'), true)
                 .append(this.createRecipientList('bcc'))
-                .append(this.createField('bcc')
+                .append(this.createField('bcc', gt('in blind copy'))
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in blind copy'))).placeholder().end()
                     );
 
             // Attachments
             this.fileCount = 0;
-            var uploadSection = this.createSection('attachments', gt('Attachments'), _.device('!smartphone'), true),
+            var uploadSection = this.createSection('attachments', _.device('!smartphone')),
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
 
             var $inputWrap = attachments.fileUploadWidget({
@@ -573,6 +565,10 @@ define('io.ox/mail/write/view-main',
 
             $input.on('change', changeHandler);
 
+            $input.on('reset.fileupload', function () {
+                $(this).val('');
+            });
+
             $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
                 e.preventDefault();
                 require(['io.ox/files/filepicker']).done(function (Picker) {
@@ -595,7 +591,7 @@ define('io.ox/mail/write/view-main',
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
                     this.createLink('attachments', gt('Attachments')),
-                    uploadSection.section.append(
+                    uploadSection.append(
                         $inputWrap,
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
                     )
@@ -609,7 +605,7 @@ define('io.ox/mail/write/view-main',
                 className: 'div',
                 preview: true,
                 index: 300,
-                $el: $('<div>').insertBefore(uploadSection.section.find('div.form-group:last')),
+                $el: $('<div>').insertBefore(uploadSection.find('div.form-group:last')),
                 registerTo: [self, this.baton],
                 ref: POINT + '/filelist/file/customizer'
             }, this.baton), {
@@ -620,9 +616,7 @@ define('io.ox/mail/write/view-main',
             (function () {
                 if (_.device('smartphone')) return;
 
-                self.addLink('signatures', gt('Signatures'));
-
-                var signatureNode = self.addSection('signatures', gt('Signatures'), false, true);
+                var signatureNode = self.addSection('signatures', false, gt('Signatures'), true);
 
                 function fnDrawSignatures() {
                     snippetAPI.getAll('signature').done(function (signatures) {
@@ -674,8 +668,7 @@ define('io.ox/mail/write/view-main',
             }());
 
             // FROM
-            this.addLink('sender', gt('Sender'));
-            this.addSection('sender', gt('Sender'), false, true)
+            this.addSection('sender', false, gt('Sender'), true)
                 .append(this.createSenderField())
                 .append(this.createReplyToField());
 
@@ -690,8 +683,7 @@ define('io.ox/mail/write/view-main',
             });
 
             // Options
-            this.addLink('options', gt('More'));
-            this.addSection('options', gt('Options'), false, true).append(
+            this.addSection('options', false, gt('More'), true).append(
                 // Priority
                 $('<div>').addClass('section-item')
                 .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
@@ -712,12 +704,12 @@ define('io.ox/mail/write/view-main',
                 // Attach vCard
                 $('<div>').addClass('section-item')
                 .css({ paddingTop: '1em', paddingBottom: '1em' })
-                .append(createCheckbox('disp_notification_to', gt('Return Receipt')))
+                .append(createCheckbox('disp_notification_to', gt('Request read receipt')))
             );
 
-            if (!Modernizr.touch) {
+            if (_.device('!touch')) {
                 var format = settings.get('messageFormat', 'html');
-                this.addSection('format', gt('Text format'), true, false).append(
+                this.addSection('format', true, gt('Text format'), false).append(
 
                     $('<div class="section-item">').append(
                         createRadio('format', 'text', gt('Text'), format === 'text'),
@@ -887,7 +879,7 @@ define('io.ox/mail/write/view-main',
                                 if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
                                     // auto jump to editor on enter/tab
                                     e.preventDefault();
-                                    app.getEditor().focus();
+                                    if (_.device('!smartphone')) app.getEditor().focus();
                                 }
                             })
                             .on('keyup', function () {
@@ -924,6 +916,8 @@ define('io.ox/mail/write/view-main',
                                 }
                             }),*/
                             'mail_subject'
+                        ).append(
+                            $('<span class="sr-only">').text(gt('Subject'))
                         )
                     ),
                     // append emojitoggle
@@ -932,8 +926,6 @@ define('io.ox/mail/write/view-main',
                     this.priorityOverlay = $('<div class="priority-overlay">')
                         .attr('title', 'Priority')
                         .append(
-                            $('<i class="fa fa-exclamation">'),
-                            $('<i class="fa fa-exclamation">'),
                             $('<i class="fa fa-exclamation">')
                         )
                         .on('click', $.proxy(togglePriority, this))
@@ -971,17 +963,6 @@ define('io.ox/mail/write/view-main',
     });
 
     var dummySignature = { displayname: gt('No signature') };
-
-    function fnToggleSection(e) {
-        var id = e.data.id,
-            target = e.target;
-        e.preventDefault();
-        if (this.sections[id].is(':visible')) {
-            this.hideSection(id, target);
-        } else {
-            this.showSection(id, target);
-        }
-    }
 
     function togglePriority() {
         var priority = this.app.getPriority();
@@ -1128,9 +1109,13 @@ define('io.ox/mail/write/view-main',
         index: 100,
         draw: function (baton) {
             this.append(
-                contactsAPI
-                    .getDisplayName(baton.data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
-                    .addClass('recipient-name')
+                util.renderPersonalName(
+                    {
+                        $el: $('<div class="recipient-name">'),
+                        name: contactsUtil.getMailFullName(baton.data)
+                    },
+                    baton.data
+                )
             );
         }
     });
@@ -1222,7 +1207,7 @@ define('io.ox/mail/write/view-main',
                 ext.point(POINT + '/emailAddress').invoke('draw', this, baton);
                 this.append(
                     // remove
-                    $('<a href="#" class="remove">')
+                    $('<a role="button" href="#" class="remove">')
                         .attr('title', gt('Remove from recipient list'))
                         .append(
                             $('<i class="fa fa-trash-o">')

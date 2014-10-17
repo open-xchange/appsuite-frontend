@@ -149,7 +149,7 @@ define('io.ox/contacts/edit/view-form',
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact container'
+                className: 'edit-contact compact'
             });
 
         point.extend(new PictureUpload({
@@ -258,7 +258,7 @@ define('io.ox/contacts/edit/view-form',
 
             node.find('.toggle-compact')
                 .find('i').attr('class', icon).end()
-                .find('a').text(label);
+                .find('a').attr('role', 'button').text(label);
         }
 
         var FullnameView = mini.AbstractView.extend({
@@ -314,7 +314,7 @@ define('io.ox/contacts/edit/view-form',
                 var link;
                 this.append(
                     $('<nav class="toggle-compact clear">').append(
-                        link = $('<a href="#" tabindex="1">').click(toggle).text(gt('Extended view')),
+                        link = $('<a href="#" tabindex="1" role="button">').click(toggle).text(gt('Extended view')),
                         $.txt(' '),
                         $('<i class="fa fa-plus-square-o">')
                     )
@@ -330,7 +330,7 @@ define('io.ox/contacts/edit/view-form',
         });
 
         // attachment Drag & Drop
-        views.ext.point('io.ox/contacts/edit/dnd/actions').extend({
+        ext.point('io.ox/contacts/edit/dnd/actions').extend({
             id: 'attachment',
             index: 100,
             label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
@@ -402,23 +402,9 @@ define('io.ox/contacts/edit/view-form',
                 $('<label class="control-label col-lg-12 col-md-12 col-sm-12 col-xs-12">').append(
                     $.txt(options.label),
                     input = new mini.InputView({ name: options.field, model: model }).render().$el,
-                    $('<div class="inline-error" aria-live="assertive">').hide()
+                    new mini.ErrorView({ selector: '.row' }).render().$el
                 )
-            )
-            .on({
-                invalid: function (e, message) {
-                    // check if already invalid to avoid endless focus calls
-                    if ($(this).hasClass('error')) return;
-                    $(this).addClass('error')
-                        .find('.inline-error').text(message).show().end()
-                        .find('input').attr('aria-invalid', true).focus();
-                },
-                valid: function () {
-                    $(this).removeClass('error')
-                        .find('.inline-error').text('').hide().end()
-                        .find('input').removeAttr('aria-invalid');
-                }
-            });
+            );
 
             // trigger change event on keyup for view updates
             if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {

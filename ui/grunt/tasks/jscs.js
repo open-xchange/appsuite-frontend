@@ -16,32 +16,32 @@
 module.exports = function (grunt) {
 
     try {
-        require('grunt-jscs-checker/tasks/jscs');
+        require('grunt-jscs/tasks/jscs');
     } catch (e) {
         grunt.verbose.warn('Skipping jscs optional tasks');
         return;
     }
 
-    grunt.config.extend('jscs', {
-
-        options: {
-            config: '.jscs.json',
-            excludeFiles: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js', 'apps/io.ox/contacts/widgets/canvasresize.js', 'apps/io.ox/contacts/widgets/exif.js'] // date.js has some funky include stuff we have to figure out
-        },
-        bootjs: {
-            src: ['src/*.js']
-        },
-        specs: {
-            src: ['spec/**/*_spec.js']
-        },
-        all: {
-            src: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js']
-        },
-        test: {
-            src: ['apps/io.ox/mail/main.js']
+    grunt.config.merge({
+        jscs: {
+            options: {
+                config: '.jscs.json',
+                excludeFiles: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js', 'apps/io.ox/contacts/widgets/canvasresize.js', 'apps/io.ox/contacts/widgets/exif.js'] // date.js has some funky include stuff we have to figure out
+            },
+            bootjs: {
+                src: ['src/*.js']
+            },
+            specs: {
+                src: ['spec/**/*_spec.js']
+            },
+            all: {
+                src: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js']
+            },
+            test: {
+                src: ['apps/io.ox/mail/main.js']
+            }
         }
-
     });
 
-    grunt.loadNpmTasks('grunt-jscs-checker');
+    grunt.loadNpmTasks('grunt-jscs');
 };

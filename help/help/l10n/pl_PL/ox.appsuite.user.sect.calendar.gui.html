@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -28,8 +31,8 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.calendar.gui"></a>7.1. Składniki aplikacji <span class="phrase"> <span class="guilabel"><strong>Kalendarz</strong></span> </span>  </h2></div></div></div>
-<a class="indexterm" name="idm139943755523808"></a><div class="reference">
+<a name="ox.appsuite.user.sect.calendar.gui"></a>7.1. Składniki aplikacji <span class="phrase"><span class="guilabel"><strong>Kalendarz </strong></span> </span>  </h2></div></div></div>
+<a class="indexterm" name="idm139961886028208"></a><div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.hint"></a><p>Wprowadzenie do interfejsu użytkownika można znaleźć tutaj: <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. Interfejs użytkownika">Interfejs użytkownika</a>.</p>
 </div>
 <div class="reference">
@@ -65,7 +68,7 @@
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Edytuj</strong></span>. Pozwala na edycję danych <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit">spotkania</a>.</p></li>
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Status</strong></span>. <a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.task.calendar.changestatus" title="Jak zmienić status spotkania:">Zmienia status</a> potwierdzenia spotkania.</p></li>
 <li class="listitem"><p>Przycisk <span class="guibutton"><strong>Usuń</strong></span>. <a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete">Usuwa spotkanie</a> wybrane przez użytkownika.</p></li>
-<li class="listitem"><p>Przycisk <span class="guibutton"><strong>Więcej</strong></span>. Otwiera menu z następującymi pozycjami: <a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print">Drukuj</a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"><span class="guibutton"><strong>Przenieś</strong></span></a>.</p></li>
+<li class="listitem"><p>Ikona <span class="guibutton"><strong>Więcej</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> . Otwiera menu z następującymi pozycjami: <a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print">Drukuj</a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"><span class="guibutton"><strong>Przenieś</strong></span></a>.</p></li>
 </ul></div>
 <p>
       </p>
@@ -95,7 +98,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p>przyciski <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit"><span class="guibutton"><strong>Edytuj</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus"><span class="guibutton"><strong>Zmień status</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete"><span class="guibutton"><strong>Usuń</strong></span></a>.</p>
-<p><span class="phrase"><strong> Uwaga: </strong></span>Przy niektórych konfiguracjach serwera dominujące mogą być następujące ograniczenia: Niektóre przyciski w kalendarzach prywatnych są wyświetlane wyłącznie u użytkowników, którzy mają uprawnienia do danych funkcji. Uczestnik nie może zmienić ani usunąć spotkania. Organizator nie może zmienić swojego statusu. </p>
+<p><span class="phrase"><strong> Uwaga: </strong></span>przy niektórych konfiguracjach serwera dominujące mogą być następujące ograniczenia: Niektóre przyciski w kalendarzach prywatnych są wyświetlane wyłącznie u użytkowników, którzy mają uprawnienia do danych funkcji. Uczestnik nie może zmienić ani usunąć spotkania. Organizator nie może zmienić swojego statusu. </p>
 </li>
 <li class="listitem"><p>Po kliknięciu przycisku <span class="guibutton"><strong>Więcej</strong></span> pojawi się menu z następującymi funkcjami: <a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"><span class="guibutton"><strong>Przenieś</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print"><span class="guibutton"><strong>Drukuj</strong></span></a>.</p></li>
 </ul></div>
@@ -121,7 +124,7 @@
 <a name="ox.appsuite.user.reference.calendar.gui.detailview"></a><p><b>Widok szczegółów </b>Kliknięcie spotkania na liście powoduje wyświetlenie widoku szczegółów z danymi spotkania oraz dostępnymi funkcjami.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Data, typ powtarzania (przy spotkaniach cyklicznych), godzina i strefa czasowa</p></li>
-<li class="listitem"><p>Temat</p></li>
+<li class="listitem"><p>Temat.</p></li>
 <li class="listitem"><p>Lokalizacja spotkania, jeśli została wprowadzona</p></li>
 <li class="listitem"><p>Opis spotkania, jeśli został wprowadzony</p></li>
 <li class="listitem"><p>Jeśli spotkanie ma kilku uczestników, liczna uczestników, którzy jeszcze nie zaakceptowali zaproszenia, odrzucili je lub nie udzielili jeszcze odpowiedzi, będzie wskazywana w prawym górnym rogu nad listą uczestników. Aby odfiltrować listę uczestników, kliknij poszczególne ikony.</p></li>
@@ -129,13 +132,13 @@
 <p>Nazwy uczestników, jeśli są dostępne. Po kliknięciu nazwy pojawi się <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Wyskakujące okienko">wyskakujące okienko</a> z następującymi składnikami:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p>Dane kontaktowe danej osoby.</p></li>
-<li class="listitem"><p>Jeśli istnieje historia korespondencji e-mail z tą osobą, będzie można ją przeczytać w sekcji <span class="guilabel"><strong>Ostatnie rozmowy</strong></span>.</p></li>
+<li class="listitem"><p>Jeśli z tą osobą była już prowadzona korespondencja e-mail, zostanie ona wyświetlona w obszarze <span class="guilabel"><strong>Ostatnie konwersacje</strong></span>.</p></li>
 <li class="listitem"><p>Jeśli są zaplanowane spotkania z tą osobą, będzie można je zobaczyć w sekcji <span class="guilabel"><strong>Wspólne spotkania</strong></span>.</p></li>
-<li class="listitem"><p>dane tej osoby z sieci społecznościowych, takich jak Xing lub LinkedIn. Za pomocą dostępnych przycisków można otworzyć profil tej osoby.</p></li>
+<li class="listitem"><p>Dane tej osoby z sieci społecznościowych, takich jak Xing czy LinkedIn. Możesz otworzyć profil tej osoby za pomocą dostępnych przycisków.</p></li>
 </ul></div>
 <p>
             </p>
-<p>Kliknięcie spotkania lub adresu e-mail spowoduje otwarcie dodatkowego wyskakującego okienka.</p>
+<p>Kliknięcie spotkania lub wiadomości e-mail powoduje otwarcie dodatkowego wyskakującego okienka.</p>
 </li>
 <li class="listitem"><p>Jeśli spotkanie ma innych uczestników, zostaną wyświetlone następujące przyciski: <a class="link" href="ox.appsuite.user.sect.calendar.share.mail_participants.html#ox.appsuite.user.concept.calendar.mail_participants"> <span class="guibutton"><strong>Wyślij wiadomość do wszystkich uczestników</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html#ox.appsuite.user.concept.calendar.invite_newappointment"> <span class="guibutton"><strong>Zaproś na nowe spotkanie</strong></span> </a> oraz <a class="link" href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html#ox.appsuite.user.concept.calendar.distributionlist_participants"><span class="guibutton"><strong>Zapisz jako listę dystrybucyjną</strong></span></a>.</p></li>
 <li class="listitem"><p>Nazwy istniejących zasobów. Kliknięcie zasobu spowoduje otwarcie <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Wyskakujące okienko">wyskakującego okienka</a>.</p></li>

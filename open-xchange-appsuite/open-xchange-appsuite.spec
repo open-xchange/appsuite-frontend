@@ -4,8 +4,8 @@ BuildRequires:  ant
 BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
-Version:        7.6.0
-%define         ox_release 14
+Version:        @OXVERSION@
+%define         ox_release 5
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -267,7 +267,7 @@ for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it
     ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build
 done
 mv "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
-cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp" | sed -e "s:## cd ##:cd %{docroot}:" > \
+cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp" | sed -e "s:## cd ##:cd %{docroot}appsuite:" > \
     "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
@@ -311,7 +311,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.cs_CZ.js
 /opt/open-xchange/appsuite/apps/*/*/*.cs_CZ.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.cs_CZ.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.cs_CZ.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-cs-cz.properties
 
 %files l10n-da-dk
@@ -321,7 +321,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.da_DK.js
 /opt/open-xchange/appsuite/apps/*/*/*.da_DK.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.da_DK.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.da_DK.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-da-dk.properties
 
 %files l10n-de-de
@@ -331,7 +331,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.de_DE.js
 /opt/open-xchange/appsuite/apps/*/*/*.de_DE.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.de_DE.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.de_DE.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-de-de.properties
 
 %files l10n-en-gb
@@ -341,7 +341,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.en_GB.js
 /opt/open-xchange/appsuite/apps/*/*/*.en_GB.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.en_GB.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.en_GB.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-en-gb.properties
 
 %files l10n-en-us
@@ -351,7 +351,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.en_US.js
 /opt/open-xchange/appsuite/apps/*/*/*.en_US.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.en_US.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.en_US.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-en-us.properties
 
 %files l10n-es-es
@@ -361,7 +361,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.es_ES.js
 /opt/open-xchange/appsuite/apps/*/*/*.es_ES.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.es_ES.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.es_ES.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-es-es.properties
 
 %files l10n-es-mx
@@ -371,7 +371,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.es_MX.js
 /opt/open-xchange/appsuite/apps/*/*/*.es_MX.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.es_MX.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.es_MX.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-es-mx.properties
 
 %files l10n-fi-fi
@@ -381,7 +381,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.fi_FI.js
 /opt/open-xchange/appsuite/apps/*/*/*.fi_FI.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.fi_FI.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.fi_FI.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-fi-fi.properties
 
 %files l10n-fr-ca
@@ -391,7 +391,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.fr_CA.js
 /opt/open-xchange/appsuite/apps/*/*/*.fr_CA.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.fr_CA.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.fr_CA.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-fr-ca.properties
 
 %files l10n-fr-fr
@@ -401,7 +401,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.fr_FR.js
 /opt/open-xchange/appsuite/apps/*/*/*.fr_FR.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.fr_FR.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.fr_FR.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-fr-fr.properties
 
 %files l10n-hu-hu
@@ -411,7 +411,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.hu_HU.js
 /opt/open-xchange/appsuite/apps/*/*/*.hu_HU.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.hu_HU.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.hu_HU.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-hu-hu.properties
 
 %files l10n-it-it
@@ -421,7 +421,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.it_IT.js
 /opt/open-xchange/appsuite/apps/*/*/*.it_IT.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.it_IT.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.it_IT.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-it-it.properties
 
 %files l10n-ja-jp
@@ -431,7 +431,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.ja_JP.js
 /opt/open-xchange/appsuite/apps/*/*/*.ja_JP.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.ja_JP.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.ja_JP.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-ja-jp.properties
 
 %files l10n-lv-lv
@@ -441,7 +441,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.lv_LV.js
 /opt/open-xchange/appsuite/apps/*/*/*.lv_LV.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.lv_LV.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.lv_LV.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-lv-lv.properties
 
 %files l10n-nl-nl
@@ -451,7 +451,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.nl_NL.js
 /opt/open-xchange/appsuite/apps/*/*/*.nl_NL.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.nl_NL.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.nl_NL.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-nl-nl.properties
 
 %files l10n-pl-pl
@@ -461,7 +461,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.pl_PL.js
 /opt/open-xchange/appsuite/apps/*/*/*.pl_PL.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.pl_PL.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.pl_PL.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-pl-pl.properties
 
 %files l10n-pt-br
@@ -471,7 +471,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.pt_BR.js
 /opt/open-xchange/appsuite/apps/*/*/*.pt_BR.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.pt_BR.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.pt_BR.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-pt-br.properties
 
 %files l10n-ro-ro
@@ -481,7 +481,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.ro_RO.js
 /opt/open-xchange/appsuite/apps/*/*/*.ro_RO.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.ro_RO.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.ro_RO.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-ro-ro.properties
 
 %files l10n-ru-ru
@@ -491,7 +491,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.ru_RU.js
 /opt/open-xchange/appsuite/apps/*/*/*.ru_RU.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.ru_RU.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.ru_RU.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-ru-ru.properties
 
 %files l10n-sk-sk
@@ -501,7 +501,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.sk_SK.js
 /opt/open-xchange/appsuite/apps/*/*/*.sk_SK.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.sk_SK.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.sk_SK.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-sk-sk.properties
 
 %files l10n-sv-se
@@ -511,7 +511,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.sv_SE.js
 /opt/open-xchange/appsuite/apps/*/*/*.sv_SE.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.sv_SE.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.sv_SE.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-sv-se.properties
 
 %files l10n-zh-cn
@@ -521,7 +521,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.zh_CN.js
 /opt/open-xchange/appsuite/apps/*/*/*.zh_CN.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.zh_CN.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.zh_CN.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-cn.properties
 
 %files l10n-zh-tw
@@ -531,24 +531,48 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.zh_TW.js
 /opt/open-xchange/appsuite/apps/*/*/*.zh_TW.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.zh_TW.js*
+/opt/open-xchange/appsuite/apps/*/*/*/*.zh_TW.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Tue Oct 14 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Fifth candidate for 7.6.1 release
+* Fri Oct 10 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Fourth candidate for 7.6.1 release
+* Thu Oct 02 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Third candidate for 7.6.1 release
 * Tue Sep 30 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-10-06
+* Thu Sep 25 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-10-06
 * Tue Sep 23 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-10-02
+* Tue Sep 16 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Second candidate for 7.6.1 release
 * Thu Sep 11 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-09-15
+* Fri Sep 05 2014 Markus Wagner <markus.wagner@open-xchange.com>
+First release candidate for 7.6.1
+* Fri Sep 05 2014 Markus Wagner <markus.wagner@open-xchange.com>
+prepare for 7.6.1
 * Wed Aug 20 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-08-25
+* Mon Aug 18 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-08-25
 * Mon Aug 11 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-08-11
+* Thu Aug 07 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-08-11
 * Wed Jul 23 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-07-30
 * Mon Jul 21 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-07-28
+* Mon Jul 21 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-07-21
+* Wed Jul 09 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-07-14
+* Thu Jun 26 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2014-06-30
 * Wed Jun 25 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Seventh candidate for 7.6.0 release
 * Fri Jun 20 2014 Markus Wagner <markus.wagner@open-xchange.com>

@@ -34,23 +34,25 @@ module.exports = function (grunt) {
         return config[key];
     }
 
-    grunt.config.extend('obs_upload', {
-        package: {
-            options: {
-                url: obsConfig('url'),
-                project: obsConfig('project'),
-                username: obsConfig('username'),
-                password: obsConfig('password')
-            },
-            files: [{
-                expand: true,
-                src: [
-                    '<%= pkg.name %>_<%= pkg.version %>.orig.tar.gz',
-                    '<%= pkg.name %>_<%= pkg.version %>-*.debian.tar.gz',
-                    '<%= pkg.name %>_<%= pkg.version %>-*.dsc'
-                ],
-                cwd: 'dist/'
-            }]
+    grunt.config.merge({
+        obs_upload: {
+            package: {
+                options: {
+                    url: obsConfig('url'),
+                    project: obsConfig('project'),
+                    username: obsConfig('username'),
+                    password: obsConfig('password')
+                },
+                files: [{
+                    expand: true,
+                    src: [
+                        '<%= pkg.name %>_<%= pkg.version %>.orig.tar.gz',
+                        '<%= pkg.name %>_<%= pkg.version %>-*.debian.tar.gz',
+                        '<%= pkg.name %>_<%= pkg.version %>-*.dsc'
+                    ],
+                    cwd: 'dist/'
+                }]
+            }
         }
     });
 

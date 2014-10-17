@@ -11,20 +11,221 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/calendar/edit/recurrence-view',
-    ['io.ox/calendar/model',
-     'io.ox/core/tk/config-sentence',
-     'io.ox/core/date',
+    ['io.ox/core/date',
+     'io.ox/core/tk/keys',
      'gettext!io.ox/calendar/edit/main',
-     'less!io.ox/calendar/edit/style'
-    ], function (model, ConfigSentence, dateAPI, gt) {
+     'less!io.ox/calendar/edit/recurrence-view-style'
+    ], function (dateAPI, KeyListener, gt) {
 
     'use strict';
 
-    var DAYS = model.DAYS,
-        RECURRENCE_TYPES = model.RECURRENCE_TYPES;
+    // First, some constants
+    // A series is of a certain recurrence type
+    // daily, weekly, monhtly, yearly, no_recurrence
+    var RECURRENCE_TYPES = {
+        NO_RECURRENCE: 0,
+        DAILY: 1,
+        WEEKLY: 2,
+        MONTHLY: 3,
+        YEARLY: 4
+    };
 
-    var CalendarWidgets = {
+    // Sometimes we need to reference a certain day, so
+    // here are the weekdays, bitmap-style
+    var DAYS = {
+        SUNDAY: 1,
+        MONDAY: 2,
+        TUESDAY: 4,
+        WEDNESDAY: 8,
+        THURSDAY: 16,
+        FRIDAY: 32,
+        SATURDAY: 64,
+        i18n: {
+            SUNDAY: gt('Sunday'),
+            MONDAY: gt('Monday'),
+            TUESDAY: gt('Tuesday'),
+            WEDNESDAY: gt('Wednesday'),
+            THURSDAY: gt('Thursday'),
+            FRIDAY: gt('Friday'),
+            SATURDAY: gt('Saturday')
+        },
+        values: [
+            'SUNDAY',
+            'MONDAY',
+            'TUESDAY',
+            'WEDNESDAY',
+            'THURSDAY',
+            'FRIDAY',
+            'SATURDAY'
+        ],
+        // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask
+        pack: function () {
+            var result = 0;
+            _(arguments).each(function (day) {
+                var dayConst = DAYS[day.toUpperCase()];
+
+                if (_.isUndefined(dayConst)) {
+                    throw 'Invalid day: ' + day;
+                }
+                result = result | dayConst;
+            });
+            return result;
+        },
+        // Usage: DAYS.unpack(bitmask) -> {'MONDAY': 1, 'WEDNESDAY': 1, 'FRIDAY': 1}
+        unpack: function (bitmask) {
+            var days = {};
+            _(DAYS.values).each(function (day) {
+                var dayConst = DAYS[day];
+                if (bitmask & dayConst) {
+                    days[day] = 1;
+                } else {
+                    days[day] = 0;
+                }
+            });
+
+            return days;
+        }
+    };
+
+    var Widgets = {
+
+        number: function ($anchor, attribute, options) {
+            var self = this,
+                originalContent = $anchor.html();
+
+            // check options
+            if (!options || !options.initial || !options.phrase) {
+                return false;
+            }
+
+            self[attribute] = options.initial;
+
+            function drawState() {
+                var value = self[attribute];
+                $anchor.text(options.phrase(value)).focus();
+                self.trigger('redraw', self);
+                $anchor.attr('aria-label', self.ghost());
+            }
+
+            $anchor.on('click', function (e) {
+                e.preventDefault();
+                var type = (Modernizr.inputtypes.number && _.device('touch')) ? 'number' : 'text',
+                    $numberInput = $('<input type="' + type + '" size="4" tabindex="1">').css({
+                    width: (Modernizr.inputtypes.number && _.device('touch')) ? '2em' : '1em',
+                    marginBottom: 0,
+                    padding: 0
+                }).val(self[attribute]);
+                var keys = new KeyListener($numberInput);
+
+                var $content = $('<span>' + originalContent + '</span>');
+                $content.find('.number-control').empty().append(
+                    $numberInput
+                );
+                $anchor.after($content);
+                $anchor.hide();
+
+                $numberInput.select();
+                keys.include();
+
+                // TODO: Allow only number entries
+                function updateValue() {
+                    var value = parseInt($numberInput.val(), 10);
+                    if (isNaN(value)) {
+                        value = options.initial || 1;
+                    }
+                    try {
+                        $content.remove();
+                    } catch (e) { }
+                    $anchor.show();
+                    self[attribute] = value;
+                    self.trigger('change', self);
+                    self.trigger('change:' + attribute, self);
+                    drawState();
+                    keys.destroy();
+                }
+                $numberInput.on('blur', function () {
+                    updateValue();
+                });
+
+                // Enter
+                keys.on('enter', function () {
+                    updateValue();
+                });
+
+                // Escape
+                keys.on('esc', function () {
+                    $numberInput.val(self[attribute]);
+                    keys.destroy();
+                    try {
+                        $content.remove();
+                    } catch (e) { }
+                    $anchor.show();
+                });
+            });
+
+            $anchor.attr('aria-label', self.ghost());
+            this.on('change:' + attribute, drawState);
+        },
+
+        options: function ($anchor, attribute, options) {
+            // First we need to wrap the anchor
+            var self = this;
+
+            // check options
+            if (!options || !options.options) {
+                return false;
+            }
+
+            self[attribute] = options.initial;
+
+            var $container = $('<span class="dropdown">').css({ zIndex: 1 });
+            $anchor.after($container);
+            $container.append($anchor);
+
+            function drawState() {
+                var label = options.options[self[attribute]];
+                if (options.chooseLabel) {
+                    label = options.chooseLabel(self[attribute]);
+                }
+                $anchor.text(label).focus();
+                self.trigger('redraw', self);
+                $anchor.attr('aria-label', self.ghost());
+            }
+
+            // Now build the menu
+            var $menu = $('<ul class="dropdown-menu no-clone" role="menu">');
+            _(options.options).each(function (label, value) {
+                $menu.append(
+                    $('<li>').attr({
+                        role: 'presentation'
+                    }).append($('<a>').attr({
+                            href: '#',
+                            tabindex: $anchor.attr('tabindex'),
+                            role: 'menuitem'
+                        }).text(label).on('click', function (e) {
+                            e.preventDefault();
+                            self[attribute] = value;
+                            self.trigger('change', self);
+                            self.trigger('change:' + attribute, self);
+                            drawState();
+                        })
+                    )
+                );
+            });
+            $container.append($menu);
+
+            // Tell the anchor that it triggers the dropdown
+            $anchor.attr({
+                'data-toggle': 'dropdown',
+                'aria-haspopup': true,
+                'aria-label': self.ghost()
+            }).dropdown();
+
+            this.on('change:' + attribute, drawState);
+        },
+
         days: function ($anchor, attribute) {
+
             var self = this,
                 nodes = {},
                 now = new dateAPI.Local(),
@@ -39,12 +240,11 @@ define('io.ox/calendar/edit/recurrence-view',
                     selectedDays = [];
 
                 _(nodes).each(function (node, day) {
-                    node.find('span').removeClass('fa-check fa-times');
                     if (value[day]) {
                         selectedDays.push(DAYS.i18n[day]);
-                        node.find('span').addClass('fa fa-check');
+                        node.find('i').attr('class', 'fa fa-check');
                     } else {
-                        node.find('span').addClass('fa fa-times');
+                        node.find('i').attr('class', 'fa fa-fw');
                     }
                 });
 
@@ -52,21 +252,28 @@ define('io.ox/calendar/edit/recurrence-view',
                 self.trigger('redraw', self);
             }
 
-            // Now build the menu
-            var $menu = $('<ul class="dropdown-menu no-clone" role="menu">');
+            // rotate on a copy
+            var array = DAYS.values.slice();
 
             for (var i = 0; i < dateAPI.locale.weekStart; i++) {
-                DAYS.values.push(DAYS.values.shift());
+                array.push(array.shift());
             }
 
-            _(DAYS.values).each(function (day) {
-                $menu.append(
-                     nodes[day] = $('<li>')
-                        .append($('<a href="#">')
-                            .attr({ tabindex: $anchor.attr('tabindex') })
-                            .text(DAYS.i18n[day])
-                            .append('<span class="fa fa-check pull-left"></span>')
-                            .on('click', function (e) {
+            // Now build the menu
+            $container.append(
+                $('<ul class="dropdown-menu no-clone" role="menu">').append(
+                    _(array).map(function (day) {
+                        return (nodes[day] = $('<li>').attr({
+                            role: 'presentation'
+                        }).append(
+                            $('<a>').attr({
+                                href: '#',
+                                role: 'menuitem',
+                                tabindex: $anchor.attr('tabindex')
+                            }).append(
+                                $('<i class="fa fa-check">'),
+                                $.txt(DAYS.i18n[day])
+                            ).on('click', function (e) {
                                 e.preventDefault();
                                 var bitmask = self[attribute];
                                 bitmask = bitmask ^ DAYS[day];
@@ -78,24 +285,21 @@ define('io.ox/calendar/edit/recurrence-view',
                                 }
                                 return false;
                             })
-                    )
-                );
-            });
-            $container.append($menu);
+                        ));
+                    })
+                )
+            );
 
             // Tell the anchor that it triggers the dropdown
             $anchor.attr({
                 'data-toggle': 'dropdown',
                 'aria-haspopup': true,
+                'aria-label': self.ghost(),
                 role: 'menuitem'
-            });
-
-            $anchor.dropdown();
+            }).dropdown();
 
             this.on('change:' + attribute, drawState);
         },
-
-        dateFormat: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
 
         datePicker: function ($anchor, attribute, options) {
             var self = this;
@@ -133,6 +337,8 @@ define('io.ox/calendar/edit/recurrence-view',
                 var value = renderDate();
                 $anchor.text(value).focus();
                 self.trigger('redraw', self);
+                $anchor.attr('aria-label', self.ghost());
+                $anchor.parent().find('.dropdown a[data-toggle="dropdown"]').attr('aria-label', self.ghost());
             }
 
             $anchor.on('click', function (e) {
@@ -156,7 +362,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     });
                 } else {
                     $dateInput.datepicker({
-                        format: CalendarWidgets.dateFormat,
+                        format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
                         parentEl: $(this).parent(),
                         weekStart: dateAPI.locale.weekStart,
                         autoclose: true,
@@ -199,9 +405,56 @@ define('io.ox/calendar/edit/recurrence-view',
                 });
             });
 
+            $anchor.attr('aria-label', self.ghost());
+            $anchor.parent().find('.dropdown a[data-toggle="dropdown"]').attr('aria-label', self.ghost());
+
             this.on('change:' + attribute, drawState);
         }
+
     };
+
+    function ConfigSentence(sentence, options) {
+        options = options || {};
+        var self = this;
+
+        this.set = function (key, value) {
+            this[key] = value;
+            this.trigger('change', this);
+            this.trigger('change:' + key, this);
+        };
+
+        this.ghost = function () {
+            var $ghost = this.$el.clone(false);
+            $ghost.find('.no-clone, .datepicker')
+                .remove();
+            $ghost
+                .find('*')
+                .each(function () {
+                    $(this).replaceWith($.txt($(this).text()));
+                });
+            return $ghost.text();
+        };
+
+        _.extend(this, Backbone.Events);
+        this.$el = $('<span>').html(sentence);
+        this.$el.find('a').each(function () {
+            var $anchor = $(this),
+                attribute = $anchor.data('attribute') || 'value',
+                widget = $anchor.data('widget'),
+                opts = options[attribute] || options;
+            if (options.tabindex) {
+                $anchor.attr({ tabindex: options.tabindex});
+            }
+            // TODO: Use ExtensionPoints here
+            if (Widgets[widget]) {
+                Widgets[widget].call(self, $anchor, attribute, opts, options);
+            }
+        });
+
+
+        this.id = options.id;
+
+    }
 
     // Mark a few translations, so the buildsystem picks up on them
     gt.ngettext('every %1$d day', 'every %1$d days', 2);
@@ -218,7 +471,10 @@ define('io.ox/calendar/edit/recurrence-view',
                 this.controls = {
                     checkbox: $('<input tabindex="1" type="checkbox">'),
                     checkboxLabel: $('<label class="checkbox control-label">'),
-                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').css({'float': 'right'}).append($('<i class="fa fa-times">'))
+                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
+                        'role': 'button',
+                        'aria-label': gt('Click to close the recurrence view')
+                    }).css({'float': 'right'}).append($('<i class="fa fa-times">'))
                 };
 
                 // add tabindex to all control elements
@@ -280,7 +536,7 @@ define('io.ox/calendar/edit/recurrence-view',
                         initial: 1,
                         gt: gt
                     }),
-                    weekly: new ConfigSentence(gt('The appointment is repeated <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> weeks</a> on <a href="#"  data-widget="custom" data-attribute="days">monday</a>.'), {
+                    weekly: new ConfigSentence(gt('The appointment is repeated <a href="#"  data-widget="number" data-attribute="interval">every <span class="number-control">2</span> weeks</a> on <a href="#"  data-widget="days" data-attribute="days">monday</a>.'), {
                         id: 'weekly',
                         tabindex: self.tabindex,
                         interval: {
@@ -300,8 +556,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             },
                             initial: 1,
                             gt: gt
-                        },
-                        days: CalendarWidgets.days
+                        }
                     }),
                     monthlyDate: new ConfigSentence(gt('The appointment is repeated on day <a href="#" data-widget="number" data-attribute="dayInMonth"><span class="number-control">10</span></a> <a href="#" data-widget="number" data-attribute="interval">every <span class="number-control">2</span> months</a>.'), {
                         id: 'monthlyDate',
@@ -483,11 +738,10 @@ define('io.ox/calendar/edit/recurrence-view',
                             }
                         })
                     }).on('change:ending', this.endingChanged, this).on('change', this.updateModel, this),
-                    date: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> on <a href="#" data-attribute="until" data-widget="custom">11/03/2013</a>.'), {
+                    date: new ConfigSentence(gt('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> on <a href="#" data-attribute="until" data-widget="datePicker">11/03/2013</a>.'), {
                         id: 'date',
                         tabindex: self.tabindex,
                         ending: endingOptions,
-                        until: CalendarWidgets.datePicker,
                         model: self.model,
                         initial: function () {
                             //tasks may not have a start date at this point

@@ -13,9 +13,8 @@
 define('io.ox/tasks/api',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/api/folder',
-     'io.ox/tasks/util'
-    ], function (http, apiFactory, folderAPI, util) {
+     'io.ox/core/folder/api'
+    ], function (http, apiFactory, folderAPI) {
 
     'use strict';
 
@@ -224,7 +223,7 @@ define('io.ox/tasks/api',
             },
             list: {
                 action: 'list',
-                columns: '1,20,101,200,202,203,220,300,301,309',
+                columns: '1,2,20,101,200,202,203,220,221,300,301,309',
                 extendColumns: 'io.ox/tasks/api/list',
                 timezone: 'UTC'
             },
@@ -234,7 +233,7 @@ define('io.ox/tasks/api',
             },
             search: {
                 action: 'search',
-                columns: '1,20,101,200,202,203,220,300,301,309',
+                columns: '1,20,101,200,202,203,220,221,300,301,309',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
                 order: 'asc',
@@ -269,7 +268,9 @@ define('io.ox/tasks/api',
         if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
             delete task.alarm;    //leaving it in would throw a backend error
         }
-
+        if (task.priority === 'null' || !task.priority) {
+            delete task.priority;
+        }
         if (task.status) {//make sure we have an integer here
             task.status = parseInt(task.status, 10);
         }
@@ -295,7 +296,6 @@ define('io.ox/tasks/api',
             return api.caches.all.get(cacheKey).then(function (cachevalue) {
                 if (cachevalue) {//only add if the key is there
                     cachevalue = cachevalue.concat(cacheObj);
-                    cachevalue = util.sortTasks(cachevalue);
                     return api.caches.all.add(cacheKey, cachevalue);
                 } else {//just leave it to the next all request, no need to do it here
                     return $.when();
@@ -330,7 +330,11 @@ define('io.ox/tasks/api',
      * @return {[type]}
      */
     api.update = function (task, newFolder) {
-        var obj, attachmentHandlingNeeded = task.tempAttachmentIndicator;
+        var obj,
+            attachmentHandlingNeeded = task.tempAttachmentIndicator,
+            useFolder = task.folder_id,
+            move = false;
+
         delete task.tempAttachmentIndicator;
 
         //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
@@ -343,14 +347,13 @@ define('io.ox/tasks/api',
 
         //repair broken folder attribute
         if (task.folder) {
-            task.folder_id = task.folder;
+            useFolder = task.folder_id = task.folder;
             delete task.folder;
         }
 
-        var useFolder = task.folder_id;
-
         if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
             task.folder_id = newFolder;
+            move = true;
         }
         task.notification = true;//set always (OX6 does this too)
 
@@ -367,6 +370,10 @@ define('io.ox/tasks/api',
             task.date_completed = null;
         }
 
+        if (task.priority === 0) {
+            task.priority = null;
+        }
+
         var key = useFolder + '.' + task.id;
         return http.PUT({
             module: 'tasks',
@@ -379,14 +386,15 @@ define('io.ox/tasks/api',
             data: task,
             appendColumns: false
         }).pipe(function () {
-            if (task.folder_id && task.folder_id !== useFolder) {//move operation
-                useFolder = task.folder_id; //make sure we get the item in it's new location
-            }
             // update cache
+            var sortChanged = false;
+            if (task.title || task.end_date || task.status) { //data that is important for sorting changed, so clear the all cache
+                sortChanged = true;
+            }
             return $.when(
                     api.removeFromCache(key)
-                        .then(function () {return api.get({id: task.id, folder_id: useFolder}); }),//api.get updates list and get caches
-                        updateAllCache([task], useFolder, task));
+                        .then(function () {return api.get({id: task.id, folder_id: newFolder || useFolder}); }),//api.get updates list and get caches
+                        sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
         }).pipe(function (data) {
             //return object with id and folder id needed to save the attachments correctly
             obj = {folder_id: useFolder, id: task.id};
@@ -399,8 +407,12 @@ define('io.ox/tasks/api',
         }).done(function () {
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
-            api.trigger('update', { id: task.id, folder_id: useFolder });
-            api.trigger('update:' + _.ecid({ id: task.id, folder_id: useFolder }));
+            if (move) {
+                api.trigger('move:' + _.ecid({ id: task.id, folder_id: useFolder }), task.folder_id);
+            } else {
+                api.trigger('update', { id: task.id, folder_id: useFolder });
+                api.trigger('update:' + _.ecid({ id: task.id, folder_id: useFolder }));
+            }
             refreshPortal();
         });
 
@@ -545,7 +557,7 @@ define('io.ox/tasks/api',
             module: 'tasks',
             params: {action: 'all',
                 folder: api.getDefaultFolder(),
-                columns: '1,20,200,202,220,203,300,309',
+                columns: '1,20,200,202,203,221,300,309',
                 sort: '202',
                 order: 'asc',
                 timezone: 'UTC'
@@ -561,10 +573,11 @@ define('io.ox/tasks/api',
                 if (filterOverdue) {
                     dueTasks.push(list[i]);
                 }
-                for (var a = 0; a < list[i].participants.length; a++) {
-                    if (list[i].participants[a].id === userId && list[i].participants[a].confirmation === 0) {
-                        confirmTasks.push(list[i]);
 
+                //use users array here because participants array contains external participants and unresolved groups(members of this groups are in the users array)
+                for (var a = 0; a < list[i].users.length; a++) {
+                    if (list[i].users[a].id === userId && list[i].users[a].confirmation === 0) {
+                        confirmTasks.push(list[i]);
                     }
                 }
             }

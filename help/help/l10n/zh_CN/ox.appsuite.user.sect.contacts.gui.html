@@ -7,11 +7,14 @@
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.chap.contacts.html" title="Chapter 6. 地址簿">
 <link rel="prev" href="ox.appsuite.user.chap.contacts.html" title="Chapter 6. 地址簿">
-<link rel="next" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. 查看联系人">
+<link rel="next" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. 显示联系人">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -32,8 +35,9 @@
 				<span class="guilabel"><strong>地址簿</strong></span>
 			</span>
 			
+			
 			元件</h2></div></div></div>
-<a class="indexterm" name="idm140621583880800"></a><div class="reference">
+<a class="indexterm" name="idm139933760441216"></a><div class="reference">
 <a name="ox.appsuite.user.reference.contacts.gui.hint"></a><p>用户界面的介绍可以在<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. 用户界面">用户界面</a>找到。</p>
 </div>
 <div class="reference">
@@ -41,7 +45,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>如果单击一个文件夹，会显示联系人。</p></li>
 <li class="listitem"><p>当前选择文件夹旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>提供<a class="link" href="ox.appsuite.user.chap.dataorganisation.html#ox.appsuite.user.concept.dataorganisation">组织数据</a>和<a class="link" href="ox.appsuite.user.chap.datainterchange.html#ox.appsuite.user.concept.datainterchange">交换数据</a>的功能。</p></li>
-<li class="listitem"><p>文件夹树里的按钮提供<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create">创建文件夹</a>的功能。</p></li>
+<li class="listitem"><p>文件夹里的按钮提供<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create">创建文件夹</a>功能。</p></li>
 </ul></div>
 <p>
       </p>
@@ -58,7 +62,7 @@
 <li class="listitem"><p><span class="guibutton"><strong>编辑</strong></span>按键。编辑一个<a class="link" href="ox.appsuite.user.sect.contacts.manage.edit.html#ox.appsuite.user.concept.contacts.edit">联系人的数据</a>。</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>删除</strong></span>按钮。把您选择的<a class="link" href="ox.appsuite.user.sect.contacts.manage.delete.html#ox.appsuite.user.concept.contacts.delete">联系人删除</a>。</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>更多</strong></span>按钮。打开一个有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html#ox.appsuite.user.concept.contacts.sendvcard"><span class="guibutton"><strong>以 vCard 发送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.print.html#ox.appsuite.user.concept.contacts.print"><span class="guibutton"><strong>打印</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.move.html#ox.appsuite.user.concept.contacts.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.copy.html#ox.appsuite.user.concept.contacts.copy"><span class="guibutton"><strong>复制</strong></span></a>。</p>
+<p><span class="guibutton"><strong>更多</strong></span>图标<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>。打印以 vCard 发送打开一个有以下项目的菜单：<a class="link" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html#ox.appsuite.user.concept.contacts.sendvcard"><span class="guibutton"><strong>以 vCard 发送</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.print.html#ox.appsuite.user.concept.contacts.print"><span class="guibutton"><strong>打印</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.move.html#ox.appsuite.user.concept.contacts.move"><span class="guibutton"><strong>移动</strong></span></a>、<a class="link" href="ox.appsuite.user.sect.contacts.manage.copy.html#ox.appsuite.user.concept.contacts.copy"><span class="guibutton"><strong>复制</strong></span></a>。</p>
 <p><span class="phrase"><strong>备注：</strong></span>如果您没有适当权限，有些按钮可能不会显示。</p>
 <p><span class="phrase"><strong>备注：</strong></span>视地址或联系人的数据而定，有些按钮可能顺序不同或不可用。</p>
 </li>
@@ -87,11 +91,11 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p>您可以选择多个联系人<a class="link" href="ox.appsuite.user.sect.contacts.manage.multiple.html#ox.appsuite.user.concept.contacts.multiple">一次编辑它们</a>。为此启用在<span class="guibutton"><strong>选择框</strong></span>选项（可从工具条下拉的<span class="guibutton"><strong>视图</strong></span>找到），以启用联系人旁边的选择框。</p>
-<p>您也可以使用您系统的多重选定功能。</p>
+<p>您可以使用您系统的多重选择功能：</p>
 <p>为了选择当前选择文件夹的所有联系人，启用在列表上面的<span class="guibutton"><strong>选择所有</strong></span>选择框。</p>
 </li>
 <li class="listitem"><p>如果单击一个联系人，会在<a class="link" href="ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.detailview" title="详细信息视图">详细视图</a>显示数据。</p></li>
-<li class="listitem"><p>列表上面的文本包含选择文件夹的名字。数值对应在选择未文件夹里的对象数目。</p></li>
+<li class="listitem"><p>列表上面的文本包含选择文件夹的名字。数值对应选择文件夹里的对象数量。</p></li>
 </ul></div>
 <p>
       </p>

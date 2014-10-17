@@ -72,18 +72,12 @@
 
 // Button colors
 //----------------------
-@btn-primary-background:                @link-color;
-@btn-primary-background-highlight:      darken(@btn-primary-background, 10%);
-@btn-info-background:                   #5bc0de;
-@btn-info-background-highlight:         #2f96b4;
-@btn-success-background:                #62c462;
-@btn-success-background-highlight:      #51a351;
-@btn-warning-background:                lighten(@orange, 15%);
-@btn-warning-background-highlight:      @orange;
-@btn-danger-background:                 #ee5f5b;
-@btn-danger-background-highlight:       #bd362f;
-@btn-inverse-background:                #444;
-@btn-inverse-background-highlight:      @gray-darker;
+@btn-primary-bg:                @link-color;
+@btn-info-bg:                   #5bc0de;
+@btn-success-bg:                #62c462;
+@btn-warning-bg:                lighten(@orange, 15%);
+@btn-danger-bg:                 #ee5f5b;
+@btn-inverse-bg:                #444;
 
 // High contrast colors
 @hc-link-color:                         #3774A8;
@@ -149,15 +143,21 @@
 @toolbar-focus-color:                   #08c;
 @toolbar-background:                    #333;
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
+@toolbar-line-height:                   24px;
+@toolbar-vertical-padding:              10px;
+@toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
 @link-accent-color:                     #ffad00;
 
 // mail app
 //----------------------
 @mail-priority:                         #ff4700;
 @mail-priority-low:                     lighten(#08c, 10%);
-@task-priority:                         #ff4700;
 @mail-attachment-link-color:            #333;
 @mail-attachment-link-color-hover:      #000;
+
+// tasks app
+//----------------------
+@task-priority:                         #ff4700;
 
 // calendar app
 //----------------------
@@ -188,7 +188,13 @@
 @weekview-time-width:                   58px;
 @weekview-footer-height:                34px;
 
+// mobile
+//----------------------
+@pagecontroller-animation-duration:     350ms;
+// size of the menu launcher in the top left
+@mobile-launcher-icon-size:             19px;
+
 // misc
-//-----------------------
+//----------------------
 @ui-disabled-color:                     #ccc;
 

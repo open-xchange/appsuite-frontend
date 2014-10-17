@@ -18,14 +18,15 @@ define('io.ox/calendar/view-detail',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
      'io.ox/core/api/resource',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
-     'io.ox/backbone/mini-views/participants',
+     'io.ox/calendar/participants',
+     'io.ox/core/util',
      'gettext!io.ox/calendar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
-    ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, gt) {
+    ], function (ext, util, calAPI, userAPI, groupAPI, resourceAPI, folderAPI, attachments, links, ParticipantsView, coreUtil, gt) {
 
     'use strict';
 
@@ -174,15 +175,19 @@ define('io.ox/calendar/view-detail',
                     $.txt(gt('Organizer')), $.txt(gt.noI18n(':\u00A0'))
                 ),
                 $('<dd class="detail organizer">').append(
-                    baton.data.organizerId ?
-                        $('<a href="#" class="halo-link">').data({ user_id: baton.data.organizerId }).append(
-                            userAPI.getTextNode(baton.data.organizerId)
-                        ) :
-                        $('<a href="#" class="halo-link">').data({ email1: baton.data.organizer }).text(
-                            baton.data.organizer
-                        )
+                    coreUtil.renderPersonalName(
+                        baton.data.organizerId ?
+                        {
+                            html: userAPI.getTextNode(baton.data.organizerId),
+                            user_id: baton.data.organizerId
+                        } : {
+                            name: baton.data.organizer,
+                            email: baton.data.organizer
+                        },
+                        baton.data
+                    )
                 )
-             );
+            );
         }
     });
 
@@ -277,9 +282,10 @@ define('io.ox/calendar/view-detail',
                     $('<dd class="created">').append(
                         $('<span>').text(gt.noI18n(baton.data.creation_date ? util.getDate(baton.data.creation_date) : '')),
                         $('<span>').text(gt.noI18n(baton.data.creation_date ? ' \u2013 ' : '')),
-                        $('<a href="#" class="halo-link">').data({ user_id: baton.data.created_by }).append(
-                            baton.data.created_by ? userAPI.getTextNode(baton.data.created_by) : ''
-                        )
+                        coreUtil.renderPersonalName({
+                            html: baton.data.created_by ? userAPI.getTextNode(baton.data.created_by) : '',
+                            user_id: baton.data.created_by
+                        }, baton.data)
                     )
                  );
             }
@@ -299,9 +305,10 @@ define('io.ox/calendar/view-detail',
                     $('<dd class="modified">').append(
                         $('<span>').text(gt.noI18n(baton.data.last_modified ? util.getDate(baton.data.last_modified) : '')),
                         $('<span>').text(gt.noI18n(baton.data.last_modified ? ' \u2013 ' : '')),
-                        $('<a href="#" class="halo-link">').data({ user_id: baton.data.modified_by }).append(
-                            baton.data.modified_by ? userAPI.getTextNode(baton.data.modified_by) : ''
-                        )
+                        coreUtil.renderPersonalName({
+                            html: baton.data.modified_by ? userAPI.getTextNode(baton.data.modified_by) : '',
+                            user_id: baton.data.modified_by
+                        }, baton.data)
                     )
                  );
             }
@@ -343,9 +350,14 @@ define('io.ox/calendar/view-detail',
         draw: function (baton, options) {
             // make sure we have a baton
             baton = ext.Baton.ensure(baton);
+            options = _.extend({}, options);
+            if (_.device('smartphone') && !options.deeplink) {
+                baton.disable('io.ox/calendar/detail/actions', 'inline-links');
+            }
             try {
                 var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
                 node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(baton.data)));
+
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 
                 return node;

@@ -32,61 +32,108 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
-        setup: function (options) {
-            this.label = options.label;
+        setup: function () {
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
-            this.$ul.on('click', 'a', this.onClick.bind(this));
-            this.listenTo(this.model, 'change', this.update);
+            this.$ul.on('click', 'a', $.proxy(this.onClick, this)); // not so nice but we need this for mobile support
+            if (this.model) this.listenTo(this.model, 'change', this.update);
         },
 
         update: function () {
             var $ul = this.$ul;
+            if (!this.model) return;
             _(this.model.changed).each(function (value, name) {
                 var li = $ul.find('[data-name="' + name + '"]');
+                // clear check marks
                 li.children('i').attr('class', 'fa fa-fw fa-none');
-                li.filter('[data-value="' + value + '"]').children('i').attr('class', 'fa fa-fw fa-check');
+                // loop over list items also allow compare non-primitive values
+                li.each(function () {
+                    var node = $(this);
+                    node.filter('[role=menuitemcheckbox][aria-checked]').attr({ 'aria-checked': _.isEqual(node.data('value'), value) });
+                    if (_.isEqual(node.data('value'), value)) node.children('i').attr('class', 'fa fa-fw fa-check');
+                });
             }, this);
+            // update drop-down toggle
+            this.label();
+        },
+
+        label: function () {
+            // extend this class for a custom implementation
+        },
+
+        stringify: function (value) {
+            return _.isObject(value) ? JSON.stringify(value) : value;
+        },
+
+        append: function (fn) {
+            this.$ul.append($('<li>').attr({ role: 'presentation' }).append(fn));
+            return this;
         },
 
         option: function (name, value, text) {
-            this.$ul.append(
-                $('<li>').append(
-                    $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
-                        $('<i class="fa fa-fw">').addClass(this.model.get(name) === value ? 'fa-check' : 'fa-none'),
-                        $('<span>').text(text)
-                    )
+            return this.append(
+                $('<a href="#">')
+                .attr({
+                    role: 'menuitemcheckbox',
+                    'aria-checked': _.isEqual(this.model.get(name), value),
+                    'data-name': name,
+                    'data-value': this.stringify(value),
+                    'data-toggle': _.isBoolean(value)
+                })
+                .data('value', value) // store original value
+                .append(
+                    $('<i class="fa fa-fw">')
+                        .attr({ 'aria-hidden': true })
+                        .addClass(_.isEqual(this.model.get(name), value) ? 'fa-check' : 'fa-none'),
+                    _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
-            return this;
         },
 
         link: function (name, text, callback) {
-            this.$ul.append(
-                $('<li>').append(
-                    $('<a href="#">', { href: '#', 'data-name': name })
-                    .text(text).on('click', callback)
-                )
+            return this.append(
+                $('<a href="#">', { href: '#', 'data-name': name })
+                .text(text).on('click', callback)
             );
-            return this;
         },
 
         header: function (text) {
-            this.$ul.append($('<li class="dropdown-header">').text(text));
+            this.$ul.append($('<li class="dropdown-header" role="sectionhead">').text(text).attr('aria-hidden', true));
             return this;
         },
 
         divider: function () {
-            this.$ul.append('<li class="divider">');
+            this.$ul.append('<li class="divider" role="separator">');
             return this;
         },
 
         render: function () {
+            var label = _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label),
+                ariaLabel = this.options.aria ? this.options.aria : '',
+                toggle;
+            if (_.isString(label)) {
+                ariaLabel += (' ' + label);
+            }
             this.$el.append(
-                $('<a href="#" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').append(
-                    $.txt(this.label), $('<i class="fa fa-caret-down">')
+                toggle = $('<a>').attr({
+                    href: '#',
+                    tabindex: 1,
+                    role: 'menuitem',
+                    'aria-haspopup': true,
+                    'aria-label': ariaLabel,
+                    'data-toggle': 'dropdown'
+                }).append(
+                    // label
+                    $('<span class="dropdown-label">').append(
+                        label
+                    ),
+                    // caret
+                    this.options.caret ? $('<i aria-hidden="true" class="fa fa-caret-down">') : []
                 ),
                 this.$ul
             );
+            toggle.dropdown();
+            // update custom label
+            this.label();
             return this;
         }
     });

@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core'], function (ext, gt) {
+define('io.ox/core/tk/list-dnd', [
+    'io.ox/core/extensions',
+    'io.ox/core/collection',
+    'gettext!io.ox/core',
+    'io.ox/core/tk/draghelper'
+], function (ext, Collection, gt) {
 
     'use strict';
 
@@ -46,9 +51,10 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
         var container = options.container || $(),
             data,
             source,
+            selected,
             helper = null,
             fast,
-            expandTimer,
+            toggleTimer,
             deltaLeft = 15,
             deltaTop = 15,
             // move helper
@@ -72,111 +78,79 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             container.trigger('selection:dragstart');
         }
 
-        function over() {
+        function toggle() {
+            this.trigger('click');
+        }
 
-            var self = this,
-                ft = $(this).closest('.foldertree-container'),
-                node = ft[0],
-                interval,
-                scrollSpeed = 0,
-                yMax,
-                RANGE = 3 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
-                MAX = 1, // Maximal scrolling speed in px/ms.
-                scale = MAX / RANGE,
-                nodeOffsetTop = 0;
+        function over(e) {
 
+            // avoid handling bubbling events
+            if (e.isDefaultPrevented()) return; else e.preventDefault();
+
+            var arrow = $(this).find('.folder-arrow');
+
+            // css hover doesn't work!
             $(this).addClass('dnd-over');
 
-            if ($(this).hasClass('expandable')) {
-                clearTimeout(expandTimer);
-                expandTimer = setTimeout(function () {
-                    $(self).find('.folder-arrow').trigger('mousedown');
-                }, 1500);
+            if (arrow.length) {
+                clearTimeout(toggleTimer);
+                toggleTimer = setTimeout(toggle.bind(arrow), 1500);
             }
-
-            function canScroll() {
-                var scrollTop = node.scrollTop;
-                return scrollSpeed < 0 && scrollTop > 0 || scrollSpeed > 0 && scrollTop < yMax;
-            }
-
-            // The speed is specified in px/ms. A range of 1 to 10 results
-            // in a speed of 100 to 1000 px/s.
-            function scroll() {
-                if (canScroll()) {
-                    var t0 = new Date().getTime(), y0 = node.scrollTop;
-                    if (interval !== undefined) clearInterval(interval);
-                    interval = setInterval(function () {
-                        if (canScroll()) {
-                            var dt = new Date().getTime() - t0,
-                            y = y0 + scrollSpeed * dt;
-                            if (y < 0) y = 0;
-                            else if (y > yMax) y = yMax;
-                            else {
-                                node.scrollTop = y;
-                                return;
-                            }
-                        }
-                        clearInterval(interval);
-                        interval = undefined;
-                    }, 10);
-                } else {
-                    if (interval !== undefined) clearInterval(interval);
-                    interval = undefined;
-                }
-            }
-
-            $(node).on({
-                'mousemove.dnd': function (e) {
-                    if (helper === null) return;
-                    if (!nodeOffsetTop) { nodeOffsetTop = $(node).offset().top; }
-                    var y = e.pageY - nodeOffsetTop;
-                    yMax = node.scrollHeight - node.clientHeight;
-
-                    if (y < RANGE) {
-                        scrollSpeed = (y - RANGE) * scale;
-                    } else if (node.clientHeight - y < RANGE) {
-                        scrollSpeed = (RANGE - node.clientHeight + y) * scale;
-                    } else {
-                        scrollSpeed = 0;
-                    }
-                    scroll();
-                },
-                'mouseleave.dnd': function () {
-                    scrollSpeed = 0;
-                    scroll();
-                    $(node).off('mousemove.dnd mouseleave.dnd');
-                }
-            });
         }
 
         function out() {
-            clearTimeout(expandTimer);
+            clearTimeout(toggleTimer);
             $(this).removeClass('dnd-over');
         }
+
+        //
+        // Auto-Scroll
+        //
+
+        var scroll = (function () {
+
+            var y = 0, timer = null;
+
+            return {
+                move: function (e) {
+                    y = e.pageY - $(this).offset().top;
+                },
+                out: function () {
+                    clearInterval(timer);
+                    timer = null;
+                },
+                over: function () {
+                    if (timer) return;
+                    var height = this.clientHeight;
+                    timer = setInterval(function () {
+                        var threshold = Math.round(y / height * 10) - 5,
+                            sign = threshold < 0 ? -1 : +1,
+                            abs = Math.abs(threshold);
+                        if (abs > 2) this.scrollTop += sign * (abs - 2) * 2;
+                    }.bind(this), 5);
+                }
+            };
+
+        }());
 
         function drag(e) {
             // unbind
             $(document).off('mousemove.dnd', drag);
-            // get selected items
-            var selected = _(container.find('.selected'));
-            // get data now
-            data = source.attr('data-drag-data') ?
-                [source.attr('data-drag-data')] :
-                selected.map(function (node) {
-                    return $(node).attr('data-cid');
-                });
             // get counter
             var counter = selected.reduce(function (sum, node) {
                 var count = $(node).find('.drag-count');
                 return sum + (count.length ? parseInt(count.text(), 10) : 1);
             }, 0);
             // create helper
-            helper = $('<div class="drag-helper">').append(
-                $('<span class="drag-counter">').text(counter || data.length),
-                $('<span>').text(
-                    source.attr('data-drag-message') || options.dragMessage.call(container, data, source)
-                )
-            );
+            helper = $('<div class="drag-helper">');
+            ext.point('io.ox/core/tk/draghelper').invoke('draw', helper,
+                new ext.Baton({
+                    container: container,
+                    count: counter || data.length,
+                    data: data,
+                    source: source,
+                    dragMessage: options.dragMessage
+                }));
             // get fast access
             fast = helper[0].style;
             // initial move
@@ -185,10 +159,15 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             // replace in DOM
             helper.appendTo(document.body);
             // bind
-            $(document).on('mousemove.dnd', move)
+            $(document)
                 .one('mousemove.dnd', firstMove)
+                .on('mousemove.dnd', move)
+                .on('mouseover.dnd', '.folder-tree', scroll.over)
+                .on('mouseout.dnd', '.folder-tree', scroll.out)
+                .on('mousemove.dnd', '.folder-tree', scroll.move)
                 .on('mouseover.dnd', options.dropzoneSelector, over)
-                .on('mouseout.dnd', options.dropzoneSelector, out);
+                .on('mouseout.dnd', options.dropzoneSelector, out)
+                .on('keyup.dnd', onEscape);
         }
 
         function remove() {
@@ -198,9 +177,15 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             }
         }
 
+        function onEscape(e) {
+            if (e.which === 27) stop();
+        }
+
         function stop() {
+            // stop auto-scroll
+            scroll.out();
             // unbind handlers
-            $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd');
+            $(document).off('mousemove.dnd mouseup.dnd mouseover.dnd mouseout.dnd keyup.dnd');
             $('.dropzone').each(function () {
                 var node = $(this), selector = node.attr('data-dropzones');
                 (selector ? node.find(selector) : node).off('mouseup.dnd');
@@ -212,9 +197,12 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             if (helper !== null) remove();
         }
 
-        function drop() {
-            clearTimeout(expandTimer);
-            var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
+        function drop(e) {
+            // avoid multiple events on parent tree nodes
+            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            // process drop
+            clearTimeout(toggleTimer);
+            var target = $(this).attr('data-model') || $(this).attr('data-id') || $(this).attr('data-cid') || $(this).attr('data-obj-id'),
                 baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
             $(this).trigger('selection:drop', [baton]);
         }
@@ -227,9 +215,23 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             }
         }
 
+        function getObjects(cid) {
+            return _.cid(cid.replace(/^thread./, ''));
+        }
+
         function start(e) {
+            // get source, selected items, and data
             source = $(this);
-            data = [];
+            selected = _(container.find('.selected'));
+            data = source.attr('data-drag-data') ?
+                [source.attr('data-drag-data')] :
+                selected.map(function (node) {
+                    return $(node).attr('data-cid');
+                });
+            // check permissions - need 'delete' access for a move
+            var collection = new Collection(_(data).map(getObjects));
+            collection.getProperties();
+            if (collection.isResolved() && !collection.has('delete')) return;
             // bind events
             $('.dropzone').each(function () {
                 var node = $(this), selector = node.attr('data-dropzones');

@@ -26,15 +26,15 @@ define('io.ox/core/tk/vgrid',
      * Template class
      * @returns {Template}
      */
-    function Template() {
+    function Template(o) {
+
+        // default options
+        o = _.extend({
+            tagName: 'div',
+            defaultClassName: 'vgrid-cell'
+        }, o);
 
         var template = [],
-
-            // default options
-            o = _.extend({
-                tagName: 'div',
-                defaultClassName: 'vgrid-cell'
-            }),
 
             getHeight = function (node) {
                 node.css('visibility', 'hidden').show()
@@ -244,7 +244,7 @@ define('io.ox/core/tk/vgrid',
             firstRun = true,
             // inner container / added role="presentation" because screen reader runs amok
             scrollpane = $('<div class="abs vgrid-scrollpane">').appendTo(node),
-            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox" aria-multiselectable="true" arai-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            container = $('<div class="vgrid-scrollpane-container f6-target" tabindex="1" role="listbox" aria-multiselectable="true" aria-label="Multiselect">').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // mobile select mode
             mobileSelectMode = false,
             // bottom toolbar
@@ -343,8 +343,8 @@ define('io.ox/core/tk/vgrid',
             tail = $(),
             // bounds of currently visible area
             bounds = { top: 0, bottom: 0 },
-            // properties
-            props = { editable: options.editable || false },
+            // Backbone prop Model
+            props = new Backbone.Model({ editable: options.editable || false }),
             // shortcut
             isArray = _.isArray,
             // private methods
@@ -369,6 +369,19 @@ define('io.ox/core/tk/vgrid',
                 var load = loadData[currentMode] || loadData.all;
                 return load.call(self, subset);
             });
+
+        // model events
+        props.on('change', function (model) {
+            var changed = model.changedAttributes(),
+                key = _.keys(changed)[0],
+                value = _.values(changed)[0];
+            // be compatible to old school events without backbone
+            self.trigger('beforechange:prop', key, model.previousAttributes()[key], value);
+            self.trigger('beforechange:prop:' + key, model.previousAttributes()[key], value);
+            self.trigger('change:prop', key, value, model.previousAttributes()[key]);
+            self.trigger('change:prop:' + key, value, model.previousAttributes()[key]);
+            responsiveChange = true;
+        });
 
         // make resizalbe (unless touch device)
         if (!_.device('touch')) {
@@ -470,7 +483,7 @@ define('io.ox/core/tk/vgrid',
             return $.when.apply($, defs).pipe(function () {
                 var i, obj, node, top,
                     //isVisible is only needed in for loop; visible selectors are slow, avoid them if possible
-                    isVisible = $i > 0 ? container.is(':visible') : undefined,
+                    isVisible = $i > 0 ? container.show().is(':visible') : undefined,
                     height;
                 for (i = 0; i < $i; i++) {
                     obj = labels.list[i];
@@ -853,7 +866,7 @@ define('io.ox/core/tk/vgrid',
                             var hasChanged = !_.isEqual(all, list);
                             updateSelection(hasChanged);
                             // global event
-                            ox.trigger('grid:stop', _.clone(props), list);
+                            ox.trigger('grid:stop', _.clone(props.toJSON()), list);
                         });
                 } else {
                     console.warn('VGrid.all() must provide an array!');
@@ -863,7 +876,7 @@ define('io.ox/core/tk/vgrid',
 
             return function () {
                 // global event
-                ox.trigger('grid:start', _.clone(props));
+                ox.trigger('grid:start', _.clone(props.toJSON()));
                 // get all IDs
                 if (responsiveChange || all.length === 0) self.busy();
                 var load = loadIds[currentMode] || loadIds.all;
@@ -1162,24 +1175,27 @@ define('io.ox/core/tk/vgrid',
             }
         };
 
+        this.props = props;
+
         this.prop = function (key, value) {
             if (key !== undefined) {
                 if (value !== undefined) {
-                    var previous = props[key];
+                    var previous = props.get(key);
                     if (value !== previous) {
+
                         this.trigger('beforechange:prop', key, value, previous);
                         this.trigger('beforechange:prop:' + key, value, previous);
-                        props[key] = value;
+                        props.set(key, value, {silent: true});
                         this.trigger('change:prop', key, value, previous);
                         this.trigger('change:prop:' + key, value, previous);
                         responsiveChange = true;
                     }
                     return this;
                 } else {
-                    return props[key];
+                    return props.get(key);
                 }
             } else {
-                return props;
+                return props.toJSON();
             }
         };
 
@@ -1219,6 +1235,28 @@ define('io.ox/core/tk/vgrid',
             this.repaint();
         };
 
+        this.getToolbar = function () {
+            return toolbar;
+        };
+
+        this.showToolbar = function (state) {
+            if (state === true) {
+                toolbar.show();
+            } else {
+                toolbar.hide();
+            }
+        };
+
+        this.showTopbar = function (state) {
+            if (state === true) {
+                topbar.show();
+                node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
+            } else {
+                topbar.hide();
+                node.removeClass('top-toolbar bottom-toolbar');
+            }
+        };
+
         // apply options
         if (options.multiple) {
             if (options.editable) {
@@ -1231,11 +1269,20 @@ define('io.ox/core/tk/vgrid',
             //toolbar.detach(); // makes no sense to disable because the toolbar is used for sorting, too
         }
 
+        // process some options on toolbars
         if (options.toolbarPlacement !== 'none') {
             node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
             if (options.secondToolbar && _.device('!small')) {
                 node.addClass(options.toolbarPlacement === 'top' ? 'bottom-toolbar' : 'top-toolbar');
             }
+        }
+
+        if (options.hideTopbar) {
+            this.showTopbar(false);
+        }
+
+        if (options.hideToolbar) {
+            this.showToolbar(false);
         }
 
         this.on('change:prop:folder', function (e, value, previous) {

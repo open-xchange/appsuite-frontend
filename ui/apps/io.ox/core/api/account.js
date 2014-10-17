@@ -57,6 +57,7 @@ define('io.ox/core/api/account',
             fix(account, 'sent', 'Sent');
             fix(account, 'drafts', 'Drafts');
             fix(account, 'spam', 'Spam');
+            fix(account, 'archive', 'Archive');
             fix(account, 'confirmed_spam', 'Confirmed Spam');
             fix(account, 'confirmed_ham', 'Confirmed Ham');
         });
@@ -77,8 +78,11 @@ define('io.ox/core/api/account',
      * @return {boolean}
      */
     api.isUnified = function (id) {
-        // is account? (unified inbox is not a usual account)
-        return !api.isAccount(id);
+        // extend if number
+        if (/^\d+$/.test(id)) id = 'default' + id;
+        // compare against unifiedInboxIdentifier (having just a number would be smarter)
+        var match = String(id).match(/^(default\d+)/);
+        return !!match && settings.get('unifiedInboxIdentifier') === (match[1] + separator + 'INBOX');
     };
 
     /**
@@ -116,7 +120,7 @@ define('io.ox/core/api/account',
      * @return {boolean}
      */
     api.isExternal = function (id) {
-        return !api.isPrimary(id) && !api.isUnified(id);
+        return api.isAccount(id) && !api.isPrimary(id);
     };
 
     /**
@@ -125,13 +129,12 @@ define('io.ox/core/api/account',
      */
     api.getUnifiedMailboxName = function () {
         var def = $.Deferred();
-        require(['io.ox/core/api/folder'], function (folderAPI) {
+        require(['io.ox/core/folder/api'], function (folderAPI) {
             return $.when(
-                folderAPI.getSubFolders(),
+                folderAPI.list('1'),
                 api.all()
             ).then(function (folders, accounts) {
                 var mailFolders, mailAccounts, diff;
-
                 mailFolders = _(folders).chain()
                     .filter(function (folder) { return folder.id.match(/^default(\d+)/);  })
                     .map(function (folder) { return parseInt(folder.id.match(/^default(\d+)/)[1], 10); })
@@ -153,6 +156,10 @@ define('io.ox/core/api/account',
             if (id === null) return null;
             return id + separator + 'INBOX';
         });
+    };
+
+    api.getInbox = function () {
+        return settings.get('folder/inbox');
     };
 
     /**
@@ -217,6 +224,14 @@ define('io.ox/core/api/account',
 
     api.isStandardFolder = function (id) {
         return typeHash[id] !== undefined;
+    };
+
+    api.getType = function (id) {
+        return typeHash[id];
+    };
+
+    api.getTypes = function () {
+        return typeHash;
     };
 
     api.inspect = function () {
@@ -445,8 +460,10 @@ define('io.ox/core/api/account',
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
-                _('sent drafts trash spam'.split(' ')).each(function (type) {
-                    typeHash[account[type + '_fullname']] = type;
+                _('sent drafts trash spam archive'.split(' ')).each(function (type) {
+                    // fullname is favored over short name
+                    var short_name = account[type], full_name = account[type + '_fullname'];
+                    typeHash[full_name || short_name] = type;
                 });
             });
         });
@@ -486,7 +503,7 @@ define('io.ox/core/api/account',
             api.cache = {};
             return api.all().then(function () {
                 api.trigger('create:account', { id: data.id, email: data.primary_address, name: data.name });
-                require(['io.ox/core/api/folder'], function (api) {
+                require(['io.ox/core/folder/api'], function (api) {
                     api.propagate('account:create');
                 });
                 return data;
@@ -514,7 +531,7 @@ define('io.ox/core/api/account',
             delete api.cache[data];
             api.trigger('refresh.all');
             api.trigger('delete');
-            require(['io.ox/core/api/folder'], function (api) {
+            require(['io.ox/core/folder/api'], function (api) {
                 api.propagate('account:delete');
             });
         });
@@ -572,7 +589,7 @@ define('io.ox/core/api/account',
             if (api.cache[id]) {
                 var enabled = result.unified_inbox_enabled;
                 if (api.cache[id].unified_inbox_enabled !== enabled) {
-                    require(['io.ox/core/api/folder'], function (api) {
+                    require(['io.ox/core/folder/api'], function (api) {
                         api.propagate(enabled ? 'account:unified-enable' : 'account:unified-disable');
                     });
                 }

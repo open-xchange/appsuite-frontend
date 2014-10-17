@@ -69,12 +69,15 @@ define('io.ox/calendar/freebusy/templates',
 
         getIntervalDropdown: function () {
             return $('<div class="view-dropdown dropdown pull-right">').append(
-                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" tabindex="4">').text(gt('Change view')),
-                $.txt(' '), $('<b class="caret">'),
+                $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" tabindex="4">').append(
+                    $.txt(gt('Change view')),
+                    $.txt(' '),
+                    $('<i class="fa fa-caret-down" aria-hidden="true">')
+                ),
                 $('<ul class="dropdown-menu pull-right" role="menu">').append(
-                    $('<li>').append($('<a role="menuitem" href="#" data-action="day">').text(gt('Day'))),
-                    $('<li>').append($('<a role="menuitem" href="#" data-action="workweek">').text(gt('Workweek'))),
-                    $('<li>').append($('<a role="menuitem" href="#" data-action="week">').text(gt('Week')))
+                    $('<li role="presentation">').append($('<a role="menuitem" href="#" data-action="day">').text(gt('Day'))),
+                    $('<li role="presentation">').append($('<a role="menuitem" href="#" data-action="workweek">').text(gt('Workweek'))),
+                    $('<li role="presentation">').append($('<a role="menuitem" href="#" data-action="week">').text(gt('Week')))
                 )
             );
         },
@@ -87,7 +90,7 @@ define('io.ox/calendar/freebusy/templates',
             return $('<div class="abs autocomplete-controls input-group">').append(
                 $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant') + ' ...'),
                 $('<span class="input-group-btn">').append(
-                    $('<button type="button" class="btn btn-default add-button" aria-label="' + gt('Add participant') + '" data-action="add" tabindex="-1">').append($('<i class="fa fa-plus">'))
+                    $('<button type="button" class="btn btn-default add-button" aria-label="' + gt('Add participant') + '" data-action="add" tabindex="-1">').append($('<i class="fa fa-plus" aria-hidden="true">'))
                 )
             );
         },

@@ -12,7 +12,17 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
+// special color scheme if widget has no account yet
+.widget-color-custom.color-twitter {
+    @color: #01AEEB;
+    .decoration { background-color: @color; }
+    &:focus {
+        .decoration { background-color: darken(@color, 10%); }
+    }
+}
+
 .twitter {
+
     margin-top: 26px;
     padding: 0;
 

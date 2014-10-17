@@ -18,7 +18,12 @@ html.high-contrast {
     a:not(.btn) {
         color: @hc-link-color;
     }
+}
 
+body {
+    // add a bit of perfection
+    -webkit-font-feature-settings: "liga", "kern";
+    font-feature-settings: "liga", "kern";
 }
 
 /* OpenSans Font Face */
@@ -26,7 +31,6 @@ html.high-contrast {
     font-family: 'OpenSans';
     src: local('Open Sans Light'),
          local('OpenSans-Light'),
-         url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.eot'),
          url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.woff') format('woff'),
          url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.ttf') format('truetype'),
          url('apps/3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.svg#OpenSansLight') format('svg');
@@ -56,7 +60,7 @@ html.high-contrast {
         right: 0;
         min-width: 100%;
         min-height: 100%;
-        font-size: 999px;
+        font-size: 100px;
         text-align: right;
         filter: alpha(opacity=0);
         opacity: 0;
@@ -160,10 +164,10 @@ div.hopscotch-bubble {
         content: '\f021';
         color: #ccc;
         /* icon-spin */
-        -moz-animation: spin 1.5s infinite linear;
-        -o-animation: spin 1.5s infinite linear;
-        -webkit-animation: spin 1.5s infinite linear;
-        animation: spin 1.5s infinite linear;
+        -moz-animation: fa-spin 1.5s infinite linear;
+        -o-animation: fa-spin 1.5s infinite linear;
+        -webkit-animation: fa-spin 1.5s infinite linear;
+        animation: fa-spin 1.5s infinite linear;
     }
 }
 
@@ -467,7 +471,6 @@ div.hopscotch-bubble {
 
     .launcher.closable:hover {
         color: @topbar-launcher-color-hover;
-        background-color: @topbar-launcher-background-hover;
     }
 
     .launcher {
@@ -538,10 +541,15 @@ div.hopscotch-bubble {
 
             }
 
-            &.closable i.fa {
-                color: @link-on-dark;
+            &.closable {
+                .apptitle i.fa {
+                    padding: 0 5px;
+                    color: rgba(255, 255, 255, 0.80);
+                }
+                i.fa {
+                    color: rgba(255, 255, 255, 0.50);
+                }
             }
-
         }
 
         &.closable {
@@ -577,8 +585,7 @@ div.hopscotch-bubble {
                     margin: 0;
 
                     &:hover {
-                        color: @topbar-launcher-color-hover;
-                        background-color: @topbar-launcher-background-hover;
+                        color: #fff;
                     }
 
                 }
@@ -636,6 +643,12 @@ div.hopscotch-bubble {
 
         float: left;
         display: none;
+        @media (max-width: 480px), (max-device-width: 480px) {
+            .dropdown-toggle {
+                font-size: @mobile-launcher-icon-size;
+                padding: @mobile-launcher-icon-size - 10px 12px;
+            }
+        }
 
         li {
             text-align: left;
@@ -766,26 +779,8 @@ div.hopscotch-bubble {
 
     }
 
-    .launcher.minimizedmediaplayer {
-
-        height: 40px;
-        display: inline-block;
-        padding: 0 12px;
-
-        &:focus {
-            i { color: white; }
-            background-color: @link-color;
-            outline-style: none;
-        }
-
-        &.active {
-            color: white;
-            background-color: @topbar-launcher-background-hover;
-        }
-
-        &.active:hover, &.active:focus {
-            background-color: @topbar-launcher-background-hover;
-        }
+    .launcher.minimizedmediaplayer:focus {
+        outline-style: none;
     }
 }
 
@@ -818,7 +813,7 @@ div.hopscotch-bubble {
     font-size: 14px;
     background-color: @notification-pane-background;
     background-clip: padding-box;
-    border-left: 2px solid rgba(0, 0, 0, 0.30);
+    border-left: 2px solid @defaultBorderColor;
     display: none;
     .overflow-x(hidden);
     .overflow-y(auto);
@@ -1004,6 +999,9 @@ div.hopscotch-bubble {
         & > div {
             max-height: 300px;
             overflow: auto;
+            + div { margin-top: 7px; }
+            a { cursor: pointer; }
+            i.fa + span { margin-left: 15px; }
         }
     }
 
@@ -1019,7 +1017,7 @@ div.hopscotch-bubble {
 
     .close {
         position: absolute;
-        top: 8px;
+        top: 15px;
         right: 15px;
         width: 36px;
         line-height: 40px;
@@ -1030,6 +1028,19 @@ div.hopscotch-bubble {
 
     .close:hover, .close:focus {
         background-color: rgba(0, 0, 0, 0.10);
+    }
+
+    html.high-contrast &.io-ox-alert-error {
+        background-color: @red;
+        .icon, .close { color: @black; }
+    }
+    html.high-contrast &.io-ox-alert-warning {
+        background-color: @yellow;
+        .icon, .close { color: @black; }
+    }
+    html.high-contrast &.io-ox-alert-success {
+        background-color: @green;
+        .icon, .close { color: @black; }
     }
 
     &.io-ox-alert-info .icon { color: #08c; }
@@ -1074,11 +1085,24 @@ div.hopscotch-bubble {
 }
 
 .window-container {
+
     position: absolute;
     top: 0;
     width: 100%;
     bottom: 0;
     left: 0;
+
+    &.header-top {
+
+        .window-body{
+            top: 50px;
+        }
+
+        .window-header {
+            height: 50px;
+        }
+
+    }
 
     &.classic {
 
@@ -1211,9 +1235,29 @@ div.hopscotch-bubble {
     overflow: hidden;
     display: none;
 
+    background-color: #f5f5f5;
+
     &.visible {
         display:block;
         overflow: visible;
+    }
+
+    .resizebar {
+        background: transparent;
+        width: 5px;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+        float: right;
+        cursor: e-resize;
+        cursor: ew-resize;
+        cursor: col-resize;
+        right: -3px;
+    }
+
+    .generic-toolbar.bottom {
+        border-color: rgba(0, 0, 0, 0.10);
+        background-color: rgba(0, 0, 0, 0.015);
     }
 }
 
@@ -1386,11 +1430,6 @@ div.hopscotch-bubble {
 // Classic and mobile toolbars
 //
 
-/* definitions */
-@toolbar-line-height: 24px;
-@toolbar-vertical-padding: 10px;
-@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
-
 .mobile-navbar {
     text-align: center;
     font-size: 15px;
@@ -1425,7 +1464,7 @@ div.hopscotch-bubble {
     padding: 0 4px 0 5px;
     border-top: 1px solid #ccc;
     width: 100%;
-    a.io-ox-action-link.mobile-toolbar-action {
+    .list-unstyled > li, .io-ox-action-link.mobile-toolbar-action {
         display: inline-block;
         font-size: 20px;
         line-height: @toolbar-height;
@@ -1438,6 +1477,8 @@ div.hopscotch-bubble {
     .dropdown {
         display: inline-block;
         position: static;
+        line-height: 45px;
+        margin-left: 5px;
     }
 }
 
@@ -1950,11 +1991,29 @@ a.button {
         -webkit-tap-highlight-color: transparent;
         z-index: 1;
 
-        & > div {
+        &.has-focus > div {
 
             outline: none;
 
-            &:focus .vgrid-cell.selected {
+            & .vgrid-cell{
+                outline: none;
+            }
+
+            & .vgrid-cell.selected {
+
+                background-color: @selected-background;
+
+                * {
+                    color: #fff !important;
+                }
+
+            }
+
+        }
+
+        > div:focus {
+
+            & .vgrid-cell.selected {
 
                 background-color: @selected-background;
 
@@ -2189,9 +2248,11 @@ a.button {
         padding: 0 10px 0 10px;
         line-height: 61px;
         height: 100%;
-        background-color: #DA4F49;
+        background-color: #FF4105;
         color: #FFF;
-        font-size: 14px;
+        font-size: 22px;
+        width: 80px;
+        text-align: center;
         &:active {
             background-color: darken(#DA4F49, 10%);
         };
@@ -2213,6 +2274,7 @@ a.button {
     left: 0;
     width: 320px;
     background-color: @background;
+    overflow: hidden;
 }
 
 .rightside {
@@ -2278,7 +2340,11 @@ a.button {
 }
 
 .default-content-padding {
-    padding: 30px 40px;
+    padding: 20px 30px;
+}
+
+.default-header-padding {
+    padding: 10px 30px;
 }
 
 .attachment-list {
@@ -2428,6 +2494,9 @@ input[type=search] {
                 .border-radius(5px 5px 0 0);
             }
         }
+        .modal-footer {
+            margin-top: 0;
+        }
     }
 
     &.relogin {
@@ -2510,7 +2579,7 @@ span.hint {
 .io-ox-inline-links {
 
     font-size: @inline-link-font-size;
-    font-weight: 300;
+    font-weight: normal;
     margin: @inline-links-margin;
     clear: both;
     .user-select(none);
@@ -2518,14 +2587,11 @@ span.hint {
 
     a {
 
-        &:hover {
-            text-decoration: underline;
-        }
+        &:hover { text-decoration: none; } // changed to none with 7.6.1
 
-        &.no-underline:hover {
-            text-decoration: none;
-        }
-
+        // &.no-underline:hover {
+        //     text-decoration: none;
+        // }
     }
 
     & > li {
@@ -2600,8 +2666,6 @@ ul.io-ox-inline-links + header {
     &.btn-primary { color: white; font-weight: normal; }
     &.btn-primary:hover { text-decoration: none; }
 }
-
-
 
 .io-ox-action-link.disabled {
     color: #aaa;
@@ -2832,7 +2896,7 @@ ul.io-ox-inline-links + header {
 
 /* auto complete */
 
-.autocomplete-popup {
+.autocomplete-popup, .tt-dropdown-menu {
 
     @width: 3px;
 
@@ -2855,6 +2919,9 @@ ul.io-ox-inline-links + header {
         cursor: pointer;
     }
 
+    .tt-suggestion > .autocomplete-item:hover,
+    .tt-suggestion > .autocomplete-item:focus,
+    .tt-suggestion.tt-cursor .autocomplete-item,
     .autocomplete-item.selected {
         background-color: #eee;
     }
@@ -3196,7 +3263,7 @@ ul.io-ox-inline-links + header {
 }
 
 /* tweaks for mobile mail edit mode */
-.io-ox-core-page {
+.io-ox-pagecontroller {
     .io-ox-foldertree {
         .folder.selected {
             .folder-options {
@@ -3236,19 +3303,6 @@ ul.io-ox-inline-links + header {
 
     html.high-contrast & {
         background: none; // HC
-    }
-
-    .resizebar {
-        background: transparent;
-        width: 5px;
-        height: 100%;
-        position: relative;
-        z-index: 1;
-        float: right;
-        cursor: e-resize;
-        cursor: ew-resize;
-        cursor: col-resize;
-        right: -3px;
     }
 
     .foldertree-container {
@@ -3418,9 +3472,36 @@ ul.io-ox-inline-links + header {
 
 // ------
 
-.inplace-search {
-    padding: 7px;
-    line-height: 20px;
+.io-ox-search {
+
+    &.inplace-search {
+        padding: 7px 10px;
+        line-height: 20px;
+        z-index: 10;
+        //background-color: @foldertree-sidepanel-background;
+    }
+    .search-field {
+        //space for fa-times
+        padding-right: 36px;
+    }
+    .btn-clear {
+        position: absolute;
+        right: 50px;
+        top: 6px;
+        color: rgba(204, 204, 204, 0.6);
+        cursor: pointer;
+        font-family: FontAwesome;
+        font-size: 18px;
+        font-style: normal;
+        line-height: normal;
+        text-decoration: inherit;
+        z-index: 3;
+        -webkit-font-smoothing: antialiased;
+
+        &:hover {
+            color: rgb(170, 170, 170);
+        }
+    }
 }
 
 // ------
@@ -3461,7 +3542,6 @@ a.toolbar-action, .toolbar-action > a {
 }
 
 /* context menu */
-.context-dropdown.dropdown { position: fixed; }
 .context-dropdown {
 
     position: fixed;
@@ -3473,8 +3553,13 @@ a.toolbar-action, .toolbar-action > a {
     background-color: rgba(255, 255, 255, 0.01);
     display: none;
 
+    &.dropdown {
+        position: fixed;
+    }
+
     .dropdown-toggle {
-        display: none;
+        // must be visible in order to receive the focus
+        outline: 0;
     }
 
     &.open {
@@ -3488,7 +3573,12 @@ a.toolbar-action, .toolbar-action > a {
         z-index: 10001; // > 10000; see bug #32517
     }
 
-    .divider + .divider { display: none; }
+    .dropdown-menu.io-ox-busy {
+        min-height: 100px;
+    }
+
+    .dropdown-menu:empty,
+    .divider:first-child, .divider:last-child, .divider + .divider { display: none; }
 }
 
 /* Guidance view */
@@ -4166,7 +4256,7 @@ input.flat-input {
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
         z-index: 65500;
-        max-height: 90%;
+        max-height: 90%; /* Fixed with iOS 8.0.2 -> Reverted changes for Bug 34487: iOS 8 has problems on pre iPhone 6 devices with max-height, position fixed and bottom: 0 */
         min-width: initial;
         .overflow-y();
         position: fixed;
@@ -4184,12 +4274,14 @@ input.flat-input {
             }
         }
 
+        @marginSmall  : 2px;
+        @marginLarge  : 5px;
+        @extraPadding : 5px;
+
         .divider {
-            height: 3px;
-            display: block;
-            background-color: #858585;
-            border-radius: 1px;
-            border-color: transparent;
+            margin: 0;
+            height: @marginLarge - 2 * @marginSmall; // because the siblings still have margins
+            visibility: hidden;
         }
 
         .divider + .divider {
@@ -4203,20 +4295,27 @@ input.flat-input {
         li {
 
             background-color: #fff;
-            margin: 5px;
-            .border-radius(2px);
+            margin: @marginSmall 5px;
             text-align: center;
 
-            &:last-child {
-                border-bottom-width: 0;
+            a {
+                padding: (3px + @extraPadding) 20px;
             }
 
             .fa {
                 line-height: inherit;
                 width: 30px;
             }
-
         }
+
+        // close
+        li:first-child {
+            margin-bottom: @marginLarge;
+        }
+
+        // no clue why but there are empty <li> in system drop-down, for example
+        li:empty { padding: 0; }
+
         li > a, li > span {
             .ellipsis();
             -webkit-tap-highlight-color: transparent;
@@ -4281,7 +4380,18 @@ input.flat-input {
             .vertical-gradient(@dropdown-link-active-bg, darken(@dropdown-link-active-bg, 5%));
         }
     }
+    .android {
+         .custom-dropdown.dropdown-menu {
+            /* active state must be disabled due to messed up active classes on android */
+            &.dropdown-menu li > a:active {
+                color: inherit;
+                text-decoration: none;
+                outline: 0;
+                background: none;
 
+            }
+        }
+    }
     //** blur style for body when mobile custom menus are shown **/
     .ios {
         #io-ox-core {
@@ -4346,6 +4456,15 @@ input.flat-input {
 
 }
 
+@-webkit-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
 /* fixes WBR handling in long character sequences, esp. for IE */
 wbr:after {
     content: "\00200B"

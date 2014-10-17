@@ -657,7 +657,7 @@
                     // integer based ids?
                     if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
                         tmp = { folder_id: String(m[1]), id: String(m[2])};
-                        if (m[4] !== undefined) { tmp[r] = String(m[4]); }
+                        if (m[4] !== undefined) { tmp[r] = parseInt(m[4], 10); }
                         return tmp;
                     }
                     // character based? (double tuple)

@@ -55,6 +55,7 @@
         right: 0;
         bottom: 0;
         top: @calendar-toolbar-height + @weekview-footer-height;
+        z-index: 1; // see bug 33927
 
         .fulltime-container {
 
@@ -224,6 +225,7 @@
         opacity: 1;
         .transition(~"opacity 0.2s, background-color 0.3s, color 0.3s");
         .backface-visibility(hidden);
+        box-sizing: content-box; // bug #32753
 
         &.modify {
             cursor: pointer;
@@ -352,7 +354,13 @@
             .scrollpane {
 
                 .week-container-label {
+
                     width: @weekview-time-widthSmall;
+
+                    .time {
+                        margin-left: 0.3em;
+                    }
+
                 }
 
                 .week-container {
@@ -366,7 +374,7 @@
         .dayview {
 
             .week-view-container {
-               top: @calendar-toolbar-height;
+               top: 0px;
             }
 
         }

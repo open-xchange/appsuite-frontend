@@ -18,6 +18,9 @@ define(['plugins/portal/quota/register',
 
     describe('portal Quota plugin', function () {
         beforeEach(function (done) {
+            this.server.responses = this.server.responses.filter(function (r) {
+                return r.method !== 'PUT' || String(r.url) !== '/api\\/multiple\\?/';
+            });
             capabilities.reset().then(function () {
                 done();
             });

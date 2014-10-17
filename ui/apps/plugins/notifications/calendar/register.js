@@ -164,9 +164,10 @@ define('plugins/notifications/calendar/register',
 
         onClickAccept: function (e) {
             e.stopPropagation();
-            var o = calAPI.reduce(this.model.get('data'));
-                require(['io.ox/core/api/folder', 'settings!io.ox/calendar'], function (folderAPI, settings) {
-                    folderAPI.get({ folder: o.folder }).done(function (folder) {
+            var o = calAPI.reduce(this.model.get('data')),
+                appointmentData = this.model.get('data');
+                require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
+                    folderAPI.get(o.folder).done(function (folder) {
                     o.data = {
                         alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
                         confirmmessage: '',
@@ -176,7 +177,30 @@ define('plugins/notifications/calendar/register',
                     if (folderAPI.is('shared', folder)) {
                         o.data.id = folder.created_by;
                     }
-                    calAPI.confirm(o);
+                    calAPI.checkConflicts(appointmentData).done(function (conflicts) {
+                        if (conflicts.length === 0) {
+                            calAPI.confirm(o);
+                        } else {
+                            ox.load(['io.ox/calendar/conflicts/conflictList', 'io.ox/core/tk/dialogs']).done(function (conflictView, dialogs) {
+                                var dialog = new dialogs.ModalDialog()
+                                    .header(conflictView.drawHeader());
+
+                                dialog.append(conflictView.drawList(conflicts, dialog).addClass('additional-info'));
+                                dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'});
+
+                                dialog.addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                    .show()
+                                    .done(function (action) {
+                                        if (action === 'cancel') {
+                                            return;
+                                        }
+                                        if (action === 'ignore') {
+                                            calAPI.confirm(o);
+                                        }
+                                    });
+                            });
+                        }
+                    });
                 });
             });
         },

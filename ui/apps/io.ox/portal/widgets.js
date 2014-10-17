@@ -38,10 +38,65 @@ define('io.ox/portal/widgets',
     var widgets = (function () {
 
         var widgets = {},
-            userValues = settings.get('settings' + widgetSet, {});
+            userValues = settings.get('settings' + widgetSet, {}),
+            setDefaultWidgets = function () {
+                var defaultWidgets = {
+                    mail_0: {
+                        plugin: 'plugins/portal/mail/register',
+                        color: 'blue',
+                        userWidget: true,
+                        index: 1
+                    },
+                    birthdays_0: {
+                        plugin: 'plugins/portal/birthdays/register',
+                        color: 'lightgreen',
+                        userWidget: true,
+                        index: 4
+                    },
+                    calendar_0: {
+                        plugin: 'plugins/portal/calendar/register',
+                        color: 'red',
+                        userWidget: true,
+                        index: 2
+                    },
+                    tasks_0: {
+                        plugin: 'plugins/portal/tasks/register',
+                        color: 'green',
+                        userWidget: true,
+                        index: 3
+                    },
+                    myfiles_0: {
+                        plugin: 'plugins/portal/recentfiles/register',
+                        color: 'lightgreen',
+                        userWidget: true,
+                        index: 4
+                    },
+                    facebook_0: {
+                        plugin: 'plugins/portal/facebook/register',
+                        color: 'blue',
+                        userWidget: true,
+                        index: 5
+                    },
+                    twitter_0: {
+                        plugin: 'plugins/portal/twitter/register',
+                        color: 'pink',
+                        userWidget: true,
+                        index: 6
+                    },
+                    linkedin_0: {
+                        plugin: 'plugins/portal/linkedin/register',
+                        color: 'lightblue',
+                        userWidget: true,
+                        index: 7
+                    }
+                };
+
+                settings.set('widgets/user', defaultWidgets).save();
+                return defaultWidgets;
+            };
 
         // Load the users widgets
-        _(settings.get('widgets/user', {})).each(function (widgetDef, id) {
+        _(settings.get('widgets/user') || setDefaultWidgets()).each(function (widgetDef, id) {
             widgets[id] = _.extend({}, widgetDef, {userWidget: true});
         });
 
@@ -75,57 +130,6 @@ define('io.ox/portal/widgets',
                 });
             }
         });
-
-        if (_.isEmpty(widgets)) {
-            // Fallback. No widgets configured and no ones saved previously.
-
-            widgets = {
-                mail_0: {
-                    plugin: 'plugins/portal/mail/register',
-                    color: 'blue',
-                    userWidget: true,
-                    index: 1
-                },
-                calendar_0: {
-                    plugin: 'plugins/portal/calendar/register',
-                    color: 'red',
-                    userWidget: true,
-                    index: 2
-                },
-                tasks_0: {
-                    plugin: 'plugins/portal/tasks/register',
-                    color: 'green',
-                    userWidget: true,
-                    index: 3
-                },
-                birthdays_0: {
-                    plugin: 'plugins/portal/birthdays/register',
-                    color: 'lightgreen',
-                    userWidget: true,
-                    index: 4
-                },
-                facebook_0: {
-                    plugin: 'plugins/portal/facebook/register',
-                    color: 'blue',
-                    userWidget: true,
-                    index: 4
-                },
-                twitter_0: {
-                    plugin: 'plugins/portal/twitter/register',
-                    color: 'pink',
-                    userWidget: true,
-                    index: 5
-                },
-                linkedin_0: {
-                    plugin: 'plugins/portal/linkedin/register',
-                    color: 'lightblue',
-                    userWidget: true,
-                    index: 6
-                }
-            };
-
-            settings.set('widgets/user', widgets).save();
-        }
 
         return widgets;
 
@@ -365,49 +369,46 @@ define('io.ox/portal/widgets',
         save: function (widgetList) {
             var self = this;
 
-            // update current data first
-            settings.load().then(function () {
-                // update collection
+            // update collection
 
-                var obj = _.extend({}, widgets),
-                    old_state = obj,
-                    index = 0;
+            var obj = _.extend({}, widgets),
+                old_state = obj,
+                index = 0;
 
-                var protectedIDs = _(obj).chain().filter(function (e) {
-                    return e.protectedWidget;
-                }).pluck('index').value();
+            var protectedIDs = _(obj).chain().filter(function (e) {
+                return e.protectedWidget;
+            }).pluck('index').value();
 
-                function getIndex(i) {
-                    if (_.contains(protectedIDs, i)) {
-                        return getIndex(i + 1);
-                    } else {
-                        return i;
+            function getIndex(i) {
+                if (_.contains(protectedIDs, i)) {
+                    return getIndex(i + 1);
+                } else {
+                    return i;
+                }
+            }
+
+            // update all indexes
+            widgetList.children().each(function () {
+                var node = $(this), id = node.attr('data-widget-id');
+                if (id in obj) {
+                    if (!obj[id].protectedWidget) {
+                        index++;
+                        obj[id].index = getIndex(index);
                     }
                 }
-
-                // update all indexes
-                widgetList.children().each(function () {
-                    var node = $(this), id = node.attr('data-widget-id');
-                    if (id in obj) {
-                        if (!obj[id].protectedWidget) {
-                            index++;
-                            obj[id].index = getIndex(index);
-                        }
-                    }
-                });
-                self.update(obj);
-                collection.trigger('sort');
-                return settings.set('widgets/user', self.toJSON()).set('settings' + widgetSet, self.extraSettingsToJSON()).save().fail(
-                    // don't say anything if successful
-                    function () {
-                        // reset old state
-                        self.update(old_state);
-                        collection.trigger('sort');
-                        widgetList.sortable('cancel');
-                        notifications.yell('error', gt('Could not save settings.'));
-                    }
-                );
             });
+            self.update(obj);
+            collection.trigger('sort');
+            return settings.set('widgets/user', self.toJSON()).set('settings' + widgetSet, self.extraSettingsToJSON()).save().fail(
+                // don't say anything if successful
+                function () {
+                    // reset old state
+                    self.update(old_state);
+                    collection.trigger('sort');
+                    widgetList.sortable('cancel');
+                    notifications.yell('error', gt('Could not save settings.'));
+                }
+            );
         },
 
         requires: function (type) {
@@ -443,7 +444,8 @@ define('io.ox/portal/widgets',
 
     collection
         .reset(api.getSettingsSorted())
-        .on('change', _.debounce(function () {
+        .on('change', _.debounce(function (model) {
+            widgets[model.get('id')] = model.attributes;//update widgets object
             settings.set('widgets/user', api.toJSON()).set('settings' + widgetSet, api.extraSettingsToJSON()).saveAndYell();
             // don’t handle positive case here, since this is called quite often
         }, 100))

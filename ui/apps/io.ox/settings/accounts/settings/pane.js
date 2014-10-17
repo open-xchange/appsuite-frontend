@@ -16,7 +16,7 @@ define('io.ox/settings/accounts/settings/pane',
      'io.ox/core/tk/dialogs',
      'io.ox/keychain/api',
      'io.ox/keychain/model',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/settings/util',
      'io.ox/core/notifications',
      'gettext!io.ox/settings/accounts',
@@ -165,9 +165,7 @@ define('io.ox/settings/accounts/settings/pane',
                         settingsUtil.yellOnReject(
                             api.remove(account).then(
                                 function success() {
-                                    folderAPI.subFolderCache.remove('1');
-                                    folderAPI.folderCache.remove('default' + account.id);
-                                    folderAPI.trigger('update');
+                                    folderAPI.list('1', { cache: false });
                                     self.model.collection.remove(self.model);
                                     popup.close();
                                 },

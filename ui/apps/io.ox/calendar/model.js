@@ -18,7 +18,7 @@ define('io.ox/calendar/model',
      'io.ox/backbone/validation',
      'io.ox/participants/model',
      'io.ox/core/date',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/calendar'
     ], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
@@ -136,81 +136,14 @@ define('io.ox/calendar/model',
     });
 
     Validators.validationFor('io.ox/calendar/model', {
-        title: { format: 'string', mandatory: true},
-        start_date : { format: 'date', mandatory: true},
-        end_date: { format: 'date', mandatory: true}
+        title: { format: 'string', mandatory: true },
+        start_date : { format: 'date', mandatory: true },
+        end_date: { format: 'date', mandatory: true }
     });
-
-    // Recurrence
-
-    // First, some constants
-    // A series is of a certain recurrence type
-    // daily, weekly, monhtly, yearly, no_recurrence
-    var RECURRENCE_TYPES = {
-        NO_RECURRENCE: 0,
-        DAILY: 1,
-        WEEKLY: 2,
-        MONTHLY: 3,
-        YEARLY: 4
-    };
-
-    // Sometimes we need to reference a certain day, so
-    // here are the weekdays, bitmap-style
-
-    var DAYS = {
-        SUNDAY: 1,
-        MONDAY: 2,
-        TUESDAY: 4,
-        WEDNESDAY: 8,
-        THURSDAY: 16,
-        FRIDAY: 32,
-        SATURDAY: 64
-    };
-
-    DAYS.i18n = {
-        SUNDAY: gt('Sunday'),
-        MONDAY: gt('Monday'),
-        TUESDAY: gt('Tuesday'),
-        WEDNESDAY: gt('Wednesday'),
-        THURSDAY: gt('Thursday'),
-        FRIDAY: gt('Friday'),
-        SATURDAY: gt('Saturday')
-    };
-
-    // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask
-    DAYS.pack = function () {
-        var result = 0;
-        _(arguments).each(function (day) {
-            var dayConst = DAYS[day.toUpperCase()];
-
-            if (_.isUndefined(dayConst)) {
-                throw 'Invalid day: ' + day;
-            }
-            result = result | dayConst;
-        });
-        return result;
-    };
-
-    // Usage: DAYS.unpack(bitmask) -> {'MONDAY': 1, 'WEDNESDAY': 1, 'FRIDAY': 1}
-    DAYS.unpack = function (bitmask) {
-        var days = {};
-        _(DAYS.values).each(function (day) {
-            var dayConst = DAYS[day];
-            if (bitmask & dayConst) {
-                days[day] = 1;
-            } else {
-                days[day] = 0;
-            }
-        });
-
-        return days;
-    };
-
-    DAYS.values = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
     return {
         setDefaultParticipants: function (model, options) {
-            return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
+            return folderAPI.get(model.get('folder_id')).done(function (folder) {
                 var userID = ox.user_id;
                 if (folderAPI.is('private', folder)) {
                     if (options.create) {
@@ -332,10 +265,6 @@ define('io.ox/calendar/model',
                 }
             });
         },
-        factory: factory,
-        Appointment: factory.model,
-        Appointments: factory.collection,
-        RECURRENCE_TYPES: RECURRENCE_TYPES,
-        DAYS: DAYS
+        factory: factory
     };
 });

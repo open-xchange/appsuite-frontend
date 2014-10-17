@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/util', function () {
+define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -20,7 +20,59 @@ define('io.ox/core/util', function () {
         regSeqHard = /(\S{30})/g,
         regHyphenation = /([^.,;:-=()]+[.,;:-=()])/;
 
+    ext.point('io.ox/core/person').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+            if (baton.html !== false) this.append(baton.html); else this.text(baton.halo.name);
+        }
+    });
+
+    // require('io.ox/core/extensions').point('io.ox/core/person').extend({
+    //     id: 'presence',
+    //     index: 200,
+    //     draw: function () {
+    //         this.prepend(
+    //             $('<span class="fa fa-circle" style="display: inline-block; font-size: 90%; float: none; margin-right: 0.5em;">')
+    //             .css('color', '#c00 #77AC40 #F89406 #ccc'.split(' ')[Math.random() * 4 >> 0])
+    //         );
+    //     }
+    // });
+
     return {
+
+        // render a person's name
+        renderPersonalName: function (options, data) {
+
+            options = _.extend({
+                $el: undefined,
+                html: false, // must be properly escaped!
+                tagName: 'span' // to support different tags
+            }, options);
+
+            var halo = {
+                // alternative fields to get the name
+                name: options.full_name || options.display_name || options.name,
+                // halo view looks for email1
+                email: options.email,
+                email1: options.email,
+                // user id
+                user_id: options.user_id
+            };
+
+            var baton = new ext.Baton({ data: data || {}, halo: halo, html: options.html });
+
+            // get node
+            var node = options.$el || (
+                halo.email || halo.user_id ?
+                $('<a href="#" class="halo-link" tabindex="1">').attr('title', halo.email).data(halo) :
+                $('<' + options.tagName + '>')
+            );
+
+            ext.point('io.ox/core/person').invoke('draw', node.empty(), baton);
+
+            return node;
+        },
 
         // remove unwanted quotes from display names
         // "World, Hello" becomes World, Hello

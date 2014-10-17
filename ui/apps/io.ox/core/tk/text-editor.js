@@ -49,7 +49,14 @@ define('io.ox/core/tk/text-editor', function () {
                 // ignore valid white-space pattern at beginning (see Bug 26316)
                 if (/^\n{0,2}[ \t\xA0]*\S/.test(str)) return str;
                 // remove white-space
-                return str.replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
+                str = str.replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
+
+                // remove trailing white-space, line-breaks, and empty paragraphs
+                str = str.replace(
+                    /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+                );
+
+                return str;
             },
 
             set = function (str) {
@@ -137,32 +144,32 @@ define('io.ox/core/tk/text-editor', function () {
         };
 
         var resizeEditorMargin = (function () {
-            // trick to force document reflow
-            var alt = false;
             return _.debounce(function () {
                 //textarea might be destroyed already
-                if (!textarea)
-                    return;
-                var w = Math.max(10, textarea.outerWidth() - 12 - 750);
-                textarea.css('paddingRight', w + 'px')
-                        .parents('.window-content').find('.editor-print-margin')
-                        .css('right', Math.max(0, w - 10) + 'px').show()
-                // force reflow
-                        .css('display', (alt = !alt) ? 'block' : '');
+                if (!textarea) return;
+                var h = $(window).height(),
+                    top = textarea.offset().top;
+                textarea.css('minHeight', (h - top - 40));
             }, 100);
         }());
 
-        this.handleShow = function () {
-            textarea.prop('disabled', false).idle().show()
-                .next().hide();
-            textarea.parents('.window-content').find('.mce-tinymce').hide();
-            resizeEditorMargin();
-            $(window).on('resize', resizeEditorMargin);
+        this.handleShow = function (compose) {
+            textarea.prop('disabled', false).idle().show();
+            if (!compose) {
+                textarea.next().hide();
+                textarea.parents('.window-content').find('.mce-tinymce').hide();
+                resizeEditorMargin();
+                $(window).on('resize.text-editor', resizeEditorMargin);
+            } else {
+                textarea.parents('.window-content').find('.editable, .editable-toolbar').hide();
+                resizeEditorMargin();
+                $(window).on('resize.text-editor', resizeEditorMargin);
+            }
 
         };
 
         this.handleHide = function () {
-            $(window).off('resize', resizeEditorMargin);
+            $(window).off('resize.text-editor');
         };
 
         this.getContainer = function () {

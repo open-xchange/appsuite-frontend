@@ -16,10 +16,11 @@ define.async('io.ox/mail/accounts/view-form',
     ['io.ox/core/notifications',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
-     'gettext!io.ox/settings/settings',
+     'gettext!io.ox/settings',
      'io.ox/core/extensions',
-     'io.ox/backbone/mini-views'
-    ], function (notifications, accountAPI, settings, gt, ext, mini) {
+     'io.ox/backbone/mini-views',
+     'io.ox/core/folder/picker'
+    ], function (notifications, accountAPI, settings, gt, ext, mini, picker) {
 
     'use strict';
 
@@ -27,8 +28,8 @@ define.async('io.ox/mail/accounts/view-form',
         model,
 
         optionsServerType = [
-            { label: gt.noI18n('imap'), value: 'imap'},
-            { label: gt.noI18n('pop3'), value: 'pop3'}
+            { label: gt.noI18n('IMAP'), value: 'imap'},
+            { label: gt.noI18n('POP3'), value: 'pop3'}
         ],
 
         optionsRefreshRatePop = [
@@ -40,6 +41,25 @@ define.async('io.ox/mail/accounts/view-form',
             { label: gt.noI18n('60'), value: '60'},
             { label: gt.noI18n('360'), value: '360'}
         ],
+
+        optionsAuthType = [
+            //#. Auth type. Short for "Use same credentials as incoming mail server"
+            { value: 'mail',    label: gt('As incoming mail server') },
+            //#. Auth type. Use separate username and password
+            { value: 'custom',  label: gt('Use separate username and password') },
+            //#. Auth type. None. No authentication
+            { value: 'none',    label: gt('None') }
+        ],
+
+        // already for 7.8.0
+        // optionsConnectionSecurity = [
+        //     //#. Connection security. None.
+        //     { value: 'none',     label: gt('None') },
+        //     //#. Connection security. StartTLS.
+        //     { value: 'starttls', label: gt('StartTLS') },
+        //     //#. Connection security. SSL/TLS.
+        //     { value: 'ssl',      label: gt('SSL/TLS') },
+        // ],
 
         portDefaults = {
             mail_port: '143',
@@ -55,7 +75,7 @@ define.async('io.ox/mail/accounts/view-form',
             }
         },
 
-        oldModel,
+        originalModel,
 
         //customize mini views: suppress validate onChange (validated when user hits save)
         custom = {
@@ -66,22 +86,12 @@ define.async('io.ox/mail/accounts/view-form',
         InputView = mini.InputView.extend(custom),
         PasswordView = mini.PasswordView.extend(custom),
 
-        validationCheck = function (data) {
-
-            data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
-            data.name = data.personal = data.primary_address;
-            return accountAPI.validate(data);
-        },
-
         returnPortMail = function () {
+
             var secure = model.get('mail_secure'),
                 protocol = model.get('mail_protocol') || 'imap';
 
-            if (protocol === 'imap') {
-                return secure ? '993' : '143';
-            } else {
-                return secure ? '995' : '110';
-            }
+            return protocol === 'imap' ? (secure ? '993' : '143') : (secure ? '995' : '110');
         },
 
         defaultDisplayName = '',
@@ -101,7 +111,9 @@ define.async('io.ox/mail/accounts/view-form',
                     this.model.set('personal', '');
                 }
 
-                oldModel = _.copy(this.model.attributes, true);
+                // store original model to determine changes
+                originalModel = _.copy(this.model.toJSON(), true);
+
                 // forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
                 Backbone.Validation.bind(this, { selector: 'name', forceUpdate: true });
             },
@@ -114,7 +126,7 @@ define.async('io.ox/mail/accounts/view-form',
                     )
                 );
 
-                ext.point(POINT + '/pane').invoke('draw', self.$el.find('.io-ox-account-settings'));
+                ext.point(POINT + '/pane').invoke('draw', self.$el.find('.io-ox-account-settings'), this);
 
                 var pop3nodes = self.$el.find('.form-group.pop3'),
                     dropdown = self.$el.find('#mail_protocol');
@@ -128,7 +140,7 @@ define.async('io.ox/mail/accounts/view-form',
                     dropdown.prop('disabled', true);
                 }
 
-                //setting port defefaults
+                // setting port defaults
                 if (self.model.get('id') === undefined) {
                     _.each(portDefaults, function (value, key) {
                         model.set(key, value);
@@ -178,20 +190,15 @@ define.async('io.ox/mail/accounts/view-form',
                             self.inSync = false;
                         }
                     });
-                } else {//primary account does not allow editing besides display name and unified mail
+                } else {
+
+                    //primary account does not allow editing besides display name and unified mail
                     self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
-
-                    self.$el.find('.variable_size').removeClass('col-sm-6').addClass('col-sm-8');
-
-                    self.$el.find('button.btn.folderselect').hide();
-                }
-                //disable folderselect if no account is defined
-                if (self.model.get('id') === undefined) {
-                    self.$el.find('button.btn.folderselect').prop('disabled', true);
                 }
 
                 return self;
             },
+
             events: {
                 'save': 'onSave',
                 'click .folderselect': 'onFolderSelect',
@@ -201,25 +208,23 @@ define.async('io.ox/mail/accounts/view-form',
             },
 
             onMailProtocolChange: function () {
-                if (this.model.id) return;
                 model.set('mail_port', returnPortMail());
             },
 
             onMailSecureChange: function () {
-                if (this.model.id) return;
                 model.set('mail_port', returnPortMail());
             },
 
             onTransportSecureChange: function () {
-                if (this.model.id) return;
                 var value = this.model.get('transport_secure') ? '465' : '587';
                 this.model.set('transport_port', value);
             },
 
             onSave: function () {
+
                 var self = this,
                     list = ['name', 'personal', 'unified_inbox_enabled'],
-                    differences = returnDifferences(this.model.attributes, oldModel);
+                    differences = returnDifferences(this.model.attributes, originalModel);
 
                 function returnDifferences(a, b) {
                     var array = [];
@@ -280,7 +285,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 if (needToValidate(list, differences)) {
-                    validationCheck(this.model.attributes).done(function (response, error) {
+                    this.model.validationCheck().done(function (response, error) {
                         //an undefined response variable implies an error (f.e. category 'USER_INPUT')
                         var hasError = _.isUndefined(response) || (error ? [].concat(error.categories || []).indexOf('ERROR') > -1 : false),
                             hasWarning = error && error.warnings;
@@ -330,250 +335,305 @@ define.async('io.ox/mail/accounts/view-form',
 
             onFolderSelect: function (e) {
 
-                var self = this;
-                self.dialog.getPopup().hide();
+                if (this.model.get('id') === 0) return;
 
-                if (self.model.get('id') !== 0) {
-                    var property = $(e.currentTarget).prev().attr('name'),
-                        id = self.model.get(property);
-                    require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                this.dialog.getPopup().hide();
 
-                        var label = gt('Select folder'),
-                            dialog = new dialogs.ModalDialog()
-                            .header($('<h4>').text(label))
-                            .addPrimaryButton('select', label, 'select', {'tabIndex': '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
-                        dialog.getBody().css({ height: '250px' });
-                        var tree = new views.FolderTree(dialog.getBody(), {
-                                type: 'mail',
-                                tabindex: 1,
-                                rootFolderId: 'default' + self.model.get('id')
-                            });
-                        dialog.show(function () {
-                            tree.paint().done(function () {
-                                tree.select(id).done(function () {
-                                    tree.selection.updateIndex();
-                                    dialog.getBody().focus();
-                                });
-                            });
-                        })
-                        .done(function (action) {
-                            if (action === 'select') {
-                                var target = _(tree.selection.get()).first();
-                                self.model.set(property, target, {validate: true});
-                                self.$el.find('input[name="' + property + '"]').val(target);
-                            }
-                            tree.destroy().done(function () {
-                                tree = dialog = null;
-                            });
-                            self.dialog.getPopup().show();
-                        });
-                    });
-                }
+                var accountId = 'default' + this.model.get('id'),
+                    property = $(e.currentTarget).attr('data-property'),
+                    id = this.model.get(property),
+                    self = this;
+
+                picker({
+                    context: 'account',
+                    done: function (target) {
+                        self.model.set(property, target, { validate: true });
+                        self.$el.find('input[name="' + property + '"]').val(target);
+                    },
+                    close: function () {
+                        self.dialog.getPopup().show();
+                    },
+                    folder: id,
+                    module: 'mail',
+                    root: accountId
+                });
             }
         });
+
+    // utility functions
+    function group() {
+        var args = _(arguments).toArray();
+        return $('<div class="form-group">').append(args);
+    }
+
+    function label(id, text) {
+        return $('<label class="control-label col-sm-4">').attr('for', id).text(text);
+    }
+
+    function div() {
+        var args = _(arguments).toArray();
+        return $('<div class="col-sm-7">').append(args);
+    }
+
+    function checkbox(text) {
+        var args = _(arguments).toArray();
+        return $('<div class="col-sm-offset-4 col-sm-7">').append(
+            $('<div class="checkbox">').append(
+                $('<label class="control-label">').text(text).prepend(args.slice(1))
+            )
+        );
+    }
 
     ext.point(POINT + '/pane').extend({
         index: 100,
         id: 'header',
-        draw: function () {
+        draw: function (view) {
 
-            var formBlocks = [],
-
-                serverSettingsIn = $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Server settings')),
-                    $('<div>').addClass('form-horizontal').append(
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'mail_protocol' }).addClass('control-label col-sm-3').text(gt('Server type')),
-                            $('<div>').addClass('col-sm-4').append(
-                                new mini.SelectView({ list: optionsServerType, name: 'mail_protocol', model: model, id: 'mail_protocol', className: 'form-control'}).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<div>').addClass('col-sm-offset-3 col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Use SSL connection')).prepend(
-                                        new mini.CheckboxView({ name: 'mail_secure', model: model }).render().$el
-                                    )
-                                )
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'mail_server' }).addClass('control-label col-sm-3').text(gt('Server name')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'mail_server', model: model, id: 'mail_server', className: 'form-control' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'mail_port' }).addClass('control-label col-sm-3').text(gt('Server port')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'mail_port', model: model, id: 'mail_port', className: 'form-control' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'login' }).addClass('control-label col-sm-3').text(gt('Username')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'login', model: model, id: 'login', className: 'form-control' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'password' }).addClass('control-label col-sm-3').text(gt('Password')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new PasswordView({ name: 'password', model: model, id: 'password', className: 'form-control' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group pop3').append(
-                            $('<label>').attr({ 'for': 'pop3_refresh_rate' }).addClass('control-label col-sm-3').text(gt('Refresh rate in minutes:')),
-                            $('<div>').addClass('col-sm-4').append(
-                                new mini.SelectView({ list: optionsRefreshRatePop, name: 'pop3_refresh_rate', model: model, id: 'pop3_refresh_rate', className: 'form-control' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group pop3').append(
-                            $('<div>').addClass('col-sm-offset-3 col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Remove copy from server after retrieving a message')).prepend(
-                                        new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model}).render().$el
-                                    )
-                                )
-                            )
-                        ),
-                        $('<div>').addClass('form-group pop3').append(
-                            $('<div>').addClass('col-sm-offset-3 col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Deleting messages on local storage also deletes them on server')).prepend(
-                                        new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model}).render().$el
-                                    )
-                                )
-                            )
+            //
+            // Incoming (IMAP/POP3)
+            //
+            var serverSettingsIn = $('<fieldset>').append(
+                $('<legend class="sectiontitle">').text(gt('Incoming server')),
+                $('<form class="form-horizontal" role="form">').append(
+                    // server type
+                    group(
+                        label('mail_protocol', gt('Server type')),
+                        $('<div class="col-sm-3">').append(
+                            new mini.SelectView({ list: optionsServerType, model: model, id: 'mail_protocol' }).render().$el
+                        )
+                    ),
+                    // secure
+                    group(
+                        checkbox(
+                            gt('Use SSL connection'),
+                            new mini.CheckboxView({ id: 'mail_secure', model: model }).render().$el
+                        )
+                    ),
+                    // mail_server
+                    group(
+                        label('mail_server', gt('Server name')),
+                        div(
+                            new InputView({ model: model, id: 'mail_server' }).render().$el
+                        )
+                    ),
+                    // secure - for 7.8.0
+                    // group(
+                    //     label('mail_secure', gt('Connection security')),
+                    //     $('<div class="col-sm-3">').append(
+                    //         new mini.SelectView({ list: optionsConnectionSecurity, model: model, id: 'mail_secure' }).render().$el
+                    //     )
+                    // ),
+                    // mail_port
+                    group(
+                        label('mail_port', gt('Server port')),
+                        $('<div class="col-sm-3">').append(
+                            new InputView({ model: model, id: 'mail_port' }).render().$el
+                        )
+                    ),
+                    // login
+                    group(
+                        label('login', gt('Username')),
+                        div(
+                            new InputView({ model: model, id: 'login' }).render().$el
+                        )
+                    ),
+                    // password
+                    group(
+                        label('password', gt('Password')),
+                        div(
+                            new PasswordView({ model: model, id: 'password' }).render().$el
+                        )
+                    ),
+                    // refresh rate (pop3 only)
+                    group(
+                        label('pop3_refresh_rate', gt('Refresh rate in minutes')),
+                        div(
+                            new mini.SelectView({ list: optionsRefreshRatePop, model: model, id: 'pop3_refresh_rate' }).render().$el
                         )
                     )
-                ),
+                    .addClass('pop3'),
+                    // expunge (pop3 only)
+                    group(
+                        checkbox(
+                            gt('Remove copy from server after retrieving a message'),
+                            new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model }).render().$el
+                        )
+                    )
+                    .addClass('pop3'),
+                    // delete write-through (pop3)
+                    group(
+                        checkbox(
+                            gt('Deleting messages on local storage also deletes them on server'),
+                            new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model }).render().$el
+                        )
+                    )
+                    .addClass('pop3')
+                )
+            );
 
-                serverSettingsOut = $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Outgoing server settings (SMTP)')),
-                    $('<div>').addClass('form-horizontal').append(
-                        $('<div>').addClass('form-group').append(
-                            $('<div>').addClass('col-sm-offset-3 col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Use SSL connection')).prepend(
-                                        new mini.CheckboxView({ name: 'transport_secure', model: model}).render().$el
+            var serverSettingsOut = $('<fieldset>').append(
+                $('<legend class="sectiontitle">').text(gt('Outgoing server (SMTP)')),
+                $('<form class="form-horizontal" role="form">').append(
+                    // secure
+                    group(
+                        checkbox(
+                            gt('Use SSL connection'),
+                            new mini.CheckboxView({ id: 'transport_secure', model: model }).render().$el
+                        )
+                    ),
+                    // server
+                    group(
+                        label('transport_server', gt('Server name')),
+                        div(
+                            new InputView({ model: model, id: 'transport_server' }).render().$el
+                        )
+                    ),
+                    // secure - for 7.8.0
+                    // group(
+                    //     label('transport_secure', gt('Connection security')),
+                    //     $('<div class="col-sm-3">').append(
+                    //         new mini.SelectView({ list: optionsConnectionSecurity, model: model, id: 'transport_secure' }).render().$el
+                    //     )
+                    // ),
+                    // port
+                    group(
+                        label('transport_port', gt('Server port')),
+                        $('<div class="col-sm-3">').append(
+                            new InputView({ model: model, id: 'transport_port' }).render().$el
+                        )
+                    ),
+                    // Auth type
+                    group(
+                        label('transport_auth', gt('Authentication')),
+                        div(
+                            new mini.SelectView({ list: optionsAuthType, model: model, id: 'transport_auth' }).render().$el
+                        )
+                    ),
+                    // login
+                    group(
+                        label('transport_login', gt('Username')),
+                        div(
+                            new InputView({ model: model, id: 'transport_login' }).render().$el
+                        )
+                    ),
+                    // password
+                    group(
+                        label('transport_password', gt('Password')),
+                        div(
+                            new PasswordView({ model: model, id: 'transport_password' }).render().$el
+                        )
+                    )
+                )
+            );
+
+            var folderLabels = {
+                //#. Sent folder
+                sent:    gt.pgettext('folder', 'Sent messages'),
+                //#. Trash folder
+                trash:   gt.pgettext('folder', 'Deleted messages'),
+                //#. Drafts folder
+                drafts:  gt.pgettext('folder', 'Drafts'),
+                //#. Spam folder
+                spam:    gt.pgettext('folder', 'Spam'),
+                //#. Archive folder
+                archive: gt.pgettext('folder', 'Archive')
+            };
+
+            var serverSettingsFolder = $('<fieldset>').append(
+                $('<legend class="sectiontitle">').text(gt('Standard folders')),
+                $('<form class="form-horizontal" role="form">').append(
+                    // add four input fields
+                    _('sent trash drafts spam archive'.split(' ')).map(function (folder) {
+
+                        var text = folderLabels[folder], id = model.get('id'), enabled = !!id; // neither 0 nor undefined
+                        folder = folder + '_fullname';
+
+                        return group(
+                            label(folder, text),
+                            $('<div class="col-sm-7">').append(
+                                enabled ?
+                                // show controls
+                                $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
+                                    new InputView({ model: model, id: folder }).render().$el.prop('disabled', true),
+                                    $('<span class="input-group-btn">').append(
+                                        $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Select'))
                                     )
-                                )
+                                ) :
+                                // just show path
+                                $('<input type="text" class="form-control" disabled="disabled">')
+                                .val($.trim(model.get(folder)).replace(/^default\d+\D/, ''))
                             )
-                        ),
-
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'transport_server'}).addClass('control-label col-sm-3').text(gt('Server name')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'transport_server', model: model, id: 'transport_server' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label col-sm-3').text(gt('Server port')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'transport_port', model: model, id: 'transport_port', className: 'form-control' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'transport_login'}).addClass('control-label col-sm-3').text(gt('Username')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'transport_login', model: model, id: 'transport_login' }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'transport_password'}).addClass('control-label col-sm-3').text(gt('Password')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new PasswordView({ name: 'transport_password', model: model, id: 'transport_password' }).render().$el
-                            )
-                        )
-                    )
-                ),
-
-                serverSettingsFolder = $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Folder settings')),
-                    $('<div>').addClass('form-horizontal').append(
-                        // sent
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label col-sm-3').text(gt('Sent folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'sent_fullname', model: model, id: 'sent_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        // trash
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label col-sm-3').text(gt('Trash folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'trash_fullname', model: model, id: 'trash_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        // drafts
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label col-sm-3').text(gt('Drafts folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'drafts_fullname', model: model, id: 'drafts_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        // spam
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label col-sm-3').text(gt('Spam folder')),
-                            $('<div>').addClass('col-sm-6 variable_size').append(
-                                new InputView({ name: 'spam_fullname', model: model, id: 'spam_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
-                            ),
-                            $('<div>').addClass('col-sm-1').append(
-                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        )
-                    )
-                );
-
-            if (!model.isHidden()) {
-                formBlocks.push(serverSettingsIn, serverSettingsOut, serverSettingsFolder);
-            }
+                        );
+                    })
+                )
+            );
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Account settings')),
-                    $('<div>').addClass('form-horizontal').append(
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'name'}).addClass('control-label col-sm-3').text(gt('Account name')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'name', model: model, id: 'name', className: 'form-control' }).render().$el
+                    $('<legend class="sectiontitle">').text(gt('Account settings')),
+                    $('<form class="form-horizontal" role="form">').append(
+                        // account name
+                        group(
+                            label('name', gt('Account name')),
+                            div(
+                                new InputView({ model: model, id: 'name' }).render().$el
                             )
                         ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'personal'}).addClass('control-label col-sm-3').text(gt('Your name')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'personal', model: model, id: 'personal', className: 'form-control' }).render().$el
+                        // personal
+                        group(
+                            label('personal', gt('Your name')),
+                            div(
+                                new InputView({ model: model, id: 'personal' }).render().$el
                             )
                         ),
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').attr({ 'for': 'primary_address'}).addClass('control-label col-sm-3').text(gt('Email address')),
-                            $('<div>').addClass('col-sm-8').append(
-                                new InputView({ name: 'primary_address', model: model, id: 'primary_address', className: 'form-control' }).render().$el
+                        // primary address
+                        group(
+                            label('primary_address', gt('Email address')),
+                            div(
+                                new InputView({ model: model, id: 'primary_address' }).render().$el
                             )
                         ),
-                        $('<div>').addClass('form-group').append(
-                            $('<div>').addClass('col-sm-offset-3 col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').text(gt('Use unified mail for this account')).prepend(
-                                        new mini.CheckboxView({ name: 'unified_inbox_enabled', model: model }).render().$el
-                                    )
-                                )
+                        // unified inbox
+                        group(
+                            checkbox(
+                                gt('Use unified mail for this account'),
+                                new mini.CheckboxView({ id: 'unified_inbox_enabled', model: model }).render().$el
                             )
                         )
                     )
-                ),
-                formBlocks
+                )
             );
+
+            function adoptCredentials() {
+                if (this.model.get('transport_auth') === 'mail') {
+                    this.model.set({
+                        transport_login: model.get('login'),
+                        transport_password: null
+                    });
+                }
+            }
+
+            function changeTransportAuth() {
+                var type = this.model.get('transport_auth');
+                this.$el.find('#transport_login, #transport_password').prop('disabled', type !== 'custom');
+                if (type === 'mail') {
+                    adoptCredentials.call(this);
+                } else {
+                    this.model.set({ transport_login: '', transport_password: '' });
+                }
+            }
+
+            if (!model.isHidden()) {
+                this.append(serverSettingsIn, serverSettingsOut);
+                view.listenTo(model, 'change:transport_auth', changeTransportAuth);
+                view.listenTo(model, 'change:login', adoptCredentials);
+                changeTransportAuth.call(view);
+            }
+
+            // don't show folder settings if this is a new account
+            if (model.get('id') !== undefined) {
+                this.append(serverSettingsFolder);
+            }
         }
     });
 

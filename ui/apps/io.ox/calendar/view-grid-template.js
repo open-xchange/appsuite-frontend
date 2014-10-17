@@ -15,7 +15,7 @@ define('io.ox/calendar/view-grid-template',
     ['io.ox/calendar/util',
      'io.ox/core/tk/vgrid',
      'io.ox/core/extensions',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/core/api/resource',
@@ -63,7 +63,7 @@ define('io.ox/calendar/view-grid-template',
                     a11yLabel = '',
                     tmpStr = '';
                 if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
-                    var folder = folderAPI.get({ folder: data.folder_id });
+                    var folder = folderAPI.get(data.folder_id);
                     folder.done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                         self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
@@ -168,8 +168,11 @@ define('io.ox/calendar/view-grid-template',
         drawSimpleGrid: function (list) {
 
             // use template
-            var tmpl = new VGrid.Template(),
-                $div = $('<div>');
+            var tmpl = new VGrid.Template({
+                    tagName: 'li',
+                    defaultClassName: 'vgrid-cell list-unstyled'
+                }),
+                $ul = $('<ul>');
 
             // add template
             tmpl.add(that.main);
@@ -177,13 +180,13 @@ define('io.ox/calendar/view-grid-template',
             _(list).each(function (data, i) {
                 var clone = tmpl.getClone();
                 clone.update(data, i);
-                clone.appendTo($div).node
+                clone.appendTo($ul).node
                     .css('position', 'relative')
                     .data('appointment', data)
                     .addClass('hover');
             });
 
-            return $div;
+            return $ul;
         }
 
     };

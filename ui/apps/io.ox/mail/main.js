@@ -24,17 +24,20 @@ define('io.ox/mail/main',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
      'io.ox/core/toolbars-mobile',
-     'io.ox/core/commons-folderview',
      'io.ox/core/page-controller',
+     'io.ox/core/capabilities',
+     'io.ox/core/folder/tree',
+     'io.ox/core/folder/view',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
      'io.ox/mail/mobile-navbar-extensions',
+     'io.ox/mail/mobile-toolbar-actions',
      'io.ox/mail/toolbar',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, PageController, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
 
     'use strict';
 
@@ -69,7 +72,8 @@ define('io.ox/mail/main',
                 name: 'folderTree',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 })
             });
 
@@ -78,15 +82,18 @@ define('io.ox/mail/main',
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'listView'
+                    page: 'listView',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'listView/multiselect'
+                    page: 'listView/multiselect',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 })
             });
 
@@ -94,11 +101,13 @@ define('io.ox/mail/main',
                 name: 'threadView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'threadView'
+                    page: 'threadView',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 })
             });
 
@@ -106,12 +115,21 @@ define('io.ox/mail/main',
                 name: 'detailView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'detailView'
+                    page: 'detailView',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 })
+            });
+
+            // important
+            // tell page controller about special navigation rules
+            app.pages.setBackbuttonRules({
+                'listView': 'folderTree',
+                'threadView': 'listView'
             });
         },
         /*
@@ -195,10 +213,15 @@ define('io.ox/mail/main',
          * Folder view support
          */
         'folder-view': function (app) {
+
             if (_.device('small')) return;
-            // folder tree
-            commons.addFolderView(app, { type: 'mail' });
-            app.getWindow().nodes.sidepanel.addClass('border-right');
+
+            // tree view
+            var tree = new TreeView({ app: app, module: 'mail', contextmenu: true });
+
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            app.folderView.resize.enable();
         },
 
         /*
@@ -207,7 +230,7 @@ define('io.ox/mail/main',
         'folder-view-toggle': function (app) {
             if (_.device('small')) return;
             app.getWindow().nodes.main.on('dblclick', '.list-view-control .toolbar', function () {
-                app.toggleFolderView();
+                app.folderView.toggle();
             });
         },
 
@@ -217,79 +240,51 @@ define('io.ox/mail/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': app.settings.get('layout', 'vertical'),
+                'layout': _.device('smartphone') ? 'vertical' : app.settings.get('layout', 'vertical'),
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
-                'contactPictures': app.settings.get('showContactPictures', false),
+                'contactPictures': _.device('smartphone') ? false : app.settings.get('showContactPictures', false),
                 'exactDates': app.settings.get('showExactDates', false),
                 'mobileFolderSelectMode': false
             });
         },
 
         'toggle-folder-editmode': function (app) {
-            if (_.device('!small')) return;
-            var toggleFolders =  function () {
-                var state = app.props.get('mobileFolderSelectMode'),
-                    page = app.pages.getPage('folderTree');
 
-                if (state) {
-                    app.props.set('mobileFolderSelectMode', false);
-                    app.pages.getNavbar('folderTree').setRight(gt('Edit'));
-                    page.removeClass('mobile-edit-mode');
-
-                } else {
-                    app.props.set('mobileFolderSelectMode', true);
-                    app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
-                    page.addClass('mobile-edit-mode');
-
-                }
-            };
-
-            app.toggleFolders = toggleFolders;
-
-        },
-
-        'folder-view-mobile-listener': function () {
             if (_.device('!small')) return;
 
-            app.bindFolderChange = function () {
-                // always change folder on click
-                // No way to use tap here since folderselection really messes up the event chain
-                app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
-                    if (app.props.get('mobileFolderSelectMode') === true) {
-                        $(e.currentTarget).trigger('contextmenu'); // open menu
-                        return; // do not change page in edit mode
-                    }
-                    if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
-                    // go to listview
-                    app.pages.changePage('listView');
-                });
+            var toggle =  function () {
+
+                var page = app.pages.getPage('folderTree'),
+                    state = app.props.get('mobileFolderSelectMode'),
+                    right = state ? gt('Edit') : gt('Cancel');
+
+                app.props.set('mobileFolderSelectMode', !state);
+                app.pages.getNavbar('folderTree').setRight(right);
+                page.toggleClass('mobile-edit-mode', !state);
             };
+
+            app.toggleFolders = toggle;
         },
+
         /*
          * Folder view support
          */
         'folder-view-mobile': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!small')) return app;
 
-            app.pages.getNavbar('folderTree')
-                .on('rightAction', function () {
-                    app.toggleFolders();
-                });
+            var nav = app.pages.getNavbar('folderTree'),
+                page = app.pages.getPage('folderTree');
 
-            var view = new FolderView(app, {
-                type: 'mail',
-                container: app.pages.getPage('folderTree')
+            nav.on('rightAction', function () {
+                app.toggleFolders();
             });
-            view.handleFolderChange();
-            view.load();
 
-            // bind action for edit button
-            app.bindFolderChange();
+            var tree = new TreeView({ app: app, module: 'mail', root: '1', contextmenu: true });
 
-            // make folder visible by default
-            app.toggleFolderView(true);
-
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            page.append(tree.render().$el);
         },
 
         /*
@@ -488,6 +483,7 @@ define('io.ox/mail/main',
             app.threadView.on({
                 back: function () {
                     app.right.removeClass('preview-visible');
+                    app.listView.focus();
                 },
                 previous: function () {
                     app.listView.previous();
@@ -510,9 +506,7 @@ define('io.ox/mail/main',
                     .toggleNext(list.hasNext());
             }
 
-            app.listView.on('selection:change', function () {
-                if (app.props.get('layout') === 'list') update();
-            });
+            app.listView.on('selection:change', update);
 
             update();
         },
@@ -521,11 +515,24 @@ define('io.ox/mail/main',
          * Respond to folder change
          */
         'folder:change': function (app) {
+
             app.on('folder:change', function (id) {
-                var options = app.getViewOptions(id);
+
+                if (app.props.get('mobileFolderSelectMode')) return;
+
+                var options = app.getViewOptions(id),
+                    fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
+                    showFrom = account.is('sent|drafts', id);
+
                 app.props.set(options);
                 app.listView.model.set('folder', id);
                 app.folder.getData();
+
+                if (showFrom) {
+                    fromTo.text(gt('To'));
+                } else {
+                    fromTo.text(gt('From'));
+                }
             });
         },
 
@@ -549,7 +556,7 @@ define('io.ox/mail/main',
         'show-mail': function (app) {
             if (_.device('small')) return;
             app.showMail = function (cid) {
-                app.threadView.show(cid);
+                app.threadView.show(cid, app.props.get('thread'));
             };
         },
 
@@ -572,7 +579,7 @@ define('io.ox/mail/main',
             // clicking on a thread will show a custom overview
             // based on a custom threadview only showing mail headers
             app.showThreadOverview = function (cid) {
-                app.threadView.show(cid);
+                app.threadView.show(cid, app.props.get('thread'));
             };
         },
 
@@ -596,7 +603,7 @@ define('io.ox/mail/main',
             if (_.device('small')) return;
             app.showMultiple = function (list) {
                 app.threadView.empty();
-                list = api.threads.resolve(list);
+                list = api.resolve(list, app.props.get('thread'));
                 app.right.find('.multi-selection-message div').text(
                     gt('%1$d messages selected', list.length)
                 );
@@ -613,7 +620,7 @@ define('io.ox/mail/main',
 
                 app.threadView.empty();
                 if (list) {
-                    list = api.threads.resolve(list);
+                    list = api.resolve(list, app.props.get('thread'));
                     app.pages.getCurrentPage().navbar.setTitle(
                         //#. This is a short version of "x messages selected", will be used in mobile mail list view
                         gt('%1$d selected', list.length));
@@ -679,6 +686,9 @@ define('io.ox/mail/main',
                     resetRight('selection-one preview-visible');
                     app.showMail(list[0]);
                     return;
+                } else if (app.props.get('layout') === 'list' && type === 'one') {//don't call show mail (an in visible detailview would be drawn which marks it as read)
+                    resetRight('selection-one');
+                    return;
                 }
 
                 switch (type) {
@@ -719,7 +729,6 @@ define('io.ox/mail/main',
          * Thread view navigation must respond to changing layout
          */
         'change:layout': function (app) {
-
             app.props.on('change:layout', function (model, value) {
                 app.threadView.toggleNavigation(value === 'list');
             });
@@ -731,7 +740,7 @@ define('io.ox/mail/main',
          * Respond to changing layout
          */
         'apply-layout': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.applyLayout = function () {
 
                 var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className;
@@ -757,6 +766,11 @@ define('io.ox/mail/main',
                 } else {
                     app.right.removeClass(className);
                     nodes.body.addClass(className).prepend(toolbar);
+                }
+
+                if(layout !== 'list' && app.props.previousAttributes().layout === 'list' && !app.right.hasClass('preview-visible')) {
+                    //listview did not create a detailview for the last mail, it was only selected, so detailview needs to be triggered manually(see bug 33456)
+                    app.listView.selection.triggerChange();
                 }
             };
 
@@ -828,8 +842,10 @@ define('io.ox/mail/main',
                     })
                     .slice(0, count)
                     .each(function (model) {
-                        var thread = model.get('thread'), i, obj;
-                        for (i = thread.length - 1; obj = _.cid(thread[i]); i--) {
+                        var thread = model.get('thread') || [model.toJSON()], i, obj;
+                        for (i = thread.length - 1; obj = thread[i]; i--) {
+                            // get data
+                            if (_.isString(obj)) obj = _.cid(obj);
                             // most recent or first unseen? (in line with threadview's autoSelectMail)
                             if ((i === 0 || util.isUnseen(obj)) && !util.isDeleted(obj)) {
                                 api.get({ unseen: true, id: obj.id, folder: obj.folder_id });
@@ -854,8 +870,18 @@ define('io.ox/mail/main',
          * Select next item in list view if current item gets deleted
          */
         'before-delete': function (app) {
+
             if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
-            api.on('beforedelete', function () {
+
+            function isSingleThreadMessage(ids, selection) {
+                if (ids.length !== 1) return false;
+                if (selection.length !== 1) return false;
+                var a = _.cid(ids[0]), b = String(selection[0]).replace(/^thread\./, '');
+                return a !== b;
+            }
+
+            api.on('beforedelete', function (e, ids) {
+                if (isSingleThreadMessage(ids, app.listView.selection.get())) return;
                 app.listView.selection.dodge();
             });
         },
@@ -879,7 +905,7 @@ define('io.ox/mail/main',
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.threads.resolve(baton.data);
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
                 actions.invoke('io.ox/mail/actions/move', null, baton);
             });
@@ -894,7 +920,7 @@ define('io.ox/mail/main',
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
-                baton.data = api.threads.resolve(baton.data);
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
                 // call action
                 actions.invoke('io.ox/mail/actions/delete', null, baton);
             });
@@ -904,11 +930,11 @@ define('io.ox/mail/main',
          * Add support for selection:
          */
         'selection-doubleclick': function (app) {
-            // reader does not make sense on small devices
+            // detail app does not make sense on small devices
             // they already see emails in full screen
             if (_.device('small')) return;
             app.listView.on('selection:doubleclick', function (list) {
-                ox.launch('io.ox/mail/reader/main', { cid: list[0] });
+                ox.launch('io.ox/mail/detail/main', { cid: list[0] });
             });
         },
 
@@ -918,7 +944,7 @@ define('io.ox/mail/main',
         'change:folderview': function (app) {
             if (_.device('small')) return;
             app.props.on('change:folderview', function (model, value) {
-                app.toggleFolderView(value);
+                app.folderView.toggle(value);
             });
             app.on('folderview:close', function () {
                 app.props.set('folderview', false);
@@ -989,28 +1015,78 @@ define('io.ox/mail/main',
             });
         },
 
-        // 'inplace-search': function (app) {
+        'fix-mobile-lazyload': function (app) {
+            if (_.device('!smartphone')) return;
+            // force lazyload to load, otherwise the whole pane will stay empty...
+            app.pages.getPage('detailView').on('pageshow', function () {
+                $(this).find('li.lazy').trigger('scroll');
+            });
+        },
 
-        //     if (_.device('small')) return;
+        'inplace-search': function (app) {
 
-        //     var side = app.getWindow().nodes.sidepanel;
+            if (_.device('small') || !capabilities.has('search')) return;
 
-        //     require(['io.ox/search/main'], function (search) {
+            var win = app.getWindow(), side = win.nodes.sidepanel;
+            side.addClass('top-toolbar');
 
-        //         side.find('.foldertree-sidepanel').append(
-        //             $('<div class="generic-toolbar top inplace-search io-ox-search">').append(
-        //                 search.init()
-        //             )
-        //         );
+            win.facetedsearch.ready
+                .done(function (search) {
+                    require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
 
-        //         var container = side.find('.foldertree-container').addClass('top-toolbar');
+                        // define collection loader for search results
+                        var collectionLoader = new CollectionLoader({
+                                module: 'mail',
+                                mode: 'search',
+                                fetch: function () {
+                                    var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+                                    return search.apiproxy.query(true, params).then(function (response) {
+                                        return response && response.results ? response.results : [];
+                                    });
+                                },
+                                getQueryParams: function (params) {
+                                    // paging support
+                                    search.model.set('start', params.offset || 0, {silent: true});
+                                    return {};
+                                },
+                                cid: function () {
+                                    return 'search/' + search.model.getCompositeId() +
+                                        '&sort=' + app.props.get('sort') +
+                                        '&order=' + app.props.get('order');
+                                },
+                                each: function (obj) {
+                                    api.processThreadMessage(obj);
+                                }
+                            });
 
-        //         side.find('.search-field').on('focus blur', function (e) {
-        //             // hide on focus, show on blur
-        //             container.toggle(e.type === 'blur');
-        //         });
-        //     });
-        // }
+                        // events
+                        win.facetedsearch.ready
+                            .done(function () {
+                                var view = win.facetedsearch.view;
+                                view.on({
+                                    'query': _.debounce(function (e, appname) {
+                                        if (appname === app.get('name')) {
+                                            // connect
+                                            if (app.listView.loader.mode !== 'search') {
+                                                app.listView.connect(collectionLoader);
+                                            }
+                                            app.listView.load();
+                                            win.facetedsearch.focus();
+                                        }
+                                    }, 10),
+                                    'focus': function () {
+                                        // register collection loader
+                                    }
+                                });
+                        });
+
+                        win.on('search:cancel', function () {
+                            app.listView.connect(api.collectionLoader);
+                            app.listView.load();
+                        });
+                    });
+            });
+        }
     });
 
     // launcher
@@ -1020,7 +1096,8 @@ define('io.ox/mail/main',
         var win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: 'Inbox',
-            chromeless: true
+            chromeless: true,
+            facetedsearch: capabilities.has('search')
         });
 
         app.setWindow(win);

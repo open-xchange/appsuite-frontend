@@ -16,208 +16,21 @@ define('io.ox/search/view-template',
      'io.ox/core/extensions',
      'io.ox/core/api/apps',
      'settings!io.ox/core',
-     'io.ox/search/util',
+     'io.ox/search/autocomplete/view',
+     'io.ox/search/facets/view',
      'io.ox/core/tk/autocomplete'
-    ], function (gt, ext, appAPI, settings, util) {
+    ], function (gt, ext, appAPI, settings) {
 
     'use strict';
 
     /**
-     * widget:      io.ox/search/view/widget
-     * fullscreen:  io.ox/search/view/window
-     * mobile:      io.ox/search/view/window/mobile
+     * fullscreen:  io.ox/search/view
+     * mobile:      io.ox/search/view/mobile
      */
 
-    var point = ext.point('io.ox/search/view/window'),
-        SORT = {
-            current: 1,
-            default: 2,
-            standard: 3
-        },
-        dropdown = function (baton, container) {
-            var ref,
-                app = baton.app,
-                model = baton.model,
-                mode = model.get('mode');
+    var point = ext.point('io.ox/search/view');
 
-            this.append(
-                $('<div class="input-group">')
-                    .append(
-                        ref = $('<input type="text" class="form-control search-field" tabindex="1">')
-                        .attr({
-                            placeholder: gt('Search') + ' ...'
-                        })
-                        .autocomplete({
-                            api: app.apiproxy,
-                            minLength: 0,
-                            mode: 'search',
-                            delay: 100,
-                            parentSelector: container  ? '.query' : '.io-ox-search',
-                            model: model,
-                            container: container,
-                            cbshow: function () {
-                                //reset autocomplete tk styles
-                                if (mode !== 'widget' && container)
-                                    $(this).attr('style', '');
-
-                            },
-                            //TODO: would be nice to move to control
-                            source: function (val) {
-                                //show dropdown immediately (busy by autocomplete tk)
-                                ref.open();
-                                return app.apiproxy.search(val);
-                            },
-                            draw: function (value) {
-                                $(this)
-                                    .data(value)
-                                    .html(value.display_name);
-                                if (container) {
-                                    //reset calculated style from autocomplete tk
-                                    container.attr('style', 'width: 100%;');
-                                }
-                            },
-                            stringify: function () {
-                                //keep input value when item selected
-                                return ref.val();
-                            },
-                            click: function (e) {
-                                //apply selected filter
-                                var node = $(e.target).closest('.autocomplete-item'),
-                                    value = node.data();
-                                if (mode === 'widget') {
-                                    model.remove();
-                                }
-                                ref.val('');
-
-                                //exclusive: define used option (type2 default is index 0 of options)
-                                var option = _.find(value.options, function (item) {
-                                    return item.id === value.id;
-                                });
-
-                                model.add(value.facet, value.id, (option || {}).id);
-                            }
-                        })
-                        .on('focus focus:custom click', function (e, opt) {
-                            //hint: 'click' supports click on already focused
-
-                            //keep dropdown closed on focus event
-                            opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
-
-                            //simulate tab keyup event
-                            ref.trigger({
-                                    type: 'keyup',
-                                    which: 9
-                                }, opt);
-
-                        })
-                        .on('keyup', function (e, options) {
-                            var opt = _.extend({}, (e.data || {}), options || {}),
-                                //keys pressed
-                                down = e.which === 40 && !ref.isOpen(),
-                                tab = e.which === 9;
-
-                            // adjust original event instead of throwing a new one
-                            // cause handler (fnKeyUp) is debounced and we might set some options
-                            if (_.isUndefined(opt.isRetry) && (down || tab)) {
-                                e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
-                            }
-                        }),
-                        $('<span class="input-group-btn">').append(
-                            //submit
-                            $('<button type="button" class="btn btn-default btn-search">')
-                            .attr('aria-label', gt('Search'))
-                            .append(
-                                $('<i class="fa fa-search"></i>')
-                            )
-                            .on('click', function () {
-                                var dropdown = $('.autocomplete-search').length;
-                                //open full size search app 'shortcut'
-                                if (!dropdown && mode === 'widget') {
-                                    //open search app
-                                    require(['io.ox/search/main'], function (searchapp) {
-                                        searchapp.run();
-                                    });
-                                } else {
-                                    //construct enter event to
-                                    var e = $.Event('keydown');
-                                    e.which = 13;
-                                    $(ref).trigger(e);
-                                }
-                            })
-                        )
-                    )
-            );
-
-            return this;
-        };
-
-    //widget mode
-    ext.point('io.ox/search/view/widget').extend({
-        id: 'query',
-        index: 200,
-        row: '0',
-        draw: function (baton) {
-            dropdown.call(this, baton);
-        }
-    });
-
-    //window mode
-    point.extend({
-        id: 'apps',
-        index: 100,
-        row: '0',
-        draw: function (baton) {
-            var id = baton.model.getApp(),
-                opt = baton.model.getOptions(),
-                row, cell,
-                apps = settings.get('search/modules', []);
-
-            //create container
-            row = $('<div class="row applications">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled">')
-            );
-
-            //apply mapping (infostore-files-drive chameleon)
-            apps = _.map(apps, function (module) {
-                var id = 'io.ox/' + module;
-                return opt.mapping[id] || id;
-            });
-
-            //create menu entries
-            _(apps).each(function (id) {
-                var title = (ox.manifests.apps[id + '/main'] || {}).title;
-                if (title) {
-                    cell.append(
-                        $('<li role="presentation" class="application">')
-                            .append(
-                                $('<div class="btn-group">')
-                                .append(
-                                    $('<button type="button" class="btn btn-link">')
-                                        .attr('data-app', id)
-                                        .addClass('pull-left')
-                                        .text(/*#, dynamic*/gt.pgettext('app', title))
-                                )
-                            )
-                    );
-                }
-            });
-
-            //mark as active
-            if (id !== '') {
-                cell.find('[data-app="' + id + '"]')
-                .removeClass('btn-link')
-                .addClass('btn-primary');
-            }
-            //register click handler
-            cell.find('li').on('click', function (e) {
-                var node = $(e.target);
-                baton.model.setModule(node.attr('data-app'));
-            });
-
-            this.append(row);
-        }
-    });
-
+    // input field
     point.extend({
         id: 'query',
         index: 200,
@@ -226,11 +39,104 @@ define('io.ox/search/view-template',
             var row,
                 mobile = this.find('.mobile-dropdown');
 
+            //add mobile container
+            baton.$.container = mobile.length ? mobile : undefined;
+
             $('<div class="row query">').append(
                 row = $('<div class="col-xs-12">')
             ).appendTo(this);
 
-            dropdown.call(row, baton, mobile.length ? mobile : undefined);
+            ext.point('io.ox/search/autocomplete/searchfield-mobile').invoke('draw', row, baton);
+        }
+    });
+
+    // dropdown button
+    point.extend({
+        id: 'apps',
+        index: 100,
+        row: '0',
+        draw: function (baton) {
+            var cell = $('<div class="btn-group col-xs-12">'),
+                row = $('<div class="row applications">').append(cell),
+                id = baton.model.getApp(),
+                opt = baton.model.getOptions(),
+                row, cell,
+                items = [],
+                titles = {},
+                apps = settings.get('search/modules', []),
+                elem;
+
+            // apply mapping (infostore-files-drive chameleon)
+            apps = _.map(apps, function (module) {
+                var id = 'io.ox/' + module;
+                return opt.mapping[id] || id;
+            });
+
+            // create dropdown menu entries
+            _(apps).each(function (id) {
+                var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
+                items.push(
+                    $('<li>')
+                    .append(
+                        $('<a href="#">')
+                            .attr({
+                                'title': title,
+                                'data-app': id,
+                                'tabindex': '-1',
+                                'role': 'button'
+                            })
+                            .append(
+                                $('<i class="fa fa-fw"></i>'),
+                                $('<span>').text(title)
+                            )
+                    )
+                );
+            });
+
+            // create button and append dropdown menue
+            cell.append(
+                $('<a href="#" type="button" class="btn btn-primary dropdown-toggle">')
+                    .attr({
+                        'data-toggle': 'dropdown',
+                        'role': 'menuitemcheckbox'
+                    })
+                    .append(
+                        $('<span class="name">'),
+                        $('<span class="caret">')
+                    ),
+                $('<ul class="dropdown dropdown-menu app-dropdown">').append(items)
+            );
+
+            // apply a11y
+            cell.find('.dropdown-toggle')
+                .dropdown();
+
+            // current app
+            if (id !== '') {
+                // add icon
+                cell.find('[data-app="' + id + '"]')
+                    .find('.fa')
+                    .removeClass('fa-none')
+                    .addClass('fa-check');
+                // add name
+                cell.find('.name').text(titles[id]);
+            }
+
+            // delegate handler
+            $('body').delegate('.app-dropdown a', 'click', function (e) {
+                var cell = $(e.target),
+                    next = cell.closest('a').attr('data-app');
+
+                if (next && next !== id)
+                    baton.model.setModule(next);
+            });
+
+            //append or replace
+            elem = this.find('.row.applications');
+            if (elem.length)
+                elem.replaceWith(row);
+            else
+                this.append(row);
         }
     });
 
@@ -238,96 +144,29 @@ define('io.ox/search/view-template',
         id: 'facets',
         index: 250,
         row: '0',
-        redraw: function (baton) {
-            $(baton.$).find('.facets').empty();
-            this.draw.call(baton.$, baton);
-        },
         draw: function (baton) {
-
-            //ensure folder facet is set
-            baton.model.ensure();
-
-            var model = baton.model,
-                list = model.get('poollist'),
-                pool = model.get('pool'),
-                row, cell;
+            var row, cell, elem;
 
             row = $('<div class="row facets">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled facets">')
+                cell = $('<ul class="col-xs-12 list-unstyled search-facets">')
             );
 
-            _.each(list, function (item) {
-                //get active value
-                var facet = pool[item.facet],
-                    value, facetnode, button;
+            ext.point('io.ox/search/facets/facets').invoke('draw', cell, baton);
 
-                if (facet) {
-                    value = facet.values[item.value];
-
-
-                    //create facet node
-                    cell.append(
-                        facetnode = $('<li role="presentation" class="facet btn-group">')
-                                    .append(
-                                        // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
-                                            e.preventDefault();
-                                        }).append($('<label>'))
-                                    )
-                    );
-
-                    //general stuff
-                    ext.point('io.ox/search/view/window/facet')
-                        .invoke('draw', button, value, facet, baton);
-
-                    //additional actions per id/type
-                    ext.point('io.ox/search/view/window/facet/' + value.facet)
-                        .invoke('draw', facetnode, value, baton);
-                }
-            });
-
-            this.append(row);
+            elem = this.find('.row.facets');
+            if (elem.length)
+                elem.replaceWith(row);
+            else
+                this.append(row);
         }
     });
 
-    //register select handler for facet option click event
+    // register select handler for facet option click event
     point.extend({
         id: 'handler',
         index: 260,
         draw: function (baton) {
-            $('body').delegate('.facet-dropdown .option', 'click tap', function (e) {
-                //TODO: remove hack
-                e.stopImmediatePropagation();
-                e.stopPropagation();
-                e.preventDefault();
-                //mobile
-                $(this).closest('.custom-dropdown').toggle();
-                ox.idle();
-
-                $(e.target).closest('.dropdown.open').toggle();
-
-                var link = $(e.target).closest('a'),
-                    list = link.closest('ul'),
-                    option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
-                    facet = list.attr('data-facet'),
-                    value = list.attr('data-value');
-
-                //select option
-                if (option === 'dialog') {
-                    //open folder dialog
-                    var facet = baton.model.get('folder');
-                    folderDialog(facet, baton);
-                } else {
-                    if (facet === 'folder') {
-                        //overwrite custom
-                        baton.model.update(facet, value, {display_name: link.attr('title'), custom: option });
-                    } else {
-                        //use existing option
-                        baton.model.update(facet, value, {option: option });
-                    }
-                    baton.model.trigger('query');
-                }
-            });
+            ext.point('io.ox/search/facets/options-handler').invoke('draw', this, baton);
         }
     });
 
@@ -336,19 +175,22 @@ define('io.ox/search/view-template',
         index: 300,
         draw: function (baton) {
             var items = baton.model.get('items'),
-                count = items.length - baton.model.get('extra');
-            if (items.length > baton.model.get('size')) {
-                this.append(
+                count = items.length - baton.model.get('extra'),
+                row = items.length <= baton.model.get('size') ?
+                    $('<div class="info">').hide() :
                     $('<div class="info">')
-                    .append(
+                        .append(
                             $('<span>')
                             .addClass('info-item')
                             .append(
                                 gt('More than the currently displayed %1$s items were found', count)
                             )
-                        )
-                );
-            }
+                        );
+            var elem = this.find('.info');
+            if (elem.length)
+                elem.replaceWith(row);
+            else
+                this.append(row);
         }
     });
 
@@ -366,388 +208,24 @@ define('io.ox/search/view-template',
         }
     });
 
-    function getOptionLabel(options, id) {
-        var current = _.find(options, function (item) {
-                return item.id === id;
-            });
-        return (current || {}).display_name;
-    }
-
-    //facet
-    ext.point('io.ox/search/view/window/facet').extend({
-        id: 'type',
-        index: 100,
-        draw: function (value, facet) {
-            var options = value.options,
-                id = value._compact.option,
-                type;
-            //get type label
-            if (value.facet === 'folder')
-                type = gt('Folder');
-            else if (options) {
-                type = getOptionLabel(options, id);
-            }
-            //append type
-            if (type) {
-                this.find('label').prepend(
-                    $('<span>')
-                        .addClass('type')
-                        //TYPE 3: use facet label instead of option label
-                        .html(facet.style === 'exclusive' ? facet.display_name : type)
-                );
-            }
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet').extend({
-        id: 'name',
-        index: 200,
-        draw: function (value, facet) {
-            var type;
-
-            //TYPE 3: use option label instead of value label
-            if (facet.style === 'exclusive')
-                type = getOptionLabel(value.options, value._compact.option);
-
-            this.find('label').append(
-                $('<span>')
-                    .addClass('name')
-                    .html(type || value.display_name)
-            );
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet').extend({
-        id: 'dropdown',
-        index: 300,
-        draw: function (value, facet) {
-            var options = facet.options || _.values(facet.values)[0].options || [],
-                current = value._compact.option, option,
-                parent = this.parent(),
-                menu;
-
-            if (options.length) {
-                this.attr('data-toggle', 'dropdown');
-                //add caret
-                this.prepend(
-                    $('<div class="caret-container">').append(
-                        $('<span class="caret">')
-                    )
-                );
-
-                //creste menu
-                menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
-                        .attr({
-                            'data-facet': facet.id,
-                            'data-value': value.id
-                        });
-                _.each(options, function (item) {
-                    menu.append(
-                        option = $('<li role="presentation">').append(
-                                     $('<a role="menuitem" tabindex="-1" href="#">')
-                                        .append(
-                                            $('<i class="fa fa-fw fa-none">'),
-                                            $('<span>').html(item.display_name)
-                                        )
-                                        .addClass('option')
-                                        .attr('data-option', item.id)
-                                )
-                    );
-                    if (current === item.id)
-                        option.find('.fa').removeClass('fa-none').addClass('fa-check');
-                });
-                //add menu
-                parent.append(menu);
-            }
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet').extend({
-        id: 'remove',
-        index: 400,
-        draw: function (value, facet, baton) {
-            var isMandatory = baton.model.isMandatory(value.facet);
-           //remove action for non mandatory facets
-            if (!isMandatory && value.facet !== 'folder') {
-                this.prepend(
-                    $('<span class="remove">')
-                    .append(
-                        $('<i class="fa fa-times action">')
-                    )
-                    .on('click', function (e) {
-                        e.stopPropagation();
-                        baton.model.remove(value.facet || value._compact.facet, value.id);
-                    })
-                );
-            }
-        }
-    });
-
-
-    //facet type: folder
-    function folderDialog(facet, baton) {
-        require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-            var id = facet.values[0].custom,
-                type = baton.model.getModule();
-
-            var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(gt('Folder')))
-                .addPrimaryButton('ok', gt('Select Folder'), 'ok', {'tabIndex': '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
-            dialog.getBody().css({ height: '250px' });
-
-            //use foldertree or folderlist
-            var TreeConstructor = ['mail', 'files'].indexOf(type) >= 0  ? views.FolderTree : views.FolderList,
-                tree = new TreeConstructor(dialog.getBody(), {
-                    type: type === 'files' ? 'infostore' : type,
-                    tabindex: 0,
-                    rootFolderId: type === 'files' ? '9' : '1',
-                    dialogmode: true,
-                    targetmode: true,
-                    customize: function (data) {
-                        if (data.id === id) {
-                            this.removeClass('selectable').addClass('disabled');
-                        }
-                    }
-                });
-
-            dialog.show(function () {
-                tree.paint().done(function () {
-                    if (id) {
-                        tree.select(id).done(function () {
-                            dialog.getBody().focus();
-                        });
-                    }
-                });
-            })
-            .done(function (action) {
-                if (action === 'ok') {
-                    var target = _(tree.selection.get()).first(),
-                        //TODO: better way tp get label?!
-                        label = $(arguments[2]).find('[data-obj-id="' + target + '"]').find('.short-title').text();
-                    baton.model.update(facet.id, id, {custom: target, display_name: label});
-                }
-                tree.destroy().done(function () {
-                    tree = dialog = null;
-                });
-            });
-        });
-    }
-
-    ext.point('io.ox/search/view/window/facet/folder').extend({
-        id: 'dropdown',
-        index: '300',
-        draw: function (value, baton) {
-
-
-            var button = this.find('a[type="button"]'),
-                current = value.custom,
-                option,
-                menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
-                    .attr({
-                        'data-facet': 'folder',
-                        'data-value': 'custom'
-                    });
-
-            button.attr('data-toggle', 'dropdown');
-            button.prepend(
-                $('<div class="caret-container">').append(
-                    $('<span class="caret">')
-                )
-            );
-
-            //add fodlers
-            util.getFolders(baton.model)
-                .then(function (accounts) {
-
-                    //handle each account
-                    _.each(accounts, function (account, key) {
-
-                        //reduce list for non primary accounts
-                        if (key !== '0') {
-                            account.list  = account.list.slice(0, 2);
-                        }
-
-                        //sort by type
-                        account.list.sort(function (a, b) {
-                            return SORT[a.type] - SORT[b.type];
-                        });
-
-
-                        //account name as dropdown header
-                        if (Object.keys(accounts).length > 1) {
-                            menu.append(
-                                $('<li role="presentation" class="dropdown-header">').append(account.name)
-                            );
-                        }
-                        //add option
-                        _.each(account.list, function (folder) {
-                            menu.append(
-                                option = $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem" class="option" tabindex="-1">')
-                                        .append(
-                                            $('<i class="fa fa-fw fa-none">'),
-                                            $('<span>').text(folder.title)
-                                        )
-                                        .attr('data-custom', folder.id)
-                                        .attr('title', folder.title)
-                                )
-                            );
-                            if (current === folder.id)
-                                option.find('.fa').removeClass('fa-none').addClass('fa-check');
-                        });
-
-                        //add divider
-                        menu.append(
-                            $('<li role="presentation" class="divider">')
-                        );
-                    });
-                    //add option to open dialog
-                    menu.append(
-                        $('<li role="presentation">').append(
-                             $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
-                                .append(
-                                    $('<i class="fa fa-fw fa-none">'),
-                                    $('<span>').text(gt('More') + '...')
-                                )
-                                .attr('data-action', 'dialog')
-                        )
-                    );
-                });
-
-            //add to dom
-            this.append(menu).appendTo(this);
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet/folder').extend({
-        id: 'all-folders',
-        index: '400',
-        draw: function (value, baton) {
-            var link;
-            //dropdown entry
-            if (!baton.model.isMandatory('folder')) {
-
-                //add dropdown entry
-                this.find('ul.dropdown').prepend(
-                    $('<li role="presentation">').append(
-                         link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
-                                    .append(
-                                        $('<i class="fa fa-fw ">'),
-                                        $('<span>').text(gt('All folders'))
-                                    )
-                                    .attr('data-custom', 'custom')
-                                    .attr('title', gt('All folders'))
-                    )
-                );
-                //is active
-                if (!value.custom || value.custom === 'custom') {
-                    //set display name
-                    this.find('.name')
-                        .text(gt('All folders'));
-                    //set fa-check icon
-                    link.find('i')
-                        .addClass('fa-check');
-                }
-            }
-        }
-    });
-
     // inline dropdown
-    ext.point('io.ox/search/view/window/mobile').extend({
+    ext.point('io.ox/search/view/mobile').extend({
         id: 'dropdown',
         index: 100,
         draw: function () {
-            //when exisiting autocomplete dropdown is rendered into this (autocompelte tk container)
+            // when exisiting autocomplete dropdown is rendered into this (autocompelte tk container)
             $('<div class="mobile-dropdown col-xs-12">')
                 .hide()
                 .appendTo(this);
         }
     });
 
-    ext.point('io.ox/search/view/window/mobile').extend({
+    ext.point('io.ox/search/view/mobile').extend({
         id: 'app',
         index: 100,
         draw: function () {
-            //overwirte app
-            point.replace({
-                id: 'apps',
-                index: 100,
-                row: '0',
-                draw: function (baton) {
+            // overwirte app
 
-                    var id = baton.model.getApp(),
-                        opt = baton.model.getOptions(),
-                        row, cell,
-                        items = [],
-                        titles = {},
-                        apps = settings.get('search/modules', []);
-
-                    //create containers
-                    row = $('<div class="row ">').append(
-                        cell = $('<div class="btn-group col-xs-12">')
-                    );
-
-                    //apply mapping (infostore-files-drive chameleon)
-                    apps = _.map(apps, function (module) {
-                        var id = 'io.ox/' + module;
-                        return opt.mapping[id] || id;
-                    });
-
-                    //create dropdown menu entries
-                    _(apps).each(function (id) {
-                        var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
-                        items.push(
-                            $('<li role="presentation">')
-                            .append(
-                                $('<a role="menuitem" tabindex="-1" href="#">')
-                                    .attr({
-                                        'title': title,
-                                        'data-app': id
-                                    })
-                                    .append(
-                                        $('<i class="fa fa-fw"></i>'),
-                                        $('<span>').text(
-                                            title
-                                        )
-                                    )
-                            )
-                        );
-                    });
-
-                    //create button and append dropdown menue
-                    cell.append(
-                        $('<a href="#" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">')
-                            .append(
-                                $('<span class="name">'),
-                                $('<span class="caret">')
-                            ),
-                        $('<ul class="dropdown dropdown-menu app-dropdown" role="menu">').append(items)
-                    );
-
-                    //current app
-                    if (id !== '') {
-                        //add icon
-                        cell.find('[data-app="' + id + '"]')
-                            .find('.fa')
-                            .removeClass('fa-none')
-                            .addClass('fa-check');
-                        //add name
-                        cell.find('.name').text(titles[id]);
-                    }
-
-                    //delegate handler
-                    $('body').delegate('.app-dropdown a', 'click', function (e) {
-                        var cell = $(e.target),
-                            next = cell.closest('a').attr('data-app');
-
-                        if (next && next !== id)
-                            baton.model.setModule(next);
-                    });
-
-                    this.append(row);
-                }
-            });
         }
     });
 

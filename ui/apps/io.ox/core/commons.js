@@ -15,10 +15,10 @@ define('io.ox/core/commons',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
-     'io.ox/core/commons-folderview',
-     'io.ox/core/api/folder',
+     // 'io.ox/core/commons-folderview',
+     'io.ox/core/folder/api',
      'io.ox/core/api/account'
-    ], function (ext, links, gt, FolderView, folderAPI, accountAPI) {
+    ], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI) {
 
     'use strict';
 
@@ -61,7 +61,7 @@ define('io.ox/core/commons',
                 draw: function (baton) {
                     // inline links
                     var node = $('<div>'), id = baton.id, opt = baton.opt || {};
-                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', forcelimit: opt.forcelimit})))
+                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', dropdown: opt.dropdown })))
                         .draw.call(node, { data: baton.selection, grid: baton.grid }); // needs grid to add busy animations without using global selectors
                     this.append(
                         node.children().first()
@@ -329,9 +329,7 @@ define('io.ox/core/commons',
 
             var name = app.get('name'),
                 // right now, only mail folders supports "total" properly
-                countGridData = name !== 'io.ox/mail',
-                // only mail searches not across all folders
-                searchAcrossFolders = name !== 'io.ox/mail';
+                countGridData = name !== 'io.ox/mail';
 
             function getInfoNode() {
                 var visible = app.getWindow && app.getWindow().state.visible;
@@ -352,11 +350,16 @@ define('io.ox/core/commons',
                     $('<span class="folder-count">')
                 );
 
-                folderAPI.get({ folder: folder_id }).then(function success(data) {
+                folderAPI.get(folder_id).done(function success(data) {
 
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
                     grid.getContainer().attr('aria-setsize', total);
+                    grid.meta = {
+                        total: total,
+                        title: data.title
+                    };
+                    grid.trigger('meta:update');
                     node.find('.folder-name').text(data.title);
 
                     if (total > 0) {
@@ -365,29 +368,20 @@ define('io.ox/core/commons',
                 });
             }
 
-            grid.on('change:prop:folder change:mode change:ids', function () {
+            grid.on({
+                'change:prop:folder change:mode change:ids': function () {
 
-                var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
-                if (mode === 'all') {
-                    // non-search; show foldername
-                    drawFolderInfo(folder_id);
-                }
-                else if (mode === 'search') {
-                    node = getInfoNode().empty();
-                    // search across all folders
-                    if (searchAcrossFolders) {
-                        node.append(
-                            $.txt(gt('Searched in all folders'))
-                        );
-                    } else {
-                        node.append(
-                            $.txt(
-                                //#. Searched in: <folder name>
-                                gt('Searched in')
-                            ),
-                            $.txt(': '),
-                            folderAPI.getTextNode(folder_id)
-                        );
+                    var folder_id = grid.prop('folder'), mode = grid.getMode();
+                    if (mode === 'all') {
+                        // non-search; show foldername
+                        drawFolderInfo(folder_id);
+                    }
+                    else if (mode === 'search') {
+                        var node = getInfoNode();
+                        node.find('.folder-name')
+                            .text(gt('Results'));
+                        node.find('.folder-count')
+                            .text('(' + grid.getIds().length + ')');
                     }
                 }
             });
@@ -462,23 +456,30 @@ define('io.ox/core/commons',
         wireGridAndSearch: function (grid, win, api) {
             // search: all request
             grid.setAllRequest('search', function () {
-                var options = win.search.getOptions();
-                options.folder = grid.prop('folder');
-                options.sort = grid.prop('sort');
-                options.order = grid.prop('order');
-                return api.search(win.search.query, options);
+                // result: contains a amount of data somewhere between the usual all and list responses
+                var params = { sort: grid.prop('sort'), order: grid.prop('order') };
+                return api.query(true, params)
+                    .then(function (response) {
+                        var data = response && response.results ? response.results : [];
+                        return data;
+                    });
             });
+
             // search: list request
+            // forward ids (no explicit all/list request in find/search api)
             grid.setListRequest('search', function (ids) {
-                return api.getList(ids);
+                var args = [ ids ];
+                return $.Deferred().resolveWith(this, args);
             });
-            // on search
-            win.on('search', function () {
-                grid.setMode('search');
-            });
-            // on cancel search
-            win.on('search:clear cancel-search', function () {
-                if (grid.getMode() !== 'all') grid.setMode('all');
+
+            // events
+            win.on({
+                'search:query': function () {
+                    grid.setMode('search');
+                },
+                'search:clear search:cancel': function () {
+                    if (grid.getMode() !== 'all') grid.setMode('all');
+                }
             });
         },
 
@@ -643,13 +644,14 @@ define('io.ox/core/commons',
         },
 
         addFolderView: function (app, options) {
-            var view = new FolderView(app, options);
-            view.handleFolderChange();
-            view.resizable();
-            view.actionLink();
-            view.handleDrag();
-            view.start();
-            return view;
+            if (ox.debug) console.warn('Deprecated: common.addFolderView()', app, options);
+            // var view = new FolderView(app, options);
+            // view.handleFolderChange();
+            // view.resizable();
+            // view.actionLink();
+            // view.handleDrag();
+            // view.start();
+            // return view;
         },
 
         vsplit: (function () {
@@ -706,11 +708,11 @@ define('io.ox/core/commons',
             };
         }()),
 
-        mediateFolderView: function (app) {
+        mediateFolderView: function (app, flat) {
 
             function toggleFolderView(e) {
                 e.preventDefault();
-                e.data.app.toggleFolderView(e.data.state);
+                e.data.app.folderView.toggle(e.data.state);
             }
 
             function onFolderViewOpen(app) {
@@ -730,19 +732,28 @@ define('io.ox/core/commons',
                         $('<a href="#" class="toolbar-item" tabindex="1">')
                         .attr('title', gt('Open folder view'))
                         .append($('<i class="fa fa-angle-double-right">'))
-                        .on('click', { app: app, state: true }, toggleFolderView)
+                        .on('click', { app: app, state: true }, toggleFolderView)
                     );
                 }
             });
 
-            var side = app.getWindow().nodes.sidepanel;
+            var side = app.getWindow().nodes.sidepanel, target;
 
-            side.find('.foldertree-container').addClass('bottom-toolbar');
-            side.find('.foldertree-sidepanel').append(
+            if (flat) {
+                side.addClass('bottom-toolbar');
+                target = side;
+            } else {
+                side.find('.foldertree-container').addClass('bottom-toolbar');
+                target = side.find('.foldertree-sidepanel');
+            }
+
+            target.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
-                    .attr('title', gt('Close folder view'))
-                    .append($('<i class="fa fa-angle-double-left">'))
+                    .append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close folder view'))
+                    )
                     .on('click', { app: app, state: false }, toggleFolderView)
                 )
             );
@@ -790,7 +801,7 @@ define('io.ox/core/commons',
                     data = changed;
                 }
 
-                if ((getter = getter || (api ? api.get : null))) {
+                if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
                     if (!data.id) {
                         data.id = arguments[1].id;
@@ -884,6 +895,8 @@ define('io.ox/core/commons',
 
     // Accessibility F6 jump
     var macos = _.device('macos');
+    // do not focus nodes with negative tabindex, or hidden nodes
+    var tabindexSelector = '[tabindex]:not([tabindex^="-"]):visible';
     $(document).on('keydown.f6', function (e) {
 
         if (e.which === 117 && (macos || e.ctrlKey)) {
@@ -892,18 +905,28 @@ define('io.ox/core/commons',
 
             var items = $('#io-ox-core .f6-target:visible'),
                 closest = $(document.activeElement).closest('.f6-target'),
-                index = (items.index(closest) || 0) + (e.shiftKey ? -1 : +1),
-                next;
+                oldIndex = items.index(closest) || 0,
+                newIndex = oldIndex,
+                nextItem;
 
-            if (index >= items.length) index = 0;
-            if (index < 0) index = items.length - 1;
-            next = items.eq(index);
+            // find next f6-target that is focusable or contains a focusable node
+            do {
+                newIndex += (e.shiftKey ? -1 : +1);
+                if (newIndex >= items.length) newIndex = 0;
+                if (newIndex < 0) newIndex = items.length - 1;
+                nextItem = items.eq(newIndex);
 
-            if (next.attr('tabindex')) {
-                next.focus();
-            } else {
-                next.find('[tabindex]:visible').first().focus();
-            }
+                if (nextItem.is(tabindexSelector)) {
+                    nextItem.focus();
+                    break;
+                }
+
+                nextItem = nextItem.find(tabindexSelector).first();
+                if (nextItem.length) {
+                    nextItem.focus();
+                    break;
+                }
+            } while (oldIndex !== newIndex);
         }
     });
 

@@ -18,13 +18,14 @@ define('io.ox/contacts/view-detail',
      'io.ox/contacts/api',
      'io.ox/contacts/actions',
      'io.ox/contacts/model',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
+     'io.ox/core/util',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
      'less!io.ox/contacts/style'
-    ], function (ext, util, api, actions, model, folderAPI, links, date, gt, settings) {
+    ], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, gt, settings) {
 
     'use strict';
 
@@ -137,17 +138,19 @@ define('io.ox/contacts/view-detail',
         id: 'contact-title',
         draw: function (baton) {
 
-            var name = createText(util.getFullNameFormat(baton.data),
-                    ['first_name', 'last_name', 'title', 'display_name']),
-                job = createText(getDescription(baton.data),
-                    ['position', 'profession', 'type']),
+            var name = coreUtil.renderPersonalName({
+                html: util.getFullName(baton.data, true),
+                tagName: 'h1'
+            }, baton.data);
+
+            var job = createText(getDescription(baton.data), ['position', 'profession', 'type']),
                 company = $.trim(baton.data.company);
 
             this.append(
                 $('<div class="next-to-picture">').append(
                     // right side
                     $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
-                    name.length ? $('<h1 class="header-name">').append(name) : [],
+                    name.children().length ? name.addClass('header-name') : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],
                     $('<section class="attachments-container clear-both">')
@@ -229,7 +232,10 @@ define('io.ox/contacts/view-detail',
                         $('<div class="member-picture">'),
                         $.extend(data, { width: 48, height: 48, scaleType: 'cover' })
                     ),
-                    $('<div class="member-name">').text(data.display_name),
+                    coreUtil.renderPersonalName({
+                        $el: $('<div class="member-name">'),
+                        name: data.display_name
+                    }, data),
                     $('<a href="#" class="halo-link">').data({ email1: data.mail }).text(data.mail)
                 )
             );
@@ -316,14 +322,8 @@ define('io.ox/contacts/view-detail',
 
     function clickMail(e) {
         e.preventDefault();
-        // set recipient
-        var data = { to: [[e.data.display_name, e.data.email]] };
-        // open compose
-        ox.load(['io.ox/mail/write/main']).done(function (m) {
-            m.getApp().launch().done(function () {
-                this.compose(data);
-            });
-        });
+        // set recipient and open compose
+        ox.registry.call('mail-compose', 'compose', { to: [[e.data.display_name, e.data.email]] });
     }
 
     function mail(address, name, id) {
@@ -704,7 +704,13 @@ define('io.ox/contacts/view-detail',
     function toggleQRCode(e) {
         e.preventDefault();
         var node = $(e.delegateTarget);
-        if (node.find('canvas').length) hideQRCode(node); else showQRCode(node);
+        if (node.find('canvas').length) {
+            hideQRCode(node);
+            $(this).attr('aria-checked', false);
+        } else {
+            showQRCode(node);
+            $(this).attr('aria-checked', true);
+        }
     }
 
     ext.point('io.ox/contacts/detail/content').extend({
@@ -720,8 +726,8 @@ define('io.ox/contacts/view-detail',
             this.append(
                 $('<fieldset class="block">').append(
                     $('<legend class="sr-only">').text(gt('Show QR code')),
-                    $('<i class="fa fa-qrcode">'), $.txt(' '),
-                    $('<a href="#">').text(gt('Show QR code'))
+                    $('<i class="fa fa-qrcode" aria-hidden="true">'), $.txt(' '),
+                    $('<a href="#" role="checkbox" aria-checked="false">').text(gt('Show QR code'))
                 )
                 .data(baton.data)
                 .on('click', 'a', toggleQRCode)
@@ -744,14 +750,16 @@ define('io.ox/contacts/view-detail',
                 }
                 this.append(
                     $('<div class="clearfix">'),
-                    folderAPI.getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
+                    getBreadcrumb(baton.data.folder_id, options).addClass('chromeless')
                 );
             }
         }
     });
 
     function redraw(e, data) {
-        $(this).replaceWith(e.data.view.draw(data));
+        var baton = e.data.baton;
+        baton.data = data;//use old baton with new data(keep disabled extensionpoints)
+        $(this).replaceWith(e.data.view.draw(baton));
     }
 
     return {
@@ -766,7 +774,7 @@ define('io.ox/contacts/view-detail',
                 baton = ext.Baton.ensure(baton);
 
                 var node = $.createViewContainer(baton.data, api)
-                    .on('redraw', { view: this, data: baton.data }, redraw)
+                    .on('redraw', { view: this, data: baton.data , baton: baton}, redraw)
                     .addClass('contact-detail view')
                     .attr({
                         'role': 'complementary',

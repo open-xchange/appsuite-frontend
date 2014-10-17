@@ -196,7 +196,7 @@ define('io.ox/mail/toolbar',
     ext.point('io.ox/mail/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        forcelimit: true, // always use drop-down
+        dropdown: true, // always use drop-down
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/mail/classic-toolbar/links'
@@ -254,17 +254,24 @@ define('io.ox/mail/toolbar',
     var toolbar = $('<ul class="classic-toolbar" role="menu">');
 
     var updateToolbar = _.debounce(function (list) {
+
         if (!list) return;
-        // remember if this list is based on a single thread
-        var isThread = list.length === 1 && /^thread\./.test(list[0]);
+
+        var isThread = this.props.get('thread'),
+            hasFocus = $.contains(toolbar[0], document.activeElement);
+
         // resolve thread
-        list = api.threads.resolve(list);
-        if (list.length === 0) isThread = false;
+        list = api.resolve(list, isThread);
+
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
+
         // draw toolbar
         var baton = ext.Baton({ $el: toolbar, data: list, isThread: isThread, app: this });
         ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), baton);
+
+        if (hasFocus) toolbar.find('a:first').focus();
+
     }, 10);
 
     ext.point('io.ox/mail/mediator').extend({

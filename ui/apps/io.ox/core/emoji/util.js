@@ -30,40 +30,50 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
     return {
 
-        processEmoji: function (text, cb) {
+        /** process a string and replace emoji characters with img tags
+         *
+         *
+         * @param str - the string to be processed
+         * @param callback - a callback method that gets called with 2 parameters:
+         *      @param result - the processed text
+         *      @param object - an object containing a key 'loaded', a boolean to indicate wether
+         *                      the emoji lib has just been loaded or had been loaded before
+         * @returns the processed or unprocessed string
+         *
+         * please mind that this functions returns HTML!
+         * if source is regarded as plain text you needs to escape it via _.escape()
+        */
+        processEmoji: function (str, callback) {
 
-            if (text.length > (1024 * (_.device('chrome >= 30') ? 64 : 32))) {
-                //text is large
-                return text;
+            var tooLarge = str.length > (1024 * (_.device('chrome >= 30') ? 64 : 32)),
+                /* check if there might be any emojis; pure ascii cannot contain them (except 0xA9 and 0xAE)
+                 * using a regex is 50-100 times faster than looping over the characters
+                 *
+                 * When adjusting this regex, make sure, all supported emoji do still
+                 * match (all unified + all softbank codepoints)
+                 */
+                hasEmoji = /[\xa9\xae\u203c\u2049\u20e3\u2122-\uffff]/.test(str);
+
+            function cont(str, libJustLoaded) {
+                if (callback) callback(str, { loaded: !!libJustLoaded });
+                return str;
             }
 
-            var i = 0, asciiOnly = true, exceptions = {
-                '\u00a9': true,
-                '\u00ae': true
-            };
-
-            // check if there might be any emojis; pure ascii cannot contain them
-            for (var i = 0; asciiOnly && i < text.length; i++) {
-                if (text.charCodeAt(i) > 255 || exceptions[text.charAt(i)]) asciiOnly = false;
+            if (tooLarge || !hasEmoji) {
+                return cont(str);
             }
-
-            if (asciiOnly) return text;
-
-            if (emoji && !cb) {
-                text = convert(text);
-            } else if (emoji && cb) {
-                cb(text = convert(text), {loaded: false});
-            } else {
+            else if (emoji) {
+                return cont(convert(str));
+            }
+            else {
                 require(['io.ox/emoji/main'], function (code) {
                     emoji = code;
-                    if (cb) {
-                        cb(convert(text), {loaded: true});
-                    }
+                    cont(convert(str), true);
                 });
+                return str;
             }
-
-            return text;
         },
+
         imageTagsToUnified: function (html) {
             var node = $('<div>').append(html);
 

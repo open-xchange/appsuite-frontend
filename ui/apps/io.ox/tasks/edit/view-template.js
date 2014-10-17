@@ -132,7 +132,7 @@ define('io.ox/tasks/edit/view-template',
             }
             this.append(
                 $('<div class="col-lg-12">').append(
-                    $('<button tabindex="1" class="btn btn-link expand-link">').text(text)
+                    $('<button type="button" tabindex="1" class="btn btn-link expand-link">').attr('aria-expanded', !baton.parentView.collapsed).text(text)
                     .on('click', function () {
                         if (baton.parentView.collapsed) {
                             baton.parentView.$el.find('.collapsed').show();
@@ -146,7 +146,7 @@ define('io.ox/tasks/edit/view-template',
                             }
                         }
                         baton.parentView.collapsed = !baton.parentView.collapsed;
-                        $(this).text((baton.parentView.collapsed ? gt('Expand form') : gt('Collapse form')));
+                        $(this).attr('aria-expanded', !baton.parentView.collapsed).text((baton.parentView.collapsed ? gt('Expand form') : gt('Collapse form')));
                     })
                 )
             );
@@ -323,6 +323,9 @@ define('io.ox/tasks/edit/view-template',
                 guid = _.uniqueId('form-control-label-');
             this.nodes = {};
             this.nodes.select = $('<select tabindex="1">').addClass('priority-selector form-control').attr('id', guid);
+            self.nodes.select.append(
+                    $('<option>', {value: 'null'}).text(gt('None'))
+                );
             _(this.selectOptions).each(function (label, value) {
                 self.nodes.select.append(
                     $('<option>', {value: value}).text(label)
@@ -336,7 +339,6 @@ define('io.ox/tasks/edit/view-template',
         },
         attribute: 'priority',
         selectOptions: {
-            0: gt('None'),
             1: gt('Low'),
             2: gt('Medium'),
             3: gt('High')
@@ -405,7 +407,10 @@ define('io.ox/tasks/edit/view-template',
                                tabindex: 1}),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
-                                .append($('<i class="fa fa-plus">'))
+                                .append(
+                                    $('<i class="fa fa-plus" aria-hidden="true">'),
+                                    $('<span class="sr-only">').text(gt('Plus'))
+                                )
                         )
                     )
                 );
@@ -572,11 +577,11 @@ define('io.ox/tasks/edit/view-template',
             }
             this.append(
                 $('<div class="col-lg-12 collapsed">').append(
-                    $('<button tabindex="1" class="btn btn-link expand-details-link">').text(text)
+                    $('<button tabindex="1" class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
                     .on('click', function () {
                         baton.parentView.$el.find('.task-edit-details').toggle();
                         baton.parentView.detailsCollapsed = !baton.parentView.detailsCollapsed;
-                        $(this).text((baton.parentView.detailsCollapsed ? gt('Show details') : gt('Hide details')));
+                        $(this).attr('aria-expanded', !baton.parentView.detailsCollapsed).text((baton.parentView.detailsCollapsed ? gt('Show details') : gt('Hide details')));
                     })
                 )
             );
@@ -707,7 +712,7 @@ define('io.ox/tasks/edit/view-template',
             var node = $(baton.app.attributes.window.nodes.body),
                 save = baton.parentView.$el.find('.task-edit-save'),
                 cancel = baton.parentView.$el.find('.task-edit-cancel');
-            node.append($('<div class="app-bottom-toolbar">').append(cancel, save));
+            node.append($('<div class="app-bottom-toolbar">').append(save, cancel));
         }
     });
 

@@ -193,7 +193,27 @@
 
 }
 
-@media all and (max-width: 480px), all and (max-device-width: 480px) {
+@media (max-width: 480px), (max-device-width: 480px) {
+    .vgrid-cell.tasks {
+        width: 100%;
+        font-size: 14px;
+        border-top: 1px solid #ddd;
+        &:first-child {
+            border-top-width: 0;
+        }
+        left: 0px;
+        .transition(e('left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1), padding 0.40s cubic-bezier(0.1, 0.7, 0.1, 1)'));
+        &.swipe-left {
+            left: -80px;
+        }
+        z-index: 2;
+    }
+
+    .io-ox-tasks-main {
+        .vgrid .vgrid-scrollpane {
+            bottom: 45px;
+        }
+    }
 
     .tasks-detailview {
 

@@ -14,15 +14,14 @@
 
 define('io.ox/contacts/distrib/create-dist-view',
     ['io.ox/backbone/views',
-     'io.ox/backbone/forms',
+     'io.ox/backbone/mini-views',
      'gettext!io.ox/contacts',
-     'io.ox/core/tk/autocomplete',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/extensions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/notifications'
-    ], function (views, forms, gt, autocomplete, api, util, ext, AddParticipantsView, notifications) {
+    ], function (views, mini, gt, api, util, ext, AddParticipantsView, notifications) {
 
     'use strict';
 
@@ -52,12 +51,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     $('<h1 class="clear-title title">').text(header),
                     // save/create button
                     $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
-                        self.options.parentView.trigger('save:start');
-                        self.options.model.save().done(function () {
-                            self.options.parentView.trigger('save:success');
-                        }).fail(function () {
-                            self.options.parentView.trigger('save:fail');
-                        });
+                        self.options.model.save();
                     }),
                     // cancel button
                     $('<button type="button" class="btn btn-default" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
@@ -70,28 +64,21 @@ define('io.ox/contacts/distrib/create-dist-view',
         }
     });
 
-    point.extend(new forms.ControlGroup({
+    point.extend({
         id: 'displayname',
         index: 200,
-        attribute: 'display_name',
         className: 'row',
-        label:
-            //#. Name of distribution list
-            gt('Name'), // mind bug #31073
-        control: '<input tabindex="1" type="text" class="form-control">',
-        buildControls: function () {
-            return this.buildElement();
-        },
-        buildControlGroup: function () {
+        render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                this.nodes.controlGroup = $('<div class="form-group col-md-12">').append(
-                    this.buildLabel().attr('for', guid),
-                    this.buildControls().attr('id', guid)
+                $('<div>').addClass('form-group col-md-12').append(
+                    //#. Name of distribution list
+                    $('<label>').addClass('control-label').attr('for', guid).text(gt('Name')), // mind bug #31073
+                    new mini.InputView({ name: 'display_name', model: this.baton.model, className: 'form-control control', id: guid }).render().$el
                 )
             );
         }
-    }));
+    });
 
     point.extend({
         id: 'add-members',
@@ -102,7 +89,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             var pNode = $('<div class="col-xs-12 col-md-6">').append(
                     $('<div class="autocomplete-controls input-group">').append(
-                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr('placeholder', gt('Add contact') + ' ...'),
+                        $('<input tabindex="1" type="text" class="add-participant form-control">').attr({'placeholder': gt('Add contact') + ' ...', 'aria-label': gt('Add contact')}),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" aria-label="' + gt('Add contact') + '" data-action="add" tabindex="1">')
                                 .append($('<i class="fa fa-plus">'))
@@ -247,14 +234,15 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             var self = this;
 
+            // get proper data for picture halo but ignore client-side ids (0.99988765533211)
+            var halo = $.extend({}, o, { width: 48, height: 48, scaleType: 'cover' });
+            if (/^0\./.test(halo.id)) delete halo.id;
+
             return $('<div class="listed-item col-xs-12 col-md-6">')
                 .attr('data-mail', o.display_name + '_' + o.mail)
                 .append(
                     // contact picture
-                    api.pictureHalo(
-                        $('<div class="contact-image">'),
-                        $.extend(o, { width: 48, height: 48, scaleType: 'cover'})
-                    ),
+                    api.pictureHalo($('<div class="contact-image">'), halo),
                     // name
                     $('<div class="person-name">').text(o.display_name),
                     // mail address
@@ -264,7 +252,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                             .text(o.mail)
                     ),
                     // remove icon
-                    $('<a href="#" class="remove" tabindex="1">').append(
+                    $('<a href="#" class="remove" role="button" aria-label="' + gt('Remove contact') + '" tabindex="1">').append(
                         $('<div class="icon">').append(
                             $('<i class="fa fa-trash-o">')
                         )
@@ -301,11 +289,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         validate: function () {
         }
     });
-
-    point.extend(new forms.ErrorAlert({
-        id: 'io.ox/contacts/distrib/create-dist-view/errors',
-        index: 250
-    }));
 
     return ContactCreateDistView;
 });

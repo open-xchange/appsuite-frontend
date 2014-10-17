@@ -14,6 +14,7 @@
 define('io.ox/core/tk/attachments',
     ['io.ox/core/extensions',
      'io.ox/core/api/attachment',
+     'io.ox/core/folder/title',
      'io.ox/core/strings',
      'io.ox/core/tk/attachmentsUtil',
      'io.ox/core/capabilities',
@@ -24,7 +25,7 @@ define('io.ox/core/tk/attachments',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'less!io.ox/core/tk/attachments',
-    ], function (ext, attachmentAPI, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
+    ], function (ext, attachmentAPI, shortTitle, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
 
@@ -305,24 +306,15 @@ define('io.ox/core/tk/attachments',
                     maxFileSize,
                     quota,
                     usage,
-                    maxFileSize,
                     isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
                     filesLength = files.length,
-                    autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments'),
+                    autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments'),
                     result = { added: [] };
-
-                /*
-                function getQuota(a, b) {
-                    // 0 and -1 means that this is disabled
-                    return (a >= 0 && b >= 0 && Math.min(a, b)) || (a >= 0 && a) || b || 0;
-                }
-                */
 
                 if (!list.length) return;
 
                 //check
                 if (isMail) {
-                    autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments');
                     maxFileSize = autoPublish ? -1 : properties.attachmentQuotaPerFile;
                     quota = autoPublish ? -1 : properties.attachmentQuota;
                     usage = 0;
@@ -348,6 +340,18 @@ define('io.ox/core/tk/attachments',
                             result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota));
                             result.reason = 'quota';
                             return true;
+                        }
+                        if (isMail && autoPublish) {
+                            if (properties.infostoreMaxUploadSize > 0 && fileSize > properties.infostoreMaxUploadSize) {
+                                result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s', fileTitle, strings.fileSize(properties.infostoreMaxUploadSize));
+                                result.reason = 'filesizeAutoPublish';
+                                return true;
+                            }
+                            if (properties.infostoreQuota > 0 && (total > (properties.infostoreQuota - properties.infostoreUsage))) {
+                                result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the infostore quota limit of %2$s', fileTitle, strings.fileSize(properties.infostoreQuota));
+                                result.reason = 'quotaAutoPublish';
+                                return true;
+                            }
                         }
                     }
 
@@ -381,7 +385,7 @@ define('io.ox/core/tk/attachments',
         this.init();
     }
 
-    function AttachmentList(options) {
+    function AttachmentListOld(options) {
         var self = this;
         _.extend(this, {
 
@@ -437,6 +441,7 @@ define('io.ox/core/tk/attachments',
         id: 'slideshow',
         index: 100,
         label: gt('Slideshow'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/slideshow-attachment'
     }));
 
@@ -451,6 +456,7 @@ define('io.ox/core/tk/attachments',
         id: 'open',
         index: 150,
         label: gt('Open in browser'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/open-attachment'
     }));
 
@@ -458,6 +464,7 @@ define('io.ox/core/tk/attachments',
         id: 'download',
         index: 200,
         label: gt('Download'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/download-attachment'
     }));
 
@@ -465,6 +472,7 @@ define('io.ox/core/tk/attachments',
         id: 'save',
         index: 400,
         label: gt('Save to Drive'),
+        mobile: 'hi',
         ref: 'io.ox/core/tk/attachment/actions/save-attachment'
     }));
 
@@ -551,7 +559,9 @@ define('io.ox/core/tk/attachments',
     //attachments api currently doesn't support zip download
     new links.Action('io.ox/core/tk/attachment/actions/download-attachment', {
         id: 'download',
-        requires: 'one',
+        requires: function (e) {
+            return e.collection.has('one') && _.device('!ios');
+        },
         action: function (baton) {
             require(['io.ox/core/download'], function (download) {
                 var url = attachmentAPI.getUrl(baton.data, 'download');
@@ -588,8 +598,8 @@ define('io.ox/core/tk/attachments',
             gguid = _.uniqueId('form-control-label-'),
             label = $('<label>').attr('for', gguid).addClass('sr-only').text(options.buttontext),
             input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ id: gguid, tabindex: options.tabindex }),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($('<i class="fa fa-paperclip">'), $.txt(options.buttontext)).append(label, input),
-            driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').attr({ tabindex: options.tabindex }).text(gt('Files'));
+            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($.txt(options.buttontext)).append(label, input),
+            driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').attr({ tabindex: options.tabindex }).text(gt('Add from Drive'));
 
         input.on('focus', function () {
             uploadButton.addClass('active');
@@ -611,7 +621,7 @@ define('io.ox/core/tk/attachments',
     return {
         EditableAttachmentList: EditableAttachmentList,
         EditableFileList: EditableFileList,
-        AttachmentList: AttachmentList,
+        AttachmentList: AttachmentListOld,
         fileUploadWidget: fileUploadWidget
     };
 });

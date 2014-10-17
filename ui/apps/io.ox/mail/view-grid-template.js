@@ -99,7 +99,6 @@ define('io.ox/mail/view-grid-template',
                     fields.subject.removeClass('empty').empty().html(
                         emoji.processEmoji(subject, function (text, lib) {
                             if (!lib.loaded) return;
-
                             fields.subject.html(text);
                         })
                     );

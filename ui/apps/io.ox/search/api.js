@@ -30,8 +30,9 @@ define('io.ox/search/api',
                     params: {
                         action: 'autocomplete',
                         module: '',
-                        //max. number of values for each facet
-                        limit: 3
+                        // max. number of values for each facet;
+                        // serverside default/fallback is 10
+                        limit: 6
                     },
                     data: {
                         prefix: '',
@@ -92,14 +93,14 @@ define('io.ox/search/api',
                     columns: apiFactory.extendColumns(data.extendColumns, module, data.columns)
                 }
             };
-        //filter admin contacts
+        // filter admin contacts
         return obj;
     }
 
-    //get default options
+    // get default options
     function getDefault(key) {
         var  obj = _.copy(api.options.requests[key], true);
-        //filter admin contacts
+        // filter admin contacts
         _.extend(obj.data.options, {admin: settings.get('showAdmin', false)});
         return obj;
     }
@@ -120,32 +121,14 @@ define('io.ox/search/api',
 
         return simpleCache.get(key).then(function (data) {
 
-            //use cache
+            // use cache
             if (data !== null) {
                 return data;
             }
 
-            //call server
+            // call server
             return http[opt.method](opt)
-                .then(function (data) {
-                    //process data
-                    _.each(data.facets, function (facet) {
-                        //add surrounding <i> tag
-                        facet.display_name = facet.display_name || [facet.display_item[0], ' <i>', facet.display_item[1], '</i>'].join('');
-
-                        //handle 'exclusive' facets (use options as values also)
-                        if (facet.style === 'exclusive' && !facet.values) {
-                            facet.values = [];
-                            _.each(facet.options, function (option) {
-                                var value = _.extend({}, option, {options: facet.options});
-                                delete value.filter;
-                                facet.values.push(value);
-                            });
-                        }
-                    });
-                    //add to cache and return data
-                    return simpleCache.add(key, data);
-                });
+                    .then(simpleCache.add.bind(this, key));
         });
     };
 

@@ -24,10 +24,11 @@ define('io.ox/core/main',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
+     'io.ox/core/folder/api',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin'
-    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
+    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
     'use strict';
 
@@ -202,15 +203,16 @@ define('io.ox/core/main',
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
-    topbar.attr({
-        'aria-label': gt('Applications')
-    });
-
-    $('a.dropdown-toggle', topbar).attr({
-        'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
-        'role': 'button',
-        'aria-haspopup': 'true'
-    });
+    topbar
+        .attr('aria-label', gt('Applications'))
+        // prevent dragging links
+        .on('dragstart', false)
+        // make system drop-down accessible
+        .find('a.dropdown-toggle').attr({
+            'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
+            'role': 'button',
+            'aria-haspopup': 'true'
+        });
 
     // whatever ...
     gt.pgettext('app', 'Portal');
@@ -234,6 +236,8 @@ define('io.ox/core/main',
             return;
         }
 
+        var itemsLeftWidth = launchers.offset().left;
+
         // Reset first
         launchers.children('.launcher:hidden').each(function (i, node) {
             $(node).show();
@@ -241,7 +245,6 @@ define('io.ox/core/main',
 
         var itemsVisible = launchers.children('.launcher:visible'),
             itemsRightWidth = topbar.find('.launchers-secondary').outerWidth(true),
-            itemsLeftWidth = 0,
             viewPortWidth = $(document).width(),
             launcherDropDownIconWidth = launcherDropDownIcon.outerWidth(true);
 
@@ -365,8 +368,7 @@ define('io.ox/core/main',
 
     (function () {
 
-        var interval = parseInt(settings.get('refreshInterval', 300000), 10),
-            next = _.now() + interval,
+        var next = _.now(),
             REFRESH_THROTTLE = 10000; // only trigger every 10 seconds
 
         ext.point('io.ox/core/refresh').extend({
@@ -379,20 +381,29 @@ define('io.ox/core/main',
                         console.error('io.ox/core/refresh:default', e.message, e);
                     }
                 }
-            }, REFRESH_THROTTLE)
+            }, REFRESH_THROTTLE),
+            reset: function () {
+                next = _.now() + parseInt(settings.get('refreshInterval', 300000), 10);
+            }
         });
 
-        refresh = function () {
-            next = _.now() + interval;
-            ext.point('io.ox/core/refresh').invoke('action');
-        };
-
         function check() {
-            if (_.now() > next) { refresh(); }
+            if (_.now() > next) {
+                ext.point('io.ox/core/refresh').invoke('action');
+                ext.point('io.ox/core/refresh').invoke('reset');
+            }
         }
 
-        setInterval(check, 10000); // check every 10 seconds
+        refresh = function () {
+            ext.point('io.ox/core/refresh').invoke('action');
+            ext.point('io.ox/core/refresh').invoke('reset');
+        };
+        settings.on('change:refreshInterval', function () {
+            ext.point('io.ox/core/refresh').invoke('reset');
+        });
 
+        ext.point('io.ox/core/refresh').invoke('reset');
+        setInterval(check, 10000); // check every 10 seconds
     }());
 
     (function () {
@@ -596,8 +607,8 @@ define('io.ox/core/main',
             if (model.get('userContent')) {
                 var cls = model.get('userContentClass') || '',
                     icon = model.get('userContentIcon') || '';
-                launcher.addClass('user-content').addClass(cls).children().first().prepend($('<span>').append(
-                    $('<i class="' + icon + '">'))
+                launcher.addClass('user-content').addClass(cls).children().first().prepend(
+                    $('<i class="' + icon + '">')
                 );
             }
         }
@@ -711,15 +722,54 @@ define('io.ox/core/main',
                     // only requests are delayed by 2s, the badge is drawn normally
                     self.append(notifications.attach(addLauncher, 2000));
                     tabManager();
+                } else {
+                    ox.one('connection:online', function () {//lets wait till we are online
+                        self.append(notifications.attach(addLauncher, 2000));
+                        tabManager();
+                    });
                 }
             }
         });
 
+        // ext.point('io.ox/core/topbar/right').extend({
+        //     id: 'search',
+        //     index: 150,
+        //     draw: function () {
+        //         if (capabilities.has('search') && !(_.device('small'))) {
+        //             this.append(
+        //                 addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+        //                                 var app = ox.ui.App.getCurrentApp();
+
+        //                                 // TODO: remove temporary evil hack
+        //                                 if (!app.getWindow().options.facetedsearch) {
+        //                                     // load search default app
+        //                                     var e = $.Event('click');
+        //                                     $('.launcher[data-app-name="io.ox/mail"]')
+        //                                         .find('a')
+        //                                         .trigger(e);
+        //                                     app = ox.ui.App.getCurrentApp();
+        //                                 }
+
+        //                                 if (app.props) {
+        //                                     // active app suppors search
+        //                                     if (!app.props.get('folderview'))
+        //                                         app.props.set('folderview', true);
+        //                                     app.getWindow().nodes.facetedsearch.toolbar.find('.search-field').focus();
+        //                                 }
+
+        //                     },  gt('Search'))
+        //                 .attr('id', 'io-ox-search-topbar-icon')
+        //                 .addClass('io-ox-search')
+        //             );
+        //         }
+        //     }
+        // });
+
         ext.point('io.ox/core/topbar/right').extend({
-            id: 'search',
+            id: 'search-mobile',
             index: 150,
             draw: function () {
-                if (capabilities.has('search')) {
+                if (capabilities.has('search') && _.device('small')) {
                     this.append(
                         addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
                                 require(['io.ox/search/main'], function (searchapp) {
@@ -753,7 +803,7 @@ define('io.ox/core/main',
             index: 100,
             draw: function () {
                 this.append(
-                    $('<li>').append(
+                    $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">').text(gt('Settings'))
                     )
                     .on('click', function (e) {
@@ -769,7 +819,7 @@ define('io.ox/core/main',
             index: 150,
             draw: function () {
                 this.append(
-                    $('<li>').append(
+                    $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">')
                         .text(gt('My contact data'))
                     )
@@ -799,7 +849,7 @@ define('io.ox/core/main',
                 };
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
+                    $('<li role="presentation">', {'class': 'io-ox-specificHelp'}).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
@@ -838,7 +888,7 @@ define('io.ox/core/main',
                             fullscreenButton.text(gt('Fullscreen'));
                         };
                         this.append(
-                            $('<li>').append(
+                            $('<li role="presentation">').append(
                                 fullscreenButton = $('<a href="#" data-action="fullscreen" role="menuitem" tabindex="1">').text(gt('Fullscreen'))
                             )
                             .on('click', function (e) {
@@ -856,7 +906,7 @@ define('io.ox/core/main',
             index: 400,
             draw: function () {
                 this.append(
-                    $('<li>').append(
+                    $('<li role="presentation">').append(
                         $('<a href="#" data-action="about" role="menuitem" tabindex="1">').text(gt('About'))
                     )
                     .on('click', function (e) {
@@ -877,7 +927,7 @@ define('io.ox/core/main',
                 draw: function () {
                     this.append(
                         $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                        $('<li>').append(
+                        $('<li role="presentation">').append(
                             $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
                         )
                         .on('click', function (e) {
@@ -893,18 +943,19 @@ define('io.ox/core/main',
             id: 'dropdown',
             index: 1000,
             draw: function () {
-                var ul;
+                var ul, a;
                 this.append(
                     $('<li class="launcher dropdown" role="presentation">').append(
-                        $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
-                        .attr('aria-label', gt('Settings'))
+                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
                         .append(
-                            $('<i class="fa fa-cog launcher-icon" aria-hidden="true">')
+                            $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
+                            $('<span class="sr-only">').text(gt('Settings'))
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
+                a.dropdown();
             }
         });
 
@@ -939,7 +990,7 @@ define('io.ox/core/main',
             draw: function () {
                 if (capabilities.has('launchpad')) {
                     addLauncher('left', $('<i class="fa fa-th">').attr('aria-label', gt('Your Applications')), function () {
-                        return require(['io.ox/launchpad/main'], function (m) {
+                        require(['io.ox/launchpad/main'], function (m) {
                             launchers.children().removeClass('active-app');
                             launcherDropdown.children().removeClass('active-app');
                             launchers.children().first().addClass('active-app');
@@ -1096,7 +1147,7 @@ define('io.ox/core/main',
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
-                mailto = _.url.hash('mailto') !== undefined && appURL === 'io.ox/mail/write:compose';
+                mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose' || appURL === 'io.ox/mail/write:compose');
 
             if (manifest && (manifest.refreshable || mailto)) {
                 return appURL.split(/,/);
@@ -1434,6 +1485,47 @@ define('io.ox/core/main',
         debug('core: launch > run stages');
         Stage.run('io.ox/core/stages', baton);
     }
+
+    (function ()  {
+
+        var hash = {
+            'mail-compose': 'io.ox/mail/write/main'
+        };
+
+        var custom = {};
+
+        ox.registry = {
+            set: function (id, path) {
+                custom[id] = path;
+            },
+            get: function (id) {
+                return custom[id] || settings.get('registry/' + id) || hash[id];
+            },
+            call: function (id, name) {
+                var dep = this.get(id),
+                    args = _(arguments).toArray().slice(2);
+                return ox.load([dep]).then(function (m) {
+                    if (m.reuse(name, args[0])) return;
+                    return m.getApp().launch().then(function () {
+                        return this[name].apply(this, args);
+                    });
+                });
+            }
+        };
+
+    }());
+
+    //
+    // Visual response to hidden folders
+    //
+    folderAPI.on('warn:hidden', function (e, folder) {
+        if (folder) {
+            notifications.yell('info',
+               //#. %1$s is the filename
+               gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
+            );
+        }
+    });
 
     return {
         logout: logout,

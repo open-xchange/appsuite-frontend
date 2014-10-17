@@ -15,37 +15,38 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('less', {
-
-        bootstrap: {
-            options: { lessrc: '.lessrc' },
-            files: [
-                {
-                    src: ['bower_components/bootstrap/less/bootstrap.less'],
-                    expand: true,
-                    rename: function (dest) { return dest; },
-                    dest: 'build/apps/io.ox/core/bootstrap/css/bootstrap.min.css'
-                }
-            ]
-        },
-        login: {
-            options: { lessrc: '.lessrc' },
-            files: [
-                {
-                    src: [
-                    'bower_components/bootstrap/less/normalize.less',
-                    'bower_components/bootstrap/less/scaffolding.less',
-                    'bower_components/bootstrap/less/type.less',
-                    'bower_components/bootstrap/less/grid.less',
-                    'bower_components/bootstrap/less/forms.less',
-                    'bower_components/bootstrap/less/buttons.less',
-                    'apps/themes/login/login.less'
-                    ],
-                    expand: true,
-                    rename: function (dest) { return dest; },
-                    dest: 'build/apps/themes/login/login.css'
-                }
-            ]
+    grunt.config.merge({
+        less: {
+            bootstrap: {
+                options: { lessrc: '.lessrc' },
+                files: [
+                    {
+                        src: ['bower_components/bootstrap/less/bootstrap.less'],
+                        expand: true,
+                        rename: function (dest) { return dest; },
+                        dest: 'build/apps/io.ox/core/bootstrap/css/bootstrap.min.css'
+                    }
+                ]
+            },
+            login: {
+                options: { lessrc: '.lessrc' },
+                files: [
+                    {
+                        src: [
+                        'bower_components/bootstrap/less/normalize.less',
+                        'bower_components/bootstrap/less/scaffolding.less',
+                        'bower_components/bootstrap/less/type.less',
+                        'bower_components/bootstrap/less/grid.less',
+                        'bower_components/bootstrap/less/forms.less',
+                        'bower_components/bootstrap/less/buttons.less',
+                        'apps/themes/login/login.less'
+                        ],
+                        expand: true,
+                        rename: function (dest) { return dest; },
+                        dest: 'build/apps/themes/login/login.css'
+                    }
+                ]
+            }
         }
     });
 

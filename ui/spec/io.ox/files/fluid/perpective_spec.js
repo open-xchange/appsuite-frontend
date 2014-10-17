@@ -16,11 +16,7 @@ define(['io.ox/files/main',
         'waitsFor',
         'fixture!io.ox/files/api-all.json'], function (main, api, waitsFor, all) {
 
-    // this suite will break the tests, because of some problem with unpainted folderviews
-    // I debugged this into app.folder.set, where folder:change is triggered
-    // TreeNode.updateArrow will fail, because the arrow has not been painted, yet. Paint-method has been
-    // called, but the deferred had not yet returned, when updateArrow is called
-    describe.skip('files app', function () {
+    describe('files app', function () {
         var loadapp = $.Deferred(),
             suite = {},
             //init app only once
@@ -77,23 +73,21 @@ define(['io.ox/files/main',
             });
             it('that filters duplicates', function () {
                 //hint: fake servers all response contains a dublette
-                //var triggered;
+                var triggered;
 
                 //check inital handling
                 expect(suite.pers.baton.allIds).to.have.length(suite.data.length);
 
-                //FIXME: handler in perspectiv isn't executed?!
                 //check refresh handling
-                // suite.pers.selection.on('update', function () {
-                //     triggered = true;
-                // });
-                // api.trigger('refresh.all');
-                // waitsFor(function () {
-                //     return triggered;
-                // });
-                // runs(function () {
-                //     expect(suite.pers.baton.allIds.length).toBe(suite.data.length);
-                // });
+                suite.pers.selection.on('update', function () {
+                    triggered = true;
+                });
+                api.trigger('refresh.all');
+                return waitsFor(function () {
+                    return triggered;
+                }).done(function () {
+                    expect(suite.pers.baton.allIds.length).to.equal(suite.data.length);
+                });
             });
             it('that should have a view mode', function () {
                 expect(suite.pers.baton.options.mode).not.to.be.empty;

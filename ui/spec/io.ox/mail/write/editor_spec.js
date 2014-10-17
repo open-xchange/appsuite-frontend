@@ -20,7 +20,7 @@ define(
 
     'use strict';
 
-    describe('Mail editor', function () {
+    describe.skip('Mail editor', function () {
 
         var app, ed, form = $();
 

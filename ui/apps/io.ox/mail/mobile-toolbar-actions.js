@@ -86,24 +86,24 @@ define('io.ox/mail/mobile-toolbar-actions',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
         },
         'markunread': {
-            prio: 'lo',
-            mobile: 'lo',
+            prio: 'hi',
+            mobile: 'hi',
             drawDisabled: true,
             label: gt('Mark as unread'),
             ref: 'io.ox/mail/actions/markunread',
             section: 'flags'
         },
         'markread': {
-            prio: 'lo',
-            mobile: 'lo',
+            prio: 'hi',
+            mobile: 'hi',
             drawDisabled: true,
             label: gt('Mark as read'),
             ref: 'io.ox/mail/actions/markread',
             section: 'flags'
         },
         'copy': {
-            prio: 'lo',
-            mobile: 'lo',
+            prio: 'hi',
+            mobile: 'hi',
             label: gt('Copy'),
             ref: 'io.ox/mail/actions/copy',
             section: 'file-op'
@@ -127,10 +127,21 @@ define('io.ox/mail/mobile-toolbar-actions',
 
     addAction(pointThreadView, ['compose']);
 
-    addAction(pointDetailView, ['move', 'reply', 'reply-all', 'forward', 'delete']);
+    addAction(pointDetailView, ['reply', 'reply-all', 'delete', 'forward']);
 
     //multiselect in listview
     addAction(pointListViewMultiSelect, ['delete', 'forward', 'move']);
+
+    pointDetailView.extend(new links.Dropdown({
+        id: 'test',
+        index: 900,
+        noCaret: true,
+        icon: 'fa fa-bars',
+        label: gt('Actions'),
+        ariaLabel: gt('Actions'),
+        ref: 'io.ox/mail/links/inline',
+        classes: 'io-ox-action-link mobile-toolbar-action'
+    }));
 
     // add submenu as text link to toolbar in multiselect
     pointListViewMultiSelect.extend(new links.Dropdown({
@@ -143,23 +154,48 @@ define('io.ox/mail/mobile-toolbar-actions',
         ref: 'io.ox/mail/mobile/toolbar/submenuActions'
     }));
 
+    // special "edit draft button"
+    ext.point('io.ox/mail/mobile/navbar/links').extend(new links.Link({
+        prio: 'hi',
+        mobile: 'hi',
+        label: gt('Edit draft'),
+
+        ref: 'io.ox/mail/actions/edit'
+    }));
+
+    ext.point('io.ox/mail/mobile/navbar/links/action').extend(new links.ToolbarLinks({
+        classes: 'navbar-action right',
+        index: 100,
+        id: 'edit-draft-button',
+        ref: 'io.ox/mail/mobile/navbar/links'
+    }));
+
     var updateToolbar = _.debounce(function (list) {
-         if (!list) return;
+
+        if (!list) return;
+
         // remember if this list is based on a single thread
-        var isThread = list.length === 1 && /^thread\./.test(list[0]);
+        var isThread = this.props.get('thread');
+
         // resolve thread
-        list = api.threads.resolve(list);
+        list = api.resolve(list, isThread);
         if (list.length === 0) isThread = false;
+
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
+
         // draw toolbar
         var baton = ext.Baton({data: list, isThread: isThread, app: this });
 
         // handle updated baton to pageController
-        this.pages.getCurrentPage().toolbar.setBaton(baton);
-        if (this.pages.getCurrentPage().secondaryToolbar) {
-            this.pages.getCurrentPage().secondaryToolbar.setBaton(baton);
-        }
+        var current = this.pages.getCurrentPage();
+
+        // handle baton to navbar
+        // this is special for mail as we might show the "edit draft" action in the upper right corner
+        // for draft mails
+        current.navbar.setBaton(baton);
+        if (current.toolbar) current.toolbar.setBaton(baton);
+        if (current.secondaryToolbar) current.secondaryToolbar.setBaton(baton);
 
     }, 10);
 

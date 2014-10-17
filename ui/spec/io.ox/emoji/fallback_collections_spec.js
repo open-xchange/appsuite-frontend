@@ -18,15 +18,20 @@ define([
 
     describe('Emoji support', function () {
         describe('with fallback collections', function () {
+            var api;
             beforeEach(function () {
                 settings.set('availableCollections', 'unified,softbank,japan_carrier');
                 settings.set('userCollection', 'unified');
 
-                this.emoji = emoji.getInstance();
+                api = emoji.getInstance();
+            });
+
+            afterEach(function () {
+                api = null;
             });
 
             it('should get CSS for unicode emoji', function () {
-                expect(this.emoji.cssFor('\u2600')).to.equal('emoji-unified emoji2600');
+                expect(api.cssFor('\u2600')).to.equal('emoji-unified emoji2600');
             });
         });
     });

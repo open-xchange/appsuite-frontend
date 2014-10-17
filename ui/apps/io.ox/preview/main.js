@@ -187,6 +187,9 @@ define('io.ox/preview/main',
     Renderer.point.extend(new Engine({
         id: 'eml',
         supports: ['eml', 'message/rfc822'],
+        verify: function (file) {
+            return !file.pim; // doesn't work for pim attachments
+        },
         draw: function (file) {
             var self = this.busy();
             require(['io.ox/mail/detail/view'], function (detail) {
@@ -264,9 +267,13 @@ define('io.ox/preview/main',
         }());
 
         // get matching renderer
-        if (this.extension || this.file.mimetype) {
-            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype, this.file);
-        }
+        this.renderer =
+            // try by extension first
+            (this.extension && Renderer.getByExtension(this.extension, this.file)) ||
+            // try by mime type
+            (this.file.mimetype && Renderer.getByExtension(this.file.mimetype, this.file)) ||
+            // otherwise
+            undefined;
     };
 
     Preview.prototype = {

@@ -21,10 +21,18 @@
             }
         };
         this.server.autoRespond = true;
-    });
 
-    afterEach(function () {
-        this.server.restore();
+        this.server.respondWith('PUT', /api\/multiple\?/, function (xhr) {
+            var actions = JSON.parse(xhr.requestBody),
+                result = new Array(actions.length);
+
+            actions.forEach(function (action, index) {
+                result[index] = {
+                    data: {}
+                };
+            });
+            xhr.respond(200, {'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
+        });
     });
 
 }());

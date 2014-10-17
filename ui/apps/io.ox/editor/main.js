@@ -13,7 +13,7 @@
 
 define('io.ox/editor/main',
     ['io.ox/files/api',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'gettext!io.ox/editor',
      'less!io.ox/editor/style'
@@ -23,7 +23,7 @@ define('io.ox/editor/main',
 
     var EditorView = Backbone.View.extend({
 
-        className: 'io-ox-editor container-fluid abs',
+        className: 'io-ox-editor container default-content-padding abs',
 
         events: {
             'submit form': 'onSubmit',
@@ -226,14 +226,14 @@ define('io.ox/editor/main',
                 app.setState({ folder: opt.folder, id: null });
             });
             win.show(function () {
-                view.focus();
+                if (_.device('!smartphone')) view.focus();
             });
         };
 
         app.save = function () {
             var fixFolder = function () {
                 //switch to default folder on missing grants (or special folders)
-                return folderAPI.get({ folder: model.get('folder_id') })
+                return folderAPI.get(model.get('folder_id'))
                         .then(function (data) {
                             var required = (model.has('id') && !folderAPI.can('write', data)) ||
                                            (!model.has('id') && !folderAPI.can('create', data)) ||
@@ -315,7 +315,7 @@ define('io.ox/editor/main',
                     app.setTitle(title);
 
                     model.set(previous = $.extend(data, { content: text[0] }));
-                    view.focus();
+                    if (_.device('!smartphone')) view.focus();
                     def.resolve();
                 })
                 .fail(win.idle)

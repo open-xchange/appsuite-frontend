@@ -11,11 +11,11 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-//autocomplete tk
+// io.ox/core/tk/autocomplete
 .autocomplete-search {
 
-	height: auto;//no static height of 200px here
-	min-height: 200px;//use min-height instead
+	height: auto;
+	min-height: 100px;
     min-width: 300px;
     max-height: 600px;
 
@@ -24,7 +24,7 @@
     }
 
     .scrollable-pane:after {
-        //make sure margins/paddings are applied properly
+        // make sure margins/paddings are applied properly
         content: '';
     }
 
@@ -33,7 +33,7 @@
         color: #333;
         padding: 2px 10px;
 
-        //description: added by backend
+        // description: added by backend
         i {
             font-style: normal;
             color: rgba(0, 0, 0, 0.5);
@@ -54,10 +54,26 @@
         &.unselectable {
             color: rgba(128, 128, 128, 0.71);
         }
+
+        &.contacts, &.contact, &.participant, &.task_participants {
+            .image {
+                margin-right: 14px;
+                display: inline-block;
+                float: left;
+                .picture(42px, 42px);
+            }
+            .name {
+                .ellipsis();
+            }
+            .detail {
+                color: rgba(0, 0, 0, 0.5);
+                .ellipsis();
+            }
+        }
     }
 }
 
-//autocomplete tk: dropdown drawn inline on mobile
+// io.ox/core/tk/autocomplete: dropdown drawn inline on mobile
 .autocomplete-search.mobile-dropdown {
 
     width: auto;
@@ -66,15 +82,15 @@
     margin-left: 0;
     margin-bottom: 4px;
 
-    //adjust autocomplete defaults
+    // adjust autocomplete defaults
     &.bottom-placement {
         border-bottom: 2px solid #fff;
     }
 
-    //scrollable pane
+    // scrollable pane
     .dropdown-menu-inline {
         background-color: rgba(128, 128, 128, 0.11);
-        //sytyle from bootstrap dropdown-menu
+        // sytyle from bootstrap dropdown-menu
         background-color: #fff;
         border: 1px solid #ccc;
         border: 1px solid rgba(0,0,0,.15);
@@ -84,7 +100,7 @@
         background-clip: padding-box;
     }
     .dropdown-menu-inline:after {
-        //make sure margins/paddings are applied properly
+        // make sure margins/paddings are applied properly
         content: '';
     }
 
@@ -92,38 +108,30 @@
         color: #333;
         margin: 2px;
 
-        //background-color: #eee;
-        padding: 10px 0 0 10px;
+        // background-color: #eee;
+        padding: 5px 0 5px 10px;
 
         &.indent {
-            padding: 10px 14px;
+            padding-left: 14px;
         }
-        //description
+        // description
         i {
             font-style: normal;
             color: rgba(0,0,0,.5);
         }
-        //groups
+        // groups
         &.group {
-            //background-color: white;
+            // background-color: white;
             font-size: 18px;
             border: none;
         }
         &.unselectable {
+            padding-bottom: 0;
             color: rgba(128, 128, 128, 0.71);
         }
     }
 }
 
-//topbar search-field vs. icon
-// #io-ox-search-topbar.launcher {
-//     display: inline-block;
-//     max-width: 17em;
-//     height: 40px;
-// }
-// #io-ox-search-topbar-icon.launcher {
-//     display: none;
-// }
 @media all and (max-width: 768px), all and (max-device-width: 768px) {
     #io-ox-search-topbar.launcher {
         display: none;
@@ -131,7 +139,7 @@
     #io-ox-search-topbar-icon.launcher {
         display: inline-block;
     }
-    //block buttons on mobile
+    // block buttons on mobile
     .io-ox-search.window-content .facet {
         width: 100%;
         a[type="button"] {
@@ -141,42 +149,35 @@
             text-overflow: ellipsis;
 
             .remove {
-                float: right;
+                position: relative;
                 padding-left: 10px;
             }
         }
     }
 }
 
-//hide/adjust default window parts
+// hide/adjust default window parts
 .io-ox-search-window {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
-    //hide head
+    // hide head
     .window-head {
         display: none;
     }
     .window-body {
         left: 0;
     }
-    //scrollable
+    // scrollable
     .window-content {
         padding: 14px;
         overflow: auto;
     }
 }
 
+// SEARCH APP STYLES
 .io-ox-search {
 
-    //mode: WIDGET
-    // &.widget-content {
-    //     .input-group {
-    //         padding-top: 5px;
-    //     }
-    // }
-
-    //mode: WINDOW
     &.window-content {
 
         .row {
@@ -189,10 +190,12 @@
             margin-bottom: 0;
         }
 
-
+        // section: applications
         .applications {
             margin-bottom: 6px;
-
+            .caret {
+                margin-left: 6px;
+            }
             .application {
                 display: inline-block;
                 margin-bottom: 8px;
@@ -204,76 +207,7 @@
             }
         }
 
-        .facets {
-            //6px + 8px facet (used when facets are stacked)
-            margin-bottom: 6px;
-            li.facet {
-                margin-right: 8px;
-                margin-bottom: 8px;
-                max-width: 470px;
-                a[type="button"] {
-                    background-color: #E6E6E6;
-                    border: transparent;
-                    //inherited from btn-group
-                    -webkit-box-shadow: none;
-                    box-shadow: none;
-                    max-height: 28px;
-                    max-width: 470px;
-                }
-                html.high-contrast & a {
-                    color: #333;
-                }
-                label>span {
-                    display: inline-block;
-                    max-width: 94%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-            }
-        }
-
-        //app/facet dropdowns
-        .dropdown-toggle {
-            border-radius: 0;
-            .type {
-                color: rgba(0,0,0,.5);
-                &:after {
-                    //divider
-                    content: ':\00a0';
-                }
-            }
-            .name:after {
-                content: '\00a0';
-            }
-            //action icons
-            .caret-container {
-                float: right;
-                .caret {
-                    //10px minus caret border
-                    margin-left: 6px;
-                }
-            }
-            .remove {
-                margin-left: 10px;
-                float: right;
-            }
-            label {
-                font-weight: initial;
-                overflow: hidden;
-                display: inline;
-                text-overflow: ellipsis;
-                //overwrite bootstrap label defaults
-                padding-top: 0;
-                margin-bottom: 0;
-            }
-        }
-
-        //reduce space between button and dropdown
-        .dropdown-menu {
-            margin-top: 0;
-        }
-
-        //section: info
+        // section: info
         .info {
             clear: both;
             font-style: italic;
@@ -285,18 +219,143 @@
             border-left: 3px solid #428bca;
         }
 
-        .results {
-            //handled in /items/*
-        }
     }
 }
 
-//info currently disabled
-// .io-ox-search.info {
-//     clear: both;
-//     margin: 0 14px 4px 15px;
-//     background-color: #f4f8fa;
-//     border-color: #5bc0de;
-//     padding: 10px;
-//     border-left: 3px solid #eee;
-// }
+// GLOBAL STYLES
+
+.search-facets {
+    // 6px + 8px facet (used when facets are stacked)
+
+    .fa-caret-down {
+        font-size: 16px;
+    }
+    margin-bottom: 6px;
+    li.facet {
+        margin-right: 8px;
+        margin-bottom: 8px;
+        max-width: 470px;
+        a[type="button"] {
+            background-color: #E6E6E6;
+            border: transparent;
+            text-align: left;
+            // inherited from btn-group
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            max-height: 28px;
+            max-width: 470px;
+        }
+        html.high-contrast & a {
+            color: #333;
+        }
+        label>span {
+            overflow: hidden;
+            .ellipsis();
+        }
+    }
+
+    .dropdown-toggle {
+        border-radius: 0;
+        .type {
+            color: rgba(0,0,0,.5);
+            &:after {
+                // divider
+                content: ':\00a0';
+            }
+        }
+        .name:after {
+            content: '\00a0';
+        }
+        // action icons
+        .caret-container {
+            float: right;
+            .caret {
+                // 10px minus caret border
+                margin-left: 6px;
+            }
+        }
+        .remove {
+            margin-left: 10px;
+            float: right;
+        }
+        label {
+            font-weight: initial;
+            overflow: hidden;
+            display: inline;
+            text-overflow: ellipsis;
+            // overwrite bootstrap label defaults
+            padding-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    // reduce space between button and dropdown
+    .dropdown-menu {
+        margin-top: 0;
+    }
+}
+
+.search-container {
+
+    top: 45px;
+    padding: 10px;
+    .overflow-x(visible);
+    .overflow-y(auto);
+
+    .search-facets {
+        padding-left: 0;
+        li.facet {
+            // border: 1px solid red;
+            width: 100%;
+            margin: 0 0 7px 0;
+            & > a[type="button"] {
+                width: 100%;
+                max-height: initial;
+                // 13px for a vertical alignment with search toolbar
+                padding: 10px 13px;
+            }
+            label {
+                font-weight: bold;
+                display: block;
+                text-align: left;
+                i, .type {
+                    font-weight: normal;
+                    font-style: normal;
+                    color: rgba(0, 0, 0, 0.5);
+                }
+            }
+        }
+
+        .timefacet {
+            .input-daterange {
+                height: 24px;
+                overflow: hidden;
+                .type {
+                    padding-bottom: 4px;
+                }
+                .input {
+                    height: '24px';
+                    min-width: '90px';
+                }
+                .input-group-addon {
+                    height: 24px;
+                    padding: 0 8px;
+                }
+            }
+        }
+    }
+
+    a[data-action="close"], a[data-action="toggle-adv"] {
+        margin-bottom: 8px;
+        margin-top: 12px;
+        margin-left: 12px;
+        display: block;
+    }
+
+    .facet-dropdown {
+        width: 100%;
+        max-width: 300px;
+        right: 0;
+        left: auto;
+    }
+}

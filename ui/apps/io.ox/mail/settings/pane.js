@@ -22,9 +22,8 @@ define('io.ox/mail/settings/pane',
      'io.ox/core/notifications',
      'gettext!io.ox/mail',
      'io.ox/core/api/account',
-     'io.ox/backbone/mini-views',
-     'io.ox/core/api/folder'
-    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini, folderAPI) {
+     'io.ox/backbone/mini-views'
+    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini) {
 
     'use strict';
 
@@ -33,7 +32,6 @@ define('io.ox/mail/settings/pane',
         mailViewSettings,
         POINT = 'io.ox/mail/settings/detail',
         optionsAllAccounts,
-        caps,
 
         optionsForwardEmailAs = [
             { label: gt('Inline'), value: 'Inline' },
@@ -90,12 +88,9 @@ define('io.ox/mail/settings/pane',
                         .value();
             });
 
-            new $.when(accounts, msisdns).then(function (addresses, numbers) {
-                optionsAllAccounts = [].concat(addresses, numbers);
-                caps = {
-                    contactCollect: capabilities.has('collect_email_addresses') ? 'true' : 'false'
-                };
+            $.when(accounts, msisdns).then(function (addresses, numbers) {
 
+                optionsAllAccounts = [].concat(addresses, numbers);
                 ext.point(POINT + '/pane').invoke('draw', self.$el);
 
                 // hide non-configurable sections
@@ -148,8 +143,8 @@ define('io.ox/mail/settings/pane',
     });
 
     function changeIMAPSubscription() {
-        ox.load(['io.ox/core/folder/imap-subscription']).done(function (subscription) {
-            subscription.show();
+        ox.load(['io.ox/core/folder/actions/imap-subscription']).done(function (subscribe) {
+            subscribe();
         });
     }
 
@@ -167,33 +162,35 @@ define('io.ox/mail/settings/pane',
         index: 200,
         id: 'common',
         draw: function () {
-            var arrayOfElements =  [],
-                contactCollectOnMailTransport = $('<div>').addClass('checkbox expertmode').append(
-                    $('<label>').text(gt('Automatically collect contacts in the folder "Collected addresses" while sending')).prepend(
-                        new mini.CheckboxView({ name: 'contactCollectOnMailTransport', model: mailSettings}).render().$el
-                    )
-                ),
-                contactCollectOnMailAccess = $('<div>').addClass('checkbox expertmode').append(
-                    $('<label>').text(gt('Automatically collect contacts in the folder "Collected addresses" while reading')).prepend(
-                        new mini.CheckboxView({ name: 'contactCollectOnMailAccess', model: mailSettings}).render().$el
-                    )
-                );
 
-            if (caps.contactCollect) {
-                arrayOfElements.push(contactCollectOnMailTransport, contactCollectOnMailAccess);
-            }
+            var contactCollect = !!capabilities.has('collect_email_addresses');
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Common')),
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('checkbox expertmode').append(
+                    $('<legend class="sectiontitle expertmode">').text(gt('Common')),
+                    $('<div class="form-group">').append(
+                        // Permanently remove
+                        $('<div class="checkbox expertmode">').append(
                             $('<label>').text(gt('Permanently remove deleted emails')).prepend(
                                 new mini.CheckboxView({ name: 'removeDeletedPermanently', model: mailSettings}).render().$el
                             )
                         ),
-                        arrayOfElements,
-                        $('<div>').addClass('checkbox expertmode').append(
+                        // Collect while sending
+                        contactCollect ?
+                            $('<div class="checkbox expertmode">').append(
+                                $('<label>').text(gt('Automatically collect contacts in the folder "Collected addresses" while sending')).prepend(
+                                    new mini.CheckboxView({ name: 'contactCollectOnMailTransport', model: mailSettings}).render().$el
+                                )
+                            ) : [],
+                        // collect while reading
+                        contactCollect ?
+                            $('<div class="checkbox expertmode">').append(
+                                $('<label>').text(gt('Automatically collect contacts in the folder "Collected addresses" while reading')).prepend(
+                                    new mini.CheckboxView({ name: 'contactCollectOnMailAccess', model: mailSettings}).render().$el
+                                )
+                            ) : [],
+                        // fixed width
+                        $('<div class="checkbox expertmode">').append(
                             $('<label>').text(gt('Use fixed-width font for text mails')).prepend(
                                 new mini.CheckboxView({ name: 'useFixedWidthFont', model: mailSettings}).render().$el
                             )
@@ -240,8 +237,12 @@ define('io.ox/mail/settings/pane',
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
                     $('<div>').addClass('form-group expertmode').append(
-                                                                                        //#. It's a label for an inputfield with a number
-                        $('<label for="lineWrapAfter">').addClass('control-label').text((gt('Automatically wrap plain text after character:'))),
+
+                        $('<label for="lineWrapAfter">').addClass('control-label').text(
+                            //#. It's a label for an input field with a number
+                            //#. This only applies for plain text messages, so please keep this information in translations
+                            gt('Automatically wrap plain text after character:')
+                        ),
                         $('<div>').addClass('controls').append(
                             $('<div>').addClass('row').append(
                                 $('<div>').addClass('col-md-2').append(
@@ -304,7 +305,7 @@ define('io.ox/mail/settings/pane',
                             )
                         ),
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').text(gt('Ask for return receipt')).prepend(
+                            $('<label>').text(gt('Show requests for read receipts')).prepend(
                                 new mini.CheckboxView({ name: 'sendDispositionNotification', model: mailSettings}).render().$el
                             )
                         )
@@ -318,33 +319,19 @@ define('io.ox/mail/settings/pane',
         index: 500,
         id: 'imap-subscription',
         draw: function () {
-            var container;
-            this.append(container = $('<fieldset>'));
 
-            folderAPI.get({folder: api.getFoldersByType('inbox')})
-            .then(function (folders) {
-                return _(folders).values()
-                .map(function (folder) {
-                    return folderAPI.can('imap-subscribe', folder);
-                })
-                .reduce(function (acc, value) {
-                    // enough if one of the folders can subscribe
-                    return acc || value;
-                }, false);
-            }).then(function (subscriptionPossible) {
-                if (!subscriptionPossible) return;
+            if (_.device('smartphone')) return;
 
-                var button = $('<button type="button" class="btn btn-primary" tabindex="1">').on('click', changeIMAPSubscription);
-
-                if (_.device('smartphone')) return;
-
-                container.append(
+            this.append(
+                $('<fieldset>').append(
                     $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
                     $('<div class="sectioncontent">').append(
-                        button.text(gt('Change subscription'))
+                        $('<button type="button" class="btn btn-primary" tabindex="1">')
+                        .on('click', changeIMAPSubscription)
+                        .text(gt('Change subscription'))
                     )
-                );
-            });
+                )
+            );
         }
     });
 

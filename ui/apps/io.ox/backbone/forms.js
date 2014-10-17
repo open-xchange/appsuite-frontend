@@ -22,46 +22,6 @@ define('io.ox/backbone/forms',
 
     'use strict';
 
-    // Error Alert
-
-    function ErrorAlert(options) {
-        _.extend(this, {
-
-            tagName: 'div',
-            className: 'error-alerts',
-
-            init: function () {
-                var self = this;
-
-                function showBackendError(error, xhr) {
-                    if (!self.isRelevant(error, xhr)) {
-                        return;
-                    }
-                    var alert = $.alert({title: self.errorTitle, message: self.formatError(error)});
-                    self.$el.find('.alert').remove();
-                    self.$el.append(alert);
-
-                    alert.find('.close').on('click', function () {
-                        alert.remove();
-                    });
-                }
-
-                this.observeModel('backendError', showBackendError);
-            },
-
-            isRelevant: function () {
-                return true;
-            },
-
-            errorTitle: gt('An error occurred'),
-
-            formatError: function (error) {
-                return error.error || gt('An error occurred. Please try again later');
-            }
-
-        }, options || {});
-    }
-
     // Control Group
     function ControlGroup(options) {
 
@@ -365,17 +325,6 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
-    function Header(options) {
-        _.extend(this, {
-            tagName: 'div',
-            render: function () {
-                this.$el.append($('<div>').append(
-                      $('<h1>').text(options.label)
-                  ));
-            }
-        }, options);
-    }
-
     function DatePicker(options) {
         options = _.extend({
             required: true,
@@ -560,7 +509,7 @@ define('io.ox/backbone/forms',
                         weekStart: date.locale.weekStart,
                         parentEl: self.nodes.controlGroup,
                         todayHighlight: true,
-                        todayBtn: true,
+                        todayBtn: 'linked',//today button should insert the date when clicked. See 34381
                         autoclose: true
                     });
                 } else {
@@ -575,7 +524,7 @@ define('io.ox/backbone/forms',
                         if (options.clearButton) {//add clear button
                             self.nodes.dayField.mobiscroll('option', 'button3Text', gt('clear'));
                             self.nodes.dayField.mobiscroll('option', 'button3', function () {
-                                self.model.set(self.attribute, null);
+                                self.model.set(self.attribute, null, { validate: true });
                                 self.nodes.dayField.mobiscroll('hide');
                             });
                         }
@@ -669,16 +618,19 @@ define('io.ox/backbone/forms',
 
             onFullTimeChange: function () {
                 // toggle time input fields
-                var ft = this.model.get('full_time');
+                var ft = this.model.get('full_time'),
+                    // fallback when no separate timefields exist
+                    timeField = this.nodes.timeField || $(),
+                    timezoneField = this.nodes.timezoneField || $();
                 if (mobileMode) {
                     this.nodes.dayField.mobiscroll('option', {
                         timeWheels: ft ? '' : this.mobileSet.timeWheels,
                         timeFormat: ft ? '' : this.mobileSet.timeFormat
                     });
                 } else {
-                    this.nodes.timeField.css('display', ft ? 'none' : '');
+                    timeField.css('display', ft ? 'none' : '');
                 }
-                this.nodes.timezoneField.css('display', ft ? 'none' : '');
+                timezoneField.css('display', ft ? 'none' : '');
             },
 
             modelEvents: modelEvents
@@ -687,10 +639,8 @@ define('io.ox/backbone/forms',
     }
 
     var forms = {
-        ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
         SelectControlGroup: SelectControlGroup,
-        Header: Header,
         InputField: InputField,
         CheckBoxField: CheckBoxField,
         CheckControlGroup: CheckControlGroup,

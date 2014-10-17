@@ -96,7 +96,6 @@ $(window).load(function () {
         setTimeout(function () {
             _.recheckDevice();
         }, 10);
-
     }
 
     // continuation
@@ -116,11 +115,19 @@ $(window).load(function () {
         cleanUp = fnChangeLanguage = initialize = $.noop;
     };
 
+    if (_.device('touch')) {
+        // disable tooltips for touch devices
+        $.fn.tooltip = function () {
+            return this;
+        }
+    }
+
     if (_.device('iOS')) {
         $('html').addClass('ios');
     }
 
     if (_.device('Android')) {
+        $('html').addClass('android');
         if (_.browser.chrome === 18 || !_.browser.chrome) {
             $('html').addClass('legacy-chrome');
         }
@@ -270,21 +277,28 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core', ox.base + '/precore.js'], function (settings) {
+            require(['settings!io.ox/core', 'settings!io.ox/mail', ox.base + '/precore.js'], function (settings, mail) {
 
                 // greedy prefetch for mail app
                 // need to get this request out as soon as possible
                 if (settings.get('autoStart') === 'io.ox/mail/main') {
-                    var params = {
-                        action: 'threadedAll',
-                        folder: 'default0/INBOX',
-                        columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
-                        sort: '610',
-                        order: 'desc',
-                        includeSent: true,
-                        max: 300,
-                        timezone: 'utc',
-                        limit: '0,30'
+                    var folder = 'default0/INBOX',
+                        thread = mail.get(['viewOptions', folder, 'thread'], true),
+                        action = thread ? 'threadedAll' : 'all',
+                        params = {
+                            action: action,
+                            folder: folder,
+                            columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                            sort: mail.get(['viewOptions', folder, 'sort'], 610),
+                            order: mail.get(['viewOptions', folder, 'order'], 'desc')
+                        };
+                    if (thread) {
+                        _.extend(params, {
+                            includeSent: true,
+                            max: 300,
+                            timezone: 'utc',
+                            limit: '0,30'
+                        });
                     };
                     http.GET({ module: 'mail', params: params }).done(function (data) {
                         // the collection loader will check ox.rampup for this data
@@ -593,10 +607,11 @@ $(window).load(function () {
                                 $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
                             // theme
-                            themes.set(ox.serverConfig.signinTheme || 'login');
-                            // continue
-                            gettext.setLanguage('en_US');
-                            require(['io.ox/core/login-i18n']).done(initialize);
+                            themes.set(_.url.hash('theme') || ox.serverConfig.signinTheme || 'login').then(function () {
+                                // continue
+                                gettext.setLanguage('en_US');
+                                return require(['io.ox/core/login-i18n']);
+                            }).done(initialize);
                         },
                         function fail() {
                             // nope, had some stuff in the caches but server is down
@@ -618,10 +633,92 @@ $(window).load(function () {
             };
             ox.on('relogin:required', ox.relogin);
 
-            // got session via hash?
             var hash = _.url.hash();
-            if (hash.session) {
+            // token login?
+            if (hash.tokenSession) {
+                var whoami = $.Deferred();
+                debug('boot.js: autoLogin > hash.tokenSession');
 
+                session.redeemToken(hash.tokenSession).fail(function (e) {
+                  debug('boot.js redeemToken > failed', e);
+                }).done(function (resp) {
+                    debug('boot.js redeemToken > success');
+
+                    ox.session = resp.session;
+                    session.store();
+
+                     // set store cookie?
+                    $.when(
+                        session.rampup(),
+                        hash.store === 'true' ? session.store() : $.when()
+                    )
+                    .always(function () {
+
+                        // fetch user config
+                        ox.secretCookie = hash.secretCookie === 'true';
+                        fetchUserSpecificServerConfig().done(function () {
+                            var whoami = $.Deferred();
+                            if (hash.user && hash.language && hash.user_id) {
+                                whoami.resolve(hash);
+                            } else {
+                                require(['io.ox/core/http'], function (http) {
+                                    http.GET({
+                                        module: 'system',
+                                        params: {
+                                            action: 'whoami'
+                                        }
+                                    }).done(function (resp) {
+                                        resp.language = resp.locale;
+                                        whoami.resolve(resp);
+                                    }).fail(whoami.reject);
+                                });
+                            }
+
+                            whoami.done(function (resp) {
+                                serverUp();
+                                // store login data (cause we have all valid languages now)
+                                session.set({
+                                    locale: resp.language,
+                                    session: resp.session,
+                                    user: resp.user,
+                                    user_id: parseInt(resp.user_id || '0', 10),
+                                    context_id: resp.context_id
+                                });
+
+                                var redirect = '#';
+                                if (hash.ref) {
+                                    redirect += hash.ref;
+                                }
+
+                                // cleanup url
+                                _.url.hash({
+                                    language: null,
+                                    session: null,
+                                    user: null,
+                                    user_id: null,
+                                    context_id: null,
+                                    secretCookie: null,
+                                    store: null,
+                                    ref: null
+                                });
+                                _.url.redirect(redirect);
+
+                                // go ...
+                                loadCoreFiles().done(function () {
+                                    loadCore();
+                                });
+
+                            });
+                        });
+                    });
+
+                }).fail(function (e) {
+                    // TBD
+                    gotoSignin();
+                });
+
+            } else if (hash.session) {
+                // session via hash?
                 debug('boot.js: autoLogin > hash.session', hash.session);
 
                 // set session; session.store() might need it now (formlogin)
@@ -774,7 +871,7 @@ $(window).load(function () {
                 if (langCount < maxLang && !_.url.hash('language-select')) {
                     for (id in langSorted) {
                         i++;
-                        node.attr({'role': 'menu', 'aria-labeledby': 'io-ox-languages-label'}).append(
+                        node.attr({'role': 'menu', 'aria-labelledby': 'io-ox-languages-label'}).append(
                             $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
                                 .on('click', { id: langSorted[id] }, fnChangeLanguage)
                                 .text(lang[langSorted[id]])

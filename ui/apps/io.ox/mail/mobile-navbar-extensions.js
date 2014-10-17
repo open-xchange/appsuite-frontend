@@ -45,14 +45,32 @@ define('io.ox/mail/mobile-navbar-extensions', ['io.ox/core/extensions'], functio
         id: 'btn-right',
         index: 300,
         draw: function (baton) {
-            if (!baton.right) return;
-            this.$el.append(
-                $('<div class="navbar-action right">').append(
-                    $('<a>').append(
-                        baton.right
+            // also handle special "edit draft case here"
+            /*
+
+            disabled until we can edit HTML mails on mobile
+
+             if (baton.baton && !baton.right) {
+                baton.baton.$el = $('<div class="custom navbar-action right">').appendTo(this.$el);
+                ext.point('io.ox/mail/mobile/navbar/links/action').invoke('draw' ,baton.baton.$el, baton.baton);
+            } else if (baton.right) {
+                this.$el.append(
+                    $('<div class="navbar-action right">').append(
+                        $('<a>').append(
+                            baton.right
+                        )
                     )
-                )
-            );
+                );
+            }*/
+            if (baton.right) {
+                this.$el.append(
+                    $('<div class="navbar-action right">').append(
+                        $('<a>').append(
+                            baton.right
+                        )
+                    )
+                );
+            }
         }
     });
 

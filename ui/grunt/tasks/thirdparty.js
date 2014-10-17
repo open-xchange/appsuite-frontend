@@ -15,64 +15,90 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('copy', {
-        build_thirdparty: {
-            files: [
-                {
-                    expand: true,
-                    src: [
-                        'bootstrap/less/*.less',
-                        'bootstrap-datepicker/less/datepicker3.less',
-                        'font-awesome/{less,fonts}/*',
-                        'open-sans-fontface/fonts/Light/*',
-                        '!**/*.otf'
-                    ],
-                    cwd: 'bower_components/',
-                    dest: 'build/apps/3rd.party/',
-                    filter: 'isFile'
+    grunt.config.merge({
+        copy: {
+            build_thirdparty: {
+                files: [
+                    {
+                        expand: true,
+                        src: [
+                            'bootstrap/less/*.less',
+                            'bootstrap-datepicker/less/datepicker3.less',
+                            'font-awesome/{less,fonts}/*',
+                            'open-sans-fontface/fonts/Light/*',
+                            '!**/*.otf'
+                        ],
+                        cwd: 'bower_components/',
+                        dest: 'build/apps/3rd.party/',
+                        filter: 'isFile'
+                    },
+                    {
+                        expand: true,
+                        src: ['view-qrcode.js', 'hopscotch/*', 'mobiscroll/css/*'],
+                        cwd: 'lib/',
+                        dest: 'build/apps/3rd.party/'
+                    },
+                    {
+                        // static lib
+                        expand: true,
+                        src: ['jquery-ui.min.js'],
+                        cwd: 'lib/',
+                        dest: 'build/static/3rd.party/'
+                    },
+                    {
+                        // static lib
+                        expand: true,
+                        src: [
+                            'jquery-imageloader/jquery.imageloader.js',
+                            'Chart.js/Chart.js',
+                            'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+                            'typeahead.js/dist/typeahead.jquery.js'
+                        ],
+                        cwd: 'bower_components',
+                        dest: 'build/static/3rd.party/'
+                    },
+                    {
+                        expand: true,
+                        src: ['*.{png,svg,swf,gif,xap,css}', '!{jquery,*.min}.js'],
+                        cwd: 'bower_components/mediaelement/build/',
+                        dest: 'build/apps/3rd.party/mediaelement/',
+                        filter: 'isFile'
+                    },
+                    {
+                        // js file of mediaelement goes to static path for caching
+                        expand: true,
+                        src: ['*.js', '!{jquery,*.min}.js'],
+                        cwd: 'bower_components/mediaelement/build/',
+                        dest: 'build/static/3rd.party/mediaelement/',
+                        filter: 'isFile'
+                    },
+                    {
+                        expand: true,
+                        src: ['*.{js,css,png}'],
+                        cwd: 'lib/node_modules/emoji/lib',
+                        dest: 'build/apps/3rd.party/emoji'
+                    }
+                ]
+            }
+        }
+    });
+
+    grunt.config.merge({
+        less: {
+            build_tokenfield: {
+                options: {
+                    lessrc: '.lessrc',
+                    process: function (src) {
+                        return src.replace(/@import "..\/bower_components\/(.*)";/g, '');
+                    }
                 },
-                {
+                files: [{
                     expand: true,
-                    src: ['view-qrcode.js', 'hopscotch/*', 'mobiscroll/css/*'],
-                    cwd: 'lib/',
-                    dest: 'build/apps/3rd.party/'
-                },
-                {
-                    // static lib
-                    expand: true,
-                    src: ['jquery-ui.min.js'],
-                    cwd: 'lib/',
-                    dest: 'build/static/3rd.party/'
-                },
-                {
-                    // static lib
-                    expand: true,
-                    src: ['jquery-imageloader/jquery.imageloader.js', 'Chart.js/Chart.js'],
-                    cwd: 'bower_components',
-                    dest: 'build/static/3rd.party/'
-                },
-                {
-                    expand: true,
-                    src: ['*.{png,svg,swf,gif,xap,css}', '!{jquery,*.min}.js'],
-                    cwd: 'bower_components/mediaelement/build/',
-                    dest: 'build/apps/3rd.party/mediaelement/',
-                    filter: 'isFile'
-                },
-                {
-                    // js file of mediaelement goes to static path for caching
-                    expand: true,
-                    src: ['*.js', '!{jquery,*.min}.js'],
-                    cwd: 'bower_components/mediaelement/build/',
-                    dest: 'build/static/3rd.party/mediaelement/',
-                    filter: 'isFile'
-                },
-                {
-                    expand: true,
-                    src: ['*.{js,css,png}'],
-                    cwd: 'lib/node_modules/emoji/lib',
-                    dest: 'build/apps/3rd.party/emoji'
-                }
-            ]
+                    src: ['bower_components/bootstrap-tokenfield/less/bootstrap-tokenfield.less'],
+                    rename: function (dest) { return dest; },
+                    dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css'
+                }]
+            }
         }
     });
 };

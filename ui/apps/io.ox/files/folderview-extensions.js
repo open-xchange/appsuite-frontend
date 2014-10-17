@@ -13,7 +13,7 @@
 
 define('io.ox/files/folderview-extensions',
     ['io.ox/core/extensions',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/files/api',
      'io.ox/core/notifications',
      'gettext!io.ox/mail'
@@ -29,7 +29,7 @@ define('io.ox/files/folderview-extensions',
         var baton = e.data.baton,
         id = _(baton.app.folderView.selection.get()).first();
         $.when(
-            folderAPI.get({ folder: id }),
+            folderAPI.get(id),
             ox.load(['io.ox/core/tk/dialogs'])
         ).done(function (folder, dialogs) {
             new dialogs.ModalDialog()

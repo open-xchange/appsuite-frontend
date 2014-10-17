@@ -17,7 +17,7 @@ define('io.ox/contacts/print',
      'io.ox/contacts/util',
      'settings!io.ox/contacts',
      'gettext!io.ox/contacts'
-    ], function (print, api, util,settings, gt) {
+    ], function (print, api, util, settings, gt) {
 
     'use strict';
 
@@ -32,7 +32,7 @@ define('io.ox/contacts/print',
     function getCellPhone(data, index) {
         return _([data.cellular_telephone1, data.cellular_telephone2]).compact()[index] || '';
     }
-
+    
     function getEmail(data, index) {
         return _([data.email1, data.email2, data.email3]).compact()[index] || data.mail || '';
     }
@@ -96,7 +96,7 @@ define('io.ox/contacts/print',
         open: function (selection, win) {
 
             var listType = settings.get('features/printList', 'phone');
-
+            
             var options = {
                 get: function (obj) {
                     return api.get(obj);
@@ -128,7 +128,7 @@ define('io.ox/contacts/print',
 
                 thumbIndex: createThumbIndex()
             };
-
+            
             if (listType === 'phone') {
                 options.filter = function (o) {
                     // ignore distribution lists plus
@@ -136,7 +136,7 @@ define('io.ox/contacts/print',
                     return !o.mark_as_distributionlist && !!(o.phone1 || o.phone2 || o.cellphone1 || o.cellphone2);
                 };
             }
-
+            
             print.smart(options);
         }
     };

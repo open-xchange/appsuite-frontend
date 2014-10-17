@@ -14,7 +14,7 @@
 
 define('io.ox/core/tk/folderviews',
     ['io.ox/core/tk/selection',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/api/user',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
@@ -27,6 +27,8 @@ define('io.ox/core/tk/folderviews',
     ], function (Selection, api, userAPI, accountAPI, ext, Events, notifications, http, capabilities, settings, gt) {
 
     'use strict';
+
+    if (ox.debug) console.warn('Module "io.ox/core/tk/folderviews" is deprecated.');
 
     var OPEN = 'fa fa-chevron-right',
         CLOSE = 'fa fa-chevron-down',
@@ -47,7 +49,7 @@ define('io.ox/core/tk/folderviews',
      */
     function TreeNode(tree, id, container, level, checkbox, all, storage) {
         // load folder data immediately
-        var ready = api.get({ folder: id, storage: storage }),
+        var ready = api.get(id, { storage: storage }),
             nodes = {},
             children = null,
             childrenLoaded,
@@ -259,7 +261,7 @@ define('io.ox/core/tk/folderviews',
             // might have a new id
             id = newId;
             return $.when(
-                ready = api.get({ folder: newId, storage: storage }),
+                ready = api.get(newId, { storage: storage }),
                 this.loadChildren(true)
             )
             .pipe(function (data) {
@@ -270,7 +272,7 @@ define('io.ox/core/tk/folderviews',
 
         // update promise
         this.reload = function () {
-            return (ready = api.get({ folder: id, storage: storage})).done(function (promise) {
+            return (ready = api.get(id, { storage: storage })).done(function (promise) {
                 data = promise;
                 children = _.isArray(children) && children.length === 0 ? null : children;
                 updateArrow();
@@ -302,7 +304,7 @@ define('io.ox/core/tk/folderviews',
                 childrenLoaded = false;
                 // we assume that folder API takes care of clearing caches for periodic refreshes
                 // get sub folders
-                return api.getSubFolders({ folder: id, all: all, storage: storage }).then(function success(data) {
+                return api.list(id, { all: all, storage: storage }).then(function success(data) {
                     // create new children array
                     children = _.chain(data)
                         .filter(function (folder) {
@@ -595,19 +597,33 @@ define('io.ox/core/tk/folderviews',
             }
         }
 
+        function reloadTrash() {
+            if (self.options.type === 'infostore') {
+                require(['settings!io.ox/files'], function (fileSettings) {
+                    var trash = fileSettings.get('folder/trash');
+                    if (trash) {
+                        api.reload(trash);
+                        api.sync();
+                    }
+                });
+            }
+        }
+
         this.removeProcess = function (folder) {
-            api.remove({ folder: folder.id }).fail(notifications.yell);
+            api.remove(folder.id)
+               .always(reloadTrash)
+               .fail(notifications.yell);
         };
 
         this.remove = function () {
             var self = this, folder_id = String(this.selection.get());
             if (!folder_id) return;
             $.when(
-                api.get({ folder: folder_id }),
+                api.get(folder_id),
                 require(['io.ox/core/tk/dialogs'])
             ).done(function (folder, dialogs) {
                 new dialogs.ModalDialog()
-                .text(gt('Do you really want to delete folder "%s"?', folder.title))
+                .text(gt('Do you really want to delete folder "%s"?', api.getFolderTitle(folder.title, 30)))
                 .addPrimaryButton('delete', gt('Delete'))
                 .addButton('cancel', gt('Cancel'))
                 .show()
@@ -633,7 +649,7 @@ define('io.ox/core/tk/folderviews',
 
             if (invalid) return $.Deferred().reject();
 
-            return api.update({ folder: folder, changes: changes });
+            return api.update(folder, changes);
         };
 
         this.rename = function () {
@@ -641,7 +657,7 @@ define('io.ox/core/tk/folderviews',
             folder_id = String(this.selection.get());
             if (folder_id) {
                 $.when(
-                    api.get({ folder: folder_id }),
+                    api.get(folder_id),
                     require(['io.ox/core/tk/dialogs'])
                 )
                 .done(function (folder, dialogs) {
@@ -805,7 +821,7 @@ define('io.ox/core/tk/folderviews',
                 data = _.isArray(data) ? data[0] : data;
                 data = _.isObject(data) ? String(data.id) : String(data);
                 // get path
-                return api.getPath({ folder: data }).pipe(function (list) {
+                return api.path(data).pipe(function (list) {
                     var def = $.Deferred();
                     deferredEach.call(self, _(list).pluck('id'), function () {
                         self.selection.set(data);
@@ -861,6 +877,7 @@ define('io.ox/core/tk/folderviews',
 
             // set counter (mail only)
             if (options.type === 'mail') {
+
                 // set title
                 var total = data.total && data.total !== 0 ? ' - ' + gt('total') + ' ' + data.total : '',
                     unread = data.unread && data.unread !== 0 ? ' - ' + gt('unread') + ' ' + data.unread : '';
@@ -871,9 +888,11 @@ define('io.ox/core/tk/folderviews',
                     // rename mail root folder
                     data.title = gt('Mail');
                 }
-                if (_.device('!small') && data.id === 'default0/INBOX' && (!data.unread  || data.unread === 0)) {//remove new mail title if inbox new-mail counter is 0
-                    document.fixedtitle = false;
-                    document.title = document.temptitle;
+
+                if (_.device('!small') && data.id === 'default0/INBOX' && (!data.unread  || data.unread === 0)) {
+                    // remove new mail title if inbox new-mail counter is 0
+                    require('io.ox/mail/api').newMailTitle(false);
+
                 }
                 if (data.unread && !options.checkbox) {
                     this.addClass('show-counter');
@@ -1036,12 +1055,13 @@ define('io.ox/core/tk/folderviews',
         function paint(options) {
 
             options = $.extend({
-                type: opt.type
+                type: opt.type,
+                module: opt.type
             }, options || {});
 
             self.busy();
 
-            return api.getVisible(options).done(function (data) {
+            return api.flat(options).done(function (data) {
                 var id,
                     section,
                     baton,

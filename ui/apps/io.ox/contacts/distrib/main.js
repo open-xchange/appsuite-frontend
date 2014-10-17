@@ -66,21 +66,22 @@ define('io.ox/contacts/distrib/main',
 
             view = new ContactCreateDistView({ model: model });
 
-            view.on('save:start', function () {
-                win.busy();
+            model.on({
+                'sync:start': function () {
+                    win.busy();
+                },
+                'sync': function () {
+                    require('io.ox/core/notifications').yell('success', gt('Distribution list has been saved'));
+                    considerSaved = true;
+                    win.idle();
+                    app.quit();
+                },
+                'sync:fail': function (response) {
+                    require('io.ox/core/notifications').yell('error', response.error ? response.error : gt('Failed to save distribution list.'));
+                    win.idle();
+                }
             });
 
-            view.on('save:fail', function () {
-                require('io.ox/core/notifications').yell('error', gt('Failed to save distribution list.'));
-                win.idle();
-            });
-
-            view.on('save:success', function () {
-                require('io.ox/core/notifications').yell('success', gt('Distribution list has been saved'));
-                considerSaved = true;
-                win.idle();
-                app.quit();
-            });
             win.on('show', function () {
                 if (model.get('id')) {//set url parameters
                     app.setState({ folder: model.get('folder_id'), id: model.get('id') });
@@ -109,19 +110,22 @@ define('io.ox/contacts/distrib/main',
 
                 view = new ContactCreateDistView({ model: model });
 
-                view.on('save:start', function () {
-                    win.busy();
+                model.on({
+                    'sync:start': function () {
+                        win.busy();
+                    },
+                    'sync': function () {
+                        require('io.ox/core/notifications').yell('success', gt('Distribution list has been saved'));
+                        considerSaved = true;
+                        win.idle();
+                        app.quit();
+                    },
+                    'sync:fail': function (response) {
+                        require('io.ox/core/notifications').yell('error', response.error ? response.error : gt('Failed to save distribution list.'));
+                        win.idle();
+                    }
                 });
 
-                view.on('save:fail', function () {
-                    win.idle();
-                });
-
-                view.on('save:success', function () {
-                    considerSaved = true;
-                    win.idle();
-                    app.quit();
-                });
                 win.on('show', function () {
                     if (model.get('id')) {//set url parameters
                         app.setState({ folder: model.get('folder_id'), id: model.get('id') });
@@ -209,6 +213,27 @@ define('io.ox/contacts/distrib/main',
             //clean
             return def;
         });
+
+        // app.failSave = function () {
+        //     if (model) {
+        //         var title = model.get('display_name');
+        //         return {
+        //             description: gt('Distribution List') + (title ? ': ' + title : ''),
+        //             module: 'io.ox/contacts/distrib',
+        //             point: model.attributes
+        //         };
+        //     }
+        //     return false;
+        // };
+
+        // app.failRestore = function (point) {
+        //     if (_.isUndefined(point.id)) {
+        //         this.create(point.folder_id, point);
+        //     } else {
+        //         this.edit(point);
+        //     }
+        //     return $.when();
+        // };
 
         return app;
     }

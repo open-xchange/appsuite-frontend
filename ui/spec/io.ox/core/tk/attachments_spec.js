@@ -87,12 +87,11 @@ define(['io.ox/core/extensions',
             });
 
             afterEach(function (done) {
-                def.done(function (result) {
-                    expect(result).to.equal('done');
-                    done();
-                }).always(function () {
+                def.always(function (result) {
                     def = null;
                     baton = null;
+                    expect(result).to.equal('done');
+                    done();
                 });
             });
 
@@ -345,6 +344,98 @@ define(['io.ox/core/extensions',
                         });
                     });
 
+                    describe('having capability publish_mail_attachments enabled', function () {
+                        beforeEach(function () {
+                            capabilities.enable('publish_mail_attachments');
+                        });
+
+                        it('when exceeding attachment quota', function () {
+                            def = setUploadLimit({
+                                'infostoreMaxUploadSize': 1000,
+                                'infostoreQuota': 1000,
+                                'infostoreUsage': 0,
+                                'attachmentQuota': 999,
+                                'attachmentQuotaPerFile': 1000
+                            })
+                            .then(createList(baton, attachmentFile, true))
+                            .then(function (result) {
+                                expect(result).to.have.property('added');
+                                expect(result).to.not.have.property('reason');
+                                expect(result).to.not.have.property('error');
+                                return 'done';
+                            });
+                        });
+
+                        it('when exceeding attachment quota per file', function () {
+                            def = setUploadLimit({
+                                'infostoreMaxUploadSize': 1000,
+                                'infostoreQuota': 1000,
+                                'infostoreUsage': 0,
+                                'attachmentQuota': -1,
+                                'attachmentQuotaPerFile': 999
+                            })
+                            .then(createList(baton, attachmentFile, true))
+                            .then(function (result) {
+                                expect(result).to.have.property('added');
+                                expect(result).to.not.have.property('reason');
+                                expect(result).to.not.have.property('error');
+                                return 'done';
+                            });
+                        });
+
+                        it('when exceeding attachment quota and attachment quota per file', function () {
+                            def = setUploadLimit({
+                                'infostoreMaxUploadSize': 1000,
+                                'infostoreQuota': 1000,
+                                'infostoreUsage': 0,
+                                'attachmentQuota': 999,
+                                'attachmentQuotaPerFile': 999
+                            })
+                            .then(createList(baton, attachmentFile, true))
+                            .then(function (result) {
+                                expect(result).to.have.property('added');
+                                expect(result).to.not.have.property('reason');
+                                expect(result).to.not.have.property('error');
+                                return 'done';
+                            });
+                        });
+
+                        it('when exceeding attachment quota and infostore maximum upload size', function () {
+                            def = setUploadLimit({
+                                'infostoreMaxUploadSize': 999,
+                                'infostoreQuota': 1000,
+                                'infostoreUsage': 0,
+                                'attachmentQuota': -1,
+                                'attachmentQuotaPerFile': 999
+                            })
+                            .then(createList(baton, attachmentFile, true))
+                            .then(function (result) {
+                                expect(result).to.have.property('added');
+                                expect(result).to.have.property('reason');
+                                expect(result.reason).to.equal('filesizeAutoPublish');
+                                expect(result.error).to.be.a('string');
+                                return 'done';
+                            });
+                        });
+
+                        it('when exceeding attachment quota and infostore quota', function () {
+                            def = setUploadLimit({
+                                'infostoreMaxUploadSize': 1000,
+                                'infostoreQuota': 1000,
+                                'infostoreUsage': 999,
+                                'attachmentQuota': -1,
+                                'attachmentQuotaPerFile': 999
+                            })
+                            .then(createList(baton, attachmentFile, true))
+                            .then(function (result) {
+                                expect(result).to.have.property('added');
+                                expect(result).to.have.property('reason');
+                                expect(result.reason).to.equal('quotaAutoPublish');
+                                expect(result.error).to.be.a('string');
+                                return 'done';
+                            });
+                        });
+                    });
                 });
             });
         });

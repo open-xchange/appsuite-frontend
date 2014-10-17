@@ -14,12 +14,12 @@
 'use strict';
 
 module.exports = function (grunt) {
-    grunt.config.extend('watch', {
+    grunt.config.merge({ watch: {
         help: {
             files: [
                 'help/**/*'
             ],
             tasks: ['default', 'send_livereload']
         },
-    });
+    }});
 };

@@ -17,7 +17,7 @@ define('io.ox/files/api',
     ['io.ox/core/http',
      'io.ox/core/extensions',
      'io.ox/core/api/factory',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/core',
      'io.ox/core/cache',
      'io.ox/core/date',
@@ -361,7 +361,9 @@ define('io.ox/files/api',
         } else {
             e.data.custom = {
                 type: 'error',
-                text: gt('This file has not been added') + '\n' + e.error
+                text: gt('This file could not be uploaded.') +
+                    // add native error message unless generic "0 An unknown error occurred"
+                    (!/^0 /.test(e.error) ? '\n' + e.error : '')
             };
         }
         return e;
@@ -1006,8 +1008,20 @@ define('io.ox/files/api',
         })
         .done(function () {
             folderAPI.reload(folder_id);
-            folderAPI.sync();
+            folderAPI.refresh();
             api.trigger('refresh.all');
+        });
+    };
+
+    //
+    // Download zipped content of a folder
+    //
+
+    api.zip = function (id) {
+        return require(['io.ox/core/download']).then(function (download) {
+            download.url(
+                ox.apiRoot + '/files?' + $.param({ action: 'zipfolder', folder: id, recursive: true, session: ox.session })
+            );
         });
     };
 

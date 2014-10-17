@@ -13,8 +13,9 @@
 
 define('io.ox/core/session',
     ['io.ox/core/http',
-     'io.ox/core/manifests'
-    ], function (http, manifests) {
+     'io.ox/core/manifests',
+     'io.ox/core/uuids'
+    ], function (http, manifests, uuids) {
 
     'use strict';
 
@@ -64,17 +65,18 @@ define('io.ox/core/session',
                     action: 'autologin',
                     client: that.client(),
                     rampup: true,
+                    rampupFor: 'open-xchange-appsutie',
                     version: that.version()
                 }
             })
-            // If autologin fails, try the token login
             .then(
-                function (data) {
+                function success(data) {
                     ox.secretCookie = true;
                     ox.rampup = data.rampup || ox.rampup || {};
                     return data;
                 },
-                function (data) {
+                // If autologin fails, try token login
+                function fail(data) {
                     if (!_.url.hash('serverToken')) return data || {};
                     return http.POST({
                         module: 'login',
@@ -171,7 +173,7 @@ define('io.ox/core/session',
                         })
                         .fail(function (response) {
                             if (console && console.error) {
-                                console.error('Login failed!', response.error, response.error_desc || '');
+                                console.error('Login failed!', response.error, response.error_desc || '');
                             }
                             def.reject(response);
                         });
@@ -190,7 +192,8 @@ define('io.ox/core/session',
                 module: 'login',
                 params: {
                     action: 'rampup',
-                    rampup: true
+                    rampup: true,
+                    rampupFor: 'open-xchange-appsuite'
                 },
                 appendColumns: false,
                 processResponse: false
@@ -213,6 +216,22 @@ define('io.ox/core/session',
             // makes store() always successful (should never block)
             .always(def.resolve);
             return def;
+        },
+
+        redeemToken: function (token) {
+            return http.POST({
+                processResponse: false,
+                appendSession: false,
+                appendColumns: false,
+                module: 'login',
+                url: 'api/login?action=redeemToken',
+                params: {
+                    authId: uuids.randomUUID(),
+                    token: token,
+                    client: 'mobile-notifier',
+                    secret: 'notifier-123'
+                }
+            });
         },
 
         logout: function () {

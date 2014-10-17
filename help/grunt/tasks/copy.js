@@ -2,8 +2,23 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('copy', {
-        help: {
+    grunt.config.merge({ copy: {
+        build_thirdparty: {
+            files: [
+                {
+                    src: ['bootstrap.min.js'],
+                    expand: true,
+                    cwd: 'bower_components/bootstrap/dist/js',
+                    dest: 'build/help'
+                }, {
+                    src: ['jquery.min.js'],
+                    expand: true,
+                    cwd: 'bower_components/jquery/dist',
+                    dest: 'build/help'
+                }
+           ]
+        },
+        build_help: {
             files: [
                 {
                     src: ['help/**/*'],
@@ -24,17 +39,6 @@ module.exports = function (grunt) {
                 }
             ]
         },
-        local_install_dynamic: {
-            files: [
-                {
-                    src: [],
-                    expand: true,
-                    filter: 'isFile',
-                    cwd: 'dist/',
-                    dest: grunt.option('prefix')
-                }
-            ]
-        },
         local_install_static: {
             files: [
                 {
@@ -46,13 +50,7 @@ module.exports = function (grunt) {
                 }
             ]
         }
-    });
-
-    grunt.registerTask('copy_build', [
-        'newer:copy:apps',
-        'newer:copy:themes',
-        'newer:copy:help'
-    ]);
+    }});
 
     // add dist l10n copy tasks
 
@@ -86,7 +84,7 @@ module.exports = function (grunt) {
             ]
         };
 
-        grunt.config.extend('copy', config);
+        grunt.config.merge({ 'copy': config });
         grunt.registerTask('install:' + Lang, 'install language directory into a custom location', function () {
             if (!grunt.option('htdoc')) {
                 grunt.fail.fatal('Need --htdoc option to be set');

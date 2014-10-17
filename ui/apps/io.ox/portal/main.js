@@ -28,6 +28,55 @@ define('io.ox/portal/main',
 
     'use strict';
 
+    var widgetsWithFirstVisit = ['mail', 'calendar', 'tasks', 'myfiles'],
+        firstVisitGreeting = {
+            //#. Default greeting for portal widget
+            mail:     gt('Welcome to your inbox'),
+            //#. Default greeting for portal widget
+            calendar: gt('Welcome to your calendar'),
+            //#. Default greeting for portal widget
+            tasks:    gt('Welcome to your tasks'),
+            //#. Default greeting for portal widget
+            myfiles:  gt('Welcome to your files')
+        },
+        hadData = settings.get('settings/hadData') || [];
+
+    function isFirstVisitWidget(type, baton) {
+
+        function hasDataShown(type) {
+            return _.contains(hadData, type) ? true : false;
+        }
+
+        function containsData(type) {
+            var tasks;
+            if (type === 'tasks') {
+                tasks = _(baton.data).filter(function (task) {
+                    return task.end_date !== null && task.status !== 3;
+                });
+                if (_.isEmpty(tasks)) return false;
+            }
+            if (!_.isEmpty(baton.data)) return true;
+        }
+
+        if (_.contains(widgetsWithFirstVisit, type)) {
+            if (containsData(type)) {
+                if (!hasDataShown(type)) hadData.push(type);
+                settings.set('settings/hadData', hadData).save();
+                return false;
+            }
+            else if (!containsData(type)) {
+                if (hasDataShown(type)) {
+                    //settings.set('settings/hadData', []).save(); // reset for debugging
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
+
     // time-based greeting phrase
     function getGreetingPhrase(name) {
         var hour = new date.Local().getHours();
@@ -287,22 +336,61 @@ define('io.ox/portal/main',
     };
 
     function setup(e) {
+        e.preventDefault();
         var baton = e.data.baton;
         ext.point(baton.point).invoke('performSetUp', null, baton);
     }
 
+    app.drawFirstVisitPane = function (type, baton) {
+
+        var greeting = firstVisitGreeting[type] || '',
+            link = settings.get('settings/getStartedLink') || '#';
+
+        baton.model.node.append(
+            $('<div class="content">').append(
+                // text
+                $('<div>').append(
+                    $('<span class="bold">').text(ox.serverConfig.productName + '. '),
+                    $.txt(greeting + '.')
+                ),
+                // link
+                $('<a href="#" tabindex="1" target="_blank" style="white-space: nowrap;" role="button">')
+                .attr('href', link)
+                .text(gt('Get started here') + '!')
+            )
+        );
+    };
+
     app.drawDefaultSetup = function (baton) {
-        baton.model.node
-            .addClass('requires-setup')
-            .append(
-                $('<div class="content" tabindex="1" role="button">').text(gt('Click here to add your account'))
+
+        var data = baton.model.toJSON(),
+            point = ext.point(baton.point),
+            title = widgets.getTitle(data, point.prop('title')),
+            node = baton.model.node;
+
+        node.append(
+            $('<div class="content">').append(
+                // text
+                $('<div class="paragraph" style="min-height: 40px">').append(
+                    $.txt(
+                        //#. %1$s is social media name, e.g. Facebook
+                        gt('Welcome to %1$s', title) + '!'
+                    ),
+                    $('<br>'),
+                    $.txt(
+                        gt('Get started here') + ':'
+                    )
+                ),
+                // button
+                $('<a href="#" class="action" tabindex="1" role="button">').text(
+                    //#. %1$s is social media name, e.g. Facebook
+                    gt('Add your %1$s account', title)
+                )
                 .on('click', { baton: baton }, setup)
-                .on('keypress', { baton: baton }, function (e) {
-                    if (e.which === 13) {
-                        setup(e);
-                    }
-                })
-            );
+            )
+        );
+
+        point.invoke('drawDefaultSetup', node, baton);
     };
 
     function ensureDeferreds(ret) {
@@ -320,7 +408,9 @@ define('io.ox/portal/main',
     function loadAndPreview(point, node, baton) {
         var defs = point.invoke('load', node, baton).map(ensureDeferreds).value(),
             decoration = node.find('.decoration');
-        return $.when.apply($, defs).done(function () {
+        return $.when.apply($, defs).then(
+            function success() {
+                var widgetType = _.last(baton.point.split('/'));
                 node.find('.content').remove();
                 // draw summary only on small devices, i.e. smartphones
                 if (_.device('smartphone') && settings.get('mobile/summaryView')) {
@@ -335,33 +425,45 @@ define('io.ox/portal/main',
                         });
                     }
                 }
-                point.invoke('preview', node, baton);
+
+                if (isFirstVisitWidget(widgetType, baton)) {
+                    app.drawFirstVisitPane(widgetType, baton);
+                } else {
+                    point.invoke('preview', node, baton);
+                }
                 node.removeClass('error-occurred');
                 decoration.removeClass('pending error-occurred');
-            })
-            .fail(function (e) {
+            },
+            function fail(e) {
                 // special return value?
                 if (e === 'remove') {
                     widgets.remove(baton.model);
                     node.remove();
                     return;
                 }
-                // show error message
+                // clean up
                 node.find('.content').remove();
-                node.append(
-                    $('<div class="content error">').append(
-                        $('<div>').text(gt('An error occurred.')),
-                        $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
-                        $('<br>'),
-                        $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
-                            node.find('.decoration').addClass('pending');
-                            loadAndPreview(point, node, baton);
-                        })
-                    )
-                );
-                point.invoke('error', node, e, baton);
                 decoration.removeClass('pending');
-            });
+                // show error message unless it's just missing oauth account
+                if (e.code !== 'OAUTH-0006') {
+                    node.append(
+                        $('<div class="content error">').append(
+                            $('<div>').text(gt('An error occurred.')),
+                            $('<div class="italic">').text(_.isString(e.error) ? e.error : ''),
+                            $('<br>'),
+                            $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
+                                node.find('.decoration').addClass('pending');
+                                loadAndPreview(point, node, baton);
+                            })
+                        )
+                    );
+                    point.invoke('error', node, e, baton);
+                } else {
+                    // missing oAuth account
+                    app.drawDefaultSetup(baton);
+                }
+            }
+        );
     }
 
     app.drawWidget = function (model, index) {
@@ -385,8 +487,7 @@ define('io.ox/portal/main',
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
                 $title = node.find('h2 .title').text(_.noI18n(title)),
-                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
-                requiresCustomSetUp = point.invoke('requiresCustomSetUp').reduce(reduceBool, true).value();
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
@@ -394,13 +495,9 @@ define('io.ox/portal/main',
                 'aria-label': title + ', ' + gt('Disable widget'),
             });
             // setup?
-            if (requiresSetUp || requiresCustomSetUp) {
+            if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');
-                if (requiresSetUp) {
-                    app.drawDefaultSetup(baton);
-                } else {
-                    point.invoke('performCustomSetUp', node, baton);
-                }
+                app.drawDefaultSetup(baton);
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {
@@ -549,11 +646,12 @@ define('io.ox/portal/main',
             if (!Modernizr.touch) {
                 require(['static/3rd.party/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
-                        items: '> li.draggable',
                         cancel: 'li.protected',
                         containment: win.nodes.main,
-                        scroll: true,
                         delay: 150,
+                        items: '> li.draggable:visible',
+                        scroll: true,
+                        tolerance: 'pointer', // default 'intersect' by 50%
                         update: function () {
                             widgets.save(appBaton.$.widgets);
                         }

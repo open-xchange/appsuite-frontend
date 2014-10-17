@@ -52,7 +52,7 @@
             i { font-size: 64px; line-height: 64px; color: #eee; }
         }
 
-        .readwrite { margin-right: 36px; }
+        .readwrite, .readonly { margin-right: 45px; }
 
         .readonly {
 			a {
@@ -67,6 +67,7 @@
 
         .entity {
             padding-left: 64px + 13;
+            position: relative;
             a { white-space: nowrap; }
         }
 
@@ -80,7 +81,33 @@
             color: darken(@red, 20%);
         }
 
-        .close { padding: 21px 0; }
+        // .close { padding: 21px 0; }
+
+        a[data-action="remove"] {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 45px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: @trash-icon-hover-background;
+                
+                i {
+                    color: @trash-icon-hover-color;
+                }
+            }
+
+            i {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -7px 0 0 -6px;
+                color: #aaa;
+            }
+        }
+
     }
 }
 

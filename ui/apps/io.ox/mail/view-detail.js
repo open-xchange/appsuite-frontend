@@ -24,7 +24,7 @@ define('io.ox/mail/view-detail', [], function () {
     //  'io.ox/core/api/account',
     //  'settings!io.ox/mail',
     //  'gettext!io.ox/mail',
-    //  'io.ox/core/api/folder',
+    //  'io.ox/core/folder/api',
     //  'io.ox/core/emoji/util',
     //  'io.ox/core/capabilities',
     //  'io.ox/mail/actions',

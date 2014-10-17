@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-spamexperts
-Version:        0.0.1
-%define         ox_release 11
+Version:        @OXVERSION@
+%define         ox_release 5
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -51,7 +51,7 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 #for i in $files
 #do
 #    mkdir -p "%{buildroot}%{docroot}/$(dirname $i)"
-#    cp "%{buildroot}/opt/open-xchange/appsuite/$i" "%{buildroot}%{docroot}/$i" 
+#    cp "%{buildroot}/opt/open-xchange/appsuite/$i" "%{buildroot}%{docroot}/$i"
 #done
 
 %clean
@@ -86,12 +86,24 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}
 
 %changelog
+* Tue Oct 14 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+Fifth candidate for 7.6.1 release
+* Fri Oct 10 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+Fourth candidate for 7.6.1 release
+* Thu Oct 02 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+Third candidate for 7.6.1 release
 * Tue Sep 30 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-10-06
 * Tue Sep 23 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-10-02
+* Tue Sep 16 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+Second candidate for 7.6.1 release
 * Thu Sep 11 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-09-15
+* Fri Sep 05 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+First release candidate for 7.6.1
+* Fri Sep 05 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+prepare for 7.6.1
 * Wed Aug 20 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-08-25
 * Mon Aug 11 2014 Viktor Pracht <viktor.pracht@open-xchange.com>

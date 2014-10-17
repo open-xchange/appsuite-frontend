@@ -4,12 +4,13 @@
 
 define('io.ox/files/guidance/statistics',
     ['io.ox/core/strings',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/files/api',
      'gettext!io.ox/files',
      'io.ox/core/capabilities',
      'static/3rd.party/Chart.js/Chart.js'
-    ], function (strings, folderAPI, api, gt, capabilities) {
+    ], function (strings, folderAPI, getBreadcrumb, api, gt, capabilities) {
 
     'use strict';
 
@@ -135,7 +136,7 @@ define('io.ox/files/guidance/statistics',
         if (recursionDepth === 3) {
             return [];
         } else {
-            return folderAPI.getSubFolders({ folder: folder.id })
+            return folderAPI.list(folder.id)
                 .then(function (subfolders) {
                     return $.when.apply($,
                         _(subfolders).map(function (subFolder) {
@@ -292,7 +293,7 @@ define('io.ox/files/guidance/statistics',
                         canvas,
                         $('<ol>').append(
                             _(data).map(function (folder) {
-                                return $('<li>').append(folderAPI.getBreadcrumb(folder.id, options),
+                                return $('<li>').append(getBreadcrumb(folder.id, options),
                                     $('<span>').text(' ' + gt.format('%1$s\u00A0 ', strings.fileSize(folder.folder_size))));
                             })
                         )

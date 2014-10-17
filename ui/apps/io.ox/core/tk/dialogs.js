@@ -38,6 +38,7 @@ define('io.ox/core/tk/dialogs',
                 easyOut: true,
                 center: true,
                 async: false,
+                noBusy: false,//prevents busy function even in asyncmode (needed for IE9 uploads)
                 maximize: false,
                 top: '50%',
                 container: $('#io-ox-core'),
@@ -149,7 +150,7 @@ define('io.ox/core/tk/dialogs',
                 var action = e.data ? e.data.action : e,
                     async = o.async && action !== 'cancel';
                 // be busy?
-                if (async) {
+                if (async && !o.noBusy) {
                     busy();
                 }
                 // trigger action event
@@ -160,7 +161,8 @@ define('io.ox/core/tk/dialogs',
                     close();
                 }
 
-                e.processed = true;
+                // Fix for #33214 - TypeError: Attempted to assign to readonly property.
+                if (_.isObject(e) && !_.browser.Safari) e.processed = true;
             },
 
             fnKey = function (e) {
@@ -220,11 +222,30 @@ define('io.ox/core/tk/dialogs',
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
 
-        if (o.addclass) {
-            nodes.popup.addClass(o.addclass);
+        if (o.addClass) {
+            nodes.popup.addClass(o.addClass);
         }
         // add event hub
         Events.extend(this);
+
+        this.resizeBody = function () {
+            var topSpace = self.getPopup().position().top,
+                docHeight = $(document).height(),
+                bodyHeight = self.getBody().height(),
+                popupHeight = self.getPopup().height(),
+                bottomSpace = 30,
+                cellHeight = self.getBody().find('.vgrid-cell').eq(0).outerHeight(),
+                neededHeight = popupHeight + topSpace + bottomSpace;
+            if (neededHeight >= docHeight) {
+                var overSize = docHeight - neededHeight,
+                    heightVal = bodyHeight + overSize;
+                if (heightVal >= cellHeight) {
+                    self.getBody().css('height', heightVal +'px');
+                } else {
+                    self.getBody().css('height', cellHeight +'px');
+                }
+            }
+        };
 
         this.data = function (d) {
             data = d !== undefined ? d : {};
@@ -397,7 +418,7 @@ define('io.ox/core/tk/dialogs',
                         'max-width': dim.width,
                         top: o.top || 0
                     });
-                    var height = $('#io-ox-core').height() - 170 - o.top;//not window here, or we might overlap ads or sth
+                    var height = o.substract ? $('#io-ox-core').height() - o.substract - o.top : $('#io-ox-core').height() - 170 - o.top;//not window here, or we might overlap ads or sth
                     nodes.body.css({
                         'height': height,
                         'max-height': height
@@ -445,8 +466,7 @@ define('io.ox/core/tk/dialogs',
                 }
             }
 
-            if (_.device('small')) {
-
+            if (_.device('smartphone')) {
                 // rebuild button section for mobile devices
                 nodes.popup.addClass('mobile-dialog');
                 nodes.footer.rowfluid = $('<div class="row">');
@@ -548,7 +568,7 @@ define('io.ox/core/tk/dialogs',
 
             overlay,
 
-            pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs" tabindex="1">'),
+            pane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
                     $('<a class="btn-sidepopup" data-action="close" role="button" tabindex="1">')

@@ -85,29 +85,37 @@ define('io.ox/core/api/autocomplete',
                 return $.Deferred().resolve(this.cache[query]);
             } else {
                 // cache miss
-                http.pause();
-                _(self.apis).each(function (apiModule) {
-                    apiModule.api.search(query, options);
-                });
-                return http.resume().pipe(function (data) {
-                    //unify and process
-                    var retData = [];
-                    _(self.apis).each(function (apiModule, index) {
-                        var type = apiModule.type;
-                        switch (type) {
-                        case 'user':
-                        case 'contact':
-                            retData = self.processContactResults(type, retData.concat(self.processItem(type, data[index])), query, options);
-                            break;
-                        case 'resource':
-                        case 'group':
-                            retData = retData.concat(self.processItem(type, data[index]));
-                            break;
-                        }
+                try {
+                    http.pause();
+                    return $.when.apply($,
+                        _(self.apis).map(function (module) {
+                            // prefer autocomplete over search
+                            return (module.api.autocomplete || module.api.search)(query, options);
+                        })
+                    )
+                    .then(function () {
+                        // unify and process
+                        var retData = [], data = _(arguments).toArray();
+
+                        _(self.apis).each(function (module, index) {
+                            var type = module.type, items = self.processItem(type, data[index]);
+                            switch (type) {
+                            case 'user':
+                            case 'contact':
+                                retData = self.processContactResults(type, retData.concat(items), query, options);
+                                break;
+                            case 'resource':
+                            case 'group':
+                                retData = retData.concat(items);
+                                break;
+                            }
+                        });
+                        // add to cache
+                        return (self.cache[query] = retData);
                     });
-                    // add to cache
-                    return (self.cache[query] = retData);
-                });
+                } finally {
+                    http.resume();
+                }
             }
         },
 
@@ -117,15 +125,10 @@ define('io.ox/core/api/autocomplete',
          * @param  {array} data (contains results array)
          * @return {array}
          */
-        processItem: function (type, data) {
-            var result = _(data.data).map(function (dataItem) {
-                var obj = {
-                    data: dataItem,
-                    type: type
-                };
-                return obj;
+        processItem: function (type, array) {
+            return _(array).map(function (data) {
+                return { data: data, type: type };
             });
-            return result;
         },
 
         /**

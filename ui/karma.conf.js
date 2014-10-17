@@ -8,13 +8,8 @@ module.exports = function(config) {
     basePath: 'build/',
     builddir: 'build/',
 
-    plugins: [
-        'karma-*',
-        require('./lib/karma-oxboot/index.js'),
-        require('./lib/karma-ox-apploader/index.js')
-    ],
     // frameworks to use
-    frameworks: ['mocha', 'oxboot', 'ox-apploader', 'chai'],
+    frameworks: ['ox-ui', 'sinon', 'mocha', 'chai'],
 
     // list of files / patterns to load in the browser
     files: [

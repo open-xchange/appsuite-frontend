@@ -13,14 +13,17 @@
 
 define('io.ox/tasks/actions',
     ['io.ox/core/extensions',
+     'io.ox/tasks/api',
      'io.ox/tasks/util',
      'io.ox/core/extPatterns/links',
+     'settings!io.ox/tasks',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'io.ox/core/extPatterns/actions',
-     'io.ox/tasks/common-extensions'
-    ], function (ext, util, links, gt, notifications, print, actions, extensions) {
+     'io.ox/tasks/common-extensions',
+     'io.ox/core/folder/api'
+    ], function (ext, api, util, links, settings, gt, notifications, print, actions, extensions, folderAPI) {
 
     'use strict';
 
@@ -29,7 +32,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
-            return e.collection.has('create');// && _.device('!small');
+            return e.baton.app.folder.can('create');
         },
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (edit) {
@@ -39,9 +42,7 @@ define('io.ox/tasks/actions',
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        requires: function (e) {
-            return e.collection.has('one');
-        },
+        requires: 'one modify',
         action: function (baton) {
             ox.load(['io.ox/tasks/edit/main']).done(function (m) {
                 if (m.reuse('edit', baton.data)) return;
@@ -100,7 +101,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
-            if (!e.collection.has('some')) {
+            if (!(e.collection.has('some') && e.collection.has('modify'))) {
                 return false;
             }
             return (e.baton.data.status !== 3);
@@ -112,7 +113,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
-            if (!e.collection.has('some')) {
+            if (!(e.collection.has('some') && e.collection.has('modify'))) {
                 return false;
             }
             return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
@@ -172,79 +173,60 @@ define('io.ox/tasks/actions',
         });
     }
 
+    // helper
+    function isShared(id) {
+        var data = folderAPI.pool.getModel(id).toJSON();
+        return folderAPI.is('shared', data);
+    }
+
     new Action('io.ox/tasks/actions/move', {
-        requires: 'some delete',
+        requires: function (e) {
+            if (!e.collection.has('some')) return false;
+            if (!e.collection.has('delete')) return false;
+            if (e.baton.app) {//app object is not available when opened from notification area
+                if (isShared(e.baton.app.folder.get())) {
+                    return false;
+                }
+            } else if (e.data.folder_id) {
+                isShared(e.data.folder_id);
+            } else {
+                return false;
+            }
+            return true;
+        },
         multiple: function (list, baton) {
-            var task = baton.data,
-                numberOfTasks = task.length || 1,
-                vGrid = baton.grid || (baton.app && baton.app.getGrid());
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/tasks/api', 'io.ox/core/api/folder'])
-                    .done(function (dialogs, views, api, folderAPI) {
 
-                function commit(target) {
-                    if (vGrid) vGrid.busy();
-                    api.move(list, target).then(
-                        function () {
-                            notifications.yell('success', gt('Tasks have been moved'));
-                            folderAPI.reload(target, list);
-                            if (vGrid) vGrid.idle();
-                        },
-                        notifications.yell
-                    );
-                }
+            var vgrid = baton.grid || (baton.app && baton.app.getGrid());
 
-                if (baton.target) {
-                    commit(baton.target);
-                } else {
+            // shared?
+            var shared = _([].concat(list)).reduce(function (memo, obj) {
+                return memo || isShared(obj.folder_id);
+            }, false);
 
-                    //build popup
-                    var popup = new dialogs.ModalDialog()
-                        .header($('<h4>').text(gt('Move')))
-                        .addPrimaryButton('ok', gt('Move'), 'ok', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
-                    popup.getBody().css({ height: '250px' });
-                    var tree = new views.FolderList(popup.getBody(), {
-                            type: 'tasks',
-                            tabindex: 0,
-                            targetmode: true,
-                            dialogmode: true
-                        }),
-                        id = String(task.folder || task.folder_id);
+            if (shared || (baton.target && isShared(baton.target))) {
+                return notifications.yell('error', gt('Tasks can not be moved to or out of shared folders'));
+            }
 
-                    popup.show(function () {
-                        tree.paint().done(function () {
-                            tree.select(id).done(function () {
-                                popup.getBody().focus();
-                            });
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'ok') {
-                            var node = $('.io-ox-multi-selection');
-                            node.hide();
-                            node.parent().busy();
-                            var target = _(tree.selection.get()).first();
-                            // move only if folder differs from old folder
-                            if (target && target !== id) {
-                                // move action
-                                api.move(task, target)
-                                .done(function () {
-                                    node.show();
-                                    node.parent().idle();
-                                    notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
-                                })
-                                .fail(function () {
-                                    node.show();
-                                    node.parent().idle();
-                                    notifications.yell('error', gt('A severe error occurred!'));
-                                });
-                            }
-                        }
-                        tree.destroy().done(function () {
-                            tree = popup = null;
-                        });
-                    });
-                }
+            require(['io.ox/core/folder/actions/move'], function (move) {
+
+                move.item({
+                    api: api,
+                    button: gt('Move'),
+                    flat: true,
+                    indent: false,
+                    list: list,
+                    module: 'tasks',
+                    root: '1',
+                    settings: settings,
+                    success: {
+                        single: 'Task has been moved',
+                        multiple: 'Tasks have been moved'
+                    },
+                    target: baton.target,
+                    title: gt('Move'),
+                    type: 'move',
+                    vgrid: vgrid
+                });
             });
         }
     });
@@ -253,10 +235,10 @@ define('io.ox/tasks/actions',
         id: 'confirm',
         requires: function (args) {
             var result = false;
-            if (args.baton.data.participants) {
+            if (args.baton.data.users) {
                 var userId = ox.user_id;
-                _(args.baton.data.participants).each(function (participant) {
-                    if (participant.id === userId) {
+                _(args.baton.data.users).each(function (user) {
+                    if (user.id === userId) {
                         result = true;
                     }
                 });
@@ -398,7 +380,7 @@ define('io.ox/tasks/actions',
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 _(list).each(function (data) {
-                    var url = attachmentAPI.getUrl(data, 'open');
+                    var url = attachmentAPI.getUrl(data, 'view');
                     window.open(url);
                 });
             });
@@ -407,7 +389,9 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/download-attachment', {
         id: 'download',
-        requires: 'some',
+        requires: function (e) {
+            return e.collection.has('some') && _.device('!ios');
+        },
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {
                 _(list).each(function (data) {
@@ -462,6 +446,7 @@ define('io.ox/tasks/actions',
 
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
+        requires: 'one modify',
         action: $.noop
     });
 
@@ -632,6 +617,7 @@ define('io.ox/tasks/actions',
         id: 'slideshow',
         index: 100,
         label: gt('Slideshow'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/slideshow-attachment'
     }));
 
@@ -646,6 +632,7 @@ define('io.ox/tasks/actions',
         id: 'open',
         index: 200,
         label: gt('Open in browser'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/open-attachment'
     }));
 
@@ -653,6 +640,7 @@ define('io.ox/tasks/actions',
         id: 'download',
         index: 300,
         label: gt('Download'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/download-attachment'
     }));
 
@@ -660,6 +648,7 @@ define('io.ox/tasks/actions',
         id: 'save',
         index: 400,
         label: gt('Save to Drive'),
+        mobile: 'hi',
         ref: 'io.ox/tasks/actions/save-attachment'
     }));
 });

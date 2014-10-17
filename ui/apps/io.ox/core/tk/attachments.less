@@ -12,7 +12,9 @@
  */
 
 .io-ox-core-tk-attachment-list {
-    margin-top: 13px;
+
+    padding: 0;
+
     /* SimpleEditableList */
     .item {
 
@@ -23,7 +25,6 @@
         background-color: white;
 
         /* depending on pane background*/
-
         &.background {
             background-color: #f5f5f5;
         }
@@ -32,6 +33,9 @@
             cursor: pointer;
         }
 
+        div.dropdown {
+            overflow: visible;
+        }
         div {
             white-space: nowrap;
             overflow: hidden;
@@ -45,7 +49,7 @@
             left: 11px;
         }
 
-        .remove {
+        .control, .remove {
             display: inline-block;
             position: absolute;
             top: 1px;
@@ -53,24 +57,30 @@
             bottom: 1px;
             width: 2em;
             line-height: 1em;
-            background-color: #f5f5f5;
-            color: #aaa;
             cursor: pointer;
+
+            &.remove {
+                background-color: #f5f5f5;
+                color: #aaa;
+            }
+            &.dropdown {
+                margin: 0;
+            }
+
+            .fa {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                margin-top: -0.5em;
+                text-align: center;
+            }
         }
 
         .remove:hover {
             background-color: #a00;
             color: #fff;
             text-decoration: none;
-        }
-
-        .remove .fa {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            margin-top: -0.5em;
-            text-align: center;
         }
 
         .group-label {
@@ -121,7 +131,9 @@
 
     }
 
-    .col-md-6:nth-child(odd) { margin-left: 0; }
+    .col-md-6:nth-child(odd) {
+        margin-left: 0;
+    }
 
     /* EditableAttachmentList */
     .io-ox-core-tk-attachment {
@@ -133,14 +145,14 @@
         padding: 4px 2.5em 4px 5px;
         background-color: #f5f5f5;
 
-        i {
+        > i, .remove i {
             position: absolute;
             font-size: 20px;
             top: 12px;
             left: 11px;
         }
 
-        div {
+        > div {
             position: absolute;
             left: 40px;
             right: 30px;
@@ -148,11 +160,11 @@
 
             &.row-2 {
                 top: 23px;
-                span.filesize { color: #aaa; }
             }
         }
 
         .remove {
+
             display: inline-block;
             position: absolute;
             top: 1px;
@@ -177,6 +189,8 @@
                 margin-top: -0.5em;
                 text-align: center;
             }
+
         }
+
     }
 }

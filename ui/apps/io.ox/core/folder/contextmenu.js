@@ -14,32 +14,31 @@
 define('io.ox/core/folder/contextmenu',
     ['io.ox/core/extensions',
      'io.ox/core/folder/actions/common',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'], function (ext, actions, api, notifications, capabilities, gt) {
 
     'use strict';
 
-    var point = ext.point('io.ox/core/foldertree/contextmenu');
-
     //
     // drawing utility functions
     //
 
     function a(action, text) {
-        return $('<a href="#" tabindex="1" role="menuitem">').attr('data-action', action).text(text);
+        return $('<a href="#" tabindex="1" role="menuitem">')
+            .attr('data-action', action).text(text)
+            .on('click', $.preventDefault); // always prevent default
     }
 
     function disable(node) {
-        return node.attr('aria-disabled', true).removeAttr('tabindex')
-            .addClass('disabled').on('click', $.preventDefault);
+        return node.attr('aria-disabled', true).removeAttr('tabindex').addClass('disabled');
     }
 
     function addLink(node, options) {
         var link = a(options.action, options.text);
         if (options.enabled) link.on('click', options.data, options.handler); else disable(link);
-        node.append($('<li>').append(link));
+        node.append($('<li role="presentation">').append(link));
         return link;
     }
 
@@ -56,7 +55,7 @@ define('io.ox/core/folder/contextmenu',
         //
         markFolderSeen: function (baton) {
 
-            if (baton.options.type !== 'mail') return;
+            if (baton.module !== 'mail') return;
 
             addLink(this, {
                 action: 'markfolderread',
@@ -72,7 +71,7 @@ define('io.ox/core/folder/contextmenu',
         //
         expunge: function (baton) {
 
-            if (baton.options.type !== 'mail') return;
+            if (baton.module !== 'mail') return;
 
             addLink(this, {
                 action: 'expunge',
@@ -84,15 +83,42 @@ define('io.ox/core/folder/contextmenu',
         },
 
         //
+        // Archive messages
+        //
+        archive: (function () {
+
+            function handler(e) {
+                ox.load(['io.ox/core/folder/actions/archive']).done(function (archive) {
+                    archive(e.data.id);
+                });
+            }
+
+            return function (baton) {
+
+                if (baton.module !== 'mail') return;
+
+                addLink(this, {
+                    action: 'archive',
+                    data: { id: baton.data.id },
+                    enabled: api.can('delete', baton.data),
+                    handler: handler,
+                    //#. Verb: (to) archive messages
+                    text: gt.pgettext('verb', 'Archive')
+                });
+            };
+
+        }()),
+
+        //
         // Empty folder
         //
         empty: function (baton) {
 
-            if (baton.options.type !== 'mail') return;
+            if (baton.module !== 'mail' && baton.module !== 'infostore') return;
 
             addLink(this, {
                 action: 'clearfolder',
-                data: { baton: baton },
+                data: { id: baton.data.id, module: baton.module },
                 enabled: api.can('delete', baton.data),
                 handler: actions.clearFolder,
                 text: gt('Empty folder')
@@ -105,8 +131,7 @@ define('io.ox/core/folder/contextmenu',
         add: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                ox.load(['io.ox/core/folder/add']).done(function (add) {
+                ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
                     add(e.data.folder, { module: e.data.module });
                 });
             }
@@ -114,12 +139,12 @@ define('io.ox/core/folder/contextmenu',
             return function (baton) {
 
                 // only mail and infostore show hierarchies
-                if (/^(contacts|calendar|tasks)$/.test(baton.options.type)) return;
+                if (/^(contacts|calendar|tasks)$/.test(baton.module)) return;
                 if (!api.can('create', baton.data)) return;
 
                 addLink(this, {
                     action: 'add-subfolder',
-                    data: { app: baton.app, folder: baton.data.id, module: baton.options.type },
+                    data: { app: baton.app, folder: baton.data.id, module: baton.module },
                     enabled: true,
                     handler: handler,
                     text: gt('New subfolder')
@@ -133,8 +158,9 @@ define('io.ox/core/folder/contextmenu',
         rename: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                e.data.app.folderView.rename();
+                ox.load(['io.ox/core/folder/actions/rename']).done(function (rename) {
+                    rename(e.data.id);
+                });
             }
 
             return function (baton) {
@@ -143,7 +169,7 @@ define('io.ox/core/folder/contextmenu',
 
                 addLink(this, {
                     action: 'rename',
-                    data: { app: baton.app },
+                    data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
                     text: gt('Rename')
@@ -152,22 +178,23 @@ define('io.ox/core/folder/contextmenu',
         }()),
 
         //
-        // Delete folder
+        // Remove folder
         //
-        deleteFolder: (function () {
+        removeFolder: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                e.data.app.folderView.remove();
+                ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
+                    remove(e.data.id);
+                });
             }
 
             return function (baton) {
 
-                if (!api.can('deleteFolder', baton.data)) return;
+                if (!api.can('remove:folder', baton.data)) return;
 
                 addLink(this, {
                     action: 'delete',
-                    data: { app: baton.app },
+                    data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
                     text: gt('Delete')
@@ -181,25 +208,49 @@ define('io.ox/core/folder/contextmenu',
         move: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                var baton = e.data.baton;
-                require(['io.ox/core/folder/move'], function (move) {
-                    move(baton);
+                require(['io.ox/core/folder/actions/move'], function (move) {
+                    move.folder(e.data.id);
                 });
             }
 
             return function (baton) {
 
-                if (!/^(mail|infostore)$/.test(baton.options.type)) return;
+                if (!/^(mail|infostore)$/.test(baton.module)) return;
                 if (_.device('smartphone')) return;
-                if (!api.can('deleteFolder', baton.data)) return;
+                if (!api.can('remove:folder', baton.data)) return;
 
                 addLink(this, {
                     action: 'move',
-                    data: { baton: baton },
+                    data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
                     text: gt('Move')
+                });
+            };
+        }()),
+
+        //
+        // Zip folder
+        //
+        zip: (function () {
+
+            function handler(e) {
+                require(['io.ox/files/api'], function (api) {
+                    api.zip(e.data.id);
+                });
+            }
+
+            return function (baton) {
+
+                if (_.device('smartphone')) return;
+                if (baton.module !== 'infostore') return;
+
+                addLink(this, {
+                    action: 'zip',
+                    data: { id: baton.data.id },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Download entire folder')
                 });
             };
         }()),
@@ -210,10 +261,9 @@ define('io.ox/core/folder/contextmenu',
         exportData: (function () {
 
             function handler(e) {
-                e.preventDefault();
                 require(['io.ox/core/export/export'], function (exporter) {
                     //module,folderid
-                    exporter.show(e.data.baton.data.module, String(e.data.baton.app.folderView.selection.get()));
+                    exporter.show(e.data.baton.data.module, e.data.baton.data.id);
                 });
             }
 
@@ -240,7 +290,7 @@ define('io.ox/core/folder/contextmenu',
             function handler(e) {
                 e.preventDefault();
                 require(['io.ox/core/import/import'], function (importer) {
-                    importer.show(e.data.baton.data.module, String(e.data.baton.app.folderView.selection.get()));
+                    importer.show(e.data.baton.data.module, e.data.baton.data.id);
                 });
             }
 
@@ -319,7 +369,7 @@ define('io.ox/core/folder/contextmenu',
                             tempLink.on('click', function () {
                                 upsell.trigger({
                                     type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/publications',
+                                    id: 'io.ox/core/foldertree/contextmenu/default/publications',
                                     missing: upsell.missing(['publication'])
                                 });
                             });
@@ -361,7 +411,7 @@ define('io.ox/core/folder/contextmenu',
                             tempLink.on('click', function () {
                                 upsell.trigger({
                                     type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/subscribe',
+                                    id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
                                     missing: upsell.missing(['subscription'])
                                 });
                             });
@@ -381,7 +431,7 @@ define('io.ox/core/folder/contextmenu',
             function handler(e) {
                 e.preventDefault();
                 var id = e.data.baton.app.folder.get();
-                require(['io.ox/core/folder/properties'], function (fn) {
+                require(['io.ox/core/folder/actions/properties'], function (fn) {
                     fn(id);
                 });
             }
@@ -406,42 +456,39 @@ define('io.ox/core/folder/contextmenu',
 
         toggle: (function () {
 
-            function handler(e) { // move folder to hidden folders section or removes it from there
+            function handler(e) {
                 e.preventDefault();
-                require(['io.ox/core/folder/toggle'], function (fn) {
-                    fn(e.data.baton, e.data.state, point);
-                });
+                // hide/show
+                api.toggle(e.data.id, e.data.state);
+                // dropdown menu needs a redraw
+                e.data.view.renderContextMenuItems();
             }
 
             return function (baton) {
 
-                if (baton.options.view !== 'FolderList') return;
-                if (_.device('smartphone')) return;
                 if (!baton.data.id) return; // if data is empty we have nothing to do here
+                if (!/^(contacts|calendar|tasks)$/.test(baton.module)) return;
+                if (_.device('smartphone')) return;
+                if (baton.data.standard_folder) return;
 
-                var settings = baton.app.settings,
-                    // apps have their own blacklists for hidden folders
-                    hide = !settings.get('folderview/blacklist', {})[baton.data.id];
-
-                // always show unhide function (we don't want to loose folders here) but hide only when it's not a standard folder
-                if (baton.data.standard_folder || hide) return;
+                var hidden = api.is('hidden', baton.data);
 
                 addLink(this, {
                     action: 'hide',
-                    data: { baton: baton, state: !hide, point: point },
+                    data: { id: baton.data.id, state: hidden, view: baton.view },
                     enabled: true,
                     handler: handler,
-                    text: hide ? gt('Hide'): gt('Show')
+                    text: hidden ? gt('Show') : gt('Hide')
                 });
             };
         }())
     };
 
     //
-    // Extensions
+    // Default extensions
     //
 
-    point.extend(
+    ext.point('io.ox/core/foldertree/contextmenu/default').extend(
         {
             id: 'mark-folder-read',
             index: 100,
@@ -453,8 +500,13 @@ define('io.ox/core/folder/contextmenu',
             draw: extensions.expunge
         },
         {
-            id: 'divider-1',
+            id: 'archive',
             index: 300,
+            draw: extensions.archive
+        },
+        {
+            id: 'divider-1',
+            index: 400,
             draw: divider
         },
         // -----------------------------------------------
@@ -500,8 +552,13 @@ define('io.ox/core/folder/contextmenu',
             draw: extensions.exportData
         },
         {
-            id: 'divider-3',
+            id: 'zip',
             index: 2300,
+            draw: extensions.zip
+        },
+        {
+            id: 'divider-3',
+            index: 2400,
             draw: divider
         },
         // -----------------------------------------------
@@ -534,7 +591,26 @@ define('io.ox/core/folder/contextmenu',
         {
             id: 'delete',
             index: 4300,
-            draw: extensions.deleteFolder
+            draw: extensions.removeFolder
         }
     );
+
+    //
+    // Special extensions
+    //
+
+    ext.point('io.ox/core/foldertree/contextmenu/myfolders').extend(
+        {
+            id: 'add-folder',
+            index: 1000,
+            draw: extensions.add
+        }
+    );
+
+    return {
+        extensions: extensions,
+        addLink: addLink,
+        disable: disable,
+        divider: divider
+    };
 });

@@ -47,6 +47,7 @@ define('io.ox/calendar/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Scheduling'),
+            title: gt('Find a free time'),
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/freebusy'
         },
@@ -102,7 +103,7 @@ define('io.ox/calendar/toolbar',
     ext.point('io.ox/calendar/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        forcelimit: true, // always use drop-down
+        dropdown: true, // always use drop-down
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/calendar/classic-toolbar/links'

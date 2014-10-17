@@ -14,7 +14,7 @@ define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
      'io.ox/core/date',
      'io.ox/core/extensions',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style',
@@ -118,7 +118,7 @@ define('io.ox/calendar/month/view',
             // set refDate for app to selected day and change
             // perspective afterwards
             this.app.refDate = d;
-            ox.ui.Perspective.show(this.app, 'week:day');
+            ox.ui.Perspective.show(this.app, 'week:day', {animation: 'slideleft'});
         },
 
         render: function () {

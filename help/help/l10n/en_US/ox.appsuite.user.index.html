@@ -6,11 +6,14 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="index.html" title="OX App Suite">
-<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Chapter 14. Questions and Answers">
+<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Chapter 13. Questions and Answers">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -70,8 +73,6 @@
 </dt>
 <dt>App Calendar, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Calendar</a>
 </dt>
-<dt>App Documents, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documents</a>
-</dt>
 <dt>App Drive, <a class="indexterm" href="ox.appsuite.user.chap.files.html">Drive</a>
 </dt>
 <dt>App E-Mail, <a class="indexterm" href="ox.appsuite.user.chap.email.html">E-Mail</a>
@@ -99,7 +100,7 @@
 </dt>
 <dt>creating a distribution list from the list of participants, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">Creating a distribution list from the list of participants</a>
 </dt>
-<dt>Delete, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Deleting appointments</a>
+<dt>delete, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Deleting appointments</a>
 </dt>
 <dt>display, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Viewing appointments</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">How are appointments displayed?</a>
 </dt>
@@ -135,9 +136,15 @@
 </dt>
 <dt>resolve conflicts, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">Resolving appointment conflicts</a>
 </dt>
+<dt>save attachments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Viewing or Saving Appointment Attachments</a>
+</dt>
 <dt>scheduling with several participants, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.freebusy.html">Scheduling appointments with several participants</a>
 </dt>
+<dt>search, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Searching for appointments</a>
+</dt>
 <dt>send E-Mail to participants, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.mail_participants.html">Sending an E-Mail to participants</a>
+</dt>
+<dt>view attachments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Viewing or Saving Appointment Attachments</a>
 </dt>
 </dl></dd>
 <dt>Apps</dt>
@@ -145,8 +152,6 @@
 <dt>Address Book, <a class="indexterm" href="ox.appsuite.user.chap.contacts.html">Address Book</a>
 </dt>
 <dt>Calendar, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Calendar</a>
-</dt>
-<dt>Documents, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documents</a>
 </dt>
 <dt>Drive, <a class="indexterm" href="ox.appsuite.user.chap.files.html">Drive</a>
 </dt>
@@ -157,6 +162,9 @@
 <dt>Tasks, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Tasks</a>
 </dt>
 </dl></dd>
+<dt>Archive</dt>
+<dd><dl><dt>E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">Archiving E-Mails</a>
+</dt></dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -236,7 +244,7 @@
 </dt>
 <dt>delete, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Deleting Contacts</a>
 </dt>
-<dt>display, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Viewing contacts</a>
+<dt>display, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Displaying Contacts</a>
 </dt>
 <dt>displaying the halo view, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">The Halo View</a>
 </dt>
@@ -264,11 +272,17 @@
 </dt>
 <dt>print, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Printing Contacts</a>
 </dt>
+<dt>save attachments, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Viewing or Saving Contact Attachments</a>
+</dt>
+<dt>search, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Searching for contacts</a>
+</dt>
 <dt>send as vCard, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">Sending contacts as vCard</a>
 </dt>
 <dt>send E-Mail to, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendmail.html">Sending E-Mails from within an address book</a>
 </dt>
 <dt>subscribe from social networks, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.subscribe.html">Importing contacts from social networks</a>
+</dt>
+<dt>view attachments, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Viewing or Saving Contact Attachments</a>
 </dt>
 </dl></dd>
 <dt>contacts</dt>
@@ -292,7 +306,7 @@
 </dt>
 <dt>file, <a class="indexterm" href="ox.appsuite.user.sect.files.add.html">Creating Files</a>
 </dt>
-<dt>task, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Creating tasks</a>
+<dt>task, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Creating Tasks</a>
 </dt>
 </dl></dd>
 <dt>Creating a distribution list from the list of participants, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">Creating a distribution list from the list of participants</a>
@@ -307,11 +321,9 @@
 <dd><dl>
 <dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.datainterchange.html">Interchanging Contacts with Other Applications</a>
 </dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.datainterchange.html">Interchanging Tasks with other Applications</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.datainterchange.html">Interchange Tasks with other Applications</a>
 </dt>
 </dl></dd>
-<dt>data organization, <a class="indexterm" href="ox.appsuite.user.chap.dataorganisation.html">Organizing Data</a>
-</dt>
 <dt>Definitions</dt>
 <dd><dl>
 <dt>app, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
@@ -324,7 +336,7 @@
 </dt>
 <dt>external participant, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
-<dt>function, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
+<dt>Function, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
 <dt>global address book, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
@@ -338,16 +350,16 @@
 </dt>
 <dt>Participant, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
-<dt>system windows, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
+<dt>System windows, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
 <dt>user, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
 <dt>user interface, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
 </dl></dd>
-<dt>Delete</dt>
+<dt>delete</dt>
 <dd><dl>
-<dt>Appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Deleting appointments</a>
+<dt>appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Deleting appointments</a>
 </dt>
 <dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Deleting Contacts</a>
 </dt>
@@ -355,29 +367,38 @@
 </dt>
 <dt>Files, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Deleting files</a>
 </dt>
-<dt>Folders, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Deleting folders</a>
-</dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Deleting tasks</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Deleting tasks</a>
 </dt>
 </dl></dd>
+<dt>Delete</dt>
+<dd><dl><dt>Folders, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Deleting folders</a>
+</dt></dl></dd>
 <dt>Design Elements, <a class="indexterm" href="ox.appsuite.user.sect.about.legend.html">Design Elements</a>
 </dt>
 <dt>display</dt>
 <dd><dl>
-<dt>Appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Viewing appointments</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Displaying appointments in a calendar view</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Displaying appointments in the list view</a>
+<dt>appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Viewing appointments</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Displaying appointments in a calendar view</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Displaying appointments in the list view</a>
 </dt>
-<dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Viewing contacts</a>
+<dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Displaying Contacts</a>
 </dt>
-<dt>E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">Viewing E-Mails</a>
+<dt>E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">Displaying E-Mails</a>
 </dt>
 <dt>Files, <a class="indexterm" href="ox.appsuite.user.sect.files.view.html">Viewing Files</a>
 </dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Viewing tasks</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Viewing tasks</a>
 </dt>
 </dl></dd>
 <dt>Display</dt>
-<dd><dl><dt>E-Mail attachment, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">Viewing or Saving E-Mail Attachments</a>
-</dt></dl></dd>
+<dd><dl>
+<dt>appointment attachment, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Viewing or Saving Appointment Attachments</a>
+</dt>
+<dt>contact attachment, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Viewing or Saving Contact Attachments</a>
+</dt>
+<dt>E-Mail attachment, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">Viewing or Saving E-Mail Attachments</a>
+</dt>
+<dt>task attachment, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Viewing or Saving Task Attachments</a>
+</dt>
+</dl></dd>
 <dt>Display contents</dt>
 <dd><dl><dt>Files, <a class="indexterm" href="ox.appsuite.user.sect.files.open.view.html">Displaying a file's content</a>
 </dt></dl></dd>
@@ -404,30 +425,9 @@
 <dt>target group, <a class="indexterm" href="ox.appsuite.user.sect.about.target.html">Who is the Target Group for this Documentation?</a>
 </dt>
 </dl></dd>
-<dt>Documents, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documents</a>
-</dt>
-<dd><dl>
-<dt>Components, <a class="indexterm" href="ox.appsuite.user.sect.documents.gui.html">The Documents Components</a>
-</dt>
-<dt>create, <a class="indexterm" href="ox.appsuite.user.sect.documents.add.html">Creating Documents</a>
-</dt>
-<dt>creating documents, <a class="indexterm" href="ox.appsuite.user.sect.documents.add.html">Creating Documents</a>
-</dt>
-<dt>display contents, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Displaying the contents of documents</a>
-</dt>
-<dt>download, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Editing Documents</a>
-</dt>
-<dt>Edit, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Editing Documents</a>
-</dt>
-<dt>edit, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Editing Documents</a>
-</dt>
-<dt>edit under a new name, <a class="indexterm" href="ox.appsuite.user.sect.documents.editasnew.html">Editing Documents Under a New Name</a>
-</dt>
-<dt>print, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Editing Documents</a>
-</dt>
-<dt>search and replace, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Editing Documents</a>
-</dt>
-</dl></dd>
+<dt>Documents</dt>
+<dd><dl><dt>display contents, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Displaying the contents of documents</a>
+</dt></dl></dd>
 <dt>Drive, <a class="indexterm" href="ox.appsuite.user.chap.files.html">Drive</a>
 </dt>
 <dd><dl><dt>Components, <a class="indexterm" href="ox.appsuite.user.sect.files.gui.html">The Drive Components</a>
@@ -442,6 +442,8 @@
 <dd><dl>
 <dt>add to portal, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.addportal.html">Adding an E-Mail to the portal</a>
 </dt>
+<dt>archive, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">Archiving E-Mails</a>
+</dt>
 <dt>automatically forward, <a class="indexterm" href="ox.appsuite.user.sect.email.send.autoforward.html">Automatically forwarding E-Mails</a>
 </dt>
 <dt>categorize with colored labels, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.label.html">Categorizing E-Mails with colored labels</a>
@@ -454,7 +456,7 @@
 </dt>
 <dt>copy, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.copy.html">Copying E-Mails</a>
 </dt>
-<dt>Delete, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">Deleting E-Mail messages</a>
+<dt>delete, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">Deleting E-Mail messages</a>
 </dt>
 <dt>drafts, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.draft.html">Working with E-Mail drafts</a>
 </dt>
@@ -489,6 +491,8 @@
 <dt>save as EML, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.save.html">Saving E-Mails</a>
 </dt>
 <dt>saving recipients as distribution list, <a class="indexterm" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">Saving all recipients of an E-Mail as a distribution list</a>
+</dt>
+<dt>search, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">Searching for E-Mails</a>
 </dt>
 <dt>send, <a class="indexterm" href="ox.appsuite.user.sect.email.send.html">Sending E-Mails</a>, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">Sending a new E-Mail</a>
 </dt>
@@ -525,8 +529,6 @@
 </dt>
 <dt>Append vcard, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
 </dt>
-<dt>Ask for return receipt, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
-</dt>
 <dt>Auto-save E-Mail drafts, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
 </dt>
 <dt>Automatically collect contacts while reading, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
@@ -551,6 +553,8 @@
 </dt>
 <dt>Permanently remove deleted emails, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
 </dt>
+<dt>Show requests for read receipts, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
+</dt>
 <dt>Signature, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
 </dt>
 </dl></dd>
@@ -563,7 +567,7 @@
 <dd><dl>
 <dt>co-operate with others, <a class="indexterm" href="ox.appsuite.user.sect.email.share.emails.html">Sharing E-Mails</a>
 </dt>
-<dt>display, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">Viewing E-Mails</a>
+<dt>display, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">Displaying E-Mails</a>
 </dt>
 <dt>edit, multiple -, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.multiple.html">Editing multiple E-Mails at once</a>
 </dt>
@@ -574,17 +578,15 @@
 </dl></dd>
 <dt>Edit</dt>
 <dd><dl>
-<dt>Appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.edit.html">Editing appointments</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">Editing appointments with drag and drop</a>
+<dt>appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.edit.html">Editing appointments</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">Editing appointments with drag and drop</a>
 </dt>
 <dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.edit.html">Editing Contacts</a>
 </dt>
-<dt>Documents, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Editing Documents</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.editasnew.html">Editing Documents Under a New Name</a>
-</dt>
 <dt>file description, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.editdescription.html">Editing descriptions</a>
 </dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.edit.html">Editing tasks</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.edit.html">Editing tasks</a>
 </dt>
-<dt>text files, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Editing Text Files</a>
+<dt>Text files, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Editing Text Files</a>
 </dt>
 <dt>versions, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.versions.html">Working with versions</a>
 </dt>
@@ -631,7 +633,7 @@
 </dt>
 <dt>create new, <a class="indexterm" href="ox.appsuite.user.sect.files.add.html">Creating Files</a>
 </dt>
-<dt>Delete, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Deleting files</a>
+<dt>delete, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Deleting files</a>
 </dt>
 <dt>display, <a class="indexterm" href="ox.appsuite.user.sect.files.view.html">Viewing Files</a>
 </dt>
@@ -654,6 +656,8 @@
 <dt>organize, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.html">Managing Files</a>
 </dt>
 <dt>rename file, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.rename.html">Editing file names</a>
+</dt>
+<dt>search, <a class="indexterm" href="ox.appsuite.user.sect.files.search.html">Searching for Files</a>
 </dt>
 <dt>send as E-Mail attachment, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.send.html">Sending files as E-Mail attachments</a>
 </dt>
@@ -681,6 +685,8 @@
 </dt>
 <dt>Folder structure</dt>
 <dd><dl>
+<dt>favorites, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Adding folders to favorites</a>
+</dt>
 <dt>hide folder, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Hiding folders</a>
 </dt>
 <dt>navigate, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navigating within the folder structure</a>
@@ -690,6 +696,8 @@
 <dd><dl>
 <dt>change width, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navigating within the folder structure</a>
 </dt>
+<dt>favorites, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Adding folders to favorites</a>
+</dt>
 <dt>hiding folders, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Hiding folders</a>
 </dt>
 <dt>open, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navigating within the folder structure</a>
@@ -698,11 +706,13 @@
 <dt>Folders, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.html">Folders</a>
 </dt>
 <dd><dl>
+<dt>add folders to favorites, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Adding folders to favorites</a>
+</dt>
 <dt>clean up, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.expungefolder.html">Cleaning up E-Mail folders</a>
 </dt>
 <dt>create, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.create.html">Creating folders</a>
 </dt>
-<dt>Delete, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Deleting folders</a>
+<dt>delete, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Deleting folders</a>
 </dt>
 <dt>grant, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">Sharing folders</a>
 </dt>
@@ -791,7 +801,7 @@
 </dl></dd>
 <dt>Import from file</dt>
 <dd><dl>
-<dt>Appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.import.html">Importing appointments from files</a>
+<dt>appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.import.html">Importing appointments from files</a>
 </dt>
 <dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.import.html">Importing contacts from files</a>
 </dt>
@@ -800,6 +810,8 @@
 <dd><dl><dt>E-Mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.import.html">Importing E-Mails</a>
 </dt></dl></dd>
 <dt>Importing data, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.html">Importing Data</a>
+</dt>
+<dt>installing clients for workstations or mobile devices, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.clients.html">Installing Clients for Workstations or Mobile Devices</a>
 </dt>
 <dt>Internal E-Mail account</dt>
 <dd><dl><dt>definition, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
@@ -841,7 +853,7 @@
 </dt>
 <dt>Folders, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.move.html">Moving folders</a>
 </dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Moving tasks</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Moving tasks</a>
 </dt>
 </dl></dd>
 <dt>Multimedia</dt>
@@ -870,6 +882,8 @@
 <dt>Organize</dt>
 <dd><dl><dt>E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.html">Organizing E-Mails</a>
 </dt></dl></dd>
+<dt>Organizing data, <a class="indexterm" href="ox.appsuite.user.chap.dataorganisation.html">Organizing Data</a>
+</dt>
 <dt>OX App Suite</dt>
 <dd><dl><dt>definition, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt></dl></dd>
@@ -942,18 +956,17 @@
 </dl></dd>
 <dt>print</dt>
 <dd><dl>
-<dt>Appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Printing appointments</a>
+<dt>appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Printing appointments</a>
 </dt>
 <dt>calendar sheet, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Printing appointments</a>
 </dt>
+<dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Printing Contacts</a>
+</dt>
 <dt>E-Mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.print.html">Printing E-Mails</a>
 </dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Printing tasks</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Printing tasks</a>
 </dt>
 </dl></dd>
-<dt>Print</dt>
-<dd><dl><dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Printing Contacts</a>
-</dt></dl></dd>
 <dt>public folders, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">Folder types</a>
 </dt>
 <dt>Publish&amp;amp;subscribe, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.pubsub.html">Publish&amp;amp;Subscribe</a>
@@ -983,7 +996,7 @@
 </dt>
 <dt>calendar, using recurring appointments, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Questions and Answers</a>
 </dt>
-<dt>Changing the Password, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Questions and Answers</a>
+<dt>Change password, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Questions and Answers</a>
 </dt>
 <dt>contacts from social networks, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Questions and Answers</a>
 </dt>
@@ -1054,14 +1067,17 @@
 <dt>Save</dt>
 <dd><dl><dt>E-Mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.draft.html">Working with E-Mail drafts</a>, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.save.html">Saving E-Mails</a>
 </dt></dl></dd>
-<dt>Search, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.html">Search</a>
-</dt>
+<dt>Search</dt>
 <dd><dl>
-<dt>properties, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.searchmenu.html">Which search options do exist?</a>
+<dt>appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Searching for appointments</a>
 </dt>
-<dt>search window, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.gui.html">The search window components</a>
+<dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Searching for contacts</a>
 </dt>
-<dt>searching for objects, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.objects.html">Searching for objects</a>
+<dt>E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">Searching for E-Mails</a>
+</dt>
+<dt>Files, <a class="indexterm" href="ox.appsuite.user.sect.files.search.html">Searching for Files</a>
+</dt>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Searching for tasks</a>
 </dt>
 </dl></dd>
 <dt>Send vCard, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">Sending contacts as vCard</a>
@@ -1089,13 +1105,15 @@
 </dt>
 <dt>E-Mail, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-Mail settings</a>
 </dt>
+<dt>installing clients for workstations or mobile devices, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.clients.html">Installing Clients for Workstations or Mobile Devices</a>
+</dt>
 <dt>personal contact data, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.personaldata.html">Changing Personal Contact Data</a>
 </dt>
 <dt>Portal widgets, <a class="indexterm" href="ox.appsuite.user.sect.portal.customize.settings.html">Changing the Portal widgets' settings</a>
 </dt>
 <dt>Setting up Accounts for Social Networks, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.socialaccounts.html">Setting up Accounts for Social Networks</a>
 </dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Tasks Settings</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Tasks Settings</a>
 </dt>
 </dl></dd>
 <dt>shared folders, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">Folder types</a>
@@ -1111,9 +1129,6 @@
 </dt>
 <dt>Social, see publish&amp;amp;subscribe, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.pubsub.html">Publish&amp;amp;Subscribe</a>
 </dt>
-<dt>Spreadsheet</dt>
-<dd><dl><dt>Components, <a class="indexterm" href="ox.appsuite.user.sect.documents.docportal.gui.html">The Text and Spreadsheet components</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.spreadsheet.gui.html">The Edit Spreadsheet page components</a>
-</dt></dl></dd>
 <dt>Subscribe</dt>
 <dd><dl>
 <dt>E-Mail folders, <a class="indexterm" href="ox.appsuite.user.sect.email.share.subscribe.html">Subscribing to E-Mail folders</a>
@@ -1125,7 +1140,7 @@
 </dl></dd>
 <dt>Subscribe to RSS feeds, <a class="indexterm" href="ox.appsuite.user.sect.portal.customize.add.html">Adding Portal widgets</a>
 </dt>
-<dt>system windows</dt>
+<dt>System windows</dt>
 <dd><dl><dt>definition, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt></dl></dd>
 </dl>
@@ -1146,11 +1161,11 @@
 </dt>
 <dt>confirm invitation, <a class="indexterm" href="ox.appsuite.user.sect.tasks.invitation.html">Answering task invitations</a>
 </dt>
-<dt>create new, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Creating tasks</a>
+<dt>create new, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Creating Tasks</a>
 </dt>
 <dt>delegate to others, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.delegate.html">Delegating tasks</a>
 </dt>
-<dt>Delete, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Deleting tasks</a>
+<dt>delete, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Deleting tasks</a>
 </dt>
 <dt>display, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Viewing tasks</a>
 </dt>
@@ -1168,6 +1183,12 @@
 </dt>
 <dt>print, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Printing tasks</a>
 </dt>
+<dt>save attachments, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Viewing or Saving Task Attachments</a>
+</dt>
+<dt>search, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Searching for tasks</a>
+</dt>
+<dt>view attachments, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Viewing or Saving Task Attachments</a>
+</dt>
 </dl></dd>
 <dt>tasks</dt>
 <dd><dl><dt>import, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.import.ical.html">Importing appointments and tasks in iCal format</a>
@@ -1183,7 +1204,7 @@
 </dl></dd>
 <dt>Team work</dt>
 <dd><dl>
-<dt>Appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.html">Appointments in teams</a>
+<dt>appointments, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.html">Appointments in teams</a>
 </dt>
 <dt>contacts, <a class="indexterm" href="ox.appsuite.user.sect.contacts.share.html">Contacts in Teams</a>
 </dt>
@@ -1191,22 +1212,19 @@
 </dt>
 <dt>Files, <a class="indexterm" href="ox.appsuite.user.sect.files.share.html">Files and Teams</a>
 </dt>
-<dt>tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.html">Tasks in teams</a>
+<dt>Tasks, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.html">Tasks in teams</a>
 </dt>
 </dl></dd>
 <dt>Terminology, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html">Terminology</a>
 </dt>
-<dt>Text</dt>
-<dd><dl><dt>Components, <a class="indexterm" href="ox.appsuite.user.sect.documents.docportal.gui.html">The Text and Spreadsheet components</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.text.gui.html">The Edit Text page components</a>
-</dt></dl></dd>
 <dt>Text files</dt>
-<dd><dl><dt>edit, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Editing Text Files</a>
+<dd><dl><dt>Edit, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Editing Text Files</a>
 </dt></dl></dd>
 <dt>Texts</dt>
 <dd><dl>
 <dt>create, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Creating Text Files</a>
 </dt>
-<dt>creating Text Files, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Creating Text Files</a>
+<dt>Creating Text Files, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Creating Text Files</a>
 </dt>
 <dt>download, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Editing Text Files</a>
 </dt>
@@ -1249,6 +1267,8 @@
 <dt>Pop-up, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">The User Interface</a>
 </dt>
 <dt>right mouse button, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">The User Interface</a>
+</dt>
+<dt>search bar, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">The User Interface</a>
 </dt>
 <dt>Toolbar, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">The User Interface</a>
 </dt>

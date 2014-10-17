@@ -84,7 +84,11 @@ define('io.ox/backbone/mini-views/attachments',
                     $('<span class="filesize">').text(size)
                 ),
                 $('<a href="#" class="remove" tabindex="1">')
-                .attr('title', gt('Remove attachment'))
+                .attr({
+                    'title': gt('Remove attachment'),
+                    'role': 'button',
+                    'aria-label': gt('Remove attachment') + ' ' + attachment.filename
+                })
                 .data(attachment)
                 .append(
                     $('<i class="fa fa-trash-o">')

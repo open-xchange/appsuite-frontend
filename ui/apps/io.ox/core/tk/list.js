@@ -34,7 +34,7 @@ define('io.ox/core/tk/list',
     var ListView = Backbone.View.extend({
 
         tagName: 'ul',
-        className: 'list-view scrollpane',
+        className: 'list-view scrollpane f6-target',
 
         // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
         // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
@@ -50,6 +50,7 @@ define('io.ox/core/tk/list',
         events: {
             'focus .list-item': 'onItemFocus',
             'blur .list-item': 'onItemBlur',
+            'click': 'onKeepFocus',
             'keydown .list-item': 'onItemKeydown',
             'scroll': 'onScroll'
         },
@@ -62,6 +63,14 @@ define('io.ox/core/tk/list',
         onItemBlur: function () {
             this.$el.attr('tabindex', 1);
             this.$el.removeClass('has-focus');
+        },
+
+        onKeepFocus: function (e) {
+            if (e.target !== this.el) return;
+            // ignore fake clicks
+            if (!e.pageX) return;
+            // restore focus
+            this.getItems().filter('.selected').focus();
         },
 
         onItemKeydown: function (e) {
@@ -82,7 +91,7 @@ define('io.ox/core/tk/list',
             // show indicator
             this.addBusyIndicator();
             // really refresh?
-            if (tail > 0) return;
+            if (tail > 1) return;
             // load more
             this.processPaginate();
 
@@ -184,19 +193,22 @@ define('io.ox/core/tk/list',
 
         onSort: function () {
             // sort all nodes by index
-            var nodes = _(this.getItems()).sortBy(function (node) {
+            var nodes = $(_(this.getItems()).sortBy(function (node) {
                 var index = $(node).attr('data-index'); // don't use data() here
                 return parseInt(index, 10);
-            });
+            }));
+            // store focus & scroll position
+            var active = nodes.index(document.activeElement), top = this.$el.scrollTop();
             // re-append to apply sorting
             this.$el.append(nodes);
+            // restore focus
+            if (active > -1) { nodes.eq(active).focus(); this.$el.scrollTop(top); }
         },
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
             var li = this.$el.find('li[data-cid="' + $.escape(this.getCID(model)) + '"]'),
-                data = this.map(model),
-                baton = ext.Baton({ data: data, model: model, app: this.app }),
+                baton = this.getBaton(model),
                 index = model.changed.index;
             // change position?
             if (index !== undefined) li.attr('data-index', index);
@@ -323,21 +335,24 @@ define('io.ox/core/tk/list',
             this.getItems().each(function (index, li) {
                 if (index >= collection.length) return;
                 var model = collection.at(index),
-                    data = this.map(model),
-                    baton = ext.Baton({ data: data, model: model, app: this.app });
+                    baton = this.getBaton(model);
                 point.invoke('draw', $(li).children().eq(1).empty(), baton);
             }.bind(this));
         },
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                data = this.map(model),
-                baton = ext.Baton({ data: data, model: model, app: this.app });
+                baton = this.getBaton(model);
             // add cid and full data
             li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
+        },
+
+        getBaton: function (model) {
+            var data = this.map(model);
+            return ext.Baton({ data: data, model: model, app: this.app, options: this.options });
         },
 
         getBusyIndicator: function () {
@@ -389,6 +404,12 @@ define('io.ox/core/tk/list',
 
         previous: function () {
             if (this.hasPrevious()) this.selection.previous(); else this.$el.scrollTop(0);
+        },
+
+        // set proper focus
+        focus: function () {
+            var items = this.getItems().filter('.selected').focus();
+            if (items.length === 0) this.$el.focus();
         }
     });
 

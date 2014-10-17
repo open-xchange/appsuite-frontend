@@ -11,8 +11,5 @@
     "tests"
     ],
     "dependencies": {
-        "bootstrap": "3.1.1",
-        "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#0168474d70a2ffcea51497e2b6ea6b7496045d93",
-        "font-awesome": "4.1.0"
     }
 }

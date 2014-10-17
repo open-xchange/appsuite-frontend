@@ -15,7 +15,7 @@ define('io.ox/mail/accounts/model',
     ['io.ox/core/extensions',
      'io.ox/keychain/model',
      'io.ox/core/api/account',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/backbone/validation',
      'gettext!io.ox/mail/accounts/settings'
     ], function (ext, keychainModel, AccountAPI, folderAPI, validation, gt) {
@@ -26,7 +26,9 @@ define('io.ox/mail/accounts/model',
 
         defaults: {
             //some conditional defaults defined in view-form.render (pop3)
-            spam_handler: 'NoSpamHandler'
+            spam_handler: 'NoSpamHandler',
+            transport_auth: 'mail',
+            transport_password: null
         },
 
         validation: {
@@ -122,57 +124,53 @@ define('io.ox/mail/accounts/model',
 
         validationCheck: function (data, options) {
 
-            data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
+            data = _.extend({ unified_inbox_enabled: false, transport_auth: 'mail' }, data || this.toJSON());
             data.name = data.personal = data.primary_address;
             return AccountAPI.validate(data, options);
         },
 
-        save: function (obj, defered) {
-            var that = this;
-            //TODO: refactor, so no deferred object is needed here and API response is
-            // returned directly
-            if (!defered) {
-                defered = $.Deferred();
-            }
+        save: function (obj) {
 
-            if (this.attributes.id !== undefined) {
-                var fill_attributes = this.attributes,
-                    mods;
+            var id = this.get('id');
 
-                //don’t send passwords if not changed
-                if (!fill_attributes.password) { delete fill_attributes.password; }
-                if (!fill_attributes.transport_password) { delete fill_attributes.transport_password; }
+            if (id !== undefined) {
 
-                mods = _.extend(this.changed, fill_attributes);
-                if (this.attributes.id === 0) {//primary mail account only allows editing of display name and unified mail
-                    mods = {
-                            id: that.attributes.id,
-                            personal: that.attributes.personal,
-                            unified_inbox_enabled: that.attributes.unified_inbox_enabled
-                        };
-                }
-                return AccountAPI.update(mods).done(function (response) {
-                    folderAPI.folderCache.remove('default' + that.attributes.id);
-                    return defered.resolve(response);
-                }).fail(function (response) {
-                    return defered.reject(response);
-                });
+                // get account to determine changes
+                return AccountAPI.get(id).then(function (account) {
+
+                    var changes = { id: id };
+
+                    // primary mail account only allows editing of display name and unified mail
+                    if (id === 0) {
+                        changes.personal = this.get('personal');
+                        changes.unified_inbox_enabled = this.get('unified_inbox_enabled');
+                    } else {
+                        // compare all attributes
+                        _(this.toJSON()).each(function (value, key) {
+                            if (!_.isEqual(value, account[key])) changes[key] = value;
+                        });
+                        // don't send transport_login/password if transport_auth is mail
+                        if (this.get('transport_auth') === 'mail') {
+                            delete changes.transport_login;
+                            delete changes.transport_password;
+                        }
+                    }
+
+                    return AccountAPI.update(changes).done(function () {
+                        folderAPI.pool.unfetch('default' + id);
+                    });
+
+                }.bind(this));
+
             } else {
                 if (obj) {
-
-                    obj = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, obj);
+                    obj = _.extend({ unified_inbox_enabled: false }, obj);
                     obj.name = obj.personal = obj.primary_address;
-
                     this.attributes = obj;
                     this.attributes.spam_handler = 'NoSpamHandler';
                 }
-                return AccountAPI.create(this.attributes).done(function (response) {
-                    return defered.resolve(response);
-                }).fail(function (response) {
-                    return defered.reject(response);
-                });
+                return AccountAPI.create(this.attributes);
             }
-
         },
 
         destroy: function () {

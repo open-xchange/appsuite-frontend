@@ -31,25 +31,33 @@ define('io.ox/mail/listview',
         }, 0));
     }
 
-    ext.point('io.ox/mail/listview/item').extend({
-        id: 'default',
-        draw: function (baton) {
+    ext.point('io.ox/mail/listview/item').extend(
+        {
+            id: 'default',
+            index: 100,
+            draw: function (baton) {
 
-            // fix missing threadSize (aparently only used by tests)
-            fixThreadSize(baton.data);
+                // fix missing threadSize (aparently only used by tests)
+                fixThreadSize(baton.data);
 
-            if (!baton.app) {
-                ext.point('io.ox/mail/listview/item/default').invoke('draw', this, baton);
-                return;
+                if (!baton.app) {
+                    ext.point('io.ox/mail/listview/item/default').invoke('draw', this, baton);
+                    return;
+                }
+
+                var layout = baton.app.props.get('layout'),
+                    isSmall = layout === 'horizontal' || layout === 'list';
+
+                this.closest('.list-item').toggleClass('small', isSmall);
+                ext.point('io.ox/mail/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
             }
-
-            var layout = baton.app.props.get('layout'),
-                isSmall = layout === 'horizontal' || layout === 'list';
-
-            this.closest('.list-item').toggleClass('small', isSmall);
-            ext.point('io.ox/mail/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
+        },
+        {
+            id: 'a11y',
+            index: 200,
+            draw: extensions.a11yLabel
         }
-    });
+    );
 
     /* small */
 

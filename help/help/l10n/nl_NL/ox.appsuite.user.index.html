@@ -6,11 +6,14 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="index.html" title="OX App Suite">
-<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Hoofdstuk 14. Vragen en Antwoorden">
+<link rel="prev" href="ox.appsuite.user.chap.bestpractices.html" title="Hoofdstuk 13. Vragen en Antwoorden">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Juridische kennisgeving">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -74,18 +77,17 @@
 </dt>
 <dt>afdrukken</dt>
 <dd><dl>
-<dt>Afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Afdrukken van afspraken</a>
+<dt>afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Afdrukken van afspraken</a>
 </dt>
 <dt>agendablad, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Afdrukken van afspraken</a>
 </dt>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Afdrukken Contacten</a>
+</dt>
 <dt>E-mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.print.html">E-mailberichten Afdrukken</a>
 </dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Taken afdrukken</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Taken afdrukken</a>
 </dt>
 </dl></dd>
-<dt>Afdrukken</dt>
-<dd><dl><dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Afdrukken Contacten</a>
-</dt></dl></dd>
 <dt>Afspraken, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Agenda</a>
 </dt>
 <dd><dl>
@@ -107,6 +109,8 @@
 </dt>
 <dt>bewerken, meerdere -, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.multiple.html">Bewerken van meerdere afspraken in één keer</a>
 </dt>
+<dt>bijlagen tonen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Tonen of opslaan van afspraakbijlagen</a>
+</dt>
 <dt>Deelnemers uitnodigen voor een nieuwe afspraak, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">Deelnemers uitnodigen voor een nieuwe afspraak</a>
 </dt>
 <dt>exporteren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Gegevens Exporteren</a>
@@ -125,6 +129,8 @@
 </dt>
 <dt>oplossen van conflicterende afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">Oplossen van conflicterende afspraken</a>
 </dt>
+<dt>opslaan bijlagen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Tonen of opslaan van afspraakbijlagen</a>
+</dt>
 <dt>plannen met meerdere deelnemers, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.freebusy.html">Plannen met meerdere deelnemers</a>
 </dt>
 <dt>samenwerken met anderen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.appointments.html">Afspraken delen</a>
@@ -141,9 +147,11 @@
 </dt>
 <dt>uitnodigen vanuit een adresboek, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">Uitnodigen van contacten voor een afspraak</a>
 </dt>
-<dt>Verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Afspraken wissen</a>
+<dt>verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Afspraken wissen</a>
 </dt>
 <dt>vrije momenten vinden, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.freebusy.html">Plannen met meerdere deelnemers</a>
+</dt>
+<dt>zoeken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Zoeken naar afspraken</a>
 </dt>
 </dl></dd>
 <dt>Agenda, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Agenda</a>
@@ -182,11 +190,9 @@
 </dt>
 <dt>App Bestanden, <a class="indexterm" href="ox.appsuite.user.chap.files.html">Bestanden</a>
 </dt>
-<dt>App Documenten, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documenten</a>
-</dt>
 <dt>App E-mail, <a class="indexterm" href="ox.appsuite.user.chap.email.html">E-mail</a>
 </dt>
-<dt>App Eenvoudig Kladblok  , <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Eenvoudig Kladblok   </a>
+<dt>App Eenvoudig Kladblok, <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Eenvoudig Kladblok</a>
 </dt>
 <dt>App Taken, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Taken</a>
 </dt>
@@ -198,15 +204,16 @@
 </dt>
 <dt>Bestanden, <a class="indexterm" href="ox.appsuite.user.chap.files.html">Bestanden</a>
 </dt>
-<dt>Documenten, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documenten</a>
-</dt>
 <dt>E-mail, <a class="indexterm" href="ox.appsuite.user.chap.email.html">E-mail</a>
 </dt>
-<dt>Eenvoudig Kladblok   , <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Eenvoudig Kladblok   </a>
+<dt>Eenvoudig Kladblok, <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Eenvoudig Kladblok</a>
 </dt>
 <dt>Taken, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Taken</a>
 </dt>
 </dl></dd>
+<dt>Archief</dt>
+<dd><dl><dt>E-mailberichten, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">E-mailberichten Archiveren</a>
+</dt></dl></dd>
 <dt>Audiobestanden afspelen, <a class="indexterm" href="ox.appsuite.user.sect.files.open.multimedia.html">Multimedia bestanden afspelen</a>
 </dt>
 </dl>
@@ -285,7 +292,7 @@
 </dt>
 <dt>versies bewerken, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.versions.html">Werken met versies</a>
 </dt>
-<dt>Verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Bestanden verwijderen</a>
+<dt>verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Bestanden verwijderen</a>
 </dt>
 <dt>verzenden als een e-mailbijlage, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.send.html">Versturen van bestanden als een bijlage</a>
 </dt>
@@ -297,23 +304,24 @@
 </dt>
 <dt>WebDAV onder Windows XP, <a class="indexterm" href="ox.appsuite.user.sect.files.webdav.winxp.html">Instellen van WebDAV onder Windows XP</a>
 </dt>
+<dt>zoeken, <a class="indexterm" href="ox.appsuite.user.sect.files.search.html">Zoeken naar Bestanden</a>
+</dt>
 </dl></dd>
 <dt>Bestandsinstellingen</dt>
 <dd><dl><dt>standaardoverzicht, <a class="indexterm" href="ox.appsuite.user.sect.files.settings.html">Drive Instellingen</a>
 </dt></dl></dd>
 <dt>Bewerken</dt>
 <dd><dl>
-<dt>Afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.edit.html">Afspraken bewerken</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">Het aanpassen van een afspraak met slepen en neerzetten</a>
+<dt>afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.edit.html">Afspraken bewerken</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">Het aanpassen van een afspraak met slepen en neerzetten</a>
 </dt>
 <dt>bestandsomschrijving, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.editdescription.html">Bewerken van omschrijvingen</a>
 </dt>
-<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.edit.html">Bewerken van Contacten</a>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.edit.html">Bewerken van Contacten</a>
 </dt>
-<dt>Documenten, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Documenten Bewerken</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.editasnew.html">Documenten Bewerken met een Nieuwe Naam</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.edit.html">Taken bewerken</a>
 </dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.edit.html">Taken bewerken</a>
-</dt>
-<dt>tekstbestanden, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Bewerken van Tekstbestanden</a>
+<dt>Tekstbestanden
+&gt;, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Bewerken van Tekstbestanden</a>
 </dt>
 <dt>versies, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.versions.html">Werken met versies</a>
 </dt>
@@ -340,6 +348,8 @@
 </dt>
 <dt>bewerken, meerdere -, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.multiple.html">Bewerken van meerdere contacten in één keer</a>
 </dt>
+<dt>bijlagen tonen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Tonen of opslaan van contactbijlagen</a>
+</dt>
 <dt>distributielijst, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.html">Creëren van distributielijsten</a>
 </dt>
 <dt>exporteren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Gegevens Exporteren</a>
@@ -350,13 +360,17 @@
 </dt>
 <dt>importeren vanuit een bestand, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.import.html">Importeren van contacten vanuit bestanden</a>
 </dt>
+<dt>kopiëren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.copy.html">Kopiëren van contacten</a>
+</dt>
+<dt>opslaan bijlagen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Tonen of opslaan van contactbijlagen</a>
+</dt>
 <dt>Organiseren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.html">Contacten organiseren</a>
 </dt>
 <dt>Toevoegen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.html">Contacten aanmaken</a>
 </dt>
 <dt>toevoegen vanuit een vCard, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">Contactgegevens vanuit een vCard toevoegen</a>
 </dt>
-<dt>tonen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Tonen van contacten</a>
+<dt>tonen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Contacten Tonen</a>
 </dt>
 <dt>Tonen van het halo overzicht, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">Het Halo Overzicht</a>
 </dt>
@@ -372,10 +386,9 @@
 </dt>
 <dt>verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Contacten verwijderen</a>
 </dt>
+<dt>zoeken, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Zoeken naar contacten</a>
+</dt>
 </dl></dd>
-<dt>contacten</dt>
-<dd><dl><dt>kopiëren, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.copy.html">Kopiëren van contacten</a>
-</dt></dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -419,7 +432,7 @@
 </dt>
 <dt>OX App Suite, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
-<dt>systeemschermen, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
+<dt>Systeemschermen, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt>
 </dl></dd>
 <dt>delen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.rights.html">Rechten</a>
@@ -445,30 +458,9 @@
 <dt>Stijlelementen, <a class="indexterm" href="ox.appsuite.user.sect.about.legend.html">Stijlelementen</a>
 </dt>
 </dl></dd>
-<dt>Documenten, <a class="indexterm" href="ox.appsuite.user.chap.documents.html">Documenten</a>
-</dt>
-<dd><dl>
-<dt>aanmaken, <a class="indexterm" href="ox.appsuite.user.sect.documents.add.html">Documenten Aanmaken</a>
-</dt>
-<dt>afdrukken, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Documenten Bewerken</a>
-</dt>
-<dt>Bewerken, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Documenten Bewerken</a>
-</dt>
-<dt>bewerken, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Documenten Bewerken</a>
-</dt>
-<dt>bewerken met een nieuwe naam, <a class="indexterm" href="ox.appsuite.user.sect.documents.editasnew.html">Documenten Bewerken met een Nieuwe Naam</a>
-</dt>
-<dt>Componenten, <a class="indexterm" href="ox.appsuite.user.sect.documents.gui.html">De Documenten componenten</a>
-</dt>
-<dt>documenten aanmaken, <a class="indexterm" href="ox.appsuite.user.sect.documents.add.html">Documenten Aanmaken</a>
-</dt>
-<dt>downloaden, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Documenten Bewerken</a>
-</dt>
-<dt>inhoud tonen, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Toon de inhoud van documenten</a>
-</dt>
-<dt>zoek en vervang, <a class="indexterm" href="ox.appsuite.user.sect.documents.edit.html">Documenten Bewerken</a>
-</dt>
-</dl></dd>
+<dt>Documenten</dt>
+<dd><dl><dt>inhoud tonen, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Toon de inhoud van documenten</a>
+</dt></dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -503,6 +495,8 @@
 <dt>afdrukken, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.print.html">E-mailberichten Afdrukken</a>
 </dt>
 <dt>alle ontvangers opslaan als distributielijst, <a class="indexterm" href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">Alle ontvangers van het e-mailbericht opslaan als distributielijst.</a>
+</dt>
+<dt>archief, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">E-mailberichten Archiveren</a>
 </dt>
 <dt>automatisch doorsturen, <a class="indexterm" href="ox.appsuite.user.sect.email.send.autoforward.html">Automatisch e-mailberichten doorsturen</a>
 </dt>
@@ -554,7 +548,7 @@
 </dt>
 <dt>toevoegen aan het portaal, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.addportal.html">E-mail toevoegen aan het portaal</a>
 </dt>
-<dt>tonen, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">Tonen e-mailberichten</a>
+<dt>tonen, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">E-mailberichten tonen</a>
 </dt>
 <dt>toon brongegevens, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.source.html">Tonen van de e-mailbrongegevens</a>
 </dt>
@@ -564,9 +558,11 @@
 </dt>
 <dt>verstuur een vakantiemelding, <a class="indexterm" href="ox.appsuite.user.sect.email.send.vacationnotice.html">Verstuur een vakantiemelding</a>
 </dt>
-<dt>Verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">E-mailberichten verwijderen</a>
+<dt>verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">E-mailberichten verwijderen</a>
 </dt>
 <dt>Verzamelde Mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.unifiedmail.html">Verzamelde Mail gebruiken</a>
+</dt>
+<dt>zoeken, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">Zoeken naar E-mailberichten</a>
 </dt>
 </dl></dd>
 <dt>E-mailberichten doorsturen, <a class="indexterm" href="ox.appsuite.user.sect.email.send.forward.html">E-mailberichten doorsturen</a>
@@ -604,16 +600,18 @@
 </dt>
 <dt>Standaard verzendadres, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-mailinstellingen</a>
 </dt>
+<dt>Toon verzoeken om ontvangstbevestigingen, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-mailinstellingen</a>
+</dt>
 <dt>vCard toevoegen, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-mailinstellingen</a>
 </dt>
 <dt>Verwijderde e-mailberichten permanent wissen, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-mailinstellingen</a>
 </dt>
 <dt>Vooraf downloaden van externe afbeeldingen toestaan, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-mailinstellingen</a>
 </dt>
-<dt>Vraag om een ontvangstbevestiging, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-mailinstellingen</a>
-</dt>
 </dl></dd>
-<dt>Eenvoudig Kladblok   , <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Eenvoudig Kladblok   </a>
+<dt>een client installeren voor werkstations of mobile apparaten, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.clients.html">Een Client installeren voor Werkstations of Mobile Apparaten</a>
+</dt>
+<dt>Eenvoudig Kladblok, <a class="indexterm" href="ox.appsuite.user.chap.pad.html">Eenvoudig Kladblok</a>
 </dt>
 <dt>Eerste Stappen, <a class="indexterm" href="ox.appsuite.user.chap.firststeps.html">Eerste Stappen</a>
 </dt>
@@ -686,19 +684,19 @@
 </dt>
 <dt>Werkbalk, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">De Gebruikersinterface</a>
 </dt>
+<dt>zoekbalk, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">De Gebruikersinterface</a>
+</dt>
 </dl></dd>
 <dt>gedeelde mappen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">Maptypen</a>
 </dt>
 <dt>Gegevens exporteren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.folder.html">Exporteren van gegevens uit een map</a>
 </dt>
-<dt>gegevens organiseren, <a class="indexterm" href="ox.appsuite.user.chap.dataorganisation.html">Organiseren van Gegevens</a>
-</dt>
 <dt>Gegevensuitwisseling, <a class="indexterm" href="ox.appsuite.user.chap.datainterchange.html">Gegevensuitwisseling</a>
 </dt>
 <dd><dl>
-<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.datainterchange.html">Uitwisselen van Contacten met Andere Applicaties</a>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.datainterchange.html">Uitwisselen van Contacten met Andere Applicaties</a>
 </dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.datainterchange.html">Uitwisselen van Gegevens met Andere Applicaties</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.datainterchange.html">Uitwisselen van Taken met andere Applicaties</a>
 </dt>
 </dl></dd>
 <dt>Globaal adresboek</dt>
@@ -757,9 +755,9 @@
 </dt>
 <dt>Importeren vanuit een bestand</dt>
 <dd><dl>
-<dt>Afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.import.html">Importeren van afspraken vanuit bestanden</a>
+<dt>afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.import.html">Importeren van afspraken vanuit bestanden</a>
 </dt>
-<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.import.html">Importeren van contacten vanuit bestanden</a>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.import.html">Importeren van contacten vanuit bestanden</a>
 </dt>
 </dl></dd>
 <dt>Inhoud tonen</dt>
@@ -777,6 +775,8 @@
 </dt>
 <dt>E-mail, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-mailinstellingen</a>
 </dt>
+<dt>een client installeren voor werkstations of mobile apparaten, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.clients.html">Een Client installeren voor Werkstations of Mobile Apparaten</a>
+</dt>
 <dt>Het Wachtwoord wijzigen, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.changepassword.html">Het Wachtwoord wijzigen</a>
 </dt>
 <dt>Instellen van Accounts voor Sociale Netwerken, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.socialaccounts.html">Instellen van Accounts voor Sociale Netwerken</a>
@@ -785,7 +785,7 @@
 </dt>
 <dt>Portaal widgets, <a class="indexterm" href="ox.appsuite.user.sect.portal.customize.settings.html">Aanpassen van de instellingen van Portaal widgets</a>
 </dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Taakinstellingen</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Taakinstellingen</a>
 </dt>
 </dl></dd>
 <dt>Intern e-mailaccount</dt>
@@ -821,7 +821,7 @@
 <h3>M</h3>
 <dl>
 <dt>Maak nieuw</dt>
-<dd><dl><dt>taak, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Taken aanmaken</a>
+<dd><dl><dt>taak, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Taken Aanmaken</a>
 </dt></dl></dd>
 <dt>Mappen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.html">Mappen</a>
 </dt>
@@ -856,7 +856,9 @@
 </dt>
 <dt>verplaatsen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.move.html">Mappen verplaatsen</a>
 </dt>
-<dt>Verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Mappen wissen</a>
+<dt>verwijder, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Mappen wissen</a>
+</dt>
+<dt>voeg mappen toe aan favorieten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Mappen toevoegen aan favorieten</a>
 </dt>
 </dl></dd>
 <dt>Mappen delen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">Mappen delen</a>
@@ -865,6 +867,8 @@
 </dt>
 <dt>Mappen structuur</dt>
 <dd><dl>
+<dt>favorieten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Mappen toevoegen aan favorieten</a>
+</dt>
 <dt>map verbergen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Mappen verbergen</a>
 </dt>
 <dt>navigeren, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navigeren binnen de mappenstructuur</a>
@@ -872,6 +876,8 @@
 </dl></dd>
 <dt>Mappenboom</dt>
 <dd><dl>
+<dt>favorieten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Mappen toevoegen aan favorieten</a>
+</dt>
 <dt>mappen verbergen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Mappen verbergen</a>
 </dt>
 <dt>openen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navigeren binnen de mappenstructuur</a>
@@ -921,6 +927,8 @@
 <dt>Organiseren</dt>
 <dd><dl><dt>E-mailberichten, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.html">E-mailberichten organiseren</a>
 </dt></dl></dd>
+<dt>Organiseren van gegevens, <a class="indexterm" href="ox.appsuite.user.chap.dataorganisation.html">Organiseren van Gegevens</a>
+</dt>
 <dt>OX App Suite</dt>
 <dd><dl><dt>definitie, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html#ox.appsuite.user.reference.glossary"></a>
 </dt></dl></dd>
@@ -1004,9 +1012,6 @@
 </dl></dd>
 <dt>rechtermuisknop, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.html">De Gebruikersinterface</a>
 </dt>
-<dt>Rekenbladen</dt>
-<dd><dl><dt>Componenten, <a class="indexterm" href="ox.appsuite.user.sect.documents.docportal.gui.html">De Tekst and Rekenbladen componenten</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.spreadsheet.gui.html">De Bewerk Rekenbladen pagina componenten</a>
-</dt></dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -1046,15 +1051,19 @@
 </dt>
 <dt>bewerken, meerdere -, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.multiple.html">Bewerken van meerdere taken in één keer</a>
 </dt>
-<dt>Componenten, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.html">De Taken componenten</a>
+<dt>bijlagen tonen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Tonen of opslaan van taakbijlagen</a>
+</dt>
+<dt>Componenten, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.html">De Taken Componenten</a>
 </dt>
 <dt>delegeren naar anderen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.delegate.html">Taken delegeren</a>
 </dt>
 <dt>exporteren, <a class="indexterm" href="ox.appsuite.user.sect.datainterchange.export.html">Gegevens Exporteren</a>
 </dt>
-<dt>maak nieuw, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Taken aanmaken</a>
+<dt>maak nieuw, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.html">Taken Aanmaken</a>
 </dt>
 <dt>Markeer als voltooid, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.markasdone.html">Taken markeren als voltooid</a>
+</dt>
+<dt>opslaan bijlagen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Tonen of opslaan van taakbijlagen</a>
 </dt>
 <dt>samenwerken met anderen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.tasks.html">Taken delen</a>
 </dt>
@@ -1068,7 +1077,9 @@
 </dt>
 <dt>vervaldatum veranderen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">De vervaldatum van de taak veranderen</a>
 </dt>
-<dt>Verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Taken verwijderen</a>
+<dt>verwijderen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Taken verwijderen</a>
+</dt>
+<dt>zoeken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Zoeken naar taken</a>
 </dt>
 </dl></dd>
 <dt>taken</dt>
@@ -1076,22 +1087,20 @@
 </dt></dl></dd>
 <dt>Teamwork</dt>
 <dd><dl>
-<dt>Afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.html">Afspraken in teams</a>
+<dt>afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.share.html">Afspraken in teams</a>
 </dt>
 <dt>Bestanden, <a class="indexterm" href="ox.appsuite.user.sect.files.share.html">Bestanden en Teams</a>
 </dt>
-<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.share.html">Contacten in Teams</a>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.share.html">Contacten in Teams</a>
 </dt>
 <dt>E-mailberichten, <a class="indexterm" href="ox.appsuite.user.sect.email.share.html">E-mailberichten binnen een Team</a>
 </dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.html">Taken in teams</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.share.html">Taken in teams</a>
 </dt>
 </dl></dd>
-<dt>Tekst</dt>
-<dd><dl><dt>Componenten, <a class="indexterm" href="ox.appsuite.user.sect.documents.docportal.gui.html">De Tekst and Rekenbladen componenten</a>, <a class="indexterm" href="ox.appsuite.user.sect.documents.text.gui.html">De Bewerk Tekst pagina componenten</a>
-</dt></dl></dd>
-<dt>Tekstbestanden</dt>
-<dd><dl><dt>bewerken, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Bewerken van Tekstbestanden</a>
+<dt>tekstbestanden
+&gt;</dt>
+<dd><dl><dt>Bewerken, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Bewerken van Tekstbestanden</a>
 </dt></dl></dd>
 <dt>Teksten</dt>
 <dd><dl>
@@ -1101,7 +1110,7 @@
 </dt>
 <dt>downloaden, <a class="indexterm" href="ox.appsuite.user.sect.pad.edit.html">Bewerken van Tekstbestanden</a>
 </dt>
-<dt>maak tekstbestand, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Maken van Tekstbestanden</a>
+<dt>Maken van Tekstbestanden, <a class="indexterm" href="ox.appsuite.user.sect.pad.add.html">Maken van Tekstbestanden</a>
 </dt>
 </dl></dd>
 <dt>Terminologie, <a class="indexterm" href="ox.appsuite.user.sect.about.definitions.html">Terminologie</a>
@@ -1112,15 +1121,15 @@
 </dt>
 <dt>tonen</dt>
 <dd><dl>
-<dt>Afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Tonen van afspraken</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Afspraken tonen in een agenda overzicht</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Afspraken tonen in het lijstoverzicht</a>
+<dt>afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Tonen van afspraken</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Afspraken tonen in een agenda overzicht</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Afspraken tonen in het lijstoverzicht</a>
 </dt>
 <dt>Bestanden, <a class="indexterm" href="ox.appsuite.user.sect.files.view.html">Bestanden Bekijken</a>
 </dt>
-<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Tonen van contacten</a>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Contacten Tonen</a>
 </dt>
-<dt>E-mailberichten, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">Tonen e-mailberichten</a>
+<dt>E-mailberichten, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">E-mailberichten tonen</a>
 </dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Tonen van taken</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Tonen van taken</a>
 </dt>
 </dl></dd>
 <dt>Tonen van PDF-documenten, <a class="indexterm" href="ox.appsuite.user.sect.files.open.office.html">Toon de inhoud van documenten</a>
@@ -1146,13 +1155,13 @@
 </dt>
 <dt>Bestanden, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.move.html">Bestanden verplaatsen</a>
 </dt>
-<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.move.html">Verplaatsen van contacten</a>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.move.html">Verplaatsen van contacten</a>
 </dt>
 <dt>E-mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.move.html">E-mailberichten verplaatsen</a>
 </dt>
 <dt>Mappen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.move.html">Mappen verplaatsen</a>
 </dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Taken verplaatsen</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Taken verplaatsen</a>
 </dt>
 </dl></dd>
 <dt>Versturen</dt>
@@ -1164,19 +1173,17 @@
 </dl></dd>
 <dt>Versturen vCard, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">Versturen van contactgegevens als vCard</a>
 </dt>
-<dt>Verwijderen</dt>
+<dt>verwijderen</dt>
 <dd><dl>
-<dt>Afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Afspraken wissen</a>
+<dt>afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Afspraken wissen</a>
 </dt>
 <dt>Bestanden, <a class="indexterm" href="ox.appsuite.user.sect.files.manage.delete.html">Bestanden verwijderen</a>
 </dt>
-<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Contacten verwijderen</a>
+<dt>Contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Contacten verwijderen</a>
 </dt>
 <dt>E-mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">E-mailberichten verwijderen</a>
 </dt>
-<dt>Mappen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Mappen wissen</a>
-</dt>
-<dt>taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Taken verwijderen</a>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Taken verwijderen</a>
 </dt>
 </dl></dd>
 <dt>Verzamelde Mail, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.unifiedmail.html">Verzamelde Mail gebruiken</a>
@@ -1210,8 +1217,6 @@
 </dt>
 <dt>een e-mailbericht sturen naar meerdere adressen in één keer, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Vragen en Antwoorden</a>
 </dt>
-<dt>Het Wachtwoord wijzigen, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Vragen en Antwoorden</a>
-</dt>
 <dt>map delen, rechten instellen, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Vragen en Antwoorden</a>
 </dt>
 <dt>nieuwe objecten melding, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Vragen en Antwoorden</a>
@@ -1227,6 +1232,8 @@
 <dt>vinden van knoppen of invoervelden, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Vragen en Antwoorden</a>
 </dt>
 <dt>vindt vrije momenten bij het maken van afspraken, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Vragen en Antwoorden</a>
+</dt>
+<dt>Wachtwoord wijzigen, <a class="indexterm" href="ox.appsuite.user.chap.bestpractices.html">Vragen en Antwoorden</a>
 </dt>
 </dl></dd>
 <dt>Vragen en Antwoorden</dt>
@@ -1257,10 +1264,21 @@
 </dt>
 </dl></dd>
 <dt>Weergave</dt>
-<dd><dl><dt>E-mailbijlagen, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">Tonen of opslaan van e-mailbijlagen</a>
-</dt></dl></dd>
+<dd><dl>
+<dt>Afspraakbijlage opgeslagen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Tonen of opslaan van afspraakbijlagen</a>
+</dt>
+<dt>contactbijlage opgeslagen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Tonen of opslaan van contactbijlagen</a>
+</dt>
+<dt>E-mailbijlagen, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">Tonen of opslaan van e-mailbijlagen</a>
+</dt>
+<dt>opslaan bijlagen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Tonen of opslaan van taakbijlagen</a>
+</dt>
+</dl></dd>
 <dt>Wijzigen van de afspraakstatus, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Wijzigen van de afspraakstatus</a>
 </dt>
+<dt>Wissen</dt>
+<dd><dl><dt>Mappen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Mappen wissen</a>
+</dt></dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -1280,14 +1298,17 @@
 <div class="indexdiv">
 <h3>Z</h3>
 <dl>
-<dt>Zoeken, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.html">Zoeken</a>
-</dt>
+<dt>Zoeken</dt>
 <dd><dl>
-<dt>eigenschappen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.searchmenu.html">Welke zoekmogelijkheden zijn standaard beschikbaar?</a>
+<dt>afspraken, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Zoeken naar afspraken</a>
 </dt>
-<dt>zoeken naar objecten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.objects.html">Zoeken naar objecten</a>
+<dt>Bestanden, <a class="indexterm" href="ox.appsuite.user.sect.files.search.html">Zoeken naar Bestanden</a>
 </dt>
-<dt>zoekscherm, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.search.gui.html">De zoekscherm componenten</a>
+<dt>contacten, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Zoeken naar contacten</a>
+</dt>
+<dt>E-mailberichten, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">Zoeken naar E-mailberichten</a>
+</dt>
+<dt>Taken, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Zoeken naar taken</a>
 </dt>
 </dl></dd>
 </dl>

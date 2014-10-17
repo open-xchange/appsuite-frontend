@@ -29,17 +29,15 @@ define('io.ox/search/view',
             render: function (node) {
 
                 var self = this,
-                    model = this.baton.model,
-                    mode = model.get('mode'),
                     node = node || self.$el;
 
-                if (_.device('smartphone')) {
+                if (_.device('small')) {
                     // create new toolbar on bottom
-                    ext.point('io.ox/search/view/window/mobile').invoke('draw', node, self.baton);
+                    ext.point('io.ox/search/view/mobile').invoke('draw', node, self.baton);
                 }
 
                 //invoke extensions defined by io.ox/search/view-template
-                ext.point('io.ox/search/view/' + mode).invoke('draw', node, self.baton);
+                ext.point('io.ox/search/view').invoke('draw', node, self.baton);
 
                 return this;
             },
@@ -69,22 +67,39 @@ define('io.ox/search/view',
                 busy.show();
                 return this;
             },
+            repaint: function (ids) {
+                var self = this;
+                ext.point('io.ox/search/view').each(function (p) {
+                    var list = ids.split(' ');
+                    list.forEach(function (id) {
+                        if (id === p.id)
+                            p.invoke('draw', self.$el, self.baton);
+                    });
+                });
+                if (_.device('small')) {
+                    ext.point('io.ox/search/view/mobile').each(function (p) {
+                        var list = ids.split(' ');
+                        list.forEach(function (id) {
+                            if (id === p.id)
+                                p.invoke('draw', self.$el, self.baton);
+                        });
+                    });
+                }
+            },
             redraw: function (options) {
                 options = options || {};
 
-                var mode = this.baton.model.get('mode'),
-                    node = $('<span>');
-                if (mode !== 'widget') {
-                    //draw into dummy node
-                    this.render(node);
-                    //TODO: keep search string the ugly way
-                    node.find('.search-field').val(
-                        this.$el.find('.search-field').val()
-                    );
-                    //replace
-                    this.$el.empty();
-                    this.$el.append(node.children());
-                }
+                var node = $('<span>');
+
+                //draw into dummy node
+                this.render(node);
+                //TODO: keep search string the ugly way
+                node.find('.search-field').val(
+                    this.$el.find('.search-field').val()
+                );
+                //replace
+                this.$el.empty();
+                this.$el.append(node.children());
 
                 if (options.closeSidepanel)
                     $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();

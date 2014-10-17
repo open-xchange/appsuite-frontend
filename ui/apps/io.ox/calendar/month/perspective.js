@@ -352,15 +352,30 @@ define('io.ox/calendar/month/perspective',
         print: function () {
             var end = new date.Local(this.current.getYear(), this.current.getMonth() + 1, 1),
                 data = null,
+                win,
                 self = this;
             if (self.folder.id || self.folder.folder) {
                 data = {folder_id: self.folder.id || self.folder.folder};
             }
-            print.open('printCalendar', data, {
+            win = print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',
                 start: self.current.local,
                 end: end.local
-            }).print();
+            });
+            if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                var limit = 50,
+                counter = 0,
+                interval;
+                interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
+                    counter++;
+                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                        win.print();
+                        clearInterval(interval);
+                    }
+                }, 100);
+            } else {
+                win.print();
+            }
         },
 
         refresh: function () {
@@ -401,8 +416,9 @@ define('io.ox/calendar/month/perspective',
             };
 
             this.pane = $('.scrollpane', this.scaffold);
-            this.scaffold.prepend(
-                $('<div>')
+
+            if (_.device('!smartphone')) {
+                var toolbarNode = $('<div>')
                     .addClass('toolbar')
                     .append(
                         this.monthInfo = $('<div>').addClass('info').text(gt.noI18n(this.current.format('MMMM y'))),
@@ -441,8 +457,15 @@ define('io.ox/calendar/month/perspective',
                                             }, this))
                                     )
                             )
-                    )
-            );
+                    );
+
+                // prepend toolbar to month veu
+                this.scaffold.prepend(toolbarNode);
+            } else {
+                // for mobile use
+                this.monthInfo = gt.noI18n(this.current.format('MMMM y'));
+                this.app.trigger('change:navbar:month', this.monthInfo);
+            }
 
             this.pane
                 .on('scroll', $.proxy(function (e) {
@@ -474,7 +497,13 @@ define('io.ox/calendar/month/perspective',
                         $('.day:not(.out)', this.pane)
                             .add($('[id^="' + this.current.getYear() + '-' + this.current.getMonth() + '-"]', this.pane))
                             .toggleClass('out');
-                        self.monthInfo.text(gt.noI18n(this.current.format('MMMM y')));
+
+                        if (_.device('smartphone')) {
+                            self.monthInfo = gt.noI18n(this.current.format('MMMM y'));
+                            self.app.trigger('change:navbar:month', self.monthInfo);
+                        } else {
+                            self.monthInfo.text(gt.noI18n(this.current.format('MMMM y')));
+                        }
                     }
                 }, this));
 

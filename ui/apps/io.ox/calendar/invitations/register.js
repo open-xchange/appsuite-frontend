@@ -102,14 +102,9 @@ define('io.ox/calendar/invitations/register',
 
         onShowDetails: function (e) {
             e.preventDefault();
-            if (this.type === 'appointment') {
-                this.showAppointment(e);
-            }
-        },
-
-        showAppointment: function (e) {
-            var data = this.appointment;
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail']).done(function (dialogs, view) {
+            var data = this[this.type] || this.appointment || this.task,
+                module = this.type === 'appointment' ? 'calendar' : 'tasks';
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/' + module + '/view-detail']).done(function (dialogs, view) {
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
                     popup.append(view.draw(data));
                 });
@@ -141,7 +136,7 @@ define('io.ox/calendar/invitations/register',
 
         renderConfirmation: function () {
 
-            var data = this.appointment,
+            var data = this[this.type] || this.appointment || this.task,
                 // 0 = none, 1 = accepted, 2 = declined, 3 = tentative
                 status = util.getConfirmationStatus(data),
                 message = '', className = '';
@@ -155,19 +150,19 @@ define('io.ox/calendar/invitations/register',
             if (status > 0) {
                 switch (status) {
                 case 1:
-                    message = data.type !== 'task' ?
+                    message = this.type !== 'task' ?
                         gt('You have accepted this appointment') :
                         gt('You have accepted this task');
                     className = 'accepted';
                     break;
                 case 2:
-                    message = data.type !== 'task' ?
+                    message = this.type !== 'task' ?
                         gt('You declined this appointment') :
                         gt('You declined this task');
                     className = 'declined';
                     break;
                 case 3:
-                    message = data.type !== 'task' ?
+                    message = this.type !== 'task' ?
                         gt('You tentatively accepted this invitation') :
                         gt('You tentatively accepted this task');
                     className = 'tentative';

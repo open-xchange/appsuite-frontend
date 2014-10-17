@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define([], function () {
-    describe('checking dependencies', function () {
+    describe('Core dependencies as globals', function () {
         it('loads underscore', function () {
             expect(_).to.exist;
         });

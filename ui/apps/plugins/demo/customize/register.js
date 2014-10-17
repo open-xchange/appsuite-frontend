@@ -49,6 +49,9 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         '          <div class="col-xs-6 text-right"><label>Background</label><br><input type="color" data-name="headerBackground"></div>' +
         '        </div>' +
         '        <div class="row form-group">' +
+        '          <div class="col-xs-12"><label>Header gradient type</label><br><input type="range" min="0" max="8" data-name="headerGradient"></div>' +
+        '        </div>' +
+        '        <div class="row form-group">' +
         '          <div class="col-xs-12"><label><input type="checkbox" checked="checked" data-name="topbarVisible"> Show top-bar</label></div>' +
         '        </div>' +
         '        <div class="row form-group">' +
@@ -65,9 +68,9 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         '    </div>' +
         '  </div>' +
         '</div>' +
-        '<div id="customize-text">Purple CableCom</div>' +
+        '<div id="customize-text"><span class="title">Purple CableCom</span><span class="logo"></span></div>' +
         '<style id="customize-css"></style>' +
-        '<style id="customize-logo"></style>'
+        '<style id="customize-css-logo"></style>'
     );
 
     $('#customize-dialog').modal({ backdrop: false, keyboard: true, show: false });
@@ -79,18 +82,17 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
 
     var fields = $('#customize-dialog input[data-name]'),
         defaults = {
-            headerSize: 0, headerText: '**Purple** |CableCom|', headerColor: '#aaaaaa', headerBackground: '#ffffff', topbarVisible: true, url: ''
+            headerSize: 0, headerText: '**OX** App Suite', headerColor: '#aaaaaa', headerBackground: '#ffffff', headerGradient: 0, topbarVisible: true, url: ''
         },
         presets = [
             { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA' }, // blue
-            { topbarColor: '#587a20', selectionColor: '#606961', linkColor: '#608e21' }, // green
-            { topbarColor: '#992019', selectionColor: '#af1916', linkColor: '#ad1c13' }, // red
+            { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA', headerSize: 2, headerColor: '#ffffff', headerBackground: '#275276' }, // blue
+            { topbarColor: '#992019', selectionColor: '#535353', linkColor: '#6e6e6e', headerSize: 2, headerColor: '#ffffff', headerBackground: '#6b1711' }, // red
+            { topbarColor: '#49a8c6', selectionColor: '#50607f', linkColor: '#ce5200', headerSize: 2, headerColor: '#ffffff', headerBackground: '#50607f' }, // purple
+            { topbarColor: '#18a0ae', selectionColor: '#1baebd', linkColor: '#e84f1b', headerSize: 2, headerColor: '#ffffff', headerBackground: '#0f6b75' }, // cyan
+            { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 2, headerColor: '#555555', topbarVisible: false }, // pink
             { topbarColor: '#474243', selectionColor: '#656465', linkColor: '#377fb5' }, // gray
-            { topbarColor: '#18a0ae', selectionColor: '#1baebd', linkColor: '#e84f1b', headerSize: 4, headerColor: '#ffffff', headerBackground: '#0f6b75' }, // cyan
-            { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 4, headerColor: '#555555', topbarVisible: false }, // pink
             { topbarColor: '#424242', selectionColor: '#39A9E1', linkColor: '#0088cc' }, // 7.4.2
-            { topbarColor: '#4a9dae', selectionColor: '#bd1e02', linkColor: '#077271' }, // cyan/red
-            { topbarColor: '#98631e', selectionColor: '#90956b', linkColor: '#ba7a30' }, // brown/green
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700' }, // gray/orange
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', headerSize: 3, headerColor: '#d24518', topbarVisible: false, headerText: '**Purple** |||CableCom|||' }, // gray/orange
             { topbarColor: '#736f71', selectionColor: '#707274', linkColor: '#cc2c20', headerSize: 3, headerColor: '#555555', topbarVisible: false }, // gray/red
@@ -99,22 +101,63 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         current = 0,
         model = new Backbone.Model();
 
+    // utility function
+    function shade(color, percent) {
+        var integer = parseInt(color.replace(/^#/, ''), 16),
+            shift = Math.round(2.55 * (percent || 0));
+        return '#' + ([16, 8, 0].reduce(function (sum, bits) {
+            var value = (integer >> bits & 0xFF) + shift;
+            value = value > 255 ? 255 : value < 0 ? 0 : value;
+            return sum + (value << bits);
+        }, 0x1000000).toString(16).substr(1));
+    }
+
+    function gradientStr(a, b, c) {
+        if (c) return 'linear-gradient(to bottom, ' + a + ' 0%, ' + b + ' 50%, ' + c + ' 100%)';
+        return 'linear-gradient(to bottom, ' + a + ' 0%, ' + b + ' 100%)';
+    }
+
+    function gradient(model) {
+        var type = model.get('headerGradient'), bg = model.get('headerBackground');
+        switch (type) {
+        // darken
+        case 1: return gradientStr(bg, shade(bg, -10));
+        case 2: return gradientStr(bg, shade(bg, -20));
+        // darken reverse
+        case 3: return gradientStr(shade(bg, -10), bg);
+        case 4: return gradientStr(shade(bg, -20), bg);
+        // lighten
+        case 5: return gradientStr(shade(bg, +10), bg);
+        case 6: return gradientStr(shade(bg, +20), bg);
+        // three colors
+        case 7: return gradientStr(shade(bg, +10), bg, shade(bg, -10));
+        case 8: return gradientStr(shade(bg, +20), bg, shade(bg, -20));
+        default: return 'none';
+        }
+    }
+
     var updateStylesheet = _.debounce(function () {
+
         $('#customize-css').text(
             // UI
             '#customize-dialog { right: 10px; left: auto; top: 45px; }\n' +
             '#customize-text {\n' +
             '  position: absolute; top: 0; left: 0; width: 100%; font-weight: 300; padding: 0 10px;\n' +
             '  color: ' + model.get('headerColor') + '; background-color: ' + model.get('headerBackground') + ';\n' +
-            '  background-position: right; background-origin: content-box; background-repeat: no-repeat; z-index: 0;\n' +
+            '  background-image: ' + gradient(model) + '; z-index: 0;\n' +
             '}\n' +
-            '#customize-text:empty { background-position: left; }\n' +
+            '#customize-text .logo {\n' +
+            '  position: absolute; top: 0; bottom: 0; right: 0; left: 50%; padding: 10px;\n' +
+            '  background-position: right; background-origin: content-box; background-repeat: no-repeat;\n' +
+            '}\n' +
+            '#customize-text .logo.left { background-position: left; left: 0; }\n' +
             '.hide-small-logo #io-ox-top-logo-small { display: none; }\n' +
             '#io-ox-core { z-index: 1; }\n' +
             // top bar
             '#io-ox-topbar { background-color: ' + model.get('topbarColor') + '; }\n' +
             // selection
             '.list-view.visible-selection.has-focus .list-item.selected,\n' +
+            '.folder-tree .folder .selectable:focus,\n' +
             '.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected,\n' +
             '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder:focus.selected {\n' +
             '  background-color: ' + model.get('selectionColor') + ';\n' +
@@ -144,7 +187,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
     //
     // Colors
     //
-    model.on('change:topbarColor change:selectionColor change:linkColor change:headerColor change:headerBackground', updateStylesheet);
+    model.on('change:topbarColor change:selectionColor change:linkColor change:headerColor change:headerBackground change:headerGradient', updateStylesheet);
 
     //
     // header size
@@ -167,7 +210,9 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             .replace(/\|\|\|([^\|]+)\|\|\|/g,   '<span style="color: rgba(0, 0, 0, 0.5);">$1</span>')
             .replace(/\|\|([^\|]+)\|\|/g,       '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
             .replace(/\|([^\|]+)\|/g,           '<span style="opacity: 0.5;">$1</span>');
-        $('#customize-text').html(value);
+        $('#customize-text .title').html(value);
+        // empty > logo left?
+        $('#customize-text .logo').toggleClass('left', value === '');
     });
 
     //
@@ -221,7 +266,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             img.src = url;
             ratio = 40 / img.height;
             // apply logo
-            $('#customize-logo').text(
+            $('#customize-css-logo').text(
                 '#io-ox-top-logo-small {' +
                 '  background-image: url(' + url + ') !important;' +
                 '  background-size: contain; height: 40px; margin: 0 10px;' +
@@ -229,18 +274,18 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
                 '}'
             );
         } else {
-            $('#customize-logo').text('');
+            $('#customize-css-logo').text('');
             $('#customize-dialog input[type="file"]').val('');
         }
         // update additional logo
         if (url !== '' && model.get('headerSize') > 0) {
-            $('#customize-text').css({
+            $('#customize-text .logo').css({
                 backgroundImage: 'url(' + url + ')',
                 backgroundSize: 'contain',
             });
             $('html').addClass('hide-small-logo');
         } else {
-            $('#customize-text').css({
+            $('#customize-text .logo').css({
                 backgroundImage: 'none'
             });
             $('html').removeClass('hide-small-logo');
@@ -256,6 +301,11 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
     fields.filter('[data-name="headerSize"]').on('input', function () {
         var value = parseInt($(this).val(), 10);
         model.set('headerSize', value);
+    });
+
+    fields.filter('[data-name="headerGradient"]').on('input', function () {
+        var value = parseInt($(this).val(), 10);
+        model.set('headerGradient', value);
     });
 
     // on change text

@@ -32,10 +32,9 @@ define('io.ox/core/settings/user',
             //$node.busy();
             return factory.realm('edit').get({})
                     .done(function (user) {
-                        //$node.idle();
                         // The edit dialog
                         var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user'),
-                            $userEditView = new UserEdit({model: user}).render().$el;
+                            $userEditView = new UserEdit({ model: user }).render().$el;
 
                         $userEditView.find('[data-id="private_flag"]').remove();
 
@@ -71,7 +70,8 @@ define('io.ox/core/settings/user',
         openModalDialog: function () {
 
             var dialog = new dialogs.ModalDialog({
-                top: 60,
+                top: 20,
+                substract: 100,
                 width: 910,
                 center: false,
                 maximize: true,

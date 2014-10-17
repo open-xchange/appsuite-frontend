@@ -15,7 +15,7 @@ define('io.ox/core/pubsub/subscriptions',
     ['io.ox/core/extensions',
      'io.ox/core/pubsub/model',
      'io.ox/core/api/pubsub',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
      'io.ox/keychain/api',
@@ -59,7 +59,7 @@ define('io.ox/core/pubsub/subscriptions',
                 var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, services: data, popup: popup, newFolder: true });
 
                 function removeFolder(id) {
-                    return folderAPI.remove({ folder: id });
+                    return folderAPI.remove(id);
                 }
 
                 function saveModel(newFolder) {
@@ -87,15 +87,16 @@ define('io.ox/core/pubsub/subscriptions',
                                         removeFolder(folder);
                                     }
                                 }
-                            ).then(function (model) {
+                            )
+                            .then(function (model) {
                                 return model.fetch();
-                            }).then(function (model) {
+                            })
+                            .then(function (model) {
                                 var subscriptions = pubsub.subscriptions();
                                 //update the model-(collection)
                                 subscriptions.add(model, {merge: true});
-                            }).then(function () {
-                                return app.folderView.idle().repaint();
-                            }).done(function () {
+                            })
+                            .done(function () {
                                 app.folder.set(folder);
                             });
                         },
@@ -146,21 +147,16 @@ define('io.ox/core/pubsub/subscriptions',
                     folder = require('settings!io.ox/core').get('folder/' + module);
 
                     //...but drive uses current selected folder instead
-                    if (module === 'infostore')
-                        folder = app.folder.get() || folder;
+                    if (module === 'infostore') folder = app.folder.get() || folder;
+
                     if (baton.newFolder) {
 
                         var service = findId(baton.services, baton.model.get('source'));
 
-                        folderAPI.create({
-                            folder: folder,
-                            data: {
-                                title: service.displayName || gt('New Folder'),
-                                module: self.model.get('entityModule')
-                            },
-                            silent: true
+                        folderAPI.create(folder, {
+                            title: service.displayName || gt('New Folder')
                         })
-                        .then(function (folder) {
+                        .done(function (folder) {
                             self.model.attributes.folder = self.model.attributes.entity.folder = folder.id;
                             saveModel(true);
                         });
@@ -177,7 +173,7 @@ define('io.ox/core/pubsub/subscriptions',
 
     function showErrorInline(node, label, msg) {
         node.find('div.alert').remove();
-        node.prepend($('<div class="alert alert-danger">').append(
+        node.prepend($('<div class="alert alert-danger" role="alert">').append(
             $('<strong>').text(label),
             $.txt(' '),
             $('<span>').html(msg),

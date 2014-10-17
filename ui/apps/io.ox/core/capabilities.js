@@ -82,7 +82,6 @@ define('io.ox/core/capabilities', function () {
         if (id[0] === '-') {
             id = id.substr(1);
             disabled[id] = true;
-            console.info('Disabled feature', id);
         } else {
             capabilities[id] = added[id] = {
                 attributes: {},
@@ -99,10 +98,11 @@ define('io.ox/core/capabilities', function () {
         _(hash.disableFeature.split(/\s*[, ]\s*/)).each(function (id) {
             disabled[id] = true;
         });
-        if (!_.isEmpty(disabled)) {
-            console.info('Disabled features', disabled);
-        }
     }
+
+    // log
+    var caps = _(disabled).keys().sort();
+    if (caps.length) console.info('Disabled capabilities: ' + caps.join(', '));
 
     return api;
 });

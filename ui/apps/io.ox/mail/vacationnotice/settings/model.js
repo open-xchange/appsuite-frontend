@@ -86,6 +86,10 @@ define('io.ox/mail/vacationnotice/settings/model',
 
         preparedData.test = testForTimeframe;
 
+        if (attributes.position !== undefined) {
+            preparedData.position = attributes.position;
+        }
+
         return preparedData;
     }
 
@@ -133,7 +137,7 @@ define('io.ox/mail/vacationnotice/settings/model',
         days: gt('Number of days between vacation notices to the same sender'),
         headlineAdresses: gt('Enabled for the following addresses'),
         addresses: gt('Email addresses'),
-        dateFrom: gt('From'),
+        dateFrom: gt('Start'),
         dateUntil: gt('End'),
         activateTimeFrame: gt('Send vacation notice during this time only')
     };

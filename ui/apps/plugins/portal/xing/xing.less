@@ -1,3 +1,25 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
+ */
+
+// special color scheme if widget has no account yet
+.widget-color-custom.color-xing {
+    @color: #126567;
+    .decoration { background-color: @color; }
+    &:focus {
+        .decoration { background-color: darken(@color, 10%); }
+    }
+}
+
 .halo.io-ox-xing {
     clear: both;
 
@@ -17,7 +39,6 @@
 
     .mini-profile, .connection {
         width: 64px;
-        height: 80px;
         display: inline-block;
         vertical-align: top;
         text-align: center;

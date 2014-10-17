@@ -27,6 +27,8 @@ define('io.ox/core/api/folder',
 
     'use strict';
 
+    if (ox.debug) console.warn('Module "io.ox/core/api/folder" is deprecated. Please migrate to "io.ox/core/folder/api".');
+
     var // folder object cache
         folderCache = new cache.SimpleCache('folder'),
         subFolderCache = new cache.SimpleCache('subfolder'),
@@ -1231,7 +1233,7 @@ define('io.ox/core/api/folder',
                 return ul;
             }
             finally {
-                api.getPath({ folder: id }).then(
+                api.path({ folder: id }).then(
                     function success(list) {
                         draw(list, ul, options);
                     },

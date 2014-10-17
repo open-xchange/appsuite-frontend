@@ -16,9 +16,8 @@ define('io.ox/core/api/user',
      'io.ox/core/api/factory',
      'io.ox/contacts/util',
      'io.ox/core/date',
-     'io.ox/core/capabilities',
-     'io.ox/contacts/api'
-    ], function (http, apiFactory, util, date, capabilities, contactsApi) {
+     'io.ox/core/capabilities'
+    ], function (http, apiFactory, util, date, capabilities) {
 
     'use strict';
 
@@ -93,49 +92,51 @@ define('io.ox/core/api/user',
         if (_.isEmpty(o.data)) {
             return $.when();
         } else {
-            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
-                o.data.birthday = util.gregorianToJulian(o.data.birthday);
-            }
-            return http.PUT({
-                    module: 'user',
-                    params: {
-                        action: 'update',
-                        id: o.id,
-                        folder: o.folder,
-                        timestamp: o.timestamp || _.then()
-                    },
-                    data: o.data,
-                    appendColumns: false
-                })
-                .pipe(function () {
-                    // get updated contact
-                    return api.get({ id: o.id }, false)
-                        .pipe(function (data) {
-                            return $.when(
-                                api.caches.get.add(data),
-                                api.caches.all.clear(),
-                                api.caches.list.remove({ id: o.id }),
-                                // update contact caches
-                                contactsApi.caches.get.remove({folder_id: data.folder_id, id: data.contact_id}),//no add here because this userdata not contactdata (similar but not equal)
-                                contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
-                                contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
-                                contactsApi.clearFetchCache()
-                            )
-                            .done(function () {
-                                api.trigger('update:' + _.ecid(data), data);
-                                api.trigger('update', data);
-                                api.trigger('refresh.list');
-                                // get new contact and trigger contact events
-                                // skip this if GAB is missing
-                                if (data.folder_id === 6 && capabilities.has('!gab')) return;
-                                // fetch contact
-                                contactsApi.get({folder_id: data.folder_id, id: data.contact_id}).done(function (contactData) {
-                                    contactsApi.trigger('update:' + _.ecid(contactData), contactData);
-                                    contactsApi.trigger('update', contactData);
+            require(['io.ox/contacts/api'], function (contactsApi) {
+                if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+                    o.data.birthday = util.gregorianToJulian(o.data.birthday);
+                }
+                return http.PUT({
+                        module: 'user',
+                        params: {
+                            action: 'update',
+                            id: o.id,
+                            folder: o.folder,
+                            timestamp: o.timestamp || _.then()
+                        },
+                        data: o.data,
+                        appendColumns: false
+                    })
+                    .pipe(function () {
+                        // get updated contact
+                        return api.get({ id: o.id }, false)
+                            .pipe(function (data) {
+                                return $.when(
+                                    api.caches.get.add(data),
+                                    api.caches.all.clear(),
+                                    api.caches.list.remove({ id: o.id }),
+                                    // update contact caches
+                                    contactsApi.caches.get.remove({folder_id: data.folder_id, id: data.contact_id}),//no add here because this userdata not contactdata (similar but not equal)
+                                    contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
+                                    contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
+                                    contactsApi.clearFetchCache()
+                                )
+                                .done(function () {
+                                    api.trigger('update:' + _.ecid(data), data);
+                                    api.trigger('update', data);
+                                    api.trigger('refresh.list');
+                                    // get new contact and trigger contact events
+                                    // skip this if GAB is missing
+                                    if (data.folder_id === 6 && capabilities.has('!gab')) return;
+                                    // fetch contact
+                                    contactsApi.get({folder_id: data.folder_id, id: data.contact_id}).done(function (contactData) {
+                                        contactsApi.trigger('update:' + _.ecid(contactData), contactData);
+                                        contactsApi.trigger('update', contactData);
+                                    });
                                 });
                             });
-                        });
-                });
+                    });
+            });
         }
     };
 

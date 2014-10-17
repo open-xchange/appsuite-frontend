@@ -12,6 +12,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -29,10 +32,11 @@
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.firststeps.gui"></a>3.1. Interfejs użytkownika</h2></div></div></div>
-<a class="indexterm" name="idm139943755388464"></a><div class="concept">
+<a class="indexterm" name="idm139961884664896"></a><div class="concept">
 <a name="ox.appsuite.user.reference.gui"></a><p>Interfejs użytkownika zawiera następujące składniki:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>U góry: <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.menubar" title="Pasek menu">pasek menu</a>.</p></li>
+<li class="listitem"><p>Po lewej stronie poniżej paska menu jest wyświetlany <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.searchbar" title="Pasek wyszukiwania">pasek wyszukiwania</a>. Można go włączyć lub wyłączyć razem z drzewem folderów.</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.foldertree" title="Drzewo folderów">Drzewo folderów</a> można włączyć po lewej stronie.</p></li>
 <li class="listitem"><p>Po prawej stronie poniżej paska menu jest widoczny <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.toolbar" title="Pasek narzędzi">pasek narzędzi</a>. Znajdują się w nim funkcje specyficzne dla aplikacji oraz funkcje wyboru widoku w obszar wyświetlania.</p></li>
 <li class="listitem"><p>Pozostała przestrzeń jest wykorzystywana na <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.content" title="Obszar wyświetlania">obszar wyświetlania</a>.</p></li>
@@ -42,7 +46,7 @@
 </ul></div>
 <p> Poniższe zrzuty ekranów przedstawiają interfejs użytkownika na przykładzie aplikacji <span class="phrase"> <span class="guilabel"><strong>E-mail</strong></span> </span>  .</p>
 </div>
-<a class="indexterm" name="idm139943756865248"></a><a class="indexterm" name="idm139943756863632"></a><a class="indexterm" name="idm139943756862016"></a><div class="reference">
+<a class="indexterm" name="idm139961885847712"></a><a class="indexterm" name="idm139961885846096"></a><a class="indexterm" name="idm139961883777936"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.menubar"></a><p><b>Pasek menu </b>
         </p>
 <div class="informalfigure">
@@ -52,7 +56,6 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Przyciski do uruchamiania aplikacji, takich jak <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> czy <span class="phrase"><span class="guilabel"><strong>Kalendarz</strong></span></span>.</p></li>
 <li class="listitem"><p>Zależnie od wykonywanej czynności mogą być wyświetlane dodatkowe przyciski, np. podczas pisania nowej wiadomości e-mail lub edycji spotkania. </p></li>
-<li class="listitem"><p>Ikona <span class="guibutton"><strong>Szukaj</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.menubar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>. Umożliwia otwarcie sekcji <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.html#ox.appsuite.user.concept.search">Szukaj</a> w nowym oknie. </p></li>
 <li class="listitem"><p>Ikona <span class="guibutton"><strong>Nieprzeczytane</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span>. Ikona ta powiadamia o liczbie nowych obiektów, np. nieprzeczytanych wiadomości e-mail lub zaproszeń na zaplanowane spotkania. Kliknięcie powoduje otwarcie <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.notificationarea" title="Obszar powiadomień">obszaru powiadomień</a>.</p></li>
 <li class="listitem"><p>Ikona <span class="guibutton"><strong>Odśwież</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.refresh"></a><img src="../../images/appsuite_user_icon_refresh.png"></span>. Umożliwia ponowne załadowanie obiektów z serwera. Bez względu na to, czy ta funkcja zostanie użyta, obiekty są regularnie odświeżane.</p></li>
 <li class="listitem">
@@ -70,7 +73,20 @@
 <p>
       </p>
 </div>
-<a class="indexterm" name="idm139943751943024"></a><div class="reference">
+<a class="indexterm" name="idm139961882909088"></a><div class="reference">
+<a name="ox.appsuite.user.reference.gui.searchbar"></a><p><b>Pasek wyszukiwania </b>
+        </p>
+<div class="informalfigure">
+<a name="ox.appsuite.user.fig.firststeps.gui.searchbar"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_gui_searchbar.png"></div></div>
+</div>
+<p>Aby wyświetlić pasek wyszukiwania, kliknij polecenie <span class="guibutton"><strong>Widok</strong></span> na pasku funkcji. Włącz polecenie <span class="guibutton"><strong>Widok folderu</strong></span>. Pasek wyszukiwania znajduje się po lewej stronie poniżej paska menu. Jego elementy to: </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Pole wejściowe na wyszukiwane słowo lub wyrażenie</p></li>
+<li class="listitem"><p>Ikona <span class="guilabel"><strong>Szukaj</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.searchbar.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>. Rozpoczyna wyszukiwanie.</p></li>
+</ul></div>
+<p>Zaraz po włączeniu wyszukiwania drzewo folderów zostanie zasłonięte funkcjami wyszukiwania. Wyniki są prezentowane na liście widocznej w obszarze wyświetlania.</p>
+</div>
+<a class="indexterm" name="idm139961882893216"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.toolbar"></a><p><b>Pasek narzędzi </b>
         </p>
 <div class="informalfigure">
@@ -78,16 +94,19 @@
 </div>
 <p>Pasek narzędzi znajduje się pod paskiem menu. Udostępnia następujące funkcje: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Przyciski umożliwiające tworzenie nowych obiektów, np. nowej wiadomości e-mail lub nowego kontaktu.</p></li>
+<li class="listitem">
+<p>Przyciski umożliwiające tworzenie nowych obiektów, np. nowej wiadomości e-mail lub nowego kontaktu.</p>
+<p>Jeśli nie masz odpowiednich uprawnień do tworzenia obiektów w bieżącym folderze, przycisk jest wyłączony.</p>
+</li>
 <li class="listitem"><p>Przyciski lub ikony umożliwiające edycję obiektów.</p></li>
 <li class="listitem"><p>Mogą być dostępne jeszcze inne przyciski lub ikony, w zależności od aplikacji.</p></li>
-<li class="listitem"><p>Przycisk <span class="guilabel"><strong>Więcej</strong></span>. Udostępnia właściwe dla danej aplikacji funkcje umożliwiające porządkowanie obiektów.</p></li>
+<li class="listitem"><p>Ikona <span class="guilabel"><strong>Więcej</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span>. Udostępnia właściwe dla danej aplikacji funkcje umożliwiające porządkowanie obiektów.</p></li>
 <li class="listitem"><p>Przycisk <span class="guilabel"><strong>Widok</strong></span>. Udostępnia funkcje umożliwiające sterowanie układem w <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.content" title="Obszar wyświetlania">obszarze wyświetlania</a> oraz otwieranie lub zamykanie <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.foldertree" title="Drzewo folderów">drzewa folderów</a>.</p></li>
 </ul></div>
 <p> 
       </p>
 </div>
-<a class="indexterm" name="idm139943751926880"></a><a class="indexterm" name="idm139943751925264"></a><a class="indexterm" name="idm139943751923648"></a><div class="reference">
+<a class="indexterm" name="idm139961882873376"></a><a class="indexterm" name="idm139961882871760"></a><a class="indexterm" name="idm139961882870144"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.foldertree"></a><p><b>Drzewo folderów </b>
         </p>
 <div class="informalfigure">
@@ -95,14 +114,14 @@
 </div>
 <p>W celu wyświetlenia drzewa folderów kliknij przycisk <span class="guibutton"><strong>Widok</strong></span> na pasku funkcji. Włącz opcję <span class="guibutton"><strong>Widok folderu</strong></span>. Pojawi się drzewo folderów z następującymi informacjami:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Alfabetycznie uporządkowaną listę folderów w poszczególnych aplikacjach</p></li>
+<li class="listitem"><p>foldery specyficzne dla aplikacji</p></li>
 <li class="listitem">
 <p>Sekcje folderów osobistych, publicznych i udostępnionych — zależnie od aplikacji</p>
-<p><span class="phrase"><strong>Uwaga:</strong></span> Przy określonych konfiguracjach oprogramowania do pracy grupowej sekcje te nie są wyświetlane, gdy nie istnieją foldery publiczne ani udostępnione.</p>
+<p><span class="phrase"><strong>Uwaga:</strong></span> przy określonych konfiguracjach oprogramowania do pracy grupowej sekcje te nie są wyświetlane, gdy nie istnieją foldery publiczne ani udostępnione.</p>
 </li>
 <li class="listitem">
-<p>Ikona <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> znajdująca się obok wybranego folderu. Udostępnia funkcje umożliwiające <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="12.2. Foldery">porządkowanie folderów</a>, a w przypadku niektórych folderów również inne funkcji.</p>
-<p><span class="phrase"><strong>Wskazówka:</strong></span> Dostęp do działań specyficznych dla folderu można także uzyskać, klikając folder prawym przyciskiem myszy.</p>
+<p>Ikona <span class="guibutton"><strong>Działania specyficzne dla folderu</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.firststeps.gui.foldertree.actions"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> znajdująca się obok wybranego folderu. Udostępnia funkcje umożliwiające <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Foldery">porządkowanie folderów</a>, a w przypadku niektórych folderów również inne funkcji.</p>
+<p><span class="phrase"><strong>Wskazówka:</strong></span> dostęp do działań specyficznych dla folderu można także uzyskać, klikając folder prawym przyciskiem myszy.</p>
 </li>
 <li class="listitem"><p>Mogą być dostępne jeszcze inne funkcje, w zależności od aplikacji.</p></li>
 <li class="listitem"><p>Kliknięcie dostępnej na dole po lewej stronie ikony <span class="guibutton"><strong>Otwórz widok folderu</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.reference.gui.foldertree.open"></a><img src="../../images/appsuite_user_icon_foldertree_open.png"></span> lub <span class="guibutton"><strong>Zamknij widok folderu</strong></span><span class="inlinemediaobject"><a name="ox.appsuite.user.reference.gui.foldertree.close"></a><img src="../../images/appsuite_user_icon_foldertree_close.png"></span> spowoduje otwarcie lub zamknięcie drzewa folderów.</p></li>
@@ -110,20 +129,20 @@
 <p>
       </p>
 </div>
-<a class="indexterm" name="idm139943751895136"></a><a class="indexterm" name="idm139943751893520"></a><div class="reference">
+<a class="indexterm" name="idm139961882841584"></a><a class="indexterm" name="idm139961882522176"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.content"></a><p><b>Obszar wyświetlania </b>
         </p>
 <div class="informalfigure">
 <a name="ox.appsuite.user.fig.firststeps.gui.content"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_gui_content.png"></div></div>
 </div>
-<p>W zależności od aplikacji i wybranego widoku obszar wyświetlania zawiera następujące składniki:</p>
+<p>Stosownie do aplikacji i wybranego widoku obszar wyświetlania zawiera następujące składniki:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Lista obiektów lub widok ikon obiektów w wybranym folderze. U góry listy znajdują się elementy sterujące umożliwiające wybieranie lub sortowanie obiektów.</p></li>
 <li class="listitem"><p>Widok szczegółów obiektu wybranego z listy.</p></li>
 </ul></div>
 <p>Widok w obszarze wyświetlania można zmienić przyciskiem <span class="guibutton"><strong>Widok</strong></span> na <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.toolbar" title="Pasek narzędzi">pasku narzędzi</a>. Kliknięcie obiektu w obszarze wyświetlania powoduje otwarcie <a class="link" href="ox.appsuite.user.sect.firststeps.gui.html#ox.appsuite.user.reference.gui.popup" title="Wyskakujące okienko">wyskakującego okienka</a>.</p>
 </div>
-<a class="indexterm" name="idm139943751880496"></a><a class="indexterm" name="idm139943751878880"></a><div class="reference">
+<a class="indexterm" name="idm139961882509200"></a><a class="indexterm" name="idm139961882507584"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.popup"></a><p><b>Wyskakujące okienko </b>
         </p>
 <div class="informalfigure">
@@ -138,7 +157,7 @@
 </ul></div>
 <p> Te wszystkie dane to tzw. <span class="guilabel"><strong>widok halo</strong></span>. Kliknięcie elementu w wyskakującym okienku może spowodować otwarcie kolejnego wyskakującego okienka. Aby zamknąć wyskakujące okienko, należy kliknąć przycisk <span class="guibutton"><strong>Zamknij</strong></span> w prawym górnym rogu. Aby zamknąć wszystkie wyskakujące okienka, należy kliknąć pozycję <span class="guibutton"><strong>Zamknij wszystko</strong></span>.</p>
 </div>
-<a class="indexterm" name="idm139943751862720"></a><div class="reference">
+<a class="indexterm" name="idm139961882491424"></a><div class="reference">
 <a name="ox.appsuite.user.reference.gui.notificationarea"></a><p><b>Obszar powiadomień </b>
         </p>
 <div class="informalfigure">

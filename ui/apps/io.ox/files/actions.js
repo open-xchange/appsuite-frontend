@@ -19,7 +19,7 @@ define('io.ox/files/actions',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
      'io.ox/core/util',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'gettext!io.ox/files',
      'settings!io.ox/files'
     ], function (api, ext, links, actionPerformer, capabilities, notifications, util, folderAPI, gt, settings) {
@@ -84,7 +84,7 @@ define('io.ox/files/actions',
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                return folderAPI.get(e.baton.data.folder_id).then(check);
             } else {//continue without foldercheck
                 return check();
             }
@@ -119,12 +119,15 @@ define('io.ox/files/actions',
             requires: function (e) {
                 var check = function (data) {
                         data = data || {};
-                        return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data);
+                        return e.collection.has('one') &&
+                            (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) &&
+                            (e.baton.openedBy !== 'io.ox/mail/write') &&
+                            !folderAPI.is('trash', data);
                     };
                 if (e.baton.app){
                     return e.baton.app.folder.getData().then(check);
                 } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                    return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                    return folderAPI.get(e.baton.data.folder_id).then(check);
                 } else {//continue without foldercheck
                     return check();
                 }
@@ -144,7 +147,7 @@ define('io.ox/files/actions',
                 if (e.baton.app){
                     return e.baton.app.folder.getData().then(check);
                 } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                    return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                    return folderAPI.get(e.baton.data.folder_id).then(check);
                 } else {//continue without foldercheck
                     return check();
                 }
@@ -159,32 +162,38 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
+            if (_.device('ios')) return false; // no file-system, no download
             if (e.collection.has('multiple')) return true;
+            // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
-            filterUnsupported(list).done(function (filtered) {
-                if (filtered.length === 1) {
-                    var o = _.first(filtered);
-                    require(['io.ox/core/download'], function (download) {
-                        download.file(o);
-                    });
-                } else if (filtered.length > 1) {
-                    require(['io.ox/core/download'], function (download) {
-                        download.files(filtered);
-                    });
-                }
-                // 'description only' items
-                if (filtered.length === 0 || list.length !== filtered.length) {
-                    notifications.yell('info', gt('Items without a file can not be downloaded.'));
-                }
-            });
+            var filtered = filterUnsupported(list);
+            if (filtered.length === 1) {
+                var o = _.first(filtered);
+                require(['io.ox/core/download'], function (download) {
+                    download.file(o);
+                });
+            } else if (filtered.length > 1) {
+                require(['io.ox/core/download'], function (download) {
+                    download.files(filtered);
+                });
+            }
+            // 'description only' items
+            if (filtered.length === 0 || list.length !== filtered.length) {
+                notifications.yell('info', gt('Items without a file can not be downloaded.'));
+            }
         }
     });
 
     new Action('io.ox/files/actions/downloadversion', {
-        requires: 'one',
+        requires: function (e) {
+            if (_.device('ios')) return false; // no file-system, no download
+            if (e.collection.has('multiple')) return true;
+            // 'description only' items
+            return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
+        },
         multiple: function (list) {
             // loop over list, get full file object and trigger downloads
             require(['io.ox/core/download'], function (download) {
@@ -198,23 +207,12 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/open', {
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
+            // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
-            filterUnsupported(list).done(function (filtered) {
-                // loop over list, get full file object and open new window
-                _(filtered).each(function (o) {
-                    api.get(o).done(function (file) {
-                        if (o.version) {
-                            file = _.extend({}, file, { version: o.version });
-                        }
-                        window.open(api.getUrl(file, 'open'));
-                    });
-                });
-                //'description only' items
-                if (list.length === 0 || filtered.length !== list.length) {
-                    notifications.yell('info', gt('Items without a file can not be opened.'));
-                }
+            _(list).each(function (file) {
+                window.open(api.getUrl(file, 'open'));
             });
         }
     });
@@ -224,31 +222,31 @@ define('io.ox/files/actions',
         requires: function (e) {
             var check = function (data) {
                     data = data || {};
-                    return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);
+                    return _.device('!small') &&
+                        !_.isEmpty(e.baton.data) &&
+                        e.collection.has('some') &&
+                        e.baton.openedBy !== 'io.ox/mail/write' &&
+                        !folderAPI.is('trash', data);
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                return folderAPI.get(e.baton.data.folder_id).then(check);
             } else {//continue without foldercheck
                 return check();
             }
         },
         multiple: function (list) {
-            require(['io.ox/mail/write/main'], function (m) {
-                api.getList(list).done(function (list) {
-                    m.getApp().launch().done(function () {
-                        //generate text and html content
-                        var html = [], text = [];
-                        _(list).each(function (file) {
-                            var url = ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
-                            var label = gt('File: %1$s', file.filename || file.title);
-                            html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
-                            text.push(label + '\n' + gt('Direct link: %1$s', url));
-                        });
-                        this.compose({ attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
-                    });
+            api.getList(list).done(function (list) {
+                //generate text and html content
+                var html = [], text = [];
+                _(list).each(function (file) {
+                    var url = ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
+                    var label = gt('File: %1$s', file.filename || file.title);
+                    html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
+                    text.push(label + '\n' + gt('Direct link: %1$s', url));
                 });
+                ox.registry.call('mail-compose', 'compose', { attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
             });
         }
     });
@@ -259,29 +257,29 @@ define('io.ox/files/actions',
             var check = function (data) {
                     data = data || {};
                     var list = _.getArray(e.context);
-                    return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data) &&//hide in mail write preview
-                    _(list).reduce(function (memo, obj) {
-                        return memo || obj.file_size > 0;
-                    }, false);
+                    return _.device('!small') &&
+                        !_.isEmpty(e.baton.data) &&
+                        e.collection.has('some') &&
+                        e.baton.openedBy !== 'io.ox/mail/write' &&
+                        !folderAPI.is('trash', data) &&
+                        _(list).reduce(function (memo, obj) {
+                            return memo || obj.file_size > 0;
+                        }, false);
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                return folderAPI.get(e.baton.data.folder_id).then(check);
             } else {//continue without foldercheck
                 return check();
             }
         },
         multiple: function (list) {
-            require(['io.ox/mail/write/main'], function (m) {
-                api.getList(list).done(function (list) {
-                    var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
-                    if (filtered_list.length > 0) {
-                        m.getApp().launch().done(function () {
-                            this.compose({ infostore_ids: filtered_list });
-                        });
-                    }
-                });
+            api.getList(list).done(function (list) {
+                var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
+                if (filtered_list.length > 0) {
+                    ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
+                }
             });
         }
     });
@@ -291,12 +289,15 @@ define('io.ox/files/actions',
         requires: function (e) {
             var check = function (data) {
                     data = data || {};
-                    return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && !folderAPI.is('trash', data);
+                    return _.device('!small') &&
+                        !_.isEmpty(e.baton.data) &&
+                        e.collection.has('some') &&
+                        !folderAPI.is('trash', data);
                 };
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                return folderAPI.get(e.baton.data.folder_id).then(check);
             } else {//continue without foldercheck
                 return check();
             }
@@ -404,7 +405,10 @@ define('io.ox/files/actions',
         capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+            return _.device('!small') &&
+                !_.isEmpty(e.baton.data) &&
+                e.collection.has('some') &&
+                (e.baton.openedBy !== 'io.ox/mail/write') && // hide in mail write preview
                 _(list).reduce(function (memo, obj) {
                     return memo || !api.tracker.isLocked(obj);
                 }, false);
@@ -434,7 +438,9 @@ define('io.ox/files/actions',
         capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return _.device('!small') && e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+            return _.device('!small') &&
+                e.collection.has('some') &&
+                (e.baton.openedBy !== 'io.ox/mail/write') && // hide in mail write preview
                 _(list).reduce(function (memo, obj) {
                     return memo || api.tracker.isLockedByMe(obj);
                 }, false);
@@ -605,75 +611,26 @@ define('io.ox/files/actions',
             },
             multiple: function (list, baton) {
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
-
-                    function commit(target) {
-                        api[type](list, target).then(
-                            function (errors) {
-                                if (errors.length > 0) {
-                                    notifications.yell('error', errors[0].error);//show only the first one, to prevent notification stacking
-                                } else {
-                                    notifications.yell('success', success);
-                                }
-                                folderAPI.reload(target, list);
-                            },
-                            notifications.yell
-                        );
-                    }
-
-                    if (baton.target) {
-                        commit(baton.target);
-                    } else {
-                        var dialog = new dialogs.ModalDialog()
-                            .header($('<h4>').text(label))
-                            .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
-                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
-                        dialog.getBody().css({ height: '250px' });
-                        var folderId = String(list[0].folder_id),
-                            id = settings.get('folderpopup/last') || folderId,
-                            tree = new views.FolderTree(dialog.getBody(), {
-                                type: 'infostore',
-                                rootFolderId: '9',
-                                open: settings.get('folderpopup/open', []),
-                                tabindex: 0,
-                                customize: function (data) {
-                                    if (type === 'move' && data.id === folderId) {
-                                        this.removeClass('selectable').addClass('disabled');
-                                    }
-                                },
-                                toggle: function (open) {
-                                    settings.set('folderpopup/open', open).save();
-                                },
-                                select: function (id) {
-                                    settings.set('folderpopup/last', id).save();
-                                },
-                                targetmode: true
-                            });
-
-                        dialog.show(function () {
-                            tree.paint().done(function () {
-                                tree.select(id).done(function () {
-                                    dialog.getBody().focus();
-                                });
-                            });
-                        })
-                        .done(function (action) {
-                            if (action === 'ok') {
-                                var target = _(tree.selection.get()).first();
-                                commit(target);
-                            }
-                            tree.destroy().done(function () {
-                                tree = dialog = null;
-                            });
-                        });
-                    }
+                require(['io.ox/core/folder/actions/move'], function (move) {
+                    move.item({
+                        api: api,
+                        button: label,
+                        list: list,
+                        module: 'infostore',
+                        root: '9',
+                        settings: settings,
+                        success: success,
+                        target: baton.target,
+                        title: label,
+                        type: type
+                    });
                 });
             }
         });
     }
 
-    moveAndCopy('move', gt('Move'), gt('Files have been moved'));
-    moveAndCopy('copy', gt('Copy'), gt('Files have been copied'));
+    moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
+    moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
@@ -685,7 +642,7 @@ define('io.ox/files/actions',
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                return folderAPI.get(e.baton.data.folder_id).then(check);
             } else {//continue without foldercheck
                 return check();
             }
@@ -1098,7 +1055,7 @@ define('io.ox/files/actions',
             if (e.baton.app){
                 return e.baton.app.folder.getData().then(check);
             } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                return folderAPI.get(e.baton.data.folder_id).then(check);
             } else {//continue without foldercheck
                 return check();
             }
@@ -1156,10 +1113,8 @@ define('io.ox/files/actions',
      * @return {deferred} resolves as array
      */
     function filterUnsupported(list) {
-        return api.getList(list, false).then(function (data) {//no cache use here or just the current version is returned
-            return _(data).filter(function (obj) {
-                return !_.isEmpty(obj.filename) || obj.file_size > 0;
-            });
+        return _(list).filter(function (obj) {
+            return !_.isEmpty(obj.filename) || obj.file_size > 0;
         });
     }
 
@@ -1253,7 +1208,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/icons/actions').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
-        forcelimit: true,
+        dropdown: true,
         ref: 'io.ox/files/icons/inline'
     }));
 

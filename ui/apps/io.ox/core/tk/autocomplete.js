@@ -28,14 +28,12 @@ define('io.ox/core/tk/autocomplete',
             minLength: Math.max(1, settings.get('search/minimumQueryLength', 3)),
             maxResults: 25,
             delay: 100,
-            collection: null,
             draw: null,
             blur: $.noop,
             click: $.noop,
             parentSelector: 'body',
             autoselect: false,
             api: null,
-            node: null,
             container: $('<div>').addClass('autocomplete-popup'),
             mode: 'participant',
 
@@ -239,24 +237,24 @@ define('io.ox/core/tk/autocomplete',
                     });
 
                     _(list).each(function (facet) {
-                        regular = facet.style !== 'simple' && !!facet.display_name;
+                        regular = facet.style !== 'simple' && !!facet.name;
                         childs = facet.values && facet.values.length > 0;
                         //facet
                         count++;
-                        if (facet.display_name && childs && regular) {
+                        if (facet.name && childs && regular) {
                             $('<div class="autocomplete-item unselectable dropdown-header">')
-                                .html(facet.display_name)
+                                .html(facet.name)
                                 .data({
                                     index: count,
                                     id: facet.id,
-                                    label: facet.display_name,
+                                    label: facet.name,
                                     type: 'group'
                                 })
                                 //delimiter
                                 .appendTo(scrollpane);
                         }
                         //values
-                        _([].concat(facet.style === 'simple' ? facet : facet.values)).each(function (value) {
+                        _([].concat(facet.values || facet)).each(function (value) {
                             value.facet = facet.id;
                             var node = $('<div class="autocomplete-item">')
                                 .on('click', fnSelectItem);
@@ -271,11 +269,11 @@ define('io.ox/core/tk/autocomplete',
             },
 
             fnSelectItem = function (e) {
-                    e.data = $(this).data();
-                    select(e.data.index);
-                    o.click.call(self.get(0), e);
-                    close();
-                },
+                e.data = $(this).data();
+                select(e.data.index);
+                o.click.call(self.get(0), e);
+                close();
+            },
 
             // handle search result
             cbSearchResult = function (query, data) {
@@ -362,8 +360,10 @@ define('io.ox/core/tk/autocomplete',
                         close();
                         break;
                     case 39: // cursor right
-                        e.preventDefault();
-                        if (!e.shiftKey) update();
+                        if (!e.shiftKey && o.mode === 'participant') {
+                            e.preventDefault();
+                            update();
+                        }
                         break;
                     case 13: // enter
 
@@ -398,7 +398,7 @@ define('io.ox/core/tk/autocomplete',
                                 e.preventDefault();
                                 selected.trigger('click');
                             } else {
-                                $(this).val(val = '');
+                                if (o.mode === 'participant') $(this).val(val = '');
                                 close();
                             }
                         }
@@ -447,6 +447,8 @@ define('io.ox/core/tk/autocomplete',
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
                 this.focus();
+
+                if (e.which === 13) return;
                 e.stopPropagation();
 
                 var opt = _.extend({}, (e.data || {}), options || {}),
@@ -480,6 +482,9 @@ define('io.ox/core/tk/autocomplete',
 
         if (_.isFunction(o.source) && _.isFunction(o.draw)) {
 
+            // input loses focus on scrollbar click
+            var isModalPopup = o.parentSelector.indexOf('.permissions-dialog') > -1;
+
             $.each(this, function () {
                 // bind fundamental handlers
                 $(this)
@@ -495,7 +500,8 @@ define('io.ox/core/tk/autocomplete',
                     });
             });
 
-            if (_.device('!desktop') || _.device('ie')) {//internet explorer needs this fix too or it closes if you try to scroll
+            //internet explorer needs this fix too or it closes if you try to scroll
+            if (_.device('!desktop') || _.device('ie') || isModalPopup) {
                 o.container.on('mousedown', blurOff).on('mouseup', blurOn);
             }
         }

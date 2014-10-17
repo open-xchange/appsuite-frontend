@@ -22,7 +22,7 @@ define('io.ox/settings/main',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
      'less!io.ox/settings/style'
-    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, advancedModeSettings) {
+    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings) {
 
     'use strict';
 
@@ -78,7 +78,7 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = advancedModeSettings.get('settings/advancedMode', false),
+        expertmode = coreSettings.get('settings/advancedMode', false),
         currentSelection = null,
         previousSelection = null;
 
@@ -147,7 +147,11 @@ define('io.ox/settings/main',
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
-        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').scrollable();
+        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
+            'tabindex': 1,
+            'aria-describedby': 'currentsettingtitle',
+            'role': 'main' //needed or mac voice over reads the whole settings pane when an input element is focused
+        }).scrollable();
 
         grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
 
@@ -246,13 +250,16 @@ define('io.ox/settings/main',
         });
 
         var getAllSettingsPanes = function () {
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
+
             appsInitialized.done(function () {
 
                 def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
-                    if (expertmode) {
+                    var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
+                    if (expertmode && shown) {
                         return true;
-                    } else if (!point.advancedMode) {
+                    } else if (!point.advancedMode && shown) {
                         return true;
                     }
                 }));
@@ -281,12 +288,18 @@ define('io.ox/settings/main',
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function () {
                     right.empty().idle(); // again, since require makes this async
+                    vsplit.right.attr('title', baton.data.title);
+                    vsplit.right.find('#currentsettingtitle').remove();
                     ext.point(extPointPart).invoke('draw', right, baton);
+                    vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     updateExpertMode();
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
                     right.empty().idle(); // again, since require makes this async
+                    vsplit.right.attr('title', baton.data.title);
+                    vsplit.right.find('#currentsettingtitle').remove();
+                    vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
                 });
@@ -358,7 +371,7 @@ define('io.ox/settings/main',
                     .on('change', function () {
 
                         expertmode = checkbox.prop('checked');
-                        advancedModeSettings.set('settings/advancedMode', expertmode).save();
+                        coreSettings.set('settings/advancedMode', expertmode).save();
                         grid.setAllRequest(getAllSettingsPanes);
                         grid.paint();
                         updateExpertMode();

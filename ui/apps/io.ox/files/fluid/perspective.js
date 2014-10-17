@@ -22,13 +22,12 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/extPatterns/actions',
-     'io.ox/core/api/folder',
      'io.ox/files/util',
      'gettext!io.ox/files',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'static/3rd.party/jquery-imageloader/jquery.imageloader.js'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, util, gt, Selection, notifications) {
+     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
 
     'use strict';
 
@@ -46,9 +45,9 @@ define('io.ox/files/fluid/perspective',
 
     function drawGenericIcon(name) {
         var node = $('<i>');
-        if (/docx?$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
-        else if (/xlsx?$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
-        else if (/pptx?$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
+        if (/(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/i.test(name)) { node.addClass('fa fa-align-left file-type-doc'); }
+        else if (/(xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb)$/i.test(name)) { node.addClass('fa fa-table file-type-xls'); }
+        else if (/(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa)$/i.test(name)) { node.addClass('fa fa-picture file-type-ppt'); }
         else if ((/(aac|mp3|m4a|m4b|ogg|opus|wav)$/i).test(name)) { node.addClass('fa fa-music'); }
         else if ((/(mp4|ogv|webm)$/i).test(name)) { node.addClass('fa fa-film'); }
         else if ((/(epub|mobi)$/i).test(name)) { node.addClass('fa fa-book'); }
@@ -56,10 +55,6 @@ define('io.ox/files/fluid/perspective',
         else if ((/(zip|tar|gz|rar|7z|bz2)$/i).test(name)) { node.addClass('fa fa-archive'); }
         else { node.addClass('fa fa-file'); }
         return node.addClass('not-selectable');
-    }
-
-    function iconError() {
-        $(this).remove();
     }
 
     function cut(str, maxLen, cutPos) {
@@ -93,12 +88,21 @@ define('io.ox/files/fluid/perspective',
     }
 
     function loadFiles(app) {
-        var def = $.Deferred();
-        if (!app.getWindow().search.active || app.getWindow().search.query === '') {//empty search query shows folder again
+        var def = $.Deferred(),
+            search = app.getWindow().nodes.sidepanel.find('.search-container').is(':visible');
+        if (!search) {
+            //empty search query shows folder again
             api.getAll({ folder: app.folder.get() }, false).done(def.resolve).fail(def.reject);
         } else {
-            _.url.hash('id', null);//remove selection to prevent errors (file might not be in our search results)
-            api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
+            //remove selection to prevent errors (file might not be in our search results)
+            _.url.hash('id', null);
+            var params = { sort: app.props.get('sort'), order: app.props.get('order') };
+            app.searchapi.query(true, params)
+                .then(function (response) {
+                    return response && response.results ? response.results : [];
+                })
+                .then(def.resolve, def.reject);
+            //api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
         }
         return def;
     }
@@ -124,6 +128,7 @@ define('io.ox/files/fluid/perspective',
     }
 
     function calculateLayout(el, options) {
+
         var rows = Math.round((el.height() - 40) / options.fileIconHeight),
             cols = Math.floor((el.width() - 6) / options.fileIconWidth);
 
@@ -148,59 +153,39 @@ define('io.ox/files/fluid/perspective',
             if (dropZone) {
                 dropZone.update();
             }
-            dialog.show(e, function (popup) {
-                popup
-                    .append(viewDetail.draw(file, app))
-                    .attr({
-                        'role': 'complementary',
-                        'aria-label': gt('File Details')
-                    });
-                el = popup.closest('.io-ox-sidepopup');
-            });
-            _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
+            if (_.device('smartphone')) {
+                if (app.props.get('showCheckboxes')) return;
+                // mobile mode, use detailView of Pagecontroller instead of Popup
+                var dView = app.pages.getPage('detailView');
+
+                // wait for transition to be done
+                dView.one('pageshow', function () {
+                    dView.idle();
+                    // append preview image
+                    $('.mobile-detail-view-wrap', dView).append(viewDetail.draw(file, app));
+                });
+
+                dView.empty()
+                    .append($('<div class="mobile-detail-view-wrap">')).busy();
+
+                app.pages.changePage('detailView');
+                app.selection.trigger('pagechange:detailView');
+
+            } else {
+                dialog.show(e, function (popup) {
+                    popup
+                        .append(viewDetail.draw(file, app))
+                        .attr({
+                            'role': 'complementary',
+                            'aria-label': gt('File Details')
+                        });
+                    el = popup.closest('.io-ox-sidepopup');
+                });
+
+                _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
+            }
         });
     }
-    // mobile multiselect helpers
-    // Not DRYed, duplicated code from io.ox/core/commons because files modules
-    // does not use a Vgrid. So we have to rewrite some code here to be used without a
-    // vgrid.
-    function drawMobileMultiselect(id, selected, selection) {
-        var node = $('<div>'),
-            points = {};
-        ext.point('io.ox/core/commons/mobile/multiselect').invoke('draw', node, {count: selected.length});
-
-        (points[id] || (points[id] = ext.point(id + '/mobileMultiSelect/toolbar')))
-            .invoke('draw', node, {data: selected, selection: selection});
-        return node;
-    }
-
-    function toggleToolbar(selected, selection, baton) {
-        var context = $(baton.app.getWindow().nodes.outer),  // get current app's window container as context
-            buttons = $('.window-toolbar .toolbar-button', context),
-            toolbar = $('.window-toolbar', context),
-            toolbarID = 'multi-select-toolbar',
-            container;
-
-        if ($('#' + toolbarID).length > 0) {
-            // reuse old toolbar
-            container = $('#' + toolbarID);
-        } else {
-            // or creaet a new one
-            container = $('<div>', {id: toolbarID});
-        }
-        _.defer(function () {
-            if (selected.length > 0) {
-                buttons.hide();
-                $('#' + toolbarID).remove();
-                toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
-            } else {
-                // selection empty
-                $('#' + toolbarID).remove();
-                buttons.show();
-            }
-        }, 10);
-    }
-    // END mobile multiselect helpers
 
     // *** ext points ***
 
@@ -218,6 +203,8 @@ define('io.ox/files/fluid/perspective',
             Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
             //selection accessible via app
             baton.app.selection = this.selection;
+
+            baton.app.trigger('selection:setup');
 
             // forward selection:change event
             this.selection.on('change', function (e, list) {
@@ -237,7 +224,7 @@ define('io.ox/files/fluid/perspective',
 
                     if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
-                        toggleToolbar(selected, self, baton);
+                        //toggleToolbar(selected, self, baton);
                     }
 
                     // set url
@@ -349,68 +336,93 @@ define('io.ox/files/fluid/perspective',
                 };
             this.append(
                 filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
-                                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
-                                    .on('click', function () {
-                                        //force focus on container click
-                                        focus();
-                                    })
-                                    .on('data:loaded refresh:finished', function () {
-                                        //inital load and refresh
-                                        if (isFolderHidden()) {
-                                            focus();
-                                        }
-                                    })
-                                    .on('perspective:shown', function () {
-                                        //folder tree select vs. layout change action
-                                        if (isFolderHidden() || $(document.activeElement).is('a.btn.layout')) {
-                                            focus();
-                                        }
-                                    })
-                                    .on('dialog:closed', function () {
-                                        //sidepanel close button vs. folder change (that triggers dialog close)
-                                        if (!$(document.activeElement).hasClass('folder')) {
-                                            focus(true);
-                                        }
-                                    })
+                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
+                    .on('click', function () {
+                        //force focus on container click
+                        focus();
+                    })
+                    .on('data:loaded refresh:finished', function () {
+                        //inital load and refresh
+                        if (isFolderHidden()) {
+                            focus();
+                        }
+                    })
+                    .on('perspective:shown', function () {
+                        //folder tree select vs. layout change action
+                        if (isFolderHidden() || $(document.activeElement).is('a.btn.layout')) {
+                            focus();
+                        }
+                    })
+                    .on('dialog:closed', function () {
+                        //sidepanel close button vs. folder change (that triggers dialog close)
+                        if (!$(document.activeElement).hasClass('folder')) {
+                            focus(true);
+                        }
+                    })
             );
+            if (_.device('smartphone')) filesContainer.addClass('checkboxes-hidden');
         }
     });
 
+    function iconLoad() {
+        // 1x1 dummy or final image?
+        if (this.width === 1 && this.height === 1) iconReload.call(this); else iconFinalize.call(this);
+    }
+
+    function iconFinalize() {
+        var img = $(this), cell = img.closest('.file-cell'), url = img.attr('src');
+        // remove placeholder
+        cell.find('i.fa').remove();
+        // use background for list/tile view
+        cell.find('.preview-cover').css('backgroundImage', 'url(' + url + ')');
+        // use icon for icon view
+        img.fadeIn().removeClass('lazy');
+    }
+
+    function iconReload() {
+        var img = $(this),
+            retry = img.data('retry') + 1,
+            url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry,
+            wait = Math.pow(2, retry - 1) * 3000; // 3 6 12 seconds
+        if (retry > 3) return; // stop trying after three retries
+        setTimeout(function () {
+            img.off('load error').one({ load: iconLoad, error: iconError }).attr('src', url).data('retry', retry);
+        }, wait);
+    }
+
+    function iconError() {
+        $(this).remove();
+    }
+
     ext.point('io.ox/files/icons/file').extend({
+
         draw: function (baton) {
+
             var file = baton.data,
                 options = _.extend({ version: true, scaletype: 'cover' }, baton.options),
-                mode = util.previewMode(file),
+                mode = util.previewMode(file), url,
                 changed = getDateFormated(baton.data.last_modified),
-                //view mode: icon
+                // view mode: icon
                 iconImage = drawGenericIcon(file.filename),
                 previewImage = $('<div class="preview">').append(iconImage),
-                //view modes: list, tile
+                // view modes: list, tile
                 iconBackground = drawGenericIcon(file.filename),
                 previewBackground = $('<div class="preview-cover not-selectable">').append(iconBackground);
 
-            //add preview image
+            // add preview image
             if (mode) {
-                var url = api.getUrl(file, mode, options);
-                previewImage
-                    .append(
-                        $('<img>', {
-                                alt: '',
-                                'data-src': url
-                            })
-                            .addClass('img-thumbnail lazy')
-                            .one({
-                                load: function () {
-                                    //list/tile view
-                                    iconBackground.remove();
-                                    previewBackground.css('backgroundImage', 'url(' + url + ')');
-                                    //icon view
-                                    iconImage.remove();
-                                    $(this).fadeIn().removeClass('lazy');
-                                },
-                                error: iconError
-                            })
-                    );
+
+                url = api.getUrl(file, mode, options);
+                if (!baton.update) {
+                    // go for fast thumbnails (see bug 34002)
+                    url = url.replace(/format=preview_image/, 'format=thumbnail_image');
+                }
+
+                previewImage.append(
+                    $('<img alt="" class="img-thumbnail lazy">')
+                    .attr('data-src', url).data('retry', 0)
+                    .one({ load: iconLoad, error: iconError })
+                );
             }
 
             var title = file.filename || file.title;
@@ -447,67 +459,12 @@ define('io.ox/files/fluid/perspective',
                     )
                 );
             if (_.device('smartphone')) {
-                this.removeClass('selectable').find('.checkbox')
+                this.removeClass('selectable')
+
+                    .find('.checkbox')
                     .attr('data-obj-id', _.cid(file))
                     .addClass('selectable');
             }
-        }
-    });
-
-    // Mobile multi select extension points
-
-    // move
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'move',
-        index: 10,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data}),
-            var btn;
-            $(this).append($('<div class="toolbar-button">')
-                .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
-                    .append(
-                        $('<i class="fa fa-sign-in">')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data, {cssDisable: true, eventType: 'tap'});
-
-        }
-    });
-
-    // delete
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'delete',
-        index: 20,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data});
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#" data-action="io.ox/files/actions/delete">')
-                    .append(
-                        $('<i class="fa fa-trash-o">')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data,  {cssDisable: true, eventType: 'tap'});
-        }
-    });
-
-    // selection clear button
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'selectionclear',
-        index: 50,
-        draw: function (data) {
-            $(this).append($('<div class="toolbar-button" style="float:right">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-times">').on('tap', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            data.selection.clear();
-                        })
-                    )
-                )
-            );
         }
     });
 
@@ -639,12 +596,12 @@ define('io.ox/files/fluid/perspective',
                         preview.call(self, e, cid);
                 });
             } else {
-                scrollpane.on('click', '.file-cell', function (e, data) {
+                scrollpane.on('tap', '.file-cell', function (e, data) {
                     var cid = _.cid($(this).attr('data-obj-id')),
-                        //special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
                         valid = e.target.type !== 'checkbox' || data === 'automated';
                     if (valid)
                         preview.call(self, e, cid);
+                        self.selection.trigger('select', [cid]);
                 });
             }
 
@@ -669,10 +626,10 @@ define('io.ox/files/fluid/perspective',
                 filesContainer.trigger('dialog:closed');
             });
 
-            drawFile = function (file) {
+            drawFile = function (file, update) {
                 var node = $('<a>');
                 ext.point('io.ox/files/icons/file').invoke(
-                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options) })
+                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options), update: update })
                 );
                 return node;
             };
@@ -686,45 +643,46 @@ define('io.ox/files/fluid/perspective',
                 );
             };
 
+            function onScroll() {
+                /*
+                 *  How this works:
+                 *
+                 *      +--------+     0
+                 *      |        |
+                 *      |        |
+                 *      |        |
+                 *      |        |
+                 *   +--+--------+--+  scrollTop
+                 *   |  |        |  |
+                 *   |  |        |  |
+                 *   |  |        |  |  height
+                 *   |  |        |  |
+                 *   |  |        |  |
+                 *   +--+--------+--+  bottom
+                 *      |        |
+                 *      |        |
+                 *      +--------+     scrollHeight
+                 *
+                 *  If bottom and scrollHeight are near (~ 50 pixels) load new icons.
+                 *
+                 */
+                var scrollTop = wrapper.scrollTop(),
+                    scrollHeight = wrapper.prop('scrollHeight'),
+                    height = wrapper.outerHeight(),
+                    bottom = scrollTop + height;
+                // scrolled to bottom?
+                if (bottom > (scrollHeight - 50)) {
+                    start = end;
+                    end = end + layout.iconCols;
+                    if (layout.iconCols <= 3) end = end + 10;
+                    displayedRows = displayedRows + 1;
+                    redraw(allIds.slice(start, end));
+                }
+            }
+
             redraw = function (ids) {
                 drawFiles(ids);
-                wrapper.on('scroll', function () {
-                    /*
-                     *  How this works:
-                     *
-                     *      +--------+     0
-                     *      |        |
-                     *      |        |
-                     *      |        |
-                     *      |        |
-                     *   +--+--------+--+  scrollTop
-                     *   |  |        |  |
-                     *   |  |        |  |
-                     *   |  |        |  |  height
-                     *   |  |        |  |
-                     *   |  |        |  |
-                     *   +--+--------+--+  bottom
-                     *      |        |
-                     *      |        |
-                     *      +--------+     scrollHeight
-                     *
-                     *  If bottom and scrollHeight are near (~ 50 pixels) load new icons.
-                     *
-                     */
-                    var scrollTop = wrapper.scrollTop(),
-                        scrollHeight = wrapper.prop('scrollHeight'),
-                        height = wrapper.outerHeight(),
-                        bottom = scrollTop + height;
-                    // scrolled to bottom?
-                    if (bottom > (scrollHeight - 50)) {
-                        wrapper.off('scroll');
-                        start = end;
-                        end = end + layout.iconCols;
-                        if (layout.iconCols <= 3) end = end + 10;
-                        displayedRows = displayedRows + 1;
-                        redraw(allIds.slice(start, end));
-                    }
-                });
+                wrapper.off('scroll', onScroll).on('scroll', onScroll);
                 //requesting data-src and setting to src after load finised (icon view only)
                 $('img.img-thumbnail.lazy').imageloader({
                     timeout: 60000
@@ -774,13 +732,17 @@ define('io.ox/files/fluid/perspective',
                         if (layout.iconCols <= 3) { end = end + 10; }
                         var displayedIds = allIds.slice(start, end);
 
+                        redraw(displayedIds);
+
                         // provoke scrolling if not all elements are displayed
                         // if not, there is no possibility to display all elements due to our loading on demand
                         if (displayedIds < allIds) {
-                            filesContainer.css('height', parseInt(parseInt(wrapper.css('height'), 10) + 1, 10) + 'px');//one pixel to large so a scrollbar is displayed
+                            // one pixel to large so a scrollbar is displayed
+                            var height = parseInt(wrapper.css('height'), 10) + 1;
+                            filesContainer.css('height', height + 'px');
+                            // some browser don't trigger a scroll event
+                            wrapper.trigger('scroll');
                         }
-
-                        redraw(displayedIds);
 
                         self.selection.init(allIds).trigger('update', 'inital');
 
@@ -880,9 +842,7 @@ define('io.ox/files/fluid/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search search:clear', function (e) {
-                //only reload when search was executed
-                if (e.type === 'cancel-search' && !filesContainer.hasClass('searchresult')) return;
+            win.on('search:query search:cancel', function () {
                 breadcrumb = undefined;
                 allIds = [];
                 drawFirst();
@@ -899,7 +859,7 @@ define('io.ox/files/fluid/perspective',
                 if (icon.length) {
                     icon.replaceWith(
                         // draw file ...
-                        drawFile(obj)
+                        drawFile(obj, true)
                         // ... and reset lazy loader
                         .find('img.img-thumbnail.lazy').imageloader({ timeout: 60000 }).end()
                     );
@@ -907,7 +867,7 @@ define('io.ox/files/fluid/perspective',
             });
 
             api.on('refresh.all', function () {
-                if (!app.getWindow().search.active) {
+                if (!app.getWindow().facetedsearch.active) {
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},

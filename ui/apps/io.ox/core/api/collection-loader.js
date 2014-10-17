@@ -160,17 +160,29 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             this.after(offset, params, data);
         },
 
+        virtual: function () {
+            return false;
+        },
+
         fetch: function (params) {
 
-            var key = this.module + '/' + $.param(params) + '&session=' + ox.session,
-                rampup = ox.rampup[key];
+            var module = this.module,
+                key = module + '/' + $.param(params) + '&session=' + ox.session,
+                rampup = ox.rampup[key],
+                virtual = this.virtual(params);
 
             if (rampup) {
                 delete ox.rampup[key];
-                return $.Deferred().resolve(rampup);
+                return $.when(rampup);
             }
 
-            return http.GET({ module: this.module, params: params });
+            if (virtual) {
+                return $.when(virtual);
+            }
+
+            return http.wait().then(function () {
+                return http.GET({ module: module, params: params });
+            });
         },
 
         getQueryParams: function () {

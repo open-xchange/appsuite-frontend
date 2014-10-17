@@ -17,8 +17,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
      'io.ox/core/extensions',
      'io.ox/mail/mailfilter/settings/filter/form-elements',
      'io.ox/mail/mailfilter/settings/filter/defaults',
-     'io.ox/backbone/mini-views'
-    ], function (notifications, gt, ext, elements, DEFAULTS, mini) {
+     'io.ox/backbone/mini-views',
+     'io.ox/core/folder/picker'
+    ], function (notifications, gt, ext, elements, DEFAULTS, mini, picker) {
 
     'use strict';
 
@@ -91,23 +92,51 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             '$cl_10': '10'
         },
 
-        adjustRulePosition = function (models, flags) {
-            var position,
-                indicator = false;
-            _(models).each(function (model) {
+        // adjustRulePosition = function (models) {
+        //     var position, firstPos, secondPos,
+        //         posibleStaticFilters = _.last(models, 2),
+        //         getStaticFilterStatus =  function (model) {
+        //             if (model.length === 0) {
+        //                 return '0';
+        //             } else if (model.length === 1) {
+        //                 firstPos = _.isEqual(model[0].get('flags'), ['vacation']) ? _.isEqual(model[0].get('flags'), ['vacation']) : _.isEqual(model[0].get('flags'), ['autoforward']);
+        //             } else {
+        //                 firstPos = _.isEqual(model[0].get('flags'), ['vacation']) ? _.isEqual(model[0].get('flags'), ['vacation']) : _.isEqual(model[0].get('flags'), ['autoforward']);
+        //                 secondPos = _.isEqual(model[1].get('flags'), ['vacation']) ? _.isEqual(model[1].get('flags'), ['vacation']) : _.isEqual(model[1].get('flags'), ['autoforward']);
+        //             }
 
-                if (_.isEqual(model.attributes.flags, flags)) {
-                    position = model.attributes.position;
-                    indicator = true;
-                }
+        //             if (firstPos && secondPos === undefined) {
+        //                 return '3';
+        //             } else if (firstPos && secondPos) {
+        //                 return '2';
+        //             } else if (!firstPos && secondPos) {
+        //                 return '1';
+        //             } else if (!firstPos && !secondPos) {
+        //                 return '0';
+        //             }
+        //         };
+        //         switch (getStaticFilterStatus(posibleStaticFilters)) {
+        //             case '0':
+        //                 break;
+        //             case '1':
+        //                 position = posibleStaticFilters[1].attributes.position;
+        //                 posibleStaticFilters[1].attributes.position = posibleStaticFilters[1].attributes.position +1;
+        //                 break;
+        //             case '2':
+        //                 position = posibleStaticFilters[0].get('position');
+        //                 posibleStaticFilters[0].set('position', posibleStaticFilters[0].attributes.position +1);
+        //                 posibleStaticFilters[1].set('position', posibleStaticFilters[1].attributes.position +1);
+        //                 break;
+        //             case '3':
+        //                 position = posibleStaticFilters[0].attributes.position;
+        //                 posibleStaticFilters[0].attributes.position = posibleStaticFilters[0].attributes.position +1;
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
 
-                if (indicator === true) {
-                    model.attributes.position = model.attributes.position + 1;
-                }
-            });
-
-            return position;
-        },
+        //         return position;
+        // },
 
         checkForMultipleTests = function (el) {
             return $(el).find('[data-test-id]');
@@ -118,7 +147,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         renderWarningForEmptyTests = function (node) {
-            var warning = $('<div>').addClass('alert alert-warning').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
+            var warning = $('<div>').addClass('alert alert-info').text(gt('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.'));
             node.append(warning);
         },
 
@@ -195,7 +224,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onSave: function () {
                 var self = this,
-                    rulePosition,
+                    // rulePosition,
                     testsPart = this.model.get('test'),
                     actionArray = this.model.get('actioncmds'),
                     config = {
@@ -231,10 +260,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     return indicatorKey;
                 }
 
-                if (!this.model.has('id')) {
-                    rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
-                    this.model.set('position', rulePosition);
-                }
+                // if (!this.model.has('id')) {
+                //     rulePosition = adjustRulePosition(self.options.listView.collection.models);
+                //     if (rulePosition !== undefined) {
+                //         this.model.set('position', rulePosition);
+                //     }
+                // }
 
                 if (testsPart.tests) {
                     testsPart.tests = loopAndRemove(testsPart.tests);
@@ -425,52 +456,38 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onFolderSelect: function (e) {
+
                 e.preventDefault();
+
                 var self = this,
                     list = $(e.currentTarget).closest('li'),
                     type = list.attr('data-type'),
                     actionID = list.attr('data-action-id'),
                     inputField = list.find('input'),
-                    currentFolder =  self.model.get('actioncmds')[actionID].into,
+                    currentFolder =  this.model.get('actioncmds')[actionID].into,
                     actionArray =  this.model.get('actioncmds');
 
-                self.dialog.getPopup().hide();
+                this.dialog.getPopup().hide();
 
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                picker({
+                    context: 'account',
+                    done: function (id) {
 
-                    var label = gt('Select folder'),
-                        dialog = new dialogs.ModalDialog()
-                        .header($('<h4>').text(label))
-                        .addPrimaryButton('select', label, 'select', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
-                    dialog.getBody().css({ height: '250px' });
-                    var tree = new views.FolderTree(dialog.getBody(), {
-                            type: 'mail'
-                                // can a mail be moved to any folder?
-//                            rootFolderId: 'default0'
-                        });
-                    dialog.show(function () {
-                        tree.paint().done(function () {
-                            tree.select(currentFolder);
-                        });
-                    })
-                    .done(function (action) {
-                        if (action === 'select') {
-                            var value = _(tree.selection.get()).first(),
-                                prepared = prepareFolderForDisplay(value);
+                        var prepared = prepareFolderForDisplay(id);
 
-                            actionArray[actionID][type] = value;
-                            self.model.set('actioncmds', actionArray);
+                        actionArray[actionID][type] = id;
+                        self.model.set('actioncmds', actionArray);
 
-                            inputField.val(prepared);
-                            inputField.attr('title', value);
-                        }
-                        tree.destroy().done(function () {
-                            tree = dialog = null;
-                        });
+                        inputField.val(prepared);
+                        inputField.attr('title', id);
+                    },
+                    close: function () {
                         self.dialog.getPopup().show();
                         self.$el.find('[data-action-id="' + actionID + '"] .folderselect').focus();
-                    });
+                    },
+                    folder: currentFolder,
+                    module: 'mail',
+                    root: '1'
                 });
             },
 
@@ -759,7 +776,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 headlineTest, notification, listTests,
                 elements.drawOptionsExtern(gt('Add condition'), headerTranslation, {
                     test: 'create',
-                    toggle: 'dropdown'
+                    toggle: 'dropup'
                 }),
                 headlineActions, listActions,
                 elements.drawOptionsExtern(gt('Add action'), actionsTranslations, {
@@ -789,7 +806,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             var arrayOfTests = baton.model.get('test'),
                 options = {
                     target: 'id',
-                    toggle: 'dropdown',
+                    toggle: 'dropup',
                     classes: 'no-positioning',
                     caret: true
 //                    test: { nrInArray: '', target: ''  },
@@ -813,6 +830,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             var checkStopAction = function (e) {
                 var currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked'),
                     arrayOfActions = baton.model.get('actioncmds');
+
+                    baton.model.trigger('ChangeProcessSub', currentState);
 
                 function getCurrentPosition(array) {
                     var currentPosition;

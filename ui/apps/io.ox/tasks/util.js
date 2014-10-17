@@ -201,19 +201,14 @@ define('io.ox/tasks/util',
 
             //change status number to status text. format enddate to presentable string
             //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
-            interpretTask: function (task, detail) {
+            interpretTask: function (task, options) {
+                options = options || {};
                 task = _.copy(task, true);
-                if (task.status === 3) {
-                    task.status = gt('Done');
-                    task.badge = 'badge badge-success';
-
-                } else {
-
-                    if (task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date) {//no state for task over time, so manual check is needed
+                if (!options.noOverdue && (task.status !== 3 && task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {//no state for task over time, so manual check is needed
                         task.status = gt('Overdue');
                         task.badge = 'badge badge-important';
-                    } else if (detail && task.status) {
-                        switch (task.status) {
+                } else if (task.status) {
+                    switch (task.status) {
                         case 1:
                             task.status = gt('Not started');
                             task.badge = 'badge';
@@ -221,6 +216,10 @@ define('io.ox/tasks/util',
                         case 2:
                             task.status = gt('In progress');
                             task.badge = 'badge';
+                            break;
+                        case 3:
+                            task.status = gt('Done');
+                            task.badge = 'badge badge-success';
                             break;
                         case 4:
                             task.status = gt('Waiting');
@@ -231,10 +230,9 @@ define('io.ox/tasks/util',
                             task.badge = 'badge';
                             break;
                         }
-                    } else {
-                        task.status = '';
-                        task.badge = '';
-                    }
+                } else {
+                    task.status = '';
+                    task.badge = '';
                 }
 
                 if (task.title === undefined || task.title === null) {
@@ -248,7 +246,7 @@ define('io.ox/tasks/util',
                     task.end_date = '';
                 }
 
-                if (detail) {
+                if (options.detail) {
                     if (task.start_date !== undefined && task.start_date !== null) {
                         task.start_date = new date.Local(date.Local.utc(task.start_date)).format(date.DATE);
                     } else {
@@ -278,7 +276,7 @@ define('io.ox/tasks/util',
                     dateArray = [],
                     emptyDateArray = [],
                     alphabetSort = function (a, b) {//sort by alphabet
-                            if (a.title > b.title) {
+                            if (a.title.toLowerCase() > b.title.toLowerCase()) {
                                 return 1;
                             } else {
                                 return -1;
@@ -325,7 +323,7 @@ define('io.ox/tasks/util',
 
             getPriority: function (data) {
                 if (data) {
-                    var p = data.priority || 0,
+                    var p = parseInt(data.priority, 10) || 0,
                         $span = $('<span>');
                     switch (p) {
                         case 0:

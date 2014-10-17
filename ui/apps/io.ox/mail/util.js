@@ -35,12 +35,12 @@ define('io.ox/mail/util',
             return n > 1 ? p : s;
         },
 
-        fnClickPerson = function (e) {
-            e.preventDefault();
-            ext.point('io.ox/core/person:action').each(function (ext) {
-                _.call(ext.action, e.data, e);
-            });
-        },
+        // fnClickPerson = function (e) {
+        //     e.preventDefault();
+        //     ext.point('io.ox/core/person:action').each(function (ext) {
+        //         _.call(ext.action, e.data, e);
+        //     });
+        // },
 
         getDateFormated = function (timestamp, options) {
 
@@ -234,25 +234,19 @@ define('io.ox/mail/util',
         serializeList: function (data, field) {
 
             field = field || 'from';
+
             var list = data[field] || [['', '']],
                 i = 0, $i = list.length,
-                tmp = $('<div>'), obj, sender;
+                tmp = $('<div>'), obj, email, node, sender;
 
             for (; i < $i; i++) {
-                obj = {
-                    display_name: this.getDisplayName(list[i]),
-                    email1: String(list[i][1] || '').toLowerCase()
-                };
-                if (obj.email1 !== 'undisclosed-recipients:;') {
-                    $('<a>', { href: '#', title: obj.email1, tabindex: 1 })
-                        .addClass('person-link person-' + field)
-                        .text(_.noI18n(obj.display_name))
-                        .data('person', obj)
-                        .on('click', obj, fnClickPerson)
-                        .appendTo(tmp);
-                } else {
-                    $('<span>').text(_.noI18n(obj.display_name)).appendTo(tmp);
-                }
+
+                obj = { display_name: this.getDisplayName(list[i]) };
+                email = String(list[i][1] || '').toLowerCase();
+                if (email !== 'undisclosed-recipients:;') obj.email = email;
+                node = util.renderPersonalName(obj);
+                if (obj.email) node.addClass('person-link person-' + field);
+                tmp.append(node);
 
                 // add 'on behalf of'?
                 if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
@@ -337,7 +331,7 @@ define('io.ox/mail/util',
             } else {
                 dn = _.noI18n(dn);
             }
-            return $('<span class="person">').text(dn);
+            return util.renderPersonalName({ name: dn }).addClass('person');
         },
 
         /**

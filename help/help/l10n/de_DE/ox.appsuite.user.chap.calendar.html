@@ -6,12 +6,15 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="index.html" title="OX App Suite">
-<link rel="prev" href="ox.appsuite.user.sect.contacts.settings.html" title="6.9. Adressbuch-Einstellungen">
+<link rel="prev" href="ox.appsuite.user.sect.contacts.settings.html" title="6.11. Adressbuch-Einstellungen">
 <link rel="next" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Die Kalender Bestandteile">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -32,14 +35,14 @@
     <span class="phrase">Kalender</span>
     
     
+    
   </h1></div></div></div>
 <div class="toc">
 <p><b>Inhaltsverzeichnis</b></p>
 <dl class="toc">
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.gui.html">7.1 Die
-      <span class="phrase">
-        <span class="guilabel"><strong>Kalender</strong></span>
-      </span>
+      <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span></span>
+      
       
       
       Bestandteile
@@ -50,56 +53,62 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.2 Termine in der Listenansicht anzeigen</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.3 Wie werden Termine dargestellt?</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.3 Termine anlegen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.attachments.html">7.3 Termin-Anlage ansehen oder speichern</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.4 Termine anlegen</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.3.1 Neuen Termin anlegen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.3.2 Termin aus iCal-Anlage anlegen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.3.3 Termine aus Datei importieren</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.3.4 Termine aus anderen Kalendern abonnieren</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.3.5 Terminkonflikte lösen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.4.1 Neuen Termin anlegen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.4.2 Termin aus iCal-Anlage anlegen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.4.3 Termine aus Datei importieren</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.4.4 Termine aus anderen Kalendern abonnieren</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.4.5 Terminkonflikte lösen</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.4 Termineinladung beantworten</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.5 Termine verwalten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.5 Termineinladung beantworten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.6 Termine verwalten</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.5.1 Termine bearbeiten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.5.2 Termine mit Drag&amp;Drop bearbeiten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.5.3 Terminbestätigung ändern</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.5.4 Termine in einen anderen Ordner verschieben</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.5.5 Termine drucken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.5.6 Termine löschen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.5.7 Mehrere Termine gemeinsam bearbeiten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.6.1 Termine bearbeiten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.6.2 Termine mit Drag&amp;Drop bearbeiten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.6.3 Terminbestätigung ändern</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.4 Termine in einen anderen Ordner verschieben</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.5 Termine drucken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.6 Termine löschen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.7 Mehrere Termine gemeinsam bearbeiten</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.6 Termine im Team</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.search.html">7.7 Termine suchen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.8 Termine im Team</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.6.1 Termine teilen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.6.2 E-Mail an Teilnehmer senden</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.6.3 Teilnehmer zu neuem Termin einladen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.6.4 Verteilerliste aus Teilnehmern anlegen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.6.5 Termin mit mehreren Teilnehmer planen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.8.1 Termine teilen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.8.2 E-Mail an Teilnehmer senden</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.8.3 Teilnehmer zu neuem Termin einladen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.8.4 Verteilerliste aus Teilnehmern anlegen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.8.5 Termin mit mehreren Teilnehmer planen</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.7 Kalender-Einstellungen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.9 Kalender-Einstellungen</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm139924632939696"></a><a class="indexterm" name="idm139924634272944"></a><a class="indexterm" name="idm139924636066512"></a><a class="indexterm" name="idm139924633294848"></a><div class="concept">
-<a name="ox.appsuite.user.concept.calendar"></a><p>Erfahren Sie, wie Sie mit der App <span class="phrase">
-      <span class="guilabel"><strong>Kalender</strong></span>
-    </span>
+<a class="indexterm" name="idm140200308950432"></a><a class="indexterm" name="idm140200307237760"></a><a class="indexterm" name="idm140200309115184"></a><a class="indexterm" name="idm140200307152928"></a><div class="concept">
+<a name="ox.appsuite.user.concept.calendar"></a><p>Erfahren Sie, wie Sie mit der App 
+    <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span></span>
     
-     arbeiten.</p>
+    
+     
+    arbeiten.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Die<a class="link" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Die Kalender Bestandteile">
           <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span></span>
           
           
+          
           Bestandteile</a>
         </p></li>
 <li class="listitem"><p>Termine <a class="link" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Termine anzeigen">anzeigen</a></p></li>
-<li class="listitem"><p>Termine <a class="link" href="ox.appsuite.user.sect.calendar.add.html" title="7.3. Termine anlegen">anlegen</a></p></li>
-<li class="listitem"><p>Termineinladung <a class="link" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.4. Termineinladung beantworten">beantworten</a></p></li>
-<li class="listitem"><p>Termine <a class="link" href="ox.appsuite.user.sect.calendar.manage.html" title="7.5. Termine verwalten">verwalten</a></p></li>
-<li class="listitem"><p>Kalender mit anderen Nutzern <a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.6. Termine im Team">teilen</a></p></li>
-<li class="listitem"><p>Die<a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.7. Kalender-Einstellungen">
+<li class="listitem"><p>Termine <a class="link" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Termine anlegen">anlegen</a></p></li>
+<li class="listitem"><p>Termineinladung <a class="link" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.5. Termineinladung beantworten">beantworten</a></p></li>
+<li class="listitem"><p>Termine <a class="link" href="ox.appsuite.user.sect.calendar.manage.html" title="7.6. Termine verwalten">verwalten</a></p></li>
+<li class="listitem"><p>Termine <a class="link" href="ox.appsuite.user.sect.calendar.search.html" title="7.7. Termine suchen">suchen</a></p></li>
+<li class="listitem"><p>Kalender mit anderen Nutzern <a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.8. Termine im Team">teilen</a></p></li>
+<li class="listitem"><p>Die<a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.9. Kalender-Einstellungen">
           <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span></span>
+          
           
           
           Einstellungen</a> verwenden</p></li>
@@ -108,11 +117,15 @@
   </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.calendar.start"></a><p class="title"><b>So starten Sie die App <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span>:</span>
+<a name="ox.appsuite.user.task.calendar.start"></a><p class="title"><b>So starten Sie die App 
+      <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span>:</span>
+      
       
       
     </b></p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>Klicken Sie in der Menüleiste auf <span class="phrase"><span class="guimenu"><strong>Kalender</strong></span>.</span>
+<div class="procedure"><ul class="procedure"><li class="step"><p>Klicken Sie in der Menüleiste auf 
+          <span class="phrase"><span class="guimenu"><strong>Kalender</strong></span>.</span>
+          
           
           
         </p></li></ul></div>

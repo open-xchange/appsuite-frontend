@@ -227,7 +227,7 @@
     }
 
     /* Mobile */
-    @media all and (max-device-width: 480px)  {
+    @media (device-width: 480px), (max-device-width: 480px)  {
 
         .toolbar {
 
@@ -256,7 +256,7 @@
         .scrollpane {
 
             -webkit-user-select: none;
-            top: @calendar-toolbar-height + 26;
+            top: 33px;
 
             .week {
 
@@ -309,7 +309,7 @@
                     }
 
                     .list {
-                        top: auto;
+                        top: 50%;
                         font-size: 12px;
                         text-align: center;
                         color: @link-color;

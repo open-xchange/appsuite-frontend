@@ -37,7 +37,7 @@ define('io.ox/mail/write/inline-images',
                 return http.FORM({
                     module: 'file',
                     form: data.form,
-                    params: { action: 'new', module: 'mail', type: 'image' }
+                    params: { module: 'mail', type: 'image' }
                 });
             }
         },
@@ -84,7 +84,8 @@ define('io.ox/mail/write/inline-images',
     return {
         api: api,
         show: function () {
-            var dialog = new dialogs.ModalDialog({async: true}),
+            var noBusy = (_.browser.IE && _.browser.IE < 10),//IE9 upload fails if window becomes busy
+                dialog = new dialogs.ModalDialog({async: true, noBusy: noBusy}),
                 baton =  new ext.Baton({$: {}}),
                 def = $.Deferred(),
                 form;
@@ -112,7 +113,9 @@ define('io.ox/mail/write/inline-images',
                         popup.idle();
                     };
 
-                popup.busy();
+                    if (!noBusy) {
+                        popup.busy();
+                    }
 
                 if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));

@@ -18,7 +18,7 @@ define('io.ox/calendar/util',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/util'
     ], function (date, gt, settings, userAPI, contactAPI, groupAPI, folderAPI, util) {
 
@@ -74,7 +74,7 @@ define('io.ox/calendar/util',
                 if (opt.folderData) {
                     return $.Deferred().resolve(check(opt.folderData));
                 } else {
-                    return folderAPI.get({ folder: opt.app.folder_id }).then(function (data) {
+                    return folderAPI.get(opt.app.folder_id).then(function (data) {
                         return check(data);
                     });
                 }
@@ -137,7 +137,8 @@ define('io.ox/calendar/util',
                 showDate = showDate || false,
                 weekStart = this.floor(now.getTime(), 'week'),
                 diff = 0,
-                diffWeek = 0;
+                diffWeek = 0,
+                lastSunday;
 
             // normalize
             d.setHours(0, 0, 0, 0);
@@ -149,9 +150,12 @@ define('io.ox/calendar/util',
 
             // past?
             if (diff < 0) {
+                // handle last sunday on next sunday
+                lastSunday = (diffWeek === -7 * date.DAY && now.t === weekStart);
+
                 if (diff >= -1 * date.DAY) {
                     return gt('Yesterday');
-                } else if (diffWeek > -7 * date.DAY) {
+                } else if (diffWeek > -7 * date.DAY || lastSunday) {
                     return gt('Last Week');
                 }
             } else {
@@ -326,16 +330,17 @@ define('io.ox/calendar/util',
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data))),
                 $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
-                    title: that.getTimeInterval(data) + ' ' + current.abbr,
+                    container: '#io-ox-core',
                     content: getContent(),
                     html: true,
-                    trigger: 'hover',
                     placement: function (tip) {
                         // add missing outer class
                         $(tip).addClass('timezones');
                         // get placement
                         return 'left';
-                    }
+                    },
+                    title: that.getTimeInterval(data) + ' ' + current.abbr,
+                    trigger: 'hover'
                 }).on('blur', function () {
                     $(this).popover('hide');
                 })
@@ -355,7 +360,7 @@ define('io.ox/calendar/util',
                             // must use outer DIV with "clear: both" here for proper layout in firefox
                             div.append($('<li>').append(
                                 $('<span>')
-                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
+                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, '').replace(/_/g, ' '))),
                                 $('<span>')
                                     .addClass('label label-info')
                                     .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),

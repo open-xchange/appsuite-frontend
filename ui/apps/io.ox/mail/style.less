@@ -14,9 +14,6 @@
 /* definitions */
 @icon-size: 18px;
 @unread-toggle-width: 40px;
-@toolbar-line-height: 24px;
-@toolbar-vertical-padding: 10px;
-@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
 
 /* phone */
 @phone-font-size: 14px;
@@ -40,7 +37,6 @@
     .select-all {
         color: #555;
         cursor: pointer;
-        outline: 0;
         i {
             color: #ccc;
             margin-right: 14px;
@@ -76,7 +72,7 @@
 }
 
 .preview-bottom {
-    .leftside { left: 0; right: 0; bottom: auto; width: auto !important; height: 45%; border-bottom: 1px solid #ccc;  z-index: 2; }
+    .leftside { left: 0; right: 0; bottom: auto; width: auto !important; height: 45%; border-bottom: 1px solid #ccc;  z-index: 2; overflow: visible; }
     .rightside { left: 0 !important; right: 0; top: 45%; z-index: 1; }
     // horizontal resizebar
     .list-view-control .resizebar {
@@ -132,8 +128,8 @@
     &.column-1 { width: @icon-width; text-align: center; }
     &.column-2 { width: @icon-width; text-align: center; }
     &.column-3 { width: @icon-width; text-align: center; }
-    &.column-4 { width: 35%; }
-    &.column-5 { width: 55%; }
+    &.column-4 { width: 35%; padding-right: 10px; }
+    &.column-5 { width: 55%; padding-right: 10px; }
     &.column-6 { width: 140px; text-align: right; }
 }
 
@@ -255,7 +251,7 @@
 .mail-detail {
     section.body {
         margin: 0;
-        padding: 10px 20px 20px 20px;
+        padding: 20px;
         background-color: #fff;
         display: none;
         width: 100%;
@@ -266,13 +262,10 @@
         }
     }
     section.attachments {
-        margin-bottom: 10px;
         display: none;
     }
     section.notifications {
         display: none;
-        margin: 14px 0;
-        &:empty { margin: 0; }
     }
 
     &.expanded {
@@ -298,6 +291,7 @@
     }
     .thread-view-control, .thread-view-list {
         position: static;
+        min-height: 100%;
     }
 }
 
@@ -343,7 +337,6 @@
         html.high-contrast & {
             opacity: 1;
         }
-
     }
 
     .size {
@@ -351,14 +344,17 @@
     }
 
     .actions {
-        margin-left: 14px;
-
+        font-size: 14px;
+        a {
+        	padding-left: 14px;
+        }
     }
 
-    div.subject {
+    @item-line-height: 21px;
 
-        .fontWeight(300);
-        line-height: 21px; // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
+    .list-item-content {
+
+        line-height: @item-line-height; // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
         .ellipsis();
 
         i {
@@ -372,24 +368,37 @@
         i.icon-unread { color: @link-color; }
         i.icon-answered { color: #aaa; }
         i.icon-forwarded { color: #888; }
+
+        .subject {
+            .fontWeight(300);
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .drag-title {
+            opacity: 0.70;
+        }
+
+        i.flag {
+            font-size: 18px;
+            padding: 0;
+            margin: 0 0 0 7px;
+            float: right;
+        }
     }
 
     &.visible-selection.has-focus .list-item.selected i {
-        color: rgba(255, 255, 255, 0.50);
+        opacity: 0.9;
+        &:not(.flag) {
+            color: rgba(255, 255, 255, 0.50);
+        }
     }
 
     .fa-paperclip.has-attachments {
         font-size: @icon-size;
         width: 18px;
         height: 18px;
-        margin-left: 7px;
-        float: right;
-    }
-
-    .flag {
-        font-size: 18px;
-        padding: 0;
-        margin-left: 7px;
+        margin: 0 0 0 7px;
         float: right;
     }
 
@@ -410,8 +419,9 @@
 
     .box() {
         color: #888;
+        line-height: @item-line-height - 2;
         padding: 0 7px;
-        margin-left: 7px;
+        margin: 0 0 0 7px;
         display: inline-block;
         float: right;
         overflow: visible;
@@ -461,9 +471,30 @@
     }
 
     .attachments {
-        padding: 19px 20px 19px 20px;
+        padding: 14px 20px;
         border-top: 1px solid #eee;
         border-bottom: 1px solid #eee;
+        .io-ox-inline-links {
+            display: inline;
+            font-family: @normal-font-family;
+            font-size: 13px;
+            margin-left: 1em;
+            a:hover {
+                text-decoration: underline;
+            }
+            li { margin-right: 14px; }
+        }
+        .preview .item .io-ox-core-tk-attachment {
+
+            > a {
+                color: @white;
+            }
+
+        }
+        .fa-paperclip {
+            font-size: 16px;
+            color: @link-color;
+        }
     }
 
     .attachment-list {
@@ -476,12 +507,6 @@
             font-size: 16px;
             color: @link-color;
         }
-        .io-ox-inline-links {
-            display: inline;
-            font-family: @normal-font-family;
-            font-size: 13px;
-            li { margin-right: 14px; }
-        }
     }
 
     .attachment-preview {
@@ -493,6 +518,7 @@
         height: 120px;
         overflow-y: hidden;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
 
         li {
             margin: 0 1px 0 0;
@@ -781,7 +807,7 @@ textarea.inplace-editor {
         .ellipsis();
         span.person {
             color: inherit;
-            .fontWeight(500);
+            .fontWeight(bold);
         }
     }
 }
@@ -942,7 +968,7 @@ textarea.inplace-editor {
     }
 
     .from .person-link.person-from {
-        .fontWeight(500);
+        .fontWeight(bold);
         color: black;
     }
 
@@ -1143,7 +1169,7 @@ textarea.inplace-editor {
 
     .detail-view-header {
         .fontWeight(300);
-        padding: 14px @header-padding;
+        padding: 14px (@header-padding + 1);
         padding-left: @picture-padding + @unread-toggle-width;
     }
 
@@ -1154,6 +1180,17 @@ textarea.inplace-editor {
 
     .notifications {
         cursor: default;
+    }
+
+    .notification-item {
+        padding: 14px 40px 14px 20px;
+        background-color: #f0f0f0;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .notification-item + .notification-item {
+        border-top: none;
     }
 
     .alert, .well {
@@ -1237,6 +1274,12 @@ textarea.inplace-editor {
 
         a {
             word-break: break-word; // fix long links
+            text-decoration: none;
+            color: inherit;
+            &:hover { color: inherit; }
+        }
+
+        a[href] {
             color: #007dbc; // not @linkColor!
             text-decoration: underline;
             &:hover { color: #08c; }
@@ -1246,9 +1289,9 @@ textarea.inplace-editor {
 
         img {
 
-            // TODO: Remove width:auto for correct styling of mail-chimp mails
-            // Leaving this for now, needs testing!
-            width: auto;
+            // width: auto;
+            // Commented this out on 29.8.14. Seems this is a relict from Bootstrap 2.x.
+            // As we are now on 3.0 and Bootstrap added a new image-responsive class we do not have to reset this here
 
             max-width: 10000px;
             vertical-align: middle;
@@ -1277,7 +1320,7 @@ textarea.inplace-editor {
             margin: 10px 0 10px 25px;
         }
 
-        ul { list-style-type: disc; }
+        ul { list-style-type: disc; }
         ul ul { list-style-type: circle; }
         ul ul ul { list-style-type: square; }
 
@@ -1446,15 +1489,33 @@ h4.mail-attachment-preview {
 @media (max-width: 480px), (max-device-width: 480px)  {
 
     .thread-view-list {
-
         padding: 0;
-
         & > h1 {
-            font-size: 16px;
+            font-size: @phone-font-size + 2;
         }
-
+        .thread-view {
+            header {
+                border-bottom: 1px solid #ccc;
+            }
+        }
     }
 
+    .mail-item.unread .unread-toggle {
+        display: inline-block;
+        position: relative;
+        left: -35px;
+        bottom: 22px;
+    }
+
+    .mail-item .unread-toggle {
+        display: none;
+        width: auto;
+        height: auto;
+    }
+    .mail-item .attachments .io-ox-inline-links {
+        font-size: @phone-font-size;
+        margin-left: 0;
+    }
     .mail-detail {
 
         list-style-type: none;
@@ -1465,7 +1526,7 @@ h4.mail-attachment-preview {
         }
 
         .subject {
-            font-size: 14px;
+            font-size: @phone-font-size;
             padding: 10px 20px;
         }
 
@@ -1476,11 +1537,28 @@ h4.mail-attachment-preview {
             }
         }
 
-        .unread-toggle {
-            left: 0px;
+        .attachments {
+            border-bottom-width: 0;
+        }
+
+        .mail-attachment-list .ul.inline-items li.item {
+            line-height: 35px;
+            .file a {
+                color: @link-color;
+            }
+        }
+        .mail-attachment-list {
+            .toggle-details {
+                display: block;
+            }
+        }
+
+        section.attachments {
+            margin-bottom: 0;
         }
 
         section.body {
+            border-top: 1px solid #ccc;
             margin-bottom: @toolbar-height;
             padding: 10px;
         }
@@ -1490,16 +1568,12 @@ h4.mail-attachment-preview {
         }
 
         .subject {
-            font-size: 16px;
+            font-size: 15px;
             padding: 10px 0 0 0;
         }
 
-        header {
-
-            border-bottom: 1px solid #ccc;
-
+        & > header {
             &.mobile-detail-view-mail {
-
                 .date {
                     margin-left: 0;
                     display: inline-block;
@@ -1510,21 +1584,20 @@ h4.mail-attachment-preview {
                     display: inline-block;
                     float: none;
                     position: absolute;
-                    right: 10px;
+                    right: 20px;
                 }
-
             }
-
         }
-
     }
 
     .thread-view.list-view {
-
         .list-item {
             margin-bottom: 0px;
         }
+    }
 
+    .io-ox-sidepopup-pane .mail-detail.no-padding .detail-view-header {
+        padding-left: 0px;
     }
 
     .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail {

@@ -16,7 +16,7 @@ define('io.ox/core/pubsub/publications',
      'io.ox/core/extensions',
      'io.ox/core/api/pubsub',
      'io.ox/core/api/templating',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/core',
@@ -190,7 +190,7 @@ define('io.ox/core/pubsub/publications',
                     baton.templates = data;
                     ext.point('io.ox/core/pubsub/publications/dialog').invoke('draw', popup.getBody(), baton);
                     // get folder first to have its name
-                    folderAPI.get({ folder: baton.model.get('entity').folder }).then(
+                    folderAPI.get(baton.model.get('entity').folder).then(
                         function success(data) {
                             var target = baton.model.get('target'),
                                 description = baton.model.get(target);
@@ -336,7 +336,7 @@ define('io.ox/core/pubsub/publications',
     });
 
     function sendInvitation(baton) {
-        return require(['io.ox/mail/write/main', 'io.ox/contacts/util', 'io.ox/core/api/user']).then(function (m, util, userAPI) {
+        return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (util, userAPI) {
                 userAPI.getCurrentUser().then(function (user) {
                     //predefined data for mail
                     var url = baton.target.url,
@@ -358,9 +358,7 @@ define('io.ox/core/pubsub/publications',
                             }
                         } || {};
                     // use default email dialog
-                    return m.getApp().launch().then(function () {
-                        return this.compose(data);
-                    });
+                    return ox.registry.call('mail-compose', 'compose', data);
                 });
             });
     }

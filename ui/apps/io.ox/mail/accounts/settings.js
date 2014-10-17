@@ -32,7 +32,7 @@ define('io.ox/mail/accounts/settings',
         myView = new AccountDetailView({model: myModel, node: myViewNode});
 
         myView.dialog = new dialogs.ModalDialog({
-            width: 600,
+            width: 700,
             async: true
         });
         //TOOD: hack to avoid horizontal scrollbar
@@ -182,30 +182,31 @@ define('io.ox/mail/accounts/settings',
         },
 
         validateMailaccount = function (data, popup, def) {
-            var deferedSave = $.Deferred();
 
-            myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
-                function success(response) {
+            myModel.validationCheck(data, { ignoreInvalidTransport: true }).then(
+                function success(response, responseobject) {
                     if (response === true) {
-                        myModel.save(data, deferedSave);
-                        deferedSave.done(function (response) {
-                            if (response.error_id) {
+                        myModel.save(data).then(
+                            function saveSuccess(response) {
+                                if (response.error_id) {
+                                    popup.close();
+                                    failDialog(response.error);
+                                } else {
+                                    popup.close();
+                                    if (collection) {
+                                        collection.add([response]);
+                                    }
+                                    successDialog();
+                                    def.resolve(response);
+                                }
+                            },
+                            function saveFail(response) {
                                 popup.close();
                                 failDialog(response.error);
-                            } else {
-                                popup.close();
-                                if (collection) {
-                                    collection.add([response]);
-                                }
-                                successDialog();
-                                def.resolve(response);
                             }
-                        }).fail(function (response) {
-                            popup.close();
-                            failDialog(response.error);
-                        });
+                        );
                     } else {
-                        var message = gt('There was no suitable server found for this mail/password combination');
+                        var message = responseobject.error ? responseobject.error : gt('There was no suitable server found for this mail/password combination');
                         drawAlert(getAlertPlaceholder(popup), message);
                         popup.idle();
                         popup.getBody().find('a.close').focus();

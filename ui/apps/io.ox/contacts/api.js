@@ -17,12 +17,11 @@ define('io.ox/contacts/api',
      'io.ox/core/api/factory',
      'io.ox/core/notifications',
      'io.ox/core/cache',
-     'io.ox/core/api/user',
      'io.ox/contacts/util',
      'l10n/ja_JP/io.ox/collation',
      'settings!io.ox/contacts',
      'io.ox/core/date'
-    ], function (ext, http, apiFactory, notifications, cache, userApi, util, collation, settings, date) {
+    ], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date) {
 
     'use strict';
 
@@ -244,11 +243,19 @@ define('io.ox/contacts/api',
      * @returns defered
      */
     function clearUserApiCache(data) {
-        return $.when(
-            userApi.caches.get.remove({ id: data.user_id }),
-            userApi.caches.all.clear(),
-            userApi.caches.list.remove({ id: data.user_id })
-        );
+        var def = $.Deferred();
+        require(['io.ox/core/api/user'], function (userApi) {
+            $.when(
+                    userApi.caches.get.remove({ id: data.user_id }),
+                    userApi.caches.all.clear(),
+                    userApi.caches.list.remove({ id: data.user_id })
+                ).pipe(function () {
+                    def.resolve();
+                }, function () {
+                    def.reject();
+                });
+        });
+        return def;
     }
 
     /**
@@ -513,7 +520,7 @@ define('io.ox/contacts/api',
     * @param  {string} address (emailaddress)
     * @return {deferred} returns exactyl one contact object
     */
-    api.getByEmailadress = function (address) {
+    api.getByEmailaddress = function (address) {
 
         address = address || '';
 
@@ -573,134 +580,143 @@ define('io.ox/contacts/api',
         });
     };
 
-    // local hash to recognize URLs that have been fetched already
-    var cachesURLs = {}, uniq = ox.t0;
+    api.pictureHalo = (function () {
 
-    // update uniq on picture change
-    api.on('update:image', function () {
-        uniq = _.now();
-    });
+        // local hash to recognize URLs that have been fetched already
+        var cachesURLs = {},
+            uniq = ox.t0,
+            fallback = ox.base + '/apps/themes/default/dummypicture.png';
 
-    // node is optional. if missing function returns just the URL
-    api.pictureHalo = function (/* [node], options */) {
+        // update uniq on picture change
+        api.on('update:image', function () {
+            uniq = _.now();
+        });
 
-        var args = _(arguments).toArray(), node, options, params, fallback, url;
-
-        // use copy of data object because of delete-statements
-        if (args.length === 1) {
-            options = _.clone(args[0]);
-        } else {
-            node = args[0];
-            options = _.clone(args[1]);
+        function load(node, url, options) {
+            var hideOnFallback = options.hideOnFallback || false;
+            _.defer(function () {
+                // use lazyload?
+                var scrollpane = node.closest('.scrollpane');
+                if (scrollpane.length) {
+                    node.attr('data-original', url).lazyload({
+                        container: scrollpane,
+                        effect: 'show',
+                        error: function () {
+                            node.css('background-image', 'url(' + fallback + ')');
+                            if (hideOnFallback) node.hide();
+                            node = scrollpane = null;
+                        },
+                        load: function (elements_left, settings, image) {
+                            if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
+                            else cachesURLs[url] = url;
+                            node = scrollpane = null;
+                        }
+                    });
+                } else {
+                    $(new Image()).one('load error', function (e) {
+                        var fail = this.width === 1 || e.type === 'error';
+                        if (!fail) cachesURLs[url] = url;
+                        if (fail && hideOnFallback) node.hide();
+                        node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                        node = null;
+                    })
+                    .attr('src', url);
+                }
+            });
+            return node;
         }
 
-        // duck checks
-        if (api.looksLikeResource(options)) {
+        // node is optional. if missing function returns just the URL
+        return function (/* [node], options */) {
 
-            url = ox.base + '/apps/themes/default/dummypicture_resource.png';
+            var args = _(arguments).toArray(), node, options, params, url;
 
-        } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+            // use copy of data object because of delete-statements
+            if (args.length === 1) {
+                options = _.clone(args[0]);
+            } else {
+                node = args[0];
+                options = _.clone(args[1]);
+            }
 
-            url = ox.base + '/apps/themes/default/dummypicture_group.png';
+            // duck checks
+            if (api.looksLikeResource(options)) {
 
-        } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+                url = ox.base + '/apps/themes/default/dummypicture_resource.png';
 
+            } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+
+                url = ox.base + '/apps/themes/default/dummypicture_group.png';
+
+            } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+
+                params = $.extend({}, {
+                    // scale
+                    width: options.width,
+                    height: options.height,
+                    scaleType: options.scaleType
+                });
+                url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+
+            } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
+                url = fallback;
+            }
+
+            // already done?
+            if (url) return node ? load(node, url, options) : url;
+
+            // preference; internal_userid must not be undefined, null, or zero
+            if (options.internal_userid || options.userid || options.user_id) {
+                delete options.contact_id;
+                delete options.folder_id;
+                delete options.folder;
+                delete options.id;
+            } else {
+                delete options.internal_userid;
+                delete options.userid;
+                delete options.user_id;
+            }
+
+            // empty extend trick to restrict to non-undefined values
             params = $.extend({}, {
+                // identifier
+                email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
+                folder: options.folder_id || options.folder,
+                id: options.contact_id || options.id,
+                internal_userid: options.internal_userid || options.userid || options.user_id,
                 // scale
                 width: options.width,
                 height: options.height,
-                scaleType: options.scaleType
+                scaleType: options.scaleType,
+                uniq: uniq
             });
-            url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
-        }
-        else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
-            url = fallback;
-        }
-        else if (_.device('phantomjs')) {
-            url = fallback;
-        }
-
-        // already done?
-        if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
-
-        // preference; internal_userid must not be undefined, null, or zero
-        if (options.internal_userid || options.userid || options.user_id) {
-            delete options.contact_id;
-            delete options.folder_id;
-            delete options.folder;
-            delete options.id;
-        } else {
-            delete options.internal_userid;
-            delete options.userid;
-            delete options.user_id;
-        }
-
-        // empty extend trick to restrict to non-undefined values
-        params = $.extend({}, {
-            // identifier
-            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
-            folder: options.folder_id || options.folder,
-            id: options.contact_id || options.id,
-            internal_userid: options.internal_userid || options.userid || options.user_id,
-            // scale
-            width: options.width,
-            height: options.height,
-            scaleType: options.scaleType,
-            uniq: uniq
-        });
-        // remove options
-        options = null;
-
-        // remove empty values
-        for (var k in params) {
-            if (params.hasOwnProperty(k) && !params[k]) {
-                delete params[k];
+            // remove empty values
+            for (var k in params) {
+                if (params.hasOwnProperty(k) && !params[k]) {
+                    delete params[k];
+                }
             }
-        }
 
-        fallback = ox.base + '/apps/themes/default/dummypicture.png';
-        url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
+            url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
 
-        // just return URL
-        if (!node) return url;
+            // just return URL
+            if (!node) return url;
 
-        // cached?
-        if (cachesURLs[url]) {
-            return node.css('background-image', 'url(' + cachesURLs[url] + ')');
-        }
-
-        // load image
-        _.defer(function () {
-            // use lazyload?
-            var scrollpane = node.closest('.scrollpane');
-            if (scrollpane.length) {
-                node.attr('data-original', url).lazyload({
-                    container: scrollpane,
-                    effect: 'show',
-                    error: function () {
-                        node.css('background-image', 'url(' + fallback + ')');
-                        node = scrollpane = null;
-                    },
-                    load: function (elements_left, settings, image) {
-                        if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
-                        else cachesURLs[url] = url;
-                        node = scrollpane = null;
-                    }
-                });
-            } else {
-                $(new Image()).one('load error', function (e) {
-                    var fail = this.width === 1 || e.type === 'error';
-                    if (!fail) cachesURLs[url] = url;
-                    node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-                    node = null;
-                })
-                .attr('src', url);
+            // cached?
+            if (cachesURLs[url]) {
+                return node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
-        });
 
-        return node;
-    };
+            load(node, url, options);
+
+            // remove options
+            options = null;
+
+            return node;
+        };
+
+    }());
 
     /**
     * get div node with callbacks managing fetching/updating
@@ -763,15 +779,15 @@ define('io.ox/contacts/api',
         if (data && data.full_name) {
             cont(data.full_name);
             clear();
-
+        }
         // looks like a full object?
-        } else if (data && (data.last_name || data.first_name)) {
+        else if (data && (data.last_name || data.first_name)) {
             cont(data);
             clear();
-
+        }
         // load data
-        } else {
-            api.getByEmailadress(data.email).done(cont).fail(clear);
+        else {
+            api.getByEmailaddress(data.email).done(cont).fail(clear);
         }
 
         return node;
@@ -924,6 +940,115 @@ define('io.ox/contacts/api',
         //trigger refresh
         api.trigger('update:' + key);
     };
+
+    //
+    // Simple auto-complete search
+    // that supports client-side lookups on former queries
+    //
+    api.autocomplete = (function () {
+
+        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)), // should be >= 1!
+            // use these fields for local lookups
+            fields = 'display_name email1 email2 email3 first_name last_name'.split(' ');
+
+        // check for minimum length
+        function hasMinLength(str) {
+            return str.length >= minLength;
+        }
+
+        // hash key: it's the first word in a query that matches the minimum length
+        function getHashKey(query) {
+            return (_(query.split(' ')).find(hasMinLength) || '').substr(0, minLength);
+        }
+
+        // get from local cache
+        function get(query) {
+
+            var key = getHashKey(query), def = search.cache[key], words = query.split(' ');
+
+            if (!def) return; // cache miss
+
+            // local lookup:
+            return def.then(function (data) {
+                return _(data).filter(function (item) {
+                    return _(words).every(function (word) {
+                        return _(item.fulltext).some(function (str) {
+                            return str.indexOf(word) === 0; // server also uses startsWith() / not contains()
+                        });
+                    });
+                });
+            });
+        }
+
+        // add to cache
+        function add(query, def) {
+            var key = getHashKey(query);
+            search.cache[key] = def.then(function (data) {
+                return _(data).map(function (item) {
+                    // prepare simple array for fast lookups
+                    item.fulltext = _(fields).map(function (id) {
+                        return String(item[id] || '').toLowerCase();
+                    });
+                    // avoid useless lookups by removing empty strings
+                    item.fulltext = _(item.fulltext).compact();
+                    return item;
+                });
+            });
+        }
+
+        function search(query, options) {
+
+            // always work with trimmed lower-case variant
+            query = $.trim(query).toLowerCase();
+
+            // default: standard columns plus cell phone for MSISDN support
+            var columns = '1,2,5,20,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,551,552';
+            options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true }, options);
+
+            // try local cache
+            var cache = options.cache && get(query);
+            if (cache) return cache;
+
+            // add query to cache
+            add(query, http.GET({
+                module: 'contacts',
+                params: {
+                    action: 'autocomplete',
+                    query: getHashKey(query), // we just look for the shortest word
+                    admin: options.admin,
+                    email: options.email,
+                    sort: options.sort,
+                    columns: options.columns
+                }
+            }));
+
+            // use local lookup! first query might exceed minimum length
+            return get(query);
+        }
+
+        // export cache for debugging/clearing
+        search.cache = {};
+
+        // use this to debug bad results:
+        // search.inspect = function () {
+        //     var pairs = _(search.cache).pairs();
+        //     $.when.apply($, _(pairs).pluck(1)).then(function () {
+        //         var result = {};
+        //         _(arguments).each(function (data, index) {
+        //             result[pairs[index][0]] = data;
+        //         });
+        //         console.log('Inspect', result);
+        //     });
+        // };
+
+        return search;
+
+    }());
+
+    // clear update cache whenever a contact is added, changed, or removed
+    api.on('create update delete', function () {
+        api.autocomplete.cache = {};
+    });
 
     return api;
 });

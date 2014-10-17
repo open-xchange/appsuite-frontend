@@ -86,6 +86,23 @@ define.async('plugins/halo/api',
 
             return provider ? investigationMap[provider] : investigationMap;
         };
+
+        this.refreshServices = function () {
+            return http.GET({
+                module: 'halo/contact',
+                params: {
+                    action: 'services'
+                }
+            })
+            .pipe(function (list) {
+                // TODO: remove; temp.fix for sequence
+                list = _(list).without('com.openexchange.halo.contacts');
+                list.unshift('com.openexchange.halo.contacts');
+                activeProviders = list;
+                // publish api!
+                return api;
+            });
+        };
     }
 
     function HaloView() {

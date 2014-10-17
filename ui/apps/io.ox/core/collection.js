@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/collection', ['io.ox/core/api/folder'], function (api) {
+define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
     'use strict';
 
@@ -20,7 +20,7 @@ define('io.ox/core/collection', ['io.ox/core/api/folder'], function (api) {
         // helper
         getRight = function (folder, owner, offset) {
             // get bits
-            var bits = api.derive.bits(folder, offset);
+            var bits = api.bits(folder, offset);
             // check
             if (bits === 0) {
                 // no permissions
@@ -58,8 +58,8 @@ define('io.ox/core/collection', ['io.ox/core/api/folder'], function (api) {
                 },
 
                 // get all folders first
-                folders = _.chain(collection)
-                    .map(getFolderId).compact().uniq().value();
+                folders = _.chain(collection).map(getFolderId).compact().uniq().value();
+
             // mail specific: toplevel? (in contrast to nested mails)
             props.toplevel = _(collection).reduce(function (memo, item) {
                 // nested mails don't have a folder_id but a filename
@@ -72,8 +72,8 @@ define('io.ox/core/collection', ['io.ox/core/api/folder'], function (api) {
                 return $.Deferred().resolve(props);
             }
 
-            return api.get({ folder: folders }).pipe(function (hash) {
-                var i = 0, item = null, folder = null;
+            return api.multiple(folders).then(function (array) {
+                var i = 0, item = null, folder = null, hash = _.toHash(array, 'id');
                 for (; i < $l; i++) {
                     item = collection[i];
                     if ((folder = hash[getFolderId(item)])) {

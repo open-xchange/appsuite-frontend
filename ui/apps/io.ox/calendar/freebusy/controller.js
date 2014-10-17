@@ -15,7 +15,7 @@ define('io.ox/calendar/freebusy/controller',
     ['io.ox/core/tk/dialogs',
      'io.ox/calendar/week/view',
      'io.ox/calendar/freebusy/templates',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/participants/model',
      'io.ox/participants/views',
@@ -88,7 +88,6 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.onCreate = function (e, data) {
-                console.log('huhu onCreate', data);
                 data = {
                     start_date: data.start_date,
                     end_date: data.end_date,
@@ -266,8 +265,7 @@ define('io.ox/calendar/freebusy/controller',
                     keyboard: false,
                     mode: mode,
                     refDate: refDate,
-                    showFulltime: false,
-                    todayClass: ''
+                    showFulltime: false
                 });
 
                 currentMode = mode;
@@ -419,17 +417,20 @@ define('io.ox/calendar/freebusy/controller',
                 state.resolve(action);
             }
 
+            var drop;
+
             this.$el.append(
                 templates.getHeadline(standalone),
                 this.autoCompleteControls,
                 templates.getParticipantsScrollpane().append(this.participantsView),
                 !standalone ? templates.getBackControl() : templates.getQuitControl(),
                 templates.getControls().append(
-                    templates.getIntervalDropdown().on('click', 'li a', changeView),
+                    drop = templates.getIntervalDropdown().on('click', 'li a', changeView),
                     templates.getPopover(standalone)
                 )
             )
             .on('click', '.close-control a', clickButton);
+            drop.find('a.dropdown-toggle').dropdown();
         },
 
         getInstance: function (options, callback) {
@@ -437,7 +438,7 @@ define('io.ox/calendar/freebusy/controller',
             var freebusy = new that.FreeBusy(options);
             options.$el.append(freebusy.$el);
 
-            folderAPI.get({ folder: options.folder }).always(function (data) {
+            folderAPI.get(options.folder).always(function (data) {
                 // pass folder data over to view (needs this for permission checks)
                 // use fallback data on error
                 var fallback = { folder_id: 1, id: settings.get('folder/calendar'), own_rights: 403710016 };

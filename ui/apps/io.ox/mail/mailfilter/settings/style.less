@@ -1,10 +1,35 @@
-.io-ox-mailfilter-settings {
+.io-ox-settings-main .window-content .rightside .scrollable-pane .io-ox-mailfilter-settings {
 
     .controls {
         padding: 13px;
         height: 30px;
         margin-bottom: 13px;
     }
+
+    li.widget-settings-view.draggable {
+        padding-right: 85px;
+    }
+
+    .widget-controls {
+
+        a[data-action="toogleProcessSub"] {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 45px;
+            width: 45px;
+            cursor: pointer;
+
+            i {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -7px 0 0 -6px;
+            }
+        }
+
+    }
+
 }
 
 .io-ox-mailfilter-edit {
@@ -62,8 +87,21 @@
         .rightalign {
             text-align: right;
 
+            .flag-dropdown {
+
+                 .dropdown-menu {
+                    text-align: left;
+                    right: 207px;
+                    top: -272px;
+                    position: relative;
+                 }
+
+            }
+            
             .dropdown-menu {
                 text-align: left;
+                left: auto;
+                right: -2px;
             }
 
         }
@@ -89,7 +127,7 @@
         font: 14px/20 @normal-font-family;
         right: -2px;
         left: auto;
-        top: 125%;
+        // top: 125%;
         width: 200px;
     }
 
@@ -140,6 +178,15 @@
             left: 50%;
             margin: -7px 0 0 -6px;
             color: #aaa;
+        }
+    }
+
+    .line {
+        margin-top: 25px;
+        margin-bottom: 20px;
+
+        .dropdown-toggle {
+            padding-top: 0;
         }
     }
 

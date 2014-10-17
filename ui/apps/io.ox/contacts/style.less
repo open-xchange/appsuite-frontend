@@ -51,7 +51,6 @@
             text-align: left;
             font-weight: 300;
             font-size: 21px;
-            line-height: 28px;
             color: @link-color;
             padding-top: 14px;
             padding-bottom: 7px;
@@ -150,6 +149,10 @@
             font-size: 24px;
             line-height: 28px;
             margin: 0;
+
+            &.header-name {
+                word-break: break-all;
+            }
         }
 
         h2 {
@@ -165,6 +168,7 @@
             &.header-job {
                 color: @hc-gray;
                 margin: 0 0 14px 0;
+                word-break: break-all;
             }
 
         }
@@ -247,7 +251,7 @@
 
             dd {
                 margin-left: 160px;
-                word-wrap: break-word;
+                word-break: break-all;
             }
         }
     }
@@ -295,7 +299,12 @@
 
 // smartphone
 @media (max-width: 480px), (max-device-width: 480px) {
-
+    .io-ox-contacts-window {
+        .vgrid.top-toolbar .vgrid-scrollpane {
+            top: 0px;
+            bottom: 40px;
+        }
+    }
     .contact-grid-container {
 
         &.abs {

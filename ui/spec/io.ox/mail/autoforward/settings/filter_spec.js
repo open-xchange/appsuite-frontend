@@ -48,6 +48,9 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=autoforward/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlag));
             });
+            this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify([]));
+            });
             $('body', document).append(this.node = $('<div id="autoforwardtestNode">'));
 
             filter.editAutoForward(this.node, multiValues, 'tester@open-xchange.com').done(function (filtermodel) {
@@ -69,9 +72,11 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
             expect(this.node.find('input[name="active"]').prop('checked')).to.be.false;
         });
 
-        it.skip('should create the filtermodel', function () {
-            //FIXME: behaviour seems to be changed, model.attributes.userMainEmail seems to be an empty object
-            model.attributes.should.deep.equal(filtermodel);
+        it('should create the filtermodel', function () {
+            expect(model.get('active')).to.be.false;
+            expect(model.get('keep')).to.be.true;
+            expect(model.get('forwardmail')).to.equal('tester@open-xchange.com');
+            expect(model.get('position')).to.equal(0);
         });
 
         it('should set a new forwardmail', function () {

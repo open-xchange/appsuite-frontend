@@ -1,0 +1,284 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.io-ox-mail-compose-window .window-header {
+
+    h1.title {
+        font-size: 20px;
+        line-height: 0;
+    }
+
+    .btn {
+        margin-left: 13px;
+    }
+}
+
+.io-ox-mail-compose {
+
+    padding-top: 10px;
+
+    & > .mail-compose-fields > .row {
+
+        margin-bottom: 10px;
+
+        .maillabel {
+            font-weight: 500;
+        }
+
+        &.sender .dropdown {
+            padding-top: 8px;
+        }
+
+        div.dropdown {
+            display: inline-block;
+            margin-bottom: 5px;
+
+            &.signatures {
+                margin-right: 15px;
+            }
+        }
+
+        &.subject input {
+            font-weight: bold;
+        }
+
+        &.attachments .inplace-dropzone {
+            margin: 0 15px;
+        }
+
+        &.attachments .io-ox-core-tk-attachment-list {
+            clear: both;
+        }
+
+    }
+
+    .sender {
+        .name { color: #333; }
+        .address { color: @link-color; }
+    }
+
+    .header {
+
+        margin-bottom: 5px;
+
+        h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .btn {
+            margin-left: 10px;
+        }
+    }
+
+    .recipient-actions {
+
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding-right: 15px;
+        margin-top: 6px;
+
+        a {
+            padding-right: 7px;
+            color: @badge-bg;
+            text-decoration: none;
+        }
+    }
+
+    .editable-toolbar {
+        position: relative;
+        height: 100%;
+
+        &.fixed{
+            position: fixed;
+            width: auto;
+            min-height: 34px;
+            height: 34px;
+            top: 90px;
+            z-index: 1;
+            //box-shadow: 0 1px 5px rgba(0,0,0,0.75);
+            border-bottom: 1px solid #ccc;
+            opacity: 0.9;
+        }
+
+        .mceEmojiPane {
+            z-index:1;
+            min-height:300px;
+            box-sizing: content-box;
+            div {
+                box-sizing: content-box;
+            }
+        }
+
+        input.file-input:hover { cursor: pointer; }
+        .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { background-color: #fff; }
+        .mce-panel.mce-edit-area { border:1px solid #fff !important; }
+    }
+
+    textarea.editable, .mce-content-body.editable {
+
+        background: white;
+        border: 1px solid #ccc;
+        padding: 13px;
+
+        &.mce-edit-focus {
+            outline: none;
+            .form-control-focus();
+        }
+
+        a {
+            color: #00a0cd;
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        table {
+            border: 0 none;
+            line-height: normal;
+            td, th { padding: 8px; }
+        }
+
+        blockquote {
+            font-size: 14px;
+            border-left: 1px solid #08C;
+            padding: 7px 0 7px 19px;
+            margin: 1em 0 1em 0;
+            opacity: 0.5;
+            blockquote { opacity: 1.0; }
+        }
+    }
+
+    .plain-text {
+        width: 100%;
+        border: 1px solid #ccc;
+        padding: 18px 21px;
+    }
+
+    // Bootstrap Tokenfield overrides
+    .tokenfield {
+
+        // background color if dropable widget is active
+        &.drophover {
+
+            background-color: #eee;
+
+            .token-input {
+                // temporary override style attribute
+                width: 0px !important;
+            }
+
+        }
+
+        // space for cc/bcc toggle
+        &.to {
+            padding-right: 65px;
+        }
+
+        &.form-control {
+            padding-top: 3px;
+        }
+
+        .token {
+
+            margin: 0 5px 3px 0;
+
+            &.placeholder {
+                background-color: transparent;
+                border: none;
+            }
+
+            .contact-image {
+                display: inline-block;
+                margin: 2px;
+                .picture(16px, 16px);
+            }
+
+        }
+
+        .token-input {
+            margin-bottom: 4px;
+        }
+    }
+
+    .hidden-file-picker {
+
+        // same as .dropdown-menu > li > a
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: normal;
+        line-height: @line-height-base;
+        color: @dropdown-link-color;
+        white-space: nowrap;
+
+        &:hover, &:focus {
+            text-decoration: none;
+            color: @dropdown-link-hover-color;
+            background-color: @dropdown-link-hover-bg;
+        }
+
+        // behave like a link
+        cursor: pointer;
+
+        // support for absolute input[file]
+        position: relative;
+        overflow: hidden;
+
+        input[type="file"] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            background: #F00;
+            cursor: inherit;
+            display: block;
+            outline: 0;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    // set max with for main window content
+    .container {
+        width: 1000px;
+    }
+}
+
+.io-ox-mail-compose-contact {
+
+    .contact-image {
+        margin-right: 14px;
+        display: inline-block;
+        float: left;
+        .picture(42px, 42px);
+    }
+
+    .recipient-name {
+        font-weight: bold;
+        .ellipsis();
+    }
+
+    .email {
+        .ellipsis();
+    }
+}
+
+
+

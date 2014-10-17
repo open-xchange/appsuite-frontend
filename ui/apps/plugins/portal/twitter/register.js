@@ -279,13 +279,17 @@ define('plugins/portal/twitter/register',
             return keychain.isEnabled('twitter') && !keychain.hasStandardAccount('twitter');
         },
 
+        drawDefaultSetup: function () {
+            this.find('h2 .title').replaceWith('<i class="fa fa-twitter">');
+            this.addClass('widget-color-custom color-twitter');
+        },
+
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('twitter', win)
-                .then(function () {
-                    baton.model.node.removeClass('requires-setup');
-                    ox.trigger('refresh^');
-                });
+            return keychain.createInteractively('twitter', win).done(function () {
+                baton.model.node.removeClass('requires-setup widget-color-custom color-twitter');
+                ox.trigger('refresh^');
+            });
         },
 
         load: function (baton) {
@@ -333,14 +337,25 @@ define('plugins/portal/twitter/register',
             }
 
             var script = document.createElement('script');
+            if (!window.twttr) {
+                script.onload= function () {
+                    window.twttr.ready(function (twttr) {
+                        twttr.events.bind('tweet', function () {
+                            loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
+                                baton.data = data;
+                                renderTweets(baton);
+                            });
+                        });
+                    });
+                };
+            }
             script.type = 'text/javascript';
             script.src = 'https://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
-
             this.empty().append(
                 $('<div>').addClass('clear-title io-ox-twitter-title').text('Twitter'),
-                getComposeBox(),
-                script
+                getComposeBox()
             );
+            this[0].appendChild(script);//need to use native methos here to trigger onload
 
             this.append($tweets.empty(), $busyIndicator);
 
@@ -371,24 +386,6 @@ define('plugins/portal/twitter/register',
                 $('<div class="io-ox-portal-preview centered">').append(
                     $('<div>').text(gt('Add your account'))
                 )
-            );
-        },
-
-        error: function (error, baton) {
-
-            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
-
-            $(this).empty().append(
-                $('<div class="decoration">').append(
-                    $('<h2>').append(
-                        $('<a href="#" class="disable-widget"><i class="fa fa-times"/></a>'),
-                        $('<span class="title">').text(gt('Twitter'))
-                    )
-                ),
-                $('<div class="content">').text(gt('Click here to add your account'))
-                .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp', null, baton);
-                })
             );
         }
     });

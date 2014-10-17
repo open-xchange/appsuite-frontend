@@ -7,11 +7,14 @@
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.chap.contacts.html" title="Chapter 6. Address Book">
 <link rel="prev" href="ox.appsuite.user.chap.contacts.html" title="Chapter 6. Address Book">
-<link rel="next" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. Viewing contacts">
+<link rel="next" href="ox.appsuite.user.sect.contacts.view.html" title="6.2. Displaying Contacts">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -29,7 +32,7 @@
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.contacts.gui"></a>6.1. The <span class="phrase"><span class="guilabel"><strong>Address Book</strong></span></span> Components</h2></div></div></div>
-<a class="indexterm" name="idm139899583071040"></a><div class="reference">
+<a class="indexterm" name="idm140502390520880"></a><div class="reference">
 <a name="ox.appsuite.user.reference.contacts.gui.hint"></a><p>An introduction to the user interface can be found in <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. The User Interface">The User Interface</a>.</p>
 </div>
 <div class="reference">
@@ -54,7 +57,7 @@
 <li class="listitem"><p><span class="guibutton"><strong>Edit</strong></span> button. Edits a <a class="link" href="ox.appsuite.user.sect.contacts.manage.edit.html#ox.appsuite.user.concept.contacts.edit">contact's data</a>.</p></li>
 <li class="listitem"><p><span class="guibutton"><strong>Delete</strong></span> button. <a class="link" href="ox.appsuite.user.sect.contacts.manage.delete.html#ox.appsuite.user.concept.contacts.delete">Deletes the contacts</a> selected by you.</p></li>
 <li class="listitem">
-<p><span class="guibutton"><strong>More</strong></span> button. Opens a menu with the following entries: <a class="link" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html#ox.appsuite.user.concept.contacts.sendvcard"><span class="guibutton"><strong>Send as vCard</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.print.html#ox.appsuite.user.concept.contacts.print"><span class="guibutton"><strong>Print</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.move.html#ox.appsuite.user.concept.contacts.move"><span class="guibutton"><strong>Move</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.copy.html#ox.appsuite.user.concept.contacts.copy"><span class="guibutton"><strong>Copy</strong></span></a>.</p>
+<p><span class="guibutton"><strong>More</strong></span> icon<span class="inlinemediaobject"><a name="ox.appsuite.user.fig.contacts.toolbar.more"></a><img src="../../images/appsuite_user_icon_more.png"></span> . Opens a menu with the following entries: <a class="link" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html#ox.appsuite.user.concept.contacts.sendvcard"><span class="guibutton"><strong>Send as vCard</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.print.html#ox.appsuite.user.concept.contacts.print"><span class="guibutton"><strong>Print</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.move.html#ox.appsuite.user.concept.contacts.move"><span class="guibutton"><strong>Move</strong></span></a>, <a class="link" href="ox.appsuite.user.sect.contacts.manage.copy.html#ox.appsuite.user.concept.contacts.copy"><span class="guibutton"><strong>Copy</strong></span></a>.</p>
 <p><span class="phrase"><strong>Note:</strong></span> Some buttons might not be displayed if you do not have the appropriate permissions. </p>
 <p><span class="phrase"><strong>Note:</strong></span> Depending on the address book or the contact's data, some buttons might be sorted differently or might not be available.</p>
 </li>

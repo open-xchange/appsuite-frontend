@@ -14,8 +14,9 @@
 define('io.ox/mail/view-options',
     ['io.ox/core/extensions',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/core/api/account',
      'gettext!io.ox/mail'
-    ], function (ext, Dropdown, gt) {
+    ], function (ext, Dropdown, account, gt) {
 
     'use strict';
 
@@ -25,10 +26,10 @@ define('io.ox/mail/view-options',
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',
         index: 100,
-        draw: function () {
+        draw: function (batton) {
             this.data('view')
                 .option('sort', 610, gt('Date'))
-                .option('sort', 'from-to', gt('From'))
+                .option('sort', 'from-to', account.is('sent|drafts', batton.app.folder.get()) ? gt('To') : gt('From'))
                 .option('sort', 651, gt('Unread'))
                 .option('sort', 608, gt('Size'))
                 .option('sort', 607, gt('Subject'))
@@ -71,20 +72,21 @@ define('io.ox/mail/view-options',
             });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right'));
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
+                e.stopPropagation();
+            }));
         }
     });
 
+    function toggleControl(i, state) {
+        i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
+    }
+
     function toggleSelection(e) {
-        e.preventDefault();
-        var i = $(this).find('i'),
-            selection = e.data.baton.app.listView.selection;
-        if (i.hasClass('fa-check-square-o')) {
-            i.attr('class', 'fa fa-square-o');
-            selection.selectNone();
-        } else {
-            i.attr('class', 'fa fa-check-square-o');
-            selection.selectAll();
+        if (e.type === 'click' || e.keyCode === 32) {
+            e.preventDefault();
+            var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
+            if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();
         }
     }
 
@@ -93,18 +95,33 @@ define('io.ox/mail/view-options',
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item select-all" tabindex="1">').append(
-                    $('<i class="fa fa-square-o">'),
+                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false" tabindex="1">').append(
+                    $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )
                 .on('click', { baton: baton }, toggleSelection)
+                .on('dblclick', function (e) {
+                    e.stopPropagation();
+                })
+                .on('keydown', { baton: baton }, toggleSelection)
             );
+
+            var i = this.find('.select-all > i');
+
+            baton.view.listView.on({
+                'selection:all': function () {
+                    toggleControl(i, true);
+                },
+                'selection:subset': function () {
+                    toggleControl(i, false);
+                }
+            });
         }
     });
 
     function toggleFolderView(e) {
         e.preventDefault();
-        e.data.app.toggleFolderView(e.data.state);
+        e.data.app.folderView.toggle(e.data.state);
     }
 
     function onFolderViewOpen(app) {
@@ -126,17 +143,19 @@ define('io.ox/mail/view-options',
                 $('<a href="#" class="toolbar-item" tabindex="1">')
                 .attr('title', gt('Open folder view'))
                 .append($('<i class="fa fa-angle-double-right">'))
-                .on('click', { app: baton.app, state: true }, toggleFolderView)
+                .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
             var side = baton.app.getWindow().nodes.sidepanel;
 
-            side.find('.foldertree-container').addClass('bottom-toolbar');
-            side.find('.foldertree-sidepanel').append(
+            side.addClass('bottom-toolbar');
+            side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
-                    .attr('title', gt('Close folder view'))
-                    .append($('<i class="fa fa-angle-double-left">'))
+                    .append(
+                        $('<i class="fa fa-angle-double-left" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close folder view'))
+                    )
                     .on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );

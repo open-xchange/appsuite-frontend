@@ -9,6 +9,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -48,6 +51,7 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.personaldata.html">3.4 Changing Personal Contact Data</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.changepassword.html">3.5 Changing the Password</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.socialaccounts.html">3.6 Setting up Accounts for Social Networks</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.clients.html">3.7 Installing Clients for Workstations or Mobile Devices</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.portal.html">4 <span class="phrase">Portal</span></a></span></dt>
 <dd><dl>
@@ -64,7 +68,7 @@
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.email.html">5 <span class="phrase">E-Mail</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 The <span class="phrase"><span class="guilabel"><strong>E-Mail</strong></span></span> Components</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 Viewing E-Mails</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 Displaying E-Mails</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 Viewing or Saving E-Mail Attachments</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 Sending E-Mails</a></span></dt>
 <dd><dl>
@@ -88,56 +92,60 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 Saving E-Mails</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 Importing E-Mails</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.print.html">5.5.12 Printing E-Mails</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.13 Deleting E-Mail messages</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.14 Cleaning up E-Mail folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.15 Editing multiple E-Mails at once</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.16 Using Unified Mail</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.17 Using E-Mail Filters</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.5.13 Archiving E-Mails</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.14 Deleting E-Mail messages</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.15 Cleaning up E-Mail folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.16 Editing multiple E-Mails at once</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.17 Using Unified Mail</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.18 Using E-Mail Filters</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.6 E-Mails within a Team</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.search.html">5.6 Searching for E-Mails</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.7 E-Mails within a Team</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.6.1 Sharing E-Mails</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.6.2 Subscribing to E-Mail folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.6.3 Inviting all E-Mail recipients to an appointment</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.6.4 Saving all recipients of an E-Mail as a distribution list</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.7.1 Sharing E-Mails</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.7.2 Subscribing to E-Mail folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.7.3 Inviting all E-Mail recipients to an appointment</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.7.4 Saving all recipients of an E-Mail as a distribution list</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.7 E-Mail Accounts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.8 E-Mail Accounts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.7.1 Setting up and editing E-Mail accounts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.7.2 Using an external E-Mail account</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.8.1 Setting up and editing E-Mail accounts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.8.2 Using an external E-Mail account</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.8 E-Mail settings</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.9 E-Mail settings</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.contacts.html">6 <span class="phrase">Address Book</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.gui.html">6.1 The <span class="phrase"><span class="guilabel"><strong>Address Book</strong></span></span> Components</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.view.html">6.2 Viewing contacts</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.haloview.html">6.3 The Halo View</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.add.html">6.4 Creating contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.view.html">6.2 Displaying Contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.attachments.html">6.3 Viewing or Saving Contact Attachments</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.haloview.html">6.4 The Halo View</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.add.html">6.5 Creating contacts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.create.html">6.4.1 Creating a new contact</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">6.4.2 Adding a contact from vCard</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.import.html">6.4.3 Importing contacts from files</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.subscribe.html">6.4.4 Importing contacts from social networks</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.create.html">6.5.1 Creating a new contact</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">6.5.2 Adding a contact from vCard</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.import.html">6.5.3 Importing contacts from files</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.subscribe.html">6.5.4 Importing contacts from social networks</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.distributionlist.html">6.5 Creating distribution lists</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.manage.html">6.6 Organizing contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.distributionlist.html">6.6 Creating distribution lists</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.manage.html">6.7 Organizing contacts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.6.1 Sending E-Mails from within an address book</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.6.2 Inviting contacts to an appointment</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.edit.html">6.6.3 Editing Contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.move.html">6.6.4 Moving Contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.copy.html">6.6.5 Copying Contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.6.6 Sending contacts as vCard</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.6.7 Adding contacts as Xing contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.6.8 Inviting contacts to Xing</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.6.9 Printing Contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.6.10 Deleting Contacts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.multiple.html">6.6.11 Editing multiple contacts at once</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.7.1 Sending E-Mails from within an address book</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.7.2 Inviting contacts to an appointment</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.edit.html">6.7.3 Editing Contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.move.html">6.7.4 Moving Contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.copy.html">6.7.5 Copying Contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.7.6 Sending contacts as vCard</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.7.7 Adding contacts as Xing contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.7.8 Inviting contacts to Xing</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.7.9 Printing Contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.7.10 Deleting Contacts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.multiple.html">6.7.11 Editing multiple contacts at once</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.share.html">6.7 Contacts in Teams</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.datainterchange.html">6.8 Interchanging Contacts with Other Applications</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.settings.html">6.9 Address Book Settings</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.search.html">6.8 Searching for contacts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.share.html">6.9 Contacts in Teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.datainterchange.html">6.10 Interchanging Contacts with Other Applications</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.settings.html">6.11 Address Book Settings</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.calendar.html">7 <span class="phrase">Calendar</span></a></span></dt>
 <dd><dl>
@@ -148,59 +156,63 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.2 Displaying appointments in the list view</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.3 How are appointments displayed?</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.3 Creating Appointments</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.attachments.html">7.3 Viewing or Saving Appointment Attachments</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.4 Creating Appointments</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.3.1 Creating new appointments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.3.2 Creating appointments from iCal attachments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.3.3 Importing appointments from files</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.3.4 Subscribing appointments from other calendars</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.3.5 Resolving appointment conflicts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.4.1 Creating new appointments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.4.2 Creating appointments from iCal attachments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.4.3 Importing appointments from files</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.4.4 Subscribing appointments from other calendars</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.4.5 Resolving appointment conflicts</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.4 Answering appointment invitations</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.5 Managing Appointments</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.5 Answering appointment invitations</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.6 Managing Appointments</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.5.1 Editing appointments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.5.2 Editing appointments with drag and drop</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.5.3 Changing the appointment status</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.5.4 Moving appointments to another folder</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.5.5 Printing appointments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.5.6 Deleting appointments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.5.7 Editing multiple appointments at once</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.6.1 Editing appointments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.6.2 Editing appointments with drag and drop</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.6.3 Changing the appointment status</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.4 Moving appointments to another folder</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.5 Printing appointments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.6 Deleting appointments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.7 Editing multiple appointments at once</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.6 Appointments in teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.search.html">7.7 Searching for appointments</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.8 Appointments in teams</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.6.1 Sharing appointments</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.6.2 Sending an E-Mail to participants</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.6.3 Inviting participants to a new appointment</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.6.4 Creating a distribution list from the list of participants</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.6.5 Scheduling appointments with several participants</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.8.1 Sharing appointments</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.8.2 Sending an E-Mail to participants</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.8.3 Inviting participants to a new appointment</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.8.4 Creating a distribution list from the list of participants</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.8.5 Scheduling appointments with several participants</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.7 Calendar Settings</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.9 Calendar Settings</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.tasks.html">8 <span class="phrase">Tasks</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.gui.html">8.1 The <span class="phrase"><span class="guilabel"><strong>Tasks</strong></span></span> Components</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.view.html">8.2 Viewing tasks</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.add.html">8.3 Creating tasks</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.invitation.html">8.4 Answering task invitations</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.manage.html">8.5 Managing Tasks</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.attachments.html">8.3 Viewing or Saving Task Attachments</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.add.html">8.4 Creating Tasks</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.invitation.html">8.5 Answering task invitations</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.manage.html">8.6 Managing Tasks</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.edit.html">8.5.1 Editing tasks</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.5.2 Marking tasks as done</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.5.3 Changing a task's due date</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.5.4 Moving tasks</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.5.5 Changing tasks confirmations</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.5.6 Printing tasks</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.5.7 Deleting tasks</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.multiple.html">8.5.8 Editing multiple tasks at once</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.edit.html">8.6.1 Editing tasks</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.6.2 Marking tasks as done</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.6.3 Changing a task's due date</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.6.4 Moving tasks</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.6.5 Changing tasks confirmations</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.6.6 Printing tasks</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.6.7 Deleting tasks</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.multiple.html">8.6.8 Editing multiple tasks at once</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.share.html">8.6 Tasks in teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.search.html">8.7 Searching for tasks</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.share.html">8.8 Tasks in teams</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.tasks.html">8.6.1 Sharing tasks</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.delegate.html">8.6.2 Delegating tasks</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.tasks.html">8.8.1 Sharing tasks</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.delegate.html">8.8.2 Delegating tasks</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.datainterchange.html">8.7 Interchanging Tasks with other Applications</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.settings.html">8.8 Tasks Settings</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.datainterchange.html">8.9 Interchange Tasks with other Applications</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.settings.html">8.10 Tasks Settings</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.files.html">9 <span class="phrase">Drive</span></a></span></dt>
 <dd><dl>
@@ -228,81 +240,65 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.11 Working with versions</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.12 Editing multiple files at one time</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.6 Accessing Files with WebDAV</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.search.html">9.6 Searching for Files</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.7 Accessing Files with WebDAV</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.6.1 Setting up WebDAV under Linux</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.6.2 Setting up WebDAV under Windows XP</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.6.3 Setting up WebDAV under Windows Vista</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.6.4 Setting up WebDAV under Windows 7</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.7.1 Setting up WebDAV under Linux</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.7.2 Setting up WebDAV under Windows XP</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.7.3 Setting up WebDAV under Windows Vista</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.7.4 Setting up WebDAV under Windows 7</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.7 Files and Teams</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.8 Drive Settings</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.8 Files and Teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.9 Drive Settings</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.documents.html">10 <span class="phrase">Documents</span></a></span></dt>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.pad.html">10 <span class="phrase">Editor</span></a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.gui.html">10.1 The <span class="phrase"><span class="guilabel"><strong>Documents</strong></span></span> Components</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.add.html">10.1 Creating Text Files</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.edit.html">10.2 Editing Text Files</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">11 Organizing Data</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.docportal.gui.html">10.1.1 The <span class="phrase"><span class="guilabel"><strong>Text</strong></span></span> and <span class="phrase"><span class="guilabel"><strong>Spreadsheet</strong></span></span> components</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.text.gui.html">10.1.2 The Edit <span class="phrase"><span class="guilabel"><strong>Text</strong></span></span> page components</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.spreadsheet.gui.html">10.1.3 The Edit <span class="phrase"><span class="guilabel"><strong>Spreadsheet</strong></span></span> page components</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.add.html">10.2 Creating Documents</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.edit.html">10.3 Editing Documents</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.editasnew.html">10.4 Editing Documents Under a New Name</a></span></dt>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.pad.html">11 <span class="phrase">Editor</span></a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">11.1 Folders</a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.add.html">11.1 Creating Text Files</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.edit.html">11.2 Editing Text Files</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">11.1.1 Folder types</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">11.1.2 Navigating within the folder structure</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">11.1.3 Hiding folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">11.1.4 Adding folders to favorites</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.create.html">11.1.5 Creating folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">11.1.6 Renaming folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">11.1.7 Moving folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">11.1.8 Deleting folders</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">12 Organizing Data</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.rights.html">11.2 Permissions</a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.search.html">12.1 Search</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.defined.html">11.2.1 Which permissions can be granted?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">11.2.2 Permissions for folders that already exist</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">11.2.3 Permissions for new folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">11.2.4 Sharing folders</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.html">11.3 Publish&amp;amp;Subscribe</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.gui.html">12.1.1 The search window components</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.searchmenu.html">12.1.2 Which search options do exist?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.objects.html">12.1.3 Searching for objects</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">11.3.1 Subscribing to data</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">11.3.2 Publishing data</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html">11.3.3 Managing subscribed and published folders</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">12.2 Folders</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.datainterchange.html">12 Data Interchange</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">12.2.1 Folder types</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">12.2.2 Navigating within the folder structure</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">12.2.3 Hiding folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.create.html">12.2.4 Creating folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">12.2.5 Renaming folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">12.2.6 Moving folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">12.2.7 Deleting folders</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.rights.html">12.3 Permissions</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.import.html">12.1 Importing Data</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.defined.html">12.3.1 Which permissions can be granted?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">12.3.2 Permissions for folders that already exist</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">12.3.3 Permissions for new folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">12.3.4 Sharing folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.ical.html">12.1.1 Importing appointments and tasks in iCal format</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">12.1.2 Importing contacts in the vCard format</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">12.1.3 Importing contacts in the CSV format</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.html">12.4 Publish&amp;amp;Subscribe</a></span></dt>
-<dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">12.4.1 Subscribing to data</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">12.4.2 Publishing data</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html">12.4.3 Managing subscribed and published folders</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.export.html">12.2 Exporting Data</a></span></dt>
+<dd><dl><dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.export.folder.html">12.2.1 Exporting folder data</a></span></dt></dl></dd>
 </dl></dd>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.datainterchange.html">13 Data Interchange</a></span></dt>
-<dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.import.html">13.1 Importing Data</a></span></dt>
-<dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.ical.html">13.1.1 Importing appointments and tasks in iCal format</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">13.1.2 Importing contacts in the vCard format</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">13.1.3 Importing contacts in the CSV format</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.export.html">13.2 Exporting Data</a></span></dt>
-<dd><dl><dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.export.folder.html">13.2.1 Exporting folder data</a></span></dt></dl></dd>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.bestpractices.html">14 Questions and Answers</a></span></dt>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.bestpractices.html">13 Questions and Answers</a></span></dt>
 <dd><dl>
 <dt><span class="qandaset"><a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice">Frequently Asked Questions</a></span></dt>
 <dd><dl>
-<dt>14.1  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">General questions</a>
+<dt>13.1  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">General questions</a>
 </dt>
 <dd><dl>
 <dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.personaldata">Where can I find my personal data and settings?</a>
@@ -316,7 +312,7 @@
 <dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.socialmessaging">How can I read current messages from social networks or news pages?</a>
 </dt>
 </dl></dd>
-<dt>14.2  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">Questions about E-Mails and contacts</a>
+<dt>13.2  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">Questions about E-Mails and contacts</a>
 </dt>
 <dd><dl>
 <dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.recipients">How can I send an E-Mail to multiple addresses at once?</a>
@@ -336,7 +332,7 @@
 <dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">How can I use the contacts from my social networks?</a>
 </dt>
 </dl></dd>
-<dt>14.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">Questions about tasks, calendars, and appointments</a>
+<dt>13.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">Questions about tasks, calendars, and appointments</a>
 </dt>
 <dd><dl>
 <dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.task_or_appointment">When should I use a task and when should I use an appointment?</a>
@@ -352,7 +348,7 @@
 <dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.scheduling">How to find free times when creating appointments? </a>
 </dt>
 </dl></dd>
-<dt>14.4  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">Questions about data organization and team work</a>
+<dt>13.4  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">Questions about data organization and team work</a>
 </dt>
 <dd><dl>
 <dt>Q: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">How can I make certain contacts available to my external partners?</a>

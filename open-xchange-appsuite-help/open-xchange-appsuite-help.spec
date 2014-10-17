@@ -4,8 +4,8 @@ BuildRequires:  ant
 BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
-Version:        7.6.0
-%define         ox_release 14
+Version:        @OXVERSION@
+%define         ox_release 5
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -160,16 +160,15 @@ done
 %defattr(-,root,root)
 %dir %{docroot}/appsuite
 %{docroot}/appsuite/help
+%exclude %{docroot}/appsuite/help/l10n
 
 %files de-de
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/de_DE
 
 %files en-gb
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/en_GB
 
@@ -181,65 +180,68 @@ done
 
 %files es-es
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/es_ES
 
 %files es-mx
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/es_MX
 
 %files fr-fr
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/fr_FR
 
 %files it-it
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/it_IT
 
 %files ja-jp
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/ja_JP
 
 %files nl-nl
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/nl_NL
 
 %files pl-pl
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/pl_PL
 
 %files zh-cn
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/zh_CN
 
 %files zh-tw
 %defattr(-,root,root)
-%dir %{docroot}/appsuite
 %dir %{docroot}/appsuite/help/l10n
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Tue Oct 14 2014 Marcus Klein <marcus.klein@open-xchange.com>
+Fifth candidate for 7.6.1 release
+* Fri Oct 10 2014 Marcus Klein <marcus.klein@open-xchange.com>
+Fourth candidate for 7.6.1 release
+* Thu Oct 02 2014 Marcus Klein <marcus.klein@open-xchange.com>
+Third candidate for 7.6.1 release
 * Tue Sep 30 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2014-10-06
 * Tue Sep 23 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2014-10-02
+* Tue Sep 16 2014 Marcus Klein <marcus.klein@open-xchange.com>
+Second candidate for 7.6.1 release
 * Thu Sep 11 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2014-09-15
+* Fri Sep 05 2014 Marcus Klein <marcus.klein@open-xchange.com>
+First release candidate for 7.6.1
+* Fri Sep 05 2014 Marcus Klein <marcus.klein@open-xchange.com>
+prepare for 7.6.1
 * Wed Aug 20 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2014-08-25
 * Mon Aug 11 2014 Marcus Klein <marcus.klein@open-xchange.com>

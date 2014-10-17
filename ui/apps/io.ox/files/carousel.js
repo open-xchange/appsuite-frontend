@@ -17,13 +17,15 @@ define('io.ox/files/carousel',
      'io.ox/core/capabilities',
      'gettext!io.ox/files',
      'io.ox/files/api',
-     'io.ox/core/api/folder',
+     'io.ox/preview/main',
+     'io.ox/core/folder/breadcrumb',
      'less!io.ox/files/carousel'
-    ], function (commons, capabilities, gt, api, folderAPI) {
+    ], function (commons, capabilities, gt, api, preview, getBreadcrumb) {
 
     'use strict';
 
-    var regIsImage = /\.(gif|tiff|jpe?g|gmp|png)$/i,
+    var regIsImage = /\.(gif|tiff|jpe?g|bmp|png)$/i,
+        regIsPlainText = /\.(txt|asc|js|md|json)$/i,//list from our text preview renderer
         regIsDocument = /\.(pdf|docx?|xlsx?|pptx?)$/i;
 
     var carouselSlider = {
@@ -42,11 +44,31 @@ define('io.ox/files/carousel',
 
         firstStart: true,
         list: [],
-        container:      $('<div class="abs carousel slide">'),
-        inner:          $('<div class="abs carousel-inner">'),
-        prevControl:    $('<a class="left carousel-control">').attr('data-slide', 'prev').append($('<i class="icon-prev fa fa-angle-left">')),
-        nextControl:    $('<a class="right carousel-control">').attr('data-slide', 'next').append($('<i class="icon-next fa fa-angle-right">')),
-        closeControl:   $('<button type="button" class="btn btn-link closecarousel">').append($('<i class="fa fa-times">')),
+        container:      $('<div class="abs carousel slide">').attr({ 'data-ride': 'carousel' }),
+        inner:          $('<div class="abs carousel-inner" role="listbox">'),
+        prevControl:    $('<a class="left carousel-control">')
+                            .attr({
+                                'data-slide': 'prev',
+                                role: 'button'
+                            })
+                            .append(
+                                $('<i class="icon-prev fa fa-angle-left"aria-hidden="true" >'),
+                                $('<span class="sr-only">').text(gt('Prev'))
+                            ),
+        nextControl:    $('<a class="right carousel-control">')
+                            .attr({
+                                'data-slide': 'next',
+                                role: 'button'
+                            })
+                            .append(
+                                $('<i class="icon-next fa fa-angle-right"aria-hidden="true" >'),
+                                $('<span class="sr-only">').text(gt('Next'))
+                            ),
+        closeControl:   $('<button type="button" class="btn btn-link closecarousel">')
+                            .append(
+                                $('<i class="fa fa-times" aria-hidden="true" >'),
+                                $('<span class="sr-only">').text(gt('Close'))
+                            ),
 
        /**
         * The config parameter used to initialize a carousel.
@@ -107,20 +129,22 @@ define('io.ox/files/carousel',
             }
             this.list = this.filterImagesList(config.baton.allIds);
             if (config.useSelectionAsStart) {
-                var index = this.findStartItem (config.baton, this.list);
+                var index;
+                if (config.baton.startIndex !== undefined && config.baton.startIndex !== null) {
+                    index = config.baton.startIndex;
+                } else {
+                    index = this.findStartItem (config.baton, this.list);
+                }
                 this.pos = _.defaults({cur: index}, this.defaults );
             } else {
                 this.pos = _.extend({}, this.defaults); // get a fresh copy
             }
             this.firstStart = true; // should have a better name
 
-            // no automatic animation
-            this.container.carousel({ interval: false });
-
             // fill with proper amount of DIVs (need to be fast here)
             var frag = document.createDocumentFragment(), i = 0, $i = this.list.length;
             for (; i < $i; i++) {
-                frag.appendChild($('<div class="item" data-index="' + i + '">').get(0));
+                frag.appendChild($('<div class="item" data-index="' + i + '" role="option">').get(0));
             }
             this.inner.get(0).appendChild(frag);
 
@@ -129,6 +153,9 @@ define('io.ox/files/carousel',
 
             this.show();
             this.eventHandler();
+
+            // no automatic animation
+            this.container.carousel({ interval: false });
         },
 
         eventHandler: function () {
@@ -144,7 +171,7 @@ define('io.ox/files/carousel',
                 this.prevControl.show();
             }
             if (pos.cur === pos.last) {
-                this.nextControl.show();
+                this.nextControl.hide();
             } else {
                 this.nextControl.show();
             }
@@ -206,9 +233,15 @@ define('io.ox/files/carousel',
 
         filterImagesList: function (list) {
             var supportsDocuments = capabilities.has('document_preview');
-            return _(list).filter(function (o) {
-                return regIsImage.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
-            });
+            if (this.config.attachmentMode) {
+                return _(list).filter(function (o) {
+                    return regIsImage.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
+                });
+            } else {
+                return _(list).filter(function (o) {
+                    return regIsImage.test(o.filename) || regIsPlainText.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
+                });
+            }
         },
 
         urlFor: function (file) {
@@ -273,15 +306,34 @@ define('io.ox/files/carousel',
                 this.firstStart = false;
             }
 
+            function parseArguments(file) {
+                if (!file.filename) {
+                    return null;
+                }
+                return {
+                    name: file.filename,
+                    filename: file.filename,
+                    mimetype: file.file_mimetype,
+                    size: file.file_size,
+                    dataURL: api.getUrl(file, 'thumbnail', {
+                        scaleType: 'contain',
+                        thumbnailWidth: $(window).width(),
+                        thumbnailHeight: $(window).height()
+                    }),
+                    version: file.version,
+                    id: file.id,
+                    folder_id: file.folder_id
+                };
+            }
+
             if (item.children().length === 0) {
                 if (!this.config.attachmentMode) {
-                    item.busy().append(
-                        $('<img>', { alt: '', src: this.urlFor(file) })
-                            .on('load', this.imgLoad)
-                            .on('error', this.imgError), /* error doesn't seem to bubble */
+                    var prev = new preview.Preview(parseArguments(file), { resize: false });
+                    prev.appendTo(item);
+                    item.append(
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { exclude: ['9'], handler: hChangeFolder, subfolder: false, last: false }) : $()
+                            file.folder_id ? getBreadcrumb(file.folder_id, { exclude: ['9'], handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {

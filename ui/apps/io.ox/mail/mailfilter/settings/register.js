@@ -21,7 +21,7 @@ define('io.ox/mail/mailfilter/settings/register',
 
     ext.point('io.ox/settings/pane').extend({
         id: 'io.ox/mailfilter',
-        title: gt('Mail Filter'),
+        title: gt('Mail Filter Rules'),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
         index: 500,
@@ -40,10 +40,10 @@ define('io.ox/mail/mailfilter/settings/register',
                 filters.editMailfilter($container, baton).fail(function (error) {
                     var msg;
                     if (error.code === 'MAIL_FILTER-0015') {
-                        msg = gt('Unable to load mail filter settings.');
+                        msg = gt('Unable to load mail filter rules settings.');
                     }
                     $container.append(
-                        $.fail(msg || gt('Couldn\'t load your mail filters.'), function () {
+                        $.fail(msg || gt('Couldn\'t load your mail filter rules.'), function () {
                             filters.editMailfilter($node).done(function () {
                                 $container.find('[data-action="discard"]').hide();
                             });

@@ -120,7 +120,8 @@ define('plugins/portal/birthdays/register',
                 );
             } else {
                 // add buy-a-gift
-                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/'));
+                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/')),
+                    now = new date.Local();
                 if (url !== 'none' && url !== '') {
                     $list.append(
                         $('<div class="buy-a-gift">').append(
@@ -132,24 +133,16 @@ define('plugins/portal/birthdays/register',
                 }
                 // loop
                 _(baton.data).each(function (contact) {
-                    var utc = date.Local.utc(contact.birthday), next, now, days, delta,
-                        birthday = new date.Local(utc),
+                    var birthday = new date.Local(date.Local.utc(contact.birthday)),
                         // we use fullname here to avoid haveing duplicates like "Jon Doe" and "Doe, Jon"
                         name = util.getFullName(contact);
 
                     if (!isDuplicate(name, birthday, hash)) {
 
-                        // get delta
-                        now = new date.Local();
-                        next = new date.Local(now.getYear(), birthday.getMonth(), birthday.getDate());
-                        //add 23h 59min and 59s, so it refers to the end of the day
-                        next.add(date.DAY - 1);
-                        // inc year?
-                        if (next < now) next.addYears(1);
-                        // get human readable delta
-                        days = birthday.getDate() - now.getDate();
-                        delta = (next - now) / date.DAY;
-                        delta = days === 0 && delta <= 1 ? gt('Today') : days === 1 && delta <= 2 ? gt('Tomorrow') : days === -1 && delta >= 364 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
+                        var nextBirthday = new date.Local().setMonth(birthday.getMonth(), birthday.getDate()),
+                            delta = nextBirthday.getDays() - now.getDays();
+
+                        delta = delta === 0 ? gt('Today') : delta === 1 ? gt('Tomorrow') : delta === -1 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(
                             $('<div class="birthday" tabindex="1">').data('contact', contact).append(

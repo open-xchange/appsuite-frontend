@@ -19,8 +19,9 @@ define('plugins/portal/mail/register',
      'io.ox/core/date',
      'io.ox/core/api/account',
      'io.ox/portal/widgets',
+     'io.ox/core/tk/dialogs',
      'gettext!plugins/portal'
-    ], function (ext, api, util, date, accountAPI, portalWidgets, gt) {
+    ], function (ext, api, util, date, accountAPI, portalWidgets, dialogs, gt) {
 
     'use strict';
 
@@ -35,6 +36,10 @@ define('plugins/portal/mail/register',
                 var view = new detail.View({ data: data });
                 popup.idle().append(view.render().expand().$el.addClass('no-padding'));
                 data = null;
+                // response to "remove" event
+                view.listenTo(view.model, 'remove', function () {
+                    popup.trigger('close');
+                });
             });
         });
     }
@@ -45,40 +50,45 @@ define('plugins/portal/mail/register',
 
         initialize: function () {
             api.on('update create delete', function () {
-                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.mail_0;
-
                     if (portalModel) {
                         portalApp.refreshWidget(portalModel, 0);
                     }
                 });
-
             });
         },
 
-        // action: function () {
-        //     ox.launch('io.ox/mail/main', { folder: api.getDefaultFolder() });
-        // },
-
         load: function (baton) {
-            var LIMIT = _.device('small') ? 5 : 10;
-            // we fetch more that we want to show because usually a lot is deleted
-            return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
-                var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder(),
-                    useCache = !!baton.cache;
-                return api.getAll({ folder:  folderName, limit: LIMIT * 5 }, useCache).pipe(function (mails) {
-                    // ignore deleted mails
-                    mails = _(mails).filter(function (obj) {
+
+            function getMails(folderName) {
+                // we fetch more that we want to show because usually a lot is deleted
+                var LIMIT = _.device('small') ? 5 : 10;
+                return api.getAll({ folder:  folderName, limit: LIMIT * 5 }, !!baton.cache).then(function (mails) {
+                    // filter deleted mails
+                    return _(mails).filter(function (obj) {
                         return !util.isDeleted(obj);
                     });
+                }).then(function (mails) {
                     // fetch detailed data for smaller subset
                     return api.getList(mails.slice(0, LIMIT)).done(function (data) {
                         baton.data = data;
                         baton.cache = false;
                     });
                 });
-            });
+            }
+
+            var props = baton.model.get('props', {});
+
+            if (props.id) {
+                return getMails('default' + props.id + '/INBOX');
+            } else {
+                return accountAPI.getUnifiedMailboxName().then(function (mb) {
+                    return getMails(mb ? mb + '/INBOX' : api.getDefaultFolder());
+                });
+            }
         },
 
         summary: function (baton) {
@@ -167,11 +177,76 @@ define('plugins/portal/mail/register',
         draw: draw
     });
 
+    function edit(model, view) {
+        // disable widget till data is set by user
+        model.set('candidate', true, { silent: true, validate: true });
+
+        var dialog = new dialogs.ModalDialog({ async: true }),
+            props = model.get('props') || {};
+
+        accountAPI.all().then(function (accounts) {
+            var accId = _.uniqueId('form-control-label-'),
+                nameId = _.uniqueId('form-control-label-'),
+                options = _(accounts).map(function (acc) {
+                    return $('<option>').val(acc.id).text(acc.name).prop('selected', props.id && (props.id === acc.id + ''));
+                }), accSelect, nameInput;
+
+            dialog.header($('<h4>').text(gt('Inbox')))
+                .build(function () {
+                    this.getContentNode().append(
+                        options.length > 1 ?
+                            $('<div class="form-group">').append(
+                                $('<label for="' + accId + '">').text(gt('Account')),
+                                accSelect = $('<select id ="' + accId + '" class="form-control">').append(options)
+                            ) : $(),
+                        $('<div class="form-group">').append(
+                            $('<label for="' + nameId + '">').text(gt('Description')),
+                            nameInput = $('<input id="' + nameId + '" type="text" class="form-control" tabindex="1">').val(props.name || gt('Inbox')),
+                            $('<div class="alert alert-danger">').css('margin-top', '15px').hide()
+                        )
+                    );
+                })
+                .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: 1 })
+                .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
+                .show(function () {
+                    if (options.length > 1) {
+                        if (!props.name) {
+                            accSelect.on('change', function () {
+                                nameInput.val(gt('Inbox') + ' (' + $('option:selected', this).text() + ')');
+                            }).change();
+                        }
+                        // set focus
+                        accSelect.focus();
+                    } else {
+                        nameInput.focus();
+                    }
+                });
+
+            dialog.on('save', function () {
+                var title = $.trim(nameInput.val()),
+                    widgetProps = { name: title };
+                if (options.length > 1) {
+                    widgetProps.id = accSelect.val();
+                }
+                model
+                    .set({ title: title, props: widgetProps })
+                    .unset('candidate');
+                dialog.close();
+            }).on('cancel', function () {
+                if (model.has('candidate') && _.isEmpty(model.attributes.props)) {
+                    view.removeWidget();
+                }
+            });
+        });
+
+    }
+
     ext.point('io.ox/portal/widget/mail/settings').extend({
         title: gt('Inbox'),
         type: 'mail',
-        editable: false,
-        unique: true
+        editable: true,
+        edit: edit,
+        unique: false
     });
 
     ext.point('io.ox/portal/widget/stickymail').extend({

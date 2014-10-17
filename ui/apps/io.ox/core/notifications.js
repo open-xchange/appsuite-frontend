@@ -14,9 +14,10 @@
 
 define('io.ox/core/notifications',
     ['io.ox/core/extensions',
+     'io.ox/core/yell',
      'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (ext, settings, gt) {
+    ], function (ext, yell, settings, gt) {
 
     'use strict';
 
@@ -24,29 +25,34 @@ define('io.ox/core/notifications',
         tagName: 'a',
         className: 'notifications-icon',
         initialize: function () {
+            this.model.set('a11y', '');
             this.model.on('change', _.bind(this.onChange, this));
             this.nodes = {};
         },
         onChange: function () {
-            var count = this.model.get('count');
+            var count = this.model.get('count'),
+                //#. %1$d number of notifications
+                //#, c-format
+                a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count),
+                a11yState = this.$el.attr('aria-pressed') ? gt('The notification area is open') : gt('The notification area is closed');
+            this.model.set('a11y', a11y, {silent: true});//don't create a loop here
             this.nodes.badge.toggleClass('empty', count === 0);
+            this.$el.attr('aria-label', a11y + ' ' + a11yState);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
-
-            new NotificationController().yell('screenreader',
-                    //#. %1$d number of notifications
-                    //#, c-format
-                    gt.format(gt.ngettext('You have %1$d notification.',
-                            'You have %1$d notifications.', this.model.get('count')), this.model.get('count')));
-
+            new NotificationController().yell('screenreader', a11y);
         },
         onToggle: function (open) {
+            var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
+            this.$el.attr({'aria-pressed': open ? true : false,
+                           'aria-label': this.model.get('a11y') + ' ' + a11yState});
         },
         render: function () {
             this.$el.attr({
                     href: '#',
                     tabindex: '1',
-                    role: 'button'
+                    role: 'button',
+                    'aria-pressed': false
                 })
                 .append(
                     this.nodes.badge = $('<span class="badge">').append(
@@ -156,12 +162,79 @@ define('io.ox/core/notifications',
     });
 
     var NotificationController = function () {
+
         this.notifications = {};
-        this.oldMailCount = 0;//special variable needed to check for autoopen on new mail
+        this.oldMailCount = 0; // special variable needed to check for autoopen on new mail
         this.badges = [];
+
+        // add event supports
+        _.extend(this, Backbone.Events);
     };
 
     NotificationController.prototype = {
+
+        isOpen: function () {
+            return this.nodes.main.hasClass('active');
+        },
+
+        toggle: function () {
+            if (this.isOpen()) this.hide(); else this.show();
+        },
+
+        show: function () {
+
+            if (this.isOpen()) return; // if it's open already we're done
+
+            if (_.device('smartphone')) {
+                $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
+            }
+
+            this.nodes.main.addClass('active');
+            this.nodes.overlay.addClass('active');
+            this.badgeView.onToggle(true);
+
+            $(document).on('keydown.notification', $.proxy(function (e) {
+                if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
+                    $(document).off('keydown.notification');
+                    this.hideList();
+                    //focus badge when closing
+                    this.badgeView.$el.focus();
+                }
+            }, this));
+
+            // try to focus first item; focus badge otherwise
+            var firstItem = $('#io-ox-notifications .item').first();
+            if (firstItem.length > 0) firstItem.focus(); else this.badgeView.$el.focus();
+
+            this.trigger('show');
+        },
+
+        hide: function () {
+
+            if (!this.isOpen()) return; // if it's closed already we're done
+
+            _.each(this.badges, function (badgeView) {
+                badgeView.setNotifier(false);
+            });
+
+            this.nodes.main.removeClass('active');
+            this.nodes.overlay.empty().removeClass('active');
+            this.badgeView.onToggle(false);
+
+            if (_.device('smartphone')) {
+                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                this.nodes.overlay.empty().removeClass('active');
+            }
+
+            this.badgeView.$el.focus();
+
+            this.trigger('hide');
+        },
+
+        // deprecated
+        toggleList : function () { this.toggle(); },
+        showList   : function () { this.show(); },
+        hideList   : function () { this.hide(); },
 
         nodes: {
             main: $('<div>').attr({
@@ -255,9 +328,7 @@ define('io.ox/core/notifications',
                 $.proxy(this.toggleList, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
-        isOpen: function () {
-            return this.nodes.main.hasClass('active');
-        },
+
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};
@@ -293,6 +364,8 @@ define('io.ox/core/notifications',
             var newMails = 0,
                 self = this;
 
+            this.notificationsView.render(this.notifications);
+
             var count = _.reduce(this.notifications, function (memo, module, key) {
                 if (key === 'io.ox/mail') { //mail is special when it comes to autoopen
                     newMails = module.collection.size() - self.oldMailCount;
@@ -319,7 +392,6 @@ define('io.ox/core/notifications',
                 }
             };
 
-            this.notificationsView.render(this.notifications);
             //clear last item reference
             if (this.lastItem) {
                 this.lastItem.off('keydown', focusBadge);
@@ -329,219 +401,18 @@ define('io.ox/core/notifications',
             this.lastItem = this.notificationsView.$el.find('[tabindex="1"]').last();
             this.lastItem.on('keydown', focusBadge);
         },
-        toggleList: function () {
-            //create nice listing view of all notifications grouped by
-            //their app
-            if (this.nodes.main.hasClass('active')) {
-                this.hideList();
-                if (_.device('smartphone')) {
-                    this.nodes.overlay.empty().removeClass('active');
-                }
-            } else {
-                this.showList();
-            }
-        },
-        showList: function () {
-            if (_.device('smartphone')) {
-                $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
-            }
 
-            this.nodes.main.addClass('active');
-            this.nodes.overlay.addClass('active');
-
-            this.badgeView.onToggle(true);
-            $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
-                    $(document).off('keydown.notification');
-                    //focus badge when closing
-                    this.badgeView.$el.focus();
-                    this.hideList();
-                }
-            }, this));
-        },
-        hideList: function () {
-
-            _.each(this.badges, function (badgeView) {
-                badgeView.setNotifier(false);
-            });
-            this.badgeView.onToggle(false);
-            this.nodes.main.removeClass('active');
-            this.nodes.overlay.empty().removeClass('active');
-            if (_.device('smartphone')) {
-                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
-            }
-            this.badgeView.$el.focus();
-
-        },
-
-        // type = info | warning | error | success | screenreader
-        yell: (function () {
-
-            //$('#io-ox-core').prepend($('<div id="io-ox-notifications-popups">'));
-
-            var validType = /^(busy|error|info|success|warning|screenreader)$/,
-                active = false,
-                timer = null,
-                isSmartphone = _.device('smartphone'),
-
-                durations = {
-                    busy: 10000,
-                    error: 30000,
-                    info: 10000,
-                    success: 4000,
-                    warning: 10000,
-                    screenreader: 100,
-                },
-
-                icons = {
-                    busy: 'fa fa-refresh fa-spin',
-                    error: 'fa fa-exclamation',
-                    info: 'fa fa-exclamation',
-                    success: 'fa fa-check',
-                    warning: 'fa fa-exclamation'
-                },
-
-                remove = function (immediately) {
-
-                    active = false;
-                    clearTimeout(timer);
-
-                    if (immediately) {
-                        $('.io-ox-alert').remove();
-                        return;
-                    }
-
-                    var nodes =  $('.io-ox-alert')
-                        .trigger('notification:removed')
-                        .removeClass('appear');
-
-                    // has been event-based (transitionend webkitTransitionEnd) but sometimes
-                    // such events are not triggered causing invisible but blocking overlays
-                    setTimeout(function () {
-                        nodes.remove(); nodes = null;
-                    }, 300);
-                },
-
-                click = function (e) {
-
-                    if (!active) return;
-
-                    if (isSmartphone) return remove();
-
-                    var target = $(e.target), alert = target.closest('.io-ox-alert');
-
-                    // click on notification?
-                    if (alert.length) {
-                        // don't close on plain links
-                        if (target.is('a') && !target.hasClass('close')) return;
-                        // close if clicked on close icon or if clicked on success notifications
-                        if (target.hasClass('close') || alert.hasClass('io-ox-alert-success')) {
-                            e.preventDefault();
-                            remove();
-                        }
-                    } else {
-                        remove();
-                    }
-                };
-
-            $(document).on(_.device('touch') ? 'tap' : 'click', click);
-
-            return function (type, message) {
-
-                if (type === 'destroy') return remove(true);
-                if (type === 'close') return remove();
-
-                var o = {
-                    duration: 0,
-                    html: false,
-                    type: 'info'
-                };
-
-                if (_.isObject(type)) {
-                    // catch server error?
-                    if ('error' in type) {
-                        o.type = 'error';
-                        o.message = type.message || type.error;
-                        o.headline = gt('Error');
-                    } else {
-                        o = _.extend(o, type);
-                    }
-                } else {
-                    o.type = type || 'info';
-                    o.message = message;
-                }
-
-                // add message
-                if (validType.test(o.type)) {
-
-                    active = false;
-
-                    if (o.type !== 'screenreader') { //screenreader notifications should not remove standard ones, so special remove here
-                        clearTimeout(timer);
-                        timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
-                    } else {
-                        setTimeout(function () {
-                            $('.io-ox-alert-screenreader').remove();
-                        }, o.duration || durations[o.type] || 100);
-                    }
-
-                    var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
-                        reuse = false,
-                        className = 'io-ox-alert io-ox-alert-' + o.type + (o.type === 'screenreader' ? ' sr-only' : ''),
-                        wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal';
-
-                    // reuse existing alert?
-                    var node = $('.io-ox-alert');
-
-                    if (node.length && o.type !== 'screenreader') { //screenreader should not reuse existing notifications, this would only remove them for other users
-                        node.empty();
-                        reuse = true;
-                        className += ' appear';
-                    } else {
-                        node = $('<div role="alert" tabindex="-1">');
-                    }
-
-                    node.attr('class', className).append(
-                        $('<div class="icon">').append(
-                            $('<i>').addClass(icons[o.type] || 'fa fa-fw')
-                        )
-                    );
-
-                    if (o.type !== 'screenreader') {
-                        node.append(
-                            $('<div class="message user-select-text">').append(
-                                o.headline ? $('<h2 class="headline">').text(o.headline) : [],
-                                $('<div>').css('word-break', wordbreak).html(html)
-                            ),
-                            $('<a href="#" class="close" tabindex="1">').html('&times')
-                        );
-                    } else {
-                        node.append(
-                            $('<div class="message user-select-text">').append(
-                                o.headline ? $('<h2 class="headline">').text(o.headline) : []
-                            ),
-                            $('<div>').css('word-break', wordbreak).html(html)
-                        );
-                    }
-
-                    if (!reuse) $('#io-ox-core').append(node);
-
-                    // put at end of stack not to run into opening click
-                    setTimeout(function () {
-                        active = true;
-                        if (!reuse) node.addClass('appear');
-                    }, _.device('touch') ? 300 : 0);
-                }
-            };
-        }())
+        yell: yell
     };
 
     var controller = new NotificationController();
 
-    // auto-close if other apps are started; see bug #32768
+    // auto-close if other apps are started or app is changed see bug #32768
     // users might open mails from notification area, open a contact halo, clicking edit
-    ox.on('app:start', function () {
-        controller.hideList();
+    ox.on('app:start app:resume', function () {
+        if (controller.badgeView) {//don't trigger to early
+            controller.hideList();
+        }
     });
 
     return controller;

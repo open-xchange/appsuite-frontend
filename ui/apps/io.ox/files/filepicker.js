@@ -14,12 +14,13 @@
 define('io.ox/files/filepicker',
     ['io.ox/core/extensions',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/tk/folderviews',
+     'io.ox/core/folder/picker',
      'io.ox/core/cache',
      'io.ox/files/api',
      'io.ox/core/tk/selection',
+     'settings!io.ox/core',
      'gettext!io.ox/files'
-    ], function (ext, dialogs, folderviews, cache, filesAPI, Selection, gt) {
+    ], function (ext, dialogs, picker, cache, filesAPI, Selection, settings, gt) {
 
     'use strict';
 
@@ -29,84 +30,39 @@ define('io.ox/files/filepicker',
             filter: function () { return true; },
             header: gt('Add files'),
             primaryButtonText: gt('Save'),
-            cancelButtonText: gt('Cancel'),
+            // cancelButtonText: gt('Cancel'), // really?
             multiselect: true,
-            width: window.innerWidth * 0.8
+            width: window.innerWidth * 0.8,
+            tree: {
+                // must be noop (must return undefined!)
+                filter: $.noop
+            }
         }, options);
 
-        var folderCache = new cache.SimpleCache('folder-all'),
-            subFolderCache = new cache.SimpleCache('subfolder-all'),
-            container = $('<div>'),
-            filesPane = $('<ul>').addClass('io-ox-fileselection list-unstyled').attr({ tabindex: 0}),
-            tree = new folderviews.ApplicationFolderTree(container, {
-                type: 'infostore',
-                tabindex: 0,
-                rootFolderId: '9',
-                all: true,
-                storage: {
-                    folderCache: folderCache,
-                    subFolderCache: subFolderCache
-                }
-            }),
-            pane = new dialogs.ModalDialog({
-                width: options.width,
-                height: 350,
-                addclass: 'add-infostore-file'
-            }),
-            self = this,
-            pickerDef = $.Deferred();
+        var container = $('<div>'),
+            filesPane = $('<ul class="io-ox-fileselection list-unstyled" tabindex="0">'),
+            def = $.Deferred(),
+            self = this;
 
         Selection.extend(this, filesPane, {});
 
         this.selection.keyboard(filesPane, true);
         this.selection.setMultiple(options.multiselect);
+
         if (options.multiselect) {
-            this.selection.setEditable(true, '.file');
+            this.selection.setEditable(true, '.checkbox-inline');
             filesPane.addClass('multiselect');
         } else {
             filesPane.addClass('singleselect');
         }
 
-        pane.header($('<h4>').text(options.header))
-            .build(function () {
-                this.getContentNode().append(container, filesPane);
-            })
-            .addPrimaryButton('save', options.primaryButtonText, 'save', {tabIndex: '1'})
-            .addButton('cancel', options.cancelButtonText, 'cancel', {tabIndex: '1'})
-            .show(function () {
-                tree.paint().done(function () {
-                    tree.selection.updateIndex().selectFirst();
-                    pane.getBody().find('.io-ox-foldertree').focus();
-                });
-            })
-            .then(function (action) {
-                tree.destroy().done(function () {
-                    tree = pane = null;
-                });
-                if (action === 'save') {
-                    var files = [];
-                    filesPane.find('input:checked').each(function (index, el) {
-                        files.push($(el).data('fileData'));
-                    });
-                    pickerDef.resolve(files);
-                }
-            }, pickerDef.reject);
-
-        // add dbl-click option like native file-chooser
-        filesPane.on('dblclick', '.file', function () {
-            var file = $('input', this).data('fileData');
-            if (file) {
-                pickerDef.resolve([file]);
-                pane.close();
-            }
-        });
-
-        // on foldertree change update file selection
-        tree.selection.on('select', function (e, folderId) {
+        function onFolderChange(id) {
             filesPane.empty();
-            filesAPI.getAll({ folder: folderId }, false).then(function (files) {
+            filesAPI.getAll({ folder: id }, false).then(function (files) {
                 filesPane.append(
-                    _.chain(files).filter(options.filter).map(function (file) {
+                    _.chain(files)
+                    .filter(options.filter)
+                    .map(function (file) {
                         var title = (file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                 $('<label class="">')
@@ -114,7 +70,7 @@ define('io.ox/files/filepicker',
                                     .attr('title', title)
                                     .append(
                                         $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
-                                            .val(file.id).data('fileData', file)
+                                            .val(file.id).data('file', file)
                                     ),
                                 $('<div class="name">').text(title)
                             );
@@ -122,17 +78,54 @@ define('io.ox/files/filepicker',
                             ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
                         }
                         return $div;
-                    }).value()
+                    })
+                    .value()
                 );
                 self.selection.clear();
                 self.selection.init(files);
                 self.selection.selectFirst();
             });
+        }
+
+        picker({
+
+            addClass: 'zero-padding add-infostore-file',
+            button: options.primaryButtonText,
+            height: 350,
+            module: 'infostore',
+            persistent: 'folderpopup/filepicker',
+            root: '9',
+            settings: settings,
+            title: options.header,
+            width: options.width,
+
+            done: function () {
+                def.resolve(
+                    _(filesPane.find('input:checked')).map(function (node) {
+                        return $(node).data('file');
+                    })
+                );
+            },
+
+            filter: options.tree.filter,
+
+            initialize: function (dialog, tree) {
+
+                dialog.getContentNode().append(container, filesPane);
+
+                filesPane.on('dblclick', '.file', function () {
+                    var file = $('input', this).data('file');
+                    if (!file) return;
+                    def.resolve([file]);
+                    dialog.close();
+                });
+
+                tree.on('change', onFolderChange);
+            }
         });
 
-        return pickerDef.promise();
+        return def.promise();
     };
 
     return FilePicker;
-
 });

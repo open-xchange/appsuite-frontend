@@ -9,6 +9,9 @@
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
@@ -48,6 +51,7 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.personaldata.html">3.4 Persoonlijke Contactgegevens wijzigen</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.changepassword.html">3.5 Het Wachtwoord wijzigen</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.socialaccounts.html">3.6 Instellen van Accounts voor Sociale Netwerken</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.clients.html">3.7 Een Client installeren voor Werkstations of Mobile Apparaten</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.portal.html">4 <span class="phrase">Portaal</span></a></span></dt>
 <dd><dl>
@@ -64,7 +68,7 @@
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.email.html">5 <span class="phrase">E-mail</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.gui.html">5.1 De <span class="phrase"><span class="guilabel"><strong>E-mail</strong></span></span> Componenten</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 Tonen e-mailberichten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.view.html">5.2 E-mailberichten tonen</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 Tonen of opslaan van e-mailbijlagen</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.email.send.html">5.4 E-mailberichten versturen</a></span></dt>
 <dd><dl>
@@ -88,56 +92,60 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.save.html">5.5.10 E-mailberichten opslaan</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.import.html">5.5.11 E-mailberichten importeren</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.print.html">5.5.12 E-mailberichten Afdrukken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.13 E-mailberichten verwijderen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.14 E-mailmappen opschonen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.15 Bewerken van meerdere e-mailberichten in één keer</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.16 Verzamelde Mail gebruiken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.17 E-mailfilters gebruiken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.5.13 E-mailberichten Archiveren</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.5.14 E-mailberichten verwijderen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.5.15 E-mailmappen opschonen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.multiple.html">5.5.16 Bewerken van meerdere e-mailberichten in één keer</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.5.17 Verzamelde Mail gebruiken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.manage.mailfilter.html">5.5.18 E-mailfilters gebruiken</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.6 E-mailberichten binnen een Team</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.search.html">5.6 Zoeken naar E-mailberichten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.share.html">5.7 E-mailberichten binnen een Team</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.6.1 E-mailberichten delen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.6.2 Abonneren op e-mailmappen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.6.3 Uitnodigen van e-mailontvangers voor een afspraak</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.6.4 Alle ontvangers van het e-mailbericht opslaan als distributielijst.</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.emails.html">5.7.1 E-mailberichten delen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.subscribe.html">5.7.2 Abonneren op e-mailmappen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_appointment.html">5.7.3 Uitnodigen van e-mailontvangers voor een afspraak</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.share.recipient_distributionlist.html">5.7.4 Alle ontvangers van het e-mailbericht opslaan als distributielijst.</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.7 E-mailaccounts</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.externalaccounts.html">5.8 E-mailaccounts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.7.1 Aanmaken en bewerken van e-mailaccounts</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.7.2 Aanpassen van een extra e-mailaccount</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.manage.html">5.8.1 Aanmaken en bewerken van e-mailaccounts</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.email.externalaccounts.use.html">5.8.2 Aanpassen van een extra e-mailaccount</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.8 E-mailinstellingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.email.settings.html">5.9 E-mailinstellingen</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.contacts.html">6 <span class="phrase">Adresboek</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.gui.html">6.1 De <span class="phrase"><span class="guilabel"><strong>Adresboek</strong></span></span> Componenten</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.view.html">6.2 Tonen van contacten</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.haloview.html">6.3 Het Halo Overzicht</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.add.html">6.4 Contacten aanmaken</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.view.html">6.2 Contacten Tonen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.attachments.html">6.3 Tonen of opslaan van contactbijlagen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.haloview.html">6.4 Het Halo Overzicht</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.add.html">6.5 Contacten aanmaken</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.create.html">6.4.1 Nieuw contact aanmaken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">6.4.2 Contactgegevens vanuit een vCard toevoegen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.import.html">6.4.3 Importeren van contacten vanuit bestanden</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.subscribe.html">6.4.4 Importeren van contacten vanuit sociale netwerken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.create.html">6.5.1 Nieuw contact aanmaken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">6.5.2 Contactgegevens vanuit een vCard toevoegen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.import.html">6.5.3 Importeren van contacten vanuit bestanden</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.add.subscribe.html">6.5.4 Importeren van contacten vanuit sociale netwerken</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.distributionlist.html">6.5 Creëren van distributielijsten</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.manage.html">6.6 Contacten organiseren</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.distributionlist.html">6.6 Creëren van distributielijsten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.manage.html">6.7 Contacten organiseren</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.6.1 Versturen van e-mailberichten vanuit uit een adresboek</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.6.2 Uitnodigen van contacten voor een afspraak</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.edit.html">6.6.3 Bewerken van Contacten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.move.html">6.6.4 Verplaatsen van contacten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.copy.html">6.6.5 Kopiëren van contacten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.6.6 Versturen van contactgegevens als vCard</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.6.7 Contactgegevens toevoegen als Xing contact</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.6.8 Uitnodigen van contacten voor Xing</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.6.9 Afdrukken Contacten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.6.10 Contacten verwijderen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.multiple.html">6.6.11 Bewerken van meerdere contacten in één keer</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.7.1 Versturen van e-mailberichten vanuit uit een adresboek</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.7.2 Uitnodigen van contacten voor een afspraak</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.edit.html">6.7.3 Bewerken van Contacten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.move.html">6.7.4 Verplaatsen van contacten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.copy.html">6.7.5 Kopiëren van contacten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.7.6 Versturen van contactgegevens als vCard</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.7.7 Contactgegevens toevoegen als Xing contact</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.7.8 Uitnodigen van contacten voor Xing</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.7.9 Afdrukken Contacten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.7.10 Contacten verwijderen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.contacts.manage.multiple.html">6.7.11 Bewerken van meerdere contacten in één keer</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.share.html">6.7 Contacten in Teams</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.datainterchange.html">6.8 Uitwisselen van Contacten met Andere Applicaties</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.settings.html">6.9 Adresboek instellingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.search.html">6.8 Zoeken naar contacten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.share.html">6.9 Contacten in Teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.datainterchange.html">6.10 Uitwisselen van Contacten met Andere Applicaties</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.contacts.settings.html">6.11 Adresboek instellingen</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.calendar.html">7 <span class="phrase">Agenda</span></a></span></dt>
 <dd><dl>
@@ -148,59 +156,63 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.2 Afspraken tonen in het lijstoverzicht</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.appointments.html">7.2.3 Hoe worden afspraken getoond?</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.3 Afspraken maken</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.attachments.html">7.3 Tonen of opslaan van afspraakbijlagen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.add.html">7.4 Afspraken maken</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.3.1 Nieuwe afspraken maken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.3.2 Het creëren van een nieuwe afspraak uit een iCal-bijlage</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.3.3 Importeren van afspraken vanuit bestanden</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.3.4 Abonneren op afspraken vanuit andere agenda's</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.3.5 Oplossen van conflicterende afspraken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.4.1 Nieuwe afspraken maken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.4.2 Het creëren van een nieuwe afspraak uit een iCal-bijlage</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.import.html">7.4.3 Importeren van afspraken vanuit bestanden</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.4.4 Abonneren op afspraken vanuit andere agenda's</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.4.5 Oplossen van conflicterende afspraken</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.4 Beantwoorden van afspraakuitnodigingen</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.5 Beheren van Afspraken</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.5 Beantwoorden van afspraakuitnodigingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.6 Beheren van Afspraken</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.5.1 Afspraken bewerken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.5.2 Het aanpassen van een afspraak met slepen en neerzetten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.5.3 Wijzigen van de afspraakstatus</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.5.4 Afspraken verplaatsen naar een andere map</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.5.5 Afdrukken van afspraken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.5.6 Afspraken wissen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.5.7 Bewerken van meerdere afspraken in één keer</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.6.1 Afspraken bewerken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.6.2 Het aanpassen van een afspraak met slepen en neerzetten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.6.3 Wijzigen van de afspraakstatus</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.6.4 Afspraken verplaatsen naar een andere map</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.6.5 Afdrukken van afspraken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.6.6 Afspraken wissen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.6.7 Bewerken van meerdere afspraken in één keer</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.6 Afspraken in teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.search.html">7.7 Zoeken naar afspraken</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.8 Afspraken in teams</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.6.1 Afspraken delen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.6.2 Versturen van e-mailberichten naar deelnemers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.6.3 Deelnemers uitnodigen voor een nieuwe afspraak</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.6.4 Aanmaken van distributielijsten vanuit de lijst van deelnemers</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.6.5 Plannen met meerdere deelnemers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.8.1 Afspraken delen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.8.2 Versturen van e-mailberichten naar deelnemers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.invite_newappointment.html">7.8.3 Deelnemers uitnodigen voor een nieuwe afspraak</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.distributionlist_participants.html">7.8.4 Aanmaken van distributielijsten vanuit de lijst van deelnemers</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.freebusy.html">7.8.5 Plannen met meerdere deelnemers</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.7 Agendainstellingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.9 Agendainstellingen</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.tasks.html">8 <span class="phrase">Taken</span></a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.gui.html">8.1 De <span class="phrase"><span class="guilabel"><strong>Taken</strong></span></span> componenten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.gui.html">8.1 De <span class="phrase"><span class="guilabel"><strong>Taken</strong></span></span> Componenten</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.view.html">8.2 Tonen van taken</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.add.html">8.3 Taken aanmaken</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.invitation.html">8.4 Beantwoorden van afspraakuitnodigingen</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.manage.html">8.5 Taken Beheren</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.attachments.html">8.3 Tonen of opslaan van taakbijlagen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.add.html">8.4 Taken Aanmaken</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.invitation.html">8.5 Beantwoorden van afspraakuitnodigingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.manage.html">8.6 Taken Beheren</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.edit.html">8.5.1 Taken bewerken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.5.2 Taken markeren als voltooid</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.5.3 De vervaldatum van de taak veranderen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.5.4 Taken verplaatsen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.5.5 Beheren van taakbevestigingen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.5.6 Taken afdrukken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.5.7 Taken verwijderen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.multiple.html">8.5.8 Bewerken van meerdere taken in één keer</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.edit.html">8.6.1 Taken bewerken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.6.2 Taken markeren als voltooid</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.6.3 De vervaldatum van de taak veranderen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.6.4 Taken verplaatsen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.6.5 Beheren van taakbevestigingen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.6.6 Taken afdrukken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.6.7 Taken verwijderen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.manage.multiple.html">8.6.8 Bewerken van meerdere taken in één keer</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.share.html">8.6 Taken in teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.search.html">8.7 Zoeken naar taken</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.share.html">8.8 Taken in teams</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.tasks.html">8.6.1 Taken delen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.delegate.html">8.6.2 Taken delegeren</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.tasks.html">8.8.1 Taken delen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.tasks.share.delegate.html">8.8.2 Taken delegeren</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.datainterchange.html">8.7 Uitwisselen van Gegevens met Andere Applicaties</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.settings.html">8.8 Taakinstellingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.datainterchange.html">8.9 Uitwisselen van Taken met andere Applicaties</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.tasks.settings.html">8.10 Taakinstellingen</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.files.html">9 <span class="phrase">Bestanden</span></a></span></dt>
 <dd><dl>
@@ -228,81 +240,65 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.versions.html">9.5.11 Werken met versies</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.files.manage.multiple.html">9.5.12 Bewerken van meerdere bestanden in één keer</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.6 Benaderen van bestanden met WebDAV</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.search.html">9.6 Zoeken naar Bestanden</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.webdav.html">9.7 Benaderen van bestanden met WebDAV</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.6.1 Instellen van WebDAV onder Linux</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.6.2 Instellen van WebDAV onder Windows XP</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.6.3 Instellen van WebDAV onder Windows Vista</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.6.4 Instellen van WebDAV onder Windows 7</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.linux.html">9.7.1 Instellen van WebDAV onder Linux</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winxp.html">9.7.2 Instellen van WebDAV onder Windows XP</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.winvista.html">9.7.3 Instellen van WebDAV onder Windows Vista</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.files.webdav.win7.html">9.7.4 Instellen van WebDAV onder Windows 7</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.7 Bestanden en Teams</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.8 Drive Instellingen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.share.html">9.8 Bestanden en Teams</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.files.settings.html">9.9 Drive Instellingen</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.documents.html">10 <span class="phrase">Documenten</span></a></span></dt>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.pad.html">10 <span class="phrase">Eenvoudig Kladblok</span></a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.gui.html">10.1 De <span class="phrase"><span class="guilabel"><strong>Documenten</strong></span></span> componenten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.add.html">10.1 Maken van Tekstbestanden</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.edit.html">10.2 Bewerken van Tekstbestanden</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">11 Organiseren van Gegevens</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.docportal.gui.html">10.1.1 De <span class="phrase"><span class="guilabel"><strong>Tekst</strong></span></span> and <span class="phrase"><span class="guilabel"><strong>Rekenbladen</strong></span></span> componenten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.text.gui.html">10.1.2 De Bewerk <span class="phrase"><span class="guilabel"><strong>Tekst</strong></span></span> pagina componenten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.documents.spreadsheet.gui.html">10.1.3 De Bewerk <span class="phrase"><span class="guilabel"><strong>Rekenbladen</strong></span></span> pagina componenten</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.add.html">10.2 Documenten Aanmaken</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.edit.html">10.3 Documenten Bewerken</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.documents.editasnew.html">10.4 Documenten Bewerken met een Nieuwe Naam</a></span></dt>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.pad.html">11 <span class="phrase">Eenvoudig Kladblok</span>   </a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">11.1 Mappen</a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.add.html">11.1 Maken van Tekstbestanden</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.pad.edit.html">11.2 Bewerken van Tekstbestanden</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">11.1.1 Maptypen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">11.1.2 Navigeren binnen de mappenstructuur</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">11.1.3 Mappen verbergen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">11.1.4 Mappen toevoegen aan favorieten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.create.html">11.1.5 Mappen aanmaken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">11.1.6 Mappen hernoemen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">11.1.7 Mappen verplaatsen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">11.1.8 Mappen wissen</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">12 Organiseren van Gegevens</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.rights.html">11.2 Rechten</a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.search.html">12.1 Zoeken</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.defined.html">11.2.1 Welke rechten kunnen worden toegekend?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">11.2.2 Rechten voor bestaande mappen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">11.2.3 Rechten voor nieuwe mappen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">11.2.4 Mappen delen</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.html">11.3 Publiceren&amp;amp;Inschrijven</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.gui.html">12.1.1 De zoekscherm componenten</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.searchmenu.html">12.1.2 Welke zoekmogelijkheden zijn standaard beschikbaar?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.search.objects.html">12.1.3 Zoeken naar objecten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">11.3.1 Inschrijven op gegevens</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">11.3.2 Publiceren van gegevens</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html">11.3.3 Organiseren van abonnementen en gepubliceerde mappen</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">12.2 Mappen</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.datainterchange.html">12 Gegevensuitwisseling</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">12.2.1 Maptypen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">12.2.2 Navigeren binnen de mappenstructuur</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">12.2.3 Mappen verbergen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.create.html">12.2.4 Mappen aanmaken</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">12.2.5 Mappen hernoemen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">12.2.6 Mappen verplaatsen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">12.2.7 Mappen wissen</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.rights.html">12.3 Rechten</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.import.html">12.1 Importeren van Gegevens</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.defined.html">12.3.1 Welke rechten kunnen worden toegekend?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">12.3.2 Rechten voor bestaande mappen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">12.3.3 Rechten voor nieuwe mappen</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.grant.html">12.3.4 Mappen delen</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.ical.html">12.1.1 Importeren van afspraken en taken in iCal-indeling.</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">12.1.2 Importeren van contacten in vCard-formaat</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">12.1.3 Importeren van contacten in CSV-formaat</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.html">12.4 Publiceren&amp;amp;Inschrijven</a></span></dt>
-<dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">12.4.1 Inschrijven op gegevens</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.publish.html">12.4.2 Publiceren van gegevens</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html">12.4.3 Organiseren van abonnementen en gepubliceerde mappen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.export.html">12.2 Gegevens Exporteren</a></span></dt>
+<dd><dl><dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.export.folder.html">12.2.1 Exporteren van gegevens uit een map</a></span></dt></dl></dd>
 </dl></dd>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.datainterchange.html">13 Gegevensuitwisseling</a></span></dt>
-<dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.import.html">13.1 Importeren van Gegevens</a></span></dt>
-<dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.ical.html">13.1.1 Importeren van afspraken en taken in iCal-indeling.</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">13.1.2 Importeren van contacten in vCard-formaat</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">13.1.3 Importeren van contacten in CSV-formaat</a></span></dt>
-</dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.datainterchange.export.html">13.2 Gegevens Exporteren</a></span></dt>
-<dd><dl><dt><span class="sect2"><a href="ox.appsuite.user.sect.datainterchange.export.folder.html">13.2.1 Exporteren van gegevens uit een map</a></span></dt></dl></dd>
-</dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.bestpractices.html">14 Vragen en Antwoorden</a></span></dt>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.bestpractices.html">13 Vragen en Antwoorden</a></span></dt>
 <dd><dl>
 <dt><span class="qandaset"><a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice">Vaak gestelde vragen</a></span></dt>
 <dd><dl>
-<dt>14.1  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">Algemene vragen</a>
+<dt>13.1  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.common">Algemene vragen</a>
 </dt>
 <dd><dl>
 <dt>Vraag: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.personaldata">Waar kan ik mijn persoonlijke gegevens en instellingen vinden?</a>
@@ -316,7 +312,7 @@
 <dt>Vraag: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.socialmessaging">Hoe kan ik actuele berichten uit sociale netwerken of nieuwspagina's lezen?</a>
 </dt>
 </dl></dd>
-<dt>14.2  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">Vragen over e-mailberichten en contacten</a>
+<dt>13.2  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mail_contacts">Vragen over e-mailberichten en contacten</a>
 </dt>
 <dd><dl>
 <dt>Vraag: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.email.recipients">Hoe kan ik een e-mailbericht sturen naar meerdere adressen in één keer ?</a>
@@ -336,7 +332,7 @@
 <dt>Vraag: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">Hoe kan ik de contacten uit mijn sociale netwerken gebruiken?</a>
 </dt>
 </dl></dd>
-<dt>14.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">Vragen over taken, agenda's en afspraken</a>
+<dt>13.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">Vragen over taken, agenda's en afspraken</a>
 </dt>
 <dd><dl>
 <dt>Vraag: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.task_or_appointment">Wanneer moet ik een taak maken en wanneer een afspraak?</a>
@@ -352,7 +348,7 @@
 <dt>Vraag: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.scheduling">Hoe vindt u vrije momenten bij het maken van afspraken? </a>
 </dt>
 </dl></dd>
-<dt>14.4  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">Vragen over gegevensorganisatie en teamwork</a>
+<dt>13.4  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.dataexchange">Vragen over gegevensorganisatie en teamwork</a>
 </dt>
 <dd><dl>
 <dt>Vraag: <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">Hoe kan ik bepaalde contacten delen met mijn externe partners?</a>

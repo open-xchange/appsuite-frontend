@@ -13,7 +13,7 @@
 
 define('io.ox/search/util',
     ['io.ox/core/http',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/api/account',
     ], function (http, folderAPI, accountAPI) {
 
@@ -23,7 +23,7 @@ define('io.ox/search/util',
     // rejects only in case all deferreds failed
     // otherwise resolves only with deferreds succeeded
     var whenResolved = function (list, def) {
-        //remove failed deferreds until when resolves
+        // remove failed deferreds until when resolves
         def = def || $.Deferred();
         $.when.apply($, list)
             .then(
@@ -31,11 +31,11 @@ define('io.ox/search/util',
                     def.resolve.apply(this, arguments);
                 },
                 function () {
-                    //kick rejected
+                    // kick rejected
                     var valid = _.filter(list, function (item) {
                         return item.state() !== 'rejected';
                     });
-                    //when again
+                    // when again
                     whenResolved(valid, def);
                 }
             );
@@ -43,8 +43,14 @@ define('io.ox/search/util',
     };
 
     return {
-
+        getOptionLabel: function (options, id) {
+            var current = _.find(options, function (item) {
+                    return item.id === id;
+                });
+            return (current || {}).name;
+        },
         getFolders: function (model) {
+
             var hash = {},
                 req = [],
                 mapping = {},
@@ -53,43 +59,45 @@ define('io.ox/search/util',
                 id,
                 accounts = {};
 
-            //infostore hack
+            // infostore hack
             module = module === 'files' ? 'infostore' : module;
 
-            //standard folders for mail
+            http.pause();
+
+            // standard folders for mail
             if (module === 'mail') {
-                _.each(accountAPI.getStandardFolders(), function (id) {
+                _.each(folderAPI.getStandardMailFolders(), function (id) {
                     mapping[id] = 'standard';
                 });
                 req.push(accountAPI.all());
             }
 
-            //default folder
+            // default folder
             id = folderAPI.getDefaultFolder(module);
-            if (id)
-                mapping[id] = 'default';
+            if (id) mapping[id] = 'default';
 
-            //current folder
+            // current folder
             app = model.getApp(true) + '/main';
             if (require.defined(app)) {
                 id = require(app).getApp().folder.get() || undefined;
-                if (id)
-                    mapping[id] = 'current';
+                if (id) mapping[id] = 'current';
             }
 
-            //request
-            _.each(Object.keys(mapping), function (id) {
+            // request
+            _(mapping).chain().keys().each(function (id) {
                 if (id && !hash[id]) {
                     hash[id] = true;
-                    req.push(folderAPI.get({folder: id}));
+                    req.push(folderAPI.get(id));
                 }
             });
+
+            http.resume();
 
             return whenResolved(req)
                     .then(function () {
                         var args = Array.prototype.slice.apply(arguments);
 
-                        //store account data
+                        // store account data
                         if (_.isArray(args[0])) {
                             var list = args.shift();
                             _.each(list, function (account) {
@@ -97,11 +105,11 @@ define('io.ox/search/util',
                             });
                         }
 
-                        //simplifiy
+                        // simplifiy
                         return _.map(args, function (folder) {
                             return {
                                 id: folder.id,
-                                title: folder.title || folder.id, //folderAPI.getFolderTitle(folder.title, 15),
+                                title: folder.title || folder.id, // folderAPI.getFolderTitle(folder.title, 15),
                                 type: mapping[folder.id],
                                 data: folder
                             };
@@ -117,26 +125,33 @@ define('io.ox/search/util',
                         });
                         return qualified;
                     });
-
         },
+
         getFirstChoice: function (model) {
             var module = model.getModule(),
-                id = model.getFolder() || folderAPI.getDefaultFolder(module),
+                id = model.getFolder(),
                 def = $.Deferred(),
                 value = function (id, folder) {
                     folder = folder || {};
-                    //use id as fallback
+                    // use id as fallback
                     def.resolve({
                         custom: folder.id || id,
-                        display_name: folder.title || id
+                        name: folder.title || id
                     });
                 };
 
-            //get folder title
-            folderAPI.get({folder: id})
-                    .always(value.bind(this, id));
+            // infostore hack
+            module = module === 'files' ? 'infostore' : module;
 
-            return def.promise();
+            //'all folders' when not mandatory and not default folder
+            if (model.isMandatory('folder') || id !== (folderAPI.getDefaultFolder(module) || '').toString()) {
+                // 'preselected folder'
+                folderAPI.get(id).always(value.bind(this, id));
+                return def.promise();
+            } else {
+                // 'all folders'
+                return $.Deferred().resolve({});
+            }
         }
 
     };

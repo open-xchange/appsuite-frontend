@@ -254,8 +254,18 @@
 
             fileCache.cache = function (name, contents) {
                 fileToc.push(name);
-                storage.setItem(name, contents);
-                storage.setItem('file-toc', JSON.stringify(fileToc));
+                try {
+                    storage.setItem(name, contents);
+                    storage.setItem('file-toc', JSON.stringify(fileToc));
+                } catch (e) {
+                    // quota exceeded
+                    if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'QuotaExceededError') {
+                        console.warn('localStorage quota exceeded.');
+                    } else {
+                        console.warn('Failed writing to localStorage. ')
+                    }
+                    return;
+                }
             };
 
             fileCache.retrieve = function (name) {
@@ -606,6 +616,13 @@
     define('withPluginsFor', {
         load: function (name, parentRequire, loaded) {
             parentRequire(ox.withPluginsFor(name, []), loaded);
+        }
+    });
+
+    define('wait', {
+        load: function (name, parentRequire, loaded) {
+            var interval = parseInt(name, 10);
+            setTimeout(loaded, interval);
         }
     });
 

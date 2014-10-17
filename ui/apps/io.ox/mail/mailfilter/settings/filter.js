@@ -16,19 +16,30 @@ define('io.ox/mail/mailfilter/settings/filter',
      'io.ox/core/api/mailfilter',
      'io.ox/mail/mailfilter/settings/model',
      'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
      'io.ox/settings/util',
      'io.ox/mail/mailfilter/settings/filter/view-form',
      'gettext!io.ox/mail',
      'io.ox/mail/mailfilter/settings/filter/defaults',
      'static/3rd.party/jquery-ui.min.js'
 
-    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt, DEFAULTS) {
+    ], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS) {
 
     'use strict';
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection,
         grid;
+
+    function containsStop(actioncmds) {
+        var stop = false;
+        _.each(actioncmds, function (action) {
+            if (_.contains(['stop'], action.id)) {
+                stop = true;
+            }
+        });
+        return stop;
+    }
 
     function updatePositionInCollection(collection, positionArray) {
         _.each(positionArray, function (key, val) {
@@ -125,24 +136,46 @@ define('io.ox/mail/mailfilter/settings/filter',
         draw: function (model) {
             var flag = (model.get('flags') || [])[0];
             var title = model.get('rulename'),
-                texttoggle = model.get('active') ? gt('Disable') : gt('Enable');
+                texttoggle = model.get('active') ? gt('Disable') : gt('Enable'),
+                actioncmds = model.get('actioncmds'),
+                faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
+                actionValue;
+
+            if (flag === 'vacation') {
+                actionValue = 'edit-vacation';
+            } else if (flag === 'autoforward') {
+                actionValue = 'edit-autoforward';
+            } else {
+                actionValue = 'edit';
+            }
 
             $(this).append(
                 $('<a>').addClass('action').text(gt('Edit')).attr({
+                    title: gt('Edit'),
                     href: '#',
                     role: 'button',
-                    'data-action': flag === 'vacation' ? 'edit-vacation' : 'edit',
+                    'data-action': actionValue,
                     tabindex: 1,
                     'aria-label': title + ', ' + gt('Edit')
                 }),
                 $('<a>').addClass('action').text(texttoggle).attr({
+                    title: texttoggle,
                     href: '#',
                     role: 'button',
                     'data-action': 'toggle',
                     tabindex: 1,
                     'aria-label': title + ', ' + (texttoggle)
                 }),
+                $('<a>').append($('<i/>').addClass('fa ' + faClass)).attr({
+                    title: gt('process subsequent rules'),
+                    href: '#',
+                    role: 'button',
+                    'data-action': 'toogleProcessSub',
+                    tabindex: 1,
+                    'aria-label': title + ', ' + gt('process subsequent rules')
+                }),
                 $('<a>').append($('<i/>').addClass('fa fa-trash-o')).attr({
+                    title: gt('remove'),
                     href: '#',
                     role: 'button',
                     'data-action': 'delete',
@@ -154,6 +187,16 @@ define('io.ox/mail/mailfilter/settings/filter',
     });
 
     ext.point('io.ox/settings/mailfilter/filter/settings/actions/vacation').extend({
+        index: 200,
+        id: 'actions',
+        draw: function (model) {
+            //redirect
+            ext.point('io.ox/settings/mailfilter/filter/settings/actions/common')
+                            .invoke('draw', this, model);
+        }
+    });
+
+    ext.point('io.ox/settings/mailfilter/filter/settings/actions/autoforward').extend({
         index: 200,
         id: 'actions',
         draw: function (model) {
@@ -229,6 +272,16 @@ define('io.ox/mail/mailfilter/settings/filter',
                         self.model.on('change:rulename', function (el, val) {
                             titleNode.text(val);
                         });
+
+                        self.model.on('ChangeProcessSub', function (status) {
+                            var target = self.$el.find('[data-action="toogleProcessSub"] i');
+                            if (status) {
+                                target.removeClass('fa-ban').addClass('fa-arrow-down');
+                            } else {
+                                target.removeClass('fa-arrow-down').addClass('fa-ban');
+                            }
+
+                        });
                         return self;
                     },
 
@@ -236,7 +289,9 @@ define('io.ox/mail/mailfilter/settings/filter',
                         'click [data-action="toggle"]': 'onToggle',
                         'click [data-action="delete"]': 'onDelete',
                         'click [data-action="edit"]': 'onEdit',
+                        'click [data-action="toogleProcessSub"]': 'onToggleProcessSub',
                         'click [data-action="edit-vacation"]': 'onEditVacation',
+                        'click [data-action="edit-autoforward"]': 'onEditAutoforward',
                         'keydown .drag-handle': 'dragViaKeyboard'
                     },
 
@@ -250,6 +305,34 @@ define('io.ox/mail/mailfilter/settings/filter',
                             api.update(self.model).done(function () {
                                 self.$el.toggleClass('active disabled');
                                 $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
+                            })
+                        );
+                    },
+
+                    onToggleProcessSub: function (e) {
+                        e.preventDefault();
+                        var self = this,
+                            actioncmds = this.model.get('actioncmds'),
+                            stop = containsStop(actioncmds);
+
+                        if (stop) {
+                            actioncmds.pop();
+                        } else {
+                            actioncmds.push({id: 'stop'});
+                        }
+
+                        this.model.set('actioncmds', actioncmds);
+
+
+                        //yell on reject
+                        settingsUtil.yellOnReject(
+                            api.update(self.model).done(function () {
+                                var target = $(e.target).closest('.widget-controls').find('[data-action="toogleProcessSub"] i');
+                                if (containsStop(actioncmds)) {
+                                    target.removeClass('fa-arrow-down').addClass('fa-ban');
+                                } else {
+                                    target.removeClass('fa-ban').addClass('fa-arrow-down');
+                                }
                             })
                         );
                     },
@@ -297,6 +380,17 @@ define('io.ox/mail/mailfilter/settings/filter',
                         e.preventDefault();
                         var elem = _.find(grid.getIds(), function (item) {
                                 return item.id === 'io.ox/vacation';
+                            });
+
+                        if (elem) {
+                            grid.selection.set(elem);
+                        }
+                    },
+
+                    onEditAutoforward: function (e) {
+                        e.preventDefault();
+                        var elem = _.find(grid.getIds(), function (item) {
+                                return item.id === 'io.ox/autoforward';
                             });
 
                         if (elem) {
@@ -358,7 +452,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                     },
 
                     render: function () {
-                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter')),
+                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter Rules')),
                             $('<div>').addClass('btn-group pull-right').append(
                                 $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
                                     'data-action': 'add',
@@ -417,7 +511,8 @@ define('io.ox/mail/mailfilter/settings/filter',
                                 data = _.map(arrayOfFilters, function (single) {
                                     return parseInt($(single).attr('data-id'), 10);
                                 });
-                                 //yell on reject
+
+                                //yell on reject
                                 settingsUtil.yellOnReject(
                                     api.reorder(data)
                                 );

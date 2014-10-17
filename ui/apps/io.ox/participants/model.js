@@ -149,7 +149,7 @@ define('io.ox/participants/model',
                 if (self.has('display_name') && self.has('image1_url')) {
                     setExternalContact(self.toJSON());
                 } else {
-                    contactAPI.getByEmailadress(self.get('mail') || self.get('email1')).done(function (data) {
+                    contactAPI.getByEmailaddress(self.get('mail') || self.get('email1')).done(function (data) {
                         if (data && data.display_name) {
                             setExternalContact(data);
                         } else {

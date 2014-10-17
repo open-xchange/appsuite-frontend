@@ -15,7 +15,7 @@ define('io.ox/calendar/week/view',
      'io.ox/core/date',
      'io.ox/core/extensions',
      'gettext!io.ox/calendar',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'settings!io.ox/calendar',
      'static/3rd.party/jquery-ui.min.js'
     ], function (util, date, ext, gt, folderAPI, settings) {
@@ -433,7 +433,7 @@ define('io.ox/calendar/week/view',
          * @param  {Object} obj appointment object
          */
         onUpdateAppointment: function (obj) {
-            if (obj.start_date && obj.end_date && obj.start_date < obj.end_date) {
+            if (obj.start_date && obj.end_date && obj.start_date <= obj.end_date) {
                 this.trigger('updateAppointment', obj);
             }
         },
@@ -796,18 +796,17 @@ define('io.ox/calendar/week/view',
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var formatDate = tmpDate.format('E d'),
-                    day = $('<a>')
+                var day = $('<a>')
                     .addClass('weekday')
                     .attr({
                         date: d,
-                        title: gt('Click for whole day appointment'),
+                        title: tmpDate.format(date.DATE) + ', ' + gt('Click for whole day appointment'),
                         role: 'button',
                         tabindex: 1,
                         href: '#',
-                        'aria-label': formatDate + ', ' + gt('Click for whole day appointment')
+                        'aria-label': tmpDate.format(date.DATE) + ', ' + gt('Click for whole day appointment')
                     })
-                    .text(gt.noI18n(formatDate))
+                    .text(gt.noI18n(tmpDate.format('E d')))
                     .width(100 / this.columns + '%');
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
@@ -836,6 +835,19 @@ define('io.ox/calendar/week/view',
                     gt('CW %1$d', this.startDate.format('w'))
                 )
             );
+
+            if (_.device('smartphone')) {
+                // pass some dates around
+                this.navbarDates = {
+                    cw: gt('CW %1$d', this.startDate.format('w')),
+                    date: gt.noI18n(this.columns > 1 ?
+                        this.startDate.formatInterval(new date.Local(this.startDate.getTime() + ((this.columns - 1) * date.DAY)), date.DATE) :
+                        this.startDate.format(date.DAYOFWEEK_DATE)
+                    )
+                };
+                // bubbling event to get it in page controller
+                this.trigger('change:navbar:date', this.navbarDates);
+            }
         },
 
         /**
@@ -1024,16 +1036,15 @@ define('io.ox/calendar/week/view',
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
                         left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
                         border = (left > 0 || (left === 0 && width < self.appWidth)),
-                        height = Math.max(pos.height, self.minCellHeight - 1),
-                        lineHeight = self.minCellHeight;
+                        height = Math.max(pos.height, self.minCellHeight - 1) - (border ? 1 : 0);
 
                     app.css({
                         top: pos.top,
                         left: left + '%',
-                        height: (height + 1) + 'px',
-                        lineHeight: lineHeight + 'px',
+                        height: height + 'px',
+                        lineHeight: self.minCellHeight + 'px',
                         width: width + '%',
-                        minHeight: (self.minCellHeight) + 'px',
+                        minHeight: (self.minCellHeight - (border ? 2 : 1)) + 'px',
                         maxWidth: self.appWidth + '%'
                         // zIndex: j
                     })
@@ -1055,7 +1066,7 @@ define('io.ox/calendar/week/view',
                 .resizable({
                     handles: 'n, s',
                     grid: [0, self.gridHeight()],
-                    minHeight: self.gridHeight() - 1,
+                    minHeight: self.gridHeight() - 2, // bug #32753
                     containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('ui-resizable');
@@ -1668,13 +1679,27 @@ define('io.ox/calendar/week/view',
                 data = {folder_id: folder.id || folder.folder};
             }
             ox.load(['io.ox/core/print']).done(function (print) {
-                print.open('printCalendar', data, {
+                var win = print.open('printCalendar', data, {
                     template: tmpl.name,
                     start: start,
                     end: end,
                     work_day_start_time: self.workStart * date.HOUR,
                     work_day_end_time: self.workEnd * date.HOUR
-                }).print();
+                });
+                if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                    var limit = 50,
+                        counter = 0,
+                        interval;
+                    interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
+                        counter++;
+                        if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                            win.print();
+                            clearInterval(interval);
+                        }
+                    }, 100);
+                } else {
+                    win.print();
+                }
             });
         }
     });

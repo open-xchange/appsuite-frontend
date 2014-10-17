@@ -14,7 +14,7 @@
 define('io.ox/calendar/acceptdeny',
     ['io.ox/calendar/api',
      'io.ox/core/tk/dialogs',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/calendar/util',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
@@ -26,12 +26,15 @@ define('io.ox/calendar/acceptdeny',
         options = options || {};
         function cont(series) {
 
-            var showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
+            var def = $.Deferred(),
+                showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
                 message = util.getConfirmationMessage(o),
+                appointmentData,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 defaultReminder = calSettings.get('defaultReminder', 15),
-                apiData = { folder: o.folder_id, id: o.id };
+                apiData = { folder: o.folder_id, id: o.id },
+                checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;//appointments check for conflicts by default, tasks don't
 
             if (options.api) {//use different api if provided (tasks use this)
                 api = options.api;
@@ -41,8 +44,8 @@ define('io.ox/calendar/acceptdeny',
                 apiData.recurrence_position = o.recurrence_position;
             }
 
-            return api.get(apiData).then(function (data) {
-
+            api.get(apiData).then(function (data) {
+                appointmentData = data;
                 if (showReminderSelect) {
                     reminderSelect = $('<div class="form-group">').append(
                         $('<label>').attr('for', 'reminderSelect').text(gt('Reminder')),
@@ -102,14 +105,17 @@ define('io.ox/calendar/acceptdeny',
                     })
                     .done(function (action, data, node) {
 
-                        if (action === 'cancel') return;
+                        if (action === 'cancel') {
+                            def.resolve(action);
+                            return;
+                        }
 
                         // add confirmmessage to request body
                         apiData.data = {
                             confirmmessage: $.trim($(node).find('[data-property="comment"]').val())
                         };
 
-                        folderAPI.get({ folder: apiData.folder }).done(function (folder) {
+                        folderAPI.get(apiData.folder).done(function (folder) {
 
                             // add current user id in shared or public folder
                             if (folderAPI.is('shared', folder)) {
@@ -138,19 +144,55 @@ define('io.ox/calendar/acceptdeny',
                             if (!options.taskmode && !series && o.recurrence_position) {
                                 _.extend(apiData, { occurrence: o.recurrence_position });
                             }
+                            var performConfirm = function () {
+                                api.confirm(apiData).done(function () {
+                                        if (options.callback) {
+                                            options.callback();
+                                        }
+                                    }).fail(
+                                        function fail(e) {
+                                            if (ox.debug) console.log('error', e);
+                                        }
+                                    );
+                            };
+                            if (checkConflicts && action !== 'declined') {//no conflicts possible if you decline the appointment
+                                var confirmAction = action;
+                                api.checkConflicts(appointmentData).done(function (conflicts) {
+                                    if (conflicts.length === 0) {
+                                        def.resolve(confirmAction);
+                                        performConfirm();
+                                    } else {
+                                        ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                            var dialog = new dialogs.ModalDialog()
+                                                .header(conflictView.drawHeader());
 
-                            api.confirm(apiData).done(function () {
-                                if (options.callback) {
-                                    options.callback();
-                                }
-                            }).fail(
-                                function fail(e) {
-                                    if (ox.debug) console.log('error', e);
-                                }
-                            );
+                                            dialog.append(conflictView.drawList(conflicts, dialog).addClass('additional-info'));
+                                            dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'});
+
+                                            dialog.addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                                .show()
+                                                .done(function (action) {
+                                                    
+                                                    if (action === 'cancel') {
+                                                        def.resolve(action);
+                                                        return;
+                                                    }
+                                                    if (action === 'ignore') {
+                                                        def.resolve(confirmAction);
+                                                        performConfirm();
+                                                    }
+                                                });
+                                        });
+                                    }
+                                });
+                            } else {
+                                def.resolve(action);
+                                performConfirm();
+                            }
                         });
                     });
             });
+            return def;
         }
 
         // series?

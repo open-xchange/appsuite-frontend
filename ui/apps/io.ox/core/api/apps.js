@@ -139,25 +139,17 @@ define('io.ox/core/api/apps',
         },
 
         getSpecial = function (prop, apps) {
-            return _(apps || appData[prop])
-                .chain()
-                .map(function (id) {
-                    return bless(appData.apps[id], id);
-                })
-                .filter(function (data) {
-                    // ignore apps that don't have a title
-                    return !!data.title;
-                })
-                .value()
-                .concat(
-                    // Add extension point categories
-                    ext.point('io.ox/core/apps/' + prop).map(function (ext) {
-                        if (ext.app) {
-                            return ext.metadata('app');
-                        }
-                        return ext;
-                    }).value()
-                );
+            return _(apps || appData[prop]).map(function (id) {
+                return bless(appData.apps[id], id);
+            }).concat(
+                // Add extension point categories
+                ext.point('io.ox/core/apps/' + prop).map(function (ext) {
+                    if (ext.app) {
+                        return ext.metadata('app');
+                    }
+                    return ext;
+                }).value()
+            );
         };
 
     var cachedInstalled = null;

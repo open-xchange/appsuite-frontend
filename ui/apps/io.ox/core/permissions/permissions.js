@@ -14,7 +14,8 @@
 define('io.ox/core/permissions/permissions',
     ['io.ox/core/extensions',
      'io.ox/core/notifications',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
+     'io.ox/core/folder/breadcrumb',
      'io.ox/core/api/user',
      'io.ox/core/api/group',
      'io.ox/core/tk/dialogs',
@@ -24,7 +25,7 @@ define('io.ox/core/permissions/permissions',
      'io.ox/core/http',
      'gettext!io.ox/core',
      'less!io.ox/core/permissions/style'
-    ], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+    ], function (ext, notifications, api, getBreadcrumb, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 
@@ -74,7 +75,7 @@ define('io.ox/core/permissions/permissions',
             events: {
                 'click a.bit': 'updateDropdown',
                 'click a.role': 'applyRole',
-                'click a.close': 'removeEntity'
+                'click a[data-action="remove"]': 'removeEntity'
             },
 
             render: function () {
@@ -264,7 +265,7 @@ define('io.ox/core/permissions/permissions',
 
     addRemoveButton = function (entity) {
         if (isFolderAdmin && entity !== ox.user_id) {
-            return $('<a href="# "class="close">').append($('<i class="fa fa-trash-o">'));
+            return $('<a href="# "data-action="remove">').append($('<i class="fa fa-trash-o">'));
         } else {
             return $();
         }
@@ -332,7 +333,7 @@ define('io.ox/core/permissions/permissions',
     return {
         show: function (folder) {
             folder_id = String(folder);
-            api.get({ folder: folder_id, cache: false }).done(function (data) {
+            api.get(folder_id, { cache: false }).done(function (data) {
                 try {
 
                     isFolderAdmin = api.Bitmask(data.own_rights).get('admin') >= 1;
@@ -349,7 +350,7 @@ define('io.ox/core/permissions/permissions',
                     }
                     var dialog = new dialogs.ModalDialog(options);
                     dialog.getHeader().append(
-                        api.getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
+                        getBreadcrumb(data.id, { subfolders: false, prefix: gt('Folder permissions') })
                     );
                     if (_.device('!desktop')) {
                         dialog.getHeader().append(
@@ -361,7 +362,7 @@ define('io.ox/core/permissions/permissions',
 
                     // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
                     // shared folder only have admins, no owner, because it's not possible to determine the right one
-                    var owner = data.created_by || api.is('insideDefaultfolder', data) ? ox.user_id : null;
+                    var owner = data.created_by || (api.is('insideDefaultfolder', data) ? ox.user_id : null);
 
                     collection.on('reset', function () {
                         var node = dialog.getContentNode().empty();
@@ -383,7 +384,7 @@ define('io.ox/core/permissions/permissions',
                         .pluck('entity')
                         .value();
 
-                    dialog.getContentNode().busy();
+                    dialog.getContentNode().addClass('scrollpane').busy();
 
                     userAPI.getList(ids, true, { allColumns: true }).done(function () {
                         // stop being busy
@@ -463,7 +464,7 @@ define('io.ox/core/permissions/permissions',
                     })
                     .done(function (action) {
                         if (isFolderAdmin && action === 'save') {
-                            api.update({ folder: folder_id, changes: { permissions: collection.toJSON() }}).always(function () {
+                            api.update(folder_id, { permissions: collection.toJSON() }).always(function () {
                                 //TODO: dialog should stay open if error occurs
                                 collection.off();
                             });

@@ -17,7 +17,7 @@ define([
 ], function (wizard, welcomeWizard, test) {
     'use strict';
 
-    describe('The Wizard API', function () {
+    describe('Wizard API', function () {
 
         it('should define a getWizard method', function () {
             expect(wizard.getWizard).to.exist;

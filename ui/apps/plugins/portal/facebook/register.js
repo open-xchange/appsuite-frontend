@@ -49,16 +49,29 @@ define('plugins/portal/facebook/register',
         };
     };
     var addLikeInfo = function (likeInfo) {
-        if (likeInfo.like_count === 0) {
-            return '';
-        } else {
-            return $('<span class="likeinfo">').append(
-                       $('<span class="youlike">').text(likeInfo.user_likes ? gt('You like this') : ''),
-                       $('<i class="fa fa-thumbs-o-up">'),
-                       $('<span class="count">').text(likeInfo.like_count)
-                   );
-        }
-    };
+            if (likeInfo.like_count === 0) {
+                return '';
+            } else {
+                return $('<span class="likeinfo">').append(
+                           $('<span class="youlike">').text(likeInfo.user_likes ? gt('You like this') : ''),
+                           $('<i class="fa fa-thumbs-o-up">'),
+                           $('<span class="count">').text(likeInfo.like_count)
+                       );
+            }
+        },
+        generalRenderer = function (post) {//Renderer that should be able to draw most posts correctly
+            var media = post.attachment.media ? post.attachment.media[0] : false,
+                link = post.attachment.href;
+
+            return [
+                $('<div>').append(parseMessageText(post.description || post.message || '')),
+                media ? $('<a>', {href: media.href}).append(
+                    $('<img class="wall-img-left">').attr({src: media.src}),
+                    $('<span class="caption">').text(post.attachment.description)
+                ) : '',
+                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
+            ];
+        };
 
     var addCommentlink = function (postComments, nextIndex, profiles, wall_content) {
         var link = $('<button tabindex=1 class="comment-link btn-link", nextIndex=' + nextIndex + '>').text(gt('Show more comments')).hide().click(function () {
@@ -75,7 +88,7 @@ define('plugins/portal/facebook/register',
                 link.off();
                 link = null;
             }
-            
+
         });
         wall_content.append(link);
     };
@@ -116,7 +129,7 @@ define('plugins/portal/facebook/register',
     var loadFromFacebook = function () {
         return proxy.request({
                 api: 'facebook',
-                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                url: 'https://graph.facebook.com/v2.0/fql?q=' + JSON.stringify({
                     newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
                     profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
                     comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
@@ -202,12 +215,15 @@ define('plugins/portal/facebook/register',
             return keychain.isEnabled('facebook') && !keychain.hasStandardAccount('facebook');
         },
 
+        drawDefaultSetup: function () {
+            this.find('h2 .title').replaceWith('<i class="fa fa-facebook">');
+            this.addClass('widget-color-custom color-facebook');
+        },
+
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return $.when(
-                keychain.createInteractively('facebook', win))
-            .then(function () {
-                baton.model.node.removeClass('requires-setup');
+            return keychain.createInteractively('facebook', win).done(function () {
+                baton.model.node.removeClass('requires-setup widget-color-custom color-facebook');
                 ox.trigger('refresh^');
             });
         },
@@ -226,7 +242,7 @@ define('plugins/portal/facebook/register',
 
             return proxy.request({
                 api: 'facebook',
-                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                url: 'https://graph.facebook.com/v2.0/fql?q=' + JSON.stringify({
                     newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
                     profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
                     comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
@@ -336,24 +352,6 @@ define('plugins/portal/facebook/register',
                     $('<span>').text(gt('Add your account'))),
                 $('<div class="io-ox-portal-actions"').append(
                     $('<i class="fa fa-times io-ox-portal-action">'))
-            );
-        },
-
-        error: function (error, baton) {
-
-            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
-
-            $(this).empty().append(
-                $('<div class="decoration">').append(
-                    $('<h2>').append(
-                        $('<a href="#" class="disable-widget"><i class="fa fa-times"/></a>'),
-                        $('<span class="title">').text(gt('Facebook'))
-                    )
-                ),
-                $('<div class="content">').text(gt('Click here to add your account'))
-                .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp', null, baton);
-                })
             );
         }
     });
@@ -515,6 +513,26 @@ define('plugins/portal/facebook/register',
         }
     });
 
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({//special renderer for undocumented types
+        id: 'Undocumented',
+        index: 128,
+        accepts: function (post) {
+            return post.type === 55;//maybe an event
+        },
+        draw: function (post) {
+            $(this).append(
+                    $('<div>').text(post.description),
+                    $('<div class="message">').append(parseMessageText(post.message)));
+            var self = $(this);
+            _(post.attachment.media).each(function (media) {
+                $('<a class = facebook-image>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .append($('<div>').text(post.attachment.caption))
+                    .appendTo(self);
+            });
+        }
+    });
+
     /* index >= 196 for plugins handling generic stuff (like the common comment) */
 
     ext.point('io.ox/plugins/portal/facebook/renderer').extend({
@@ -526,16 +544,7 @@ define('plugins/portal/facebook/register',
                 ((post.attachment.media && post.attachment.media[0]) || post.attachment.href);
         },
         draw: function (post) {
-            var media = post.attachment.media ? post.attachment.media[0] : false,
-                link = post.attachment.href;
-            this.append(
-                $('<div>').append(parseMessageText(post.description || post.message || '')),
-                media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">').attr({src: media.src}),
-                    $('<span class="caption">').text(post.attachment.description)
-                ) : '',
-                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
-            );
+            this.append(generalRenderer(post));
         }
     });
 
@@ -583,16 +592,7 @@ define('plugins/portal/facebook/register',
             return post.type === 295;
         },
         draw: function (post) {
-            var media = post.attachment.media ? post.attachment.media[0] : false,
-                link = post.attachment.href;
-            this.append(
-                $('<div>').append(parseMessageText(post.description || post.message || '')),
-                media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">').attr({src: media.src}),
-                    $('<span class="caption">').text(post.attachment.description)
-                ) : '',
-                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
-            );
+            this.append(generalRenderer(post));
         }
     });
 
@@ -620,16 +620,7 @@ define('plugins/portal/facebook/register',
             return post.type === 308;
         },
         draw: function (post) {
-            var media = post.attachment.media ? post.attachment.media[0] : false,
-            link = post.attachment.href;
-            this.append(
-                $('<div>').append(parseMessageText(post.description || post.message || '')),
-                media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">').attr({src: media.src}),
-                    $('<span class="caption">').text(post.attachment.description)
-                ) : '',
-                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
-            );
+            this.append(generalRenderer(post));
         }
     });
 
@@ -642,7 +633,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', JSON.stringify(post));
-            this.append(parseMessageText(post.message));
+            this.append(generalRenderer(post));
         }
     });
 

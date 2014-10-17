@@ -39,10 +39,15 @@ define('io.ox/mail/detail/view',
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
-            var subject = util.getSubject(baton.data);
-            this.append(
-                $('<h1 class="subject">').text(subject)
-            );
+
+            var subject = util.getSubject(baton.data),
+                node = $('<h1 class="subject">').text(subject);
+
+            emoji.processEmoji(_.escape(subject), function (html) {
+                node.html(html);
+            });
+
+            this.append(node);
         }
     });
 
@@ -81,12 +86,18 @@ define('io.ox/mail/detail/view',
         draw: extensions.unreadToggle
     });
 
-    ext.point('io.ox/mail/detail/header').extend(new links.Dropdown({
+    /* move the actions menu to the top in sidepanel on smartphones */
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header';
+
+    ext.point(extPoint).extend(new links.Dropdown({
         id: 'actions',
-        index: INDEX_header += 100,
-        classes: 'actions pull-right',
+        index: _.device('smartphone') ? 50 : INDEX_header += 100,
+        classes: _.device('smartphone') ? '': 'actions pull-right',
         label: gt('Actions'),
-        ref: 'io.ox/mail/links/inline'
+        ariaLabel: gt('Actions'),
+        icon: _.device('smartphone') ? undefined : 'fa fa-bars',
+        noCaret: true,
+        ref: 'io.ox/mail/links/inline',
     }));
 
     ext.point('io.ox/mail/detail/header').extend({
@@ -165,10 +176,20 @@ define('io.ox/mail/detail/view',
         id: 'body',
         index: INDEX += 100,
         draw: function () {
+            var $body;
             this.append(
                 $('<section class="attachments">'),
-                $('<section class="body user-select-text">')
+                $body = $('<section class="body user-select-text">')
             );
+            $body.on('dispose', function () {
+                var $content = $(this).find('.content');
+                if ($content[0] && $content[0].children.length > 0) {
+                    //cleanup content manually, since this subtree might get very large
+                    //content only contains the mail and should not have any handlers assigned
+                    //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
+                    $content[0].innerHTML = '';
+                }
+            });
         }
     });
 
@@ -178,19 +199,13 @@ define('io.ox/mail/detail/view',
         draw: extensions.attachmentList
     });
 
-    ext.point('io.ox/mail/detail/attachments').extend({
-        id: 'attachment-preview',
-        index: 200,
-        draw: extensions.attachmentPreview
-    });
-
     ext.point('io.ox/mail/detail/body').extend({
         id: 'content',
         index: 1000,
         draw: function (baton) {
             var data = content.get(baton.data),
                 node = data.content;
-            if (!data.processedEmoji && data.type === 'text/html') {
+            if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.html(), function (text, lib) {
                     baton.processedEmoji = !lib.loaded;
                     if (baton.processedEmoji) return;
@@ -205,7 +220,7 @@ define('io.ox/mail/detail/view',
 
     var View = Backbone.View.extend({
 
-        className: 'list-item mail-item mail-detail',
+        className: 'list-item mail-item mail-detail f6-target',
 
         events: {
             'keydown': 'onToggle',
@@ -227,16 +242,9 @@ define('io.ox/mail/detail/view',
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                node = this.$el.find('section.body'),
-                $content = node.find('.content');
+                node = this.$el.find('section.body').empty();
 
-            if ($content[0] && $content[0].children.length > 0) {
-                //cleanup content manually, since this subtree might get very large
-                //content only contains the mail and should not have any handlers assigned
-                //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
-                $content[0].innerHTML = '';
-            }
-            ext.point('io.ox/mail/detail/body').invoke('draw', node.empty(), baton);
+            ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
         },
 
         onToggle: function (e) {
@@ -245,6 +253,9 @@ define('io.ox/mail/detail/view',
 
             // ignore click on/inside <a> tags
             if ($(e.target).closest('a').length) return;
+
+            // ignore click on dropdowns
+            if ($(e.target).hasClass('dropdown-menu')) return;
 
             // don't toggle single messages
             if (this.$el.siblings().length === 0) return;
@@ -282,7 +293,12 @@ define('io.ox/mail/detail/view',
             if (data) this.model.set(data);
 
             // process unseen flag
-            if (unseen) this.onUnseen();
+            if (unseen) {
+                this.onUnseen();
+            } else {
+                //if this mail was read elsewhere notify other apps about it, for example the notification area (also manages new mail window title)
+                api.trigger('update:set-seen', [{id: this.model.get('id'), folder_id: this.model.get('folder_id')}]);
+            }
         },
 
         onLoadFail: function () {
@@ -294,7 +310,13 @@ define('io.ox/mail/detail/view',
 
             var $li = this.$el;
 
-            if (state === undefined) $li.toggleClass('expanded'); else $li.toggleClass('expanded', state);
+            if (state === undefined) {
+                $li.toggleClass('expanded');
+                $li.attr('aria-expanded', !$li.attr('aria-expanded'));
+            } else {
+                $li.toggleClass('expanded', state);
+                $li.attr('aria-expanded', state);
+            }
 
             // trigger DOM event that bubbles
             this.$el.trigger('toggle');
@@ -372,6 +394,7 @@ define('io.ox/mail/detail/view',
 
             this.$el.attr({
                 'aria-label': title,
+                'aria-expanded': 'false',
                 'data-cid': this.model.cid,
                 'data-loaded': 'false'
             });
