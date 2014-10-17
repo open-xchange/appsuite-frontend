@@ -63,7 +63,7 @@ define('io.ox/calendar/month/view', [
                     obj = _.cid(String(cid));
 
                 if (!cT.hasClass('current')) {
-                    self.trigger('showAppointment', e, obj);
+                    ox.launch('io.ox/calendar/detail/main', { cid: String(cT.data('cid')) });
                     self.pane.find('.appointment')
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
