@@ -73,6 +73,7 @@ define('io.ox/calendar/freebusy/controller', [
                 self.autocomplete.remove();
                 self.autocomplete = calendarViews = null;
                 cache = {};
+                api.off('create update refresh.all', $.proxy(self.refresh, self));
             });
 
             this.updateAppointment = function (data) {
@@ -152,7 +153,9 @@ define('io.ox/calendar/freebusy/controller', [
                     // check for weekView cause it might get null if user quits
                     if (self.getCalendarView()) {
                         cache = {};
-                        data = _(data).chain()
+                        data = _(data)
+                            .chain()
+                            .compact()
                             .map(function (request, index) {
                                 return _(request.data).chain()
                                     .filter(function (obj) {
@@ -215,10 +218,12 @@ define('io.ox/calendar/freebusy/controller', [
                 }
             };
 
-            this.refresh = function (useCache) {
-                if (self.getCalendarView()) {
-                    self.loadAppointments(useCache);
-                }
+            this.refresh = function () {
+                this.repaint(false);
+            };
+
+            this.repaint = function (useCache) {
+                if (self.getCalendarView()) self.loadAppointments(!!useCache);
             };
 
             this.refreshChangedParticipants = _.debounce(function () {
@@ -300,9 +305,7 @@ define('io.ox/calendar/freebusy/controller', [
                 view.render();
                 this.$el.append(view.$el.addClass('abs week-view'));
 
-                api.on('create refresh.all', function () {
-                    self.refresh(false);
-                });
+                api.on('create update refresh.all', $.proxy(self.refresh, self));
 
                 return view;
             };

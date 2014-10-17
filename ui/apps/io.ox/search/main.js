@@ -186,10 +186,11 @@ define('io.ox/search/main', [
                 app.busy();
             },
             'query:stop': function () {
+                app.view.repaint('info');
                 app.idle();
             },
             'query:result': function () {
-                app.view.repaint('info items');
+                app.view.repaint('items');
                 app.idle();
             },
             'button:app': function () {
@@ -251,7 +252,7 @@ define('io.ox/search/main', [
     // extend app
     app.apiproxy = apiproxy.init(app);
 
-    ext.point('io.ox/search').invoke('config', model);
+    ext.point('io.ox/search').invoke('config', model, app);
 
     // run app
     run = function () {

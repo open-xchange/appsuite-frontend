@@ -44,7 +44,7 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     newFileInfo.filename = href;
 
     var paths = env.paths || ['.'];
-    paths.push(path);
+    if (paths.indexOf(path) < 0) paths.push(path);
     var data = '';
     paths.forEach(function (path) {
         try {
@@ -60,7 +60,7 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
         }
     });
     if (!data) {
-        callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found" });
+        callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
         return;
     }
 
@@ -87,9 +87,9 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
 	print('Processing', dir);
 	deleteRecurse(/\.css$/, new java.io.File(dir));
 	var defs = [bootstrap, bootstrapDP, fontAwesome, style1].join('\n');
-	compileLess(defs, subDir('common.css'));
+	compileLess(defs, subDir('common.css'), '<multiple less files>');
 	compileLess(readFile(subDir('style.less')),
-		subDir('style.css'));
+		subDir('style.css'), '<default theme style.less>');
 	recurse('', subDir, new java.io.File('apps'));
     }
 }());
@@ -156,7 +156,7 @@ function compileLess(input, outputFile, sourceFileName) {
         ],
         filename: '' + sourceFileName
     }).parse(input, function (e, css) {
-        if (e) return error(e);
+        if (e) return error(e, sourceFileName);
         outputFile.getParentFile().mkdirs();
         writeFile(outputFile, css.toCSS({
             compress: true,

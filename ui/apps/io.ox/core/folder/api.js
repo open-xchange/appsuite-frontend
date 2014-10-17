@@ -112,9 +112,11 @@ define('io.ox/core/folder/api', [
             options = options || {};
             // update collection
             var collection = this.getCollection(id),
-                type = options.reset || !collection.fetched ? 'reset' : 'set';
+                type = collection.fetched ? 'set' : 'reset';
             collection[type](models);
             collection.fetched = true;
+
+            if (options.reset) collection.trigger('reset');
         },
 
         getModel: function (id) {
@@ -403,7 +405,6 @@ define('io.ox/core/folder/api', [
     }
 
     function getFlatCollectionId(module, section) {
-
         return 'flat/' + module + '/' + section;
     }
 

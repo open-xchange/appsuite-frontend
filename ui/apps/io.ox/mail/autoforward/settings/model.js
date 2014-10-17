@@ -53,7 +53,7 @@ define('io.ox/mail/autoforward/settings/model', [
                     'flags': ['autoforward'],
                     'active': attributes.active ? true : false
                 };
-            if (attributes.keep !== false) {
+            if (attributes.keep) {
                 preparedData.actioncmds.push({ 'id': 'keep' });
             }
             //first rule gets 0

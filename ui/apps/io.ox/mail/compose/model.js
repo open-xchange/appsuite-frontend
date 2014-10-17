@@ -66,6 +66,14 @@ define('io.ox/mail/compose/model', [
 
         initialize: function () {
             var list = this.get('attachments');
+            if (_.isObject(list) && !_.isEmpty(list)) {
+                list = [{
+                    content: list[this.get('editorMode') === 'text' ? 'text' : 'html'][0].content,
+                    content_type: this.getContentType(),
+                    disp: 'inline'
+                }];
+            }
+
             if (_.isArray(list)) {
                 this.set('attachments', new Attachments.Collection(list), { silent: true });
                 list = this.get('attachments');

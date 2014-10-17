@@ -59,6 +59,7 @@ define('io.ox/search/facets/extensions', [
             hide: gt('Hide advanced filters'),
             show: gt('Show advanced filters')
         },
+        phone = _.device('smartphone'),
         extensions = {
 
             item: function (baton, value, facet) {
@@ -194,7 +195,10 @@ define('io.ox/search/facets/extensions', [
                     e.stopPropagation();
                     e.preventDefault();
                     // mobile
-                    $(this).closest('.custom-dropdown').toggle();
+                    if (phone) {
+                        $('#io-ox-core').removeClass('menu-blur');
+                        $(this).closest('.custom-dropdown').toggle();
+                    }
                     ox.idle();
 
                     $(e.target).closest('.dropdown.open').toggle();

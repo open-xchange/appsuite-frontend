@@ -351,7 +351,7 @@ define('io.ox/tasks/api', [
 
         //repair broken folder attribute
         if (task.folder) {
-            task.folder_id = task.folder;
+            useFolder = task.folder_id = task.folder;
             delete task.folder;
         }
 
