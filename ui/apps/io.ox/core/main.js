@@ -1474,7 +1474,7 @@ define('io.ox/core/main', [
 
                 debug('Stage "curtain"');
 
-                if (baton.instantFadeOut) {
+                if (baton.instantFadeOut && false) {
                     // instant fade out
                     $('#background-loader').idle().hide();
                     return $.when();

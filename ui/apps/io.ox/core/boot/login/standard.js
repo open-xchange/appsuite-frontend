@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/login', [
+define('io.ox/core/boot/login/standard', [
 
     'io.ox/core/boot/util',
     'io.ox/core/boot/language',

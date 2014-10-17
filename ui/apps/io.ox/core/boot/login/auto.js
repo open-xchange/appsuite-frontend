@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/autologin', [
+define('io.ox/core/boot/login/auto', [
     'io.ox/core/boot/util',
     'io.ox/core/boot/config',
     'io.ox/core/session'
@@ -19,7 +19,7 @@ define('io.ox/core/boot/autologin', [
 
     'use strict';
 
-    return function () {
+    return function autoLogin() {
 
         util.debug('Auto login ...');
 
@@ -38,11 +38,12 @@ define('io.ox/core/boot/autologin', [
             .fail(function (error) {
                 // log
                 util.debug('Auto login FAIL', error);
-                ox.trigger('login:fail', error);
                 // special autologin error handling. redirect user to an
                 // external page defined in the error params
                 if (error && error.code === 'LGI-0016' && (error.error_params || []).length === 1) {
                     window.location.href = error.error_params[0];
+                } else {
+                    ox.trigger('login:fail', error);
                 }
             });
     };

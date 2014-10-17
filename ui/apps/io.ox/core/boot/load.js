@@ -26,10 +26,6 @@ define('io.ox/core/boot/load', [
         // remove unnecessary stuff
         util.cleanUp();
 
-        // hide login dialog
-        $('#io-ox-login-screen').hide();
-        $(this).busy();
-
         prefetch();
         applyHighContrast();
         loadUserTheme();

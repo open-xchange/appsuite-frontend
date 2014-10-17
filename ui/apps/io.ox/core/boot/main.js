@@ -15,14 +15,15 @@ define('io.ox/core/boot/main', [
 
     'themes',
     'gettext',
+    'io.ox/core/manifests',
+    'io.ox/core/session',
     'io.ox/core/boot/util',
-    'io.ox/core/boot/autologin',
     'io.ox/core/boot/form',
     'io.ox/core/boot/config',
-    'io.ox/core/manifests',
-    'io.ox/core/session'
+    'io.ox/core/boot/login/auto',
+    'io.ox/core/boot/login/token'
 
-], function (themes, gettext, util, autologin, form, config, manifests, session) {
+], function (themes, gettext, manifests, session, util, form, config, autologin, tokenlogin) {
 
     'use strict';
 
@@ -85,13 +86,15 @@ define('io.ox/core/boot/main', [
         },
 
         useCookie: function () {
-            autologin().fail(this.useForm.bind(this));
+            autologin();
         },
 
         useSession: function () {
+            tokenlogin(); // yep, both use tokenlogin
         },
 
         useToken: function () {
+            tokenlogin(); // yep, both use tokenlogin
         },
 
         loadUI: function () {
@@ -120,10 +123,22 @@ define('io.ox/core/boot/main', [
     };
 
     //
+    // Respond to failed login
+    //
+
+    ox.once('login:fail', function () {
+        exports.useForm();
+    });
+
+    //
     // Respond to successful login
     //
 
     ox.once('login:success', function (data) {
+
+        $('#background-loader').fadeIn(util.DURATION, function () {
+            $('#io-ox-login-screen').hide().empty();
+        });
 
         // load user config
         config.user().done(function () {

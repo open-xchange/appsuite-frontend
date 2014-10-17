@@ -15,7 +15,7 @@ define('io.ox/core/boot/form', [
 
     'io.ox/core/boot/util',
     'io.ox/core/boot/language',
-    'io.ox/core/boot/login',
+    'io.ox/core/boot/login/standard',
     'io.ox/core/manifests',
     'io.ox/core/capabilities'
 

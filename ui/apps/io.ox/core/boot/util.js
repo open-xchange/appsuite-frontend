@@ -53,13 +53,9 @@ define('io.ox/core/boot/util', [], function () {
         },
 
         cleanUp: function () {
-            // remove dom nodes
-            $('#io-ox-login-footer').remove();
-            // update form
-            $('#io-ox-login-username').prop('disabled', true);
-            $('#io-ox-login-password').val('');
-            // unbind
             $('#io-ox-login-form').off('submit');
+            $('#io-ox-login-password').val('********');
+            $('#io-ox-login-form').find('input, button').prop('readonly', true);
         },
 
         gotoSignin: function (hash) {
