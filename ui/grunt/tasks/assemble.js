@@ -32,18 +32,31 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        src: ['index.html', 'signin.html', 'core.html'],
+                        src: ['index.html'],
                         expand: true,
                         cwd: 'html/',
-                        rename: function (dest, matchedSrcPath) {
-                            var map = {
-                                'index.html': 'ui',
-                                'signin.html': 'signin',
-                                'core.html': 'core'
-                            };
-                            return dest + map[matchedSrcPath];
+                        rename: function (dest) {
+                            return dest;
                         },
-                        dest: 'build/'
+                        dest: 'build/ui'
+                    },
+                    {
+                        src: ['index.html'],
+                        expand: true,
+                        cwd: 'html/',
+                        rename: function (dest) {
+                            return dest;
+                        },
+                        dest: 'build/core'
+                    },
+                    {
+                        src: ['index.html'],
+                        expand: true,
+                        cwd: 'html/',
+                        rename: function (dest) {
+                            return dest;
+                        },
+                        dest: 'build/signin'
                     }
                 ]
             },
