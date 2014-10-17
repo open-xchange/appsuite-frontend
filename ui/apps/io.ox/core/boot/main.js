@@ -19,9 +19,10 @@ define('io.ox/core/boot/main', [
     'io.ox/core/boot/autologin',
     'io.ox/core/boot/form',
     'io.ox/core/boot/config',
-    'io.ox/core/manifests'
+    'io.ox/core/manifests',
+    'io.ox/core/session'
 
-], function (themes, gettext, util, autologin, form, config, manifests) {
+], function (themes, gettext, util, autologin, form, config, manifests, session) {
 
     'use strict';
 
@@ -81,12 +82,10 @@ define('io.ox/core/boot/main', [
                     form();
                 });
             });
-
-            ox.once('login:success', this.loadUI.bind(this));
         },
 
         useCookie: function () {
-            autologin().then(this.loadUI.bind(this), this.useForm.bind(this));
+            autologin().fail(this.useForm.bind(this));
         },
 
         useSession: function () {
@@ -119,6 +118,22 @@ define('io.ox/core/boot/main', [
             });
         }
     };
+
+    //
+    // Respond to successful login
+    //
+
+    ox.once('login:success', function (data) {
+
+        // load user config
+        config.user().done(function () {
+            // apply session data (again) & page title
+            session.set(data);
+            util.setPageTitle(ox.serverConfig.pageTitle);
+            // load UI
+            exports.loadUI();
+        });
+    });
 
     return exports;
 

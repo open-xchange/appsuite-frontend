@@ -58,10 +58,11 @@ define('io.ox/core/boot/form', [
         }
 
         // hide forgot password?
-        if (sc.forgotPassword === false) {
+        var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
+        if (!forgotPassword) {
             $('#io-ox-forgot-password').remove();
         } else {
-            $('#io-ox-forgot-password').find('a').attr('href', sc.forgotPassword);
+            $('#io-ox-forgot-password').find('a').attr('href', forgotPassword);
         }
 
         // set username input type to text in IE
@@ -77,7 +78,7 @@ define('io.ox/core/boot/form', [
 
         return $.when(
             // load extensions
-            manifests.manager.loadPluginsFor(ox.signin ? 'signin' : 'core'),
+            manifests.manager.loadPluginsFor('signin'),
             // use browser language
             language.setDefaultLanguage()
         )

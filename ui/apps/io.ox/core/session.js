@@ -158,10 +158,14 @@ define('io.ox/core/session', [
                                 client: that.client(),
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
-                                multiple: JSON.stringify(multiple)
+                                multiple: JSON.stringify(multiple),
+                                rampup: true,
+                                rampupFor: 'open-xchange-appsuite'
                             }
                         })
                         .done(function (data) {
+                            // store rampup data
+                            ox.rampup = data.rampup || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
                             set(data, forceLanguage);

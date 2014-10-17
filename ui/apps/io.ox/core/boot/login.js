@@ -44,10 +44,6 @@ define('io.ox/core/boot/login', [
             return fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
-        // form.off('submit');
-        // storeCredentials(form);
-        // if ('wurst') return;
-
         // login
         session.login(
             username,
@@ -58,14 +54,14 @@ define('io.ox/core/boot/login', [
             // permanent language change!?
             language.getSelectedLanguage()
         )
-        .done(function () {
+        .done(function (data) {
             // don't respond to submit any more
             form.off('submit');
             // store credentials
             storeCredentials(form);
             // success
             restore();
-            ox.trigger('login:success');
+            ox.trigger('login:success', data);
         })
         .fail(fail);
     };

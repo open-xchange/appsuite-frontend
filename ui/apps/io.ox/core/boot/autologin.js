@@ -32,20 +32,17 @@ define('io.ox/core/boot/autologin', [
                 ox.trigger('server:up');
                 // set user language - see bug #31433
                 ox.language = data.locale;
-                // load user config
-                return config.user().done(function () {
-                    // apply session data (again) & page title
-                    session.set(data);
-                    util.setPageTitle(ox.serverConfig.pageTitle);
-                });
+                // event
+                ox.trigger('login:success', data);
             })
-            .fail(function (data) {
+            .fail(function (error) {
                 // log
-                util.debug('Auto login FAIL', data);
+                util.debug('Auto login FAIL', error);
+                ox.trigger('login:fail', error);
                 // special autologin error handling. redirect user to an
                 // external page defined in the error params
-                if (data && data.code === 'LGI-0016' && (data.error_params || []).length === 1) {
-                    window.location.href = data.error_params[0];
+                if (error && error.code === 'LGI-0016' && (error.error_params || []).length === 1) {
+                    window.location.href = error.error_params[0];
                 }
             });
     };
