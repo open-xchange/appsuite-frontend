@@ -640,7 +640,8 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/versions/actions/makeCurrent', {
         requires: function (e) {
-            return !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');//hide in mail compose preview
+            //hide in mail compose preview
+            return e.collection.has('one') && !e.context.current_version && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             var data = baton.data;
