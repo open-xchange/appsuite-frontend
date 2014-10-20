@@ -53,18 +53,18 @@ define('io.ox/core/boot/load', [
     function loadDefaultTheme(theme, loadCore, loadTheme) {
 
         function fail() {
-            console.error('Could not load theme: ' + theme);
+            console.error('Could not load default theme');
             ox.trigger('boot:fail');
         }
 
-        util.debug('Theme failed');
+        util.debug('Loading theme failed', theme);
 
         // failed to load theme?
         if (loadTheme.state() === 'rejected') {
             // give up if it was the default theme
             if (theme === 'default') return fail();
             // otherwise try to load default theme now
-            console.error('Could not load custom theme: ' + theme);
+            console.error('Could not load custom theme', theme);
             themes.set('default').then(launch.bind(null, loadCore), fail);
         }
     }

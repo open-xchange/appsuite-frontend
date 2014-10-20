@@ -15,6 +15,7 @@ define('io.ox/core/boot/main', [
 
     'themes',
     'gettext',
+    'io.ox/core/extensions',
     'io.ox/core/manifests',
     'io.ox/core/session',
     'io.ox/core/boot/util',
@@ -23,33 +24,26 @@ define('io.ox/core/boot/main', [
     'io.ox/core/boot/login/auto',
     'io.ox/core/boot/login/token'
 
-], function (themes, gettext, manifests, session, util, form, config, autologin, tokenlogin) {
+], function (themes, gettext, ext, manifests, session, util, form, config, autologin, tokenlogin) {
 
     'use strict';
 
     var exports = {
 
         start: function () {
-
-            var loginType = this.getLoginType();
-
-            util.debug('loginType=' + loginType);
-
-            switch (loginType) {
-            case 'none': return this.useForm();
-            case 'cookie': return this.useCookie();
-            case 'session': return this.useSession();
-            case 'token': return this.useToken();
-            }
+            // use extensions to determine proper login method
+            var baton = ext.Baton({ hash: _.url.hash() });
+            ext.point('io.ox/core/boot/login').invoke('login', this, baton);
         },
 
-        getLoginType: function () {
-            var hash = _.url.hash();
-            if (hash.login_type !== undefined) return hash.login_type;
-            if (hash.tokenSession) return 'token';
-            if (hash.session) return 'session';
-            if (hash.autologin === 'false') return 'none';
-            return 'cookie';
+        invoke: function (loginType) {
+            // invoke login method
+            if (_.isFunction(this[loginType])) {
+                util.debug('Using login type', loginType);
+                this[loginType]();
+            } else {
+                console.error('Unkown login type', loginType);
+            }
         },
 
         useForm: function () {
@@ -85,22 +79,17 @@ define('io.ox/core/boot/main', [
             });
         },
 
+        useToken: function () {
+            tokenlogin();
+        },
+
         useCookie: function () {
             autologin();
         },
 
-        useSession: function () {
-            tokenlogin(); // yep, both use tokenlogin
-        },
-
-        useToken: function () {
-            tokenlogin(); // yep, both use tokenlogin
-        },
-
         loadUI: function () {
 
-            util.debug('Load UI ...');
-            util.debug('Load UI > load core plugins and current language', ox.language);
+            util.debug('Load UI ... load core plugins and current language', ox.language);
 
             // signin phase is over (important for gettext)
             ox.signin = false;
@@ -123,31 +112,74 @@ define('io.ox/core/boot/main', [
     };
 
     //
-    // Respond to failed login
+    // Different login types are implemented as extensions
     //
 
-    ox.once('login:fail', function () {
-        exports.useForm();
-    });
+    ext.point('io.ox/core/boot/login').extend(
+        {
+            id: 'explicit',
+            index: 100,
+            login: function (baton) {
+                if (baton.hash.login_type !== undefined) {
+                    baton.stopPropagation();
+                    this.invoke(baton.hash.login_type);
+                }
+            }
+        },
+        {
+            id: 'token',
+            index: 200,
+            login: function (baton) {
+                if (baton.hash.tokenSession || baton.hash.session) {
+                    baton.stopPropagation();
+                    this.invoke('useToken');
+                }
+            }
+        },
+        {
+            id: 'no-autologin',
+            index: 300,
+            login: function (baton) {
+                if (baton.hash.autologin === 'false') {
+                    baton.stopPropagation();
+                    this.invoke('useForm');
+                }
+            }
+        },
+        {
+            id: 'default',
+            index: 'last',
+            login: function () {
+                this.invoke('useCookie');
+            }
+        }
+    );
 
     //
-    // Respond to successful login
+    // Respond to login events
     //
 
-    ox.once('login:success', function (data) {
+    ox.once({
 
-        $('#background-loader').fadeIn(util.DURATION, function () {
-            $('#io-ox-login-screen').hide().empty();
-        });
+        'login:success': function (data) {
 
-        // load user config
-        config.user().done(function () {
-            // apply session data (again) & page title
-            session.set(data);
-            util.setPageTitle(ox.serverConfig.pageTitle);
-            // load UI
-            exports.loadUI();
-        });
+            $('#background-loader').fadeIn(util.DURATION, function () {
+                $('#io-ox-login-screen').hide().empty();
+            });
+
+            // load user config
+            config.user().done(function () {
+                // apply session data (again) & page title
+                session.set(data);
+                util.setPageTitle(ox.serverConfig.pageTitle);
+                // load UI
+                exports.loadUI();
+            });
+        },
+
+        'login:fail': function () {
+            exports.useForm();
+        }
     });
 
     return exports;
