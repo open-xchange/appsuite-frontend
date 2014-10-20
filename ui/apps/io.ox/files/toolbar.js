@@ -69,7 +69,7 @@ define('io.ox/files/toolbar', [
                 prio: 'hi',
                 mobile: 'lo',
                 label: gt('Share'),
-                title: gt('Share this folder'),
+                title: gt('Share selected files'),
                 ref: 'io.ox/files/icons/share'
             },
             'slideshow': {

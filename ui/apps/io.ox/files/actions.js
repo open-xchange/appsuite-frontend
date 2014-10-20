@@ -914,58 +914,14 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Iconview Inline Links
-
-    // old share action
-    // new Action('io.ox/files/icons/share', {
-    //     capabilities: 'publication',
-    //     requires: function (e) {
-    //         var check = function (data) {
-    //             data = data || {};
-    //             return folderAPI.can('publish', data) && !folderAPI.is('trash', data);
-    //         };
-    //         if (e.baton.app) {
-    //             return e.baton.app.folder.getData().then(check);
-    //         } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
-    //             return folderAPI.get(e.baton.data.folder_id).then(check);
-    //         } else {//continue without foldercheck
-    //             return check();
-    //         }
-    //     },
-    //     action: function (baton) {
-    //         require(['io.ox/core/pubsub/publications'], function (publications) {
-    //             baton.app.folder.getData().then(function (data) {
-    //                 baton = ext.Baton({ data: data });
-    //                 publications.buildPublishDialog(baton);
-    //             });
-    //         });
-    //     }
-    // });
-
     // new share action
     new Action('io.ox/files/icons/share', {
         capabilities: 'publication',
         requires: 'some',
         action: function (baton) {
-            require(['io.ox/core/tk/dialogs', 'io.ox/files/share/view'], function (dialogs, ShareView) {
-                var files = _.isArray(baton.data) ? baton.data : [baton.data],
-                    count = files.length,
-                    insert = count === 1 ? _.ellipsis(files[0].filename, { max: 40, charpos: 'middel' }) : count,
-                    //#. if only one item -> insert filename / on more than one item -> item count
-                    header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), insert),
-                    view = new ShareView({ files: files });
-
-                new dialogs.ModalDialog({ width: 600 })
-                    .header($('<h4>').text(header))
-                    .append(view.render().$el)
-                    .addPrimaryButton('share', gt('Share'), 'delete')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
-                    .done(function (action) {
-                        if (action === 'share') {
-                            notifications.yell('warning', 'The share cannot be set up because of unready API');
-                        }
-                    });
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                var list = [].concat(baton.data);
+                action(list);
             });
         }
     });
@@ -1126,7 +1082,7 @@ define('io.ox/files/actions', [
         prio: 'hi',
         mobile: 'lo',
         id: 'share',
-        label: gt('Share this folder'),
+        label: gt('Share selected files'),
         ref: 'io.ox/files/icons/share'
     }));
 
