@@ -941,25 +941,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/icons/slideshow-fullscreen', {
-        requires: function (e) {
-            return BigScreen.enabled && _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        action: function (baton) {
-            BigScreen.request($('.io-ox-files-main .carousel')[0]);
-            require(['io.ox/files/carousel'], function (carousel) {
-                carousel.init({
-                    fullScreen: true,
-                    baton: baton,
-                    attachmentMode: false,
-                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
-                });
-            });
-        }
-    });
-
     /**
      * filters 'description only files'
      * @param  {object|array} list or single item
