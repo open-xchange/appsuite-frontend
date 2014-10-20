@@ -933,12 +933,9 @@ define('io.ox/files/actions', [
             }, false);
         },
         action: function (baton) {
-            require(['io.ox/files/carousel'], function (carousel) {
-                carousel.init({
-                    fullScreen: false,
-                    baton: baton,
-                    attachmentMode: false,
-                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
+            ox.load(['io.ox/files/actions/slideshow']).done(function (action) {
+                action({
+                    baton: baton
                 });
             });
         }
