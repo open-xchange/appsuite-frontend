@@ -1015,7 +1015,7 @@ define('io.ox/files/actions', [
             return checkMedia(e, 'audio');
         },
         action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
                 mediaplayer.init({
                     baton: baton,
                     videoSupport: false
@@ -1030,7 +1030,7 @@ define('io.ox/files/actions', [
             return checkMedia(e, 'video');
         },
         action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
                 mediaplayer.init({
                     baton: baton,
                     videoSupport: true
