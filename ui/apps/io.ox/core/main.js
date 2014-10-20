@@ -1400,7 +1400,7 @@ define('io.ox/core/main', [
                     drawDesktop();
                     return baton.block.resolve(true);
                 }
-                return baton.block.resolve(baton.autoLaunch.length || baton.canRestore || location.hash === '#!');
+                return baton.block.resolve(baton.autoLaunch.length > 0 || baton.canRestore || location.hash === '#!');
             }
         });
 
@@ -1474,7 +1474,7 @@ define('io.ox/core/main', [
 
                 debug('Stage "curtain"');
 
-                if (baton.instantFadeOut && false) {
+                if (baton.instantFadeOut) {
                     // instant fade out
                     $('#background-loader').idle().hide();
                     return $.when();
