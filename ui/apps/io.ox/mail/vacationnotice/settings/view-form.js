@@ -44,7 +44,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             draw: function (baton) {
                 this.append(
                     $('<div>').addClass('form-group').append(
-                        $('<label for="subject">').text(model.fields.subject),
+                        $('<label for="subject">').append(model.fields.subject),
                         new mini.InputView({ name: 'subject', model: baton.model, className: 'form-control', id: 'subject' }).render().$el
                     )
                 );
@@ -91,8 +91,9 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                 _(multiValues.aliases).each(function (alias) {
                     checkboxes.push(
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label blue').text(alias).append(
-                                new mini.CheckboxView({ name: alias, model: baton.model }).render().$el
+                            $('<label>').addClass('control-label blue').append(
+                                new mini.CheckboxView({ name: alias, model: baton.model }).render().$el,
+                                $.txt(alias)
                             )
                         )
                     );
@@ -144,8 +145,9 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                         this.append(
                             $('<fieldset>').append(
                                 $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(model.fields.activateTimeFrame).append(
-                                        new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model }).render().$el
+                                    $('<label>').addClass('control-label').append(
+                                        new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model }).render().$el,
+                                        $.txt(model.fields.activateTimeFrame)
                                     )
                                 )
                             )
