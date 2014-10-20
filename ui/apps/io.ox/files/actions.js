@@ -654,28 +654,13 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/versions/actions/delete', {
         requires: function (e) {
-            return e.baton.openedBy !== 'io.ox/mail/compose';//hide in mail compose preview
+            //hide in mail compose preview
+            return e.collection.has('one') && e.baton.openedBy !== 'io.ox/mail/compose';
+
         },
         action: function (baton) {
-            var data = baton.data;
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                // get proper question
-                var question = gt.ngettext(
-                        'Do you really want to delete this file?',
-                        'Do you really want to delete these files?',
-                        _.isArray(data) ? data.length : 1
-                );
-                // ask
-                new dialogs.ModalDialog()
-                    .text(question)
-                    .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
-                    .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            api.detach(data);
-                        }
-                    });
+            ox.load(['io.ox/files/actions/versions-delete']).done(function (action) {
+                action(baton.data);
             });
         }
     });
