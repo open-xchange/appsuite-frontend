@@ -155,10 +155,10 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'full_time',
         index: 600,
-        className: 'col-xs-12',
+        className: 'col-xs-12 checkbox',
         render: function () {
             this.$el.append(
-                $('<label class="control-label checkbox">').append(
+                $('<label class="control-label">').append(
                     new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
                     $.txt(gt('All day'))
                 )

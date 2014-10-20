@@ -468,7 +468,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 // Construct the UI
                 this.controls = {
                     checkbox: $('<input tabindex="1" type="checkbox">'),
-                    checkboxLabel: $('<label class="checkbox control-label">'),
+                    checkboxLabel: $('<label class="control-label">'),
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
                         'role': 'button',
                         'aria-label': gt('Click to close the recurrence view')
@@ -1214,7 +1214,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 // hide it for recurring appointments and exceptions, i.e.
                 // if rec_pos is unset or zero
                 if (!this.model.get('recurrence_position')) {
-                    this.$el.append(
+                    this.$el.addClass('checkbox').append(
                         this.controls.checkboxLabel.append(
                             this.controls.checkbox,
                             $.txt(gt('Repeat'))
