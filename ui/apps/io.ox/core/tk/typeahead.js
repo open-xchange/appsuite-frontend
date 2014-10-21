@@ -72,6 +72,7 @@ define('io.ox/core/tk/typeahead',
         }, o || {});
 
         var typeaheadInput,
+            self = this,
             typeaheadOptions = [{
                 autoselect: o.autoselect,
                 minLength: o.minLength,
@@ -147,6 +148,25 @@ define('io.ox/core/tk/typeahead',
                     token.attr({
                         title: title
                     });
+                },
+                'tokenfield:edittoken': function (e) {
+                    if (e.attrs) {
+                        if (e.attrs.label !== e.attrs.value) {
+                            e.attrs.value = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
+                        } else {
+                            e.attrs.value = e.attrs.label;
+                        }
+                    }
+                },
+                'tokenfield:createtoken': function (e) {
+                    var tokenData = self.getOriginalInput().data();
+                    if (tokenData.edit === true ) {
+                        var newAttrs = /^"(.*?)"\s+<\s*(.*?)\s*>$/.exec(e.attrs.value);
+                        if (_.isArray(newAttrs)) {
+                            e.attrs.label = newAttrs[1];
+                            e.attrs.value = newAttrs[2];
+                        }
+                    }
                 }
             });
 
