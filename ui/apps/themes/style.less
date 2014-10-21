@@ -339,6 +339,25 @@ div.hopscotch-bubble {
     }
 }
 
+//
+// iOS 8 on Ipad needs some extra top padding for its status bar in standalone mode
+// IPhone is not (yet) affected
+//
+
+html.ios8-standalone-ipad-fix {
+
+    @height: 20px;
+
+    #io-ox-topbar {
+        border-top: @height solid @topbar-launcher-background-active;
+        height: 40 + @height;
+    }
+
+    #io-ox-screens {
+        top: 40 + @height;
+    }
+}
+
 @media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
 
     #topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)

@@ -126,6 +126,11 @@ $(window).load(function () {
         $('html').addClass('ios');
     }
 
+    // ios8 ipad standalone fix (see bug 35087)
+    if (_.device('standalone && ios >= 8') && navigator.userAgent.indexOf('iPad') > -1) {
+        $('html').addClass('ios8-standalone-ipad-fix');
+    }
+
     if (_.device('Android')) {
         $('html').addClass('android');
         if (_.browser.chrome === 18 || !_.browser.chrome) {
