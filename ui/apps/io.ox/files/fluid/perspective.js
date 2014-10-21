@@ -217,7 +217,13 @@ define('io.ox/files/fluid/perspective', [
 
             // forward selection:change event
             this.selection.on('change', function (e, list) {
-                baton.app.trigger('selection:change', list);
+                if (baton.app.currentFile && !_.isEmpty(list)) {
+                    if (list[0].id !== baton.app.currentFile.id) {
+                        baton.app.trigger('selection:change', list);
+                    }
+                } else {
+                    baton.app.trigger('selection:change', list);
+                }
             });
 
             var pers = this;
