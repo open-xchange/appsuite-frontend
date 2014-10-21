@@ -69,7 +69,7 @@ define('io.ox/core/extPatterns/links', [
                         // tooltip removes title attribute
                         'aria-label': self.title || self.label || ''
                     })
-                    .tooltip()
+                    .tooltip({ trigger: 'hover' })
                     .on('dispose', function () {
                         $(this).tooltip('hide');
                     });
@@ -595,7 +595,7 @@ define('io.ox/core/extPatterns/links', [
                             })
                             .on('click', { baton: baton, extension: links[0] }, actionClick);
                             if (!_.device('touch')) {
-                                a.tooltip();
+                                a.tooltip({ trigger: 'hover' });
                             }
                         } else {
                             a.addClass('disabled').removeAttr('tabindex').attr({ 'aria-disabled': true }).on('click', preventDefault);
