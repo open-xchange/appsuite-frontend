@@ -20,7 +20,7 @@ define('io.ox/calendar/edit/main', [
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/edit/style'
-], function (appointmentModel, api, dnd, EditView, notifications, gt, settings) {
+], function (appointmentFactory, api, dnd, EditView, notifications, gt, settings) {
 
     'use strict';
 
@@ -80,9 +80,7 @@ define('io.ox/calendar/edit/main', [
 
                     self.setWindow(win);
 
-                    appointmentModel.applyAutoLengthMagic(self.model);
-                    appointmentModel.fullTimeChangeBindings(self.model);
-                    appointmentModel.setDefaultParticipants(self.model, { create: opt.mode === 'create' }).done(function () {
+                    self.model.setDefaultParticipants({ create: opt.mode === 'create' }).done(function () {
 
                         app.view = self.view = new EditView({
                             model: self.model,
@@ -236,9 +234,7 @@ define('io.ox/calendar/edit/main', [
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
-                    // self.model = appointmentModel.factory.realm('edit').create(data);
-                    // cont();
-                    appointmentModel.factory.realm('edit').retain().get({
+                    appointmentFactory.realm('edit').retain().get({
                         id: data.id,
                         folder: data.folder_id
                     })
@@ -247,7 +243,7 @@ define('io.ox/calendar/edit/main', [
                         cont();
                     });
                 } else {
-                    self.model = appointmentModel.factory.create(data);
+                    self.model = appointmentFactory.create(data);
                     if (!data.folder_id) {
                         require(['io.ox/core/folder/api']).done(function (api) {
                             data.folder_id = api.getDefaultFolder('calendar');
