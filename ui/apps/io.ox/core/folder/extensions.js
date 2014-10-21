@@ -117,6 +117,9 @@ define('io.ox/core/folder/extensions', [
         },
 
         addRemoteAccount: function () {
+
+            if (!capabilities.has('multiple_mail_accounts')) return;
+
             this.append(
                 $('<div class="links">').append(
                     $('<a href="#" data-action="add-mail-account" tabindex="1" role="button">')

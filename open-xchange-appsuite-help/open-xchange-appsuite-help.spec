@@ -226,6 +226,8 @@ done
 %changelog
 * Tue Oct 14 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Fifth candidate for 7.6.1 release
+* Mon Oct 13 2014 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2014-10-20
 * Fri Oct 10 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Fourth candidate for 7.6.1 release
 * Thu Oct 02 2014 Marcus Klein <marcus.klein@open-xchange.com>

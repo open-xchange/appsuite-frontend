@@ -16,9 +16,10 @@ define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
     'io.ox/core/folder/api',
+    'io.ox/core/print',
     'settings!io.ox/calendar',
     'static/3rd.party/jquery-ui.min.js'
-], function (util, date, ext, gt, folderAPI, settings) {
+], function (util, date, ext, gt, folderAPI, print, settings) {
 
     'use strict';
 
@@ -1684,29 +1685,27 @@ define('io.ox/calendar/week/view', [
             if (folder.id || folder.folder) {
                 data = { folder_id: folder.id || folder.folder };
             }
-            ox.load(['io.ox/core/print']).done(function (print) {
-                var win = print.open('printCalendar', data, {
-                    template: tmpl.name,
-                    start: start,
-                    end: end,
-                    work_day_start_time: self.workStart * date.HOUR,
-                    work_day_end_time: self.workEnd * date.HOUR
-                });
-                if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
-                    var limit = 50,
-                        counter = 0,
-                        interval;
-                    interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
-                        counter++;
-                        if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
-                            win.print();
-                            clearInterval(interval);
-                        }
-                    }, 100);
-                } else {
-                    win.print();
-                }
+            var win = print.open('printCalendar', data, {
+                template: tmpl.name,
+                start: start,
+                end: end,
+                work_day_start_time: self.workStart * date.HOUR,
+                work_day_end_time: self.workEnd * date.HOUR
             });
+            if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+                var limit = 50,
+                    counter = 0,
+                    interval;
+                interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
+                    counter++;
+                    if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
+                        win.print();
+                        clearInterval(interval);
+                    }
+                }, 100);
+            } else {
+                win.print();
+            }
         }
     });
 

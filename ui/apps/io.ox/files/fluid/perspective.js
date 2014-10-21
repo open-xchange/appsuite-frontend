@@ -1011,6 +1011,7 @@ define('io.ox/files/fluid/perspective', [
 
                             _(changed).each(function (cid) {
                                 var data = hash[cid],
+                                    index = _.indexOf(newIds, cid),
                                     prev = indexPrevPosition(newIds, cid),
                                     outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
                                     anchor;
@@ -1019,7 +1020,7 @@ define('io.ox/files/fluid/perspective', [
 
                                 if (indexPrev(newIds, cid)) {
                                     anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                    if (anchor.length) {
+                                    if (anchor.length && index !== 0) {
                                         anchor.first().after(drawFile(data));
                                     } else {
                                         scrollpane.find('.files-container').prepend(drawFile(data));
@@ -1042,12 +1043,13 @@ define('io.ox/files/fluid/perspective', [
 
                             _(added).each(function (cid) {
                                 var data = hash[cid],
+                                    index = _.indexOf(newIds, cid),
                                     prev = indexPrevPosition(newIds, cid),
                                     anchor;
 
                                 if (indexPrev(newIds, cid)) {
                                     anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                    if (anchor.length) {
+                                    if (anchor.length && index !== 0) {
                                         anchor.first().after(drawFile(data));
                                     } else {
                                         scrollpane.find('.files-container').prepend(drawFile(data));
