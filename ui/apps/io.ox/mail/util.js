@@ -320,18 +320,38 @@ define('io.ox/mail/util',
             return data && _.isArray(data.from) && data.from.length > 0 && !!data.from[0][1];
         },
 
+        // returns jquery set
         getFrom: function (data, field) {
+
+            data = data || {};
             field = field || 'from';
-            var list = data[field] || [['', '']],
-                dn = that.getDisplayName(list[0]);
-            if (field === 'from' && dn === '') {
-                dn = gt('Unknown sender');
-            } else if (field === 'to' && dn === '') {
-                dn = gt('No recipients');
-            } else {
-                dn = _.noI18n(dn);
+
+            // get list
+            var list = _(data[field])
+                .chain()
+                .map(function (item) {
+                    return that.getDisplayName(item); // reduce to display name
+                })
+                .filter(function (name) {
+                    return name !== ''; // skip empty names
+                })
+                .value();
+
+            // empty?
+            if (list.length === 0) {
+                return $().add(
+                    $.txt(field === 'from' ? gt('Unknown sender') : gt('No recipients'))
+                );
             }
-            return util.renderPersonalName({ name: dn }).addClass('person');
+
+            list = _(list).reduce(function (set, name) {
+                return set
+                    .add(util.renderPersonalName({ name: name }).addClass('person'))
+                    .add($.txt(', '));
+            }, $());
+
+            // drop last item
+            return list.slice(0, -1);
         },
 
         /**
