@@ -84,6 +84,11 @@ define('io.ox/contacts/distrib/create-dist-view', [
         id: 'add-members',
         index: 300,
         className: 'row',
+
+        init: function () {
+            this.listenTo(this.model, 'change:distribution_list', this.onDistributionListChange);
+        },
+
         render: function () {
             var self = this;
 
@@ -270,9 +275,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
                     _.call(ext.action, e.data, e);
                 });
             }
-        },
-
-        observe: 'distribution_list'
+        }
 
     });
 
