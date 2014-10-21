@@ -523,6 +523,18 @@ define('io.ox/calendar/main', [
             app.pages.getPage('week').on('pageshow', function () {
                 //app.pages.getPageObject('week').perspective.view.setScrollPos();
             });
+        },
+
+        /*
+         * Add support for selection:
+         */
+        'selection-doubleclick': function (app) {
+            // detail app does not make sense on small devices
+            // they already see appointments in full screen
+            if (_.device('small')) return;
+            app.grid.selection.on('selection:doubleclick', function (e, key) {
+                ox.launch('io.ox/calendar/detail/main', { cid: key });
+            });
         }
 
     });

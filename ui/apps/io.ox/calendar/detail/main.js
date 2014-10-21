@@ -39,6 +39,10 @@ define('io.ox/calendar/detail/main', [
                             'aria-label': gt('Appointment Details')
                         }).append(detailView.draw(data)));
 
+                        api.one('delete:' + _.ecid(data), function () {
+                            app.quit();
+                        });
+
                     },
                     function fail() {
                         notifications.yell('error', gt('An error occurred. Please try again.'));

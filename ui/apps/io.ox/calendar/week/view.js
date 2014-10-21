@@ -380,11 +380,7 @@ define('io.ox/calendar/week/view', [
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
                         .addClass('opac');
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
-                    if (_.device('smartphone')) {
-                        self.trigger('showAppointment', e, obj);
-                    } else {
-                        ox.launch('io.ox/calendar/detail/main', { cid: String(cT.data('cid')) });
-                    }
+                    self.trigger('showAppointment', e, obj);
 
                 } else {
                     $('.appointment', self.$el).removeClass('opac');
