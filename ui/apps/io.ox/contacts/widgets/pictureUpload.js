@@ -28,8 +28,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
             className: 'picture-upload-view',
 
-            modelEvents: {
-                'change:image1_url': 'displayImageURL'
+            init: function () {
+                this.listenTo(this.model, 'change:image1_url', this.displayImageURL);
             },
 
             resetImage: function (e) {

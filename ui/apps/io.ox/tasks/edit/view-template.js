@@ -161,7 +161,6 @@ define('io.ox/tasks/edit/view-template', [
     point.extend(new DatePicker({
         id: 'start_date',
         index: 500,
-        labelClassName: 'task-edit-label',
         display: 'DATE',
         className: 'col-xs-6 collapsed',
         attribute: 'start_date',
@@ -175,14 +174,13 @@ define('io.ox/tasks/edit/view-template', [
     point.extend(new DatePicker({
         id: 'end_date',
         index: 600,
-        labelClassName: 'task-edit-label',
         display: 'DATE',
         className: 'col-xs-6 collapsed',
         attribute: 'end_date',
         required: false,
         label: gt('Due date'),
         utc: true,
-        clearButton: _.device('small')//add clearbutton on mobile devices
+        clearButton: _.device('small') //add clearbutton on mobile devices
     }), { row: '4' });
 
     // recurrence

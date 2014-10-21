@@ -22,6 +22,7 @@ define('io.ox/backbone/mini-views/datepicker', [
     // Bootstrap DatePicker
 
     function DatePicker(options) {
+
         options = _.extend({
             required: true,
             display: 'DATETIME',
@@ -136,21 +137,23 @@ define('io.ox/backbone/mini-views/datepicker', [
             today: gt('Today')
         };
 
-        var mobileMode = _.device('small'),
-            modelEvents = {};
-        modelEvents['change:' + options.attribute] = 'setValueInField';
-        modelEvents['invalid:' + options.attribute] = 'showError';
-        modelEvents.valid = 'removeError';
-        modelEvents['change:full_time'] = 'onFullTimeChange';
+        var mobileMode = _.device('small');
+
         _.extend(this, {
             tagName: 'div',
+            init: function () {
+                this.listenTo(this.model, 'change:' + options.attribute, this.setValueInField);
+                this.listenTo(this.model, 'invalid:' + options.attribute, this.showError);
+                this.listenTo(this.model, 'valid', this.removeError);
+                this.listenTo(this.model, 'change:full_time', this.onFullTimeChange);
+            },
             render: function () {
                 var self = this;
                 this.nodes = {};
                 this.mobileSet = {};
                 this.$el.append(
                     this.nodes.controlGroup = $('<fieldset>').append(
-                        $('<legend>').addClass(options.labelClassName || '').text(this.label),
+                        $('<legend>').addClass('control-label').text(this.label),
                         $('<div class="form-inline">').append(
                             function () {
                                 var guid = _.uniqueId('form-control-label-');
@@ -327,9 +330,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                     timeField.css('display', ft ? 'none' : '');
                 }
                 timezoneField.css('display', ft ? 'none' : '');
-            },
-
-            modelEvents: modelEvents
+            }
 
         }, options);
     }

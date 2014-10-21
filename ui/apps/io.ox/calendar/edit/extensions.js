@@ -119,8 +119,7 @@ define('io.ox/calendar/edit/extensions', [
     point.extend(new DatePicker({
         id: 'start-date',
         index: 400,
-        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
-        labelClassName: 'control-label',
+        className: 'dateinput col-xs-6 col-md-4',
         display: 'DATETIME',
         attribute: 'start_date',
         label: gt('Starts on')
@@ -129,10 +128,9 @@ define('io.ox/calendar/edit/extensions', [
     // end date
     point.extend(new DatePicker({
         id: 'end-date',
-        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
-        labelClassName: 'control-label',
-        display: 'DATETIME',
         index: 500,
+        className: 'dateinput col-xs-6 col-md-4',
+        display: 'DATETIME',
         attribute: 'end_date',
         label: gt('Ends on')
     }), {

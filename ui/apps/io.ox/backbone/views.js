@@ -80,15 +80,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 });
             }
 
-            if (options.modelEvents) {
-                _(options.modelEvents).each(function (methodNames, evt) {
-                    _(methodNames.split(' ')).each(function (methodName) {
-                        self.observeModel(evt, function () {
-                            self[methodName].apply(self, $.makeArray(arguments));
-                        });
-                    });
-                });
-            }
             if (options.observe) {
                 _(attributeDefinitions(options.observe)).each(function (definition) {
                     if (self['on' + definition.canonicalName + 'Change']) {
