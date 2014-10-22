@@ -35,9 +35,9 @@
 
     // supported browsers
     us.browserSupport = {
-        'Chrome'  :   32,
+        'Chrome'  :   37,
         'Safari'  :    7,
-        'Firefox' :   27,
+        'Firefox' :   32,
         'IE'      :   10,
         'Android' :  4.1,
         'iOS'     :  6.0
