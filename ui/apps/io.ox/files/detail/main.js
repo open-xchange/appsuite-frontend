@@ -27,8 +27,9 @@ define('io.ox/files/detail/main', [
             app.showFile = function (file) {
 
                 api.get(file).done(function (data) {
+
                     var label = gt('File Details'),
-                        title = data.filename;
+                        title = data.filename || data.title;
 
                     app.getWindowNode().append($('<div class="default-content-padding f6-target file-view-container">').attr({
                         'tabindex': 1,
