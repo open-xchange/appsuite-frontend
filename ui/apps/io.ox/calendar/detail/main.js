@@ -42,7 +42,6 @@ define('io.ox/calendar/detail/main', [
                         api.one('delete:' + _.ecid(data), function () {
                             app.quit();
                         });
-
                     },
                     function fail() {
                         notifications.yell('error', gt('An error occurred. Please try again.'));
@@ -63,6 +62,7 @@ define('io.ox/calendar/detail/main', [
 
         // launcher
         return app.setLauncher(function (options) {
+
             var win = ox.ui.createWindow({
                 chromeless: true,
                 name: NAME,
@@ -76,7 +76,7 @@ define('io.ox/calendar/detail/main', [
             if (cid !== undefined) {
                 // called from calendar app
                 obj = _.cid(cid);
-                app.setState({ folder: obj.folder_id, id: obj.id });
+                app.setState({ folder: obj.folder_id, id: obj.id, recurrence_position: obj.recurrence_position || null });
                 app.showAppointment(obj);
                 return;
             }
