@@ -167,9 +167,13 @@ define('io.ox/settings/main',
 
         // Create extensions for the apps
         var appsInitialized = appsAPI.getInstalled().done(function (installed) {
+
             var apps = _.filter(installed, function (item) {
-                return item.settings;
+                if (!item.settings) return false;
+                if (item.device) return _.device(item.device);
+                return true;
             });
+
             var index = 200;
 
             _(apps).each(function (app) {
@@ -179,7 +183,6 @@ define('io.ox/settings/main',
                     index: index
                 }, app));
                 index += 100;
-
             });
         });
 
