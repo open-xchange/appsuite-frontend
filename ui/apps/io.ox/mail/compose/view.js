@@ -55,7 +55,7 @@ define('io.ox/mail/compose/view',
     ext.point(POINT + '/fields').extend({
         id: 'cc',
         index: INDEX += 100,
-        draw: extensions.tokenfield('CC')
+        draw: extensions.tokenfield('CC', true)
     });
 
     ext.point(POINT + '/fields').extend({

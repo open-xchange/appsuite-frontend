@@ -164,7 +164,7 @@ define('io.ox/mail/compose/extensions',
                                     id: guid,
                                     tabindex: 1
                                 }),
-                                addActions ? $('<div class="recipient-actions">').append(
+                                attr === 'to' ? $('<div class="recipient-actions">').append(
                                     $('<a>').attr({
                                         href: '#',
                                         tabindex: 1,
