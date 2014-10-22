@@ -13,6 +13,7 @@
 
 define('io.ox/mail/compose/extensions',
     ['io.ox/mail/sender',
+     'io.ox/backbone/mini-views/common',
      'io.ox/backbone/mini-views/dropdown',
      'io.ox/core/extensions',
      'io.ox/core/api/autocomplete',
@@ -24,7 +25,7 @@ define('io.ox/mail/compose/extensions',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'static/3rd.party/jquery-ui.min.js'
-    ], function (sender, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
+    ], function (sender, mini, Dropdown, ext, AutocompleteAPI, autocomplete, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -254,24 +255,17 @@ define('io.ox/mail/compose/extensions',
         },
 
         subject: function (baton) {
-            var guid = _.uniqueId('form-control-label-'),
-                input;
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="row subject" data-extension-id="subject">').append(
                     $('<label class="maillabel col-xs-2 col-md-1">').text(gt('Subject')).attr({
                         'for': guid
                     }),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        input = $('<input type="text" class="form-control">').val(baton.model.get('subject')).attr({
-                            id: guid,
-                            tabindex: 1
-                        })
+                        new mini.InputView({ model: baton.model, id: guid, name: 'subject' }).render().$el
                     )
                 )
             );
-            baton.view.listenTo(baton.model, 'change:subject', function() {
-                input.val(baton.model.get('subject'));
-            });
         },
 
         signature: function (baton) {

@@ -344,7 +344,7 @@ define('io.ox/mail/compose/view',
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
-            this.listenTo(this.model, 'change:subject', this.setTitle);
+            this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
             this.listenTo(this.model, 'change:editorMode', this.changeEditorMode);
             this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
             this.listenTo(this.model, 'needsync', this.syncMail);
@@ -374,7 +374,7 @@ define('io.ox/mail/compose/view',
 
         setSubject: function (e) {
             var value = e.target ? $(e.target).val() : e;
-            this.model.set('subject', value);
+            this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
         },
 
         setTitle: function () {
