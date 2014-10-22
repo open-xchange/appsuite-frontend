@@ -118,7 +118,7 @@ define('io.ox/core/settings/pane', [
     point.extend({
         id: 'language',
         index: 100,
-        className: 'row form-group',
+        className: 'form-group',
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
@@ -177,7 +177,7 @@ define('io.ox/core/settings/pane', [
         point.extend({
             id: 'timezones',
             index: 200,
-            className: 'row form-group',
+            className: 'form-group',
             render: function () {
                 var guid = _.uniqueId('form-control-label-');
                 this.$el.append(
@@ -210,7 +210,7 @@ define('io.ox/core/settings/pane', [
             point.extend({
                 id: 'theme',
                 index: 400,
-                className: 'row form-group',
+                className: 'form-group',
                 render: function () {
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.append(
@@ -235,7 +235,7 @@ define('io.ox/core/settings/pane', [
         point.extend({
             id: 'highcontrast',
             index: 401,
-            className: 'row form-group',
+            className: 'form-group',
             render: function () {
                 var guid = _.uniqueId('form-control-label-');
                 this.$el.append(
@@ -269,7 +269,7 @@ define('io.ox/core/settings/pane', [
             point.extend({
                 id: 'refreshInterval',
                 index: 300,
-                className: 'row form-group',
+                className: 'form-group',
                 render: function () {
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.append(
@@ -303,7 +303,7 @@ define('io.ox/core/settings/pane', [
             point.extend({
                 id: 'autoStart',
                 index: 500,
-                className: 'row form-group',
+                className: 'form-group',
                 render: function () {
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.append(
@@ -340,7 +340,7 @@ define('io.ox/core/settings/pane', [
         point.extend({
             id: 'autoLogout',
             index: 600,
-            className: 'row form-group',
+            className: 'form-group',
             render: function () {
                 var guid = _.uniqueId('form-control-label-');
                 this.$el.append(
@@ -374,7 +374,7 @@ define('io.ox/core/settings/pane', [
             point.extend({
                 id: 'autoOpenNotification',
                 index: 700,
-                className: 'row form-group',
+                className: 'form-group',
                 render: function () {
                     var guid = _.uniqueId('form-control-label-');
                     this.$el.append(

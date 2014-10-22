@@ -152,13 +152,9 @@ define('io.ox/calendar/settings/pane', [
                 $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle expertmode').text(gt('Default calendar view')),
                     $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('row').append(
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Show declined appointments')).prepend(
-                                        new mini.CheckboxView({ name: 'showDeclinedAppointments', model: model }).render().$el
-                                    )
-                                )
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Show declined appointments')).prepend(
+                                new mini.CheckboxView({ name: 'showDeclinedAppointments', model: model }).render().$el
                             )
                         )
                     )
@@ -183,13 +179,9 @@ define('io.ox/calendar/settings/pane', [
                         )
                     ),
                     $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('row').append(
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Mark all day appointments as free')).prepend(
-                                        new mini.CheckboxView({ name: 'markFulltimeAppointmentsAsFree', model: model }).render().$el
-                                    )
-                                )
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Mark all day appointments as free')).prepend(
+                                new mini.CheckboxView({ name: 'markFulltimeAppointmentsAsFree', model: model }).render().$el
                             )
                         )
                     )
@@ -204,55 +196,26 @@ define('io.ox/calendar/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for appointment')),
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notifications')),
                     $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('row').append(
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Email notification for New, Changed, Deleted?')).prepend(
-                                        new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model }).render().$el
-                                    )
-                                )
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Receive notification for appointment changes')).prepend(
+                                new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model }).render().$el
                             )
-                        )
-                    )
-                ),
-                $('<fieldset>').append(
-
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for Accept/Declined')),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('row').append(
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Email notification for appointment creator?')).prepend(
-                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model }).render().$el
-                                    )
-                                )
+                        ),
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Receive notification as appointment creator when participants accept or decline')).prepend(
+                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('row').append(
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Email notification for appointment participant?')).prepend(
-                                        new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model }).render().$el
-                                    )
-                                )
+                        ),
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Receive notification as appointment participant when other participants accept or decline')).prepend(
+                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model }).render().$el
                             )
-                        )
-                    )
-                ),
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Incoming Notification Mails')),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('row').append(
-                            $('<div>').addClass('col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Automatically delete a notification mail after it has been accepted or declined?')).prepend(
-                                        new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: model }).render().$el
-                                    )
-                                )
+                        ),
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Automatically delete incoming notifications after it has been accepted or declined')).prepend(
+                                new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: model }).render().$el
                             )
                         )
                     )
