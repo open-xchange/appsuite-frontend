@@ -247,9 +247,13 @@
 
     queryScreen();
 
+    function isSmartphone() {
+        return Math.min(screen.width, screen.height) < 480 && mobileOS;
+    }
+
     var mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
     // define devices as combination of screensize and OS
-    display.smartphone = display.small && mobileOS;
+    display.smartphone = isSmartphone();
     display.tablet = display.medium && mobileOS; // maybe to fuzzy...
     display.desktop = !mobileOS;
     us.displayInfo = display;
@@ -280,7 +284,7 @@
 
             mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
             // define devices as combination of screensize and OS
-            display.smartphone = display.small && mobileOS;
+            display.smartphone = isSmartphone();
             display.tablet = display.medium && mobileOS; // maybe to fuzzy...
             display.desktop = !mobileOS;
             us.displayInfo = display;
