@@ -24,6 +24,9 @@ define('io.ox/mail/mailfilter/settings/model', [
         var factory = new ModelFactory({
             api: api,
             ref: ref,
+            model: {
+                idAttribute: 'id'
+            },
 
             update: function (model) {
                 //yell on reject

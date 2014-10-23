@@ -70,7 +70,9 @@ define('io.ox/mail/autoforward/settings/model', [
         var factory = new ModelFactory({
             api: api,
             ref: ref,
-
+            model: {
+                idAttribute: 'id'
+            },
             update: function (model) {
                 $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
                 if (model.attributes.forwardmail === '') {

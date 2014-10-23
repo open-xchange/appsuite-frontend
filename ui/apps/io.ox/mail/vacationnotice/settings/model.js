@@ -97,7 +97,9 @@ define('io.ox/mail/vacationnotice/settings/model', [
         var factory = new ModelFactory({
             api: api,
             ref: ref,
-
+            model: {
+                idAttribute: 'id'
+            },
             update: function (model) {
                 return settingsUtil.yellOnReject(
                     api.update(providePreparedData(model.attributes))
