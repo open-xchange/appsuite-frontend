@@ -663,7 +663,7 @@ $(window).load(function () {
                         ox.secretCookie = hash.secretCookie === 'true';
                         fetchUserSpecificServerConfig().done(function () {
                             var whoami = $.Deferred();
-                            if (hash.user && hash.language && hash.user_id) {
+                            if (hash.user && hash.language && hash.user_id && hash.context_id) {
                                 whoami.resolve(hash);
                             } else {
                                 require(['io.ox/core/http'], function (http) {
@@ -740,7 +740,7 @@ $(window).load(function () {
                     ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
                         var whoami = $.Deferred();
-                        if (hash.user && hash.language && hash.user_id) {
+                        if (hash.user && hash.language && hash.user_id && hash.context_id) {
                             whoami.resolve(hash);
                         } else {
                             require(['io.ox/core/http'], function (http) {
