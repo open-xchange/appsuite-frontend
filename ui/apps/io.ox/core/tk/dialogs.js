@@ -728,9 +728,9 @@ define('io.ox/core/tk/dialogs', [
             lastFocus = $(document.activeElement);
 
             self.nodes = {
-                closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
-                click: my.parents('.io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
-                target: target || my.parents('.window-body, .simple-window, .window-container-center, .notifications-overlay').first(),
+                closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay, body').first(),
+                click: my.parents('.io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay, body').first(),
+                target: target || my.parents('.window-body, .simple-window, .window-container-center, .notifications-overlay, body').first(),
                 simple: my.closest('.simple-window')
             };
 
@@ -738,7 +738,7 @@ define('io.ox/core/tk/dialogs', [
             sidepopup = self.nodes.closest.prop('sidepopup') || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = my.parents('.io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay').css('zIndex');
+            zIndex = my.parents('.io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay, body').css('zIndex');
             zIndex = parseInt(zIndex, 10);
             zIndex = _.isNumber(zIndex) ? zIndex + 2 : 100;
             // second click?
