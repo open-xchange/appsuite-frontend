@@ -73,7 +73,7 @@ define('io.ox/calendar/freebusy/controller',
                 self.autocomplete.remove();
                 self.autocomplete = calendarViews = null;
                 cache = {};
-                api.off('create update refresh.all', $.proxy(self.refresh, self));
+                api.off('create update delete refresh.all', $.proxy(self.refresh, self));
             });
 
             this.updateAppointment = function (data) {
@@ -305,7 +305,7 @@ define('io.ox/calendar/freebusy/controller',
                 view.render();
                 this.$el.append(view.$el.addClass('abs week-view'));
 
-                api.on('create update refresh.all', $.proxy(self.refresh, self));
+                api.on('create update delete refresh.all', $.proxy(self.refresh, self));
 
                 return view;
             };
