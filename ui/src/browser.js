@@ -45,13 +45,8 @@
 
     // helpers
     function allFalsy(d) {
-        var allfalse = true;
-        for (var i in d) {
-            if (!!d[i]) {
-                allfalse = false;
-            }
-        }
-        return allfalse;
+        for (var i in d) if (d[i]) return false;
+        return true;
     }
 
     function extend() {
@@ -143,7 +138,7 @@
                 /** is WebKit? */
                 WebKit: webkit,
                 /** Safari */
-                Safari: !Android && webkit && !chrome && !phantom && !uiwebview ?
+                Safari: webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry ?
                     (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
                 /** PhantomJS (needed for headless spec runner) */
                 PhantomJS: webkit && phantom ?
