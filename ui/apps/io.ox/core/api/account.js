@@ -80,9 +80,12 @@ define('io.ox/core/api/account',
     api.isUnified = function (id) {
         // extend if number
         if (/^\d+$/.test(id)) id = 'default' + id;
+        // get identifier (might be null)
+        var identifier = settings.get('unifiedInboxIdentifier');
+        if (!identifier || identifier === 'null') return false;
         // compare against unifiedInboxIdentifier (having just a number would be smarter)
         var match = String(id).match(/^(default\d+)/);
-        return !!match && settings.get('unifiedInboxIdentifier') === (match[1] + separator + 'INBOX');
+        return !!match && identifier === (match[1] + separator + 'INBOX');
     };
 
     /**
