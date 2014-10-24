@@ -164,9 +164,10 @@
 
             function reset(tx) {
                 try {
-                    tx.executeSql('DELETE FROM files');
+                    tx.executeSql('DROP TABLE IF EXISTS files');
+                    tx.executeSql('CREATE TABLE files (name TEXT unique, contents TEXT, version TEXT)');
                     tx.executeSql('DELETE FROM version');
-                    tx.executeSql('REPLACE INTO version VALUES (?)', [ox.version]);
+                    tx.executeSql('INSERT INTO version VALUES (?)', [ox.version]);
                 } catch (e) {
                     if (ox.debug) console.error('Failed to reset WebSQL file cache', e);
                 }
