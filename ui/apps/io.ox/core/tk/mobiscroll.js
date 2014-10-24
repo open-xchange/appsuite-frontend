@@ -12,12 +12,14 @@
  */
 
 define('io.ox/core/tk/mobiscroll', [
-    'apps/3rd.party/mobiscroll/mobiscroll.js',
     'gettext!io.ox/core',
     'io.ox/core/date',
-    'css!3rd.party/mobiscroll/css/mobiscroll.core.css',
-    'css!3rd.party/mobiscroll/css/mobiscroll.ios7.css'
-], function (mobi, gt, date) {
+    'apps/3rd.party/mobiscroll/mobiscroll.js',
+    'css!3rd.party/mobiscroll/css/mobiscroll.widget.css',
+    'css!3rd.party/mobiscroll/css/mobiscroll.widget.ios7.css',
+    'css!3rd.party/mobiscroll/css/mobiscroll.scroller.css',
+    'css!3rd.party/mobiscroll/css/mobiscroll.scroller.ios7.css'
+], function (gt, date) {
 
     'use strict';
 
