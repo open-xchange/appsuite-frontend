@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-08 12:58+0100\n"
+"PO-Revision-Date: 2014-10-24 14:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.10\n"
 "X-POOTLE-MTIME: 1410268670.000000\n"
 
 #. File size
@@ -7534,7 +7534,7 @@ msgstr "Willkommen bei Ihren Dateien"
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:34 module:io.ox/portal
 msgid "Welcome to your inbox"
-msgstr "Wollkommen in Ihrem Posteingang"
+msgstr "Willkommen in Ihrem Posteingang"
 
 #. Default greeting for portal widget
 #: apps/io.ox/portal/main.js:38 module:io.ox/portal
