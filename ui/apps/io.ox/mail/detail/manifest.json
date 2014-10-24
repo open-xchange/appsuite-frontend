@@ -1,5 +1,6 @@
 {
     "category": "Basic",
     "requires": "webmail",
-    "refreshable": true
+    "refreshable": true,
+    "visible": false
 }

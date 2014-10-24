@@ -1,5 +1,6 @@
 {
     "category": "Productivity",
     "requires": "tasks",
-    "refreshable": true
+    "refreshable": true,
+    "visible": false
 }
