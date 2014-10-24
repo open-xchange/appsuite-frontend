@@ -293,7 +293,8 @@ define('io.ox/core/tk/list',
         },
 
         connect: function (loader) {
-
+            // remove listeners
+            this.stopListening(this.collection);
             this.collection = loader.getDefaultCollection();
             this.loader = loader;
 
