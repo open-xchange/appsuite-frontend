@@ -285,14 +285,14 @@ define('plugins/notifications/calendar/register',
                 min = $(e.target).data('value') || $(e.target).val(),
                 reminder = self.model;
             if (min !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+                hiddenCalReminderItems[_.ecid(reminder.get('remdata'))] = true;
                 self.collection.remove(self.model);
-                self.collection.hidden.push(self.model.get('cid'));
                 setTimeout(function () {
                     //get updated data
                     calAPI.get(reminder.get('caldata')).done(function (calObj) {
-                        if (!calObj.alarm) {//alarmtime was removed in the meantime, so no reminder to add
+                        if (calObj.alarm) {//alarmtime was removed in the meantime, so no reminder to add
                             require(['io.ox/calendar/util'], function (util) {
-                                self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
+                                delete hiddenCalReminderItems[_.ecid(reminder.get('remdata'))];
                                 //fill in new data
                                 reminder.set('caldata', calObj);
                                 reminder.set('title', calObj.title);
@@ -311,7 +311,11 @@ define('plugins/notifications/calendar/register',
             // stopPropagation could be prevented by another markup structure
             e.stopPropagation();
             var self = this;
-            reminderAPI.deleteReminder(self.model.get('remdata').id).done(function () {
+            var obj = { id: self.model.get('remdata').id };
+            if (self.model.get('remdata').recurrence_position) {
+                obj.recurrence_position = self.model.get('remdata').recurrence_position;
+            }
+            reminderAPI.deleteReminder(obj).done(function () {
                 self.collection.remove(self.model);
             });
         }
@@ -365,10 +369,6 @@ define('plugins/notifications/calendar/register',
             'click [data-action="clear"]': 'clearItems'
         },
 
-        initialize: function () {
-            this.collection.hidden = [];
-        },
-
         render: function () {
 
             this.$el.empty();
@@ -389,7 +389,7 @@ define('plugins/notifications/calendar/register',
             if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
-                hiddenCalReminderItems[_.ecid(item.attributes)] = true;
+                hiddenCalReminderItems[_.ecid(item.attributes.remdata)] = true;
             });
             this.collection.reset();
         }
@@ -403,7 +403,6 @@ define('plugins/notifications/calendar/register',
         index: 100,
         register: function (controller) {
             var ReminderNotifications = controller.get('io.ox/calendarreminder', ReminderNotificationsView);
-            ReminderNotifications.collection.hidden = [];
 
             function removeReminders(e, reminders) {
                 //make sure we have an array
@@ -419,65 +418,66 @@ define('plugins/notifications/calendar/register',
             }
 
             reminderAPI
-                .on('remove:reminder', removeReminders)
-                .on('add:calendar:reminder', function (e, reminder) {
+                .on('set:calendar:reminder', function (e, reminders) {
 
-                    var counter = reminder.length,
-                        now = _.now();
+                    var appointmentIds = [];
 
-                    _(reminder).each(function (remObj) {
-                        //test if this invites are hidden
-                        if (hiddenCalReminderItems[_.ecid(remObj)]) {
-                            counter--;
+                    _(reminders).each(function (reminder) {
+                        if (!hiddenCalReminderItems[_.ecid(reminder)]) {
+                            appointmentIds.push({id: reminder.target_id,
+                                          recurrence_position: reminder.recurrence_position,
+                                          folder: reminder.folder});
+                        }
+                    });
 
-                            if (counter === 0) {
-                                //all data processed. Update Collection
-                                ReminderNotifications.collection.trigger('add');
+                    if (appointmentIds.length === 0) {//no reminders to display
+                        ReminderNotifications.collection.reset([]);
+                        return;
+                    }
+
+                    $.when.apply($, _(appointmentIds).map(function (id) {
+                        return calAPI.get(id);
+                    })).done(function () {
+                        var appointments = appointmentIds.length === 1 ? [arguments[0]] : _.map(arguments, function (item) {//remove timestamps (cached data has no timestamp, real requests do)
+                            if (_.isArray(item)) {
+                                return item[0];
+                            } else {
+                                return item;
                             }
-                        } else {
-                            var obj = {
-                                id: remObj.target_id,
-                                folder: remObj.folder,
-                                recurrence_position: remObj.recurrence_position
-                            };
-                            calAPI.get(obj).done(function (data) {
-                                require(['io.ox/calendar/util'], function (util) {
+                        });
 
-                                    var inObj = {
-                                        cid: _.cid(remObj),
-                                        title: data.title,
-                                        location: data.location,
-                                        time: util.getTimeInterval(data),
-                                        date: util.getDateInterval(data),
-                                        remdata: remObj,
-                                        caldata: data
-                                    };
+                        require(['io.ox/calendar/util'], function (util) {
 
-                                    // ignore appointments that are over
-                                    var isOver = data.end_date < now;
-
-                                    if (!isOver) {
-                                        _(ReminderNotifications.collection.models).each(function (reminderModel) {//remove outdated versions of the model
-                                            if (reminderModel.get('cid') === inObj.cid) {
-                                                ReminderNotifications.collection.remove(reminderModel);
+                            var models = [],
+                                remindersToDelete  = [];
+                            _(appointments).each(function (data) {
+                                _(reminders).each(function (rem) {
+                                    if (rem.target_id === data.id) {
+                                        if (data.end_date < _.now()) {//don't show reminders for old appointments
+                                            var obj = { id: rem.id };
+                                            if (rem.recurrence_position) {
+                                                obj.recurrence_position = rem.recurrence_position;
                                             }
-                                        });
-
-                                        // do not add user suppressed ('remind me later') reminders
-                                        if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
-                                            ReminderNotifications.collection.add(new Backbone.Model(inObj));
+                                            remindersToDelete.push(obj);
+                                        } else {
+                                            models.push({
+                                                    cid: _.cid(rem),
+                                                    title: data.title,
+                                                    location: data.location,
+                                                    time: util.getTimeInterval(data),
+                                                    date: util.getDateInterval(data),
+                                                    remdata: rem,
+                                                    caldata: data
+                                                });
                                         }
-                                    }
-
-                                    counter--;
-
-                                    if (counter === 0) {
-                                        //all data processed. Update Collection
-                                        ReminderNotifications.collection.trigger('add');
                                     }
                                 });
                             });
-                        }
+                            if (remindersToDelete.length > 0) {
+                                reminderAPI.deleteReminder(remindersToDelete);//remove reminders correctly from server too  
+                            }
+                            ReminderNotifications.collection.reset(models);
+                        });
                     });
                 });
             calAPI.on('delete:appointment', removeReminders)
