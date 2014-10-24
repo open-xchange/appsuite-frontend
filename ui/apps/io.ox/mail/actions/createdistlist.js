@@ -20,7 +20,7 @@ define('io.ox/mail/actions/createdistlist', [
     'use strict';
 
     return function (baton) {
-        debugger;
+
         var data = baton.data,
             collectedRecipients = [].concat(data.to, data.cc, data.from),
             dev = $.Deferred(),

@@ -112,7 +112,7 @@ define('io.ox/core/tk/tokenfield', [
         }
 
     });
-    debugger;
+
     return Tokenfield;
 
 });
