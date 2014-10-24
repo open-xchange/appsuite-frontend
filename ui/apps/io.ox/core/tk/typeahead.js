@@ -9,101 +9,50 @@
  * Copyright (C) 2004-2012 Open-Xchange, Inc.
  * Mail: info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
 define('io.ox/core/tk/typeahead', [
+    'io.ox/core/api/autocomplete',
     'io.ox/core/util',
     'settings!io.ox/contacts',
-    'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
-    'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
-    'less!io.ox/core/tk/typeahead'
-], function (util, settings) {
+    'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
+], function (AutocompleteAPI, util, settings) {
 
     'use strict';
 
-    $.fn.autocompleteNew = function (o) {
-        function fixType (obj) {
-            switch (obj.type) {
-            case 'user':
-            case 1:
-                obj.data.type = obj.type = obj.sort = 1;
-                break;
-            case 'group':
-            case 2:
-                obj.data.type = obj.type = obj.sort = 2;
-                break;
-            case 'resource':
-            case 3:
-                obj.data.type = obj.type = obj.sort = 3;
-                break;
-            case 4:
-                obj.data.type = obj.type = obj.sort = 4;
-                break;
-            case 'contact':
-            case 5:
-                if (obj.data.internal_userid) {
-                    obj.sort = 1;
-                } else if (obj.data.mark_as_distributionlist) {
-                    obj.sort = 4; //distlistunsergroup
-                } else {
-                    obj.sort = 5;
-                }
-                if (!obj.data.type) {//only change if no type is there or type 5 will be made to type 1 on the second run
-                    obj.data.external = true;
-                    if (obj.data.internal_userid && obj.data.email1 === obj.email) {
-                        obj.data.type = 1; //user
-                        obj.data.external = false;
-                        // if (!options.keepId) {
-                        //     obj.data.id = obj.data.internal_userid;
-                        // }
-                    } else if (obj.data.mark_as_distributionlist) {
-                        obj.data.type = 6; //distlistunsergroup
-                    } else {
-                        obj.data.type = 5;
-                        // h4ck
-                        obj.data.email1 = obj.email;
-                        //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                        obj.data.emailparam = obj.email;
-                    }
-                }
-                obj.type = 5;
-                break;
-            }
-            return obj;
-        }
+    var Typeahead = Backbone.View.extend({
 
-        o = $.extend({
-            api: null,
+        tagName: 'input type="text"',
+
+        className: 'form-control',
+
+        options: {
+            apiOptions: {},
             draw: $.noop,
             cbshow: $.noop,
             click: $.noop,
             blur: $.noop,
+            tabindex: 1,
             // The minimum character length needed before suggestions start getting rendered
-            minLength: Math.max(1, settings.get('search/minimumQueryLength', 3)),
+            minLength: Math.max(1, settings.get('search/minimumQueryLength', 2)),
             // Max limit for draw operation in dropdown
             maxResults: 25,
-            // init tokenfield plugin
-            tokenfield: false,
             // Select first element on result callback
-            autoselect: false,
+            autoselect: true,
             // Highlight found query characters in bold
-            highlight: false,
+            highlight: true,
             // Typeahead will not show a hint
             hint: true,
             // mode: participant or search
             mode: 'participant',
             // Get data
-            source: function (val) {
-                return this.api.search(val).then(function (data) {
-                    return o.placement === 'top' ? data.reverse() : data;
-                });
+            source: function (query) {
+                return this.api.search(query);
             },
             // Filter items
-            reduce: function (data) {
-                return fixType(data);
-            },
+            reduce: _.identity,
             name: function (data) {
                 return util.unescapeDisplayName(data.display_name);
             },
@@ -116,23 +65,27 @@ define('io.ox/core/tk/typeahead', [
                 name = name ? '"' + name + '" <' + data.email + '>' : data.email;
                 return name || '';
             },
+            // lazyload selector
+            lazyload: null
+        },
 
-            // TODO: not implemented for new autocomplete
-            delay: 100,
-            parentSelector: 'body',
-            container: $('<div>').addClass('autocomplete-popup')
-        }, o || {});
+        typeaheadInput: $(),
 
-        var typeaheadInput,
-            self = this,
-            typeaheadOptions = [{
+        initialize: function (o) {
+            var self = this;
+
+            o = $.extend(this.options, o || {});
+
+            this.api = new AutocompleteAPI(o.apiOptions);
+
+            this.typeaheadOptions = [{
                 autoselect: o.autoselect,
                 minLength: o.minLength,
                 highlight: o.highlight,
                 hint: o.hint
             }, {
                 source: function (query, callback) {
-                    o.source(query)
+                    o.source.call(self, query)
                         .then(o.reduce)
                         .then(function (data) {
                             if (o.maxResults) {
@@ -141,11 +94,10 @@ define('io.ox/core/tk/typeahead', [
                             return data;
                         })
                         .then(function (data) {
-                            data =  _(data).map(function (data) {
-                                var stringResult = o.stringify(data);
+                            data = o.placement === 'top' ? data.reverse() : data;
+                            return _(data).map(function (data) {
                                 if (o.mode === 'participant') {
                                     data = {
-                                        // index: index,
                                         contact: data.data,
                                         email: data.email,
                                         field: data.field || '',
@@ -160,14 +112,15 @@ define('io.ox/core/tk/typeahead', [
                                         display_name: data.data.display_name
                                     };
                                 }
+                                var stringResult = o.stringify(data);
                                 return {
                                     value: stringResult.value || stringResult,
                                     label: stringResult.label || stringResult,
                                     data: data
                                 };
                             });
-                            callback(data);
-                        });
+                        })
+                        .then(callback);
                 },
                 templates: {
                     suggestion: function (tokenData) {
@@ -178,68 +131,27 @@ define('io.ox/core/tk/typeahead', [
                 }
             }];
 
-        if (o.tokenfield) {
+            this.$el.attr({ tabindex: this.options.tabindex }).typeahead(this.typeaheadOptions);
+        },
 
-            this.tokenfield({
-                createTokensOnBlur: true,
-                minLength: o.minLength,
-                typeahead: typeaheadOptions
-            }).on({
-                'tokenfield:createdtoken': function (e) {
-                    // A11y: set title
-                    var title = '',
-                        token = $(e.relatedTarget);
-                    if (e.attrs) {
-                        if (e.attrs.label !== e.attrs.value) {
-                            title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
-                        } else {
-                            title = e.attrs.label;
-                        }
-                    }
-                    token.attr({
-                        title: title
-                    });
+        render: function () {
+            var o = this.options,
+                self = this;
+            this.$el.on({
+                'typeahead:opened': function () {
+                    if (_.isFunction(o.cbshow)) o.cbshow();
                 },
-                'tokenfield:edittoken': function (e) {
-                    if (e.attrs) {
-                        if (e.attrs.label !== e.attrs.value) {
-                            e.attrs.value = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
-                        } else {
-                            e.attrs.value = e.attrs.label;
-                        }
-                    }
+                'typeahead:selected typeahead:autocompleted': function (e, item) {
+                    o.click.call(this, e, item.data);
+                    self.typeaheadInput.trigger('select', item.data);
                 },
-                'tokenfield:createtoken': function (e) {
-                    var tokenData = self.getOriginalInput().data();
-                    if (tokenData.edit === true ) {
-                        var newAttrs = /^"(.*?)"\s+<\s*(.*?)\s*>$/.exec(e.attrs.value);
-                        if (_.isArray(newAttrs)) {
-                            e.attrs.label = newAttrs[1];
-                            e.attrs.value = newAttrs[2];
-                        }
-                    }
-                }
+                'blur': o.blur
             });
-
-            typeaheadInput =  $(this).data('bs.tokenfield').$input;
-        } else {
-            typeaheadInput = this.typeahead.apply(this, typeaheadOptions);
+            return this;
         }
 
-        typeaheadInput.on({
-            'typeahead:opened': function () {
-                if (_.isFunction(o.cbshow)) o.cbshow();
-            },
-            'typeahead:selected': function (e, item) {
-                o.click.call(this, e, item.data);
-            },
-            'blur': o.blur
-        });
+    });
 
-        this.getOriginalInput = function () {
-            return typeaheadInput;
-        };
+    return Typeahead;
 
-        return this;
-    };
 });
