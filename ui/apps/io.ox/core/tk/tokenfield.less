@@ -1,4 +1,4 @@
-    /**
+/**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -35,8 +35,11 @@
         }
     }
 
-    .token-input, .twitter-typeahead .tt-hint {
-        height: 22px;
-        padding: 0px 5px;
+    .twitter-typeahead > .token-input {
+        &.tt-input, &.tt-hint {
+            height: 22px;
+            border: 0;
+            padding: 0px 5px;
+        }
     }
 }
