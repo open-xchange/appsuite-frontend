@@ -42,7 +42,7 @@ define('io.ox/tasks/detail/main', [
                         api.off('delete', handleDelete);
                     });
 
-                    app.getWindowNode().append($('<div class="default-content-padding f6-target task-view-container">').attr({
+                    app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
                         'tabindex': 1,
                         'role': 'complementary',
                         'aria-label': gt('Task Details')

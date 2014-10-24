@@ -32,8 +32,7 @@ define('io.ox/calendar/detail/main', [
                     function success(data) {
                         var title = data.title;
                         app.setTitle(title);
-
-                        app.getWindowNode().append($('<div class="default-content-padding f6-target appointment-view-container">').attr({
+                        app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
                             'tabindex': 1,
                             'role': 'complementary',
                             'aria-label': gt('Appointment Details')

@@ -43,7 +43,7 @@ define('io.ox/contacts/detail/main', [
                         });
                     });
 
-                    app.getWindowNode().append($('<div class="default-content-padding f6-target contact-view-container">').attr({
+                    app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
                         'tabindex': 1,
                         'role': 'complementary',
                         'aria-label': label

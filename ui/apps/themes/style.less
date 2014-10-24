@@ -4303,3 +4303,27 @@ wbr:after {
         }
     }
 }
+
+// detail-view-app
+
+.detail-view-app {
+    background-color: #eee;
+    .overflow();
+    .thread-view-control, .detail-view-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .detail-view-container {
+        padding: 20px;
+
+        > div {
+            min-height: 200px;
+            padding: 20px;
+            background-color: white;
+        }
+    }
+    .thread-view-control, .thread-view-list {
+        position: static;
+        min-height: 100%;
+    }
+}

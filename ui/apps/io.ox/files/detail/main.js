@@ -31,7 +31,7 @@ define('io.ox/files/detail/main', [
                     var label = gt('File Details'),
                         title = data.filename || data.title;
 
-                    app.getWindowNode().append($('<div class="default-content-padding f6-target file-view-container">').attr({
+                    app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
                         'tabindex': 1,
                         'role': 'complementary',
                         'aria-label': label

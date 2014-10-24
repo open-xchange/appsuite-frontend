@@ -29,7 +29,7 @@ define('io.ox/mail/detail/main', [
         'thread-view': function (app) {
             app.threadView = new threadView.Desktop();
             app.getWindow().nodes.main
-                .addClass('mail-reader')
+                .addClass('detail-view-app')
                 .append(app.threadView.render().$el);
         },
         /*
