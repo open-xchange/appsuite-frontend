@@ -28,20 +28,12 @@ define('io.ox/core/api/autocomplete', [
         var that = this;
 
         this.options = $.extend({
-            split: true
+            split: true,
+            limit: 0
         }, options);
 
         this.cache = {};
         this.apis = [];
-
-        contactsAPI.on('create update delete', function () {
-            that.cache = {};
-        });
-
-        mailAPI.on('send', function () {
-            // clear on mail send. Auto-collect contacts might have added new contacts
-            that.cache = {};
-        });
 
         if (options.users) {
             this.apis.push({ type: 'user', api: contactsAPI });
@@ -55,9 +47,15 @@ define('io.ox/core/api/autocomplete', [
         if (options.groups) {
             this.apis.push({ type: 'group', api: groupAPI });
         }
-        if (options.msisdn && (capabilities.has('msisdn'))) {
-            this.options.calloptions = $.extend(this.options.calloptions || {}, { extra: ['msisdn'] });
-        }
+
+        contactsAPI.on('create update delete', function () {
+            that.cache = {};
+        });
+
+        mailAPI.on('send', function () {
+            // clear on mail send. Auto-collect contacts might have added new contacts
+            that.cache = {};
+        });
     }
 
     Autocomplete.prototype = {
@@ -74,11 +72,14 @@ define('io.ox/core/api/autocomplete', [
             var self = this,
                 options = {
                     admin: settings.get('showAdmin', false),
-                    emailAutoComplete: false
+                    emailAutoComplete: false,
+                    limit: this.options.limit
                 };
 
             //msisdn support: request also msisdn columns (telephone columns; defined in http.js)
-            options = $.extend(options, this.options.calloptions || {});
+            if (this.options.msisdn && (capabilities.has('msisdn'))) {
+                options.extra = ['msisdn'];
+            }
 
             if (query in this.cache) {
                 // cache hit
@@ -174,16 +175,13 @@ define('io.ox/core/api/autocomplete', [
             });
             // 2/2: filter distribution lists & remove email duplicates
             tmp = _(tmp).filter(function (obj) {
-                var isDistributionList = obj.data.mark_as_distributionlist === true,
-                    isDuplicate = hash[getTarget(obj)];
-
-                if (isDistributionList) {
+                if (obj.data.mark_as_distributionlist === true) {
                     if (self.options.distributionlists === false) {
                         return false;
                     }
                     return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
                 } else {
-                    return isDuplicate ? false : (hash[getTarget(obj)] = true);
+                    return hash[getTarget(obj)] ? false : (hash[getTarget(obj)] = true);
                 }
             });
             hash = null;
