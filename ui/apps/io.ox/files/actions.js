@@ -87,27 +87,87 @@ define('io.ox/files/actions', [
         }
     });
 
+    var RESOLVE = $.Deferred().resolve(),
+        REJECT = $.Deferred().reject();
+
+    /**
+     * check type of folder
+     * @param  {string}  type  (e.g. 'trash')
+     * @param  {object}  baton [description]
+     * @return {deferred} that is rejected if
+     */
+    var is = (function () {
+        // tries to get data from current/provided folder
+        // hint: may returns a empty objec in case no usable data is provided
+        function getFolder (baton) {
+            var app = baton.app,
+                data = baton.data || {};
+            if (app) {
+                return app.folder.getData();
+            } else if (data.folder_id) {
+                // no app given, maybe the item itself has a folder
+                return folderAPI.get(data.folder_id);
+            } else {
+                // continue without getFolder
+                return $.Deferred().resolveWith(data);
+            }
+        }
+        return function (type, baton) {
+            return getFolder(baton)
+                        .then(function (data) {
+                            // '!' type prefix as magical negation
+                            var inverse, result;
+                            if (type[0] === '!') {
+                                type = type.substr(1);
+                                inverse = true;
+                            }
+                            result = folderAPI.is(type, data);
+                            // reject/resolve
+                            if (inverse ? !result : result) {
+                                console.log('%c' + 'resolve', 'color: white; background-color: green');
+                                return RESOLVE;
+                            } else {
+                                console.log('%c' + 'reject', 'color: white; background-color: red');
+                                return REJECT;
+                            }
+                        });
+        };
+    })();
+
+    /**
+     * returns deferred that sequently checks sync and async conditions
+     * @return {deferred} that rejects on first false/reject in chain
+     */
+    function conditionChain () {
+        var args = _.isArray(arguments[0]) ? arguments[0] : arguments || [],
+            chain = $.when();
+        // add conditions to chain
+        _.each(args, function (condition) {
+            var async = !!condition.then,
+                def = async ? condition : (condition ? RESOLVE : REJECT);
+            chain = chain.then(function () {
+                return def;
+                // return def.always(function () {
+                //     //debugger
+                //     console.log(index, def.state());
+                // });
+            });
+        });
+        return chain;
+    }
+
     // editor
     if (window.Blob) {
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                var check = function (data) {
-                        data = data || {};
-                        return e.collection.has('one') &&
-                            (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) &&
-                            (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                            !folderAPI.is('trash', data);
-                    };
-                if (e.baton.app) {
-                    return e.baton.app.folder.getData().then(check);
-                } else if (e.baton.data.folder_id) {
-                    // no app given, maybe the item itself has a folder
-                    return folderAPI.get(e.baton.data.folder_id).then(check);
-                } else {
-                    // continue without foldercheck
-                    return check();
-                }
+                return conditionChain(
+                    e.collection.has('one'),
+                    (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
+                    (e.baton.openedBy !== 'io.ox/mail/compose'),
+                    is('!trash', e.baton)
+                );
+
             },
             action: function (baton) {
                 if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) return;
@@ -117,19 +177,10 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor-new', {
             requires: function (e) {
-                var check = function (data) {
-                        data = data || {};
-                        return e.baton.openedBy !== 'io.ox/mail/compose' && !folderAPI.is('trash', data);
-                    };
-                if (e.baton.app) {
-                    return e.baton.app.folder.getData().then(check);
-                } else if (e.baton.data.folder_id) {
-                    // no app given, maybe the item itself has a folder
-                    return folderAPI.get(e.baton.data.folder_id).then(check);
-                } else {
-                    // continue without foldercheck
-                    return check();
-                }
+                return conditionChain(
+                    (e.baton.openedBy !== 'io.ox/mail/compose'),
+                    is('!trash', e.baton)
+                );
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
@@ -201,23 +252,13 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return _.device('!small') &&
-                        !_.isEmpty(e.baton.data) &&
-                        e.collection.has('some') &&
-                        e.baton.openedBy !== 'io.ox/mail/compose' &&
-                        !folderAPI.is('trash', data);
-                };
-            if (e.baton.app) {
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                // no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                // continue without foldercheck
-                return check();
-            }
+            return conditionChain(
+                _.device('!small'),
+                !_.isEmpty(e.baton.data),
+                e.collection.has('some'),
+                e.baton.openedBy !== 'io.ox/mail/compose',
+                is('!trash', e.baton)
+            );
         },
         multiple: function (list) {
             api.getList(list).done(function (list) {
@@ -237,27 +278,17 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    var list = _.getArray(e.context);
-                    return _.device('!small') &&
-                        !_.isEmpty(e.baton.data) &&
-                        e.collection.has('some') &&
-                        e.baton.openedBy !== 'io.ox/mail/compose' &&
-                        !folderAPI.is('trash', data) &&
-                        _(list).reduce(function (memo, obj) {
-                            return memo || obj.file_size > 0;
-                        }, false);
-                };
-            if (e.baton.app) {
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                // no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                // continue without foldercheck
-                return check();
-            }
+            var list = _.getArray(e.context);
+            return conditionChain(
+                _.device('!small'),
+                !_.isEmpty(e.baton.data),
+                e.collection.has('some'),
+                e.baton.openedBy !== 'io.ox/mail/compose',
+                _(list).reduce(function (memo, obj) {
+                    return memo || obj.file_size > 0;
+                }, false),
+                is('!trash', e.baton)
+            );
         },
         multiple: function (list) {
             api.getList(list).done(function (list) {
@@ -272,22 +303,12 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/showlink', {
         capabilities: '!alone',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return _.device('!small') &&
-                        !_.isEmpty(e.baton.data) &&
-                        e.collection.has('some') &&
-                        !folderAPI.is('trash', data);
-                };
-            if (e.baton.app) {
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                // no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                // continue without foldercheck
-                return check();
-            }
+            return conditionChain(
+                _.device('!small'),
+                !_.isEmpty(e.baton.data),
+                e.collection.has('some'),
+                is('!trash', e.baton)
+            );
         },
         multiple: function (list) {
 
@@ -627,19 +648,11 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            var check = function (data) {
-                    data = data || {};
-                    return e.collection.has('one') && !_.isEmpty(e.baton.data) && !folderAPI.is('trash', data);
-                };
-            if (e.baton.app) {
-                return e.baton.app.folder.getData().then(check);
-            } else if (e.baton.data.folder_id) {
-                // no app given, maybe the item itself has a folder
-                return folderAPI.get(e.baton.data.folder_id).then(check);
-            } else {
-                // continue without foldercheck
-                return check();
-            }
+            return conditionChain(
+                e.collection.has('one'),
+                !_.isEmpty(e.baton.data),
+                is('!trash', e.baton)
+            );
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
