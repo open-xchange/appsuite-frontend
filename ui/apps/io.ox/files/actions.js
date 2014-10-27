@@ -481,79 +481,8 @@ define('io.ox/files/actions', [
             return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
-
-            require(['io.ox/core/tk/dialogs', 'io.ox/files/util', 'io.ox/core/notifications'], function (dialogs, util, notifications) {
-
-                var filename = baton.data.filename || baton.data.title;
-
-                /**
-                 * @return { promise }
-                 */
-                function fnRename(name) {
-
-                    var update = {
-                            id: baton.data.id,
-                            folder_id: baton.data.folder_id
-                        };
-
-                    // 'title only' entries
-                    if (!baton.data.filename && baton.data.title) {
-                        update.title = name;
-                    } else {
-                        update.filename = name;
-                    }
-
-                    return api.update(update).fail(notifications.yell);
-                }
-
-                /**
-                 * user have to confirm if name doesn't contains a file extension
-                 * @return { promise }
-                 */
-                function process($input) {
-
-                    var name = $.trim($input.val()), invalid = false;
-
-                    // check for valid filename
-                    ext.point('io.ox/core/filename')
-                        .invoke('validate', null, name, 'file')
-                        .find(function (result) {
-                            if (result !== true) {
-                                notifications.yell('warning', result);
-                                return (invalid = true);
-                            }
-                        });
-
-                    if (invalid) return $.Deferred().reject();
-
-                    return util.confirmDialog(name, filename)
-                        .then(
-                            function yes() {
-                                return fnRename(name);
-                            },
-                            function no() {
-                                setTimeout(function () { $input.focus(); }, 0);
-                            }
-                        );
-                }
-
-                new dialogs.ModalDialog({ enter: 'rename', async: true })
-                    .header(
-                        $('<h4>').text(gt('Rename'))
-                    )
-                    .append(
-                        $('<input type="text" name="name" class="form-control" tabindex="1">')
-                    )
-                    .addPrimaryButton('rename', gt('Rename'), 'rename',  { 'tabIndex': '1' })
-                    .addButton('cancel', gt('Cancel'),  'cancel',  { 'tabIndex': '1' })
-                    .on('rename', function () {
-                        var $input = this.getContentNode().find('input[name="name"]');
-                        process($input).then(this.close, this.idle);
-                    })
-                    .show(function () {
-                        var $input = this.find('input[name="name"]').focus().val(filename);
-                        $input.get()[0].setSelectionRange(0, $input.val().lastIndexOf('.'));
-                    });
+            ox.load(['io.ox/files/actions/rename']).done(function (action) {
+                action(baton.data);
             });
         }
     });
@@ -574,10 +503,12 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/' + type, {
             id: type,
             requires:  function (e) {
-                return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/compose') && (type === 'move' ? e.collection.has('delete') && isUnLocked(e) : e.collection.has('read'));
+                return e.collection.has('some') &&
+                        (e.baton.openedBy !== 'io.ox/mail/compose') &&
+                        (type === 'move' ? e.collection.has('delete') &&
+                        isUnLocked(e) : e.collection.has('read'));
             },
             multiple: function (list, baton) {
-
                 require(['io.ox/core/folder/actions/move'], function (move) {
                     move.item({
                         api: api,
