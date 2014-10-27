@@ -310,41 +310,8 @@ define('io.ox/files/actions', [
             );
         },
         multiple: function (list) {
-
-            api.getList(list).done(function (list) {
-
-                // create dialog
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ width: 500 })
-                        .build(function () {
-                            // header
-                            this.header($('<h4>').text(gt('Direct link')));
-                            // content
-                            this.getContentNode().addClass('user-select-text max-height-200').append(
-
-                                _(list).map(function (file) {
-
-                                    var url = ox.abs + ox.root +
-                                        '/#!&app=io.ox/files' +
-                                        '&folder=' + encodeURIComponent(file.folder_id) +
-                                        '&id=' + encodeURIComponent(file.folder_id) + '.' + encodeURIComponent(file.id);
-
-                                    return $('<p>').append(
-                                        $('<div>').text(file.filename || file.title || ''),
-                                        $('<div>').append(
-                                            $('<a class="direct-link" target="_blank" tabindex="1">')
-                                            .attr('href', url)
-                                            .html(util.breakableHTML(url))
-                                        )
-                                    );
-                                })
-                            );
-                        })
-                        .addPrimaryButton('cancel', gt('Close'), 'cancel',  { 'tabIndex': '1' })
-                        .show(function () {
-                            this.find('a.direct-link').focus();
-                        });
-                });
+            ox.load(['io.ox/files/actions/showlink']).done(function (action) {
+                action(list);
             });
         }
     });
