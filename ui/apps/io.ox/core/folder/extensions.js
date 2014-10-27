@@ -81,6 +81,7 @@ define('io.ox/core/folder/extensions',
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
                 count: 0,
+                empty: false,
                 filter: function (id, model) {
                     return !account.isStandardFolder(model.id);
                 },
