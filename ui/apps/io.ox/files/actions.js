@@ -351,7 +351,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('some') && e.collection.has('delete') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('some') && e.collection.has('delete') && hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         multiple: function (list) {
 
@@ -426,13 +426,6 @@ define('io.ox/files/actions', [
         }, false);
     };
 
-    var isUnLocked = function (e) {
-        var list = _.getArray(e.context);
-        return _(list).reduce(function (memo, obj) {
-            return memo || !api.tracker.isLockedByOthers(obj);
-        }, false);
-    };
-
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
@@ -470,7 +463,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one') && hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/rename']).done(function (action) {
@@ -482,7 +475,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one') && hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
@@ -498,7 +491,7 @@ define('io.ox/files/actions', [
                 return e.collection.has('some') &&
                         (e.baton.openedBy !== 'io.ox/mail/compose') &&
                         (type === 'move' ? e.collection.has('delete') &&
-                        isUnLocked(e) : e.collection.has('read'));
+                        hasStatus('!lockedByOthers', e) : e.collection.has('read'));
             },
             multiple: function (list, baton) {
                 require(['io.ox/core/folder/actions/move'], function (move) {
