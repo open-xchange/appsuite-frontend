@@ -564,52 +564,8 @@ define('io.ox/files/actions', [
             return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
-            require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
-                var keys = new KeyListener($input),
-                    dialog = new dialogs.ModalDialog(),
-                    $input = $('<textarea rows="10" class="form-control" tabindex="1"></textarea>')
-                            .val(baton.data.description),
-                    $form = $('<form>')
-                            .css('margin', '0 0 0 0')
-                            .append(
-                                $input
-                            );
-
-                function fnSave() {
-
-                    var description = $input.val();
-                    var update = {
-                        id: baton.data.id,
-                        folder_id: baton.data.folder_id,
-                        description: description
-                    };
-
-                    return api.update(update).fail(require('io.ox/core/notifications').yell);
-                }
-
-                keys.on('shift+enter', function () {
-                    dialog.busy();
-                    fnSave().done(function () {
-                        dialog.close();
-                    });
-                });
-
-                dialog
-                .header($('<h4>').text(gt('Description')))
-                .append(
-                    $form
-                )
-                .addPrimaryButton('save', gt('Save'), 'save',  { 'tabIndex': '1' })
-                .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
-                .show(function () {
-                    $input.select();
-                    keys.include();
-                })
-                .done(function (action) {
-                    if (action === 'save') {
-                        fnSave();
-                    }
-                });
+            ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
+                action(baton.data);
             });
         }
     });
