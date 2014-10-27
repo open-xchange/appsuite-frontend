@@ -19,7 +19,7 @@ define('io.ox/files/actions/lock-unlock', [
 
     'use strict';
 
-    function label (type) {
+    function getMessages (type) {
         var plural = (type === 'multiple');
         return {
             lockSuccess: gt.ngettext(
@@ -46,8 +46,8 @@ define('io.ox/files/actions/lock-unlock', [
     }
 
     // store labels once
-    var single = label('single'),
-        multiple = label('multiple');
+    var single = getMessages('single'),
+        multiple = getMessages('multiple');
 
     return {
         lock: function (list) {

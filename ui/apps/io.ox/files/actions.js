@@ -354,49 +354,8 @@ define('io.ox/files/actions', [
             return e.collection.has('some') && e.collection.has('delete') && hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         multiple: function (list) {
-
-            var question = gt.ngettext(
-                    'Do you really want to delete this file?',
-                    'Do you really want to delete these files?',
-                    list.length
-            ),
-            responseSuccess = gt.ngettext(
-                    'This file has been deleted',
-                    'These files have been deleted',
-                    list.length
-            ),
-            responseFail = gt.ngettext(
-                    'This file has not been deleted',
-                    'These files have not been deleted',
-                    list.length
-            ),
-            responseFailLocked = gt.ngettext(
-                    'This file has not been deleted, as it is locked by its owner.',
-                    'These files have not been deleted, as they are locked by their owner.',
-                    list.length
-            );
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog()
-                    .text(question)
-                    .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
-                    .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
-                    .show()
-                    .done(function (action) {
-                        if (action === 'delete') {
-                            api.remove(list).done(function () {
-                                api.propagate('delete', list[0]);
-                                notifications.yell('success', responseSuccess);
-                            }).fail(function (e) {
-                                if (e && e.code && e.code === 'IFO-0415') {
-                                    notifications.yell('error', responseFailLocked);
-                                } else {
-                                    notifications.yell('error', responseFail + '\n' + e.error);
-                                }
-                                api.trigger('refresh:all');
-                            });
-                        }
-                    });
+            ox.load(['io.ox/files/actions/delete']).done(function (action) {
+                action(list);
             });
         }
     });
