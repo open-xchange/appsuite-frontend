@@ -198,22 +198,9 @@ define('io.ox/files/actions', [
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
-            // loop over list, get full file object and trigger downloads
-            var filtered = filterUnsupported(list);
-            if (filtered.length === 1) {
-                var o = _.first(filtered);
-                require(['io.ox/core/download'], function (download) {
-                    download.file(o);
-                });
-            } else if (filtered.length > 1) {
-                require(['io.ox/core/download'], function (download) {
-                    download.files(filtered);
-                });
-            }
-            // 'description only' items
-            if (filtered.length === 0 || list.length !== filtered.length) {
-                notifications.yell('info', gt('Items without a file can not be downloaded.'));
-            }
+            ox.load(['io.ox/files/actions/download']).done(function (action) {
+                action(list);
+            });
         }
     });
 
@@ -748,17 +735,6 @@ define('io.ox/files/actions', [
             });
         }
     });
-
-    /**
-     * filters 'description only files'
-     * @param  {object|array} list or single item
-     * @return { deferred} resolves as array
-     */
-    function filterUnsupported(list) {
-        return _(list).filter(function (obj) {
-            return !_.isEmpty(obj.filename) || obj.file_size > 0;
-        });
-    }
 
     function checkMedia(e, type) {
 
