@@ -87,8 +87,9 @@ define('io.ox/files/actions', [
         }
     });
 
-    var RESOLVE = $.Deferred().resolve(),
-        REJECT = $.Deferred().reject();
+    // action requires handling of deferreds
+    var RESOLVE = $.Deferred().resolveWith(undefined, [true]),
+        REJECT = $.Deferred().resolveWith(undefined, [false]);
 
     /**
      * check type of folder
