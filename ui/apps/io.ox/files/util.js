@@ -12,16 +12,177 @@
  */
 
 define('io.ox/files/util', [
+    'io.ox/files/api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files',
-    'io.ox/core/capabilities'
-], function (dialogs, gt, Caps) {
+    'io.ox/core/capabilities',
+    'io.ox/core/folder/api',
+    'settings!io.ox/files'
+], function (api, dialogs, gt, capabilities, folderAPI, settings) {
 
     'use strict';
 
-    var regexp = {};
+    var regexp = {},
+        // action requires handling of deferreds
+        RESOLVE = $.Deferred().resolveWith(undefined, [true]),
+        REJECT = $.Deferred().resolveWith(undefined, [false]);
 
     return {
+
+        /**
+         * returns deferred that sequently checks sync and async conditions
+         * @return {deferred} that rejects on first false/reject in chain
+         */
+        conditionChain: function () {
+            var args = _.isArray(arguments[0]) ? arguments[0] : arguments || [],
+                chain = $.when();
+            // add conditions to chain
+            _.each(args, function (condition) {
+                var async = !!condition.then,
+                    def = async ? condition : (condition ? RESOLVE : REJECT);
+                chain = chain.then(function () {
+                    return def;
+                });
+            });
+            return chain;
+        },
+
+        /**
+         * check type of folder
+         * @param  {string}  type  (e.g. 'trash')
+         * @param  {object}  baton [description]
+         * @return {deferred} that is rejected if
+         */
+        isFolderType: (function () {
+            // tries to get data from current/provided folder
+            // hint: may returns a empty objec in case no usable data is provided
+            function getFolder (baton) {
+                var app = baton.app,
+                    data = baton.data || {};
+                if (app) {
+                    return app.folder.getData();
+                } else if (data.folder_id) {
+                    // no app given, maybe the item itself has a folder
+                    return folderAPI.get(data.folder_id);
+                } else {
+                    // continue without getFolder
+                    return $.Deferred().resolveWith(data);
+                }
+            }
+            return function (type, baton) {
+                return getFolder(baton)
+                            .then(function (data) {
+                                // '!' type prefix as magical negation
+                                var inverse, result;
+                                if (type[0] === '!') {
+                                    type = type.substr(1);
+                                    inverse = true;
+                                }
+                                result = folderAPI.is(type, data);
+                                // reject/resolve
+                                if (inverse ? !result : result) {
+                                    return RESOLVE;
+                                } else {
+                                    return REJECT;
+                                }
+                            });
+            };
+        })(),
+
+        /**
+         * check for 'lock' and 'unlock' status
+         * @param  {string}  type (potentially negated with '!' prefix)
+         * @param  {event}  e     (e.context)
+         * @return {boolean}
+         */
+        hasStatus: function (type, e) {
+            var self = this,
+                list = _.getArray(e.context),
+                mapping = {
+                    'locked': api.tracker.isLocked,
+                    'lockedByOthers': api.tracker.isLockedByOthers,
+                    'lockedByMe': api.tracker.isLockedByMe
+                },
+                inverse, result, fn;
+            // '!' type prefix as magical negation
+            if (type[0] === '!') {
+                type = type.substr(1);
+                inverse = true;
+            }
+            // map type and fn
+            fn = mapping[type];
+            // call
+            return _(list).reduce(function (memo, obj) {
+                result = fn.call(self, obj);
+                // negate result?
+                return memo || (inverse ? !result : result);
+            }, false);
+        },
+
+        /**
+         * checks for audio/video support
+         * @param  {string} type (audio|video)
+         * @param  {event}  e
+         * @return {deferred} resolves with boolean
+         */
+        checkMedia: function (type, e) {
+
+            if (!e.collection.has('some') && !settings.get(type + 'Enabled')) {
+                return false;
+            }
+
+            var list = _.copy(e.baton.allIds, true),
+                incompleteHash = {},
+                incompleteItems = [],
+                def = $.Deferred(),
+                index, folder;
+
+            if (_.isUndefined(e.baton.allIds)) {
+                e.baton.allIds = e.baton.data;
+                list = [e.baton.allIds];
+            }
+
+            // avoid runtime errors
+            if (!_.isArray(list)) return false;
+
+            // identify incomplete items
+            _(list).each(function (item) {
+                if (_.isUndefined(item.filename)) {
+                    // collect all incomplete items grouped by folder ID
+                    incompleteHash[item.folder_id] = (incompleteHash[item.folder_id] || []).concat(item);
+                    // all incomplete items
+                    incompleteItems.push(item);
+                    index = list.indexOf(item);
+                    if (index !== -1) {
+                        list.splice(index, 1);
+                    }
+                }
+            });
+
+            // complement data from server/cache
+            folder = Object.keys(incompleteHash);
+            if (folder.length === 1) {
+                // get only this folder
+                def = api.getAll({ folder: folder[0] });
+            } else if (folder.length > 1) {
+                // multiple folder -> use getList
+                def = api.getList(incompleteItems).then(function (data) {
+                    return list.concat(data);
+                });
+            } else {
+                // nothing to do
+                def.resolve(list);
+            }
+
+            return def.then(function (data) {
+                // update baton
+                e.baton.allIds = data;
+                return _(data).reduce(function (memo, obj) {
+                    return memo || !!(obj && api.checkMediaFile(type, obj.filename));
+                }, false);
+            });
+        },
+
         /**
          * shows confirm dialog in case user changes file extension
          * @param  {string} formFilename    filename
@@ -75,7 +236,11 @@ define('io.ox/files/util', [
             return def.promise();
         },
 
-        //returns previewmode and checks capabilities
+        /**
+         * returns previewmode and checks capabilities
+         * @param  {object} file
+         * @return {string} (thumbnail|cover|preview) or false as fallback
+         */
         previewMode: function (file) {
 
             var image = '(gif|png|jpe?g|bmp|tiff)',
@@ -104,7 +269,7 @@ define('io.ox/files/util', [
                 return 'thumbnail';
             } else if (is(audio, 'audio') || is(audio)) {
                 return 'cover';
-            } else if (Caps.has('document_preview') && (is(application, 'application') || is(text, 'text') || is(office))) {
+            } else if (capabilities.has('document_preview') && (is(application, 'application') || is(text, 'text') || is(office))) {
                 return 'preview';
             }
             return false;

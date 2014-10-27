@@ -16,7 +16,7 @@ define('io.ox/files/actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-    'io.ox/core/util',
+    'io.ox/files/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/files',
     'settings!io.ox/files'
@@ -74,7 +74,7 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (_.device('android')) return false;
             if (e.collection.has('none')) return false;
-            return checkMedia(e, 'video');
+            return util.checkMedia('video', e);
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -86,84 +86,16 @@ define('io.ox/files/actions', [
         }
     });
 
-    // action requires handling of deferreds
-    var RESOLVE = $.Deferred().resolveWith(undefined, [true]),
-        REJECT = $.Deferred().resolveWith(undefined, [false]);
-
-    /**
-     * check type of folder
-     * @param  {string}  type  (e.g. 'trash')
-     * @param  {object}  baton [description]
-     * @return {deferred} that is rejected if
-     */
-    var isFolderType = (function () {
-        // tries to get data from current/provided folder
-        // hint: may returns a empty objec in case no usable data is provided
-        function getFolder (baton) {
-            var app = baton.app,
-                data = baton.data || {};
-            if (app) {
-                return app.folder.getData();
-            } else if (data.folder_id) {
-                // no app given, maybe the item itself has a folder
-                return folderAPI.get(data.folder_id);
-            } else {
-                // continue without getFolder
-                return $.Deferred().resolveWith(data);
-            }
-        }
-        return function (type, baton) {
-            return getFolder(baton)
-                        .then(function (data) {
-                            // '!' type prefix as magical negation
-                            var inverse, result;
-                            if (type[0] === '!') {
-                                type = type.substr(1);
-                                inverse = true;
-                            }
-                            result = folderAPI.is(type, data);
-                            // reject/resolve
-                            if (inverse ? !result : result) {
-                                return RESOLVE;
-                            } else {
-                                return REJECT;
-                            }
-                        });
-        };
-    })();
-
-    /**
-     * returns deferred that sequently checks sync and async conditions
-     * @return {deferred} that rejects on first false/reject in chain
-     */
-    function conditionChain () {
-        var args = _.isArray(arguments[0]) ? arguments[0] : arguments || [],
-            chain = $.when();
-        // add conditions to chain
-        _.each(args, function (condition) {
-            var async = !!condition.then,
-                def = async ? condition : (condition ? RESOLVE : REJECT);
-            chain = chain.then(function () {
-                return def;
-                // return def.always(function () {
-                //     //debugger
-                //     console.log(index, def.state());
-                // });
-            });
-        });
-        return chain;
-    }
-
     // editor
     if (window.Blob) {
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return conditionChain(
+                return util.conditionChain(
                     e.collection.has('one'),
                     (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
-                    isFolderType('!trash', e.baton)
+                    util.isFolderType('!trash', e.baton)
                 );
 
             },
@@ -175,9 +107,9 @@ define('io.ox/files/actions', [
 
         new Action('io.ox/files/actions/editor-new', {
             requires: function (e) {
-                return conditionChain(
+                return util.conditionChain(
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
-                    isFolderType('!trash', e.baton)
+                    util.isFolderType('!trash', e.baton)
                 );
             },
             action: function (baton) {
@@ -237,12 +169,12 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
         requires: function (e) {
-            return conditionChain(
+            return util.conditionChain(
                 _.device('!small'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
-                isFolderType('!trash', e.baton)
+                util.isFolderType('!trash', e.baton)
             );
         },
         multiple: function (list) {
@@ -256,7 +188,7 @@ define('io.ox/files/actions', [
         capabilities: 'webmail',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return conditionChain(
+            return util.conditionChain(
                 _.device('!small'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
@@ -264,7 +196,7 @@ define('io.ox/files/actions', [
                 _(list).reduce(function (memo, obj) {
                     return memo || obj.file_size > 0;
                 }, false),
-                isFolderType('!trash', e.baton)
+                util.isFolderType('!trash', e.baton)
             );
         },
         multiple: function (list) {
@@ -280,11 +212,11 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/showlink', {
         capabilities: '!alone',
         requires: function (e) {
-            return conditionChain(
+            return util.conditionChain(
                 _.device('!small'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
-                isFolderType('!trash', e.baton)
+                util.isFolderType('!trash', e.baton)
             );
         },
         multiple: function (list) {
@@ -297,7 +229,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/delete', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('some') && e.collection.has('delete') && hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('some') && e.collection.has('delete') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/delete']).done(function (action) {
@@ -305,31 +237,6 @@ define('io.ox/files/actions', [
             });
         }
     });
-
-    // check for 'lock' and 'unlock' states
-    var hasStatus = function (type, e) {
-        var self = this,
-            list = _.getArray(e.context),
-            mapping = {
-                'locked': api.tracker.isLocked,
-                'lockedByOthers': api.tracker.isLockedByOthers,
-                'lockedByMe': api.tracker.isLockedByMe
-            },
-            inverse, result, fn;
-        // '!' type prefix as magical negation
-        if (type[0] === '!') {
-            type = type.substr(1);
-            inverse = true;
-        }
-        // map type and fn
-        fn = mapping[type];
-        // call
-        return _(list).reduce(function (memo, obj) {
-            result = fn.call(self, obj);
-            // negate result?
-            return memo || (inverse ? !result : result);
-        }, false);
-    };
 
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
@@ -339,7 +246,7 @@ define('io.ox/files/actions', [
                 e.collection.has('some') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                hasStatus('!locked', e);
+                util.hasStatus('!locked', e);
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
@@ -356,7 +263,7 @@ define('io.ox/files/actions', [
                 e.collection.has('some') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                hasStatus('lockedByMe', e);
+                util.hasStatus('lockedByMe', e);
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
@@ -368,7 +275,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/rename']).done(function (action) {
@@ -380,7 +287,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/edit-description', {
         requires: function (e) {
             // hide in mail compose preview
-            return e.collection.has('one') && hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
+            return e.collection.has('one') && util.hasStatus('!lockedByOthers', e) && (e.baton.openedBy !== 'io.ox/mail/compose');
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
@@ -396,7 +303,7 @@ define('io.ox/files/actions', [
                 return e.collection.has('some') &&
                         (e.baton.openedBy !== 'io.ox/mail/compose') &&
                         (type === 'move' ? e.collection.has('delete') &&
-                        hasStatus('!lockedByOthers', e) : e.collection.has('read'));
+                        util.hasStatus('!lockedByOthers', e) : e.collection.has('read'));
             },
             multiple: function (list, baton) {
                 require(['io.ox/core/folder/actions/move'], function (move) {
@@ -423,10 +330,10 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            return conditionChain(
+            return util.conditionChain(
                 e.collection.has('one'),
                 !_.isEmpty(e.baton.data),
-                isFolderType('!trash', e.baton)
+                util.isFolderType('!trash', e.baton)
             );
         },
         action: function (baton) {
@@ -727,67 +634,10 @@ define('io.ox/files/actions', [
         }
     });
 
-    function checkMedia(e, type) {
-
-        if (!e.collection.has('some') && !settings.get(type + 'Enabled')) {
-            return false;
-        }
-
-        var list = _.copy(e.baton.allIds, true),
-            incompleteHash = {},
-            incompleteItems = [],
-            def = $.Deferred(),
-            index, folder;
-
-        if (_.isUndefined(e.baton.allIds)) {
-            e.baton.allIds = e.baton.data;
-            list = [e.baton.allIds];
-        }
-
-        if (!_.isArray(list)) return false; // avoid runtime errors
-
-        // identify incomplete items
-        _(list).each(function (item) {
-            if (_.isUndefined(item.filename)) {
-                // collect all incomplete items grouped by folder ID
-                incompleteHash[item.folder_id] = (incompleteHash[item.folder_id] || []).concat(item);
-                // all incomplete items
-                incompleteItems.push(item);
-                index = list.indexOf(item);
-                if (index !== -1) {
-                    list.splice(index, 1);
-                }
-            }
-        });
-
-        // complement data from server/cache
-        folder = Object.keys(incompleteHash);
-        if (folder.length === 1) {
-            // get only this folder
-            def = api.getAll({ folder: folder[0] });
-        } else if (folder.length > 1) {
-            // multiple folder -> use getList
-            def = api.getList(incompleteItems).then(function (data) {
-                return list.concat(data);
-            });
-        } else {
-            // nothing to do
-            def.resolve(list);
-        }
-
-        return def.then(function (data) {
-            // update baton
-            e.baton.allIds = data;
-            return _(data).reduce(function (memo, obj) {
-                return memo || !!(obj && api.checkMediaFile(type, obj.filename));
-            }, false);
-        });
-    }
-
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
             if (_.device('android')) return false;
-            return checkMedia(e, 'audio');
+            return util.checkMedia('audio', e);
         },
         action: function (baton) {
             ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
@@ -802,7 +652,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/icons/videoplayer', {
         requires: function (e) {
             if (_.device('android')) return false;
-            return checkMedia(e, 'video');
+            return util.checkMedia('video', e);
         },
         action: function (baton) {
             ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
