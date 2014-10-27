@@ -260,16 +260,8 @@ define('io.ox/files/actions', [
             );
         },
         multiple: function (list) {
-            api.getList(list).done(function (list) {
-                // generate text and html content
-                var html = [], text = [];
-                _(list).each(function (file) {
-                    var url = ox.abs + ox.root + '/#!&app=io.ox/files&folder=' + file.folder_id + '&id=' + _.cid(file);
-                    var label = gt('File: %1$s', file.filename || file.title);
-                    html.push(_.escape(label) + '<br>' + gt('Direct link: %1$s', '<a data-mce-href="' + url + '" href="' + url + '">' + url + '</a>'));
-                    text.push(label + '\n' + gt('Direct link: %1$s', url));
-                });
-                ox.registry.call('mail-compose', 'compose', { attachments: { 'text': [{ content: text.join('\n\n') }], 'html': [{ content: html.join('<br>') }] } });
+            ox.load(['io.ox/files/actions/sendlink']).done(function (action) {
+                action(list);
             });
         }
     });
