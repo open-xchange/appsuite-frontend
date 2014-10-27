@@ -213,7 +213,11 @@ define('io.ox/mail/compose/extensions', [
 
                 // bind tokeninput to model and set initial values
                 baton.model.on('change:' + attr, function () {
-                    tokenfieldView.setTokens(this.getTokens(attr));
+                    var tokens = this.getTokens(attr);
+                    tokenfieldView.setTokens(tokens);
+                    if (attr !== 'to') {
+                        baton.view.toggleInput(attr, tokens.length > 0);
+                    }
                 }).trigger('change:' + attr);
 
                 // init drag 'n' drop sort
