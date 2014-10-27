@@ -401,6 +401,31 @@ define('io.ox/files/actions', [
         }
     });
 
+    // check for 'lock' and 'unlock' states
+    var hasStatus = function (type, e) {
+        var self = this,
+            list = _.getArray(e.context),
+            mapping = {
+                'locked': api.tracker.isLocked,
+                'lockedByOthers': api.tracker.isLockedByOthers,
+                'lockedByMe': api.tracker.isLockedByMe
+            },
+            inverse, result, fn;
+        // '!' type prefix as magical negation
+        if (type[0] === '!') {
+            type = type.substr(1);
+            inverse = true;
+        }
+        // map type and fn
+        fn = mapping[type];
+        // call
+        return _(list).reduce(function (memo, obj) {
+            result = fn.call(self, obj);
+            // negate result?
+            return memo || (inverse ? !result : result);
+        }, false);
+    };
+
     var isUnLocked = function (e) {
         var list = _.getArray(e.context);
         return _(list).reduce(function (memo, obj) {
@@ -411,15 +436,12 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-            var list = _.getArray(e.context);
             return _.device('!small') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                _(list).reduce(function (memo, obj) {
-                    return memo || !api.tracker.isLocked(obj);
-                }, false);
+                hasStatus('!locked', e);
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
@@ -431,14 +453,12 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-            var list = _.getArray(e.context);
             return _.device('!small') &&
+                !_.isEmpty(e.baton.data) &&
                 e.collection.has('some') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                _(list).reduce(function (memo, obj) {
-                    return memo || api.tracker.isLockedByMe(obj);
-                }, false);
+                hasStatus('lockedByMe', e);
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
