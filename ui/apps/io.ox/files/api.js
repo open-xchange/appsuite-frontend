@@ -53,7 +53,7 @@ define('io.ox/files/api', [
 
             isLockedByMe: function (obj) {
                 var cid = getCID(obj);
-                return this.isLocked(cid) && !this.isLockedByOthers(cid);
+                return self.isLocked(cid) && !self.isLockedByOthers(cid);
             },
 
             /**
