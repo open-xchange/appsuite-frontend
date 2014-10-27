@@ -70,7 +70,6 @@ define('io.ox/files/actions/rename', [
                 .invoke('validate', null, name, 'file')
                 .find(function (result) {
                     if (result !== true) {
-                        debugger;
                         notify('warning', result);
                         return (invalid = true);
                     }

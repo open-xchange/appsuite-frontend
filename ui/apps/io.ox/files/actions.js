@@ -96,7 +96,7 @@ define('io.ox/files/actions', [
      * @param  {object}  baton [description]
      * @return {deferred} that is rejected if
      */
-    var is = (function () {
+    var isFolderType = (function () {
         // tries to get data from current/provided folder
         // hint: may returns a empty objec in case no usable data is provided
         function getFolder (baton) {
@@ -163,7 +163,7 @@ define('io.ox/files/actions', [
                     e.collection.has('one'),
                     (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename),
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
-                    is('!trash', e.baton)
+                    isFolderType('!trash', e.baton)
                 );
 
             },
@@ -177,7 +177,7 @@ define('io.ox/files/actions', [
             requires: function (e) {
                 return conditionChain(
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
-                    is('!trash', e.baton)
+                    isFolderType('!trash', e.baton)
                 );
             },
             action: function (baton) {
@@ -255,7 +255,7 @@ define('io.ox/files/actions', [
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
-                is('!trash', e.baton)
+                isFolderType('!trash', e.baton)
             );
         },
         multiple: function (list) {
@@ -285,7 +285,7 @@ define('io.ox/files/actions', [
                 _(list).reduce(function (memo, obj) {
                     return memo || obj.file_size > 0;
                 }, false),
-                is('!trash', e.baton)
+                isFolderType('!trash', e.baton)
             );
         },
         multiple: function (list) {
@@ -305,7 +305,7 @@ define('io.ox/files/actions', [
                 _.device('!small'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
-                is('!trash', e.baton)
+                isFolderType('!trash', e.baton)
             );
         },
         multiple: function (list) {
@@ -536,7 +536,7 @@ define('io.ox/files/actions', [
             return conditionChain(
                 e.collection.has('one'),
                 !_.isEmpty(e.baton.data),
-                is('!trash', e.baton)
+                isFolderType('!trash', e.baton)
             );
         },
         action: function (baton) {
