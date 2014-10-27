@@ -16,12 +16,11 @@ define('io.ox/files/actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-    'io.ox/core/notifications',
     'io.ox/core/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/files',
     'settings!io.ox/files'
-], function (api, ext, links, capabilities, notifications, util, folderAPI, gt, settings) {
+], function (api, ext, links, capabilities, util, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -431,16 +430,8 @@ define('io.ox/files/actions', [
             );
         },
         action: function (baton) {
-            require(['io.ox/portal/widgets'], function (widgets) {
-                widgets.add('stickyfile', {
-                    plugin: 'files',
-                    props: {
-                        id: baton.data.id,
-                        folder_id: baton.data.folder_id,
-                        title: baton.data.filename || baton.data.title
-                    }
-                });
-                notifications.yell('success', gt('This file has been added to the portal'));
+            ox.load(['io.ox/files/actions/add-to-portal']).done(function (action) {
+                action(baton.data);
             });
         }
     });
