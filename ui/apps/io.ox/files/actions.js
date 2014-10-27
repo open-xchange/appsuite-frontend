@@ -422,22 +422,8 @@ define('io.ox/files/actions', [
                 }, false);
         },
         multiple: function (list) {
-
-            var responseSuccess = gt.ngettext(
-                    'This file has been locked',
-                    'These files have been locked',
-                    list.length
-            ),
-            responseFail = gt.ngettext(
-                    'This file has not been locked',
-                    'These files have not been locked',
-                    list.length
-            );
-
-            api.lock(list).done(function () {
-                notifications.yell('success', responseSuccess);
-            }).fail(function () {
-                notifications.yell('error', responseFail);
+            ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
+                action.lock(list);
             });
         }
     });
@@ -455,22 +441,8 @@ define('io.ox/files/actions', [
                 }, false);
         },
         multiple: function (list) {
-
-            var responseSuccess = gt.ngettext(
-                    'This file has been unlocked',
-                    'These files have been unlocked',
-                    list.length
-            ),
-            responseFail = gt.ngettext(
-                    'This file has not been unlocked',
-                    'These files have not been unlocked',
-                    list.length
-            );
-
-            api.unlock(list).done(function () {
-                notifications.yell('success', responseSuccess);
-            }).fail(function () {
-                notifications.yell('error', responseFail);
+            ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
+                action.unlock(list);
             });
         }
     });
