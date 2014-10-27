@@ -87,7 +87,7 @@
         top: 0;
         right: 0;
         padding-right: 15px;
-        margin-top: 6px;
+        margin-top: 5px;
 
         a {
             padding-right: 7px;
@@ -95,6 +95,26 @@
             text-decoration: none;
         }
     }
+
+    .autocomplete-item {
+
+        .contact-image {
+            margin-right: 14px;
+            display: inline-block;
+            float: left;
+            .picture(42px, 42px);
+        }
+
+        .recipient-name {
+            font-weight: bold;
+            .ellipsis();
+        }
+
+        .email {
+            .ellipsis();
+        }
+    }
+
 
     .editable-toolbar {
         position: relative;
@@ -149,7 +169,6 @@
             line-height: normal;
             td, th { padding: 8px; }
         }
-
         blockquote {
             font-size: 14px;
             border-left: 1px solid #08C;
@@ -177,39 +196,18 @@
             .token-input {
                 // temporary override style attribute
                 width: 0px !important;
+                background-color: #eee;
             }
 
-        }
-
-        // space for cc/bcc toggle
-        &.to {
-            padding-right: 65px;
         }
 
         &.form-control {
-            padding-top: 3px;
-        }
-
-        .token {
-
-            margin: 0 5px 3px 0;
-
-            &.placeholder {
-                background-color: transparent;
-                border: none;
+            // space for cc/bcc toggle
+            &.to {
+                padding-right: 65px;
             }
-
-            .contact-image {
-                display: inline-block;
-                margin: 2px;
-                .picture(16px, 16px);
-            }
-
         }
 
-        .token-input {
-            margin-bottom: 4px;
-        }
     }
 
     .hidden-file-picker {
@@ -258,25 +256,6 @@
     // set max with for main window content
     .container {
         width: 1000px;
-    }
-}
-
-.io-ox-mail-compose-contact {
-
-    .contact-image {
-        margin-right: 14px;
-        display: inline-block;
-        float: left;
-        .picture(42px, 42px);
-    }
-
-    .recipient-name {
-        font-weight: bold;
-        .ellipsis();
-    }
-
-    .email {
-        .ellipsis();
     }
 }
 

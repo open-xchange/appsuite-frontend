@@ -11,23 +11,24 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/view',
-    ['io.ox/mail/compose/extensions',
-     'io.ox/mail/compose/model',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/extensions',
-     'io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'settings!io.ox/mail',
-     'settings!io.ox/core',
-     'io.ox/core/notifications',
-     'io.ox/core/api/snippets',
-     'gettext!io.ox/mail',
-     'less!io.ox/mail/style',
-     'less!io.ox/mail/compose/style'
-    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt) {
+define('io.ox/mail/compose/view', [
+    'io.ox/mail/compose/extensions',
+    'io.ox/mail/compose/model',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/extensions',
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/contacts/api',
+    'io.ox/contacts/util',
+    'io.ox/contacts/model',
+    'settings!io.ox/mail',
+    'settings!io.ox/core',
+    'io.ox/core/notifications',
+    'io.ox/core/api/snippets',
+    'gettext!io.ox/mail',
+    'less!io.ox/mail/style',
+    'less!io.ox/mail/compose/style'
+], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, ContactModel, settings, coreSettings, notifications, snippetAPI, gt) {
 
     'use strict';
 
@@ -49,13 +50,13 @@ define('io.ox/mail/compose/view',
     ext.point(POINT + '/fields').extend({
         id: 'to',
         index: INDEX += 100,
-        draw: extensions.tokenfield('To', true)
+        draw: extensions.tokenfield('To')
     });
 
     ext.point(POINT + '/fields').extend({
         id: 'cc',
         index: INDEX += 100,
-        draw: extensions.tokenfield('CC', true)
+        draw: extensions.tokenfield('CC')
     });
 
     ext.point(POINT + '/fields').extend({
@@ -201,28 +202,6 @@ define('io.ox/mail/compose/view',
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
 
-    /**
-     * mapping for getFieldLabel()
-     * @type {object}
-     */
-    var mapping = {
-        telephone_business1: gt('Phone (business)'),
-        telephone_business2: gt('Phone (business)'),
-        telephone_home1: gt('Phone (private)'),
-        telephone_home2: gt('Phone (private)'),
-        cellular_telephone1: gt('Mobile'),
-        cellular_telephone2: gt('Mobile')
-    };
-
-    /**
-     * fieldname to fieldlabel
-     * @param  {string} field
-     * @return {string} label
-     */
-    function getFieldLabel(field) {
-        return mapping[field] || '';
-    }
-
     /*
      * extension point for contact picture
      */
@@ -232,7 +211,7 @@ define('io.ox/mail/compose/view',
         draw: function (baton) {
             this.append(
                 $('<div class="contact-image">')
-                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data , { width: 42, height: 42, scaleType: 'contain' })))
+                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data, { width: 42, height: 42, scaleType: 'contain' })))
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
                     .lazyload({
                         effect: 'fadeIn',
@@ -267,8 +246,8 @@ define('io.ox/mail/compose/view',
                 this.append(
                     $('<div class="ellipsis email">').append(
                         $.txt(baton.data.email + (baton.data.phone || '') + ' '),
-                        getFieldLabel(baton.data.field) !== '' ?
-                            $('<span style="color: #888;">').text('(' + getFieldLabel(baton.data.field) + ')') : []
+                        ContactModel.fields[baton.data.field] ?
+                            $('<span style="color: #888;">').text('(' + ContactModel.fields[baton.data.field] + ')') : []
                     )
                 );
             } else {
@@ -344,7 +323,7 @@ define('io.ox/mail/compose/view',
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
-            this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
+            this.listenTo(this.model, 'change:subject', this.setTitle);
             this.listenTo(this.model, 'change:editorMode', this.changeEditorMode);
             this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
             this.listenTo(this.model, 'needsync', this.syncMail);
@@ -353,7 +332,7 @@ define('io.ox/mail/compose/view',
         },
 
         filterData: function (data) {
-            if(/(compose|edit)/.test(data.mode)) return data;
+            if (/(compose|edit)/.test(data.mode)) return data;
             return _.pick(data, 'id', 'folder_id', 'mode');
         },
 
@@ -374,7 +353,7 @@ define('io.ox/mail/compose/view',
 
         setSubject: function (e) {
             var value = e.target ? $(e.target).val() : e;
-            this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
+            this.model.set('subject', value);
         },
 
         setTitle: function () {
@@ -398,7 +377,7 @@ define('io.ox/mail/compose/view',
 
             if (_(mail.flags).isUndefined()) {
                 mail.flags = mailAPI.FLAGS.DRAFT;
-            } else if (mail.data.flags & 4 === 0) {
+            } else if ((mail.data.flags & 4) === 0) {
                 mail.flags += mailAPI.FLAGS.DRAFT;
             }
 
@@ -447,7 +426,7 @@ define('io.ox/mail/compose/view',
             return def;
         },
 
-        stopAutoSave: function() {
+        stopAutoSave: function () {
             if (this.autosave) {
                 window.clearTimeout(this.autosave.timer);
             }
@@ -528,9 +507,9 @@ define('io.ox/mail/compose/view',
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
-                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', {tabIndex: '1'})
-                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', { tabIndex: 1 })
+                        .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', { tabIndex: 1 })
+                        .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
@@ -669,8 +648,8 @@ define('io.ox/mail/compose/view',
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt('Mail has empty subject. Send it anyway?'))
-                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', {tabIndex: '1'})
-                            .addButton('subject', gt('Add subject'), 'subject', {tabIndex: '1'})
+                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
+                            .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
                             .show(function () {
                                 def.notify('empty subject');
                             })
@@ -1030,8 +1009,7 @@ define('io.ox/mail/compose/view',
                         $(window).trigger('resize.tinymce');
                         fixed = true;
                     }
-                }
-                else if (fixed) {
+                } else if (fixed) {
                     toolbar.removeClass('fixed');
                     editor.css('margin-top', 0);
                     fixed = false;

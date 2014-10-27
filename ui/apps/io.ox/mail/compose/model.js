@@ -11,15 +11,15 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/mail/compose/model',
-    ['io.ox/mail/api',
-     'io.ox/mail/util',
-     'io.ox/core/api/account',
-     'io.ox/emoji/main',
-     'io.ox/core/attachments/backbone',
-     'settings!io.ox/mail',
-     'gettext!io.ox/mail'
-    ], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
+define('io.ox/mail/compose/model', [
+    'io.ox/mail/api',
+    'io.ox/mail/util',
+    'io.ox/core/api/account',
+    'io.ox/emoji/main',
+    'io.ox/core/attachments/backbone',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (mailAPI, mailUtil, accountAPI, emoji, Attachments, settings, gt) {
 
     'use strict';
 
@@ -78,7 +78,7 @@ define('io.ox/mail/compose/model',
             }
 
             if (_.isArray(list)) {
-                this.set('attachments', new Attachments.Collection(list), {silent: true});
+                this.set('attachments', new Attachments.Collection(list), { silent: true });
                 list = this.get('attachments');
             }
             var content = list.at(0);
@@ -228,10 +228,10 @@ define('io.ox/mail/compose/model',
             };
         },
 
-        getMail: function() {
+        getMail: function () {
             this.trigger('needsync');
             var result;
-            var convert = emoji.converterFor({to: emoji.sendEncoding()});
+            var convert = emoji.converterFor({ to: emoji.sendEncoding() });
             var content = this.get('attachments').at(0).get('content');
             // get flat ids for data.infostore_ids
             /*if (mail.data.infostore_ids) {
@@ -256,7 +256,7 @@ define('io.ox/mail/compose/model',
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
                 //convert to send encoding (NOOP, if target encoding is 'unified')
-                this.set('subject', convert(this.get('subject')), {silent: true});
+                this.set('subject', convert(this.get('subject')), { silent: true });
 
                 content = convert(content, this.get('editorMode'));
             }
@@ -264,7 +264,7 @@ define('io.ox/mail/compose/model',
             // fix inline images
             content = mailUtil.fixInlineImages(content);
 
-            this.get('attachments').at(0).set('content', content, {silent: true});
+            this.get('attachments').at(0).set('content', content, { silent: true });
 
             result = this.pick(
                 'from',
