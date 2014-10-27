@@ -124,10 +124,8 @@ define('io.ox/files/actions', [
                             result = folderAPI.is(type, data);
                             // reject/resolve
                             if (inverse ? !result : result) {
-                                console.log('%c' + 'resolve', 'color: white; background-color: green');
                                 return RESOLVE;
                             } else {
-                                console.log('%c' + 'reject', 'color: white; background-color: red');
                                 return REJECT;
                             }
                         });
