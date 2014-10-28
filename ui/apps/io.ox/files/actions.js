@@ -502,8 +502,9 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'rename',
         index: index += 100,
-        label: gt('Rename'),
+        prio: 'lo',
         mobile: 'lo',
+        label: gt('Rename'),
         ref: 'io.ox/files/actions/rename',
         section: 'edit'
     }));
@@ -511,8 +512,9 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'edit-description',
         index: index += 100,
-        label: gt('Edit description'),
+        prio: 'lo',
         mobile: 'lo',
+        label: gt('Edit description'),
         ref: 'io.ox/files/actions/edit-description',
         section: 'edit'
     }));
@@ -520,9 +522,9 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'move',
         index: index += 100,
-        label: gt('Move'),
         prio: 'lo',
         mobile: 'lo',
+        label: gt('Move'),
         ref: 'io.ox/files/actions/move',
         section: 'file-op'
     }));
@@ -550,22 +552,28 @@ define('io.ox/files/actions', [
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'unlock',
         index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Unlock'),
         ref: 'io.ox/files/actions/unlock',
         section: 'file-op'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: index += 100,
         id: 'mediaplayer-audio',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Play audio files'),
         ref: 'io.ox/files/actions/audioplayer',
         section: 'media'
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        index: index += 100,
         id: 'mediaplayer-video',
+        index: index += 100,
+        prio: 'lo',
+        mobile: 'lo',
         label: gt('Play video files'),
         ref: 'io.ox/files/actions/videoplayer',
         section: 'media'
