@@ -18,9 +18,8 @@ define('io.ox/files/actions', [
     'io.ox/core/capabilities',
     'io.ox/files/util',
     'io.ox/core/folder/api',
-    'gettext!io.ox/files',
-    'settings!io.ox/files'
-], function (api, ext, links, capabilities, util, folderAPI, gt, settings) {
+    'gettext!io.ox/files'
+], function (api, ext, links, capabilities, util, folderAPI, gt) {
 
     'use strict';
 
@@ -306,19 +305,13 @@ define('io.ox/files/actions', [
                         util.hasStatus('!lockedByOthers', e) : e.collection.has('read'));
             },
             multiple: function (list, baton) {
-                require(['io.ox/core/folder/actions/move'], function (move) {
-                    move.item({
-                        api: api,
-                        button: label,
-                        list: list,
-                        module: 'infostore',
-                        root: '9',
-                        settings: settings,
-                        success: success,
-                        target: baton.target,
-                        title: label,
-                        type: type
-                    });
+                ox.load(['io.ox/files/actions/move-copy']).done(function (action) {
+                    var options = {
+                        type: type,
+                        label: label,
+                        success: success
+                    };
+                    action(list, baton, options);
                 });
             }
         });
