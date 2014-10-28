@@ -116,25 +116,42 @@ define('io.ox/calendar/edit/extensions', [
     });
 
     // start date
-    point.extend(new DatePicker({
+    point.basicExtend({
         id: 'start-date',
         index: 400,
-        className: 'dateinput col-xs-6 col-md-4',
-        display: 'DATETIME',
-        attribute: 'start_date',
-        label: gt('Starts on')
-    }));
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'dateinput col-xs-6 col-md-4',
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
+                    attribute: 'start_date',
+                    label: gt('Starts on')
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                }).render().$el
+            );
+        }
+    });
 
     // end date
-    point.extend(new DatePicker({
+    point.basicExtend({
         id: 'end-date',
         index: 500,
-        className: 'dateinput col-xs-6 col-md-4',
-        display: 'DATETIME',
-        attribute: 'end_date',
-        label: gt('Ends on')
-    }), {
-        nextTo: 'start-date'
+        nextTo: 'start-date',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'dateinput col-xs-6 col-md-4',
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
+                    attribute: 'end_date',
+                    label: gt('Ends on')
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                }).render().$el
+            );
+        }
     });
 
     // find free time link

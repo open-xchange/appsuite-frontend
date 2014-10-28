@@ -158,30 +158,40 @@ define('io.ox/tasks/edit/view-template', [
     });
 
     // start date
-    point.extend(new DatePicker({
+    point.basicExtend({
         id: 'start_date',
         index: 500,
-        display: 'DATE',
-        className: 'col-xs-6 collapsed',
-        attribute: 'start_date',
-        required: false,
-        label: gt('Start date'),
-        utc: true,
-        clearButton: _.device('small')//add clearbutton on mobile devices
-    }), { row: '4' });
+        row: '4',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'col-xs-6 collapsed',
+                    attribute: 'start_date',
+                    label: gt('Start date'),
+                    clearButton: true
+                }).render().$el
+            );
+        }
+    });
 
     // due date
-    point.extend(new DatePicker({
+    point.basicExtend({
         id: 'end_date',
         index: 600,
-        display: 'DATE',
-        className: 'col-xs-6 collapsed',
-        attribute: 'end_date',
-        required: false,
-        label: gt('Due date'),
-        utc: true,
-        clearButton: _.device('small') //add clearbutton on mobile devices
-    }), { row: '4' });
+        row: '4',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'col-xs-6 collapsed',
+                    attribute: 'end_date',
+                    label: gt('Due date'),
+                    clearButton: true
+                }).render().$el
+            );
+        }
+    });
 
     // recurrence
     point.extend(new RecurrenceView({
@@ -215,16 +225,23 @@ define('io.ox/tasks/edit/view-template', [
     });
 
     // reminder date
-    point.extend(new DatePicker({
+    point.basicExtend({
         id: 'alarm',
         index: 900,
-        className: 'col-sm-6 collapsed',
-        display: 'DATETIME',
-        attribute: 'alarm',
-        label: gt('Reminder date'),
-        required: false,
-        clearButton: _.device('small')//add clearbutton on mobile devices
-    }), { row: '6' });
+        row: '6',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    display: 'DATETIME',
+                    className: 'col-xs-6 collapsed',
+                    attribute: 'alarm',
+                    label: gt('Reminder date'),
+                    clearButton: true
+                }).render().$el
+            );
+        }
+    });
 
     // status
     point.extend({

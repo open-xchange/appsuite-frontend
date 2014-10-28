@@ -40,6 +40,7 @@ define('io.ox/calendar/model', [
             return api.remove(options);
         },
         model: {
+
             idAttribute: 'id',
 
             defaults: {
@@ -47,6 +48,7 @@ define('io.ox/calendar/model', [
                 notification: true,
                 shown_as: 1
             },
+
             init: function () {
                 var defStart = new date.Local().setMinutes(0, 0, 0).add(date.HOUR);
 
@@ -56,14 +58,112 @@ define('io.ox/calendar/model', [
                     end_date: defStart.getTime() + date.HOUR
                 }, this.attributes);
 
-                this.listenTo(this, 'create:fail update:fail', function (response) {
-                    if (response.conflicts) {
-                        this.trigger('conflicts', response.conflicts);
+                // End date automatically shifts with start date
+                var length = this.get('end_date') - this.get('start_date'),
+                    updatingStart = false,
+                    updatingEnd = false;
+
+                // internal storage for last timestamps
+                this.cache = {
+                    start: this.get('full_time') ? date.Local.utc(this.get('start_date')) : this.get('start_date'),
+                    end: this.get('full_time') ? date.Local.utc(this.get('end_date')) : this.get('end_date')
+                };
+
+                // bind events
+                this.on({
+                    'create:fail update:fail': function (response) {
+                        if (response.conflicts) {
+                            this.trigger('conflicts', response.conflicts);
+                        }
+                    },
+                    'change:start_date': function (model, startDate) {
+                        if (length < 0 || updatingStart) {
+                            return;
+                        }
+                        updatingEnd = true;
+                        if (startDate && _.isNumber(length)) {
+                            model.set('end_date', startDate + length, { validate: true });
+                        }
+                        updatingEnd = false;
+                    },
+                    'change:end_date': function (model, endDate) {
+                        if (updatingEnd) {
+                            return;
+                        }
+                        var tmpLength = endDate - model.get('start_date');
+                        if (tmpLength < 0) {
+                            updatingStart = true;
+                            if (endDate && _.isNumber(length)) {
+                                model.set('start_date', endDate - length, { validate: true });
+                            }
+                            updatingStart = false;
+                        } else {
+                            length = tmpLength;
+                        }
+                    },
+                    'change:full_time': function (model, fulltime) {
+                        // handle shown as
+                        if (settings.get('markFulltimeAppointmentsAsFree', false)) {
+                            model.set('shown_as', fulltime ? 4 : 1, { validate: true });
+                        }
+
+                        if (fulltime === true) {
+                            // save to cache
+                            this.cache.start = model.get('start_date');
+                            this.cache.end = model.get('end_date');
+
+                            // handle time
+                            var startDate = new date.Local(this.cache.start).setHours(0, 0, 0, 0),
+                                endDate = new date.Local(this.cache.end).setHours(0, 0, 0, 0).add(date.DAY);
+
+                            // convert to UTC and save
+                            model.set('start_date', startDate.local, { validate: true });
+                            model.set('end_date', endDate.local, { validate: true });
+                        } else {
+                            var oldStart = new date.Local(this.cache.start),
+                                oldEnd = new date.Local(this.cache.end);
+
+                            // save to cache
+                            this.cache.start = date.Local.utc(model.get('start_date'));
+                            this.cache.end = date.Local.utc(model.get('end_date'));
+
+                            // handle time
+                            var startDate = new date.Local(this.cache.start).setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0),
+                                endDate = new date.Local(this.cache.end).setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0).add(-date.DAY);
+
+                            // save
+                            model.set('start_date', startDate.getTime(), { validate: true });
+                            model.set('end_date', endDate.getTime(), { validate: true });
+                        }
                     }
                 });
-                this.applyAutoLengthMagic();
-                this.fullTimeChangeBindings();
             },
+
+            // special get function for datepicker
+            getDate: function (attr) {
+                var time = this.get.apply(this, arguments);
+                if (this.get('full_time')) {
+                    time = date.Local.utc(time);
+                    // fake end date for datepicker
+                    if (attr === 'end_date') {
+                        time = new date.Local(time).add(-date.DAY).getTime();
+                    }
+                }
+                return time;
+            },
+
+            // special set function for datepicker
+            setDate: function (attr, time) {
+                if (this.get('full_time')) {
+                    // fix fake end date for model
+                    if (attr === 'end_date') {
+                        time = new date.Local(time).add(date.DAY).getTime();
+                    }
+                    arguments[1] = date.Local.localTime(time);
+                }
+                return this.set.apply(this, arguments);
+            },
+
             getParticipants: function () {
                 if (this._participants) {
                     return this._participants;
@@ -98,103 +198,7 @@ define('io.ox/calendar/model', [
 
                 return participants;
             },
-            applyAutoLengthMagic: function () {
-                // End date automatically shifts with start date
-                var model = this,
-                    length = model.get('end_date') - model.get('start_date'),
-                    updatingStart = false,
-                    updatingEnd = false;
 
-                model.on('change:start_date', function () {
-                    if (length < 0 || updatingStart) {
-                        return;
-                    }
-                    updatingEnd = true;
-                    if (model.get('start_date') && _.isNumber(length)) {
-                        model.set('end_date', model.get('start_date') + length, { validate: true });
-                    }
-                    updatingEnd = false;
-                });
-
-                model.on('change:end_date', function () {
-                    if (updatingEnd) {
-                        return;
-                    }
-                    var tmpLength = model.get('end_date') - model.get('start_date');
-                    if (tmpLength < 0) {
-                        updatingStart = true;
-                        if (model.get('end_date') && _.isNumber(length)) {
-                            model.set('start_date', model.get('end_date') - length, { validate: true });
-                        }
-                        updatingStart = false;
-                    } else {
-                        length = tmpLength;
-                    }
-                });
-            },
-            fullTimeChangeBindings: function () {
-                // save initial values;
-                var model = this,
-                    _start = model.get('full_time') ? date.Local.utc(model.get('start_date')) : model.get('start_date'),
-                    _end = model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date'),
-                    mark = settings.get('markFulltimeAppointmentsAsFree', false);
-
-                model.on('change:full_time', function (m, fulltime) {
-                    var oldStart = _start,
-                        oldEnd = _end;
-
-                    if (fulltime === true) {
-                        /// save to cache
-                        _start = model.get('start_date');
-                        _end = model.get('end_date');
-
-                        // handle time
-                        var startDate = new date.Local(_start),
-                            endDate = new date.Local(_end - 1);
-
-                        // parse to fulltime dates
-                        startDate.setHours(0, 0, 0, 0);
-                        endDate.setHours(0, 0, 0, 0).setDate(endDate.getDate() + 1);
-
-                        // convert to UTC and save
-                        m.set('start_date', startDate.local, { validate: true });
-                        m.set('end_date', endDate.local, { validate: true });
-
-                        // handle shown as
-                        if (mark) {
-                            m.set('shown_as', 4, { validate: true });
-                        }
-                    } else {
-                        // save to cache
-                        _start = date.Local.utc(model.get('start_date'));
-                        _end = date.Local.utc(model.get('end_date'));
-
-                        // handle time
-                        var startDate = new date.Local(_start),
-                            endDate = new date.Local(_end + 1);
-
-                        oldStart = new date.Local(oldStart);
-                        oldEnd = new date.Local(oldEnd);
-
-                        startDate.setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0);
-                        endDate.setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0);
-
-                        // fix short appointments
-                        if (oldEnd - oldStart > date.DAY) {
-                            endDate.setDate(endDate.getDate() - 1);
-                        }
-
-                        // save
-                        m.set('start_date', startDate.getTime(), { validate: true });
-                        m.set('end_date', endDate.getTime(), { validate: true });
-
-                        // handle shown as
-                        if (mark) {
-                            m.set('shown_as', 1, { validate: true });
-                        }
-                    }
-                });
-            },
             setDefaultParticipants: function (options) {
                 var self = this;
                 return folderAPI.get(self.get('folder_id')).done(function (folder) {

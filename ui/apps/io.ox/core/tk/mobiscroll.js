@@ -23,31 +23,32 @@ define('io.ox/core/tk/mobiscroll', [
 
     'use strict';
 
-    var settings = {},
-        set = false;
+    var settings = {};
 
     //put some defaults in to reduce code duplications
-    if ($.mobiscroll && !set) {
-        settings = {
+    if ($.mobiscroll) {
+        var settings = {
+            cancelText: gt('Cancel'),
+            clearText: gt('Clear'),
             dateOrder: date.getFormat(date.DATE).replace(/\W/g, '').toLowerCase(),
             dateFormat: date.getFormat(date.DATE).replace(/\by\b/, 'yy').toLowerCase(),
-            timeFormat: date.getFormat(date.TIME).replace(/m/g, 'i').replace(/a/g, 'A'),
-            monthNamesShort: date.locale.monthsShort,
-            setText: gt('Ok'),
-            cancelText: gt('Cancel'),
-            minuteText: gt('Minutes'),
-            hourText: gt('Hours'),
             dayText: gt('Days'),
-            monthText: gt('Months'),
-            yearText: gt('Years'),
-            showLabel: true,
-            separator: ' ',
             display: 'bottom',
             endYear: new Date().getFullYear() + 100,
-            theme: 'ios7'
+            hourText: gt('Hours'),
+            minuteText: gt('Minutes'),
+            monthNamesShort: date.locale.monthsShort,
+            monthText: gt('Months'),
+            preset: 'date',
+            separator: ' ',
+            setText: gt('Ok'),
+            showLabel: true,
+            theme: 'ios7',
+            timeFormat: date.getFormat(date.TIME).replace(/m/g, 'i').replace(/a/g, 'A'),
+            yearText: gt('Years')
         };
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
-        set = true;
+        $.mobiscroll.setDefaults(settings);
     }
 
     return settings;
