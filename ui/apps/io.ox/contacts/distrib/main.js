@@ -61,15 +61,21 @@ define('io.ox/contacts/distrib/main', [
 
             view = new ContactCreateDistView({ model: model });
 
+            function quit () {
+                app.quit();
+            }
+
             model.on({
                 'sync:start': function () {
                     win.busy();
                 },
                 'sync': function () {
+                    var lfoquit = _.lfo(quit);
                     require('io.ox/core/notifications').yell('success', gt('Distribution list has been saved'));
                     considerSaved = true;
                     win.idle();
-                    app.quit();
+                    // quit app after last sync event was handled
+                    lfoquit();
                 },
                 'sync:fail': function (response) {
                     require('io.ox/core/notifications').yell('error', response.error ? response.error : gt('Failed to save distribution list.'));

@@ -357,7 +357,8 @@ define('io.ox/core/folder/node', [
 
         renderCounter: function () {
             var value = this.getCounter();
-            if (!value) this.$.counter.empty(); else this.$.counter.text(value);
+            this.$.selectable.toggleClass('show-counter', value > 0);
+            this.$.counter.text(value);
         },
 
         getTitle: function () {

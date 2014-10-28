@@ -80,9 +80,12 @@ define('io.ox/core/api/account', [
     api.isUnified = function (id) {
         // extend if number
         if (/^\d+$/.test(id)) id = 'default' + id;
+        // get identifier (might be null)
+        var identifier = settings.get('unifiedInboxIdentifier');
+        if (!identifier || identifier === 'null') return false;
         // compare against unifiedInboxIdentifier (having just a number would be smarter)
         var match = String(id).match(/^(default\d+)/);
-        return !!match && settings.get('unifiedInboxIdentifier') === (match[1] + separator + 'INBOX');
+        return !!match && identifier === (match[1] + separator + 'INBOX');
     };
 
     /**
@@ -187,7 +190,8 @@ define('io.ox/core/api/account', [
             } else {
                 // loop of all types to also check if a subfolder is of a type
                 return _(typeHash).some(function (defaultType, defaultId) {
-                    return defaultType === type && id.indexOf(defaultId) === 0;
+                    var isSubfolder = (id).indexOf(defaultId + separator) === 0;
+                    return defaultType === type && (defaultId === id || isSubfolder);
                 });
             }
         }

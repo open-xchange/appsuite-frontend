@@ -46,7 +46,8 @@ define('io.ox/core/folder/extensions', [
                 new TreeNodeView({
                     empty: false,
                     filter: function (id, model) {
-                        return account.isUnified(model.id);
+                        // we check for ^default to make sure we only consider mail folders
+                        return /^default/.test(model.id) && account.isUnified(model.id);
                     },
                     folder: '1',
                     headless: true,
@@ -80,6 +81,7 @@ define('io.ox/core/folder/extensions', [
             var node = new TreeNodeView({
                 contextmenu: 'myfolders',
                 count: 0,
+                empty: false,
                 filter: function (id, model) {
                     return !account.isStandardFolder(model.id);
                 },

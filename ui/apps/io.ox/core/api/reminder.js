@@ -20,111 +20,88 @@ define('io.ox/core/api/reminder', [
 
     'use strict';
 
+    /*this works API is a bit different than other APIs. Although reminders are requested from the server at the standard refresh interval
+    we need to update the notification area independent from this.
+    To accomplish this we get the reminders 1 hour in advance and use a timeout that triggers when the next reminder is due */
+
     //object to store reminders that are not to display yet
     var reminderStorage = {},
+        //arrays to store the reminders that should be displayed currently
+        tasksToDisplay = [],
+        appointmentsToDisplay = [],
         nextReminder,//next reminder to be triggered
         reminderTimer,// timer that triggers the next reminder
-        updateReminders = function (reminders) {//adds new reminders and removes invalid ones
-            var validIds = [],
-                needsForceCheck = false;
+        updateReminders = function (reminders) {//updates the reminder storage
+            var keys = [];
             _(reminders).each(function (reminder) {
-                if (!reminderStorage[reminder.id]) {//new
-                    reminderStorage[reminder.id] = reminder;
-                } else if (reminderStorage[reminder.id].alarm !== reminder.alarm) {//alarm was updated
-                    if (reminderStorage[reminder.id].displayed) {
-                        api.trigger('remove:reminder', [{ id: reminder.target_id, folder_id: reminder.folder }]);
-                        needsForceCheck = true;
-                    }
-                    reminderStorage[reminder.id] = reminder;
-                }
-                validIds.push(reminder.id);
+                keys.push(reminder.id);
             });
-            var ids = [];
-            //remove reminders that are no longer there
-            _(reminderStorage).each(function (item) {
-                if (!(_.contains(validIds, item.id))) {
-                    ids.push(item.id);
-                }
-            });
-            api.removeFromStorage(ids, needsForceCheck);
+            reminderStorage = _.object( keys, reminders );
         },
-        checkReminders = function () {//function to check reminders and add a timer to trigger the next one
-            var changed = false;
+        checkReminders = function () {//function to check reminders which reminders should be displayed and keeps the timer for the next reminder up to date
+
+            //reset variables
+            tasksToDisplay = [];
+            appointmentsToDisplay = [];
+            clearTimeout(reminderTimer);
+
+            if (nextReminder && !reminderStorage[nextReminder.id]) {//check if nextReminder was removed meanwhile
+                nextReminder = null;
+            }
+            //find the next due reminder
             _(reminderStorage).each(function (reminder) {
-                if (!reminder.displayed) {
-                    if (!nextReminder) {
-                        nextReminder = reminder;
-                        changed = true;
-                    } else if (reminder.alarm < nextReminder.alarm) {
-                        nextReminder = reminder;
-                        changed = true;
+                if (reminder.alarm <= _.now()) {
+                    if (reminder.module === 4) {//tasks
+                        tasksToDisplay.push(reminder);
+                    } else {// appointments
+                        appointmentsToDisplay.push(reminder);
                     }
+                } else if (!nextReminder || reminder.alarm < nextReminder.alarm) {
+                    nextReminder = reminder;
                 }
             });
 
-            if (changed) {
-                clearTimeout(reminderTimer);
+            //trigger events so notification area is up to date
+            api.trigger('set:tasks:reminder', tasksToDisplay);
+            api.trigger('set:calendar:reminder', appointmentsToDisplay);
+
+            if (nextReminder) {
                 var timeout = nextReminder.alarm - _.now();
-                if (timeout < 0) { //setTimeout can only handle small negative values, to prevent errors we set it to 0
-                    timeout = 0;
-                }
                 reminderTimer = setTimeout(function () {
-                    if (nextReminder.module === 4) {
-                        api.trigger('add:tasks:reminder', [nextReminder]);
-                    } else if (nextReminder.module === 1) {
-                        api.trigger('add:calendar:reminder', [nextReminder]);
-                    }
-                    reminderStorage[nextReminder.id].displayed = true;
                     nextReminder = null;
-                    checkReminders();
+                    api.getReminders();//get fresh reminders (a task or an appointment may have been deleted meanwhile)
                 }, timeout);
             }
         };
 
     var api = {
-        /**
-        * delete reminder
-        * @param  {ids} reminderIds
-        * @param  {forceCheck} checkReminders is called even if next reminder was not deleted
-        */
-        removeFromStorage: function (ids, forceCheck) {//removesReminders
-            var removedNext = false;
-            _(ids).each(function (id) {
-                if (nextReminder && nextReminder.id === id) {
-                    removedNext = true;
-                    clearTimeout(reminderTimer);
-                    nextReminder = null;
-                }
-                if (reminderStorage[id].displayed) {
-                    api.trigger('remove:reminder', [{ id: reminderStorage[id].target_id, folder_id: reminderStorage[id].folder }]);//remove displayed reminders
-                }
-                delete reminderStorage[id];
-            });
-            if (removedNext || forceCheck) {
-                checkReminders();
-            }
-        },
 
         /**
          * delete reminder
-         * @param  {string} reminderId
-         * @return { deferred }
+         * @param  {object} or array of objects with reminderId, optional recurrence_position
+         * @return {deferred}
          */
-        deleteReminder: function (reminderId) {
+        deleteReminder: function (reminders) {
             return http.PUT({
                 module: 'reminder',
                 params: { action: 'delete' },
-                data: { id: reminderId }
+                data: reminders
             }).then(function () {
-                delete reminderStorage[reminderId];
+                if (_.isArray(reminders)) {
+                    _(reminders).each(function (reminder) {
+                        delete reminderStorage[reminder.id];
+                    });
+                } else {
+                    delete reminderStorage[reminders.id];
+                }
             });
         },
 
         /**
-         * remind again
+         * remind again (works only for task reminders)
          * @param  {number} remindDate (unix datetime)
          * @param  {string} reminderId
-         * @return { deferred }
+         * @return {deferred}
          */
         remindMeAgain: function (remindDate, reminderId) {
             return http.PUT({
@@ -135,12 +112,8 @@ define('io.ox/core/api/reminder', [
                     timezone: 'UTC'
                 },
                 data: { alarm: remindDate }
-            }).then(function () {
-                delete reminderStorage[reminderId];//remove old reminder
+            }).always(function () {
                 api.getReminders();//get the new data
-            }, function () {
-                reminderStorage[reminderId].displayed = false;//something went wrong, show the reminder again
-                checkReminders();
             });
         },
 
@@ -148,9 +121,9 @@ define('io.ox/core/api/reminder', [
          * get reminders
          * @param  {number} range (end of scope)
          * @param  {number} module
-         * @fires  api#add:tasks:reminder (reminderTaskId, reminderId)
-         * @fires  api#add:calendar:reminder (reminderCalId)
-         * @return { deferred }
+         * @fires  api#set:tasks:reminder (reminderTaskId, reminderId)
+         * @fires  api#set:calendar:reminder (reminderCalId)
+         * @return {deferred}
          */
         getReminders: function (range) {
             return http.GET({
@@ -173,7 +146,7 @@ define('io.ox/core/api/reminder', [
     /**
      * bind to global refresh; clears caches and trigger refresh.all
      * @fires  api#refresh.all
-     * @return { promise }
+     * @return {promise}
      */
     api.refresh = function () {
         api.getReminders().done(function () {
@@ -181,28 +154,6 @@ define('io.ox/core/api/reminder', [
             api.trigger('refresh.all');
         });
     };
-
-    var findReminders = function (e, objs) {
-        //make sure we have an array
-        objs = objs ? [].concat(objs) : [];
-        var remindersToRemove = [];
-        _(objs).each(function (obj) {
-            if (!obj.data || obj.data.confirmation === 2) {//remove if no data is given (user was removed from a task) or if declined
-                _(reminderStorage).each(function (reminder) {
-                    if (obj.id === reminder.target_id) {
-                        remindersToRemove.push(reminder.id);
-                    }
-                });
-            }
-        });
-        if (remindersToRemove.length > 0) {
-            api.removeFromStorage(remindersToRemove);
-        }
-    };
-
-    //remove reminders for declined appointments or tasks. Makes no sense to show a reminder then
-    calendarAPI.on('mark:invite:confirmed', findReminders);
-    taskAPI.on('mark:task:confirmed', findReminders);
 
     ox.on('refresh^', function () {
         api.refresh();

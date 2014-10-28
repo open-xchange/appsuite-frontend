@@ -62,7 +62,7 @@ define('io.ox/core/boot/login/token', [
 
     function whoami() {
 
-        if (hash.user && hash.language && hash.user_id) {
+        if (hash.user && hash.language && hash.user_id && hash.context_id) {
             hash.locale = hash.language;
             finalize(hash);
         } else {
