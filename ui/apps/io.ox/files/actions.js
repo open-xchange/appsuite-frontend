@@ -401,7 +401,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Guidance
+    // guidance
     new Action('io.ox/files/actions/guidance', {
         action: function (baton) {
             require(['io.ox/files/guidance/main'], function (guidance) {
@@ -418,7 +418,25 @@ define('io.ox/files/actions', [
         }
     });
 
-    // INLINE
+    // 'new' dropdown
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
+        index: 100,
+        id: 'upload',
+        label: gt('Upload new file'),
+        ref: 'io.ox/files/actions/upload'
+    });
+
+    new links.ActionLink('io.ox/files/links/toolbar/default', {
+        index: 200,
+        id: 'note',
+        label:
+            //#. Please translate like "take a note", "Notiz" in German, for example.
+            //#. more like "to notice" than "to notify".
+            gt('Add note'),
+        ref: 'io.ox/files/actions/editor-new'
+    });
+
+    // INLINE (used in detail view / portal)
     var index = 100;
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
