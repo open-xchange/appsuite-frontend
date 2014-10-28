@@ -48,22 +48,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/actions/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            if (e.collection.has('none')) return false;
-            return util.checkMedia('video', e);
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
-            });
-        }
-    });
-
     // editor
     if (window.Blob) {
 
@@ -250,6 +234,37 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/add-to-portal', {
+        capabilities: 'portal',
+        requires: function (e) {
+            return util.conditionChain(
+                e.collection.has('one'),
+                !_.isEmpty(e.baton.data),
+                util.isFolderType('!trash', e.baton)
+            );
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/add-to-portal']).done(function (action) {
+                action(baton.data);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/videoplayer', {
+        requires: function (e) {
+            if (_.device('android')) return false;
+            return util.checkMedia('video', e);
+        },
+        action: function (baton) {
+            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: true
+                });
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             // hide in mail compose preview
@@ -299,18 +314,59 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
-    new Action('io.ox/files/actions/add-to-portal', {
-        capabilities: 'portal',
+    // folder based actions
+    new Action('io.ox/files/icons/share', {
+        capabilities: 'publication',
+        requires: 'some',
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/share']).done(function (action) {
+                var list = [].concat(baton.data);
+                action(list);
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/slideshow', {
         requires: function (e) {
-            return util.conditionChain(
-                e.collection.has('one'),
-                !_.isEmpty(e.baton.data),
-                util.isFolderType('!trash', e.baton)
-            );
+            return _(e.baton.allIds).reduce(function (memo, obj) {
+                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, false);
         },
         action: function (baton) {
-            ox.load(['io.ox/files/actions/add-to-portal']).done(function (action) {
-                action(baton.data);
+            ox.load(['io.ox/files/actions/slideshow']).done(function (action) {
+                action({
+                    baton: baton
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/audioplayer', {
+        requires: function (e) {
+            if (_.device('android')) return false;
+            return util.checkMedia('audio', e);
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: false
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/videoplayer', {
+        requires: function (e) {
+            if (_.device('android')) return false;
+            return util.checkMedia('video', e);
+        },
+        action: function (baton) {
+            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
+                mediaplayer.init({
+                    baton: baton,
+                    videoSupport: true
+                });
             });
         }
     });
@@ -579,62 +635,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // new share action
-    new Action('io.ox/files/icons/share', {
-        capabilities: 'publication',
-        requires: 'some',
-        action: function (baton) {
-            ox.load(['io.ox/files/actions/share']).done(function (action) {
-                var list = [].concat(baton.data);
-                action(list);
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/slideshow', {
-        requires: function (e) {
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/actions/slideshow']).done(function (action) {
-                action({
-                    baton: baton
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/audioplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('audio', e);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('video', e);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
-            });
-        }
-    });
 
     ext.point('io.ox/files/icons/actions').extend(new links.InlineLinks({
         index: 100,
