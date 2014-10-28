@@ -48,27 +48,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/actions/layout-tile', {
-        require: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'fluid:tile');
-        }
-    });
-
-    new Action('io.ox/files/actions/layout-icon', {
-        require: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'fluid:icon');
-        }
-    });
-
-    new Action('io.ox/files/actions/layout-list', {
-        require: true,
-        action: function (baton) {
-            ox.ui.Perspective.show(baton.app, 'fluid:list');
-        }
-    });
-
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
             if (_.device('android')) return false;
@@ -801,43 +780,6 @@ define('io.ox/files/actions', [
         label: gt('Unlock'),
         ref: 'io.ox/files/actions/unlock',
         section: 'file-op'
-    }));
-
-    // rightside
-    ext.point('io.ox/files/icons/actions-right').extend(new links.InlineButtonGroup({
-        index: 100,
-        id: 'inline-links',
-        ref: 'io.ox/files/icons/inline-right'
-    }));
-
-    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'layout-list',
-        ref: 'io.ox/files/actions/layout-list',
-        title: gt('List'),
-        icon: 'fa fa-align-justify',
-        cssClasses: 'io-ox-action-link btn layout'
-    }));
-
-    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
-        index: 200,
-        prio: 'hi',
-        id: 'layout-icon',
-        ref: 'io.ox/files/actions/layout-icon',
-        title: gt('Icons'),
-        icon: 'fa fa-th',
-        cssClasses: 'io-ox-action-link btn layout'
-    }));
-
-    ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
-        index: 300,
-        prio: 'hi',
-        id: 'layout-tile',
-        ref: 'io.ox/files/actions/layout-tile',
-        title: gt('Tile'),
-        icon: 'fa fa-th-large',
-        cssClasses: 'io-ox-action-link btn layout'
     }));
 
 });
