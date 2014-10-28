@@ -81,6 +81,31 @@ define('plugins/portal/linkedIn/register',
             .on('click', person, fnClick);
     };
 
+    function filterActivity(activity) {
+        if (!activity.updateContent || !activity.updateContent.person) return false;
+        if (activity.updateType === 'CONN' && activity.updateContent.person.connections) return true;
+        if (activity.updateType === 'NCON' && activity.updateContent.person) return true;
+        return false;
+    }
+
+    function hasActivities(list) {
+        return _(list).some(filterActivity);
+    }
+
+    function renderActivities(node, list) {
+
+        if (!_.isArray(list)) return;
+        if (!hasActivities(list)) return;
+
+        node.append(
+            $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
+        );
+
+        _(list).each(function (activity) {
+            ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
+        });
+    }
+
     ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').extend({
         id: 'CONN',
         draw: function (activity) {
@@ -292,15 +317,9 @@ define('plugins/portal/linkedIn/register',
                     params: { action: 'updates' }
                 })
                 .done(function (activities) {
-                    if (_.isArray(activities.values) && activities.values.length > 0) {
-                        node.append(
-                            $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                        );
-                        _(activities.values).each(function (activity) {
-                            ext.point('io.ox/plugins/portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                        });
-                    }
+                    renderActivities(node, activities.values);
                 });
+
                 this.append(node);
 
             } else {
@@ -321,16 +340,7 @@ define('plugins/portal/linkedIn/register',
                     });
                 });
 
-                if (_.isArray(baton.data) && baton.data.length > 0) {
-
-                    node.append(
-                        $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                    );
-
-                    _(baton.data).each(function (activity) {
-                        ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                    });
-                }
+                renderActivities(node, baton.data);
 
                 this.append(node);
             }
