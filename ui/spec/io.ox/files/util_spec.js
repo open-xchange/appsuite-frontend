@@ -37,6 +37,64 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
             container.empty();
         });
 
+        describe.only('conditionChain function', function () {
+
+            function truthy(val) {
+                expect(val).to.be.true;
+            }
+            function falsy(val) {
+                expect(val).to.be.false;
+            }
+
+            describe('resolves with', function () {
+                describe('true:', function () {
+                    it('truthy boolean', function () {
+                        return util.conditionChain(true, true).done(truthy);
+                    });
+                    it('deferred returns false', function () {
+                        return util.conditionChain($.Deferred().resolveWith(undefined, [true])).done(truthy);
+                    });
+                });
+                describe('false: when', function () {
+                    it('falsy boolean', function () {
+                        return util.conditionChain(false, true).done(falsy);
+                    });
+                    it('deferred returns false', function () {
+                        return util.conditionChain($.Deferred().resolveWith(undefined, [false]), true).done(falsy);
+                    });
+                    it('deferred rejects', function () {
+                        return util.conditionChain($.Deferred().reject(), true).done(falsy);
+                    });
+                });
+            });
+            describe('supports breaking of chains', function () {
+                it('when boolean breaks', function () {
+                    var cb = sinon.spy(),
+                        def = $.Deferred().then(cb);
+                        //cause def is second in line that breaks it should not be called
+                    return util.conditionChain(false, def).done(function () {
+                        expect(cb.called).to.be.false;
+                    });
+                });
+                it('when deferred breaks', function () {
+                    var cb = sinon.spy(),
+                        def = $.Deferred().then(cb);
+                        //cause def is second in line that breaks it should not be called
+                    return util.conditionChain($.Deferred().reject(), def).done(function () {
+                        expect(cb.called).to.be.false;
+                    });
+                });
+                it('when deferred returns false', function () {
+                    var cb = sinon.spy(),
+                        def = $.Deferred().then(cb);
+                        //cause def is second in line that breaks it should not be called
+                    return util.conditionChain($.Deferred().resolveWith(undefined, [false]), def).done(function () {
+                        expect(cb.called).to.be.false;
+                    });
+                });
+            });
+        });
+
         describe('confirmDialog function', function () {
             it('should always return a promise', function () {
                 expect(isPromise(util.confirmDialog())).to.be.true;

@@ -24,27 +24,56 @@ define('io.ox/files/util', [
 
     var regexp = {},
         // action requires handling of deferreds
-        RESOLVE = $.Deferred().resolveWith(undefined, [true]),
-        REJECT = $.Deferred().resolveWith(undefined, [false]);
+        RESOLVE = $.Deferred().resolve(),
+        REJECT = $.Deferred().reject();
+
+    // pseudo reject -> real reject
+    function normalize (val) {
+        // consider: fc
+        if (!_.isUndefined(val) && val === false) {
+            return $.Deferred().reject();
+        } else {
+            return $.Deferred().resolve();
+        }
+    }
 
     return {
 
         /**
          * returns deferred that sequently checks sync and async conditions
          * @return {deferred} that rejects on first false/reject in chain
+         *
+         * truthy condition:
+         * ta) true
+         * tb) resolved deferred
+         * tc) resolved deferred returning true
+         *
+         * falsy condition:
+         * fa) false
+         * fb) rejected deferred
+         * fc) resolved deferred returning false
          */
         conditionChain: function () {
-            var args = _.isArray(arguments[0]) ? arguments[0] : arguments || [],
-                chain = $.when();
-            // add conditions to chain
-            _.each(args, function (condition) {
-                var async = !!condition.then,
-                    def = async ? condition : (condition ? RESOLVE : REJECT);
+            var list = _.isArray(arguments[0]) ? arguments[0] : arguments || [],
+                chain = $.when(),
+                response = $.Deferred();
+
+            // conditions
+            _.each(list, function (cond) {
+                var async = !!cond.then,
+                    def = async ? cond.then(normalize) : (cond ? RESOLVE : REJECT);
+                // line up conditions
                 chain = chain.then(function () {
                     return def;
                 });
             });
-            return chain;
+
+            //real reject/resolve -> pseudo resolve/reject
+            chain.always(function () {
+                return response.resolveWith(undefined, [chain.state() === 'resolved' ? true : false]);
+            });
+
+            return response.promise();
         },
 
         /**
