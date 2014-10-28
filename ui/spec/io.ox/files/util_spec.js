@@ -37,7 +37,7 @@ define(['io.ox/files/util', 'waitsFor'], function (util, waitsFor) {
             container.empty();
         });
 
-        describe.only('conditionChain function', function () {
+        describe('conditionChain function', function () {
 
             function truthy(val) {
                 expect(val).to.be.true;
