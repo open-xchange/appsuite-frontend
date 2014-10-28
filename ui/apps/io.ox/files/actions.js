@@ -560,16 +560,6 @@ define('io.ox/files/actions', [
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'mediaplayer-audio',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Play audio files'),
-        ref: 'io.ox/files/actions/audioplayer',
-        section: 'media'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'mediaplayer-video',
         index: index += 100,
         prio: 'lo',
