@@ -182,16 +182,22 @@ define('io.ox/core/desktop',
 
                     set: function (id) {
                         var def = $.Deferred();
-                        if (id !== undefined && id !== null && String(id) !== folder) {
+                        if (id !== undefined && id !== null) {
                             var activeApp = _.url.hash('app');
                             require(['io.ox/core/api/folder'], function (api) {
                                 api.get({ folder: id })
                                 .done(function (data) {
-                                    // off
-                                    //api.off('change:' + folder);
+
                                     var appchange = _.url.hash('app') !== activeApp; //app has changed while folder was requested
+
+                                    // don't do anything if same folder
+                                    if (String(id) === folder) {
+                                        return def.resolve(data, appchange);
+                                    }
+
                                     // remember
                                     folder = String(id);
+
                                     if (!appchange) {//only change if the app did not change
                                         // update window title & toolbar?
                                         if (win) {
