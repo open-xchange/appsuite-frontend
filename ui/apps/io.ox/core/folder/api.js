@@ -776,6 +776,15 @@ define('io.ox/core/folder/api',
 
     }());
 
+    function setUnseenCounter(id, unread) {
+        pool.getModel(id).set('unread', Math.max(0, unread));
+    }
+
+    function setUnseenMinimum(id, min) {
+        var model = pool.getModel(id);
+        model.set('unread', Math.max(min || 0, model.get('unread')));
+    }
+
     //
     // Refresh all folders
     //
@@ -853,6 +862,8 @@ define('io.ox/core/folder/api',
         ignoreSentItems: ignoreSentItems,
         processListResponse: processListResponse,
         changeUnseenCounter: changeUnseenCounter,
+        setUnseenCounter: setUnseenCounter,
+        setUnseenMinimum: setUnseenMinimum,
         getSection: getSection,
         Bitmask: Bitmask,
         propagate: propagate

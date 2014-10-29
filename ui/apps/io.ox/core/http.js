@@ -804,6 +804,37 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 });
         }
 
+        //
+        // limitedSend allows limiting the number of parallel requests
+        // Actually the browser should do that but apparently some have
+        // problems dealing with large timeouts
+        //
+        var limitedSend = (function () {
+
+            var pending = 0, queue = [];
+
+            return function (request) {
+                if (!ox.serverConfig.maxConnections) return send(request);
+                if (belowLimit()) send(request); else queue.push(request);
+            };
+
+            function belowLimit() {
+                return pending < ox.serverConfig.maxConnections;
+            }
+
+            function send(request) {
+                pending++;
+                request.def.always(tick);
+                lowLevelSend(request);
+            }
+
+            function tick() {
+                pending--;
+                if (belowLimit() && queue.length > 0) send(queue.shift());
+            }
+
+        }());
+
         // to avoid bugs based on passing objects by reference
         function clone(data) {
             if (!data) return data; // null, undefined, empty string, numeric zero
@@ -849,11 +880,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         hash = null;
                     });
                     requests[hash] = [];
-                    lowLevelSend(r);
+                    limitedSend(r);
                     r = null;
                 }
             } else {
-                lowLevelSend(r);
+                limitedSend(r);
                 r = null;
             }
         }

@@ -247,12 +247,20 @@ define('io.ox/core/tk/list',
             if (_.device('!smartphone')) this.$el.addClass('visible-selection');
         },
 
+        forwardCollectionEvents: function (name) {
+            var args = _(arguments).toArray().slice(1);
+            args.unshift('collection:' + name);
+            this.trigger.apply(this, args);
+        },
+
         setCollection: function (collection) {
             // remove listeners
             this.stopListening(this.collection);
             this.collection = collection;
             this.toggleComplete(false);
             this.listenTo(collection, {
+                // forward events
+                'all': this.forwardCollectionEvents,
                 // backbone
                 'add': this.onAdd,
                 'change': this.onChange,
@@ -270,6 +278,7 @@ define('io.ox/core/tk/list',
                 'complete': this.onComplete
             });
             this.selection.reset();
+            this.trigger('collection:set');
             return this;
         },
 
