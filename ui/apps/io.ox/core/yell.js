@@ -98,7 +98,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             $(document).off('.yell');
             _.defer(function () {
                 // use defer not to run into drag&drop
-                $(document).on(_.device('touch') ? 'tap.yell' : 'mouseup.yell', click);
+                $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
             });
         } else {
             setTimeout(function () {
