@@ -26,10 +26,6 @@ module.exports = function (grunt) {
                             'bootstrap-datepicker/less/datepicker3.less',
                             'font-awesome/{less,fonts}/*',
                             'open-sans-fontface/fonts/Light/*',
-                            'mobiscroll/css/mobiscroll.widget.css',
-                            'mobiscroll/css/mobiscroll.widget.ios7.css',
-                            'mobiscroll/css/mobiscroll.scroller.css',
-                            'mobiscroll/css/mobiscroll.scroller.ios7.css',
                             '!**/*.otf'
                         ],
                         cwd: 'bower_components/',
