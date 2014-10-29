@@ -43,7 +43,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
         requires: function () {
-            return _.device('!small');
+            return _.device('!smartphone');
         },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:week');
@@ -52,7 +52,7 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/actions/switch-to-week-view', {
         requires: function () {
-            return _.device('!small');
+            return _.device('!smartphone');
         },
         action: function (baton) {
             ox.ui.Perspective.show(baton.app, 'week:workweek');
@@ -193,7 +193,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/print-appointment', {
         capabilities: 'printing',
         requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!small');
+            return e.collection.has('some', 'read') && _.device('!smartphone');
         },
         multiple: function (list) {
             ox.load(['io.ox/core/print']).done(function (print) {
@@ -220,7 +220,7 @@ define('io.ox/calendar/actions', [
         id: 'print',
         requires: function (e) {
             var win = e.baton.window;
-            if (_.device('!small') && win && win.getPerspective) {
+            if (_.device('!smartphone') && win && win.getPerspective) {
                 var pers = win.getPerspective();
                 return pers && pers.name !== 'list';
             } else {
@@ -274,7 +274,7 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone',
         requires: function () {
-            return _.device('!small');
+            return _.device('!smartphone');
         },
         action: function (baton) {
             ox.launch('io.ox/calendar/freebusy/main', {

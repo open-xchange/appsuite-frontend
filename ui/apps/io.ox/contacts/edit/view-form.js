@@ -391,7 +391,7 @@ define('io.ox/contacts/edit/view-form', [
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
                 } else {
                     var button;
-                    if (_.device('small')) {
+                    if (_.device('smartphone')) {
                         // really not so nice...
                         button = options.parentView.$el.parent().parent().parent().find('[data-action="discard"]');
                     } else {

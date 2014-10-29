@@ -1269,7 +1269,7 @@ define('io.ox/core/tk/vgrid', [
         // process some options on toolbars
         if (options.toolbarPlacement !== 'none') {
             node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
-            if (options.secondToolbar && _.device('!small')) {
+            if (options.secondToolbar && _.device('!smartphone')) {
                 node.addClass(options.toolbarPlacement === 'top' ? 'bottom-toolbar' : 'top-toolbar');
             }
         }

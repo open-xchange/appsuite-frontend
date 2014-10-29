@@ -133,13 +133,13 @@ define('io.ox/portal/settings/pane', [
 
     function appendIconText(target, text, type, activeColor) {
         if (type === 'color') {
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 return $(target).addClass('widget-color-' + activeColor).append($('<i class="fa fa-tint">').css('font-size', '20px'));
             } else {
                 return target.text(text);
             }
         } else {
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 var iconClass = (type === 'edit' ? 'fa fa-pencil' : 'fa fa-power-off');
                 return $(target).append($('<i>').addClass(iconClass).css('font-size', '20px'));
             } else {

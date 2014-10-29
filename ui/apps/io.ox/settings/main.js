@@ -321,7 +321,7 @@ define('io.ox/settings/main', [
             saveSettings('changeGrid');
         });
 
-        if (_.device('small')) {
+        if (_.device('smartphone')) {
             grid.selection.on('changeMobile', function () {
                 saveSettings('changeGridMobile');
             });

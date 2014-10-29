@@ -40,7 +40,7 @@ define('io.ox/core/extPatterns/links', [
                 _.defer(function () { node.tooltip('hide'); });
             },
             drawDefault = function (baton) {
-                var prio = _.device('small') ? self.mobile : self.prio;
+                var prio = _.device('smartphone') ? self.mobile : self.prio;
                 var icons = self.icon && baton.options.icons !== false;
                 var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                     .addClass(self.cssClasses || 'io-ox-action-link')
@@ -48,7 +48,7 @@ define('io.ox/core/extPatterns/links', [
                         'role': 'menuitem',
                         'title': self.title || self.label || '',
                         'data-section': self.section || 'default',
-                        'data-prio': _.device('small') ? (self.mobile || 'none') : (self.prio || 'lo'),
+                        'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
                         'data-ref': self.ref
                     });
                 // icons are prefered over labels
@@ -329,10 +329,10 @@ define('io.ox/core/extPatterns/links', [
                 lo = all.children().filter('[data-prio="lo"]').parent(),
                 links = lo.find('a'),
                 allDisabled = links.length === links.filter('.disabled').length,
-                isSmall = _.device('small');
+                isSmartphone = _.device('smartphone');
 
             // remove unimportant links on smartphone (prio='none')
-            if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
+            if (isSmartphone) all.children().filter('[data-prio="none"]').parent().remove();
 
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
                 var dd;
@@ -345,9 +345,9 @@ define('io.ox/core/extPatterns/links', [
                             'data-toggle': 'dropdown',
                             'data-action': 'more',
                             'aria-haspopup': true,
-                            'aria-label': isSmall ? gt('Actions') : gt('More')
+                            'aria-label': isSmartphone ? gt('Actions') : gt('More')
                         }).append(
-                            isSmall ? $.txt(gt('Actions')) : $('<span class="sr-only">' + gt('Actions') + '</span><i aria-hidden="true" class="fa fa-bars">'),
+                            isSmartphone ? $.txt(gt('Actions')) : $('<span class="sr-only">' + gt('Actions') + '</span><i aria-hidden="true" class="fa fa-bars">'),
                             $('<i aria-hidden="true" class="fa fa-caret-down">')
                         )
                         .on(Modernizr.touch ? 'touchstart' : 'click', function () {
@@ -356,7 +356,7 @@ define('io.ox/core/extPatterns/links', [
                             $(this).next().attr('class', 'dropdown-menu' + (left < 200 ? '' : ' pull-right'));
                         }),
                         $('<ul class="dropdown-menu pull-right" role="menu">')
-                            .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
+                            .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))
                             .append(lo)
                     )
                 );

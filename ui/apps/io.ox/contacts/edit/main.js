@@ -164,7 +164,7 @@ define('io.ox/contacts/edit/main', [
                                 app.setState({ folder: contact.get('folder_id'), id: null });
                             }
                         });
-                        if (_.device('small')) {
+                        if (_.device('smartphone')) {
                             ext.point('io.ox/contacts/edit/bottomToolbar').invoke('draw', app, new ext.Baton(contact));
                         }
 

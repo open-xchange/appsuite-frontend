@@ -21,7 +21,7 @@ define('io.ox/mail/view-options', [
     'use strict';
 
     // no view options on smartphones
-    //if (_.device('small')) return;
+    //if (_.device('smartphone')) return;
 
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',

@@ -137,7 +137,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         id: 'toolbar-mobile',
         index: 10100,
         setup: function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.updateToolbar = updateToolbar;
         }
     });
@@ -146,7 +146,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         id: 'update-toolbar-mobile',
         index: 10300,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             // folder change
             app.grid.on('change:ids', function () {
@@ -186,7 +186,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
         id: 'change-mode-toolbar-mobile',
         index: 10400,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             // if multiselect is triggered, show secondary toolbar with other options based on selection
             app.props.on('change:checkboxes', function (model, state) {
                 app.pages.toggleSecondaryToolbar('listView', state);

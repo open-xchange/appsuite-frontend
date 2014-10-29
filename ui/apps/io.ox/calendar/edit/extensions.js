@@ -182,7 +182,7 @@ define('io.ox/calendar/edit/extensions', [
     });
 
     // move recurrence view to collapsible area on mobile devices
-    var recurrenceIndex = _.device('small') ? 950 : 650;
+    var recurrenceIndex = _.device('smartphone') ? 950 : 650;
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
@@ -211,7 +211,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'noteSeparator',
         index: 750,
         draw: function (baton) {
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 this.append(
                     $('<a href="#">')
                         .text(gt('Expand form'))

@@ -19,7 +19,7 @@ define('plugins/demo/customize/register', [
     'use strict';
 
     // exclude smartphones
-    if (_.device('small')) return;
+    if (_.device('smartphone')) return;
 
     //
     // This is quick & dirty code. Don't adopt this style for productive use.

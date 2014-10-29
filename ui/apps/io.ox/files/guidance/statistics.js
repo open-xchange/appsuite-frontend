@@ -15,8 +15,8 @@ define('io.ox/files/guidance/statistics', [
     'use strict';
 
     var COLUMNS = '1,3,5,20,23,700,702,703,704,705,707',
-        WIDTH = _.device('small') ? 280 : 500,
-        HEIGHT = _.device('small') ? 150 : 200,
+        WIDTH = _.device('smartphone') ? 280 : 500,
+        HEIGHT = _.device('smartphone') ? 150 : 200,
         EXTENSION_KEYWORDS = {
             //images
             'jpg':  'Images',

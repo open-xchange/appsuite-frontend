@@ -113,7 +113,7 @@ define('plugins/halo/xing/register', [
     miniProfile = function (contact) {
         var node, img, name;
 
-        img = _.device('small') ? contact.photo_urls.thumb : contact.photo_urls.maxi_thumb;
+        img = _.device('smartphone') ? contact.photo_urls.thumb : contact.photo_urls.maxi_thumb;
 
         if (contact.permalink) {
             name = $('<a>').attr({ href: contact.permalink, target: '_blank' })

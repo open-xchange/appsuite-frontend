@@ -429,7 +429,7 @@ define('io.ox/core/tk/dialogs', [
             var dim = fnSetDimensions();
 
             // apply dimensions, only on desktop and pad
-            if (_.device('!small')) {
+            if (_.device('!smartphone')) {
                 var css = { 'max-width': dim.width + 'px' };
                 if (o.center) {
                     // center vertically
@@ -796,7 +796,7 @@ define('io.ox/core/tk/dialogs', [
                 popup.add(arrow).removeClass('left right').addClass(mode).css('z-index', zIndex);
                 arrow.css('zIndex', zIndex + 1);
 
-                if (options.closely && _.device('!small')) {
+                if (options.closely && _.device('!smartphone')) {
                     popup.add(arrow).css(mode === 'left' ? 'right' : 'left', '20%');
                 }
 

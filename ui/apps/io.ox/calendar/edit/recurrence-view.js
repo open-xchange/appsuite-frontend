@@ -346,7 +346,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         marginBottom: 0
                     }).val(renderDate());
 
-                if (_.device('small')) {
+                if (_.device('smartphone')) {
                     require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
                         var now = new dateAPI.Local();
                         $dateInput.mobiscroll().date($.extend(defaultSettings, {
@@ -382,7 +382,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                         drawState();
                     }
                     try {
-                        if (_.device('small')) {
+                        if (_.device('smartphone')) {
                             $dateInput.mobiscroll('destroy');
                         } else {
                             $dateInput.datepicker('remove');

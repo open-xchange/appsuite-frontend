@@ -65,7 +65,7 @@ define('plugins/portal/mail/register', [
 
             function getMails(folderName) {
                 // we fetch more that we want to show because usually a lot is deleted
-                var LIMIT = _.device('small') ? 5 : 10;
+                var LIMIT = _.device('smartphone') ? 5 : 10;
                 return api.getAll({ folder:  folderName, limit: LIMIT * 5 }, !!baton.cache).then(function (mails) {
                     // filter deleted mails
                     return _(mails).filter(function (obj) {

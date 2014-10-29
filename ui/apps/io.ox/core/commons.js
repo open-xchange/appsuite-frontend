@@ -207,7 +207,7 @@ define('io.ox/core/commons', [
                                 )
                             )
                         );
-                        if (_.device('small')) {
+                        if (_.device('smartphone')) {
                             //don't stay in empty detail view
                             var vsplit = node.closest('.vsplit');
                             //only click if in detail view to prevent infinite loop
@@ -258,7 +258,7 @@ define('io.ox/core/commons', [
 
                 var list = grid.selection.get(), index;
                 if (list.length > 0) {
-                    if (_.device('small')) {
+                    if (_.device('smartphone')) {
                         //preparation to return to vgrid
                         grid.selection.clear(true);
                     } else {
@@ -650,7 +650,7 @@ define('io.ox/core/commons', [
                 $(this).parent().find('.rightside-inline-actions').empty();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
                 if (e.data.app && e.data.app.getGrid) {
-                    if (_.device('small')) {
+                    if (_.device('smartphone')) {
                         e.data.app.getGrid().selection.trigger('changeMobile');
                     }
                     e.data.app.getGrid().selection.clear();

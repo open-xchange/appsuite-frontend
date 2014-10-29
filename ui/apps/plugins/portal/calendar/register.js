@@ -42,7 +42,7 @@ define('plugins/portal/calendar/register', [
 
         load: function (baton) {
             return api.getAll().pipe(function (ids) {
-                var numOfItems = _.device('small') ? 5 : 10;
+                var numOfItems = _.device('smartphone') ? 5 : 10;
                 return api.getList(ids.slice(0, numOfItems)).done(function (data) {
                     baton.data = data;
                 });

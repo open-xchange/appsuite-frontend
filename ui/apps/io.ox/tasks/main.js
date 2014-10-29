@@ -519,7 +519,7 @@ define('io.ox/tasks/main', [
         'selection-doubleclick': function (app) {
             // detail app does not make sense on small devices
             // they already see tasks in full screen
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.grid.selection.on('selection:doubleclick', function (e, key) {
                 ox.launch('io.ox/tasks/detail/main', { cid: key });
             });
@@ -527,7 +527,7 @@ define('io.ox/tasks/main', [
 
         'inplace-search': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');

@@ -32,7 +32,7 @@ $(window).load(function () {
     // if device small wait 10ms check again
     // maybe the check was made too early could be wrong
     // desktop was recognized as mobile in some cases because of this
-    if (_.device('small')) {
+    if (_.device('smartphone')) {
         setTimeout(function () { _.recheckDevice(); }, 10);
     }
 

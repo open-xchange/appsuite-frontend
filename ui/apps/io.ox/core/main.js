@@ -740,7 +740,7 @@ define('io.ox/core/main', [
         //     id: 'search',
         //     index: 150,
         //     draw: function () {
-        //         if (capabilities.has('search') && !(_.device('small'))) {
+        //         if (capabilities.has('search') && !(_.device('smartphone'))) {
         //             this.append(
         //                 addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
         //                                 var app = ox.ui.App.getCurrentApp();
@@ -774,7 +774,7 @@ define('io.ox/core/main', [
             id: 'search-mobile',
             index: 150,
             draw: function () {
-                if (capabilities.has('search') && _.device('small')) {
+                if (capabilities.has('search') && _.device('smartphone')) {
                     this.append(
                         addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
                             require(['io.ox/search/main'], function (searchapp) {
@@ -923,7 +923,7 @@ define('io.ox/core/main', [
             }
         });
 
-        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
+        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!smartphone');
         if (!dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right/dropdown').extend({
                 id: 'logout',
@@ -1145,7 +1145,7 @@ define('io.ox/core/main', [
             }
 
             // always use portal on small devices!
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 mobileAutoLaunchArray();
             }
 
@@ -1318,7 +1318,7 @@ define('io.ox/core/main', [
                         )
                     );
 
-                    if (_.device('small')) {
+                    if (_.device('smartphone')) {
                         btn1.addClass('btn-block btn-lg');
                         btn2.addClass('btn-block btn-lg');
                     }

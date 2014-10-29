@@ -145,7 +145,7 @@ define('io.ox/tasks/actions', [
 
     new Action('io.ox/tasks/actions/print', {
         requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!small');
+            return e.collection.has('some', 'read') && _.device('!smartphone');
         },
         multiple: function (list) {
             print.request('io.ox/tasks/print', list);
@@ -155,7 +155,7 @@ define('io.ox/tasks/actions', [
     new Action('io.ox/tasks/actions/print-disabled', {
         id: 'print',
         requires: function () {
-            return _.device('!small');
+            return _.device('!smartphone');
         },
         multiple: function (list) {
             ox.load(['io.ox/tasks/actions/printDisabled']).done(function (action) {

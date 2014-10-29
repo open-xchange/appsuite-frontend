@@ -58,7 +58,7 @@ define('io.ox/core/boot/main', [
 
                 // set page title now
                 util.setPageTitle(
-                    ox.serverConfig.pageTitle + (_.device('small') ? ' Login' : '')
+                    ox.serverConfig.pageTitle + (_.device('smartphone') ? ' Login' : '')
                 );
 
                 gettext.setLanguage('en_US');

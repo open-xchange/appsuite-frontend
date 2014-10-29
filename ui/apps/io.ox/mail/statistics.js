@@ -69,8 +69,8 @@ define('io.ox/mail/statistics', [
     });
 
     var COLUMNS = '603,604,610',
-        WIDTH = _.device('small') ? 280 : 500,
-        HEIGHT = _.device('small') ? 150 : 200;
+        WIDTH = _.device('smartphone') ? 280 : 500,
+        HEIGHT = _.device('smartphone') ? 150 : 200;
 
     function createCanvas() {
 

@@ -132,7 +132,7 @@ define('io.ox/files/actions', [
         capabilities: 'webmail !alone',
         requires: function (e) {
             return util.conditionChain(
-                _.device('!small'),
+                _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
@@ -151,7 +151,7 @@ define('io.ox/files/actions', [
         requires: function (e) {
             var list = _.getArray(e.context);
             return util.conditionChain(
-                _.device('!small'),
+                _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
                 e.baton.openedBy !== 'io.ox/mail/compose',
@@ -175,7 +175,7 @@ define('io.ox/files/actions', [
         capabilities: '!alone',
         requires: function (e) {
             return util.conditionChain(
-                _.device('!small'),
+                _.device('!smartphone'),
                 !_.isEmpty(e.baton.data),
                 e.collection.has('some'),
                 util.isFolderType('!trash', e.baton)
@@ -203,7 +203,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-            return _.device('!small') &&
+            return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some') &&
                 // hide in mail compose preview
@@ -220,7 +220,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-            return _.device('!small') &&
+            return _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some') &&
                 // hide in mail compose preview

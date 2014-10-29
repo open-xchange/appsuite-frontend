@@ -191,7 +191,7 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         draw: function () {
             var currentSetting = settings.get('feeback/show', 'both');
-            if (_.device('!small') && (currentSetting === 'both' || currentSetting === 'side')) {
+            if (_.device('!smartphone') && (currentSetting === 'both' || currentSetting === 'side')) {
                 feedback.drawButton();
             }
 

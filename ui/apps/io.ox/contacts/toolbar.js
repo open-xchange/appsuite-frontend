@@ -24,7 +24,7 @@ define('io.ox/contacts/toolbar', [
 
     'use strict';
 
-    if (_.device('small')) return;
+    if (_.device('smartphone')) return;
 
     // define links for classic toolbar
     var point = ext.point('io.ox/contacts/classic-toolbar/links');

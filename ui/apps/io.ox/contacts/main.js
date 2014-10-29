@@ -54,7 +54,7 @@ define('io.ox/contacts/main', [
          * the state of the toolbars and navbars
          */
         'pages-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             var c = app.getWindow().nodes.main;
             var navbar = $('<div class="mobile-navbar">'),
                 toolbar = $('<div class="mobile-toolbar">');
@@ -118,7 +118,7 @@ define('io.ox/contacts/main', [
         },
 
         'pages-desktop': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             // add page controller
             app.pages = new PageController(app);
@@ -141,7 +141,7 @@ define('io.ox/contacts/main', [
 
         'folder-view-mobile': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
 
             var nav = app.pages.getNavbar('folderTree'),
                 page = app.pages.getPage('folderTree');
@@ -292,7 +292,7 @@ define('io.ox/contacts/main', [
 
             function thumbClick() {
                 var text = $(this).data('text');
-                if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('small'));
+                if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('smartphone'));
             }
 
             function thumbMove(e) {
@@ -303,7 +303,7 @@ define('io.ox/contacts/main', [
                         y = touches.clientY,
                         element = document.elementFromPoint(x, y),
                         text = $(element).data('text');
-                    if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('small'));
+                    if (text) app.grid.scrollToLabelText(text, /* silent? */ _.device('smartphone'));
                 }
             }
 
@@ -345,7 +345,7 @@ define('io.ox/contacts/main', [
          */
         'navbars-mobile': function (app) {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             app.pages.getNavbar('listView')
                 .setLeft(gt('Folders'))
@@ -372,7 +372,7 @@ define('io.ox/contacts/main', [
 
         'toolbars-mobile': function () {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             // tell each page's back button what to do
             app.pages.getNavbar('listView').on('leftAction', function () {
@@ -466,7 +466,7 @@ define('io.ox/contacts/main', [
         },
 
         'show-contact': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             // LFO callback
             var showContact, drawContact, drawFail, grid = app.grid;
 
@@ -508,7 +508,7 @@ define('io.ox/contacts/main', [
         },
 
         'show-contact-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             // LFO callback
             var showContact, drawContact, drawFail, grid = app.grid;
 
@@ -553,7 +553,7 @@ define('io.ox/contacts/main', [
          * Always change pages on tap, don't wait for data to load
          */
         'select:contact-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.grid.getContainer().on('click', '.vgrid-cell.selectable', function () {
                 if (app.props.get('checkboxes') === true) return;
                 // hijack selection event hub to trigger page-change event
@@ -568,14 +568,14 @@ define('io.ox/contacts/main', [
         'selection-doubleclick': function (app) {
             // detail app does not make sense on small devices
             // they already see tasks in full screen
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.grid.selection.on('selection:doubleclick', function (e, key) {
                 ox.launch('io.ox/contacts/detail/main', { cid: key });
             });
         },
 
         'delete:contact-mobile': function (app) {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             api.on('delete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
                     app.pages.goBack();
@@ -609,21 +609,21 @@ define('io.ox/contacts/main', [
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': _.device('small') ? false : app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
                 'mobileFolderSelectMode': false
             });
         },
 
         'vgrid-checkboxes': function (app) {
             // always hide checkboxes on small devices initially
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             var grid = app.getGrid();
             grid.setEditable(app.props.get('checkboxes'));
         },
 
         'vgrid-checkboxes-mobile': function (app) {
             // always hide checkboxes on small devices initially
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             var grid = app.getGrid();
             app.props.on('change:checkboxes', function () {
                 grid.setEditable(app.props.get('checkboxes'));
@@ -635,14 +635,14 @@ define('io.ox/contacts/main', [
          * Set folderview property
          */
         'prop-folderview': function (app) {
-            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+            app.props.set('folderview', _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true));
         },
 
         /*
          * Store view options
          */
         'store-view-options': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function () {
                 var data = app.props.toJSON();
                 app.settings
@@ -655,7 +655,7 @@ define('io.ox/contacts/main', [
          * Respond to folder view changes
          */
         'change:folderview': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:folderview', function (model, value) {
                 app.folderView.toggle(value);
             });
@@ -668,7 +668,7 @@ define('io.ox/contacts/main', [
         },
 
         'change:folder': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             // folder change
             app.grid.on('change:ids', function () {
                 ext.point('io.ox/contacts/thumbIndex').invoke('draw', app.thumbs, app.baton);
@@ -676,7 +676,7 @@ define('io.ox/contacts/main', [
         },
 
         'folder-view-mobile-listener': function () {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             // always change folder on click
             // No way to use tap here since folderselection really messes up the event chain
             app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
@@ -689,7 +689,7 @@ define('io.ox/contacts/main', [
         },
 
         'change:folder-mobile': function () {
-            if (_.device('!small')) return;
+            if (_.device('!smartphone')) return;
             app.grid.on('change:ids', function () {
                 ext.point('io.ox/contacts/thumbIndex').invoke('draw', app.thumbs, app.baton);
                 app.folder.getData().done(function (d) {
@@ -721,7 +721,7 @@ define('io.ox/contacts/main', [
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:checkboxes', function (model, value) {
                 var grid = app.getGrid();
                 grid.setEditable(value);
@@ -732,7 +732,7 @@ define('io.ox/contacts/main', [
          * Folerview toolbar
          */
         'folderview-toolbar': function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             commons.mediateFolderView(app);
         },
 
@@ -751,7 +751,7 @@ define('io.ox/contacts/main', [
 
         'inplace-search': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('smartphone') || !capabilities.has('search')) return;
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
@@ -779,15 +779,15 @@ define('io.ox/contacts/main', [
 
         app.grid = new VGrid(app.gridContainer, {
             settings: settings,
-            hideTopbar: _.device('small'),
-            hideToolbar: _.device('small')
+            hideTopbar: _.device('smartphone'),
+            hideToolbar: _.device('smartphone')
             //swipeRightHandler: swipeRightHandler,
         });
 
         commons.wireGridAndWindow(app.grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(app.grid, api, win);
-        if (_.device('!small')) commons.addGridToolbarFolder(app, app.grid, 'CONTACTS');
+        if (_.device('!smartphone')) commons.addGridToolbarFolder(app, app.grid, 'CONTACTS');
 
         app.getGrid = function () {
             return app.grid;

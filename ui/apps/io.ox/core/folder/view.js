@@ -181,7 +181,7 @@ define('io.ox/core/folder/view', [
             type: undefined,
             view: 'ApplicationFolderTree',
             // disable folder popup as it takes to much space for startup on small screens
-            visible: _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true)
+            visible: _.device('smartphone') ? false : app.settings.get('folderview/visible/' + _.display(), true)
         });
 
         //

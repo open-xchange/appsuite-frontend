@@ -1082,7 +1082,7 @@ define('io.ox/core/desktop', [
                         self.state.visible = true;
                         self.state.open = true;
                         self.trigger('show');
-                        if (_.device('!small')) {
+                        if (_.device('!smartphone')) {
                             document.title = document.customTitle = gt.format(
                                 //#. Title of the browser window
                                 //#. %1$s is the name of the page, e.g. OX App Suite
@@ -1248,7 +1248,7 @@ define('io.ox/core/desktop', [
                         title = str;
                         self.nodes.title.find('span').first().text(title);
                         if (this === currentWindow) {
-                            if (_.device('!small')) {
+                            if (_.device('!smartphone')) {
                                 document.title = document.customTitle = gt.format(
                                     //#. Title of the browser window
                                     //#. %1$s is the name of the page, e.g. OX App Suite

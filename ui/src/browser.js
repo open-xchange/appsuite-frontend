@@ -242,7 +242,11 @@
     queryScreen();
 
     function isSmartphone() {
-        return Math.min(screen.width, screen.height) < 480 && mobileOS;
+        var size = Math.min(screen.width, screen.height) < 540,
+            touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch),
+            razrHD = navigator.userAgent.indexOf('RAZR 4G') >= 0;
+
+        return (size && touch && mobileOS) || razrHD;
     }
 
     var mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);

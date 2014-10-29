@@ -84,7 +84,7 @@ define('io.ox/contacts/actions', [
         index: 100,
         id: 'create-dist',
         requires: function (e) {
-            if (_.device('small')) {
+            if (_.device('smartphone')) {
                 return false;
             } else {
                 return e.baton.app.folder.can('create');
@@ -235,7 +235,7 @@ define('io.ox/contacts/actions', [
     // print action
     new Action('io.ox/contacts/actions/print', {
         requires: function (e) {
-            if (_.device('small')) return false;
+            if (_.device('smartphone')) return false;
             // check if collection has min 1 contact
             return e.collection.has('some', 'read') &&
                 (settings.get('features/printList') === 'list' || (_.filter([].concat(e.context), function (el) {

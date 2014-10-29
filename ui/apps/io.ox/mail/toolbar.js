@@ -223,7 +223,7 @@ define('io.ox/mail/toolbar', [
         index: 10000,
         draw: function (baton) {
 
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
@@ -278,7 +278,7 @@ define('io.ox/mail/toolbar', [
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                toolbar = $('<ul class="classic-toolbar" role="menu">')
             );
@@ -290,7 +290,7 @@ define('io.ox/mail/toolbar', [
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {

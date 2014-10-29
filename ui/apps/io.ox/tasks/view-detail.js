@@ -175,7 +175,7 @@ define('io.ox/tasks/view-detail', [
                 );
             }
 
-            if (task.alarm && !_.device('small')) {//alarm makes no sense if reminders are disabled
+            if (task.alarm && !_.device('smartphone')) {//alarm makes no sense if reminders are disabled
                 this.append(
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
@@ -251,7 +251,7 @@ define('io.ox/tasks/view-detail', [
                 ref: 'io.ox/tasks/attachment/links'
             }).draw.call(container, data);
 
-        if (_.device('small')) {//no inline style for mobile
+        if (_.device('smartphone')) {//no inline style for mobile
             $(bla).css('display', 'block');
         }
         return bla;

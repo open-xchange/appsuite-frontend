@@ -475,7 +475,7 @@ define('io.ox/portal/main', [
     app.drawWidget = function (model, index) {
 
         var node = model.node,
-            load = _.device('small') ? (node.offset().top < scrollPos) : true;
+            load = _.device('smartphone') ? (node.offset().top < scrollPos) : true;
 
         if (!model.drawn && load) {
 
