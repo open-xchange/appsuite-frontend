@@ -155,7 +155,21 @@ define('io.ox/calendar/acceptdeny',
                                         }
                                     );
                             };
-                            if (checkConflicts && action !== 'declined') {//no conflicts possible if you decline the appointment
+
+                            var previousConfirmation = 0;
+                            for (var i = 0; i < appointmentData.users.length; i++) {
+                                if (appointmentData.users[i].id === ox.user_id) {//confirmed or tentative
+                                   previousConfirmation = appointmentData.users[i].confirmation;
+                               } 
+                            }
+                            //no conflicts possible if you decline the appointment
+                            //no conflicts possible for free appointments
+                            //don't check if confirmation status did not change
+                            if (action === 'declined' || appointmentData.shown_as === 4 || apiData.data.confirmation === previousConfirmation) {
+                                checkConflicts = false;
+                            }
+
+                            if (checkConflicts) {
                                 var confirmAction = action;
                                 api.checkConflicts(appointmentData).done(function (conflicts) {
                                     if (conflicts.length === 0) {
