@@ -17,7 +17,8 @@ define('io.ox/search/model', [
     'io.ox/backbone/modelFactory',
     'io.ox/search/util',
     'io.ox/core/extensions'
-], function (api, collection, ModelFactory, util, ext) {
+     'gettext!io.ox/search'
+], function (api, collection, ModelFactory, util, ext, gt) {
 
     'use strict';
 
@@ -29,6 +30,11 @@ define('io.ox/search/model', [
     var options = {},
         items = collection.create(),
         defaults, factory, conflicts;
+
+    // custom error message
+    var error = {
+        virtual: gt('Selected folder is virtual and can not be searched. Please select another folder.')
+    };
 
     // fetch settings/options
     ext.point('io.ox/search/main').invoke('config', $(), options);
@@ -381,9 +387,12 @@ define('io.ox/search/model', [
                     def = missingFolder ? util.getFirstChoice(this) : $.Deferred().resolve({});
                 return def.then(function (data) {
                     data = data || {};
-                    if (!self.get('pool').folder && !self.get('pooldisabled').folder) {
+                    if (!self.get('pool').folder && !self.get('pooldisabled').folder)
                         self.add('folder', 'custom', data);
-                    }
+                }, function () {
+                    return {
+                        message: error.virtual
+                    };
                 });
             },
             getFacets: function () {

@@ -402,7 +402,9 @@ define('io.ox/calendar/api', [
          * @return {deferred}
          */
         checkConflicts: function (appointment) {
-            var data = appointment;
+            var data = appointment,
+                //conflicts with appointments in the past are of no interest
+                start = Math.max(_.now() , appointment.start_date);
 
             return http.GET({
                 module: 'calendar',
@@ -410,7 +412,7 @@ define('io.ox/calendar/api', [
                     action: 'all',
                     // id, created_by, folder_id, private_flag, title, start_date, end_date,users, location, shown_as
                     columns: '1,2,20,101,200,201,202,221,400,402',
-                    start: appointment.start_date,
+                    start: start,
                     end: appointment.end_date,
                     showPrivate: true,
                     recurrence_master: false,
@@ -419,19 +421,23 @@ define('io.ox/calendar/api', [
                     timezone: 'UTC'
                 }
             }).then(function (items) {
-                var conflicts = [];
+                var conflicts = [],
+                    //maximum number of conflicts to return (to reduce calculations and prevent cases with really high numbers of appointments)
+                    max = 50;
 
-                _(items).each(function (obj) {
-                    if (obj.id !== data.id) {//no conflict with itself
-                        if (obj.shown_as !== 4) {//4 = free
-                            _(obj.users).each(function (user) {
-                                if (user.id === ox.user_id && (user.confirmation === 1 || user.confirmation === 3)) {//confirmed or tentative
-                                    conflicts.push(obj);
-                                }
-                            });
+                for (var i = 0; i < items.length && conflicts.length < max; i++) {
+                    if (items[i].id !== data.id) {//no conflict with itself
+                        if (items[i].shown_as !== 4) {//4 = free
+                            var found = false;
+                            for (var a = 0; a < items[i].users.length && !found; a++) {
+                                if (items[i].users[a].id === ox.user_id && (items[i].users[a].confirmation === 1 || items[i].users[a].confirmation === 3)) {//confirmed or tentative
+                                   conflicts.push(items[i]);
+                               }
+                            }
                         }
                     }
-                });
+                }
+
                 return conflicts;
             });
         },

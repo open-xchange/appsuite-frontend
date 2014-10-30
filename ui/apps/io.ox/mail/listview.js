@@ -18,9 +18,10 @@ define('io.ox/mail/listview', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/core/tk/list',
+    'io.ox/core/folder/api',
     'io.ox/mail/view-options',
     'less!io.ox/mail/style'
-], function (extensions, ext, util, api, account, ListView) {
+], function (extensions, ext, util, api, account, ListView, folderAPI) {
 
     'use strict';
 
@@ -279,6 +280,21 @@ define('io.ox/mail/listview', [
             options = _.extend({ threaded: true }, options);
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('mail-item');
+            this.on('collection:load', this.lookForUnseenMessage);
+        },
+
+        lookForUnseenMessage: function () {
+
+            // let's take the first folder_id we see
+            var folder_id = this.collection.at(0).get('folder_id');
+
+            // run over entre collection to get number of unseen messages
+            var unseen = this.collection.reduce(function (sum, model) {
+                return sum + util.isUnseen(model.get('flags')) ? 1 : 0;
+            }, 0);
+
+            // use this number only to set the minimum (there might be more due to pagination)
+            folderAPI.setUnseenMinimum(folder_id, unseen);
         },
 
         filter: function (model) {

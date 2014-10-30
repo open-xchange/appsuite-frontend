@@ -175,7 +175,7 @@ define('io.ox/search/apiproxy',[
                             })
                             .then(undefined, function (error) {
                                 // fallback when app doesn't support search
-                                if (error.code === 'SVL-0010') {
+                                if (error && error.code === 'SVL-0010') {
                                     var app = model.getApp();
                                     // add temporary mapping (default app)
                                     model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
