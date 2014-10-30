@@ -234,6 +234,9 @@ define('io.ox/core/desktop',
                                         }
                                     );
                                 }
+                            } else if (String(id) === folder) { // bug 34927
+                                var model = api.pool.getModel(id), data = model.toJSON();
+                                def.resolve(data, false);
                             } else {
                                 def.reject();
                             }
@@ -249,9 +252,7 @@ define('io.ox/core/desktop',
                     setDefault: function () {
                         var def = new $.Deferred();
                         require(['settings!io.ox/mail'], function (mailConfig) {
-                            var defaultFolder = type === 'mail' ?
-                                    mailConfig.get('folder/inbox') :
-                                    coreConfig.get('folder/' + type);
+                            var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
                             if (defaultFolder) {
                                 that.set(defaultFolder)
                                     .done(def.resolve)
