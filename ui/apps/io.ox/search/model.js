@@ -16,8 +16,8 @@ define('io.ox/search/model', [
     'io.ox/search/items/main',
     'io.ox/backbone/modelFactory',
     'io.ox/search/util',
-    'io.ox/core/extensions'
-     'gettext!io.ox/search'
+    'io.ox/core/extensions',
+    'gettext!io.ox/search'
 ], function (api, collection, ModelFactory, util, ext, gt) {
 
     'use strict';

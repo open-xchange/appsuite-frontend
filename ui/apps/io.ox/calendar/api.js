@@ -404,7 +404,7 @@ define('io.ox/calendar/api', [
         checkConflicts: function (appointment) {
             var data = appointment,
                 //conflicts with appointments in the past are of no interest
-                start = Math.max(_.now() , appointment.start_date);
+                start = Math.max(_.now(), appointment.start_date);
 
             return http.GET({
                 module: 'calendar',
@@ -431,8 +431,8 @@ define('io.ox/calendar/api', [
                             var found = false;
                             for (var a = 0; a < items[i].users.length && !found; a++) {
                                 if (items[i].users[a].id === ox.user_id && (items[i].users[a].confirmation === 1 || items[i].users[a].confirmation === 3)) {//confirmed or tentative
-                                   conflicts.push(items[i]);
-                               }
+                                    conflicts.push(items[i]);
+                                }
                             }
                         }
                     }

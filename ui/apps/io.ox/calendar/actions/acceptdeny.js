@@ -159,8 +159,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                             var previousConfirmation = 0;
                             for (var i = 0; i < appointmentData.users.length; i++) {
                                 if (appointmentData.users[i].id === ox.user_id) {//confirmed or tentative
-                                   previousConfirmation = appointmentData.users[i].confirmation;
-                               }
+                                    previousConfirmation = appointmentData.users[i].confirmation;
+                                }
                             }
                             //no conflicts possible if you decline the appointment
                             //no conflicts possible for free appointments

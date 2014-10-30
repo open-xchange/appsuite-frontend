@@ -138,9 +138,9 @@ define('io.ox/search/util', [
                 var types = {
                     'all': def.resolve.bind(this, {}),
                     'selected': def.resolve.bind(this, {
-                                custom: data.id || id,
-                                name: data.title || id
-                            }),
+                        custom: data.id || id,
+                        name: data.title || id
+                    }),
                     'invalid': def.reject
                 };
                 types[type]();
