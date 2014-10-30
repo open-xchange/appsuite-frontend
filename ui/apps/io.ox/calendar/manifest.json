@@ -7,7 +7,11 @@
         "settings": true,
         "requires": "calendar",
         "refreshable": true,
-        "index": 800
+        "index": 800,
+        "help": {
+            "base": "help",
+            "target": "ox.appsuite.user.chap.calendar.html"
+        }
     },
     {
         "namespace": "io.ox/dev/testing/main",

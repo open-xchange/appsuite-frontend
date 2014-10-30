@@ -6,5 +6,9 @@
     "settings": true,
     "requires": "!deniedPortal",
     "refreshable": true,
-    "index": 100
+    "index": 100,
+    "help": {
+        "base": "help",
+        "target": "ox.appsuite.user.sect.portal.customize.html"
+    }
 }

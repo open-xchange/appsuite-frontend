@@ -837,26 +837,27 @@ define('io.ox/core/main',
             id: 'app-specific-help',
             index: 200,
             draw: function () { //replaced by module
-                var helpDir = 'help/l10n/' + ox.language + '/',
-                    node = this,
-                    startingPoints = {
-                    'io.ox/contacts': 'ox.appsuite.user.chap.contacts.html',
-                    'io.ox/calendar': 'ox.appsuite.user.chap.calendar.html',
-                    'io.ox/tasks': 'ox.appsuite.user.chap.tasks.html',
-                    'io.ox/mail': 'ox.appsuite.user.chap.email.html',
-                    'io.ox/files': 'ox.appsuite.user.chap.files.html',
-                    'io.ox/portal': 'ox.appsuite.user.sect.portal.customize.html'
-                };
+                var node = this;
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
                     $('<li role="presentation">', {'class': 'io-ox-specificHelp'}).append(
                         $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(gt('Help'))
                         .on('click', function (e) {
                             var currentApp = ox.ui.App.getCurrentApp(),
-                                currentType = currentApp && currentApp.attributes && currentApp.attributes.name,
-                                target = currentType in startingPoints ? startingPoints[currentType] : 'index.html';
+                                currentType = currentApp && currentApp.getName(),
+                                manifest = _.defaults(
+                                    ox.manifests.apps[currentType] || {},
+                                    ox.manifests.apps[currentType + '/main'] || {},
+                                    {
+                                        help: {
+                                            base: 'help',
+                                            target: 'index.html'
+                                        }
+                                    }).help;
+
                             e.preventDefault();
-                            window.open(helpDir + target);
+
+                            window.open(manifest.base + '/l10n/' + ox.language + '/' + manifest.target);
                         })
                     )
                 );
