@@ -141,33 +141,15 @@ define('io.ox/calendar/week/view', [
 
             //append datepicker
             if (!_.device('smartphone')) {
-                //just localize the picker, use en as default with current languages
-                $.fn.datepicker.dates.en = {
-                    days: date.locale.days,
-                    daysShort: date.locale.daysShort,
-                    daysMin: date.locale.daysStandalone,
-                    months: date.locale.months,
-                    monthsShort: date.locale.monthsShort,
-                    today: gt('Today')
-                };
-
-                this.kwInfo
-                    .on('changeDate', function (e) {
+                require(['io.ox/core/tk/datepicker'], function () {
+                    self.kwInfo.datepicker({ parentEl: self.$el }).on('changeDate', function (e) {
                         self.setStartDate(e.date.getTime());
                         self.trigger('onRefresh');
                     })
                     .on('show', function () {
-                        $(this).datepicker('update', new Date(self.startDate.getTime()));
-                    })
-                    .datepicker({
-                        format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                        parentEl: this.$el,
-                        weekStart: date.locale.weekStart,
-                        autoclose: true,
-                        calendarWeeks: true,
-                        todayHighlight: true,
-                        todayBtn: true
+                        $(self).datepicker('update', new Date(self.startDate.getTime()));
                     });
+                });
             }
         },
 

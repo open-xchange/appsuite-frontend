@@ -41,7 +41,7 @@ module.exports = function (grunt) {
                     {
                         // static lib
                         expand: true,
-                        src: ['jquery-ui.min.js'],
+                        src: ['jquery-ui.min.js', 'bootstrap-combobox.js'],
                         cwd: 'lib/',
                         dest: 'build/static/3rd.party/'
                     },
@@ -49,6 +49,8 @@ module.exports = function (grunt) {
                         // static lib
                         expand: true,
                         src: [
+                            'bootstrap-datepicker/js/bootstrap-datepicker.js',
+                            'bootstrap-typeahead/bootstrap3-typeahead.js',
                             'jquery-imageloader/jquery.imageloader.js',
                             'Chart.js/Chart.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',

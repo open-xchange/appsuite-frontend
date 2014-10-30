@@ -469,67 +469,48 @@ define('io.ox/search/facets/extensions', [
                     }
                 }
 
-                //i18n: just localize the picker, use en as default with current languages
-                $.fn.datepicker.dates.en = {
-                    days: dateAPI.locale.days,
-                    daysShort: dateAPI.locale.daysShort,
-                    daysMin: dateAPI.locale.daysStandalone,
-                    months: dateAPI.locale.months,
-                    monthsShort: dateAPI.locale.monthsShort,
-                    today: gt('Today')
-                };
-
                 // used to handle overlow when datepicker is shown
                 $('body>.datepicker-container').remove();
                 $('body').append(
                     container = $('<div class="datepicker-container">').hide()
                 );
+                require(['io.ox/core/tk/datepicker'], function () {
+                    // input group
+                    self.find('label')
+                        .append(
+                            $('<div>')
+                                .addClass('type')
+                                .text(facet.name),
+                            group = $('<div class="input-daterange input-group" id="datepicker">')
+                                        .append(
+                                            $('<input type="text" class="input-sm form-control" name="start" />')
+                                                .attr('placeholder', gt('Starts on'))
+                                                .val(from)
+                                                .on('change', lazyApply),
+                                            $('<span class="input-group-addon">')
+                                                .text('-'),
+                                            $('<input type="text" class="input-sm form-control" name="end" />')
+                                                .attr('placeholder', gt('Ends on'))
+                                                .val(to)
+                                                .on('change', lazyApply)
+                                        )
+                                        .datepicker({ parentEl: container })
+                                        .on('show', function (e) {
+                                            // position container (workaround)
+                                            var offset = $(e.target).offset();
+                                            container.show();
 
-                // input group
-                self.find('label')
-                    .append(
-                        $('<div>')
-                            .addClass('type')
-                            .text(facet.name),
-                        group = $('<div class="input-daterange input-group" id="datepicker">')
-                                    .append(
-                                        $('<input type="text" class="input-sm form-control" name="start" />')
-                                            .attr('placeholder', gt('Starts on'))
-                                            .val(from)
-                                            .on('change', lazyApply),
-                                        $('<span class="input-group-addon">')
-                                            .text('-'),
-                                        $('<input type="text" class="input-sm form-control" name="end" />')
-                                            .attr('placeholder', gt('Ends on'))
-                                            .val(to)
-                                            .on('change', lazyApply)
-                                    )
-                                    .datepicker({
-                                        format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                                        parentEl: container,
-                                        weekStar: dateAPI.locale.weekStart,
-                                        //orientation: 'top left auto',
-                                        autoclose: true,
-                                        clearBtn: false,
-                                        todayHighlight: true,
-                                        //insert date when clicked
-                                        todayBtn: 'linked'
-                                    })
-                                    .on('show', function (e) {
-                                        // position container (workaround)
-                                        var offset = $(e.target).offset();
-                                        container.show();
+                                            // use samt offset
+                                            container.offset(offset);
 
-                                        // use samt offset
-                                        container.offset(offset);
-
-                                        // appply child style
-                                        container.find('.datepicker').css({
-                                            top: $(e.target).outerHeight(),
-                                            left: 0
-                                        });
-                                    })
-                    );
+                                            // appply child style
+                                            container.find('.datepicker').css({
+                                                top: $(e.target).outerHeight(),
+                                                left: 0
+                                            });
+                                        })
+                        );
+                });
             },
 
             folderFacet: function (baton, value, facet) {

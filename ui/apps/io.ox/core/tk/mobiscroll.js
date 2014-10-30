@@ -24,7 +24,7 @@ define('io.ox/core/tk/mobiscroll', [
 
     //put some defaults in to reduce code duplications
     if ($.mobiscroll) {
-        var settings = {
+        settings = {
             cancelText: gt('Cancel'),
             clearText: gt('Clear'),
             dateOrder: date.getFormat(date.DATE).replace(/\W/g, '').toLowerCase(),

@@ -19,18 +19,6 @@ define('io.ox/backbone/mini-views/datepicker', [
 
     'use strict';
 
-    //customize datepicker
-    //just localize the picker, use en as default with current languages
-    $.fn.datepicker.dates.en = {
-        days: date.locale.days,
-        daysShort: date.locale.daysShort,
-        daysMin: date.locale.daysStandalone,
-        months: date.locale.months,
-        monthsShort: date.locale.monthsShort,
-        today: gt('Today'),
-        clear: gt('Clear')
-    };
-
     // Bootstrap DatePicker
     var DatePickerView = Backbone.View.extend({
 
@@ -45,7 +33,6 @@ define('io.ox/backbone/mini-views/datepicker', [
 
             this.attribute = this.options.attribute;
             this.nodes = {};
-            this.mobileSettings = {};
             this.mobileMode = _.device('smartphone');
 
             this.listenTo(this.model, 'change:' + this.attribute, this.updateView);
@@ -63,7 +50,10 @@ define('io.ox/backbone/mini-views/datepicker', [
                         // render date input
                         var guid = _.uniqueId('form-control-label-'),
                             dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date'));
-                        self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr('id', guid);
+                        self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr({
+                            id: guid,
+                            'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
+                        });
 
                         if (self.mobileMode) {
                             // render date input only on mobile devices
@@ -99,62 +89,54 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.updateView();
 
             if (this.mobileMode) {
-                require(['io.ox/core/tk/mobiscroll'], function (mobileSettings) {
-
-                    self.mobileSettings = mobileSettings;
-
+                require(['io.ox/core/tk/mobiscroll'], function () {
+                    var moset = {};
                     if (self.options.clearButton) {
-                        self.mobileSettings.buttons = ['set', 'clear', 'cancel'];
+                        moset.buttons = ['set', 'clear', 'cancel'];
                     }
                     if (self.options.display === 'DATETIME') {
-                        self.mobileSettings.preset = 'datetime';
+                        moset.preset = 'datetime';
                     }
-
                     // initialize mobiscroll plugin
-                    self.nodes.dayField.mobiscroll(mobileSettings);
+                    self.nodes.dayField.mobiscroll(moset);
                 });
             } else {
-                // get the right date format and init datepicker
-                this.nodes.dayField.attr({
-                    'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
-                }).datepicker({
-                    autoclose: true,
-                    clearBtn: self.options.clearButton,
-                    format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                    parentEl: self.$el,
-                    todayBtn: 'linked', // today button should insert and select. See Bug #34381
-                    todayHighlight: true,
-                    weekStart: date.locale.weekStart
-                });
+                require(['io.ox/core/tk/datepicker'], function () {
+                    // get the right date format and init datepicker
+                    self.nodes.dayField.datepicker({
+                        clearBtn: self.options.clearButton,
+                        parentEl: self.$el
+                    });
 
-                // build and init timepicker based on combobox plugin
-                if (self.options.display === 'DATETIME') {
-                    var hours_typeahead = [],
-                        filldate = new date.Local().setHours(0, 0, 0, 0),
-                        interval = parseInt(settings.get('interval'), 10) || 30;
-                    for (var i = 0; i < 1440; i += interval) {
-                        hours_typeahead.push(filldate.format(date.TIME));
-                        filldate.add(interval * date.MINUTE);
+                    // build and init timepicker based on combobox plugin
+                    if (self.options.display === 'DATETIME') {
+                        var hours_typeahead = [],
+                            filldate = new date.Local().setHours(0, 0, 0, 0),
+                            interval = parseInt(settings.get('interval'), 10) || 30;
+                        for (var i = 0; i < 1440; i += interval) {
+                            hours_typeahead.push(filldate.format(date.TIME));
+                            filldate.add(interval * date.MINUTE);
+                        }
+
+                        var comboboxHours = {
+                            source: hours_typeahead,
+                            items: hours_typeahead.length,
+                            menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
+                            sorter: function (items) {
+                                items = _(items).sortBy(function (item) {
+                                    var pd = date.Local.parse(item, date.TIME);
+                                    return pd.getTime();
+                                });
+                                return items;
+                            },
+                            autocompleteBehaviour: false
+                        };
+
+                        self.nodes.timeField.combobox(comboboxHours);
+                        self.nodes.timeField.on('change', _.bind(self.updateModel, self));
                     }
-
-                    var comboboxHours = {
-                        source: hours_typeahead,
-                        items: hours_typeahead.length,
-                        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-                        sorter: function (items) {
-                            items = _(items).sortBy(function (item) {
-                                var pd = date.Local.parse(item, date.TIME);
-                                return pd.getTime();
-                            });
-                            return items;
-                        },
-                        autocompleteBehaviour: false
-                    };
-
-                    this.nodes.timeField.combobox(comboboxHours);
-                    this.nodes.timeField.on('change', _.bind(this.updateModel, this));
-                }
-                this.toggleTimeInput(self.options.display === 'DATETIME');
+                    self.toggleTimeInput(self.options.display === 'DATETIME');
+                });
             }
 
             this.nodes.dayField.on('change', _.bind(this.updateModel, this));

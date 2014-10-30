@@ -109,9 +109,9 @@ define('io.ox/calendar/edit/recurrence-view', [
 
             $anchor.on('click', function (e) {
                 e.preventDefault();
-                var type = (Modernizr.inputtypes.number && _.device('touch')) ? 'number' : 'text',
+                var type = (Modernizr.inputtypes.number && _.device('smartphone')) ? 'number' : 'text',
                     $numberInput = $('<input type="' + type + '" size="4" tabindex="1">').css({
-                        width: (Modernizr.inputtypes.number && _.device('touch')) ? '2em' : '1em',
+                        width: (Modernizr.inputtypes.number && _.device('smartphone')) ? '2em' : '1em',
                         marginBottom: 0,
                         padding: 0
                     }).val(self[attribute]);
@@ -342,34 +342,33 @@ define('io.ox/calendar/edit/recurrence-view', [
 
             $anchor.on('click', function (e) {
                 e.preventDefault();
-                var $dateInput = $('<input type="text" class="input-sm no-clone">').css({
-                        marginBottom: 0
-                    }).val(renderDate());
+                var now = new dateAPI.Local(),
+                    minDate = new Date(now.getYear(), now.getMonth(), now.getDate()),
+                    $dateInput = $('<input type="text" class="form-control dateinput no-clone">').val(renderDate);
 
                 if (_.device('smartphone')) {
-                    require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
-                        var now = new dateAPI.Local();
-                        $dateInput.mobiscroll().date($.extend(defaultSettings, {
-                            onSelect: function () {
-                                updateValue();
-                            },
-                            onCancel: function () {
-                                updateValue();
-                            },
-                            minDate: new Date(now.getYear(), now.getMonth(), now.getDate())
-                        })).mobiscroll('show');
+                    require(['io.ox/core/tk/mobiscroll'], function () {
+                        $dateInput.mobiscroll().date({
+                            onChange: updateValue,
+                            minDate: minDate
+                        }).mobiscroll('show');
                     });
                 } else {
-                    $dateInput.datepicker({
-                        format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
-                        parentEl: $(this).parent(),
-                        weekStart: dateAPI.locale.weekStart,
-                        autoclose: true,
-                        todayHighlight: true,
-                        todayBtn: true
+                    require(['io.ox/core/tk/datepicker'], function () {
+                        $dateInput.datepicker({
+                            parentEl: self.$el,
+                            startDate: minDate
+                        });
+                        $anchor.after($dateInput).hide();
+                        $dateInput.select().on({
+                            'hide': updateValue,
+                            'keydown': function (e) {
+                                if (e.which === 13) {
+                                    updateValue();
+                                }
+                            }
+                        });
                     });
-                    $anchor.after($dateInput).hide();
-                    $dateInput.select();
                 }
 
                 // On change
@@ -391,17 +390,6 @@ define('io.ox/calendar/edit/recurrence-view', [
                     } catch (e) {}
                     $anchor.show().focus();
                 }
-
-                $dateInput.on('hide', function () {
-                    updateValue();
-                });
-
-                // Enter
-                $dateInput.on('keydown', function (e) {
-                    if (e.which === 13) {
-                        updateValue();
-                    }
-                });
             });
 
             $anchor.attr('aria-label', self.ghost());
@@ -483,7 +471,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 });
 
                 this.nodes = {
-                    recView: $('<div class="io-ox-recurrence-view">').hide(),
+                    recView: $('<form class="io-ox-recurrence-view form-inline">').hide(),
                     summary: $('<span>'),
                     typeChoice: $('<div class="inset">'),
                     hint: $('<div class="text-muted inset">'),
