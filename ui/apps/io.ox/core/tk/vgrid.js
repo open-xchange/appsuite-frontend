@@ -31,14 +31,17 @@ define('io.ox/core/tk/vgrid',
         // default options
         o = _.extend({
             tagName: 'div',
-            defaultClassName: 'vgrid-cell'
+            defaultClassName: 'vgrid-cell',
+            //container to draw templates for height measuring
+            //normally the the actual vgrid container is used(so css styles are applied correct)
+            tempDrawContainer: document.body
         }, o);
 
         var template = [],
 
             getHeight = function (node) {
                 node.css('visibility', 'hidden').show()
-                    .appendTo(document.body);
+                    .appendTo(o.tempDrawContainer);
                 var height = Math.max(1, node.outerHeight(true));
                 node.remove();
                 return height;
@@ -310,9 +313,9 @@ define('io.ox/core/tk/vgrid',
                 )
                 .appendTo(node),
             // item template
-            template = new Template(),
+            template = new Template({tempDrawContainer: container}),
             // label template
-            label = new Template(),
+            label = new Template({tempDrawContainer: container}),
             // item pool
             pool = [],
             // heights
