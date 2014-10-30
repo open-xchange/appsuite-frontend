@@ -1323,7 +1323,7 @@ define('io.ox/mail/write/main',
             prepareMailForSending(mail);
 
             if (mail.data.sendtype === mailAPI.SENDTYPE.FORWARD) {
-                mail.data.msgref = '';
+                delete mail.data.msgref;
             }
 
             if (mail.data.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
