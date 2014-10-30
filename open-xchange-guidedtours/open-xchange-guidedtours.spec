@@ -48,6 +48,8 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 /opt/open-xchange/etc/settings/guidedtours.properties
 
 %changelog
+* Mon Oct 27 2014 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2014-10-30
 * Wed Oct 22 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2014-10-22
 * Tue Oct 14 2014 Marcus Klein <marcus.klein@open-xchange.com>
