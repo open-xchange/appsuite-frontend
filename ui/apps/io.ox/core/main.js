@@ -1077,10 +1077,10 @@ define('io.ox/core/main', [
             }
         });
 
-        // add some senseless characters to avoid unwanted scrolling
-        if (location.hash === '') {
-            location.hash = '#!';
-        }
+        // add some senseless characters
+        // a) to avoid unwanted scrolling
+        // b) to recognize deep links
+        if (location.hash === '') location.hash = '#!!';
 
         var autoLaunchArray = function () {
 
@@ -1115,55 +1115,66 @@ define('io.ox/core/main', [
         };
 
         // checks url which app to launch, needed to handle direct links
-        function appCheck() {
-            if (_.url.hash('m')) {
-                //direkt link
-                switch (_.url.hash('m')) {
-                case 'task':
-                    _.url.hash({ app: 'io.ox/tasks' });
-                    break;
-                case 'calendar':
-                    // only list perspective can handle ids
-                    _.url.hash({ app: 'io.ox/calendar', perspective: 'week:week' });
-                    break;
-                case 'infostore':
-                    // only list perspective can handle ids
-                    _.url.hash({ app: 'io.ox/files', perspective: 'list' });
-                    break;
-                case 'contact':
-                    _.url.hash({ app: 'io.ox/contacts' });
-                    break;
-                }
-                // fill id and folder, then clean up
+        function appCheck(baton) {
+
+            var hash = _.url.hash(), looksLikeDeepLink = !('!!' in hash);
+
+            // fix old infostore
+            if (hash.m === 'infostore') hash.m = 'files';
+
+            if (looksLikeDeepLink && hash.app && hash.folder && hash.id) {
+
+                // new-school: app + folder + id
+                var id = hash.id.indexOf('.') > -1 ? _.cid(hash.id).id : hash.id;
+
                 _.url.hash({
-                    folder: _.url.hash('f'),
-                    id: _.url.hash('f') + '.' + _.url.hash('i'),
-                    m: null,
-                    f: null,
-                    i: null
+                    app: hash.app + '/detail',
+                    folder: hash.folder,
+                    id: id
                 });
+
+                baton.isDeepLink = true;
+
+            } else if (hash.m && hash.f && hash.i) {
+
+                // old-school: module + folder + id
+                _.url.hash({
+                    app: 'io.ox/' + hash.m + '/detail',
+                    folder: hash.f,
+                    id: hash.i
+                });
+
+                baton.isDeepLink = true;
+
+            } else if (hash.m && hash.f) {
+
+                // just folder
+                _.url.hash({
+                    app: 'io.ox/' + hash.m,
+                    folder: hash.f
+                });
+
+                baton.isDeepLink = true;
             }
 
+            // clean up
+            _.url.hash({ m: null, f: null, i: null });
+
             // always use portal on small devices!
-            if (_.device('smartphone')) {
-                mobileAutoLaunchArray();
-            }
+            if (_.device('small')) mobileAutoLaunchArray();
 
             var appURL = _.url.hash('app'),
                 manifest = appURL && ox.manifests.apps[getAutoLaunchDetails(appURL).app],
                 mailto = _.url.hash('mailto') !== undefined && (appURL === 'io.ox/mail/compose:compose');
 
-            if (manifest && (manifest.refreshable || mailto)) {
-                return appURL.split(/,/);
-            } else {
-                return autoLaunchArray();
-            }
+            baton.autoLaunch = (manifest && (manifest.refreshable || mailto)) ?
+                appURL.split(/,/) :
+                autoLaunchArray();
         }
 
-        var baton = ext.Baton({
-            block: $.Deferred(),
-            autoLaunch: appCheck()
-        });
+        var baton = ext.Baton({ block: $.Deferred() });
+
+        appCheck(baton);
 
         baton.autoLaunchApps = _(baton.autoLaunch)
         .chain()
@@ -1391,15 +1402,17 @@ define('io.ox/core/main', [
 
                 debug('Stage "restore"');
 
-                if (baton.canRestore) {
+                if (baton.canRestore && !baton.isDeepLink) {
                     // clear auto start stuff (just conflicts)
                     baton.autoLaunch = [];
                     baton.autoLaunchApps = [];
                 }
+
                 if (baton.autoLaunch.length === 0 && !baton.canRestore) {
                     drawDesktop();
                     return baton.block.resolve(true);
                 }
+
                 return baton.block.resolve(baton.autoLaunch.length > 0 || baton.canRestore || location.hash === '#!');
             }
         });

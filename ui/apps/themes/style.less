@@ -4165,6 +4165,11 @@ wbr:after {
         .folder-counter {
             color: #08c;
             font-weight: @bold;
+            display: none;
+        }
+
+        &.show-counter .folder-counter {
+            display: inline-block;
         }
 
         .folder-options {
@@ -4328,21 +4333,32 @@ wbr:after {
 // detail-view-app
 
 .detail-view-app {
+
     background-color: #eee;
     .overflow();
+
     .thread-view-control, .detail-view-container {
         max-width: 900px;
         margin: 0 auto;
     }
-    .detail-view-container {
-        padding: 20px;
 
-        > div {
-            min-height: 200px;
-            padding: 20px;
+    .detail-view-container {
+
+        height: 100%;
+        overflow: visible;
+        outline: 0;
+
+        & > div {
+            min-height: 100%;
             background-color: white;
+            padding: 20px;
+            // bottom padding of outer element not shown with height/min-height: 100%.
+            // instead of padding: 20px we use border + background-clip
+            border: 20px solid transparent;
+            background-clip: padding-box;
         }
     }
+
     .thread-view-control, .thread-view-list {
         position: static;
         min-height: 100%;
