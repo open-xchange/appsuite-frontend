@@ -130,28 +130,47 @@ define('io.ox/search/util',
         getFirstChoice: function (model) {
             var module = model.getModule(),
                 id = model.getFolder(),
-                def = $.Deferred(),
-                value = function (id, folder) {
-                    folder = folder || {};
-                    // use id as fallback
-                    def.resolve({
-                        custom: folder.id || id,
-                        name: folder.title || id
-                    });
-                };
+                def = $.Deferred();
 
             // infostore hack
             module = module === 'files' ? 'infostore' : module;
 
-            //'all folders' when not mandatory and not default folder
-            if (model.isMandatory('folder') || id !== (folderAPI.getDefaultFolder(module) || '').toString()) {
-                // 'preselected folder'
-                folderAPI.get(id).always(value.bind(this, id));
-                return def.promise();
-            } else {
-                // 'all folders'
-                return $.Deferred().resolve({});
+            function cont (type, data) {
+                var types = {
+                    'all': def.resolve.bind(this, {}),
+                    'selected': def.resolve.bind(this, {
+                                custom: data.id || id,
+                                name: data.title || id
+                            }),
+                    'invalid': def.reject
+                };
+                types[type]();
             }
+
+            folderAPI.get(id)
+                .then(function (data) {
+                    data = data || {};
+                    // conditions
+                    var isMandatory = model.isMandatory('folder'),
+                        isDefault = data.id === (folderAPI.getDefaultFolder(module) || '').toString(),
+                        isVirtual = module === 'mail' && !folderAPI.can('read', data);
+                    // conditions mapping
+                    if (!isMandatory) {
+                        if (isDefault || isVirtual) {
+                            cont('all', data);
+                        } else {
+                            cont('selected', data);
+                        }
+                    } else {
+                        if (isVirtual) {
+                            cont('invalid', data);
+                        } else {
+                            cont('selected', data);
+                        }
+                    }
+                });
+
+            return def.promise();
         }
 
     };
