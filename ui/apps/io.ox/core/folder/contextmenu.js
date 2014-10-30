@@ -140,7 +140,7 @@ define('io.ox/core/folder/contextmenu',
 
                 // only mail and infostore show hierarchies
                 if (/^(contacts|calendar|tasks)$/.test(baton.module)) return;
-                if (!api.can('create', baton.data)) return;
+                if (!api.can('create:folder', baton.data)) return;
 
                 addLink(this, {
                     action: 'add-subfolder',

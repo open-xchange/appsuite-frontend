@@ -269,24 +269,6 @@ define('io.ox/core/commons-folderview',
                 });
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     /**
