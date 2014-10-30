@@ -287,36 +287,16 @@ define('io.ox/tasks/api',
         }).then(function (obj) {
             task.id = obj.id;
             response = obj;
-            var cacheObj = _.copy(task, true),
-                cacheKey = api.cid({folder: cacheObj.folder_id,
-                                sort: api.options.requests.all.sort,
-                                order: api.options.requests.all.order});
-            cacheObj.id = obj.id;
+
             //all cache
-            return api.caches.all.get(cacheKey).then(function (cachevalue) {
-                if (cachevalue) {//only add if the key is there
-                    cachevalue = cachevalue.concat(cacheObj);
-                    return api.caches.all.add(cacheKey, cachevalue);
-                } else {//just leave it to the next all request, no need to do it here
-                    return $.when();
-                }
-            });
-        }).then(function () {
-            // add to cache
-            return $.when(
-                api.caches.get.add(task),
-                api.caches.list.merge(task).done(function (ok) {
-                    if (ok) {
-                        api.trigger('refresh.list');
-                    }
-                })
-           );
+            return api.caches.all.grepRemove(task.folder_id + api.DELIM);
         }).then(function () {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
             checkForNotifications(task, task, true);
             api.trigger('create', task);
+            api.trigger('refresh.all');
             return response;
         });
     };
