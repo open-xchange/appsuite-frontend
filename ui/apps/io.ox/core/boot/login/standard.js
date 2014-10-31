@@ -21,7 +21,7 @@ define('io.ox/core/boot/login/standard', [
 
     'use strict';
 
-    return function login(e) {
+    return function (e) {
 
         // stop unless iOS
         e.preventDefault();
@@ -44,27 +44,54 @@ define('io.ox/core/boot/login/standard', [
             return fail({ error: util.gt('Please enter your password.'), code: 'UI-0002' }, 'password');
         }
 
-        // login
-        session.login(
-            username,
-            password,
-            $('#io-ox-login-store-box').prop('checked'),
-            // temporary language for error messages
-            language.getCurrentLanguage(),
-            // permanent language change!?
-            language.getSelectedLanguage()
-        )
-        .done(function (data) {
-            // don't respond to submit any more
-            form.off('submit');
-            // store credentials
-            storeCredentials(form);
-            // success
-            restore();
-            ox.trigger('login:success', data);
-        })
-        .fail(fail);
+        login(username, password).then(
+            function success(data) {
+                // store credentials
+                if (!util.isAnonymous()) storeCredentials(form);
+                // clear URL hash
+                _.url.hash({ share: null, target: null, login_type: null });
+                // deep-link?
+                if (data.module && data.folder) {
+                    _.url.hash({ app: 'io.ox/' + data.module, folder: data.folder });
+                }
+                // don't respond to submit any more
+                form.off('submit');
+                // success
+                restore();
+                ox.trigger('login:success', data);
+            },
+            fail
+        );
     };
+
+    function login(username, password) {
+
+        if (util.isAnonymous()) {
+            return session.login({
+                action: 'anonymous',
+                username: username,
+                password: password,
+                store: $('#io-ox-login-store-box').prop('checked'),
+                // temporary language for error messages
+                language: language.getCurrentLanguage(),
+                // permanent language change!?
+                forceLanguage: language.getSelectedLanguage(),
+                // share-specific data
+                share: _.url.hash('share'),
+                target: _.url.hash('target')
+            });
+        } else {
+            return session.login({
+                username: username,
+                password: password,
+                store: $('#io-ox-login-store-box').prop('checked'),
+                // temporary language for error messages
+                language: language.getCurrentLanguage(),
+                // permanent language change!?
+                forceLanguage: language.getSelectedLanguage()
+            });
+        }
+    }
 
     function restore() {
         // stop being busy
@@ -87,7 +114,8 @@ define('io.ox/core/boot/login/standard', [
         // restore form
         restore();
         // reset focus
-        $('#io-ox-login-' + (_.isString(focus) ? focus : 'username')).focus().select();
+        var id = (_.isString(focus) && focus) || (util.isAnonymous() && 'password') || 'username';
+        $('#io-ox-login-' + id).focus().select();
         // event
         ox.trigger('login:fail', error);
     }

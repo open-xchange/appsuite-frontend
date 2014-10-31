@@ -65,6 +65,14 @@ define('io.ox/core/boot/util', [], function () {
             path = path.replace('[hostname]', window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + encodeURIComponent(ref) : '');
             _.url.redirect((hash ? path + glue + hash : path));
+        },
+
+        isGuest: function () {
+            return _.url.hash('login_type') === 'anonymous';
+        },
+
+        isAnonymous: function () {
+            return _.url.hash('login_type') === 'anonymous';
         }
     };
 

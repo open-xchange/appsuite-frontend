@@ -48,6 +48,9 @@ define('io.ox/core/boot/main', [
 
         useForm: function () {
 
+            // avoid multiple calls
+            this.useForm = $.noop;
+
             config.server().done(function serverConfigLoaded() {
 
                 // forceHTTPS
@@ -77,6 +80,10 @@ define('io.ox/core/boot/main', [
                     form();
                 });
             });
+        },
+
+        anonymous: function () {
+            this.useForm();
         },
 
         useToken: function () {

@@ -118,76 +118,78 @@ define('io.ox/core/session', [
 
             var pending = null;
 
-            return function (username, password, store, language, forceLanguage) {
+            return function (options) {
 
-                var def = $.Deferred(), multiple = [];
+                if (!ox.online) {
+                    // don't try when offline
+                    set({ session: 'offline', user: options.username }, options.language);
+                    return $.when({ session: ox.session, user: ox.user });
+                }
 
-                // online?
-                if (ox.online) {
-                    // pending?
-                    if (pending !== null) {
-                        return pending;
-                    } else {
-                        // mark as pending
-                        pending = def.always(function () {
-                            pending = null;
-                        });
-                        // POST request
-                        if (forceLanguage) {
-                            multiple.push({
-                                module: 'jslob',
-                                action: 'update',
-                                id: 'io.ox/core',
-                                data: {
-                                    // permanent language change
-                                    language: forceLanguage
-                                }
-                            });
-                        }
-                        http.POST({
-                            module: 'login',
-                            appendColumns: false,
-                            appendSession: false,
-                            processResponse: false,
-                            params: {
-                                action: 'login',
-                                name: username,
-                                password: password,
-                                // current browser language; required for proper error messages
-                                language: language || 'en_US',
-                                client: that.client(),
-                                version: that.version(),
-                                timeout: TIMEOUTS.LOGIN,
-                                multiple: JSON.stringify(multiple),
-                                rampup: true,
-                                rampupFor: 'open-xchange-appsuite'
-                            }
-                        })
-                        .done(function (data) {
+                // pending?
+                if (pending !== null) return pending;
+
+                var multiple = [], forceLanguage = options.forceLanguage;
+
+                if (forceLanguage) {
+                    // required for permanent language change
+                    multiple.push({
+                        module: 'jslob',
+                        action: 'update',
+                        id: 'io.ox/core',
+                        data: { language: forceLanguage }
+                    });
+                    delete options.forceLanguage;
+                }
+
+                var params = {
+                    action: options.action || 'login',
+                    name: options.username,
+                    password: options.password,
+                    // current browser language; required for proper error messages
+                    language: options.language || 'en_US',
+                    client: that.client(),
+                    version: that.version(),
+                    timeout: TIMEOUTS.LOGIN,
+                    multiple: JSON.stringify(multiple),
+                    rampup: true,
+                    rampupFor: 'open-xchange-appsuite'
+                };
+
+                // copy optional share-specific parameters to avoid undefineds
+                if (options.share) params.share = options.share;
+                if (options.target) params.target = options.target;
+
+                return (
+                    pending = http.POST({
+                        module: 'login',
+                        appendColumns: false,
+                        appendSession: false,
+                        processResponse: false,
+                        params: params
+                    })
+                    .then(
+                        function success(data) {
                             // store rampup data
                             ox.rampup = data.rampup || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
                             set(data, forceLanguage);
-                            if (store) {
-                                that.store().done(function () { def.resolve(data); });
+                            if (options.store) {
+                                return that.store().then(function () { return data; });
                             } else {
-                                def.resolve(data);
+                                return data;
                             }
-                        })
-                        .fail(function (response) {
-                            if (console && console.error) {
-                                console.error('Login failed!', response.error, response.error_desc || '');
-                            }
-                            def.reject(response);
-                        });
-                    }
-                } else {
-                    // offline
-                    set({ session: 'offline', user: username }, language);
-                    def.resolve({ session: ox.session, user: ox.user });
-                }
-                return def;
+                        },
+                        function fail(e) {
+                            if (ox.debug) console.error('Login failed!', e.error, e.error_desc || '');
+                            return e;
+                        }
+                    )
+                    .always(function () {
+                        pending = null;
+                    })
+                );
             };
         }()),
 

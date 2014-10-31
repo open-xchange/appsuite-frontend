@@ -26,9 +26,14 @@ define('io.ox/core/boot/form', [
 
     return function () {
 
-        var sc = ox.serverConfig, gt = util.gt;
+        var sc = ox.serverConfig, gt = util.gt, isGuest = util.isGuest();
 
         util.debug('Show form ...');
+
+        if (isGuest) {
+            // prefill
+            $('#io-ox-login-username').val(_.url.hash('share')).prop('readonly', true);
+        }
 
         language.render();
 
@@ -60,7 +65,8 @@ define('io.ox/core/boot/form', [
 
         // hide forgot password?
         var forgotPassword = _.url.hash('forgot-password') || sc.forgotPassword;
-        if (!forgotPassword) {
+        if (!forgotPassword || isGuest) {
+            // either not configured or guest user
             $('#io-ox-forgot-password').remove();
         } else {
             $('#io-ox-forgot-password').find('a').attr('href', forgotPassword);
@@ -101,7 +107,9 @@ define('io.ox/core/boot/form', [
                 // show login dialog
                 $('#io-ox-login-blocker').on('mousedown', false);
                 $('#io-ox-login-form').on('submit', login);
-                $('#io-ox-login-username').prop('disabled', false).focus().select();
+                $('#io-ox-login-username').prop('disabled', false);
+                // focus password or username
+                $(isGuest ? '#io-ox-login-password' : '#io-ox-login-username').focus().select();
             });
         });
     };
