@@ -14,7 +14,7 @@
     "jquery": "2.1.1",
     "underscore": "1.7.0",
     "mediaelement": "2.15.1",
-    "bootstrap": "3.2.0",
+    "bootstrap": "3.3.0",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#1cba48a2b711d4288f641a5a15e6508b8e3b2bde",
     "font-awesome": "4.2.0",
     "open-sans-fontface": "1.1.0",
@@ -28,11 +28,11 @@
     "requirejs": "2.1.15",
     "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#3c5d87c422d0f2eaada6216c30ce19028a6cdbe6",
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72",
-    "bootstrap-tokenfield": "https://github.com/sliptree/bootstrap-tokenfield.git#481c1b883707620bb02861e3f83891bcebc379cc",
-    "typeahead.js": "~0.10.5",
-    "mobiscroll": "https://github.com/acidb/mobiscroll.git#2.13.2"
+    "bootstrap-tokenfield": "0.12.1",
+    "typeahead.js": "0.10.5",
+    "mobiscroll": "2.13.2"
   },
   "resolutions": {
-    "bootstrap": "3.2.0"
+    "bootstrap": "3.3.0"
   }
 }
