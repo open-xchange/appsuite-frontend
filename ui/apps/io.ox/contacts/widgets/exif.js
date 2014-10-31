@@ -109,8 +109,7 @@ define('io.ox/contacts/widgets/exif', function () {
             numValues = file.getLongAt(entryOffset + 4, bigEnd),
             valueOffset = file.getLongAt(entryOffset + 8, bigEnd) + tiffStart,
             offset,
-            vals, val, n,
-            numerator, denominator;
+            vals, n;
 
         switch (type) {
         case 1:
@@ -158,12 +157,12 @@ define('io.ox/contacts/widgets/exif', function () {
             }
             break;
         case 5: // rational = two long values, first is numerator, second is denominator
-            if (iNumValues == 1) {
-                return oFile.getLongAt(iValueOffset, bBigEnd) / oFile.getLongAt(iValueOffset+4, bBigEnd);
+            if (numValues === 1) {
+                return file.getLongAt(valueOffset, bigEnd) / file.getLongAt(valueOffset + 4, bigEnd);
             } else {
                 var aVals = [];
-                for (var n=0;n<iNumValues;n++) {
-                    aVals[n] = oFile.getLongAt(iValueOffset + 8*n, bBigEnd) / oFile.getLongAt(iValueOffset+4 + 8*n, bBigEnd);
+                for (var n = 0; n < numValues; n++) {
+                    aVals[n] = file.getLongAt(valueOffset + 8 * n, bigEnd) / file.getLongAt(valueOffset + 4 + 8 * n, bigEnd);
                 }
                 return aVals;
             }
