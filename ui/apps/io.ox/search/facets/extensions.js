@@ -558,6 +558,9 @@ define('io.ox/search/facets/extensions',
                     )
                 );
 
+                // disable dropdown until menu is added (mobiles custom dropdown)
+                if (phone) { button.addClass('disabled'); }
+
                 // add 'all folders'
                 var link;
                 if (!baton.model.isMandatory('folder')) {
@@ -661,6 +664,9 @@ define('io.ox/search/facets/extensions',
                         if (value.custom && value.custom !== 'custom')
                             // use custom click handler
                             ext.point('io.ox/search/facets/facet-remove').invoke('draw', button, baton, value, facet, remove);
+
+                        // enable dropdown again
+                        if (phone) { button.removeClass('disabled'); }
 
                         // apply a11y
                         button.dropdown();
