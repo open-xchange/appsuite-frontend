@@ -448,6 +448,7 @@ define('io.ox/contacts/api', [
             )
             .then(function () {
                 api.trigger('refresh.list');
+                api.trigger('update:' + _.ecid(o));
                 api.trigger('update:image', { // TODO needs a switch for created by hand or by test
                     id: o.id,
                     folder: o.folder_id
