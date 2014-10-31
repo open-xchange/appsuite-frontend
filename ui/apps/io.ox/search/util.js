@@ -129,7 +129,9 @@ define('io.ox/search/util', [
         getFirstChoice: function (model) {
             var module = model.getModule(),
                 id = model.getFolder(),
-                def = $.Deferred();
+                def = $.Deferred(),
+                defaultfolder = (folderAPI.getDefaultFolder(module) || '').toString(),
+                isMandatory = model.isMandatory('folder');
 
             // infostore hack
             module = module === 'files' ? 'infostore' : module;
@@ -146,12 +148,14 @@ define('io.ox/search/util', [
                 types[type]();
             }
 
+            // be robust (mobile)
+            id = id || defaultfolder;
+
             folderAPI.get(id)
                 .then(function (data) {
                     data = data || {};
                     // conditions
-                    var isMandatory = model.isMandatory('folder'),
-                        isDefault = data.id === (folderAPI.getDefaultFolder(module) || '').toString(),
+                    var isDefault = data.id === defaultfolder,
                         isVirtual = module === 'mail' && !folderAPI.can('read', data);
                     // conditions mapping
                     if (!isMandatory) {

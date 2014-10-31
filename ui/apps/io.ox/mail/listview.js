@@ -285,6 +285,8 @@ define('io.ox/mail/listview', [
 
         lookForUnseenMessage: function () {
 
+            if (!this.collection.length) return;
+
             // let's take the first folder_id we see
             var folder_id = this.collection.at(0).get('folder_id');
 

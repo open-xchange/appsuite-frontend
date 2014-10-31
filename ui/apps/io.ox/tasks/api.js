@@ -290,8 +290,11 @@ define('io.ox/tasks/api', [
             task.id = obj.id;
             response = obj;
 
-            //all cache
-            return api.caches.all.grepRemove(task.folder_id + api.DELIM);
+            return $.when(
+                api.caches.all.grepRemove(task.folder_id + api.DELIM),
+                api.caches.get.add(task),
+                api.caches.list.merge(task)
+           );
         }).then(function () {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
@@ -318,14 +321,6 @@ define('io.ox/tasks/api', [
             move = false;
 
         delete task.tempAttachmentIndicator;
-
-        //check if oldschool argument list was used (timestamp, taskId, modifications, folder) convert and give notice
-        if (arguments.length > 2) {
-            console.log('Using old api signature.');
-            task = arguments[2];
-            task.folder_id = arguments[3];
-            task.id = arguments[1];
-        }
 
         //repair broken folder attribute
         if (task.folder) {

@@ -237,6 +237,8 @@ define('io.ox/contacts/main', [
             // add label template
             grid.addLabelTemplate({
                 build: function () {
+                    //need to apply this here or label is not affected by correct css when height is calculated
+                    this.addClass('vgrid-label');
                 },
                 set: function (data) {
                     this.text(_.noI18n(getLabel(data)));

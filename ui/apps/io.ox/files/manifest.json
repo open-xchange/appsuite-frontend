@@ -7,5 +7,9 @@
     "requires": "infostore",
     "refreshable": true,
     "index": 1000,
-    "advancedMode": true
+    "advancedMode": true,
+    "help": {
+        "base": "help",
+        "target": "ox.appsuite.user.chap.files.html"
+    }
 }
