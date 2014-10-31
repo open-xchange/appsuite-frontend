@@ -23,7 +23,7 @@ define('io.ox/participants/model', [
     'use strict';
     // TODO: Bulk Loading
 
-    var ParticipantModel = Backbone.Model.extend({
+    var Model = Backbone.Model.extend({
 
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
@@ -182,19 +182,24 @@ define('io.ox/participants/model', [
         getDisplayName: function () {
             return util.getMailFullName(this.toJSON());
         },
+
         getEmail: function () {
             return util.getMail(this.toJSON());
         },
+
         getImage: function () {
             console.warn('deprecated');
         },
+
         markAsUnremovable: function () {
             this.set('ui_removable', false);
         }
 
     });
 
-    var ParticipantsCollection = Backbone.Collection.extend({
+    var Collection = Backbone.Collection.extend({
+
+        model: Model,
 
         initialize: function () {
             var self = this;
@@ -213,9 +218,7 @@ define('io.ox/participants/model', [
             });
         },
 
-        model: ParticipantModel,
-
-        addUniquely: function (models) {
+        addUniquely: function (models, opt) {
             var self = this;
             if (!_.isArray(models)) {
                 models = [models];
@@ -226,13 +229,13 @@ define('io.ox/participants/model', [
                     toAdd.push(participant);
                 }
             });
-            this.add(toAdd);
+            return this.add(toAdd, opt);
         }
     });
 
     return {
-        Participant: ParticipantModel,
-        Participants: ParticipantsCollection
+        Participant: Model,
+        Participants: Collection
     };
 
 });
