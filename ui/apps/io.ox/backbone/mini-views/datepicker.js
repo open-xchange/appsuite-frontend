@@ -128,8 +128,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                                     return pd.getTime();
                                 });
                                 return items;
-                            },
-                            autocompleteBehaviour: false
+                            }
                         };
 
                         self.nodes.timeField.combobox(comboboxHours);
