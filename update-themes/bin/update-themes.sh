@@ -25,8 +25,5 @@ $NODEJS "share/update-themes/bin/update-themes" \
 || echo 'failed! If a subsequent theme update finishes without errors,' \
         'you can ignore the above error message.'
 
-[ -d "share/update-themes.d" ] && find "share/update-themes.d" -type f -executable -exec {} +
-
-# need exit code 0 or other scripts might break - we don't want that
-exit 0
+[ -d "share/update-themes.d" ] && find "share/update-themes.d" -type f -executable -exec {} + || exit 0
 
