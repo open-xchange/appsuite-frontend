@@ -1013,7 +1013,7 @@ define('io.ox/mail/write/main',
                 getMail(data).then(
                     function success(data) {
                         data.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                        app.setMail({ data: data, mode: 'compose', initial: false, format: data.format })
+                        app.setMail({ data: data, mode: 'compose', initial: false, format: (data.content_type === 'text/plain' ? 'text' : 'html') })
                         .done(function () {
                             app.setFrom(data || {});
                             win.idle();
