@@ -39,10 +39,10 @@ define('io.ox/portal/widgets',
 
         var widgets = {},
             userValues = settings.get('settings' + widgetSet, {}),
-            userWidgets = settings.get('widgets/user', {});
+            userWidgets = settings.get('widgets/user');
 
         // Load the users widgets
-        _(userWidgets).each(function (widgetDef, id) {
+        _(userWidgets || {}).each(function (widgetDef, id) {
             widgets[id] = _.extend({}, widgetDef, {userWidget: true});
         });
 
@@ -77,8 +77,8 @@ define('io.ox/portal/widgets',
             }
         });
 
-        if (_.isEmpty(widgets) && _.isEmpty(userWidgets)) {
-            // Fallback. No widgets configured and no ones saved previously.
+        // no widgets configured (first start)
+        if (_.isEmpty(widgets) && !userWidgets) {
 
             widgets = {
                 mail_0: {
