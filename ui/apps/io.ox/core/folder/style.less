@@ -88,6 +88,23 @@
         }
     }
 
+    &.visible-selection-smartphone {
+        // visually ignore hover/focus/blur
+        .selected > .folder-node {
+            // using &.visible-selection .selectable:focus > .folder-node
+            background-color: @foldertree-selected-focus-background;
+            * {
+                color: @foldertree-focused-label-color;
+            }
+            .folder-counter {
+                color: rgba(255, 255, 255, 0.50);
+            }
+            .folder-options {
+                background-color: rgba(0, 0, 0, 0.20);
+            }
+        }
+    }
+
     .folder-node {
 
         .folder-arrow {

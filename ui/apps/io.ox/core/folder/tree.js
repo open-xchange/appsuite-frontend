@@ -40,7 +40,9 @@ define('io.ox/core/folder/tree',
                 customize: $.noop,
                 disable: $.noop,
                 icons: settings.get('features/folderIcons', false),
-                root: 'default0/INBOX'
+                root: 'default0/INBOX',
+                highlight: _.device('!smartphone'),
+                highlightclass: 'visible-selection'
             }, options);
 
             this.all = !!options.all;
@@ -57,7 +59,7 @@ define('io.ox/core/folder/tree',
             this.$dropdownMenu = $();
             this.options = options;
 
-            this.$el.toggleClass('visible-selection', _.device('!smartphone'));
+            this.$el.toggleClass(options.highlightclass, !!options.highlight);
             this.$el.append(this.$container);
 
             this.selection = new Selection(this);
