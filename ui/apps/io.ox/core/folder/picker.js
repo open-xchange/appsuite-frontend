@@ -115,7 +115,10 @@ define('io.ox/core/folder/picker',
             open: ['1'].concat(open),
             root: o.root,
             customize: o.customize,
-            disable: o.disable
+            disable: o.disable,
+            // highlight current selection
+            highlight: true,
+            highlightclass: _.device('smartphone') ? 'visible-selection-smartphone' : 'visible-selection'
         });
 
         if (o.settings && _.isString(o.persistent)) {
