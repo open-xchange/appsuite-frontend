@@ -63,7 +63,7 @@ define('io.ox/files/settings/pane', [
                     $('<div>').addClass('row').append(
                         $('<div>').addClass('col-sm-8').append(
                             $('<div>').addClass('checkbox').append(
-                                $('<label>').addClass('control-label').text(gt('Show hidden files and folders')).append(
+                                $('<label>').addClass('control-label').text(gt('Show hidden files and folders')).prepend(
                                     new mini.CheckboxView({ name: 'showHidden', model: model }).render().$el
                                 )
                             )
