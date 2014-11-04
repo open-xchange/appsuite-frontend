@@ -1834,7 +1834,7 @@ define('io.ox/mail/api',
         }
 
         return function (state) {
-            if (_.device('small')) return;
+            if (_.device('smartphone')) return;
             if (state === true) blink(); else original();
         };
 
