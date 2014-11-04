@@ -42,21 +42,25 @@ define('io.ox/core/extPatterns/links', [
             drawDefault = function (baton) {
                 var prio = _.device('smartphone') ? self.mobile : self.prio;
                 var icons = self.icon && baton.options.icons !== false;
+                var title = self.title || self.label;
                 var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
                         'role': 'menuitem',
-                        'title': self.title || self.label || '',
                         'data-section': self.section || 'default',
                         'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
                         'data-ref': self.ref
                     });
-                // icons are prefered over labels
-                a.append(
-                    (icons && prio === 'hi' && $('<i>').addClass(self.icon)) ||
-                    (self.label && $.txt(self.label)) ||
-                    $()
-                );
+                // add icon or text? (icons are prefered over labels)
+                if (icons && prio === 'hi') {
+                    // add icon and title attribut
+                    a.append($('<i>').addClass(self.icon));
+                    a.attr('title', self.title || self.label || '');
+                } else if (self.label) {
+                    // add text. add title unless it matches content
+                    a.append($.txt(self.label));
+                    if (self.label !== title) a.attr('title', title);
+                }
                 // has icon?
                 if (icons) a.addClass('no-underline');
                 // use tooltip?
