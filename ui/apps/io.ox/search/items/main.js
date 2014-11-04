@@ -29,7 +29,7 @@ define('io.ox/search/items/main', [
                 collection.trigger('needs-redraw');
             });
 
-            return _.extend({}, collection, {
+            return _.extend(collection, {
                 render: view.render,
                 empty: function () {
                     delete this.timestamp;
