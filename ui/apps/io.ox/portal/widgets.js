@@ -87,6 +87,12 @@ define('io.ox/portal/widgets',
                     userWidget: true,
                     index: 1
                 },
+                birthdays_0: {
+                    plugin: 'plugins/portal/birthdays/register',
+                    color: 'lightgreen',
+                    userWidget: true,
+                    index: 4
+                },
                 calendar_0: {
                     plugin: 'plugins/portal/calendar/register',
                     color: 'red',
@@ -99,8 +105,8 @@ define('io.ox/portal/widgets',
                     userWidget: true,
                     index: 3
                 },
-                birthdays_0: {
-                    plugin: 'plugins/portal/birthdays/register',
+                myfiles_0: {
+                    plugin: 'plugins/portal/recentfiles/register',
                     color: 'lightgreen',
                     userWidget: true,
                     index: 4
@@ -109,19 +115,19 @@ define('io.ox/portal/widgets',
                     plugin: 'plugins/portal/facebook/register',
                     color: 'blue',
                     userWidget: true,
-                    index: 4
+                    index: 5
                 },
                 twitter_0: {
                     plugin: 'plugins/portal/twitter/register',
                     color: 'pink',
                     userWidget: true,
-                    index: 5
+                    index: 6
                 },
                 linkedin_0: {
                     plugin: 'plugins/portal/linkedin/register',
                     color: 'lightblue',
                     userWidget: true,
-                    index: 6
+                    index: 7
                 }
             };
 
