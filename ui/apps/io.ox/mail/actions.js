@@ -257,7 +257,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/print', {
         requires: function (e) {
             // not on smartphones
-            if (_.device('small')) return false;
+            if (_.device('smartphone')) return false;
             // need some and either read access or being embedded
             return e.collection.has('some') && (e.collection.has('read') || !e.collection.has('toplevel'));
         },

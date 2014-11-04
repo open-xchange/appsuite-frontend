@@ -187,7 +187,7 @@ define('io.ox/mail/mobile-toolbar-actions',
         id: 'toolbar-mobile',
         index: 10100,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             app.updateToolbar = updateToolbar;
         }
     });
@@ -196,7 +196,7 @@ define('io.ox/mail/mobile-toolbar-actions',
         id: 'update-toolbar-mobile',
         index: 10300,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {
@@ -217,7 +217,7 @@ define('io.ox/mail/mobile-toolbar-actions',
         id: 'change-mode-toolbar-mobile',
         index: 10400,
         setup: function (app) {
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
             // if multiselect is triggered, show secondary toolbar with other options based on selection
             app.props.on('change:checkboxes', function (model, state) {
                 var page = app.pages.getCurrentPage();

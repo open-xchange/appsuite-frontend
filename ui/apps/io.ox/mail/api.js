@@ -1734,7 +1734,7 @@ define('io.ox/mail/api',
      * @return {undefined}
      */
     api.newMailTitle = function (state) {
-        if (_.device('!small')) {
+        if (_.device('!smartphone')) {
             if (state === true) {//show new mail title
                 document.fixedtitle = true;
                 document.title = gt('New Mail');
