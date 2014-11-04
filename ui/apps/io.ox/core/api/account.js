@@ -128,34 +128,13 @@ define('io.ox/core/api/account',
      * @return {deferred} returns array or null
      */
     api.getUnifiedMailboxName = function () {
-        var def = $.Deferred();
-        require(['io.ox/core/folder/api'], function (folderAPI) {
-            return $.when(
-                folderAPI.list('1'),
-                api.all()
-            ).then(function (folders, accounts) {
-                var mailFolders, mailAccounts, diff;
-                mailFolders = _(folders).chain()
-                    .filter(function (folder) { return folder.id.match(/^default(\d+)/);  })
-                    .map(function (folder) { return parseInt(folder.id.match(/^default(\d+)/)[1], 10); })
-                    .uniq().value();
-                mailAccounts = _(accounts).map(function (account) { return account.id; });
-                diff = _.difference(mailFolders, mailAccounts);
-
-                if (diff.length > 0) {
-                    return def.resolve('default' + diff[0]);
-                }
-                return def.resolve(null);
-            });
+        return this.getUnifiedInbox().then(function (inbox) {
+            return inbox === null ? null : inbox.split(separator)[0];
         });
-        return def;
     };
 
     api.getUnifiedInbox = function () {
-        return this.getUnifiedMailboxName().then(function (id) {
-            if (id === null) return null;
-            return id + separator + 'INBOX';
-        });
+        return $.when(settings.get('unifiedInboxIdentifier', null));
     };
 
     api.getInbox = function () {
