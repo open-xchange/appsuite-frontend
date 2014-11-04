@@ -419,11 +419,15 @@ define('io.ox/search/facets/extensions', [
                         WILDCARD = '*';
                     // construct facet custom value
                     _.each(nodes, function (node) {
-                        var value = $(node).val();
+                        node = $(node);
+                        var value = node.val(),
+                            type = node.attr('name');
 
                         if (value !== '') {
                             // standard date format
                             value = (dateAPI.Local.parse(value, dateAPI.DATE));
+                            // use 23:59:59 for end date
+                            value = type === 'start' ? value : value.setHours(0, 0, 0, 0).add(dateAPI.DAY - 1);
                         } else {
                             // use wildcard
                             value = value !== '' ? value : WILDCARD;

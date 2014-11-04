@@ -69,6 +69,11 @@ define('io.ox/mail/listview', [
             draw: extensions.unreadClass
         },
         {
+            id: 'deleted',
+            index: 120,
+            draw: extensions.deleted
+        },
+        {
             id: 'col1',
             index: 100,
             draw: function (baton) {
