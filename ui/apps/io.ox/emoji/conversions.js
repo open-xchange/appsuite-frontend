@@ -219,7 +219,8 @@ define('io.ox/emoji/conversions',
         '\ufb73': '\ud83c\udfa2',
         '\uf764': '\ud83c\udfa1',
         '\ufba8': '\ud83c\udfed',
-        '\ufbaa': '\u0000', //FIXME
+        //FIXME
+        '\ufbaa': '\u0000',
         //PUA encoding 0xe50a, no unified version
         //see [1](http://www.unicode.org/~scherer/emoji4unicode/snapshot/full.html#e-4C5)
         '\ufba9': '\ud83d\uddfc',
