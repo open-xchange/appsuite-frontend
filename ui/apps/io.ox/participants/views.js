@@ -180,7 +180,8 @@ define('io.ox/participants/views',
         },
 
         fnKey: function (e) {
-            if (e.which === 46) this.onRemove(e); // DEL
+            // DEL
+            if (e.which === 46) this.onRemove(e);
         },
 
         onRemove: function (e) {
@@ -210,7 +211,8 @@ define('io.ox/participants/views',
             // bring organizer up
             this.collection.each(function (participant) {
                 if (participant.get('id') === self.options.baton.model.get('organizerId')) {
-                    self.nodes[0] = self.createParticipantNode(participant); // 0 is reserved for the organizer
+                    // 0 is reserved for the organizer
+                    self.nodes[0] = self.createParticipantNode(participant);
                 } else {
                     self.nodes[counter] = self.createParticipantNode(participant);
                     counter++;

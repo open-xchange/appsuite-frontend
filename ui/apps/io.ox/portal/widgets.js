@@ -22,8 +22,8 @@ define('io.ox/portal/widgets',
 
     'use strict';
 
-    // use for temporary hacks
-    var DEV_PLUGINS = []; // ['plugins/portal/helloworld/register'];
+    // for temporary hacks use: ['plugins/portal/helloworld/register']
+    var DEV_PLUGINS = [];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -289,7 +289,8 @@ define('io.ox/portal/widgets',
                 enabled: options.enabled,
                 inverse: options.inverse,
                 id: id,
-                index: 0, // otherwise not visible
+                // otherwise not visible
+                index: 0,
                 plugin: this.getPluginByType(options.plugin),
                 props: options.props,
                 type: type,
@@ -448,7 +449,8 @@ define('io.ox/portal/widgets',
     collection
         .reset(api.getSettingsSorted())
         .on('change', _.debounce(function (model) {
-            widgets[model.get('id')] = model.attributes;//update widgets object
+            //update widgets object
+            widgets[model.get('id')] = model.attributes;
             settings.set('widgets/user', api.toJSON()).set('settings' + widgetSet, api.extraSettingsToJSON()).saveAndYell();
             // don’t handle positive case here, since this is called quite often
         }, 100))
