@@ -708,6 +708,4 @@ define('io.ox/tasks/edit/view-template',
 
         }
     });
-
-    return null; //just used to clean up the view class
 });
