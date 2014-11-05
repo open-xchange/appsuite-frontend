@@ -429,12 +429,12 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                         switch (e.which) {
                         case 38:
-                            if (index > 0) { // up
+                            if (index > 0) {
                                 keyHandle('up');
                             }
                             break;
                         case 40:
-                            if (index < items.length) { // down
+                            if (index < items.length) {
                                 keyHandle('down');
                             }
                             break;

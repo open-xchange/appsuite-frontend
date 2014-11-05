@@ -1036,8 +1036,7 @@ define('io.ox/mail/write/main',
          * Get mail
          */
         app.getMail = function () {
-            var // get relevant fields
-                fields = view.form
+            var fields = view.form
                     .find(':input[name]')
                     .filter('textarea, [type=text], [type=hidden], [type=radio]:checked, [type=checkbox]:checked'),
                 // get raw data

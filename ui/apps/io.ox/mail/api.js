@@ -1952,7 +1952,6 @@ define('io.ox/mail/api',
     };
 
     // collection loader
-
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
         getQueryParams: function (params) {

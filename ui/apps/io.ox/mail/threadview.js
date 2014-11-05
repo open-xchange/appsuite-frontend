@@ -480,7 +480,6 @@ define('io.ox/mail/threadview',
         },
     });
 
-
     return {
         Desktop: ThreadView,
         Mobile: MobileThreadView
