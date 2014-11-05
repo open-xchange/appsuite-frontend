@@ -114,11 +114,6 @@ define('io.ox/mail/settings/pane',
             this.addClass('io-ox-mail-settings');
             mailViewSettings = new MailSettingsView({model: mailSettings});
 
-            // var holder = $('<div>'),
-            //     pane = $('<div class="io-ox-mail-settings">');
-
-            // this.append(holder.append(pane.append(mailViewSettings.render().$el)));
-
             this.append(mailViewSettings.render().$el);
 
             if (Modernizr.touch) { // See Bug 24802

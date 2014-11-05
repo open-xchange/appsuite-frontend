@@ -21,17 +21,6 @@ define('io.ox/mail/autoforward/settings/model',
 
     'use strict';
 
-    // function calculatePosition() {
-    //     api.getRules('vacation').done(function (data) {
-    //         debugger;
-    //         if (_.isEmpty(data)) {
-    //             return 0;
-    //         } else {
-    //             return 1;
-    //         }
-    //     });
-    // }
-
     function providePreparedData(attributes) {
         if (!attributes.forwardmail) {
             return {};
