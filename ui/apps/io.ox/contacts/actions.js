@@ -330,9 +330,6 @@ define('io.ox/contacts/actions',
                     resolvedContacts = _.chain(resolvedContacts).map(mapContact).flatten(true).filter(filterContact).value();
 
                     participants = participants.concat(resolvedContacts);
-//                    participants = _.uniq(participants, false, function (single) {
-//                        return single.id;
-//                    });
 
                     require(['io.ox/calendar/edit/main'], function (m) {
                         m.getApp().launch().done(function () {

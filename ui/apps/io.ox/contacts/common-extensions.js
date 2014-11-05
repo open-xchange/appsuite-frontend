@@ -44,7 +44,6 @@ define('io.ox/contacts/common-extensions',
             );
         }
 
-
     };
 
     return extensions;

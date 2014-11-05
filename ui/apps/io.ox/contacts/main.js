@@ -400,71 +400,8 @@ define('io.ox/contacts/main',
         },
 
         'swipe-mobile': function () {
-            // helper to remove button from grid
-
-            /*var removeButton = function () {
-                if (showSwipeButton) {
-                    var g = grid.getContainer();
-                    $('.swipeDelete', g).remove();
-                    showSwipeButton = false;
-                }
-            };
-
-            app.grid.selection.on('change', removeButton);
-
-            app.grid.selection.on('change', function () {
-                if (showSwipeButton) {
-                    removeButton();
-                }
-            });
-
-            ext.point('io.ox/contacts/swipeDelete').extend({
-                index: 666,
-                id: 'deleteButton',
-                draw: function (baton) {
-                    // remove old buttons first
-                    if (showSwipeButton) {
-                        removeButton();
-                    }
-                    this.append(
-                        $('<div class="mail cell-button swipeDelete fadein fast">')
-                            .text(gt('Delete'))
-                            .on('mousedown', function (e) {
-                                // we have to use mousedown as the selection listens to this, too
-                                // otherwise we are to late to get the event
-                                e.stopImmediatePropagation();
-                            }).on('tap', function (e) {
-                                e.preventDefault();
-                                removeButton();
-                                showSwipeButton = false;
-                                actions.invoke('io.ox/contacts/actions/delete', null, baton);
-                            })
-                    );
-                    showSwipeButton = true;
-                }
-            });
-
-            // swipe handler
-            var swipeRightHandler = function (e, id, cell) {
-                var obj = _.cid(id);
-
-                if (hasDeletePermission === undefined) {
-                    folderAPI.get({folder: obj.folder_id, cache: true}).done(function (data) {
-                        if (folderAPI.can('delete', data)) {
-                            hasDeletePermission = true;
-                            api.getList([obj]).done(function (list) {
-                                ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
-                            });
-                        }
-                    });
-                } else if (hasDeletePermission) {
-                    api.getList([obj]).done(function (list) {
-                        ext.point('io.ox/contacts/swipeDelete').invoke('draw', cell, list[0]);
-                    });
-                }
-            };
-            */
-
+            // introduced with cb6b821f33c07a0a47711f639819b9d6c65d960f but does not contain any executable code
+            // TODO: remove property in case it's useless
         },
 
         'show-contact': function (app) {
