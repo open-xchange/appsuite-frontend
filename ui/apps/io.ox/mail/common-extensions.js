@@ -112,7 +112,8 @@ define('io.ox/mail/common-extensions',
         flag: function (baton) {
 
             var color = baton.data.color_label;
-            if (color <= 0) return; // 0 and a buggy -1
+            // 0 and a buggy -1
+            if (color <= 0) return;
 
             this.append(
                 $('<i class="flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')

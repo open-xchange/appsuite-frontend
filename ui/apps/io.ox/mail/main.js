@@ -686,7 +686,8 @@ define('io.ox/mail/main',
                     resetRight('selection-one preview-visible');
                     app.showMail(list[0]);
                     return;
-                } else if (app.props.get('layout') === 'list' && type === 'one') {//don't call show mail (an in visible detailview would be drawn which marks it as read)
+                } else if (app.props.get('layout') === 'list' && type === 'one') {
+                    //don't call show mail (an in visible detailview would be drawn which marks it as read)
                     resetRight('selection-one');
                     return;
                 }
@@ -802,7 +803,8 @@ define('io.ox/mail/main',
             if (_.device('smartphone')) return;
 
             app.listView.on('first-reset', function () {
-                _.defer(function () { // defer to have a visible window
+                // defer to have a visible window
+                _.defer(function () {
                     app.listView.collection.find(function (model, index) {
                         if (!util.isUnseen(model.get('flags'))) {
                             app.listView.selection.select(index);
@@ -871,7 +873,8 @@ define('io.ox/mail/main',
          */
         'before-delete': function (app) {
 
-            if (_.device('smartphone')) return; // fixes scrolling issue on mobiles during delete
+            // fixes scrolling issue on mobiles during delete
+            if (_.device('smartphone')) return;
 
             function isSingleThreadMessage(ids, selection) {
                 if (ids.length !== 1) return false;

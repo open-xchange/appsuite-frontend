@@ -355,7 +355,8 @@
 
     .list-item-content {
 
-        line-height: @item-line-height; // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
+        // need explicit line-height to avoid flicker base on icon height + bold letters need 21px
+        line-height: @item-line-height;
         .ellipsis();
 
         i {
@@ -876,7 +877,8 @@ textarea.inplace-editor {
         padding: 20px;
         display: table;
         width: 100%;
-        min-height: 100%; // to make sure the quick-reply field can scroll out of viewport
+        // to make sure the quick-reply field can scroll out of viewport
+        min-height: 100%;
 
         .mail-detail {
             background-color: white;
@@ -1212,7 +1214,8 @@ textarea.inplace-editor {
 
     article {
         padding: 19px;
-        border: 1px solid white; // to work with outline
+        // to work with outline
+        border: 1px solid white;
         display: table;
         background-color: white;
     }
@@ -1229,26 +1232,29 @@ textarea.inplace-editor {
         .fontWeight(400);
         font-size: 14px;
         line-height: 20px;
-        /* max-width: 1000px; */ /* Max-width does not work here, see Bug #24505 */
+        // Max-width does not work here, see Bug #24505
+        // max-width: 1000px;
         width: 100%;
         cursor: auto;
-        display: block; /* for large images (see bug #22756 and #25033) */
+        // for large images (see bug #22756 and #25033)
+        display: block;
         position: relative;
-        overflow: hidden; /* helper for absolutely positioned elements */
+        // helper for absolutely positioned elements
+        overflow: hidden;
 
         * {
-            /* fixes https://bugs.open-xchange.com/show_bug.cgi?id=25737 */
+            // see Bug 25737 - [L3] HTML mail with pasted text from MS Word not displayed correctly (cut off at upper edge)
             line-height: 1.4em;
             box-sizing: content-box;
         }
 
-        /* TODO: remove / temp. fix for bootstrap */
+        // TODO: remove / temp. fix for bootstrap
         [class*="span"] {
             float: none;
             margin-left: 0;
         }
 
-        /* TODO: remove / temp. fix for sanitized HTML */
+        // TODO: remove / temp. fix for sanitized HTML
         padding: 0;
         & > div > [class$="-content"] { padding: 0; }
 
@@ -1274,14 +1280,16 @@ textarea.inplace-editor {
         h6 { font-size: 0.67 * @base; }
 
         a {
-            word-break: break-word; // fix long links
+            // fix long links
+            word-break: break-word;
             text-decoration: none;
             color: inherit;
             &:hover { color: inherit; }
         }
 
         a[href] {
-            color: #007dbc; // not @linkColor!
+            // not @linkColor!
+            color: #007dbc;
             text-decoration: underline;
             &:hover { color: #08c; }
         }
@@ -1331,7 +1339,8 @@ textarea.inplace-editor {
         }
 
         pre {
-            word-break: keep-all; // for firefox
+            // for firefox
+            word-break: keep-all;
             word-break: initial;
             white-space: pre-wrap;
             background-color: transparent;
@@ -1346,7 +1355,7 @@ textarea.inplace-editor {
 
         ul, ol { padding-left: 25px; }
 
-        /* Fix for Bug 24995 */
+        // see Bug 24995 - Strange boxes shown for invitation mails
         .calendar-detail .label {
             display: block;
             text-shadow: none;

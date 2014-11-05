@@ -84,7 +84,8 @@ define('io.ox/mail/write/inline-images',
     return {
         api: api,
         show: function () {
-            var noBusy = (_.browser.IE && _.browser.IE < 10),//IE9 upload fails if window becomes busy
+            //IE9 upload fails if window becomes busy
+            var noBusy = (_.browser.IE && _.browser.IE < 10),
                 dialog = new dialogs.ModalDialog({async: true, noBusy: noBusy}),
                 baton =  new ext.Baton({$: {}}),
                 def = $.Deferred(),
@@ -100,7 +101,8 @@ define('io.ox/mail/write/inline-images',
 
                 ext.point(POINT + 'buttons').invoke('draw', this, baton);
 
-                this.getPopup().addClass('inline-images').parent().css('z-index', 999999); // Get high!;
+                // Get high!;
+                this.getPopup().addClass('inline-images').parent().css('z-index', 999999);
             });
             dialog.on('insert', function () {
 

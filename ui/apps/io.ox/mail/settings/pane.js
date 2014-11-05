@@ -116,11 +116,13 @@ define('io.ox/mail/settings/pane',
 
             this.append(mailViewSettings.render().$el);
 
-            if (Modernizr.touch) { // See Bug 24802
+            if (Modernizr.touch) {
+                // see Bug 24802 - iPad: Cannot write email
                 this.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
             }
 
-            if (!capabilities.has('emoji')) { // see Bug 25537
+            if (!capabilities.has('emoji')) {
+                // see Bug 25537 - Emotes not working as advertised
                 this.find('[name="displayEmoticons"]').parent().parent().hide();
             }
         },

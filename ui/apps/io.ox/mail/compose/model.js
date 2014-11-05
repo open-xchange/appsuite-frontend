@@ -142,7 +142,8 @@ define('io.ox/mail/compose/model', [
             // sync mail editor content to model
             this.trigger('needsync');
             if (flag === true) {
-                this._shadowAttributes = {}; // always dirty this way
+                // always dirty this way
+                this._shadowAttributes = {};
             } else if (flag === false) {
                 this.updateShadow();
             } else {

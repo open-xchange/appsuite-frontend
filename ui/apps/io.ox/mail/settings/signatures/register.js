@@ -87,7 +87,8 @@ define('io.ox/mail/settings/signatures/register',
         }
 
         function validateField(field, target) {
-            if ($.trim(field.val()) === '') {//trim here because backend does not allow names containing only spaces
+            if ($.trim(field.val()) === '') {
+                //trim here because backend does not allow names containing only spaces
                 field.addClass('error');
                 target.text(gt('Please enter a valid name'));
             } else {
@@ -187,8 +188,10 @@ define('io.ox/mail/settings/signatures/register',
 
                 var $row = $('<tr>').addClass('sig-row').appendTo($container);
                 var preview = (classicSignature.signature_text || '')
-                                .replace(/\s\s+/g, ' ') // remove subsequent white-space
-                                .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
+                                // remove subsequent white-space
+                                .replace(/\s\s+/g, ' ')
+                                // reduce special char sequences
+                                .replace(/(\W\W\W)\W+/g, '$1 ');
 
                 $row.append(
                     $('<td>').css({width: '10%', textAlign: 'center'}).append(

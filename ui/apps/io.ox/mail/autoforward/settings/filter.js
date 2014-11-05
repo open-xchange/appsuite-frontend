@@ -40,8 +40,10 @@ define('io.ox/mail/autoforward/settings/filter',
                     $node.append(autoForward.render().$el);
                     $node.one('dispose', function () {
                         if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
-                            $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
-                            if (!_.isEmpty(autoForward.model.changed)) {//unsaved changes (grid changed while input field was still selected with unsaved changes)
+                            //make the active element lose focus to get the changes of the field a user was editing
+                            $(document.activeElement).blur();
+                            //unsaved changes (grid changed while input field was still selected with unsaved changes)
+                            if (!_.isEmpty(autoForward.model.changed)) {
                                 autoForward.model.save();
                             }
                         }
@@ -90,8 +92,10 @@ define('io.ox/mail/autoforward/settings/filter',
                     $node.append(autoForward.render().$el);
                     $node.one('dispose', function () {
                         if (_.isEmpty(autoForward.model.changed) && $(document.activeElement).is(':input')) {
-                            $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
-                            if (!_.isEmpty(autoForward.model.changed)) {//unsaved changes (grid changed while input field was still selected with unsaved changes)
+                            //make the active element lose focus to get the changes of the field a user was editing
+                            $(document.activeElement).blur();
+                            //unsaved changes (grid changed while input field was still selected with unsaved changes)
+                            if (!_.isEmpty(autoForward.model.changed)) {
                                 autoForward.model.save();
                             }
                         }

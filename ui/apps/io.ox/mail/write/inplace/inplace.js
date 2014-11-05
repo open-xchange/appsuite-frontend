@@ -103,7 +103,8 @@ define('io.ox/mail/write/inplace/inplace',
                 async: true,
                 container: options.container || $('body'),
                 easyOut: false,
-                width: 572 // 572 fits input-xxlarge,
+                // 572 fits input-xxlarge,
+                width: 572
             });
 
             // show dialog instantly

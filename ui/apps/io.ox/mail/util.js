@@ -220,8 +220,7 @@ define('io.ox/mail/util',
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
                 // get recipient
                 recipient = this.parseRecipient(match[0]);
-                //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly
-                //look Bug 23983
+                //stupid workarround so exchange draft emails without proper mail adresses get displayed correctly (Bug 23983)
                 var msExchange = recipient[0] === recipient[1];
                 // add to list? (stupid check but avoids trash)
                 if (msExchange || recipient[1].indexOf('@') > -1 || that.getChannel(recipient[1]) === 'phone') {
@@ -330,10 +329,12 @@ define('io.ox/mail/util',
             var list = _(data[field])
                 .chain()
                 .map(function (item) {
-                    return that.getDisplayName(item); // reduce to display name
+                    // reduce to display name
+                    return that.getDisplayName(item);
                 })
                 .filter(function (name) {
-                    return name !== ''; // skip empty names
+                    // skip empty names
+                    return name !== '';
                 })
                 .value();
 
@@ -625,7 +626,8 @@ define('io.ox/mail/util',
                             id: obj.id,
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
-                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}), // remove consecutive white-space
+                                      // remove consecutive white-space
+                                      _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}),
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,

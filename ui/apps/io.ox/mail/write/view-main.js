@@ -52,7 +52,8 @@ define('io.ox/mail/write/view-main',
     ext.point(POINT + '/toolbar').extend(new links.Button({
         id: 'draft',
         index: 200,
-        label: gt('Save'), // is 'Save as draft' but let's keep it short for small devices
+        // is 'Save as draft' but let's keep it short for small devices
+        label: gt('Save'),
         cssClasses: 'btn btn-default',
         ref: POINT + '/actions/draft',
         tabIndex: '6'
@@ -186,7 +187,8 @@ define('io.ox/mail/write/view-main',
                     .attr({
                         tabindex: (id === 'to' ? '2' : '7'),
                         id: 'writer_field_' + id,
-                        'data-type': id // not name=id!
+                        // not name=id!
+                        'data-type': id
                     })
                     .autocomplete({
                         api: autocompleteAPI,
@@ -573,8 +575,10 @@ define('io.ox/mail/write/view-main',
                 e.preventDefault();
                 require(['io.ox/files/filepicker']).done(function (Picker) {
                     var picker = new Picker({
-                        point: POINT,                   // prefix for custom ext. point
-                        filter: function () {           // filter function
+                        // prefix for custom ext. point
+                        point: POINT,
+                        // filter function
+                        filter: function () {
                             return true;
                         },
                         primaryButtonText: gt('Add'),
@@ -827,8 +831,10 @@ define('io.ox/mail/write/view-main',
                                         self.spacer.show();
                                         self.scrollEmoji();
                                     }
-                                    if (_.device('android')) {//android needs special handling here
-                                        setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
+                                    //android needs special handling here
+                                    if (_.device('android')) {
+                                        //use timeout because the onscreen keyboard resizes the window
+                                        setTimeout(function () {
                                             self.form.parent().scrollTop(self.form.parent().height());
                                         }, 500);
 
@@ -837,7 +843,8 @@ define('io.ox/mail/write/view-main',
                                             self.spacer.hide();
                                         });
                                     } else {
-                                        self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
+                                        //show spacer to prevent onscreen keyboard from overlapping
+                                        self.spacer.show();
                                         self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
                                     }
                                 }
@@ -864,8 +871,8 @@ define('io.ox/mail/write/view-main',
                                 tabindex: '3',
                                 placeholder: gt('Subject')
                             })
-                            /* no padding-right for input fields in IE9
-                               -> Bug 27069 - Subject does not scroll properly for long strings in IE9 */
+                            // no padding-right for input fields in IE9
+                            // see Bug 27069 - Subject does not scroll properly for long strings in IE9
                             .css('width', function () {
                                 return _.device('desktop') && _.browser.IE < 10 ? '85%' : null;
                             })
@@ -937,8 +944,8 @@ define('io.ox/mail/write/view-main',
 
             // iOS 7 has problems with rotation changes while the keyboard is shown (on iPad)
             // blur to dismiss the keyboard
-            // fix for bug 29386
-            // PLEASE REMOVE THIS UGLY PIECE OF CODE ASA APPLE HAS FIXED THIS BUG
+            // see bug 29386
+            // TODO: PLEASE REMOVE THIS UGLY PIECE OF CODE ASA APPLE HAS FIXED THIS BUG
             if (_.browser.ios >= 7 && _.device('medium')) {
                 $(this.leftside, this.tightside).on('orientationchange', function () {
                     $('input, textarea', this.leftside).blur();
@@ -1051,7 +1058,8 @@ define('io.ox/mail/write/view-main',
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
                 display_name: util.unescapeDisplayName(elem.full_name || elem.display_name).replace(/"/g, ''),
-                email: elem.email || elem.mail || '', // distribution lists just have "mail"
+                // distribution lists just have "mail"
+                email: elem.email || elem.mail || '',
                 phone: elem.phone || '',
                 field: elem.field || '',
                 image1_url: elem.image1_url || '',

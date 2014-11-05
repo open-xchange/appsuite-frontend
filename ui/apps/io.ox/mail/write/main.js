@@ -68,7 +68,8 @@ define('io.ox/mail/write/main',
     var UUID = 1,
         blocked = {},
         timerScale = {
-            minute: 60000, //60s
+            //60s
+            minute: 60000,
             minutes: 60000
         },
         convertAllToUnified = emoji.converterFor({
@@ -93,7 +94,8 @@ define('io.ox/mail/write/main',
         scale = timerScale[timeout[1]];
         timeout = timeout[0];
 
-        if (!timeout || !scale) return; // settings not parsable
+        // settings not parsable
+        if (!timeout || !scale) return;
 
         stopAutoSave(app);
 
@@ -177,7 +179,8 @@ define('io.ox/mail/write/main',
 
         // don’t force text on phantomjs, because phantomjs reports as a touch device
         // see https://github.com/ariya/phantomjs/issues/10375
-        if (!_.device('phantomjs') && Modernizr.touch) messageFormat = 'text'; // See Bug 24802
+        // See Bug 24802 - iPad: Cannot write email
+        if (!_.device('phantomjs') && Modernizr.touch) messageFormat = 'text';
 
         function blockReuse(sendtype) {
             blocked[sendtype] = (blocked[sendtype] || 0) + 1;
@@ -698,7 +701,8 @@ define('io.ox/mail/write/main',
 
         app.dirty = function (flag) {
             if (flag === true) {
-                previous = null; // always dirty this way
+                // always dirty this way
+                previous = null;
                 return this;
             } else if (flag === false) {
                 previous = app.getMail();
@@ -721,7 +725,8 @@ define('io.ox/mail/write/main',
             // default data
             var data = mail.data = _.extend({
                 vcard: settings.get('appendVcard'),
-                csid: mailAPI.csid() // composition space id
+                // composition space id
+                csid: mailAPI.csid()
             }, mail.data);
 
             // Allow extensions to have a go at the data
@@ -825,7 +830,7 @@ define('io.ox/mail/write/main',
                 // remove 'mailto:'' prefix and split at '?''
                 var tmp = mailto.replace(/^mailto:/, '').split(/\?/, 2);
                 var to = unescape(tmp[0]), params = _.deserialize(tmp[1]);
-                // Bug: 31345
+                // see Bug 31345 - [L3] Case sensitivity issue with Richmail while rendering Mailto: link parameters
                 for (var key in params) params[key.toLowerCase()] = params[key];
                 // save data
                 data = {
@@ -976,9 +981,11 @@ define('io.ox/mail/write/main',
 
             var def = $.Deferred();
 
-            _.url.hash('app', 'io.ox/mail/write:compose'); // yep, edit is same as compose
+            // yep, edit is same as compose
+            _.url.hash('app', 'io.ox/mail/write:compose');
 
-            app.cid = 'io.ox/mail:edit.' + _.cid(data); // here, for reuse it's edit!
+            // here, for reuse it's edit!
+            app.cid = 'io.ox/mail:edit.' + _.cid(data);
             data.msgref = data.folder_id + '/' + data.id;
 
             function getMail(data) {
@@ -1184,7 +1191,8 @@ define('io.ox/mail/write/main',
 
                     if (result.error && !result.warnings) {
                         win.idle().show();
-                        notifications.yell(result); // TODO: check if backend just says "A severe error occurred"
+                        // TODO: check if backend just says "A severe error occurred"
+                        notifications.yell(result);
                         return;
                     }
 
@@ -1424,7 +1432,8 @@ define('io.ox/mail/write/main',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                clean();
                                 def.resolve();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function () {

@@ -224,7 +224,8 @@ define('io.ox/mail/api',
 
             getColorLabel: function (obj) {
                 var cid = getCID(obj);
-                return (cid in colorLabel ? colorLabel[cid] : obj.color_label) || 0; // fallback to 0 to avoid undefined
+                // fallback to 0 to avoid undefined
+                return (cid in colorLabel ? colorLabel[cid] : obj.color_label) || 0;
             },
 
             setColorLabel: function (obj) {
@@ -260,12 +261,15 @@ define('io.ox/mail/api',
         requests: {
             all: {
                 folder: 'default0/INBOX',
-                columns: '601,600,611,102', // + flags & color_label
+                // + flags & color_label
+                columns: '601,600,611,102',
                 extendColumns: 'io.ox/mail/api/all',
-                sort: '610', // received_date
+                // received_date
+                sort: '610',
                 order: 'desc',
                 deleted: 'true',
-                cache: false // allow DB cache
+                // allow DB cache
+                cache: false
             },
             list: {
                 action: 'list',
@@ -327,7 +331,8 @@ define('io.ox/mail/api',
                 }
                 // reset tracker! if we get a seen mail here, although we have it in 'explicit unseen' hash,
                 // another devices might have set it back to seen.
-                tracker.reset(response.data || response); // threadedAll || all
+                // threadedAll || all
+                tracker.reset(response.data || response);
                 return response;
             },
             listPost: function (data) {
@@ -361,7 +366,8 @@ define('io.ox/mail/api',
                 return options;
             }
         },
-        simplify: function (options) {//special function for list requests that fall back to a get request (only one item in the array)
+        //special function for list requests that fall back to a get request (only one item in the array)
+        simplify: function (options) {
             // fix mail unseen issue
             options.simplified.unseen = true;
             return options.simplified;
@@ -373,7 +379,8 @@ define('io.ox/mail/api',
      */
     api.updateViewSettings = function () {
         api.options.requests.get.view = settings.get('allowHtmlMessages', true) ? (settings.get('allowHtmlImages', false) ? 'html' : 'noimg') : 'text';
-        api.trigger('viewChanged');//special event to redraw current detailview
+        //special event to redraw current detailview
+        api.trigger('viewChanged');
     };
 
     // publish tracker
@@ -638,14 +645,17 @@ define('io.ox/mail/api',
         options = options || {};
         options = $.extend(options, {
             action: 'threadedAll',
-            columns: options.columns || '601,600,611,102', // +flags +color_label
+            // +flags +color_label
+            columns: options.columns || '601,600,611,102',
             sort: options.sort || '610',
             sortKey: 'threaded-' + (options.sort || '610'),
             konfetti: true,
             order: options.order || 'desc',
             includeSent: !accountAPI.is('sent|drafts', options.folder),
-            cache: false, // never use server cache
-            max: options.max || 500 // apply internal limit to build threads fast enough
+            // never use server cache
+            cache: false,
+            // apply internal limit to build threads fast enough
+            max: options.max || 500
         });
         // use cache?
         var cid = api.cid(options);
@@ -682,7 +692,8 @@ define('io.ox/mail/api',
                     action: apiAction || 'update',
                     id: obj.id,
                     folder: folder,
-                    timestamp: _.then() // to be safe
+                    // to be safe
+                    timestamp: _.then()
                 },
                 data: data,
                 appendColumns: false
@@ -694,8 +705,10 @@ define('io.ox/mail/api',
             _(list).each(function (obj) {
                 api.trigger('update:' + _.ecid(obj), obj);
             });
-            if (apiAction === 'copy' || move) {//give response if its a copy action (to look if there was an error)
-                return { list: list, response: response};//not doing this as a standardaction to prevent errors with functions looking only for the list parameter
+            if (apiAction === 'copy' || move) {
+                // give response (to look if there was an error)
+                // not doing this as a standardaction to prevent errors with functions looking only for the list parameter
+                return { list: list, response: response};
             }
             // return list
             return list;
@@ -718,7 +731,8 @@ define('io.ox/mail/api',
                 api.caches.get.remove(id),
                 api.caches.list.remove(obj),
                 api.caches.list.remove(id),
-                api.caches.all.grepRemove(targetFolderId + DELIM) // clear target folder
+                // clear target folder
+                api.caches.all.grepRemove(targetFolderId + DELIM)
             );
         };
     };
@@ -867,7 +881,9 @@ define('io.ox/mail/api',
     api.changeColor = function (list, label, local) {
 
         list = [].concat(list);
-        label = String(label); // Bugfix: #24730
+
+        // see Bug 24730 - Folder "INBOX" does not support user-defined flags. Update of color flag ignored.
+        label = String(label);
 
         _(list).each(function (obj) {
             obj.color_label = label;
@@ -1066,7 +1082,8 @@ define('io.ox/mail/api',
         return http.wait(
             update(list, { folder_id: targetFolderId }).then(function (response) {
                 var errorText, i = 0, $i = response.length;
-                for (; i < $i; i++) { // look if anything went wrong
+                // look if anything went wrong
+                for (; i < $i; i++) {
                     if (response[i].error) {
                         errorText = response[i].error.error;
                         break;
@@ -1099,7 +1116,8 @@ define('io.ox/mail/api',
             .then(function () {
 
                 var errorText;
-                for (var i = 0; i < response.length; i++) { // look if something went wrong
+                // look if something went wrong
+                for (var i = 0; i < response.length; i++) {
                     if (response[i].error) {
                         errorText = response[i].error.error;
                         break;
@@ -1510,7 +1528,8 @@ define('io.ox/mail/api',
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
                 attachment: _(data).pluck('id').join(','),
-                session: ox.session // required here!
+                // required here!
+                session: ox.session
             });
         } else if (mode === 'eml:reference') {
             //if eml stored as reference use parent object
@@ -1574,9 +1593,12 @@ define('io.ox/mail/api',
             params: {
                 action: 'all',
                 folder: 'default0/INBOX',
-                columns: '610,600,601,611', //received_date, id, folder_id, flags
-                unseen: 'true', // only unseen mails are interesting here!
-                deleted: 'false', // any reason to see them?
+                //received_date, id, folder_id, flags
+                columns: '610,600,601,611',
+                // only unseen mails are interesting here!
+                unseen: 'true',
+                // any reason to see them?
+                deleted: 'false',
                 sort: '610',
                 order: 'desc',
                 // not really sure if limit works as expected
@@ -1602,7 +1624,8 @@ define('io.ox/mail/api',
             if (recent.length > 0) {
                 lastUnseenMail = recent[0].received_date;
                 api.newMailTitle(true);
-            } else {//if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
+            } else {
+                //if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
                 lastUnseenMail = _.utc();
             }
 
@@ -1712,15 +1735,24 @@ define('io.ox/mail/api',
     api.beautifyMailText = function (str, lengthLimit) {
         lengthLimit = lengthLimit || 500;
         str = String(str)
-            .replace(/(\r\n|\n|\r)/gm, '') // remove line breaks
-            .substr(0, lengthLimit) // limit overall length
-            .replace(/-{3,}/g, '---') // reduce dashes
-            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
-            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
-            .replace(/<[^>]+(>|$)/g, '') // strip tags
-            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>') // links
-            .replace(/&#160;/g, ' ') // convert to simple white space
-            .replace(/\s{2,}/g, ' '); // reduce consecutive white space
+            // remove line breaks
+            .replace(/(\r\n|\n|\r)/gm, '')
+            // limit overall length
+            .substr(0, lengthLimit)
+            // reduce dashes
+            .replace(/-{3,}/g, '---')
+            // remove quotes after line breaks
+            .replace(/<br\s?\/?>(&gt;)+/ig, ' ')
+            // remove line breaks
+            .replace(/<br\s?\/?>/ig, ' ')
+            // strip tags
+            .replace(/<[^>]+(>|$)/g, '')
+            // links
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>')
+            // convert to simple white space
+            .replace(/&#160;/g, ' ')
+            // reduce consecutive white space
+            .replace(/\s{2,}/g, ' ');
         // trim
         return $.trim(str);
     };
@@ -1742,7 +1774,8 @@ define('io.ox/mail/api',
                 params: {
                     action: 'import',
                     folder: options.folder,
-                    force: true // don't check from address!
+                    // don't check from address!
+                    force: true
                 },
                 data: form,
                 fixPost: true
@@ -1825,7 +1858,8 @@ define('io.ox/mail/api',
 
         function blink() {
             if (interval) return;
-            interval = setInterval(tick, 1500); // 1s is fast, 2s feels slow, 1.5 is compromise
+            // 1s is fast, 2s feels slow, 1.5 is compromise
+            interval = setInterval(tick, 1500);
         }
 
         function original() {
@@ -1847,7 +1881,8 @@ define('io.ox/mail/api',
     api.resolve = (function () {
 
         function map(cid) {
-            cid = String(cid).replace(/^thread\./, ''); // yep, also in non-threaded mails)
+            // yep, also in non-threaded mails
+            cid = String(cid).replace(/^thread\./, '');
             return pool.get('detail').get(cid);
         }
 
@@ -1991,7 +2026,8 @@ define('io.ox/mail/api',
 
         // remove deleted mails
         thread = _(list = thread).filter(filterDeleted);
-        if (thread.length === 0) thread = list.slice(0, 1); // don't remove all if all marked as deleted
+        // don't remove all if all marked as deleted
+        if (thread.length === 0) thread = list.slice(0, 1);
 
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(thread).last();

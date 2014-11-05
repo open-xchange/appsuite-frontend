@@ -123,7 +123,8 @@ define('io.ox/mail/statistics',
                     data = _(who).chain()
                         .pairs()
                         .sortBy(function (obj) { return -obj[1]; })
-                        .first(10) // as we want the highest numbers
+                        // as we want the highest numbers
+                        .first(10)
                         .value();
 
                     var chart = {
@@ -172,8 +173,10 @@ define('io.ox/mail/statistics',
                 function success(data) {
 
                     var days = [0, 0, 0, 0, 0, 0, 0],
-                        tempDays = date.locale.daysShort,//get localized dates
-                        weekdays = tempDays.slice(date.locale.weekStart, tempDays.length).concat(tempDays.slice(0, date.locale.weekStart));//adjust weekstart
+                        //get localized dates
+                        tempDays = date.locale.daysShort,
+                        //adjust weekstart
+                        weekdays = tempDays.slice(date.locale.weekStart, tempDays.length).concat(tempDays.slice(0, date.locale.weekStart));
 
                     _(data).each(function (obj) {
                         var day = new Date(obj.received_date).getUTCDay();
@@ -183,7 +186,8 @@ define('io.ox/mail/statistics',
                     days = _(days).map(function (sum) {
                         return Math.round(sum / data.length * 100);
                     });
-                    days = days.slice(date.locale.weekStart, days.length).concat(days.slice(0, date.locale.weekStart));//adjust weekstart
+                    //adjust weekstart
+                    days = days.slice(date.locale.weekStart, days.length).concat(days.slice(0, date.locale.weekStart));
 
                     var chart = {
                         labels: weekdays,

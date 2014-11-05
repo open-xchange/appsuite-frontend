@@ -61,7 +61,8 @@ define('io.ox/mail/autoforward/settings/model',
             ref: ref,
 
             update: function (model) {
-                $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
+                //make the active element lose focus to get the changes of the field a user was editing
+                $(document.activeElement).blur();
                 if (model.attributes.forwardmail === '') {
                     return settingsUtil.yellOnReject(
                         api.deleteRule(model.attributes.id)
@@ -73,7 +74,8 @@ define('io.ox/mail/autoforward/settings/model',
                 }
             },
             create: function (model) {
-                $(document.activeElement).blur();//make the active element lose focus to get the changes of the field a user was editing
+                //make the active element lose focus to get the changes of the field a user was editing
+                $(document.activeElement).blur();
 
                 return settingsUtil.yellOnReject(
                     api.create(providePreparedData(model.attributes))

@@ -177,7 +177,8 @@ define('io.ox/mail/threadview',
             e.preventDefault();
             var items = this.getItems(),
                 open = items.filter('.expanded'),
-                state = open.length === 0; // only open all if all are closed
+                // only open all if all are closed
+                state = open.length === 0;
             // pause http layer to combine GET requests
             http.pause();
             this.collection.each(function (model) {
@@ -326,10 +327,12 @@ define('io.ox/mail/threadview',
         onKeydown: function (e) {
             if (!e.shiftKey) return;
             switch (e.which) {
-            case 38: // cursor up
+            case 38:
+                // cursor up
                 this.onNext(e);
                 break;
-            case 40: // cursor down
+            case 40:
+                // cursor down
                 this.onPrevious(e);
                 break;
             }
