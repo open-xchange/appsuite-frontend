@@ -36,7 +36,9 @@ define('io.ox/settings/main',
                             .addClass('title')
                     );
                 if (_.device('smartphone')) {
-                    title.css('margin', '4px 0'); // must use inline styles because vgrid's height calculon-o-mat does not respect any css values bound via classes for its calculation..
+                    // must use inline styles because vgrid's height calculon-o-mat does not
+                    // respect any css values bound via classes for its calculation
+                    title.css('margin', '4px 0');
                     title.prepend($('<i class="fa fa-chevron-right pull-right">'));
                 }
                 return { title: title };
@@ -150,7 +152,8 @@ define('io.ox/settings/main',
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
             'tabindex': 1,
             'aria-describedby': 'currentsettingtitle',
-            'role': 'main' //needed or mac voice over reads the whole settings pane when an input element is focused
+            //needed or mac voice over reads the whole settings pane when an input element is focused
+            'role': 'main'
         }).scrollable();
 
         grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
@@ -290,7 +293,8 @@ define('io.ox/settings/main',
             right.empty().busy();
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
                 return require([settingsPath], function () {
-                    right.empty().idle(); // again, since require makes this async
+                    // again, since require makes this async
+                    right.empty().idle();
                     vsplit.right.attr('title', baton.data.title);
                     vsplit.right.find('#currentsettingtitle').remove();
                     ext.point(extPointPart).invoke('draw', right, baton);
@@ -299,7 +303,8 @@ define('io.ox/settings/main',
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
-                    right.empty().idle(); // again, since require makes this async
+                    // again, since require makes this async
+                    right.empty().idle();
                     vsplit.right.attr('title', baton.data.title);
                     vsplit.right.find('#currentsettingtitle').remove();
                     vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
