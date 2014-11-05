@@ -88,7 +88,7 @@ define('io.ox/tasks/edit/main',
             var taskData = options.taskData,
                 startApp = function ()  {
                     app.view = taskView = view.getView(taskModel, win.nodes.main, app);
-    
+
                     if (_.browser.IE === undefined || _.browser.IE > 9) {
                         self.dropZone = new dnd.UploadZone({
                             ref: 'io.ox/tasks/edit/dnd/actions'

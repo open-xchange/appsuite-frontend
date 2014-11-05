@@ -95,7 +95,6 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    // title
     point.extend(new forms.InputField({
         id: 'title',
         index: 200,
@@ -107,7 +106,6 @@ define('io.ox/tasks/edit/view-template',
         row: '1'
     });
 
-    // note
     point.extend(new forms.InputField({
         id: 'note',
         index: 300,
@@ -119,7 +117,6 @@ define('io.ox/tasks/edit/view-template',
         row: '2'
     });
 
-    //expand link
     point.basicExtend({
         id: 'expand_link',
         index: 400,
@@ -153,7 +150,6 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    // start date
     point.extend(new forms.DatePicker({
         id: 'start_date',
         index: 500,
@@ -164,12 +160,11 @@ define('io.ox/tasks/edit/view-template',
         required: false,
         label: gt('Start date'),
         utc: true,
-        clearButton: _.device('small')//add clearbutton on mobile devices
+        clearButton: _.device('small')
     }), {
         row: '4'
     });
 
-    // due date
     point.extend(new forms.DatePicker({
         id: 'end_date',
         index: 600,
@@ -180,12 +175,11 @@ define('io.ox/tasks/edit/view-template',
         required: false,
         label: gt('Due date'),
         utc: true,
-        clearButton: _.device('small')//add clearbutton on mobile devices
+        clearButton: _.device('small')
     }), {
         row: '4'
     });
 
-    // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'col-sm-12 collapsed',
@@ -232,7 +226,6 @@ define('io.ox/tasks/edit/view-template',
         row: '6'
     });
 
-    // status
     point.extend(new forms.SelectBoxField({
         id: 'status',
         index: 1000,
@@ -313,7 +306,6 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    // priority
     point.extend(new forms.SelectBoxField({
         id: 'priority',
         index: 1200,
@@ -348,7 +340,6 @@ define('io.ox/tasks/edit/view-template',
         row: '7'
     });
 
-    //privateflag
     point.extend(new forms.CheckBoxField({
         id: 'private_flag',
         index: 1300,
@@ -360,7 +351,6 @@ define('io.ox/tasks/edit/view-template',
         row: '7'
     });
 
-    // participants label
     point.extend(new forms.SectionLegend({
         id: 'participants_legend',
         className: 'col-md-12 collapsed',
@@ -370,7 +360,6 @@ define('io.ox/tasks/edit/view-template',
         row: '8'
     });
 
-    //participants list
     point.basicExtend({
         id: 'participants_list',
         index: 1500,
@@ -386,7 +375,6 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    // add participants
     point.basicExtend({
         id: 'add_participant',
         index: 1600,
@@ -477,7 +465,6 @@ define('io.ox/tasks/edit/view-template',
 
     // Attachments
 
-    // attachments label
     point.extend(new forms.SectionLegend({
         id: 'attachments_legend',
         className: 'col-md-12 collapsed',
@@ -565,7 +552,6 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    //expand details link
     point.basicExtend({
         id: 'expand_detail_link',
         index: 2000,
@@ -600,7 +586,6 @@ define('io.ox/tasks/edit/view-template',
         row: '15'
     });
 
-    //actual duration
     point.extend(new forms.InputField({
         id: 'actual_duration',
         index: 2200,
@@ -624,7 +609,6 @@ define('io.ox/tasks/edit/view-template',
         row: '16'
     });
 
-    //actual costs
     point.extend(new forms.InputField({
         id: 'actual_costs',
         index: 2400,
@@ -636,7 +620,6 @@ define('io.ox/tasks/edit/view-template',
         row: '16'
     });
 
-    //currency
     point.extend(new forms.SelectBoxField({
         id: 'currency',
         index: 2500,
@@ -679,7 +662,6 @@ define('io.ox/tasks/edit/view-template',
         row: '17'
     });
 
-    // billing information
     point.extend(new forms.InputField({
         id: 'billing_information',
         index: 2700,
@@ -691,7 +673,6 @@ define('io.ox/tasks/edit/view-template',
         row: '18'
     });
 
-    // companies
     point.extend(new forms.InputField({
         id: 'companies',
         index: 2800,

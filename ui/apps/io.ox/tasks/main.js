@@ -533,8 +533,7 @@ define('io.ox/tasks/main',
     // launcher
     app.setLauncher(function (options) {
 
-        var // app window
-            win,
+        var win,
             grid,
             showSwipeButton = false,
             hasDeletePermission;

@@ -591,7 +591,7 @@ define('io.ox/tasks/api',
      * @return {boolean}
      */
     api.uploadInProgress = function (key) {
-        return uploadInProgress[key] || false;//return true boolean
+        return uploadInProgress[key] || false;
     };
 
     /**
