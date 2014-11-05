@@ -118,7 +118,7 @@ define.async('io.ox/mail/accounts/view-form',
                 Backbone.Validation.bind(this, { selector: 'name', forceUpdate: true });
             },
             render: function () {
-                var self = this;                    // hideAccountDetails = self.model.isHidden();
+                var self = this;
                 model = self.model;
                 self.$el.empty().append(
                     $('<div>').addClass('settings-detail-pane').append(

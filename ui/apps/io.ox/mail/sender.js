@@ -249,11 +249,9 @@ define('io.ox/mail/sender',
             // fallback address - if any other request fails we have the default send address
             var fallbackAddress = this.getDefaultSendAddress();
 
-            //button.text(defaultAddress);
-
             // append options to select-box
             return that.getAddresses().then(function (addresses, numbers, primary) {
-                var defaultAddress = fallbackAddress || primary[1], //button.attr('data-default') || primary[1],
+                var defaultAddress = fallbackAddress || primary[1],
                     defaultValue,
                     list = [].concat(addresses, numbers);
 

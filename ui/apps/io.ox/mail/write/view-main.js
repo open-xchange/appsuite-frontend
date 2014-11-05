@@ -1234,11 +1234,6 @@ define('io.ox/mail/write/view-main',
              '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + (obj.phone || '') + '>' : '<' + obj.email + (obj.phone || '') + '>';
     }
 
-    // function clickRadio(e) {
-    //     var node = $(this).parent();
-    //     node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-    // }
-
     function createRadio(name, value, text, isChecked) {
         var label, radio;
         radio = $('<input>', { type: 'radio', name: name, value: value, tabindex: '7' });
@@ -1248,16 +1243,8 @@ define('io.ox/mail/write/view-main',
         if (isChecked) {
             radio.prop('checked', true);
         }
-        // if (Modernizr.touch) {
-        //     label.on('click', clickRadio);
-        // }
         return label;
     }
-
-    // function clickCheckbox(e) {
-    //     var node = $(this).parent();
-    //     node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-    // }
 
     function createCheckbox(name, text, isChecked) {
         var label, box;
@@ -1268,9 +1255,6 @@ define('io.ox/mail/write/view-main',
         if (isChecked) {
             box.prop('checked', true);
         }
-        // if (Modernizr.touch) {
-        //     label.on('click', clickCheckbox);
-        // }
         return label;
     }
 

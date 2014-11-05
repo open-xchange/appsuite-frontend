@@ -809,8 +809,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     toggle: 'dropup',
                     classes: 'no-positioning',
                     caret: true
-//                    test: { nrInArray: '', target: ''  },
-//                    action: { nrInArray: '', target: ''  }
                 },
                 optionsSwitch = elements.drawOptionsExtern(arrayOfTests.id, {allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met.')}, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
