@@ -57,7 +57,8 @@ define('io.ox/core/event', function () {
 
             var args = $.makeArray(arguments),
                 types = args.shift(),
-                myHub = hub; // Keep reference in case a handler cleans up the event dispatcher
+                // Keep reference in case a handler cleans up the event dispatcher
+                myHub = hub;
 
             function trigger(type) {
 
@@ -66,7 +67,8 @@ define('io.ox/core/event', function () {
 
                 // trigger generic 'triggered' event (convert event object to event name before)
                 if (_.isObject(type)) { type = type.type; }
-                myHub.triggerHandler.call(hub, 'triggered', _([type, args]).flatten(true)); // Allow stringing event hubs together
+                // Allow stringing event hubs together
+                myHub.triggerHandler.call(hub, 'triggered', _([type, args]).flatten(true));
             }
 
             if (_.isString(types)) {

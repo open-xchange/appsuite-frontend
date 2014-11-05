@@ -211,7 +211,8 @@ define('io.ox/core/print',
         },
 
         getWindow: function (url) {
-            var name = 'print_' + _.now(), // avoid bugs about non-opening windows
+            // avoid bugs about non-opening windows
+            var name = 'print_' + _.now(),
                 options = this.getWindowOptions(url),
                 win = window.open(url, name, options.string);
             return win;

@@ -17,7 +17,8 @@ define('io.ox/core/page-controller',
     'use strict';
 
     var PageController = function (app, o) {
-        if (!window.trappedTaps) window.trappedTaps = 0; // stats ;)
+        // stats ;)
+        if (!window.trappedTaps) window.trappedTaps = 0;
         var pages = {},
             current,
             order = [],

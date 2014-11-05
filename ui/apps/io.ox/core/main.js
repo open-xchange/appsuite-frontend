@@ -20,7 +20,8 @@ define('io.ox/core/main',
      'io.ox/core/extPatterns/stage',
      'io.ox/core/date',
      'io.ox/core/notifications',
-     'io.ox/core/commons', // defines jQuery plugin
+     // defines jQuery plugin
+     'io.ox/core/commons',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
@@ -369,7 +370,8 @@ define('io.ox/core/main',
     (function () {
 
         var next = _.now(),
-            REFRESH_THROTTLE = 10000; // only trigger every 10 seconds
+            // only trigger every 10 seconds
+            REFRESH_THROTTLE = 10000;
 
         ext.point('io.ox/core/refresh').extend({
             action: _.throttle(function () {
@@ -403,18 +405,26 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/refresh').invoke('reset');
-        setInterval(check, 10000); // check every 10 seconds
+        // check every 10 seconds
+        setInterval(check, 10000);
     }());
 
     (function () {
 
-        var CHECKINTERVAL = 10,     // check only in this interval to optimize script performance
-            WARNINGSTART = 30,      // threshold for warning dialog in sconds
-            interval = 0,           // init logout interval
-            timeout = null,         // main timeout reference
-            checker = null,         // checker timeout reference
-            timeoutStart,           // remember timeout init
-            dialog = null,          // init warning dialog
+        // check only in this interval to optimize script performance
+        var CHECKINTERVAL = 10,
+            // threshold for warning dialog in sconds
+            WARNINGSTART = 30,
+            // init logout interval
+            interval = 0,
+            // main timeout reference
+            timeout = null,
+            // checker timeout reference
+            checker = null,
+            // remember timeout init
+            timeoutStart,
+            // init warning dialog
+            dialog = null,
             changed = false;
 
         var getTimeLeft = function () {
@@ -723,7 +733,8 @@ define('io.ox/core/main',
                     self.append(notifications.attach(addLauncher, 2000));
                     tabManager();
                 } else {
-                    ox.one('connection:online', function () {//lets wait till we are online
+                    //lets wait till we are online
+                    ox.one('connection:online', function () {
                         self.append(notifications.attach(addLauncher, 2000));
                         tabManager();
                     });
@@ -836,7 +847,8 @@ define('io.ox/core/main',
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'app-specific-help',
             index: 200,
-            draw: function () { //replaced by module
+            draw: function () {
+                //replaced by module
                 var node = this;
                 node.append(
                     $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
@@ -998,8 +1010,10 @@ define('io.ox/core/main',
                             m.show();
                         });
                     })
-                    .addClass('left-corner') // to match dimensions of side navigation
-                    .attr('data-app-name', 'launchpad'); // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
+                    // to match dimensions of side navigation
+                    .addClass('left-corner')
+                    // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
+                    .attr('data-app-name', 'launchpad');
                 }
             }
         });

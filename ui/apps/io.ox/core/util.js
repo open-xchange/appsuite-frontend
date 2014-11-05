@@ -46,8 +46,10 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
 
             options = _.extend({
                 $el: undefined,
-                html: false, // must be properly escaped!
-                tagName: 'span' // to support different tags
+                // must be properly escaped!
+                html: false,
+                // to support different tags
+                tagName: 'span'
             }, options);
 
             var halo = {
@@ -122,7 +124,8 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                 regDot = /^\./,
                 regDoubleDots = /\.\./,
                 regDomainIPAddress = /^\[(\d{1,3}\.){3}\d{1,3}\]$/,
-                regDomainIPv6 = /^\[IPv6(:\w{0,4}){0,8}\]$/i, // yep, vage
+                // yep, vage
+                regDomainIPv6 = /^\[IPv6(:\w{0,4}){0,8}\]$/i,
                 regDomain = /[a-z0-9]$/i;
 
             // email address validation is not trivial
