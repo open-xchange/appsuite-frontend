@@ -389,7 +389,7 @@
 }
 
 
-/* Proofread */
+// Proofread
 
 .io-ox-mail-proofread {
     background-color: #555;
@@ -398,42 +398,36 @@
     overflow: auto;
 }
 
-/* tinyMCE polishing */
+// tinyMCE polishing
 
-/*.editor-inner-container {
+// .editor-inner-container {
+//     .oxSkin table.mceLayout.focused tr.mceLast td {
+//         border-color: rgba(82, 168, 236, 0.8);
+//         .box-shadow(0 0 8px rgba(82, 168, 236, 0.6));
+//     }
+//     .oxSkin table.mceLayout {
+//         border: 0 none;
+//         border-left: 0 none;
+//         border-right: 0 none;
+//     }
+//     .oxSkin table.mceLayout tr.mceLast > td {
+//         border: 1px solid #ccc;
+//         border-bottom: 1px solid #ccc;
+//     }
+//     .oxSkin table.mceLayout tr.mceFirst > td {
+//         border-top: 0 none;
+//         padding: 4px 0 12px 0;
+//     }
+//     .oxSkin table.mceSplitButtonEnabled:hover a.mceAction,
+//     .oxSkin a.mceButtonEnabled:hover,
+//     .oxSkin table.mceSplitButtonEnabled:hover a.mceOpen,
+//     .oxSkin table.mceListBoxEnabled:hover .mceText,
+//     .oxSkin table.mceListBoxEnabled:hover .mceOpen {
+//         border-color: rgba(82, 168, 236, 0.8); background-color: rgba(82, 168, 236, 0.2);
+//     }
+// }
 
-    .oxSkin table.mceLayout.focused tr.mceLast td {
-        border-color: rgba(82, 168, 236, 0.8);
-        .box-shadow(0 0 8px rgba(82, 168, 236, 0.6));
-    }
-
-    .oxSkin table.mceLayout {
-        border: 0 none;
-        border-left: 0 none;
-        border-right: 0 none;
-    }
-
-    .oxSkin table.mceLayout tr.mceLast > td {
-        border: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
-    }
-
-    .oxSkin table.mceLayout tr.mceFirst > td {
-        border-top: 0 none;
-        padding: 4px 0 12px 0;
-    }
-
-    .oxSkin table.mceSplitButtonEnabled:hover a.mceAction,
-    .oxSkin a.mceButtonEnabled:hover,
-    .oxSkin table.mceSplitButtonEnabled:hover a.mceOpen,
-    .oxSkin table.mceListBoxEnabled:hover .mceText,
-    .oxSkin table.mceListBoxEnabled:hover .mceOpen {
-        border-color: rgba(82, 168, 236, 0.8); background-color: rgba(82, 168, 236, 0.2);
-    }
-}
-*/
-
-/* tablet */
+// tablet
 @media (max-width: 1024px), (max-device-width: 1024px) {
     .io-ox-mail-write-window {
         .textarea-shift{
@@ -479,7 +473,7 @@
             width: 100%;
         }
 
-        /* only apply this adjustments on tablet, therefore checking for .touch */
+        // only apply this adjustments on tablet, therefore checking for .touch
         .touch & .mceEmojiPane {
             position: absolute;
             right: 0;
@@ -488,7 +482,6 @@
             height: auto;
             z-index: 1000;
 
-            /*height: 100%;*/
             width: 255px;
             vertical-align: top;
 
@@ -706,14 +699,16 @@
             padding-right: 30px;
         }
         .leftside {
-            background: #fff; /* let's make it flat */
+            // let's make it flat
+            background: #fff;
             .title {
                 display: none;
             }
             padding: 5px;
         }
         .rightside {
-            background: #fff; /* let's make it flat */
+            // let's make it flat
+            background: #fff;
             padding: 5px;
             height: auto;
 
@@ -922,7 +917,7 @@
             }
         }
 
-        /* bootstrap re-resets */
+        // bootstrap re-resets
 
         .dropdown-toggle, .dropdown-toggle * { cursor: pointer; }
 

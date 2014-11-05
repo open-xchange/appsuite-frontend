@@ -11,15 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-/* definitions */
+// definitions
 @icon-size: 18px;
 @unread-toggle-width: 40px;
 
-/* phone */
+// phone
 @phone-font-size: 14px;
 @phone-line-height: 24px;
 
-/* preview panes */
+// preview panes
 
 .flag-picker-view {
     position: absolute;
@@ -271,7 +271,8 @@
 
     &.expanded {
         section.attachments, section.notifications { display: block; }
-        section.body { display: table; /* for proper overflow behavior */ }
+        // for proper overflow behavior */
+        section.body { display: table; }
         section.attachments:empty { display: none; }
     }
 
@@ -296,7 +297,7 @@
     }
 }
 
-/* ListView */
+// ListView
 
 .mail-item {
 
@@ -546,14 +547,14 @@
         font-size: 14px;
         color: #ccc;
         &:hover { text-decoration: none; color: #aaa; }
-        i.fa:before { content: "\f003"; /* fa-envelope-o */ }
+        i.fa:before { content: "\f003"; } // fa-envelope-o
     }
 
     &.no-padding .unread-toggle { left: 40px; }
 
     &.unread .unread-toggle {
         color: #08c;
-        i.fa:before { content: "\f0e0"; /* fa-envelope */ }
+        i.fa:before { content: "\f0e0"; } // fa-envelope
     }
 
     .flag-picker {
@@ -828,10 +829,8 @@ textarea.inplace-editor {
 
     .vgrid-cell {
         .touch-helper {
-            /*
-            a transparent div to enlarge the touchable area around the
-            thread-size badge - aka "can't touch this, dadada-dada-dada"
-            */
+            // a transparent div to enlarge the touchable area around the
+            // thread-size badge - aka "can't touch this, dadada-dada-dada"
             height: 40px;
             width: 40px;
             position: absolute;
@@ -848,7 +847,7 @@ textarea.inplace-editor {
     }
 }
 
-/* Detail view */
+// Detail view
 
 .rightside.mail-detail-pane {
 
@@ -863,7 +862,8 @@ textarea.inplace-editor {
 
     .scrollable-pane {
         margin-bottom: 20px;
-        height: 110%; /* allows hiding "Entire thread" */
+        // allows hiding "Entire thread"
+        height: 110%;
     }
 }
 
@@ -1165,7 +1165,7 @@ textarea.inplace-editor {
         }
     }
 
-    /* label dropdown */
+    // label dropdown
     .active-label {
         .fontWeight(bold);
     }
@@ -1223,7 +1223,8 @@ textarea.inplace-editor {
     article.text-html.horizontal-scrolling {
         max-width: 100%;
         overflow-x: auto;
-        margin-right: -10000px; /* funky trick */
+        // funky trick
+        margin-right: -10000px;
     }
 
     .content {
@@ -1367,7 +1368,7 @@ textarea.inplace-editor {
     }
 }
 
-/* flag colors */
+// flag colors
 .flag_1  { color: @red; } /* red */
 .flag_7  { color: @orange; } /* orange */
 .flag_10 { color: @yellow; } /* yellow */
@@ -1390,7 +1391,7 @@ textarea.inplace-editor {
 .flag_bg_8  { background-color: @pink; } /* pink */
 .flag_bg_4  { background-color: @gray-light; } /* dark gray */
 
-/* multi selection */
+// multi selection
 
 .multi-selection-flag {
 
@@ -1422,7 +1423,7 @@ textarea.inplace-editor {
 
 }
 
-/* attachment preview */
+// attachment preview
 
 h4.mail-attachment-preview {
     height: 3em;
@@ -1495,7 +1496,7 @@ h4.mail-attachment-preview {
     }
 }
 
-/* smartphone */
+// smartphone
 @media (max-width: 480px), (max-device-width: 480px)  {
 
     .thread-view-list {
