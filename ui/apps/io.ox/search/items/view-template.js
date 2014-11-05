@@ -91,7 +91,8 @@ define('io.ox/search/items/view-template',
 
             // create containers
             row = $('<div class="row result">').append(
-                cell = $('<ul class="col-xs-12 list-unstyled">') // list-view
+                // list-view
+                cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
 
