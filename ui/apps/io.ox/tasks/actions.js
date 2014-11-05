@@ -183,15 +183,10 @@ define('io.ox/tasks/actions',
         requires: function (e) {
             if (!e.collection.has('some')) return false;
             if (!e.collection.has('delete')) return false;
-            if (e.baton.app) {//app object is not available when opened from notification area
-                if (isShared(e.baton.app.folder.get())) {
-                    return false;
-                }
-            } else if (e.data.folder_id) {
-                isShared(e.data.folder_id);
-            } else {
-                return false;
-            }
+            // app object is not available when opened from notification area
+            if (e.baton.app && isShared(e.baton.app.folder.get())) return false;
+            // look for folder_id in task data
+            if (e.baton.data.folder_id && isShared(e.baton.data.folder_id)) return false;
             return true;
         },
         multiple: function (list, baton) {
