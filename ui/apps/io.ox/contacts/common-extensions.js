@@ -26,7 +26,8 @@ define('io.ox/contacts/common-extensions',
                 name;
             if (fullname) {
                 name = fullname;
-                fullname = util.getFullName(data, true); // use html output
+                // use html output
+                fullname = util.getFullName(data, true);
             } else {
                 name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
             }

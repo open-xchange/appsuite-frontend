@@ -178,7 +178,8 @@ define('io.ox/contacts/actions',
 
         requires: function (e) {
             var ctx = e.context;
-            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
+            if (ctx.id === 0 || ctx.folder_id === 0) {
+                // e.g. non-existing contacts in halo view
                 return false;
             } else {
                 var list = [].concat(ctx);
@@ -321,7 +322,8 @@ define('io.ox/contacts/actions',
                 distLists = _.difference(distLists, externalParticipants);
 
                 api.getList(distLists).done(function (obj) {
-                    resolvedContacts = resolvedContacts.concat(obj, externalParticipants);//put everyone back in
+                    //put everyone back in
+                    resolvedContacts = resolvedContacts.concat(obj, externalParticipants);
                     def.resolve();
                 });
 

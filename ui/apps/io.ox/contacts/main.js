@@ -90,7 +90,8 @@ define('io.ox/contacts/main',
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'detailView', // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    page: 'detailView',
                     extension: 'io.ox/contacts/mobile/toolbar'
                 })
             });
@@ -202,7 +203,8 @@ define('io.ox/contacts/main',
                         if (fullname) {
                             name = fullname;
                             fields.name.empty().append(
-                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }, data) // use html output
+                                // use html output
+                                coreUtil.renderPersonalName({ html: util.getFullName(data, true) }, data)
                             );
                         } else {
                             name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
@@ -311,7 +313,8 @@ define('io.ox/contacts/main',
 
             app.Thumb = Thumb;
 
-            app.left.append( // thumb index
+            app.left.append(
+                // thumb index
                 app.thumbs = $('<div class="atb contact-grid-index">')
                     .on('click', '.thumb-index', thumbClick)
                     .on('touchmove', thumbMove)
@@ -362,7 +365,7 @@ define('io.ox/contacts/main',
                 .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
-                .setTitle('') // no title
+                .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
@@ -608,8 +611,10 @@ define('io.ox/contacts/main',
             // No way to use tap here since folderselection really messes up the event chain
             app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                 if (app.props.get('mobileFolderSelectMode') === true) {
-                    $(e.currentTarget).trigger('contextmenu'); // open menu
-                    return; // do not change page in edit mode
+                    // open menu
+                    $(e.currentTarget).trigger('contextmenu');
+                    // do not change page in edit mode
+                    return;
                 }
                 app.pages.changePage('listView');
             });

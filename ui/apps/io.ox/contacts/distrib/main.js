@@ -89,7 +89,8 @@ define('io.ox/contacts/distrib/main',
             });
 
             win.on('show', function () {
-                if (model.get('id')) {//set url parameters
+                if (model.get('id')) {
+                    //set url parameters
                     app.setState({ folder: model.get('folder_id'), id: model.get('id') });
                 } else {
                     app.setState({ folder: model.get('folder_id'), id: null});
@@ -133,7 +134,8 @@ define('io.ox/contacts/distrib/main',
                 });
 
                 win.on('show', function () {
-                    if (model.get('id')) {//set url parameters
+                    if (model.get('id')) {
+                        //set url parameters
                         app.setState({ folder: model.get('folder_id'), id: model.get('id') });
                     } else {
                         app.setState({ folder: model.get('folder_id'), id: null});
@@ -201,9 +203,9 @@ define('io.ox/contacts/distrib/main',
                                     model.factory.realm('edit').release();
                                     def.resolve();
                                 } else {
-                                    // biggeleben: maybe we need a better function here
+                                    // NOTE: biggeleben: maybe we need a better function here
                                     // actually I just want to reset the current model
-                                    // see https://bugs.open-xchange.com/show_bug.cgi?id=26184
+                                    // see Bug 26184 - [L3] Contact in Distribution list will still be deleted although the removal of the contact in edit mode was cancelled
                                     model.factory.realm('edit').destroy();
                                     def.reject();
                                 }
@@ -220,6 +222,7 @@ define('io.ox/contacts/distrib/main',
             return def;
         });
 
+        // TODO: fix me
         // app.failSave = function () {
         //     if (model) {
         //         var title = model.get('display_name');
