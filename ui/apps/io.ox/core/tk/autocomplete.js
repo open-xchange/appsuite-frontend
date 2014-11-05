@@ -89,9 +89,15 @@ define('io.ox/core/tk/autocomplete',
 
             update = function () {
                 // get data from current item and update input field
-                var data = scrollpane.children().eq(Math.max(0, index)).data();
-                lastValue = data !== undefined ? String(o.stringify(data)) : lastValue;
-                self.val(lastValue);
+                var data = scrollpane.children().eq(Math.max(0, index)).data(),
+                    current = self.val(),
+                    changed = false;
+
+                if (data !== undefined) {
+                    lastValue = String(o.stringify(data));
+                    changed = lastValue !== current;
+                    if (changed) self.val(lastValue);
+                }
 
                 // if two related Fields are needed
                 if (_.isFunction(o.related)) {
@@ -101,6 +107,8 @@ define('io.ox/core/tk/autocomplete',
                     relatedField.val(relatedValue);
                     dataHolder.data(data);
                 }
+
+                return changed;
             },
 
             select = function (i, processData) {
@@ -369,8 +377,9 @@ define('io.ox/core/tk/autocomplete',
                         break;
                     case 39: // cursor right
                         if (!e.shiftKey && o.mode === 'participant') {
-                            e.preventDefault();
-                            update();
+                            // only prevent cursor movement when changing the content
+                            // otherwise its not possible to use the cursor keys properly
+                            if (update()) e.preventDefault();
                         }
                         break;
                     case 13: // enter
