@@ -251,68 +251,14 @@ define('io.ox/contacts/actions',
         }
     });
 
-    new Action('io.ox/contacts/actions/print-disabled', {
-
-        requires: 'some read',
-
-        multiple: function (list) {
-            var win;
-            api.getList(list).done(function (list) {
-                var cleanedList = [];
-
-                _(list).each(function (contact) {
-                    if (contact.mark_as_distributionlist !== true) {
-                        var clean = {};
-                        clean.folder = contact.folder_id;
-                        clean.id = contact.id;
-                        cleanedList.push(clean);
-
-                    }
-                });
-
-                require(['io.ox/core/print'], function (print) {
-                    win = print.openURL();
-                    win.document.title = gt('Print');
-
-                    require(['io.ox/core/http'], function (http) {
-
-                        var getPrintable = function (cleanedList) {
-                            return http.PUT({
-                                module: 'contacts',
-                                dataType: 'text',
-                                params: {
-                                    action: 'list',
-//                                    template: 'infostore://70170', // dev
-//                                    template: 'infostore://70213', //  ui-dev
-                                    template: 'infostore://12495', // tobias
-                                    view: 'text',
-                                    format: 'template',
-                                    columns: '501,502,519,526,542,543,547,548,549,551,552'
-                                },
-                                data: cleanedList
-                            });
-                        };
-
-                        getPrintable(cleanedList)
-                        .done(function (print) {
-                            var $content = $('<div>').append(print);
-                            win.document.write($content.html());
-                            win.print();
-                        });
-
-                    });
-                });
-            });
-        }
-    });
-
     new Action('io.ox/contacts/actions/invite', {
 
         capabilities: 'calendar',
 
         requires: function (e) {
             var ctx = e.context;
-            if (ctx.id === 0 || ctx.folder_id === 0) { // e.g. non-existing contacts in halo view
+            // e.g. non-existing contacts in halo view
+            if (ctx.id === 0 || ctx.folder_id === 0) {
                 return false;
             } else {
                 var list = [].concat(ctx);

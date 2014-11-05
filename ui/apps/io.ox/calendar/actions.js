@@ -361,16 +361,6 @@ define('io.ox/calendar/actions',
         }
     });
 
-    new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
-        requires: 'one',
-        capabilities: 'printing',
-        action: function (baton) {
-            var options = { template: 'print.appointment.tmpl' }, POS = 'recurrence_position';
-            if (baton.data[POS]) options[POS] = baton.data[POS];
-            print.open('calendar', baton.data, options);
-        }
-    });
-
     new Action('io.ox/calendar/detail/actions/print', {
         capabilities: 'printing',
         id: 'print',
