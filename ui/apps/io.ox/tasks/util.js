@@ -39,64 +39,82 @@ define('io.ox/tasks/util',
                     endDate;
 
                 switch (value) {
-                case '5': // in 5 minutes
+                // in 5 minutes
+                case '5':
                     alarmDate.add(date.MINUTE * 5);
                     break;
-                case '15': // in 15 minutes
+                // in 15 minutes
+                case '15':
                     alarmDate.add(date.MINUTE * 15);
                     break;
-                case '30': // in 30 minutes
+                // in 30 minutes
+                case '30':
                     alarmDate.add(date.MINUTE * 30);
                     break;
-                case '60': // in 60 minutes
+                // in 60 minutes
+                case '60':
                     alarmDate.add(date.HOUR);
                     break;
                 default:
                     alarmDate.setMinutes(0, 0, 0);
                     switch (value) {
-                    case 'd0': // this morning
+                    // this morning
+                    case 'd0':
                         alarmDate.setHours(6);
                         break;
-                    case 'd1': // by noon
+                    // by noon
+                    case 'd1':
                         alarmDate.setHours(12);
                         break;
-                    case 'd2': // this afternoon
+                    // this afternoon
+                    case 'd2':
                         alarmDate.setHours(15);
                         break;
-                    case 'd3': // tonight
+                    // tonight
+                    case 'd3':
                         alarmDate.setHours(18);
                         break;
-                    case 'd4': // late in the evening
+                    // late in the evening
+                    case 'd4':
                         alarmDate.setHours(22);
                         break;
                     default:
                         alarmDate.setHours(6);
                         switch (value) {
-                        case 't': // tomorrow
+                        // tomorrow
+                        case 't':
                             alarmDate.add(date.DAY);
                             break;
-                        case 'ww': // next week
+                        // next week
+                        case 'ww':
                             alarmDate.add(date.WEEK);
                             break;
-                        case 'w0': // next Sunday
+                        // next Sunday
+                        case 'w0':
                             alarmDate.add(date.DAY * (7 - alarmDate.getDay()));
                             break;
-                        case 'w1': // next Monday
+                        // next Monday
+                        case 'w1':
                             alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 6) % 7)));
                             break;
-                        case 'w2': // next Tuesday
+                        // next Tuesday
+                        case 'w2':
                             alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 5) % 7)));
                             break;
-                        case 'w3': // next Wednesday
+                        // next Wednesday
+                        case 'w3':
                             alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 4) % 7)));
                             break;
-                        case 'w4': // next Thursday
+                        // next Thursday
+                        case 'w4':
                             alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 3) % 7)));
                             break;
-                        case 'w5': // next Friday
+                        // next Friday
+                        case 'w5':
                             alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 2) % 7)));
                             break;
-                        case 'w6': // next Saturday
+                        // next Saturday
+                        case 'w6':
                             alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 1) % 7)));
                             break;
                         default:
@@ -112,10 +130,13 @@ define('io.ox/tasks/util',
                 endDate = new date.Local(alarmDate.getTime());
 
                 if (smartEndDate) {
-                    var weekDay = endDate.getDay(); // 0 for Sunday to 6 for Saturday
-                    if (weekDay < 1 || weekDay > 5) { // if weekend, shift to next Monday
+                    // 0 for Sunday to 6 for Saturday
+                    var weekDay = endDate.getDay();
+                    // if weekend, shift to next Monday
+                    if (weekDay < 1 || weekDay > 5) {
                         endDate.add(date.DAY * (7 - ((endDate.getDay() + 6) % 7)));
-                    } else { // next Friday
+                    // next Friday
+                    } else {
                         endDate.add(date.DAY * (7 - ((endDate.getDay() + 2) % 7)));
                     }
                 }
@@ -129,8 +150,10 @@ define('io.ox/tasks/util',
                 endDate.setHours(0, 0, 0, 0);
 
                 return {
-                    endDate: endDate.local, // UTC
-                    alarmDate: alarmDate.getTime() // Localtime
+                    // UTC
+                    endDate: endDate.local,
+                    // Localtime
+                    alarmDate: alarmDate.getTime()
                 };
             },
 
@@ -188,7 +211,8 @@ define('io.ox/tasks/util',
                     }
                 }
 
-                result.push(['t', gt('tomorrow')]); // tomorrow
+                // tomorrow
+                result.push(['t', gt('tomorrow')]);
 
                 for (i = (now.getDay() + 2) % 7;i !== now.getDay(); i = ++i % 7) {
                     result.push(['w' + i, lookupWeekdayStrings[i]]);
@@ -204,7 +228,8 @@ define('io.ox/tasks/util',
             interpretTask: function (task, options) {
                 options = options || {};
                 task = _.copy(task, true);
-                if (!options.noOverdue && (task.status !== 3 && task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {//no state for task over time, so manual check is needed
+                //no state for task over time, so manual check is needed
+                if (!options.noOverdue && (task.status !== 3 && task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date)) {
                         task.status = gt('Overdue');
                         task.badge = 'badge badge-important';
                 } else if (task.status) {
@@ -266,8 +291,10 @@ define('io.ox/tasks/util',
                 return task;
             },
 
-            sortTasks: function (tasks, order) {//done tasks last, overduetasks first, same or no date alphabetical
-                tasks = _.copy(tasks, true);//make local copy
+            //done tasks last, overduetasks first, same or no date alphabetical
+            sortTasks: function (tasks, order) {
+                //make local copy
+                tasks = _.copy(tasks, true);
                 if (!order) {
                     order = 'asc';
                 }
@@ -275,18 +302,21 @@ define('io.ox/tasks/util',
                 var resultArray = [],
                     dateArray = [],
                     emptyDateArray = [],
-                    alphabetSort = function (a, b) {//sort by alphabet
+                    //sort by alphabet
+                    alphabetSort = function (a, b) {
                             if (a.title.toLowerCase() > b.title.toLowerCase()) {
                                 return 1;
                             } else {
                                 return -1;
                             }
                         },
-                    dateSort = function (a, b) {//sort by endDate. If equal, sort by alphabet
+                    //sort by endDate. If equal, sort by alphabet
+                    dateSort = function (a, b) {
                             /* jshint eqeqeq: false */
                             if (a.end_date > b.end_date) {
                                 return 1;
-                            } else if (a.end_date == b.end_date) {// use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
+                            // use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
+                            } else if (a.end_date == b.end_date) {
                                 return alphabetSort(a, b);
                             }
                             else {
@@ -299,9 +329,11 @@ define('io.ox/tasks/util',
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
                     } else if (tasks[i].end_date === null || tasks[i].end_date === undefined) {
-                        emptyDateArray.push(tasks[i]);//tasks without end_date
+                        //tasks without end_date
+                        emptyDateArray.push(tasks[i]);
                     } else {
-                        dateArray.push(tasks[i]);// tasks with end_date
+                        // tasks with end_date
+                        dateArray.push(tasks[i]);
                     }
                 }
                 //sort by end_date and alphabet

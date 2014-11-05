@@ -76,16 +76,18 @@ define('io.ox/tasks/actions',
                                                                           'Tasks have been deleted!', numberOfTasks));
                                 popup.close();
                             }).fail(function (result) {
-                                if (result.code === 'TSK-0019') { //task was already deleted somewhere else. everythings fine, just show info
+                                if (result.code === 'TSK-0019') {
+                                    //task was already deleted somewhere else. everythings fine, just show info
                                     notifications.yell('info', gt('Task was already deleted!'));
                                     popup.close();
-                                } else if (result.error) {//there is an error message from the backend
+                                } else if (result.error) {
+                                    //there is an error message from the backend
                                     popup.idle();
                                     popup.getBody().empty().append($.fail(result.error, function () {
                                         popup.trigger('deleteTask', data);
                                     })).find('h4').remove();
-                                } else {//show generic error message
-                                    //show retrymessage and enable buttons again
+                                } else {
+                                    //show generic error message, show retrymessage and enable buttons again
                                     popup.idle();
                                     popup.getBody().empty().append($.fail(gt.ngettext('The task could not be deleted.',
                                                                               'The tasks could not be deleted.', numberOfTasks), function () {
