@@ -55,7 +55,8 @@
         right: 0;
         bottom: 0;
         top: @calendar-toolbar-height + @weekview-footer-height;
-        z-index: 1; // see bug 33927
+        // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
+        z-index: 1;
 
         .fulltime-container {
 
@@ -201,7 +202,7 @@
 
     }
 
-    /* Hide days in dayview */
+    // Hide days in dayview
     .dayview {
 
         .toolbar {
@@ -225,7 +226,8 @@
         opacity: 1;
         .transition(~"opacity 0.2s, background-color 0.3s, color 0.3s");
         .backface-visibility(hidden);
-        box-sizing: content-box; // bug #32753
+        // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
+        box-sizing: content-box;
 
         &.modify {
             cursor: pointer;
@@ -274,7 +276,7 @@
 
     }
 
-    /* Resize bars */
+    // Resize bars
     .ui-resizable-handle {
         position: absolute;
         font-size: 0.1px;
@@ -317,7 +319,7 @@
         height: 100%;
     }
 
-    /* Big Screen */
+    // Big Screen
     @media all and (min-height: 1200px) {
 
         .week-view-container {
@@ -338,7 +340,7 @@
 
     }
 
-    /* Mobile */
+    // Mobile
     @media all and (max-width: 480px), all and (max-device-width: 480px)  {
 
         .info {

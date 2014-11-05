@@ -36,7 +36,8 @@ define('io.ox/calendar/api',
             freebusy: {},
             all: {},
             get: {},
-            upload: {} // object to store appointments, that have attachments uploading atm
+            // object to store appointments, that have attachments uploading atm
+            upload: {}
         },
 
         reduce: factory.reduce,
@@ -174,7 +175,8 @@ define('io.ox/calendar/api',
                     params: {
                         action: 'search',
                         sort: '201',
-                        order: 'desc', // top-down makes more sense
+                        // top-down makes more sense
+                        order: 'desc',
                         timezone: 'UTC'
                     },
                     data: {
@@ -426,13 +428,16 @@ define('io.ox/calendar/api',
                     max = 50;
 
                 for (var i = 0; i < items.length && conflicts.length < max; i++) {
-                    if (items[i].id !== data.id) {//no conflict with itself
-                        if (items[i].shown_as !== 4) {//4 = free
+                    if (items[i].id !== data.id) {
+                        //no conflict with itself
+                        if (items[i].shown_as !== 4) {
+                            //4 = free
                             var found = false;
                             for (var a = 0; a < items[i].users.length && !found; a++) {
-                                if (items[i].users[a].id === ox.user_id && (items[i].users[a].confirmation === 1 || items[i].users[a].confirmation === 3)) {//confirmed or tentative
+                                if (items[i].users[a].id === ox.user_id && (items[i].users[a].confirmation === 1 || items[i].users[a].confirmation === 3)) {
+                                    //confirmed or tentative
                                    conflicts.push(items[i]);
-                               } 
+                               }
                             }
                         }
                     }
@@ -485,14 +490,16 @@ define('io.ox/calendar/api',
                 return api.update({
                     folder: o.folder,
                     id: o.id,
-                    timestamp: timestamp,//ie gets conflict error so manual timestamp is needed here
+                    // ie gets conflict error so manual timestamp is needed here
+                    timestamp: timestamp,
                     alarm: alarm
                 });
             })
             .then(function () {
                 api.caches.get = {};
                 api.caches.all = {};
-                api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
+                // redraw detailview to be responsive and remove invites
+                api.trigger('mark:invite:confirmed', o);
                 delete api.caches.get[key];
                 return api.get(o).then(function (data) {
                     api.trigger('update', data);
@@ -534,7 +541,8 @@ define('io.ox/calendar/api',
             return this.getUpdates({
                 folder: 'all',
                 start: start,
-                end: end, // 5 years like OX6
+                // 5 years like OX6
+                end: end,
                 timestamp: 0,
                 recurrence_master: true
             })
@@ -587,7 +595,8 @@ define('io.ox/calendar/api',
             var result = [], requests = [];
 
             _(list).each(function (obj) {
-                if (obj.type === 1 || obj.type === 3) {//freebusy only supports internal users and resources
+                // freebusy only supports internal users and resources
+                if (obj.type === 1 || obj.type === 3) {
                     var key = [obj.type, obj.id, options.start, options.end].join('-');
                     // in cache?
                     if (key in api.caches.freebusy && useCache) {
@@ -638,7 +647,8 @@ define('io.ox/calendar/api',
          * @return {boolean}
          */
         uploadInProgress: function (key) {
-            return this.caches.upload[key] || false;//return true boolean
+            // return true boolean
+            return this.caches.upload[key] || false;
         },
 
         /**
@@ -697,7 +707,8 @@ define('io.ox/calendar/api',
                     action: action || 'update',
                     id: o.id,
                     folder: o.folder_id || o.folder,
-                    timestamp: o.timestamp || _.now() // mandatory for 'update'
+                    // mandatory for 'update'
+                    timestamp: o.timestamp || _.now()
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
@@ -733,11 +744,13 @@ define('io.ox/calendar/api',
     var checkForNotification = function (obj, removeAction) {
         if (removeAction) {
             api.trigger('delete:appointment', obj);
-        } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {//new appointments
+        } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {
+            //new appointments
             require(['io.ox/core/api/reminder'], function (reminderAPI) {
                 reminderAPI.getReminders();
             });
-        } else if (obj.alarm || obj.end_date || obj.start_date) {//if one of this has changed during update action
+        } else if (obj.alarm || obj.end_date || obj.start_date) {
+            //if one of this has changed during update action
             require(['io.ox/core/api/reminder'], function (reminderAPI) {
                 reminderAPI.getReminders();
             });

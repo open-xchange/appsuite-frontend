@@ -86,9 +86,10 @@ define('io.ox/calendar/participants',
     function ParticipantsView(baton, options) {
 
         options = _.extend({
-            summary: true,//show summary
-            inlineLinks: false,//no inline links (provide extensionpoint id here to make them show)
-            //inlineLinks: true
+            //show summary
+            summary: true,
+            //no inline links (provide extensionpoint id here to make them show)
+            inlineLinks: false
         }, options);
 
         this.draw = function () {
@@ -150,7 +151,8 @@ define('io.ox/calendar/participants',
                     })
                     .value();
 
-                if (baton.data.confirmations === undefined || baton.data.confirmations.length === 0) {//workaround for tasks
+                if (baton.data.confirmations === undefined || baton.data.confirmations.length === 0) {
+                    //workaround for tasks
                     confirmations = util.getConfirmations({users: baton.data.users, confirmations: external});
                 } else {
                     confirmations = util.getConfirmations(baton.data);
@@ -300,7 +302,8 @@ define('io.ox/calendar/participants',
                         });
                         participants.find('legend').first().append(sum);
                     }
-                    if (changedBaton) {//remove temporary changes
+                    if (changedBaton) {
+                        //remove temporary changes
                         delete baton.data;
                     }
                     // draw action links if extension point is provided

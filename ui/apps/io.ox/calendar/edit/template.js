@@ -77,7 +77,8 @@ define('io.ox/calendar/edit/template',
                 .on('click', function () {
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
-                        baton.model.attributes.tempAttachmentIndicator = true;//temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                        //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                        baton.model.attributes.tempAttachmentIndicator = true;
                     }
                     baton.model.save().then(_.bind(baton.app.onSave, baton.app));
                 })
@@ -442,7 +443,8 @@ define('io.ox/calendar/edit/template',
         module: 1,
         finishedCallback: function (model, id) {
             var obj = {};
-            obj.id = model.attributes.id || id;//new objects have no id in model yet
+            //new objects have no id in model yet
+            obj.id = model.attributes.id || id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
             if (model.attributes.recurrence_position !== null) {
                 obj.recurrence_position = model.attributes.recurrence_position;

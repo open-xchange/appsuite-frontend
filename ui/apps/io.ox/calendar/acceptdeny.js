@@ -34,9 +34,11 @@ define('io.ox/calendar/acceptdeny',
                 inputid = _.uniqueId('dialog'),
                 defaultReminder = calSettings.get('defaultReminder', 15),
                 apiData = { folder: o.folder_id, id: o.id },
-                checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;//appointments check for conflicts by default, tasks don't
+                //appointments check for conflicts by default, tasks don't
+                checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;
 
-            if (options.api) {//use different api if provided (tasks use this)
+            //use different api if provided (tasks use this)
+            if (options.api) {
                 api = options.api;
             }
 
@@ -158,13 +160,14 @@ define('io.ox/calendar/acceptdeny',
 
                             var previousConfirmation = 0;
                             for (var i = 0; i < appointmentData.users.length; i++) {
-                                if (appointmentData.users[i].id === ox.user_id) {//confirmed or tentative
-                                   previousConfirmation = appointmentData.users[i].confirmation;
-                               } 
+                                if (appointmentData.users[i].id === ox.user_id) {
+                                    //confirmed or tentative
+                                    previousConfirmation = appointmentData.users[i].confirmation;
+                               }
                             }
-                            //no conflicts possible if you decline the appointment
-                            //no conflicts possible for free appointments
-                            //don't check if confirmation status did not change
+                            // no conflicts possible if you decline the appointment
+                            // no conflicts possible for free appointments
+                            // don't check if confirmation status did not change
                             if (action === 'declined' || appointmentData.shown_as === 4 || apiData.data.confirmation === previousConfirmation) {
                                 checkConflicts = false;
                             }
@@ -186,7 +189,7 @@ define('io.ox/calendar/acceptdeny',
                                             dialog.addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                                 .show()
                                                 .done(function (action) {
-                                                    
+
                                                     if (action === 'cancel') {
                                                         def.resolve(action);
                                                         return;

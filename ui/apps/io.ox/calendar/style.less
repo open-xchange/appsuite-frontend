@@ -105,7 +105,7 @@
 
     }
 
-    /* Mobile */
+    // Mobile
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
         .toolbar {
@@ -197,7 +197,7 @@
 
         &.reserved {
 
-            @r: #D0EAFF; // lighten(@appointment-reserved, 50%);
+            @r: #D0EAFF;
             border-color: lighten(@appointment-reserved, 10%);
             color: darken(@appointment-reserved, 5%);
             background-color: @r;
@@ -298,9 +298,7 @@
     }
 }
 
-/* Grid , only used in conflicts. Listview styles are located under
-   list/style.less
-*/
+// Grid , only used in conflicts. Listview styles are located under list/style.less
 .vgrid-cell {
 
     &.calendar {
@@ -383,7 +381,7 @@
 
         &.absent {
             background-color: @appointment-absent;
-        } /* red */
+        }
 
         &.free {
             background-color: @appointment-free;
@@ -391,7 +389,7 @@
     }
 }
 
-/* Conflicts */
+// Conflicts
 .additional-info {
 
     .vgrid-cell.calendar {
@@ -416,7 +414,7 @@
     .conflicts .person-link {
 
         &.accepted {
-            color: #799952;  /* green */
+            color: #799952;
         }
 
         &.declined {
@@ -425,14 +423,14 @@
         }
 
         &.tentative {
-            color: #c80; /* orange */
+            color: #c80;
         }
 
     }
 
 }
 
-/* Detail view */
+// Detail view
 .calendar-detail {
 
     @media (max-width: 480px), (max-device-width: 480px) {
@@ -571,10 +569,10 @@
 
 .participants-view {
 
-    @participant-unconfirmed:   #428BCA; /* blue */
-    @participant-accepted:      #799952; /* green */
-    @participant-declined:      #913F3F; /* red */
-    @participant-tentative:     #cc8800; /* orange */
+    @participant-unconfirmed:   #428BCA;
+    @participant-accepted:      #799952;
+    @participant-declined:      #913F3F;
+    @participant-tentative:     #cc8800;
 
     .io-ox-label {
         font-size: 0.9em;
@@ -686,7 +684,8 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                max-width: 222px; //icons and padding need 28px
+                // icons and padding need 28px
+                max-width: 222px;
                 display: inline-block;
 
                 &.accepted {
@@ -723,7 +722,7 @@
     float: none;
 }
 
-/* Timezone popups */
+// Timezone popups
 .popover {
 
     &.timezones {
@@ -746,7 +745,7 @@
     }
 }
 
-/* Invitations */
+// Invitations
 .itip-section.io-ox-busy {
     min-height: 60px;
 }
@@ -761,7 +760,8 @@
 .itip-item {
     padding: 20px;
     min-height: 80px;
-    background-color: #F5F5F5; // same color as .well
+    // same color as .well
+    background-color: #F5F5F5;
 }
 
 .itip-item + .itip-item {
@@ -820,7 +820,7 @@
 
 }
 
-//io.ox/calendar/listview, io.ox/calendar/common-extensions
+// io.ox/calendar/listview, io.ox/calendar/common-extensions
 .calendar-item {
 
     .title {

@@ -23,7 +23,8 @@ define('io.ox/calendar/mobile-toolbar-actions',
     // define links for each page
 
     var pMonth = ext.point('io.ox/calendar/mobile/toolbar/month'),
-        pWeek = ext.point('io.ox/calendar/mobile/toolbar/week'), // actually a single day as we use week:day
+        // actually a single day as we use week:day
+        pWeek = ext.point('io.ox/calendar/mobile/toolbar/week'),
         pList = ext.point('io.ox/calendar/mobile/toolbar/list'),
         pListMulti = ext.point('io.ox/calendar/mobile/toolbar/list/multiselect'),
         multiInlineActions = ext.point('io.ox/calendar/mobile/toolbar/list/multiselectactions'),
@@ -129,7 +130,8 @@ define('io.ox/calendar/mobile-toolbar-actions',
             //.# Will be used as button label in the toolbar, allowing the user to peform actions for the current appointment
             gt('Actions')
         ),
-        noCaret: true, // don't draw the caret icon beside menu link
+        // don't draw the caret icon beside menu link
+        noCaret: true,
         drawDisabled: true,
         ref: 'io.ox/calendar/links/inline'
     }));

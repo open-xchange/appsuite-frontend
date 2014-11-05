@@ -29,7 +29,8 @@ define('io.ox/calendar/conflicts/conflictList', ['gettext!io.ox/calendar/conflic
                     conflictList.append(viewGrid.drawSimpleGrid(conflicts).children());
                     dialog.resizeBody();
                     $('.vgrid-cell', conflictList).on('click', function (e) {
-                        if ($(this).data('appointment').folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
+                        if ($(this).data('appointment').folder_id) {
+                            //conflicts with appointments, where you aren't a participant don't have a folder_id.
                             calAPI.get($(this).data('appointment')).done(function (data) {
                                 // check if private
                                 if (!data.private_flag || ox.user_id === data.created_by) {

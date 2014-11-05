@@ -43,7 +43,8 @@ define('io.ox/calendar/list/perspective',
             grid,
             findRecurrence = false,
             optDropdown = null,
-            months = 1; // how many months do we display
+            // how many months do we display
+            months = 1;
 
         if (_.device('smartphone')) {
             app.left.addClass('calendar-list-view vsplit');
@@ -71,8 +72,10 @@ define('io.ox/calendar/list/perspective',
 
         this.grid = grid = app.getGrid();
 
-        if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
-            findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
+        // use only for single items
+        if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {
+            //check if recurrencePosition is missing
+            findRecurrence = _.url.hash('id').split('.').length === 2;
         }
 
         // fix selection's serialize
@@ -106,7 +109,8 @@ define('io.ox/calendar/list/perspective',
             return $.Deferred().resolve(ids);
         });
 
-        var directAppointment;//directly linked appointments are stored here
+        //directly linked appointments are stored here
+        var directAppointment;
 
         //function to check for a selection change to prevent refresh from overiding direct links
         function checkDirectlink(e, list) {
@@ -296,11 +300,13 @@ define('io.ox/calendar/list/perspective',
                             //found valid recurrence, append it
                             if (foundRecurrence !== false) {
                                 _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
-                            } else {//ok its not in the list lets show it directly
+                            } else {
+                                //ok its not in the list lets show it directly
                                 app.trigger('show:appointment', {id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0}, true);
                             }
 
-                            findRecurrence = false;//only search once
+                            //only search once
+                            findRecurrence = false;
                         }
                         return data;
                     });

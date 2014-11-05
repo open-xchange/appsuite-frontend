@@ -130,8 +130,9 @@ define('io.ox/calendar/actions',
             var exists = e.baton && e.baton.data ? e.baton.data.id !== undefined : true,
                 allowed = e.collection.has('one', 'create');
             if (allowed) {
-                //if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
-                if (!e.baton.data.folder_id) {//you need to have a folder id to edit
+                // if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
+                if (!e.baton.data.folder_id) {
+                    // you need to have a folder id to edit
                     allowed = false;
                 }
             }

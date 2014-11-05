@@ -54,14 +54,16 @@
 
         .week {
 
-            height: 100/6%; /* might be 6 weeks in a month */
+            // might be 6 weeks in a month
+            height: 100/6%;
             .backface-visibility(hidden);
 
             .week-info {
 
                 position: relative;
                 float: right;
-                width: 100/8%; /* fix for different round functions */
+                // fix for different round functions
+                width: 100/8%;
                 height: 100%;
                 padding: 13px 13px 13px 1px;
                 font-size: 11px;
@@ -193,7 +195,7 @@
 
     }
 
-    /* Appointment */
+    // Appointment
     .appointment {
 
         line-height: 14px;
@@ -226,7 +228,7 @@
 
     }
 
-    /* Mobile */
+    // Mobile
     @media (device-width: 480px), (max-device-width: 480px)  {
 
         .toolbar {
@@ -260,7 +262,8 @@
 
             .week {
 
-                height: 20%; // 5 weeks only
+                // 5 weeks only
+                height: 20%;
                 border-bottom: 1px solid #ccc;
 
                 .day {
@@ -276,7 +279,8 @@
 
                     .number {
                         top: auto;
-                        bottom: auto; // move number to top of cell
+                        // move number to top of cell
+                        bottom: auto;
                         left: 0;
                         text-align: center;
                         color: rgba(1,1,1,.6);

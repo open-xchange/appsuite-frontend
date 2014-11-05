@@ -226,7 +226,7 @@ define('io.ox/calendar/main',
                 .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
-                .setTitle('') // no title
+                .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
@@ -266,7 +266,8 @@ define('io.ox/calendar/main',
                 showToggle: _.device('smartphone'),
                 hideTopbar: _.device('smartphone'),
                 hideToolbar: _.device('smartphone'),
-                toolbarPlacement: 'top' // if it's shown, it should be on the top
+                // if it's shown, it should be on the top
+                toolbarPlacement: 'top'
             };
 
             // show "load more" link

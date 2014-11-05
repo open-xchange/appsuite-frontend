@@ -62,7 +62,8 @@ define('io.ox/calendar/view-grid-template',
                 var self = this,
                     a11yLabel = '',
                     tmpStr = '';
-                if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
+                //conflicts with appointments, where you aren't a participant don't have a folder_id.
+                if (data.folder_id) {
                     var folder = folderAPI.get(data.folder_id);
                     folder.done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);

@@ -165,7 +165,8 @@ define('io.ox/calendar/util',
                 } else if (diff < 2 * date.DAY) {
                     return gt('Tomorrow');
                 } else if (diffWeek < 7 * date.DAY) {
-                    return date.locale.days[d.getDay()]; // this week
+                    // this week
+                    return date.locale.days[d.getDay()];
                 } else if (diffWeek >= 7 * date.DAY && diffWeek < 14 * date.DAY) {
                     return showDate ? d.format(date.DATE) : gt('Next Week');
                 }
@@ -646,7 +647,8 @@ define('io.ox/calendar/util',
             mode = mode || 'dist';
 
             _.each(participants, function (participant) {
-                if (participant.type === 5) { // external user
+                if (participant.type === 5) {
+                    // external user
                     if (mode === 'dist') {
                         result.push({
                             display_name: participant.display_name,
@@ -656,9 +658,11 @@ define('io.ox/calendar/util',
                     } else {
                         result.push([participant.display_name, participant.mail]);
                     }
-                } else if (participant.type === 2) { // group
+                } else if (participant.type === 2) {
+                    // group
                     groupIDs.push(participant.id);
-                } else if (participant.type === 1) { // internal user
+                } else if (participant.type === 1) {
+                    // internal user
                     userIDs.push(participant.id);
                 }
             });
