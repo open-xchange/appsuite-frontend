@@ -61,7 +61,8 @@ define('io.ox/preview/officePreview/main',
 
         app.document = [];
         app.index = 0;
-        app.maxPages = -1; // Unknown
+        // Unknown
+        app.maxPages = -1;
 
         var $pageIndicator = $('<span>').addClass('io-ox-office-preview-page-indicator').text('1');
 
