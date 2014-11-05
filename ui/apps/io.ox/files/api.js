@@ -562,12 +562,6 @@ define('io.ox/files/api',
         }
         formData.append($('<input>', {'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json)}));
 
-        /*return http.UPLOAD({
-            module: 'files',
-            params: { action: 'update', timestamp: _.now(), id: options.id },
-            data: formData,
-            fixPost: true // TODO: temp. backend fix
-        });*/
         var tmpName = 'iframe_' + _.now(),
         frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
         $('#tmp').append(frame);
@@ -643,29 +637,6 @@ define('io.ox/files/api',
                 return handleExtendedResponse(file, response);
             });
     };
-
-    // deprecated/unused; commented out on 18.11.2013
-    // api.create = function (options) {
-    //     options = $.extend({
-    //         folder: coreConfig.get('folder/infostore')
-    //     }, options || {});
-    //     if (!options.json.folder_id) {
-    //         options.json.folder_id = options.folder;
-    //     }
-    //     return http.PUT({
-    //             module: 'files',
-    //             params: { action: 'new' },
-    //             data: options.json,
-    //             appendColumns: false
-    //         })
-    //         .pipe(function (data) {
-    //             // clear folder cache
-    //             return api.propagate('new', { folder_id: options.folder }).pipe(function () {
-    //                 api.trigger('create.file', {id: data, folder: options.folder});
-    //                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
-    //             });
-    //         });
-    // };
 
     /**
      * update caches and fire events (if not suppressed)
