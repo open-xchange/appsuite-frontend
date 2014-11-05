@@ -123,7 +123,8 @@ define('io.ox/backbone/forms',
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
         this.modelEvents['valid:' + options.attribute] = 'removeError';
 
-        _.extend(this, options); // May override any of the above aspects
+        // May override any of the above aspects
+        _.extend(this, options);
     }
 
     function SelectControlGroup(options) {
@@ -335,11 +336,13 @@ define('io.ox/backbone/forms',
 
         var BinderUtils = {
             _toDate: function (value, attribute, model) {
-                if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
+                if (value === undefined || value === null || value === '') {
+                    //dont use !value or 0 will result in false
                     return null;
                 }
                 if (!_.isNumber(value)) {
-                    return value; //do nothing
+                    //do nothing
+                    return value;
                 }
                 if (model.get('full_time')) {
                     value = date.Local.utc(value);
@@ -364,7 +367,8 @@ define('io.ox/backbone/forms',
             },
 
             _toTime: function (value) {
-                if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
+                if (value === undefined || value === null || value === '') {
+                    //dont use !value or 0 will result in false
                     return null;
                 }
                 var myTime = new date.Local(parseInt(value, 10));
@@ -509,7 +513,8 @@ define('io.ox/backbone/forms',
                         weekStart: date.locale.weekStart,
                         parentEl: self.nodes.controlGroup,
                         todayHighlight: true,
-                        todayBtn: 'linked',//today button should insert the date when clicked. See 34381
+                        //today button should insert the date when clicked. See 34381
+                        todayBtn: 'linked',
                         autoclose: true
                     });
                 } else {
@@ -520,8 +525,8 @@ define('io.ox/backbone/forms',
                         } else {
                             self.nodes.dayField.mobiscroll().date(defaultSettings);
                         }
-                        // self.nodes.dayField.mobiscroll('option', 'dateOrder', 'dmy');
-                        if (options.clearButton) {//add clear button
+                        //add clear button
+                        if (options.clearButton) {
                             self.nodes.dayField.mobiscroll('option', 'button3Text', gt('clear'));
                             self.nodes.dayField.mobiscroll('option', 'button3', function () {
                                 self.model.set(self.attribute, null, { validate: true });
@@ -529,7 +534,8 @@ define('io.ox/backbone/forms',
                             });
                         }
 
-                        self.nodes.dayField.val = function (value) {//repairing functionality
+                        //repairing functionality
+                        self.nodes.dayField.val = function (value) {
                             if (arguments.length > 0) {
                                 this['0'].value = value;
                             } else {

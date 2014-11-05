@@ -29,20 +29,28 @@ define('io.ox/backbone/validation',
         text: function () {
             return true;
         },
-        anyFloat: function (val) {//numbers with . or , as a separator are valid 1.23 or 1,23 for example
+        //numbers with . or , as a separator are valid 1.23 or 1,23 for example
+        anyFloat: function (val) {
             val = String(val)
                     .replace(/,/g, '.')
-                    .replace(/\.0*$/, ''); //remove zero only decimal places
-            var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
-            (!isNaN(parseFloat(val, 10)) &&  //check if its a number
-            (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+                    //remove zero only decimal places
+                    .replace(/\.0*$/, '');
+            //empty value is valid (if not, add the mandatory flag)
+            var isValid = (emptycheck(val)) ||
+                          //check if its a number
+                          (!isNaN(parseFloat(val, 10)) &&
+                          //check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+                          (parseFloat(val, 10).toString().length === val.toString().length));
             return isValid ||
               gt('Please enter a valid number');
         },
         number: function (val) {
-            var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
-                          (!isNaN(parseFloat(val, 10)) &&  //check if its a number
-                          (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+            //empty value is valid (if not, add the mandatory flag)
+            var isValid = (emptycheck(val)) ||
+                          //check if its a number
+                          (!isNaN(parseFloat(val, 10)) &&
+                          //check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+                          (parseFloat(val, 10).toString().length === val.toString().length));
             return isValid ||
                 gt('Please enter a valid number');
         },
@@ -72,12 +80,14 @@ define('io.ox/backbone/validation',
             return _.now() > val || gt('Please enter a date in the past');
         },
         email: function (val) {
-            return settings.get('features/validateMailAddresses', true) === false || // enabled by default
+            // enabled by default
+            return settings.get('features/validateMailAddresses', true) === false ||
                 util.isValidMailAddress(val) ||
                 gt('Please enter a valid email address');
         },
         phone: function (val) {
-            return settings.get('features/validatePhoneNumbers', false) === false || // disabled by default
+            // disabled by default
+            return settings.get('features/validatePhoneNumbers', false) === false ||
                 util.isValidPhoneNumber(val) ||
                 gt('Please enter a valid phone number. Allowed characters are: %1$s', '0-9 , . - ( ) # + ; /');
         },

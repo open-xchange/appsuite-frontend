@@ -422,7 +422,8 @@ define('io.ox/backbone/modelFactory',
             id: 'generic',
             validate: function (attributes, errors) {
                 _(attributes).each(function (value, key) {
-                    var analysisisis = self.point('validation/' + key).invoke('validate', errors, value, errors, attributes, key).value(); // What's the plural of analysis again?
+                    // What's the plural of analysis again?
+                    var analysisisis = self.point('validation/' + key).invoke('validate', errors, value, errors, attributes, key).value();
                     // If the extension returned a falsy value, we assume everything is correct
                     // If the value is truthy, it can be either an array or another object (typically a string)
                     // the array elements are passed as individual errors to the error collection for this attribute
