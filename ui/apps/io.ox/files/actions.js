@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',

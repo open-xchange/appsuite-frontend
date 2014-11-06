@@ -19,7 +19,7 @@ define('io.ox/files/toolbar', [
     'io.ox/backbone/mini-views/toolbar',
     'io.ox/core/notifications',
     'gettext!io.ox/files',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/files/actions',
     'less!io.ox/files/style'
 ], function (ext, links, actions, Dropdown, Toolbar, notifications, gt, api) {

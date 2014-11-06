@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/rename', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/files/util',

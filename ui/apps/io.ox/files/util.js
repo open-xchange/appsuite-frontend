@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/util', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',

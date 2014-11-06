@@ -16,7 +16,7 @@ define('io.ox/files/filepicker', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/folder/picker',
     'io.ox/core/cache',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/tk/selection',
     'settings!io.ox/core',
     'gettext!io.ox/files',

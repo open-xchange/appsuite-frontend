@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/lock-unlock', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
 ], function (api, notifications, gt) {

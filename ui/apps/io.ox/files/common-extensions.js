@@ -13,7 +13,7 @@
 
 define('io.ox/files/common-extensions', [
     'io.ox/mail/util',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/strings'
 ], function (util, api, strings) {
 

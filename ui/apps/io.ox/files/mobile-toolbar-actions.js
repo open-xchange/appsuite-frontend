@@ -14,7 +14,7 @@
 define('io.ox/files/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'gettext!io.ox/mail'
 ], function (ext, links, api, gt) {
 

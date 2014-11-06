@@ -12,7 +12,7 @@
  */
 
 define('io.ox/files/actions/showlink', [
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/util',
     'gettext!io.ox/files'

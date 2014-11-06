@@ -10,7 +10,7 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-define(['io.ox/files/api',
+define(['io.ox/files/legacy_api',
     'shared/examples/for/api',
     'sinon-wrapper',
     'fixture!io.ox/files/file.json',
@@ -72,7 +72,7 @@ define(['io.ox/files/api',
             });
         };
 
-    describe('files API', function () {
+    describe('files API (legacy)', function () {
         //tracker
         describe('has a tracker', function () {
             var tracker = api.tracker;

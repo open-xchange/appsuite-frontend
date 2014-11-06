@@ -13,7 +13,7 @@
  *
  */
 
-define('io.ox/files/api', [
+define('io.ox/files/legacy_api', [
     'io.ox/core/http',
     'io.ox/core/extensions',
     'io.ox/core/api/factory',

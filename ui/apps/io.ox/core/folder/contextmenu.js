@@ -295,7 +295,7 @@ define('io.ox/core/folder/contextmenu', [
         zip: (function () {
 
             function handler(e) {
-                require(['io.ox/files/api'], function (api) {
+                require(['io.ox/files/legacy_api'], function (api) {
                     api.zip(e.data.id);
                 });
             }

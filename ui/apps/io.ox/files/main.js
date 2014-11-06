@@ -24,7 +24,7 @@ define('io.ox/files/main', [
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
     'io.ox/core/capabilities',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
     'io.ox/files/actions',

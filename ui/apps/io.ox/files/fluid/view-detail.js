@@ -17,7 +17,7 @@ define('io.ox/files/fluid/view-detail', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/files/actions',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/preview/main',
     'io.ox/core/api/user',
     'io.ox/core/folder/breadcrumb',

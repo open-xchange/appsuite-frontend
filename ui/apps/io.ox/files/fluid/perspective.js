@@ -16,7 +16,7 @@ define('io.ox/files/fluid/perspective', [
     'io.ox/core/extensions',
     'io.ox/core/commons',
     'io.ox/core/tk/dialogs',
-    'io.ox/files/api',
+    'io.ox/files/legacy_api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/upload',
     'io.ox/core/extPatterns/dnd',
