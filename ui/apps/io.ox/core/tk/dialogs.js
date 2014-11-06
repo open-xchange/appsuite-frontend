@@ -64,13 +64,11 @@ define('io.ox/core/tk/dialogs', [
             keepFocus = function (e) {
                 // we have to consider that two popups might be open
                 // so we cannot just refocus the current popup
-                var insidePopup = $(e.target).closest('.io-ox-dialog-popup').length > 0;
-                var sidePopups = $(e.target).closest('.io-ox-sidepopup').length > 0;
-                if (!insidePopup && !sidePopups) {
-                    if (nodes.popup.is(':visible')) {
-                        e.stopPropagation();
-                        nodes.popup.focus();
-                    }
+                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window').length > 0;
+                if (insidePopup) return;
+                if (nodes.popup.is(':visible')) {
+                    e.stopPropagation();
+                    nodes.popup.focus();
                 }
             },
 

@@ -55,7 +55,7 @@ define('io.ox/mail/settings/pane', [
     var MailSettingsView = Backbone.View.extend({
         tagName: 'div',
 
-        render: function () {
+        render: function (baton) {
             var self = this, accounts, msisdns;
             /* TODO: only the default account (id: 0) can have multiple aliases for now
              * all other accounts can only have one address (the primary address)
@@ -91,7 +91,7 @@ define('io.ox/mail/settings/pane', [
             $.when(accounts, msisdns).then(function (addresses, numbers) {
 
                 optionsAllAccounts = [].concat(addresses, numbers);
-                ext.point(POINT + '/pane').invoke('draw', self.$el);
+                ext.point(POINT + '/pane').invoke('draw', self.$el, baton);
 
                 // hide non-configurable sections
                 self.$el.find('[data-property-section]').each(function () {
@@ -114,7 +114,7 @@ define('io.ox/mail/settings/pane', [
             this.addClass('io-ox-mail-settings');
             mailViewSettings = new MailSettingsView({ model: mailSettings });
 
-            this.append(mailViewSettings.render().$el);
+            this.append(mailViewSettings.render(baton).$el);
 
             if (Modernizr.touch) {
                 // see Bug 24802 - iPad: Cannot write email
@@ -312,8 +312,11 @@ define('io.ox/mail/settings/pane', [
         }
     });
 
-    ext.point('io.ox/mail/settings/detail').extend({
-        index: 500,
+    // extension point with index 500 is in 'io.ox/mail/settings/signatures/register'
+    // and displays signature settings
+
+    ext.point(POINT + '/pane').extend({
+        index: 600,
         id: 'imap-subscription',
         draw: function () {
 
