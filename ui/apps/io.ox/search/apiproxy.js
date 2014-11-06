@@ -50,7 +50,7 @@ define('io.ox/search/apiproxy',[
             id: 'custom-facet-daterange',
             index: 200,
             customize: function (baton) {
-                if (_.device('small')) return;
+                if (_.device('smartphone')) return;
                 if (baton.args[0].params.module !== 'mail') return;
 
                 // for mail only
