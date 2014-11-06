@@ -985,8 +985,10 @@ html.ios8-standalone-ipad-fix {
 
 .io-ox-alert {
 
-    position: absolute;
-    top: 30px;
+    // we use position fixed and top:15px so to be independent of scroll positions esp. on mobile devices
+    position: fixed;
+    top: 15px;
+
     left: 50%;
     margin-left: -230px;
     width: 460px;
