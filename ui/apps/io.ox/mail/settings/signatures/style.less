@@ -1,3 +1,21 @@
+.mce-content-body.editable {
+    outline: none;
+    border-radius: 4px;
+}
+
+.io-ox-signature-edit {
+    background: white;
+    border: 1px solid #ccc;
+    padding: 13px;
+
+    &:focus {
+        border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+}
+
 .io-ox-signature-import {
 
     .classic-sig-preview {
@@ -17,6 +35,43 @@
 
 }
 
+.io-ox-signature-settings {
+    .radio label {
+        width: 100%;
+    }
+}
+
 input.error {
     border-color: #b94a48;
+}
+
+.io-ox-signature-dialog {
+    .editable-toolbar {
+        .mce-tinymce {
+            background-color: transparent;
+
+            .mce-toolbar-grp {
+                background-color: transparent;
+            }
+
+            .mce-edit-area {
+                border-color: transparent!important;
+            }
+        }
+    }
+}
+
+.mce-window {
+    .mce-formitem {
+        .mce-widget {
+            width: auto!important;;
+            position: relative!important;
+        }
+        .mce-last {
+            left: 0!important;
+            position: relative!important;
+            width: auto!important;
+            float: right;
+        }
+    }
 }

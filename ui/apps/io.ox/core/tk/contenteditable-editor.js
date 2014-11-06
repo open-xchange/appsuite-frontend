@@ -354,29 +354,29 @@ define.async('io.ox/core/tk/contenteditable-editor',
         }
     }
 
-    function Editor(el) {
+    function Editor(el, opt) {
 
-        var def = $.Deferred(), ed,
-            toolbar1, toolbar2, toolbar3, advanced;
+        var def = $.Deferred(), ed;
 
-        // toolbar default
-        toolbar1 = 'undo redo | bold italic | emoji | bullist numlist outdent indent';
-        advanced = 'styleselect fontselect fontsizeselect | forecolor backcolor | link image';
-        toolbar2 = '';
-        toolbar3 = '';
+        opt = _.extend({
+            toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
+            advanced: 'styleselect fontselect fontsizeselect | forecolor backcolor | link image',
+            toolbar2: '',
+            toolbar3: ''
+        }, opt);
 
-        toolbar1 += ' | ' + advanced;
+        opt.toolbar1 += ' | ' + opt.advanced;
 
         // consider custom configurations
-        toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
-        toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', toolbar2);
-        toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', toolbar3);
+        opt.toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', opt.toolbar1);
+        opt.toolbar2 = settings.get('tinyMCE/theme_advanced_buttons2', opt.toolbar2);
+        opt.toolbar3 = settings.get('tinyMCE/theme_advanced_buttons3', opt.toolbar3);
 
         // remove unsupported stuff
         if (!capabilities.has('emoji')) {
-            toolbar1 = toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
-            toolbar2 = toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
-            toolbar3 = toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.toolbar1 = opt.toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.toolbar2 = opt.toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
+            opt.toolbar3 = opt.toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
         }
 
         var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
@@ -400,9 +400,9 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
             skin: 'ox',
 
-            toolbar1: toolbar1,
-            toolbar2: toolbar2,
-            toolbar3: toolbar3,
+            toolbar1: opt.toolbar1,
+            toolbar2: opt.toolbar2,
+            toolbar3: opt.toolbar3,
 
             relative_urls: false,
             remove_script_host: false,
@@ -412,6 +412,10 @@ define.async('io.ox/core/tk/contenteditable-editor',
             browser_spellcheck: true,
 
             plugins: 'autolink oximage link paste textcolor emoji',
+
+            //link plugin settings
+            link_title: false,
+            target_list: false,
 
             language: lookupTinyMCELanguage(),
 
@@ -448,6 +452,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
             paste_postprocess: paste_postprocess,
 
             setup: function (ed) {
+
                 ed.on('keydown', function (e) {
                     // pressed enter?
                     if ((e.keyCode || e.which) === 13) {
@@ -475,10 +480,12 @@ define.async('io.ox/core/tk/contenteditable-editor',
           if (el === null) return;
 
             var p = el.parent(),
-            h = $(window).height(),
-            top = el.offset().top;
+                h = $(window).height(),
+                top = el.offset().top;
 
-            el.css('min-height', (h - top - 40));
+            el.css('min-height', h - top - 40 + 'px');
+            if (opt.css) el.css(opt.css);
+
             var th = $(fixed_toolbar + ' > div').height(),
                 w = $(fixed_toolbar).next().outerWidth();
             if (th) {
