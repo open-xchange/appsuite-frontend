@@ -672,7 +672,7 @@ define('io.ox/core/tk/vgrid',
         resize = function () {
             // get num of rows
             numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
-            numRows = CHUNK_SIZE; //Math.max(numVisible * mult >> 0, minRows);
+            numRows = CHUNK_SIZE;
             // prepare pool
             var  i = 0, clone, frag = document.createDocumentFragment();
             for (; i < numRows; i++) {
