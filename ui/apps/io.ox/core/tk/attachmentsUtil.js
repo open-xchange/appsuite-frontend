@@ -146,7 +146,8 @@ define('io.ox/core/tk/attachmentsUtil',
                 isText = (/^text\/(plain)$/i).test(data.type),
                 isOffice = false;
 
-            if (capabilities.has('text')) {//if we have office support let's check those files too
+            if (capabilities.has('text')) {
+                // if we have office support let's check those files too
                 if (file.file) {
                     isOffice = new pre.Preview({mimetype: file.file.content_type, filename: file.file.filename}).supportsPreview();
                 } else {

@@ -405,7 +405,8 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onTapRemove: function (e) {
             e.preventDefault();
-            e.stopImmediatePropagation(); // prevent a new select happening on the deleted cell
+            // prevent a new select happening on the deleted cell
+            e.stopImmediatePropagation();
             var node = $(e.currentTarget).closest(SELECTABLE),
                 cid = node.attr('data-cid');
             // propagate event

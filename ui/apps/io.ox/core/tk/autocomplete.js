@@ -372,17 +372,20 @@ define('io.ox/core/tk/autocomplete',
 
                 if (isOpen) {
                     switch (e.which) {
-                    case 27: // escape
+                    case 27:
+                        // escape
                         close();
                         break;
-                    case 39: // cursor right
+                    case 39:
+                        // cursor right
                         if (!e.shiftKey && o.mode === 'participant') {
                             // only prevent cursor movement when changing the content
                             // otherwise its not possible to use the cursor keys properly
                             if (update()) e.preventDefault();
                         }
                         break;
-                    case 13: // enter
+                    case 13:
+                        // enter
 
                         // two different behaviors are possible:
                         // 1. use the exact value that is in the input field
@@ -408,8 +411,10 @@ define('io.ox/core/tk/autocomplete',
                         if (value.length > 0) $(this).trigger('selected', val, (val || '').length >= o.minLength);
 
                         break;
-                    case 9:  // tab
-                        if (!e.shiftKey) { // ignore back-tab
+                    case 9:
+                        // tab
+                        // ignore back-tab
+                        if (!e.shiftKey) {
                             selected = scrollpane.find('.selected');
                             if (selected.length) {
                                 e.preventDefault();
@@ -420,24 +425,29 @@ define('io.ox/core/tk/autocomplete',
                             }
                         }
                         break;
-                    case 38: // cursor up
+                    case 38:
+                        // cursor up
                         e.preventDefault();
                         if (index > 0) {
                             select(index - 1);
                         }
                         break;
-                    case 40: // cursor down
+                    case 40:
+                        // cursor down
                         e.preventDefault();
                         select(index + 1);
                         break;
                     }
                 } else {
                     switch (e.which) {
-                    case 27: // escape
-                        $(this).val(''); //empty it
+                    case 27:
+                        // escape
+                        //empty it
+                        $(this).val('');
                         close();
                         break;
-                    /*case 39: // cursor right
+                    /*case 39:
+                        // cursor right
                         e.preventDefault();
                         if (!e.shiftKey) {
                             update();
@@ -445,11 +455,13 @@ define('io.ox/core/tk/autocomplete',
                         }
                         break;*/
                     case 13:
+                        // enter
                         if (o.mode !== 'participant') {
                             autoSelectFirstWait();
                         }
                         /* falls through */
                     case 9:
+                        // tab
                         var val = $.trim($(this).val());
                         if (val.length > 0) {
                             $(this).trigger('selected', val, (val || '').length >= o.minLength);
@@ -507,12 +519,14 @@ define('io.ox/core/tk/autocomplete',
                 $(this)
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
-                    .on('compositionend', fnKeyUp) // for IME support
+                    // for IME support
+                    .on('compositionend', fnKeyUp)
                     .on('blur', o.blur)
                     .on('blur', fnBlur)
                     .attr({
                         autocapitalize: 'off',
-                        autocomplete: 'off', //naming conflict with function
+                        //naming conflict with function
+                        autocomplete: 'off',
                         autocorrect: 'off'
                     });
             });

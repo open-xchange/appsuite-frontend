@@ -171,7 +171,8 @@ define.async('io.ox/core/tk/html-editor',
             })
             .css({
                 lineHeight: '1em',
-                margin: '0.5em auto 0.5em auto' // center!
+                // center!
+                margin: '0.5em auto 0.5em auto'
             });
         self.find('th')
             .css({
@@ -449,12 +450,13 @@ define.async('io.ox/core/tk/html-editor',
 
             language: lookupTinyMCELanguage(),
 
+            // TODO: needed for emoji ?
             /*
-            TODO: needed for emoji ?
             object_resizing: 0,
             */
 
-            // need this to work in karma/phantomjs // TODO: still needed?
+            // TODO: still needed?
+            // need this to work in karma/phantomjs
             //content_element: textarea.get(0),
 
             init_instance_callback: function (editor) {
@@ -568,7 +570,8 @@ define.async('io.ox/core/tk/html-editor',
 
         ln2br = function (str) {
             return String(str || '').replace(/\r/g, '')
-                .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
+                // '\n' is for IE
+                .replace(new RegExp('\\n', 'g'), '<br>');
         },
 
         // get editor content
@@ -779,7 +782,8 @@ define.async('io.ox/core/tk/html-editor',
             textarea.prop('disabled', false).idle();
             textarea.parents('.window-content').find('.mce-tinymce').show();
             textarea.hide();
-            setTimeout(function () { resizeEditor(); }, 150);//wait a bit or some browsers have problems calculating the correct toolbar height (see Bug 34607)
+            //wait a bit or some browsers have problems calculating the correct toolbar height (see Bug 34607)
+            setTimeout(function () { resizeEditor(); }, 150);
             $(window).on('resize.tinymce', _.debounce(resizeEditor, 50));
         };
 

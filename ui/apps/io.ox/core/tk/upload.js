@@ -117,9 +117,11 @@ define('io.ox/core/tk/upload',
                             self.trigger('drop', action.id, files[i], action);
                         }
                     }
-                    self.trigger('drop-multiple', action, $.makeArray(files)); // cause it's instanceOf FileList
+                    // cause it's instanceOf FileList
+                    self.trigger('drop-multiple', action, $.makeArray(files));
                     removeOverlay(e);
-                    return false; // Prevent regular event handling
+                    // Prevent regular event handling
+                    return false;
                 }
             }).append($('<span class="dndignore">').html(action.label)));
         });
@@ -140,7 +142,8 @@ define('io.ox/core/tk/upload',
             $overlay.on({
                 dragenter: function () {
                     clearTimeout(dragLeaveTimer);
-                    return false; // Prevent regular event handling
+                    // Prevent regular event handling
+                    return false;
                 },
                 dragover: function (e) {
                     var origEvt = e.originalEvent,
@@ -152,7 +155,8 @@ define('io.ox/core/tk/upload',
 
                     clearTimeout(dragLeaveTimer);
                     e.preventDefault();
-                    return false; // Prevent regular event handling
+                    // Prevent regular event handling
+                    return false;
                 },
                 dragleave: function (e) {
                     dragLeaveTimer = setTimeout(function () {

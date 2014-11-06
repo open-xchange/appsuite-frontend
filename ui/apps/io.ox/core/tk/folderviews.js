@@ -34,8 +34,10 @@ define('io.ox/core/tk/folderviews',
         CLOSE = 'fa fa-chevron-down',
         hasFolderIcons = settings.get('features/folderIcons', false),
 
-        SMALL_FOLDER_PADDING = 15, // for small devices like smartphons
-        DESKTOP_FOLDER_PADDING = 30, // for mouse-based devices (could be smaller but irrelevant) and for fat finger support
+        // for small devices like smartphons
+        SMALL_FOLDER_PADDING = 15,
+        // for mouse-based devices (could be smaller but irrelevant) and for fat finger support
+        DESKTOP_FOLDER_PADDING = 30,
         SUB_PADDING = _.device('small') ? SMALL_FOLDER_PADDING : DESKTOP_FOLDER_PADDING,
 
         tmplFolder = $('<div class="folder selectable" role="treeitem" tabindex="-1">'),
@@ -109,7 +111,8 @@ define('io.ox/core/tk/folderviews',
                             // we use this array to feed $.when(). Thus, we get a proper combined deferred object
                             // that will be resolved once all child nodes are resolved.
                             if (!children || children.length === 0) {
-                                nodes.sub.idle().hide(); // Robustness. Sometimes the folder interface seems unsure about subfolders.
+                                // Robustness. Sometimes the folder interface seems unsure about subfolders.
+                                nodes.sub.idle().hide();
                                 hideArrow();
                                 return $.when();
                             } else {
@@ -502,7 +505,8 @@ define('io.ox/core/tk/folderviews',
 
         // selection
         var selectionContainer = container.parent().is('.foldertree-container') ? container.parent() : container;
-        Selection.extend(this, selectionContainer, { dropzone: true, dropType: 'folder', tabFix: this.options.tabindex }) // not this.container!
+        // not this.container!
+        Selection.extend(this, selectionContainer, { dropzone: true, dropType: 'folder', tabFix: this.options.tabindex })
             .setMultiple(false)
             .setSerializer(function (obj) {
                 return obj ? String(obj.id) : '';
@@ -586,7 +590,8 @@ define('io.ox/core/tk/folderviews',
                 self.selection.destroy();
                 self.internal.destroy();
                 container.empty();
-                container.trigger('destroy');//trigger event so eventhandlers for repainting can be removed
+                //trigger event so eventhandlers for repainting can be removed
+                container.trigger('destroy');
                 container = self.container = self.selection = self.internal = null;
             });
         };
@@ -858,7 +863,8 @@ define('io.ox/core/tk/folderviews',
 
             var label = this.find('.folder-label'),
                 counter = this.find('.folder-counter'),
-                isSelectable = !options.type || options.type === data.module, // so: all folder that I can see
+                // so: all folder that I can see
+                isSelectable = !options.type || options.type === data.module,
                 isReadable = isSelectable && api.can('read', data),
                 isEnabled = !(options.targetmode && isReadable && !api.can('create', data)),
                 labelTitle = data.title,
@@ -991,7 +997,8 @@ define('io.ox/core/tk/folderviews',
         draw: function (baton) {
             // headline if more than one section contains elements and this section contains elements
             if (!baton.showHeadlines || !baton.data[baton.id] || baton.data[baton.id].length === 0) return;
-            if (baton.id !== 'hidden') {//hidden is a special section that has a dropdown link instead of a normal headline
+            //hidden is a special section that has a dropdown link instead of a normal headline
+            if (baton.id !== 'hidden') {
                 this.append(
                     $('<div class="section-title">').text(sections[baton.id])
                 );
@@ -1003,7 +1010,8 @@ define('io.ox/core/tk/folderviews',
                         e.preventDefault();
                         container.toggle();
                         arrow.toggleClass('fa-caret-right fa-caret-down');
-                        baton.selection.updateIndex();//hidden items are not in the selection, so it must be updated
+                        //hidden items are not in the selection, so it must be updated
+                        baton.selection.updateIndex();
                     }).append(arrow), container);
             }
         }
@@ -1080,8 +1088,10 @@ define('io.ox/core/tk/folderviews',
                         return !check;
                     };
 
-                for (items in sections) {//not id in data here, too keep the same order
-                    if (items !== 'hidden' && data[items]) {//exclude hidden and sections that are not present
+                //not id in data here, too keep the same order
+                for (items in sections) {
+                    //exclude hidden and sections that are not present
+                    if (items !== 'hidden' && data[items]) {
                         data[items] = _(data[items]).filter(blacklistCheck);
                     }
                 }
@@ -1135,7 +1145,8 @@ define('io.ox/core/tk/folderviews',
             return $.when();
         };
 
-        function eventHandler() {//wrapper function to bind and unbind repaint function
+        //wrapper function to bind and unbind repaint function
+        function eventHandler() {
             self.repaint();
         }
 

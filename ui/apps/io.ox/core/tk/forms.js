@@ -187,7 +187,8 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
 
         createDateField: function (options) {
             var f = new Field(options, 'date');
-            f.create('<input type="text">', dateChange); // changed to text again for validation reasons
+            // changed to text again for validation reasons
+            f.create('<input type="text">', dateChange);
             f.applyModel(dateChangeByModel);
             f.wrapLabel();
             return f.node;

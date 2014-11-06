@@ -38,7 +38,8 @@ define('io.ox/core/tk/dialogs',
                 easyOut: true,
                 center: true,
                 async: false,
-                noBusy: false,//prevents busy function even in asyncmode (needed for IE9 uploads)
+                //prevents busy function even in asyncmode (needed for IE9 uploads)
+                noBusy: false,
                 maximize: false,
                 top: '50%',
                 container: $('#io-ox-core'),
@@ -83,7 +84,8 @@ define('io.ox/core/tk/dialogs',
                 o.container.removeClass('blockscroll');
 
                 self.trigger('close');
-                document.removeEventListener('focus', keepFocus, true); // not via jQuery!
+                // not via jQuery!
+                document.removeEventListener('focus', keepFocus, true);
                 nodes.popup.empty().remove();
                 nodes.underlay.remove();
                 nodes.wrapper.remove();
@@ -170,15 +172,16 @@ define('io.ox/core/tk/dialogs',
                 var items, focus, index;
 
                 switch (e.which || e.keyCode) {
-                case 27: // ESC
+                case 27:
+                    // ESC
                     if (!isBusy) {
                         // prevent other elements to trigger close
                         e.stopPropagation();
                         if (o.easyOut) invoke('cancel');
                     }
                     break;
-
-                case 13: // Enter
+                case 13:
+                    // Enter
                     if (!isBusy && $(e.target).is('input:text, input:password')) {
                         if (!o.enter) return false;
                         if (_.isFunction(o.enter)) return o.enter.call(self);
@@ -186,8 +189,8 @@ define('io.ox/core/tk/dialogs',
                         return false;
                     }
                     break;
-
-                case 9: // tab
+                case 9:
+                    // tab
                     if (o.tabTrap) {
                         // get items first
                         items = $(this).find('[tabindex][disabled!="disabled"]:visible');
@@ -206,7 +209,6 @@ define('io.ox/core/tk/dialogs',
                         }
                     }
                     break;
-
                 default:
                     break;
                 }
@@ -383,7 +385,8 @@ define('io.ox/core/tk/dialogs',
 
             // remember focussed element
             lastFocus = $(document.activeElement);
-            document.addEventListener('focus', keepFocus, true); // not via jQuery!
+            // not via jQuery!
+            document.addEventListener('focus', keepFocus, true);
 
             // empty header?
             if (nodes.header.children().length === 0) {
@@ -418,7 +421,8 @@ define('io.ox/core/tk/dialogs',
                         'max-width': dim.width,
                         top: o.top || 0
                     });
-                    var height = o.substract ? $('#io-ox-core').height() - o.substract - o.top : $('#io-ox-core').height() - 170 - o.top;//not window here, or we might overlap ads or sth
+                    //not window here, or we might overlap ads or sth
+                    var height = o.substract ? $('#io-ox-core').height() - o.substract - o.top : $('#io-ox-core').height() - 170 - o.top;
                     nodes.body.css({
                         'height': height,
                         'max-height': height
@@ -550,7 +554,8 @@ define('io.ox/core/tk/dialogs',
         options = _.extend({
             modal: false,
             arrow: true,
-            closely: false, // closely positon to click/touch location
+            // closely positon to click/touch location
+            closely: false,
             tabTrap: true
         }, options || {});
 
@@ -561,7 +566,8 @@ define('io.ox/core/tk/dialogs',
             closeAll,
             closeByEscapeKey,
             closeByClick,
-            closeByEvent, //for example: The view within this SidePopup closes itself
+            // for example: The view within this SidePopup closes itself
+            closeByEvent,
             previousProp,
             timer = null,
             lastFocus = $(),
@@ -709,12 +715,15 @@ define('io.ox/core/tk/dialogs',
 
         closer.find('.btn-sidepopup')
             .on('click', function (e) {
-                pane.trigger('click'); // route click to 'pane' since closer is above pane
-                close(e); // close side popup
+                // route click to 'pane' since closer is above pane
+                pane.trigger('click');
+                // close side popup
+                close(e);
                 return false;
             })
             .on('keydown', function (e) {
-                if ((e.keyCode || e.which) === 13) { // enter
+                // enter
+                if ((e.keyCode || e.which) === 13) {
                     $(this).trigger('click');
                 }
             });
@@ -897,8 +906,8 @@ define('io.ox/core/tk/dialogs',
     };
 });
 
-/* Test
-
+// DEBUGGING
+/*
 require(['io.ox/core/tk/dialogs'], function (dialogs) {
     new dialogs.ModalDialog()
         .text('Are you really sure about your decision? Are you aware of all consequences you have to live with?')
