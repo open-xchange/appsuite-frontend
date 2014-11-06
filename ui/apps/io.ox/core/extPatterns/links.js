@@ -368,13 +368,15 @@ define('io.ox/core/extPatterns/links',
 
             // hide if all links are disabled
             if (allDisabled) lo.hide();
-            if (extension.customizeNode) extension.customizeNode(nav); // deprecated!
+            // deprecated!
+            if (extension.customizeNode) extension.customizeNode(nav);
             if (extension.customize) extension.customize.call(nav, baton);
 
             // move to real target node at dummy's position
             if (baton.$.positionDummy) {
                 baton.$.positionDummy.before(nav.children());
-                baton.$.positionDummy.remove();//remove dummy
+                //remove dummy
+                baton.$.positionDummy.remove();
             }
 
             // clear
@@ -388,7 +390,8 @@ define('io.ox/core/extPatterns/links',
             // use temporary container and remember real target node
             if (baton.$el) {
                 baton.$.temp = $('<div>');
-                baton.$.positionDummy = $('<div class="position-dummy">').hide();//needed to keep the position or extensionpoint index would be ignored
+                // needed to keep the position or extensionpoint index would be ignored
+                baton.$.positionDummy = $('<div class="position-dummy">').hide();
                 baton.$el.append(baton.$.positionDummy);
                 baton.$el = null;
             }
@@ -413,7 +416,8 @@ define('io.ox/core/extPatterns/links',
 
     var drawDropDownItems = function (options, baton, args) {
         var ul = this.data('ul'), closer;
-        if (!ul) return; // race-condition
+        // race-condition
+        if (!ul) return;
         // special handling for mobile menus, otherwise the "closer"
         // may be removed from menu
         if (ul.find('[data-action="close-menu"]')) {

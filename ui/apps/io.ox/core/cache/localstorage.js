@@ -16,7 +16,8 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
 
     'use strict';
 
-    var MAX_LENGTH = 1024 * 1024, // 1MB
+    var // 1MB
+        MAX_LENGTH = 1024 * 1024,
         // queue
         QUEUE_DELAY = 5000,
         queue = { timer: null, list: [] },
@@ -130,7 +131,8 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
             remove: function (key) {
                 var cid = id + '.' + key;
                 delete fluent[cid];
-                localStorage.removeItem(cid); // do this sync
+                // do this sync
+                localStorage.removeItem(cid);
                 return $.when();
             },
 

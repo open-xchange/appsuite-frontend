@@ -16,7 +16,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     'use strict';
 
     var SCHEMA = 1,
-        MAX_LENGTH = 1024 * 1024, // 1MB
+        // 1MB
+        MAX_LENGTH = 1024 * 1024,
         instances = {},
         moduleDefined = $.Deferred(),
         db,
@@ -41,7 +42,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
             removed = {},
             queue,
             myDB,
-            dbOpened = $.Deferred(); // OP(opened);
+            // OP(opened);
+            dbOpened = $.Deferred();
 
         var opened =  window.indexedDB.open('appsuite.cache', SCHEMA);
         opened.onupgradeneeded = function (e) {

@@ -165,7 +165,8 @@ define('io.ox/core/attachments/view',
         onToggleMode: function (e) {
             e.preventDefault();
             this.$el.toggleClass('show-preview');
-            this.$preview.trigger('scroll'); // to provoke lazyload
+            // to provoke lazyload
+            this.$preview.trigger('scroll');
             this.updateScrollControls();
         },
 
@@ -226,11 +227,16 @@ define('io.ox/core/attachments/view',
         },
 
         getColor: function (extension) {
-            if (/^do[ct]x?$/.test(extension)) return '#2C5897'; // word blue
-            if (/^xlsx?$/.test(extension)) return '#1D7047'; // excel green
-            if (/^p[po]tx?$/.test(extension)) return '#D04423'; // powerpoint orange
-            if (/^pdf$/.test(extension)) return '#C01E07'; // pdf red
-            if (/^(zip|gz|gzip|tgz)$/.test(extension)) return '#FF940A'; // zip orange
+            // word blue
+            if (/^do[ct]x?$/.test(extension)) return '#2C5897';
+            // excel green
+            if (/^xlsx?$/.test(extension)) return '#1D7047';
+            // powerpoint orange
+            if (/^p[po]tx?$/.test(extension)) return '#D04423';
+            // pdf red
+            if (/^pdf$/.test(extension)) return '#C01E07';
+            // zip orange
+            if (/^(zip|gz|gzip|tgz)$/.test(extension)) return '#FF940A';
         },
 
         fallback: function () {
