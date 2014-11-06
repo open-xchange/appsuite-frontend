@@ -22,6 +22,7 @@ define([
     var app,
         view,
         node,
+        header,
         model,
         setup = _.memoize(
             function () {
@@ -30,6 +31,7 @@ define([
                 var def = app.launch({ folder_id: 555123456 }).then(function () {
                     view = app.view;
                     node = view.$el;
+                    header = app.getWindow().nodes.header;
                     model = view.model;
                 });
 
@@ -49,9 +51,9 @@ define([
         });
         describe('should contain', function () {
             it('a headline', function () {
-                expect(node.find('h1.clear-title').length).to.equal(1);
-                expect(node.find('button[data-action="save"]').length).to.equal(1);
-                expect(node.find('button[data-action="discard"]').length).to.equal(1);
+                expect(header.find('h1.clear-title').length).to.equal(1);
+                expect(header.find('button[data-action="save"]').length).to.equal(1);
+                expect(header.find('button[data-action="discard"]').length).to.equal(1);
             });
             it('a title inputfield', function () {
                 expect(node.find('input.title-field').length).to.equal(1);
@@ -65,23 +67,15 @@ define([
                 expect(node.find('.expand-link').length).to.equal(1);
             });
             it('a date inputfields', function () {
-                expect(node.find('[data-extension-id="start_date"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="start_date"] label').length).to.equal(1);
-                expect(node.find('[data-extension-id="start_date"] input').length).to.equal(1);
-                expect(node.find('[data-extension-id="end_date"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="end_date"] label').length).to.equal(1);
-                expect(node.find('[data-extension-id="end_date"] input').length).to.equal(1);
+                expect(node.find('input.datepicker-day-field').length).to.equal(3);
             });
             it('a recurrence view', function () {
                 expect(node.find('[data-extension-id="recurrence"]').length).to.equal(1);
                 expect(node.find('.io-ox-recurrence-view').length).to.equal(1);
                 expect(node.find('[data-extension-id="recurrence"] input[type="checkbox"]').length).to.equal(1);
             });
-            it('a reminder controls', function () {
+            it('reminder controls', function () {
                 expect(node.find('#task-edit-reminder-select').length).to.equal(1);
-                expect(node.find('[data-extension-id="alarm"]').length).to.equal(1);
-                expect(node.find('[data-extension-id="alarm"] label').length).to.equal(2);
-                expect(node.find('[data-extension-id="alarm"] input').length).to.equal(2);//alarm has date and time field
             });
             it('a status controls', function () {
                 expect(node.find('[data-extension-id="status"] select').length).to.equal(1);
@@ -114,8 +108,8 @@ define([
         });
         describe('headline', function () {
             it('should have correct text', function () {
-                expect(node.find('h1.clear-title').text()).to.equal(gt('Create task'));
-                expect(node.find('button[data-action="save"]').text()).to.equal(gt('Create'));
+                expect(header.find('h1.clear-title').text()).to.equal(gt('Create task'));
+                expect(header.find('button[data-action="save"]').text()).to.equal(gt('Create'));
             });
         });
         describe('title', function () {
