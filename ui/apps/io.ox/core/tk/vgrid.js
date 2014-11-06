@@ -1269,7 +1269,6 @@ define('io.ox/core/tk/vgrid',
             toolbar.show();
         } else {
             this.selection.setMultiple(false);
-            //toolbar.detach(); // makes no sense to disable because the toolbar is used for sorting, too
         }
 
         // process some options on toolbars
