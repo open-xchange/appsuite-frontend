@@ -33,7 +33,8 @@ define('io.ox/core/api/pubsub',
             sub: data.folder + '.'
         };
         return $.when(
-            //api.caches.all.remove(keys.folder), //enable to support getAll({folder: folder})
+            //enable to support getAll({folder: folder})
+            //api.caches.all.remove(keys.folder),
             api.caches.all.remove(keys.general),
             api.caches.get.grepRemove(keys.pub),
             api.caches.get.grepRemove(keys.sub)
@@ -128,7 +129,7 @@ define('io.ox/core/api/pubsub',
          * @param  {object} data (id,folder)
          * @return {deferred} item count
          */
-        refresh: function (data) { //checked
+        refresh: function (data) {
             if (!data) {
                 //triggered by global refresh
                 return;

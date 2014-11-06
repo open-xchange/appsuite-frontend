@@ -20,40 +20,46 @@ define('io.ox/core/api/reminder',
 
     'use strict';
 
-    /*this works API is a bit different than other APIs. Although reminders are requested from the server at the standard refresh interval
-    we need to update the notification area independent from this.
-    To accomplish this we get the reminders 1 hour in advance and use a timeout that triggers when the next reminder is due */
+    // this works API is a bit different than other APIs. Although reminders are requested from the server at the standard refresh interval
+    // we need to update the notification area independent from this.
+    // To accomplish this we get the reminders 1 hour in advance and use a timeout that triggers when the next reminder is due
 
-    //object to store reminders that are not to display yet
-    var reminderStorage = {},
-        //arrays to store the reminders that should be displayed currently
+    var // object to store reminders that are not to display yet
+        reminderStorage = {},
+        // arrays to store the reminders that should be displayed currently
         tasksToDisplay = [],
         appointmentsToDisplay = [],
-        nextReminder,//next reminder to be triggered
-        reminderTimer,// timer that triggers the next reminder
-        updateReminders = function (reminders) {//updates the reminder storage
+        // next reminder to be triggered
+        nextReminder,
+        // timer that triggers the next reminder
+        reminderTimer,
+        // updates the reminder storage
+        updateReminders = function (reminders) {
             var keys = [];
             _(reminders).each(function (reminder) {
                 keys.push(reminder.id);
             });
             reminderStorage = _.object( keys, reminders );
         },
-        checkReminders = function () {//function to check reminders which reminders should be displayed and keeps the timer for the next reminder up to date
-
+        // function to check reminders which reminders should be displayed and keeps the timer for the next reminder up to date
+        checkReminders = function () {
             //reset variables
             tasksToDisplay = [];
             appointmentsToDisplay = [];
             clearTimeout(reminderTimer);
 
-            if (nextReminder && !reminderStorage[nextReminder.id]) {//check if nextReminder was removed meanwhile
+            //check if nextReminder was removed meanwhile
+            if (nextReminder && !reminderStorage[nextReminder.id]) {
                 nextReminder = null;
             }
             //find the next due reminder
             _(reminderStorage).each(function (reminder) {
                 if (reminder.alarm <= _.now()) {
-                    if (reminder.module === 4) {//tasks
+                    //tasks
+                    if (reminder.module === 4) {
                         tasksToDisplay.push(reminder);
-                    } else {// appointments
+                    // appointments
+                    } else {
                         appointmentsToDisplay.push(reminder);
                     }
                 } else if (!nextReminder || reminder.alarm < nextReminder.alarm) {
@@ -69,7 +75,8 @@ define('io.ox/core/api/reminder',
                 var timeout = nextReminder.alarm - _.now();
                 reminderTimer = setTimeout(function () {
                     nextReminder = null;
-                    api.getReminders();//get fresh reminders (a task or an appointment may have been deleted meanwhile)
+                    //get fresh reminders (a task or an appointment may have been deleted meanwhile)
+                    api.getReminders();
                 }, timeout);
             }
         };
@@ -90,11 +97,10 @@ define('io.ox/core/api/reminder',
                 if (_.isArray(reminders)) {
                    _(reminders).each(function (reminder) {
                         delete reminderStorage[reminder.id];
-                    }); 
+                    });
                 } else {
                     delete reminderStorage[reminders.id];
                 }
-                
             });
         },
 
@@ -113,7 +119,8 @@ define('io.ox/core/api/reminder',
                          },
                 data: {alarm: remindDate}
             }).always(function () {
-                api.getReminders();//get the new data
+                //get the new data
+                api.getReminders();
             });
         },
 
@@ -131,7 +138,8 @@ define('io.ox/core/api/reminder',
                 params: {
                     action: 'range',
                     timezone: 'UTC',
-                    end: range || (_.now() + date.HOUR)//if no range given, get the reminders an our ahead(to be independent of global refresh)
+                    // if no range given, get the reminders an our ahead(to be independent of global refresh)
+                    end: range || (_.now() + date.HOUR)
                 }
             }).pipe(function (list) {
                 updateReminders(list);

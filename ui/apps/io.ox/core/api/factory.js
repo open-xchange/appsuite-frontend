@@ -25,7 +25,8 @@ define('io.ox/core/api/factory',
     var fix = function (obj) {
         var clone = _.copy(obj, true);
         clone.folder = clone.folder || clone.folder_id;
-        delete clone.folder_id; // to avoid trash in requests
+        // to avoid trash in requests
+        delete clone.folder_id;
         return clone;
     };
 
@@ -51,7 +52,8 @@ define('io.ox/core/api/factory',
             // globally unique id for caches
             id: null,
             // for caches
-            keyGenerator: null, // ~ use default
+            // ~ use default
+            keyGenerator: null,
             // module
             module: '',
             //column mapping
@@ -181,7 +183,7 @@ define('io.ox/core/api/factory',
                         readThrough[cid] = true;
                         setTimeout(function () {
                             api.refresh();
-                        }, 5000); // wait some secs
+                        }, 5000);
                     }
                 };
 
@@ -234,7 +236,7 @@ define('io.ox/core/api/factory',
                 // empty?
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]).done(o.done.list || $.noop);
-                /* see bug 32300 */
+                // see Bug 32300 - Single contact does not get updated after external change
                 // } else if (ids.length === 1) {
 
                 //     // if just one item, we use get request
@@ -580,7 +582,8 @@ define('io.ox/core/api/factory',
                     data: getData(query, options)
                 })
                 .then(function (data) {
-                    return data; // make sure we always have the same response
+                    // make sure we always have the same response
+                    return data;
                 });
             };
         }
@@ -608,7 +611,8 @@ define('io.ox/core/api/factory',
         };
 
         ox.on('refresh^', function () {
-            api.refresh(); // write it this way so that API's can overwrite refresh
+            // write it this way so that API's can overwrite refresh
+            api.refresh();
         });
 
         // basic model with custom cid
@@ -641,9 +645,10 @@ define('io.ox/core/api/factory',
      * @returns {string} The extended columns parameter.
      */
     factory.extendColumns = function (id, module, columns) {
-        var hash = {}, // avoid duplication by using a hash instead of an array
-
-            cols = {}, // a map from field names to column IDs
+        // avoid duplication by using a hash instead of an array
+        var hash = {},
+            // a map from field names to column IDs
+            cols = {},
             // http has only the reverse version of what we need
             fields = http.getColumnMapping(module);
         _.each(fields, function (field, col) { cols[field] = col; });
