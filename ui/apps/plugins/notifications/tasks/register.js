@@ -147,7 +147,8 @@ define('plugins/notifications/tasks/register',
 
             // toggle?
             if (sidepopup && cid === overlay.find('[data-cid]').attr('data-cid')) {
-                lastFocus = undefined;//no focus restore when toggling
+                //no focus restore when toggling
+                lastFocus = undefined;
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -179,7 +180,8 @@ define('plugins/notifications/tasks/register',
         }
     });
 
-    var hiddenOverDueItems = {};//object to store hidden items (clear button uses this)
+    //object to store hidden items (clear button uses this)
+    var hiddenOverDueItems = {};
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'dueTasks',
@@ -207,7 +209,8 @@ define('plugins/notifications/tasks/register',
                                 if (reset) {
                                     items.push(tmp);
                                 } else {
-                                    notifications.collection.push(tmp, {merge: true, silent: true});//update data but don't throw events until we are finished(causes many redraws)
+                                    //update data but don't throw events until we are finished(causes many redraws)
+                                    notifications.collection.push(tmp, {merge: true, silent: true});
                                 }
                             }
                         });
@@ -309,12 +312,15 @@ define('plugins/notifications/tasks/register',
             var model = this.model,
                 time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
-            if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+            if (time !== '0') {
+                //0 means 'pick a time here' was selected. Do nothing.
                 require(['io.ox/tasks/util'], function (util) {
                     reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, model.get('reminder').id).then(function () {
-                        return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
+                        //update Caches
+                        return $.when(api.caches.get.remove(key), api.caches.list.remove(key));
                     }).done(function () {
-                        api.trigger('update:' + _.ecid(key[0]));//update detailview
+                        //update detailview
+                        api.trigger('update:' + _.ecid(key[0]));
                     });
                     model.collection.remove(model);
                 });
@@ -340,7 +346,8 @@ define('plugins/notifications/tasks/register',
 
                 // toggle?
             if (sidepopup && cid === overlay.find('.tasks-detailview').attr('data-cid')) {
-                lastFocus = undefined;//no focus restore when toggling
+                //no focus restore when toggling
+                lastFocus = undefined;
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -408,7 +415,8 @@ define('plugins/notifications/tasks/register',
         }
     });
 
-    var hiddenReminderItems = {};//object to store hidden items (clear button uses this)
+    //object to store hidden items (clear button uses this)
+    var hiddenReminderItems = {};
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'reminderTasks',
@@ -427,7 +435,8 @@ define('plugins/notifications/tasks/register',
                     }
                 });
 
-                if (taskIds.length === 0) {//no reminders to display
+                if (taskIds.length === 0) {
+                    //no reminders to display
                     notifications.collection.reset([]);
                     return;
                 }
@@ -442,7 +451,6 @@ define('plugins/notifications/tasks/register',
                                         var obj = util.interpretTask(task);
                                         obj.reminder = reminder;
                                         tempTasks.push(obj);
-                                        
                                     }
                                 });
                             });
@@ -451,14 +459,16 @@ define('plugins/notifications/tasks/register',
                     }
                 });
             });
-            api.on('delete', function (e, ids) {//ids of task objects
+            api.on('delete', function (e, ids) {
+                //ids of task objects
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
             }).on('mark:task:confirmed', function (e, ids) {
                 var reminders = [];
                 _(ids).each(function (id) {
-                    if ((!id.data || id.data.confirmation === 2) && notifications.collection._byId[id.id]) {//remove reminders for declined tasks
+                    if ((!id.data || id.data.confirmation === 2) && notifications.collection._byId[id.id]) {
+                        //remove reminders for declined tasks
                         var obj = { id: notifications.collection._byId[id.id].get('reminder').id };
                         if (notifications.collection._byId[id.id].get('reminder').recurrence_position) {
                             obj.recurrence_position = notifications.collection._byId[id.id].get('reminder').recurrence_position;
@@ -468,7 +478,8 @@ define('plugins/notifications/tasks/register',
                     }
                 });
                 if (reminders.length > 0) {
-                   reminderAPI.deleteReminder(reminders);//remove reminders correctly from server too  
+                   //remove reminders correctly from server too
+                   reminderAPI.deleteReminder(reminders);
                 }
             });
         }
@@ -572,7 +583,8 @@ define('plugins/notifications/tasks/register',
 
                // toggle?
             if (sidepopup && cid === overlay.find('.tasks-detailview').attr('data-cid')) {
-                lastFocus = undefined;//no focus restore when toggling
+                //no focus restore when toggling
+                lastFocus = undefined;
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -604,7 +616,8 @@ define('plugins/notifications/tasks/register',
 
         onClickAccept: function (e) {
             e.stopPropagation();
-            if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
+            //only open if click or enter is pressed
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var model = this.model,
                 o = {id: model.get('id'),
@@ -619,7 +632,8 @@ define('plugins/notifications/tasks/register',
 
         onChangeState: function (e) {
             e.stopPropagation();
-            if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
+            //only open if click or enter is pressed
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var data = this.model.attributes;
             ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
@@ -669,7 +683,8 @@ define('plugins/notifications/tasks/register',
         }
     });
 
-    var hiddenInvitationItems = {};//object to store hidden items (clear button uses this)
+    //object to store hidden items (clear button uses this)
+    var hiddenInvitationItems = {};
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'confirmationTasks',

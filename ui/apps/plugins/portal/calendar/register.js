@@ -29,7 +29,8 @@ define('plugins/portal/calendar/register',
 
         initialize: function () {
             api.on('update create delete', function () {
-                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
                     if (portalModel) {

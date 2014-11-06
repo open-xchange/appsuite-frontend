@@ -350,12 +350,14 @@ define('plugins/portal/twitter/register',
                 };
             }
             script.type = 'text/javascript';
-            script.src = 'https://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
+            //TODO must be stored locally, even if the Twitter guys hate us
+            script.src = 'https://platform.twitter.com/widgets.js';
             this.empty().append(
                 $('<div>').addClass('clear-title io-ox-twitter-title').text('Twitter'),
                 getComposeBox()
             );
-            this[0].appendChild(script);//need to use native methos here to trigger onload
+            //need to use native methos here to trigger onload
+            this[0].appendChild(script);
 
             this.append($tweets.empty(), $busyIndicator);
 

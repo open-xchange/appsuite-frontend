@@ -37,7 +37,8 @@ define('plugins/portal/xing/actions',
 
         handle: function (activity) {
             var id, commentToggle, formSubmission, textarea, container;
-            id = activity.ids[0]; //tres fragile
+            //tres fragile
+            id = activity.ids[0];
 
             commentToggle = function () {
                 container.toggle();
@@ -83,7 +84,8 @@ define('plugins/portal/xing/actions',
 
         handle: function (activity) {
             var handler,
-                id = activity.ids[0]; //tres fragile
+                //tres fragile
+                id = activity.ids[0];
 
             handler = function () {
                 var container = $('.activity[data-activity-id="' + id + '"]'),
@@ -129,7 +131,8 @@ define('plugins/portal/xing/actions',
         handle: function (activity) {
             var handler,
                 actId = activity.ids[0],
-                comId = activity.objects[0].id, //tres fragile
+                //tres fragile
+                comId = activity.objects[0].id,
                 isAlreadyLiked = activity && activity.likes && activity.likes.current_user_liked;
 
             handler = function () {
@@ -186,7 +189,8 @@ define('plugins/portal/xing/actions',
 
         handle: function (activity) {
             var handler,
-                id = activity.ids[0]; //tres fragile
+                //tres fragile
+                id = activity.ids[0];
 
             handler = function () {
                 api.shareActivity({

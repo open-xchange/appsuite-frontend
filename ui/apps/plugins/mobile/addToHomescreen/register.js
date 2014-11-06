@@ -201,7 +201,8 @@ define('plugins/mobile/addToHomescreen/register',
                 }
             }
 
-            var unused = balloon.offsetHeight;   // repaint trick
+            // repaint trick
+            var unused = balloon.offsetHeight;
             unused = null;
             balloon.style.webkitTransitionDuration = duration;
             balloon.style.opacity = '1';
