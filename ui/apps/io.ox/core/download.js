@@ -71,7 +71,8 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         files: function (list) {
             form({
                 url: ox.apiRoot + '/files?action=zipdocuments&session=' + ox.session,
-                body: JSON.stringify(_.map(list, map)) // this one wants folder_id
+                // this one wants folder_id
+                body: JSON.stringify(_.map(list, map))
             });
         },
 
@@ -85,7 +86,8 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
         mails: function (list) {
             form({
                 url: ox.apiRoot + '/mail?action=zip_messages&session=' + ox.session,
-                body: JSON.stringify(_.map(list, api.reduce)) // this one wants folder - not folder_id
+                // this one wants folder - not folder_id
+                body: JSON.stringify(_.map(list, api.reduce))
             });
         }
     };

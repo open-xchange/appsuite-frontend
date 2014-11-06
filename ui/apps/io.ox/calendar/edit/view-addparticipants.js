@@ -22,7 +22,8 @@ define('io.ox/calendar/edit/view-addparticipants', [
 
     'use strict';
 
-    var lastSearchResults = [],//last results, used to identify internal Users
+    var //last results, used to identify internal Users
+        lastSearchResults = [],
         blackList = {},
         AddParticipantView = Backbone.View.extend({
             events: {
@@ -86,7 +87,8 @@ define('io.ox/calendar/edit/view-addparticipants', [
                                         if (obj.data.internal_userid) {
                                             obj.sort = 1;
                                         } else if (obj.data.mark_as_distributionlist) {
-                                            obj.sort = 4; //distlistunsergroup
+                                            //distlistunsergroup
+                                            obj.sort = 4;
                                         } else {
                                             obj.sort = 5;
                                         }
@@ -225,7 +227,8 @@ define('io.ox/calendar/edit/view-addparticipants', [
                         display_name: elem[0],
                         mail: elem[1],
                         image1_url: '',
-                        type: 5 // TYPE_EXTERNAL_USER
+                        // TYPE_EXTERNAL_USER
+                        type: 5
                     });
                 });
             },

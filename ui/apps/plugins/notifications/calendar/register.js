@@ -175,7 +175,8 @@ define('plugins/notifications/calendar/register', [
             require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, settings) {
                 folderAPI.get(o.folder).done(function (folder) {
                     o.data = {
-                        alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
+                        // default reminder
+                        alarm: parseInt(settings.get('defaultReminder', 15), 10),
                         confirmmessage: '',
                         confirmation: 1
                     };
@@ -290,13 +291,15 @@ define('plugins/notifications/calendar/register', [
             var self = this,
                 min = $(e.target).data('value') || $(e.target).val(),
                 reminder = self.model;
-            if (min !== '0') {//0 means 'pick a time here' was selected. Do nothing.
+            if (min !== '0') {
+                //0 means 'pick a time here' was selected. Do nothing.
                 hiddenCalReminderItems[_.ecid(reminder.get('remdata'))] = true;
                 self.collection.remove(self.model);
                 setTimeout(function () {
                     //get updated data
                     calAPI.get(reminder.get('caldata')).done(function (calObj) {
-                        if (calObj.alarm) {//alarmtime was removed in the meantime, so no reminder to add
+                        if (calObj.alarm) {
+                            //alarmtime was removed in the meantime, so no reminder to add
                             require(['io.ox/calendar/util'], function (util) {
                                 delete hiddenCalReminderItems[_.ecid(reminder.get('remdata'))];
                                 //fill in new data
@@ -438,7 +441,8 @@ define('plugins/notifications/calendar/register', [
                         }
                     });
 
-                    if (appointmentIds.length === 0) {//no reminders to display
+                    //no reminders to display
+                    if (appointmentIds.length === 0) {
                         ReminderNotifications.collection.reset([]);
                         return;
                     }
@@ -446,7 +450,8 @@ define('plugins/notifications/calendar/register', [
                     $.when.apply($, _(appointmentIds).map(function (id) {
                         return calAPI.get(id);
                     })).done(function () {
-                        var appointments = appointmentIds.length === 1 ? [arguments[0]] : _.map(arguments, function (item) {//remove timestamps (cached data has no timestamp, real requests do)
+                        //remove timestamps (cached data has no timestamp, real requests do)
+                        var appointments = appointmentIds.length === 1 ? [arguments[0]] : _.map(arguments, function (item) {
                             if (_.isArray(item)) {
                                 return item[0];
                             } else {
@@ -461,7 +466,8 @@ define('plugins/notifications/calendar/register', [
                             _(appointments).each(function (data) {
                                 _(reminders).each(function (rem) {
                                     if (rem.target_id === data.id) {
-                                        if (data.end_date < _.now()) {//don't show reminders for old appointments
+                                        //don't show reminders for old appointments
+                                        if (data.end_date < _.now()) {
                                             var obj = { id: rem.id };
                                             if (rem.recurrence_position) {
                                                 obj.recurrence_position = rem.recurrence_position;
@@ -482,7 +488,8 @@ define('plugins/notifications/calendar/register', [
                                 });
                             });
                             if (remindersToDelete.length > 0) {
-                                reminderAPI.deleteReminder(remindersToDelete);//remove reminders correctly from server too
+                                //remove reminders correctly from server too
+                                reminderAPI.deleteReminder(remindersToDelete);
                             }
                             ReminderNotifications.collection.reset(models);
                         });
@@ -495,7 +502,8 @@ define('plugins/notifications/calendar/register', [
                     reminderAPI.getReminders();
                 })
                 .on('mark:invite:confirmed', function (e, obj) {
-                    if (obj.data.confirmation === 2) {//remove reminders for declined appointments
+                    //remove reminders for declined appointments
+                    if (obj.data.confirmation === 2) {
                         removeReminders(e, obj);
                     }
                 });

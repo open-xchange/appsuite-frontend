@@ -33,7 +33,8 @@ define('io.ox/contacts/edit/view-form', [
     var meta = {
         sections: {
             personal: [
-                'title', 'first_name', 'last_name', /*'display_name',*/ // yep, end-users don't understand it
+                // no 'display_name' used cause end-users don't understand it (bug 27260)
+                'title', 'first_name', 'last_name',
                 'second_name', 'suffix', 'nickname', 'birthday',
                 'marital_status', 'number_of_children', 'spouse_name',
                 'anniversary', 'url'
@@ -155,7 +156,8 @@ define('io.ox/contacts/edit/view-form', [
     function createContactEdit(ref) {
         var isMyContactData = ref === 'io.ox/core/user';
 
-        if (isMyContactData) { // Remove attachment handling if view is used with user data instead of contact data
+        if (isMyContactData) {
+            // Remove attachment handling if view is used with user data instead of contact data
             delete meta.sections.attachments;
             delete meta.i18n.attachments;
         }
@@ -335,11 +337,15 @@ define('io.ox/contacts/edit/view-form', [
                     )
                 );
 
-                var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');//check if all non rare non attachment fields are filled
+                //check if all non rare non attachment fields are filled
+                var inputs = this.find('.field').not('.rare,[data-field="attachments_list"]').not('.has-content');
 
-                this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">')); // wrap userfields in a row
-                if (inputs.length === 0) {//if all fields are filled the link must be compact view, not extend view
-                    link.trigger('click');//only one button must trigger this
+                // wrap userfields in a row
+                this.find('[data-id="userfields"] > div').wrapAll($('<div class="row">'));
+                //if all fields are filled the link must be compact view, not extend view
+                if (inputs.length === 0) {
+                    //only one button must trigger this
+                    link.trigger('click');
                 }
             }
         });
@@ -481,7 +487,8 @@ define('io.ox/contacts/edit/view-form', [
 
             return api.get({ id: id, folder: folder_id }, !upload)
                 .then(function (data) {
-                    if (upload) {//don't delete caches if there is no upload
+                    if (upload) {
+                        // don't delete caches if there is no upload
                         return $.when(
                             api.caches.get.add(data),
                             api.caches.all.grepRemove(folder_id + api.DELIM),

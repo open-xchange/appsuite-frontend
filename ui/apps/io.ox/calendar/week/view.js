@@ -325,21 +325,25 @@ define('io.ox/calendar/week/view', [
                 return false;
             }
             switch (e.which) {
-            case 27: // ESC
+            case 27:
+                // ESC
                 this.cleanUpLasso();
                 $('.week-container .day>.appointment.modify', this.$el)
                     .draggable({ 'revert': true })
                     .trigger( 'mouseup' );
                 break;
-            case 37: // left
+            case 37:
+                // left
                 this.setStartDate('prev');
                 this.trigger('onRefresh');
                 break;
-            case 39: // right
+            case 39:
+                // right
                 this.setStartDate('next');
                 this.trigger('onRefresh');
                 break;
-            case 13: // enter
+            case 13:
+                // enter
                 this.onClickAppointment(e);
                 break;
             default:
@@ -1051,7 +1055,8 @@ define('io.ox/calendar/week/view', [
                 .resizable({
                     handles: 'n, s',
                     grid: [0, self.gridHeight()],
-                    minHeight: self.gridHeight() - 2, // bug #32753
+                    // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
+                    minHeight: self.gridHeight() - 2,
                     containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('ui-resizable');
@@ -1235,13 +1240,13 @@ define('io.ox/calendar/week/view', [
                     scroll: true,
                     revertDuration: 0,
                     revert: function (drop) {
-                        //if false then no socket object drop occurred.
                         if (drop === false) {
-                            //revert the appointment by returning true
+                            // no socket object drop occurred.
+                            // revert the appointment by returning true
                             $(this).show();
                             return true;
                         } else {
-                            //return false so that the appointment does not revert
+                            // return false so that the appointment does not revert
                             return false;
                         }
                     },
@@ -1270,19 +1275,24 @@ define('io.ox/calendar/week/view', [
                     },
                     drag: function (e, ui) {
                         var d = $(this).data('ui-draggable'),
-                            left = ui.position.left -= ui.originalPosition.left, // normalize to colWith
+                            // normalize to colWith
+                            left = ui.position.left -= ui.originalPosition.left,
                             move = Math.floor(left / colWidth),
                             day = d.my.initPos + move,
                             top = ui.position.top;
 
                         // correct position
-                        if (d.my.firstPos === d.my.lastPos) { // start and end on same day
+                        if (d.my.firstPos === d.my.lastPos) {
+                            // start and end on same day
                             d.my.mode = 4;
-                        } else if (day === d.my.firstPos + move) { // drag first element
+                        } else if (day === d.my.firstPos + move) {
+                            // drag first element
                             d.my.mode = 3;
-                        } else if (day === d.my.lastPos + move) { // drag last element
+                        } else if (day === d.my.lastPos + move) {
+                            // drag last element
                             d.my.mode = 2;
-                        } else { // drag in all other cases
+                        } else {
+                            // drag in all other cases
                             d.my.mode = 1;
                         }
 
@@ -1670,11 +1680,13 @@ define('io.ox/calendar/week/view', [
                 work_day_start_time: self.workStart * date.HOUR,
                 work_day_end_time: self.workEnd * date.HOUR
             });
-            if (_.browser.firefox) {//firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
+            if (_.browser.firefox) {
+                // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
                 var limit = 50,
                     counter = 0,
                     interval;
-                interval = setInterval(function () {//onLoad does not work with firefox on mac, so ugly polling is used
+                // onLoad does not work with firefox on mac, so ugly polling is used
+                interval = setInterval(function () {
                     counter++;
                     if (counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
                         win.print();

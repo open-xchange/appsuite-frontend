@@ -127,7 +127,8 @@ define('io.ox/calendar/freebusy/controller', [
             this.getParticipants = function () {
                 return this.participants.map(function (model) {
                     var tempParticipant = { id: model.get('id'), type: model.get('type') };
-                    if (model.get('type') === 5) { // External participants need more data for an appointment
+                    if (model.get('type') === 5) {
+                        // External participants need more data for an appointment
                         tempParticipant.id = tempParticipant.mail = model.getEmail();
                         tempParticipant.display_name = model.getDisplayName();
                         tempParticipant.image1_url = model.get('image1_url');
@@ -198,7 +199,8 @@ define('io.ox/calendar/freebusy/controller', [
 
             this.showAppointment = function (e, obj) {
                 var cid = _.cid(obj),
-                    folder = parseInt(obj.folder_id, 10); // otherwise '0' is true
+                    // otherwise '0' is true
+                    folder = parseInt(obj.folder_id, 10);
                 if (!folder && cid in cache) {
                     openSidePopup(e, cache[cid]);
                 } else {
@@ -334,7 +336,8 @@ define('io.ox/calendar/freebusy/controller', [
                 self.participantsView.find('[data-cid="' + cid + '"]').remove();
             }
 
-            function resolveParticipants(data) { //resolves groups to it's users and adds them
+            //resolves groups to it's users and adds them
+            function resolveParticipants(data) {
 
                 if (_.isArray(data.distribution_list)) {
                     // resolve distribution lits

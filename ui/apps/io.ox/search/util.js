@@ -108,7 +108,7 @@ define('io.ox/search/util', [
                     return _.map(args, function (folder) {
                         return {
                             id: folder.id,
-                            title: folder.title || folder.id, // folderAPI.getFolderTitle(folder.title, 15),
+                            title: folder.title || folder.id,
                             type: mapping[folder.id],
                             data: folder
                         };

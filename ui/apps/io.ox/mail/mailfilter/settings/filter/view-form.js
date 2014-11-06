@@ -39,7 +39,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'contains': gt('Contains'),
             'is': gt('Is exactly'),
             'matches': gt('Matches'),
-            'regex': gt('Regex') //needs no different translation
+            //needs no different translation
+            'regex': gt('Regex')
         },
 
         headerTranslation = {
@@ -811,7 +812,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             function checkForStopAction(array) {
                 var stopAction;
-                if (baton.model.id === undefined) { // default value
+                if (baton.model.id === undefined) {
+                    // default value
                     return true;
                 }
 

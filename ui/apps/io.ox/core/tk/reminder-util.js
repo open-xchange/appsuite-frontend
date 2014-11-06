@@ -19,7 +19,8 @@ define('io.ox/core/tk/reminder-util', [
     'use strict';
 
     function buildActions(node, values, focusId) {
-        if (_.device('medium')) {//native style for tablet
+        if (_.device('medium')) {
+            //native style for tablet
             node.append(
                     $('<div>').text(gt('Remind me again')),
                     $('<select tabindex="1" class="dateselect" data-action="selector">').append(function () {
@@ -57,11 +58,13 @@ define('io.ox/core/tk/reminder-util', [
 
     var draw = function (node, model, options) {
         var info,
-            label,//aria label
+            //aria label
+            label,
             actions = $('<div class="reminder-actions">');
 
         //find out remindertype
-        if (model.get('reminder') && model.get('reminder').module === 4) {//task
+        if (model.get('reminder') && model.get('reminder').module === 4) {
+            //task
             info = [
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<div class="info-wrapper">').append(
@@ -82,7 +85,8 @@ define('io.ox/core/tk/reminder-util', [
                     //#. %3$s task status
                     //#, c-format
             label = gt('Task reminder. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(model.get('title')), endText, statusText);
-        } else {//appointment
+        } else {
+            //appointment
             info = [
                 $('<div class="time">').text(model.get('time')),
                 $('<div class="date">').text(model.get('date')),
@@ -107,7 +111,8 @@ define('io.ox/core/tk/reminder-util', [
             'data-cid': model.get('cid'),
             'model-cid': model.cid,
             'aria-label': label,
-            'focus-id': 'reminder-notification-' + focusId,//calendar and task are a bit different here (recurrenceposition etc)
+            //calendar and task are a bit different here (recurrenceposition etc)
+            'focus-id': 'reminder-notification-' + focusId,
             role: 'listitem',
             'tabindex': 1
         }).addClass('reminder-item refocus clearfix');

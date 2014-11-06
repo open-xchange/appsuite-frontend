@@ -455,7 +455,8 @@ define('io.ox/calendar/invitations/register', [
                     if (data.recurrence_position) {
                         tempdata.recurrence_position = data.recurrence_position;
                     }
-                    if (this.task) {//tasks use absolute timestamps
+                    if (this.task) {
+                        //tasks use absolute timestamps
                         tempdata.alarm = _.utc() + tempdata.alarm;
                     }
                     this.api.update(tempdata);

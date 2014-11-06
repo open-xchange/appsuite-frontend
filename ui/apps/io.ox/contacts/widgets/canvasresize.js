@@ -265,7 +265,8 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/contacts/widgets/exif'], f
                         iw /= 2;
                         ih /= 2;
                     }
-                    var d = 1024; // size of tiling canvas
+                    // size of tiling canvas
+                    var d = 1024;
                     var tmpCanvas = document.createElement('canvas');
                     tmpCanvas.width = tmpCanvas.height = d;
                     var tmpCtx = tmpCanvas.getContext('2d');

@@ -103,7 +103,8 @@ define('io.ox/calendar/toolbar', [
     ext.point('io.ox/calendar/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/calendar/classic-toolbar/links'

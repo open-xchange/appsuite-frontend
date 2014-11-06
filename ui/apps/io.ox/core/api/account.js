@@ -342,7 +342,7 @@ define('io.ox/core/api/account', [
         // just for robustness
         if (!account) return [];
 
-        if (!account.addresses) { // null, undefined, empty
+        if (!account.addresses) {
             return [getAddressArray(account.personal, account.primary_address)];
         }
 
@@ -535,7 +535,8 @@ define('io.ox/core/api/account', [
             appendColumns: false,
             params: params,
             data: data,
-            processData: false//needed or http.js does not give the warnings back
+            //needed or http.js does not give the warnings back
+            processData: false
         })
         //make it always successful but either true or false, if false we give the warnings back
         .then(

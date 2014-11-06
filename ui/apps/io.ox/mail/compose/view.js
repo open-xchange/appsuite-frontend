@@ -436,7 +436,8 @@ define('io.ox/mail/compose/view', [
 
             var timeout = settings.get('autoSaveDraftsAfter', false),
                 timerScale = {
-                    minute: 60000, //60s
+                    //60s
+                    minute: 60000,
                     minutes: 60000
                 },
                 scale,
@@ -450,7 +451,8 @@ define('io.ox/mail/compose/view', [
             scale = timerScale[timeout[1]];
             timeout = timeout[0];
 
-            if (!timeout || !scale) return; // settings not parsable
+            // settings not parsable
+            if (!timeout || !scale) return;
 
             this.stopAutoSave();
 
@@ -513,7 +515,8 @@ define('io.ox/mail/compose/view', [
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                self.clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                self.clean();
                                 def.resolve();
                             } else if (action === 'savedraft') {
                                 self.saveDraft().done(function () {
@@ -573,7 +576,8 @@ define('io.ox/mail/compose/view', [
 
                     if (result.error && !result.warnings) {
                         if (win) { win.idle().show(); }
-                        notifications.yell(result); // TODO: check if backend just says "A severe error occurred"
+                        // TODO: check if backend just says "A severe error occurred"
+                        notifications.yell(result);
                         return;
                     }
 

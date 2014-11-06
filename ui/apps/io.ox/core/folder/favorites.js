@@ -47,7 +47,7 @@ define('io.ox/core/folder/favorites', [
                 list = api.processListResponse(id, list);
                 collection.reset(list);
                 model.set('subfolders', true);
-                // // if there was an error we update settings
+                // if there was an error we update settings
                 if (list.length !== response.length) storeCollection();
             });
         }
@@ -105,7 +105,8 @@ define('io.ox/core/folder/favorites', [
     function a(action, text) {
         return $('<a href="#" tabindex="1" role="menuitem">')
             .attr('data-action', action).text(text)
-            .on('click', $.preventDefault); // always prevent default
+            // always prevent default
+            .on('click', $.preventDefault);
     }
 
     function disable(node) {

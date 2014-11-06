@@ -25,7 +25,8 @@ define('io.ox/files/carousel', [
     'use strict';
 
     var regIsImage = /\.(gif|tiff|jpe?g|bmp|png)$/i,
-        regIsPlainText = /\.(txt|asc|js|md|json)$/i,//list from our text preview renderer
+        //list from our text preview renderer
+        regIsPlainText = /\.(txt|asc|js|md|json)$/i,
         regIsDocument = /\.(pdf|docx?|xlsx?|pptx?)$/i;
 
     var carouselSlider = {
@@ -137,9 +138,11 @@ define('io.ox/files/carousel', [
                 }
                 this.pos = _.defaults({ cur: index }, this.defaults );
             } else {
-                this.pos = _.extend({}, this.defaults); // get a fresh copy
+                // get a fresh copy
+                this.pos = _.extend({}, this.defaults);
             }
-            this.firstStart = true; // should have a better name
+            // should have a better name
+            this.firstStart = true;
 
             // fill with proper amount of DIVs (need to be fast here)
             var frag = document.createDocumentFragment(), i = 0, $i = this.list.length;
@@ -261,7 +264,8 @@ define('io.ox/files/carousel', [
             $(this).parent().idle();
         },
 
-        getItems: function (loadBoth) {//if we start in the middle of our slideshow we need to preload both directions
+        // if we start in the middle of our slideshow we need to preload both directions
+        getItems: function (loadBoth) {
 
             var self = this;
             var pos = this.pos,
@@ -301,7 +305,8 @@ define('io.ox/files/carousel', [
                 self = null;
             }
 
-            if (this.firstStart && this.pos.cur === index) {//support starting the slideshow in the middle
+            // support starting the slideshow in the middle
+            if (this.firstStart && this.pos.cur === index) {
                 item.addClass('active');
                 this.firstStart = false;
             }
@@ -390,7 +395,8 @@ define('io.ox/files/carousel', [
             );
             if (this.list.length === 1) this.nextControl.hide();
             win.idle();
-            this.getItems(this.pos.cur !== 0);//if we start in the middle we need to preload both directions
+            // if we start in the middle we need to preload both directions
+            this.getItems(this.pos.cur !== 0);
         },
 
         close: function () {

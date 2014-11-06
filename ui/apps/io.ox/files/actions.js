@@ -29,9 +29,9 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
             return e.baton.app.folder.getData().then(function (data) {
-                //  hide for virtual folders (other files root, public files root)
+                //hide for virtual folders (other files root, public files root)
                 var virtual = _.contains(['14', '15'], data.id);
-                // no new files in trash folders
+                //no new files in trash folders
                 return folderAPI.can('create', data) && !virtual && !folderAPI.is('trash', data);
             });
         },
@@ -392,7 +392,6 @@ define('io.ox/files/actions', [
         requires: function (e) {
             // hide in mail compose preview
             return e.collection.has('one') && e.baton.openedBy !== 'io.ox/mail/compose';
-
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/versions-delete']).done(function (action) {

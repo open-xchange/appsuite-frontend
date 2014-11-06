@@ -22,8 +22,8 @@ define('io.ox/portal/widgets', [
 
     'use strict';
 
-    // use for temporary hacks
-    var DEV_PLUGINS = []; // ['plugins/portal/helloworld/register'];
+    // for temporary hacks use: ['plugins/portal/helloworld/register']
+    var DEV_PLUGINS = [];
 
     // application object
     var availablePlugins = _(manifests.manager.pluginsFor('portal')).uniq().concat(DEV_PLUGINS),
@@ -87,6 +87,12 @@ define('io.ox/portal/widgets', [
                     userWidget: true,
                     index: 1
                 },
+                birthdays_0: {
+                    plugin: 'plugins/portal/birthdays/register',
+                    color: 'lightgreen',
+                    userWidget: true,
+                    index: 4
+                },
                 calendar_0: {
                     plugin: 'plugins/portal/calendar/register',
                     color: 'red',
@@ -99,8 +105,8 @@ define('io.ox/portal/widgets', [
                     userWidget: true,
                     index: 3
                 },
-                birthdays_0: {
-                    plugin: 'plugins/portal/birthdays/register',
+                myfiles_0: {
+                    plugin: 'plugins/portal/recentfiles/register',
                     color: 'lightgreen',
                     userWidget: true,
                     index: 4
@@ -109,19 +115,19 @@ define('io.ox/portal/widgets', [
                     plugin: 'plugins/portal/facebook/register',
                     color: 'blue',
                     userWidget: true,
-                    index: 4
+                    index: 5
                 },
                 twitter_0: {
                     plugin: 'plugins/portal/twitter/register',
                     color: 'pink',
                     userWidget: true,
-                    index: 5
+                    index: 6
                 },
                 linkedin_0: {
                     plugin: 'plugins/portal/linkedin/register',
                     color: 'lightblue',
                     userWidget: true,
-                    index: 6
+                    index: 7
                 }
             };
 
@@ -283,7 +289,8 @@ define('io.ox/portal/widgets', [
                 enabled: options.enabled,
                 inverse: options.inverse,
                 id: id,
-                index: 0, // otherwise not visible
+                // otherwise not visible
+                index: 0,
                 plugin: this.getPluginByType(options.plugin),
                 props: options.props,
                 type: type,
@@ -445,7 +452,8 @@ define('io.ox/portal/widgets', [
 
     collection
         .on('change', _.debounce(function (model) {
-            widgets[model.get('id')] = model.attributes;//update widgets object
+            //update widgets object
+            widgets[model.get('id')] = model.attributes;
             settings.set('widgets/user', api.toJSON()).set('settings' + widgetSet, api.extraSettingsToJSON()).saveAndYell();
             // don’t handle positive case here, since this is called quite often
         }, 100))

@@ -178,10 +178,11 @@ define('io.ox/emoji/main', [
         },
 
         getCategories: function () {
+            // return copy
             return (categories[this.currentCollection].meta || []).slice()
             .filter(function (cat) {
                 return cat.name !== 'recently';
-            }); // return copy
+            });
         },
 
         getDefaultCategory: function () {

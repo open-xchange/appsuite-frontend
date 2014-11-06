@@ -21,7 +21,8 @@ define('io.ox/tasks/view-detail', [
     'io.ox/calendar/participants',
     'io.ox/tasks/actions',
     'less!io.ox/tasks/style',
-    'less!io.ox/calendar/style'//participantsview needs this
+    //participantsview needs this
+    'less!io.ox/calendar/style'
 ], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
@@ -135,7 +136,8 @@ define('io.ox/tasks/view-detail', [
             }
 
             _(fields).each(function (label, key) {
-                if (task[key] !== undefined && task[key] !== null && task[key] !== '') {//0 is valid
+                //0 is valid
+                if (task[key] !== undefined && task[key] !== null && task[key] !== '') {
                     $details.append($('<dt class="detail-label">').text(label));
                     if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
                         $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
@@ -175,7 +177,8 @@ define('io.ox/tasks/view-detail', [
                 );
             }
 
-            if (task.alarm && !_.device('smartphone')) {//alarm makes no sense if reminders are disabled
+            //alarm makes no sense if reminders are disabled
+            if (task.alarm && !_.device('smartphone')) {
                 this.append(
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
@@ -213,10 +216,12 @@ define('io.ox/tasks/view-detail', [
         id: 'attachments',
         draw: function (task) {
             var attachmentNode;
-            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is already there
+            //if attachmentrequest fails the container is already there
+            if (this.hasClass('attachments-container')) {
                 attachmentNode = this;
             } else {
-                attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);//else build new
+                //else build new
+                attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);
             }
             $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
@@ -251,7 +256,8 @@ define('io.ox/tasks/view-detail', [
                 ref: 'io.ox/tasks/attachment/links'
             }).draw.call(container, data);
 
-        if (_.device('smartphone')) {//no inline style for mobile
+        //no inline style for mobile
+        if (_.device('smartphone')) {
             $(bla).css('display', 'block');
         }
         return bla;

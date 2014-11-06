@@ -87,7 +87,8 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         var alert = [];
 
-        if (o.type !== 'screenreader') { //screenreader notifications should not remove standard ones, so special remove here
+        //screenreader notifications should not remove standard ones, so special remove here
+        if (o.type !== 'screenreader') {
             clearTimeout(timer);
             timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
             // replace existing alert?
@@ -145,7 +146,8 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         // put at end of stack not to run into opening click
         setTimeout(function () {
 
-            node.trigger('notification:appear').addClass('appear'); // might be already added
+            // might be already added
+            node.trigger('notification:appear').addClass('appear');
             if (o.focus) node.attr('tabindex', 1).focus();
 
         }, _.device('touch') ? 300 : 0);

@@ -93,7 +93,8 @@ define('io.ox/core/tk/selection', [
             selectPrevious,
             selectLast,
             selectNext,
-            lastIndex = -1, // trick for smooth updates
+            // trick for smooth updates
+            lastIndex = -1,
             lastValidIndex = 0,
             fnKey,
             hasMultiple,
@@ -1142,7 +1143,8 @@ define('io.ox/core/tk/selection', [
                     .on('mousemove.dnd', { x: e.pageX, y: e.pageY }, resist)
                     .on('mouseup.dnd', stop);
                 // prevent text selection and kills the focus
-                if (!_.browser.IE) { // Not needed in IE - See #27981
+                if (!_.browser.IE) {
+                    // Not needed in IE - See #27981
                     (options.focus ? container.find(options.focus).first() : container).focus();
                 }
             }

@@ -146,7 +146,8 @@ define('io.ox/contacts/toolbar', [
     ext.point('io.ox/contacts/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/contacts/classic-toolbar/links'
@@ -203,7 +204,7 @@ define('io.ox/contacts/toolbar', [
         index: 10200,
         setup: function (app) {
             app.updateToolbar();
-            // // update toolbar on selection change as well as any model change (seen/unseen flag)
+            // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.getGrid().selection.on('change', function (e, list) {
                 app.updateToolbar(list);
             });

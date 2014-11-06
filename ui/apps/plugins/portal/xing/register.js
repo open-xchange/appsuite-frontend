@@ -143,7 +143,8 @@ define('plugins/portal/xing/register', [
         return keychain.createInteractively('xing', win).done(function () {
             var model = baton.model;
             $(model.node).find('.setup-questions').remove();
-            model.changed.props = baton.model.drawn = true; //hack to provoke loadAndPreview()
+            //hack to provoke loadAndPreview()
+            model.changed.props = baton.model.drawn = true;
             ox.trigger('refresh^');
         });
     };
@@ -281,7 +282,8 @@ define('plugins/portal/xing/register', [
         load: function (baton) {
             var def = $.Deferred();
             api.getUserfeed({
-                user_fields: '0,1,2,3,4,8,23' //name variations, page_name and picture
+                //name variations, page_name and picture
+                user_fields: '0,1,2,3,4,8,23'
             }).then(function (xingResponse) {
                 baton.data = xingResponse;
                 def.resolve(xingResponse);

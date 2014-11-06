@@ -23,7 +23,8 @@ define('io.ox/core/api/backbone', [], function () {
             this.cid = _.cid(this.attributes);
         },
         toString: function () {
-            return 'Model(' + this.cid + ')'; // just helps debugging
+            // just helps debugging
+            return 'Model(' + this.cid + ')';
         }
     });
 

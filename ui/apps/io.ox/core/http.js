@@ -361,7 +361,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
     $.extend(idMapping.files, idMapping.common);
-    delete idMapping.files['101']; // not "common" here (exception)
+    // not "common" here (exception)
+    delete idMapping.files['101'];
     delete idMapping.files['104'];
     $.extend(idMapping.tasks, idMapping.common);
     // See bug #25300
@@ -610,7 +611,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 if (o.module === 'multiple') {
                     var i = 0, $l = response.length, tmp;
                     for (; i < $l; i++) {
-                        if (response[i]) { // to bypass temp. [null] bug
+                        if (response[i]) {
                             // time
                             timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
                             // data/error
@@ -835,7 +836,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         // to avoid bugs based on passing objects by reference
         function clone(data) {
-            if (!data) return data; // null, undefined, empty string, numeric zero
+            // null, undefined, empty string, numeric zero
+            if (!data) return data;
             return JSON.parse(JSON.stringify(data));
         }
 

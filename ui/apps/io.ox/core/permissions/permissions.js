@@ -42,9 +42,12 @@ define('io.ox/core/permissions/permissions', [
         folder_id,
 
         presets = [
-            { label: gt('Guest'), bits: 257 }, // view folder + read all
-            { label: gt('Author'), bits: 4227332 }, // create folder + read/write/delete all
-            { label: gt('Administrator'), bits: 272662788 } // plus admin
+            // view folder + read all
+            { label: gt('Guest'), bits: 257 },
+            // create folder + read/write/delete all
+            { label: gt('Author'), bits: 4227332 },
+            // plus admin
+            { label: gt('Administrator'), bits: 272662788 }
         ],
 
         Permission = Backbone.Model.extend({
@@ -252,7 +255,8 @@ define('io.ox/core/permissions/permissions', [
                 options.addClass('readwrite');
             } else {
                 options.addClass('readonly');
-                options.find('span.dropdown a').attr({ 'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled' });//disable dropdown
+                //disable dropdown
+                options.find('span.dropdown a').attr({ 'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled' });
             }
             node.append(
                 addRemoveButton(baton.model.get('entity')),
@@ -305,7 +309,8 @@ define('io.ox/core/permissions/permissions', [
             ul = $('<ul class="dropdown-menu" role="menu">')
         );
         _(menus[permission]).each(function (item, value) {
-            if (value === '64') return true; // Skip maximum rights
+            // Skip maximum rights
+            if (value === '64') return true;
             ul.append(
                 $('<li>').append(
                     $('<a>', { href: '#', 'data-value': value, role: 'menuitem' }).addClass('bit').text(item)
@@ -434,7 +439,8 @@ define('io.ox/core/permissions/permissions', [
                             var isGroup = data.type === 2,
                                 obj = {
                                     entity: isGroup ? data.id : data.internal_userid,
-                                    bits: 257, // default is 'view folder' plus 'read all'
+                                    // default is 'view folder' plus 'read all'
+                                    bits: 257,
                                     group: isGroup
                                 };
                             if (!('entity' in obj)) {

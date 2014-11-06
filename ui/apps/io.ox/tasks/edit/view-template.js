@@ -48,8 +48,10 @@ define('io.ox/tasks/edit/view-template', [
                 headlineText = gt('Edit task');
             }
             this.append($('<div class="col-lg-12">').append(
-                headline = $('<h1 class="clear-title">').text(headlineText),//title
-                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')//save button
+                //title
+                headline = $('<h1 class="clear-title">').text(headlineText),
+                //save button
+                saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
                     .text(saveBtnText)
                     .on('click', function () {
                         app.getWindow().busy();
@@ -57,7 +59,8 @@ define('io.ox/tasks/edit/view-template', [
                         // check if waiting for attachmenthandling is needed
                         var list = baton.attachmentList;
                         if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
-                            baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
+                            //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
+                            baton.model.attributes.tempAttachmentIndicator = true;
                         }
                         //accept any formating
                         if (baton.model.get('actual_costs')) {
@@ -78,7 +81,8 @@ define('io.ox/tasks/edit/view-template', [
                         });
 
                     }),
-                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')//cancel button
+                //cancel button
+                $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
                     .text(gt('Discard'))
                     .on('click', function () { app.quit(); })
                 ));
@@ -123,7 +127,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     }, { row: '2' });
 
-    //expand link
     point.basicExtend({
         id: 'expand_link',
         index: 400,
@@ -140,12 +143,14 @@ define('io.ox/tasks/edit/view-template', [
                     .on('click', function () {
                         if (baton.parentView.collapsed) {
                             baton.parentView.$el.find('.collapsed').show();
-                            if (!baton.parentView.detailsCollapsed) {//if details were open, show them too
+                            //if details were open, show them too
+                            if (!baton.parentView.detailsCollapsed) {
                                 baton.parentView.$el.find('.task-edit-details').show();
                             }
                         } else {
                             baton.parentView.$el.find('.collapsed').hide();
-                            if (!baton.parentView.detailsCollapsed) {//if details were open, hide them too
+                            //if details were open, hide them too
+                            if (!baton.parentView.detailsCollapsed) {
                                 baton.parentView.$el.find('.task-edit-details').hide();
                             }
                         }
@@ -193,7 +198,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     });
 
-    // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
         className: 'col-sm-12 collapsed',
@@ -384,7 +388,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     }, { row: '8' });
 
-    //participants list
     point.basicExtend({
         id: 'participants_list',
         index: 1500,
@@ -400,7 +403,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     });
 
-    // add participants
     point.basicExtend({
         id: 'add_participant',
         index: 1600,
@@ -432,7 +434,8 @@ define('io.ox/tasks/edit/view-template', [
                 var autocomplete = new AddParticipantsView({ el: node });
                 autocomplete.render({
                     parentSelector: '.io-ox-tasks-edit',
-                    resources: false//adding resources throws a backend error
+                    //adding resources throws a backend error
+                    resources: false
                 });
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
@@ -519,7 +522,8 @@ define('io.ox/tasks/edit/view-template', [
             _(errors).each(function (error) {
                 notifications.yell('error', error.error);
             });
-            if (api.uploadInProgress(_.ecid(obj))) {//no need to remove cachevalues if there was no upload
+            //no need to remove cachevalues if there was no upload
+            if (api.uploadInProgress(_.ecid(obj))) {
 
                 //make sure cache values are valid
                 api.get(obj, false).done(function (data) {
@@ -583,7 +587,6 @@ define('io.ox/tasks/edit/view-template', [
         }
     });
 
-    //expand details link
     point.basicExtend({
         id: 'expand_detail_link',
         index: 2000,
@@ -755,6 +758,4 @@ define('io.ox/tasks/edit/view-template', [
 
         }
     });
-
-    return null; //just used to clean up the view class
 });

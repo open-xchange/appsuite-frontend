@@ -25,14 +25,20 @@ define.async('io.ox/core/date', [
         'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Md'
     ];
 
-    var AVG_YEAR = 31556952000; // average ms / year
+    // average ms / year
+    var AVG_YEAR = 31556952000;
 
     var api = {
-        SECOND:    1000, // ms / s
-        MINUTE:   60000, // ms / min
-        HOUR:   3600000, // ms / h
-        DAY:   86400000, // ms / day
-        WEEK: 604800000, // ms / week
+        // ms / s
+        SECOND:    1000,
+        // ms / min
+        MINUTE:   60000,
+        // ms / h
+        HOUR:   3600000,
+        // ms / day
+        DAY:   86400000,
+        // ms / week
+        WEEK: 604800000,
 
         // Flags for format functions. Multiple flags can be combined through
         // addition or bitwise ORing.
@@ -968,7 +974,8 @@ define.async('io.ox/core/date', [
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
-                D.displayName = name; // just use this for performance reasons
+                // just use this for performance reasons
+                D.displayName = name;
                 return D;
             });
     });

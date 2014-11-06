@@ -272,7 +272,8 @@ define('io.ox/mail/actions', [
                 return e.collection.has('some') && _.device('!smartphone') && _(list).reduce(function (memo, obj) {
                     return memo || new p.Preview({
                         filename: obj.filename,
-                        mimetype: String(obj.content_type || '').split(';')[0], // fixes 'audio/mp3; name="Metallica - 01 - Enter Sandman.mp3"''
+                        // fixes 'audio/mp3; name="Metallica - 01 - Enter Sandman.mp3"''
+                        mimetype: String(obj.content_type || '').split(';')[0],
                         attachment: true
                     })
                     .supportsPreview();

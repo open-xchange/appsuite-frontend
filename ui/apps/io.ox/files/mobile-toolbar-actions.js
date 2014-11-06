@@ -41,7 +41,8 @@ define('io.ox/files/mobile-toolbar-actions', [
                         links.DropdownLinks({
                             ref: 'io.ox/files/links/toolbar/default',
                             wrap: false,
-                            emptyCallback: function () {//function to call when dropdown is empty
+                            //function to call when dropdown is empty
+                            emptyCallback: function () {
                                 self.addClass('disabled')
                                     .attr({ 'aria-disabled': true })
                                     .removeAttr('href');
@@ -111,7 +112,8 @@ define('io.ox/files/mobile-toolbar-actions', [
             //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
             gt('Actions')
         ),
-        noCaret: true, // don't draw the caret icon beside menu link
+        // don't draw the caret icon beside menu link
+        noCaret: true,
         drawDisabled: true,
         ref: 'io.ox/files/links/inline'
     }));
@@ -123,7 +125,8 @@ define('io.ox/files/mobile-toolbar-actions', [
             //.# Will be used as button label in the toolbar, allowing the user to choose some file actions like "copy" or "delete"
             gt('Actions')
         ),
-        noCaret: true, // don't draw the caret icon beside menu link
+        // don't draw the caret icon beside menu link
+        noCaret: true,
         drawDisabled: true,
         ref: 'io.ox/files/links/inline'
     }));

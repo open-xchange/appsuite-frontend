@@ -152,7 +152,8 @@ define('io.ox/files/main', [
                 .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
-                .setTitle('') // no title
+                // no title
+                .setTitle('')
                 .setLeft(
                     //#. Used as button label for a navigation action, like the browser back button
                     gt('Back')
@@ -262,8 +263,10 @@ define('io.ox/files/main', [
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': settings.get('view', 'fluid:list'),
-                'folderEditMode': false, // mobile only
-                'showCheckboxes': false  // mobile only
+                // mobile only
+                'folderEditMode': false,
+                // mobile only
+                'showCheckboxes': false
             });
 
             win.trigger('change:perspective', 'fluid', app.props.get('layout'));

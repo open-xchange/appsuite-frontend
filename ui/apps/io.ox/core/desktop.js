@@ -157,7 +157,8 @@ define('io.ox/core/desktop', [
 
             var save = $.proxy(this.saveRestorePoint, this);
             $(window).on('unload', save);
-            this.set('saveRestorePointTimer', setInterval(save, 10 * 1000)); // 10 secs
+            // 10 secs
+            this.set('saveRestorePointTimer', setInterval(save, 10 * 1000));
 
             // add folder management
             this.folder = (function () {
@@ -184,10 +185,12 @@ define('io.ox/core/desktop', [
                     set: (function () {
 
                         function change(id, data, app, def) {
-                            var appchange = _.url.hash('app') !== app; //app has changed while folder was requested
+                            //app has changed while folder was requested
+                            var appchange = _.url.hash('app') !== app;
                             // remember
                             folder = String(id);
-                            if (!appchange) {//only change if the app did not change
+                            //only change if the app did not change
+                            if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
                                     win.setTitle(_.noI18n(data.title));
@@ -234,7 +237,8 @@ define('io.ox/core/desktop', [
                                         }
                                     );
                                 }
-                            } else if (String(id) === folder) { // bug 34927
+                            } else if (String(id) === folder) {
+                                // see Bug 34927 - [L3] unexpected application error when clicking on "show all messages in inbox" in notification area
                                 var model = api.pool.getModel(id), data = model.toJSON();
                                 def.resolve(data, false);
                             } else {
@@ -692,8 +696,8 @@ define('io.ox/core/desktop', [
     // check if any open application has unsaved changes
     window.onbeforeunload = function () {
 
-        var // find all applications with unsaved changes
-            dirtyApps = ox.ui.apps.filter(function (app) {
+        // find all applications with unsaved changes
+        var dirtyApps = ox.ui.apps.filter(function (app) {
                 return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
             });
 
@@ -1068,7 +1072,8 @@ define('io.ox/core/desktop', [
                         this.trigger('beforeshow');
                         this.updateToolbar();
                         //set current appname in url, was lost on returning from edit app
-                        if (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0]) {//just get everything before the first ':' to exclude parameter additions
+                        if (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0]) {
+                            //just get everything before the first ':' to exclude parameter additions
                             _.url.hash('app', self.app.getName());
                         }
                         node.show();
@@ -1097,7 +1102,8 @@ define('io.ox/core/desktop', [
 
                         if (firstShow) {
                             shown.resolve();
-                            self.trigger('show:initial'); // alias for open
+                            // alias for open
+                            self.trigger('show:initial');
                             self.trigger('open');
                             self.state.running = true;
                             ox.ui.windowManager.trigger('window.open', self);
@@ -1179,7 +1185,8 @@ define('io.ox/core/desktop', [
                     var blocker;
                     if (self) {
                         blocker = self.nodes.blocker;
-                        $('body').focus(); // steal focus
+                        // steal focus
+                        $('body').focus();
                         self.nodes.main.find(BUSY_SELECTOR)
                             .not(':disabled').prop('disabled', true).addClass(TOGGLE_CLASS);
                         if (_.isNumber(pct)) {

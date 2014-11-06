@@ -35,7 +35,8 @@ define('io.ox/core/notifications', [
                 //#, c-format
                 a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count),
                 a11yState = this.$el.attr('aria-pressed') ? gt('The notification area is open') : gt('The notification area is closed');
-            this.model.set('a11y', a11y, { silent: true });//don't create a loop here
+            //don't create a loop here
+            this.model.set('a11y', a11y, { silent: true });
             this.nodes.badge.toggleClass('empty', count === 0);
             this.$el.attr('aria-label', a11y + ' ' + a11yState);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
@@ -71,11 +72,14 @@ define('io.ox/core/notifications', [
             this.nodes.badge.toggleClass('active', !!b);
         },
         setCount: function (count, newMails) {
-            var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
+            //check if there are new notifications, that are not mail
+            var newOther = count - this.model.get('count') - newMails;
 
-            if (newOther > 0) { //new notifications not mail
+            if (newOther > 0) {
+                //new notifications not mail
                 this.trigger('newNotifications');
-            } else if (newMails > 0) { //new mail notifications
+            } else if (newMails > 0) {
+                //new mail notifications
                 this.trigger('newMailNotifications');
             } else if (count === 0 && this.model.get('count') > count) {
                 //just trigger if count is set to 0, not if it was 0 already
@@ -96,21 +100,27 @@ define('io.ox/core/notifications', [
         render: function (notifications) {
             var self = this,
                 refocus = false,
-                lastFocused = $(document.activeElement, self.$el), //save focus
-                nextFocus, //focus in case lastFocus got lost (item not there anymore)
-                empty = true; //check if notification area is empty
+                //save focus
+                lastFocused = $(document.activeElement, self.$el),
+                //focus in case lastFocus got lost (item not there anymore)
+                nextFocus,
+                //check if notification area is empty
+                empty = true;
 
             //remove old empty message to avoid duplicates
             self.$el.find('.no-news-message').remove();
 
-            if (lastFocused.hasClass('refocus')) { //refocusable elements have this marker class
+            // refocusable elements have this marker class
+            if (lastFocused.hasClass('refocus')) {
                 //find next possible focus
                 var items = $('#io-ox-notifications .item'),
                     lastFocusItemId = lastFocused.closest('.item').attr('focus-id');
-                if (lastFocusItemId !== undefined) { //refocus only when inside of items (clear buttons or inbox link are outside)
+                if (lastFocusItemId !== undefined) {
+                    //refocus only when inside of items (clear buttons or inbox link are outside)
                     for (var i = 0; i < items.length; i++) {
                         if (lastFocusItemId === $(items[i]).attr('focus-id')) {
-                            if ((i + 1) < items.length) { //prevent index out of bounds
+                            if ((i + 1) < items.length) {
+                                //prevent index out of bounds
                                 nextFocus = $(items[i + 1]).attr('focus-id');
                             }
                             break;
@@ -123,7 +133,8 @@ define('io.ox/core/notifications', [
                 refocus = true;
             }
 
-            if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
+            //make sure views are created one time only to avoid zombies
+            if (_.size(self.subviews) < _.size(notifications)) {
                 _(notifications).each(function (category, type) {
                     if (self.subviews[type] === undefined) {
                         self.subviews[type] = new category.ListView({ collection: category.collection });
@@ -145,15 +156,19 @@ define('io.ox/core/notifications', [
                 self.$el.append($('<legend class="section-title no-news-message">').text(gt('No notifications')));
             }
 
-            if (refocus) { //restore focus if possible
+            //restore focus if possible
+            if (refocus) {
                 var found = self.$el.find('[focus-id="' + lastFocused + '"]');
                 if (found.length > 0) {
                     found.focus();
-                } else { //item was deleted. try focusing the next item
+                } else {
+                    //item was deleted. try focusing the next item
                     found = self.$el.find('[focus-id="' + nextFocus + '"]');
-                    if (found.length > 0) { //focus if its there
+                    //focus if its there
+                    if (found.length > 0) {
                         found.focus();
-                    } else { //just focus first
+                    //just focus first
+                    } else {
                         $('#io-ox-notifications .refocus').first().focus();
                     }
                 }
@@ -165,7 +180,8 @@ define('io.ox/core/notifications', [
     var NotificationController = function () {
 
         this.notifications = {};
-        this.oldMailCount = 0; // special variable needed to check for autoopen on new mail
+        // special variable needed to check for autoopen on new mail
+        this.oldMailCount = 0;
         this.badges = [];
 
         // add event supports
@@ -184,7 +200,8 @@ define('io.ox/core/notifications', [
 
         show: function () {
 
-            if (this.isOpen()) return; // if it's open already we're done
+            // if it's open already we're done
+            if (this.isOpen()) return;
 
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
@@ -195,7 +212,8 @@ define('io.ox/core/notifications', [
             this.badgeView.onToggle(true);
 
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
+                if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) {
+                    // escapekey and no open sidepopup (escapekey closes the sidepopup then)
                     $(document).off('keydown.notification');
                     this.hideList();
                     //focus badge when closing
@@ -212,7 +230,8 @@ define('io.ox/core/notifications', [
 
         hide: function () {
 
-            if (!this.isOpen()) return; // if it's closed already we're done
+            // if it's closed already we're done
+            if (!this.isOpen()) return;
 
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
@@ -247,7 +266,8 @@ define('io.ox/core/notifications', [
             }).addClass('abs notifications-overlay')
         },
 
-        attach: function (addLauncher, delay) { //delay only affects requests, not the drawing of the badge
+        //delay only affects requests, not the drawing of the badge
+        attach: function (addLauncher, delay) {
             //view
             var self = this;
 
@@ -270,7 +290,8 @@ define('io.ox/core/notifications', [
             function changeAutoOpen(value) {
                 value = value || settings.get('autoOpenNotification', 'noEmail');
 
-                self.badgeView.off('newNotifications newMailNotifications');//prevent stacking of eventhandlers
+                //prevent stacking of eventhandlers
+                self.badgeView.off('newNotifications newMailNotifications');
 
                 if (value === 'always') {
                     self.badgeView.on('newNotifications newMailNotifications', function () {
@@ -290,7 +311,8 @@ define('io.ox/core/notifications', [
 
             //close if count set to 0
             self.badgeView.on('lastItemDeleted', function () {
-                if (self.nodes.overlay.children().length > 0) { //if there is an open popup, wait till this is closed
+                //if there is an open popup, wait till this is closed
+                if (self.nodes.overlay.children().length > 0) {
                     self.nodes.overlay.prop('sidepopup').one('close', _.bind(self.slowClose, self));
                 } else {
                     self.hideList();
@@ -305,12 +327,15 @@ define('io.ox/core/notifications', [
             }, delay || 2000);
 
             function focusNotifications(e) {
-                if (e.which === 13) { //enter
-                    if (self.isOpen()) { //focus badge when closing
+                //enter
+                if (e.which === 13) {
+                    if (self.isOpen()) {
+                        //focus badge when closing
                         _.defer(function () {
                             self.badgeView.$el.focus();
                         });
-                    } else { //focus notifications when opening
+                    } else {
+                        //focus notifications when opening
                         _.defer(function () {
                             var firstItem = $('#io-ox-notifications .item').first();
                             if (firstItem.length > 0) {
@@ -346,7 +371,8 @@ define('io.ox/core/notifications', [
             this.nodes.overlay.off('mail-detail-closed');
             this.hideList();
         },
-        delayedUpdate: function () { //delays updating by 100ms (prevents updating the view multiple times in a row)
+        delayedUpdate: function () {
+            //delays updating by 100ms (prevents updating the view multiple times in a row)
             var self = this;
             if (!this.updateTimer) {
                 this.updateTimer = setTimeout(function () {
@@ -368,7 +394,8 @@ define('io.ox/core/notifications', [
             this.notificationsView.render(this.notifications);
 
             var count = _.reduce(this.notifications, function (memo, module, key) {
-                if (key === 'io.ox/mail') { //mail is special when it comes to autoopen
+                if (key === 'io.ox/mail') {
+                    //mail is special when it comes to autoopen
                     newMails = module.collection.size() - self.oldMailCount;
                     self.oldMailCount = module.collection.size();
                 }
@@ -387,8 +414,10 @@ define('io.ox/core/notifications', [
             });
 
             var focusBadge =  function (e) {
-                if (e.which === 9) { //tabkey
-                    e.preventDefault(); //prevent default to not jump to reload button
+                if (e.which === 9) {
+                    //tabkey
+                    //prevent default to not jump to reload button
+                    e.preventDefault();
                     $('#io-ox-notifications .refocus').first().focus();
                 }
             };
@@ -411,7 +440,8 @@ define('io.ox/core/notifications', [
     // auto-close if other apps are started or app is changed see bug #32768
     // users might open mails from notification area, open a contact halo, clicking edit
     ox.on('app:start app:resume', function () {
-        if (controller.badgeView) {//don't trigger to early
+        if (controller.badgeView) {
+            //don't trigger to early
             controller.hideList();
         }
     });

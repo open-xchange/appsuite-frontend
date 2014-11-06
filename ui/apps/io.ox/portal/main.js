@@ -65,7 +65,8 @@ define('io.ox/portal/main', [
                 return false;
             } else if (!containsData(type)) {
                 if (hasDataShown(type)) {
-                    //settings.set('settings/hadData', []).save(); // reset for debugging
+                    // reset for debugging
+                    // settings.set('settings/hadData', []).save();
                     return false;
                 } else {
                     return true;
@@ -424,7 +425,8 @@ define('io.ox/portal/main', [
                     if (point.all()[0].summary) {
                         //invoke special summary if there is one
                         point.invoke('summary', node, baton);
-                    } else if (!node.hasClass('generic-summary')) { //add generic open close if it's not added yet
+                    } else if (!node.hasClass('generic-summary')) {
+                        //add generic open close if it's not added yet
                         node.addClass('with-summary show-summary generic-summary');
                         node.on('tap', 'h2', function (e) {
                             $(e.delegateTarget).toggleClass('show-summary generic-summary');
@@ -539,10 +541,11 @@ define('io.ox/portal/main', [
         _.defer(function () {
             _.delay(function () {
                 node.find('.decoration').addClass('pending');
+                // CSS Transition delay 0.3s
                 _.delay(function () {
                     loadAndPreview(point, node, baton);
                     node = baton = point = null;
-                }, 300); // CSS Transition delay 0.3s
+                }, 300);
             }, delay);
         });
     };
@@ -657,7 +660,8 @@ define('io.ox/portal/main', [
                         delay: 150,
                         items: '> li.draggable:visible',
                         scroll: true,
-                        tolerance: 'pointer', // default 'intersect' by 50%
+                        // default 'intersect' by 50%
+                        tolerance: 'pointer',
                         update: function () {
                             widgets.save(appBaton.$.widgets);
                         }

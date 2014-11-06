@@ -191,7 +191,8 @@ define('io.ox/files/fluid/perspective', [
                     el = popup.closest('.io-ox-sidepopup');
                 });
 
-                _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
+                // Focus SidePopup
+                _.defer(function () { if (el) { el.focus(); } });
             }
         });
     }
@@ -251,7 +252,8 @@ define('io.ox/files/fluid/perspective', [
                 .on('keyboard', function (selEvent, orgEvent) {
                     var sel = this.get();
                     switch (orgEvent.keyCode || orgEvent.which) {
-                    case 13: // enter: treat like click on title
+                    case 13:
+                        // enter: treat like click on title
                         if (sel.length === 1) {
                             //trigger click event on title (preview action)
                             $(orgEvent.target).find('[data-obj-id="' + _.cid(sel[0])  + '"]')
@@ -260,10 +262,12 @@ define('io.ox/files/fluid/perspective', [
                                 .trigger('click');
                         }
                         break;
-                    case 37: // left: treat like up
+                    case 37:
+                        // left: treat like up
                         orgEvent.which = 38;
                         break;
-                    case 39: // right: treat like down
+                    case 39:
+                        // right: treat like down
                         orgEvent.which = 40;
                         break;
                     }
@@ -398,8 +402,10 @@ define('io.ox/files/fluid/perspective', [
         var img = $(this),
             retry = img.data('retry') + 1,
             url = String(img.attr('src') || '').replace(/&retry=\d+/, '') + '&retry=' + retry,
-            wait = Math.pow(2, retry - 1) * 3000; // 3 6 12 seconds
-        if (retry > 3) return; // stop trying after three retries
+            // 3 6 12 seconds
+            wait = Math.pow(2, retry - 1) * 3000;
+        // stop trying after three retries
+        if (retry > 3) return;
         setTimeout(function () {
             img.off('load error').one({ load: iconLoad, error: iconError }).attr('src', url).data('retry', retry);
         }, wait);
@@ -625,9 +631,10 @@ define('io.ox/files/fluid/perspective', [
                 }
             };
             adjustWidth();
+            //let the foldertree draw or we get wrong values
             app.on('folderview:close folderview:open folderview:resize', _.debounce(function () {
                 adjustWidth();
-            }, 300));//let the foldertree draw or we get wrong values
+            }, 300));
 
             //register dnd handler
             dropZoneInit(app);

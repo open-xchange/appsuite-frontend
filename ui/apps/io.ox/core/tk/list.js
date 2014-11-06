@@ -183,7 +183,8 @@ define('io.ox/core/tk/list', [
         onSort: function () {
             // sort all nodes by index
             var nodes = $(_(this.getItems()).sortBy(function (node) {
-                var index = $(node).attr('data-index'); // don't use data() here
+                // don't use data() here
+                var index = $(node).attr('data-index');
                 return parseInt(index, 10);
             }));
             // store focus & scroll position

@@ -68,7 +68,8 @@ define('io.ox/core/tk/attachments', [
             render: function () {
                 var self = this;
                 _(this.allAttachments).each(function (attachment) {
-                    self.$el.addClass('io-ox-core-tk-attachment-list clearfix').append(self.renderAttachment(attachment));//clearfix because all attachments have css float
+                    //clearfix because all attachments have css float
+                    self.$el.addClass('io-ox-core-tk-attachment-list clearfix').append(self.renderAttachment(attachment));
                 });
 
                 //trigger refresh of attachmentcounter
@@ -148,8 +149,10 @@ define('io.ox/core/tk/attachments', [
 
             save: function (id, folderId) {
                 var self = this,
-                    errors = [],//errors are saved and send to callback
-                    allDone = 0, // 0 ready 1 delete 2 add 3 delete and add
+                    //errors are saved and send to callback
+                    errors = [],
+                    // 0 ready 1 delete 2 add 3 delete and add
+                    allDone = 0,
                     apiOptions = {
                         module: this.module,
                         id: id || this.model.id,
@@ -212,7 +215,7 @@ define('io.ox/core/tk/attachments', [
     }
 
     /**
-     * gui widget collecting files user wants to upload // Only used by mail and files
+     * Only used by mail and files: gui widget collecting files user wants to upload
      * @param {object} options
      * @param {object} baton
      */

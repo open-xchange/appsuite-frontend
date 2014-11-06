@@ -248,7 +248,8 @@ define('io.ox/files/api', [
             },
             search: {
                 action: 'search',
-                columns: allColumns, // should be the same as all-request
+                // should be the same as all-request
+                columns: allColumns,
                 extendColumns: 'io.ox/files/api/all',
                 sort: '702',
                 order: 'asc',
@@ -307,7 +308,8 @@ define('io.ox/files/api', [
                 return data;
             }
         },
-        simplify: function (options) {//special function for list requests that fall back to a get request (only one item in the array)
+        //special function for list requests that fall back to a get request (only one item in the array)
+        simplify: function (options) {
             //add version parameter again so you don't get the current version all the time
             options.simplified.version = options.original.version;
             return options.simplified;
@@ -524,7 +526,8 @@ define('io.ox/files/api', [
                 timestamp: _.now()
             },
             data: formData,
-            fixPost: true // TODO: temp. backend fix
+            // TODO: temp. backend fix
+            fixPost: true
         })
         .then(
             function success(response) {
@@ -568,12 +571,6 @@ define('io.ox/files/api', [
         }
         formData.append($('<input>',  { 'type': 'hidden', 'name': 'json', 'value': JSON.stringify(options.json) }));
 
-        /*return http.UPLOAD({
-            module: 'files',
-            params: { action: 'update', timestamp: _.now(), id: options.id },
-            data: formData,
-            fixPost: true // TODO: temp. backend fix
-        });*/
         var tmpName = 'iframe_' + _.now(),
         frame = $('<iframe>',  { 'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1 });
         $('#tmp').append(frame);
@@ -649,29 +646,6 @@ define('io.ox/files/api', [
             return handleExtendedResponse(file, response);
         });
     };
-
-    // deprecated/unused; commented out on 18.11.2013
-    // api.create = function (options) {
-    //     options = $.extend({
-    //         folder: coreConfig.get('folder/infostore')
-    //     }, options || {});
-    //     if (!options.json.folder_id) {
-    //         options.json.folder_id = options.folder;
-    //     }
-    //     return http.PUT({
-    //             module: 'files',
-    //             params: { action: 'new' },
-    //             data: options.json,
-    //             appendColumns: false
-    //         })
-    //         .pipe(function (data) {
-    //             // clear folder cache
-    //             return api.propagate('new', { folder_id: options.folder }).pipe(function () {
-    //                 api.trigger('create.file', { id: data, folder: options.folder });
-    //                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
-    //             });
-    //         });
-    // };
 
     /**
      * update caches and fire events (if not suppressed)
@@ -818,7 +792,8 @@ define('io.ox/files/api', [
             return url + '?' + $.param({
                 action: 'zipdocuments',
                 body: JSON.stringify(_.map(file, function (o) { return { id: o.id, folder_id: o.folder_id }; })),
-                session: ox.session // required here!
+                // required here!
+                session: ox.session
             }) + userContext;
         default:
             return url + query;
@@ -856,7 +831,8 @@ define('io.ox/files/api', [
     };
 
     var copymove = function (list, action, targetFolderId) {
-        var errors = [];//object to store errors inside the multiple
+        //object to store errors inside the multiple
+        var errors = [];
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
@@ -870,7 +846,8 @@ define('io.ox/files/api', [
                     extendedResponse: true,
                     id: o.id,
                     folder: o.folder_id || o.folder,
-                    timestamp: o.timestamp || _.then() // mandatory for 'update'
+                    // mandatory for 'update'
+                    timestamp: o.timestamp || _.then()
                 },
                 data: { folder_id: targetFolderId },
                 appendColumns: false
@@ -893,7 +870,8 @@ define('io.ox/files/api', [
                     })
                 );
             }).then(function () {
-                return errors;//return errors inside multiple
+                //return errors inside multiple
+                return errors;
             })
             .done(function () {
                 api.trigger('refresh.all');
@@ -944,7 +922,8 @@ define('io.ox/files/api', [
                     id: o.id,
                     folder: o.folder_id || o.folder,
                     timezone: 'UTC'
-                    // diff: 10000 // Use 10s diff for debugging purposes
+                    // Use 10s diff for debugging purposes
+                    // diff: 10000
                 },
                 appendColumns: false
             });

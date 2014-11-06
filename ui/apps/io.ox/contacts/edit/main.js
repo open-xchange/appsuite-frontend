@@ -158,7 +158,8 @@ define('io.ox/contacts/edit/main', [
                             });
                         }
                         win.on('show', function () {
-                            if (contact.get('id')) {//set url parameters
+                            if (contact.get('id')) {
+                                //set url parameters
                                 app.setState({ folder: contact.get('folder_id'), id: contact.get('id') });
                             } else {
                                 app.setState({ folder: contact.get('folder_id'), id: null });

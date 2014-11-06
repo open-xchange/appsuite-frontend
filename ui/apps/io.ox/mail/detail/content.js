@@ -67,8 +67,10 @@ define('io.ox/mail/detail/content', [
             ';)': '&#x1F609;',
             ':-D': '&#x1F603;',
             ':D': '&#x1F603;',
-            ':-|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
-            ':|': '&#x1F614;', // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':-|': '&#x1F614;',
+            // may be, switch to &#x1F610; once we have the icon for it (neutral face)
+            ':|': '&#x1F614;',
             ':-(': '&#x1F61E;',
             ':(': '&#x1F61E;'
         };
@@ -201,7 +203,8 @@ define('io.ox/mail/detail/content', [
         id: 'white-space',
         index: 600,
         process: function (baton) {
-            if (baton.isLarge) return; // espeically firefox doesn't like those regex for large messages
+            // espeically firefox doesn't like those regex for large messages
+            if (baton.isLarge) return;
             baton.source = baton.source
                 // remove leading white-space
                 .replace(/^(<div[^>]+>)(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '$1')
@@ -350,12 +353,14 @@ define('io.ox/mail/detail/content', [
                 var link = $(node)
                         .filter('[href^="mailto:"]')
                         .addClass('mailto-link')
-                        .attr('target', '_blank'), // to be safe
+                        // to be safe
+                        .attr('target', '_blank'),
                     text = link.text();
-                // trim text if it contains mailto:...
                 if (text.search(/^mailto:/) > -1) {
-                    text = text.substring(7);//cut of mailto
-                    text = text.split(/\?/, 2)[0];//cut of additional parameters
+                    //cut of mailto
+                    text = text.substring(7);
+                    //cut of additional parameters
+                    text = text.split(/\?/, 2)[0];
                     link.text(text);
                 }
             });
@@ -387,7 +392,8 @@ define('io.ox/mail/detail/content', [
         index: 1000,
         process: function (baton) {
             // auto-collapse blockquotes?
-            if (baton.options.autoCollapseBlockquotes === false) return; // use by printing, for example
+            // use by printing, for example
+            if (baton.options.autoCollapseBlockquotes === false) return;
             if (settings.get('features/autoCollapseBlockquotes', true) !== true) return;
             // blockquotes (top-level only)
             this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
@@ -424,7 +430,8 @@ define('io.ox/mail/detail/content', [
     function fixAbsolutePositions(content, isLarge) {
         var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight, found: false },
             width = content.width(), height = content.height();
-        if (!isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
+        // FF18 is behaving oddly correct, but impractical
+        if (!isLarge && (farthest.x >= width || farthest.y >= height)) {
             farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
         }
         // only do this for absolute elements

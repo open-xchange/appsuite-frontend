@@ -196,7 +196,8 @@ define('io.ox/mail/toolbar', [
     ext.point('io.ox/mail/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/mail/classic-toolbar/links'

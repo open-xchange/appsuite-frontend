@@ -85,7 +85,8 @@ define('io.ox/tasks/edit/view', [
 
             //draw the rows
             _(rows).each(function (row, key) {
-                if (key !== 'rest') {//leave out all the rest, for now
+                //leave out all the rest, for now
+                if (key !== 'rest') {
                     var node = $('<div class="row">').appendTo(self.$el);
                     for (var i = 0; i < row.length; i++) {
                         row[i].invoke('draw', node, self.baton);
@@ -125,7 +126,8 @@ define('io.ox/tasks/edit/view', [
                             return val;
                         });
                 if (details.length || attributes.length || self.model.get('status') !== 1 ||
-                        (self.model.get('participants') && self.model.get('participants').length)) {//check if attributes contain values other than the defaults
+                        //check if attributes contain values other than the defaults
+                        (self.model.get('participants') && self.model.get('participants').length)) {
                     self.$el.find('.expand-link').click();
                     if (details.length) {
                         self.$el.find('.expand-details-link').click();

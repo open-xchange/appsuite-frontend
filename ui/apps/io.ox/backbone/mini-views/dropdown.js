@@ -28,13 +28,15 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 name = node.attr('data-name'),
                 value = node.data('value'),
                 toggle = node.data('toggle');
-            if (value === undefined) return; // ignore plain links
+            // ignore plain links
+            if (value === undefined) return;
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
         setup: function () {
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
-            this.$ul.on('click', 'a', $.proxy(this.onClick, this)); // not so nice but we need this for mobile support
+            // not so nice but we need this for mobile support
+            this.$ul.on('click', 'a', $.proxy(this.onClick, this));
             if (this.model) this.listenTo(this.model, 'change', this.update);
         },
 
@@ -79,7 +81,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     'data-value': this.stringify(value),
                     'data-toggle': _.isBoolean(value)
                 })
-                .data('value', value) // store original value
+                // store original value
+                .data('value', value)
                 .append(
                     $('<i class="fa fa-fw">')
                         .attr({ 'aria-hidden': true })

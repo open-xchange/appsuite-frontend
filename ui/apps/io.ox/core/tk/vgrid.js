@@ -268,7 +268,8 @@ define('io.ox/core/tk/vgrid', [
             },
 
             updateSelectAll = function (list) {
-                var check = (list.length >= 1) && (list.length >= all.length);//list can be larger if threads are expanded in the grid
+                //list can be larger if threads are expanded in the grid
+                var check = (list.length >= 1) && (list.length >= all.length);
 
                 ignoreCheckbox = true;
                 node.find('.select-all input').prop('checked', check);
@@ -672,7 +673,7 @@ define('io.ox/core/tk/vgrid', [
         resize = function () {
             // get num of rows
             numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
-            numRows = CHUNK_SIZE; //Math.max(numVisible * mult >> 0, minRows);
+            numRows = CHUNK_SIZE;
             // prepare pool
             var  i = 0, clone, frag = document.createDocumentFragment();
             for (; i < numRows; i++) {
@@ -770,7 +771,8 @@ define('io.ox/core/tk/vgrid', [
                     cid = _(ids).first();
                     index = self.selection.getIndex(cid) || 0;
                     if (!isVisible(index)) {
-                        setIndex(index - 2); // not at the very top
+                        // not at the very top
+                        setIndex(index - 2);
                     }
                 }
             }
@@ -808,7 +810,8 @@ define('io.ox/core/tk/vgrid', [
                         //console.debug('case #2 select() >> index', i);
                         self.selection.set(all[i]);
                         if (!isVisible(i)) {
-                            setIndex(i - 2); // not at the very top
+                            // not at the very top
+                            setIndex(i - 2);
                         }
                     } else if (_.isArray(i)) {
                         // select by object (cid)
@@ -1214,7 +1217,8 @@ define('io.ox/core/tk/vgrid', [
         };
 
         this.getIds = function () {
-            return all.slice(); // return shallow copy
+            // return shallow copy
+            return all.slice();
         };
 
         this.isVisible = isVisible;
@@ -1230,7 +1234,8 @@ define('io.ox/core/tk/vgrid', [
                 node.detach();
             });
             pool = [];
-            if (!initialized) return; // no need to update if not yet initialized
+            // no need to update if not yet initialized
+            if (!initialized) return;
             init();
             this.repaint();
         };
@@ -1266,7 +1271,6 @@ define('io.ox/core/tk/vgrid', [
             toolbar.show();
         } else {
             this.selection.setMultiple(false);
-            //toolbar.detach(); // makes no sense to disable because the toolbar is used for sorting, too
         }
 
         // process some options on toolbars

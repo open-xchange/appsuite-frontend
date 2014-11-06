@@ -190,7 +190,8 @@ define('io.ox/core/folder/view', [
 
         // migrate hidden folders
         if (module) {
-            var hidden = settings.get(['folder/hidden']); // yep, folder/hidden is one key
+            // yep, folder/hidden is one key
+            var hidden = settings.get(['folder/hidden']);
             if (hidden === undefined) {
                 hidden = app.settings.get('folderview/blacklist', {});
                 if (_.isObject(hidden)) settings.set(['folder/hidden'], hidden).save();
@@ -220,8 +221,10 @@ define('io.ox/core/folder/view', [
                     return tree.$dropdown.find('.dropdown-toggle').click();
                 }
                 // otherwise
-                app.pages.changePage(options.firstResponder); // default 'listView'
-                if (options.respondCallback) options.respondCallback(); // callback for custom actions after pagechange
+                // default 'listView'
+                app.pages.changePage(options.firstResponder);
+                // callback for custom actions after pagechange
+                if (options.respondCallback) options.respondCallback();
             }, 10));
 
             if (id) {

@@ -177,7 +177,8 @@ define('io.ox/contacts/actions', [
         capabilities: 'calendar',
         requires: function (e) {
             var contact = e.context;
-            if (contact.id === 0 || contact.folder_id === 0) { // e.g. non-existing contacts in halo view
+            // e.g. non-existing contacts in halo view
+            if (contact.id === 0 || contact.folder_id === 0) {
                 return false;
             } else {
                 var list = [].concat(contact);

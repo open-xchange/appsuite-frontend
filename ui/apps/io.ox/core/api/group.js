@@ -28,7 +28,8 @@ define('io.ox/core/api/group', [
             all: {
                 columns: '1,20',
                 extendColumns: 'io.ox/core/api/group/all',
-                sort: '500', // display_name
+                // display_name
+                sort: '500',
                 order: 'asc'
             },
             list: {
@@ -68,8 +69,10 @@ define('io.ox/core/api/group', [
                 node.nodeValue = data.display_name;
             })
             .always(function () {
-                _.defer(function () { // use defer! otherwise we return null on cache hit
-                    node = null; // don't leak
+                // use defer! otherwise we return null on cache hit
+                _.defer(function () {
+                    // don't leak
+                    node = null;
                 });
             });
         return node;

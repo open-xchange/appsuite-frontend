@@ -48,7 +48,8 @@ define('io.ox/files/toolbar', [
                         links.DropdownLinks({
                             ref: 'io.ox/files/links/toolbar/default',
                             wrap: false,
-                            emptyCallback: function () {//function to call when dropdown is empty
+                            //function to call when dropdown is empty
+                            emptyCallback: function () {
                                 self.addClass('disabled')
                                     .attr({ 'aria-disabled': true })
                                     .removeAttr('href');
@@ -189,7 +190,8 @@ define('io.ox/files/toolbar', [
     ext.point('io.ox/files/classic-toolbar').extend(new links.InlineLinks({
         attributes: {},
         classes: '',
-        dropdown: true, // always use drop-down
+        // always use drop-down
+        dropdown: true,
         index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/files/classic-toolbar/links'

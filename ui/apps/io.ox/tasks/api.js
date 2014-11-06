@@ -37,31 +37,37 @@ define('io.ox/tasks/api', [
          * @return { undefined }
          */
         checkForNotifications = function (currentValues, modifications, create) {
-            if (modifications.folder_id && modifications.folder_id !== currentValues.folder_id) {//check move
+            //check move
+            if (modifications.folder_id && modifications.folder_id !== currentValues.folder_id) {
                 api.getTasks();
                 require(['io.ox/core/api/reminder'], function (reminderAPI) {
                     reminderAPI.getReminders();
                 });
             } else {
-                if ((modifications.alarm !== undefined) || (create && modifications.alarm)) {//check alarm
+                //check alarm
+                if ((modifications.alarm !== undefined) || (create && modifications.alarm)) {
                     require(['io.ox/core/api/reminder'], function (reminderAPI) {
                         reminderAPI.getReminders();
                     });
                 }
-                if (modifications.participants) {//check participants
+                //check participants
+                if (modifications.participants) {
                     var myId = ox.user_id,
                         triggered = false;
-                    _(modifications.participants).each(function (obj) { //user is added to a task
+                    //user is added to a task
+                    _(modifications.participants).each(function (obj) {
                         if (obj.id === myId) {
                             triggered = true;
                             api.trigger('mark:task:to-be-confirmed', [currentValues]);
                         }
                     });
-                    if (!triggered) {//user is not in the current participants
+                    //user is not in the current participants
+                    if (!triggered) {
                         api.trigger('mark:task:confirmed', [currentValues]);
                     }
                 }
-                if (modifications.status || (modifications.end_date !== undefined)) {//check overdue
+                //check overdue
+                if (modifications.status || (modifications.end_date !== undefined)) {
                     if (currentValues.status !== 3 && currentValues.end_date < _.utc()) {
                         api.trigger('mark:overdue', [currentValues]);
                     } else {
@@ -86,7 +92,8 @@ define('io.ox/tasks/api', [
             list = list || [];
             list = _.isArray(list) ? list : [list];
 
-            if (list.length === 0) {//is's empty. nothing to do
+            //is's empty. nothing to do
+            if (list.length === 0) {
                 return $.when();
             }
             //make sure ids are strings
@@ -96,7 +103,8 @@ define('io.ox/tasks/api', [
                 task.folder_id = task.folder_id.toString();
             });
 
-            if (list[0].folder_id && list[0].folder_id !== folder) {//move operation
+            //move operation
+            if (list[0].folder_id && list[0].folder_id !== folder) {
                 return api.caches.all.clear();
             }
             var found = false,
@@ -111,7 +119,8 @@ define('io.ox/tasks/api', [
                     _(cachevalue).each(function (singlevalue) {
                         _(list).each(function (item) {
                             if (singlevalue.id.toString() === item.id && singlevalue.folder_id.toString() === folder) {
-                                _.extend(singlevalue, modifications);//apply modified values
+                                //apply modified values
+                                _.extend(singlevalue, modifications);
                                 found = true;
                             }
                         });
@@ -122,7 +131,8 @@ define('io.ox/tasks/api', [
                     } else {
                         return $.when();
                     }
-                } else {//just leave it to the next all request, no need to do it here
+                } else {
+                    //just leave it to the next all request, no need to do it here
                     return $.when();
                 }
             });
@@ -146,7 +156,8 @@ define('io.ox/tasks/api', [
             if (portalModel && portalApp) {
                 portalApp.refreshWidget(portalModel, 0);
             } else {
-                require(['io.ox/portal/main'], function (portal) {//refresh portal
+                //refresh portal
+                require(['io.ox/portal/main'], function (portal) {
                     portalApp = portal.getApp();
                     portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
                     if (portalModel) {
@@ -220,7 +231,8 @@ define('io.ox/tasks/api', [
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
                 order: 'asc',
-                cache: true, // allow DB cache
+                // allow DB cache
+                cache: true,
                 timezone: 'UTC'
             },
             list: {
@@ -267,19 +279,24 @@ define('io.ox/tasks/api', [
         var attachmentHandlingNeeded = task.tempAttachmentIndicator,
             response;
         delete task.tempAttachmentIndicator;
-        if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
-            delete task.alarm;    //leaving it in would throw a backend error
+        //task.alarm must not be null on creation, it's only used to delete an alarm on update actions
+        if (task.alarm === null) {
+            //leaving it in would throw a backend error
+            delete task.alarm;
         }
         if (task.priority === 'null' || !task.priority) {
             delete task.priority;
         }
-        if (task.status) {//make sure we have an integer here
+        //make sure we have an integer here
+        if (task.status) {
             task.status = parseInt(task.status, 10);
         }
         if (task.status === 3) {
-            task.date_completed = task.date_completed || _.now();//make sure we have date_completed
+            //make sure we have date_completed
+            task.date_completed = task.date_completed || _.now();
         } else {
-            delete task.date_completed;//remove invalid date_completed
+            //remove invalid date_completed
+            delete task.date_completed;
         }
         return http.PUT({
             module: 'tasks',
@@ -297,7 +314,8 @@ define('io.ox/tasks/api', [
            );
         }).then(function () {
             if (attachmentHandlingNeeded) {
-                api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
+                //to make the detailview show the busy animation
+                api.addToUploadList(_.ecid(task));
             }
             checkForNotifications(task, task, true);
             api.trigger('create', task);
@@ -328,21 +346,26 @@ define('io.ox/tasks/api', [
             delete task.folder;
         }
 
-        if (newFolder && arguments.length === 2) { //folder is only used by move operation, because here we need 2 folder attributes
+        //folder is only used by move operation, because here we need 2 folder attributes
+        if (newFolder && arguments.length === 2) {
             task.folder_id = newFolder;
             move = true;
         }
-        task.notification = true;//set always (OX6 does this too)
+        //set always (OX6 does this too)
+        task.notification = true;
 
-        if (useFolder === undefined) {//if no folder is given use default
+        //if no folder is given use default
+        if (useFolder === undefined) {
             useFolder = api.getDefaultFolder();
         }
 
-        if (task.status) {//make sure we have an integer here
+        //make sure we have an integer here
+        if (task.status) {
             task.status = parseInt(task.status, 10);
         }
         if (task.status === 3) {
-            task.date_completed = task.date_completed || _.now();// make sure we have date_completed
+            // make sure we have date_completed
+            task.date_completed = task.date_completed || _.now();
         } else if (task.status !== 3 && task.status !== '3') {
             task.date_completed = null;
         }
@@ -365,12 +388,15 @@ define('io.ox/tasks/api', [
         }).pipe(function () {
             // update cache
             var sortChanged = false;
-            if (task.title || task.end_date || task.status) { //data that is important for sorting changed, so clear the all cache
+            //data that is important for sorting changed, so clear the all cache
+            if (task.title || task.end_date || task.status) {
                 sortChanged = true;
             }
             return $.when(
+                    //api.get updates list and get caches
                     api.removeFromCache(key)
-                        .then(function () { return api.get({ id: task.id, folder_id: newFolder || useFolder }); }),//api.get updates list and get caches
+                        //api.get updates list and get caches
+                        .then(function () { return api.get({ id: task.id, folder_id: newFolder || useFolder }); }),
                         sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
         }).pipe(function (data) {
             //return object with id and folder id needed to save the attachments correctly
@@ -378,7 +404,8 @@ define('io.ox/tasks/api', [
             //notification check
             checkForNotifications(data, task, true);
             if (attachmentHandlingNeeded) {
-                api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
+                //to make the detailview show the busy animation
+                api.addToUploadList(_.ecid(task));
             }
             return obj;
         }).done(function () {
@@ -404,7 +431,8 @@ define('io.ox/tasks/api', [
      */
     api.updateMultiple = function (list, modifications) {
         var keys  = [];
-        modifications.notification = true;//set always (OX6 does this too)
+        //set always (OX6 does this too)
+        modifications.notification = true;
         http.pause();
 
         _(list).map(function (obj) {
@@ -475,7 +503,8 @@ define('io.ox/tasks/api', [
      * @param  {object} options (properties: data, folder_id, id)
      * @return { promise }
      */
-    api.confirm =  function (options) { //options.id is the id of the task not userId
+    api.confirm =  function (options) {
+        //options.id is the id of the task not userId
         var key = (options.folder_id || options.folder) + '.' + options.id;
         return http.PUT({
             module: 'tasks',
@@ -485,7 +514,8 @@ define('io.ox/tasks/api', [
                 id: options.id,
                 timezone: 'UTC'
             },
-            data: options.data, // object with confirmation attribute
+            // object with confirmation attribute
+            data: options.data,
             appendColumns: false
         }).pipe(function () {
             api.trigger('mark:task:confirmed', [{ id: options.id, data: options.data }]);
@@ -535,7 +565,8 @@ define('io.ox/tasks/api', [
      */
     api.getTasks = function () {
 
-        return http.GET({//could be done to use all folders, see portal widget but not sure if this is needed
+        //could be done to use all folders, see portal widget but not sure if this is needed
+        return http.GET({
             module: 'tasks',
             params: { action: 'all',
                 folder: api.getDefaultFolder(),
@@ -566,7 +597,8 @@ define('io.ox/tasks/api', [
             //even if empty array is given it needs to be triggered to remove
             //notifications that does not exist anymore (already handled in ox6 etc)
             api.trigger('new-tasks', dueTasks);
-            api.trigger('set:tasks:to-be-confirmed', confirmTasks);//same here
+            //same here
+            api.trigger('set:tasks:to-be-confirmed', confirmTasks);
             return list;
         });
     };
@@ -598,7 +630,7 @@ define('io.ox/tasks/api', [
      * @return { boolean }
      */
     api.uploadInProgress = function (key) {
-        return uploadInProgress[key] || false;//return true boolean
+        return uploadInProgress[key] || false;
     };
 
     /**

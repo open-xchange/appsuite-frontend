@@ -1,4 +1,4 @@
-/* jshint unused: false */
+            /* jshint unused: false */
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -171,7 +171,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             })
             .css({
                 lineHeight: '1em',
-                margin: '0.5em auto 0.5em auto' // center!
+                // center!
+                margin: '0.5em auto 0.5em auto'
             });
         self.find('th')
             .css({
@@ -496,7 +497,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         ln2br = function (str) {
             return String(str || '').replace(/\r/g, '')
-                .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
+                // '\n' is for IE
+                .replace(new RegExp('\\n', 'g'), '<br>');
         },
 
         // get editor content

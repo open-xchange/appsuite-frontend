@@ -36,7 +36,8 @@ define('io.ox/core/session', [
 
     var set = function (data, language) {
         if ('session' in data) ox.session = data.session || '';
-        if ('user' in data) ox.user = data.user || ''; // might have a domain; depends on what the user entered on login
+        // might have a domain; depends on what the user entered on login
+        if ('user' in data) ox.user = data.user || '';
         if ('user_id' in data) ox.user_id = data.user_id || 0;
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang

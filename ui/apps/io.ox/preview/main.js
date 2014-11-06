@@ -157,7 +157,8 @@ define('io.ox/preview/main', [
                         enablePluginDebug: true,
                         pauseOtherPlayers: true,
                         keyActions: [{
-                            keys: [32, 179], // SPACE
+                            // SPACE
+                            keys: [32, 179],
                             action: function (player, media) {
                                 if (media.paused || media.ended) {
                                     media.play();
@@ -167,14 +168,16 @@ define('io.ox/preview/main', [
                             }
                         },
                         {
-                            keys: [39, 228], // RIGHT
+                            // RIGHT
+                            keys: [39, 228],
                             action: function (player, media) {
                                 var newVolume = Math.min(media.volume + 0.1, 1);
                                 media.setVolume(newVolume);
                             }
                         },
                         {
-                            keys: [37, 227], // LEFT
+                            // LEFT
+                            keys: [37, 227],
                             action: function (player, media) {
                                 var newVolume = Math.max(media.volume - 0.1, 0);
                                 media.setVolume(newVolume);
@@ -190,7 +193,8 @@ define('io.ox/preview/main', [
         id: 'eml',
         supports: ['eml', 'message/rfc822'],
         verify: function (file) {
-            return !file.pim; // doesn't work for pim attachments
+            // doesn't work for pim attachments
+            return !file.pim;
         },
         draw: function (file) {
             var self = this.busy();
@@ -239,7 +243,8 @@ define('io.ox/preview/main', [
 
         var self = this;
 
-        this.file = _.copy(file, true); // work with a copy
+        // work with a copy
+        this.file = _.copy(file, true);
         this.options = options || {};
 
         //ensure integer (if numeric) for valid url params
