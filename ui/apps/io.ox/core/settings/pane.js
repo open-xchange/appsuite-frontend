@@ -41,7 +41,6 @@ define('io.ox/core/settings/pane',
             defaults.index = (defaults || options).index + 100;
             // apply defaults and create group
             options = _.extend({}, defaults, options);
-            console.log(options);
             return new forms.SelectControlGroup(options);
         };
 
