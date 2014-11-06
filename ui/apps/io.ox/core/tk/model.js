@@ -43,7 +43,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         },
         number: function (prop, val, def) {
             var regex = /^\d+$/;
-//            return _.isNumber(val) ||
+            // return _.isNumber(val) ||
             return regex.test(val) ||
             new Error(prop, _.printf('%s must be a number', def.i18n || prop));
         },
