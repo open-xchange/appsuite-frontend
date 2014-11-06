@@ -15,21 +15,32 @@
     margin-right: 5px;
 }
 
-.edit-contact {
+.io-ox-contacts-edit-window {
+
+    &.contacts-header-top .window-header {
+        height: 130px;
+        button[data-action="save"] {
+            margin-right:15px;
+        }
+        .btn.control {
+            float: right;
+            margin-left: 14px;
+        }
+    }
+
+    &.contacts-header-top .window-body {
+       top: 130px;
+    }
+
+    .edit-contact {
+        padding-top: 10px;
+    }
 
     .settings-detail-pane & {
         margin: 0;
         padding: 0;
     }
 
-    .btn.control {
-        float: right;
-        margin-left: 14px;
-    }
-
-    button[data-action="save"] {
-        margin-right:15px;
-    }
     .toggle-compact {
         padding-left:15px;
         padding-right:15px;

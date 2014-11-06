@@ -29,7 +29,7 @@ define('io.ox/contacts/edit/main', [
     // multi instance pattern
     function createInstance(data) {
 
-        var app, getDirtyStatus, container, editView;
+        var app, getDirtyStatus, container, header, editView;
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
@@ -50,6 +50,11 @@ define('io.ox/contacts/edit/main', [
             app.setWindow(win);
 
             container = win.nodes.main.scrollable();
+            header = win.nodes.header;
+
+            //non standard header class because contacts header is bigger
+            win.addClass('contacts-header-top');
+            header.addClass('container default-header-padding');
 
             var cont = function (data) {
 
@@ -64,6 +69,7 @@ define('io.ox/contacts/edit/main', [
                         app.setTitle(appTitle || gt('Create contact'));
                         app.contact = contact;
                         editView = new view.ContactEditView({ model: contact });
+                        editView.header = header;
                         container.append(
                             editView.render().$el.addClass('default-content-padding container')
                         );

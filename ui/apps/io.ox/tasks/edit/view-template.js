@@ -738,8 +738,8 @@ define('io.ox/tasks/edit/view-template', [
         draw: function (baton) {
             // must be on a non overflow container to work with position:fixed
             var node = $(baton.app.attributes.window.nodes.body),
-                save = baton.parentView.$el.find('.task-edit-save'),
-                cancel = baton.parentView.$el.find('.task-edit-cancel');
+                save = baton.app.getWindow().nodes.header.find('.task-edit-save'),
+                cancel = baton.app.getWindow().nodes.header.find('.task-edit-cancel');
             node.append($('<div class="app-bottom-toolbar">').append(save, cancel));
         }
     });

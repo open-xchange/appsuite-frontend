@@ -44,9 +44,17 @@ define('io.ox/calendar/edit/view', [
         render: function () {
             var self = this,
                 rows = [],
+                header,
+                headerNode = $('<div class="row">').appendTo(self.baton.app.getWindow().nodes.header),
                 rowPerExtensionId = {};
 
             this.point.each(function (extension) {
+
+                //header is special
+                if (extension.id === 'header') {
+                    header = extension;
+                    return;
+                }
                 var row = null;
                 if (extension.nextTo) {
                     row = rowPerExtensionId[extension.nextTo];
@@ -61,6 +69,8 @@ define('io.ox/calendar/edit/view', [
                 rowPerExtensionId[extension.id] = row;
                 row.push(extension);
             });
+
+            header.invoke('draw', headerNode, self.baton);
 
             _(rows).each(function (row) {
                 var $rowNode = $('<div class="row">').appendTo(self.$el);
