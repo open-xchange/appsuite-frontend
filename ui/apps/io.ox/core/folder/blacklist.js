@@ -32,7 +32,8 @@ define('io.ox/core/folder/blacklist',
             index: 100,
             visible: function (baton) {
                 var data = baton.data, id = String(data.id);
-                hash = settings.get('folder/blacklist', {}); // work with fresh hash (esp. for testing)
+                // work with fresh hash (esp. for testing)
+                hash = settings.get('folder/blacklist', {});
                 return !hash[id];
             }
         },

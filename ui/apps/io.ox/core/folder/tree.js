@@ -135,8 +135,10 @@ define('io.ox/core/folder/tree',
 
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
                 this.$dropdown
-                    .data('previous-focus', target) // helps to restore focus (see renderContextMenu)
-                    .find('.dropdown-toggle').dropdown('toggle'); // use official method
+                    // helps to restore focus (see renderContextMenu)
+                    .data('previous-focus', target)
+                    // use official method
+                    .find('.dropdown-toggle').dropdown('toggle');
 
             }.bind(this));
         },
@@ -153,7 +155,8 @@ define('io.ox/core/folder/tree',
         },
 
         onContextMenu: function (e) {
-            e.stopPropagation(); // clicks bubbles. right-click not
+            // clicks bubbles. right-click not
+            e.stopPropagation();
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
             this.toggleContextMenu(target, top, left);
         },
@@ -167,18 +170,24 @@ define('io.ox/core/folder/tree',
         onKeydown: function (e) {
 
             var dropdown = this.$dropdown;
-            if (!dropdown.hasClass('open')) return; // done if not open
-            if (e.shiftKey && e.which === 9) return; // shift-tab
+            // done if not open
+            if (!dropdown.hasClass('open')) return;
+            // shift-tab
+            if (e.shiftKey && e.which === 9) return;
 
             switch (e.which) {
-            case 9:  // tab
-            case 40: // cursor down
+            case 9:
+                // tab
+            case 40:
+                // cursor down
                 e.preventDefault();
                 return dropdown.find('.dropdown-menu > li:first > a').focus();
-            case 38: // cursor up
+            case 38:
+                // cursor up
                 e.preventDefault();
                 return dropdown.find('.dropdown-menu > li:last > a').focus();
-            case 27: // escape
+            case 27:
+                // escape
                 return dropdown.find('.dropdown-toggle').dropdown('toggle');
             }
         },

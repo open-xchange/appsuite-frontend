@@ -20,7 +20,8 @@ define('io.ox/core/folder/node', [
 
     'use strict';
 
-    var ICON = 'caret'; // angle caret chevron
+    // angle caret chevron
+    var ICON = 'caret';
 
     var TreeNodeView = Backbone.View.extend({
 
@@ -225,7 +226,8 @@ define('io.ox/core/folder/node', [
                 if (!this.$) return;
                 // re-append to apply sorting
                 var nodes = _(this.$.subfolders.children()).sortBy(function (node) {
-                    var index = $(node).attr('data-index'); // don't use data() here
+                    // don't use data() here
+                    var index = $(node).attr('data-index');
                     return parseInt(index, 10);
                 });
                 this.$.subfolders.append(nodes);
@@ -373,7 +375,8 @@ define('io.ox/core/folder/node', [
         },
 
         renderTooltip: function () {
-            if (this.options.title) return; // don't overwrite custom title
+            // don't overwrite custom title
+            if (this.options.title) return;
             if (!this.model.has('title')) return;
             var data = this.model.toJSON(), summary = [];
             if (_.isNumber(data.total)) summary.push(gt('Total: %1$d', data.total));
