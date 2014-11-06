@@ -25,7 +25,8 @@ define('io.ox/core/updates/updater',
             var states = settings.get('states');
 
             if (_.isUndefined(states)) {
-                return $.when(); // Skip this round
+                // Skip this round
+                return $.when();
             }
 
             function next() {

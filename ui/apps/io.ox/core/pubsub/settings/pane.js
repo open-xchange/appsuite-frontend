@@ -117,9 +117,12 @@ define('io.ox/core/pubsub/settings/pane',
                     this.folder.set(id);
                 });
             },
-            exclude: ['9'], // root folder is useless
-            subfolder: false, //don’t show subfolders for last item
-            last: false // make last item a link (responding to handler function)
+            // root folder is useless
+            exclude: ['9'],
+            //don’t show subfolders for last item
+            subfolder: false,
+            // make last item a link (responding to handler function)
+            last: false
         };
 
         var folder, entity;

@@ -46,7 +46,8 @@ define('io.ox/core/settings/user',
                         });
 
                         user.on('sync:start', function () {
-                            if (user.get('birthday') === null) {//if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
+                            //if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
+                            if (user.get('birthday') === null) {
                                 $node.find('[data-field="birthday"]').find('.year,.month,.date').val('');
                             }
                             // dont't hide on IE to fix form submit.
