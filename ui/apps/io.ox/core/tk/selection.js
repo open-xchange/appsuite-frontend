@@ -247,6 +247,12 @@ define('io.ox/core/tk/selection',
                     selectNext(e);
                 }
                 break;
+            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+            case 8:
+            case 46:
+                e.preventDefault();
+                self.trigger('selection:delete', self.get());
+                break;
             }
         };
 

@@ -517,9 +517,19 @@ define('io.ox/tasks/main',
             });
         },
 
+        /*
+         * Handle delete event based on keyboard shortcut
+         */
+        'selection-delete': function (app) {
+            app.grid.selection.on('selection:delete', function (e, list) {
+                var baton = ext.Baton({ data: list });
+                actions.invoke('io.ox/tasks/actions/delete', null, baton);
+            });
+        },
+
         'inplace-search': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('small') || !capabilities.has('search')) return;
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
