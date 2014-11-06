@@ -107,9 +107,10 @@ define('io.ox/tasks/edit/main', [
                 chromeless: true
             });
 
-            win.addClass('io-ox-tasks-edit-main');
+            win.addClass('io-ox-tasks-edit-main header-top');
             app.setWindow(win);
             win.nodes.main.addClass('scrollable');
+            win.nodes.header.addClass('container default-header-padding');
 
             win.on('hide', function () {
                 if (app && app.dropZone) {

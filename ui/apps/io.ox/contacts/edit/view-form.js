@@ -166,7 +166,32 @@ define('io.ox/contacts/edit/view-form', [
 
             ContactEditView = point.createView({
                 tagName: 'div',
-                className: 'edit-contact compact'
+                className: 'edit-contact compact',
+                render: function () {
+                    //own render function so we are able to draw extensionpoints into 2 nodes (header and body)
+                    if (this.header) {
+                        var header = [],
+                            body = [];
+                        _(this.point.all()).each(function (extension) {
+                            if (extension.header)  {
+                                header.push(extension);
+                            } else {
+                                body.push(extension);
+                            }
+                        });
+                        for (var i = 0; i < header.length; i++) {
+                            header[i].invoke.apply(this.point, ['draw', this.header].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
+                        }
+                        for (var i = 0; i < body.length; i++) {
+                            body[i].invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
+                        }
+
+                    } else {
+                        this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
+                    }
+
+                    return this;
+                }
             });
 
         point.extend(new PictureUpload({
@@ -178,13 +203,14 @@ define('io.ox/contacts/edit/view-form', [
                 // so we just go on here
                 this.$el.addClass('contact-picture-upload f6-target');
             }
-        }));
+        }), { header: true });
 
         // Save
         if (!isMyContactData) {
             point.basicExtend(new links.Button({
                 id: 'save',
                 index: 110,
+                header: true,
                 label: gt('Save'),
                 ref: ref + '/actions/edit/save',
                 cssClasses: 'btn btn-primary control f6-target',
@@ -195,6 +221,7 @@ define('io.ox/contacts/edit/view-form', [
             point.basicExtend(new links.Button({
                 id: 'discard',
                 index: 120,
+                header: true,
                 label: gt('Discard'),
                 ref: ref + '/actions/edit/discard',
                 cssClasses: 'btn btn-default control',
@@ -228,10 +255,11 @@ define('io.ox/contacts/edit/view-form', [
             index: 100,
             draw: function () {
                 var node = $(this.attributes.window.nodes.body),
+                    header = $(this.attributes.window.nodes.header),
                     toolbar = $('<div class="app-bottom-toolbar">');
                 // due to the very strange usage of extension points in contacts module
                 // we have to do move the buttons the old-school way
-                toolbar.append(node.find('[data-action="save"], [data-action="discard"]'));
+                toolbar.append(header.find('[data-action="save"], [data-action="discard"]'));
                 node.append(toolbar);
             }
 
@@ -243,7 +271,10 @@ define('io.ox/contacts/edit/view-form', [
                 e.preventDefault();
             }
 
-            var node = $(this).closest('.edit-contact');
+            //make sure this works for links in head and body
+            var windowNode = $(this).closest('.io-ox-contacts-edit-window'),
+                header = windowNode.find('.window-header'),
+                node = windowNode.find('.edit-contact');
 
             // update "has-content" class
             node.find('.field input[type="text"]').each(function () {
@@ -274,6 +305,9 @@ define('io.ox/contacts/edit/view-form', [
             });
 
             node.find('.toggle-compact')
+                .find('i').attr('class', icon).end()
+                .find('a').attr('role', 'button').text(label);
+            header.find('.toggle-compact')
                 .find('i').attr('class', icon).end()
                 .find('a').attr('role', 'button').text(label);
         }
@@ -310,6 +344,7 @@ define('io.ox/contacts/edit/view-form', [
         point.basicExtend({
             id: 'summary',
             index: 150,
+            header: true,
             draw: function (baton) {
 
                 this.append(
@@ -401,7 +436,7 @@ define('io.ox/contacts/edit/view-form', [
                         // really not so nice...
                         button = options.parentView.$el.parent().parent().parent().find('[data-action="discard"]');
                     } else {
-                        button = options.parentView.$el.find('[data-action="discard"]');
+                        button = options.parentView.header.find('[data-action="discard"]');
                     }
                     button.trigger('controller:quit');
                 }

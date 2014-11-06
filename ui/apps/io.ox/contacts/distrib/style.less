@@ -11,7 +11,11 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-.create-distributionlist {
+.io-ox-contacts-distrib-window {
+
+    .create-distributionlist {
+        padding-top: 10px;
+    }
 
     .title-controls {
         .btn { float: right; }
@@ -32,7 +36,6 @@
     }
 
     h1.title {
-        line-height:0;
         font-size: 20px;
         float: left;
     }
@@ -115,6 +118,13 @@
 
     @media (max-width: 767px) {
         .title-controls .btn-primary { margin-bottom: 5px; }
+            &.header-top .window-header {
+            height: 75px;
+        }
+
+        &.header-top .window-body {
+            top: 75px;
+        }
     }
 
     @media (min-width: 767px) {
