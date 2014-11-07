@@ -15,10 +15,11 @@
  */
 
 define('io.ox/files/api', [
+    'io.ox/core/http',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'settings!io.ox/core'
-], function (Pool, CollectionLoader, coreConfig) {
+], function (http, Pool, CollectionLoader, coreConfig) {
 
     'use strict';
 
@@ -41,6 +42,34 @@ define('io.ox/files/api', [
             };
         }
     });
+
+    /**
+     * returns versions
+     * @param  {object} options
+     * @param  {string} options.id
+     * @return { deferred }
+     */
+    api.versions = function (options) {
+        var cid = _.cid(options),
+            model = pool.get('detail').get(cid);
+
+        if (model && model.get('versions')) return $.when(model.get('versions'));
+
+        return http.GET({
+            module: 'files',
+            params: _.extend({ action: 'versions', timezone: 'utc' }, options),
+            appendColumns: true
+        })
+        .done(function (data) {
+            if (model) {
+                model.set('versions', data);
+            } else {
+                pool.add('detail', _.extend({
+                    versions: data
+                }, options));
+            }
+        });
+    };
 
     return api;
 

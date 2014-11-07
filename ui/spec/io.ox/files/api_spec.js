@@ -20,21 +20,33 @@ define([
         it('should exist', function () {
             expect(api).to.exist;
         });
-        describe.only('Collection Loader', function () {
-            beforeEach(function () {
-                this.server.respondWith('GET', /api\/files\?/, function (xhr) {
-                    expect(xhr.url).to.contain('action=all');
-                    expect(xhr.url).to.contain('folder=4711');
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: [
-                            { id: '3', folder_id: '1337', title: 'three' },
-                            { id: '4', folder_id: '1337', title: 'four' },
-                            { id: '5', folder_id: '1337', title: 'five' }
-                        ]
-                    }));
-                });
+
+        beforeEach(function () {
+            api.pool.get('detail').reset();
+            this.server.respondWith('GET', /api\/files\?action=all/, function (xhr) {
+                expect(xhr.url).to.contain('folder=4711');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: [
+                        { id: '3', folder_id: '1337', title: 'three' },
+                        { id: '4', folder_id: '1337', title: 'four' },
+                        { id: '5', folder_id: '1337', title: 'five' }
+                    ]
+                }));
             });
+
+            this.server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                    timestamp: 1368791630910,
+                    data: [
+                        { id: '1337' },
+                        { id: '1337' }
+                    ]
+                }));
+            });
+        });
+
+        describe('Collection Loader', function () {
 
             it('uses the files module', function () {
                 expect(api.collectionLoader.module).to.equal('files');
@@ -58,6 +70,37 @@ define([
                 c.on('load', function (m) {
                     expect(c).to.have.length(3);
                     done();
+                });
+            });
+        });
+
+        describe('versions of files', function () {
+            it('should be a list for each file', function () {
+                var server = this.server;
+                return api.versions({
+                    id: '1337'
+                }).then(function (versions) {
+                    expect(versions).to.be.an('array');
+                    expect(versions).to.have.length(2);
+                    expect(server.requests.filter(function (xhr) {
+                        return xhr.url.indexOf('action=versions') >= 0;
+                    })).to.have.length(1);
+                });
+            });
+            it('should cache versions', function () {
+                var server = this.server;
+                return api.versions({
+                    id: '1337'
+                }).then(function () {
+                    return api.versions({
+                        id: '1337'
+                    });
+                }).then(function (versions) {
+                    expect(versions).to.be.an('array');
+                    expect(versions).to.have.length(2);
+                    expect(server.requests.filter(function (xhr) {
+                        return xhr.url.indexOf('action=versions') >= 0;
+                    })).to.have.length(1);
                 });
             });
         });
