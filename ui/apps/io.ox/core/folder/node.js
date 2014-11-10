@@ -375,8 +375,8 @@ define('io.ox/core/folder/node', [
             if (this.options.title) return; // don't overwrite custom title
             if (!this.model.has('title')) return;
             var data = this.model.toJSON(), summary = [];
-            if (_.isNumber(data.total)) summary.push(gt('Total: %1$d', data.total));
-            if (_.isNumber(data.unread)) summary.push(gt('Unread: %1$d', data.unread));
+            if (_.isNumber(data.total) && data.total >= 0) summary.push(gt('Total: %1$d', data.total));
+            if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
             summary = summary.join(', ');
             if (summary) summary = ' (' + summary + ')';
             this.$el.attr('title', this.model.get('title') + summary);
