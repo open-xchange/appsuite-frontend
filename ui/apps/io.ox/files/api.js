@@ -43,6 +43,80 @@ define('io.ox/files/api', [
         }
     });
 
+    api.get = function (options) {
+        var model = pool.get('detail').get(_.cid(options));
+
+        if (model) return $.when(model);
+
+        return http.GET({
+            module: 'files',
+            params: {
+                action: 'get',
+                id: options.id,
+                folder: options.folder_id || options.folder,
+                timezone: 'UTC'
+            }
+        }).then(function (data) {
+            return pool.add('detail', data).get(_.cid(data));
+        });
+    };
+
+    pool.get('detail').on('add', function (model) {
+        api.versions(model.attributes);
+    });
+
+    var lockToggle = function (list, action) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        // pause http layer
+        http.pause();
+        // process all updates
+        _(list).map(function (o) {
+            return http.PUT({
+                module: 'files',
+                params: {
+                    action: action,
+                    id: o.id,
+                    folder: o.folder_id || o.folder,
+                    timezone: 'UTC'
+                    // Use 10s diff for debugging purposes
+                    // diff: 10000
+                },
+                appendColumns: false
+            });
+        });
+
+        // resume & trigger refresh
+        return http.resume().done(function () {
+            api.collectionLoader.reload(list[0]);
+        });
+    };
+
+    /**
+     * unlocks files
+     * @param  {array} list
+     * @return { deferred }
+     */
+    api.unlock = function (list) {
+        list = _.isArray(list) ? list : [list];
+        http.pause();
+        list.forEach(function (o) {
+            pool.propagate('change', _.extend({
+                locked_until: 0
+            }, o));
+        });
+        return http.resume();
+    };
+
+    /**
+     * locks files
+     * @param  {array} list
+     * @return { deferred }
+     */
+    api.lock = function (list) {
+        return lockToggle(list, 'lock');
+    };
+
     /**
      * returns versions
      * @param  {object} options
