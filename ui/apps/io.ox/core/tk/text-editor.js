@@ -110,8 +110,9 @@ define('io.ox/core/tk/text-editor', function () {
         this.setCaretPosition = function () {
             if (!textarea) return;
             var el = textarea.get(0);
-
             function fnSetCaretPosition() {
+                // Prevent NS_ERROR_FAILURE in Firefox
+                if (document.activeElement && document.activeElement.nodeName.toLowerCase() !== 'textarea') return;
                 if (el.setSelectionRange) {
                     el.setSelectionRange(0, 0);
                 } else if (el.createTextRange) {
