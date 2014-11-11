@@ -23,7 +23,8 @@ define('io.ox/core/folder/view',
     function initialize(options) {
 
         options = _.extend({
-            firstResponder: 'listView'
+            firstResponder: 'listView',
+            autoHideThreshold: 700
         }, options);
 
         var app = options.app,
@@ -106,10 +107,11 @@ define('io.ox/core/folder/view',
                 var bar = $(),
                     maxSidePanelWidth = 0,
                     minSidePanelWidth = 150,
+                    base,
                     width = 0;
 
                 function mousemove(e) {
-                    var x = e.pageX;
+                    var x = e.pageX - base;
                     if (x > maxSidePanelWidth || x < minSidePanelWidth) return;
                     app.trigger('folderview:resize');
                     applyWidth(width = x);
@@ -118,12 +120,16 @@ define('io.ox/core/folder/view',
                 function mouseup(e) {
                     $(this).off('mousemove.resize mouseup.resize');
                     // auto-close?
-                    if (e.pageX < minSidePanelWidth) app.folderView.hide();
-                    else storeWidth(width || 250);
+                    if (e.pageX - base < minSidePanelWidth) {
+                        app.folderView.hide();
+                    } else {
+                        storeWidth(width || 250);
+                    }
                 }
 
                 function mousedown(e) {
                     e.preventDefault();
+                    base = e.pageX - sidepanel.width();
                     maxSidePanelWidth = $(document).width() / 2;
                     $(document).on({
                         'mousemove.resize': mousemove,
@@ -136,7 +142,8 @@ define('io.ox/core/folder/view',
                         sidepanel.append(
                             bar = $('<div class="resizebar">').on('mousedown.resize', mousedown)
                         );
-                    }
+                    },
+                    autoHideThreshold: options.autoHideThreshold
                 };
             }())
         };
@@ -155,10 +162,11 @@ define('io.ox/core/folder/view',
             // skip if window is invisible
             if (!nodes.outer.is(':visible')) return;
             // respond to current width
-            if (!hiddenByWindowResize && visible && width <= 700) {
+            var threshold = app.folderView.resize.autoHideThreshold;
+            if (!hiddenByWindowResize && visible && width <= threshold) {
                 app.folderView.hide();
                 hiddenByWindowResize = true;
-            } else if (hiddenByWindowResize && width > 700) {
+            } else if (hiddenByWindowResize && width > threshold) {
                 app.folderView.show();
                 hiddenByWindowResize = false;
             }
