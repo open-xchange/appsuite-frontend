@@ -93,19 +93,20 @@ define('plugins/portal/rss/register',
         draw: (function () {
 
             function drawItem(item) {
-                var publishedDate = new date.Local(item.date).format(date.DATE),
-                    $body = $(item.body);
 
-                //replace img tags with empty src
+                var publishedDate = new date.Local(item.date).format(date.DATE),
+                    $body = $('<div class="text-body noI18n">').html(item.body);
+
+                // replace img tags with empty src
                 $body.find('img[src=""]').replaceWith(gt('show image'));
 
-                //add target to a tags
+                // add target to a tags
                 $body.find('a').attr('target', '_blank');
 
                 this.append(
                     $('<div class="text">').append(
                         $('<h4>').text(_.noI18n(item.subject)),
-                        $('<div class="text-body noI18n">').append($body),
+                        $body,
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
                         )
