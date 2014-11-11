@@ -46,16 +46,22 @@ define('io.ox/core/folder/view',
         }
 
         function storeWidth(width) {
-            app.settings.set('folderview/width/' + _.display(), width).save();
+            if (width === undefined) {
+                app.settings.remove('folderview/width/' + _.display());
+            } else {
+                app.settings.set('folderview/width/' + _.display(), width);
+            }
+            app.settings.save();
         }
 
         function getWidth() {
-            return app.settings.get('folderview/width/' + _.display(), 250);
+            return app.settings.get('folderview/width/' + _.display());
         }
 
         function applyWidth(x) {
-            nodes.body.css('left', x + 'px');
-            nodes.sidepanel.css('width', x + 'px');
+            var width = x === undefined ? '' :  x + 'px';
+            nodes.body.css('left', width);
+            nodes.sidepanel.css('width', width);
         }
 
         function applyInitialWidth() {
@@ -65,7 +71,7 @@ define('io.ox/core/folder/view',
         function resetLeftPosition() {
             var win = app.getWindow(),
                 chromeless = win.options.chromeless,
-                tooSmall = $(document).width() <= 700;
+                tooSmall = $(document).width() <= app.folderView.resize.autoHideThreshold;
             nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         }
 
@@ -107,8 +113,7 @@ define('io.ox/core/folder/view',
                 var bar = $(),
                     maxSidePanelWidth = 0,
                     minSidePanelWidth = 150,
-                    base,
-                    width = 0;
+                    base, width;
 
                 function mousemove(e) {
                     var x = e.pageX - base;
@@ -120,10 +125,10 @@ define('io.ox/core/folder/view',
                 function mouseup(e) {
                     $(this).off('mousemove.resize mouseup.resize');
                     // auto-close?
-                    if (e.pageX - base < minSidePanelWidth) {
+                    if (e.pageX - base < minSidePanelWidth * 0.75) {
                         app.folderView.hide();
                     } else {
-                        storeWidth(width || 250);
+                        storeWidth(width);
                     }
                 }
 
