@@ -125,6 +125,12 @@ define('io.ox/mail/compose/model', [
                 }.bind(this));
             }
 
+            if (this.get('mode') === 'edit') {
+                this.set({ 'signature': '' });
+            } else if (_.device('!smartphone') && (this.get('mode') === 'reply' || this.get('mode') == 'forward')) {
+                this.set({ 'signature': settings.get('defaultReplyForwardSignature') });
+            }
+
             this.updateShadow();
         },
 

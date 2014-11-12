@@ -17,8 +17,9 @@ define('io.ox/mail/settings/signatures/register', [
     'settings!io.ox/mail',
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/snippets',
+    'io.ox/backbone/mini-views',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, gt, settings, dialogs, snippets) {
+], function (ext, gt, settings, dialogs, snippets, mini) {
 
     'use strict';
 
@@ -301,37 +302,47 @@ define('io.ox/mail/settings/signatures/register', [
         id: 'signatures',
         index: 500,
         draw: function (baton) {
-            var $node, $list, signatures;
+            var $node,
+                $list,
+                signatures,
+                defaultSignatureView,
+                defaultReplyForwardView;
+
             this.append($node = $('<fieldset class="io-ox-signature-settings">'));
             function fnDrawAll() {
                 snippets.getAll('signature').done(function (sigs) {
                     signatures = {};
                     $list.empty();
+                    //clear views before rendering
+                    defaultSignatureView.$el.empty();
+                    defaultSignatureView.trigger('appendOption', { value: '', label: gt('No signature'), isDefault: false });
+                    defaultReplyForwardView.$el.empty();
+                    defaultReplyForwardView.trigger('appendOption', { value: '', label: gt('No signature'), isDefault: false });
+
+                    //hide default signature selection, if there are no signatures
+                    $node.children('.form-group').css('display', sigs.length > 0 ? '' : 'none');
                     _(sigs).each(function (signature) {
                         signatures[signature.id] = signature;
 
-                        var isDefault = settings.get('defaultSignature') === signature.id,
-                            $item = $('<li class="widget-settings-view">')
-                                .attr('data-id', signature.id)
+                        var $item = $('<li class="widget-settings-view">')
+                            .attr('data-id', signature.id)
+                            .append(
+                                $('<div class="selectable deletable-item">')
                                 .append(
-                                    $('<div class="selectable deletable-item">')
-                                    .append(
-                                        $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
-                                        $('<div class="widget-controls">').append(
-                                            $('<a class="action" tabindex="1" data-action="default">').text((isDefault ? gt('(Default)') : gt('Set as default'))),
-                                            $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')),
-                                            $('<a class="remove">').attr({
-                                                'data-action': 'delete',
-                                                title: gt('Delete'),
-                                                tabindex: 1
-                                            }).append($('<i class="fa fa-trash-o">'))
-                                        )
+                                    $('<span class="list-title pull-left" data-property="displayName">').text(gt.noI18n(signature.displayname)),
+                                    $('<div class="widget-controls">').append(
+                                        $('<a class="action" tabindex="1" data-action="edit">').text(gt('Edit')),
+                                        $('<a class="remove">').attr({
+                                            'data-action': 'delete',
+                                            title: gt('Delete'),
+                                            tabindex: 1
+                                        }).append($('<i class="fa fa-trash-o">'))
                                     )
-                                );
-                        if (settings.get('defaultSignature') === signature.id) {
-                            $item.addClass('default');
-                        }
+                                )
+                            );
                         $list.append($item);
+                        defaultSignatureView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultSignature') === signature.id });
+                        defaultReplyForwardView.trigger('appendOption', { value: signature.id, label: signature.displayname, isDefault: settings.get('defaultReplyForwardSignature') === signature.id });
                     });
                 });
             }
@@ -369,7 +380,7 @@ define('io.ox/mail/settings/signatures/register', [
                     );
                 } else {
                     $node.append($('<legend class="sectiontitle">').text(gt('Signatures')));
-                    addSignatureList($node);
+                    addSignatureList($node, baton);
                 }
             } catch (e) {
                 console.error(e, e.stack);
@@ -385,7 +396,9 @@ define('io.ox/mail/settings/signatures/register', [
             }
 
             function addSignatureList($node) {
-                // List
+                var section;
+
+                // Register edit and delete events
                 $list = $('<ul class="list-unstyled list-group settings-list">')
                 .on('click keydown', 'a[data-action=edit]', function (e) {
                     if ((e.type === 'click') || (e.which === 13)) {
@@ -401,38 +414,57 @@ define('io.ox/mail/settings/signatures/register', [
                         e.preventDefault();
                     }
                 })
-                .on('click keydown', 'a[data-action=default]', function (e) {
-                    if ((e.type === 'click') || (e.which === 13)) {
-                        var id = $(this).closest('li').attr('data-id');
-                        settings.set('defaultSignature', id).save();
-                        $list.find('li').removeClass('default')
-                            .find('a[data-action="default"]').text(gt('Set as default'));
-                        $(this).closest('li').addClass('default')
-                            .find('a[data-action="default"]').text(gt('(Default)'));
-                        e.preventDefault();
-                    }
-                })
                 .appendTo($node);
 
-                fnDrawAll();
-                snippets.on('refresh.all', fnDrawAll);
-
-                var section;
-
+                // Append "add signature" button
                 $node.append(
                     section = $('<div class="sectioncontent btn-toolbar">').append(
-                        $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
+                        $('<div class="form-group">').append(
+                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
+                        )
                     )
                 );
 
-                section.append(
-                    $('<button type="button" class="btn btn-primary" tabindex="1">')
-                        .text(gt('Unset default signature'))
-                        .on('click', function () {
-                            settings.set('defaultSignature', '').save();
-                            fnDrawAll();
-                        })
+                defaultSignatureView = new mini.SelectView({ list: [], name: 'defaultSignature', model: baton.model, id: 'defaultSignature', className: 'form-control' })
+                .on('appendOption', function (option) {
+                    this.$el.append($('<option>').attr({ 'value': option.value }).text(option.label));
+                    if (option.isDefault) {
+                        this.$el.val(option.value);
+                    }
+                });
+
+                defaultReplyForwardView = new mini.SelectView({ list: [], name: 'defaultReplyForwardSignature', model: baton.model, id: 'defaultReplyForwardSignature', className: 'form-control' })
+                .on('appendOption', function (option) {
+                    this.$el.append($('<option>').attr({ 'value': option.value }).text(option.label));
+                    if (option.isDefault) {
+                        this.$el.val(option.value);
+                    }
+                });
+
+                $node.append(
+                    $('<div class="form-group row">').append(
+                        $('<label for="defaultSignature" class="control-label col-xs-12 col-md-8">')
+                        .text(gt('Default signature for new messages')),
+                        $('<div>').addClass('controls col-xs-12 col-md-4').append(
+                            $('<div>').append(
+                                $('<div>').append(defaultSignatureView.render().$el)
+                            )
+                        )
+                    ),
+                    $('<div class="form-group row">').append(
+                        $('<label for="defaultSignature" class="control-label col-xs-12 col-md-8">')
+                        .text(gt('Default signature for reply or forward messages')),
+                        $('<div>').addClass('controls col-xs-12 col-md-4').append(
+                            $('<div>').append(
+                                $('<div>').append(defaultReplyForwardView.render().$el)
+                            )
+                        )
+                    )
                 );
+
+                //draw signatures
+                fnDrawAll();
+                snippets.on('refresh.all', fnDrawAll);
 
                 require(['io.ox/core/config'], function (config) {
                     if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {

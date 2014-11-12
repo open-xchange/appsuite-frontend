@@ -10,7 +10,9 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/mail/compose/model'], function (MailModel) {
+define(['io.ox/mail/compose/model',
+    'settings!io.ox/mail'
+], function (MailModel, settings) {
     'use strict';
 
     describe('Mail Compose', function () {
@@ -76,6 +78,42 @@ define(['io.ox/mail/compose/model'], function (MailModel) {
                     expect(model.get('attachments').at(0).get('content_type')).to.equal('text/plain');
                     expect(model.get('attachments').at(0).get('content')).to.equal('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
                     expect(model.getContent()).to.equal('This is some <i>html</i> <b>text</b><br /><br> with line breaks and stuff.');
+                });
+            });
+
+            describe('signature', function () {
+                beforeEach(function () {
+                    settings.set('defaultSignature', { value: 42, label: 'Default Signature' });
+                    settings.set('defaultReplyForwardSignature', { value: 24, label: 'Default reply/forward signature' });
+                });
+                afterEach(function () {
+                    //restore default values
+                    settings.set('defaultSignature', false);
+                    settings.set('defaultReplyForwardSignature', false);
+                });
+                it('should use default signature on compose', function () {
+                    var model = new MailModel({
+                        mode: 'compose'
+                    });
+                    expect(model.get('signature')).to.deep.equal(settings.get('defaultSignature'));
+                });
+                it('should use reply/forward on reply', function () {
+                    var model = new MailModel({
+                        mode: 'reply'
+                    });
+                    expect(model.get('signature')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
+                });
+                it('should use reply/forward on reply', function () {
+                    var model = new MailModel({
+                        mode: 'forward'
+                    });
+                    expect(model.get('signature')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
+                });
+                it('should use no signature on edit', function () {
+                    var model = new MailModel({
+                        mode: 'edit'
+                    });
+                    expect(model.get('signature')).to.deep.equal('');
                 });
             });
         });
