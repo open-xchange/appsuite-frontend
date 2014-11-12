@@ -420,7 +420,7 @@ define('io.ox/portal/main', [
             function success() {
                 var widgetType = _.last(baton.point.split('/'));
                 node.find('.content').remove();
-                // draw summary only on small devices, i.e. smartphones
+                // draw summary only on smartphones (please adjust settings pane when adjusting this check)
                 if (_.device('smartphone') && settings.get('mobile/summaryView')) {
                     if (point.all()[0].summary) {
                         //invoke special summary if there is one

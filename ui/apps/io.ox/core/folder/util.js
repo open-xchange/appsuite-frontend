@@ -203,7 +203,8 @@ define('io.ox/core/folder/util', [
             // default folder cannot be renamed
             return !is('defaultfolder', data);
         case 'create:folder':
-            return (isAdmin || bits(data.permissions, 0) >= 4);
+            // check 4th bit (see http://oxpedia.org/wiki/index.php?title=HTTP_API#PermissionFlags)
+            return isAdmin || (rights & 4) === 4;
         case 'delete:folder':
         case 'remove:folder':
             // must be admin; system and default folder cannot be deleted

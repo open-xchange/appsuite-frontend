@@ -139,8 +139,8 @@ define('io.ox/core/settings/pane', [
         }
     });
 
+    // Timezones
     (function () {
-        // Timezones
         var available = settingOptions.get('availableTimeZones'),
             technicalNames = _(available).keys(),
             userTZ = settings.get('timezone', 'UTC'),
@@ -197,8 +197,30 @@ define('io.ox/core/settings/pane', [
                 );
             }
         });
+    }());
 
-        // Themes
+    // Refresh interval
+    (function () {
+        if (settings.isConfigurable('refreshInterval')) {
+            var MINUTES = 60000;
+            var options = {};
+
+            options[5 * MINUTES] = gt('5 minutes');
+            options[10 * MINUTES] = gt('10 minutes');
+            options[15 * MINUTES] = gt('15 minutes');
+            options[30 * MINUTES] = gt('30 minutes');
+
+            point.extend(createSelectonGroup({
+                id: 'refreshInterval',
+                attribute: 'refreshInterval',
+                label: gt('Refresh interval'),
+                selectOptions: options
+            }));
+        }
+    }());
+
+    // Themes
+    (function () {
         var availableThemes = settingOptions.get('themes') || {};
 
         //  until we get translated themes from backend
@@ -396,5 +418,5 @@ define('io.ox/core/settings/pane', [
             });
         }
     }());
-
 });
+

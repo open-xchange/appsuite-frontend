@@ -108,13 +108,17 @@ define('io.ox/core/tk/text-editor', function () {
 
         this.setCaretPosition = function () {
             var el = textarea.get(0);
-            if (el.setSelectionRange) {
-                el.setSelectionRange(0, 0);
-            } else if (el.createTextRange) {
-                var range = el.createTextRange();
-                range.moveStart('character', 0);
-                range.select();
-            }
+            // Prevent NS_ERROR_FAILURE in Firefox
+            _.defer(function () {
+                if (document.activeElement && document.activeElement.nodeName.toLowerCase() !== 'textarea') return;
+                if (el.setSelectionRange) {
+                    el.setSelectionRange(0, 0);
+                } else if (el.createTextRange) {
+                    var range = el.createTextRange();
+                    range.moveStart('character', 0);
+                    range.select();
+                }
+            });
         };
 
         this.appendContent = function (str) {

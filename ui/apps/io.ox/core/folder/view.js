@@ -23,7 +23,8 @@ define('io.ox/core/folder/view', [
     function initialize(options) {
 
         options = _.extend({
-            firstResponder: 'listView'
+            firstResponder: 'listView',
+            autoHideThreshold: 700
         }, options);
 
         var app = options.app,
@@ -45,16 +46,22 @@ define('io.ox/core/folder/view', [
         }
 
         function storeWidth(width) {
-            app.settings.set('folderview/width/' + _.display(), width).save();
+            if (width === undefined) {
+                app.settings.remove('folderview/width/' + _.display());
+            } else {
+                app.settings.set('folderview/width/' + _.display(), width);
+            }
+            app.settings.save();
         }
 
         function getWidth() {
-            return app.settings.get('folderview/width/' + _.display(), 250);
+            return app.settings.get('folderview/width/' + _.display());
         }
 
         function applyWidth(x) {
-            nodes.body.css('left', x + 'px');
-            nodes.sidepanel.css('width', x + 'px');
+            var width = x === undefined ? '' :  x + 'px';
+            nodes.body.css('left', width);
+            nodes.sidepanel.css('width', width);
         }
 
         function applyInitialWidth() {
@@ -64,7 +71,7 @@ define('io.ox/core/folder/view', [
         function resetLeftPosition() {
             var win = app.getWindow(),
                 chromeless = win.options.chromeless,
-                tooSmall = $(document).width() <= 700;
+                tooSmall = $(document).width() <= app.folderView.resize.autoHideThreshold;
             nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         }
 
@@ -106,10 +113,10 @@ define('io.ox/core/folder/view', [
                 var bar = $(),
                     maxSidePanelWidth = 0,
                     minSidePanelWidth = 150,
-                    width = 0;
+                    base, width;
 
                 function mousemove(e) {
-                    var x = e.pageX;
+                    var x = e.pageX - base;
                     if (x > maxSidePanelWidth || x < minSidePanelWidth) return;
                     app.trigger('folderview:resize');
                     applyWidth(width = x);
@@ -118,7 +125,7 @@ define('io.ox/core/folder/view', [
                 function mouseup(e) {
                     $(this).off('mousemove.resize mouseup.resize');
                     // auto-close?
-                    if (e.pageX < minSidePanelWidth) {
+                    if (e.pageX - base < minSidePanelWidth * 0.75) {
                         app.folderView.hide();
                     } else {
                         storeWidth(width || 250);
@@ -127,6 +134,7 @@ define('io.ox/core/folder/view', [
 
                 function mousedown(e) {
                     e.preventDefault();
+                    base = e.pageX - sidepanel.width();
                     maxSidePanelWidth = $(document).width() / 2;
                     $(document).on({
                         'mousemove.resize': mousemove,
@@ -139,7 +147,8 @@ define('io.ox/core/folder/view', [
                         sidepanel.append(
                             bar = $('<div class="resizebar">').on('mousedown.resize', mousedown)
                         );
-                    }
+                    },
+                    autoHideThreshold: options.autoHideThreshold
                 };
             }())
         };
@@ -158,10 +167,11 @@ define('io.ox/core/folder/view', [
             // skip if window is invisible
             if (!nodes.outer.is(':visible')) return;
             // respond to current width
-            if (!hiddenByWindowResize && visible && width <= 700) {
+            var threshold = app.folderView.resize.autoHideThreshold;
+            if (!hiddenByWindowResize && visible && width <= threshold) {
                 app.folderView.hide();
                 hiddenByWindowResize = true;
-            } else if (hiddenByWindowResize && width > 700) {
+            } else if (hiddenByWindowResize && width > threshold) {
                 app.folderView.show();
                 hiddenByWindowResize = false;
             }
