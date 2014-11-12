@@ -199,26 +199,6 @@ define('io.ox/core/settings/pane', [
         });
     }());
 
-    // Refresh interval
-    (function () {
-        if (settings.isConfigurable('refreshInterval')) {
-            var MINUTES = 60000;
-            var options = {};
-
-            options[5 * MINUTES] = gt('5 minutes');
-            options[10 * MINUTES] = gt('10 minutes');
-            options[15 * MINUTES] = gt('15 minutes');
-            options[30 * MINUTES] = gt('30 minutes');
-
-            point.extend(createSelectonGroup({
-                id: 'refreshInterval',
-                attribute: 'refreshInterval',
-                label: gt('Refresh interval'),
-                selectOptions: options
-            }));
-        }
-    }());
-
     // Themes
     (function () {
         var availableThemes = settingOptions.get('themes') || {};
@@ -419,4 +399,3 @@ define('io.ox/core/settings/pane', [
         }
     }());
 });
-
