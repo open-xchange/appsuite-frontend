@@ -134,7 +134,9 @@ define('io.ox/core/api/account',
     };
 
     api.getUnifiedInbox = function () {
-        return $.when(settings.get('unifiedInboxIdentifier', null));
+        var name = settings.get('unifiedInboxIdentifier', null);
+        // name might be "null" (a string), should be null instead (see Bug 35439)
+        return $.when(name === 'null' ? null : name);
     };
 
     api.getInbox = function () {
