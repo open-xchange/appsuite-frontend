@@ -178,7 +178,7 @@ define('io.ox/calendar/edit/recurrence-view',
 
             self[attribute] = options.initial;
 
-            var $container = $('<span class="dropdown">').css({ zIndex: 1 });
+            var $container = $('<span class="dropdown">');
             $anchor.after($container);
             $container.append($anchor);
 
@@ -229,7 +229,7 @@ define('io.ox/calendar/edit/recurrence-view',
             var self = this,
                 nodes = {},
                 now = new dateAPI.Local(),
-                $container = $('<span class="dropdown">').css({ zIndex: 1 });
+                $container = $('<span class="dropdown">');
 
             self[attribute] = Math.pow(2, now.getDay());
             $anchor.after($container);
