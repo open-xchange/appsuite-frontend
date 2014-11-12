@@ -471,7 +471,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 h = $(window).height(),
                 top = el.offset().top;
 
-            el.css('min-height', h - top - 40);
+            el.css('min-height', h - top - 40 + 'px');
             if (opt.css) el.css(opt.css);
 
             var th = $(fixed_toolbar + ' > div').height(),

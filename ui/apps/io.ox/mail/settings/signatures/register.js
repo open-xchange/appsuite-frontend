@@ -49,7 +49,7 @@ define('io.ox/mail/settings/signatures/register', [
         index: 300,
         draw: function (baton) {
             this.append(
-                $('<div class="form-group">').append(
+                $('<div class="form-group">').css('min-height', '266px').append(
                     $('<div class="editable-toolbar">').attr('data-editor-id', baton.editorId),
                     baton.$.contentEditable = $('<div class="io-ox-signature-edit editable">')
                     .attr({
@@ -61,7 +61,6 @@ define('io.ox/mail/settings/signatures/register', [
 
             require(['io.ox/core/tk/contenteditable-editor'], function (Editor) {
                 var ed;
-
                 (ed = new Editor(baton.$.contentEditable, {
                     toolbar1: 'bold italic | alignleft aligncenter alignright | link',
                     advanced: 'fontselect fontsizeselect | forecolor',
@@ -90,7 +89,7 @@ define('io.ox/mail/settings/signatures/register', [
         draw: function (baton) {
             this.append(
                 $('<div class="form-group">').append(
-                    baton.$.insertion = $('<select id="signature-position" class="form-control">')
+                    baton.$.insertion = $('<select id="signature-position" class="form-control" tabindex="1">')
                         .attr({ 'tabindex': 1 })
                         .append(
                             $('<option value="above">').text(gt('Add signature above quoted text')),
@@ -129,7 +128,7 @@ define('io.ox/mail/settings/signatures/register', [
 
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-        var popup = new dialogs.ModalDialog({ async: true, width: 600 });
+        var popup = new dialogs.ModalDialog({ async: true, tabTrap: false, width: 600 });
         popup.header($('<h4>').text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
 
         var baton = new ext.Baton({
@@ -182,6 +181,7 @@ define('io.ox/mail/settings/signatures/register', [
         .show();
 
         baton.$.name.val(signature.displayname);
+        baton.$.name.focus();
 
         if (_.isObject(signature.misc) && signature.misc.insertion) {
             baton.$.insertion.val(signature.misc.insertion);
