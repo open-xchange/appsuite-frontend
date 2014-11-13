@@ -205,6 +205,7 @@ define('io.ox/core/api/autocomplete', [
                 var data = obj.data;
                 if (data[field]) {
 
+                    // magic for users beyond global adress book
                     if (data.folder_id !== 6 && type === 'user') return;
 
                     //store target value
