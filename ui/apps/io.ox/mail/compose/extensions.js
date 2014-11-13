@@ -145,9 +145,6 @@ define('io.ox/mail/compose/extensions', [
                         apiOptions: {
                             contacts: true,
                             msisdn: true,
-                            users: true,
-                            resources: true,
-                            groups: true,
                             emailAutoComplete: true
                         },
                         maxResults: 20,
