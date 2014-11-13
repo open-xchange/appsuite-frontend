@@ -189,10 +189,6 @@ define('io.ox/participants/model', [
 
         getImage: function () {
             console.warn('deprecated');
-        },
-
-        markAsUnremovable: function () {
-            this.set('ui_removable', false);
         }
 
     });
