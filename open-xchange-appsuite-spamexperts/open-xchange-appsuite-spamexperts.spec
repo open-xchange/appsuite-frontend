@@ -64,7 +64,7 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 ## Uncomment for multiple packages (3/4)
 #rm -r "%{buildroot}%{docroot}"
 
-%define update /opt/open-xchange/appsuite/share/update-themes.sh --later
+%define update "/opt/open-xchange/appsuite/share/update-themes.sh --later"
 
 %post
 if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi

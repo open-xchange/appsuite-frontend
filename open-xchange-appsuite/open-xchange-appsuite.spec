@@ -278,7 +278,7 @@ rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 %clean
 %{__rm} -rf %{buildroot}
 
-%define update /opt/open-xchange/appsuite/share/update-themes.sh --later
+%define update "/opt/open-xchange/appsuite/share/update-themes.sh --later"
 
 %post manifest
 if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
