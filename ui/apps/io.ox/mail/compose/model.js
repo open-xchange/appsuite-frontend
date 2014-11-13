@@ -213,14 +213,6 @@ define('io.ox/mail/compose/model', [
                 });
         },
 
-        setTokens: function (type, tokens, opt) {
-            this.set(type, _.map(tokens, function (o) { return [o.label, o.value]; }), opt);
-        },
-
-        getTokens: function (type) {
-            return this.get(type, []).map(function (o) { return { label: o[0] || '', value: o[1] || '' }; });
-        },
-
         getFailSave: function () {
             this.trigger('needsync');
             var mail = this.toJSON();
