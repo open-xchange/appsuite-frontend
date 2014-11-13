@@ -1,5 +1,6 @@
 .mce-content-body.editable {
     outline: none;
+    border-radius: 4px;
 }
 
 .io-ox-signature-edit {
@@ -42,6 +43,22 @@
 
 input.error {
     border-color: #b94a48;
+}
+
+.io-ox-signature-dialog {
+    .editable-toolbar {
+        .mce-tinymce {
+            background-color: transparent;
+
+            .mce-toolbar-grp {
+                background-color: transparent;
+            }
+
+            .mce-edit-area {
+                border-color: transparent!important;
+            }
+        }
+    }
 }
 
 .mce-window {
