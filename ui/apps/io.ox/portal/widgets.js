@@ -46,6 +46,17 @@ define('io.ox/portal/widgets',
             widgets[id] = _.extend({}, widgetDef, {userWidget: true});
         });
 
+        // http://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins
+        //                      +--------------+------------+----------------+--------+
+        //                      | show on      | user can...                          |
+        //                      | first start  | move       | enable/disable | delete |
+        // +--------------------+--------------+------------+----------------+--------+
+        // | default            | x            | x          | x              | x      |
+        // | eager              | x            | x          | x              |        |
+        // | protected          | x            | (property) |                |        |
+        // | proteced(disabled) |              |            |                |        |
+        // +--------------------+--------------+------------+----------------+--------+
+
         // Ensure all eager widgets of all generations that weren't removed in their corresponding generation
         function processEager(gen) {
             var deleted = {};
@@ -58,7 +69,7 @@ define('io.ox/portal/widgets',
                 }
             };
         }
-
+        // process all eager generations
         for (var gen = 0; gen <= generation; gen++) {
             _(settings.get('widgets/eager' + widgetSet + '/gen_' + gen)).each(processEager(gen));
         }
