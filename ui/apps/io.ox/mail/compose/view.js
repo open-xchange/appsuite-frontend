@@ -807,8 +807,6 @@ define('io.ox/mail/compose/view', [
 
             this.editor.setContent(content);
             this.setSelectedSignature();
-            this.prependNewLine();
-
         },
 
         getMobileSignature: function () {
@@ -829,6 +827,7 @@ define('io.ox/mail/compose/view', [
             } else {
                 this.removeSignature();
             }
+            this.prependNewLine();
         },
 
         removeSignature: function () {
@@ -842,10 +841,14 @@ define('io.ox/mail/compose/view', [
                 this.editor.find('.io-ox-signature').each(function () {
                     var node = $(this),
                         text = node.html()
-                            //remove added image urls(tiny adds them automatically)
-                            .replace(/ data-mce-src="[^"]+"\s?/, '')
+                            //remove attributes added by tinymce
+                            .replace(/ data-mce-[src|style|href]+="[^"]+"\s?/, '')
                             //remove empty alt attribute(added by tiny)
-                            .replace(/ alt=""/, '');
+                            .replace(/ alt=""/, '')
+                            //replace subsequent white-space (except linebreaks)
+                            .replace(/>[\t\f\v ]+/g, '>')
+                            .replace(/[\t\f\v ]+</g, '<')
+                            .trim();
 
                     if (self.isSignature(text)) {
                         // remove entire node
