@@ -300,7 +300,7 @@ define('io.ox/mail/settings/signatures/register', [
 
     ext.point('io.ox/mail/settings/detail/pane').extend({
         id: 'signatures',
-        index: 500,
+        index: 600,
         draw: function (baton) {
             var $node,
                 $list,
@@ -322,6 +322,11 @@ define('io.ox/mail/settings/signatures/register', [
                     //hide default signature selection, if there are no signatures
                     $node.children('.form-group').css('display', sigs.length > 0 ? '' : 'none');
                     _(sigs).each(function (signature) {
+                        //replace div and p elements to br's and remove all other tags.
+                        var content = signature.content
+                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
+                            .replace(/<(?:.|\n)*?>/gm, '')
+                            .replace(/(\n)+/g, '<br>');
                         signatures[signature.id] = signature;
 
                         var $item = $('<li class="widget-settings-view">')
@@ -337,7 +342,8 @@ define('io.ox/mail/settings/signatures/register', [
                                             title: gt('Delete'),
                                             tabindex: 1
                                         }).append($('<i class="fa fa-trash-o">'))
-                                    )
+                                    ),
+                                    $('<div class="signature-preview">').click(clickEdit).append(content)
                                 )
                             );
                         $list.append($item);
@@ -395,6 +401,14 @@ define('io.ox/mail/settings/signatures/register', [
                 baton.model.set('mobileSignature', signatureText.val());
             }
 
+            function clickEdit(e) {
+                if ((e.type === 'click') || (e.which === 13)) {
+                    var id = $(this).closest('li').attr('data-id');
+                    fnEditSignature(e, signatures[id]);
+                    e.preventDefault();
+                }
+            }
+
             function addSignatureList($node) {
                 var section;
 
@@ -418,8 +432,8 @@ define('io.ox/mail/settings/signatures/register', [
 
                 // Append "add signature" button
                 $node.append(
-                    section = $('<div class="sectioncontent btn-toolbar">').append(
-                        $('<div class="form-group">').append(
+                    $('<div class="sectioncontent">').append(
+                        section = $('<div class="form-group">').append(
                             $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
                         )
                     )
@@ -442,21 +456,19 @@ define('io.ox/mail/settings/signatures/register', [
                 });
 
                 $node.append(
-                    $('<div class="form-group row">').append(
-                        $('<label for="defaultSignature" class="control-label col-xs-12 col-md-8">')
-                        .text(gt('Default signature for new messages')),
-                        $('<div>').addClass('controls col-xs-12 col-md-4').append(
-                            $('<div>').append(
-                                $('<div>').append(defaultSignatureView.render().$el)
+                    $('<div class="row">').append(
+                        $('<div class="form-group col-xs-12 col-md-6">').append(
+                            $('<label for="defaultSignature" class="control-label">')
+                            .text(gt('Default signature for new messages')),
+                            $('<div>').addClass('controls').append(
+                                defaultSignatureView.render().$el
                             )
-                        )
-                    ),
-                    $('<div class="form-group row">').append(
-                        $('<label for="defaultSignature" class="control-label col-xs-12 col-md-8">')
-                        .text(gt('Default signature for reply or forward messages')),
-                        $('<div>').addClass('controls col-xs-12 col-md-4').append(
-                            $('<div>').append(
-                                $('<div>').append(defaultReplyForwardView.render().$el)
+                        ),
+                        $('<div class="form-group col-xs-12 col-md-6">').append(
+                            $('<label for="defaultSignature" class="control-label">')
+                            .text(gt('Default signature for replies or forwards')),
+                            $('<div>').addClass('controls').append(
+                                defaultReplyForwardView.render().$el
                             )
                         )
                     )
@@ -470,7 +482,7 @@ define('io.ox/mail/settings/signatures/register', [
                     if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
                         section.append(
 
-                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
+                            $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
                                 fnImportSignatures(e, config.get('gui.mail.signatures'));
                                 return false;
                             })
