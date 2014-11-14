@@ -40,7 +40,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             .on(isTouch ? 'tap' : 'click', SELECTABLE, $.proxy(function (e) {
                 if (!this.isMultiple(e)) this.triggerAction(e);
             }, this))
-            // double clikc
+            // double click
             .on('dblclick', SELECTABLE, $.proxy(function (e) {
                 this.triggerDouble(e);
             }, this))
@@ -83,7 +83,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         uncheck: function (nodes) {
-            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
+            nodes.removeClass('selected no-checkbox').attr({ 'aria-selected': false, tabindex: '-1' });
         },
 
         toggle: function (node) {
@@ -133,8 +133,8 @@ define('io.ox/core/tk/list-selection', [], function () {
             var list = this.get(), events = 'selection:change';
             // empty, one, multiple
             if (list.length === 0) events += ' selection:empty';
-            else if (list.length === 1) events += ' selection:one';
-            else if (list.length > 1) events += ' selection:multiple';
+            //else if (list.length === 1) events += ' selection:one';
+            else if (list.length >= 1) events += ' selection:multiple';
             // all vs subset
             if (items.length > 0 && items.length === list.length) events += ' selection:all';
             else events += ' selection:subset';
@@ -181,7 +181,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         resetCheckmark: function (items) {
-            items.filter('.selected').removeClass('selected');
+            items.filter('.selected').removeClass('selected no-checkbox');
             // collect garbage: remove preserved items when selection changes
             _.defer(function () {
                 items.filter('.preserved').not('.selected').fadeOut('fast', function () { $(this).remove(); });
@@ -223,7 +223,22 @@ define('io.ox/core/tk/list-selection', [], function () {
                 // single select
                 items.removeClass('precursor');
                 node = this.focus(index, items).addClass('precursor');
-                if (this.isMultiple(e)) this.toggle(node); else this.check(node);
+                if (this.isMultiple(e)) {
+                    //already selected but checkbox is not yet marked
+                    if (node.hasClass('selected no-checkbox')) {
+                        node.removeClass('no-checkbox');
+                    } else {
+                        //remove selected items without checked checkbox in true multi selection
+                        items.filter('.no-checkbox').removeClass('selected no-checkbox').attr('aria-selected', false);
+                        this.toggle(node);
+                    }
+                } else {
+                    if (this.isCheckmark(e)) {
+                        this.check(node);
+                    } else {
+                        node.addClass('selected no-checkbox').attr('aria-selected', true);
+                    }
+                }
             }
         },
 
@@ -356,12 +371,24 @@ define('io.ox/core/tk/list-selection', [], function () {
             case 34:
                 this.onPageUpDown(e);
                 break;
+            // spacebar
+            case 32:
+                e.preventDefault();
+                var selection = this.getItems().filter('.selected');
+                if (selection.length === 1) {
+                    selection.find('.list-item-checkmark').trigger('mousedown');
+                } else if (selection.length === 0) {
+                    //if the currently focussed element is in our items list we select it
+                    selection = $(this.getItems()[this.getItems().index($(document.activeElement))]);
+                    selection.find('.list-item-checkmark').trigger('mousedown');
+                }
+                break;
             }
         },
 
         onClick: function (e) {
             if (e.type === 'tap') {
-                // prevent ghostlicks
+                // prevent ghostclicks
                 e.preventDefault();
                 e.stopPropagation();
             }
@@ -382,7 +409,8 @@ define('io.ox/core/tk/list-selection', [], function () {
 
             // range select / single select
             this.pick(index, items, e);
-            if (!_.isEqual(previous, this.get())) this.triggerChange(items);
+            //always trigger in multiple mode (sometimes only checkbox is changed)
+            if (!_.isEqual(previous, this.get()) || this.isMultiple(e)) this.triggerChange(items);
         },
 
         onSwipeLeft: function (e) {

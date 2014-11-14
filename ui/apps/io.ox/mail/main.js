@@ -714,7 +714,7 @@ define('io.ox/mail/main',
                     react('empty');
                 },
                 'selection:one': function (list) {
-                    react('one', list);
+                    react('multiple', list);
                 },
                 'selection:multiple': function (list) {
                     react('multiple', list);
@@ -807,7 +807,8 @@ define('io.ox/mail/main',
                 _.defer(function () {
                     app.listView.collection.find(function (model, index) {
                         if (!util.isUnseen(model.get('flags'))) {
-                            app.listView.selection.select(index);
+                            //trigger manual mousedown
+                            $(app.listView.selection.getItems()[index]).trigger('click');
                             return true;
                         }
                     });
@@ -963,9 +964,7 @@ define('io.ox/mail/main',
          */
         'change:checkboxes': function (app) {
             if (_.device('smartphone')) return;
-            app.props.on('change:checkboxes', function (model, value) {
-                app.listView.toggleCheckboxes(value);
-            });
+            app.listView.toggleCheckboxes(true);
         },
 
         /*
