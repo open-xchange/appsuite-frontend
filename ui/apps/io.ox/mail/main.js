@@ -307,7 +307,7 @@ define('io.ox/mail/main',
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new MailListView({ app: app, ignoreFocus: true });
+            app.listView = new MailListView({ app: app, ignoreFocus: true , selectionOptions: {mode: 'special'}});
             app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging
@@ -807,8 +807,7 @@ define('io.ox/mail/main',
                 _.defer(function () {
                     app.listView.collection.find(function (model, index) {
                         if (!util.isUnseen(model.get('flags'))) {
-                            //trigger manual mousedown
-                            $(app.listView.selection.getItems()[index]).trigger('click');
+                            app.listView.selection.select(index);
                             return true;
                         }
                     });

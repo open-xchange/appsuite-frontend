@@ -225,11 +225,12 @@ define('io.ox/core/tk/list',
             // ref: id of the extension point that is used to render list items
             // app: application
             // pagination: use pagination (default is true)
-            this.options = _.extend({ pagination: true }, options);
+            // selectionOptions: options given to the selection (currently only {mode: 'special'}), if not present standard selection will be used
+            this.options = _.extend({ pagination: true, selectionOptions: {} }, options);
 
             this.ref = this.ref || options.ref;
             this.app = options.app;
-            this.selection = new Selection(this);
+            this.selection = new Selection(this, options.selectionOptions);
             this.model = new Backbone.Model();
             this.isBusy = false;
             this.complete = false;
