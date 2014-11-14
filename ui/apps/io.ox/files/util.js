@@ -274,6 +274,7 @@ define('io.ox/files/util', [
 
             var image = '(gif|png|jpe?g|bmp|tiff)',
                 audio = '(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)',
+                video = '(mp4|m4v|ogv|ogm|webm)',
                 office = '(xls|xlb|xlt|ppt|pps|doc|dot|xlsx|xltx|pptx|ppsx|potx|docx|dotx|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',
                 application = '(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf)',
                 text = '(rtf|plain)';
@@ -298,7 +299,7 @@ define('io.ox/files/util', [
                 return 'thumbnail';
             } else if (is(audio, 'audio') || is(audio)) {
                 return 'cover';
-            } else if (capabilities.has('document_preview') && (is(application, 'application') || is(text, 'text') || is(office))) {
+            } else if (capabilities.has('document_preview') && (is(application, 'application') || is(text, 'text') || is(office) || is(video))) {
                 return 'preview';
             }
             return false;

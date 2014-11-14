@@ -188,6 +188,46 @@ define('io.ox/preview/main', [
             }
         }));
     }
+    if (mediasupport.hasSupport('video')) {
+        Renderer.point.extend(new Engine({
+            id: 'video',
+            index: 10,
+            supports: (function () {
+                return mediasupport.supportedExtensionsArray('video');
+            }()),
+            verify: function (file) {
+                return !file || !file.attachment || !_.device('chrome');
+            },
+            draw: function (file) {
+                $('<video>').attr({
+                    src: file.dataURL + '&delivery=view&content_type=' + String(file.mimetype || '').split(';')[0],
+                    type: file.mimetype,
+                    preload: 'none',
+                    controls: 'control',
+                    autoplay: 'autoplay'
+                }).appendTo(this.on('click', function () { return false; }));
+                var self = this;
+                require([
+                    'static/3rd.party/mediaelement/mediaelement-and-player.js',
+                    'css!3rd.party/mediaelement/mediaelementplayer.css'
+                ], function () {
+                    // TODO: sizing mediaplayer on changing viewport dimensions
+                    var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
+                    self.find('video').mediaelementplayer({
+                        audioWidth: pw,
+                        videoWidth: pw,
+                        plugins: ['flash', 'silverlight'],
+                        pluginPath: 'apps/3rd.party/mediaelement/',
+                        enableAutosize: true,
+                        timerRate: 250,
+                        features: ['playpause', 'progress', 'current', 'volume'],
+                        enablePluginDebug: true,
+                        pauseOtherPlayers: true
+                    });
+                });
+            }
+        }));
+    }
 
     Renderer.point.extend(new Engine({
         id: 'eml',

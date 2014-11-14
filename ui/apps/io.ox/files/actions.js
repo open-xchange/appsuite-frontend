@@ -250,21 +250,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/actions/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('video', e);
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             // hide in mail compose preview
@@ -574,16 +559,6 @@ define('io.ox/files/actions', [
         label: gt('Unlock'),
         ref: 'io.ox/files/actions/unlock',
         section: 'file-op'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'mediaplayer-video',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Play video files'),
-        ref: 'io.ox/files/actions/videoplayer',
-        section: 'media'
     }));
 
     // version links
