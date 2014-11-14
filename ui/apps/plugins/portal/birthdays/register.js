@@ -140,7 +140,7 @@ define('plugins/portal/birthdays/register',
                 // loop
                 _(baton.data).each(function (contact) {
                     var birthday = new date.Local(date.Local.utc(contact.birthday)),
-                        // we use fullname here to avoid haveing duplicates like "Jon Doe" and "Doe, Jon"
+                        // we use fullname here to avoid having duplicates like "Jon Doe" and "Doe, Jon"
                         name = util.getFullName(contact);
 
                     if (!isDuplicate(name, birthday, hash)) {
@@ -148,6 +148,14 @@ define('plugins/portal/birthdays/register',
                         var nextBirthday = new date.Local().setMonth(birthday.getMonth(), birthday.getDate()),
                             delta = nextBirthday.getDays() - now.getDays();
 
+                        //avoid negative deltas to not display negative days till birthday (-300 for example)
+                        //delta -1 is ok, we display this as yesterday
+                        if (delta < -1) {
+                            //increase Birthday by one year to be sure it's in the future and calculate again
+                            //we don't just do a + 365 days here because we we don't know if it's a leapyear
+                            nextBirthday.setYear(nextBirthday.getYear() + 1);
+                            delta = nextBirthday.getDays() - now.getDays();
+                        }
                         delta = delta === 0 ? gt('Today') : delta === 1 ? gt('Tomorrow') : delta === -1 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(
