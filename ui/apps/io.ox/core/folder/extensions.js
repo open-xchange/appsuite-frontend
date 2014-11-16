@@ -269,6 +269,31 @@ define('io.ox/core/folder/extensions', [
         // Flat trees
         //
 
+        var sectionNames = {
+            'contacts': {
+                'private':  gt('My address books'),
+                'public':   gt('Public address books'),
+                'shared':   gt('Shared address books'),
+                'hidden':   gt('Hidden address books')
+            },
+            'calendar': {
+                'private':  gt('My calendars'),
+                'public':   gt('Public calendars'),
+                'shared':   gt('Shared calendars'),
+                'hidden':   gt('Hidden calendars')
+            },
+            'tasks': {
+                'private':  gt('My tasks'),
+                'public':   gt('Public tasks'),
+                'shared':   gt('Shared tasks'),
+                'hidden':   gt('Hidden tasks')
+            }
+        };
+
+        function getTitle(module, type) {
+            return sectionNames[module][type];
+        }
+
         var defaultExtension = {
             id: 'standard-folders',
             index: 100,
@@ -284,7 +309,7 @@ define('io.ox/core/folder/extensions', [
 
                 ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
 
-                privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: gt('Private') }));
+                privateFolders = new TreeNodeView(_.extend({}, defaults, { empty: true, folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
 
                 // open private folder whenever a folder is added to it
                 api.pool.getCollection('flat/' + module + '/private').on('add', function () {
@@ -296,7 +321,7 @@ define('io.ox/core/folder/extensions', [
                     privateFolders.toggle(true);
                 });
 
-                publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: gt('Public') }));
+                publicFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/public',  model_id: model_id + '/public',  title: getTitle(module, 'public') }));
 
                 this.append(
                     // private folders
@@ -306,13 +331,13 @@ define('io.ox/core/folder/extensions', [
                     // public folders
                     publicFolders.render().$el.addClass('section'),
                     // shared with me
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: gt('Shared') }))
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/shared',  model_id: model_id + '/shared',  title: getTitle(module, 'shared') }))
                     .render().$el.addClass('section'),
                     // // shared by me
                     // new TreeNodeView(_.extend({}, defaults, { folder: folder + '/sharing', model_id: model_id + '/sharing', title: gt('Shared by me') }))
                     // .render().$el.addClass('section'),
                     // hidden folders
-                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: gt('Hidden') }))
+                    new TreeNodeView(_.extend({}, defaults, { folder: folder + '/hidden',  model_id: model_id + '/hidden',  title: getTitle(module, 'hidden') }))
                     .render().$el.addClass('section')
                 );
             }
@@ -400,9 +425,13 @@ define('io.ox/core/folder/extensions', [
 
                     this.find('.owner').remove();
 
+                    var name = data['com.openexchange.folderstorage.displayName'],
+                        //#. %1$s is the folder owner
+                        title = gt.format(gt.pgettext('owner', 'From: %1$s'), name);
+
                     this.addClass('shared').find('.folder-node').append(
                         $('<div class="owner">').append(
-                            userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName']).attr({ tabindex: -1 })
+                            userAPI.getLink(data.created_by, title).attr({ tabindex: -1 })
                         )
                     );
                 }

@@ -13,9 +13,8 @@
 
 define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
-    'gettext!io.ox/core',
     'less!io.ox/core/tk/dialog'
-], function (Events, gt) {
+], function (Events) {
 
     'use strict';
 
@@ -575,8 +574,7 @@ define('io.ox/core/tk/dialogs', [
             pane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a class="btn-sidepopup" data-action="close" role="button" tabindex="1">')
-                        .text(options.saveOnClose ? gt('Save') : gt('Close'))
+                    $('<a href="#" class="close" data-action="close" role="button" tabindex="1">&times;</a>')
                 ),
 
             popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
@@ -711,7 +709,7 @@ define('io.ox/core/tk/dialogs', [
 
         popup.on('keydown', fnKey);
 
-        closer.find('.btn-sidepopup')
+        closer.find('.close')
             .on('click', function (e) {
                 // route click to 'pane' since closer is above pane
                 pane.trigger('click');
@@ -736,8 +734,8 @@ define('io.ox/core/tk/dialogs', [
 
             self.nodes = {
                 closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay, body').first(),
-                click: my.parents('.io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay, body').first(),
-                target: target || my.parents('.window-body, .simple-window, .window-container-center, .notifications-overlay, body').first(),
+                click: my.parents('.io-ox-sidepopup-pane, .window-container-center, .io-ox-dialog-popup, .notifications-overlay, body').first(),
+                target: target || my.parents('.simple-window, .window-container-center, .notifications-overlay, body').first(),
                 simple: my.closest('.simple-window')
             };
 
@@ -767,20 +765,6 @@ define('io.ox/core/tk/dialogs', [
                 processEvent(e);
                 // clear timer
                 clearTimeout(timer);
-
-                // add "Close all"
-                if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
-                    closer.find('.close-all').remove();
-                    closer.prepend(
-                        $('<a class="btn-sidepopup close-all" role="button" tabindex="1" data-action="close-all">').text(gt('Close all'))
-                        .on('click', { target: self.nodes.target }, closeAll)
-                        .on('keypress', { target: self.nodes.target }, function (e) {
-                            if (e.which === 13) {
-                                closeAll(e);
-                            }
-                        })
-                    );
-                }
 
                 // add handlers to close popup
                 self.nodes.click.on('click', closeByClick);
