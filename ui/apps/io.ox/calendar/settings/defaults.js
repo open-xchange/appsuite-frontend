@@ -26,7 +26,6 @@ define('io.ox/calendar/settings/defaults', function () {
         notifyNewModifiedDeleted: true,
         notifyAcceptedDeclinedAsCreator: false,
         notifyAcceptedDeclinedAsParticipant: false,
-        showAllPrivateAppointments: false,
         deleteInvitationMailAfterAction: true
     };
 

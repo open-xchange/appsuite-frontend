@@ -1606,14 +1606,6 @@ define('io.ox/calendar/week/view', [
         },
 
         /**
-         * get property of showAll checkbox
-         * @return { Boolean}     value of the showAllPrivateAppointments setting (only when opt param === undefined)
-         */
-        showAll: function () {
-            return settings.get('showAllPrivateAppointments', false);
-        },
-
-        /**
          * get or set current folder data
          * @param  {Object} data folder data
          * @return { Object}      if (data === undefined) current folder data
@@ -1636,7 +1628,7 @@ define('io.ox/calendar/week/view', [
             return {
                 start: this.apiRefTime.getTime(),
                 end: new date.Local(this.apiRefTime).add(10 * date.WEEK).getTime(),
-                folder: (this.folderData.type > 1 || this.showAll() === false) ? this.folderData.id : 0
+                folder: this.folderData.id === 'virtual/all-my-appointments' ? 0 : this.folderData.id
             };
         },
 

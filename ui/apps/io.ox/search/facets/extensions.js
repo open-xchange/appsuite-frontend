@@ -595,6 +595,10 @@ define('io.ox/search/facets/extensions', [
                             }
                             // add option
                             _.each(account.list, function (folder) {
+
+                                // ignore any virtual folders
+                                if (/^virtual/.test(folder.id)) return;
+
                                 menu.append(
                                     option = $('<li>').append(
                                         $('<a href="#" role="menuitemcheckbox" class="option" tabindex="-1">')
@@ -626,7 +630,7 @@ define('io.ox/search/facets/extensions', [
                                  $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1">')
                                     .append(
                                         $('<i class="fa fa-fw fa-none">'),
-                                        $('<span>').text(gt('More') + '...')
+                                        $('<span>').text(gt('More') + ' ...')
                                     )
                                     .attr('data-action', 'dialog')
                             )

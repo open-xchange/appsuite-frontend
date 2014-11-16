@@ -189,22 +189,17 @@ define('io.ox/calendar/list/perspective', [
         }
 
         this.updateGridOptions = function () {
+
             var dropdown = grid.getToolbar().find('.grid-options'),
                 list = dropdown.find('ul'),
-                showAll = $('[data-option="all"]', list).parent(),
                 props = grid.prop();
+
             // uncheck all
             list.find('i').attr('class', 'fa fa-fw');
 
-            app.folder.getData().done(function (folder) {
-                showAll[folder.type === 1 ? 'show' : 'hide']();
-            });
-
             // sort & showall
-            list.find(
-                '[data-option="' + props.order + '"], ' +
-                '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]')
-                .find('i').attr('class', 'fa fa-check');
+            list.find('[data-option="' + props.order + '"]').find('i').attr('class', 'fa fa-check');
+
             // order
             var opacity = [1, 0.4][props.order === 'asc' ? 'slice' : 'reverse']();
             dropdown.find('.fa-arrow-down').css('opacity', opacity[0]).end()
@@ -266,14 +261,15 @@ define('io.ox/calendar/list/perspective', [
                     start = dates.start,
                     end = dates.end;
 
-                return app.folder.getData().pipe(function (folder) {
+                return app.folder.getData().then(function () {
                     // set folder data to view and update
                     return api.getAll({
                         start: start.getTime(),
                         end: end.getTime(),
-                        folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
+                        folder: prop.folder === 'virtual/all-my-appointments' ? 0 : prop.folder,
                         order: prop.order
-                    }).then(function (data) {
+                    })
+                    .then(function (data) {
                         if (!settings.get('showDeclinedAppointments', false)) {
                             data = _.filter(data, function (obj) {
                                 return util.getConfirmationStatus(obj) !== 2;

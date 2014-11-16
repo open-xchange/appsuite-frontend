@@ -375,11 +375,13 @@ define('io.ox/search/model', [
                 }
             },
             getFolder: function () {
-                var app = this.getApp() + '/main';
+                var app = this.getApp() + '/main', folder;
                 if (require.defined(app)) {
-                    return require(app).getApp().folder.get() || undefined;
+                    folder = require(app).getApp().folder.get() || undefined;
+                    // ignore any virtual folder
+                    if (/^virtual/.test(folder)) folder = undefined;
                 }
-                return undefined;
+                return folder;
             },
             ensure: function () {
                 var self = this,

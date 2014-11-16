@@ -88,6 +88,7 @@ define('io.ox/core/folder/actions/move', [
             picker({
 
                 button: options.button,
+                filter: options.filter,
                 flat: !!options.flat,
                 indent: options.indent !== undefined ? options.indent : true,
                 module: options.module,

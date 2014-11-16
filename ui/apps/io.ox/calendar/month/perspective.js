@@ -155,7 +155,7 @@ define('io.ox/calendar/month/perspective', [
                 weeks: this.updateLoad
             }, obj);
             // do folder magic
-            if (this.folder.type !== 1 || !settings.get('showAllPrivateAppointments', false)) {
+            if (this.folder.id !== 'virtual/all-my-appointments') {
                 obj.folder = this.folder.id;
             }
             obj.end = obj.start + obj.weeks * date.WEEK;
