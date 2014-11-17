@@ -104,11 +104,6 @@ define('io.ox/calendar/list/perspective', [
             }
         });
 
-        // special search: list request
-        grid.setListRequest('search', function (ids) {
-            return $.Deferred().resolve(ids);
-        });
-
         //directly linked appointments are stored here
         var directAppointment;
 
