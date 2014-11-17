@@ -144,12 +144,14 @@ define('io.ox/mail/compose/extensions', [
                         className: attr,
                         apiOptions: {
                             contacts: true,
+                            distributionlists: true,
                             msisdn: true,
                             emailAutoComplete: true
                         },
                         maxResults: 20,
-                        draw: function (tokenData) {
-                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, _.extend(baton, { data: tokenData.data }));
+                        draw: function (token) {
+                            baton.participantModel = token.model;
+                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
                         },
                         lazyload: 'div.contact-image'
                     });
@@ -186,7 +188,7 @@ define('io.ox/mail/compose/extensions', [
                     );
 
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
-                    // for validation etc.
+                    // extension point for validation etc.
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 

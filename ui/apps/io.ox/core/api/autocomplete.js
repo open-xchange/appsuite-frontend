@@ -99,11 +99,14 @@ define('io.ox/core/api/autocomplete', [
                         var retData = [], data = _(arguments).toArray();
 
                         _(self.apis).each(function (module, index) {
-                            var type = module.type, items = self.processItem(type, data[index]);
-                            switch (type) {
+                            var type = module.type,
+                                items = _(data[index]).map(function (data) {
+                                    return { data: data, type: type };
+                                });
+                            switch (module.type) {
                             case 'user':
                             case 'contact':
-                                retData = self.processContactResults(type, retData.concat(items), query, options);
+                                retData = self.processContactResults(retData.concat(items), query, options);
                                 break;
                             case 'resource':
                             case 'group':
@@ -121,18 +124,6 @@ define('io.ox/core/api/autocomplete', [
         },
 
         /**
-         * process results
-         * @param  {string} type
-         * @param  {array} data (contains results array)
-         * @return { array }
-         */
-        processItem: function (type, array) {
-            return _(array).map(function (data) {
-                return { data: data, type: type };
-            });
-        },
-
-        /**
          * process contact results
          * @param  {string} type
          * @param  {array}  data (contains results array)
@@ -140,20 +131,16 @@ define('io.ox/core/api/autocomplete', [
          * @param  {object} options (request options)
          * @return { array }
          */
-        processContactResults: function (type, data, query, options) {
+        processContactResults: function (data, query, options) {
 
             var tmp = [], hash = {}, self = this;
-
-            //distinguish email and phone objects
-            function getTarget(obj) {
-                return obj.email !== '' ? obj.email : obj.phone;
-            }
 
             // improve response
             // 1/2: resolve email addresses
             _(data).each(function (obj) {
                 if (obj.data.mark_as_distributionlist) {
                     // distribution list
+                    obj.data.type = obj.type;
                     tmp.push({
                         type: obj.type,
                         display_name: obj.data.display_name || '',
@@ -163,16 +150,22 @@ define('io.ox/core/api/autocomplete', [
                 } else {
                     // create separate objects for each email value
                     var fields = self.options.split ? ['email1', 'email2', 'email3'] : ['email1'];
-                    self.processContactItem(type, tmp, obj, 'email', fields);
+                    self.processContactItem(tmp, obj, 'email', fields);
                     //msisdn support: create separate objects for each phone number
                     if (options.extra && options.extra.length) {
                         //get requested extra columns and process
                         _.each(options.extra, function (id) {
-                            self.processContactItem(type, tmp, obj, 'phone', contactsAPI.getMapping(id, 'names'));
+                            self.processContactItem(tmp, obj, 'phone', contactsAPI.getMapping(id, 'names'));
                         });
                     }
                 }
             });
+
+            //distinguish email and phone objects
+            function getTarget(obj) {
+                return obj.email !== '' ? obj.email : obj.phone;
+            }
+
             // 2/2: filter distribution lists & remove email duplicates
             tmp = _(tmp).filter(function (obj) {
                 if (obj.data.mark_as_distributionlist === true) {
@@ -190,14 +183,13 @@ define('io.ox/core/api/autocomplete', [
 
         /**
          * process contact items
-         * @param  {string} type
          * @param  {array} list
          * @param  {object} obj
          * @param  {string} target (target property)
          * @param  {string|array} fields
          * @return { undefined }
          */
-        processContactItem: function (type, list, obj, target, fields) {
+        processContactItem: function (list, obj, target, fields) {
             //ensure array
             var fields = [].concat(fields), ids;
             //process each field
@@ -206,11 +198,14 @@ define('io.ox/core/api/autocomplete', [
                 if (data[field]) {
 
                     // magic for users beyond global adress book
-                    if (data.folder_id !== 6 && type === 'user') return;
+                    if (data.folder_id !== 6 && obj.type === 'user') return;
 
                     //store target value
                     ids = {};
-                    ids[target] = obj.data[field].toLowerCase();
+                    ids[target] = data[field].toLowerCase();
+
+                    data.field = field;
+                    data.type = obj.type;
 
                     list.push(
                         $.extend({
