@@ -57,6 +57,9 @@ define('io.ox/calendar/freebusy/main',
             // quit if opener quits
             if (options.app) {
                 options.app.on('quit', quit);
+                app.on('quit', function () {
+                    options.app.off('quit', quit);
+                });
             }
 
             win.show(function () {
