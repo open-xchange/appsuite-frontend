@@ -509,6 +509,13 @@ define('io.ox/core/tk/list-selection', [], function () {
         uncheck: function (nodes) {
             nodes.removeClass('selected no-checkbox').attr({ 'aria-selected': false, tabindex: '-1' });
         },
+
+        selectAll: function () {
+            var items = this.getItems();
+            items = items.slice(0, items.length);
+            items.removeClass('no-checkbox');
+            normalMode.selectAll.call(this);
+        }
     };
 
     function modeSelect (view , options) {
