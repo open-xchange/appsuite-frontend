@@ -29,6 +29,8 @@ define('io.ox/core/folder/selection', [], function () {
                 baton.dropType = view.module;
                 view.selection.trigger('selection:drop', baton);
             });
+
+        this.selectableVirtualFolders = {};
     }
 
     _.extend(Selection.prototype, {
@@ -174,11 +176,16 @@ define('io.ox/core/folder/selection', [], function () {
             return this.view.$el.find('.selectable');
         },
 
+        addSelectableVirtualFolder: function (id) {
+            this.selectableVirtualFolders[id] = true;
+        },
+
         triggerChange: _.debounce(function (items) {
-            var item = (items || this.getItems()).filter('.selected').first(), id = item.attr('data-id'),
+            var item = (items || this.getItems()).filter('.selected').first(),
+                id = item.attr('data-id'),
                 isVirtual = /^virtual/.test(id);
             // trigger change event on view
-            this.view.trigger(isVirtual ? 'virtual' : 'change', id, item);
+            this.view.trigger(isVirtual && !this.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
         }, 300)
     });
 

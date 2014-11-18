@@ -536,6 +536,14 @@ define('io.ox/calendar/main', [
             app.grid.selection.on('selection:doubleclick', function (e, key) {
                 ox.launch('io.ox/calendar/detail/main', { cid: key });
             });
+        },
+
+        /*
+         * Add support for virtual folder "All my appointments"
+         */
+        'all-my-appointments': function (app) {
+
+            app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-my-appointments');
         }
 
     });
@@ -558,47 +566,8 @@ define('io.ox/calendar/main', [
         // easy debugging
         window.calendar = app;
 
-        // "show all" extension for folder view
-
-        function changeShowAll() {
-            settings.set('showAllPrivateAppointments', $(this).prop('checked')).save();
-            win.getPerspective().refresh();
-        }
-
-        ext.point('io.ox/core/foldertree/calendar/links').extend({
-            index: 100,
-            id: 'show-all',
-            draw: function (baton) {
-
-                if (baton.context !== 'app') return;
-                if (!baton.data || !baton.options) return;
-
-                this.append(
-                    $('<div class="show-all-checkbox">').append(
-                        $('<label class="checkbox">').append(
-                            $('<input type="checkbox" tabindex="1">')
-                                .prop('checked', settings.get('showAllPrivateAppointments', false))
-                                .on('change', changeShowAll),
-                            $.txt(gt('Show all my appointments from all calendars'))
-                        )
-                    )
-                );
-
-                // hide "show all" checkbox when only one calendar is available
-                function toggle() {
-                    var count = folderAPI.getFlatCollection('calendar', 'private').length + folderAPI.getFlatCollection('calendar', 'public').length;
-                    this.$el.find('.show-all-checkbox').toggle(count > 0);
-                }
-
-                baton.view.listenTo(folderAPI.getFlatCollection('calendar', 'private'), 'add remove reset', toggle);
-                baton.view.listenTo(folderAPI.getFlatCollection('calendar', 'public'), 'add remove reset', toggle);
-
-                toggle.call(baton.view);
-            }
-        });
-
         // go!
-        commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
+        commons.addFolderSupport(app, null, 'calendar', options.folder || 'virtual/all-my-appointments')
             .always(function () {
                 app.mediate();
                 win.show();

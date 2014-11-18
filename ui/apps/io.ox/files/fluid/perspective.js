@@ -111,7 +111,6 @@ define('io.ox/files/fluid/perspective', [
                     return response && response.results ? response.results : [];
                 })
                 .then(def.resolve, def.reject);
-            //api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
         }
         return def;
     }
@@ -301,7 +300,7 @@ define('io.ox/files/fluid/perspective', [
 
                         //deep link handling
                         //deactivate for search or every item is loaded at once(may cause huge server load)
-                        if (state === 'inital' && list.length === 1 && !baton.app.attributes.window.search.active) {
+                        if (state === 'inital' && list.length === 1) {
                             cid = _.cid(this.get()[0]);
                             node = filesContainer.find('[data-obj-id="' + cid + '"]');
                             //node not drawn yet?
@@ -316,23 +315,6 @@ define('io.ox/files/fluid/perspective', [
                         }
                     }
                 });
-        }
-    });
-
-    ext.point('io.ox/files/icons').extend({
-        id: 'search-term',
-        index: 100,
-        draw: function (baton) {
-            if (baton.app.getWindow().search.active) {
-                this.append(
-                    breadcrumb = $('<li class="breadcrumb">').append(
-                        $('<li class="active">').text(
-                            //#. Appears in file icon view during searches
-                            gt('Searched for: %1$s', baton.app.getWindow().search.query)
-                        )
-                    )
-                );
-            }
         }
     });
 
@@ -355,7 +337,6 @@ define('io.ox/files/fluid/perspective', [
             };
             this.append(
                 filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
-                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
                     .on('click', function () {
                         //force focus on container click
                         focus();
@@ -643,8 +624,6 @@ define('io.ox/files/fluid/perspective', [
                 .on('folder:change', function () {
                     app.currentFile = null;
                     dropZoneInit(app);
-                    app.getWindow().search.clear();
-                    app.getWindow().search.active = false;
                     self.main.closest('.search-open').removeClass('search-open');
                     dialog.close();
                     breadcrumb = undefined;

@@ -35,7 +35,8 @@ define('io.ox/core/folder/view', [
             open = app.settings.get('folderview/open', {}),
             nodes = app.getWindow().nodes,
             sidepanel = nodes.sidepanel,
-            hiddenByWindowResize = false;
+            hiddenByWindowResize = false,
+            DEFAULT_WIDTH = 250;
 
         //
         // Utility functions
@@ -55,7 +56,7 @@ define('io.ox/core/folder/view', [
         }
 
         function getWidth() {
-            return app.settings.get('folderview/width/' + _.display());
+            return app.settings.get('folderview/width/' + _.display(), DEFAULT_WIDTH);
         }
 
         function applyWidth(x) {
@@ -128,7 +129,7 @@ define('io.ox/core/folder/view', [
                     if (e.pageX - base < minSidePanelWidth * 0.75) {
                         app.folderView.hide();
                     } else {
-                        storeWidth(width || 250);
+                        storeWidth(width || DEFAULT_WIDTH);
                     }
                 }
 
@@ -278,6 +279,9 @@ define('io.ox/core/folder/view', [
         tree.$('.tree-container').attr({
             'aria-label': gt('Folders')
         });
+
+        // add "flat" class to allow specific CSS rules
+        tree.$('.tree-container').toggleClass('flat-tree', api.isFlat(tree.options.module));
 
         // apply all options
         _(ext.point(POINT + '/options').all()).each(function (obj) {

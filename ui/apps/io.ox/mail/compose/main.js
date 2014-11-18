@@ -43,7 +43,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/mail/compose',
-                search: false,
                 chromeless: true
             }));
         });

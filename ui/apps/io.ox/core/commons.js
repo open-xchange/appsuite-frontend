@@ -727,7 +727,7 @@ define('io.ox/core/commons', [
                 }
             });
 
-            var side = app.getWindow().nodes.sidepanel;
+            var side = app.getWindow().nodes.sidepanel.addClass('bottom-toolbar');
 
             side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(

@@ -251,9 +251,9 @@ define('io.ox/calendar/edit/main', [
                     });
                 } else {
                     self.model = appointmentFactory.create(data);
-                    if (!data.folder_id) {
+                    if (!data.folder_id || /^virtual/.test(data.folder_id)) {
                         require(['io.ox/core/folder/api']).done(function (api) {
-                            data.folder_id = api.getDefaultFolder('calendar');
+                            self.model.set('folder_id', data.folder_id = api.getDefaultFolder('calendar'));
                             cont();
                         });
                     } else {

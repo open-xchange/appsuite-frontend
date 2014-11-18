@@ -133,6 +133,10 @@ define('io.ox/core/folder/tree', [
 
             _.defer(function () {
 
+                // skip virtual folders
+                var id = this.selection.get('data-model');
+                if (api.isVirtual(id)) return;
+
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
                 this.$dropdown
                     // helps to restore focus (see renderContextMenu)
@@ -157,6 +161,7 @@ define('io.ox/core/folder/tree', [
         onContextMenu: function (e) {
             // clicks bubbles. right-click not
             e.stopPropagation();
+            console.log('Soooo!', e.currentTarget);
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
             this.toggleContextMenu(target, top, left);
         },

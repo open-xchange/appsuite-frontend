@@ -642,7 +642,7 @@ define('io.ox/tasks/main', [
         app.getGrid = function () {
             return grid;
         };
-        // debugging
+        // FIXME: debugging leftover?
         window.tasks = app;
 
         //ready for show

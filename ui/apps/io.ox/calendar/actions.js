@@ -253,6 +253,9 @@ define('io.ox/calendar/actions', [
                 move.item({
                     api: api,
                     button: gt('Move'),
+                    filter: function (id, model) {
+                        return model.id !== 'virtual/all-my-appointments';
+                    },
                     flat: true,
                     indent: false,
                     list: list,

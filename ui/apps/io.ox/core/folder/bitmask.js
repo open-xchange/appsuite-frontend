@@ -40,6 +40,7 @@ define('io.ox/core/folder/bitmask', [], function () {
 
             set: function (offset, bits) {
                 offset = resolve(offset);
+                bits = bits || 0;
                 // clear 7 bits first
                 value &= 536870911 ^ (127 << offset);
                 // set bits

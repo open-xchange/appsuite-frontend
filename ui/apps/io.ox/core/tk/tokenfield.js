@@ -36,10 +36,11 @@ define('io.ox/core/tk/tokenfield', [
             var self = this;
 
             options.stringify = function (data) {
+                var model = new pModel.Participant(data.data);
                 return {
-                    value: data.data[data.field],
-                    label: data.display_name || '',
-                    data: data
+                    value: model.getTarget(),
+                    label: model.getDisplayName(),
+                    model: model
                 };
             };
 
@@ -63,7 +64,10 @@ define('io.ox/core/tk/tokenfield', [
         },
 
         dispose: function () {
+            // clean up tokenfield
             this.$el.tokenfield('destroy');
+            this.stopListening();
+            this.collection = null;
         },
 
         render: function () {
@@ -99,23 +103,22 @@ define('io.ox/core/tk/tokenfield', [
                         e.attrs.model = model;
                     } else if (!self.redrawLock) {
                         // create mode
-                        var data;
-                        if (e.attrs.data) {
-                            data = self.fixParticipantType(e.attrs.data);
+                        var model;
+                        if (e.attrs.model) {
+                            model = e.attrs.model;
                         } else {
                             // add extrenal participant
-                            data = {
+                            model = new pModel.Participant({
                                 type: 5,
                                 display_name: e.attrs.label,
                                 email1: e.attrs.value
-                            };
+                            });
                         }
-                        data.token = {
+                        model.set('token', {
                             label: e.attrs.label,
                             value: e.attrs.value
-                        };
+                        }, { silent: true });
                         // add model to the collection and save cid to the token
-                        model = new pModel.Participant(data);
                         self.collection.addUniquely(model);
                         // save cid to token value
                         e.attrs.value = model.cid;
@@ -239,46 +242,6 @@ define('io.ox/core/tk/tokenfield', [
 
         getInput: function () {
             return this.input;
-        },
-
-        fixParticipantType: function (obj) {
-            switch (obj.type) {
-            case 'user':
-            case 1:
-                obj.data.type = 1;
-                break;
-            case 'group':
-            case 2:
-                obj.data.type = 2;
-                break;
-            case 'resource':
-            case 3:
-                obj.data.type = 3;
-                break;
-            case 4:
-                obj.data.type = 4;
-                break;
-            case 'contact':
-            case 5:
-                //only change if no type is there or type 5 will be made to type 1 on the second run
-                if (!obj.data.type) {
-                    obj.data.external = true;
-                    if (obj.data.internal_userid && obj.data.email1 === obj.email) {
-                        obj.data.type = 1; //user
-                        obj.data.external = false;
-                    } else if (obj.data.mark_as_distributionlist) {
-                        obj.data.type = 6; //distlistunsergroup
-                    } else {
-                        obj.data.type = 5;
-                        // h4ck
-                        obj.data.email1 = obj.email;
-                        //uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
-                        obj.data.emailparam = obj.email;
-                    }
-                }
-                break;
-            }
-            return obj.data;
         }
     });
 

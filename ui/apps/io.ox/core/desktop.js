@@ -199,9 +199,6 @@ define('io.ox/core/desktop', [
                                 // update grid?
                                 if (grid && grid.prop('folder') !== folder) {
                                     grid.busy().prop('folder', folder);
-                                    if (win && win.search.active) {
-                                        win.search.close();
-                                    }
                                     grid.refresh();
                                     // load fresh folder & trigger update event
                                     api.reload(id);
@@ -970,7 +967,6 @@ define('io.ox/core/desktop', [
                 this.id = options.id;
                 this.name = options.name || 'generic';
                 this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $(), facetedsearch: {}};
-                this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 this.detachable = false;
@@ -1032,9 +1028,6 @@ define('io.ox/core/desktop', [
                     id: 'default',
                     draw: function () {
                         return this.body.append(
-                            // search area
-                            // deprecated: old search will be removed after 7.6.1
-                            this.search = $('<div class="window-search">'),
                             // default perspective
                             this.main = $('<div class="abs window-content">')
                         );
@@ -1275,87 +1268,6 @@ define('io.ox/core/desktop', [
                     return this;
                 };
 
-                // deprecated: old search will be removed after 7.6.1
-                this.search = {
-
-                    active: false,
-                    query: '',
-                    previous: '',
-                    lastFocus: '',
-
-                    open: function () {
-                        if (!this.active) {
-                            this.lastFocus = $(document.activeElement);
-                            self.trigger('search:open');
-                            self.nodes.body.addClass('search-open');
-                            self.nodes.searchField.focus();
-                            this.active = true;
-                        }
-                        return this;
-                    },
-
-                    close: function () {
-                        if (this.active) {
-                            self.trigger('search:close');
-                            self.nodes.body.removeClass('search-open');
-                            this.active = false;
-                            self.nodes.searchField.val('');
-                            self.trigger('search:cancel cancel-search');
-                            this.query = this.previous = '';
-                            this.lastFocus.focus();
-                        }
-                        return this;
-                    },
-
-                    clear: function () {
-                        if (this.active) {
-                            self.trigger('search:clear');
-                            self.nodes.searchField.val('');
-                            this.query = this.previous = '';
-                        }
-                    },
-
-                    toggle: function () {
-                        if (this.active) {
-                            this.close();
-                        } else {
-                            this.open();
-                        }
-                        return this;
-                    },
-
-                    getOptions: function () {
-                        var tmp = {}, data = self.nodes.search.find('.search-options').data();
-                        if (data && data.options) {
-                            _.each(data.options, function (item) {
-                                if (item.checked !== undefined)
-                                    tmp[item.name] = item.checked ? 'on' : 'off';
-                            });
-                        }
-                        return tmp;
-                    },
-
-                    getQuery: function () {
-                        return self.nodes.searchField.val();
-                    },
-
-                    setQuery: function (query) {
-                        self.nodes.searchField.val(this.query = query);
-                        return this;
-                    },
-
-                    start: function (query) {
-                        this.open().setQuery(query);
-                        self.trigger('search', query);
-                        return this;
-                    },
-
-                    stop: function () {
-                        this.close();
-                        return this;
-                    }
-                };
-
                 this.facetedsearch = {
                     active: false,
                     lastFocus: '',
@@ -1529,9 +1441,7 @@ define('io.ox/core/desktop', [
                 classic: false,
                 id: 'window-' + guid,
                 name: '',
-                search: false,
                 facetedsearch: false,
-                searchShortcut: false,
                 title: '',
                 toolbar: false,
                 width: 0
@@ -1558,7 +1468,6 @@ define('io.ox/core/desktop', [
                 win.nodes.sidepanel = $();
                 win.nodes.head = $();
                 win.nodes.body = $();
-                win.nodes.search = $();
                 win.nodes.facetedsearch = {};
 
             } else {
@@ -1609,73 +1518,8 @@ define('io.ox/core/desktop', [
             // add event hub
             Events.extend(win);
 
-            // deprecated: old search will be removed after 7.6.1
-            if (opt.search) {
-                // search
-                var triggerSearch = function (query) {
-                        win.trigger('search', query);
-                    };
-
-                var searchHandler = {
-
-                    keydown: function (e) {
-                        if (e.which === 27) {
-                            win.search.close();
-                        } else if (e.which === 13) {
-                            searchHandler.change(e);
-                        }
-                    },
-
-                    clear: function () {
-                        win.search.clear();
-                    },
-
-                    change: function (e) {
-                        e.stopPropagation();
-                        win.search.query = win.search.getQuery();
-                        win.search.options = JSON.stringify(win.search.getOptions());
-                        var changed = win.search.query !== win.search.previous || win.search.options !== win.search.optionsprev;
-                        // trigger search?
-                        if (win.search.query !== '' && changed) {
-                            win.search.optionsprev = win.search.options;
-                            triggerSearch(win.search.previous = win.search.query);
-                        } else if (win.search.query === '') {
-                            win.search.clear();
-                        }
-                    }
-                };
-
-                $('<form class="form-search form-inline" role="search">')
-                .attr('aria-label', gt('Search for items'))
-                .append(
-                    $('<div class="search-query-container input-group">').append(
-                        // search field
-                        win.nodes.searchField = $('<input type="text" class="form-control search-query">')
-                        .attr({ name: 'query',
-                            autocomplete: 'off',
-                            tabindex: '1',
-                            placeholder: gt('Search') + ' ...',
-                            'aria-label': gt('Search')
-                        })
-                        .on(searchHandler)
-                        .placeholder(),
-                        // 'clear' X
-                        $('<i class="fa fa-times clear-query">').on('click', searchHandler.clear),
-                        $('<span class="input-group-btn">').append(
-                            $('<button type="submit" data-action="search" class="btn btn-default" aria-hidden="true">')
-                                .on('click', searchHandler.change)
-                                .append($('<i class="fa fa-search">'))
-                        )
-                    ),
-                    //abort button
-                    $('<a href="#" data-action="remove" tabindex="1">×</a>')
-                    .addClass('close close-big')
-                    .on('click', function (e) { e.preventDefault(); win.search.stop(); })
-                )
-                .on('change', 'input', function () { win.search.previous = ''; })
-                .on('submit', false)
-                .appendTo(win.nodes.search);
-            }
+            if (opt.search)
+                console.warn('search is deprecated: please use facetedsearch instead');
 
             if (opt.facetedsearch) {
 
@@ -1842,44 +1686,6 @@ define('io.ox/core/desktop', [
                     id: 'links',
                     ref: opt.name + '/links/toolbar'
                 }));
-
-                // add search
-                // deprecated: enable search via io.ox/find application extension points instead
-                if (opt.search === true) {
-
-                    new links.Action(opt.name + '/actions/search', {
-                        action:  function (baton) {
-                            //hide open sidepopup
-                            var $sidepopup = $(baton.window.nodes.body).find('.io-ox-sidepopup');
-                            if ($sidepopup.is(':visible'))
-                                $sidepopup.trigger('remove');
-                            baton.window.search.toggle();
-                        }
-                    });
-
-                    new links.ActionLink(opt.name + '/links/toolbar/search', {
-                        label: gt('Toggle search'),
-                        ref: opt.name + '/actions/search'
-                    });
-
-                    new links.ActionGroup(opt.name + '/links/toolbar', {
-                        id: 'search',
-                        index: 300,
-                        icon: function () {
-                            return $('<i class="fa fa-search">').attr('aria-label', gt('Search'));
-                        }
-                    });
-
-                    if (opt.searchShortcut) {
-                        // look for ctrl/cmd + F
-                        win.nodes.outer.on('keydown', function (e) {
-                            if (e.which === 70 && e.metaKey) {
-                                e.preventDefault();
-                                win.search.toggle();
-                            }
-                        });
-                    }
-                }
 
                 // add fullscreen handler
                 if (opt.fullscreen === true) {

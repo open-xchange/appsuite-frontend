@@ -2774,22 +2774,24 @@ ul.io-ox-inline-links + header {
     background-color: white;
     z-index: 3; /* above .window-content */
 
-    @shadowColor: #ccc;
+    @shadowColor: rgba(0, 0, 0, 0.50);
+    @margin: 50px;
+
+    top: @margin;
+    right: @margin;
+    bottom: @margin;
+    left: @margin;
+
+    // border and shodow for better contrast
 
     &.right {
         left: 49.5%;
-        right: 0;
-        .box-shadow(-10px 0 50px -5px @shadowColor);
+        .box-shadow(+20px 0 100px 0 @shadowColor);
     }
 
     &.left {
-        left: 0;
         right: 49.5%;
-        .box-shadow(10px 0 50px -5px @shadowColor);
-    }
-
-    .window-container-center > &.left {
-        left: @window-head-width;
+        .box-shadow(-20px 0 100px 0 @shadowColor);
     }
 
     @media (min-width: 480px), (min-device-width: 480px) {
@@ -2879,44 +2881,8 @@ ul.io-ox-inline-links + header {
 }
 
 .io-ox-sidepopup-close {
-
-    text-align: right;
-    margin: 0 40px;
-
-    .btn {
-        margin-left: 13px;
-        .user-select(none);
-    }
-
-    .btn-sidepopup {
-
-        display: inline-block;
-        background-color: #eee;
-        color: #aaa;
-        padding: 6px 13px;
-        margin-left: 7px;
-        border-radius: 0 0 5px 5px;
-        cursor: pointer;
-
-        html.high-contrast & {
-            background-color: @hc-gray;
-            color: @white;
-        }
-
-        &:hover {
-            background-color: #aaa;
-            color: #eee;
-            text-decoration: none;
-
-            html.high-contrast & {
-                background-color: @black;
-                color: @white;
-            }
-
-        }
-
-    }
-
+    padding: 10px 15px;
+    .close { outline: 0; }
 }
 
 /* auto complete */
@@ -4239,7 +4205,9 @@ wbr:after {
         .owner {
             font-size: 12px;
             padding-left: 40px;
-            margin-top: -7px;
+            margin-top: -10px;
+            margin-bottom: 3px;
+            a { color: #555; }
         }
     }
 
@@ -4278,6 +4246,27 @@ wbr:after {
         }
     }
 
+    // shorten folder title when selected so that folder options are visible
+    .selected > .folder-node > .folder-label {
+        max-width: 120px;
+        vertical-align: top;
+        .ellipsis();
+    }
+
+    .flat-tree {
+        // set min-width on flat folder to get consistent layout
+        // must match side-panel's default width of 250px
+        .folder-label {
+            min-width: 150px;
+        }
+        // set proper limit when selected (see above)
+        .selected > .folder-node > .folder-label {
+            width: 150px;
+            max-width: 150;
+        }
+    }
+
+
     // links
     .links {
 
@@ -4300,6 +4289,9 @@ wbr:after {
         margin: 14px 0 20px 40px;
         padding: 0;
         line-height: 20px;
+        &:empty {
+            margin: 0;
+        }
     }
 
     .mobile-edit-mode & {

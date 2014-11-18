@@ -94,7 +94,6 @@ define('io.ox/search/main', [
             name: 'io.ox/search',
             title: 'Search',
             toolbar: true,
-            search: false,
             // important
             facetedsearch: false
         }),

@@ -16,9 +16,11 @@ define('io.ox/participants/model', [
     'io.ox/core/api/group',
     'io.ox/core/api/resource',
     'io.ox/contacts/api',
+    'io.ox/contacts/model',
     'io.ox/contacts/util',
-    'io.ox/core/util'
-], function (userAPI, groupAPI, resourceAPI, contactAPI, util, coreUtil) {
+    'io.ox/core/util',
+    'gettext!io.ox/participants/model'
+], function (userAPI, groupAPI, resourceAPI, contactAPI, ContactModel, util, coreUtil, gt) {
 
     'use strict';
     // TODO: Bulk Loading
@@ -32,6 +34,15 @@ define('io.ox/participants/model', [
         TYPE_EXTERNAL_USER: 5,
         TYPE_DISTLIST_USER_GROUP: 6,
 
+        TYPE_STRINGS: {
+            1: '',
+            2: gt('Group'),
+            3: gt('Resource'),
+            4: gt('Resource group'),
+            5: gt('External contact'),
+            6: gt('Distribution list')
+        },
+
         defaults: {
             display_name: '',
             email1: ''
@@ -39,6 +50,11 @@ define('io.ox/participants/model', [
 
         initialize: function () {
             var self = this;
+
+            if (_.isString(this.get('type'))) {
+                this.fixType();
+            }
+
             if (this.get('internal_userid')) {
                 this.cid = 'internal_' + this.get('internal_userid');
                 this.set({
@@ -66,8 +82,8 @@ define('io.ox/participants/model', [
                         this.cid = 'resourcegroup_' + this.get('id');
                         break;
                     case this.TYPE_EXTERNAL_USER:
-                        this.cid = 'external_' + this.getEmail();
                         this.set('id', this.getEmail());
+                        this.cid = 'external_' + this.get('id');
                         break;
                     case this.TYPE_DISTLIST_USER_GROUP:
                         this.cid = 'distlist_' + this.get('id');
@@ -187,8 +203,48 @@ define('io.ox/participants/model', [
             return util.getMail(this.toJSON());
         },
 
+        getImageURL: function (options) {
+            return contactAPI.pictureHalo(_.extend({}, this.toJSON(), options));
+        },
+
+        getTarget: function () {
+            return this.get(this.get('field')) || '';
+        },
+
+        getFieldName: function () {
+            var field = this.get('field') || '';
+            return field !== '' ? ContactModel.fields[field] : '';
+        },
+
+        getTypeString: function () {
+            return this.TYPE_STRINGS[this.get('type')] || '';
+        },
+
         getImage: function () {
             console.warn('deprecated');
+        },
+
+        fixType: function () {
+            var newType = 0;
+            switch (this.get('type')) {
+                case 'user':
+                    newType = this.TYPE_USER;
+                    break;
+                case 'group':
+                    newType = this.TYPE_USER_GROUP;
+                    break;
+                case 'resource':
+                    newType = this.TYPE_RESOURCE;
+                    break;
+                case 'contact':
+                    if (this.get('mark_as_distributionlist')) {
+                        newType = this.TYPE_DISTLIST_USER_GROUP;
+                    } else {
+                        newType = this.TYPE_EXTERNAL_USER;
+                    }
+                    break;
+            }
+            this.set('type', newType);
         }
 
     });

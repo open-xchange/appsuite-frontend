@@ -56,6 +56,10 @@ define('io.ox/core/folder/api', [
         pool.unfetch(model.id);
     }
 
+    function isVirtual(id) {
+        return /^virtual/.test(id);
+    }
+
     function isFlat(id) {
         return /^(contacts|calendar|tasks)$/.test(id);
     }
@@ -178,6 +182,23 @@ define('io.ox/core/folder/api', [
     });
 
     //
+    // Define virtual folders
+    //
+
+    pool.addModel({
+        folder_id: '1',
+        id: 'virtual/all-my-appointments',
+        module: 'calendar',
+        own_rights: 134225984, // all rights but admin
+        permissions: [{ bits: 134225984, entity: ox.user_id, group: false }],
+        standard_folder: true,
+        supported_capabilities: [],
+        title: gt('All my appointments'),
+        total: -1,
+        type: 1
+    });
+
+    //
     // Propagate
     // central hub to coordinate events and caches
     // (see files/api.js for a full implementation for files)
@@ -249,7 +270,7 @@ define('io.ox/core/folder/api', [
         var model = pool.models[id];
         if (options.cache === true && model !== undefined && model.has('title')) return $.when(model.toJSON());
 
-        if (/^virtual/.test(id)) return $.when({ id: id });
+        if (isVirtual(id)) return $.when({ id: id });
 
         return http.GET({
             module: 'folders',
@@ -324,7 +345,7 @@ define('io.ox/core/folder/api', [
         }
 
         // special handling for virtual folders
-        if (/^virtual/.test(id)) return virtual.get(id).done(function (array) {
+        if (isVirtual(id)) return virtual.get(id).done(function (array) {
             pool.addCollection(collectionId, array);
         });
 
@@ -412,6 +433,10 @@ define('io.ox/core/folder/api', [
         return pool.getCollection(getFlatCollectionId(module, section));
     }
 
+    function injectVirtualCalendarFolder(array) {
+        array.unshift(pool.getModel('virtual/all-my-appointments').toJSON());
+    }
+
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
@@ -469,6 +494,8 @@ define('io.ox/core/folder/api', [
                         return true;
                     })
                     .value();
+                // inject 'All my appointments' for calender/private
+                if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
@@ -853,6 +880,7 @@ define('io.ox/core/folder/api', [
         is: util.is,
         can: util.can,
         virtual: virtual,
+        isVirtual: isVirtual,
         isFlat: isFlat,
         getFlatCollection: getFlatCollection,
         getDefaultFolder: util.getDefaultFolder,
