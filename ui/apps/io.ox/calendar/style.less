@@ -391,55 +391,55 @@
         margin-top: 0;
     }
 
-    .interval {
-
-        color: #555;
-        white-space: nowrap;
-        float: right;
-
-        .label-default {
-            margin-left: 5px;
-
-            html.high-contrast & {
-                background-color: @black;
-            }
-
-        }
-
+    h1.subject {
+        display: inline-block;
+        margin: 0;
     }
 
-    .day {
+    .date-time-recurrence, .location {
+        font-weight: normal;
+        margin: 1.25em 0;
+    }
 
-        font-size: 1.1em;
-        color: #888;
-
+    .date-time {
+        font-weight: normal;
         html.high-contrast & {
             color: @black;
         }
+    }
 
+    .time {
+        font-weight: bold;
+        white-space: nowrap;
+        .label-default {
+            margin-left: 7px;
+            position: relative;
+            top: -1px;
+            background-color: #999;
+            html.high-contrast & {
+                color: white;
+                background-color: @black;
+            }
+        }
+    }
+
+    .date {
+        white-space: nowrap;
+    }
+
+    .recurrence {
+        color: #888;
+        font-weight: 300;
+    }
+
+    .location {
+        font-weight: 500;
     }
 
     .private-flag {
         font-size: 18pt;
         margin-right: 11px;
         color: #aaa;
-    }
-
-    // better rename to .subject
-    h1.title {
-        display: inline-block;
-        margin: 0.25em 0 0.25em 0;
-    }
-
-    .location {
-
-        color: #888;
-        margin-bottom: 1em;
-
-        html.high-contrast & {
-            color: @black;
-        }
-
     }
 
     .note {
