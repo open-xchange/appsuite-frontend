@@ -4358,3 +4358,31 @@ wbr:after {
         min-height: 100%;
     }
 }
+
+//
+// Expandable section
+//
+
+.expandable {
+
+    .expandable-content {
+        display: none;
+    }
+
+    .expandable-toggle {
+        color: inherit;
+    }
+
+    &.open .expandable-content {
+        display: block;
+    }
+
+    .expandable-indicator:before {
+        color: #aaa;
+        content: "\f0da"; // fa-caret-right
+    }
+
+    &.open .expandable-indicator:before {
+        content: "\f0d7"; // fa-caret-down
+    }
+}

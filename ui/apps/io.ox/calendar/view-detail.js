@@ -144,20 +144,28 @@ define('io.ox/calendar/view-detail', [
         }
     });
 
+    $(document).on('click', '.expandable-toggle', function (e) {
+        e.preventDefault();
+        $(this).closest('fieldset').toggleClass('open');
+    });
+
     // draw details
     ext.point('io.ox/calendar/detail').extend({
         index: 800,
         id: 'details',
         draw: function (baton, options) {
-            var node = $('<dl>');
+            var node = $('<dl class="dl-horizontal expandable-content">');
+            ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
             this.append(
-                $('<fieldset>').addClass('details')
-                    .append(
-                        $('<legend>').addClass('io-ox-label').text(gt('Details')),
-                        node.addClass('dl-horizontal')
+                $('<fieldset class="details expandable">').append(
+                    $('<legend class="io-ox-label">').append(
+                        $('<a href="#" class="expandable-toggle" role="button">').text(gt('Details')),
+                        $.txt(' '),
+                        $('<i class="fa expandable-indicator">')
+                    ),
+                    node
                 )
             );
-            ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
         }
     });
 
