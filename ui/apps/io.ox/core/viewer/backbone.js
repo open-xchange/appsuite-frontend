@@ -12,8 +12,155 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
-define('io.ox/core/viewer/backbone', function () {
+define('io.ox/core/viewer/backbone', ['io.ox/files/api', 'io.ox/core/api/attachment'], function (FilesAPI, AttachmentAPI) {
 
     'use strict';
 
+    var ITEM_TYPE_FILE = 'file',
+        ITEM_TYPE_ATTACHMENT = 'attachment',
+        THUMBNAIL_SIZE = { thumbnailWidth: 100, thumbnailHeight: 100 }; // todo: set better defaults;
+
+    var FileModel = Backbone.Model.extend({
+
+        defaults: function () {
+            return {
+                source: null,
+                filename: '',
+                size: 0,
+                version: null, // nur drive
+                contentType: null,
+                id: null, // could be a attachment id, or drive file id
+                folderId: null,
+                meta: {},
+                lastModified: null,
+                previewUrl: null,
+                downloadUrl: null,
+                thumbnailUrl: null
+            };
+
+        },
+
+        initialize: function (data, options) {
+            console.warn('FileModel.initialize(): ', data, options);
+        },
+
+        parse: function (data, options) {
+
+            var result = {};
+
+            /**
+             * duck check for drive file or e-mail attachment
+             */
+            function getFileSource (data) {
+                if (!data || !data.id) { return null; }
+
+                if (data.mail && data.mail.id && data.mail.folder_id && data.mail.folder_id.toUpperCase().indexOf('/INBOX') > -1 ||
+                    data.group === 'mail' ||
+                    data.disp === 'attachment') {
+                    return ITEM_TYPE_ATTACHMENT;
+                } else {
+                    return ITEM_TYPE_FILE;
+                }
+            }
+
+            console.warn('FileModel.parse(): ', data, options);
+
+            result.source = getFileSource (data);
+
+            if (result.source === ITEM_TYPE_ATTACHMENT) {
+
+                result.filename = data.filename;
+                result.size = data.size;
+                result.contentType = data.content_type;
+                result.id = data.mail && data.mail.id || null; // could be a attachment id, or drive file id
+                result.folderId = data.mail && data.mail.folder_id || null;
+                result.previewUrl = AttachmentAPI.getUrl(data, 'view');
+                result.downloadUrl = AttachmentAPI.getUrl(data, 'download');
+                result.thumbnailUrl = AttachmentAPI.getUrl(data, 'view');   // todo: check for thumbnails
+
+            } else if (result.source === ITEM_TYPE_FILE) {
+
+                result.filename = data.filename;
+                result.size = data.file_size;
+                result.version = data.version;  // drive only
+                result.contentType = data.file_mimetype;
+                result.id = data.id;    // could be a attachment id, or drive file id
+                result.folderId = data.folder_id;
+                result.meta = data.meta;
+                result.lastModified = data.last_modified;
+                result.previewUrl = FilesAPI.getUrl(data, 'preview');
+                result.downloadUrl = FilesAPI.getUrl(data, 'download');
+                result.thumbnailUrl = FilesAPI.getUrl(data, 'thumbnail', THUMBNAIL_SIZE);
+            }
+
+            return result;
+        },
+
+        isMailAttachment: function () {
+            return this.get('source') === ITEM_TYPE_ATTACHMENT;
+        },
+
+        isDriveFile: function () {
+            return this.get('source') === ITEM_TYPE_FILE;
+        },
+
+        getPreviewUrl: function () {
+            return this.previewUrl;
+        },
+
+        getDownloadUrl: function () {
+            return this.downloadUrl;
+        },
+
+        getThumbnailUrl: function () {
+            return this.thumbnailUrl;
+        }
+
+    });
+
+    // debug stuff
+    var dummyMailImage = {
+        id: '2',
+        filename: 'cola.jpg',
+        size: 145218,
+        disp: 'attachment',
+        content_type: 'image/jpeg',
+        content: null,
+        mail: {
+            id: '3',
+            folder_id: 'default0/INBOX'
+        },
+        title: 'cola.jpg',
+        parent: {
+            id: '3',
+            folder_id: 'default0/INBOX'
+        },
+        group: 'mail',
+        uploaded: 1,
+        meta: {}
+    };
+
+    var dummyDriveImage = {
+        id: '124/374',
+        modified_by: 20,
+        last_modified: 1402646241319,
+        folder_id: '124',
+        meta: {},
+        title: 'cola.jpg',
+        filename: 'cola.jpg',
+        file_mimetype: 'image/jpeg',
+        file_size: 106120,
+        version: '1',
+        locked_until: 0
+    };
+
+    console.log('debug data, mail attachment, image file: ', dummyMailImage, dummyDriveImage);
+
+    var modelDummy1 = new FileModel(dummyMailImage, { parse: true });
+    console.log('model: ', modelDummy1);
+
+    var modelDummy2 = new FileModel(dummyDriveImage, { parse: true });
+    console.log('model: ', modelDummy2);
+
+    return FileModel;
 });
