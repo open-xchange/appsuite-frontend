@@ -714,7 +714,11 @@ define('io.ox/mail/main',
                     react('empty');
                 },
                 'selection:one': function (list) {
-                    react('multiple', list);
+                    var type = 'one';
+                    if ( app.listView.selection.getBehavior() === 'alternative' ) {
+                        type = 'multiple';
+                    }
+                    react(type, list);
                 },
                 'selection:multiple': function (list) {
                     react('multiple', list);
@@ -963,7 +967,13 @@ define('io.ox/mail/main',
          */
         'change:checkboxes': function (app) {
             if (_.device('smartphone')) return;
-            app.listView.toggleCheckboxes(true);
+            if ( app.listView.selection.getBehavior() === 'alternative' ) {
+                app.listView.toggleCheckboxes(true);
+            } else {
+                app.props.on('change:checkboxes', function (model, value) {
+                    app.listView.toggleCheckboxes(value);
+                });
+            }
         },
 
         /*
@@ -1026,7 +1036,7 @@ define('io.ox/mail/main',
 
         'inplace-search': function (app) {
 
-            if (_.device('small') || !capabilities.has('search')) return;
+            if (_.device('small') || !capabilities.has('search')) return;
 
             var win = app.getWindow(), side = win.nodes.sidepanel;
             side.addClass('top-toolbar');
@@ -1055,7 +1065,7 @@ define('io.ox/mail/main',
                                 },
                                 getQueryParams: function (params) {
                                     // paging support
-                                    search.model.set('start', params.offset || 0, {silent: true});
+                                    search.model.set('start', params.offset || 0, {silent: true});
                                     return {};
                                 },
                                 cid: function () {
