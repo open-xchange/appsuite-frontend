@@ -633,6 +633,10 @@ define('io.ox/mail/compose/view', [
                             });
                         });
                     }
+
+                    //remove sync listener
+                    //causes problems with inline images that are already deleted on the backend (see Bug 32599)
+                    self.stopListening(self.model, 'needsync', self.syncMail);
                     self.model.dirty(false);
                     self.app.quit();
                 })
