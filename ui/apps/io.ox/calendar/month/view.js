@@ -92,12 +92,15 @@ define('io.ox/calendar/month/view', [
         },
 
         onCreateAppointment: function (e) {
-            if (!folderAPI.can('create', this.folder)) {
-                return;
-            }
-            if ($(e.target).hasClass('list')) {
+
+            this.app.folder.can('create').done(function (create) {
+
+                if (!create) return;
+                if (!$(e.target).hasClass('list')) return;
+
                 this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
-            }
+
+            }.bind(this));
         },
 
         // handler for onmouseenter event for hover effect
