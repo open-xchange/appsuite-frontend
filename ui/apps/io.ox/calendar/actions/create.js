@@ -16,13 +16,14 @@ define('io.ox/calendar/actions/create', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/user',
     'io.ox/contacts/util',
-    'gettext!io.ox/calendar'
-], function (api, dialogs, userAPI, util, gt) {
+    'gettext!io.ox/calendar',
+    'settings!io.ox/core'
+], function (api, dialogs, userAPI, util, gt, settings) {
 
     'use strict';
 
     function openEditDialog(params) {
-        ox.load(['io.ox/calendar/edit/main'], function (edit) {
+        ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
             edit.getApp().launch().done(function () {
                 this.create(params);
             });
@@ -52,7 +53,8 @@ define('io.ox/calendar/actions/create', [
                 openEditDialog(params);
             })
             .on('invite', function () {
-                params.participants = [{ id: user.id, type: 1 }];
+                params.participants = [{ id: ox.user_id, type: 1 }, { id: user.id, type: 1 }];
+                params.folder_id = settings.get('folders/calendar');
                 openEditDialog(params);
             })
             .show();
