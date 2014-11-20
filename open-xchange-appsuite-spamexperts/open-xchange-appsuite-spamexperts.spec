@@ -86,12 +86,12 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}
 
 %changelog
+* Thu Nov 13 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2014-11-17
 * Fri Oct 31 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 First candidate for 7.6.2 release
 * Tue Oct 28 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-11-03
-* Thu Nov 13 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
-Build for patch 2014-11-17
 * Mon Oct 27 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-10-30
 * Wed Oct 22 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
