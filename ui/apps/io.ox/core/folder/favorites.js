@@ -61,6 +61,7 @@ define('io.ox/core/folder/favorites', [
                     new TreeNodeView({
                         empty: false,
                         folder: id,
+                        indent: !api.isFlat(module),
                         open: false,
                         parent: tree,
                         sortable: true,
