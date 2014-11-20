@@ -312,8 +312,11 @@ define('io.ox/mail/settings/pane', [
         }
     });
 
+    // extension point with index 500 is in 'io.ox/mail/settings/signatures/register'
+    // and displays signature settings
+
     ext.point(POINT + '/pane').extend({
-        index: 500,
+        index: 600,
         id: 'imap-subscription',
         draw: function () {
 

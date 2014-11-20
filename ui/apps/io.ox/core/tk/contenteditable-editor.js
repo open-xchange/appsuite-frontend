@@ -732,6 +732,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.destroy = function () {
             this.handleHide();
             if (el.tinymce()) {
+                //empty node before removing because tiny saves the contents before.
+                //this might cause server errors if there were inline images (those only exist temporarily and are already removed)
+                el.empty();
                 el.tinymce().remove();
             }
             el = el.tinymce = def = ed = null;

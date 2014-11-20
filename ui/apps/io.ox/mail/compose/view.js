@@ -330,8 +330,10 @@ define('io.ox/mail/compose/view', [
             return mailAPI[obj.mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
                 data.sendtype = obj.mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                 data.mode = obj.mode;
+                var attachments = _.clone(data.attachments);
+                delete data.attachments;
                 self.model.set(data);
-                self.model.initialize();
+                self.model.set('attachments', self.model.get('attachments').reset(attachments));
             });
         },
 
@@ -615,6 +617,10 @@ define('io.ox/mail/compose/view', [
                             });
                         });
                     }
+
+                    //remove sync listener
+                    //causes problems with inline images that are already deleted on the backend (see Bug 32599)
+                    self.stopListening(self.model, 'needsync', self.syncMail);
                     self.model.dirty(false);
                     self.app.quit();
                 })

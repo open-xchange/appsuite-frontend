@@ -91,7 +91,6 @@ define('io.ox/mail/settings/signatures/register', [
             this.append(
                 $('<div class="form-group">').append(
                     baton.$.insertion = $('<select id="signature-position" class="form-control" tabindex="1">')
-                        .attr({ 'tabindex': 1 })
                         .append(
                             $('<option value="above">').text(gt('Add signature above quoted text')),
                             $('<option value="below">').text(gt('Add signature below quoted text'))
@@ -307,7 +306,6 @@ define('io.ox/mail/settings/signatures/register', [
                 signatures,
                 defaultSignatureView,
                 defaultReplyForwardView;
-
             this.append($node = $('<fieldset class="io-ox-signature-settings">'));
             function fnDrawAll() {
                 snippets.getAll('signature').done(function (sigs) {

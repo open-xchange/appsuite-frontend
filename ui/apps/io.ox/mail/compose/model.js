@@ -30,7 +30,7 @@ define('io.ox/mail/compose/model', [
                 editorMode: settings.get('messageFormat', 'html'),
                 account_name: '',
                 attachment: '',
-                attachments: [],
+                attachments: new Attachments.Collection(),
                 bcc: [],
                 cc: [],
                 color_label: '',
