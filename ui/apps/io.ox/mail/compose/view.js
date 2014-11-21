@@ -333,7 +333,7 @@ define('io.ox/mail/compose/view', [
 
         filterData: function (data) {
             if (/(compose|edit)/.test(data.mode)) return data;
-            return _.pick(data, 'id', 'folder_id', 'mode');
+            return _.pick(data, 'id', 'folder_id', 'mode', 'csid');
         },
 
         fetchMail: function (obj) {
@@ -341,7 +341,7 @@ define('io.ox/mail/compose/view', [
             if (/(compose|edit)/.test(obj.mode)) {
                 return $.when();
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'mode');
+                obj = _.pick(obj, 'id', 'folder_id', 'mode', 'csid');
             }
             return mailAPI[obj.mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
                 data.sendtype = obj.mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;

@@ -55,6 +55,7 @@ define('io.ox/mail/compose/model', [
                 sent_date: '',
                 signature: _.device('smartphone') ? (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) : settings.get('defaultSignature'),
                 currentSignature: '',
+                csid: mailAPI.csid(),
                 size: '',
                 subject: '',
                 to: [],
@@ -277,7 +278,8 @@ define('io.ox/mail/compose/model', [
                 'subject',
                 'priority',
                 'vcard',
-                'nested_msgs'
+                'nested_msgs',
+                'csid'
             );
 
             if (this.get('msgref')) {
