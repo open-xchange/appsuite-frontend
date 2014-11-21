@@ -1,0 +1,76 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+.io-ox-find {
+
+    // left
+    .search-box {
+
+        .twitter-typeahead .tt-dropdown-menu {
+            // enlarge default height
+            max-height: 400px;
+        }
+
+        // keep placeholder at same position when switching to typeahead
+        .search-field .token-input.tt-input {
+            padding-left: 3px;
+        }
+    }
+
+    .autocomplete-item {
+
+        color: #333;
+        padding: 2px 10px;
+
+        // description: added by backend
+        i {
+            font-style: normal;
+            color: rgba(0, 0, 0, 0.5);
+        }
+        &.indent {
+            padding-left: 24px;
+        }
+        &.dropdown-header {
+            padding-top: 9px;
+            margin-top: 9px;
+            border-top: 1px solid rgba(128, 128, 128, 0.25);
+            // reset bootstrap
+            max-width: inherit;
+        }
+        &.dropdown-header:first-child {
+            margin-top: 0;
+            border-top: 0;
+        }
+        &.unselectable {
+            cursor: default;
+            color: rgba(128, 128, 128, 0.71);
+        }
+
+        &.contacts, &.contact, &.participant, &.task_participants {
+            .image {
+                margin-right: 14px;
+                display: inline-block;
+                float: left;
+                .picture(42px, 42px);
+            }
+            .name {
+                .ellipsis();
+            }
+            .detail {
+                color: rgba(0, 0, 0, 0.5);
+                .ellipsis();
+            }
+        }
+    }
+}
+

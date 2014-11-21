@@ -555,17 +555,10 @@ define('io.ox/tasks/main', [
             });
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
-            if (_.device('smartphone') || !capabilities.has('search')) return;
-
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
-
-            win.facetedsearch.ready
-                .done(function (search) {
-                    commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
-                });
+            if (_.device('smartphone') || !capabilities.has('search')) return;
+            app.setSearch();
         }
     });
 
@@ -585,7 +578,7 @@ define('io.ox/tasks/main', [
             name: 'io.ox/tasks',
             title: 'Tasks',
             chromeless: true,
-            facetedsearch: capabilities.has('search')
+            find: capabilities.has('search')
         });
 
         win.addClass('io-ox-tasks-main');

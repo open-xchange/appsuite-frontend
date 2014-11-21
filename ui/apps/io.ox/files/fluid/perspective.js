@@ -111,9 +111,8 @@ define('io.ox/files/fluid/perspective', [
     }
 
     function loadFiles(app) {
-        var def = $.Deferred(),
-            search = app.getWindow().nodes.sidepanel.find('.search-container').is(':visible');
-        if (!search) {
+        var def = $.Deferred();
+        if (!app.get('search').isActive()) {
             //empty search query shows folder again
             api.getAll(app.folder.get(), { cache: false }).done(def.resolve).fail(def.reject);
         } else {
@@ -623,7 +622,6 @@ define('io.ox/files/fluid/perspective', [
                 .on('folder:change', function () {
                     app.currentFile = null;
                     dropZoneInit(app);
-                    self.main.closest('.search-open').removeClass('search-open');
                     dialog.close();
                     breadcrumb = undefined;
                     allIds = [];
@@ -851,10 +849,12 @@ define('io.ox/files/fluid/perspective', [
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search:query search:cancel', function () {
-                breadcrumb = undefined;
-                allIds = [];
-                drawFirst();
+            app.get('search').on({
+                'search:query search:idle': function () {
+                    breadcrumb = undefined;
+                    allIds = [];
+                    drawFirst();
+                }
             });
 
             api.on('update', function (e, obj) {
@@ -872,7 +872,7 @@ define('io.ox/files/fluid/perspective', [
             });
 
             api.on('refresh.all', function () {
-                if (!app.getWindow().facetedsearch.active) {
+                if (!app.get('search').isActive()) {
                     api.getAll({ folder: app.folder.get() }, false).done(function (ids) {
 
                         var hash = {},

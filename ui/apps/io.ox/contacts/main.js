@@ -778,17 +778,13 @@ define('io.ox/contacts/main', [
             });
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
-
-            win.facetedsearch.ready.done(function (search) {
-                commons.wireGridAndSearch(app.grid, app.getWindow(), search.apiproxy);
-            });
+            app.setSearch();
         }
+
     });
 
     // launcher
@@ -798,7 +794,7 @@ define('io.ox/contacts/main', [
         var win = ox.ui.createWindow({
             name: 'io.ox/contacts',
             chromeless: true,
-            facetedsearch: capabilities.has('search')
+            find: capabilities.has('search')
         });
 
         app.setWindow(win);

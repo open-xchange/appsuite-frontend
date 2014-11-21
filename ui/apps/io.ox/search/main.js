@@ -75,7 +75,7 @@ define('io.ox/search/main', [
                 custom: true,
                 hidden: true,
                 flags: [
-                    _.device('small') ? '' : 'advanced',
+                    _.device('smartphone') ? '' : 'advanced',
                     'conflicts:folder_type'
                 ],
                 values: [{
@@ -120,6 +120,7 @@ define('io.ox/search/main', [
             title: 'Search',
             toolbar: true,
             chromeless: true,
+            search: false,
             // important
             facetedsearch: false
         }),

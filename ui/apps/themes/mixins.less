@@ -55,6 +55,12 @@
     .text-overflow();
 }
 
+.placeholder(@color) {
+    ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
+        color: @color
+    }
+}
+
 .overflow(@type: auto) {
     overflow: @type;
     -webkit-overflow-scrolling: touch;

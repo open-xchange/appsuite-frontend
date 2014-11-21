@@ -1108,35 +1108,37 @@ define('io.ox/mail/main', [
             });
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
+            //create search app instance (sub instance of current app)
+            var searchApp = app.setSearch();
 
-            win.facetedsearch.ready
-                .done(function (search) {
+            searchApp.ready
+                .done(function () {
                     require(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
-
+                        var manager = searchApp.view.model.manager,
+                            searchcid = _.bind(manager.getResponseCid, manager),
+                            mode = 'default';
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
                                 module: 'mail',
                                 mode: 'search',
                                 fetch: function (params) {
-                                    var limit = params.limit.split(','),
+                                    var self = this,
+                                        limit = params.limit.split(','),
                                         start = parseInt(limit[0]),
                                         size = parseInt(limit[1]) - start;
 
-                                    search.model.set({
+                                    searchApp.model.set({
                                         'start': start,
                                         'size': size,
                                         'extra': 1
                                     }, { silent: true });
 
-                                    var self = this;
                                     var params = { sort: app.props.get('sort'), order: app.props.get('order') };
-                                    return search.apiproxy.query(true, params).then(function (response) {
+                                    return searchApp.apiproxy.query(true, params).then(function (response) {
                                         response = response || {};
                                         var list = response.results || [],
                                             request = response.request || {};
@@ -1147,61 +1149,47 @@ define('io.ox/mail/main', [
                                         return list;
                                     });
                                 },
-                                cid: function () {
-                                    return 'search/' + search.model.getCompositeId() +
-                                        '&sort=' + app.props.get('sort') +
-                                        '&order=' + app.props.get('order');
-                                },
+                                cid: searchcid,
                                 each: function (obj) {
                                     api.processThreadMessage(obj);
                                 }
                             });
                         var register = function () {
-                                var view = win.facetedsearch.view,
+                                var view = searchApp.view.model,
                                     // remember original setCollection
                                     setCollection = app.listView.setCollection;
                                 app.listView.connect(collectionLoader);
+                                mode = 'search';
                                 // wrap setCollection
                                 app.listView.setCollection = function (collection) {
                                     view.stopListening();
-                                    view.listenTo(collection, 'add reset remove', view.trigger.bind(view, 'query:resultready', collection));
+                                    view.listenTo(collection, 'add reset remove', searchApp.trigger.bind(view, 'query:result', collection));
                                     return setCollection.apply(this, arguments);
                                 };
                             };
-                        // events
-                        win.facetedsearch.ready
-                            .done(function () {
-                                var view = win.facetedsearch.view;
-                                view.on({
-                                    'query': _.debounce(function (e, appname) {
-                                        if (appname === app.get('name')) {
-                                            // register/connect once
-                                            if (app.listView.loader.mode !== 'search') register();
-                                            // reset start index
-                                            win.facetedsearch.view.model.set(
-                                                {
-                                                    'start': 0,
-                                                    'size': 30,
-                                                    'extra': 1
-                                                }, { silent: true });
-                                            // load
-                                            app.listView.load();
-                                            win.facetedsearch.focus();
-                                        }
-                                    }, 10),
-                                    'focus': function () {
-                                        // register collection loader
-                                    }
-                                });
-                            });
 
-                        win.on('search:cancel', function () {
-                            app.listView.connect(api.collectionLoader);
-                            app.listView.load();
+                        // events
+                        searchApp.on({
+                            'search:idle': function () {
+                                if (mode === 'search') {
+                                    //console.log('%c' + 'reset collection loader', 'color: white; background-color: green');
+                                    app.listView.connect(api.collectionLoader);
+                                    app.listView.load();
+                                }
+                                mode = 'default';
+                            },
+                            'search:query': _.debounce(function () {
+                                // register/connect once
+                                if (app.listView.loader.mode !== 'search') register();
+                                // load
+                                app.listView.load();
+                            }, 10)
                         });
+
                     });
                 });
         }
+
     });
 
     // launcher
@@ -1212,7 +1200,7 @@ define('io.ox/mail/main', [
             name: 'io.ox/mail',
             title: 'Inbox',
             chromeless: true,
-            facetedsearch: capabilities.has('search')
+            find: capabilities.has('search')
         });
 
         if (_.url.hash().mailto) ox.registry.call('mail-compose', 'compose');

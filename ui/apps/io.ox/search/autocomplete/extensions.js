@@ -163,7 +163,7 @@ define('io.ox/search/autocomplete/extensions',[
 
         searchfieldMobile: function (baton) {
 
-            if (!_.device('small')) return;
+            if (!_.device('smartphone')) return;
 
             var group,
                 label = gt('Search'),

@@ -1,0 +1,227 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2015 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+define('io.ox/find/view', [
+    'io.ox/core/extensions',
+    'io.ox/find/view-searchbox',
+    'io.ox/find/view-facets',
+    'less!io.ox/find/style'
+], function (ext, AutocompleteView, FacetView) {
+
+    'use strict';
+
+    var FindView = Backbone.View.extend({
+
+        events: {
+            'focusin': 'show',
+            'focusout': 'smartCancel',
+            // subview buttons
+            'click .action-cancel': 'cancel'
+        },
+
+        classes: {
+            active: 'io-ox-find-active'
+        },
+
+        /**
+         *  -> left: view-searchbox
+         *      -> input: view-tokenfield
+         *          -> token: view-token
+         *  -> right: view-facets
+         */
+
+        initialize: function (options) {
+            var props = {
+                app: options.app,
+                // could be external view (inplace) or search view (standalone)
+                win: options.app.getWindow(),
+                // TODO: bottleneck
+                model: options.model,
+                baton: ext.Baton({
+                    app: options.app,
+                    model: options.model,
+                    view: this,
+                    $: this.$el
+                })
+            };
+            props.baton.model = props.model;
+
+            // props
+            _.extend(this, props);
+
+            // TODO: legacy?
+            _.extend(this, {
+                active: false,
+                lastFocus: '',
+                selectors: {
+                    facets: '.search-facets:first',
+                    facetsadv: '.search-facets-advanced'
+                }
+            });
+
+            // shortcuts
+            this.ui = {
+                container: undefined,
+                body: undefined,
+                manager: undefined,
+                // subviews
+                searchbox: undefined,
+                facets: undefined
+            };
+
+            // field stub already rendered
+            this.setElement(this.win.nodes.sidepanel.find('.io-ox-find'));
+
+            // shortcuts
+            this.ui.container = this.$el.closest('.window-container');
+            this.ui.body = this.ui.container.find('.window-body');
+            this.ui.manager = $('#io-ox-windowmanager');
+
+            // create empty view
+            this.ui.searchbox = new AutocompleteView(_.extend(props, { parent: this }));
+            this.ui.facets = new FacetView(_.extend(props, { parent: this }));
+
+        },
+
+        calculateDimensions: function () {
+            this.css = {
+                body: {
+                    closed: this.ui.body.css('top'),
+                    open: this.$el.outerHeight() + 'px'
+                },
+                el: {
+                    closed: this.$el.css('top'),
+                    open: this.ui.manager.offset().top + 'px'
+                }
+            };
+        },
+
+        render: function () {
+            // replaces stub
+            this.ui.searchbox.render();
+            this.ui.facets.render().hide();
+            return this;
+        },
+
+        show: function () {
+            if (this.isActive()) return;
+            this.calculateDimensions();
+            // apply dynamic styles
+            this.ui.body.css('top', this.css.body.open);
+            this.$el.css('top', this.css.el.open);
+            // css switch-class
+            this.ui.container.addClass(this.classes.active);
+            // bubble
+            this.ui.searchbox.show();
+            this.ui.facets.show();
+            // loose coupling
+            this.trigger('show');
+        },
+
+        // collapse (keep focus)
+        hide: function () {
+            if (!this.isActive() || !this.isEmpty()) return;
+            // reset dynamic styles
+            this.ui.body.css('top', this.css.body.closed);
+            this.$el.css('top', this.css.el.closed);
+            // css switch-class
+            this.ui.container.removeClass(this.classes.active);
+            // bubble
+            this.ui.searchbox.hide();
+            this.ui.facets.hide();
+            // loose coupling
+            this.trigger('hide');
+        },
+
+        // reset fields (keep focus)
+        reset: function () {
+            if (!this.isActive()) return;
+            // model reset
+            this.model.reset();
+            // view reset
+            this.ui.searchbox.reset();
+            this.ui.facets.reset();
+            // keep search field focused
+            this.setFocus();
+            // throw event
+            this.trigger('reset');
+        },
+
+        cancel: function () {
+            this.reset();
+            this.hide();
+            // move to next visible tabindexed node
+            this.setFocus('move');
+            // move focus
+            this.trigger('cancel');
+        },
+
+        // on focusout
+        smartCancel: function () {
+            var self = this;
+            //
+            _.defer(function () {
+                if (!self.hasFocus() && self.isEmpty())
+                    self.cancel();
+            });
+        },
+
+        // hint: debounced
+        setFocus: function (target) {
+            // focus search field
+            if (target !== 'move') return this.ui.searchbox.setFocus();
+
+            // focus next element in tabindex order
+            var tabVisible = '[tabindex][tabindex!="-1"]:visible',
+                $list = $(tabVisible),
+                last = this.$el.closest('.io-ox-find').find(tabVisible).last(),
+                index = $list.index(last),
+                next = $list.get(index + 1) || $list.get(index - 1) || $();
+            _.defer(function () {
+                next.focus();
+            });
+        },
+
+        isActive: function () {
+            return this.ui.container.hasClass(this.classes.active);
+        },
+
+        isEmpty: function () {
+            return this.ui.searchbox.isEmpty();
+        },
+
+        // hint: defer call in case it's used withing focus event stack
+        hasFocus: function () {
+            var node = $(document.activeElement);
+            return !!node.closest('.io-ox-find').length;
+        },
+
+        lazyload: function () {
+            // TODO: rework on that later
+
+            //TODO: sould be executed only once; name properly
+            if (!!this.logic) return;
+
+            // add autocomplete and addional handler
+            ext.point('io.ox/find/tokenfield/logic').invoke('draw', this.ui.searchbox.$el, this.baton);
+
+            // app is ready now
+            this.app.ready.resolve();
+
+            // TODO: set app status
+            this.logic = true;
+        }
+    });
+
+    return FindView;
+});

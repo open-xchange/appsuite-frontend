@@ -482,35 +482,27 @@ define('io.ox/calendar/main', [
             });
         },
 
-        'inplace-search': function (app) {
+        'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
 
-            var win = app.getWindow(), side = win.nodes.sidepanel;
-            side.addClass('top-toolbar');
+            var searchApp = app.setSearch();
 
             // when search is ready
-            win.facetedsearch.ready.done(function (facetedsearch) {
+            searchApp.ready.done(function () {
                 var lastPerspective,
-                    SEARCH_PERSPECTIVE = 'list',
-                    cancelSearch = function () {
-                        var win = app.getWindow();
-                        if (win.facetedsearch && win.facetedsearch.view)
-                            win.facetedsearch.view.trigger('button:cancel');
-                    };
-                // register
-                commons.wireGridAndSearch(app.grid, app.getWindow(), facetedsearch.apiproxy);
+                    SEARCH_PERSPECTIVE = 'list';
 
                 // additional handler: switch to list perspective (and back)
-                win.on({
+                searchApp.on({
                     'search:query': function () {
                         // switch to supported perspective
-                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
-                        if (lastPerspective !== SEARCH_PERSPECTIVE) {
+                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                        if (lastPerspective !== SEARCH_PERSPECTIVE) {
                             // fluent option: do not write to user settings
                             app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
                             // cancel search when user changes view
-                            app.props.on('change:layout', cancelSearch);
+                            app.props.on('change', app.getSearch().view.cancel);
                         }
                     },
                     'search:cancel': function () {
@@ -519,14 +511,14 @@ define('io.ox/calendar/main', [
                         if (lastPerspective && lastPerspective !== currentPerspective)
                             app.props.set('layout', lastPerspective);
                         // disable
-                        app.props.off('change:layout', cancelSearch);
+                        app.props.off('change', app.getSearch().view.cancel);
                         // reset
                         lastPerspective = undefined;
-
                     }
                 });
             });
         },
+
         /*
          * mobile only
          * change current date label in navbar
@@ -576,7 +568,7 @@ define('io.ox/calendar/main', [
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            facetedsearch: capabilities.has('search'),
+            find: capabilities.has('search'),
             chromeless: true
         }));
 

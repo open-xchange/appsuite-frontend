@@ -686,6 +686,12 @@ define('io.ox/contacts/api', [
             // use copy of data object because of delete-statements
             data = _.clone(data);
 
+            // duck check: special handling for search tokens
+            if (data.facet) {
+                if (!(data.facet.hasPersons() && data.data.item)) return;
+                data.image1_url = data.data.item.image_url;
+            }
+
             // duck checks
             if (api.looksLikeResource(data)) {
 
