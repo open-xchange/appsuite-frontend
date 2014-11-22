@@ -1001,7 +1001,7 @@ define('io.ox/mail/api',
         // loop over detail collection
         pool.get('detail').each(function (model) {
             var data = model.toJSON();
-            if (util.isUnseen(data)) {
+            if (data.folder_id === folder && util.isUnseen(data)) {
                 pool.propagate('change', {
                     id: data.id,
                     folder_id: data.folder_id,
