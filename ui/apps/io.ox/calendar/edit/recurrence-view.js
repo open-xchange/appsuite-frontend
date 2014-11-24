@@ -1202,8 +1202,8 @@ define('io.ox/calendar/edit/recurrence-view', [
                 // hide it for recurring appointments and exceptions, i.e.
                 // if rec_pos is unset or zero
                 if (!this.model.get('recurrence_position')) {
-                    this.$el.addClass('checkbox').append(
-                        this.controls.checkboxLabel.append(
+                    this.$el.append(
+                        this.controls.checkboxLabel.addClass('checkbox').append(
                             this.controls.checkbox,
                             $.txt(gt('Repeat'))
                         ),
