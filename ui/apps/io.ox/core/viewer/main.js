@@ -1,3 +1,4 @@
+// jscs:disable disallowTrailingWhitespace
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -14,15 +15,16 @@
 
 define('io.ox/core/viewer/main', [
     'io.ox/core/viewer/models/filemodel',
+    'io.ox/core/viewer/collections/filecollection',
     'io.ox/core/viewer/views/mainview'
-], function (FileModel, MainView) {
+], function (FileModel, FileCollection, MainView) {
 
     'use strict';
 
     /**
      * Main bootstrap file for the OX Viewer.
      */
-    // debug stuff
+    // lets work with dummies first
     var dummyMailImage = {
         id: '2',
         filename: 'cola.jpg',
@@ -58,12 +60,12 @@ define('io.ox/core/viewer/main', [
         locked_until: 0
     };
 
-    console.log('debug data, mail attachment, image file: ', dummyMailImage, dummyDriveImage);
+    // create file collection with dummy models
+    var fileCollection = new FileCollection();
+    fileCollection.add([dummyDriveImage, dummyMailImage]);
 
-    var modelDummy1 = new FileModel(dummyMailImage, { parse: true });
-    console.log('model: ', modelDummy1);
+    // create main view and append main view to core
+    var mainView =  new MainView({ collection: fileCollection });
+    $('#io-ox-core').append(mainView.el);
 
-    var modelDummy2 = new FileModel(dummyDriveImage, { parse: true });
-    console.log('model: ', modelDummy2);
-    console.log(MainView);
 });

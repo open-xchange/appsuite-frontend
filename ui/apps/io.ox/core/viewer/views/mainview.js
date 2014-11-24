@@ -29,6 +29,14 @@ define('io.ox/core/viewer/views/mainview', [
 
         className: 'io-ox-viewer abs',
 
+        toolbarView: new ToolbarView(),
+
+        displayerView: new DisplayerView(),
+
+        sidebarView: new SidebarView(),
+
+        displayedFileIndex: 0,
+
         events: {
             'click': 'onClose'
         },
@@ -38,10 +46,15 @@ define('io.ox/core/viewer/views/mainview', [
         },
 
         initialize: function () {
-            //console.log('MainView.initialize()');
+            //console.info('MainView.initialize()');
+            this.render();
         },
 
         render: function () {
+            //console.info('MainView.render()');
+            // append children views
+            this.$el.append(this.toolbarView.el, this.sidebarView.el);
+
             return this;
         }
     });

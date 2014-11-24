@@ -19,14 +19,16 @@ define('io.ox/core/viewer/views/toolbarview', function () {
      */
     var ToolbarView = Backbone.View.extend({
 
-        className: 'io-ox-viewer-toolbar',
+        className: 'viewer-toolbar',
 
         initialize: function () {
-            //console.warn('ToolbarView.initialize()');
+            //console.info('ToolbarView.initialize()');
+            this.render();
         },
 
         render: function () {
-            //console.warn('ToolbarView.render()');
+            //console.info('ToolbarView.render()');
+            this.$el.html('Hello, I\'m the toolbar view');
             return this;
         }
 

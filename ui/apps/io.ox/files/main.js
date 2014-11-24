@@ -13,6 +13,7 @@
  */
 
 define('io.ox/files/main', [
+    'io.ox/core/viewer/main',
     'io.ox/core/commons',
     'gettext!io.ox/files',
     'settings!io.ox/files',
@@ -31,7 +32,7 @@ define('io.ox/files/main', [
     'io.ox/files/folderview-extensions',
     'less!io.ox/files/style',
     'io.ox/files/toolbar'
-], function (commons, gt, settings, ext, folderAPI, TreeView, FolderView, actions, Bars, PageController, capabilities, api) {
+], function (Viewer, commons, gt, settings, ext, folderAPI, TreeView, FolderView, actions, Bars, PageController, capabilities, api) {
 
     'use strict';
 

@@ -20,18 +20,20 @@ define('io.ox/core/viewer/views/sidebarview', function () {
      */
     var SidebarView = Backbone.View.extend({
 
-        className: 'io-ox-viewer-sidebar',
+        className: 'viewer-sidebar',
 
         events: {
 
         },
 
         initialize: function () {
-            //console.warn('SidebarView.initialize()');
+            //console.info('SidebarView.initialize()');
+            this.render();
         },
 
         render: function () {
-            //console.warn('SidebarView.render()');
+            //console.info('SidebarView.render()');
+            this.$el.html('hallo ich bin der sidebar');
             return this;
         }
     });
