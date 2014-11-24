@@ -192,14 +192,21 @@ define('io.ox/calendar/edit/template',
     });
 
     // full time
-    point.extend(new forms.CheckBoxField({
+    point.extend({
         id: 'full_time',
+        index: 600,
         className: 'col-xs-12',
-        labelClassName: 'control-label',
-        label: gt('All day'),
-        attribute: 'full_time',
-        index: 600
-    }));
+        render: function () {
+            this.$el.append(
+                $('<div>').addClass('checkbox').append(
+                    $('<label class="control-label">').append(
+                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                        $.txt(gt('All day'))
+                    )
+                )
+            );
+        }
+    });
 
     // move recurrence view to collapsible area on mobile devices
     var recurrenceIndex = _.device('small') ? 950 : 650;

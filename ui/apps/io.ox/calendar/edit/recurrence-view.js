@@ -483,7 +483,7 @@ define('io.ox/calendar/edit/recurrence-view',
                 // Construct the UI
                 this.controls = {
                     checkbox: $('<input tabindex="1" type="checkbox">'),
-                    checkboxLabel: $('<label class="checkbox control-label">'),
+                    checkboxLabel: $('<label class="control-label">'),
                     detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
                         'role': 'button',
                         'aria-label': gt('Click to close the recurrence view')
@@ -498,8 +498,9 @@ define('io.ox/calendar/edit/recurrence-view',
                 });
 
                 this.nodes = {
-                    recView: $('<div class="io-ox-recurrence-view">').hide(),
                     summary: $('<span>'),
+                    wrapper: $('<div>').addClass('checkbox'),
+                    recView: $('<form class="io-ox-recurrence-view form-inline">').hide(),
                     typeChoice: $('<div class="inset">'),
                     hint: $('<div class="text-muted inset">'),
                     alternative1: $('<div class="inset">'),
@@ -947,7 +948,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             .css('fontSize', 'small')
                     );
                 if (this.model.get('recurrence_type') !== RECURRENCE_TYPES.NO_RECURRENCE) {
-                    this.controls.checkboxLabel.css({'display': 'inline-block'});
+                    this.nodes.wrapper.css({ 'display': 'inline-block' });
                     this.nodes.summary.show();
                     sum.append(
                         this.choice.ghost(),
@@ -955,7 +956,7 @@ define('io.ox/calendar/edit/recurrence-view',
                         $('<span>&nbsp;</span>')
                     );
                 } else {
-                    this.controls.checkboxLabel.css('display', 'block');
+                    this.nodes.wrapper.removeAttr('style');
                     this.nodes.summary.hide();
                 }
             },
@@ -1224,9 +1225,11 @@ define('io.ox/calendar/edit/recurrence-view',
                 // if rec_pos is unset or zero
                 if (!this.model.get('recurrence_position')) {
                     this.$el.append(
-                        this.controls.checkboxLabel.append(
-                            this.controls.checkbox,
-                            $.txt(gt('Repeat'))
+                        this.nodes.wrapper.append(
+                            this.controls.checkboxLabel.append(
+                                this.controls.checkbox,
+                                $.txt(gt('Repeat'))
+                            )
                         ),
                         this.nodes.summary,
                         this.nodes.recView.append(
