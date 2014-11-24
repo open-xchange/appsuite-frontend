@@ -174,9 +174,11 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-xs-12',
         render: function () {
             this.$el.append(
-                $('<label class="control-label checkbox">').append(
-                    new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
-                    $.txt(gt('All day'))
+                $('<div>').addClass('checkbox').append(
+                    $('<label class="control-label">').append(
+                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                        $.txt(gt('All day'))
+                    )
                 )
             );
         }
