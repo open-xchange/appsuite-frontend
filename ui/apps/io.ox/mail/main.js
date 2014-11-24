@@ -307,7 +307,7 @@ define('io.ox/mail/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new MailListView({ app: app, ignoreFocus: true });
+            app.listView = new MailListView({ app: app, ignoreFocus: true, selectionOptions: { mode: 'special' }});
             app.listView.model.set({ folder: app.folder.get() });
             app.listView.model.set('thread', true);
             // for debugging
@@ -711,7 +711,11 @@ define('io.ox/mail/main', [
                     react('empty');
                 },
                 'selection:one': function (list) {
-                    react('one', list);
+                    var type = 'one';
+                    if ( app.listView.selection.getBehavior() === 'alternative' ) {
+                        type = 'multiple';
+                    }
+                    react(type, list);
                 },
                 'selection:multiple': function (list) {
                     react('multiple', list);
@@ -960,9 +964,13 @@ define('io.ox/mail/main', [
          */
         'change:checkboxes': function (app) {
             if (_.device('smartphone')) return;
-            app.props.on('change:checkboxes', function (model, value) {
-                app.listView.toggleCheckboxes(value);
-            });
+            if ( app.listView.selection.getBehavior() === 'alternative' ) {
+                app.listView.toggleCheckboxes(true);
+            } else {
+                app.props.on('change:checkboxes', function (model, value) {
+                    app.listView.toggleCheckboxes(value);
+                });
+            }
         },
 
         /*

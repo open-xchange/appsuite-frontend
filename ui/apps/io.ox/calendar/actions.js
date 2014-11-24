@@ -140,19 +140,8 @@ define('io.ox/calendar/actions', [
             return e.baton.app.folder.can('create');
         },
         action: function (baton, obj) {
-            // FIXME: if this action is invoked by the menu button, both
-            // arguments are the same (the app)
-            var params = {
-                folder_id: baton.app.folder.get(),
-                participants: []
-            };
-            if (obj && obj.start_date) {
-                _.extend(params, obj);
-            }
-            ox.load(['io.ox/calendar/edit/main']).done(function (editmain) {
-                editmain.getApp().launch().done(function () {
-                    this.create(params);
-                });
+            ox.load(['io.ox/calendar/actions/create']).done(function (action) {
+                action(baton, obj);
             });
         }
     });

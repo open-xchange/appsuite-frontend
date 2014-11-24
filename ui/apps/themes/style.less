@@ -1658,6 +1658,11 @@ a.button {
 
 }
 
+.window-sidepanel.visible {
+    width: 250px;
+    + .window-body { left: 250px; }
+}
+
 .window-container.toolbar-right {
 
     .window-head {
@@ -4356,5 +4361,33 @@ wbr:after {
     .thread-view-control, .thread-view-list {
         position: static;
         min-height: 100%;
+    }
+}
+
+//
+// Expandable section
+//
+
+.expandable {
+
+    .expandable-content {
+        display: none;
+    }
+
+    .expandable-toggle {
+        color: inherit;
+    }
+
+    &.open .expandable-content {
+        display: block;
+    }
+
+    .expandable-indicator:before {
+        color: #aaa;
+        content: "\f0da"; // fa-caret-right
+    }
+
+    &.open .expandable-indicator:before {
+        content: "\f0d7"; // fa-caret-down
     }
 }

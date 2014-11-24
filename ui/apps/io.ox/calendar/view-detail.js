@@ -40,64 +40,70 @@ define('io.ox/calendar/view-detail', [
         }
     });
 
-    // draw appointment date & time
-    ext.point('io.ox/calendar/detail').extend({
-        index: 200,
-        id: 'date',
-        draw: function (baton) {
-            var node = $('<div>');
-            this.append(node);
-            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
-        }
-    });
-
-    // draw appointment time
-    ext.point('io.ox/calendar/detail/date').extend({
-        index: 100,
-        id: 'time',
-        draw: function (baton) {
-            this.append(
-                util.addTimezoneLabel($('<div>').addClass('interval'), baton.data)
-            );
-        }
-    });
-
-    // draw date and recurrence information
-    ext.point('io.ox/calendar/detail/date').extend({
-        index: 200,
-        id: 'date',
-        draw: function (baton) {
-            var recurrenceString = util.getRecurrenceString(baton.data);
-            this.append(
-                $('<div>').addClass('day').append(
-                    $.txt(gt.noI18n(util.getDateInterval(baton.data))),
-                    $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
-                )
-            );
-        }
-    });
-
     // draw private flag
     ext.point('io.ox/calendar/detail').extend({
-        index: 250,
+        index: 150,
         id: 'private-flag',
         draw: function (baton) {
-            if (baton.data.private_flag) {
-                $('<i class="fa fa-lock private-flag">').appendTo(this);
-            }
+            if (!baton.data.private_flag) return;
+            this.append(
+                $('<i class="fa fa-lock private-flag">')
+            );
         }
     });
 
     // draw title
     ext.point('io.ox/calendar/detail').extend({
-        index: 300,
+        index: 200,
         id: 'title',
         draw: function (baton) {
             this.append(
-                $('<h1>').addClass('title clear-title').text(gt.noI18n(baton.data.title || ''))
+                $('<h1 class="subject clear-title">').text(gt.noI18n(baton.data.title || ''))
             );
         }
     });
+
+    // draw appointment date & time
+    ext.point('io.ox/calendar/detail').extend({
+        index: 300,
+        id: 'date-time',
+        draw: function (baton) {
+            var node = $('<div class="date-time-recurrence">');
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
+            this.append(node);
+        }
+    });
+
+    // draw date and recurrence information
+    ext.point('io.ox/calendar/detail/date').extend(
+        {
+            index: 100,
+            id: 'date',
+            draw: function (baton) {
+                this.append(
+                    $('<div class="date-time">').append(
+                        // date
+                        $('<span class="date">').text(util.getDateInterval(baton.data)),
+                        // mdash
+                        $.txt(' \u00A0 '),
+                        // time
+                        util.addTimezoneLabel($('<span class="time">'), baton.data)
+                    )
+                );
+            }
+        },
+        {
+            index: 200,
+            id: 'recurrence',
+            draw: function (baton) {
+                var recurrenceString = util.getRecurrenceString(baton.data);
+                if (recurrenceString === '') return;
+                this.append(
+                    $('<div class="recurrence">').text(recurrenceString)
+                );
+            }
+        }
+    );
 
     // draw location
     ext.point('io.ox/calendar/detail').extend({
@@ -144,20 +150,28 @@ define('io.ox/calendar/view-detail', [
         }
     });
 
+    $(document).on('click', '.expandable-toggle', function (e) {
+        e.preventDefault();
+        $(this).closest('fieldset').toggleClass('open');
+    });
+
     // draw details
     ext.point('io.ox/calendar/detail').extend({
         index: 800,
         id: 'details',
         draw: function (baton, options) {
-            var node = $('<dl>');
+            var node = $('<dl class="dl-horizontal expandable-content">');
+            ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
             this.append(
-                $('<fieldset>').addClass('details')
-                    .append(
-                        $('<legend>').addClass('io-ox-label').text(gt('Details')),
-                        node.addClass('dl-horizontal')
+                $('<fieldset class="details expandable">').append(
+                    $('<legend class="io-ox-label">').append(
+                        $('<a href="#" class="expandable-toggle" role="button">').text(gt('Details')),
+                        $.txt(' '),
+                        $('<i class="fa expandable-indicator">')
+                    ),
+                    node
                 )
             );
-            ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
         }
     });
 

@@ -171,12 +171,14 @@ define('io.ox/calendar/edit/extensions', [
     point.extend({
         id: 'full_time',
         index: 600,
-        className: 'col-xs-12 checkbox',
+        className: 'col-xs-12',
         render: function () {
             this.$el.append(
-                $('<label class="control-label">').append(
-                    new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
-                    $.txt(gt('All day'))
+                $('<div>').addClass('checkbox').append(
+                    $('<label class="control-label">').append(
+                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                        $.txt(gt('All day'))
+                    )
                 )
             );
         }
@@ -577,12 +579,25 @@ define('io.ox/calendar/edit/extensions', [
     });
 
     function openFreeBusyView(e) {
-        var app = e.data.app, model = e.data.model;
+        var app = e.data.app,
+            model = e.data.model,
+            start = model.get('start_date'),
+            end = model.get('end_date');
         e.preventDefault();
+
+        //when editing a series we are not interested in the past (see Bug 35492)
+        if (model.get('recurrence_type') !== 0) {
+            start = _.now();
+            //prevent end_date before start_date
+            if (start > end) {
+                //just add an hour
+                end = start + 3600000;
+            }
+        }
         ox.launch('io.ox/calendar/freebusy/main', {
             app: app,
-            start_date: model.get('start_date'),
-            end_date: model.get('end_date'),
+            start_date: start,
+            end_date: end,
             folder: model.get('folder_id'),
             participants: model.get('participants'),
             model: model

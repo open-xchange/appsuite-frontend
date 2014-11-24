@@ -18,20 +18,18 @@ define('io.ox/files/share/view', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
-    'io.ox/core/api/autocomplete',
-    'io.ox/core/tk/typeahead',
-    'io.ox/participants/views',
+    'io.ox/core/tk/tokenfield',
     'io.ox/core/date',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, ShareModel, miniViews, Dropdown, contactsAPI, contactsUtil, AutocompleteAPI, typeahead, pViews, date, gt) {
+], function (ext, ShareModel, miniViews, Dropdown, contactsAPI, contactsUtil, Tokenfield, date, gt) {
 
     'use strict';
 
     var INDEX = 0,
         POINT = 'io.ox/files/share',
         trans = {
-            mail: gt('Invite people via email. Every recipient will get an individual link to access the shared files.'),
+            invite: gt('Invite people via email. Every recipient will get an individual link to access the shared files.'),
             link: gt('Create a link to copy and paste in an email, instant messenger or social network. Please note that anyone who gets the link can access the share.')
         };
 
@@ -43,12 +41,12 @@ define('io.ox/files/share/view', [
         index: INDEX += 100,
         draw: function (baton) {
             var typeTranslations = {
-                mail: gt('Invite people'),
+                invite: gt('Invite people'),
                 link: gt('Get a link')
             };
 
             var dropdown = new Dropdown({ model: baton.model, label: typeTranslations[baton.model.get('type')], caret: true })
-                .option('type', 'mail', typeTranslations.mail)
+                .option('type', 'invite', typeTranslations.invite)
                 .option('type', 'link', typeTranslations.link)
                 .listenTo(baton.model, 'change:type', function (model, type) {
                     this.$el.find('.dropdown-label').text(typeTranslations[type]);
@@ -68,7 +66,7 @@ define('io.ox/files/share/view', [
         index: INDEX += 100,
         draw: function (baton) {
             this.append(
-                baton.nodes.default.description = $('<p>').addClass('form-group description').text(trans[baton.model.get('type', 'mail')])
+                baton.nodes.default.description = $('<p>').addClass('form-group description').text(trans[baton.model.get('type', 'invite')])
             );
         }
     });
@@ -101,14 +99,8 @@ define('io.ox/files/share/view', [
         draw: function (baton) {
             this.append(
                 $('<div class="contact-image">')
-                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data, { width: 42, height: 42, scaleType: 'contain' })))
-                    .css('background-image', 'url(' + contactsAPI.pictureHalo($.extend(baton.data, { width: 42, height: 42, scaleType: 'contain' })) + ')')
-                    // TODO: lazyload does not work in a dialog container ???
-                    // .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
-                    // .lazyload({
-                    //     effect: 'fadeIn',
-                    //     container: this
-                    // })
+                    .attr('data-original', baton.participantModel.getImageURL({ width: 42, height: 42, scaleType: 'contain' }))
+                    .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
             );
         }
     });
@@ -121,7 +113,7 @@ define('io.ox/files/share/view', [
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<div class="recipient-name">').text(contactsUtil.getMailFullName(baton.data))
+                $('<div class="recipient-name">').text(baton.participantModel.getDisplayName())
             );
         }
     });
@@ -133,8 +125,13 @@ define('io.ox/files/share/view', [
         id: 'emailAddress',
         index: 100,
         draw: function (baton) {
+            var model = baton.participantModel;
             this.append(
-                $('<div class="email">').text(baton.data.email + (baton.data.phone || '') + ' ')
+                $('<div class="ellipsis email">').append(
+                    $.txt(model.getTarget() + ' '),
+                    model.getFieldName() !== '' ?
+                        $('<span style="color: #888;">').text('(' + model.getFieldName() + ')') : model.getTypeString()
+                )
             );
         }
     });
@@ -143,76 +140,43 @@ define('io.ox/files/share/view', [
      * extension point for recipients autocomplete input field
      */
     ext.point(POINT + '/fields').extend({
-        id: 'recipients-autocomplete',
+        id: 'recipients-tokenfield',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-'),
-                input = $('<input>').attr({
-                    id: guid,
-                    placeholder: gt('Add recipients ...'),
-                    type: 'text',
-                    tabindex: 1
-                }).addClass('form-control');
+            var guid = _.uniqueId('form-control-label-');
+
+            // add autocomplete
+            var tokenfieldView = new Tokenfield({
+                id: guid,
+                apiOptions: {
+                    contacts: true,
+                    users: true,
+                    groups: true
+                },
+                maxResults: 20,
+                draw: function (token) {
+                    baton.participantModel = token.model;
+                    ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
+                },
+                lazyload: 'div.contact-image'
+            });
 
             this.append(
                 baton.nodes.invite.autocomplete = $('<div class="form-group">').append(
                     $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
-                    input
+                    tokenfieldView.$el.attr({ placeholder: gt('Add recipients ...') })
                 )
             );
 
-            function onReady() {
-                var val = $(this).typeahead('val');
-                if (val) {
-                    baton.model.getRecipients().addUniquely({ type: 5, mail: val });
-                    $(this).typeahead('val', '');
-                }
-            }
+            tokenfieldView.render();
 
-            // add autocomplete
-            input.autocompleteNew({
-                api: new AutocompleteAPI({
-                    contacts: true,
-                    groups: true
-                }),
-                autoselect: true,
-                highlight: true,
-                draw: function (data) {
-                    ext.point(POINT + '/autoCompleteItem').invoke('draw', this, _.extend(baton, { data: data }));
-                }
-            }).on({
-                'typeahead:selected': function (e, contact) {
-                    // clear input
-                    $(this).typeahead('val', '');
-                    // add to collection
-                    baton.model.getRecipients().addUniquely(contact.data.contact);
-                },
-                'blur': function (e) {
-                    onReady.apply(this, e);
-                },
-                'keydown': function (e) {
-                    if (e.which !== 13) return;
-                    onReady.apply(this, e);
-                }
+            // bind collection to share model
+            tokenfieldView.collection.on('change add remove sort', function () {
+                var recipients = this.map(function (model) {
+                    return model;
+                });
+                baton.model.set('recipients', recipients, { silent: true });
             });
-        }
-    });
-
-    /*
-     * extension point for recipient list
-     */
-    ext.point(POINT + '/fields').extend({
-        id: 'recipients-list',
-        index: INDEX += 100,
-        draw: function (baton) {
-            this.append(
-                baton.nodes.invite.container = new pViews.UserContainer({
-                    collection: baton.model.getRecipients(),
-                    baton: baton,
-                    singlerow: true,
-                    halo: false
-                }).render().$el.addClass('form-group')
-            );
         }
     });
 
@@ -248,7 +212,7 @@ define('io.ox/files/share/view', [
         id: 'defaultOptions',
         index: INDEX += 100,
         draw: function (baton) {
-            var optionGroup = $('<div>').addClass('share-options').hide(),
+            var optionGroup = $('<div>').addClass('shareoptions').hide(),
                 icon = $('<i>').addClass('fa fa-caret-right fa-fw');
             ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
             this.append(
@@ -274,7 +238,7 @@ define('io.ox/files/share/view', [
             this.append(
                 $('<div>').addClass('form-group').append(
                     $('<div>').addClass('checkbox').append(
-                        $('<label>').addClass('control-label').text(gt('Recipients can edit')).append(
+                        $('<label>').addClass('control-label').text(gt('Recipients can edit')).prepend(
                             new miniViews.CheckboxView({ name: 'edit', model: baton.model }).render().$el
                         )
                     )
@@ -295,7 +259,7 @@ define('io.ox/files/share/view', [
                 $('<div>').addClass('form-inline passwordgroup').append(
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('checkbox-inline').append(
-                            $('<label>').addClass('control-label').text(gt('Password required')).append(
+                            $('<label>').addClass('control-label').text(gt('Password required')).prepend(
                                 new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
                             )
                         )
@@ -346,7 +310,7 @@ define('io.ox/files/share/view', [
             this.append(
                 $('<div>').addClass('form-inline').append(
                     $('<div>').addClass('checkbox-inline').append(
-                        $('<label>').text(gt('Expires in')).append(
+                        $('<label>').text(gt('Expires in')).prepend(
                             new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
                         ),
                         $.txt(' '),
@@ -354,14 +318,6 @@ define('io.ox/files/share/view', [
                     )
                 )
             );
-            // var toggle = dropdown.$el.find('a[data-toggle=dropdown]');
-            // toggle.dropdown()
-            //     .toggleClass('disabled', !baton.model.get('temporary'))
-            //     .attr({ tabindex: baton.model.get('temporary') ? 1 : -1 });
-
-            // baton.model.on('change:temporary', function (model, val) {
-            //     toggle.toggleClass('disabled', !val).attr({ tabindex: val ? 1 : -1 });
-            // });
 
             baton.model.on('change:expires', function (model) {
                 model.set('temporary', true);
@@ -391,24 +347,23 @@ define('io.ox/files/share/view', [
                     default: {}
                 }
             });
-            this.model.on({
-                'change:type': function (model, val) {
-                    // toggle autocomplete and message input
-                    _(self.baton.nodes.invite).each(function (el) {
-                        el.toggle(val === 'mail');
-                    });
-                    _(self.baton.nodes.link).each(function (el) {
-                        el.toggle(val === 'link');
-                    });
 
-                    self.baton.nodes.default.description.text(trans[val]);
+            this.listenTo(this.model, 'change:type', function (model, val) {
+                // toggle autocomplete and message input
+                _(self.baton.nodes.invite).each(function (el) {
+                    el.toggle(val === 'invite');
+                });
+                _(self.baton.nodes.link).each(function (el) {
+                    el.toggle(val === 'link');
+                });
 
-                    // generate link if empty
-                    if (val === 'link' && model.get('link', '') === '') {
-                        model.generateLink().then(function (link) {
-                            model.set('link', link);
-                        });
-                    }
+                self.baton.nodes.default.description.text(trans[val]);
+
+                // generate link if empty
+                if (val === 'link' && model.get('link') === '' ) {
+                    model.save().then(function (url) {
+                        model.set('link', url);
+                    });
                 }
             });
 
@@ -426,8 +381,12 @@ define('io.ox/files/share/view', [
             return this;
         },
 
-        getShare: function () {
-            return this.model;
+        share: function () {
+            this.model.save();
+        },
+
+        cancel: function () {
+            this.model.destroy();
         }
 
     });

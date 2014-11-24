@@ -427,12 +427,10 @@ define('io.ox/core/folder/extensions', [
 
                     var name = data['com.openexchange.folderstorage.displayName'],
                         //#. %1$s is the folder owner
-                        title = gt.format(gt.pgettext('owner', 'From: %1$s'), name);
+                        title = gt.format(gt.pgettext('owner', 'Shared by: %1$s'), name);
 
                     this.addClass('shared').find('.folder-node').append(
-                        $('<div class="owner">').append(
-                            userAPI.getLink(data.created_by, title).attr({ tabindex: -1 })
-                        )
+                        $('<div class="owner">').text(title)
                     );
                 }
             },
