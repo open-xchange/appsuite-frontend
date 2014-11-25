@@ -2787,7 +2787,7 @@ ul.io-ox-inline-links + header {
     bottom: @margin;
     left: @margin;
 
-    // border and shodow for better contrast
+    // shadow for better contrast
 
     &.right {
         left: 49.5%;
@@ -2799,10 +2799,28 @@ ul.io-ox-inline-links + header {
         .box-shadow(-20px 0 100px 0 @shadowColor);
     }
 
+    &.first {
+        left: auto;
+        right: auto;
+        width: 800px;
+        max-width: 45%;
+    }
+
+    // no margins inside notifications overlay
+    .notifications-overlay & {
+        top: 0; right: 0; bottom: 0; left: 0;
+    }
+
+    // larger popups for notification overlay
     @media (min-width: 480px), (min-device-width: 480px) {
-        // larger popups for notification overlay
         .notifications-overlay &.right { left: 39.5%; }
         .notifications-overlay &.left { right: 39.5%; }
+    }
+
+    // no margins on smartphones (using 540 otherwise 500, for example, could only use 450 due to margins)
+    @media (max-width: 540px), (max-device-width: 540px) {
+        & { top: 0; right: 0; bottom: 0; left: 0; }
+        &.first { max-width: 100%; }
     }
 }
 
@@ -4291,7 +4309,7 @@ wbr:after {
     }
 
     .folder.section + .links {
-        margin: 14px 0 20px 40px;
+        margin: 20px 0 20px 40px;
         padding: 0;
         line-height: 20px;
         &:empty {
