@@ -26,8 +26,8 @@ define('io.ox/core/viewer/collections/filecollection', [
         model: FileModel,
 
         // TODO: filter file models without a real file
-        parse: function (model) {
-            //console.info('FileCollection.parse()');
+        parse: function (model, options) {
+            //console.info('FileCollection.parse()', model, options);
             return model;
         },
 

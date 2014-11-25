@@ -28,29 +28,26 @@ define('io.ox/core/viewer/models/filemodel', [
      */
     var FileModel = Backbone.Model.extend({
 
-        defaults: function () {
-            return {
-                source: null,
-                filename: '',
-                size: 0,
-                version: null, // nur drive
-                contentType: null,
-                id: null, // could be a attachment id, or drive file id
-                folderId: null,
-                meta: {},
-                lastModified: null,
-                previewUrl: null,
-                downloadUrl: null,
-                thumbnailUrl: null
-            };
-
+        defaults: {
+            source: null,
+            filename: '',
+            size: 0,
+            version: null, // nur drive
+            contentType: null,
+            id: null, // could be a attachment id, or drive file id
+            folderId: null,
+            meta: {},
+            lastModified: null,
+            previewUrl: null,
+            downloadUrl: null,
+            thumbnailUrl: null
         },
 
-        initialize: function (data, options) {
-            console.warn('FileModel.initialize(): ', data, options);
+        initialize: function () {
+            //console.warn('FileModel.initialize(): ', data, options);
         },
 
-        parse: function (data, options) {
+        parse: function (data) {
 
             var result = {};
 
@@ -60,16 +57,12 @@ define('io.ox/core/viewer/models/filemodel', [
             function getFileSource (data) {
                 if (!data || !data.id) { return null; }
 
-                if (data.mail && data.mail.id && data.mail.folder_id && data.mail.folder_id.toUpperCase().indexOf('/INBOX') > -1 ||
-                    data.group === 'mail' ||
-                    data.disp === 'attachment') {
+                if (data.mail && data.mail.id && data.mail.folder_id || data.group === 'mail' || data.disp === 'attachment') {
                     return ITEM_TYPE_ATTACHMENT;
                 } else {
                     return ITEM_TYPE_FILE;
                 }
             }
-
-            console.warn('FileModel.parse(): ', data, options);
 
             result.source = getFileSource (data);
 

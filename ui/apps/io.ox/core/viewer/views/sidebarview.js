@@ -26,14 +26,16 @@ define('io.ox/core/viewer/views/sidebarview', function () {
 
         },
 
-        initialize: function () {
+        initialize: function (options) {
             //console.info('SidebarView.initialize()');
+            this.parent = options.parent;
             this.render();
         },
 
         render: function () {
             //console.info('SidebarView.render()');
-            this.$el.html('hallo ich bin der sidebar');
+            var sidebar = this.$el;
+            sidebar.html('sidebar');
             return this;
         }
     });

@@ -9,7 +9,7 @@
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
-define('io.ox/core/viewer/views/toolbarview', function () {
+define('io.ox/core/viewer/views/toolbarview', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 
@@ -21,14 +21,31 @@ define('io.ox/core/viewer/views/toolbarview', function () {
 
         className: 'viewer-toolbar',
 
-        initialize: function () {
-            //console.info('ToolbarView.initialize()');
+        events: {
+            'click': 'onClose'
+        },
+
+        initialize: function (options) {
+            //console.info('ToolbarView.initialize()', options);
+            this.parent = options.parent;
             this.render();
+        },
+
+        onClose: function () {
+            //console.info('ToolbarView.onClose()');
+            this.parent.remove();
         },
 
         render: function () {
             //console.info('ToolbarView.render()');
-            this.$el.html('Hello, I\'m the toolbar view');
+            var toolbar = this.$el,
+                closeViewerButton = $('<button type="button" class="btn btn-link close-viewer">');
+            closeViewerButton.append(
+                $('<i class="fa fa-times" aria-hidden="true" >'),
+                $('<span class="sr-only">').text(gt('Close'))
+            );
+            toolbar.append(closeViewerButton);
+            this.parent.$el.append(toolbar);
             return this;
         }
 

@@ -200,6 +200,14 @@ define('io.ox/files/actions', [
         }
     });
 
+    new Action('io.ox/files/actions/viewer', {
+        action: function (baton) {
+            ox.load(['io.ox/files/actions/viewer']).done(function (action) {
+                action({ baton: baton });
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {

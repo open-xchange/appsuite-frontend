@@ -12,20 +12,49 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
+@viewer-text-color: #ffffff;
+@viewer-background-color: rgba(0, 0, 0, 0.85);
+
+@viewer-toolbar-height: 40px;
+@viewer-toolbar-bgcolor: #000000;
+
+@viewer-sidebar-bgcolor: #202020;
+@viewer-sidebar-width: 30%;
+
 .io-ox-viewer {
-    background-color: rgba(0, 0, 0, 0.8);
+
+    background-color: @viewer-background-color;
     z-index: 11; // just to one more than #io-ox-screens
-    color: #ffffff;
+    color: @viewer-text-color;
 
     .viewer-toolbar {
-        height: 40px;
-        background-color: rgba(255, 255, 255, 0.4);
+
+        height: @viewer-toolbar-height;
+        line-height: @viewer-toolbar-height;
+        background: @viewer-toolbar-bgcolor;
+        padding: 0 1rem;
+
+        .close-viewer {
+
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: @viewer-toolbar-height;
+            color: rgba(255, 255, 255, 0.5);
+
+            &:hover {
+                color: #ffffff;
+            }
+        }
     }
 
     .viewer-sidebar {
+
         float: right;
         height: 100%;
-        width: 30%;
-        background-color: rgba(255, 255, 255, 0.2);
+        width: @viewer-sidebar-width;
+        padding: 1rem;
+        background: @viewer-sidebar-bgcolor;
+
     }
 }

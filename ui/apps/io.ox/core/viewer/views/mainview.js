@@ -29,35 +29,32 @@ define('io.ox/core/viewer/views/mainview', [
 
         className: 'io-ox-viewer abs',
 
-        toolbarView: new ToolbarView(),
-
-        displayerView: new DisplayerView(),
-
-        sidebarView: new SidebarView(),
-
-        displayedFileIndex: 0,
-
         events: {
-            'click': 'onClose'
+            'click': 'onClick'
         },
 
-        onClose: function () {
-            this.remove();
+        onClick: function () {
+            //console.info('MainView.onClick()');
         },
 
         initialize: function () {
             //console.info('MainView.initialize()');
+            this.toolbarView = new ToolbarView({ parent: this });
+            this.displayerView = new DisplayerView({ parent: this });
+            this.sidebarView = new SidebarView({ parent: this });
+            this.displayedFileIndex = 0;
             this.render();
         },
 
         render: function () {
             //console.info('MainView.render()');
             // append children views
-            this.$el.append(this.toolbarView.el, this.sidebarView.el);
-
+            var viewer = this.$el;
+            viewer.append(this.toolbarView.render().el)
+                .append(this.displayerView.render().el)
+                .append(this.sidebarView.render().el);
             return this;
         }
     });
-    console.log(ToolbarView, DisplayerView, SidebarView);
     return MainView;
 });

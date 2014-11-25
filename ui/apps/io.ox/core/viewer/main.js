@@ -22,50 +22,27 @@ define('io.ox/core/viewer/main', [
     'use strict';
 
     /**
-     * Main bootstrap file for the OX Viewer.
+     * The OX Viewer component
+     *
+     * @constructor
      */
-    // lets work with dummies first
-    var dummyMailImage = {
-        id: '2',
-        filename: 'cola.jpg',
-        size: 145218,
-        disp: 'attachment',
-        content_type: 'image/jpeg',
-        content: null,
-        mail: {
-            id: '3',
-            folder_id: 'default0/INBOX'
-        },
-        title: 'cola.jpg',
-        parent: {
-            id: '3',
-            folder_id: 'default0/INBOX'
-        },
-        group: 'mail',
-        uploaded: 1,
-        meta: {}
+    var Viewer = function () {
+        /**
+         * Main bootstrap file for the OX Viewer.
+         */
+        this.launch = function (data) {
+            //console.info('Main.launch() ', data);
+            var files = data && data.baton && data.baton.allIds;
+            // create file collection and populate it with file models
+            var fileCollection = new FileCollection();
+            _.each(files, function (file) {
+                fileCollection.add(new FileModel(file, { parse: true }) );
+            });
+            // create main view and append main view to core
+            var mainView =  new MainView({ collection: fileCollection });
+            $('#io-ox-core').append(mainView.el);
+        };
     };
 
-    var dummyDriveImage = {
-        id: '124/374',
-        modified_by: 20,
-        last_modified: 1402646241319,
-        folder_id: '124',
-        meta: {},
-        title: 'cola.jpg',
-        filename: 'cola.jpg',
-        file_mimetype: 'image/jpeg',
-        file_size: 106120,
-        version: '1',
-        locked_until: 0
-    };
-
-    // create file collection with dummy models
-    var fileCollection = new FileCollection();
-    fileCollection.add([dummyDriveImage, dummyMailImage]);
-
-    // create main view and append main view to core
-    var mainView =  new MainView({ collection: fileCollection });
-    $('#io-ox-core').append(mainView.el);
-
+    return new Viewer();
 });

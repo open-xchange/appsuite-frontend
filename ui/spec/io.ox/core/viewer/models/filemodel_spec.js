@@ -27,6 +27,43 @@ define([
             // constants ======================================================
 
             // methods ========================================================
+            // lets work with dummies first
+            //
+            //var dummyMailImage = {
+            //    id: '2',
+            //    filename: 'cola.jpg',
+            //    size: 145218,
+            //    disp: 'attachment',
+            //    content_type: 'image/jpeg',
+            //    content: null,
+            //    mail: {
+            //        id: '3',
+            //        folder_id: 'default0/INBOX'
+            //    },
+            //    title: 'cola.jpg',
+            //    parent: {
+            //        id: '3',
+            //        folder_id: 'default0/INBOX'
+            //    },
+            //    group: 'mail',
+            //    uploaded: 1,
+            //    meta: {}
+            //};
+            //
+            //var dummyDriveImage = {
+            //     id: '124/374',
+            //     modified_by: 20,
+            //     last_modified: 1402646241319,
+            //     folder_id: '124',
+            //     meta: {},
+            //     title: 'cola.jpg',
+            //     filename: 'cola.jpg',
+            //     file_mimetype: 'image/jpeg',
+            //     file_size: 106120,
+            //     version: '1',
+            //     locked_until: 0
+            // };
+            //
 
             // ----------------------------------------------------------------
 
