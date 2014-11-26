@@ -30,7 +30,7 @@ define('io.ox/tasks/actions/delete', [
             popup.getBody()
                 .append($('<h4>')
                         .text(gt.ngettext('Do you really want to delete this task?',
-                                          'Do you really want to delete this tasks?', numberOfTasks)));
+                                          'Do you really want to delete these tasks?', numberOfTasks)));
             //go
             popup.show();
             popup.on('deleteTask', function () {
