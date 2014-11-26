@@ -79,7 +79,7 @@ define('io.ox/core/viewer/backbone', [
                 result.filename = data.filename;
                 result.size = data.size;
                 result.contentType = data.content_type;
-                result.id = data.mail && data.mail.id || null; // could be a attachment id, or drive file id
+                result.id = data.id;    // could be a attachment id, or drive file id
                 result.folderId = data.mail && data.mail.folder_id || null;
             } else if (result.source === ITEM_TYPE_FILE) {
                 result.filename = data.filename;

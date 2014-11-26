@@ -21,59 +21,138 @@ define([
         Collection = backbone.Collection;
 
     describe('OX Viewer', function () {
-        describe('backbone Model and Collection', function () {
+
+        var driveFile = {
+                id: '124/374',
+                modified_by: 20,
+                last_modified: 1402646241319,
+                folder_id: '124',
+                meta: {},
+                title: 'cola.jpg',
+                filename: 'cola.jpg',
+                file_mimetype: 'image/jpeg',
+                file_size: 106120,
+                version: '1',
+                locked_until: 0
+            },
+
+            mailAttachment = {
+                id: '2',
+                filename: 'cola.jpg',
+                size: 145218,
+                disp: 'attachment',
+                content_type: 'image/jpeg',
+                content: null,
+                mail: {
+                    id: '3',
+                    folder_id: 'default0/INBOX'
+                },
+                title: 'cola.jpg',
+                parent: {
+                    id: '3',
+                    folder_id: 'default0/INBOX'
+                },
+                group: 'mail',
+                uploaded: 1,
+                meta: {}
+            };
+
+        describe('Model and Collection definition', function () {
 
             it('Model should exist', function () {
                 expect(Model).to.be.a('function');
             });
-            
+
             it('Collection should exist', function () {
                 expect(Collection).to.be.a('function');
             });
-            
-            // constants ======================================================
+        });
 
-            // methods ========================================================
-            // lets work with dummies first
-            //
-            //var dummyMailImage = {
-            //    id: '2',
-            //    filename: 'cola.jpg',
-            //    size: 145218,
-            //    disp: 'attachment',
-            //    content_type: 'image/jpeg',
-            //    content: null,
-            //    mail: {
-            //        id: '3',
-            //        folder_id: 'default0/INBOX'
-            //    },
-            //    title: 'cola.jpg',
-            //    parent: {
-            //        id: '3',
-            //        folder_id: 'default0/INBOX'
-            //    },
-            //    group: 'mail',
-            //    uploaded: 1,
-            //    meta: {}
-            //};
-            //
-            //var dummyDriveImage = {
-            //     id: '124/374',
-            //     modified_by: 20,
-            //     last_modified: 1402646241319,
-            //     folder_id: '124',
-            //     meta: {},
-            //     title: 'cola.jpg',
-            //     filename: 'cola.jpg',
-            //     file_mimetype: 'image/jpeg',
-            //     file_size: 106120,
-            //     version: '1',
-            //     locked_until: 0
-            // };
-            //
+        // constants ======================================================
 
-            // ----------------------------------------------------------------
+        // methods ========================================================
+
+        describe('Model instance', function () {
+            describe('result of creating an empty Model instance', function () {
+                it('should return a non empty object', function () {
+                    var model = new Model();
+                    expect(model).to.be.an('object');
+                    expect(model).to.be.not.empty;
+                });
+
+                it('should be initialized with defaults', function () {
+                    var model = new Model();
+                    expect(model.get('source')).to.equal(null);
+                    expect(model.get('filename')).to.equal('');
+                    expect(model.get('size')).to.equal(0);
+                    expect(model.get('version')).to.equal(null);
+                    expect(model.get('contentType')).to.equal(null);
+                    expect(model.get('id')).to.equal(null);
+                    expect(model.get('folderId')).to.equal(null);
+                    expect(model.get('meta')).to.deep.equal({});
+                    expect(model.get('lastModified')).to.equal(null);
+
+                    expect(model.isMailAttachment()).to.be['false'];
+                    expect(model.isDriveFile()).to.be['false'];
+
+                    // todo: check for URLs when implemented
+                });
+            });
+
+            describe('result of creating a Model from a Drive file', function () {
+                it('should return a non empty object', function () {
+                    var model = new Model(driveFile, { parse: true });
+                    expect(model).to.be.an('object');
+                    expect(model).to.be.not.empty;
+                });
+
+                it('should be initialized with correct attributes', function () {
+                    var model = new Model(driveFile, { parse: true });
+                    expect(model.get('source')).to.equal('file');
+                    expect(model.get('filename')).to.equal('cola.jpg');
+                    expect(model.get('size')).to.equal(106120);
+                    expect(model.get('version')).to.equal('1');
+                    expect(model.get('contentType')).to.equal('image/jpeg');
+                    expect(model.get('id')).to.equal('124/374');
+                    expect(model.get('folderId')).to.equal('124');
+                    expect(model.get('meta')).to.deep.equal({});
+                    expect(model.get('lastModified')).to.equal(1402646241319);
+
+                    expect(model.isMailAttachment()).to.be['false'];
+                    expect(model.isDriveFile()).to.be['true'];
+
+                    // todo: check for URLs when implemented
+                });
+            });
+
+            describe('result of creating a Model from a mail attachment', function () {
+                it('should return a non empty object', function () {
+                    var model = new Model(mailAttachment, { parse: true });
+                    expect(model).to.be.an('object');
+                    expect(model).to.be.not.empty;
+                });
+
+                it('should be initialized with correct attributes', function () {
+                    var model = new Model(mailAttachment, { parse: true });
+                    expect(model.get('source')).to.equal('attachment');
+                    expect(model.get('filename')).to.equal('cola.jpg');
+                    expect(model.get('size')).to.equal(145218);
+                    expect(model.get('version')).to.equal(null);
+                    expect(model.get('contentType')).to.equal('image/jpeg');
+                    expect(model.get('id')).to.equal('2');
+                    expect(model.get('folderId')).to.equal('default0/INBOX');
+                    expect(model.get('meta')).to.deep.equal({});
+                    expect(model.get('lastModified')).to.equal(null);
+
+                    expect(model.isMailAttachment()).to.be['true'];
+                    expect(model.isDriveFile()).to.be['false'];
+
+                    // todo: check for URLs when implemented
+                });
+            });
 
         });
+
+        // ----------------------------------------------------------------
     });
 });
