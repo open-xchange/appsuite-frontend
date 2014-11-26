@@ -27,13 +27,14 @@ define('io.ox/core/viewer/views/toolbarview', ['gettext!io.ox/core'], function (
 
         initialize: function (options) {
             //console.info('ToolbarView.initialize()', options);
+            this.$el.on('dispose', this.dispose.bind(this));
             this.parent = options.parent;
             this.render();
         },
 
         onClose: function () {
             //console.info('ToolbarView.onClose()');
-            this.parent.remove();
+            this.trigger('close');
         },
 
         render: function () {
@@ -45,7 +46,12 @@ define('io.ox/core/viewer/views/toolbarview', ['gettext!io.ox/core'], function (
                 $('<span class="sr-only">').text(gt('Close'))
             );
             toolbar.append(closeViewerButton);
-            this.parent.$el.append(toolbar);
+            return this;
+        },
+
+        dispose: function () {
+            //console.info('ToolbarView.dispose()');
+            this.stopListening();
             return this;
         }
 

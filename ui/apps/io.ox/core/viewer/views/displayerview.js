@@ -28,10 +28,17 @@ define('io.ox/core/viewer/views/displayerview', function () {
 
         initialize: function () {
             //console.warn('DisplayerView.initialize()');
+            this.$el.on('dispose', this.dispose.bind(this));
         },
 
         render: function () {
             //console.warn('DisplayerView.render()');
+            return this;
+        },
+
+        dispose: function () {
+            //console.info('DisplayerView.dispose()');
+            this.stopListening();
             return this;
         }
     });

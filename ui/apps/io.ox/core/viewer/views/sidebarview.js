@@ -28,6 +28,7 @@ define('io.ox/core/viewer/views/sidebarview', function () {
 
         initialize: function (options) {
             //console.info('SidebarView.initialize()');
+            this.$el.on('dispose', this.dispose.bind(this));
             this.parent = options.parent;
             this.render();
         },
@@ -36,6 +37,12 @@ define('io.ox/core/viewer/views/sidebarview', function () {
             //console.info('SidebarView.render()');
             var sidebar = this.$el;
             sidebar.html('sidebar');
+            return this;
+        },
+
+        dispose: function () {
+            //console.info('SidebarView.dispose()');
+            this.stopListening();
             return this;
         }
     });

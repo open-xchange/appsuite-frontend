@@ -14,10 +14,9 @@
  */
 
 define('io.ox/core/viewer/main', [
-    'io.ox/core/viewer/models/filemodel',
-    'io.ox/core/viewer/collections/filecollection',
+    'io.ox/core/viewer/backbone',
     'io.ox/core/viewer/views/mainview'
-], function (FileModel, FileCollection, MainView) {
+], function (backbone, MainView) {
 
     'use strict';
 
@@ -34,10 +33,8 @@ define('io.ox/core/viewer/main', [
             //console.info('Main.launch() ', data);
             var files = data && data.baton && data.baton.allIds;
             // create file collection and populate it with file models
-            var fileCollection = new FileCollection();
-            _.each(files, function (file) {
-                fileCollection.add(new FileModel(file, { parse: true }) );
-            });
+            var fileCollection = new backbone.Collection();
+            fileCollection.set(files, { parse: true });
             // create main view and append main view to core
             var mainView =  new MainView({ collection: fileCollection });
             $('#io-ox-core').append(mainView.el);

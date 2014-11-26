@@ -39,7 +39,11 @@ define('io.ox/core/viewer/views/mainview', [
 
         initialize: function () {
             //console.info('MainView.initialize()');
+            this.$el.on('dispose', this.dispose.bind(this));
             this.toolbarView = new ToolbarView({ parent: this });
+            this.listenTo(this.toolbarView, 'close', function () {
+                this.$el.remove();
+            });
             this.displayerView = new DisplayerView({ parent: this });
             this.sidebarView = new SidebarView({ parent: this });
             this.displayedFileIndex = 0;
@@ -49,10 +53,21 @@ define('io.ox/core/viewer/views/mainview', [
         render: function () {
             //console.info('MainView.render()');
             // append children views
-            var viewer = this.$el;
-            viewer.append(this.toolbarView.render().el)
-                .append(this.displayerView.render().el)
-                .append(this.sidebarView.render().el);
+            this.$el.append(
+                this.toolbarView.render().el,
+                this.displayerView.render().el,
+                this.sidebarView.render().el
+            );
+
+            return this;
+        },
+
+        dispose: function () {
+            //console.info('MainView.dispose()');
+            this.stopListening();
+            this.toolbarView = null;
+            this.displayerView = null;
+            this.sidebarView = null;
             return this;
         }
     });
