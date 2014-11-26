@@ -12,18 +12,25 @@
  */
 
 define([
-    'io.ox/core/viewer/models/filemodel'
-], function (FileModel) {
+    'io.ox/core/viewer/backbone'
+], function (backbone) {
 
     'use strict';
 
+    var Model = backbone.Model,
+        Collection = backbone.Collection;
+
     describe('OX Viewer', function () {
-        describe('filemodel', function () {
+        describe('backbone Model and Collection', function () {
 
-            it('should exist', function () {
-                expect(FileModel).to.be.a('function');
+            it('Model should exist', function () {
+                expect(Model).to.be.a('function');
             });
-
+            
+            it('Collection should exist', function () {
+                expect(Collection).to.be.a('function');
+            });
+            
             // constants ======================================================
 
             // methods ========================================================
