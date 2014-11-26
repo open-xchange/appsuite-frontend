@@ -491,7 +491,10 @@ define('io.ox/mail/compose/view', [
 
             if (this.model.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    //button texts may become quite large in some languages (e. g. french, see Bug 35581)
+                    //add some extra space
+                    //TODO maybe we could use a more dynamical approach
+                    new dialogs.ModalDialog({ width: 550 })
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
