@@ -21,7 +21,7 @@ define('io.ox/files/actions/versions-delete', [
 
     return function (data) {
         new dialogs.ModalDialog()
-            .text(gt('Do you really want to delete this file?'))
+            .text(gt.pgettext('One file only', 'Do you really want to delete this file?'))
             .addPrimaryButton('delete', gt('Delete'), 'delete',  { 'tabIndex': '1' })
             .addButton('cancel', gt('Cancel'), 'cancel',  { 'tabIndex': '1' })
             .show()
