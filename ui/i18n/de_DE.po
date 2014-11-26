@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-24 14:49+0100\n"
+"PO-Revision-Date: 2014-11-25 14:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -695,10 +695,8 @@ msgstr "Teilnehmer/Ressource hinzufügen"
 
 #: apps/io.ox/files/share/view.js:152 module:io.ox/files
 #: apps/io.ox/files/share/view.js:159
-#, fuzzy
-#| msgid "No recipients"
 msgid "Add recipients ..."
-msgstr "Keine Empfänger"
+msgstr "Empfänger hinzufügen ..."
 
 #: apps/io.ox/mail/settings/signatures/register.js:102 module:io.ox/mail
 msgid "Add signature"
@@ -788,8 +786,6 @@ msgid "Advanced Settings"
 msgstr "Erweiterte Einstellungen"
 
 #: apps/io.ox/files/share/view.js:257 module:io.ox/files
-#, fuzzy
-#| msgid "Advanced Settings"
 msgid "Advanced options"
 msgstr "Erweiterte Einstellungen"
 
@@ -1826,6 +1822,9 @@ msgid ""
 "Create a link to copy and paste in an email, instant messenger or social "
 "network. Please note that anyone who gets the link can access the share."
 msgstr ""
+"Erstellen Sie einen Link zum Kopieren und Einfügen in eine E-Mail, den "
+"Instant Messenger oder ein soziales Netzwerk. Bitte beachten Sie, dass "
+"jeder, der den Link erhält, Zugriff auf die Freigabe hat. "
 
 #: apps/io.ox/calendar/edit/extensions.js:49 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:148 apps/io.ox/calendar/edit/main.js:299
@@ -2173,9 +2172,8 @@ msgstr "Die Verteilerliste wurde gespeichert."
 
 #: apps/io.ox/contacts/detail/main.js:34 module:io.ox/contacts
 #, fuzzy
-#| msgid "Distribution list"
 msgid "Distributionlist Details"
-msgstr "Verteilerliste"
+msgstr "Details für Verteilerliste"
 
 #: apps/io.ox/files/util.js:52 module:io.ox/files
 msgid ""
@@ -2662,10 +2660,8 @@ msgstr "Endet am"
 
 #: apps/io.ox/files/share/view.js:305 module:io.ox/files
 #: apps/io.ox/files/share/view.js:308
-#, fuzzy
-#| msgid "Password"
 msgid "Enter Password"
-msgstr "Passwort"
+msgstr "Passwort eingeben"
 
 #: apps/io.ox/editor/main.js:142 module:io.ox/editor
 #: apps/io.ox/editor/main.js:145
@@ -2804,7 +2800,7 @@ msgstr "Zeitrahmen um einen Monat erweitern"
 
 #: apps/io.ox/files/share/view.js:349 module:io.ox/files
 msgid "Expires in"
-msgstr ""
+msgstr "Läuft ab in"
 
 #: apps/io.ox/core/export/export.js:103 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:281
@@ -3215,9 +3211,8 @@ msgstr "%s abrufen"
 
 #: apps/io.ox/files/share/view.js:47 module:io.ox/files
 #, fuzzy
-#| msgid "Direct link"
 msgid "Get a link"
-msgstr "Direkter Link"
+msgstr "Einen Link abrufen"
 
 #: apps/io.ox/core/upsell.js:35 module:io.ox/core
 msgid "Get free upgrade"
@@ -3547,16 +3542,16 @@ msgid "Invite"
 msgstr "Einladen"
 
 #: apps/io.ox/files/share/view.js:46 module:io.ox/files
-#, fuzzy
-#| msgid "Invite to %s"
 msgid "Invite people"
-msgstr "Einladen zu %s"
+msgstr "Andere einladen"
 
 #: apps/io.ox/files/share/view.js:34 module:io.ox/files
 msgid ""
 "Invite people via email. Every recipient will get an individual link to "
 "access the shared files."
 msgstr ""
+"Laden Sie andere per E-Mail ein. Jeder Empfänger erhält einen individuellen "
+"Link zum Zugriff auf die geteilten Dateien."
 
 #: apps/plugins/xing/main.js:123 module:plugins/portal
 #: apps/plugins/xing/main.js:130 apps/plugins/xing/main.js:138
@@ -4020,10 +4015,8 @@ msgstr "Mittlere Priorität"
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/view.js:229 module:io.ox/files
 #: apps/io.ox/files/share/view.js:237
-#, fuzzy
-#| msgid "Description (optional)"
 msgid "Message (optional)"
-msgstr "Beschreibung (optional)"
+msgstr "Nachricht (optional)"
 
 #: apps/io.ox/contacts/edit/view-form.js:119 module:io.ox/contacts
 msgid "Messaging"
@@ -4755,10 +4748,8 @@ msgid "Password length must be between %1$d and %2$d characters."
 msgstr "Passwortlänge muss zwischen %1$d und %2$d Zeichen liegen."
 
 #: apps/io.ox/files/share/view.js:298 module:io.ox/files
-#, fuzzy
-#| msgid "Upgrade required"
 msgid "Password required"
-msgstr "Upgrade erforderlich"
+msgstr "Passwort erforderlich"
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
 msgid "Password strength: Good"
@@ -5330,10 +5321,8 @@ msgid "Recently used"
 msgstr "Kürzlich verwendet"
 
 #: apps/io.ox/files/share/view.js:277 module:io.ox/files
-#, fuzzy
-#| msgid "Recipient"
 msgid "Recipients can edit"
-msgstr "Empfänger"
+msgstr "Empfänger können bearbeiten"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:38 module:io.ox/keychain
 msgid "Recover"
@@ -5872,12 +5861,10 @@ msgstr "Teilen"
 
 #. if only one item -> insert filename / on more than one item -> item count
 #: apps/io.ox/files/actions.js:1052 module:io.ox/files
-#, fuzzy
-#| msgid "Share this file"
 msgid "Share the file \"%1$d\""
 msgid_plural "Share %1$d items"
-msgstr[0] "Datei freigeben"
-msgstr[1] "Datei freigeben"
+msgstr[0] "Datei \"%1$d\" freigeben"
+msgstr[1] "%1$d Objekte freigeben"
 
 #: apps/io.ox/files/actions.js:1226 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:72
@@ -6967,10 +6954,8 @@ msgstr "Dieser Ordner enthält keine Abonnements"
 
 #: apps/io.ox/core/folder/extensions.js:417 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:941
-#, fuzzy
-#| msgid "This folder has no subscriptions"
 msgid "This folder has subscriptions"
-msgstr "Dieser Ordner enthält keine Abonnements"
+msgstr "Dieser Ordner enthält Abonnements"
 
 #: apps/io.ox/core/sub/settings/pane.js:365 module:io.ox/core/sub
 msgid ""
@@ -8281,28 +8266,20 @@ msgid "no read permissions"
 msgstr "keine Leseberechtigungen"
 
 #: apps/io.ox/files/share/view.js:329 module:io.ox/files
-#, fuzzy
-#| msgid "Whole day"
 msgid "one day"
-msgstr "Ganzer Tag"
+msgstr "ein Tag"
 
 #: apps/io.ox/files/share/view.js:331 module:io.ox/files
-#, fuzzy
-#| msgid "every month"
 msgid "one month"
-msgstr "jeden Monat"
+msgstr "ein Monat"
 
 #: apps/io.ox/files/share/view.js:330 module:io.ox/files
-#, fuzzy
-#| msgid "in one week"
 msgid "one week"
-msgstr "in einer Woche"
+msgstr "eine Woche"
 
 #: apps/io.ox/files/share/view.js:334 module:io.ox/files
-#, fuzzy
-#| msgid "Phone (car)"
 msgid "one year"
-msgstr "Autotelefon"
+msgstr "ein Jahr"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:169 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:174
@@ -8350,10 +8327,8 @@ msgid "show image"
 msgstr "Bild anzeigen"
 
 #: apps/io.ox/files/share/view.js:333 module:io.ox/files
-#, fuzzy
-#| msgid "Months"
 msgid "six months"
-msgstr "Monate"
+msgstr "sechs Monate"
 
 #: apps/io.ox/core/tk/reminder-util.js:76 module:io.ox/core
 msgid "status"
@@ -8386,10 +8361,8 @@ msgid "this morning"
 msgstr "heute Morgen"
 
 #: apps/io.ox/files/share/view.js:332 module:io.ox/files
-#, fuzzy
-#| msgid "every month"
 msgid "three months"
-msgstr "jeden Monat"
+msgstr "drei Monate"
 
 #: apps/io.ox/tasks/util.js:195 module:io.ox/tasks
 msgid "tomorrow"

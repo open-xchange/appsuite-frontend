@@ -43,7 +43,7 @@ define('io.ox/calendar/edit/main', [
             */
             dispose: function () {
                 this.view.off('save', _.bind(this.onSave, this));
-                this.model.off('change:title');
+                this.model.off();
             },
 
             // published via calllbacks objects in baton (see below)

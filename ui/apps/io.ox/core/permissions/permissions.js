@@ -63,12 +63,16 @@ define('io.ox/core/permissions/permissions', [
         }),
 
         PermissionsView = Backbone.View.extend({
-            initialize: function () {
-            //TODO:switch to listenTo here, once backbone is up to date
-            //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
+
+            initialize: function (options) {
+
+                this.options = options;
+
+                //TODO:switch to listenTo here, once backbone is up to date
+                //see [1](http://blog.rjzaworski.com/2013/01/why-listento-in-backbone/)
+
                 this.model.off('change', performRender);
                 this.model.on('change', performRender, this);
-
                 this.model.off('remove', performRemove, this);
                 this.model.on('remove', performRemove, this);
             },
