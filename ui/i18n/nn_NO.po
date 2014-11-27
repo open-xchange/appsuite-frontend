@@ -729,7 +729,7 @@ msgstr ""
 msgid "Add signature below quoted text"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:649 module:io.ox/mail
 msgid "Add subject"
 msgstr ""
 
@@ -1290,7 +1290,7 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:330
-#: apps/io.ox/mail/compose/view.js:500
+#: apps/io.ox/mail/compose/view.js:503
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -2123,7 +2123,7 @@ msgstr ""
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:498 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:501 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr ""
@@ -2223,7 +2223,7 @@ msgstr ""
 
 #: apps/io.ox/tasks/actions/delete.js:32 module:io.ox/tasks
 msgid "Do you really want to delete this task?"
-msgid_plural "Do you really want to delete this tasks?"
+msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -2239,7 +2239,7 @@ msgstr ""
 msgid "Do you really want to discard your changes?"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:495 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:498 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr ""
 
@@ -3770,11 +3770,11 @@ msgstr ""
 msgid "Mail has been moved"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:647 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:637 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:640 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr ""
 
@@ -5553,7 +5553,7 @@ msgstr ""
 msgid "Save as distribution list"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:499 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
 msgid "Save as draft"
 msgstr ""
 
@@ -5709,7 +5709,7 @@ msgid "Sender/From"
 msgstr ""
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:807 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:810 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr ""
 
@@ -6455,7 +6455,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:575 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:578 module:io.ox/mail
 msgid "The email has been sent"
 msgstr ""
 
@@ -7404,7 +7404,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:645 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:648 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr ""
 
