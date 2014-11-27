@@ -29,9 +29,10 @@ define('io.ox/mail/write/main',
      'settings!io.ox/mail',
      'settings!io.ox/core',
      'gettext!io.ox/mail',
+     'io.ox/mail/actions/attachmentEmpty',
      'less!io.ox/mail/style',
      'less!io.ox/mail/write/style'
-    ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, coreSettings, gt) {
+    ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, coreSettings, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -1274,7 +1275,9 @@ define('io.ox/mail/write/main',
                             })
                             .done(function (action) {
                                 if (action === 'send') {
-                                    cont();
+                                     attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                                        cont();
+                                    });
                                 } else {
                                     if (_.device('!smartphone')) focus('subject');
                                     def.reject();
@@ -1284,7 +1287,9 @@ define('io.ox/mail/write/main',
                 }
 
             } else {
-                cont();
+                attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                    cont();
+                });
             }
 
             return def;
@@ -1351,18 +1356,20 @@ define('io.ox/mail/write/main',
             // fix inline images
             mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
-            var defSend = mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
-                .always(function (result) {
-                    if (result.error) {
-                        notifications.yell(result);
-                        def.reject(result);
-                    } else {
-                        app.setMsgRef(result.data);
-                        app.dirty(false);
-                        notifications.yell('success', gt('Mail saved as draft'));
-                        def.resolve(result);
-                    }
-                });
+            var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                return mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
+                    .always(function (result) {
+                        if (result.error) {
+                            notifications.yell(result);
+                            def.reject(result);
+                        } else {
+                            app.setMsgRef(result.data);
+                            app.dirty(false);
+                            notifications.yell('success', gt('Mail saved as draft'));
+                            def.resolve(result);
+                        }
+                    });
+            });
 
             _.defer(initAutoSaveAsDraft, this);
 
