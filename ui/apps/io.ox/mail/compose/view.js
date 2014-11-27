@@ -25,9 +25,10 @@ define('io.ox/mail/compose/view',
      'io.ox/core/notifications',
      'io.ox/core/api/snippets',
      'gettext!io.ox/mail',
+     'io.ox/mail/actions/attachmentEmpty',
      'less!io.ox/mail/style',
      'less!io.ox/mail/compose/style'
-    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt) {
+    ], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -410,17 +411,20 @@ define('io.ox/mail/compose/view',
             // fix inline images
             //mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
-            var defSend = mailAPI.send(mail, mail.files).always(function (result) {
-                if (result.error) {
-                    notifications.yell(result);
-                    def.reject(result);
-                } else {
-                    self.model.set('msgref', result.data, { silent: true });
-                    self.model.dirty(false);
-                    notifications.yell('success', gt('Mail saved as draft'));
-                    def.resolve(result);
-                }
+            var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                return mailAPI.send(mail, mail.files).always(function (result) {
+                    if (result.error) {
+                        notifications.yell(result);
+                        def.reject(result);
+                    } else {
+                        self.model.set('msgref', result.data, { silent: true });
+                        self.model.dirty(false);
+                        notifications.yell('success', gt('Mail saved as draft'));
+                        def.resolve(result);
+                    }
+                });
             });
+
             return $.when.apply($, [def, defSend]);
 
         },
@@ -676,7 +680,9 @@ define('io.ox/mail/compose/view',
                             })
                             .done(function (action) {
                                 if (action === 'send') {
-                                    cont();
+                                    attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                                        cont();
+                                    });
                                 } else {
                                     focus('subject');
                                     def.reject();
@@ -686,7 +692,9 @@ define('io.ox/mail/compose/view',
                 }
 
             } else {
-                cont();
+                attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                    cont();
+                });
             }
 
             return def;
