@@ -19,7 +19,7 @@
 @viewer-toolbar-bgcolor: #000000;
 
 @viewer-sidebar-bgcolor: #202020;
-@viewer-sidebar-width: 30%;
+@viewer-sidebar-width: 400px;
 
 .io-ox-viewer {
 
@@ -48,13 +48,45 @@
         }
     }
 
-    .viewer-sidebar {
+    .viewer-displayer {
+        position: absolute;
+        top: 40px;
+        width: 100%;
+        bottom: 0;
 
-        float: right;
-        height: 100%;
+        #viewer-carousel,
+        .carousel-inner,
+        .item {
+            height: 100%;
+        }
+
+        .item {
+            position:relative;
+            img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                margin: auto;
+            }
+        }
+
+        .carousel-control i {
+            position: absolute;
+            top: 50%;
+            font-size: 3rem;
+        }
+    }
+
+    .viewer-sidebar {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        bottom: 0;
         width: @viewer-sidebar-width;
         padding: 1rem;
         background: @viewer-sidebar-bgcolor;
-
+        display: none;
     }
 }
