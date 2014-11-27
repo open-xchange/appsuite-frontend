@@ -24,15 +24,16 @@
  */
 
 define('io.ox/core/viewer/backbone', [
-    //'io.ox/files/api',
-    //'io.ox/core/api/attachment'
-], function (/*FilesAPI, AttachmentAPI*/) {
+    'io.ox/files/api',
+    'io.ox/core/api/attachment'
+], function (FilesAPI, AttachmentAPI) {
 
     'use strict';
 
     var ITEM_TYPE_FILE = 'file',
-        ITEM_TYPE_ATTACHMENT = 'attachment';
-        //THUMBNAIL_SIZE = { thumbnailWidth: 100, thumbnailHeight: 100 }; // todo: set better defaults;
+        ITEM_TYPE_ATTACHMENT = 'attachment',
+        THUMBNAIL_SIZE = { thumbnailWidth: 100, thumbnailHeight: 100 }; // todo: set better defaults;
+
     /**
      *  The Model represents a general file model for the OX Viewer.
      */
@@ -40,6 +41,7 @@ define('io.ox/core/viewer/backbone', [
 
         defaults: function () {
             return {
+                origData: null,
                 source: null,
                 filename: '',
                 size: 0,
@@ -73,6 +75,7 @@ define('io.ox/core/viewer/backbone', [
                 }
             }
 
+            result.origData = _.copy(data, true);   // create a deep copy, since we want to do updates later
             result.source = getFileSource (data);
 
             if (result.source === ITEM_TYPE_ATTACHMENT) {
@@ -101,39 +104,39 @@ define('io.ox/core/viewer/backbone', [
 
         isDriveFile: function () {
             return this.get('source') === ITEM_TYPE_FILE;
-        }
+        },
 
-        //getPreviewUrl: function () {
-        //    if (this.isMailAttachment()) {
-        //        return AttachmentAPI.getUrl(data, 'view');
-        //    } else if (this.isDriveFile()) {
-        //        return FilesAPI.getUrl(data, 'preview');
-        //    }
-        //    return null;
-        //},
-        //
-        //getDownloadUrl: function () {
-        //    if (this.isMailAttachment()) {
-        //        return AttachmentAPI.getUrl(data, 'download');
-        //    } else if (this.isDriveFile()) {
-        //        return FilesAPI.getUrl(data, 'download');
-        //    }
-        //    return null;
-        //},
-        //
-        //getThumbnailUrl: function () {
-        //    if (this.isMailAttachment()) {
-        //        return AttachmentAPI.getUrl(data, 'view');
-        //    } else if (this.isDriveFile()) {
-        //        return FilesAPI.getUrl(data, 'thumbnail', THUMBNAIL_SIZE);
-        //    }
-        //    return null;
-        //}
+        getPreviewUrl: function () {
+            if (this.isMailAttachment()) {
+                return AttachmentAPI.getUrl(this.get('origData'), 'view');
+            } else if (this.isDriveFile()) {
+                return FilesAPI.getUrl(this.get('origData'), 'preview');
+            }
+            return null;
+        },
+
+        getDownloadUrl: function () {
+            if (this.isMailAttachment()) {
+                return AttachmentAPI.getUrl(this.get('origData'), 'download');
+            } else if (this.isDriveFile()) {
+                return FilesAPI.getUrl(this.get('origData'), 'download');
+            }
+            return null;
+        },
+
+        getThumbnailUrl: function () {
+            if (this.isMailAttachment()) {
+                return AttachmentAPI.getUrl(this.get('origData'), 'view');
+            } else if (this.isDriveFile()) {
+                return FilesAPI.getUrl(this.get('origData'), 'thumbnail', THUMBNAIL_SIZE);
+            }
+            return null;
+        }
 
     });
 
     /**
-     *  The Collection consists of an array of viewer file models.
+     *  The Collection consists of an array of viewer models.
      */
     var Collection = Backbone.Collection.extend({
 

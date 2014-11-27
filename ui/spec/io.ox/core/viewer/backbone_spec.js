@@ -82,6 +82,7 @@ define([
 
                 it('should be initialized with defaults', function () {
                     var model = new Model();
+                    expect(model.get('origData')).to.equal(null);
                     expect(model.get('source')).to.equal(null);
                     expect(model.get('filename')).to.equal('');
                     expect(model.get('size')).to.equal(0);
@@ -95,7 +96,9 @@ define([
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['false'];
 
-                    // todo: check for URLs when implemented
+                    expect(model.getPreviewUrl()).to.equal(null);
+                    expect(model.getDownloadUrl()).to.equal(null);
+                    expect(model.getThumbnailUrl()).to.equal(null);
                 });
             });
 
@@ -108,6 +111,7 @@ define([
 
                 it('should be initialized with correct attributes', function () {
                     var model = new Model(driveFile, { parse: true });
+                    expect(model.get('origData')).to.be.not.empty;
                     expect(model.get('source')).to.equal('file');
                     expect(model.get('filename')).to.equal('cola.jpg');
                     expect(model.get('size')).to.equal(106120);
@@ -121,7 +125,30 @@ define([
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['true'];
 
-                    // todo: check for URLs when implemented
+                    expect(model.getPreviewUrl()).to.contain('/api/files?')
+                                                .and.to.contain('action=document')
+                                                .and.to.contain('folder=124')
+                                                .and.to.contain('id=124/374')
+                                                .and.to.contain('version=1')
+                                                .and.to.contain('delivery=view')
+                                                .and.to.contain('format=preview_image')
+                                                .and.to.contain('content_type=image/jpeg');
+
+                    expect(model.getDownloadUrl()).to.contain('/api/files/cola.jpg?')
+                                                .and.to.contain('action=document')
+                                                .and.to.contain('folder=124')
+                                                .and.to.contain('id=124/374')
+                                                .and.to.contain('version=1')
+                                                .and.to.contain('delivery=download');
+
+                    expect(model.getThumbnailUrl()).to.contain('/api/files?')
+                                                .and.to.contain('action=document')
+                                                .and.to.contain('folder=124')
+                                                .and.to.contain('id=124/374')
+                                                .and.to.contain('version=1')
+                                                .and.to.contain('delivery=view')
+                                                .and.to.contain('scaleType=contain')
+                                                .and.to.contain('content_type=image/jpeg');
                 });
             });
 
@@ -134,6 +161,7 @@ define([
 
                 it('should be initialized with correct attributes', function () {
                     var model = new Model(mailAttachment, { parse: true });
+                    expect(model.get('origData')).to.be.not.empty;
                     expect(model.get('source')).to.equal('attachment');
                     expect(model.get('filename')).to.equal('cola.jpg');
                     expect(model.get('size')).to.equal(145218);
@@ -147,7 +175,26 @@ define([
                     expect(model.isMailAttachment()).to.be['true'];
                     expect(model.isDriveFile()).to.be['false'];
 
-                    // todo: check for URLs when implemented
+                    expect(model.getPreviewUrl()).to.contain('/api/attachment/cola.jpg?')
+                                                .and.to.contain('action=document')
+                                                .and.to.contain('id=2')
+                                                .and.to.contain('delivery=view');
+
+                    expect(model.getDownloadUrl()).to.contain('/api/attachment/cola.jpg?')
+                                                .and.to.contain('action=document')
+                                                .and.to.contain('id=2')
+                                                .and.to.contain('delivery=download');
+
+                    expect(model.getThumbnailUrl()).to.contain('/api/attachment/cola.jpg?')
+                                                .and.to.contain('action=document')
+                                                .and.to.contain('id=2')
+                                                .and.to.contain('delivery=view');
+                });
+            });
+
+            describe('Huba Huba Marsupilami', function () {
+                it('should always fail', function () {
+                    expect(true).to.be['false'];
                 });
             });
 
