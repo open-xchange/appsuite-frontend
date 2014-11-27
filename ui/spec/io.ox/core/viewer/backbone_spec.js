@@ -191,13 +191,6 @@ define([
                                                 .and.to.contain('delivery=view');
                 });
             });
-
-            describe('Huba Huba Marsupilami', function () {
-                it('should always fail', function () {
-                    expect(true).to.be['false'];
-                });
-            });
-
         });
 
         // ----------------------------------------------------------------
