@@ -70,7 +70,7 @@ define('io.ox/files/share/model', [
 
             // default invite data
             var self = this,
-                bitMask = this.get('edit') ? 403710016 : 403710016,
+                bitMask = this.get('edit') ? 33026 : 257,
                 data = {
                     targets: []
                 };
