@@ -110,7 +110,8 @@ define('io.ox/core/viewer/backbone', [
             if (this.isMailAttachment()) {
                 return AttachmentAPI.getUrl(this.get('origData'), 'view');
             } else if (this.isDriveFile()) {
-                return FilesAPI.getUrl(this.get('origData'), 'preview');
+                //return FilesAPI.getUrl(this.get('origData'), 'preview');  // doesn't work
+                return FilesAPI.getUrl(this.get('origData'), 'view');
             }
             return null;
         },

@@ -61,7 +61,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     filename = model && model.get('filename') || '';
 
                 if (previewUrl) {
-                    image.attr({ src: previewUrl, alt: filename });
+                    image.attr({ src: _.unescapeHTML(previewUrl), alt: filename });
                     slide.append(image);
                 }
 

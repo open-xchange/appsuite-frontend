@@ -29,10 +29,9 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         },
 
-        initialize: function (options) {
+        initialize: function () {
             //console.info('SidebarView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
-            this.parent = options.parent;
 
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);

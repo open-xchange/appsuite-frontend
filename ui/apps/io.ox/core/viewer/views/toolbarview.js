@@ -29,10 +29,9 @@ define('io.ox/core/viewer/views/toolbarview', [
             'click': 'onClose'
         },
 
-        initialize: function (options) {
+        initialize: function () {
             //console.info('ToolbarView.initialize()', options);
             this.$el.on('dispose', this.dispose.bind(this));
-            this.parent = options.parent;
 
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
@@ -58,10 +57,10 @@ define('io.ox/core/viewer/views/toolbarview', [
             );
 
             if (data && data.model) {
-                filenameLabel.text(data.mode.get('filename') || '');
+                filenameLabel.text(data.model.get('filename') || '');
             }
 
-            toolbar.append(filenameLabel, closeViewerButton);
+            toolbar.empty().append(filenameLabel, closeViewerButton);
             return this;
         },
 
