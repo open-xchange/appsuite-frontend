@@ -112,8 +112,8 @@ define('io.ox/core/import/import', [
         id: 'default',
         draw: function (baton) {
             this.append(
-                //show option only for ical imports
-                _.contains(['calendar', 'tasks'], baton.module) ?
+                //show option only for ical imports in calendar
+                _.contains(['calendar'], baton.module) ?
                 $('<label class="checkbox">').append(
                     $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
                     gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
