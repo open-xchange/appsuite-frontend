@@ -8,13 +8,15 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/toolbarview',
     'io.ox/core/viewer/views/displayerview',
     'io.ox/core/viewer/views/sidebarview',
+    'io.ox/core/viewer/eventdispatcher',
     'less!io.ox/core/viewer/style'
-], function (ToolbarView, DisplayerView, SidebarView) {
+], function (ToolbarView, DisplayerView, SidebarView, EventDispatcher) {
 
     'use strict';
 
@@ -37,17 +39,25 @@ define('io.ox/core/viewer/views/mainview', [
             //console.info('MainView.onClick()');
         },
 
-        initialize: function () {
+        initialize: function (/*options*/) {
             //console.info('MainView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
-            this.toolbarView = new ToolbarView({ parent: this });
+
+            this.toolbarView = new ToolbarView();
+            this.displayerView = new DisplayerView({ collection: this.collection });
+            this.sidebarView = new SidebarView();
+
             this.listenTo(this.toolbarView, 'close', function () {
                 this.$el.remove();
             });
-            this.displayerView = new DisplayerView({ parent: this });
-            this.sidebarView = new SidebarView({ parent: this });
+
+            this.listenTo(EventDispatcher, 'viewer:display:previous', this.onPreviousSlide);
+            this.listenTo(EventDispatcher, 'viewer:display:next', this.onNextSlide);
+
             this.displayedFileIndex = 0;
             this.render();
+
+            EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
         },
 
         render: function () {
@@ -60,6 +70,36 @@ define('io.ox/core/viewer/views/mainview', [
             );
 
             return this;
+        },
+
+        onPreviousSlide: function () {
+            //console.warn('MainView.onPreviousSlide(), old index: ', this.displayedFileIndex);
+
+            if (this.displayedFileIndex > 0) {
+                this.displayedFileIndex--;
+
+            } else {
+                this.displayedFileIndex = this.collection.length - 1;
+            }
+
+            //console.warn('MainView.onPreviousSlide(), new index: ', this.displayedFileIndex);
+
+            EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
+        },
+
+        onNextSlide: function () {
+            //console.warn('MainView.onNextSlide(), old index: ', this.displayedFileIndex);
+
+            if (this.displayedFileIndex < this.collection.length - 1) {
+                this.displayedFileIndex++;
+
+            } else {
+                this.displayedFileIndex = 0;
+            }
+
+            //console.warn('MainView.onNextSlide(), new index: ', this.displayedFileIndex);
+
+            EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
         },
 
         dispose: function () {

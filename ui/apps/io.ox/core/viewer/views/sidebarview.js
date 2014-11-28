@@ -8,8 +8,11 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Edy Haryono <edy.haryono@open-xchange.com>
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
-define('io.ox/core/viewer/views/sidebarview', function () {
+define('io.ox/core/viewer/views/sidebarview', [
+    'io.ox/core/viewer/eventdispatcher'
+], function (EventDispatcher) {
 
     'use strict';
 
@@ -30,13 +33,25 @@ define('io.ox/core/viewer/views/sidebarview', function () {
             //console.info('SidebarView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
             this.parent = options.parent;
+
+            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
+                //console.warn('SidebarbarView viewer:displayeditem:change', data);
+                this.render(data);
+            });
+
             this.render();
         },
 
-        render: function () {
+        render: function (/*data*/) {
             //console.info('SidebarView.render()');
-            var sidebar = this.$el;
-            sidebar.html('sidebar');
+
+//            this.$el.html('<div class="panel panel-default" style="background-color: transparent;"><div class="panel-heading"><h3 class="panel-title">Info</h3></div><div class="panel-body"><label>filename:</label><div id="foo"></div></div>');
+//
+//            if (data && data.model) {
+//                this.$el.find('#foo').text(data.model.get('filename'));
+//            }
+
+            this.$el.html('sidebar');
             return this;
         },
 
