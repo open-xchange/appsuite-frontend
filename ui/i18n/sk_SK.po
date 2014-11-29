@@ -618,11 +618,11 @@ msgstr "Nastavenia účtu"
 msgid "Account added successfully"
 msgstr "Účet úspešne pridaný"
 
-#: apps/io.ox/mail/accounts/view-form.js:583 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:590 module:io.ox/settings
 msgid "Account name"
 msgstr "Názov účtu"
 
-#: apps/io.ox/mail/accounts/view-form.js:579 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:586 module:io.ox/settings
 msgid "Account settings"
 msgstr "Nastavenia účtu"
 
@@ -633,7 +633,7 @@ msgid ""
 msgstr ""
 "Nastavenie účtu nebolo uložené. Prosím, pozrite na poznámky vo formulári."
 
-#: apps/io.ox/mail/accounts/view-form.js:272 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:279 module:io.ox/settings
 msgid "Account updated"
 msgstr "Účet bol aktualizovaný"
 
@@ -646,7 +646,7 @@ msgstr "Účet bol aktualizovaný"
 #: apps/io.ox/files/mobile-toolbar-actions.js:113
 #: apps/io.ox/files/mobile-toolbar-actions.js:126
 #: apps/io.ox/mail/detail/view.js:96 apps/io.ox/mail/detail/view.js:97
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:699
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:718
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/mobile-toolbar-actions.js:140
 #: apps/io.ox/mail/mobile-toolbar-actions.js:141
@@ -669,7 +669,6 @@ msgstr "Skutočné trvanie v minútach"
 #: apps/io.ox/core/folder/actions/add.js:98 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/compose/extensions.js:329 module:io.ox/mail
 msgid "Add"
 msgstr "Pridať"
 
@@ -678,16 +677,12 @@ msgstr "Pridať"
 msgid "Add account"
 msgstr "Pridať účet"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:713
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:732
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Pridať operáciu"
 
-#: apps/io.ox/mail/compose/extensions.js:331 module:io.ox/mail
-msgid "Add attachments"
-msgstr "Pridať prílohy"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:708
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:727
 #: module:io.ox/settings/settings
 msgid "Add condition"
 msgstr "Pridať podmienku"
@@ -707,13 +702,8 @@ msgid "Add files"
 msgstr "Pridať súbory"
 
 #: apps/io.ox/core/tk/attachments.js:607 module:io.ox/core/tk/attachments
-#: apps/io.ox/mail/compose/extensions.js:358 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Pridať z Drive"
-
-#: apps/io.ox/mail/compose/extensions.js:354 module:io.ox/mail
-msgid "Add local file"
-msgstr "Priložiť lokálny súbor"
 
 #: apps/io.ox/core/folder/extensions.js:129 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:274
@@ -734,7 +724,7 @@ msgstr "Pridať nový priečinok pre tento odber"
 msgid "Add new participant"
 msgstr "Pridať nového účastníka"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:456 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:458 module:io.ox/mail
 msgid "Add new rule"
 msgstr "Pridať nové pravidlo"
 
@@ -789,7 +779,7 @@ msgstr "Nad citovaným textom"
 msgid "Add signature below quoted text"
 msgstr "Pod citovaným textom"
 
-#: apps/io.ox/mail/compose/view.js:649 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
 msgid "Add subject"
 msgstr "Pridať predmet"
 
@@ -974,13 +964,13 @@ msgstr "Aplikácie"
 msgid "Apply role"
 msgstr "Aplikovať rolu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:744
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:763
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:748
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:767
 msgid "Apply rule if all conditions are met"
 msgstr "Použiť pravidlo, ak sú splnené všetky podmienky"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:744
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:763
 #: module:io.ox/settings/settings
 msgid "Apply rule if any condition is met."
 msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená."
@@ -1055,7 +1045,7 @@ msgid "April"
 msgstr "Apríl"
 
 #. Archive folder
-#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:551 module:io.ox/settings
 msgctxt "folder"
 msgid "Archive"
 msgstr "Archív"
@@ -1081,7 +1071,7 @@ msgid "Are you sure you want to delete this Tweet?"
 msgstr "Ste si istý, že chcete zmazať tento tweet?"
 
 #. Auth type. Short for "Use same credentials as incoming mail server"
-#: apps/io.ox/mail/accounts/view-form.js:47 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:48 module:io.ox/settings
 msgid "As incoming mail server"
 msgstr "Server prichádzajúcej pošty"
 
@@ -1095,7 +1085,7 @@ msgstr "vzostupne"
 msgid "Assistant"
 msgstr "Asistent"
 
-#: apps/io.ox/mail/compose/view.js:135 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:136 module:io.ox/mail
 msgid "Attach Vcard"
 msgstr "Priložiť vizitku vCard"
 
@@ -1113,8 +1103,6 @@ msgstr[2] "Prílohy boli uložené"
 #: apps/io.ox/calendar/edit/extensions.js:488 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:332 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
-#: apps/io.ox/mail/compose/extensions.js:346 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:364
 #: apps/io.ox/tasks/edit/view-template.js:505 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:226
@@ -1133,7 +1121,7 @@ msgstr "Prílohy boli boli uložené!"
 msgid "August"
 msgstr "August"
 
-#: apps/io.ox/mail/accounts/view-form.js:512 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:519 module:io.ox/settings
 msgid "Authentication"
 msgstr "Autentifikácia"
 
@@ -1201,11 +1189,6 @@ msgstr "Priemerný čas: %1$s ms"
 msgid "B"
 msgstr "B"
 
-#: apps/io.ox/mail/compose/extensions.js:49 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:184
-msgid "BCC"
-msgstr "Skrytá kópia"
-
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:371
@@ -1248,7 +1231,7 @@ msgid "Black"
 msgstr "Čierna"
 
 #: apps/io.ox/core/tk/flag-picker.js:25 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:88
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:167
 #: module:io.ox/portal
 msgid "Blue"
@@ -1292,8 +1275,6 @@ msgstr ""
 "Ak zmenáte dátum tejto schôdzky, vytvoríte v sérii stretnutí výnimku. Chcete "
 "pokračovať?"
 
-#: apps/io.ox/mail/compose/extensions.js:48 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:176
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1368,11 +1349,10 @@ msgstr "Zobrazenie kalendára"
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/settings.js:281
-#: apps/io.ox/mail/accounts/view-form.js:320 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:327 module:io.ox/settings
+#: apps/io.ox/mail/actions/attachmentEmpty.js:29
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
-#: apps/io.ox/mail/actions/reminder.js:35
-#: apps/io.ox/mail/compose/extensions.js:330
-#: apps/io.ox/mail/compose/view.js:503
+#: apps/io.ox/mail/actions/reminder.js:35 apps/io.ox/mail/compose/view.js:507
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1697,7 +1677,7 @@ msgid "Company"
 msgstr "Spoločnosť"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:346
+#: apps/io.ox/mail/compose/view.js:347
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -1707,11 +1687,7 @@ msgstr "Napísať správu"
 msgid "Compose new email"
 msgstr "Napísať nový e-mail"
 
-#: apps/io.ox/mail/compose/extensions.js:63 module:io.ox/mail
-msgid "Compose new mail"
-msgstr "Napísať novú správu"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:698
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:717
 #: module:io.ox/settings/settings
 msgid "Conditions"
 msgstr "Podmienky"
@@ -2126,12 +2102,12 @@ msgid "Delete widget"
 msgstr "Zmazať miniaplikáciu"
 
 #. Trash folder
-#: apps/io.ox/mail/accounts/view-form.js:538 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:545 module:io.ox/settings
 msgctxt "folder"
 msgid "Deleted messages"
 msgstr "Zmazané správy"
 
-#: apps/io.ox/mail/accounts/view-form.js:471 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:478 module:io.ox/settings
 msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Zmazanie správ v lokálnom úložisku ich zmaže aj na serveri"
 
@@ -2179,7 +2155,7 @@ msgstr "Priamy odkaz: %1$s"
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
 #: apps/io.ox/mail/mailfilter/settings/filter.js:138 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:307
+#: apps/io.ox/mail/mailfilter/settings/filter.js:309
 #: apps/io.ox/portal/settings/pane.js:341 module:io.ox/portal
 msgid "Disable"
 msgstr "Vypnúť"
@@ -2193,7 +2169,6 @@ msgstr "Vypnúť miniaplikáciu"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:57 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:225
 #: apps/io.ox/core/settings/user.js:82
-#: apps/io.ox/mail/compose/extensions.js:72 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:86
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
@@ -2213,7 +2188,7 @@ msgstr "Zahodiť zmeny"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:501 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Zahodiť správu"
@@ -2340,7 +2315,7 @@ msgstr "Skutočne chcete zmazať túto miniaplikáciu?"
 msgid "Do you really want to discard your changes?"
 msgstr "Skutočne chcete zahodiť vaše úpravy?"
 
-#: apps/io.ox/mail/compose/view.js:498 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Skutočne chcete zahodiť túto správu?"
 
@@ -2447,7 +2422,7 @@ msgid "Downloads"
 msgstr "Sťahovania"
 
 #. Drafts folder
-#: apps/io.ox/mail/accounts/view-form.js:540 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:547 module:io.ox/settings
 msgctxt "folder"
 msgid "Drafts"
 msgstr "Rozpísané"
@@ -2471,10 +2446,6 @@ msgstr "Nastavenie Drive"
 #: apps/io.ox/mail/import.js:57 module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "Poštu importujete pretiahnutím súboru EML sem"
-
-#: apps/io.ox/mail/compose/extensions.js:274 module:io.ox/mail
-msgid "Drop attachments here"
-msgstr "Sem presuňte prílohy"
 
 #: apps/io.ox/mail/actions.js:719 module:io.ox/mail
 msgid "Drop here to import this mail"
@@ -2612,7 +2583,7 @@ msgstr "Upravením nastavíte meno."
 
 #: apps/io.ox/editor/main.js:189 module:io.ox/editor
 #: apps/io.ox/editor/main.js:209 apps/io.ox/editor/main.js:314
-#: apps/io.ox/mail/compose/view.js:111 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:112 module:io.ox/mail
 msgid "Editor"
 msgstr "Editor"
 
@@ -2636,7 +2607,7 @@ msgstr "Email 2"
 msgid "Email 3"
 msgstr "Email 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:597 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:604 module:io.ox/settings
 msgid "Email address"
 msgstr "Emailová adresa"
 
@@ -2724,7 +2695,7 @@ msgstr "Vyprázdňuje sa priečinok... To môže niekoľko sekúnd trvať."
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
 #: apps/io.ox/mail/mailfilter/settings/filter.js:138 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js:307
+#: apps/io.ox/mail/mailfilter/settings/filter.js:309
 #: apps/io.ox/portal/settings/pane.js:345 module:io.ox/portal
 msgid "Enable"
 msgstr "Zapnúť"
@@ -2897,7 +2868,7 @@ msgid "Expires in"
 msgstr ""
 
 #: apps/io.ox/core/export/export.js:103 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:282
+#: apps/io.ox/core/folder/contextmenu.js:284
 msgid "Export"
 msgstr "Exportovať"
 
@@ -3249,9 +3220,7 @@ msgid "Friday"
 msgstr "Piatok"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:99
-#: apps/io.ox/mail/compose/extensions.js:114 apps/io.ox/mail/main.js:534
-#: apps/io.ox/mail/view-options.js:32
+#: apps/io.ox/mail/main.js:534 apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Od"
 
@@ -3312,14 +3281,14 @@ msgid "Good morning, %s"
 msgstr "Dobré ráno, %s"
 
 #: apps/io.ox/core/tk/flag-picker.js:27 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:91
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:161
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Šedá"
 
 #: apps/io.ox/core/tk/flag-picker.js:26 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:86
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:165
 #: module:io.ox/portal
 msgid "Green"
@@ -3334,7 +3303,7 @@ msgstr "Skupina"
 msgid "Guest"
 msgstr "Hosť"
 
-#: apps/io.ox/mail/compose/view.js:113 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:114 module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "HTML"
 msgstr "HTML"
@@ -3380,7 +3349,7 @@ msgstr "Skryté priečinky"
 msgid "Hidden tasks"
 msgstr "Tlačové úlohy"
 
-#: apps/io.ox/core/folder/contextmenu.js:442 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:444 module:io.ox/core
 msgid "Hide"
 msgstr "Skryť"
 
@@ -3409,7 +3378,7 @@ msgstr "Skryť telo požiadavky"
 msgid "Hide stack trace"
 msgstr "Skryť trasovanie zásobníka"
 
-#: apps/io.ox/mail/compose/view.js:123 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:124 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:342 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
 msgid "High"
@@ -3491,7 +3460,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignorovať"
 
-#: apps/io.ox/mail/accounts/view-form.js:319 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:326 module:io.ox/settings
 msgid "Ignore Warnings"
 msgstr "Ignorovať upozornenia"
 
@@ -3516,7 +3485,7 @@ msgstr ""
 msgid "Image 1"
 msgstr "Obrázok 1"
 
-#: apps/io.ox/core/folder/contextmenu.js:309 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:311 module:io.ox/core
 #: apps/io.ox/core/import/import.js:129
 msgid "Import"
 msgstr "Importovať"
@@ -3552,7 +3521,7 @@ msgstr "Prijaté"
 msgid "Include distribution lists"
 msgstr "Pridať distribučné zoznamy"
 
-#: apps/io.ox/mail/accounts/view-form.js:401 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:408 module:io.ox/settings
 msgid "Incoming server"
 msgstr "Server prichádzajúcej pošty"
 
@@ -3783,14 +3752,14 @@ msgid "Life"
 msgstr "Život"
 
 #: apps/io.ox/core/tk/flag-picker.js:32 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:87
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:166
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Svetlomodrá"
 
 #: apps/io.ox/core/tk/flag-picker.js:29 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:74
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:85
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:164
 #: module:io.ox/portal
 msgid "Light green"
@@ -3852,7 +3821,7 @@ msgstr "Strata"
 msgid "Loss: %1$s %"
 msgstr "Strata: %1$s %"
 
-#: apps/io.ox/mail/compose/view.js:125 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:126 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:340 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
 msgid "Low"
@@ -3868,7 +3837,7 @@ msgstr "Nízka priorita"
 msgid "MB"
 msgstr "MB"
 
-#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:226 module:io.ox/mail
 msgid "Mail"
 msgstr "Pošta"
 
@@ -3883,7 +3852,7 @@ msgstr "Pošta"
 msgid "Mail Details"
 msgstr "Podrobnosti pošty"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:454 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:456 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 msgid "Mail Filter Rules"
 msgstr "Pravidlá filtra pošty"
@@ -3922,11 +3891,11 @@ msgstr "Pošta bola importovaná"
 msgid "Mail has been moved"
 msgstr "Poštové správy boli presunuté"
 
-#: apps/io.ox/mail/compose/view.js:647 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:651 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Predmet emailu bol prázdny. Poslať napriek tomu?"
 
-#: apps/io.ox/mail/compose/view.js:640 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Správa nemá žiadneho príjemcu."
 
@@ -3946,8 +3915,8 @@ msgstr "Pripomienka pošty"
 msgid "Mail reminder for"
 msgstr "Pripomienka pošty pre"
 
-#: apps/io.ox/mail/compose/view.js:385 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:405
+#: apps/io.ox/mail/compose/view.js:387 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:409
 msgid "Mail saved as draft"
 msgstr "Správa bola uložená ako rozpísaná"
 
@@ -4253,7 +4222,7 @@ msgstr "úlohy"
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:77 module:io.ox/contacts
 #: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:458
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:523
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:542
 #: module:io.ox/settings/settings
 msgid "Name"
 msgstr "Meno"
@@ -4350,7 +4319,7 @@ msgstr "Nové pravidlo"
 msgid "New subfolder"
 msgstr "Nový podpriečinok"
 
-#: apps/io.ox/core/folder/contextmenu.js:362 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:364 module:io.ox/core
 msgid "New subscription"
 msgstr "Nový odber"
 
@@ -4466,7 +4435,7 @@ msgstr "Žiadni príjemcovia"
 msgid "No reminder"
 msgstr "Bez pripomenutia"
 
-#: apps/io.ox/mail/compose/view.js:146 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:147 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:316
 #: apps/io.ox/mail/settings/signatures/register.js:318
 #: apps/io.ox/mail/settings/signatures/register.js:369
@@ -4479,7 +4448,7 @@ msgstr "Žiadne pomalé požiadavky"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:226 module:io.ox/mail
 #: apps/io.ox/mail/util.js:388 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:64
@@ -4500,14 +4469,14 @@ msgstr "Zatiaľ žiadne príspevky na nástenke."
 #: apps/io.ox/core/settings/pane.js:303 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
-#: apps/io.ox/mail/accounts/view-form.js:51 module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:70
+#: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:81
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:339
 #: module:io.ox/tasks/edit
 msgid "None"
 msgstr "Žiadne"
 
-#: apps/io.ox/mail/compose/view.js:124 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:125 module:io.ox/mail
 msgid "Normal"
 msgstr "Normálna"
 
@@ -4757,14 +4726,14 @@ msgstr "Voliteľné 20"
 #: apps/io.ox/contacts/toolbar.js:164 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:215 module:io.ox/files
-#: apps/io.ox/mail/compose/view.js:134 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:144 apps/io.ox/mail/toolbar.js:237
+#: apps/io.ox/mail/compose/view.js:135 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:145 apps/io.ox/mail/toolbar.js:237
 #: apps/io.ox/tasks/toolbar.js:140
 msgid "Options"
 msgstr "Možnosti"
 
 #: apps/io.ox/core/tk/flag-picker.js:30 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:83
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:163
 #: module:io.ox/portal
 msgid "Orange"
@@ -4787,7 +4756,7 @@ msgstr "Iná adresa"
 msgid "Other address"
 msgstr "Iné adresy"
 
-#: apps/io.ox/mail/accounts/view-form.js:480 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:487 module:io.ox/settings
 msgid "Outgoing server (SMTP)"
 msgstr "Server odchádzajúcej pošty (SMTP)"
 
@@ -4830,8 +4799,8 @@ msgstr "Účastníci"
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
 #: apps/io.ox/core/relogin.js:51 module:io.ox/core
-#: apps/io.ox/mail/accounts/view-form.js:447 module:io.ox/settings
-#: apps/io.ox/mail/accounts/view-form.js:526
+#: apps/io.ox/mail/accounts/view-form.js:454 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:533
 msgid "Password"
 msgstr "Heslo"
 
@@ -4889,7 +4858,7 @@ msgstr "Ľudia"
 msgid "Permanently remove deleted emails"
 msgstr "Trvale odstrániť zmazané poštové správy"
 
-#: apps/io.ox/core/folder/contextmenu.js:338 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:340 module:io.ox/core
 msgid "Permissions"
 msgstr "Oprávnenia"
 
@@ -4954,7 +4923,7 @@ msgid "Pick a time here"
 msgstr "Tu vyberte čas"
 
 #: apps/io.ox/core/tk/flag-picker.js:31 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:90
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:169
 #: module:io.ox/portal
 msgid "Pink"
@@ -4965,7 +4934,7 @@ msgstr "Ružová"
 msgid "Places"
 msgstr "Miesta"
 
-#: apps/io.ox/mail/compose/view.js:112 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:113 module:io.ox/mail
 msgid "Plain Text"
 msgstr "Čistý text"
 
@@ -5050,7 +5019,7 @@ msgid "Please enter correct password"
 msgstr "Prosím, zadajte správne heslo."
 
 #. %1$s the missing request parameter
-#: apps/io.ox/mail/accounts/view-form.js:283 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:290 module:io.ox/settings
 #, c-format
 msgid "Please enter the following data: %1$s"
 msgstr "Prosím, zadajte nasledovné dáta: %1$s"
@@ -5262,7 +5231,7 @@ msgstr "Tlačové úlohy"
 msgid "Printout"
 msgstr "Výtlačok"
 
-#: apps/io.ox/mail/compose/view.js:122 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:123 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:348 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:674 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:105
@@ -5310,7 +5279,7 @@ msgid "Progress must be a valid number between 0 and 100"
 msgstr "Priebeh musí byť platné číslo medzi 0 a 100"
 
 #: apps/io.ox/core/folder/actions/properties.js:46 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:408
+#: apps/io.ox/core/folder/contextmenu.js:410
 msgid "Properties"
 msgstr "Vlastnosti"
 
@@ -5339,7 +5308,7 @@ msgid "Purchase confirmation"
 msgstr "Potvrdenie objednávky"
 
 #: apps/io.ox/core/tk/flag-picker.js:28 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:89
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:168
 #: module:io.ox/portal
 msgid "Purple"
@@ -5466,7 +5435,7 @@ msgid "Recurring tasks need a valid start date."
 msgstr "Opakujúce sa úlohy musia mať platný dátum začiatku."
 
 #: apps/io.ox/core/tk/flag-picker.js:24 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:82
 #: module:io.ox/settings/settings apps/io.ox/portal/settings/pane.js:162
 #: module:io.ox/portal
 msgid "Red"
@@ -5491,7 +5460,7 @@ msgstr "Obnoviť"
 msgid "Refresh interval"
 msgstr "Interval obnovenia"
 
-#: apps/io.ox/mail/accounts/view-form.js:454 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:461 module:io.ox/settings
 msgid "Refresh rate in minutes"
 msgstr "Interval obnovenia v minútach"
 
@@ -5578,7 +5547,7 @@ msgstr "Odstrániť prílohu"
 msgid "Remove contact"
 msgstr "Odstrániť kontakt"
 
-#: apps/io.ox/mail/accounts/view-form.js:463 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:470 module:io.ox/settings
 msgid "Remove copy from server after retrieving a message"
 msgstr "Odstrániť kópiu zo servera po stiahnutí správy"
 
@@ -5625,7 +5594,7 @@ msgstr "Odpovedať všetkým príjemcom"
 msgid "Reply to sender"
 msgstr "Odpovedať odosielateľovi"
 
-#: apps/io.ox/mail/compose/view.js:136 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:137 module:io.ox/mail
 msgid "Request read receipt"
 msgstr "Vyžiadať potvrdenie prečítania"
 
@@ -5697,7 +5666,7 @@ msgstr "Skontrolovať vaše nákupy"
 msgid "Room number"
 msgstr "Číslo izby"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:727
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:746
 #: module:io.ox/settings/settings
 msgid "Rule name"
 msgstr "Názov pravidla"
@@ -5730,7 +5699,6 @@ msgstr "Sobota"
 #: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:83
 #: apps/io.ox/mail/mailfilter/settings/filter.js:100
 #: apps/io.ox/mail/settings/signatures/register.js:140
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
@@ -5749,7 +5717,7 @@ msgstr "Uložiť"
 msgid "Save as distribution list"
 msgstr "Uložiť ako poštovú konferenciu"
 
-#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:506 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Uložiť ako rozpísané"
 
@@ -5827,7 +5795,7 @@ msgstr "Hľadať"
 msgid "Search here"
 msgstr "Hľadať tu"
 
-#: apps/io.ox/mail/accounts/view-form.js:565 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:572 module:io.ox/settings
 msgid "Select"
 msgstr "Vybrať"
 
@@ -5852,10 +5820,6 @@ msgstr ""
 #: apps/io.ox/core/commons.js:183 module:io.ox/core
 msgid "Selection Details"
 msgstr "Podrobnosti výberu"
-
-#: apps/io.ox/mail/compose/extensions.js:86 module:io.ox/mail
-msgid "Send"
-msgstr "Poslať"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
 #: apps/io.ox/mail/common-extensions.js:540 module:io.ox/mail
@@ -5906,7 +5870,7 @@ msgid "Sender/From"
 msgstr "Odosielateľ/Od"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:810 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:818 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Odoslané prostredníctvom %s z mobilu"
 
@@ -5915,7 +5879,7 @@ msgid "Sent mails"
 msgstr "Odoslané emaily"
 
 #. Sent folder
-#: apps/io.ox/mail/accounts/view-form.js:536 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings
 msgctxt "folder"
 msgid "Sent messages"
 msgstr "Odoslané správy"
@@ -5933,17 +5897,17 @@ msgstr "September"
 msgid "Series"
 msgstr "Séria"
 
-#: apps/io.ox/mail/accounts/view-form.js:419 module:io.ox/settings
-#: apps/io.ox/mail/accounts/view-form.js:491
+#: apps/io.ox/mail/accounts/view-form.js:426 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:498
 msgid "Server name"
 msgstr "Názov servera"
 
-#: apps/io.ox/mail/accounts/view-form.js:433 module:io.ox/settings
-#: apps/io.ox/mail/accounts/view-form.js:505
+#: apps/io.ox/mail/accounts/view-form.js:440 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:512
 msgid "Server port"
 msgstr "Port servera"
 
-#: apps/io.ox/mail/accounts/view-form.js:405 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:412 module:io.ox/settings
 msgid "Server type"
 msgstr "Typ servera"
 
@@ -6031,7 +5995,7 @@ msgstr "Zdieľať úlohy"
 msgid "Shopping cart"
 msgstr "Nákupný košík"
 
-#: apps/io.ox/core/folder/contextmenu.js:442 module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js:444 module:io.ox/core
 msgid "Show"
 msgstr "Zobraziť"
 
@@ -6056,14 +6020,6 @@ msgstr "Zobraziť všetky položky"
 #: apps/io.ox/calendar/invitations/register.js:121 module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Zobraziť podrobnosti schôdzky"
-
-#: apps/io.ox/mail/compose/extensions.js:183 module:io.ox/mail
-msgid "Show blind carbon copy input field"
-msgstr "Zobraziť vstupné pole Skrytá kópia"
-
-#: apps/io.ox/mail/compose/extensions.js:175 module:io.ox/mail
-msgid "Show carbon copy input field"
-msgstr "Zobraziť vstupné pole Kópia"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:329
@@ -6178,7 +6134,7 @@ msgstr "Odhlásiť sa teraz"
 msgid "Signature"
 msgstr "Podpis"
 
-#: apps/io.ox/mail/compose/view.js:145 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:146 module:io.ox/mail
 #: apps/io.ox/mail/settings/signatures/register.js:386
 msgid "Signatures"
 msgstr "Podpisy"
@@ -6277,7 +6233,7 @@ msgid "Source"
 msgstr "Zdroj"
 
 #. Spam folder
-#: apps/io.ox/mail/accounts/view-form.js:542 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings
 msgctxt "folder"
 msgid "Spam"
 msgstr "Spam"
@@ -6286,7 +6242,7 @@ msgstr "Spam"
 msgid "Spouse's name"
 msgstr "Názov partnera"
 
-#: apps/io.ox/mail/accounts/view-form.js:548 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:555 module:io.ox/settings
 msgid "Standard folders"
 msgstr "Štandardné priečinky"
 
@@ -6345,7 +6301,6 @@ msgstr "Študent"
 
 #: apps/io.ox/calendar/edit/extensions.js:93 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:228
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:137
@@ -6681,7 +6636,7 @@ msgstr ""
 msgid "The changes have been rejected"
 msgstr "Zmeny boli zamietnuté"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:405
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:424
 #: module:io.ox/settings/settings
 msgid "The character \" \" is not allowed."
 msgstr "Znak „  nie je povolený."
@@ -6702,7 +6657,7 @@ msgstr "Termín nemôže byť pred dátumom začiatku. Zmeniť dátum začiatku?
 msgid "The email address %1$s is already in the list"
 msgstr "E-mailová adresa %1$s sa už v zozname nachádza"
 
-#: apps/io.ox/mail/compose/view.js:578 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:582 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Email bol odoslaný"
 
@@ -6899,7 +6854,7 @@ msgstr[2] "V tomto časovom rámci máte už %1$d schôdzok."
 msgid "There is no recent activity in your Xing network."
 msgstr "Vo vašej sieti Xing nenastala nedávno žiadna aktivita"
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:473 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:475 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Žiadne pravidlo nie je definované"
 
@@ -7122,7 +7077,7 @@ msgstr "Môže to trvať niekoľko sekúnd"
 msgid "This note will not be printed"
 msgstr "Táto poznámka sa nevypíše"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:105
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:116
 #: module:io.ox/settings/settings
 msgid ""
 "This rule applies to all messages. Please add a condition to restrict this "
@@ -7182,7 +7137,6 @@ msgid "Title"
 msgstr "Nadpis"
 
 #: apps/io.ox/mail/common-extensions.js:242 module:io.ox/mail
-#: apps/io.ox/mail/compose/extensions.js:47
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:532
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
@@ -7457,8 +7411,8 @@ msgstr "Čas behu: %1$s minút"
 msgid "Urgency"
 msgstr "Naliehavosť"
 
-#: apps/io.ox/mail/accounts/view-form.js:413 module:io.ox/settings
-#: apps/io.ox/mail/accounts/view-form.js:485
+#: apps/io.ox/mail/accounts/view-form.js:420 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:492
 msgid "Use SSL connection"
 msgstr "Použiť pripojenie SSL"
 
@@ -7473,7 +7427,7 @@ msgstr ""
 "zmeniť rok alebo Shift ak chcete zmeniť mesiac. Stlačením klávesu ESC "
 "zatvoríte výber dátumu."
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:263 module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter.js:265 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:264 module:io.ox/portal
 msgid "Use cursor keys to change the item position"
 msgstr "Použite klávesy so šípkami na zmenu polohy bodu"
@@ -7483,11 +7437,11 @@ msgid "Use fixed-width font for text mails"
 msgstr "Používať proporcionálne písmo pre text emailov"
 
 #. Auth type. Use separate username and password
-#: apps/io.ox/mail/accounts/view-form.js:49 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:50 module:io.ox/settings
 msgid "Use separate username and password"
 msgstr "Použiť samostatné prihlasovacie meno a heslo"
 
-#: apps/io.ox/mail/accounts/view-form.js:605 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:612 module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Použiť pre tento účet Zjednotenú poštu"
 
@@ -7512,12 +7466,12 @@ msgstr "Používateľom definované"
 msgid "User name"
 msgstr "Meno používateľa"
 
-#: apps/io.ox/mail/accounts/view-form.js:440 module:io.ox/settings
-#: apps/io.ox/mail/accounts/view-form.js:519
+#: apps/io.ox/mail/accounts/view-form.js:447 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:526
 msgid "Username"
 msgstr "Meno používateľa"
 
-#: apps/io.ox/mail/accounts/view-form.js:278 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:285 module:io.ox/settings
 msgid "Username must not be empty."
 msgstr "Meno používateľa nesmie byť prázdne."
 
@@ -7567,7 +7521,7 @@ msgstr "Čaká sa"
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Upozornenie: Táto správa môže byť podvodný email!"
 
-#: apps/io.ox/mail/accounts/view-form.js:314 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:321 module:io.ox/settings
 msgid "Warnings"
 msgstr "Upozornenia"
 
@@ -7700,7 +7654,7 @@ msgid "Years"
 msgstr "Roky"
 
 #: apps/io.ox/core/tk/flag-picker.js:33 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:73
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:84
 #: module:io.ox/settings/settings
 msgid "Yellow"
 msgstr "Žltá"
@@ -7713,9 +7667,17 @@ msgstr "Žltá"
 msgid "Yes"
 msgstr "Áno"
 
-#: apps/io.ox/mail/compose/view.js:648 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Áno, poslať bez predmetu"
+
+#: apps/io.ox/mail/actions/attachmentEmpty.js:28 module:io.ox/mail
+#, fuzzy
+#| msgctxt "plural"
+#| msgid "Hide attachment"
+#| msgid_plural "Hide attachments"
+msgid "Yes, with empty attachment"
+msgstr "Skryť prílohu"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:195 apps/io.ox/mail/util.js:72
@@ -7774,6 +7736,12 @@ msgstr "Nie sú priamo spojený s %s. Tu sú ľudia, ktorí sú spojení s %s:"
 #: apps/io.ox/calendar/invitations/register.js:145 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "Ste organizátorom"
+
+#: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
+msgid ""
+"You attached an empty file. It could be, that this file has been deleted on "
+"your drive. Send it anyway?"
+msgstr ""
 
 #: apps/io.ox/files/views/create.js:29 module:io.ox/files
 msgid ""
@@ -7995,7 +7963,7 @@ msgstr "Vaša emailová adresa"
 msgid "Your messages"
 msgstr "Vaše správy"
 
-#: apps/io.ox/mail/accounts/view-form.js:590 module:io.ox/settings
+#: apps/io.ox/mail/accounts/view-form.js:597 module:io.ox/settings
 #: apps/plugins/wizards/mandatory/main.js:40 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Vaše meno"
@@ -8788,6 +8756,9 @@ msgstr "vaša platforma"
 #~ msgid "Add a stream"
 #~ msgstr "Pridať stream"
 
+#~ msgid "Add attachments"
+#~ msgstr "Pridať prílohy"
+
 #~ msgid "Add cipher code"
 #~ msgstr "Pridať kód šifry"
 
@@ -8804,6 +8775,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Add group"
 #~ msgstr "Pridať skupinu"
+
+#~ msgid "Add local file"
+#~ msgstr "Priložiť lokálny súbor"
 
 #~ msgid "Add new contact"
 #~ msgstr "Pridať nový kontakt"
@@ -9142,6 +9116,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "Azerbajdžan"
+
+#~ msgid "BCC"
+#~ msgstr "Skrytá kópia"
 
 #~ msgid "Background 1"
 #~ msgstr "Pozadie 1"
@@ -9504,6 +9481,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Company:"
 #~ msgstr "Spoločnosť:"
+
+#~ msgid "Compose new mail"
+#~ msgstr "Napísať novú správu"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Vytvorenie nového emailu"
@@ -10052,6 +10032,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Drive Client"
 #~ msgstr "Klient Drive"
+
+#~ msgid "Drop attachments here"
+#~ msgstr "Sem presuňte prílohy"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr ""
@@ -10752,13 +10735,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Hidden"
 #~ msgstr "Skryté"
-
-#~ msgctxt "plural"
-#~ msgid "Hide attachment"
-#~ msgid_plural "Hide attachments"
-#~ msgstr[0] "Skryť prílohu"
-#~ msgstr[1] "Skryť prílohy"
-#~ msgstr[2] "Skryť prílohy"
 
 #~ msgid "Hide conflicts"
 #~ msgstr "Skryť konflikty"
@@ -12479,6 +12455,9 @@ msgstr "vaša platforma"
 #~ msgid "Selecting a view"
 #~ msgstr "Výber zobrazenia"
 
+#~ msgid "Send"
+#~ msgstr "Poslať"
+
 #~ msgid "Send Attachment"
 #~ msgstr "Poslať prílohu"
 
@@ -12580,6 +12559,12 @@ msgstr "vaša platforma"
 #~ msgstr[0] "Zobraziť prílohu"
 #~ msgstr[1] "Zobraziť prílohy"
 #~ msgstr[2] "Zobraziť prílohy"
+
+#~ msgid "Show blind carbon copy input field"
+#~ msgstr "Zobraziť vstupné pole Skrytá kópia"
+
+#~ msgid "Show carbon copy input field"
+#~ msgstr "Zobraziť vstupné pole Kópia"
 
 #, fuzzy
 #~| msgid "Show in calendar"
