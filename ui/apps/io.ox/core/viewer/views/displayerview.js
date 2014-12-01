@@ -34,24 +34,23 @@ define('io.ox/core/viewer/views/displayerview', [
             //console.warn('DisplayerView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
 
-            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
-                console.warn('SidebarbarView viewer:displayeditem:change', data);
+            this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (/*data*/) {
+                //console.warn('SidebarbarView viewer:displayeditem:change', data);
+            });
+
+            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', function () {
+                //console.warn('SidebarbarView viewer:toggle:sidebar');
+                this.$el.toggleClass('sidebar-opened');
             });
         },
 
         render: function () {
-            console.warn('DisplayerView.render()');
+            //console.warn('DisplayerView.render()');
 
             // init carousel with  dummy slides.
             var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
-                carouselInner = $('<div class="carousel-inner">');
-//                slide1 = $('<div class="item active"><img src="http://localhost:8337/appsuite/api/files?action=document&folder=135&id=135/657&delivery=view&scaleType=contain&content_type=image/jpeg">'),
-//                slide2 = $('<div class="item"><img src="http://localhost:8337/appsuite/api/files?action=document&folder=135&id=135/658&delivery=view&scaleType=contain&content_type=image/jpeg">'),
-//                slide3 = $('<div class="item"><img src="http://localhost:8337/appsuite/api/files?action=document&folder=135&id=135/659&delivery=view&scaleType=contain&content_type=image/jpeg">'),
-//                slide4 = $('<div class="item"><img src="http://localhost:8337/appsuite/api/files?action=document&folder=135&id=135/660&delivery=view&scaleType=contain&content_type=image/jpeg">'),
-//                slide5 = $('<div class="item"><img src="http://localhost:8337/appsuite/api/files?action=document&folder=135&id=135/661&delivery=view&scaleType=contain&content_type=image/jpeg">');
-
-            var prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev"><i class="fa fa-angle-left"></i></a>'),
+                carouselInner = $('<div class="carousel-inner">'),
+                prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev"><i class="fa fa-angle-left"></i></a>'),
                 nextSlide = $('<a class="right carousel-control" href="#viewer-carousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>');
 
             function createSlide (model) {
@@ -75,7 +74,6 @@ define('io.ox/core/viewer/views/displayerview', [
             // set first item active, to be change when we handle selected drive items
             carouselInner.find('div.item').first().addClass('active');
 
-//            carouselInner.append(slide1, slide2, slide3, slide4, slide5);
             carouselRoot.append(carouselInner, prevSlide, nextSlide);
 
             carouselRoot.carousel();
@@ -86,12 +84,12 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         onPreviousSlide: function () {
-            console.warn('DisplayerView.onPreviousSlide()');
+            //console.warn('DisplayerView.onPreviousSlide()');
             EventDispatcher.trigger('viewer:display:previous');
         },
 
         onNextSlide: function () {
-            console.warn('DisplayerView.onNextSlide()');
+            //console.warn('DisplayerView.onNextSlide()');
             EventDispatcher.trigger('viewer:display:next');
         },
 

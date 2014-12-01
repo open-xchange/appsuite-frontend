@@ -19,7 +19,7 @@
 @viewer-toolbar-bgcolor: #000000;
 
 @viewer-sidebar-bgcolor: #202020;
-@viewer-sidebar-width: 400px;
+@viewer-sidebar-width: 30%;
 
 .io-ox-viewer {
 
@@ -33,19 +33,30 @@
         line-height: @viewer-toolbar-height;
         background: @viewer-toolbar-bgcolor;
         padding: 0 1rem;
+        box-shadow: 0px 2px 2px #000000;
 
-        .close-viewer {
-
+        .right-wrapper {
             position: absolute;
             top: 0;
             right: 0;
             height: @viewer-toolbar-height;
-            color: rgba(255, 255, 255, 0.5);
+            button {
+                height: 100%;
+                color: rgba(255, 255, 255, 0.5);
+                outline: none;
 
-            &:hover {
-                color: #ffffff;
+                &.active {
+                    background-color: #252525;
+                    color: #ffffff;
+                }
+
+                &:hover {
+                    color: #ffffff;
+                    background-color: #333;
+                }
             }
         }
+
     }
 
     .viewer-displayer {
@@ -76,6 +87,11 @@
             position: absolute;
             top: 50%;
             font-size: 3rem;
+            transform: translateY(-50%);
+        }
+
+        &.sidebar-opened {
+            width: 70%;
         }
     }
 
@@ -88,5 +104,9 @@
         padding: 1rem;
         background: @viewer-sidebar-bgcolor;
         display: none;
+        box-shadow: inset 0px 2px 2px 0px #000000;
+        &.opened {
+            display: block;
+        }
     }
 }

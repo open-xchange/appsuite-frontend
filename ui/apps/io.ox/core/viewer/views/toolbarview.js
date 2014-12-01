@@ -26,7 +26,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         className: 'viewer-toolbar',
 
         events: {
-            'click': 'onClose'
+            'click button#viewer-close': 'onClose',
+            'click button#viewer-toggle-sidebar': 'onToggleSidebar'
         },
 
         initialize: function () {
@@ -46,21 +47,34 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.trigger('close');
         },
 
+        onToggleSidebar: function () {
+            //console.info('ToolbarView.onClose()');
+            this.$el.find('#viewer-toggle-sidebar').toggleClass('active');
+            EventDispatcher.trigger('viewer:toggle:sidebar');
+        },
+
         render: function (data) {
             //console.info('ToolbarView.render()');
             var toolbar = this.$el,
                 filenameLabel = $('<div>'),
-                closeViewerButton = $('<button type="button" class="btn btn-link close-viewer">');
-            closeViewerButton.append(
-                $('<i class="fa fa-times" aria-hidden="true" >'),
-                $('<span class="sr-only">').text(gt('Close'))
-            );
+                rightWrapper = $('<div class="right-wrapper">'),
+                closeViewerButton = $('<button id="viewer-close" type="button" class="btn btn-link">').append(
+                    $('<i class="fa fa-times" aria-hidden="true" >'),
+                    $('<span class="sr-only">').text(gt('Close'))
+                ),
+                toggleSidebarButton = $('<button id="viewer-toggle-sidebar" type="button" class="btn btn-link">').append(
+                    $('<i class="fa fa-info-circle" aria-hidden="true" >'),
+                    $('<span class="sr-only">').text(gt('Toggle detail sidebar'))
+                );
+
+            rightWrapper.append(toggleSidebarButton, closeViewerButton);
 
             if (data && data.model) {
                 filenameLabel.text(data.model.get('filename') || '');
             }
 
-            toolbar.empty().append(filenameLabel, closeViewerButton);
+            toolbar.empty().append(filenameLabel, rightWrapper);
+
             return this;
         },
 

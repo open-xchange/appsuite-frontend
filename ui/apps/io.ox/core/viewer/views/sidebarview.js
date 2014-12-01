@@ -38,6 +38,11 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.render(data);
             });
 
+            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', function () {
+                //console.warn('SidebarbarView viewer:toggle:sidebar');
+                this.$el.toggleClass('opened');
+            });
+
             this.render();
         },
 
