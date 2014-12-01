@@ -775,8 +775,8 @@ define.async('io.ox/realtime/rt',
     start();
 
     var def = $.Deferred();
-
     enrol().done(function () {
+        flushAllBuffers();
         def.resolve(api);
     }).fail(def.reject);
 
