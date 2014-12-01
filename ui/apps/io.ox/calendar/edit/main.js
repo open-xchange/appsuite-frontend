@@ -96,7 +96,7 @@ define('io.ox/calendar/edit/main', [
 
                         //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
                         if (_.browser.IE === undefined || _.browser.IE > 9) {
-                            self.model.on('create:start update:start', function () {
+                            self.model.on('sync:start', function () {
                                 self.getWindow().busy();
                             });
                         }
