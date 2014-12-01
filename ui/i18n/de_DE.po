@@ -159,14 +159,6 @@ msgstr "%1$s %2$s"
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Vorläufig)"
 
-#. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/fluid/perspective.js:431 module:io.ox/files
-#: apps/io.ox/files/fluid/perspective.js:867
-#: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
-#, fuzzy
-msgid "%1$s Complete"
-msgstr "%1$s fertig"
-
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js:180 module:plugins/portal
@@ -176,6 +168,14 @@ msgstr "%1$s bei %2$s"
 #: apps/plugins/portal/xing/activities.js:119 module:plugins/portal
 msgid "%1$s changed their status:"
 msgstr "%1$s haben ihren Status geändert:"
+
+#. %1$s progress of currently uploaded files in percent
+#: apps/io.ox/files/fluid/perspective.js:431 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:867
+#: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
+#, fuzzy
+msgid "%1$s completed"
+msgstr "%1$s fertig"
 
 #: apps/io.ox/files/upload/main.js:51 module:io.ox/files
 msgid "%1$s day"
@@ -1117,9 +1117,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js:217 module:io.ox/calendar
 #, fuzzy
-msgid ""
-"Automatically delete incoming notifications after it has been accepted or "
-"declined"
+msgid "Automatically delete notifications after having accepted or declined"
 msgstr ""
 "Benachrichtigungen nach Bestätigen oder Ablehnen in der Einladungs-E-Mail "
 "automatisch löschen"
@@ -1989,7 +1987,7 @@ msgstr "Standardsignatur für neue Nachrichten"
 
 #: apps/io.ox/mail/settings/signatures/register.js:467 module:io.ox/mail
 #, fuzzy
-msgid "Default signature for replies or forwards"
+msgid "Default signature for replies or forwardings"
 msgstr "Standardsignatur für Antworten und Weiterleitungen"
 
 #: apps/io.ox/tasks/edit/view-template.js:263 module:io.ox/tasks/edit
@@ -2180,6 +2178,11 @@ msgstr "Entfernung"
 msgid "Distribution List"
 msgstr "Verteilerliste"
 
+#: apps/io.ox/contacts/detail/main.js:34 module:io.ox/contacts
+#, fuzzy
+msgid "Distribution List Details"
+msgstr "Details für Verteilerliste"
+
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:200 apps/io.ox/contacts/model.js:315
 #: apps/io.ox/contacts/view-detail.js:50 apps/io.ox/participants/model.js:43
@@ -2193,11 +2196,6 @@ msgstr "Verteilerliste"
 msgid "Distribution list has been saved"
 msgstr "Die Verteilerliste wurde gespeichert."
 
-#: apps/io.ox/contacts/detail/main.js:34 module:io.ox/contacts
-#, fuzzy
-msgid "Distributionlist Details"
-msgstr "Details für Verteilerliste"
-
 #: apps/io.ox/files/util.js:242 module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2208,9 +2206,9 @@ msgstr ""
 #: apps/io.ox/calendar/actions/create.js:46 module:io.ox/calendar
 #, fuzzy
 msgid ""
-"Do you really want to create an appointment <b>on behalf of the owner</b> or "
-"do you want to create an appointment <b>with the owner</b> in your own "
-"calendar?"
+"Do you really want to create an appointment <b>on behalf of the folder "
+"owner</b> or do you want to create an appointment <b>with the folder owner</"
+"b> in your own calendar?"
 msgstr ""
 "Wollen Sie wirklich einen Termin <b>im Auftrag des Ordner-Eigentümers</b> "
 "erstellen oder wollen Sie einen Termin <b>mit dem Ordner-Eigentümer</b> in "
@@ -5761,15 +5759,6 @@ msgstr "Alle wählen"
 msgid "Select folder"
 msgstr "Ordner wählen"
 
-#: apps/io.ox/search/model.js:36 module:io.ox/search
-#, fuzzy
-msgid ""
-"Selected folder is virtual and can not be searched. Please select another "
-"folder."
-msgstr ""
-"Der gewählte Ordner ist ein virtueller Ordner und kann nicht durchsucht "
-"werden. Bitte wählen Sie einen anderen Ordner."
-
 #: apps/io.ox/core/commons.js:183 module:io.ox/core
 msgid "Selection Details"
 msgstr "Auswahl-Details"
@@ -6700,6 +6689,15 @@ msgstr ""
 "Der gewählte Kalender wurde von %1$s geteilt. Termine in geteilten Kalendern "
 "werden üblicherweise im Auftrag des Eigentümers erstellt."
 
+#: apps/io.ox/search/model.js:36 module:io.ox/search
+#, fuzzy
+msgid ""
+"The selected folder is virtual and can not be searched. Please select "
+"another folder."
+msgstr ""
+"Der gewählte Ordner ist ein virtueller Ordner und kann nicht durchsucht "
+"werden. Bitte wählen Sie einen anderen Ordner."
+
 #: apps/io.ox/mail/common-extensions.js:543 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -7341,7 +7339,7 @@ msgstr "Neue Version hochladen"
 msgid "Upload progress"
 msgstr "Upload-Fortschritt"
 
-#. the name of the file, which is currently uploaded
+#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/fluid/perspective.js:847 module:io.ox/files
 #, fuzzy
 msgid "Uploading %1$s"
