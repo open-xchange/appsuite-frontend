@@ -94,13 +94,16 @@ define('io.ox/core/commons',
         }()),
 
         simpleMultiSelection: function (node, selection) {
+            var length = selection.length;
 
-            if (selection.length <= 1) return;
+            if (length <= 1) return;
 
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
                     $('<div>').text(
-                        gt('%1$d messages selected', selection.length)
+                        gt.format(
+                            gt.ngettext('%1$d item selected', '%1$d items selected', length), length
+                        )
                     )
                 )
             );
