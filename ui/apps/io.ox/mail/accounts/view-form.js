@@ -19,8 +19,9 @@ define.async('io.ox/mail/accounts/view-form', [
     'gettext!io.ox/settings',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
-    'io.ox/core/folder/picker'
-], function (notifications, accountAPI, settings, gt, ext, mini, picker) {
+    'io.ox/core/folder/picker',
+    'io.ox/core/capabilities'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities) {
 
     'use strict';
 
@@ -99,6 +100,11 @@ define.async('io.ox/mail/accounts/view-form', [
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
             initialize: function () {
+                //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
+                //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
+                if (!capabilities.has('pop3') && !this.model.get('id')) {
+                    optionsServerType = [ { label: gt.noI18n('IMAP'), value: 'imap' } ];
+                }
 
                 //check if login and mailaddress are synced
                 this.inSync = false;
@@ -136,7 +142,8 @@ define.async('io.ox/mail/accounts/view-form', [
                     pop3nodes.hide();
                 }
 
-                if (self.model.get('id')) {
+                //no need to edit it with only one option or when editing an account(causes server errors)
+                if (self.model.get('id') || !capabilities.has('pop3')) {
                     dropdown.prop('disabled', true);
                 }
 

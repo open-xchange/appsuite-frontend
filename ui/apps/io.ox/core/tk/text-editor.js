@@ -110,7 +110,7 @@ define('io.ox/core/tk/text-editor', function () {
             var el = textarea.get(0);
             // Prevent NS_ERROR_FAILURE in Firefox
             _.defer(function () {
-                if (document.activeElement && document.activeElement.nodeName.toLowerCase() !== 'textarea') return;
+                if (document.activeElement !== el) return;
                 if (el.setSelectionRange) {
                     el.setSelectionRange(0, 0);
                 } else if (el.createTextRange) {
@@ -118,6 +118,7 @@ define('io.ox/core/tk/text-editor', function () {
                     range.moveStart('character', 0);
                     range.select();
                 }
+                textarea.scrollTop(0);
             });
         };
 

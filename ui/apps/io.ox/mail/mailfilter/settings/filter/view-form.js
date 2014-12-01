@@ -66,6 +66,17 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             'flag': gt('Flag mail with')
         },
 
+        actionCapabilities = {
+            'keep': 'keep',
+            'discard': 'discard',
+            'redirect': 'redirect',
+            'move': 'move',
+            'reject': 'reject',
+            'markmail': 'addflags',
+            'tag': 'addflags',
+            'flag': 'addflags'
+        },
+
         COLORS = {
             NONE: { value: 0, text: gt('None') },
             RED: { value: 1, text: gt('Red') },
@@ -117,6 +128,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             className: 'io-ox-mailfilter-edit',
 
             initialize: function (opt) {
+                var unsupported = [];
+                _.each(actionCapabilities, function (val, key) {
+                    var index = _.indexOf(opt.config.actioncommands, val);
+                    if (index === -1) {
+                        unsupported.push(key);
+                    }
+                });
+                actionsTranslations = _.omit(actionsTranslations, unsupported);
                 this.listView = opt.listView;
             },
 

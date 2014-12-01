@@ -47,7 +47,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         collection.sort();
     }
 
-    function renderDetailView(evt, data) {
+    function renderDetailView(evt, data, config) {
         var myView,
             header = data.id === undefined ? gt('Create new rule') : gt('Edit rule'),
             testArray, actionArray, rulename,
@@ -70,7 +70,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 return tests;
             };
 
-        myView = new FilterDetailView({ model: data, listView: evt.data.listView });
+        myView = new FilterDetailView({ model: data, listView: evt.data.listView, config: config });
 
         testArray = _.copy(myView.model.get('test'), true);
         actionArray = _.copy(myView.model.get('actioncmds'), true);
@@ -124,8 +124,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
     ext.point('io.ox/settings/mailfilter/filter/settings/detail').extend({
         index: 200,
         id: 'mailfiltersettings',
-        draw: function (evt) {
-            renderDetailView(evt, evt.data.obj);
+        draw: function (evt, config) {
+            renderDetailView(evt, evt.data.obj, config);
         }
     });
 
@@ -209,11 +209,13 @@ define('io.ox/mail/mailfilter/settings/filter', [
         editMailfilter: function ($node, baton) {
             grid = (baton || {}).grid;
 
-            var createExtpointForSelectedFilter = function (node, args) {
-                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args);
+            var createExtpointForSelectedFilter = function (node, args, config) {
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
                 };
 
-            return api.getRules().then(function (data) {
+            return $.when(api.getRules(), api.getConfig()).then(function (data, config) {
+                var data = data[0],
+                    config = config[0];
 
                 collection = factory.createCollection(data);
                 collection.comparator = function (model) {
@@ -371,7 +373,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         e.data.id = self.model.get('id');
                         e.data.obj = self.model;
                         if (e.data.obj !== undefined) {
-                            createExtpointForSelectedFilter(this.$el.parent(), e);
+                            createExtpointForSelectedFilter(this.$el.parent(), e, config);
                         }
                     },
 
@@ -490,7 +492,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             listView: this,
                             obj: factory.create(mailfilterModel.protectedMethods.provideEmptyModel())
                         };
-                        createExtpointForSelectedFilter(this.el, args);
+                        createExtpointForSelectedFilter(this.el, args, config);
                     },
 
                     makeSortable: function () {

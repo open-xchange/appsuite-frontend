@@ -161,7 +161,6 @@ define('io.ox/core/folder/tree', [
         onContextMenu: function (e) {
             // clicks bubbles. right-click not
             e.stopPropagation();
-            console.log('Soooo!', e.currentTarget);
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
             this.toggleContextMenu(target, top, left);
         },

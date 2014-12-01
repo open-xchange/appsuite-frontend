@@ -23,9 +23,10 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/notifications',
     'io.ox/core/api/snippets',
     'gettext!io.ox/mail',
+    'io.ox/mail/actions/attachmentEmpty',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, gt) {
+], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -307,7 +308,7 @@ define('io.ox/mail/compose/view', [
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
 
-            this.listenTo(this.model, 'change:subject', this.setTitle);
+            this.listenTo(this.model, 'keyup:subject change:subject', this.setTitle);
             this.listenTo(this.model, 'change:editorMode', this.changeEditorMode);
             this.listenTo(this.model, 'change:signature', this.setSelectedSignature);
             this.listenTo(this.model, 'needsync', this.syncMail);
@@ -317,7 +318,7 @@ define('io.ox/mail/compose/view', [
 
         filterData: function (data) {
             if (/(compose|edit)/.test(data.mode)) return data;
-            return _.pick(data, 'id', 'folder_id', 'mode');
+            return _.pick(data, 'id', 'folder_id', 'mode', 'csid');
         },
 
         fetchMail: function (obj) {
@@ -325,7 +326,7 @@ define('io.ox/mail/compose/view', [
             if (/(compose|edit)/.test(obj.mode)) {
                 return $.when();
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'mode');
+                obj = _.pick(obj, 'id', 'folder_id', 'mode', 'csid');
             }
             return mailAPI[obj.mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
                 data.sendtype = obj.mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
@@ -339,7 +340,7 @@ define('io.ox/mail/compose/view', [
 
         setSubject: function (e) {
             var value = e.target ? $(e.target).val() : e;
-            this.model.set('subject', value);
+            this.model.set('subject', value, { silent: true }).trigger('keyup:subject', value);
         },
 
         setTitle: function () {
@@ -375,17 +376,20 @@ define('io.ox/mail/compose/view', [
             // fix inline images
             //mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
-            var defSend = mailAPI.send(mail, mail.files).always(function (result) {
-                if (result.error) {
-                    notifications.yell(result);
-                    def.reject(result);
-                } else {
-                    self.model.set('msgref', result.data, { silent: true });
-                    self.model.dirty(false);
-                    notifications.yell('success', gt('Mail saved as draft'));
-                    def.resolve(result);
-                }
+            var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                return mailAPI.send(mail, mail.files).always(function (result) {
+                    if (result.error) {
+                        notifications.yell(result);
+                        def.reject(result);
+                    } else {
+                        self.model.set('msgref', result.data, { silent: true });
+                        self.model.dirty(false);
+                        notifications.yell('success', gt('Mail saved as draft'));
+                        def.resolve(result);
+                    }
+                });
             });
+
             return $.when.apply($, [def, defSend]);
 
         },
@@ -491,7 +495,10 @@ define('io.ox/mail/compose/view', [
 
             if (this.model.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    //button texts may become quite large in some languages (e. g. french, see Bug 35581)
+                    //add some extra space
+                    //TODO maybe we could use a more dynamical approach
+                    new dialogs.ModalDialog({ width: 550 })
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user
@@ -649,7 +656,9 @@ define('io.ox/mail/compose/view', [
                             })
                             .done(function (action) {
                                 if (action === 'send') {
-                                    cont();
+                                    attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                                        cont();
+                                    });
                                 } else {
                                     focus('subject');
                                     def.reject();
@@ -659,7 +668,9 @@ define('io.ox/mail/compose/view', [
                 }
 
             } else {
-                cont();
+                attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                    cont();
+                });
             }
 
             return def;
