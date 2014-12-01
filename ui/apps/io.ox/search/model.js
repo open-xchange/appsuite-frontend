@@ -33,7 +33,7 @@ define('io.ox/search/model',
 
     // custom error message
     var error = {
-        virtual: gt('Selected folder is virtual and can not be searched. Please select another folder.')
+        virtual: gt('The selected folder is virtual and can not be searched. Please select another folder.')
     };
 
     // fetch settings/options
