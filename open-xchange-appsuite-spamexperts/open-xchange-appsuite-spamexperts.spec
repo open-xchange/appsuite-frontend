@@ -1,10 +1,6 @@
 Name:           open-xchange-appsuite-spamexperts
 Version:        @OXVERSION@
-<<<<<<< HEAD
 %define         ox_release 0
-=======
-%define         ox_release 2
->>>>>>> release-7.6.2
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
