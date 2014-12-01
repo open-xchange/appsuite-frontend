@@ -50,7 +50,7 @@ define('io.ox/files/upload/view', [
                             .attr({ 'aria-valuenow': val });
                         progress.find('.sr-only').text(
                             //#. %1$s progress of currently uploaded files in percent
-                            gt('%1$s Complete', val + '%')
+                            gt('%1$s completed', val + '%')
                         );
                     }
                 });
@@ -94,7 +94,7 @@ define('io.ox/files/upload/view', [
                             .append(
                                 $('<span class="sr-only">').text(
                                     //#. %1$s progress of currently uploaded files in percent
-                                    gt('%1$s Complete', val + '%')
+                                    gt('%1$s completed', val + '%')
                                 )
                             )
                     )

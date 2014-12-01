@@ -464,7 +464,7 @@ define('io.ox/mail/settings/signatures/register', [
                         ),
                         $('<div class="form-group col-xs-12 col-md-6">').append(
                             $('<label for="defaultSignature" class="control-label">')
-                            .text(gt('Default signature for replies or forwards')),
+                            .text(gt('Default signature for replies or forwardings')),
                             $('<div>').addClass('controls').append(
                                 defaultReplyForwardView.render().$el
                             )
