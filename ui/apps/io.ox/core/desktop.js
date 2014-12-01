@@ -1413,11 +1413,11 @@ define('io.ox/core/desktop',
                     cancel: function () {
                         // empty input
                         self.facetedsearch.clear();
-                        // apps switch from 'search mode' to 'all mode'
-                        self.trigger('search:cancel');
                         // reset model
                         self.facetedsearch.view.model.reset();
                         self.facetedsearch.close();
+                        // apps switch from 'search mode' to 'all mode'
+                        self.trigger('search:cancel');
                     }
                 };
 
