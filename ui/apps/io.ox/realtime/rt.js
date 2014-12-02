@@ -543,9 +543,7 @@ define.async('io.ox/realtime/rt',
 
         if (error.code === 'RT_STANZA-1007' || error.code === 1007) {
             enroled = false;
-            enrol().done(function () {
-                api.trigger('reset');
-            });
+            enrol();
             return;
         }
     }
@@ -775,8 +773,8 @@ define.async('io.ox/realtime/rt',
     start();
 
     var def = $.Deferred();
+
     enrol().done(function () {
-        flushAllBuffers();
         def.resolve(api);
     }).fail(def.reject);
 
