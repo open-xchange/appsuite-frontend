@@ -17,6 +17,7 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/commons',
      'io.ox/core/tk/dialogs',
      'io.ox/files/api',
+     'io.ox/core/folder/api',
      'io.ox/core/date',
      'io.ox/core/tk/upload',
      'io.ox/core/extPatterns/dnd',
@@ -27,7 +28,7 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'static/3rd.party/jquery-imageloader/jquery.imageloader.js'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
+     ], function (viewDetail, ext, commons, dialogs, api, folderAPI, date, upload, dnd, shortcuts, actions, util, gt, Selection, notifications) {
 
     'use strict';
 
@@ -66,13 +67,27 @@ define('io.ox/files/fluid/perspective',
     }
 
     function dropZoneInit(app) {
-        if (_.browser.IE === undefined || _.browser.IE > 9) {
+        if (_.browser.IE && _.browser.IE < 9) return;
+
+        var init = function () {
             dropZoneOff();
             dropZone = new dnd.UploadZone({
                 ref: 'io.ox/files/dnd/actions'
             }, app);
             dropZoneOn();
-        }
+        };
+
+        // HINT: dropZoneInit is used synchroniously so dropzone takes effect a little bit delayed
+        app.folder.getData().then(function (data) {
+            //hide for virtual folders (other files root, public files root)
+            var virtual = _.contains(['14', '15'], data.id);
+            // no 'new files' in trash folders
+            if (folderAPI.can('create', data) && !virtual && !folderAPI.is('trash', data)) {
+                init();
+            } else {
+                dropZoneOff();
+            }
+        });
     }
 
     function dropZoneOn() {
