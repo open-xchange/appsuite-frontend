@@ -22,7 +22,7 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (sender, mini, Dropdown, ext, Tokenfield, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
+], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
