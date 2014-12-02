@@ -68,7 +68,7 @@ define('plugins/portal/files/register',
                 this.addClass('photo-stream');
                 content.addClass('decoration');
                 content.css('backgroundImage', 'url(' + url + ')');
-            } else if ((/(txt|json|md)$/i).test(baton.data.filename)) {
+            } else if ((/(txt|json|md|csv)$/i).test(baton.data.filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 $.ajax({ type: 'GET', url: api.getUrl(data, 'view') + '&' + _.now(), dataType: 'text' }).done(function (filecontent) {
                     content.html(_.escape(filecontent).replace(/\n/g, '<br>'));

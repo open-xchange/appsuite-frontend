@@ -123,7 +123,7 @@ define('io.ox/files/actions',
                 var check = function (data) {
                         data = data || {};
                         return e.collection.has('one') &&
-                            (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) &&
+                            (/\.(txt|js|css|md|tmpl|html|csv?)$/i).test(e.context.filename) &&
                             (e.baton.openedBy !== 'io.ox/mail/write') &&
                             !folderAPI.is('trash', data);
                     };
