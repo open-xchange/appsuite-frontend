@@ -15,11 +15,11 @@
 @viewer-text-color: #ffffff;
 @viewer-background-color: rgba(0, 0, 0, 0.85);
 
-@viewer-toolbar-height: 40px;
+@viewer-toolbar-height: 45px;
 @viewer-toolbar-bgcolor: #000000;
 
 @viewer-sidebar-bgcolor: #202020;
-@viewer-sidebar-width: 30%;
+@viewer-sidebar-width: 400px;
 
 .io-ox-viewer {
 
@@ -28,33 +28,35 @@
     color: @viewer-text-color;
 
     .viewer-toolbar {
-
+        position: absolute;
+        top: 0;
+        width: 100%;
         height: @viewer-toolbar-height;
         line-height: @viewer-toolbar-height;
         background: @viewer-toolbar-bgcolor;
-        padding: 0 1rem;
         box-shadow: 0px 2px 2px #000000;
+        list-style: none;
 
-        .right-wrapper {
-            position: absolute;
-            top: 0;
-            right: 0;
-            height: @viewer-toolbar-height;
-            button {
-                height: 100%;
-                color: rgba(255, 255, 255, 0.5);
+        > li {
+            float: right;
+            width: 60px;
+            text-align: center;
+            > a {
+                display: block;
+                height: @viewer-toolbar-height;
                 outline: none;
-
-                &.active {
-                    background-color: #252525;
-                    color: #ffffff;
-                }
-
-                &:hover {
-                    color: #ffffff;
-                    background-color: #333;
-                }
+                color: rgba(255, 255, 255, 0.5) !important;
             }
+            > a:hover {
+                color: #ffffff !important;
+                background-color: #333;
+            }
+        }
+
+        #filename {
+            position:absolute;
+            top: 0;
+            width: auto;
         }
 
     }
@@ -91,16 +93,17 @@
         }
 
         &.sidebar-opened {
-            width: 70%;
+            //right: 400px;
         }
     }
 
     .viewer-sidebar {
         position: absolute;
-        top: 40px;
+        top: 45px;
         right: 0;
         bottom: 0;
         width: @viewer-sidebar-width;
+        width: 400px;
         padding: 1rem;
         background: @viewer-sidebar-bgcolor;
         display: none;
