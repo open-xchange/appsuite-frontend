@@ -32,7 +32,70 @@ define('io.ox/core/viewer/backbone', [
 
     var ITEM_TYPE_FILE = 'file',
         ITEM_TYPE_ATTACHMENT = 'attachment',
-        THUMBNAIL_SIZE = { thumbnailWidth: 100, thumbnailHeight: 100 }; // todo: set better defaults;
+        THUMBNAIL_SIZE = { thumbnailWidth: 400, thumbnailHeight: 600 }, // temporary default size for office docs
+        VIEW_MODES = { VIEW: 'view', PREVIEW: 'preview', THUMBNAIL: 'thumbnail', DOWNLOAD: 'download' },
+        MIME_TYPES = {
+            IMAGES: {
+                'jpg':  'image/jpeg',
+                'jpeg': 'image/jpeg',
+                'png':  'image/png',
+                'gif':  'image/gif',
+                'tif':  'image/tiff',
+                'tiff': 'image/tiff',
+                'bmp':  'image/bmp'
+            },
+            AUDIO: {
+                'mp3':  'audio/mpeg',
+                'ogg':  'audio/ogg',
+                'opus': 'audio/ogg',
+                'aac':  'audio/aac',
+                'm4a':  'audio/mp4',
+                'm4b':  'audio/mp4',
+                'wav':  'audio/wav'
+            },
+            VIDEO: {
+                'mp4':  'video/mp4',
+                'm4v':  'video/mp4',
+                'ogv':  'video/ogg',
+                'ogm':  'video/ogg',
+                'webm': 'video/webm'
+            },
+            OFFICE: {
+                // open office
+                'odc': 'application/vnd.oasis.opendocument.chart',
+                'odb': 'application/vnd.oasis.opendocument.database',
+                'odf': 'application/vnd.oasis.opendocument.formula',
+                'odg': 'application/vnd.oasis.opendocument.graphics',
+                'otg': 'application/vnd.oasis.opendocument.graphics-template',
+                'odi': 'application/vnd.oasis.opendocument.image',
+                'odp': 'application/vnd.oasis.opendocument.presentation',
+                'otp': 'application/vnd.oasis.opendocument.presentation-template',
+                'ods': 'application/vnd.oasis.opendocument.spreadsheet',
+                'ots': 'application/vnd.oasis.opendocument.spreadsheet-template',
+                'odt': 'application/vnd.oasis.opendocument.text',
+                'odm': 'application/vnd.oasis.opendocument.text-master',
+                'ott': 'application/vnd.oasis.opendocument.text-template',
+                'oth': 'application/vnd.oasis.opendocument.text-web',
+                // microsoft office
+                'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+                'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+                'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+                'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+                'doc': 'application/msword',
+                'dot': 'application/msword',
+                'xls': 'application/vnd.ms-excel',
+                'xlb': 'application/vnd.ms-excel',
+                'xlt': 'application/vnd.ms-excel',
+                'ppt': 'application/vnd.ms-powerpoint',
+                'pps': 'application/vnd.ms-powerpoint'
+            },
+            PDF: {
+                'pdf': 'application/pdf'
+            }
+        };
 
     /**
      *  The Model represents a general file model for the OX Viewer.
@@ -59,7 +122,6 @@ define('io.ox/core/viewer/backbone', [
         },
 
         parse: function (data) {
-            //console.warn('backbone.parse()', data);
 
             var result = {};
 
@@ -106,30 +168,43 @@ define('io.ox/core/viewer/backbone', [
             return this.get('source') === ITEM_TYPE_FILE;
         },
 
+        isOfficeDocument: function () {
+            var officeMimeTypes = _.values(MIME_TYPES.OFFICE),
+                currentContentType = this.get('contentType');
+            return _.contains(officeMimeTypes, currentContentType);
+        },
+
         getPreviewUrl: function () {
+            //console.warn('backbone.getPreviewUrl()');
             if (this.isMailAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), 'view');
+                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
             } else if (this.isDriveFile()) {
-                //return FilesAPI.getUrl(this.get('origData'), 'preview');  // doesn't work
-                return FilesAPI.getUrl(this.get('origData'), 'view');
+                // temporary workaround to show previews of office documents
+                var viewMode = this.isOfficeDocument() ? VIEW_MODES.PREVIEW : VIEW_MODES.THUMBNAIL,
+                    viewOptions = this.isOfficeDocument() ? {
+                        scaleType: 'contain',
+                        thumbnailWidth: 400,
+                        thumbnailHeight: 600
+                    } : null;
+                return FilesAPI.getUrl(this.get('origData'), viewMode, viewOptions);
             }
             return null;
         },
 
         getDownloadUrl: function () {
             if (this.isMailAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), 'download');
+                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
             } else if (this.isDriveFile()) {
-                return FilesAPI.getUrl(this.get('origData'), 'download');
+                return FilesAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
             }
             return null;
         },
 
         getThumbnailUrl: function () {
             if (this.isMailAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), 'view');
+                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
             } else if (this.isDriveFile()) {
-                return FilesAPI.getUrl(this.get('origData'), 'thumbnail', THUMBNAIL_SIZE);
+                return FilesAPI.getUrl(this.get('origData'), VIEW_MODES.THUMBNAIL, THUMBNAIL_SIZE);
             }
             return null;
         }
