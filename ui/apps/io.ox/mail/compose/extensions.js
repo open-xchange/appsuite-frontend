@@ -144,6 +144,7 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
+                        placeholder: tokenfieldTranslations[attr],
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
