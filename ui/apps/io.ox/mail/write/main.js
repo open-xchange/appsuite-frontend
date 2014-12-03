@@ -436,7 +436,11 @@ define('io.ox/mail/write/main',
             return _.queued(function (mode) {
                 // change?
                 mode = getEditorMode(mode);
-                view.sections.format.find('input[name="format"]').val([mode]);
+
+                if(_.device('!smartphone')) {
+                    view.sections.format.find('input[name="format"]').val([mode]);
+                }
+
                 return (mode === editorMode ?
                     $.when() :
                     changeMode(mode || editorMode).done(function () {
