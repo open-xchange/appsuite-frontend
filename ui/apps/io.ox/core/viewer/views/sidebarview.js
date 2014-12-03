@@ -11,8 +11,9 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebarview', [
-    'io.ox/core/viewer/eventdispatcher'
-], function (EventDispatcher) {
+    'io.ox/core/viewer/eventdispatcher',
+    'io.ox/core/viewer/views/sidebar/fileinfoview'
+], function (EventDispatcher, FileInfoView) {
 
     'use strict';
 
@@ -33,6 +34,8 @@ define('io.ox/core/viewer/views/sidebarview', [
             //console.info('SidebarView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
 
+            this.fileInfoView = new FileInfoView();
+
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
                 this.render(data);
@@ -46,16 +49,10 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.render();
         },
 
-        render: function (/*data*/) {
-            //console.info('SidebarView.render()');
+        render: function (data) {
+            //console.info('SidebarView.render() ', data);
 
-//            this.$el.html('<div class="panel panel-default" style="background-color: transparent;"><div class="panel-heading"><h3 class="panel-title">Info</h3></div><div class="panel-body"><label>filename:</label><div id="foo"></div></div>');
-//
-//            if (data && data.model) {
-//                this.$el.find('#foo').text(data.model.get('filename'));
-//            }
-
-            this.$el.html('sidebar');
+            this.$el.empty().append(this.fileInfoView.render(data).el);
             return this;
         },
 
