@@ -38,11 +38,19 @@
         }
     }
 
-    .twitter-typeahead > .token-input {
-        &.tt-input, &.tt-hint {
+    .twitter-typeahead {
+
+        & > .token-input.tt-input, & > .token-input.tt-hint {
             height: 22px;
             border: 0;
             padding: 0px 5px;
+        }
+
+        .tt-dropdown-menu {
+            min-width: 320px;
+            max-height: 200px;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
     }
 
@@ -58,5 +66,4 @@
         }
 
     }
-
 }
