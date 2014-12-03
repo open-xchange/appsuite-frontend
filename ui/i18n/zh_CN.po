@@ -646,6 +646,7 @@ msgstr "按分钟设置间隔"
 #: apps/io.ox/core/folder/actions/add.js:98 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/compose/extensions.js:324 module:io.ox/mail
 msgid "Add"
 msgstr "添加"
 
@@ -658,6 +659,10 @@ msgstr "添加新户口"
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "添加动作"
+
+#: apps/io.ox/mail/compose/extensions.js:326 module:io.ox/mail
+msgid "Add attachments"
+msgstr "添加附件"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:727
 #: module:io.ox/settings/settings
@@ -679,8 +684,13 @@ msgid "Add files"
 msgstr "添加文件"
 
 #: apps/io.ox/core/tk/attachments.js:607 module:io.ox/core/tk/attachments
+#: apps/io.ox/mail/compose/extensions.js:353 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "从 Drive 添加"
+
+#: apps/io.ox/mail/compose/extensions.js:349 module:io.ox/mail
+msgid "Add local file"
+msgstr "附加本地文件"
 
 #: apps/io.ox/core/folder/extensions.js:129 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:274
@@ -837,7 +847,7 @@ msgstr "调整起始日期"
 msgid "Administrator"
 msgstr "管理员"
 
-#: apps/io.ox/settings/main.js:392 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "进阶设置"
 
@@ -1077,6 +1087,8 @@ msgstr[1] "已保存附件"
 #: apps/io.ox/calendar/edit/extensions.js:488 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:332 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
+#: apps/io.ox/mail/compose/extensions.js:341 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:359
 #: apps/io.ox/tasks/edit/view-template.js:505 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:226
@@ -1156,6 +1168,11 @@ msgstr "平均时间：%1$s 毫秒"
 msgid "B"
 msgstr "B"
 
+#: apps/io.ox/mail/compose/extensions.js:51 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:186
+msgid "BCC"
+msgstr "密件抄送"
+
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:371
@@ -1173,7 +1190,7 @@ msgid "Back to appointment"
 msgstr "回到约会"
 
 #: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
-#: apps/io.ox/settings/main.js:248
+#: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "基本设置"
 
@@ -1240,6 +1257,8 @@ msgid ""
 "exception to the series. Do you want to continue?"
 msgstr "更改此约会日期可创建一个系列约会的例外情况。是否继续？"
 
+#: apps/io.ox/mail/compose/extensions.js:50 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:178
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1317,7 +1336,9 @@ msgstr "日历视图"
 #: apps/io.ox/mail/accounts/view-form.js:327 module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
-#: apps/io.ox/mail/actions/reminder.js:35 apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/actions/reminder.js:35
+#: apps/io.ox/mail/compose/extensions.js:325
+#: apps/io.ox/mail/compose/view.js:507
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1648,6 +1669,10 @@ msgstr "撰写"
 
 #: apps/io.ox/mail/toolbar.js:43 module:io.ox/mail
 msgid "Compose new email"
+msgstr "撰写新邮件"
+
+#: apps/io.ox/mail/compose/extensions.js:65 module:io.ox/mail
+msgid "Compose new mail"
 msgstr "撰写新邮件"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:717
@@ -2132,6 +2157,7 @@ msgstr "关闭小程序"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:57 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:225
 #: apps/io.ox/core/settings/user.js:82
+#: apps/io.ox/mail/compose/extensions.js:74 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:86
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
@@ -2404,6 +2430,10 @@ msgstr "Drive 设置"
 #: apps/io.ox/mail/import.js:57 module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "拖放 EML 文件到这里以作导入"
+
+#: apps/io.ox/mail/compose/extensions.js:269 module:io.ox/mail
+msgid "Drop attachments here"
+msgstr "把附件放在这里"
 
 #: apps/io.ox/mail/actions.js:719 module:io.ox/mail
 msgid "Drop here to import this mail"
@@ -3164,7 +3194,9 @@ msgid "Friday"
 msgstr "星期五"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
-#: apps/io.ox/mail/main.js:534 apps/io.ox/mail/view-options.js:32
+#: apps/io.ox/mail/compose/extensions.js:101
+#: apps/io.ox/mail/compose/extensions.js:116 apps/io.ox/mail/main.js:534
+#: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "从"
 
@@ -3805,7 +3837,7 @@ msgid "Mail and Messaging"
 msgstr "邮件和即时通讯"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:121
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:254
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:255
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "电子邮件和社交账户"
@@ -5621,6 +5653,7 @@ msgstr "星期六"
 #: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:85
 #: apps/io.ox/mail/mailfilter/settings/filter.js:100
 #: apps/io.ox/mail/settings/signatures/register.js:140
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
@@ -5735,6 +5768,10 @@ msgstr "选择文件夹"
 #: apps/io.ox/core/commons.js:183 module:io.ox/core
 msgid "Selection Details"
 msgstr "选择详情"
+
+#: apps/io.ox/mail/compose/extensions.js:88 module:io.ox/mail
+msgid "Send"
+msgstr "发送"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
 #: apps/io.ox/mail/common-extensions.js:540 module:io.ox/mail
@@ -5934,6 +5971,14 @@ msgstr "显示所有项目"
 #: apps/io.ox/calendar/invitations/register.js:121 module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "显示约会详情"
+
+#: apps/io.ox/mail/compose/extensions.js:185 module:io.ox/mail
+msgid "Show blind carbon copy input field"
+msgstr "显示加密副本输入字段"
+
+#: apps/io.ox/mail/compose/extensions.js:177 module:io.ox/mail
+msgid "Show carbon copy input field"
+msgstr "显示副本输入字段"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:329
@@ -6213,6 +6258,7 @@ msgstr "学生"
 
 #: apps/io.ox/calendar/edit/extensions.js:93 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:229
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:137
@@ -7022,6 +7068,7 @@ msgid "Title"
 msgstr "标题"
 
 #: apps/io.ox/mail/common-extensions.js:242 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:49
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:532
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
@@ -8592,9 +8639,6 @@ msgstr "您的平台"
 #~ msgid "Add a stream"
 #~ msgstr "添加流"
 
-#~ msgid "Add attachments"
-#~ msgstr "添加附件"
-
 #~ msgid "Add cipher code"
 #~ msgstr "添加暗号"
 
@@ -8611,9 +8655,6 @@ msgstr "您的平台"
 
 #~ msgid "Add group"
 #~ msgstr "添加组"
-
-#~ msgid "Add local file"
-#~ msgstr "附加本地文件"
 
 #~ msgid "Add new folder"
 #~ msgstr "添加新文件夹"
@@ -8928,9 +8969,6 @@ msgstr "您的平台"
 
 #~ msgid "Azerbaijan"
 #~ msgstr "阿塞拜疆"
-
-#~ msgid "BCC"
-#~ msgstr "密件抄送"
 
 #~ msgid "Background 1"
 #~ msgstr "背景 1"
@@ -9276,9 +9314,6 @@ msgstr "您的平台"
 
 #~ msgid "Company:"
 #~ msgstr "公司："
-
-#~ msgid "Compose new mail"
-#~ msgstr "撰写新邮件"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "编写一个新电子邮件"
@@ -9793,9 +9828,6 @@ msgstr "您的平台"
 
 #~ msgid "Drive Client"
 #~ msgstr "Drive 客户端"
-
-#~ msgid "Drop attachments here"
-#~ msgstr "把附件放在这里"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "拖放到这里以上载一个 <b class='dndignore'>新附件</b>"
@@ -10925,9 +10957,6 @@ msgstr "您的平台"
 #~ msgid "Selecting a view"
 #~ msgstr "选择一个视图"
 
-#~ msgid "Send"
-#~ msgstr "发送"
-
 #~ msgid "Send as mail"
 #~ msgstr "以邮件方式发送"
 
@@ -10969,12 +10998,6 @@ msgstr "您的平台"
 #~ msgid_plural "Show attachments"
 #~ msgstr[0] "显示附件"
 #~ msgstr[1] "删除附件"
-
-#~ msgid "Show blind carbon copy input field"
-#~ msgstr "显示加密副本输入字段"
-
-#~ msgid "Show carbon copy input field"
-#~ msgstr "显示副本输入字段"
 
 #, fuzzy
 #~| msgid "Show comments"

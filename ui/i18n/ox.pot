@@ -398,6 +398,7 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js:50
 #: apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
+#: apps/io.ox/mail/compose/extensions.js:325
 #: apps/io.ox/mail/compose/view.js:507
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259
@@ -599,6 +600,7 @@ msgstr ""
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70
 #: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:85
 #: apps/io.ox/mail/mailfilter/settings/filter.js:100
 #: apps/io.ox/mail/settings/signatures/register.js:140
 #: apps/io.ox/oauth/settings.js:80
@@ -632,6 +634,8 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:225
 #: apps/io.ox/core/settings/user.js:82
+#: apps/io.ox/mail/compose/extensions.js:74
+#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings
 #: apps/io.ox/tasks/edit/view-template.js:86
@@ -645,6 +649,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45
 #: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:229
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:137
@@ -802,6 +807,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:128
 #: module:io.ox/contacts
+#: apps/io.ox/mail/compose/extensions.js:341
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:359
 #: apps/io.ox/tasks/edit/view-template.js:505
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:94
@@ -3949,6 +3957,8 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/compose/extensions.js:324
+#: module:io.ox/mail
 msgid "Add"
 msgstr ""
 
@@ -4879,7 +4889,7 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:60
 #: module:io.ox/core
-#: apps/io.ox/settings/main.js:248
+#: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr ""
 
@@ -5227,6 +5237,8 @@ msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js:607
 #: module:io.ox/core/tk/attachments
+#: apps/io.ox/mail/compose/extensions.js:353
+#: module:io.ox/mail
 msgid "Add from Drive"
 msgstr ""
 
@@ -6830,6 +6842,8 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/reminder.js:51
 #: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:101
+#: apps/io.ox/mail/compose/extensions.js:116
 #: apps/io.ox/mail/main.js:534
 #: apps/io.ox/mail/view-options.js:32
 msgid "From"
@@ -6902,6 +6916,7 @@ msgstr ""
 
 #: apps/io.ox/mail/common-extensions.js:242
 #: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:49
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/main.js:532
@@ -6970,6 +6985,55 @@ msgstr ""
 #: apps/io.ox/mail/common-extensions.js:543
 #: module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:50
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:178
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
+#: module:io.ox/settings/settings
+msgid "CC"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:51
+#: module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:186
+msgid "BCC"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:65
+#: module:io.ox/mail
+msgid "Compose new mail"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:88
+#: module:io.ox/mail
+msgid "Send"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:177
+#: module:io.ox/mail
+msgid "Show carbon copy input field"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:185
+#: module:io.ox/mail
+msgid "Show blind carbon copy input field"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:269
+#: module:io.ox/mail
+msgid "Drop attachments here"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:326
+#: module:io.ox/mail
+msgid "Add attachments"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js:349
+#: module:io.ox/mail
+msgid "Add local file"
 msgstr ""
 
 #: apps/io.ox/mail/compose/main.js:36
@@ -7275,11 +7339,6 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
 #: module:io.ox/settings/settings
 msgid "Mailing list"
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
-#: module:io.ox/settings/settings
-msgid "CC"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:53
@@ -8108,7 +8167,7 @@ msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js:121
 #: module:io.ox/settings/accounts
-#: apps/io.ox/settings/main.js:254
+#: apps/io.ox/settings/main.js:255
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr ""
@@ -8123,7 +8182,7 @@ msgstr ""
 msgid "Delete account"
 msgstr ""
 
-#: apps/io.ox/settings/main.js:392
+#: apps/io.ox/settings/main.js:401
 #: module:io.ox/core
 msgid "Advanced Settings"
 msgstr ""

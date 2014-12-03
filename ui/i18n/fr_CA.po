@@ -656,6 +656,7 @@ msgstr "Durée réelle en minutes"
 #: apps/io.ox/core/folder/actions/add.js:98 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/compose/extensions.js:324 module:io.ox/mail
 msgid "Add"
 msgstr "Ajouter"
 
@@ -668,6 +669,10 @@ msgstr "Ajouter un compte"
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Ajouter une action"
+
+#: apps/io.ox/mail/compose/extensions.js:326 module:io.ox/mail
+msgid "Add attachments"
+msgstr "Joindre des pièces"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:727
 #: module:io.ox/settings/settings
@@ -689,8 +694,13 @@ msgid "Add files"
 msgstr "Ajouter des fichiers"
 
 #: apps/io.ox/core/tk/attachments.js:607 module:io.ox/core/tk/attachments
+#: apps/io.ox/mail/compose/extensions.js:353 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Ajouter depuis Drive"
+
+#: apps/io.ox/mail/compose/extensions.js:349 module:io.ox/mail
+msgid "Add local file"
+msgstr "Ajouter un fichier local"
 
 #: apps/io.ox/core/folder/extensions.js:129 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:274
@@ -847,7 +857,7 @@ msgstr "Ajuster la date de début"
 msgid "Administrator"
 msgstr "Administrateur"
 
-#: apps/io.ox/settings/main.js:392 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Réglages avancés"
 
@@ -1094,6 +1104,8 @@ msgstr[1] "Les pièces jointes ont été enregistrées"
 #: apps/io.ox/calendar/edit/extensions.js:488 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:332 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
+#: apps/io.ox/mail/compose/extensions.js:341 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:359
 #: apps/io.ox/tasks/edit/view-template.js:505 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:226
@@ -1179,6 +1191,11 @@ msgstr "Durée moyenne : %1$s ms"
 msgid "B"
 msgstr "o"
 
+#: apps/io.ox/mail/compose/extensions.js:51 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:186
+msgid "BCC"
+msgstr "BCC"
+
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:371
@@ -1196,7 +1213,7 @@ msgid "Back to appointment"
 msgstr "Revenir au rendez-vous"
 
 #: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
-#: apps/io.ox/settings/main.js:248
+#: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "Réglages de base"
 
@@ -1265,6 +1282,8 @@ msgstr ""
 "En modifiant la date de ce rendez-vous, vous créez une exception de rendez-"
 "vous dans la série. Voulez-vous continuer ?"
 
+#: apps/io.ox/mail/compose/extensions.js:50 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:178
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1342,7 +1361,9 @@ msgstr "Vue en calendrier"
 #: apps/io.ox/mail/accounts/view-form.js:327 module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
-#: apps/io.ox/mail/actions/reminder.js:35 apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/actions/reminder.js:35
+#: apps/io.ox/mail/compose/extensions.js:325
+#: apps/io.ox/mail/compose/view.js:507
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1676,6 +1697,10 @@ msgstr "Rédiger"
 
 #: apps/io.ox/mail/toolbar.js:43 module:io.ox/mail
 msgid "Compose new email"
+msgstr "Rédiger un nouveau courrier électronique"
+
+#: apps/io.ox/mail/compose/extensions.js:65 module:io.ox/mail
+msgid "Compose new mail"
 msgstr "Rédiger un nouveau courrier électronique"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:717
@@ -2166,6 +2191,7 @@ msgstr "Désactiver le composant graphique"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:57 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:225
 #: apps/io.ox/core/settings/user.js:82
+#: apps/io.ox/mail/compose/extensions.js:74 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:86
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
@@ -2446,6 +2472,10 @@ msgstr "Réglages de Drive"
 #: apps/io.ox/mail/import.js:57 module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "Déposer le fichier EML ici pour une importation"
+
+#: apps/io.ox/mail/compose/extensions.js:269 module:io.ox/mail
+msgid "Drop attachments here"
+msgstr "Déposez les pièces jointes ici"
 
 #: apps/io.ox/mail/actions.js:719 module:io.ox/mail
 msgid "Drop here to import this mail"
@@ -3228,7 +3258,9 @@ msgid "Friday"
 msgstr "Vendredi"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
-#: apps/io.ox/mail/main.js:534 apps/io.ox/mail/view-options.js:32
+#: apps/io.ox/mail/compose/extensions.js:101
+#: apps/io.ox/mail/compose/extensions.js:116 apps/io.ox/mail/main.js:534
+#: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "De"
 
@@ -3879,7 +3911,7 @@ msgid "Mail and Messaging"
 msgstr "Courrier et messagerie"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:121
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:254
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:255
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Comptes de courrier et sur les réseaux sociaux"
@@ -5726,6 +5758,7 @@ msgstr "Samedi"
 #: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:85
 #: apps/io.ox/mail/mailfilter/settings/filter.js:100
 #: apps/io.ox/mail/settings/signatures/register.js:140
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
@@ -5840,6 +5873,10 @@ msgstr "Choisir un dossier"
 #: apps/io.ox/core/commons.js:183 module:io.ox/core
 msgid "Selection Details"
 msgstr "Détails sur la sélection"
+
+#: apps/io.ox/mail/compose/extensions.js:88 module:io.ox/mail
+msgid "Send"
+msgstr "Envoyer"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
 #: apps/io.ox/mail/common-extensions.js:540 module:io.ox/mail
@@ -6039,6 +6076,14 @@ msgstr "Afficher tous les éléments"
 #: apps/io.ox/calendar/invitations/register.js:121 module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Afficher le détail du rendez-vous"
+
+#: apps/io.ox/mail/compose/extensions.js:185 module:io.ox/mail
+msgid "Show blind carbon copy input field"
+msgstr "Afficher le champ de saisie des adresses en copie carbone cachée"
+
+#: apps/io.ox/mail/compose/extensions.js:177 module:io.ox/mail
+msgid "Show carbon copy input field"
+msgstr "Afficher le champ de saisie des adresses en copie carbone"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:329
@@ -6321,6 +6366,7 @@ msgstr "Étudiant"
 
 #: apps/io.ox/calendar/edit/extensions.js:93 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:229
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:137
@@ -7180,6 +7226,7 @@ msgid "Title"
 msgstr "Titre"
 
 #: apps/io.ox/mail/common-extensions.js:242 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:49
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:532
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
@@ -8678,9 +8725,6 @@ msgstr "votre plate-forme"
 #~ msgid "Add a stream"
 #~ msgstr "Ajouter un flux"
 
-#~ msgid "Add attachments"
-#~ msgstr "Joindre des pièces"
-
 #~ msgid "Add cipher code"
 #~ msgstr "Ajouter un code de chiffrement"
 
@@ -8692,9 +8736,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "Add group"
 #~ msgstr "Ajouter un groupe"
-
-#~ msgid "Add local file"
-#~ msgstr "Ajouter un fichier local"
 
 #~ msgid "Add member"
 #~ msgstr "Ajouter un membre"
@@ -8830,9 +8871,6 @@ msgstr "votre plate-forme"
 #~ msgid "Automatically select first E-Mail"
 #~ msgstr "Sélectionner automatiquement le premier courriel"
 
-#~ msgid "BCC"
-#~ msgstr "BCC"
-
 #~ msgid "Background 1"
 #~ msgstr "Fond 1"
 
@@ -8901,9 +8939,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "Comment:"
 #~ msgstr "Commentaire :"
-
-#~ msgid "Compose new mail"
-#~ msgstr "Rédiger un nouveau courrier électronique"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Rédiger un nouveau message"
@@ -9117,9 +9152,6 @@ msgstr "votre plate-forme"
 
 #~ msgid "Drive Client"
 #~ msgstr "Client Drive"
-
-#~ msgid "Drop attachments here"
-#~ msgstr "Déposez les pièces jointes ici"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr ""
@@ -9872,9 +9904,6 @@ msgstr "votre plate-forme"
 #~ msgid "Selecting a view"
 #~ msgstr "Choisir une vue"
 
-#~ msgid "Send"
-#~ msgstr "Envoyer"
-
 #~ msgid "Send as mail"
 #~ msgstr "Envoyer en tant que courriel"
 
@@ -9918,12 +9947,6 @@ msgstr "votre plate-forme"
 #~ msgid_plural "Show attachments"
 #~ msgstr[0] "Afficher la pièce jointe"
 #~ msgstr[1] "Afficher les pièces jointes"
-
-#~ msgid "Show blind carbon copy input field"
-#~ msgstr "Afficher le champ de saisie des adresses en copie carbone cachée"
-
-#~ msgid "Show carbon copy input field"
-#~ msgstr "Afficher le champ de saisie des adresses en copie carbone"
 
 #, fuzzy
 #~| msgid "Show comments"
