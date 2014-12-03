@@ -108,7 +108,7 @@ define('io.ox/core/notifications', [
                 empty = true;
 
             //remove old empty message to avoid duplicates
-            self.$el.find('.no-news-message').remove();
+            self.$el.find('.no-news-message, .notification-test').remove();
 
             // refocusable elements have this marker class
             if (lastFocused.hasClass('refocus')) {
@@ -141,6 +141,15 @@ define('io.ox/core/notifications', [
                     }
                 });
             }
+            self.$el.append($('<button class="notification-test">').text('show desktop notification').on('click', function () {
+                require(['io.ox/core/desktopNotifications'], function (desktopNotifications) {
+                    desktopNotifications.show({
+                        title: 'Lecker',
+                        icon: 'http://2.bp.blogspot.com/-WJTsS-5s5cE/U5dv-Ss_-MI/AAAAAAAAAVM/MQX6zpqEpKA/s1600/MettIcon120.png',
+                        body: 'Mett!'
+                    });
+                });
+            }));
 
             _(self.subviews).each(function (category) {
                 //subviews must be rendered even if they have 0 items.
