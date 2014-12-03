@@ -543,7 +543,10 @@ define.async('io.ox/realtime/rt',
 
         if (error.code === 'RT_STANZA-1007' || error.code === 1007) {
             enroled = false;
-            enrol();
+            enrol().done(function () {
+                flushAllBuffers();
+                api.trigger('reset');
+            });
             return;
         }
     }
