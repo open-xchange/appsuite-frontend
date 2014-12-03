@@ -227,6 +227,8 @@ define('io.ox/settings/accounts/settings/pane', [
                     },
                     render: function () {
 
+                        var hash = {};
+
                         var self = this, $dropDown;
 
                         self.$el.empty().append(drawPane);
@@ -238,6 +240,8 @@ define('io.ox/settings/accounts/settings/pane', [
                         }
 
                         this.collection.each(function (item) {
+                            var key = item.get('accountType') || item.get('serviceId');
+                            hash[key] = true;
                             self.$el.find('.widget-list').append(
                                 new AccountSelectView({ model: item }).render().el
                             );
@@ -247,6 +251,10 @@ define('io.ox/settings/accounts/settings/pane', [
                         $dropDown = this.$el.find('.dropdown-menu');
 
                         _(api.submodules).chain()
+                        .filter(function (submodule) {
+                            // you can add only one xing account
+                            return !(submodule.id === 'xing' && hash[submodule.id]);
+                        })
                         .select(function (submodule) {
                             return !submodule.canAdd || submodule.canAdd.apply(this);
                         })
