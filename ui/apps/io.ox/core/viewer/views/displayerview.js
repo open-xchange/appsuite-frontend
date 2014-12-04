@@ -38,8 +38,6 @@ define('io.ox/core/viewer/views/displayerview', [
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
             });
 
-            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar);
-
         },
 
         render: function () {
@@ -52,6 +50,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 nextSlide = $('<a class="right carousel-control" href="#viewer-carousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>');
 
             function createSlide (model) {
+
                 var slide = $('<div>').addClass('item'),
                     image = $('<img>'),
                     previewUrl = model && model.getPreviewUrl(),
@@ -89,16 +88,6 @@ define('io.ox/core/viewer/views/displayerview', [
         onNextSlide: function () {
             //console.warn('DisplayerView.onNextSlide()');
             EventDispatcher.trigger('viewer:display:next');
-        },
-
-        onToggleSidebar: function () {
-            //console.warn('MainView.onToggleSidebar()');
-            this.$el.toggleClass('sidebar-opened');
-            if (this.$el.hasClass('sidebar-opened') && !_.device('small')) {
-                this.$el.css({ width: window.innerWidth - 400 });
-            } else {
-                this.$el.css({ width: '100%' });
-            }
         },
 
         dispose: function () {

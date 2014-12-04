@@ -53,11 +53,16 @@ define('io.ox/core/viewer/views/mainview', [
 
             this.listenTo(EventDispatcher, 'viewer:display:previous', this.onPreviousSlide);
             this.listenTo(EventDispatcher, 'viewer:display:next', this.onNextSlide);
+            this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
 
             this.displayedFileIndex = 0;
             this.render();
 
             EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
+
+            // listen to browser window resize
+            $(window).on('resize.viewer', this.onWindowResize.bind(this));
+
         },
 
         render: function () {
@@ -102,12 +107,33 @@ define('io.ox/core/viewer/views/mainview', [
             EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
         },
 
+        // refresh view sizes and broadcast window resize event
+        onWindowResize: function () {
+            //console.warn('MainView.onWindowResize()');
+            this.refreshViewSizes();
+            EventDispatcher.trigger('viewer:window:resize');
+        },
+
+        // eventually necessary actions after the sidebar button is toggled
+        onToggleSidebar: function () {
+            //console.warn('MainView.onToggleSidebar()');
+            this.refreshViewSizes();
+        },
+
+        // recalculate view dimensions after e.g. window resize events
+        refreshViewSizes: function () {
+            //console.warn('MainView.refreshViewSizes()');
+            var rightOffset = this.sidebarView.opened ? this.sidebarView.width : 0;
+            this.displayerView.$el.css({ width: window.innerWidth - rightOffset });
+        },
+
         dispose: function () {
             //console.info('MainView.dispose()');
             this.stopListening();
             this.toolbarView = null;
             this.displayerView = null;
             this.sidebarView = null;
+            $(window).off('resize.viewer');
             return this;
         }
     });

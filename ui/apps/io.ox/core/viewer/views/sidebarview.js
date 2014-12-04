@@ -30,6 +30,12 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         },
 
+        // the default width of this sidebar in pixels.
+        width: 400,
+
+        // the visible state of the side bar, hidden per default.
+        opened: false,
+
         initialize: function () {
             //console.info('SidebarView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
@@ -44,6 +50,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', function () {
                 //console.warn('SidebarbarView viewer:toggle:sidebar');
                 this.$el.toggleClass('opened');
+                this.opened = !this.opened;
             });
 
             this.render();
@@ -51,7 +58,6 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         render: function (data) {
             //console.info('SidebarView.render() ', data);
-
             this.$el.empty().append(this.fileInfoView.render(data).el);
             return this;
         },
