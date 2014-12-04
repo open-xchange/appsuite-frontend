@@ -212,7 +212,7 @@ define('io.ox/calendar/actions', [
             var win = e.baton.window;
             if (_.device('!smartphone') && win && win.getPerspective) {
                 var pers = win.getPerspective();
-                return pers && pers.name !== 'list';
+                return pers && pers.print;
             } else {
                 return false;
             }
