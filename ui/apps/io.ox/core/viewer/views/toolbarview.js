@@ -31,6 +31,18 @@ define('io.ox/core/viewer/views/toolbarview', [
         // toolbar link meta object used to generate extension points later
         toolbarLinksMeta = {
             // high priority links
+            'filename': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-file-image-o',
+                label: gt('Click to rename'),
+                ref: 'io.ox/core/viewer/actions/filename',
+                customize: function (baton) {
+                    //console.warn('ToolbarView.meta.customize()', baton);
+                    this.append(baton.model.get('filename'));
+                    this.parent().addClass('pull-left');
+                }
+            },
             'close': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -88,7 +100,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     toolbarPoint.extend(new Links.InlineLinks({
         attributes: {},
         classes: '',
-        // always use drop-down
         dropdown: true,
         index: 200,
         id: 'toolbar-links',
@@ -99,6 +110,16 @@ define('io.ox/core/viewer/views/toolbarview', [
     var Action = Links.Action;
 
     // high priority actions
+    new Action('io.ox/core/viewer/actions/filename', {
+        id: 'filename',
+        requires: function () {
+            return true;
+        },
+        action: function (baton) {
+            console.warn('ToolbarView.actions.filename', baton);
+        }
+    });
+
     new Action('io.ox/core/viewer/actions/togglesidebar', {
         id: 'togglesidebar',
         requires: function () {
@@ -200,11 +221,8 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!data || !data.model) { return this; }
             // draw toolbar
             var toolbar = this.$el,
-                baton = Ext.Baton({ $el: toolbar, model: data.model }),
-                fileNameLabel = $('<li id="filename">');
+                baton = Ext.Baton({ $el: toolbar, model: data.model });
             toolbar.empty();
-            fileNameLabel.text(data.model.get('filename'));
-            toolbar.append(fileNameLabel);
             Ext.point('io.ox/core/viewer/toolbar').invoke('draw', toolbar, baton);
             return this;
         },

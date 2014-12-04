@@ -17,6 +17,8 @@
 
 @viewer-toolbar-height: 45px;
 @viewer-toolbar-bgcolor: #000000;
+@viewer-toolbar-filename-width: 400px;
+@viewer-toolbar-hover-bgcolor: #222222;
 
 @viewer-sidebar-bgcolor: #202020;
 @viewer-sidebar-width: 400px;
@@ -36,8 +38,9 @@
         background: @viewer-toolbar-bgcolor;
         box-shadow: 0px 2px 2px #000000;
         list-style: none;
+        padding-left: 0;
 
-        > li {
+        li {
             float: right;
             width: 60px;
             text-align: center;
@@ -45,19 +48,32 @@
                 display: block;
                 height: @viewer-toolbar-height;
                 outline: none;
+                text-decoration: none;
                 color: rgba(255, 255, 255, 0.5) !important;
             }
             > a:hover {
                 color: #ffffff !important;
-                background-color: #333;
+                background-color: @viewer-toolbar-hover-bgcolor;
+            }
+            > a[data-action="filename"] {
+                width: @viewer-toolbar-filename-width;
+                padding-left: 20px;
+                text-align: left;
+                .ellipsis();
+                i { margin-right: 10px };
             }
         }
 
         #filename {
             position:absolute;
             top: 0;
-            width: auto;
+            width: @viewer-toolbar-filename-width;
+            text-align: left;
+            .ellipsis();
+            i { margin-right: 10px; }
         }
+
+        .pull-left { float: left; }
 
     }
 
