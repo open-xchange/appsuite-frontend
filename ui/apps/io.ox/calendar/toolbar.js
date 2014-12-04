@@ -125,10 +125,20 @@ define('io.ox/calendar/toolbar',
         li.toggle(layout !== 'list');
     }
 
-    function print(app, e) {
+    function updatePrintLink(baton) {
+        if (baton.app.getWindow().currentPerspective !== 'list') return;
+        var link = this.$el.find('[data-name="print"]');
+        link.toggleClass('disabled', baton.data && _.isEmpty(baton.data));
+    }
+
+    function print(baton, e) {
         e.preventDefault();
-        var baton = ext.Baton({ app: app, window: app.getWindow() });
-        actions.invoke('io.ox/calendar/detail/actions/print', null, baton);
+        if (baton.app.getWindow().currentPerspective === 'list') {
+            if (!baton.data || _.isEmpty(baton.data)) return;
+            actions.invoke('io.ox/calendar/detail/actions/print-appointment', null, baton);
+        } else {
+            actions.invoke('io.ox/calendar/detail/actions/print', null, ext.Baton({ app: baton.app, window: baton.app.getWindow() }));
+        }
     }
 
     // view dropdown
@@ -136,7 +146,6 @@ define('io.ox/calendar/toolbar',
         id: 'view-dropdown',
         index: 10000,
         draw: function (baton) {
-
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
@@ -151,7 +160,7 @@ define('io.ox/calendar/toolbar',
             .option('checkboxes', true, gt('Checkboxes'))
             .option('darkColors', true, gt('Dark colors'))
             .divider()
-            .link('print', gt('Print'), print.bind(null, baton.app))
+            .link('print', gt('Print'), print.bind(null, baton))
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
@@ -159,6 +168,7 @@ define('io.ox/calendar/toolbar',
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
             );
 
+            updatePrintLink.call(dropdown, baton);
             updateCheckboxOption.call(dropdown);
             updateColorOption.call(dropdown);
         }

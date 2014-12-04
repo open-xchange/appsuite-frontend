@@ -94,8 +94,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         link: function (name, text, callback) {
             return this.append(
-                $('<a href="#">', { href: '#', 'data-name': name })
-                .text(text).on('click', callback)
+                $('<a>', { href: '#', 'data-name': name })
+                    .text(text).on('click', callback)
             );
         },
 
