@@ -28,11 +28,36 @@ define('io.ox/mail/detail/links',
         if (data.id) {
             // open file in side-popup
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail','io.ox/core/notifications']).done(function (dialogs, api, view, notifications) {
-                var sidePopup = new dialogs.SidePopup({ tabTrap: true });
+                var sidePopup = new dialogs.SidePopup({ tabTrap: true }),
+                    pseudoApp = {
+                        getName: function() { return ''; },
+                        folder: {
+                            set: function (folderId) {
+                                ox.launch('io.ox/files/main', { folder: folderId, perspective: 'fluid:list' }).done(function () {
+                                    var app = this;
+                                    // switch to proper perspective
+                                    ox.ui.Perspective.show(app, 'fluid:list').done(function () {
+                                        // set proper folder
+                                        if (app.folder.get() === folderId) {
+                                            app.selection.set(folderId);
+                                        } else {
+                                            app.folder.set(folderId).done(function () {
+                                                app.selection.set(folderId);
+                                            });
+                                        }
+                                    });
+                                });
+                            },
+                            getData: function () {
+                                return $.Deferred().reject();
+                            }
+                        }
+                    };
+
                 sidePopup.show(e, function (popupNode) {
                     popupNode.busy();
                     api.get(_.cid(data.id)).done(function (data) {
-                        popupNode.idle().append(view.draw(data));
+                        popupNode.idle().append(view.draw(data, pseudoApp));
                     }).fail(function (e) {
                         sidePopup.close();
                         notifications.yell(e);
