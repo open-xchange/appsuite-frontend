@@ -85,15 +85,21 @@
             }
         }
 
-        .carousel-control i {
-            position: absolute;
-            top: 50%;
-            font-size: 3rem;
-            transform: translateY(-50%);
-        }
-
-        &.sidebar-opened {
-            //right: 400px;
+        .carousel-control {
+            opacity: 0.3;
+            background: none;
+            i {
+                position: absolute;
+                top: 50%;
+                font-size: 3rem;
+                transform: translateY(-50%);
+            }
+            &.left i { left: 20px; }
+            &.right i { right: 20px; }
+            &:hover {
+                opacity: 1;
+                background: none;
+            }
         }
     }
 
@@ -103,7 +109,6 @@
         right: 0;
         bottom: 0;
         width: @viewer-sidebar-width;
-        width: 400px;
         padding: 1rem;
         background: @viewer-sidebar-bgcolor;
         display: none;
@@ -112,13 +117,13 @@
             display: block;
         }
     }
-    
+
     .viewer-fileinfo {
-        
+
         .panel {
             background-color: transparent;
             border-color: transparent;
-    
+
             .panel-heading {
                 color: @viewer-text-color;
                 background-color: transparent;
