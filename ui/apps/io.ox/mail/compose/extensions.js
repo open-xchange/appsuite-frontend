@@ -22,7 +22,7 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-], function (sender, mini, Dropdown, ext, Tokenfield, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
+], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -144,6 +144,7 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
+                        placeholder: tokenfieldTranslations[attr],
                         apiOptions: {
                             contacts: true,
                             distributionlists: true,
@@ -162,10 +163,10 @@ define('io.ox/mail/compose/extensions', [
                     $('<div data-extension-id="' + attr + '">')
                         .addClass(cls)
                         .append(
-                            $('<label class="maillabel col-xs-2 col-md-1">').text(tokenfieldTranslations[attr]).attr({
+                            $('<label class="maillabel hidden-xs col-sm-1">').text(tokenfieldTranslations[attr]).attr({
                                 'for': guid
                             }),
-                            $('<div class="col-xs-10 col-md-11">').append(
+                            $('<div class="col-xs-12 col-sm-11">').append(
                                 tokenfieldView.$el,
                                 attr === 'to' ? $('<div class="recipient-actions">').append(
                                     $('<a>').attr({
@@ -226,11 +227,11 @@ define('io.ox/mail/compose/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="row subject" data-extension-id="subject">').append(
-                    $('<label class="maillabel col-xs-2 col-md-1">').text(gt('Subject')).attr({
+                    $('<label class="maillabel hidden-xs col-sm-2 col-md-1">').text(gt('Subject')).attr({
                         'for': guid
                     }),
-                    $('<div class="col-xs-10 col-md-11">').append(
-                        new mini.InputView({ model: baton.model, id: guid, name: 'subject' }).render().$el
+                    $('<div class="col-xs-12 col-sm-10 col-md-11">').append(
+                        new mini.InputView({ model: baton.model, id: guid, name: 'subject' }).render().$el.attr({ placeholder: gt('Subject') })
                     )
                 )
             );

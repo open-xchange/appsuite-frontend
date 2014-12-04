@@ -31,7 +31,7 @@ define('io.ox/contacts/detail/main', [
                 api.get(contact).done(function (data) {
                     var baton = ext.Baton({ data: data }),
                         title = data.display_name ? data.display_name : util.getFullName(data.toJSON()),
-                        label = data.mark_as_distributionlist ? gt('Distributionlist Details') : gt('Contact Details');
+                        label = data.mark_as_distributionlist ? gt('Distribution List Details') : gt('Contact Details');
 
                     app.setTitle(title);
                     api.on('delete:' + _.ecid(data), function () {

@@ -60,6 +60,55 @@
             clear: both;
         }
 
+        .token-input, &.subject input {
+            &::-webkit-input-placeholder {
+                color: transparent;
+            }
+            &:-moz-placeholder {
+                color: transparent;
+            }
+            &::-moz-placeholder {
+                color: transparent;
+            }
+            &:-ms-input-placeholder {
+                color: transparent;
+            }
+        }
+
+        @media (max-width: 767px) {
+
+            &.subject input {
+                padding-left: 8px;
+            }
+
+            .token-input, &.subject input {
+                &::-webkit-input-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &:-moz-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &::-moz-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+                &:-ms-input-placeholder {
+                    color: #aaa;
+                    font-weight: normal;
+                }
+            }
+
+            .form-control {
+                border: none;
+                border-bottom: 1px solid #aaa;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+        }
+
     }
 
     .sender {
@@ -93,6 +142,10 @@
             padding-right: 7px;
             color: @badge-bg;
             text-decoration: none;
+        }
+
+        @media (max-width: 767px) {
+            padding-right: 10px;
         }
     }
 

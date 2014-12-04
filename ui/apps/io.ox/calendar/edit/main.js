@@ -96,7 +96,7 @@ define('io.ox/calendar/edit/main', [
 
                         //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
                         if (_.browser.IE === undefined || _.browser.IE > 9) {
-                            self.model.on('create:start update:start', function () {
+                            self.model.on('sync:start', function () {
                                 self.getWindow().busy();
                             });
                         }
@@ -221,13 +221,6 @@ define('io.ox/calendar/edit/main', [
                                 self.model.set('alarm', -1, { silent: true, validate: true });
                             }
 
-                        } else {
-
-                            self.model.set('alarm', settings.get('defaultReminder', 15), { validate: true });
-                            if (self.model.get('full_time') === true) {
-                                self.model.set('shown_as', settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1, { validate: true });
-                            }
-
                         }
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
@@ -250,7 +243,14 @@ define('io.ox/calendar/edit/main', [
                         cont();
                     });
                 } else {
-                    self.model = appointmentFactory.create(data);
+
+                    // default values from settings
+                    data.alarm = settings.get('defaultReminder', 15);
+                    if (data.full_time) {
+                        data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
+                    }
+
+                    self.model = appointmentFactory.realm('default').create(data);
                     if (!data.folder_id || /^virtual/.test(data.folder_id)) {
                         require(['io.ox/core/folder/api']).done(function (api) {
                             self.model.set('folder_id', data.folder_id = api.getDefaultFolder('calendar'));

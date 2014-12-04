@@ -428,7 +428,7 @@ define('io.ox/files/fluid/perspective', [
                         .append(
                             $('<span class="sr-only">').text(
                                 //#. %1$s progress of currently uploaded files in percent
-                                gt('%1$s Complete', '0%')
+                                gt('%1$s completed', '0%')
                             )
                         )
                 )
@@ -843,7 +843,7 @@ define('io.ox/files/fluid/perspective', [
                 })
                 .on('progress', function (e, def, file) {
                     $('.upload-wrapper').find('.file-name').text(
-                        //#. the name of the file, which is currently uploaded
+                        //#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
                         gt('Uploading %1$s', file.file.name)
                     );
                 })
@@ -864,7 +864,7 @@ define('io.ox/files/fluid/perspective', [
                         .css({ 'width': val + '%' });
                     progressText.text(
                         //#. %1$s progress of currently uploaded files in percent
-                        gt('%1$s Complete', val + '%')
+                        gt('%1$s completed', val + '%')
                     );
 
                     progressWrapper.find('.estimated-time').text(

@@ -160,16 +160,6 @@ msgstr "%1$s %2$s"
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Voorlopig)"
 
-#. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/fluid/perspective.js:431 module:io.ox/files
-#: apps/io.ox/files/fluid/perspective.js:867
-#: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
-#, fuzzy
-#| msgid "%1$s mail"
-#| msgid_plural "%1$s mails"
-msgid "%1$s Complete"
-msgstr "%1$s e-mailbericht"
-
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js:180 module:plugins/portal
@@ -179,6 +169,16 @@ msgstr "%1$s om %2$s"
 #: apps/plugins/portal/xing/activities.js:119 module:plugins/portal
 msgid "%1$s changed their status:"
 msgstr "%1$s heeft hun status gewijzigd:"
+
+#. %1$s progress of currently uploaded files in percent
+#: apps/io.ox/files/fluid/perspective.js:431 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:867
+#: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
+#, fuzzy
+#| msgid "%1$s mail"
+#| msgid_plural "%1$s mails"
+msgid "%1$s completed"
+msgstr "%1$s e-mailbericht"
 
 #: apps/io.ox/files/upload/main.js:51 module:io.ox/files
 #, fuzzy
@@ -658,6 +658,7 @@ msgstr "Werkelijke duur in minuten"
 #: apps/io.ox/core/folder/actions/add.js:98 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:280
 #: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/compose/extensions.js:325 module:io.ox/mail
 msgid "Add"
 msgstr "Toevoegen"
 
@@ -670,6 +671,10 @@ msgstr "Account toevoegen"
 #: module:io.ox/settings/settings
 msgid "Add action"
 msgstr "Actie toevoegen"
+
+#: apps/io.ox/mail/compose/extensions.js:327 module:io.ox/mail
+msgid "Add attachments"
+msgstr "Bijlagen toevoegen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:727
 #: module:io.ox/settings/settings
@@ -691,8 +696,13 @@ msgid "Add files"
 msgstr "Bestanden toevoegen"
 
 #: apps/io.ox/core/tk/attachments.js:607 module:io.ox/core/tk/attachments
+#: apps/io.ox/mail/compose/extensions.js:354 module:io.ox/mail
 msgid "Add from Drive"
 msgstr "Toevoegen vanuit Drive"
+
+#: apps/io.ox/mail/compose/extensions.js:350 module:io.ox/mail
+msgid "Add local file"
+msgstr "Lokaal bestand toevoegen"
 
 #: apps/io.ox/core/folder/extensions.js:129 module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js:274
@@ -849,7 +859,7 @@ msgstr "Begindatum aanpassen"
 msgid "Administrator"
 msgstr "Beheerder"
 
-#: apps/io.ox/settings/main.js:392 module:io.ox/core
+#: apps/io.ox/settings/main.js:401 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Geavanceerde Instellingen"
 
@@ -1094,6 +1104,8 @@ msgstr[1] "Bijlagen zijn opgeslagen"
 #: apps/io.ox/calendar/edit/extensions.js:488 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:332 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:128 module:io.ox/contacts
+#: apps/io.ox/mail/compose/extensions.js:342 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:360
 #: apps/io.ox/tasks/edit/view-template.js:505 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/view-detail.js:94 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:226
@@ -1159,9 +1171,7 @@ msgstr ""
 #| msgid ""
 #| "Automatically delete a notification mail after it has been accepted or "
 #| "declined?"
-msgid ""
-"Automatically delete incoming notifications after it has been accepted or "
-"declined"
+msgid "Automatically delete notifications after having accepted or declined"
 msgstr ""
 "Automatisch kennisgevingsberichten verwijderen als deze zijn geaccepteerd of "
 "afgewezen?"
@@ -1181,6 +1191,11 @@ msgstr "Gemiddelde tijd: %1$s ms"
 msgid "B"
 msgstr "B"
 
+#: apps/io.ox/mail/compose/extensions.js:51 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:187
+msgid "BCC"
+msgstr "BCC"
+
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:371
@@ -1198,7 +1213,7 @@ msgid "Back to appointment"
 msgstr "Terug naar afspraak"
 
 #: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
-#: apps/io.ox/settings/main.js:248
+#: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "Basisinstellingen"
 
@@ -1267,6 +1282,8 @@ msgstr ""
 "Door de datum van deze afspraak te wijzigen creëert u een uitzondering op de "
 "reeks. Wilt u doorgaan?"
 
+#: apps/io.ox/mail/compose/extensions.js:50 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:179
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
 msgid "CC"
@@ -1344,7 +1361,9 @@ msgstr "Agendaoverzicht"
 #: apps/io.ox/mail/accounts/view-form.js:327 module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js:29
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
-#: apps/io.ox/mail/actions/reminder.js:35 apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/actions/reminder.js:35
+#: apps/io.ox/mail/compose/extensions.js:326
+#: apps/io.ox/mail/compose/view.js:507
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1681,6 +1700,10 @@ msgstr "Samenstellen"
 
 #: apps/io.ox/mail/toolbar.js:43 module:io.ox/mail
 msgid "Compose new email"
+msgstr "Nieuw e-mailbericht opstellen"
+
+#: apps/io.ox/mail/compose/extensions.js:65 module:io.ox/mail
+msgid "Compose new mail"
 msgstr "Nieuw e-mailbericht opstellen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:717
@@ -2031,8 +2054,10 @@ msgid "Default signature for new messages"
 msgstr "U heeft geen nieuwe berichten"
 
 #: apps/io.ox/mail/settings/signatures/register.js:467 module:io.ox/mail
-msgid "Default signature for replies or forwards"
-msgstr ""
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Default signature for replies or forwardings"
+msgstr "U heeft geen nieuwe berichten"
 
 #: apps/io.ox/tasks/edit/view-template.js:263 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 module:io.ox/tasks
@@ -2165,6 +2190,7 @@ msgstr "De widget uitschakelen"
 #: apps/io.ox/contacts/distrib/create-dist-view.js:57 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:225
 #: apps/io.ox/core/settings/user.js:82
+#: apps/io.ox/mail/compose/extensions.js:74 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
 #: module:io.ox/settings/settings apps/io.ox/tasks/edit/view-template.js:86
 #: module:io.ox/tasks/edit apps/plugins/portal/userSettings/register.js:45
@@ -2220,6 +2246,12 @@ msgstr "Afstand"
 msgid "Distribution List"
 msgstr "Distributielijst"
 
+#: apps/io.ox/contacts/detail/main.js:34 module:io.ox/contacts
+#, fuzzy
+#| msgid "Distribution list"
+msgid "Distribution List Details"
+msgstr "Distributielijst"
+
 #: apps/io.ox/contacts/common-extensions.js:42 module:io.ox/contacts
 #: apps/io.ox/contacts/main.js:200 apps/io.ox/contacts/model.js:315
 #: apps/io.ox/contacts/view-detail.js:50 apps/io.ox/participants/model.js:43
@@ -2233,12 +2265,6 @@ msgstr "Distributielijst"
 msgid "Distribution list has been saved"
 msgstr "De distributielijst is opgeslagen"
 
-#: apps/io.ox/contacts/detail/main.js:34 module:io.ox/contacts
-#, fuzzy
-#| msgid "Distribution list"
-msgid "Distributionlist Details"
-msgstr "Distributielijst"
-
 #: apps/io.ox/files/util.js:242 module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
@@ -2249,9 +2275,9 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/create.js:46 module:io.ox/calendar
 msgid ""
-"Do you really want to create an appointment <b>on behalf of the owner</b> or "
-"do you want to create an appointment <b>with the owner</b> in your own "
-"calendar?"
+"Do you really want to create an appointment <b>on behalf of the folder "
+"owner</b> or do you want to create an appointment <b>with the folder owner</"
+"b> in your own calendar?"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/remove.js:32 module:io.ox/core
@@ -2443,6 +2469,10 @@ msgstr "Drive instellingen"
 #: apps/io.ox/mail/import.js:57 module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "Sleep het EML bestand hiernaartoe om deze te importeren"
+
+#: apps/io.ox/mail/compose/extensions.js:270 module:io.ox/mail
+msgid "Drop attachments here"
+msgstr "Laat bijlagen hier los"
 
 #: apps/io.ox/mail/actions.js:719 module:io.ox/mail
 msgid "Drop here to import this mail"
@@ -3226,7 +3256,9 @@ msgid "Friday"
 msgstr "Vrijdag"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
-#: apps/io.ox/mail/main.js:534 apps/io.ox/mail/view-options.js:32
+#: apps/io.ox/mail/compose/extensions.js:101
+#: apps/io.ox/mail/compose/extensions.js:116 apps/io.ox/mail/main.js:534
+#: apps/io.ox/mail/view-options.js:32
 msgid "From"
 msgstr "Van"
 
@@ -3874,7 +3906,7 @@ msgid "Mail and Messaging"
 msgstr "E-mail en Berichtenservice"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:121
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:254
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:255
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "E-mail en sociale accounts"
@@ -5714,6 +5746,7 @@ msgstr "Zaterdag"
 #: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:70 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:85
 #: apps/io.ox/mail/mailfilter/settings/filter.js:100
 #: apps/io.ox/mail/settings/signatures/register.js:140
 #: apps/io.ox/oauth/settings.js:80 module:io.ox/settings/oauth
@@ -5825,15 +5858,13 @@ msgstr "Selecteer alles"
 msgid "Select folder"
 msgstr "Selecteer map"
 
-#: apps/io.ox/search/model.js:36 module:io.ox/search
-msgid ""
-"Selected folder is virtual and can not be searched. Please select another "
-"folder."
-msgstr ""
-
 #: apps/io.ox/core/commons.js:183 module:io.ox/core
 msgid "Selection Details"
 msgstr "Selectiedetails"
+
+#: apps/io.ox/mail/compose/extensions.js:88 module:io.ox/mail
+msgid "Send"
+msgstr "Verzenden"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
 #: apps/io.ox/mail/common-extensions.js:540 module:io.ox/mail
@@ -6033,6 +6064,14 @@ msgstr "Toon meer items"
 #: apps/io.ox/calendar/invitations/register.js:121 module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Toon afspraakdetails"
+
+#: apps/io.ox/mail/compose/extensions.js:186 module:io.ox/mail
+msgid "Show blind carbon copy input field"
+msgstr "Toon blinde kopie aan invoer veld"
+
+#: apps/io.ox/mail/compose/extensions.js:178 module:io.ox/mail
+msgid "Show carbon copy input field"
+msgstr "Toon kopie aan invoer veld"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:329
@@ -6314,6 +6353,8 @@ msgstr "Student"
 
 #: apps/io.ox/calendar/edit/extensions.js:93 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions/reminder.js:45 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:230
+#: apps/io.ox/mail/compose/extensions.js:234
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/vacationnotice/settings/model.js:137
@@ -6772,6 +6813,12 @@ msgid ""
 "will generally be created on behalf of the owner."
 msgstr ""
 
+#: apps/io.ox/search/model.js:36 module:io.ox/search
+msgid ""
+"The selected folder is virtual and can not be searched. Please select "
+"another folder."
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js:543 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -7161,6 +7208,7 @@ msgid "Title"
 msgstr "Titel"
 
 #: apps/io.ox/mail/common-extensions.js:242 module:io.ox/mail
+#: apps/io.ox/mail/compose/extensions.js:49
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:51
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:532
 #: apps/io.ox/mail/print.js:84 apps/io.ox/mail/view-options.js:32
@@ -7413,7 +7461,7 @@ msgid "Upload progress"
 msgstr "Is bezig"
 
 # Reinout: of gewoon 'laden'
-#. the name of the file, which is currently uploaded
+#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
 #: apps/io.ox/files/fluid/perspective.js:847 module:io.ox/files
 #, fuzzy
 #| msgid "Uploading..."
@@ -8559,14 +8607,8 @@ msgstr "uw platform"
 #~ msgid "Add Attachment"
 #~ msgstr "Bijlage Toevoegen"
 
-#~ msgid "Add attachments"
-#~ msgstr "Bijlagen toevoegen"
-
 #~ msgid "Add cipher code"
 #~ msgstr "Versleutelcode toevoegen"
-
-#~ msgid "Add local file"
-#~ msgstr "Lokaal bestand toevoegen"
 
 #~ msgid "Adding further details"
 #~ msgstr "Meer details toevoegen"
@@ -8626,9 +8668,6 @@ msgstr "uw platform"
 #~ msgid "Attention"
 #~ msgstr "Let op"
 
-#~ msgid "BCC"
-#~ msgstr "BCC"
-
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
 #~ "copies to other recipients or for adding attachments."
@@ -8664,9 +8703,6 @@ msgstr "uw platform"
 
 #~ msgid "Closing a tile"
 #~ msgstr "Een vlak sluiten"
-
-#~ msgid "Compose new mail"
-#~ msgstr "Nieuw e-mailbericht opstellen"
 
 #~ msgid "Composing a new E-Mail"
 #~ msgstr "Nieuw e-mailbericht opstellen"
@@ -8795,9 +8831,6 @@ msgstr "uw platform"
 
 #~ msgid "Drive Client"
 #~ msgstr "Drive Client"
-
-#~ msgid "Drop attachments here"
-#~ msgstr "Laat bijlagen hier los"
 
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr "Laat het bestand ergens vallen om de bijlage toe te voegen"
@@ -9223,9 +9256,6 @@ msgstr "uw platform"
 #~ msgid "Selecting a view"
 #~ msgstr "Selecteer een weergave"
 
-#~ msgid "Send"
-#~ msgstr "Verzenden"
-
 #~ msgid "Sender"
 #~ msgstr "Verzender"
 
@@ -9258,12 +9288,6 @@ msgstr "uw platform"
 #~ msgid_plural "Show attachments"
 #~ msgstr[0] "Bijlage tonen"
 #~ msgstr[1] "Bijlagen tonen"
-
-#~ msgid "Show blind carbon copy input field"
-#~ msgstr "Toon blinde kopie aan invoer veld"
-
-#~ msgid "Show carbon copy input field"
-#~ msgstr "Toon kopie aan invoer veld"
 
 # (Reinout)
 #~ msgid "Show legal information"

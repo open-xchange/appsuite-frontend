@@ -43,7 +43,7 @@ define('io.ox/calendar/actions/create', [
             .build(function () {
                 this.getContentNode().append(
                     $('<p>').text(gt('The selected calendar is shared by %1$s. Appointments in shared calendars will generally be created on behalf of the owner.', fullname) + ' '),
-                    $('<p>').html(gt('Do you really want to create an appointment <b>on behalf of the owner</b> or do you want to create an appointment <b>with the owner</b> in your own calendar?'))
+                    $('<p>').html(gt('Do you really want to create an appointment <b>on behalf of the folder owner</b> or do you want to create an appointment <b>with the folder owner</b> in your own calendar?'))
                 );
             })
             .addPrimaryButton('behalf', gt('On behalf of the owner'))
