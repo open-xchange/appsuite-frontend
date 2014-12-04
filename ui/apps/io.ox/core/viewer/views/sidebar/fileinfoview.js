@@ -19,6 +19,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
     'use strict';
 
+    var DRIVE_ROOT_FOLDER = '9';
+
     /**
      * The FileInfoView is intended as a sub view of the SidebarView and
      * is responsible for displaying the general file details.
@@ -32,12 +34,12 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         },
 
         initialize: function () {
-            console.info('FileInfoView.initialize()');
+            //console.info('FileInfoView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
         },
 
         render: function (data) {
-            console.info('FileInfoView.render() ', data);
+            //console.info('FileInfoView.render() ', data);
 
             var panel, panelHeader, panelBody,
                 fileName, size, modified, folderId;
@@ -102,7 +104,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 _.each(list, function (folder, index, list) {
                     var isLast = (index === list.length - 1);
 
-                    if (folder.id !== '9' /*9 -> Drive*/ ) {
+                    if (folder.id !== DRIVE_ROOT_FOLDER) {
                         folderPath += gt.noI18n(FolderAPI.getFolderTitle(folder.title, 30));
                         if (!isLast) {
                             folderPath += gt.noI18n(' / ');
@@ -122,7 +124,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         },
 
         dispose: function () {
-            console.info('FileInfoView.dispose()');
+            //console.info('FileInfoView.dispose()');
 
             this.stopListening();
             return this;

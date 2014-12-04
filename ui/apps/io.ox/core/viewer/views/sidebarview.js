@@ -12,8 +12,9 @@
  */
 define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/viewer/eventdispatcher',
-    'io.ox/core/viewer/views/sidebar/fileinfoview'
-], function (EventDispatcher, FileInfoView) {
+    'io.ox/core/viewer/views/sidebar/fileinfoview',
+    'io.ox/core/viewer/views/sidebar/filedescriptionview'
+], function (EventDispatcher, FileInfoView, FileDescriptionView) {
 
     'use strict';
 
@@ -41,6 +42,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.$el.on('dispose', this.dispose.bind(this));
 
             this.fileInfoView = new FileInfoView();
+            this.fileDescriptionView = new FileDescriptionView();
 
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
@@ -52,13 +54,16 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.$el.toggleClass('opened');
                 this.opened = !this.opened;
             });
-
-            this.render();
         },
 
         render: function (data) {
             //console.info('SidebarView.render() ', data);
-            this.$el.empty().append(this.fileInfoView.render(data).el);
+            // append sub views
+            this.$el.append(
+                    this.fileInfoView.render(data).el,
+                    this.fileDescriptionView.render(data).el
+            );
+
             return this;
         },
 
