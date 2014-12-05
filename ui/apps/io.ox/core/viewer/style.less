@@ -23,6 +23,8 @@
 @viewer-sidebar-bgcolor: #202020;
 @viewer-sidebar-width: 400px;
 
+@viewer-sidebar-description-max-height: 200px;
+
 .io-ox-viewer {
 
     background-color: @viewer-background-color;
@@ -129,6 +131,7 @@
         background: @viewer-sidebar-bgcolor;
         display: none;
         box-shadow: inset 0px 2px 2px 0px #000000;
+        overflow-y: scroll;
         &.opened {
             display: block;
         }
@@ -156,23 +159,24 @@
             .panel-body {
 
                 .description {
+                    max-height: @viewer-sidebar-description-max-height;
 
-                    textarea {
+                    &.description-text {
                         color: @viewer-text-color;
                         background-color: transparent;
                         display: none;
                         width: 100%;
-
+    
                         &.editmode {
                             display: block;
                         }
                     }
-
-                    span {
+                    &.description-label {
                         display: block;
                         white-space: pre-wrap;
+                        overflow-y: scroll;
                         padding: 3px;
-
+    
                         &.editmode {
                             display: none;
                         }

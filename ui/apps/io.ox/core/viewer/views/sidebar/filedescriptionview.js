@@ -28,8 +28,8 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         events: {
             'click #edit-button': 'onStartEdit',
-            'click #description-label': 'onStartEdit',
-            'blur #description-text': 'onStopEdit',
+            'click .description-label': 'onStartEdit',
+            'blur .description-text': 'onStopEdit',
             'keyup': 'onKeyUp'
         },
 
@@ -76,6 +76,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
             // set initial textarea height
             if (this.descriptionTextArea.height() < this.descriptionTextArea.prop('scrollHeight')) {
+                this.descriptionTextArea.height('auto');
                 this.descriptionTextArea.height(this.descriptionTextArea.prop('scrollHeight'));
             }
 
@@ -156,12 +157,12 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             panelHeader.append($('<h3>').addClass('panel-title').text(gt('Description')));
             panelHeader.append($('<a>', { id: 'edit-button', href: '#', role: 'button', tabindex: 1 }).addClass('panel-heading-button').append($('<i>').addClass('fa fa-pencil')));
 
-            this.descriptionLabel = $('<span>', { id: 'description-label' });
-            this.descriptionTextArea = $('<textarea>', { id: 'description-text' });
+            this.descriptionLabel = $('<span>').addClass('description description-label');
+            this.descriptionTextArea = $('<textarea>').addClass('description description-text');
 
             panelBody = $('<div>').addClass('panel-body')
                 .append(($('<div>').addClass('row'))
-                        .append(($('<div>').addClass('col-xs-12 col-md-12 description'))
+                        .append(($('<div>').addClass('col-xs-12 col-md-12'))
                                 .append(this.descriptionLabel, this.descriptionTextArea)));
 
             // get description
