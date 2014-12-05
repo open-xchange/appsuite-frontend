@@ -58,6 +58,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 if (previewUrl) {
                     image.attr({ src: _.unescapeHTML(previewUrl), alt: filename });
+                    image.css({ maxHeight: window.innerHeight - carouselRoot.offset().top });
                     slide.append(image);
                 }
 

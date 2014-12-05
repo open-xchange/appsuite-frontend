@@ -180,13 +180,8 @@ define('io.ox/core/viewer/backbone', [
                 return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
             } else if (this.isDriveFile()) {
                 // temporary workaround to show previews of office documents
-                var viewMode = this.isOfficeDocument() ? VIEW_MODES.PREVIEW : VIEW_MODES.THUMBNAIL,
-                    viewOptions = this.isOfficeDocument() ? {
-                        scaleType: 'contain',
-                        thumbnailWidth: 400,
-                        thumbnailHeight: 600
-                    } : null;
-                return FilesAPI.getUrl(this.get('origData'), viewMode, viewOptions);
+                var viewMode = this.isOfficeDocument() ? VIEW_MODES.PREVIEW : VIEW_MODES.THUMBNAIL;
+                return FilesAPI.getUrl(this.get('origData'), viewMode, null);
             }
             return null;
         },
