@@ -32,6 +32,11 @@ module.exports = function (grunt) {
                         dest: 'build/'
                     },
                     {
+                        src: ['src/browser.js'],
+                        expand: true,
+                        dest: 'build/'
+                    },
+                    {
                         expand: true,
                         src: ['apps/**/*.{json,yml,tmpl}', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
                         dest: 'build/'
