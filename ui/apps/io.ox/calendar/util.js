@@ -539,13 +539,12 @@ define('io.ox/calendar/util', [
         },
 
         getNote: function (data) {
-            return $.trim(gt.noI18n(data.note) || '')
+
+            var text = $.trim(gt.noI18n(data.note) || '')
                 .replace(/\n{3,}/g, '\n\n')
-                .replace(/</g, '&lt;')
-                .replace(/(https?\:\/\/\S+)/g, function ($1) {
-                    // soft-break long words (like long URLs)
-                    return '<a href="' + $1 + '" target="_blank">' + util.breakableHTML($1) + '</a>';
-                });
+                .replace(/</g, '&lt;');
+
+            return util.urlify(text);
         },
 
         getConfirmations: function (data) {
