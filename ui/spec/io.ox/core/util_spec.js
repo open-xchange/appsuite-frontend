@@ -155,7 +155,7 @@ define(['io.ox/core/util'], function (util) {
             });
         });
 
-        describe.only('urlify()', function () {
+        describe('urlify()', function () {
 
             it('doesnt change normal text', function () {
                 expect(util.urlify('Hello World!')).to.equal('Hello World!');
