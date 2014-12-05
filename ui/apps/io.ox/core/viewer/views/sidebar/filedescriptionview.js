@@ -29,22 +29,30 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         events: {
             'click #edit-button': 'onStartEdit',
             'click #description-label': 'onStartEdit',
-            'blur #description-text': 'onStopEdit'
+            'blur #description-text': 'onStopEdit',
+            'keyup': 'onKeyUp'
         },
 
         onStartEdit: function () {
-            console.info('FileDescriptionView.onStartEdit()');
-            this.setDescriptionString(this.descriptionString);
-            this.descriptionLabel.addClass('editmode');
-            this.descriptionTextArea.addClass('editmode').focus();
+            //console.info('FileDescriptionView.onStartEdit()');
+            this.startEdit();
         },
 
         onStopEdit: function () {
-            console.info('FileDescriptionView.onStopEdit()');
-            this.descriptionLabel.removeClass('editmode');
-            this.descriptionTextArea.removeClass('editmode');
-
+            //console.info('FileDescriptionView.onStopEdit()');
+            this.stopEdit();
             this.saveDescription(this.descriptionTextArea.val());
+        },
+
+        onKeyUp: function (e) {
+            //console.info('event type: ', e.type, 'keyCode: ', e.keyCode, 'charCode: ', e.charCode);
+
+            switch (e.which || e.keyCode) {
+            case 27:
+                this.stopEdit();
+                this.resetDescriptionString();
+                break;
+            }
         },
 
         initialize: function () {
@@ -56,6 +64,30 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             this.descriptionString = '';
             this.descriptionLabel = null;
             this.descriptionTextArea = null;
+        },
+
+        /**
+         * Switch description to texarea
+         */
+        startEdit: function () {
+            this.resetDescriptionString();
+            this.descriptionLabel.addClass('editmode');
+            this.descriptionTextArea.addClass('editmode');
+
+            // set initial textarea height
+            if (this.descriptionTextArea.height() < this.descriptionTextArea.prop('scrollHeight')) {
+                this.descriptionTextArea.height(this.descriptionTextArea.prop('scrollHeight'));
+            }
+
+            this.descriptionTextArea.focus();
+        },
+
+        /**
+         * Switch description to label
+         */
+        stopEdit: function () {
+            this.descriptionLabel.removeClass('editmode');
+            this.descriptionTextArea.removeClass('editmode');
         },
 
         /**
@@ -76,6 +108,13 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         },
 
         /**
+         * Resets the label and text area to the previous description
+         */
+        resetDescriptionString: function () {
+            this.setDescriptionString(this.descriptionString);
+        },
+
+        /**
          * Updates the file with the new description
          */
         saveDescription: function (description) {
@@ -91,19 +130,19 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 description: description
             })
             .done(function (file) {
-                console.info('FilesAPI.update() ok ', file);
+                //console.info('FilesAPI.update() ok ', file);
                 this.setDescriptionString(file && file.description);
 
             }.bind(this))
-            .fail(function (err) {
-                console.info('FilesAPI.update() error ', err);
-                this.setDescriptionString(this.descriptionString);
+            .fail(function (/*err*/) {
+                //console.info('FilesAPI.update() error ', err);
+                this.resetDescriptionString();
 
             }.bind(this));
         },
 
         render: function (data) {
-            console.info('FileDescriptionView.render() ', data);
+            //console.info('FileDescriptionView.render() ', data);
 
             var panel, panelHeader, panelBody;
 
@@ -128,13 +167,13 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             // get description
             FilesAPI.get({ id: this.id, folder_id: this.folderId })
             .done(function (file) {
-                console.info('FilesAPI.get() ok ', file);
+                //console.info('FilesAPI.get() ok ', file);
                 this.setDescriptionString(file && file.description);
 
             }.bind(this))
-            .fail(function (err) {
-                console.info('FilesAPI.get() error ', err);
-                this.setDescriptionString('');
+            .fail(function (/*err*/) {
+                //console.info('FilesAPI.get() error ', err);
+                this.setDescriptionString();
 
             }.bind(this));
 
@@ -144,7 +183,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         },
 
         dispose: function () {
-            console.info('FileDescriptionView.dispose()');
+            //console.info('FileDescriptionView.dispose()');
 
             this.stopListening();
             return this;
