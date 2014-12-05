@@ -39,7 +39,9 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
     //     }
     // });
 
-    return {
+    var regUrl = /((https?|ftps?)\:\/\/[^\s"]+)/gim;
+
+    var that = {
 
         // render a person's name
         renderPersonalName: function (options, data) {
@@ -94,6 +96,21 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return str;
         },
 
+        // detect URLs in plain text
+        urlify: function (text) {
+
+            return text.replace(regUrl, function ($1) {
+                var suffix = '';
+                // fix punctuation marks
+                $1 = $1.replace(/([.,;!?>]+)$/, function (all, marks) {
+                    suffix = marks;
+                    return '';
+                });
+                // soft-break long words (like long URLs)
+                return '<a href="' + $1 + '" target="_blank">' + that.breakableHTML($1) + '</a>' + suffix;
+            });
+        },
+
         // split long character sequences
         breakableHTML: function (text) {
             // inject zero width space and replace by <wbr>
@@ -113,7 +130,11 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         breakableText: function (text) {
-            return String(text || '').replace(/(\S{20})/g, '$1\u200B');
+            var result = String(text || '').replace(/(\S{20})/g, '$1\u200B');
+            if (result[result.length - 1] === '\u200B') {
+                result = result.slice(0, -1);
+            }
+            return result;
         },
 
         isValidMailAddress: (function () {
@@ -176,4 +197,6 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             };
         }())
     };
+
+    return that;
 });
