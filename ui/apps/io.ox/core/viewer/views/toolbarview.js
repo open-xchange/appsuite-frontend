@@ -25,6 +25,18 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     'use strict';
 
+    // a map of file categories to Font Awesome icon classes
+    var CATEGORY_ICON_MAP = {
+        'OFFICE': 'fa-file-text-o',
+        'OFFICE_TEXT': 'fa-file-word-o',
+        'OFFICE_PRESENTATION': 'fa-file-powerpoint-o',
+        'OFFICE_SPREADSHEET': 'fa-file-excel-o',
+        'IMAGE': 'fa-file-image-o',
+        'VIDEO': 'fa-file-video-o',
+        'AUDIO': 'fa-file-audio-o',
+        'PDF': 'fa-file-pdf-o'
+    };
+
     // define extension points for this ToolbarView
     var toolbarPoint = Ext.point('io.ox/core/viewer/toolbar'),
         toolbarLinksPoint = Ext.point('io.ox/core/viewer/toolbar/links'),
@@ -34,12 +46,13 @@ define('io.ox/core/viewer/views/toolbarview', [
             'filename': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-file-image-o',
-                label: gt('Click to rename'),
+                title: gt('Click to rename'),
                 ref: 'io.ox/core/viewer/actions/filename',
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
-                    this.append(baton.model.get('filename'));
+                    var iconClass = CATEGORY_ICON_MAP[baton.model.get('fileCategory')] || 'fa-file-o',
+                        fileIcon = $('<i class="fa">').addClass(iconClass);
+                    this.append(fileIcon, baton.model.get('filename'));
                     this.parent().addClass('pull-left');
                 }
             },
@@ -47,14 +60,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-times',
-                label: gt('Close viewer'),
                 ref: 'io.ox/core/viewer/actions/close'
             },
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-info-circle',
-                label: gt('See file detail'),
                 ref: 'io.ox/core/viewer/actions/togglesidebar'
             },
             // low priority links, will be shown in a dropdown.

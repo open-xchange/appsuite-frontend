@@ -60,17 +60,16 @@
                 padding-left: 20px;
                 text-align: left;
                 .ellipsis();
-                i { margin-right: 10px };
+                i {
+                    margin-right: 10px;
+                    font-size: 16px;
+                };
+                i.fa-file-excel-o { color: #44B957; }
+                i.fa-file-word-o { color: #1A9DD4; }
+                i.fa-file-powerpoint-o { color: #EE5F37; }
+                i.fa-file-pdf-o { color: #CF1E28; }
+                i.fa-file-image-o { color: #EE5F37; }
             }
-        }
-
-        #filename {
-            position:absolute;
-            top: 0;
-            width: @viewer-toolbar-filename-width;
-            text-align: left;
-            .ellipsis();
-            i { margin-right: 10px; }
         }
 
         .pull-left { float: left; }
@@ -91,6 +90,7 @@
 
         .item {
             position:relative;
+            outline: none;
             img {
                 position: absolute;
                 top: 0;
@@ -133,7 +133,7 @@
             display: block;
         }
     }
-    
+
     .viewer-fileinfo, .viewer-filedescription {
 
         .panel {
@@ -144,7 +144,7 @@
                 color: @viewer-text-color;
                 background-color: transparent;
                 position: relative;
-                
+
                 a.panel-heading-button {
                     color: @viewer-text-color;
                     position: absolute;

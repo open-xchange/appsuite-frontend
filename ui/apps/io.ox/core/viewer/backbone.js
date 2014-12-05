@@ -35,7 +35,7 @@ define('io.ox/core/viewer/backbone', [
         THUMBNAIL_SIZE = { thumbnailWidth: 400, thumbnailHeight: 600 }, // temporary default size for office docs
         VIEW_MODES = { VIEW: 'view', PREVIEW: 'preview', THUMBNAIL: 'thumbnail', DOWNLOAD: 'download' },
         MIME_TYPES = {
-            IMAGES: {
+            IMAGE: {
                 'jpg':  'image/jpeg',
                 'jpeg': 'image/jpeg',
                 'png':  'image/png',
@@ -92,6 +92,38 @@ define('io.ox/core/viewer/backbone', [
                 'ppt': 'application/vnd.ms-powerpoint',
                 'pps': 'application/vnd.ms-powerpoint'
             },
+
+            OFFICE_SPREADSHEET: {
+                'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+                'xls': 'application/vnd.ms-excel',
+                'xlb': 'application/vnd.ms-excel',
+                'xlt': 'application/vnd.ms-excel',
+                'ods': 'application/vnd.oasis.opendocument.spreadsheet',
+                'ots': 'application/vnd.oasis.opendocument.spreadsheet-template'
+            },
+
+            OFFICE_TEXT: {
+                'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+                'doc': 'application/msword',
+                'dot': 'application/msword',
+                'odt': 'application/vnd.oasis.opendocument.text',
+                'odm': 'application/vnd.oasis.opendocument.text-master',
+                'ott': 'application/vnd.oasis.opendocument.text-template',
+                'oth': 'application/vnd.oasis.opendocument.text-web'
+            },
+
+            OFFICE_PRESENTATION: {
+                'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+                'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+                'ppt': 'application/vnd.ms-powerpoint',
+                'pps': 'application/vnd.ms-powerpoint',
+                'odp': 'application/vnd.oasis.opendocument.presentation',
+                'otp': 'application/vnd.oasis.opendocument.presentation-template'
+            },
+
             PDF: {
                 'pdf': 'application/pdf'
             }
@@ -137,6 +169,27 @@ define('io.ox/core/viewer/backbone', [
                 }
             }
 
+            /**
+             *  Retrieves the file category from its MIME type.
+             *
+             *  @param {String} mimeType
+             *  the MIME type string
+             *
+             *  @returns {String}
+             *   Returns one of these supported categories: 'IMAGE', 'VIDEO', AUDIO', 'OFFICE', 'PDF',
+             *   and returns null if no matching category is found.
+             */
+            function getFileCategory (mimeType) {
+                var fileCategory = null;
+                _.each(MIME_TYPES, function (extensions, category) {
+                    var mimeTypes = _.values(extensions);
+                    if (_.contains(mimeTypes, mimeType)) {
+                        fileCategory = category;
+                    }
+                });
+                return fileCategory;
+            }
+
             result.origData = _.copy(data, true);   // create a deep copy, since we want to do updates later
             result.source = getFileSource (data);
 
@@ -144,6 +197,7 @@ define('io.ox/core/viewer/backbone', [
                 result.filename = data.filename;
                 result.size = data.size;
                 result.contentType = data.content_type;
+                result.fileCategory = getFileCategory(data.content_type);
                 result.id = data.id;    // could be a attachment id, or drive file id
                 result.folderId = data.mail && data.mail.folder_id || null;
             } else if (result.source === ITEM_TYPE_FILE) {
@@ -151,6 +205,7 @@ define('io.ox/core/viewer/backbone', [
                 result.size = data.file_size;
                 result.version = data.version;  // drive only
                 result.contentType = data.file_mimetype;
+                result.fileCategory = getFileCategory(data.file_mimetype);
                 result.id = data.id;    // could be a attachment id, or drive file id
                 result.folderId = data.folder_id;
                 result.meta = data.meta;
@@ -168,19 +223,13 @@ define('io.ox/core/viewer/backbone', [
             return this.get('source') === ITEM_TYPE_FILE;
         },
 
-        isOfficeDocument: function () {
-            var officeMimeTypes = _.values(MIME_TYPES.OFFICE),
-                currentContentType = this.get('contentType');
-            return _.contains(officeMimeTypes, currentContentType);
-        },
-
         getPreviewUrl: function () {
             //console.warn('backbone.getPreviewUrl()');
             if (this.isMailAttachment()) {
                 return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
             } else if (this.isDriveFile()) {
                 // temporary workaround to show previews of office documents
-                var viewMode = this.isOfficeDocument() ? VIEW_MODES.PREVIEW : VIEW_MODES.THUMBNAIL;
+                var viewMode = (this.get('fileCategory').indexOf('OFFICE') >= 0) ? VIEW_MODES.PREVIEW : VIEW_MODES.THUMBNAIL;
                 return FilesAPI.getUrl(this.get('origData'), viewMode, null);
             }
             return null;
