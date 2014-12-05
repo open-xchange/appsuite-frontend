@@ -545,7 +545,7 @@ define.async('io.ox/realtime/rt',
             enroled = false;
             enrol().done(function () {
                 flushAllBuffers();
-                api.trigger('reset');
+                api.trigger('reset', error);
             });
             return;
         }
