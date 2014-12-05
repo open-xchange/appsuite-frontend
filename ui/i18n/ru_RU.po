@@ -1343,7 +1343,7 @@ msgstr "Календарь"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:130
-#: apps/io.ox/core/main.js:489 apps/io.ox/core/main.js:1341
+#: apps/io.ox/core/main.js:489 apps/io.ox/core/main.js:1343
 #: apps/io.ox/core/permissions/permissions.js:367
 #: apps/io.ox/core/permissions/permissions.js:409 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:53
@@ -1484,7 +1484,7 @@ msgstr "Изменения сохранены."
 msgid "Character"
 msgstr "Символы"
 
-#: apps/io.ox/calendar/toolbar.js:151 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:160 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:166 module:io.ox/contacts
 #: apps/io.ox/mail/toolbar.js:239 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:142
@@ -1774,7 +1774,7 @@ msgstr "Контакты перенесены"
 msgid "Contains"
 msgstr "содержит"
 
-#: apps/io.ox/core/main.js:1342 module:io.ox/core
+#: apps/io.ox/core/main.js:1344 module:io.ox/core
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -1964,7 +1964,7 @@ msgstr "Денежная единица"
 msgid "Customize this page"
 msgstr "Настроить страницу"
 
-#: apps/io.ox/calendar/toolbar.js:152 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:161 module:io.ox/calendar
 msgid "Dark colors"
 msgstr "Темные цвета"
 
@@ -1994,7 +1994,7 @@ msgstr "Дата рождения"
 
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
 #: apps/io.ox/calendar/freebusy/templates.js:79 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:143 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:152 module:io.ox/calendar
 msgid "Day"
 msgstr "День"
 
@@ -3127,7 +3127,7 @@ msgstr "Разрешения папок"
 msgid "Folder type"
 msgstr "Тип папки"
 
-#: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:159 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:165 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:216 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:238 module:io.ox/mail
@@ -3136,7 +3136,7 @@ msgid "Folder view"
 msgstr "Вид папок"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1565 module:io.ox/core
+#: apps/io.ox/core/main.js:1567 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3747,7 +3747,7 @@ msgstr "Фамилия, имя"
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "Меню запуска. Чтобы перейти к списку, нажмите [Enter]."
 
-#: apps/io.ox/calendar/toolbar.js:142 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:151 module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:210 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:231 module:io.ox/mail
 msgid "Layout"
@@ -3812,7 +3812,7 @@ msgstr "Ошибка LinkedIn:"
 msgid "Links"
 msgstr "Ссылки"
 
-#: apps/io.ox/calendar/toolbar.js:147 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:156 module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:211 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:235 module:io.ox/mail
 msgid "List"
@@ -4138,7 +4138,7 @@ msgid "Monday"
 msgstr "Понедельник"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
-#: apps/io.ox/calendar/toolbar.js:146 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:155 module:io.ox/calendar
 msgid "Month"
 msgstr "Месяц"
 
@@ -4741,7 +4741,7 @@ msgstr "Дополнительно 19"
 msgid "Optional 20"
 msgstr "Дополнительно 20"
 
-#: apps/io.ox/calendar/toolbar.js:149 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:158 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:164 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:215 module:io.ox/files
@@ -5230,7 +5230,7 @@ msgid "Primary account"
 msgstr "Основная учетная запись"
 
 #: apps/io.ox/calendar/actions.js:418 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:79 apps/io.ox/calendar/toolbar.js:154
+#: apps/io.ox/calendar/toolbar.js:79 apps/io.ox/calendar/toolbar.js:163
 #: apps/io.ox/contacts/actions.js:461 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:98 apps/io.ox/core/print.js:108
 #: module:io.ox/core apps/io.ox/mail/actions.js:610 module:io.ox/mail
@@ -5639,7 +5639,7 @@ msgstr "Группы ресурсов"
 msgid "Resources"
 msgstr "Ресурсы"
 
-#: apps/io.ox/core/main.js:1334 module:io.ox/core
+#: apps/io.ox/core/main.js:1336 module:io.ox/core
 msgid "Restore applications"
 msgstr "Восстановить приложения"
 
@@ -6725,7 +6725,7 @@ msgstr "Папка освобождена."
 msgid "The folder has been emptied."
 msgstr "Папка освобождена."
 
-#: apps/io.ox/core/main.js:1336 module:io.ox/core
+#: apps/io.ox/core/main.js:1338 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -7515,7 +7515,7 @@ msgid "Vertical"
 msgstr "Вертикально"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-#: apps/io.ox/calendar/toolbar.js:141 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:163 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:209 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:230 module:io.ox/mail
@@ -7565,7 +7565,7 @@ msgid "Wednesday"
 msgstr "Среда"
 
 #: apps/io.ox/calendar/freebusy/templates.js:81 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:145 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:154 module:io.ox/calendar
 msgid "Week"
 msgstr "Неделя"
 
@@ -7632,7 +7632,7 @@ msgid "Whole day"
 msgstr "Весь день"
 
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:153 module:io.ox/calendar
 msgid "Workweek"
 msgstr "Рабочая неделя"
 

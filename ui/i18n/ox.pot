@@ -37,7 +37,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/date.js:24
 #: module:io.ox/core
-#: apps/io.ox/calendar/toolbar.js:146
+#: apps/io.ox/calendar/toolbar.js:155
 #: module:io.ox/calendar
 msgid "Month"
 msgstr ""
@@ -46,7 +46,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/calendar/freebusy/templates.js:79
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:143
+#: apps/io.ox/calendar/toolbar.js:152
 #: module:io.ox/calendar
 msgid "Day"
 msgstr ""
@@ -262,7 +262,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:418
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:79
-#: apps/io.ox/calendar/toolbar.js:154
+#: apps/io.ox/calendar/toolbar.js:163
 #: apps/io.ox/contacts/actions.js:461
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:98
@@ -364,7 +364,7 @@ msgstr ""
 #: apps/io.ox/core/folder/picker.js:94
 #: apps/io.ox/core/import/import.js:130
 #: apps/io.ox/core/main.js:489
-#: apps/io.ox/core/main.js:1341
+#: apps/io.ox/core/main.js:1343
 #: apps/io.ox/core/permissions/permissions.js:367
 #: apps/io.ox/core/permissions/permissions.js:409
 #: apps/io.ox/core/print.js:113
@@ -1270,14 +1270,14 @@ msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:80
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:144
+#: apps/io.ox/calendar/toolbar.js:153
 #: module:io.ox/calendar
 msgid "Workweek"
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:81
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:145
+#: apps/io.ox/calendar/toolbar.js:154
 #: module:io.ox/calendar
 msgid "Week"
 msgstr ""
@@ -1947,7 +1947,7 @@ msgid "Status"
 msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-#: apps/io.ox/calendar/toolbar.js:141
+#: apps/io.ox/calendar/toolbar.js:150
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:163
 #: module:io.ox/contacts
@@ -1959,7 +1959,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:142
+#: apps/io.ox/calendar/toolbar.js:151
 #: module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:210
 #: module:io.ox/files
@@ -1968,7 +1968,7 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:147
+#: apps/io.ox/calendar/toolbar.js:156
 #: module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:211
 #: module:io.ox/files
@@ -1977,7 +1977,7 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:149
+#: apps/io.ox/calendar/toolbar.js:158
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:164
 #: module:io.ox/contacts
@@ -1993,7 +1993,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:150
+#: apps/io.ox/calendar/toolbar.js:159
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:165
 #: module:io.ox/contacts
@@ -2005,7 +2005,7 @@ msgstr ""
 msgid "Folder view"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:151
+#: apps/io.ox/calendar/toolbar.js:160
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:166
 #: module:io.ox/contacts
@@ -2015,7 +2015,7 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
-#: apps/io.ox/calendar/toolbar.js:152
+#: apps/io.ox/calendar/toolbar.js:161
 #: module:io.ox/calendar
 msgid "Dark colors"
 msgstr ""
@@ -4496,23 +4496,23 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1334
+#: apps/io.ox/core/main.js:1336
 #: module:io.ox/core
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1336
+#: apps/io.ox/core/main.js:1338
 #: module:io.ox/core
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1342
+#: apps/io.ox/core/main.js:1344
 #: module:io.ox/core
 msgid "Continue"
 msgstr ""
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1565
+#: apps/io.ox/core/main.js:1567
 #: module:io.ox/core
 msgid "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files and folders\" to access this folder again."
 msgstr ""
