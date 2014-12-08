@@ -15,8 +15,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
+    'io.ox/files/api',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, Ext, Links, gt) {
+], function (EventDispatcher, Dropdown, Ext, Links, FilesAPI, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -51,9 +52,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
                     var iconClass = CATEGORY_ICON_MAP[baton.model.get('fileCategory')] || 'fa-file-o',
-                        fileIcon = $('<i class="fa">').addClass(iconClass);
-                    this.append(fileIcon, baton.model.get('filename'));
-                    this.parent().addClass('pull-left');
+                        fileIcon = $('<i class="fa">').addClass(iconClass),
+                        filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename')),
+                        fileInputField = $('<input type="text" class="filename-field">').val(baton.model.get('filename'));
+                    this.addClass('toolbar-filename')
+                        .append(fileIcon, filenameLabel)
+                        .after(fileInputField)
+                        .parent().addClass('pull-left');
                 }
             },
             'close': {
@@ -127,7 +132,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             return true;
         },
         action: function (baton) {
-            console.warn('ToolbarView.actions.filename', baton);
+            console.warn('ToolbarView.actions.filename', baton, this);
         }
     });
 
@@ -201,7 +206,9 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         events: {
             'click a[data-action="close"]': 'onClose',
-            'click a[data-action="togglesidebar"]': 'onToggleSidebar'
+            'click a[data-action="togglesidebar"]': 'onToggleSidebar',
+            'click a.toolbar-filename': 'onEditModeStart',
+            'blur input.filename-field': 'onEditModeEnd'
         },
 
         initialize: function () {
@@ -221,10 +228,43 @@ define('io.ox/core/viewer/views/toolbarview', [
             this.trigger('close');
         },
 
-        onToggleSidebar: function () {
-            //console.info('ToolbarView.onClose()');
-            this.$el.find('#viewer-toggle-sidebar').toggleClass('active');
+        onToggleSidebar: function (event) {
+            //console.warn('ToolbarView.onClose()', event);
+            $(event.currentTarget).toggleClass('active');
             EventDispatcher.trigger('viewer:toggle:sidebar');
+        },
+
+        onEditModeStart: function () {
+            //console.warn('ToolbarView.onEditModeStart()', this.filename, this.filenameInputField);
+            this.filename.addClass('editmode');
+            this.filenameInputField.val(this.filename.text()).addClass('editmode').focus();
+        },
+
+        onEditModeEnd: function () {
+            //console.warn('ToolbarView.onEditModeEnd()');
+            this.filename.find('.filename-label').text(this.filenameInputField.val());
+            this.filename.removeClass('editmode');
+            this.filenameInputField.removeClass('editmode');
+            this.saveFilename();
+        },
+
+        saveFilename: function () {
+            var filename = this.filename.find('.filename-label').text(),
+                self = this;
+
+            FilesAPI.update({
+                id: this.model.get('id'),
+                folder_id: this.model.get('folderId'),
+                filename: filename
+            })
+            .done(function (file) {
+                //console.info('FilesAPI.update() ok ', file);
+                if (!file || !file.filename) { return; }
+                self.model.set('filename', file.filename);
+            })
+            .fail(function (/*err*/) {
+                //console.info('ToolbarView.FilesAPI.update() error ', err);
+            });
         },
 
         render: function (data) {
@@ -233,8 +273,11 @@ define('io.ox/core/viewer/views/toolbarview', [
             // draw toolbar
             var toolbar = this.$el,
                 baton = Ext.Baton({ $el: toolbar, model: data.model });
+            this.model = data.model;
             toolbar.empty();
             Ext.point('io.ox/core/viewer/toolbar').invoke('draw', toolbar, baton);
+            this.filename = this.$('.toolbar-filename');
+            this.filenameInputField = this.$('.filename-field');
             return this;
         },
 
