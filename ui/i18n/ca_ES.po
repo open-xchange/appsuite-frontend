@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-16 10:24+0000\n"
+"PO-Revision-Date: 2014-12-02 17:07+0000\n"
 "Last-Translator: Xavier <xavier.pons@uib.es>\n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: ca_ES\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1413455041.000000\n"
+"X-POOTLE-MTIME: 1417540062.000000\n"
 
 #. File size
 #. %1$d is the number
@@ -2301,7 +2301,6 @@ msgid "Do you really want to delete this file?"
 msgstr "Realment voleu suprimir aquest fitxer?"
 
 #: apps/io.ox/tasks/actions/delete.js:32 module:io.ox/tasks
-#, fuzzy
 #| msgid "Do you really want to delete this task?"
 #| msgid_plural "Do you really want to delete this tasks?"
 msgid "Do you really want to delete this task?"
