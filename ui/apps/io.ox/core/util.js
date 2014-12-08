@@ -39,7 +39,9 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
     //     }
     // });
 
-    return {
+    var regUrl = /((https?|ftps?)\:\/\/[^\s"]+)/gim;
+
+    var that = {
 
         // render a person's name
         renderPersonalName: function (options, data) {
@@ -92,6 +94,21 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             str = str.replace(/\\"/g, '"');
 
             return str;
+        },
+
+        // detect URLs in plain text
+        urlify: function (text) {
+
+            return text.replace(regUrl, function ($1) {
+                var suffix = '';
+                // fix punctuation marks
+                $1 = $1.replace(/([.,;!?>]+)$/, function (all, marks) {
+                    suffix = marks;
+                    return '';
+                });
+                // soft-break long words (like long URLs)
+                return '<a href="' + $1 + '" target="_blank">' + that.breakableHTML($1) + '</a>' + suffix;
+            });
         },
 
         // split long character sequences
@@ -176,4 +193,6 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             };
         }())
     };
+
+    return that;
 });

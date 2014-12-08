@@ -1137,7 +1137,9 @@ define('io.ox/core/main', [
             // fix old infostore
             if (hash.m === 'infostore') hash.m = 'files';
 
-            if (looksLikeDeepLink && hash.app && hash.folder && hash.id) {
+            // no id values with id collections 'folder.id,folder.id'
+            // no virtual folder
+            if (looksLikeDeepLink && hash.app && hash.folder && hash.id && hash.folder.indexOf('virtual/') !== 0 && hash.id.indexOf(',') < 0) {
 
                 // new-school: app + folder + id
                 var id = hash.id.indexOf('.') > -1 ? _.cid(hash.id).id : hash.id;

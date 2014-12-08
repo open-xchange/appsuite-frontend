@@ -341,6 +341,7 @@ define('io.ox/calendar/week/perspective', [
         followDeepLink: function () {
             var cid = _.url.hash('id'), e;
             if (cid) {
+                cid = cid.split(',',1)[0];
                 e = $.Event('click', { target: this.main });
                 //marker to make the view open in the correct week
                 this.setNewStart = true;

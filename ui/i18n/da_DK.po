@@ -1329,7 +1329,7 @@ msgstr "Kalendervisning"
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
 #: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:130
-#: apps/io.ox/core/main.js:489 apps/io.ox/core/main.js:1341
+#: apps/io.ox/core/main.js:489 apps/io.ox/core/main.js:1343
 #: apps/io.ox/core/permissions/permissions.js:367
 #: apps/io.ox/core/permissions/permissions.js:409 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/relogin.js:56 apps/io.ox/core/sub/subscriptions.js:53
@@ -1469,7 +1469,7 @@ msgstr "Ændringerne er blevet gemt."
 msgid "Character"
 msgstr "Karakter"
 
-#: apps/io.ox/calendar/toolbar.js:151 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:160 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:166 module:io.ox/contacts
 #: apps/io.ox/mail/toolbar.js:239 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:142
@@ -1757,7 +1757,7 @@ msgstr "Kontakterne blev flyttet"
 msgid "Contains"
 msgstr "Indeholder"
 
-#: apps/io.ox/core/main.js:1342 module:io.ox/core
+#: apps/io.ox/core/main.js:1344 module:io.ox/core
 msgid "Continue"
 msgstr "Fortsæt"
 
@@ -1947,7 +1947,7 @@ msgstr "Valuta"
 msgid "Customize this page"
 msgstr "Tilpas denne side"
 
-#: apps/io.ox/calendar/toolbar.js:152 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:161 module:io.ox/calendar
 msgid "Dark colors"
 msgstr "Mørke farver"
 
@@ -1977,7 +1977,7 @@ msgstr "Fødselsdato"
 
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
 #: apps/io.ox/calendar/freebusy/templates.js:79 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:143 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:152 module:io.ox/calendar
 msgid "Day"
 msgstr "Dag"
 
@@ -3108,7 +3108,7 @@ msgstr "Mappetilladelser"
 msgid "Folder type"
 msgstr "Mappetype"
 
-#: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:159 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:165 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:216 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:238 module:io.ox/mail
@@ -3117,7 +3117,7 @@ msgid "Folder view"
 msgstr "Mappevisning"
 
 #. %1$s is the filename
-#: apps/io.ox/core/main.js:1565 module:io.ox/core
+#: apps/io.ox/core/main.js:1567 module:io.ox/core
 msgid ""
 "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files "
 "and folders\" to access this folder again."
@@ -3729,7 +3729,7 @@ msgstr "Efternavn, Fornavn"
 msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "Starter drop-ned liste. Tryk [enter] for at gå til hop-ned."
 
-#: apps/io.ox/calendar/toolbar.js:142 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:151 module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:210 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:231 module:io.ox/mail
 msgid "Layout"
@@ -3794,7 +3794,7 @@ msgstr "LinkedIn gav en fejl:"
 msgid "Links"
 msgstr "Links"
 
-#: apps/io.ox/calendar/toolbar.js:147 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:156 module:io.ox/calendar
 #: apps/io.ox/files/toolbar.js:211 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:235 module:io.ox/mail
 msgid "List"
@@ -4120,7 +4120,7 @@ msgid "Monday"
 msgstr "Mandag"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
-#: apps/io.ox/calendar/toolbar.js:146 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:155 module:io.ox/calendar
 msgid "Month"
 msgstr "Måned"
 
@@ -4717,7 +4717,7 @@ msgstr "Valgfri 19"
 msgid "Optional 20"
 msgstr "Valgfri 20"
 
-#: apps/io.ox/calendar/toolbar.js:149 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:158 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:164 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:121 module:io.ox/mail/emoji
 #: apps/io.ox/files/toolbar.js:215 module:io.ox/files
@@ -5209,7 +5209,7 @@ msgid "Primary account"
 msgstr "Primær konto"
 
 #: apps/io.ox/calendar/actions.js:418 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:79 apps/io.ox/calendar/toolbar.js:154
+#: apps/io.ox/calendar/toolbar.js:79 apps/io.ox/calendar/toolbar.js:163
 #: apps/io.ox/contacts/actions.js:461 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:98 apps/io.ox/core/print.js:108
 #: module:io.ox/core apps/io.ox/mail/actions.js:610 module:io.ox/mail
@@ -5619,7 +5619,7 @@ msgstr "Ressourcegruppe"
 msgid "Resources"
 msgstr "Ressourcer"
 
-#: apps/io.ox/core/main.js:1334 module:io.ox/core
+#: apps/io.ox/core/main.js:1336 module:io.ox/core
 msgid "Restore applications"
 msgstr "Gendan programmer"
 
@@ -6707,7 +6707,7 @@ msgstr "Denne mappe er blevet ryddet op."
 msgid "The folder has been emptied."
 msgstr "Mappen er blevet tømt."
 
-#: apps/io.ox/core/main.js:1336 module:io.ox/core
+#: apps/io.ox/core/main.js:1338 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -7496,7 +7496,7 @@ msgid "Vertical"
 msgstr "Lodret"
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-#: apps/io.ox/calendar/toolbar.js:141 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js:163 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:209 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:230 module:io.ox/mail
@@ -7546,7 +7546,7 @@ msgid "Wednesday"
 msgstr "Onsdag"
 
 #: apps/io.ox/calendar/freebusy/templates.js:81 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:145 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:154 module:io.ox/calendar
 msgid "Week"
 msgstr "Uge"
 
@@ -7613,7 +7613,7 @@ msgid "Whole day"
 msgstr "Hel dag"
 
 #: apps/io.ox/calendar/freebusy/templates.js:80 module:io.ox/calendar/freebusy
-#: apps/io.ox/calendar/toolbar.js:144 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:153 module:io.ox/calendar
 msgid "Workweek"
 msgstr "Arbejdsuge"
 
