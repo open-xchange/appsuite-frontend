@@ -56,6 +56,7 @@ define('io.ox/core/folder/selection', [], function () {
             // we use get() to support duplicates!
             if (this.get() === id) return;
             // go!
+            this.resetSelected(items);
             this.pick(index, items, { focus: false });
         },
 
@@ -168,6 +169,7 @@ define('io.ox/core/folder/selection', [], function () {
             return nodes.addClass('selected').attr({ 'aria-selected': true, tabindex: 1 });
         },
 
+        // TODO: isn't this basically the same as resetSelected?
         uncheck: function (nodes) {
             nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
         },

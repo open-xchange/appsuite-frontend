@@ -84,7 +84,7 @@ define('io.ox/core/settings/downloads/pane', [
     }
 
     // add OX Drive download links
-    if (capabilities.has('infostore')) {
+    if (capabilities.has('drive')) {
 
         var productName = driveClientsSettings.get('productName'),
             linkTo = driveClientsSettings.get('linkTo');

@@ -147,7 +147,7 @@ define(['io.ox/core/util'], function (util) {
             it('does not inseart breaks on text boundaries', function () {
                 expect(util.breakableText('01234567890123456789')).to.equal('01234567890123456789');
                 expect(util.breakableText('0123456789012345678901234567890123456789')).to.equal('01234567890123456789\u200B01234567890123456789');
-                expect(util.breakableText('012345678901234567890123456789012345678901')).to.equal('01234567890123456789\u200B012345678901234567890\u200B1');
+                expect(util.breakableText('012345678901234567890123456789012345678901')).to.equal('01234567890123456789\u200B01234567890123456789\u200B01');
             });
 
             it('breaks longs strings properly', function () {
