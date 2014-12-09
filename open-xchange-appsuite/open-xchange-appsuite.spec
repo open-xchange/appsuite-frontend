@@ -7,7 +7,7 @@ BuildRequires:  ant-nodeps
 %endif
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
-Version:        @OXVERSION@
+rsion:        @OXVERSION@
 %define         ox_release 0
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
@@ -278,16 +278,16 @@ rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 %clean
 %{__rm} -rf %{buildroot}
 
-%define update "/opt/open-xchange/appsuite/share/update-themes.sh --later"
+%define update "/opt/open-xchange/appsuite/share/update-themes.sh"
 
 %post manifest
-if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
+if [ $1 -eq 1 -a -x %{update} ]; then %{update} --later; fi
 
 %postun manifest
 if [ $1 -lt 1 ]; then
     rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
 else
-    if [ -x %{update} ]; then %{update}; fi
+    if [ -x %{update} ]; then %{update} --later; fi
 fi
 
 %triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
