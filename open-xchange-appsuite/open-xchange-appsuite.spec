@@ -7,7 +7,7 @@ BuildRequires:  ant-nodeps
 %endif
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
-rsion:        @OXVERSION@
+Version:        @OXVERSION@
 %define         ox_release 0
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
