@@ -31,14 +31,6 @@ define('io.ox/core/viewer/views/mainview', [
 
         className: 'io-ox-viewer abs',
 
-        events: {
-            'click': 'onClick'
-        },
-
-        onClick: function () {
-            //console.info('MainView.onClick()');
-        },
-
         initialize: function (/*options*/) {
             //console.info('MainView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));

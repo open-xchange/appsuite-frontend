@@ -19,6 +19,7 @@
 @viewer-toolbar-bgcolor: #000000;
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-hover-bgcolor: #222222;
+@viewer-toolbar-link-width: 60px;
 
 @viewer-sidebar-bgcolor: #202020;
 @viewer-sidebar-width: 400px;
@@ -44,11 +45,12 @@
 
         > li {
             float: right;
-            min-width: 60px;
+            min-width: @viewer-toolbar-link-width;
             text-align: center;
             > a {
                 display: inline-block;
                 height: @viewer-toolbar-height;
+                min-width: @viewer-toolbar-link-width;
                 outline: none;
                 text-decoration: none;
                 color: rgba(255, 255, 255, 0.5) !important;

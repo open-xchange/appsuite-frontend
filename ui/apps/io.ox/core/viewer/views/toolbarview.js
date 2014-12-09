@@ -16,8 +16,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/files/api',
+    'io.ox/files/actions',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, Ext, Links, FilesAPI, gt) {
+], function (EventDispatcher, Dropdown, Ext, Links, FilesAPI, FilesActions, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -48,16 +49,14 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 title: gt('Click to rename'),
-                ref: 'io.ox/core/viewer/actions/filename',
+                ref: 'io.ox/files/actions/rename',
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
                     var iconClass = CATEGORY_ICON_MAP[baton.model.get('fileCategory')] || 'fa-file-o',
                         fileIcon = $('<i class="fa">').addClass(iconClass),
-                        filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename')),
-                        fileInputField = $('<input type="text" class="filename-field">').val(baton.model.get('filename'));
+                        filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('toolbar-filename')
                         .append(fileIcon, filenameLabel)
-                        .after(fileInputField)
                         .parent().addClass('pull-left');
                 }
             },
@@ -74,19 +73,20 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: 'io.ox/core/viewer/actions/togglesidebar'
             },
             // low priority links, will be shown in a dropdown.
+            // share == send link via mail at the moment
             'share': {
                 prio: 'lo',
                 mobile: 'lo',
                 icon: 'fa fa-share-alt',
                 label: gt('Share'),
-                ref: 'io.ox/core/viewer/actions/share'
+                ref: 'io.ox/files/actions/sendlink'
             },
             'download': {
                 prio: 'lo',
                 mobile: 'lo',
                 icon: 'fa fa-download',
                 label: gt('Download'),
-                ref: 'io.ox/core/viewer/actions/download'
+                ref: 'io.ox/files/actions/download'
             },
             'print': {
                 prio: 'lo',
@@ -100,7 +100,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 mobile: 'lo',
                 icon: 'fa fa-trash-o',
                 label: gt('Delete'),
-                ref: 'io.ox/core/viewer/actions/delete'
+                ref: 'io.ox/files/actions/delete'
             }
         };
 
@@ -125,17 +125,6 @@ define('io.ox/core/viewer/views/toolbarview', [
     // define actions of this ToolbarView
     var Action = Links.Action;
 
-    // high priority actions
-    new Action('io.ox/core/viewer/actions/filename', {
-        id: 'filename',
-        requires: function () {
-            return true;
-        },
-        action: function (baton) {
-            console.warn('ToolbarView.actions.filename', baton, this);
-        }
-    });
-
     new Action('io.ox/core/viewer/actions/togglesidebar', {
         id: 'togglesidebar',
         requires: function () {
@@ -156,27 +145,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         }
     });
 
-    // low priority actions
-    new Action('io.ox/core/viewer/actions/share', {
-        id: 'share',
-        requires: function () {
-            return true;
-        },
-        action: function (baton) {
-            console.warn('ToolbarView.actions.share', baton);
-        }
-    });
-
-    new Action('io.ox/core/viewer/actions/download', {
-        id: 'download',
-        requires: function () {
-            return true;
-        },
-        action: function (baton) {
-            console.warn('ToolbarView.actions.download', baton);
-        }
-    });
-
     new Action('io.ox/core/viewer/actions/print', {
         id: 'print',
         requires: function () {
@@ -184,16 +152,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             console.warn('ToolbarView.actions.print', baton);
-        }
-    });
-
-    new Action('io.ox/core/viewer/actions/delete', {
-        id: 'delete',
-        requires: function () {
-            return true;
-        },
-        action: function (baton) {
-            console.warn('ToolbarView.actions.delete', baton);
         }
     });
 
@@ -207,19 +165,16 @@ define('io.ox/core/viewer/views/toolbarview', [
         events: {
             'click a[data-action="close"]': 'onClose',
             'click a[data-action="togglesidebar"]': 'onToggleSidebar',
-            'click a.toolbar-filename': 'onEditModeStart',
-            'blur input.filename-field': 'onEditModeEnd'
+            'click a[data-ref="io.ox/files/actions/sendlink"]': 'onShare'
         },
 
         initialize: function () {
             //console.info('ToolbarView.initialize()', options);
             this.$el.on('dispose', this.dispose.bind(this));
-
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
                 this.render(data);
             });
-
             this.render();
         },
 
@@ -234,37 +189,10 @@ define('io.ox/core/viewer/views/toolbarview', [
             EventDispatcher.trigger('viewer:toggle:sidebar');
         },
 
-        onEditModeStart: function () {
-            //console.warn('ToolbarView.onEditModeStart()', this.filename, this.filenameInputField);
-            this.filename.addClass('editmode');
-            this.filenameInputField.val(this.filename.text()).addClass('editmode').focus();
-        },
-
-        onEditModeEnd: function () {
-            //console.warn('ToolbarView.onEditModeEnd()');
-            this.filename.find('.filename-label').text(this.filenameInputField.val());
-            this.filename.removeClass('editmode');
-            this.filenameInputField.removeClass('editmode');
-            this.saveFilename();
-        },
-
-        saveFilename: function () {
-            var filename = this.filename.find('.filename-label').text(),
-                self = this;
-
-            FilesAPI.update({
-                id: this.model.get('id'),
-                folder_id: this.model.get('folderId'),
-                filename: filename
-            })
-            .done(function (file) {
-                //console.info('FilesAPI.update() ok ', file);
-                if (!file || !file.filename) { return; }
-                self.model.set('filename', file.filename);
-            })
-            .fail(function (/*err*/) {
-                //console.info('ToolbarView.FilesAPI.update() error ', err);
-            });
+        onShare: function () {
+            //console.warn('ToolbarView.onShare()', event);
+            // close viewer upon triggering share per mail
+            this.onClose();
         },
 
         render: function (data) {
@@ -272,12 +200,10 @@ define('io.ox/core/viewer/views/toolbarview', [
             if (!data || !data.model) { return this; }
             // draw toolbar
             var toolbar = this.$el,
-                baton = Ext.Baton({ $el: toolbar, model: data.model });
+                baton = Ext.Baton({ $el: toolbar, model: data.model, data: data.model.get('origData') });
             this.model = data.model;
             toolbar.empty();
             Ext.point('io.ox/core/viewer/toolbar').invoke('draw', toolbar, baton);
-            this.filename = this.$('.toolbar-filename');
-            this.filenameInputField = this.$('.filename-field');
             return this;
         },
 
