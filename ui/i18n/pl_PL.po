@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-08 09:35+0200\n"
+"PO-Revision-Date: 2014-12-09 16:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl_PL\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. File size
 #. %1$d is the number
@@ -1715,7 +1715,7 @@ msgstr "Firma"
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
-msgstr "Redagowanie"
+msgstr "Utwórz e-mail"
 
 #: apps/io.ox/mail/toolbar.js:43 module:io.ox/mail
 msgid "Compose new email"
@@ -2359,12 +2359,12 @@ msgstr "Czy na pewno chcesz odrzucić zmiany?"
 
 #: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
 msgid "Do you really want to discard your message?"
-msgstr "Czy na pewno chcesz odrzucić ten komunikat?"
+msgstr "Czy na pewno chcesz odrzucić tę wiadomość?"
 
 #: apps/io.ox/core/folder/actions/common.js:43 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:36 module:io.ox/mail
 msgid "Do you really want to empty folder \"%s\"?"
-msgstr "Czy na pewno chcesz usunąć folder \"%s\"? "
+msgstr "Czy na pewno chcesz opróżnić folder \"%s\"?"
 
 #: apps/io.ox/files/util.js:239 module:io.ox/files
 msgid ""
