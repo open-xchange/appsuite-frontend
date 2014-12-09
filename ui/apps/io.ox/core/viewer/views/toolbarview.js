@@ -15,10 +15,11 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
+    'io.ox/core/extPatterns/actions',
     'io.ox/files/api',
     'io.ox/files/actions',
     'gettext!io.ox/core'
-], function (EventDispatcher, Dropdown, Ext, Links, FilesAPI, FilesActions, gt) {
+], function (EventDispatcher, Dropdown, Ext, Links, Actions, FilesAPI, FilesActions, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -49,7 +50,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 title: gt('Click to rename'),
-                ref: 'io.ox/files/actions/rename',
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
                     var iconClass = CATEGORY_ICON_MAP[baton.model.get('fileCategory')] || 'fa-file-o',
@@ -165,7 +165,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         events: {
             'click a[data-action="close"]': 'onClose',
             'click a[data-action="togglesidebar"]': 'onToggleSidebar',
-            'click a[data-ref="io.ox/files/actions/sendlink"]': 'onShare'
+            'click a[data-ref="io.ox/files/actions/sendlink"]': 'onShare',
+            'dblclick a.toolbar-filename': 'onRename'
         },
 
         initialize: function () {
@@ -193,6 +194,11 @@ define('io.ox/core/viewer/views/toolbarview', [
             //console.warn('ToolbarView.onShare()', event);
             // close viewer upon triggering share per mail
             this.onClose();
+        },
+
+        onRename: function () {
+            //console.warn('TooölbarView.onRename()', event);
+            Actions.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData') });
         },
 
         render: function (data) {
