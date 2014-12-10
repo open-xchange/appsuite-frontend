@@ -193,10 +193,15 @@ define('io.ox/search/model',
             },
             add: function (facet, value, option, silent) {
                 var pool = this.get('pool'),
-                    list = this.get('poollist');
+                    list = this.get('poollist'),
+                    autocomplete = this.get('autocomplete');
+
+                // in case folder is man
+                if (!autocomplete.length)
+                    autocomplete = _.copy(options.sticky, true);
 
                 // add facet to pool
-                _.each(this.get('autocomplete'), function (data) {
+                _.each(autocomplete, function (data) {
                     if (data.id === facet) {
                         var item = _.copy(data, true),
                             itemvalue;

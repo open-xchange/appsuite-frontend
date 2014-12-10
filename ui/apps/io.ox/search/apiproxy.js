@@ -107,23 +107,9 @@ define('io.ox/search/apiproxy',
             id: 'folder',
             index: 350,
             customize: function (baton) {
-                baton.data.push({
-                    id: 'folder',
-                    name: gt('Folder'),
-                    style: 'custom',
-                    custom: true,
-                    hidden: true,
-                    flags: [
-                        _.device('small') ? '' : 'advanced',
-                        'conflicts:folder_type'
-                    ],
-                    values: [{
-                        facet: 'folder',
-                        id: 'custom',
-                        custom: '',
-                        filter: {}
-                    }]
-                });
+                baton.data = baton.data.concat(
+                    _.copy(baton.app.view.model.getOptions().sticky, true)
+                );
             }
         });
 
