@@ -286,12 +286,12 @@ define('io.ox/mail/compose/extensions', [
                     }
                 });
 
-                view.listenToOnce(view.collection, 'add remove reset', function () {
+                view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
                         if (!this.isListRendered) this.renderList();
                     }
-                });
+                }));
 
                 view.render();
                 if (view.getValidModels().length > 0) {
