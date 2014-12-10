@@ -59,7 +59,6 @@ define('io.ox/files/actions', [
                     (e.baton.openedBy !== 'io.ox/mail/compose'),
                     util.isFolderType('!trash', e.baton)
                 );
-
             },
             action: function (baton) {
                 if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) return;

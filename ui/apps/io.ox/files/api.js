@@ -148,7 +148,6 @@ define('io.ox/files/api', [
         'm4a':  'audio/mp4',
         'm4b':  'audio/mp4',
         'wav':  'audio/wav',
-
         // video
         'mp4':  'video/mp4',
         'm4v':  'video/mp4',
@@ -174,12 +173,18 @@ define('io.ox/files/api', [
         'pdf': 'application/pdf',
         // microsoft office
         'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xlsm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'xltx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        'xltm': 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
         'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'pptm': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         'ppsx': 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
         'potx': 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'potm': 'application/vnd.openxmlformats-officedocument.presentationml.template',
         'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'docm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'dotx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'dotm': 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
         'doc': 'application/msword',
         'dot': 'application/msword',
         'xls': 'application/vnd.ms-excel',

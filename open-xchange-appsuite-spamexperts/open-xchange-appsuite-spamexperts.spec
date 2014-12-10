@@ -64,13 +64,13 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 ## Uncomment for multiple packages (3/4)
 #rm -r "%{buildroot}%{docroot}"
 
-%define update "/opt/open-xchange/appsuite/share/update-themes.sh --later"
+%define update "/opt/open-xchange/appsuite/share/update-themes.sh"
 
 %post
-if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
+if [ $1 -eq 1 -a -x %{update} ]; then %{update} --later; fi
 
 %postun
-if [ -x %{update} ]; then %{update}; fi
+if [ -x %{update} ]; then %{update} --later; fi
 
 %files
 %defattr(-,root,root)
@@ -90,6 +90,8 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}
 
 %changelog
+* Fri Dec 05 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+Third candidate for 7.6.2 release
 * Tue Nov 25 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-12-01
 * Fri Nov 21 2014 Viktor Pracht <viktor.pracht@open-xchange.com>

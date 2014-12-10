@@ -38,8 +38,8 @@ define('io.ox/realtime/groups', [
         });
 
         function relayEvent(name) {
-            return function () {
-                self.trigger(name);
+            return function (event, data) {
+                self.trigger(name, data);
             };
         }
 

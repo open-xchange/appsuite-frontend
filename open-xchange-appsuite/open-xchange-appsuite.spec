@@ -278,16 +278,16 @@ rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 %clean
 %{__rm} -rf %{buildroot}
 
-%define update "/opt/open-xchange/appsuite/share/update-themes.sh --later"
+%define update "/opt/open-xchange/appsuite/share/update-themes.sh"
 
 %post manifest
-if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
+if [ $1 -eq 1 -a -x %{update} ]; then %{update} --later; fi
 
 %postun manifest
 if [ $1 -lt 1 ]; then
     rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
 else
-    if [ -x %{update} ]; then %{update}; fi
+    if [ -x %{update} ]; then %{update} --later; fi
 fi
 
 %triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
@@ -538,6 +538,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
+* Fri Dec 05 2014 Markus Wagner <markus.wagner@open-xchange.com>
+Third candidate for 7.6.2 release
 * Tue Nov 25 2014 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2014-12-01
 * Fri Nov 21 2014 Markus Wagner <markus.wagner@open-xchange.com>

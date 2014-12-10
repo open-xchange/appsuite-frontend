@@ -21,6 +21,39 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
     'use strict';
 
+    var POINT = 'io.ox/core/tk/contenteditable-editor';
+
+    var INDEX = 0;
+
+    ext.point(POINT + '/setup').extend({
+        id: 'default',
+        index: INDEX += 100,
+        draw: function (ed) {
+            ed.on('keydown', function (e) {
+                // pressed enter?
+                if ((e.keyCode || e.which) === 13) {
+                    splitContent(ed, e);
+                }
+            });
+
+            ext.point('3rd.party/emoji/editor_css').each(function (point) {
+                var url = ed.convertURL(require.toUrl(point.css));
+                ed.contentCSS.push(url);
+            });
+        }
+    });
+
+    ext.point(POINT + '/setup').extend({
+        id: 'emoji',
+        index: INDEX += 100,
+        draw: function (ed) {
+            ext.point('3rd.party/emoji/editor_css').each(function (point) {
+                var url = ed.convertURL(require.toUrl(point.css));
+                ed.contentCSS.push(url);
+            });
+        }
+    });
+
     /*
      * Helpers to handle paste
      */
@@ -381,9 +414,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         var fixed_toolbar = '[data-editor-id="' + el.attr('data-editor-id') + '"].editable-toolbar';
 
-        el = $(el);
-        el.tinymce({
-
+        var options = {
             script_url: ox.base + '/apps/3rd.party/tinymce/tinymce.min.js',
 
             extended_valid_elements: 'blockquote[type]',
@@ -440,25 +471,15 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             paste_postprocess: paste_postprocess,
 
             setup: function (ed) {
-
-                ed.on('keydown', function (e) {
-                    // pressed enter?
-                    if ((e.keyCode || e.which) === 13) {
-                        try {
-                            // split content
-                            splitContent(ed, e);
-                        } catch (e) {
-                            console.error('Ooops! setup.onKeyDown()', e);
-                        }
-                    }
-                });
-
-                ext.point('3rd.party/emoji/editor_css').each(function (point) {
-                    var url = ed.convertURL(require.toUrl(point.css));
-                    ed.contentCSS.push(url);
-                });
+                ext.point(POINT + '/setup').invoke('draw', this, ed);
             }
-        });
+        };
+
+        el = $(el);
+
+        ext.point(POINT + '/options').invoke('config', options);
+
+        el.tinymce(options);
 
         function trimEnd(str) {
             return String(str || '').replace(/[\s\xA0]+$/g, '');

@@ -130,7 +130,11 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         breakableText: function (text) {
-            return String(text || '').replace(/(\S{20})([^$])/g, '$1\u200B$2');
+            var result = String(text || '').replace(/(\S{20})/g, '$1\u200B');
+            if (result[result.length - 1] === '\u200B') {
+                result = result.slice(0, -1);
+            }
+            return result;
         },
 
         isValidMailAddress: (function () {

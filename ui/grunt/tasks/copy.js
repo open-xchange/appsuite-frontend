@@ -30,6 +30,11 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'src/',
                         dest: 'build/'
+                    },
+                    {
+                        src: ['src/browser.js'],
+                        expand: true,
+                        dest: 'build/'
                     }
                 ]
             }

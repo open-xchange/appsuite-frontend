@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-10-16 10:24+0000\n"
+"PO-Revision-Date: 2014-12-02 17:07+0000\n"
 "Last-Translator: Xavier <xavier.pons@uib.es>\n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: ca_ES\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1413455041.000000\n"
+"X-POOTLE-MTIME: 1417540062.000000\n"
 
 #. File size
 #. %1$d is the number
@@ -96,11 +96,18 @@ msgid_plural "%1$d hours and %2$s"
 msgstr[0] "%1$d hora i %2$s"
 msgstr[1] "%1$d hores i %2$s"
 
+#: apps/io.ox/core/commons.js:104 module:io.ox/core
+#, fuzzy
+#| msgid "%1$d selected"
+msgid "%1$d item selected"
+msgid_plural "%1$d items selected"
+msgstr[0] "%1$d de seleccionats"
+msgstr[1] "%1$d de seleccionats"
+
 #: apps/io.ox/mail/threadview.js:108 module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr "%1$d missatges en aquesta conversa"
 
-#: apps/io.ox/core/commons.js:102 module:io.ox/core
 #: apps/io.ox/mail/main.js:605 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d missatges seleccionats"
@@ -166,8 +173,8 @@ msgid "%1$s changed their status:"
 msgstr "%1$s ha canviat el seu estat:"
 
 #. %1$s progress of currently uploaded files in percent
-#: apps/io.ox/files/fluid/perspective.js:431 module:io.ox/files
-#: apps/io.ox/files/fluid/perspective.js:867
+#: apps/io.ox/files/fluid/perspective.js:446 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:882
 #: apps/io.ox/files/upload/view.js:53 apps/io.ox/files/upload/view.js:97
 #, fuzzy
 #| msgid "Date completed"
@@ -724,7 +731,7 @@ msgstr "Afegeix una nova firma"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
-#: apps/io.ox/files/actions.js:419 module:io.ox/files
+#: apps/io.ox/files/actions.js:418 module:io.ox/files
 msgid "Add note"
 msgstr "Afegeix nota"
 
@@ -785,7 +792,7 @@ msgid "Add to favorites"
 msgstr "Afegeix als preferits"
 
 #: apps/io.ox/contacts/actions.js:497 module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:499
+#: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:498
 #: module:io.ox/files apps/io.ox/files/toolbar.js:139
 #: apps/io.ox/mail/actions.js:651 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:173
@@ -812,7 +819,7 @@ msgid "Added the new participant"
 msgstr "El nou participant ha estat afegit"
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:190 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Address Book"
 msgstr "Llibreta d'adreces"
 
@@ -966,7 +973,7 @@ msgstr "Aplica la regla si es compleix alguna condició"
 #: apps/io.ox/calendar/actions/edit.js:41 apps/io.ox/calendar/edit/main.js:343
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/view-detail.js:274
 #: apps/io.ox/calendar/week/perspective.js:159
-#: apps/io.ox/mail/detail/links.js:189 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:214 module:io.ox/mail
 msgid "Appointment"
 msgstr "Cita"
 
@@ -1184,7 +1191,7 @@ msgstr "CCO"
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:211 module:io.ox/calendar
 #: apps/io.ox/calendar/main.js:232 apps/io.ox/contacts/main.js:371
-#: module:io.ox/contacts apps/io.ox/core/commons.js:690 module:io.ox/core
+#: module:io.ox/contacts apps/io.ox/core/commons.js:693 module:io.ox/core
 #: apps/io.ox/files/main.js:159 module:io.ox/files apps/io.ox/mail/main.js:158
 #: module:io.ox/mail apps/io.ox/mail/main.js:163
 #: apps/io.ox/mail/threadview.js:40 apps/io.ox/tasks/main.js:160
@@ -1288,7 +1295,7 @@ msgstr "Setm %1$d"
 msgid "CalDAV URL"
 msgstr "URL de CalDAV"
 
-#: apps/io.ox/mail/detail/links.js:190 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 msgid "Calendar"
 msgstr "Calendari"
 
@@ -1395,7 +1402,7 @@ msgid_plural "Cannot print these items"
 msgstr[0] "No s'ha pogut imprimir aquest element"
 msgstr[1] "No s'han pogut imprimir aquests elements"
 
-#: apps/io.ox/files/guidance/statistics.js:183 module:io.ox/files
+#: apps/io.ox/files/guidance/statistics.js:188 module:io.ox/files
 msgid "Capacity"
 msgstr "Capacitat"
 
@@ -1593,7 +1600,7 @@ msgstr "Premeu per a puja una imatge"
 msgid "Close"
 msgstr "Tanca"
 
-#: apps/io.ox/core/commons.js:737 module:io.ox/core
+#: apps/io.ox/core/commons.js:740 module:io.ox/core
 #: apps/io.ox/mail/view-options.js:157 module:io.ox/mail
 msgid "Close folder view"
 msgstr "Tanca la vista de carpeta"
@@ -1716,7 +1723,7 @@ msgid "Connector for Microsoft Outlook®"
 msgstr "Connector per a Microsoft Outlook®"
 
 #: apps/io.ox/contacts/edit/main.js:282 module:io.ox/contacts
-#: apps/io.ox/mail/detail/links.js:189 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:214 module:io.ox/mail
 msgid "Contact"
 msgstr "Contacte"
 
@@ -1775,8 +1782,8 @@ msgstr "Converses"
 #: apps/io.ox/contacts/actions.js:133 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:513
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:82 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:113 apps/io.ox/files/actions.js:300
-#: module:io.ox/files apps/io.ox/files/actions.js:539
+#: apps/io.ox/contacts/toolbar.js:113 apps/io.ox/files/actions.js:299
+#: module:io.ox/files apps/io.ox/files/actions.js:538
 #: apps/io.ox/files/toolbar.js:153 apps/io.ox/mail/actions.js:182
 #: apps/io.ox/mail/actions.js:600
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
@@ -2064,7 +2071,7 @@ msgstr "Ajornada"
 #: apps/io.ox/core/folder/actions/remove.js:33 module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js:202
 #: apps/io.ox/core/sub/settings/pane.js:219 module:io.ox/core/sub
-#: apps/io.ox/core/sub/settings/pane.js:221 apps/io.ox/files/actions.js:458
+#: apps/io.ox/core/sub/settings/pane.js:221 apps/io.ox/files/actions.js:457
 #: module:io.ox/files apps/io.ox/files/actions/delete.js:74
 #: apps/io.ox/files/actions/versions-delete.js:25
 #: apps/io.ox/files/toolbar.js:109 apps/io.ox/mail/actions.js:495
@@ -2096,7 +2103,7 @@ msgstr "Suprimeix el compte"
 msgid "Delete appointment"
 msgstr "Esborra la cita"
 
-#: apps/io.ox/files/actions.js:590 module:io.ox/files
+#: apps/io.ox/files/actions.js:589 module:io.ox/files
 msgid "Delete version"
 msgstr "Suprimeix la versió"
 
@@ -2146,7 +2153,7 @@ msgid "Description has been copied"
 msgstr "La descripció ha estat copiada"
 
 #: apps/io.ox/calendar/view-detail.js:168 module:io.ox/calendar
-#: apps/io.ox/files/fluid/perspective.js:411 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:426 module:io.ox/files
 msgid "Details"
 msgstr "Detalls"
 
@@ -2301,9 +2308,6 @@ msgid "Do you really want to delete this file?"
 msgstr "Realment voleu suprimir aquest fitxer?"
 
 #: apps/io.ox/tasks/actions/delete.js:32 module:io.ox/tasks
-#, fuzzy
-#| msgid "Do you really want to delete this task?"
-#| msgid_plural "Do you really want to delete this tasks?"
 msgid "Do you really want to delete this task?"
 msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Segur que voleu suprimir aquesta tasca?"
@@ -2387,8 +2391,8 @@ msgstr "Feu doble clic en aquesta fila per a una cita de tot el dia"
 
 #: apps/io.ox/contacts/actions.js:552 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:469 module:io.ox/core/tk/attachments
-#: apps/io.ox/files/actions.js:449 module:io.ox/files
-#: apps/io.ox/files/actions.js:576 apps/io.ox/files/toolbar.js:102
+#: apps/io.ox/files/actions.js:448 module:io.ox/files
+#: apps/io.ox/files/actions.js:575 apps/io.ox/files/toolbar.js:102
 #: apps/io.ox/mail/actions.js:702 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:481 module:io.ox/tasks
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
@@ -2465,16 +2469,16 @@ msgstr "Amolla-ho aquí per a importar aquest correu"
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Moveu aquí un <b class=\"dndignore\">nou arxiu adjunt</b>"
 
-#: apps/io.ox/files/actions.js:600 module:io.ox/files
+#: apps/io.ox/files/actions.js:599 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr "Arrossega aquí per a pujar un <b class=\"dndignore\">nou fitxer</b>"
 
-#: apps/io.ox/files/actions.js:620 module:io.ox/files
+#: apps/io.ox/files/actions.js:619 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
 "Arrossega aquí per a pujar-ne una <b class=\"dndignore\">nova versió</b>"
 
-#: apps/io.ox/files/actions.js:614 module:io.ox/files
+#: apps/io.ox/files/actions.js:613 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
@@ -2517,7 +2521,7 @@ msgstr "EB"
 #: module:io.ox/contacts apps/io.ox/contacts/main.js:359
 #: apps/io.ox/contacts/main.js:365 apps/io.ox/contacts/main.js:717
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:63 module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:75 apps/io.ox/files/actions.js:440
+#: apps/io.ox/contacts/toolbar.js:75 apps/io.ox/files/actions.js:439
 #: module:io.ox/files apps/io.ox/files/main.js:146
 #: apps/io.ox/files/main.js:152 apps/io.ox/files/main.js:341
 #: apps/io.ox/files/main.js:365 apps/io.ox/mail/actions.js:485
@@ -2558,7 +2562,7 @@ msgstr "Edita un feed de Tumblr"
 msgid "Edit appointment"
 msgstr "Edita cita"
 
-#: apps/io.ox/files/actions.js:519 module:io.ox/files
+#: apps/io.ox/files/actions.js:518 module:io.ox/files
 msgid "Edit description"
 msgstr "Edita'n la descripció"
 
@@ -3032,21 +3036,21 @@ msgid "Feeling • Decoration"
 msgstr "Sensació • Decoració"
 
 #: apps/io.ox/files/fluid/view-detail.js:357 module:io.ox/files
-#: apps/io.ox/mail/detail/links.js:189 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:214 module:io.ox/mail
 msgid "File"
 msgstr "Fitxer"
 
 #: apps/io.ox/files/detail/main.js:31 module:io.ox/files
 #: apps/io.ox/files/detail/main.js:42
-#: apps/io.ox/files/fluid/perspective.js:188
+#: apps/io.ox/files/fluid/perspective.js:203
 msgid "File Details"
 msgstr "Detalls del fitxer"
 
-#: apps/io.ox/files/actions.js:300 module:io.ox/files
+#: apps/io.ox/files/actions.js:299 module:io.ox/files
 msgid "File has been copied"
 msgstr "El fitxer ha estat copiat"
 
-#: apps/io.ox/files/actions.js:299 module:io.ox/files
+#: apps/io.ox/files/actions.js:298 module:io.ox/files
 msgid "File has been moved"
 msgstr "El fitxer ha estat mogut"
 
@@ -3058,15 +3062,15 @@ msgstr "Quota de fitxers"
 msgid "File: %1$s"
 msgstr "Fitxer: %1$s"
 
-#: apps/io.ox/files/fluid/perspective.js:574 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:589 module:io.ox/files
 msgid "Files View"
 msgstr "Vista de fitxers"
 
-#: apps/io.ox/files/actions.js:300 module:io.ox/files
+#: apps/io.ox/files/actions.js:299 module:io.ox/files
 msgid "Files have been copied"
 msgstr "Els fitxers s'han copiat"
 
-#: apps/io.ox/files/actions.js:299 module:io.ox/files
+#: apps/io.ox/files/actions.js:298 module:io.ox/files
 msgid "Files have been moved"
 msgstr "Els fitxers no han estat moguts"
 
@@ -3096,7 +3100,7 @@ msgid "Flickr"
 msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:235 module:io.ox/calendar
-#: apps/io.ox/mail/detail/links.js:190 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 #: apps/io.ox/search/apiproxy.js:113 module:io.ox/core
 msgid "Folder"
 msgstr "Carpeta"
@@ -3645,7 +3649,7 @@ msgstr "És exactament"
 msgid "Is smaller than"
 msgstr "És menor que"
 
-#: apps/io.ox/core/commons.js:683 module:io.ox/core
+#: apps/io.ox/core/commons.js:686 module:io.ox/core
 msgid "Items"
 msgstr "Ítems"
 
@@ -3816,7 +3820,7 @@ msgstr "Vista de llista"
 msgid "Location"
 msgstr "Ubicació"
 
-#: apps/io.ox/files/actions.js:549 module:io.ox/files
+#: apps/io.ox/files/actions.js:548 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:160
 msgid "Lock"
 msgstr "Bloqueja"
@@ -3958,7 +3962,7 @@ msgstr "Correus per hora (%)"
 msgid "Mails per week-day (%)"
 msgstr "Correus per dia de la setmana (%)"
 
-#: apps/io.ox/files/actions.js:583 module:io.ox/files
+#: apps/io.ox/files/actions.js:582 module:io.ox/files
 msgid "Make this the current version"
 msgstr "Estableix-la com a versió actual"
 
@@ -4171,8 +4175,8 @@ msgstr "S'han trobat més elements que els %1$s que es mostren a continuació"
 #: apps/io.ox/contacts/mobile-toolbar-actions.js:76 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:105
 #: apps/io.ox/core/folder/contextmenu.js:229 module:io.ox/core
-#: apps/io.ox/files/actions.js:299 module:io.ox/files
-#: apps/io.ox/files/actions.js:529 apps/io.ox/files/toolbar.js:144
+#: apps/io.ox/files/actions.js:298 module:io.ox/files
+#: apps/io.ox/files/actions.js:528 apps/io.ox/files/toolbar.js:144
 #: apps/io.ox/mail/actions.js:181 apps/io.ox/mail/actions.js:590
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:130
 #: apps/io.ox/tasks/actions.js:432 module:io.ox/tasks
@@ -4386,7 +4390,7 @@ msgstr ""
 "No hi ha connexió amb el servidor. Per favor, comprovau la vostra connexió a "
 "Internet i provau-ho de nou."
 
-#: apps/io.ox/core/commons.js:209 module:io.ox/core
+#: apps/io.ox/core/commons.js:212 module:io.ox/core
 msgid "No elements selected"
 msgstr "No hi ha elements seleccionats"
 
@@ -4620,8 +4624,8 @@ msgstr "Els dies feiners"
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Es mostren només els elements relacionats amb la carpeta \"%1$s\""
 
-#: apps/io.ox/files/actions.js:431 module:io.ox/files
-#: apps/io.ox/files/actions.js:569
+#: apps/io.ox/files/actions.js:430 module:io.ox/files
+#: apps/io.ox/files/actions.js:568
 msgid "Open"
 msgstr "Obre"
 
@@ -4629,7 +4633,7 @@ msgstr "Obre"
 msgid "Open external link"
 msgstr "Obre l'enllaç extern"
 
-#: apps/io.ox/core/commons.js:723 module:io.ox/core
+#: apps/io.ox/core/commons.js:726 module:io.ox/core
 #: apps/io.ox/mail/view-options.js:144 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Obre la vista de carpeta"
@@ -5093,7 +5097,7 @@ msgstr ""
 msgid "Please sign in again to continue"
 msgstr "Per favor, iniciau de nou la sessió per a continuar"
 
-#: apps/io.ox/files/api.js:402 module:io.ox/files
+#: apps/io.ox/files/api.js:407 module:io.ox/files
 msgid "Please specify these missing variables:"
 msgstr "Per favor, especificau aquestes variables que falten:"
 
@@ -5501,7 +5505,7 @@ msgid "Reload statistics"
 msgstr "Recarrega les estadístiques"
 
 #. %1$s remaining upload time
-#: apps/io.ox/files/fluid/perspective.js:872 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:887 module:io.ox/files
 #, fuzzy
 #| msgid "Reminder date %1$s"
 msgid "Remaining time: %1$s"
@@ -5569,7 +5573,7 @@ msgid "Remove from favorites"
 msgstr "Suprimeix dels preferits"
 
 #: apps/io.ox/core/folder/actions/rename.js:65 module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js:177 apps/io.ox/files/actions.js:509
+#: apps/io.ox/core/folder/contextmenu.js:177 apps/io.ox/files/actions.js:508
 #: module:io.ox/files apps/io.ox/files/actions/rename.js:90
 #: apps/io.ox/files/actions/rename.js:95
 msgid "Rename"
@@ -5639,7 +5643,7 @@ msgstr "Recursos"
 msgid "Restore applications"
 msgstr "Restaura les aplicacions"
 
-#: apps/io.ox/core/commons.js:383 module:io.ox/core
+#: apps/io.ox/core/commons.js:386 module:io.ox/core
 msgid "Results"
 msgstr "Resultats"
 
@@ -5647,7 +5651,7 @@ msgstr "Resultats"
 msgid "Retired"
 msgstr "Jubilat"
 
-#: apps/io.ox/core/commons.js:867 module:io.ox/core
+#: apps/io.ox/core/commons.js:870 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:329 module:io.ox/mail
 msgid "Retry"
 msgstr "Torna-ho a provar"
@@ -5824,7 +5828,7 @@ msgstr "Selecciona-ho tot"
 msgid "Select folder"
 msgstr "Selecciona carpeta"
 
-#: apps/io.ox/core/commons.js:183 module:io.ox/core
+#: apps/io.ox/core/commons.js:186 module:io.ox/core
 msgid "Selection Details"
 msgstr "Detalls de la selecció"
 
@@ -5837,7 +5841,7 @@ msgstr "Envia"
 msgid "Send a read receipt"
 msgstr "Envia una confirmació de lectura"
 
-#: apps/io.ox/files/actions.js:479 module:io.ox/files
+#: apps/io.ox/files/actions.js:478 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:125
 msgid "Send as internal link"
 msgstr "Envia com a enllaç intern"
@@ -5848,7 +5852,7 @@ msgstr "Envia com a enllaç intern"
 msgid "Send as vCard"
 msgstr "Envia com a vCard"
 
-#: apps/io.ox/files/actions.js:469 module:io.ox/files
+#: apps/io.ox/files/actions.js:468 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:118
 msgid "Send by mail"
 msgstr "Envia per correu electrònic"
@@ -6076,7 +6080,7 @@ msgstr "Mostra imatges"
 msgid "Show inbox"
 msgstr "Mostra la safata d'entrada"
 
-#: apps/io.ox/files/actions.js:489 module:io.ox/files
+#: apps/io.ox/files/actions.js:488 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:132
 msgid "Show internal link"
 msgstr "Mostra enllaç intern"
@@ -6412,7 +6416,7 @@ msgstr "DTS"
 msgid "Tag mail with"
 msgstr "Etiqueta correu amb"
 
-#: apps/io.ox/mail/detail/links.js:189 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:214 module:io.ox/mail
 #: apps/io.ox/tasks/edit/main.js:198 module:io.ox/tasks
 msgid "Task"
 msgstr "Tasca"
@@ -6462,7 +6466,7 @@ msgstr "La tasca ja havia estat suprimida"
 msgid "Task was modified before, please reload"
 msgstr "La tasca ja havia estat modificada. Per favor, recarregau-la"
 
-#: apps/io.ox/mail/detail/links.js:190 module:io.ox/mail
+#: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
 #: apps/plugins/portal/tasks/register.js:137
 msgid "Tasks"
@@ -6546,7 +6550,7 @@ msgstr "El compte ha de tenir nom"
 msgid "The activity has been deleted successfully"
 msgstr "L'activitat s'ha eliminat correctament"
 
-#: apps/io.ox/files/api.js:362 module:io.ox/files
+#: apps/io.ox/files/api.js:367 module:io.ox/files
 msgid "The allowed quota is reached."
 msgstr "Heu arribat a la quota permesa."
 
@@ -6767,7 +6771,7 @@ msgstr "L'àrea de notificació està oberta"
 msgid "The person %1$s is already in the list"
 msgstr "La persona %1$s ja es troba a la llista"
 
-#: apps/io.ox/files/api.js:357 module:io.ox/files
+#: apps/io.ox/files/api.js:362 module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
 msgstr "El nom d'arxiu indicat excedeix la longitud permesa."
 
@@ -6924,8 +6928,8 @@ msgid "There were not activities in your network"
 msgstr "No hi ha hagut activitat en la vostra xarxa"
 
 #. %1$s name of the current folder
-#: apps/io.ox/files/guidance/statistics.js:304 module:io.ox/files
-#: apps/io.ox/files/guidance/statistics.js:389
+#: apps/io.ox/files/guidance/statistics.js:309 module:io.ox/files
+#: apps/io.ox/files/guidance/statistics.js:394
 msgid ""
 "These statistics only include folders, which have a depth less than four in "
 "the folder structure from the folder \"%1$s\"."
@@ -6984,7 +6988,7 @@ msgstr ""
 msgid "This field has to be filled"
 msgstr "Heu d'omplir aquest camp"
 
-#: apps/io.ox/files/api.js:367 module:io.ox/files
+#: apps/io.ox/files/api.js:372 module:io.ox/files
 msgid "This file could not be uploaded."
 msgstr "El fitxer no s'ha pogut pujar."
 
@@ -7212,11 +7216,11 @@ msgstr "Demà"
 msgid "Tool"
 msgstr "Eina"
 
-#: apps/io.ox/files/guidance/statistics.js:323 module:io.ox/files
+#: apps/io.ox/files/guidance/statistics.js:328 module:io.ox/files
 msgid "Top 10 file types"
 msgstr "Top 10 de tipus de fitxer"
 
-#: apps/io.ox/files/guidance/statistics.js:229 module:io.ox/files
+#: apps/io.ox/files/guidance/statistics.js:234 module:io.ox/files
 msgid "Top 10 folder size"
 msgstr "Top 10 de mida de carpeta"
 
@@ -7342,7 +7346,7 @@ msgstr "Error desconegut en comprovar el blog de Tumblr."
 msgid "Unknown sender"
 msgstr "Remitent desconegut"
 
-#: apps/io.ox/files/actions.js:559 module:io.ox/files
+#: apps/io.ox/files/actions.js:558 module:io.ox/files
 #: apps/io.ox/files/toolbar.js:167
 msgid "Unlock"
 msgstr "Desbloqueja"
@@ -7405,7 +7409,7 @@ msgstr "Puja'n una nova versió"
 msgid "Upload file"
 msgstr "Puja el fitxer"
 
-#: apps/io.ox/files/actions.js:409 module:io.ox/files
+#: apps/io.ox/files/actions.js:408 module:io.ox/files
 msgid "Upload new file"
 msgstr "Puja un nou fitxer"
 
@@ -7424,7 +7428,7 @@ msgid "Upload progress"
 msgstr "En progrés"
 
 #. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
-#: apps/io.ox/files/fluid/perspective.js:847 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:862 module:io.ox/files
 #, fuzzy
 #| msgid "Uploading..."
 msgid "Uploading %1$s"
@@ -7729,7 +7733,7 @@ msgstr ""
 #. %1$s used disk space
 #. %2$s total disk space
 #. %3$s free disk space
-#: apps/io.ox/files/guidance/statistics.js:211 module:io.ox/files
+#: apps/io.ox/files/guidance/statistics.js:216 module:io.ox/files
 msgid ""
 "You are currently using %1$s of your %2$s available disk space. You have "
 "%3$s left."
@@ -7970,7 +7974,7 @@ msgstr ""
 #. %1$s used disk space
 #. %2$s total disk space
 #. %3$s free disk space
-#: apps/io.ox/files/guidance/statistics.js:198 module:io.ox/files
+#: apps/io.ox/files/guidance/statistics.js:203 module:io.ox/files
 msgid ""
 "Your capacity is shared with all members of your group. Your group is "
 "currently using %1$s of its %2$s available disk space. The amount of free "
@@ -8488,7 +8492,7 @@ msgstr "avui vespre"
 msgid "unconfirmed"
 msgstr "no confirmat"
 
-#: apps/io.ox/files/fluid/perspective.js:120 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:135 module:io.ox/files
 #: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:424
 #: apps/io.ox/mail/util.js:437
 msgid "unknown"
