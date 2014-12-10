@@ -99,6 +99,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
             .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
             // beautify dashes
             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
+
         o.content = emoji.processEmoji(o.content);
     }
 
@@ -135,7 +136,8 @@ define.async('io.ox/core/tk/contenteditable-editor',
         });
         // has no children?
         if (children.length === 0) {
-            text = $.trim(self.text());
+            //do not trim single spaces
+            text = self.text() === ' ' ? self.text : $.trim(self.text());
             // has no text?
             if (text === '') {
                 // empty table cell?
