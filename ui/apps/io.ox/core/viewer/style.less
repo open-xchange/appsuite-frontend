@@ -18,7 +18,8 @@
 @viewer-toolbar-height: 45px;
 @viewer-toolbar-bgcolor: #000000;
 @viewer-toolbar-filename-width: 400px;
-@viewer-toolbar-hover-bgcolor: #222222;
+@viewer-toolbar-hover-bgcolor: #333333;
+@viewer-toolbar-active-bgcolor: #222222;
 @viewer-toolbar-link-width: 60px;
 
 @viewer-sidebar-bgcolor: #202020;
@@ -42,7 +43,6 @@
         box-shadow: 0px 2px 2px #000000;
         list-style: none;
         padding-left: 0;
-
         > li {
             float: right;
             min-width: @viewer-toolbar-link-width;
@@ -59,7 +59,7 @@
                 color: #ffffff !important;
                 background-color: @viewer-toolbar-hover-bgcolor;
             }
-            > a.toolbar-filename {
+            > a.viewer-toolbar-filename {
                 max-width: @viewer-toolbar-filename-width;
                 padding: 0 20px;
                 text-align: left;
@@ -73,22 +73,11 @@
                 i.fa-file-powerpoint-o { color: #EE5F37; }
                 i.fa-file-pdf-o { color: #CF1E28; }
                 i.fa-file-image-o { color: #EE5F37; }
-                &.editmode { display: none; }
             }
-            > a.active { background-color: #333333; }
-            .filename-field {
-                color: #000000;
-                width: 300px;
-                height: 25px;
-                line-height: 25px;
-                margin: 10px;
-                padding: 5px;
-                display: none;
-                &.editmode { display: block; }
-            }
+            > a.active { background-color: @viewer-toolbar-active-bgcolor ; }
+            &.dropdown.open { background-color: @viewer-toolbar-active-bgcolor; }
+            .dropdown-menu { margin: 0; }
         }
-
-
     }
 
     .viewer-displayer {
