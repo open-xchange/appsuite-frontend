@@ -425,12 +425,14 @@ define('io.ox/files/api',
         }, options || {});
 
         function fixOptions() {
-            if (options.json && !$.isEmptyObject(options.json)) {
-                if (!options.json.folder_id) {
-                    options.json.folder_id = options.folder;
-                }
-            } else {
-                options.json = { folder_id: options.folder };
+            if (!_.isObject(options.json) || _.isEmpty(options.json)) {
+                options.json = {};
+            }
+            if (!options.json.folder_id) {
+                options.json.folder_id = options.folder;
+            }
+            if (options.description) {
+                options.json.description = options.description;
             }
         }
 
