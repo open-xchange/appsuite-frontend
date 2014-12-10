@@ -132,7 +132,7 @@ define('io.ox/search/apiproxy',
          */
         function autocomplete () {
             var args = [{}].concat(Array.prototype.slice.call(arguments)),
-                opt = $.extend.apply(undefined, args);
+                opt = $.extend.apply(undefined, [true].concat(args));
             // call api
             return api.autocomplete(opt).then(extend.bind(this, args));
         }
