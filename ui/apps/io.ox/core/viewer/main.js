@@ -29,12 +29,11 @@ define('io.ox/core/viewer/main', [
         /**
          * Main bootstrap file for the OX Viewer.
          */
-        this.launch = function (data) {
-            //console.info('Main.launch() ', data);
-            var files = data && data.baton && data.baton.allIds;
+        this.launch = function (filesList) {
+            //console.warn('Main.launch() ', filesList);
             // create file collection and populate it with file models
             var fileCollection = new backbone.Collection();
-            fileCollection.set(files, { parse: true });
+            fileCollection.set(filesList, { parse: true });
             // create main view and append main view to core
             var mainView =  new MainView({ collection: fileCollection });
             $('#io-ox-core').append(mainView.el);

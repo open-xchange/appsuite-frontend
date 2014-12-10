@@ -342,6 +342,17 @@ define('io.ox/mail/actions', [
         }
     });
 
+    // Viewer 2.0
+    new Action('io.ox/mail/actions/viewer', {
+        id: 'viewer',
+        requires: 'some',
+        multiple: function (attachmentList) {
+            ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
+                action(attachmentList);
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/vcard', {
         id: 'vcard',
         capabilities: 'contacts',
@@ -709,6 +720,15 @@ define('io.ox/mail/actions', [
         mobile: 'high',
         label: gt('Save to Drive'),
         ref: 'io.ox/mail/actions/save-attachment'
+    }));
+
+    // the mighty Viewer 2.0
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'viewer',
+        index: 600,
+        mobile: 'high',
+        label: gt('View attachment'),
+        ref: 'io.ox/mail/actions/viewer'
     }));
 
     // DND actions
