@@ -655,12 +655,12 @@ define('io.ox/mail/compose/view', [
             if ($.trim(mail.subject) === '' || noRecipient) {
                 if (noRecipient) {
                     notifications.yell('error', gt('Mail has no recipient.'));
-                    focus('to');
+                    self.$el.find('.tokenfield:first .token-input').focus();
                     def.reject();
                 } else if ($.trim(mail.subject) === '') {
                     // show dialog
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({ focus: false })
                             .text(gt('Mail has empty subject. Send it anyway?'))
                             .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
                             .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
@@ -673,7 +673,7 @@ define('io.ox/mail/compose/view', [
                                         cont();
                                     });
                                 } else {
-                                    focus('subject');
+                                    self.$el.find('input[name="subject"]').focus();
                                     def.reject();
                                 }
                             });
