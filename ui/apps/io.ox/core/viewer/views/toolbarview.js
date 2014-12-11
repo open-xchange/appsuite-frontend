@@ -29,15 +29,17 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // a map of file categories to Font Awesome icon classes
     var CATEGORY_ICON_MAP = {
-        'OFFICE': 'fa-file-text-o',
-        'OFFICE_TEXT': 'fa-file-word-o',
-        'OFFICE_PRESENTATION': 'fa-file-powerpoint-o',
-        'OFFICE_SPREADSHEET': 'fa-file-excel-o',
-        'IMAGE': 'fa-file-image-o',
-        'VIDEO': 'fa-file-video-o',
-        'AUDIO': 'fa-file-audio-o',
-        'PDF': 'fa-file-pdf-o'
-    };
+            'OFFICE': 'fa-file-text-o',
+            'OFFICE_TEXT': 'fa-file-word-o',
+            'OFFICE_PRESENTATION': 'fa-file-powerpoint-o',
+            'OFFICE_SPREADSHEET': 'fa-file-excel-o',
+            'IMAGE': 'fa-file-image-o',
+            'VIDEO': 'fa-file-video-o',
+            'AUDIO': 'fa-file-audio-o',
+            'PDF': 'fa-file-pdf-o'
+        },
+        TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
+        DROPDOWN_ACTION_ID = TOOLBAR_ACTION_ID + '/dropdown';
 
     // define extension points for this ToolbarView
     var toolbarPoint = Ext.point('io.ox/core/viewer/toolbar'),
@@ -63,7 +65,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-times',
-                ref: 'io.ox/core/viewer/actions/close',
+                ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
                     this.addClass('viewer-toolbar-close');
                 }
@@ -72,7 +74,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-info-circle',
-                ref: 'io.ox/core/viewer/actions/togglesidebar',
+                ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar');
                 }
@@ -82,13 +84,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                 mobile: 'hi',
                 icon: 'fa fa-bars',
                 title: gt('More functions'),
-                drawDisabled: true,
-                ref: 'io.ox/core/viewer/actions/toolbar/dropdown',
+                ref: DROPDOWN_ACTION_ID,
                 customize: function (baton) {
                     var self = this,
                         fileSource = baton.model.get('source'),
                         dropdownLinks = LinksPattern.DropdownLinks({
-                            ref: 'io.ox/core/viewer/actions/' + fileSource + '/dropdown/links',
+                            ref: DROPDOWN_ACTION_ID + '/' + fileSource,
                             wrap: false,
                             //function to call when dropdown is empty
                             emptyCallback: function () {
@@ -97,13 +98,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                                     .removeAttr('href');
                             }
                         }, baton);
-                    this.append('<i class="fa fa-caret-down">');
-                    this.after(dropdownLinks);
-                    this.addClass('dropdown-toggle viewer-toolbar-dropdown').attr({
-                        'aria-haspopup': 'true',
-                        'data-toggle': 'dropdown',
-                        'role': 'button'
-                    }).dropdown();
+                    this.append('<i class="fa fa-caret-down">')
+                        .after(dropdownLinks)
+                        .addClass('dropdown-toggle viewer-toolbar-dropdown')
+                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button' })
+                        .dropdown();
                     this.parent().addClass('dropdown');
                 }
             }
@@ -129,20 +128,20 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // define actions of this ToolbarView
     var Action = ActionsPattern.Action;
-    new Action('io.ox/core/viewer/actions/toolbar/dropdown', {
+    new Action(DROPDOWN_ACTION_ID, {
         requires: function () { return true; },
         action: $.noop
     });
-    new Action('io.ox/core/viewer/actions/print', {
+    new Action(TOOLBAR_ACTION_ID + '/print', {
         id: 'print',
         requires: function () {
             return true;
         },
-        action: function (baton) {
-            console.warn('ToolbarView.actions.print', baton);
+        action: function () {
+            //console.warn('ToolbarView.actions.print', baton);
         }
     });
-    new Action('io.ox/core/viewer/actions/togglesidebar', {
+    new Action(TOOLBAR_ACTION_ID + '/togglesidebar', {
         id: 'togglesidebar',
         requires: function () {
             return true;
@@ -151,7 +150,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             //console.warn('ToolbarView.actions.togglesidebar', baton);
         }
     });
-    new Action('io.ox/core/viewer/actions/close', {
+    new Action(TOOLBAR_ACTION_ID + '/close', {
         id: 'close',
         requires: function () {
             return true;
@@ -162,25 +161,25 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     // action links for the function dropdown for Drive files
-    new LinksPattern.ActionLink('io.ox/core/viewer/actions/file/dropdown/links', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
         index: 100,
         id: 'share',
         label: gt('Share'),
         ref: 'io.ox/files/actions/sendlink'
     });
-    new LinksPattern.ActionLink('io.ox/core/viewer/actions/file/dropdown/links', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
         index: 200,
         id: 'download',
         label: gt('Download'),
         ref: 'io.ox/files/actions/download'
     });
-    new LinksPattern.ActionLink('io.ox/core/viewer/actions/file/dropdown/links', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
         index: 300,
         id: 'print',
         label: gt('Print'),
-        ref: 'io.ox/core/viewer/actions/print'
+        ref: TOOLBAR_ACTION_ID + '/print'
     });
-    new LinksPattern.ActionLink('io.ox/core/viewer/actions/file/dropdown/links', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
         index: 400,
         id: 'delete',
         label: gt('Delete'),
@@ -188,19 +187,19 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     // action links of the function dropdown for mail attachments
-    new LinksPattern.ActionLink('io.ox/core/viewer/actions/attachment/dropdown/links', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/attachment', {
         index: 100,
         id: 'open',
         label: gt('Open in browser'),
         ref: 'io.ox/mail/actions/open-attachment'
     });
-    new LinksPattern.ActionLink('io.ox/core/viewer/actions/attachment/dropdown/links', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/attachment', {
         index: 200,
         id: 'download',
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     });
-    new LinksPattern.ActionLink('io.ox/core/viewer/actions/attachment/dropdown/links', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/attachment', {
         index: 300,
         id: 'save',
         label: gt('Save to Drive'),
