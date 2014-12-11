@@ -105,7 +105,7 @@
                     tmp.push(e(id) + (obj[id] !== undefined ? '=' + e(obj[id]) : ''));
                 }
             }
-            return tmp.join(delimiter === undefined ? '&' : delimiter);
+            return tmp.sort().join(delimiter === undefined ? '&' : delimiter);
         },
 
         /**
@@ -118,7 +118,15 @@
          * @example
          * _.deserialize('a=1&b=2&c=text');
          */
-        deserialize: deserialize
+        deserialize: deserialize,
+
+        /**
+         * Convenience function; similar to jQuery's $.param but sorted;
+         * different delimiter; not escaped; useful for composite keys
+         */
+        param: function (obj) {
+            return this.serialize(obj, ' / ', _.identity);
+        }
     });
 
     $(window).resize(_.recheckDevice);
