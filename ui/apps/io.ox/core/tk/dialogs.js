@@ -89,10 +89,12 @@ define('io.ox/core/tk/dialogs', [
 
                 // restore focus
                 lastFocus = lastFocus.closest(':visible');
-                if (lastFocus.hasClass('dropdown')) {
-                    lastFocus.children().first().focus();
-                } else {
-                    lastFocus.focus();
+                if (o.focus) {
+                    if (lastFocus.hasClass('dropdown')) {
+                        lastFocus.children().first().focus();
+                    } else {
+                        lastFocus.focus();
+                    }
                 }
                 // self destruction
                 self.events.destroy();
@@ -379,11 +381,12 @@ define('io.ox/core/tk/dialogs', [
 
             // enable scrollblocker - Bug 29011
             o.container.addClass('blockscroll');
-
-            // remember focussed element
-            lastFocus = $(document.activeElement);
-            // not via jQuery!
-            document.addEventListener('focus', keepFocus, true);
+            if (o.focus) {
+                // remember focussed element
+                lastFocus = $(document.activeElement);
+                // not via jQuery!
+                document.addEventListener('focus', keepFocus, true);
+            }
 
             // empty header?
             if (nodes.header.children().length === 0) {
