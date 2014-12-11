@@ -23,7 +23,6 @@ html.high-contrast {
 body {
     // add a bit of perfection
     -webkit-font-feature-settings: "liga", "kern";
-    -webkit-font-smoothing: antialiased;
     font-feature-settings: "liga", "kern";
 }
 
@@ -3049,6 +3048,21 @@ ul.io-ox-inline-links + header {
 
 // ------
 
+.window-body {
+    .transition(top 0.3s linear);
+}
+
+.search-active {
+    .window-body {
+        top: 45px;
+    }
+    .inplace-search {
+        position: fixed;
+        top: 40px;
+        .input-group { max-width: 600px; }
+    }
+}
+
 .io-ox-search {
 
     &.inplace-search {
@@ -3056,6 +3070,7 @@ ul.io-ox-inline-links + header {
         line-height: 20px;
         z-index: 10;
     }
+
     .search-field {
         //space for fa-times
         padding-right: 36px;
