@@ -488,7 +488,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
         selectEvents: function () {
-            this.view.trigger('selection:action', this.get());
+            this.view.trigger('selection:change selection:action', this.get());
         }
     };
 
