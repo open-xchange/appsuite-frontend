@@ -20,6 +20,13 @@ Replaces: open-xchange-documents-ui (<< 7.2.1-0)
 Conflicts: open-xchange-documents-ui (<< 7.2.1-0)
 Description: Manifest and apps included in the OX App Suite HTML5 client
 
+Package: open-xchange-appsuite-l10n-ca-es
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-ca-es
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-ca-es (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (ca_ES)
+
 Package: open-xchange-appsuite-l10n-cs-cz
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-l10n-cs-cz
