@@ -12,7 +12,8 @@
  */
 
 define('io.ox/core/desktopNotifications', [
-], function () {
+    'settings!io.ox/core'
+], function (settings) {
     //see http://www.w3.org/TR/notifications for information
 
     'use strict';
@@ -115,13 +116,14 @@ define('io.ox/core/desktopNotifications', [
         /*shows desktop notifications if supported
         automatically asks for permission
         supports 4 types of parameter configurations for maximum compatibility:
+
         messageObject e.g. {title: 'abc', body: 'hey', icon: ...}
         title, options e.g. 'abc', {body: 'hey', icon: ...} (standard w3c parameter list)
         title, body e.g. 'abc', 'hey'
         title e.g. 'abc' */
         show: function (message) {
-            //if desktop notifications aren't supported stop here
-            if (!supported) {
+            //if desktop notifications aren't supported or not wanted stop here
+            if (!supported || !settings.get('showDesktopNotifications', true)) {
                 return;
             }
 
