@@ -33,6 +33,7 @@ define('io.ox/core/settings/defaults', function () {
         autoStart: 'io.ox/mail/main',
         autoOpenNotification: 'noEmail',
         autoLogout: 0,
+        showDesktopNotifications: true,
         settings: {
             downloadsDisabled: false
         }
