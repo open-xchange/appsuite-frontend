@@ -320,7 +320,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc/languages/appsuite
 /opt/open-xchange/appsuite/apps/*/*.ca_ES.js
 /opt/open-xchange/appsuite/apps/*/*/*.ca_ES.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.ca_ES.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.ca_ES_.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-ca-es.properties
 
 
