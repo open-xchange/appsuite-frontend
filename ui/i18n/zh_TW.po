@@ -426,8 +426,8 @@ msgstr "1 分鐘"
 msgid "1 week"
 msgstr "1 週"
 
-#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 分鐘"
@@ -443,8 +443,8 @@ msgid "12 hour"
 msgstr "12 小時"
 
 #: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:338
+#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 分鐘"
 
@@ -473,8 +473,8 @@ msgid "3 weeks"
 msgstr "3 週"
 
 #: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:339
+#: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 分鐘"
 
@@ -498,8 +498,8 @@ msgstr "45 分鐘"
 msgid "5 days"
 msgstr "5 天"
 
-#: apps/io.ox/core/settings/pane.js:265 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:336 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 分鐘"
@@ -801,7 +801,7 @@ msgid "Add widget"
 msgstr "新增小工具"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:395 module:io.ox/portal
+#: apps/io.ox/portal/main.js:398 module:io.ox/portal
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
@@ -907,7 +907,7 @@ msgstr "允許 HTML 格式的電子郵件"
 msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
-#: apps/io.ox/portal/main.js:459 module:io.ox/portal
+#: apps/io.ox/portal/main.js:462 module:io.ox/portal
 msgid "An error occurred."
 msgstr "發生錯誤。"
 
@@ -1129,12 +1129,12 @@ msgstr "自動轉寄"
 msgid "Auto-save email drafts"
 msgstr "自動保存電子郵件草稿"
 
-#: apps/io.ox/core/settings/pane.js:386 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:387 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "自動開啟通知區域"
 
 #: apps/io.ox/core/main.js:486 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:352
+#: apps/io.ox/core/settings/pane.js:353
 msgid "Automatic sign out"
 msgstr "自動登出"
 
@@ -1194,7 +1194,7 @@ msgstr "向後"
 msgid "Back to appointment"
 msgstr "回到約會"
 
-#: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
 #: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "基礎設定"
@@ -1348,7 +1348,7 @@ msgstr "日曆視圖"
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:615 module:io.ox/portal
+#: apps/io.ox/portal/main.js:618 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
@@ -1419,7 +1419,7 @@ msgstr "修改確認狀態"
 msgid "Change due date"
 msgstr "更改到期日"
 
-#: apps/io.ox/core/settings/pane.js:108 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:109 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:97
 msgid "Change password"
 msgstr "更改密碼"
@@ -1557,7 +1557,7 @@ msgstr "點擊以重試。"
 msgid "Click to retry later."
 msgstr "點擊以稍後重試。"
 
-#: apps/io.ox/portal/main.js:462 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "Click to try again."
 msgstr "點擊以再試一次。"
 
@@ -1933,7 +1933,7 @@ msgstr "建立檔案"
 msgid "Currency"
 msgstr "幣值"
 
-#: apps/io.ox/portal/main.js:135 module:io.ox/portal
+#: apps/io.ox/portal/main.js:138 module:io.ox/portal
 msgid "Customize this page"
 msgstr "自訂此頁面"
 
@@ -1995,7 +1995,7 @@ msgstr "拒絕"
 msgid "Declined"
 msgstr "拒絕"
 
-#: apps/io.ox/core/settings/pane.js:208 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:209 module:io.ox/core
 msgid "Default Theme"
 msgstr "預設佈景"
 
@@ -2003,7 +2003,7 @@ msgstr "預設佈景"
 msgid "Default address"
 msgstr "預設地址"
 
-#: apps/io.ox/core/settings/pane.js:315 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "登入後的預設應用程式"
 
@@ -2054,7 +2054,7 @@ msgstr "延遲"
 #: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:340
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:613
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:616
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2087,7 +2087,7 @@ msgstr "刪除版本"
 msgid "Delete whole series"
 msgstr "刪除整個系列"
 
-#: apps/io.ox/portal/main.js:609 module:io.ox/portal
+#: apps/io.ox/portal/main.js:612 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "刪除小工具"
@@ -2151,8 +2151,8 @@ msgstr "直接鏈結：%1$s"
 msgid "Disable"
 msgstr "禁用"
 
-#: apps/io.ox/portal/main.js:192 module:io.ox/portal
-#: apps/io.ox/portal/main.js:193 apps/io.ox/portal/main.js:503
+#: apps/io.ox/portal/main.js:195 module:io.ox/portal
+#: apps/io.ox/portal/main.js:196 apps/io.ox/portal/main.js:506
 msgid "Disable widget"
 msgstr "停用小工具"
 
@@ -2292,7 +2292,7 @@ msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "確定要刪除此工作嗎？"
 msgstr[1] "確定要刪除此工作嗎？"
 
-#: apps/io.ox/portal/main.js:610 module:io.ox/portal
+#: apps/io.ox/portal/main.js:613 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "確定要刪除此小工具嗎？"
@@ -3067,7 +3067,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:235 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
-#: apps/io.ox/search/apiproxy.js:113 module:io.ox/core
+#: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "文件夾"
 
@@ -3241,8 +3241,8 @@ msgstr "直接鏈結"
 msgid "Get free upgrade"
 msgstr "取得免費升級"
 
-#: apps/io.ox/portal/main.js:367 module:io.ox/portal
-#: apps/io.ox/portal/main.js:389
+#: apps/io.ox/portal/main.js:370 module:io.ox/portal
+#: apps/io.ox/portal/main.js:392
 msgid "Get started here"
 msgstr "開始入門"
 
@@ -3250,11 +3250,11 @@ msgstr "開始入門"
 msgid "Give feedback"
 msgstr "提供意見回饋"
 
-#: apps/io.ox/portal/main.js:87 module:io.ox/portal
+#: apps/io.ox/portal/main.js:90 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "%s 晚安"
 
-#: apps/io.ox/portal/main.js:85 module:io.ox/portal
+#: apps/io.ox/portal/main.js:88 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "%s 早安"
 
@@ -3295,7 +3295,7 @@ msgstr "HTML 和純文本"
 msgid "Header"
 msgstr "標題"
 
-#: apps/io.ox/portal/main.js:89 module:io.ox/portal
+#: apps/io.ox/portal/main.js:92 module:io.ox/portal
 msgid "Hello %s"
 msgstr "%s 您好"
 
@@ -3362,7 +3362,7 @@ msgstr "隱藏堆疊追蹤內容"
 msgid "High"
 msgstr "高"
 
-#: apps/io.ox/core/settings/pane.js:247 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:248 module:io.ox/core
 msgid "High contrast theme"
 msgstr "高對比佈景主題"
 
@@ -3646,7 +3646,7 @@ msgid "June"
 msgstr "六月"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:619 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "僅停用小工具"
@@ -3665,7 +3665,7 @@ msgstr "保留"
 msgid "Keep a copy of the message"
 msgstr "保留訊息副本"
 
-#: apps/io.ox/core/settings/pane.js:128 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:129 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:94 module:plugins/portal
 msgid "Language"
 msgstr "語言"
@@ -4164,7 +4164,7 @@ msgid "My calendars"
 msgstr "新增行事曆"
 
 #: apps/io.ox/core/main.js:839 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:80
+#: apps/io.ox/core/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
 msgstr "我的聯絡人資料"
@@ -4201,7 +4201,7 @@ msgstr "姓名"
 msgid "Nature"
 msgstr "大自然"
 
-#: apps/io.ox/core/settings/pane.js:371 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
 msgid "Never"
 msgstr "永不"
 
@@ -4433,7 +4433,7 @@ msgid "No wall posts yet."
 msgstr "尚無塗鴉牆貼文。"
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:303 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -4534,7 +4534,7 @@ msgstr "物件"
 msgid "October"
 msgstr "十月"
 
-#: apps/io.ox/core/settings/pane.js:335 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
 msgid "Off"
 msgstr "關閉"
 
@@ -4558,11 +4558,11 @@ msgstr "確定"
 msgid "On behalf of the owner"
 msgstr "代表 "
 
-#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
 msgid "On every new notification"
 msgstr "每個新通知時"
 
-#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
 msgid "On new notifications except mails"
 msgstr "在新通知時，但郵件通知除外"
 
@@ -5059,7 +5059,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "入口"
 
-#: apps/io.ox/portal/main.js:575 module:io.ox/portal
+#: apps/io.ox/portal/main.js:578 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "入口小工具"
 
@@ -5411,7 +5411,7 @@ msgstr ""
 msgid "Refresh"
 msgstr "刷新"
 
-#: apps/io.ox/core/settings/pane.js:281 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:282 module:io.ox/core
 msgid "Refresh interval"
 msgstr "更新時間"
 
@@ -5739,8 +5739,8 @@ msgstr "行程"
 #: apps/io.ox/core/main.js:794
 #: apps/io.ox/search/autocomplete/extensions.js:166
 #: apps/io.ox/search/autocomplete/extensions.js:208
-#: apps/io.ox/search/main.js:172 module:io.ox/search
-#: apps/io.ox/search/main.js:233 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:197 module:io.ox/search
+#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "搜索"
@@ -5823,7 +5823,7 @@ msgid "Sender/From"
 msgstr "寄件者/自"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:818 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "從行動裝置上的 %s 傳送"
 
@@ -5994,6 +5994,12 @@ msgstr "顯示衝突"
 msgid "Show declined appointments"
 msgstr "顯示拒絕的約會"
 
+#: apps/io.ox/core/settings/pane.js:425 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Show desktop notifications"
+msgstr "無通知"
+
 #: apps/io.ox/tasks/edit/view-template.js:597 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:605
 msgid "Show details"
@@ -6100,7 +6106,7 @@ msgid "Signatures"
 msgstr "簽名"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:115 module:io.ox/portal
+#: apps/io.ox/portal/main.js:118 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "已登入為 %1$s"
 
@@ -6745,7 +6751,7 @@ msgid ""
 "application the next time."
 msgstr "選項已被儲存，將會在您下次進入應用程式時生效。"
 
-#: apps/io.ox/core/settings/pane.js:53 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:54 module:io.ox/core
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "此選項需要重新載入或重新登入才能生效。"
 
@@ -6784,7 +6790,7 @@ msgstr "已成功清除無法復原的項目，請重新整理此頁面檢視變
 msgid "The user has administrative rights"
 msgstr "使用者有管理員全線"
 
-#: apps/io.ox/core/settings/pane.js:222 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:223 module:io.ox/core
 msgid "Theme"
 msgstr "主題"
 
@@ -7055,7 +7061,7 @@ msgstr "時間"
 msgid "Time scale in minutes"
 msgstr "按分鐘設置間隔"
 
-#: apps/io.ox/core/settings/pane.js:187 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:188 module:io.ox/core
 msgid "Time zone"
 msgstr "時區"
 
@@ -7487,7 +7493,7 @@ msgid "Weekly on %1$s"
 msgstr "每週的 %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:385 module:io.ox/portal
+#: apps/io.ox/portal/main.js:388 module:io.ox/portal
 #, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"

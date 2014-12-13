@@ -446,8 +446,8 @@ msgstr "1 минута"
 msgid "1 week"
 msgstr "1 неделя"
 
-#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 минут"
@@ -463,8 +463,8 @@ msgid "12 hour"
 msgstr "12 часов"
 
 #: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:338
+#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 минут"
 
@@ -493,8 +493,8 @@ msgid "3 weeks"
 msgstr "3 недели"
 
 #: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:339
+#: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 минут"
 
@@ -518,8 +518,8 @@ msgstr "45 минут"
 msgid "5 days"
 msgstr "5 дней"
 
-#: apps/io.ox/core/settings/pane.js:265 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:336 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 минут"
@@ -823,7 +823,7 @@ msgid "Add widget"
 msgstr "Добавить модуль"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:395 module:io.ox/portal
+#: apps/io.ox/portal/main.js:398 module:io.ox/portal
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
@@ -929,7 +929,7 @@ msgstr "Разрешить HTML в сообщениях"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Разрешить загрузку изображений из сети"
 
-#: apps/io.ox/portal/main.js:459 module:io.ox/portal
+#: apps/io.ox/portal/main.js:462 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Произошла ошибка."
 
@@ -1155,12 +1155,12 @@ msgstr "Автопересылка"
 msgid "Auto-save email drafts"
 msgstr "Автосохранение черновиков"
 
-#: apps/io.ox/core/settings/pane.js:386 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:387 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Автоматически открывать область уведомлений"
 
 #: apps/io.ox/core/main.js:486 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:352
+#: apps/io.ox/core/settings/pane.js:353
 msgid "Automatic sign out"
 msgstr "Автоматический выход"
 
@@ -1223,7 +1223,7 @@ msgstr "Назад"
 msgid "Back to appointment"
 msgstr "Назад к встрече"
 
-#: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
 #: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "Основные параметры"
@@ -1377,7 +1377,7 @@ msgstr "Календарь"
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:615 module:io.ox/portal
+#: apps/io.ox/portal/main.js:618 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
@@ -1449,7 +1449,7 @@ msgstr "Изменить статус подтверждения"
 msgid "Change due date"
 msgstr "Изменить срок"
 
-#: apps/io.ox/core/settings/pane.js:108 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:109 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:97
 msgid "Change password"
 msgstr "Изменить пароль"
@@ -1589,7 +1589,7 @@ msgstr "Нажмите, чтобы повторить попытку"
 msgid "Click to retry later."
 msgstr "Нажмите, чтобы повторить позднее."
 
-#: apps/io.ox/portal/main.js:462 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Нажмите, чтобы повторить попытку."
 
@@ -1967,7 +1967,7 @@ msgstr "Создание файлов"
 msgid "Currency"
 msgstr "Денежная единица"
 
-#: apps/io.ox/portal/main.js:135 module:io.ox/portal
+#: apps/io.ox/portal/main.js:138 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Настроить страницу"
 
@@ -2029,7 +2029,7 @@ msgstr "Отклонить"
 msgid "Declined"
 msgstr "Отклонено"
 
-#: apps/io.ox/core/settings/pane.js:208 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:209 module:io.ox/core
 msgid "Default Theme"
 msgstr "Тема по умолчанию"
 
@@ -2037,7 +2037,7 @@ msgstr "Тема по умолчанию"
 msgid "Default address"
 msgstr "Адрес по умолчанию"
 
-#: apps/io.ox/core/settings/pane.js:315 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Приложение после авторизации"
 
@@ -2088,7 +2088,7 @@ msgstr "Отложено"
 #: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:340
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:613
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:616
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2121,7 +2121,7 @@ msgstr "Удалить версию"
 msgid "Delete whole series"
 msgstr "Удалить всю серию"
 
-#: apps/io.ox/portal/main.js:609 module:io.ox/portal
+#: apps/io.ox/portal/main.js:612 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Удалить модуль"
@@ -2185,8 +2185,8 @@ msgstr "Прямая ссылка: %1$s"
 msgid "Disable"
 msgstr "Отключить"
 
-#: apps/io.ox/portal/main.js:192 module:io.ox/portal
-#: apps/io.ox/portal/main.js:193 apps/io.ox/portal/main.js:503
+#: apps/io.ox/portal/main.js:195 module:io.ox/portal
+#: apps/io.ox/portal/main.js:196 apps/io.ox/portal/main.js:506
 msgid "Disable widget"
 msgstr "Отключить модуль"
 
@@ -2328,7 +2328,7 @@ msgstr[0] "Удалить эту задачу?"
 msgstr[1] "Удалить задачи?"
 msgstr[2] "Удалить задачи?"
 
-#: apps/io.ox/portal/main.js:610 module:io.ox/portal
+#: apps/io.ox/portal/main.js:613 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Удалить модуль?"
@@ -3113,7 +3113,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:235 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
-#: apps/io.ox/search/apiproxy.js:113 module:io.ox/core
+#: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Папка"
 
@@ -3289,8 +3289,8 @@ msgstr "Прямая ссылка"
 msgid "Get free upgrade"
 msgstr "Получить бесплатное обновление"
 
-#: apps/io.ox/portal/main.js:367 module:io.ox/portal
-#: apps/io.ox/portal/main.js:389
+#: apps/io.ox/portal/main.js:370 module:io.ox/portal
+#: apps/io.ox/portal/main.js:392
 msgid "Get started here"
 msgstr "Начало работы"
 
@@ -3298,11 +3298,11 @@ msgstr "Начало работы"
 msgid "Give feedback"
 msgstr "Оставить отзыв"
 
-#: apps/io.ox/portal/main.js:87 module:io.ox/portal
+#: apps/io.ox/portal/main.js:90 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "Добрый вечер, %s"
 
-#: apps/io.ox/portal/main.js:85 module:io.ox/portal
+#: apps/io.ox/portal/main.js:88 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Доброе утро, %s"
 
@@ -3343,7 +3343,7 @@ msgstr "HTML и текст"
 msgid "Header"
 msgstr "Заголовок"
 
-#: apps/io.ox/portal/main.js:89 module:io.ox/portal
+#: apps/io.ox/portal/main.js:92 module:io.ox/portal
 msgid "Hello %s"
 msgstr "Здравствуйте, %s"
 
@@ -3410,7 +3410,7 @@ msgstr "Скрыть трассировку стека"
 msgid "High"
 msgstr "Высокий"
 
-#: apps/io.ox/core/settings/pane.js:247 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:248 module:io.ox/core
 msgid "High contrast theme"
 msgstr "Контрастная тема"
 
@@ -3701,7 +3701,7 @@ msgid "June"
 msgstr "Июнь"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:619 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Отключить модуль"
@@ -3720,7 +3720,7 @@ msgstr "Оставить"
 msgid "Keep a copy of the message"
 msgstr "Сохранить копию"
 
-#: apps/io.ox/core/settings/pane.js:128 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:129 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:94 module:plugins/portal
 msgid "Language"
 msgstr "Язык"
@@ -4219,7 +4219,7 @@ msgid "My calendars"
 msgstr "Новый календарь"
 
 #: apps/io.ox/core/main.js:839 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:80
+#: apps/io.ox/core/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
 msgstr "Мои контактные данные"
@@ -4255,7 +4255,7 @@ msgstr "Имя"
 msgid "Nature"
 msgstr "Природа"
 
-#: apps/io.ox/core/settings/pane.js:371 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
 msgid "Never"
 msgstr "Никогда"
 
@@ -4489,7 +4489,7 @@ msgid "No wall posts yet."
 msgstr "Нет сообщений."
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:303 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -4596,7 +4596,7 @@ msgstr "Объекты"
 msgid "October"
 msgstr "Октябрь"
 
-#: apps/io.ox/core/settings/pane.js:335 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
 msgid "Off"
 msgstr "Откл."
 
@@ -4620,11 +4620,11 @@ msgstr "ОК"
 msgid "On behalf of the owner"
 msgstr "от имени"
 
-#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
 msgid "On every new notification"
 msgstr "При новых уведомлениях"
 
-#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
 msgid "On new notifications except mails"
 msgstr "При новых уведомлениях за исключением почтовых"
 
@@ -5123,7 +5123,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Портал"
 
-#: apps/io.ox/portal/main.js:575 module:io.ox/portal
+#: apps/io.ox/portal/main.js:578 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Виджеты портала"
 
@@ -5478,7 +5478,7 @@ msgstr ""
 msgid "Refresh"
 msgstr "Обновить"
 
-#: apps/io.ox/core/settings/pane.js:281 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:282 module:io.ox/core
 msgid "Refresh interval"
 msgstr "Обновить интервал"
 
@@ -5807,8 +5807,8 @@ msgstr "Планирование"
 #: apps/io.ox/core/main.js:794
 #: apps/io.ox/search/autocomplete/extensions.js:166
 #: apps/io.ox/search/autocomplete/extensions.js:208
-#: apps/io.ox/search/main.js:172 module:io.ox/search
-#: apps/io.ox/search/main.js:233 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:197 module:io.ox/search
+#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Поиск"
@@ -5891,7 +5891,7 @@ msgid "Sender/From"
 msgstr "Отправитель/от кого"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:818 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Отправлено с мобильного из %s"
 
@@ -6063,6 +6063,12 @@ msgstr "Показать конфликты"
 msgid "Show declined appointments"
 msgstr "Показать отклоненные встречи"
 
+#: apps/io.ox/core/settings/pane.js:425 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Show desktop notifications"
+msgstr "Нет уведомлений"
+
 #: apps/io.ox/tasks/edit/view-template.js:597 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:605
 msgid "Show details"
@@ -6169,7 +6175,7 @@ msgid "Signatures"
 msgstr "Подписи"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:115 module:io.ox/portal
+#: apps/io.ox/portal/main.js:118 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Вошел как  %1$s"
 
@@ -6821,7 +6827,7 @@ msgid ""
 "application the next time."
 msgstr "Параметр сохранен и вступит в силу при следующем запуске приложения."
 
-#: apps/io.ox/core/settings/pane.js:53 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:54 module:io.ox/core
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Чтоби изменения вступили в силу, необходимо перезагрузить или авторизоваться "
@@ -6865,7 +6871,7 @@ msgstr ""
 msgid "The user has administrative rights"
 msgstr "Пользователь обладает правами администратора"
 
-#: apps/io.ox/core/settings/pane.js:222 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:223 module:io.ox/core
 msgid "Theme"
 msgstr "Тема"
 
@@ -7151,7 +7157,7 @@ msgstr "Время"
 msgid "Time scale in minutes"
 msgstr "Масштаб времени в минутах"
 
-#: apps/io.ox/core/settings/pane.js:187 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:188 module:io.ox/core
 msgid "Time zone"
 msgstr "Часовой пояс"
 
@@ -7585,7 +7591,7 @@ msgid "Weekly on %1$s"
 msgstr "Каждую неделю в %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:385 module:io.ox/portal
+#: apps/io.ox/portal/main.js:388 module:io.ox/portal
 #, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"

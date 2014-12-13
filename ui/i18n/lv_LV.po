@@ -446,8 +446,8 @@ msgstr "1 minūte"
 msgid "1 week"
 msgstr "1 nedēļa"
 
-#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minūtes"
@@ -463,8 +463,8 @@ msgid "12 hour"
 msgstr "12 stundas"
 
 #: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:338
+#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 minūtes"
 
@@ -493,8 +493,8 @@ msgid "3 weeks"
 msgstr "3 nedēļas"
 
 #: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:339
+#: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 minūtes"
 
@@ -518,8 +518,8 @@ msgstr "45 minūtes"
 msgid "5 days"
 msgstr "5 dienas"
 
-#: apps/io.ox/core/settings/pane.js:265 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:336 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minūtes"
@@ -824,7 +824,7 @@ msgid "Add widget"
 msgstr "Pievienot vidžetu"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:395 module:io.ox/portal
+#: apps/io.ox/portal/main.js:398 module:io.ox/portal
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
@@ -930,7 +930,7 @@ msgstr "Atļaut HTML formatētu e-pastu"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
-#: apps/io.ox/portal/main.js:459 module:io.ox/portal
+#: apps/io.ox/portal/main.js:462 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Reģistrēta kļūda."
 
@@ -1157,12 +1157,12 @@ msgstr "Automātiski pārsūtīt"
 msgid "Auto-save email drafts"
 msgstr "Automātiski saglabāt e-pasta melnrakstus"
 
-#: apps/io.ox/core/settings/pane.js:386 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:387 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Automātiski atvērt paziņojuma apgabalu"
 
 #: apps/io.ox/core/main.js:486 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:352
+#: apps/io.ox/core/settings/pane.js:353
 msgid "Automatic sign out"
 msgstr "Automātiska atslēgšanās"
 
@@ -1228,7 +1228,7 @@ msgstr "Atpakaļ"
 msgid "Back to appointment"
 msgstr "Atpakaļ uz tikšanos"
 
-#: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
 #: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "Pamata iestatījumi"
@@ -1384,7 +1384,7 @@ msgstr "Kalendāra skats"
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:615 module:io.ox/portal
+#: apps/io.ox/portal/main.js:618 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
@@ -1456,7 +1456,7 @@ msgstr "Izmaiņu apstiprinājuma statuss"
 msgid "Change due date"
 msgstr "Mainīt izpildes datumu"
 
-#: apps/io.ox/core/settings/pane.js:108 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:109 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:97
 msgid "Change password"
 msgstr "Paroles maiņa"
@@ -1596,7 +1596,7 @@ msgstr "Noklikšķiniet lai mēģinātu vēlreiz"
 msgid "Click to retry later."
 msgstr "Noklikšķiniet lai mēģinātu vēlāk vēlreiz"
 
-#: apps/io.ox/portal/main.js:462 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Noklikšķiniet lai mēģinātu vēlreiz."
 
@@ -1974,7 +1974,7 @@ msgstr "Failu izveide"
 msgid "Currency"
 msgstr "Valūta"
 
-#: apps/io.ox/portal/main.js:135 module:io.ox/portal
+#: apps/io.ox/portal/main.js:138 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Pielāgot šo lapu"
 
@@ -2036,7 +2036,7 @@ msgstr "Atteikt"
 msgid "Declined"
 msgstr "Atteikts"
 
-#: apps/io.ox/core/settings/pane.js:208 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:209 module:io.ox/core
 msgid "Default Theme"
 msgstr "Noklusētā tēma"
 
@@ -2044,7 +2044,7 @@ msgstr "Noklusētā tēma"
 msgid "Default address"
 msgstr "Noklusētā adrese"
 
-#: apps/io.ox/core/settings/pane.js:315 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Noklusētā aplikācija pēc pieslēgšanās"
 
@@ -2095,7 +2095,7 @@ msgstr "Atlikts"
 #: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:340
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:613
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:616
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2128,7 +2128,7 @@ msgstr "Dzēst versiju"
 msgid "Delete whole series"
 msgstr "Dzēst visu sēriju"
 
-#: apps/io.ox/portal/main.js:609 module:io.ox/portal
+#: apps/io.ox/portal/main.js:612 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Dzēst vidžetu"
@@ -2192,8 +2192,8 @@ msgstr "Tiešā saite: %1$s"
 msgid "Disable"
 msgstr "Atspējot"
 
-#: apps/io.ox/portal/main.js:192 module:io.ox/portal
-#: apps/io.ox/portal/main.js:193 apps/io.ox/portal/main.js:503
+#: apps/io.ox/portal/main.js:195 module:io.ox/portal
+#: apps/io.ox/portal/main.js:196 apps/io.ox/portal/main.js:506
 msgid "Disable widget"
 msgstr "Atspējot vidžetu"
 
@@ -2337,7 +2337,7 @@ msgstr[0] "Vai tiešām vēlaties dzēst šo uzdevumu?"
 msgstr[1] "Vai tiešām vēlaties dzēst šos uzdevumus?"
 msgstr[2] "Vai tiešām vēlaties dzēst šos uzdevumus?"
 
-#: apps/io.ox/portal/main.js:610 module:io.ox/portal
+#: apps/io.ox/portal/main.js:613 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Vai tiešām vēlaties dzēst šo vidžetu?"
@@ -3130,7 +3130,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:235 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
-#: apps/io.ox/search/apiproxy.js:113 module:io.ox/core
+#: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Mape"
 
@@ -3306,8 +3306,8 @@ msgstr "Tieša saite"
 msgid "Get free upgrade"
 msgstr "Iegūt bezmaksas jauninājumu"
 
-#: apps/io.ox/portal/main.js:367 module:io.ox/portal
-#: apps/io.ox/portal/main.js:389
+#: apps/io.ox/portal/main.js:370 module:io.ox/portal
+#: apps/io.ox/portal/main.js:392
 msgid "Get started here"
 msgstr "Sāciet šeit"
 
@@ -3315,11 +3315,11 @@ msgstr "Sāciet šeit"
 msgid "Give feedback"
 msgstr "Atsausmes"
 
-#: apps/io.ox/portal/main.js:87 module:io.ox/portal
+#: apps/io.ox/portal/main.js:90 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "Labvakar, %s"
 
-#: apps/io.ox/portal/main.js:85 module:io.ox/portal
+#: apps/io.ox/portal/main.js:88 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Labrīt, %s"
 
@@ -3360,7 +3360,7 @@ msgstr "HTML un vienkāršs teksts"
 msgid "Header"
 msgstr "Hederis"
 
-#: apps/io.ox/portal/main.js:89 module:io.ox/portal
+#: apps/io.ox/portal/main.js:92 module:io.ox/portal
 msgid "Hello %s"
 msgstr "Sveicināti %s"
 
@@ -3427,7 +3427,7 @@ msgstr "Paslēpt izsekošanu"
 msgid "High"
 msgstr "Augsta"
 
-#: apps/io.ox/core/settings/pane.js:247 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:248 module:io.ox/core
 msgid "High contrast theme"
 msgstr "Augsta kontrasta tēma"
 
@@ -3720,7 +3720,7 @@ msgid "June"
 msgstr "Jūnijs"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:619 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Tikai atspējot vidžetu"
@@ -3739,7 +3739,7 @@ msgstr "Paturēt"
 msgid "Keep a copy of the message"
 msgstr "Saglabāt ziņas kopiju"
 
-#: apps/io.ox/core/settings/pane.js:128 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:129 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:94 module:plugins/portal
 msgid "Language"
 msgstr "Valoda"
@@ -4238,7 +4238,7 @@ msgid "My calendars"
 msgstr "Jauns kalendārs"
 
 #: apps/io.ox/core/main.js:839 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:80
+#: apps/io.ox/core/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
 msgstr "Mani kontakta dati"
@@ -4274,7 +4274,7 @@ msgstr "Vārds"
 msgid "Nature"
 msgstr "Daba"
 
-#: apps/io.ox/core/settings/pane.js:371 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
 msgid "Never"
 msgstr "Nekad"
 
@@ -4508,7 +4508,7 @@ msgid "No wall posts yet."
 msgstr "Nav neviena sienas postera."
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:303 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -4617,7 +4617,7 @@ msgstr "Objekti"
 msgid "October"
 msgstr "Oktobris"
 
-#: apps/io.ox/core/settings/pane.js:335 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
 msgid "Off"
 msgstr "Izslēgts"
 
@@ -4641,11 +4641,11 @@ msgstr "Labi"
 msgid "On behalf of the owner"
 msgstr "pēc lūguma no"
 
-#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
 msgid "On every new notification"
 msgstr "Pie katra jauna paziņojuma"
 
-#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
 msgid "On new notifications except mails"
 msgstr "Pie jauniem paziņojumiem, izņemot pastu"
 
@@ -5145,7 +5145,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Portāls"
 
-#: apps/io.ox/portal/main.js:575 module:io.ox/portal
+#: apps/io.ox/portal/main.js:578 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Portāla logrīki"
 
@@ -5499,7 +5499,7 @@ msgstr ""
 msgid "Refresh"
 msgstr "Jaunināt"
 
-#: apps/io.ox/core/settings/pane.js:281 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:282 module:io.ox/core
 msgid "Refresh interval"
 msgstr "Jaunināšanas intervāls"
 
@@ -5828,8 +5828,8 @@ msgstr "Plānošana"
 #: apps/io.ox/core/main.js:794
 #: apps/io.ox/search/autocomplete/extensions.js:166
 #: apps/io.ox/search/autocomplete/extensions.js:208
-#: apps/io.ox/search/main.js:172 module:io.ox/search
-#: apps/io.ox/search/main.js:233 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:197 module:io.ox/search
+#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Meklēšana"
@@ -5912,7 +5912,7 @@ msgid "Sender/From"
 msgstr "Sūtītājs/No"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:818 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Nosūtīts no %s ar mobilo ierīci"
 
@@ -6084,6 +6084,12 @@ msgstr "Rādīt konfliktus"
 msgid "Show declined appointments"
 msgstr "Rādīt noraidītās tikšanās"
 
+#: apps/io.ox/core/settings/pane.js:425 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Show desktop notifications"
+msgstr "Nav paziņojumu"
+
 #: apps/io.ox/tasks/edit/view-template.js:597 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:605
 msgid "Show details"
@@ -6190,7 +6196,7 @@ msgid "Signatures"
 msgstr "Paraksti"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:115 module:io.ox/portal
+#: apps/io.ox/portal/main.js:118 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Pieslēdzies kā lietotājs %1$s"
 
@@ -6860,7 +6866,7 @@ msgstr ""
 "Iestatījums ir saglabāts un tiks aktivizēts nākamreiz, kad pieslēgsieties "
 "aplikācijai."
 
-#: apps/io.ox/core/settings/pane.js:53 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:54 module:io.ox/core
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Lai iestatījumi stātos spēkā ir jāveic pārlāde vai atkārtota pielēgšanās."
@@ -6903,7 +6909,7 @@ msgstr ""
 msgid "The user has administrative rights"
 msgstr "Lietotājam ir administratīvās tiesības"
 
-#: apps/io.ox/core/settings/pane.js:222 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:223 module:io.ox/core
 msgid "Theme"
 msgstr "Tēma"
 
@@ -7190,7 +7196,7 @@ msgstr "Laiks"
 msgid "Time scale in minutes"
 msgstr "Laika grafiks minūtēs"
 
-#: apps/io.ox/core/settings/pane.js:187 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:188 module:io.ox/core
 msgid "Time zone"
 msgstr "Laika zona"
 
@@ -7627,7 +7633,7 @@ msgid "Weekly on %1$s"
 msgstr "Katru nedēļu, %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:385 module:io.ox/portal
+#: apps/io.ox/portal/main.js:388 module:io.ox/portal
 #, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"
