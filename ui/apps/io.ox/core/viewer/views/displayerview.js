@@ -41,8 +41,12 @@ define('io.ox/core/viewer/views/displayerview', [
                 carouselInner = $('<div class="carousel-inner">'),
                 prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev"><i class="fa fa-angle-left"></i></a>'),
                 nextSlide = $('<a class="right carousel-control" href="#viewer-carousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>'),
-                slideToLoad = 0;
+                // simulation with first file in the folder selected
+                fileSelection = 0,
+                // preload 1 neigboring slides
+                preload = 1;
 
+            // create a Bootstrap carousel slide
             function createSlide (model, modelIndex) {
                 var slide = $('<div>').addClass('item'),
                     image = $('<img>').addClass('viewer-carousel-image'),
@@ -57,17 +61,32 @@ define('io.ox/core/viewer/views/displayerview', [
                 return slide;
             }
 
-            function loadSlide (slideIndex) {
-                //console.warn('DisplayerView.render.loadSlide()', slideIndex);
-                if (Math.abs(slideIndex) >= slidesList.length) { return; }
-                var slide = slidesList.eq(slideIndex),
-                    imageToLoad = slide.find('img');
-                slide.busy();
-                imageToLoad.attr('src', imageToLoad.attr('data-src'));
-                imageToLoad[0].onload = function () {
-                    slide.idle();
-                    imageToLoad.show();
-                };
+            // load the given slide index and additionally number of neigboring slides in the given direction.
+            function preloadSlide(slideToLoad, preloadOffset, preloadDirection) {
+                var preloadOffset = preloadOffset || 1,
+                    step = preloadDirection === 'left' ? 1 : -1,
+                    slideToLoad = slideToLoad || 0,
+                    loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
+                    slidesCount = slidesList.length;
+                // load a single slide with the given slide index
+                function loadSlide (slideIndex) {
+                    if (typeof slideIndex !== 'number' || isNaN(slideIndex)) { return; }
+                    var slideIndex = slideIndex % slidesCount,
+                        slideEl = slidesList.eq(slideIndex),
+                        imageToLoad = slideEl.find('img');
+                    if (imageToLoad.attr('src')) { return ;}
+                    slideEl.busy();
+                    imageToLoad.attr('src', imageToLoad.attr('data-src'));
+                    imageToLoad[0].onload = function () {
+                        slideEl.idle();
+                        imageToLoad.show();
+                    };
+                    imageToLoad[0].onerror = function () {
+                        //TODO handle image load error with notifications
+                    };
+                }
+                // load the load range, containing the requested slide and preload slides
+                _.each(loadRange, loadSlide);
             }
 
             // create slides from file collection and append them to the carousel
@@ -79,17 +98,15 @@ define('io.ox/core/viewer/views/displayerview', [
             // TODO load selected file from OX Drive/Mail
             var slidesList = carouselInner.children();
             slidesList.first().addClass('active');
-            loadSlide(slideToLoad);
-            loadSlide(slideToLoad + 1);
-            loadSlide(slideToLoad - 1);
+            preloadSlide(fileSelection, preload, 'left');
+            preloadSlide(fileSelection, preload, 'right');
 
-            // init the carousel
+            // init the carousel and preload neighboring slides on next/prev
             carouselRoot.append(carouselInner, prevSlide, nextSlide)
                 .carousel()
                 .on('slid.bs.carousel', function (event) {
-                    var activeSlideIndex = $(event.relatedTarget).data('slide'),
-                        preloadOffset = event.direction === 'left' ? 1 : -1;
-                    loadSlide(activeSlideIndex + preloadOffset);
+                    var activeSlideIndex = $(event.relatedTarget).data('slide');
+                    preloadSlide(activeSlideIndex, preload, event.direction);
                 });
 
             // append carousel to view
