@@ -11,8 +11,9 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/displayerview', [
-    'io.ox/core/viewer/eventdispatcher'
-], function (EventDispatcher) {
+    'io.ox/core/viewer/eventdispatcher',
+    'gettext!io.ox/core'
+], function (EventDispatcher, gt) {
 
     'use strict';
 
@@ -44,18 +45,21 @@ define('io.ox/core/viewer/views/displayerview', [
                 // simulation with first file in the folder selected
                 fileSelection = 0,
                 // preload 1 neigboring slides
-                preload = 1;
+                preload = 1,
+                slidesCount = this.collection.length;
 
             // create a Bootstrap carousel slide
             function createSlide (model, modelIndex) {
-                var slide = $('<div>').addClass('item'),
-                    image = $('<img>').addClass('viewer-carousel-image'),
+                var slide = $('<div class="item">'),
+                    image = $('<img class="viewer-displayer-image">'),
+                    caption = $('<div class="viewer-displayer-caption">'),
                     previewUrl = model && model.getPreviewUrl(),
                     filename = model && model.get('filename') || '';
                 if (previewUrl) {
                     image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
                         .css({ maxHeight: window.innerHeight - carouselRoot.offset().top });
-                    slide.append(image);
+                    caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
+                    slide.append(image, caption);
                 }
                 slide.attr('data-slide', modelIndex);
                 return slide;
@@ -63,14 +67,15 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // load the given slide index and additionally number of neigboring slides in the given direction.
             function preloadSlide(slideToLoad, preloadOffset, preloadDirection) {
-                var preloadOffset = preloadOffset || 1,
+                var preloadOffset = preloadOffset || 0,
                     step = preloadDirection === 'left' ? 1 : -1,
                     slideToLoad = slideToLoad || 0,
-                    loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
-                    slidesCount = slidesList.length;
+                    loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step);
                 // load a single slide with the given slide index
                 function loadSlide (slideIndex) {
-                    if (typeof slideIndex !== 'number' || isNaN(slideIndex)) { return; }
+                    if (typeof slideIndex !== 'number' || isNaN(slideIndex) || Math.abs(slideIndex) >= slidesCount) {
+                        return;
+                    }
                     var slideIndex = slideIndex % slidesCount,
                         slideEl = slidesList.eq(slideIndex),
                         imageToLoad = slideEl.find('img');
@@ -82,7 +87,9 @@ define('io.ox/core/viewer/views/displayerview', [
                         imageToLoad.show();
                     };
                     imageToLoad[0].onerror = function () {
-                        //TODO handle image load error with notifications
+                        var notification = $('<p class="viewer-displayer-notification">')
+                            .text(gt('Sorry, there is no preview available for this file.'));
+                        slideEl.idle().append(notification);
                     };
                 }
                 // load the load range, containing the requested slide and preload slides

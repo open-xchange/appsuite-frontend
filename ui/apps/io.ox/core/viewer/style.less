@@ -95,7 +95,7 @@
         .item {
             position:relative;
             outline: none;
-            img {
+            .viewer-displayer-image {
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -103,6 +103,19 @@
                 right: 0;
                 margin: auto;
                 display: none;
+            }
+            .viewer-displayer-caption {
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: auto;
+                bottom: 40px;
+                height: 40px;
+                line-height: 40px;
+                width: 100px;
+                text-align: center;
+                background: rgba(0,0,0,0.4);
+                .border-radius(4px);
             }
             &.io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
         }
@@ -122,6 +135,17 @@
                 opacity: 1;
                 background: none;
             }
+        }
+
+        .viewer-displayer-notification {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            height: 1em;
+            text-align: center;
         }
     }
 
