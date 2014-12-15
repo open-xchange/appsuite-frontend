@@ -158,7 +158,13 @@ define('io.ox/core/viewer/backbone', [
             var result = {};
 
             /**
-             * duck check for drive file or e-mail attachment
+             * Guesses the source of a file by its properties.
+             *
+             * @param {Object} data
+             *  a file descriptor object passed from e.g Drive or Mail app.
+             *
+             * @returns {String}
+             *  returns the file source string constant ('file' or 'attachment')
              */
             function getFileSource (data) {
                 if (!data || !data.id) { return null; }
@@ -170,24 +176,43 @@ define('io.ox/core/viewer/backbone', [
             }
 
             /**
-             *  Retrieves the file category from its MIME type.
+             *  Retrieves the file category from its MIME type and extension.
              *
              *  @param {String} mimeType
              *  the MIME type string
+             *
+             *  @param {String} fileExtension
+             *  the file extension
              *
              *  @returns {String}
              *   Returns one of these supported categories: 'IMAGE', 'VIDEO', AUDIO', 'OFFICE', 'PDF',
              *   and returns null if no matching category is found.
              */
-            function getFileCategory (mimeType) {
+            function getFileCategory (mimeType, fileExtension) {
                 var fileCategory = null;
-                _.each(MIME_TYPES, function (extensions, category) {
-                    var mimeTypes = _.values(extensions);
-                    if (_.contains(mimeTypes, mimeType)) {
+                _.each(MIME_TYPES, function (types, category) {
+                    var mimeTypes = _.values(types),
+                        extensions = _.keys(types);
+                    if (_.contains(mimeTypes, mimeType) || _.contains(extensions, fileExtension)) {
                         fileCategory = category;
                     }
                 });
                 return fileCategory;
+            }
+
+            /**
+             *  Retrieves the extension from a given file name.
+             *
+             * @param {String} filename
+             *  Filename string
+             *
+             * @returns {String | null}
+             *  Returns the file extension string if found, null otherwise.
+             */
+            function getExtension (fileName) {
+                if (!fileName || !_.isString(fileName) || fileName.length === 0) { return null; }
+                var index = fileName.lastIndexOf('.');
+                return (fileName.lastIndexOf('.') >= 0) ? fileName.substring(index + 1).toLowerCase() : null;
             }
 
             result.origData = _.copy(data, true);   // create a deep copy, since we want to do updates later
@@ -197,7 +222,7 @@ define('io.ox/core/viewer/backbone', [
                 result.filename = data.filename;
                 result.size = data.size;
                 result.contentType = data.content_type;
-                result.fileCategory = getFileCategory(data.content_type);
+                result.fileCategory = getFileCategory(data.content_type, getExtension(data.filename));
                 result.id = data.id;    // could be a attachment id, or drive file id
                 result.folderId = data.mail && data.mail.folder_id || null;
             } else if (result.source === ITEM_TYPE_FILE) {
@@ -205,7 +230,7 @@ define('io.ox/core/viewer/backbone', [
                 result.size = data.file_size;
                 result.version = data.version;  // drive only
                 result.contentType = data.file_mimetype;
-                result.fileCategory = getFileCategory(data.file_mimetype);
+                result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
                 result.id = data.id;    // could be a attachment id, or drive file id
                 result.folderId = data.folder_id;
                 result.meta = data.meta;
