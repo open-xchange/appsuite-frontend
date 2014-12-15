@@ -16,10 +16,11 @@
 
 define('io.ox/files/api', [
     'io.ox/core/http',
+    'io.ox/core/folder/api',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'settings!io.ox/core'
-], function (http, Pool, CollectionLoader, coreConfig) {
+], function (http, folderAPI, Pool, CollectionLoader, coreConfig) {
 
     'use strict';
 
@@ -142,6 +143,32 @@ define('io.ox/files/api', [
                     versions: data
                 }, options));
             }
+        });
+    };
+
+    /**
+     * deletes all files from a specific folder
+     * @param  {string} folder_id
+     * @return { deferred }
+     */
+    api.clear = function (folder_id) {
+
+        pool.getByFolder(folder_id).forEach(function (collection) {
+            collection.expired = true;
+            collection.reset();
+        });
+
+        // new clear
+        return http.PUT({
+            module: 'folders',
+            appendColumns: false,
+            params: {
+                action: 'clear',
+                tree: '1'
+            },
+            data: [folder_id]
+        }).done(function () {
+            folderAPI.reload(folder_id);
         });
     };
 

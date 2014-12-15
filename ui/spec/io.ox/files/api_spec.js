@@ -204,5 +204,63 @@ define([
                 });
             });
         });
+
+        describe('clear folder', function () {
+            var clearSpy, def, folderReload;
+            beforeEach(function () {
+                clearSpy = sinon.spy(function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                        timestamp: 1368791630910,
+                        data: []
+                    }));
+                });
+                def = $.Deferred();
+                folderReload = $.Deferred();
+
+                api.pool.getByFolder('4711').forEach(function (c) {
+                    c.on('reset', def.resolve);
+                });
+
+                this.server.respondWith('PUT', /api\/folders\?action=clear/, function (xhr) {
+                    clearSpy(xhr);
+                });
+                this.server.responses = this.server.responses.filter(function (r) {
+                    return !r.url.test('api/folders?action=get');
+                });
+                this.server.respondWith(/api\/folders\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                        timestamp: 1368791630910,
+                        data: {
+                            id: '4711',
+                            folder_id: '1'
+                        }
+                    }));
+                    folderReload.resolve();
+                });
+            });
+            it('should trigger reset event for folder collection', function () {
+                api.clear('4711').fail(function () {
+                    expect('api.clear failed').to.equal('api.clear succeeded');
+                });
+                return def.then(function (c) {
+                    expect(c).to.have.length(0);
+                });
+            });
+
+            it('should reload the folder', function () {
+                api.clear('4711').fail(function () {
+                    expect('api.clear failed').to.equal('api.clear succeeded');
+                });
+                return folderReload;
+            });
+
+            it('should send action=clear to folder module', function () {
+                return api.clear('4711').fail(function () {
+                    expect('api.clear failed').to.equal('api.clear succeeded');
+                }).done(function () {
+                    expect(clearSpy.called, 'folder clear action sent to server').to.be.true;
+                });
+            });
+        });
     });
 });
