@@ -792,10 +792,9 @@ define('io.ox/core/folder/api',
     function refresh() {
         // pause http layer to get one multiple
         http.pause();
-        // loop over all subfolder collection and reload
-        _(pool.collections).each(function (collection, id) {
-            // check collection.fetched; no need to fetch brand new subfolders
-            if (collection.fetched) list(id, { cache: false });
+        // loop over all folders, get all parent folders, apply unique, and reload if they have subfolders
+        _(api.pool.models).chain().invoke('get', 'folder_id').uniq().compact().without('0').each(function (id) {
+            list(id, { cache: false });
         });
         // go!
         http.resume();
