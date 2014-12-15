@@ -108,7 +108,7 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
     // The function will then be called at the start of each resize.
     // TODO: Use {min,max}-{width,height} CSS properties of the elements,
     // since this stuff actually belongs in a theme.
-    ListViewControl.minWidth = 250;
+    ListViewControl.minWidth = 270;
     ListViewControl.maxWidth = -250;
     ListViewControl.minHeight = 150;
     ListViewControl.maxHeight = -100;
