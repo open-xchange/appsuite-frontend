@@ -710,10 +710,13 @@ define('io.ox/mail/compose/view', [
             if (input.hasClass('hidden') || show) {
                 this.showInput(type, input);
                 button.addClass('active').attr('aria-checked', true);
-            } else {
+            }
+            /*
+            We don't want to close it automatically! Bug: 35730
+            else {
                 this.closeInput(type, input);
                 button.removeClass('active').attr('aria-checked', false);
-            }
+            } */
             return input;
         },
 

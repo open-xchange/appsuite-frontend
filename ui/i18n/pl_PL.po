@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-12-09 16:36+0100\n"
+"PO-Revision-Date: 2014-12-09 16:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl_PL\n"
@@ -450,8 +450,8 @@ msgstr "1 minuta"
 msgid "1 week"
 msgstr "1 tydzień"
 
-#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minut"
@@ -467,8 +467,8 @@ msgid "12 hour"
 msgstr "12 godzin"
 
 #: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:338
+#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 minut"
 
@@ -497,8 +497,8 @@ msgid "3 weeks"
 msgstr "3 tygodnie"
 
 #: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:339
+#: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 minut"
 
@@ -522,8 +522,8 @@ msgstr "45 minut"
 msgid "5 days"
 msgstr "5 dni"
 
-#: apps/io.ox/core/settings/pane.js:265 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:336 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minut"
@@ -827,7 +827,7 @@ msgid "Add widget"
 msgstr "Dodaj widget"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:395 module:io.ox/portal
+#: apps/io.ox/portal/main.js:398 module:io.ox/portal
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
@@ -934,7 +934,7 @@ msgstr "Zezwalaj na wiadomości e-mail w formacie HTML"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Pozwól na wstępne wczytywanie połączonych obrazów zewnętrznych"
 
-#: apps/io.ox/portal/main.js:459 module:io.ox/portal
+#: apps/io.ox/portal/main.js:462 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Wystąpił błąd."
 
@@ -1163,12 +1163,12 @@ msgstr "Automatyczne przesyłanie dalej"
 msgid "Auto-save email drafts"
 msgstr "Automatycznie zapisuj wersje robocze wiadomości"
 
-#: apps/io.ox/core/settings/pane.js:386 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:387 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Automatyczne otwieranie obszaru powiadomień"
 
 #: apps/io.ox/core/main.js:486 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:352
+#: apps/io.ox/core/settings/pane.js:353
 msgid "Automatic sign out"
 msgstr "Automatyczne wylogowanie"
 
@@ -1234,7 +1234,7 @@ msgstr "Wróć"
 msgid "Back to appointment"
 msgstr "Wróć do spotkania"
 
-#: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
 #: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "Ustawienia podstawowe"
@@ -1390,7 +1390,7 @@ msgstr "Widok kalendarza"
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:615 module:io.ox/portal
+#: apps/io.ox/portal/main.js:618 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
@@ -1462,7 +1462,7 @@ msgstr "Zmień status potwierdzenia"
 msgid "Change due date"
 msgstr "Zmień termin"
 
-#: apps/io.ox/core/settings/pane.js:108 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:109 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:97
 msgid "Change password"
 msgstr "Zmień hasło"
@@ -1602,7 +1602,7 @@ msgstr "Kliknij, aby spróbować ponownie"
 msgid "Click to retry later."
 msgstr "Kliknij, aby spróbować ponownie później."
 
-#: apps/io.ox/portal/main.js:462 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Kliknij, aby spróbować ponownie."
 
@@ -1980,7 +1980,7 @@ msgstr "Tworzenie plików"
 msgid "Currency"
 msgstr "Waluta"
 
-#: apps/io.ox/portal/main.js:135 module:io.ox/portal
+#: apps/io.ox/portal/main.js:138 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Dopasuj tę stronę"
 
@@ -2043,7 +2043,7 @@ msgstr "Odrzuć"
 msgid "Declined"
 msgstr "Odrzucono"
 
-#: apps/io.ox/core/settings/pane.js:208 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:209 module:io.ox/core
 msgid "Default Theme"
 msgstr "Motyw domyślny"
 
@@ -2051,7 +2051,7 @@ msgstr "Motyw domyślny"
 msgid "Default address"
 msgstr "Adres domyślny"
 
-#: apps/io.ox/core/settings/pane.js:315 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Domyślna aplikacja po zalogowaniu"
 
@@ -2102,7 +2102,7 @@ msgstr "Odroczone"
 #: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:340
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:613
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:616
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2135,7 +2135,7 @@ msgstr "Usuń wersję"
 msgid "Delete whole series"
 msgstr "Usuń cały cykl"
 
-#: apps/io.ox/portal/main.js:609 module:io.ox/portal
+#: apps/io.ox/portal/main.js:612 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Usuń widget"
@@ -2201,8 +2201,8 @@ msgstr "Łącze bezpośrednie: %1$s"
 msgid "Disable"
 msgstr "Wyłącz"
 
-#: apps/io.ox/portal/main.js:192 module:io.ox/portal
-#: apps/io.ox/portal/main.js:193 apps/io.ox/portal/main.js:503
+#: apps/io.ox/portal/main.js:195 module:io.ox/portal
+#: apps/io.ox/portal/main.js:196 apps/io.ox/portal/main.js:506
 msgid "Disable widget"
 msgstr "Wyłącz widget"
 
@@ -2233,7 +2233,7 @@ msgstr "Odrzuć zmiany"
 #: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
-msgstr "Odrzuć komunikat"
+msgstr "Odrzuć wiadomość"
 
 #: apps/io.ox/mail/settings/pane.js:282 module:io.ox/mail
 msgid "Display"
@@ -2345,7 +2345,7 @@ msgstr[0] "Czy na pewno chcesz usunąć to zadanie?"
 msgstr[1] "Czy na pewno chcesz usunąć te zadania?"
 msgstr[2] "Czy na pewno chcesz usunąć te zadania?"
 
-#: apps/io.ox/portal/main.js:610 module:io.ox/portal
+#: apps/io.ox/portal/main.js:613 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Czy na pewno chcesz usunąć ten widget?"
@@ -2364,7 +2364,7 @@ msgstr "Czy na pewno chcesz odrzucić tę wiadomość?"
 #: apps/io.ox/core/folder/actions/common.js:43 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:36 module:io.ox/mail
 msgid "Do you really want to empty folder \"%s\"?"
-msgstr "Czy na pewno chcesz opróżnić folder \"%s\"?"
+msgstr "Czy na pewno chcesz opróżnić folder \"%s\"? "
 
 #: apps/io.ox/files/util.js:239 module:io.ox/files
 msgid ""
@@ -3135,7 +3135,7 @@ msgstr "Serwis Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:235 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
-#: apps/io.ox/search/apiproxy.js:113 module:io.ox/core
+#: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Folder"
 
@@ -3311,8 +3311,8 @@ msgstr "Łącze bezpośrednie"
 msgid "Get free upgrade"
 msgstr "Pobierz bezpłatne uaktualnienie"
 
-#: apps/io.ox/portal/main.js:367 module:io.ox/portal
-#: apps/io.ox/portal/main.js:389
+#: apps/io.ox/portal/main.js:370 module:io.ox/portal
+#: apps/io.ox/portal/main.js:392
 msgid "Get started here"
 msgstr "Zacznij tutaj"
 
@@ -3320,11 +3320,11 @@ msgstr "Zacznij tutaj"
 msgid "Give feedback"
 msgstr "Przekaż opinię"
 
-#: apps/io.ox/portal/main.js:87 module:io.ox/portal
+#: apps/io.ox/portal/main.js:90 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "Witamy serdecznie"
 
-#: apps/io.ox/portal/main.js:85 module:io.ox/portal
+#: apps/io.ox/portal/main.js:88 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Witamy serdecznie"
 
@@ -3365,7 +3365,7 @@ msgstr "HTML i zwykły tekst"
 msgid "Header"
 msgstr "Nagłówek"
 
-#: apps/io.ox/portal/main.js:89 module:io.ox/portal
+#: apps/io.ox/portal/main.js:92 module:io.ox/portal
 msgid "Hello %s"
 msgstr "Witamy"
 
@@ -3432,7 +3432,7 @@ msgstr "Ukryj zrzut stosu"
 msgid "High"
 msgstr "Wysoki"
 
-#: apps/io.ox/core/settings/pane.js:247 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:248 module:io.ox/core
 msgid "High contrast theme"
 msgstr "Motyw z wysokim kontrastem"
 
@@ -3725,7 +3725,7 @@ msgid "June"
 msgstr "Czerwiec"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:619 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Tylko wyłącz widget"
@@ -3744,7 +3744,7 @@ msgstr "Zatrzymaj"
 msgid "Keep a copy of the message"
 msgstr "Zachowaj kopię wiadomości"
 
-#: apps/io.ox/core/settings/pane.js:128 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:129 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:94 module:plugins/portal
 msgid "Language"
 msgstr "Język"
@@ -4245,7 +4245,7 @@ msgid "My calendars"
 msgstr "Nowy kalendarz"
 
 #: apps/io.ox/core/main.js:839 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:80
+#: apps/io.ox/core/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
 msgstr "Moje dane kontaktowe"
@@ -4281,7 +4281,7 @@ msgstr "Nazwa"
 msgid "Nature"
 msgstr "Natura"
 
-#: apps/io.ox/core/settings/pane.js:371 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
 msgid "Never"
 msgstr "Nigdy"
 
@@ -4515,7 +4515,7 @@ msgid "No wall posts yet."
 msgstr "Brak wiadomości na ścianie."
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:303 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -4620,7 +4620,7 @@ msgstr "Obiekty"
 msgid "October"
 msgstr "Październik"
 
-#: apps/io.ox/core/settings/pane.js:335 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
 msgid "Off"
 msgstr "Wył."
 
@@ -4644,11 +4644,11 @@ msgstr "OK"
 msgid "On behalf of the owner"
 msgstr "w imieniu"
 
-#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
 msgid "On every new notification"
 msgstr "Przy każdym nowym powiadomieniu"
 
-#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
 msgid "On new notifications except mails"
 msgstr "Przy nowych powiadomieniach, z wyjątkiem wiadomości"
 
@@ -5148,7 +5148,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/portal/main.js:575 module:io.ox/portal
+#: apps/io.ox/portal/main.js:578 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Widgety portalu"
 
@@ -5508,7 +5508,7 @@ msgstr ""
 msgid "Refresh"
 msgstr "Odśwież"
 
-#: apps/io.ox/core/settings/pane.js:281 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:282 module:io.ox/core
 msgid "Refresh interval"
 msgstr "Odstęp odświeżania"
 
@@ -5837,8 +5837,8 @@ msgstr "Planowanie"
 #: apps/io.ox/core/main.js:794
 #: apps/io.ox/search/autocomplete/extensions.js:166
 #: apps/io.ox/search/autocomplete/extensions.js:208
-#: apps/io.ox/search/main.js:172 module:io.ox/search
-#: apps/io.ox/search/main.js:233 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:197 module:io.ox/search
+#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Szukaj"
@@ -5921,7 +5921,7 @@ msgid "Sender/From"
 msgstr "Nadawca/Od"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:818 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Wysłane z %s przez telefon komórkowy"
 
@@ -6093,6 +6093,12 @@ msgstr "Pokaż konflikty"
 msgid "Show declined appointments"
 msgstr "Pokaż odrzucone spotkania"
 
+#: apps/io.ox/core/settings/pane.js:425 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Show desktop notifications"
+msgstr "Brak powiadomień"
+
 #: apps/io.ox/tasks/edit/view-template.js:597 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:605
 msgid "Show details"
@@ -6199,7 +6205,7 @@ msgid "Signatures"
 msgstr "Podpisy"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:115 module:io.ox/portal
+#: apps/io.ox/portal/main.js:118 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Zalogowano jako %1$s"
 
@@ -6876,7 +6882,7 @@ msgstr ""
 "Ustawienie zostało zmienione i zostanie wprowadzone przy następnym "
 "załadowaniu aplikacji."
 
-#: apps/io.ox/core/settings/pane.js:53 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:54 module:io.ox/core
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Wprowadzenie ustawienia wymaga przeładowania lub ponownego zalogowania."
@@ -6919,7 +6925,7 @@ msgstr ""
 msgid "The user has administrative rights"
 msgstr "Użytkownik ma uprawnienia administracyjne"
 
-#: apps/io.ox/core/settings/pane.js:222 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:223 module:io.ox/core
 msgid "Theme"
 msgstr "Motyw"
 
@@ -7212,7 +7218,7 @@ msgstr "Godzina"
 msgid "Time scale in minutes"
 msgstr "Skala czasu w minutach"
 
-#: apps/io.ox/core/settings/pane.js:187 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:188 module:io.ox/core
 msgid "Time zone"
 msgstr "Strefa czasowa"
 
@@ -7649,7 +7655,7 @@ msgid "Weekly on %1$s"
 msgstr "Co tydzień w: %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:385 module:io.ox/portal
+#: apps/io.ox/portal/main.js:388 module:io.ox/portal
 #, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"

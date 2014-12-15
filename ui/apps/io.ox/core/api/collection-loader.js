@@ -167,7 +167,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         fetch: function (params) {
 
             var module = this.module,
-                key = module + '/' + $.param(params) + '&session=' + ox.session,
+                key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
                 rampup = ox.rampup[key],
                 virtual = this.virtual(params);
 

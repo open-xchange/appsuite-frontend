@@ -63,6 +63,31 @@ define('io.ox/search/main', [
         }
     });
 
+    ext.point('io.ox/search/main').extend({
+        index: 400,
+        id: 'folderfacet',
+        config: function (data) {
+            data.sticky = data.sticky || [];
+            data.sticky.push({
+                id: 'folder',
+                name: gt('Folder'),
+                style: 'custom',
+                custom: true,
+                hidden: true,
+                flags: [
+                    _.device('small') ? '' : 'advanced',
+                    'conflicts:folder_type'
+                ],
+                values: [{
+                    facet: 'folder',
+                    id: 'custom',
+                    custom: '',
+                    filter: {}
+                }]
+            });
+        }
+    });
+
     // ext.point('io.ox/search/main').extend({
     //     index: 500,
     //     id: 'flags',

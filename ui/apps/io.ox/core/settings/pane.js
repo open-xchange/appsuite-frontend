@@ -19,11 +19,12 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/api/apps',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
+    'io.ox/core/desktopNotifications',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core'
-], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
+], function (ext, BasicModel, views, miniViews, appAPI, capabilities, notifications, desktopNotifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -397,5 +398,36 @@ define('io.ox/core/settings/pane', [
                 }
             });
         }
+    }());
+    (function () {
+        point.extend({
+            id: 'showDesktopNotifications',
+            index: 800,
+            className: 'form-group',
+            render: function () {
+                var guid = _.uniqueId('form-control-label-'),
+                    miniView = new miniViews.CheckboxView({
+                        name: 'showDesktopNotifications',
+                        model: this.baton.model,
+                        id: guid
+                    });
+
+                this.baton.model.on('change:showDesktopNotifications', function (e, value) {
+                    if (value === true) {
+                        desktopNotifications.requestPermission();
+                    }
+                });
+
+                this.$el.append(
+                    $('<label>').attr({
+                        class: 'control-label col-sm-4',
+                        for: guid
+                    }).text(gt('Show desktop notifications')),
+                    $('<div>').addClass('col-sm-4').append(
+                        miniView.render().$el
+                    )
+                );
+            }
+        });
     }());
 });

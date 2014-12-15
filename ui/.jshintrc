@@ -39,6 +39,7 @@
         "Backbone": false,
         "BigScreen": false,
         "MediaElementPlayer": false,
-        "tinyMCE": false
+        "tinyMCE": false,
+        "Notification": false
     }
 }

@@ -108,7 +108,7 @@ define('io.ox/core/notifications', [
                 empty = true;
 
             //remove old empty message to avoid duplicates
-            self.$el.find('.no-news-message').remove();
+            self.$el.find('.no-news-message, .notification-test').remove();
 
             // refocusable elements have this marker class
             if (lastFocused.hasClass('refocus')) {

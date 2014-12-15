@@ -279,8 +279,8 @@ define('io.ox/mail/detail/links', [
     // Mail Address
     //
 
-    var regMail = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im,
-        regMailMatch = /^(.*?)([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im; /* dedicated one to avoid strange side effects */
+    var regMail = /^(.*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im,
+        regMailMatch = /^(.*?)([^"\s<,:;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})(.*)$/im; /* dedicated one to avoid strange side effects */
 
     function processMailAddress(node) {
 

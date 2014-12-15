@@ -426,8 +426,8 @@ msgstr "1 minuutti"
 msgid "1 week"
 msgstr "1 viikko"
 
-#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minuuttia"
@@ -443,8 +443,8 @@ msgid "12 hour"
 msgstr "12 tunnin"
 
 #: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:338
+#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 minuuttia"
 
@@ -473,8 +473,8 @@ msgid "3 weeks"
 msgstr "3 viikkoa"
 
 #: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:339
+#: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 minuuttia"
 
@@ -498,8 +498,8 @@ msgstr "45 minuuttia"
 msgid "5 days"
 msgstr "5 päivää"
 
-#: apps/io.ox/core/settings/pane.js:265 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:336 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minuuttia"
@@ -803,7 +803,7 @@ msgid "Add widget"
 msgstr "Lisää widget"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:395 module:io.ox/portal
+#: apps/io.ox/portal/main.js:398 module:io.ox/portal
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
@@ -909,7 +909,7 @@ msgstr "Salli html muotoillut sähköpostit"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
-#: apps/io.ox/portal/main.js:459 module:io.ox/portal
+#: apps/io.ox/portal/main.js:462 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Tapahtui virhe."
 
@@ -1132,12 +1132,12 @@ msgstr "Automaattinen välitys"
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
 
-#: apps/io.ox/core/settings/pane.js:386 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:387 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "Ilmoitusalueen automaattinen avaus"
 
 #: apps/io.ox/core/main.js:486 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:352
+#: apps/io.ox/core/settings/pane.js:353
 msgid "Automatic sign out"
 msgstr "Automaattinen uloskirjautuminen"
 
@@ -1202,7 +1202,7 @@ msgstr "Takaisin"
 msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
-#: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
 #: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "Perusasetukset"
@@ -1358,7 +1358,7 @@ msgstr "Kalenterinäkymä"
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:615 module:io.ox/portal
+#: apps/io.ox/portal/main.js:618 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
@@ -1429,7 +1429,7 @@ msgstr "Muuta vahvistustilanne"
 msgid "Change due date"
 msgstr "Vaihda valmistumispäivämäärää"
 
-#: apps/io.ox/core/settings/pane.js:108 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:109 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:97
 msgid "Change password"
 msgstr "Vaihda salasana"
@@ -1568,7 +1568,7 @@ msgstr "Napsauta yrittääksesi uudelleen."
 msgid "Click to retry later."
 msgstr "Napsauta yrittääksesi uudelleen myöhemmin."
 
-#: apps/io.ox/portal/main.js:462 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Napsauta yrittääksesi uudestaan."
 
@@ -1946,7 +1946,7 @@ msgstr "Tiedostojen luominen"
 msgid "Currency"
 msgstr "Valuutta"
 
-#: apps/io.ox/portal/main.js:135 module:io.ox/portal
+#: apps/io.ox/portal/main.js:138 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Mukauta tätä sivua"
 
@@ -2008,7 +2008,7 @@ msgstr "Kieltäydy"
 msgid "Declined"
 msgstr "Evätty"
 
-#: apps/io.ox/core/settings/pane.js:208 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:209 module:io.ox/core
 msgid "Default Theme"
 msgstr "Oletusteema"
 
@@ -2016,7 +2016,7 @@ msgstr "Oletusteema"
 msgid "Default address"
 msgstr "oletusosoite"
 
-#: apps/io.ox/core/settings/pane.js:315 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "Oletussovellus kirjautumisen jälkeen"
 
@@ -2067,7 +2067,7 @@ msgstr "Lykätty"
 #: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:340
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:613
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:616
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2100,7 +2100,7 @@ msgstr "Poista versio"
 msgid "Delete whole series"
 msgstr "Poista koko sarja"
 
-#: apps/io.ox/portal/main.js:609 module:io.ox/portal
+#: apps/io.ox/portal/main.js:612 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Poista widget"
@@ -2164,8 +2164,8 @@ msgstr "Suora linkki: %1$s"
 msgid "Disable"
 msgstr "Kytke pois"
 
-#: apps/io.ox/portal/main.js:192 module:io.ox/portal
-#: apps/io.ox/portal/main.js:193 apps/io.ox/portal/main.js:503
+#: apps/io.ox/portal/main.js:195 module:io.ox/portal
+#: apps/io.ox/portal/main.js:196 apps/io.ox/portal/main.js:506
 msgid "Disable widget"
 msgstr "Poista widget käytöstä"
 
@@ -2305,7 +2305,7 @@ msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "Haluatko varmasti poistaa tämän tehtävän?"
 msgstr[1] "Haluatko varmasti poistaa nämä tehtävät?"
 
-#: apps/io.ox/portal/main.js:610 module:io.ox/portal
+#: apps/io.ox/portal/main.js:613 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Haluatko varmasti poistaa tämä widgetin?"
@@ -3087,7 +3087,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:235 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
-#: apps/io.ox/search/apiproxy.js:113 module:io.ox/core
+#: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "Kansio"
 
@@ -3263,8 +3263,8 @@ msgstr "Suora linkki"
 msgid "Get free upgrade"
 msgstr "Ilmainen päivitys"
 
-#: apps/io.ox/portal/main.js:367 module:io.ox/portal
-#: apps/io.ox/portal/main.js:389
+#: apps/io.ox/portal/main.js:370 module:io.ox/portal
+#: apps/io.ox/portal/main.js:392
 msgid "Get started here"
 msgstr "Aloita tästä"
 
@@ -3272,11 +3272,11 @@ msgstr "Aloita tästä"
 msgid "Give feedback"
 msgstr "Anna palautetta"
 
-#: apps/io.ox/portal/main.js:87 module:io.ox/portal
+#: apps/io.ox/portal/main.js:90 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "Hyvää iltaa, %s"
 
-#: apps/io.ox/portal/main.js:85 module:io.ox/portal
+#: apps/io.ox/portal/main.js:88 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Hyvää huomenta, %s"
 
@@ -3317,7 +3317,7 @@ msgstr "HTML ja teksti"
 msgid "Header"
 msgstr "Otsake"
 
-#: apps/io.ox/portal/main.js:89 module:io.ox/portal
+#: apps/io.ox/portal/main.js:92 module:io.ox/portal
 msgid "Hello %s"
 msgstr "Hei %s"
 
@@ -3384,7 +3384,7 @@ msgstr "Piilota stack trace"
 msgid "High"
 msgstr "Korkea"
 
-#: apps/io.ox/core/settings/pane.js:247 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:248 module:io.ox/core
 msgid "High contrast theme"
 msgstr "Korkean kontrastin teema"
 
@@ -3675,7 +3675,7 @@ msgid "June"
 msgstr "kesäkuu"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:619 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Poista widget käytöstä"
@@ -3694,7 +3694,7 @@ msgstr "Säilytä"
 msgid "Keep a copy of the message"
 msgstr "Säilytä kopio viestistä"
 
-#: apps/io.ox/core/settings/pane.js:128 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:129 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:94 module:plugins/portal
 msgid "Language"
 msgstr "Kieli"
@@ -4193,7 +4193,7 @@ msgid "My calendars"
 msgstr "Uusi kalenteri"
 
 #: apps/io.ox/core/main.js:839 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:80
+#: apps/io.ox/core/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
 msgstr "Omat yhteystietoni"
@@ -4229,7 +4229,7 @@ msgstr "Nimi"
 msgid "Nature"
 msgstr "Luonto"
 
-#: apps/io.ox/core/settings/pane.js:371 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
 msgid "Never"
 msgstr "Ei koskaan"
 
@@ -4462,7 +4462,7 @@ msgid "No wall posts yet."
 msgstr "Ei vielä seinäpostauksia."
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:303 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -4565,7 +4565,7 @@ msgstr "Esineet"
 msgid "October"
 msgstr "lokakuu"
 
-#: apps/io.ox/core/settings/pane.js:335 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
 msgid "Off"
 msgstr "Pois"
 
@@ -4587,11 +4587,11 @@ msgstr "Ok"
 msgid "On behalf of the owner"
 msgstr ""
 
-#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
 msgid "On every new notification"
 msgstr "Kaikista uusista ilmoituksista"
 
-#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
 msgid "On new notifications except mails"
 msgstr "Uusista ilmoituksista paitsi posteista"
 
@@ -5093,7 +5093,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Portaali"
 
-#: apps/io.ox/portal/main.js:575 module:io.ox/portal
+#: apps/io.ox/portal/main.js:578 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Portaalin widgetit"
 
@@ -5449,7 +5449,7 @@ msgstr ""
 msgid "Refresh"
 msgstr "Päivitä"
 
-#: apps/io.ox/core/settings/pane.js:281 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:282 module:io.ox/core
 msgid "Refresh interval"
 msgstr "Päivitysväli"
 
@@ -5777,8 +5777,8 @@ msgstr "Suunnittelu"
 #: apps/io.ox/core/main.js:794
 #: apps/io.ox/search/autocomplete/extensions.js:166
 #: apps/io.ox/search/autocomplete/extensions.js:208
-#: apps/io.ox/search/main.js:172 module:io.ox/search
-#: apps/io.ox/search/main.js:233 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:197 module:io.ox/search
+#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "Etsi"
@@ -5861,7 +5861,7 @@ msgid "Sender/From"
 msgstr "Lähettäjä"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:818 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Lähetetty kohteesta %s mobiililaitteella"
 
@@ -6032,6 +6032,12 @@ msgstr "Näytä ristiriidat"
 msgid "Show declined appointments"
 msgstr "Näytä tapaamiset joista kieltäydytty"
 
+#: apps/io.ox/core/settings/pane.js:425 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Show desktop notifications"
+msgstr "Ei ilmoituksia"
+
 #: apps/io.ox/tasks/edit/view-template.js:597 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:605
 msgid "Show details"
@@ -6138,7 +6144,7 @@ msgid "Signatures"
 msgstr "Allekirjoitukset"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:115 module:io.ox/portal
+#: apps/io.ox/portal/main.js:118 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Kirjautuneena käyttäjänä %1$s"
 
@@ -6802,7 +6808,7 @@ msgstr ""
 "Asetukset ovat tallentuneet ja astuvat voimaan, kun seuraavaksi kirjaudut "
 "ohjelmaan."
 
-#: apps/io.ox/core/settings/pane.js:53 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:54 module:io.ox/core
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Asetus vaatii uudelleenlatauksen tai uudelleenkirjautumisen alkaakseen "
@@ -6845,7 +6851,7 @@ msgstr ""
 msgid "The user has administrative rights"
 msgstr "Käyttäjällä on ylläpitäjän oikeuksia"
 
-#: apps/io.ox/core/settings/pane.js:222 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:223 module:io.ox/core
 msgid "Theme"
 msgstr "Teema"
 
@@ -7126,7 +7132,7 @@ msgstr "Aika"
 msgid "Time scale in minutes"
 msgstr "Aika-asteikko minuuteissa"
 
-#: apps/io.ox/core/settings/pane.js:187 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:188 module:io.ox/core
 msgid "Time zone"
 msgstr "Aikavyöhyke"
 
@@ -7559,7 +7565,7 @@ msgid "Weekly on %1$s"
 msgstr "Viikoittain %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:385 module:io.ox/portal
+#: apps/io.ox/portal/main.js:388 module:io.ox/portal
 #, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"

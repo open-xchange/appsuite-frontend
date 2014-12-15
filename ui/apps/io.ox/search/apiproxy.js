@@ -108,23 +108,9 @@ define('io.ox/search/apiproxy',[
             id: 'folder',
             index: 350,
             customize: function (baton) {
-                baton.data.push({
-                    id: 'folder',
-                    name: gt('Folder'),
-                    style: 'custom',
-                    custom: true,
-                    hidden: true,
-                    flags: [
-                        _.device('smartphone') ? '' : 'advanced',
-                        'conflicts:folder_type'
-                    ],
-                    values: [{
-                        facet: 'folder',
-                        id: 'custom',
-                        custom: '',
-                        filter: {}
-                    }]
-                });
+                baton.data = baton.data.concat(
+                    _.copy(baton.app.view.model.getOptions().sticky, true)
+                );
             }
         });
 
@@ -147,7 +133,7 @@ define('io.ox/search/apiproxy',[
          */
         function autocomplete () {
             var args = [{}].concat(Array.prototype.slice.call(arguments)),
-                opt = $.extend.apply(undefined, args);
+                opt = $.extend.apply(undefined, [true].concat(args));
             // call api
             return api.autocomplete(opt).then(extend.bind(this, args));
         }

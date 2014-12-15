@@ -410,8 +410,8 @@ msgstr "1 分"
 msgid "1 week"
 msgstr "1 週間"
 
-#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:52
+#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 分"
@@ -427,8 +427,8 @@ msgid "12 hour"
 msgstr "12 時間"
 
 #: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:338
+#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 分"
 
@@ -457,8 +457,8 @@ msgid "3 weeks"
 msgstr "3 週間"
 
 #: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
-#: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:339
+#: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 分"
 
@@ -482,8 +482,8 @@ msgstr "45 分"
 msgid "5 days"
 msgstr "5 日"
 
-#: apps/io.ox/core/settings/pane.js:265 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:336 apps/io.ox/mail/settings/pane.js:51
+#: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 分"
@@ -788,7 +788,7 @@ msgid "Add widget"
 msgstr "ウィジェットを追加"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:395 module:io.ox/portal
+#: apps/io.ox/portal/main.js:398 module:io.ox/portal
 #, fuzzy
 #| msgid "Add your account"
 msgid "Add your %1$s account"
@@ -894,7 +894,7 @@ msgstr "HTML フォーマットのメールを許可"
 msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
-#: apps/io.ox/portal/main.js:459 module:io.ox/portal
+#: apps/io.ox/portal/main.js:462 module:io.ox/portal
 msgid "An error occurred."
 msgstr "エラーが発生しました。"
 
@@ -1118,12 +1118,12 @@ msgstr "自動転送"
 msgid "Auto-save email drafts"
 msgstr "下書きの自動保存"
 
-#: apps/io.ox/core/settings/pane.js:386 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:387 module:io.ox/core
 msgid "Automatic opening of notification area"
 msgstr "通知エリアを自動的に表示"
 
 #: apps/io.ox/core/main.js:486 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:352
+#: apps/io.ox/core/settings/pane.js:353
 msgid "Automatic sign out"
 msgstr "自動サイン アウト"
 
@@ -1183,7 +1183,7 @@ msgstr "戻る"
 msgid "Back to appointment"
 msgstr "アポイントに戻る"
 
-#: apps/io.ox/core/settings/pane.js:60 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:61 module:io.ox/core
 #: apps/io.ox/settings/main.js:249
 msgid "Basic settings"
 msgstr "基本設定"
@@ -1339,7 +1339,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:615 module:io.ox/portal
+#: apps/io.ox/portal/main.js:618 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions/delete.js:28
@@ -1409,7 +1409,7 @@ msgstr "確認ステータスを変更"
 msgid "Change due date"
 msgstr "期限を変更"
 
-#: apps/io.ox/core/settings/pane.js:108 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:109 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:97
 msgid "Change password"
 msgstr "パスワードを変更"
@@ -1550,7 +1550,7 @@ msgstr "再試行"
 msgid "Click to retry later."
 msgstr "後で再試行"
 
-#: apps/io.ox/portal/main.js:462 module:io.ox/portal
+#: apps/io.ox/portal/main.js:465 module:io.ox/portal
 msgid "Click to try again."
 msgstr "クリックして再試行"
 
@@ -1927,7 +1927,7 @@ msgstr "ファイルの作成"
 msgid "Currency"
 msgstr "通貨"
 
-#: apps/io.ox/portal/main.js:135 module:io.ox/portal
+#: apps/io.ox/portal/main.js:138 module:io.ox/portal
 msgid "Customize this page"
 msgstr "このページをカスタマイズ"
 
@@ -1990,7 +1990,7 @@ msgstr "辞退"
 msgid "Declined"
 msgstr "辞退"
 
-#: apps/io.ox/core/settings/pane.js:208 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:209 module:io.ox/core
 msgid "Default Theme"
 msgstr "既定のテーマ"
 
@@ -1998,7 +1998,7 @@ msgstr "既定のテーマ"
 msgid "Default address"
 msgstr "既定の住所"
 
-#: apps/io.ox/core/settings/pane.js:315 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:316 module:io.ox/core
 msgid "Default app after sign in"
 msgstr "サイン イン後に表示する既定のアプリケーション"
 
@@ -2049,7 +2049,7 @@ msgstr "延期"
 #: apps/io.ox/mail/actions/delete.js:49 apps/io.ox/mail/actions/delete.js:68
 #: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:340
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:613
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:616
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -2082,7 +2082,7 @@ msgstr "バージョンを削除"
 msgid "Delete whole series"
 msgstr "アポイント全体を削除"
 
-#: apps/io.ox/portal/main.js:609 module:io.ox/portal
+#: apps/io.ox/portal/main.js:612 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "ウィジェットを削除"
@@ -2146,8 +2146,8 @@ msgstr "ダイレクト リンク: %1$s"
 msgid "Disable"
 msgstr "無効"
 
-#: apps/io.ox/portal/main.js:192 module:io.ox/portal
-#: apps/io.ox/portal/main.js:193 apps/io.ox/portal/main.js:503
+#: apps/io.ox/portal/main.js:195 module:io.ox/portal
+#: apps/io.ox/portal/main.js:196 apps/io.ox/portal/main.js:506
 msgid "Disable widget"
 msgstr "ウィジェットを無効化"
 
@@ -2285,7 +2285,7 @@ msgid "Do you really want to delete this task?"
 msgid_plural "Do you really want to delete these tasks?"
 msgstr[0] "この仕事を削除しますか？"
 
-#: apps/io.ox/portal/main.js:610 module:io.ox/portal
+#: apps/io.ox/portal/main.js:613 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "このウィジェットを削除しますか？"
@@ -3081,7 +3081,7 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:235 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
-#: apps/io.ox/search/apiproxy.js:113 module:io.ox/core
+#: apps/io.ox/search/main.js:73 module:io.ox/search
 msgid "Folder"
 msgstr "フォルダ"
 
@@ -3257,8 +3257,8 @@ msgstr "ダイレクト リンク"
 msgid "Get free upgrade"
 msgstr "無償のアップグレードを入手"
 
-#: apps/io.ox/portal/main.js:367 module:io.ox/portal
-#: apps/io.ox/portal/main.js:389
+#: apps/io.ox/portal/main.js:370 module:io.ox/portal
+#: apps/io.ox/portal/main.js:392
 msgid "Get started here"
 msgstr "はじめにここからはじめます。"
 
@@ -3266,11 +3266,11 @@ msgstr "はじめにここからはじめます。"
 msgid "Give feedback"
 msgstr "フィードバックを提供"
 
-#: apps/io.ox/portal/main.js:87 module:io.ox/portal
+#: apps/io.ox/portal/main.js:90 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "こんばんは、%s さん。"
 
-#: apps/io.ox/portal/main.js:85 module:io.ox/portal
+#: apps/io.ox/portal/main.js:88 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "おはようございます、%s さん。"
 
@@ -3311,7 +3311,7 @@ msgstr "HTML とテキスト"
 msgid "Header"
 msgstr "ヘッダ"
 
-#: apps/io.ox/portal/main.js:89 module:io.ox/portal
+#: apps/io.ox/portal/main.js:92 module:io.ox/portal
 msgid "Hello %s"
 msgstr "こんにちは、%s さん。"
 
@@ -3378,7 +3378,7 @@ msgstr "スタック トレースを隠す"
 msgid "High"
 msgstr "高"
 
-#: apps/io.ox/core/settings/pane.js:247 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:248 module:io.ox/core
 msgid "High contrast theme"
 msgstr "ハイ コントラスト テーマ"
 
@@ -3670,7 +3670,7 @@ msgid "June"
 msgstr "6 月"
 
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:619 module:io.ox/portal
+#: apps/io.ox/portal/main.js:622 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "ウィジェットを無効化"
@@ -3689,7 +3689,7 @@ msgstr "保持"
 msgid "Keep a copy of the message"
 msgstr "メッセージのコピーを保存"
 
-#: apps/io.ox/core/settings/pane.js:128 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:129 module:io.ox/core
 #: apps/plugins/portal/xing/register.js:94 module:plugins/portal
 msgid "Language"
 msgstr "言語"
@@ -4191,7 +4191,7 @@ msgid "My calendars"
 msgstr "新規予定表"
 
 #: apps/io.ox/core/main.js:839 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:80
+#: apps/io.ox/core/settings/pane.js:81
 #: apps/plugins/portal/userSettings/register.js:241
 msgid "My contact data"
 msgstr "マイ連絡先データ"
@@ -4227,7 +4227,7 @@ msgstr "名前"
 msgid "Nature"
 msgstr "自然"
 
-#: apps/io.ox/core/settings/pane.js:371 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
 msgid "Never"
 msgstr "期限なし"
 
@@ -4461,7 +4461,7 @@ msgid "No wall posts yet."
 msgstr "ウォール ポストは今のところありません。"
 
 #. Auth type. None. No authentication
-#: apps/io.ox/core/settings/pane.js:303 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:304 module:io.ox/core
 #: apps/io.ox/core/tk/attachments.js:427 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/accounts/view-form.js:52 module:io.ox/settings
@@ -4561,7 +4561,7 @@ msgstr "モノ"
 msgid "October"
 msgstr "10 月"
 
-#: apps/io.ox/core/settings/pane.js:335 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
 msgid "Off"
 msgstr "オフ"
 
@@ -4585,11 +4585,11 @@ msgstr "OK"
 msgid "On behalf of the owner"
 msgstr "次の代理"
 
-#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:374 module:io.ox/core
 msgid "On every new notification"
 msgstr "すべての新規の通知"
 
-#: apps/io.ox/core/settings/pane.js:372 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:373 module:io.ox/core
 msgid "On new notifications except mails"
 msgstr "メール以外の新規の通知"
 
@@ -5089,7 +5089,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "ポータル"
 
-#: apps/io.ox/portal/main.js:575 module:io.ox/portal
+#: apps/io.ox/portal/main.js:578 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "ポータル ウィジェット"
 
@@ -5442,7 +5442,7 @@ msgstr ""
 msgid "Refresh"
 msgstr "最新の状態に更新"
 
-#: apps/io.ox/core/settings/pane.js:281 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:282 module:io.ox/core
 msgid "Refresh interval"
 msgstr "更新間隔"
 
@@ -5769,8 +5769,8 @@ msgstr "スケジューリング"
 #: apps/io.ox/core/main.js:794
 #: apps/io.ox/search/autocomplete/extensions.js:166
 #: apps/io.ox/search/autocomplete/extensions.js:208
-#: apps/io.ox/search/main.js:172 module:io.ox/search
-#: apps/io.ox/search/main.js:233 apps/plugins/portal/flickr/register.js:215
+#: apps/io.ox/search/main.js:197 module:io.ox/search
+#: apps/io.ox/search/main.js:258 apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
 msgstr "検索"
@@ -5853,7 +5853,7 @@ msgid "Sender/From"
 msgstr "差出人"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:818 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "%s からモバイル経由で送信されました。"
 
@@ -6023,6 +6023,12 @@ msgstr "競合を表示"
 msgid "Show declined appointments"
 msgstr "辞退したアポイントを表示"
 
+#: apps/io.ox/core/settings/pane.js:425 module:io.ox/core
+#, fuzzy
+#| msgid "No notifications"
+msgid "Show desktop notifications"
+msgstr "通知はありません。"
+
 #: apps/io.ox/tasks/edit/view-template.js:597 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:605
 msgid "Show details"
@@ -6129,7 +6135,7 @@ msgid "Signatures"
 msgstr "署名"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:115 module:io.ox/portal
+#: apps/io.ox/portal/main.js:118 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "サイン イン ユーザ: %1$s"
 
@@ -6794,7 +6800,7 @@ msgid ""
 msgstr ""
 "設定が保存されました。次回アプリケーションを起動する時に有効になります。"
 
-#: apps/io.ox/core/settings/pane.js:53 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:54 module:io.ox/core
 msgid "The setting requires a reload or relogin to take effect."
 msgstr "設定を有効にするには、再読み込みするかログオンしなおしてください。"
 
@@ -6834,7 +6840,7 @@ msgstr ""
 msgid "The user has administrative rights"
 msgstr "管理者権限の付与"
 
-#: apps/io.ox/core/settings/pane.js:222 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:223 module:io.ox/core
 msgid "Theme"
 msgstr "テーマ"
 
@@ -7109,7 +7115,7 @@ msgstr "時間"
 msgid "Time scale in minutes"
 msgstr "時間の間隔 (分)"
 
-#: apps/io.ox/core/settings/pane.js:187 module:io.ox/core
+#: apps/io.ox/core/settings/pane.js:188 module:io.ox/core
 msgid "Time zone"
 msgstr "タイム ゾーン"
 
@@ -7547,7 +7553,7 @@ msgid "Weekly on %1$s"
 msgstr "毎週 %1$s"
 
 #. %1$s is social media name, e.g. Facebook
-#: apps/io.ox/portal/main.js:385 module:io.ox/portal
+#: apps/io.ox/portal/main.js:388 module:io.ox/portal
 #, fuzzy
 #| msgid "Welcome to %s"
 msgid "Welcome to %1$s"
