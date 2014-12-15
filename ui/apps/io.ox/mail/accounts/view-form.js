@@ -18,8 +18,9 @@ define.async('io.ox/mail/accounts/view-form',
      'io.ox/core/api/account',
      'text!io.ox/mail/accounts/account_detail.html',
      'settings!io.ox/mail',
-     'gettext!io.ox/settings/settings'
-    ], function (View, notifications, accountAPI, tmpl, settings, gt) {
+     'gettext!io.ox/settings/settings',
+     'io.ox/core/capabilities'
+    ], function (View, notifications, accountAPI, tmpl, settings, gt, capabilities) {
 
     'use strict';
 
@@ -98,6 +99,11 @@ define.async('io.ox/mail/accounts/view-form',
             tagName: 'div',
             _modelBinder: undefined,
             initialize: function () {
+                //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
+                //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
+                if (!capabilities.has('pop3') && !this.model.get('id')) {
+                    optionsServerType = [ 'imap' ];
+                }
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
@@ -144,7 +150,7 @@ define.async('io.ox/mail/accounts/view-form',
                 //just change port settings if this is a new account
                 if (self.model.get('id') === undefined) {
 
-                    //setting port defefaults
+                    //setting port defaults
                     _.each(portDefaults, function (value, key) {
                         self.model.set(key, value);
                     });
@@ -162,9 +168,15 @@ define.async('io.ox/mail/accounts/view-form',
                         self.model.set('transport_port', portValue);
                     });
                 }
+                //changing mail protocol for existing accounts leads to backend errors
+                //also having a dropdown with only one item in it makes no sense(happens when there's no pop3 support), let's disable it then
+                var dropdown = self.$el.find('[data-property="mail_protocol"]').prop('disabled', true);
 
+                if (self.model.get('id') || !capabilities.has('pop3')) {
+                    dropdown.prop('disabled', true);
+                }
                 if (self.model.get('id') !== 0) {//check for primary account
-
+                    
                     //refreshrate field needs to be toggled
                     self.model.on('change:mail_protocol', function (model, value) {
                         if (value !== 'pop3') {
