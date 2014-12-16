@@ -157,6 +157,9 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                     index: 450,
                     id: ref + '/edit/view/start_date',
                     draw: function (baton) {
+
+                        var dateView = new mini.DateView({ name: 'dateFrom', model: baton.model, future: 5, past: 5 });
+
                         this.append(
                             $('<fieldset class="col-md-12 form-group dateFrom">').append(
                                 $('<legend class="simple">').text(model.fields.dateFrom),
@@ -171,6 +174,9 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                     index: 500,
                     id: ref + '/edit/view/end_date',
                     draw: function (baton) {
+
+                        var dateView = new mini.DateView({ name: 'dateUntil', model: baton.model, future: 5, past: 5 });
+
                         this.append(
                             $('<fieldset class="col-md-12 form-group dateUntil">').append(
                                 $('<legend class="simple">').text(model.fields.dateUntil),
