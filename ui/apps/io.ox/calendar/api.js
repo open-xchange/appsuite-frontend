@@ -336,7 +336,6 @@ define('io.ox/calendar/api', [
             });
         },
 
-        // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
             var keys = [];
@@ -756,6 +755,21 @@ define('io.ox/calendar/api', [
             });
         }
     };
+
+    api.on('create update', function (e, obj) {
+        // has participants?
+        if (obj && _.isArray(obj.participants) && obj.participants.length > 0) {
+            // check for external participants
+            var hasExternalParticipants = _(obj.participants).some(function (participant) {
+                return participant.type === 5;
+            });
+            if (hasExternalParticipants) {
+                require(['io.ox/contacts/api'], function (contactsApi) {
+                    contactsApi.trigger('maybyNewContact');
+                });
+            }
+        }
+    });
 
     ox.on('refresh^', function () {
         api.refresh();

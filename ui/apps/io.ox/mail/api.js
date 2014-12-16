@@ -17,6 +17,7 @@ define('io.ox/mail/api', [
     'settings!io.ox/core',
     'io.ox/core/api/factory',
     'io.ox/core/folder/api',
+    'io.ox/contacts/api',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
     'io.ox/mail/util',
@@ -24,7 +25,7 @@ define('io.ox/mail/api', [
     'io.ox/core/api/collection-loader',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, Pool, CollectionLoader, settings, gt) {
+], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -964,6 +965,7 @@ define('io.ox/mail/api', [
 
         return deferred
             .done(function () {
+                contactsAPI.trigger('maybyNewContact');
                 api.trigger('send', { data: data, files: files, form: form });
                 ox.trigger('mail:send:stop', data, files);
             })

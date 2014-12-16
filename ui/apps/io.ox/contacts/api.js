@@ -276,7 +276,7 @@ define('io.ox/contacts/api', [
                     userApi.caches.get.remove({ id: data.user_id }),
                     userApi.caches.all.clear(),
                     userApi.caches.list.remove({ id: data.user_id })
-                ).pipe(function () {
+                ).then(function () {
                     def.resolve();
                 }, function () {
                     def.reject();
@@ -1091,6 +1091,10 @@ define('io.ox/contacts/api', [
 
     // clear update cache whenever a contact is added, changed, or removed
     api.on('create update delete', function () {
+        api.trigger('maybyNewContact');
+    });
+
+    api.on('maybyNewContact', function () {
         api.autocomplete.cache = {};
     });
 
