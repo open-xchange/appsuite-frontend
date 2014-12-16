@@ -58,6 +58,9 @@ define('io.ox/portal/main',
             if (!_.isEmpty(baton.data)) return true;
         }
 
+        // URL is mandatory; return false if it's missing
+        if (!settings.get('settings/getStartedLink')) return false;
+
         if (_.contains(widgetsWithFirstVisit, type)) {
             if (containsData(type)) {
                 if (!hasDataShown(type)) hadData.push(type);

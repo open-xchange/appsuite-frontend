@@ -1321,6 +1321,10 @@ define('io.ox/mail/write/main',
 
             prepareMailForSending(mail);
 
+            if (mail.data.sendtype === mailAPI.SENDTYPE.FORWARD) {
+                delete mail.data.msgref;
+            }
+
             if (mail.data.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
                 mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
             }
