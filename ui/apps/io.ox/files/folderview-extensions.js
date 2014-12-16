@@ -39,7 +39,7 @@ define('io.ox/files/folderview-extensions', [
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {
-                        notifications.yell('info', gt('Emptying folder... This may take a few seconds.'));
+                        notifications.yell('busy', gt('Emptying folder ...'));
                         filesAPI.clear(id).done(function () {
                             notifications.yell('success', gt('The folder has been emptied.'));
                         });

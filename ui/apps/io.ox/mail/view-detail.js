@@ -113,7 +113,7 @@ define('io.ox/mail/view-detail', [], function () {
     //                     window.open(pub.url, '_blank');
     //                 } else {
     //                     $(e.target).prop('disabled', true);
-    //                     notifications.yell('info', gt('Adding subscription. This may take some seconds...'));
+    //                     notifications.yell('busy', gt('Adding subscription ...'));
     //                     var opt = opt || {};
     //                     //create folder; create and refresh subscription
     //                     require(['io.ox/core/pubsub/util']).done(function (pubsubUtil) {

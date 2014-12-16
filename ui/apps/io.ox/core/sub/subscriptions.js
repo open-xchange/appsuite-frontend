@@ -63,7 +63,7 @@ define('io.ox/core/sub/subscriptions', [
 
                 function saveModel(newFolder) {
 
-                    notifications.yell('info', gt('Checking credentials... This may take a few seconds.'));
+                    notifications.yell('busy', gt('Checking credentials ...'));
                     var folder = self.model.attributes.folder;
 
                     self.model.save().then(
