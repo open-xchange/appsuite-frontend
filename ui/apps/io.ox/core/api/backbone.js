@@ -18,9 +18,8 @@ define('io.ox/core/api/backbone', [], function () {
     // basic model with custom cid
     var Model = Backbone.Model.extend({
         idAttribute: 'cid',
-        constructor: function () {
-            Backbone.Model.apply(this, arguments);
-            this.cid = _.cid(this.attributes);
+        initialize: function () {
+            this.cid = this.attributes.cid = _.cid(this.attributes);
         },
         toString: function () {
             // just helps debugging
@@ -31,7 +30,12 @@ define('io.ox/core/api/backbone', [], function () {
     // collection using custom models
     var Collection = Backbone.Collection.extend({
         comparator: 'index',
-        model: Model
+        model: Model,
+        parse: function (array) {
+            return _(array).map(function (item) {
+                return new Model(item);
+            });
+        }
     });
 
     return {
