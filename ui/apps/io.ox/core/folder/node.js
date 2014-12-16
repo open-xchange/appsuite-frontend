@@ -34,6 +34,7 @@ define('io.ox/core/folder/node', [
             'click .folder-options'     : 'onOptions',
             'click .folder-arrow'       : 'onToggle',
             'dblclick .folder-label'    : 'onToggle',
+            'mousedown .folder-arrow'   : 'onArrowMousedown',
             'keydown'                   : 'onKeydown'
         },
 
@@ -155,6 +156,11 @@ define('io.ox/core/folder/node', [
             if (e.isDefaultPrevented()) return;
             e.preventDefault();
             this.toggle(!this.options.open);
+        },
+
+        onArrowMousedown: function (e) {
+            // just to avoid changing the focus (see bug 35802)
+            e.preventDefault();
         },
 
         onOptions: function (e) {
