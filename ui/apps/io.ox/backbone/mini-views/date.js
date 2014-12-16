@@ -160,7 +160,7 @@ define('io.ox/backbone/mini-views/date', [
                 function (match, y, m, d) {
                     var proto = date.Local.prototype, node, year;
                     if (y) {
-                        year = (new date.Local()).getYear();
+                        year = (new date.Local()).getYear() + 1;
                         node = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">').append(
                             createSelect('year', year, year - 150, proto.setYear, y).addClass('year')
                         );
