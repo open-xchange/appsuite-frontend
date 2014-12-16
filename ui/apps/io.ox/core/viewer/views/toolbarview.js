@@ -67,7 +67,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 icon: 'fa fa-times',
                 ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
-                    this.addClass('viewer-toolbar-close');
+                    this.addClass('viewer-toolbar-close').attr('tabindex', '1');
                 }
             },
             'togglesidebar': {
@@ -76,7 +76,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 icon: 'fa fa-info-circle',
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
-                    this.addClass('viewer-toolbar-togglesidebar');
+                    this.addClass('viewer-toolbar-togglesidebar').attr('tabindex', '1');
                 }
             },
             'functiondropdown': {
@@ -101,7 +101,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.append('<i class="fa fa-caret-down">')
                         .after(dropdownLinks)
                         .addClass('dropdown-toggle viewer-toolbar-dropdown')
-                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button' })
+                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1' })
                         .dropdown();
                     this.parent().addClass('dropdown');
                 }
@@ -256,7 +256,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             //console.warn('ToolbarView.render()', data, this);
             if (!data || !data.model) { return this; }
             // draw toolbar
-            var toolbar = this.$el,
+            var toolbar = this.$el.attr('role', 'menu'),
                 baton = Ext.Baton({ $el: toolbar, model: data.model, data: data.model.get('origData') });
             this.model = data.model;
             toolbar.empty();

@@ -33,32 +33,42 @@ define('io.ox/core/viewer/views/mainview', [
 
         initialize: function (/*options*/) {
             //console.info('MainView.initialize()');
-            this.$el.on('dispose', this.dispose.bind(this));
-
+            // create children views
             this.toolbarView = new ToolbarView();
             this.displayerView = new DisplayerView({ collection: this.collection });
             this.sidebarView = new SidebarView();
 
+            // clean Viewer element and all event handlers on viewer close
             this.listenTo(this.toolbarView, 'close', function () {
                 this.$el.remove();
             });
 
+            // listen to the Viewer event 'bus' for useful events
             this.listenTo(EventDispatcher, 'viewer:display:previous', this.onPreviousSlide);
             this.listenTo(EventDispatcher, 'viewer:display:next', this.onNextSlide);
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
 
+            // handle DOM events
+            $(window).on('resize.viewer', this.onWindowResize.bind(this));
+            this.$el.on('keydown', this.onKeydown.bind(this));
+
+            // clean stuff on dispose event from core/commons.js
+            this.$el.on('dispose', this.dispose.bind(this));
+
+            // display initially first file
+            // TODO get real selection from Drive or Mail app
             this.displayedFileIndex = 0;
+
+            // render viewer initially
             this.render();
 
+            // trigger item changed event initally for the first file
             EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
-
-            // listen to browser window resize
-            $(window).on('resize.viewer', this.onWindowResize.bind(this));
-
         },
 
         render: function () {
             //console.info('MainView.render()');
+            var self = this;
             // append children views
             this.$el.append(
                 this.toolbarView.render().el,
@@ -66,7 +76,38 @@ define('io.ox/core/viewer/views/mainview', [
                 this.sidebarView.render().el
             );
 
+            // focus the active slide initially
+            _.defer(function () {
+                self.displayerView.$el.find('.active').focus();
+            });
+
             return this;
+        },
+
+        // handler for keyboard events on the viewer
+        onKeydown: function (event) {
+            //console.warn('MainView.onKeydown()', event.which, event);
+            var viewerRootEl = this.$el;
+            // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
+            function tabHandler(event) {
+                var tabableActions = viewerRootEl.find('[tabindex][disabled!="disabled"]:visible'),
+                    tabableActionsCount = tabableActions.length;
+                // quit immediately if no tabable actions are found
+                if (tabableActionsCount === 0) { return; }
+                var focusedElementIndex = tabableActions.index(document.activeElement),
+                    traversalStep = event.shiftKey ? -1 : 1,
+                    nextElementIndex = focusedElementIndex + traversalStep;
+                // prevent default TAB traversal
+                event.preventDefault();
+                // traverse to prev/next action
+                if (nextElementIndex >= tabableActionsCount) {
+                    nextElementIndex = 0;
+                }
+                // focus next action candidate
+                tabableActions.eq(nextElementIndex).focus();
+            }
+            // handle TAB traversal
+            if (event.which === 9) { tabHandler(event); }
         },
 
         onPreviousSlide: function () {

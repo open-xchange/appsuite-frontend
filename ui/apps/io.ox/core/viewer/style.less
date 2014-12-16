@@ -46,6 +46,7 @@
         > li {
             float: right;
             min-width: @viewer-toolbar-link-width;
+            height: @viewer-toolbar-height;
             text-align: center;
             > a {
                 display: inline-block;
@@ -54,11 +55,14 @@
                 outline: none;
                 text-decoration: none;
                 color: rgba(255, 255, 255, 0.5) !important;
+                &:hover,
+                &:focus,
+                &:active {
+                    color: #ffffff !important;
+                    background-color: @viewer-toolbar-hover-bgcolor;
+                }
             }
-            > a:hover {
-                color: #ffffff !important;
-                background-color: @viewer-toolbar-hover-bgcolor;
-            }
+
             > a.viewer-toolbar-filename {
                 max-width: @viewer-toolbar-filename-width;
                 padding: 0 20px;
