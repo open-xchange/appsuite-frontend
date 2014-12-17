@@ -61,24 +61,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                         .parent().addClass('pull-left');
                 }
             },
-            'close': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-times',
-                ref: TOOLBAR_ACTION_ID + '/close',
-                customize: function () {
-                    this.addClass('viewer-toolbar-close').attr('tabindex', '1');
-                }
-            },
-            'togglesidebar': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-info-circle',
-                ref: TOOLBAR_ACTION_ID + '/togglesidebar',
-                customize: function () {
-                    this.addClass('viewer-toolbar-togglesidebar').attr('tabindex', '1');
-                }
-            },
             'functiondropdown': {
                 prio: 'hi',
                 mobile: 'hi',
@@ -104,6 +86,24 @@ define('io.ox/core/viewer/views/toolbarview', [
                         .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1' })
                         .dropdown();
                     this.parent().addClass('dropdown');
+                }
+            },
+            'togglesidebar': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-info-circle',
+                ref: TOOLBAR_ACTION_ID + '/togglesidebar',
+                customize: function () {
+                    this.addClass('viewer-toolbar-togglesidebar').attr('tabindex', '1');
+                }
+            },
+            'close': {
+                prio: 'hi',
+                mobile: 'lo',
+                icon: 'fa fa-times',
+                ref: TOOLBAR_ACTION_ID + '/close',
+                customize: function () {
+                    this.addClass('viewer-toolbar-close').attr('tabindex', '1');
                 }
             }
         };

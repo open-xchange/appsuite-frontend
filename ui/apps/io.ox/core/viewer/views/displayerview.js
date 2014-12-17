@@ -40,8 +40,8 @@ define('io.ox/core/viewer/views/displayerview', [
             //console.warn('DisplayerView.render()');
             var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
                 carouselInner = $('<div class="carousel-inner">'),
-                prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev"><i class="fa fa-angle-left"></i></a>'),
-                nextSlide = $('<a class="right carousel-control" href="#viewer-carousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>'),
+                prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev" tabindex="1"><i class="fa fa-angle-left"></i></a>'),
+                nextSlide = $('<a class="right carousel-control" href="#viewer-carousel" role="button" data-slide="next" tabindex="1"><i class="fa fa-angle-right"></i></a>'),
                 // simulation with first file in the folder selected
                 fileSelection = 0,
                 // preload 1 neigboring slides
