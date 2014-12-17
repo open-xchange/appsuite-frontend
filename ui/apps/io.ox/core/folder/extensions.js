@@ -412,12 +412,12 @@ define('io.ox/core/folder/extensions',
                 index: 200,
                 draw: function (baton) {
 
-                    this.find('.folder-shared').remove();
+                    this.find('.folder-shared:first').remove();
 
                     if (_.device('smartphone')) return;
                     if (!api.is('unlocked', baton.data)) return;
 
-                    this.find('.folder-node').append(
+                    this.find('.folder-node:first').append(
                         $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users'))
                         .on('click', { id: baton.data.id }, openPermissions)
                     );
@@ -428,13 +428,13 @@ define('io.ox/core/folder/extensions',
                 index: 300,
                 draw: function (baton) {
 
-                    this.find('.folder-pubsub').remove();
+                    this.find('.folder-pubsub:first').remove();
 
                     // ignore shared folders
                     if (api.is('shared', baton.data)) return;
                     if (!capabilities.has('publication') || !api.is('published|subscribed', baton.data)) return;
 
-                    this.find('.folder-node').append(
+                    this.find('.folder-node:first').append(
                         $('<i class="fa folder-pubsub">').attr('title', gt('This folder has publications and/or subscriptions'))
                         .on('click', { folder: baton.data }, openPubSubSettings)
                     );
