@@ -11,12 +11,21 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/sidebarview', [
+    'io.ox/core/extensions',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
     'io.ox/core/viewer/views/sidebar/filedescriptionview'
-], function (EventDispatcher, FileInfoView, FileDescriptionView) {
+], function (Ext, EventDispatcher, FileInfoView, FileDescriptionView) {
 
     'use strict';
+
+    // define extension points for this SidebarView
+    Ext.point('io.ox/core/viewer/sidebar').extend({
+        attributes: {},
+        classes: '',
+        index: 200,
+        id: 'sidebar'
+    });
 
     /**
      * The SidebarView is responsible for displaying the detail sidebar.
@@ -26,10 +35,6 @@ define('io.ox/core/viewer/views/sidebarview', [
     var SidebarView = Backbone.View.extend({
 
         className: 'viewer-sidebar',
-
-        events: {
-
-        },
 
         // the default width of this sidebar in pixels.
         width: 400,
@@ -58,10 +63,17 @@ define('io.ox/core/viewer/views/sidebarview', [
 
         render: function (data) {
             //console.info('SidebarView.render() ', data);
+            if (!data || !data.model) { return this; }
+
+            var sidebar = this.$el,
+                baton = Ext.Baton({ $el: sidebar, model: data.model, data: data.model.get('origData') });
+
+            Ext.point('io.ox/core/viewer/sidebar').invoke('draw', sidebar, baton);
+
             // append sub views
             this.$el.append(
-                    this.fileInfoView.render(data).el,
-                    this.fileDescriptionView.render(data).el
+                this.fileInfoView.render(data).el,
+                this.fileDescriptionView.render(data).el
             );
 
             return this;

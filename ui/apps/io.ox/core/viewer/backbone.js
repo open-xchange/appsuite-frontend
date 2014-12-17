@@ -145,7 +145,8 @@ define('io.ox/core/viewer/backbone', [
                 id: null, // could be a attachment id, or drive file id
                 folderId: null,
                 meta: {},
-                lastModified: null
+                lastModified: null,
+                description: null
             };
         },
 
