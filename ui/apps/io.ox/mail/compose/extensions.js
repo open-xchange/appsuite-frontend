@@ -357,18 +357,23 @@ define('io.ox/mail/compose/extensions', [
                     var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
                         fileInput = $('<input type="file" name="file">').css('display', 'none')
                             .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true);
+                            .prop('multiple', true),
+                        link;
 
                     this.append(
                         fileInput,
                         dropdown.append(
-                            $('<a href="#">').append($.txt(gt('Add local file'))).on('click', function () {
+                            link = $('<a href="#" draggable="false">').append($.txt(gt('Add local file'))).on('click', function () {
                                 fileInput.trigger('click');
                             })
                         )
                         .link('add-file', gt('Add from Drive'), openFilePicker.bind(this, baton.model))
                         .render().$el
                     );
+                    //in firefox draggable=false is not enough to prevent dragging...
+                    if ( _.device('firefox') ) {
+                        link.attr('ondragstart', 'return false;');
+                    }
                 } else {
                     this.append($('<button type="button" class="btn btn-link hidden-file-picker">').append(
                         $('<span class="hidden">'),
