@@ -54,14 +54,30 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var offset = type === 'paginate' ? this.collection.length : 0;
             // trigger proper event
             this.collection.trigger('before:' + type);
+            // create callbacks
+            var cb_apply = _.lfo(apply, this.collection, type),
+                cb_fail = _.lfo(fail, this.collection, type),
+                self = this;
             // fetch data
             return this.fetch(params)
-                .done(this.addIndex.bind(this, offset, params))
-                .always(this.done.bind(this))
-                .then(
-                    _.lfo(apply, this.collection, type),
-                    _.lfo(fail, this.collection, type)
-                );
+                .done(function (data) {
+                    if (type === 'paginate' && self.collection.length > 0) {
+                        // check if first fetched item matches last existing item
+                        // use case: reload on new messages; race-conditions with external clients
+                        if (_.cid(_(data).first()) !== self.collection.last().cid) {
+                            self.done();
+                            self.reload(params, self.LIMIT);
+                            return;
+                        }
+                    }
+                    self.addIndex(offset, params, data);
+                    self.done();
+                    cb_apply(data);
+                })
+                .fail(function (e) {
+                    self.done();
+                    cb_fail(e);
+                });
         }
 
         this.load = function (params) {
@@ -88,7 +104,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var collection = this.collection;
             if (this.loading) return collection;
 
-            var offset = collection.length;
+            // offset is collection length minus one to allow comparing last item and first fetched item (see above)
+            var offset = Math.max(0, collection.length - 1);
             params = this.getQueryParams(_.extend({ offset: offset }, params));
             params.limit = offset + ',' + (offset + this.LIMIT);
             this.loading = true;
@@ -98,13 +115,13 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             return collection;
         };
 
-        this.reload = function (params) {
+        this.reload = function (params, tail) {
 
             var collection = this.collection;
             if (this.loading) return collection;
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
-            params.limit = '0,' + Math.max(collection.length, this.LIMIT);
+            params.limit = '0,' + Math.max(collection.length + (tail || 0), this.LIMIT);
             this.loading = true;
 
             collection.expired = false;
