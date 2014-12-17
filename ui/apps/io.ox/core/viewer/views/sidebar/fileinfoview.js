@@ -39,8 +39,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 var row, labelNode, contentNode;
 
                 row = $('<div>').addClass('row');
-                labelNode = $('<div>').addClass('col-xs-12 col-md-4').text(label);
-                contentNode = $('<div>').addClass('col-xs-12 col-md-8').text(content);
+                labelNode = $('<dt>').addClass('col-xs-12 col-md-4').text(label);
+                contentNode = $('<dd>').addClass('col-xs-12 col-md-8').text(content);
                 row.append(labelNode, contentNode);
                 panelBody.append(row);
             }
@@ -55,7 +55,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             panel = $('<div>').addClass('panel panel-default');
             panelHeader = $('<div>').addClass('panel-heading');
             panelHeader.append($('<h3>').addClass('panel-title').text(gt('General Info')));
-            panelBody = $('<div>').addClass('panel-body');
+            panelBody = $('<dl>').addClass('panel-body');
 
             addRow(gt('Filename'), fileName);
             addRow(gt('Size'), size);
