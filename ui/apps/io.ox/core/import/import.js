@@ -101,23 +101,35 @@ define('io.ox/core/import/import', [
     ext.point('io.ox/core/import/file_upload').extend({
         id: 'default',
         draw: function (baton) {
-            baton.nodes.file_upload = attachments.fileUploadWidget({ displayLabel: true, tabindex: 0, multi: false });
+            var label = $('<span class="filename">');
             this.append(
-                baton.nodes.file_upload
+                baton.nodes.file_upload = attachments.fileUploadWidget({ tabindex: 0, multi: false }).append(label)
             );
+            var $input = baton.nodes.file_upload.find('input[type="file"]');
+            $input.on('change', function (e) {
+                e.preventDefault();
+                var buttonText = '';
+                if ($input[0].files && $input[0].files.length > 0) {
+                    buttonText = $input[0].files[0].name;
+                }
+                label.text(buttonText);
+            });
         }
     });
 
     ext.point('io.ox/core/import/ignore_uuids').extend({
         id: 'default',
         draw: function (baton) {
+            //show option only for ical imports in calendar
+            if (!_.contains(['calendar'], baton.module)) return;
+
             this.append(
-                //show option only for ical imports in calendar
-                _.contains(['calendar'], baton.module) ?
-                $('<label class="checkbox">').append(
-                    $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
-                    gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
-                ) : $()
+                $('<div class="checkbox">').appned(
+                    $('<label>').append(
+                        $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
+                        gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
+                    )
+                )
             );
         }
     });
