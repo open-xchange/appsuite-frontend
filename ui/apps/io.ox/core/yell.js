@@ -155,12 +155,6 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         return node;
     }
 
-    // add convenience functions
-    yell.busy = function (str) {
-        // use this to standardize messages (be patient, take a few seconds, take a while etc.)
-        yell('busy', str + '. ' + gt('This may take some seconds') + ' ...');
-    };
-
     yell.done = function () {
         yell('success', gt('Done'));
     };

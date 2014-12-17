@@ -385,7 +385,7 @@ define('io.ox/tasks/api', [
             },
             data: task,
             appendColumns: false
-        }).pipe(function () {
+        }).then(function () {
             // update cache
             var sortChanged = false;
             //data that is important for sorting changed, so clear the all cache
@@ -398,7 +398,7 @@ define('io.ox/tasks/api', [
                         //api.get updates list and get caches
                         .then(function () { return api.get({ id: task.id, folder_id: newFolder || useFolder }); }),
                         sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
-        }).pipe(function (data) {
+        }).then(function (data) {
             //return object with id and folder id needed to save the attachments correctly
             obj = { folder_id: useFolder, id: task.id };
             //notification check
@@ -455,7 +455,7 @@ define('io.ox/tasks/api', [
                 appendColumns: false
             });
         });
-        return http.resume().pipe(function () {
+        return http.resume().then(function () {
             // update cache
             return $.when(api.removeFromCache(keys), updateAllCache(list, modifications.folder_id || list[0].folder_id, modifications));
         }).done(function () {
@@ -484,7 +484,7 @@ define('io.ox/tasks/api', [
         // api.caches.list.remove({ id: o.id, folder: o.folder_id })
 
         // call updateCaches (part of remove process) to be responsive
-        return api.updateCaches(task).pipe(function () {
+        return api.updateCaches(task).then(function () {
             // trigger visual refresh
             api.trigger('refresh.all');
 
@@ -517,7 +517,7 @@ define('io.ox/tasks/api', [
             // object with confirmation attribute
             data: options.data,
             appendColumns: false
-        }).pipe(function () {
+        }).then(function () {
             api.trigger('mark:task:confirmed', [{ id: options.id, data: options.data }]);
             // update cache
             return api.removeFromCache(key);
@@ -550,7 +550,7 @@ define('io.ox/tasks/api', [
         }
 
         return function () {
-            return getAllFromAllFolders().pipe(function (list) {
+            return getAllFromAllFolders().then(function (list) {
                 return _(list).filter(filter);
             });
         };
@@ -575,7 +575,7 @@ define('io.ox/tasks/api', [
                 order: 'asc',
                 timezone: 'UTC'
             }
-        }).pipe(function (list) {
+        }).then(function (list) {
             // sorted by end_date filter over due Tasks
             var now = new Date(),
                 userId = ox.user_id,
@@ -653,6 +653,23 @@ define('io.ox/tasks/api', [
         }
 
     };
+
+    api.on('create update', function (e, obj) {
+        api.get(obj).then(function (obj) {
+            // has participants?
+            if (obj && _.isArray(obj.participants) && obj.participants.length > 0) {
+                // check for external participants
+                var hasExternalParticipants = _(obj.participants).some(function (participant) {
+                    return participant.type === 5;
+                });
+                if (hasExternalParticipants) {
+                    require(['io.ox/contacts/api'], function (contactsApi) {
+                        contactsApi.trigger('maybyNewContact');
+                    });
+                }
+            }
+        });
+    });
 
     return api;
 });

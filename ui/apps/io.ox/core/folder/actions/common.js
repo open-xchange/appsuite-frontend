@@ -30,7 +30,7 @@ define('io.ox/core/folder/actions/common', [
         expungeFolder: function (e) {
             // get current folder id
             var folder = e.data.folder;
-            notifications.yell('busy', gt('Cleaning up... This may take a few seconds.'));
+            notifications.yell('busy', gt('Cleaning up ...'));
             mailAPI.expunge(folder).done(function () {
                 notifications.yell('success', gt('The folder has been cleaned up.'));
             });
@@ -44,7 +44,7 @@ define('io.ox/core/folder/actions/common', [
                     .addPrimaryButton('delete', gt('Empty folder'), 'delete', { tabIndex: 1 })
                     .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
                     .on('delete', function () {
-                        notifications.yell('busy', gt('Emptying folder... This may take a few seconds.'));
+                        notifications.yell('busy', gt('Emptying folder ...'));
                         var dep = e.data.module === 'mail' ? 'io.ox/mail/api' : 'io.ox/files/api';
                         require([dep], function (api) {
                             api.clear(id).done(function () {

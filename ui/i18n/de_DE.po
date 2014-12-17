@@ -1061,7 +1061,9 @@ msgstr "Nachrichten archivieren"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "Nachrichten werden archiviert"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1482,7 +1484,9 @@ msgid "Checkboxes"
 msgstr "Kontrollfelder"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "Zugangsdaten werden überprüft... Dies kann eine Weile dauern. "
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1498,8 +1502,10 @@ msgid "Clean up"
 msgstr "Aufräumen"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "Es wird aufgeräumt... Dies kann eine Weile dauern."
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "Aufräumen"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2385,7 +2391,7 @@ msgstr "Dokumente"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2716,8 +2722,10 @@ msgstr "Leeres Namens- und Beschreibungsfeld "
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "Ordner wird geleert.. Dies kann eine Weile dauern."
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "Ordner leeren"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4285,7 +4293,7 @@ msgstr "Neu"
 msgid "New Folder"
 msgstr "Neuer Ordner"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "Neue E-Mails"
 
@@ -5804,7 +5812,7 @@ msgstr "Kontakt-Anlage wurde gespeichert"
 msgid "Saved in"
 msgstr "Gespeichert unter"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "E-Mail-Anlage wurde gespeichert"
 
@@ -5813,10 +5821,12 @@ msgid "Saved task attachment"
 msgstr "Aufgaben-Anlage wurde gespeichert"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Anlage in Drive-App speichern"
-msgstr[1] "Anlagen in Drive-App speichern"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "Anlage speichern"
+msgstr[1] "Anlage speichern"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7151,10 +7161,6 @@ msgstr "Diese E-Mail wurde dem Portal hinzugefügt"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Diese E-Mail hat keinen Inhalt"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "Dies kann eine Weile dauern..."
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -9062,6 +9068,9 @@ msgstr "Ihre Plattform"
 #~ msgid "Choose file"
 #~ msgstr "Datei wählen"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Es wird aufgeräumt... Dies kann eine Weile dauern."
+
 #~ msgid "Clear cache"
 #~ msgstr "Cache leeren"
 
@@ -9451,6 +9460,9 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Email notification for appointment creator?"
 #~ msgstr "E-Mail-Benachrichtigung für Terminersteller?"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Ordner wird geleert.. Dies kann eine Weile dauern."
 
 #~ msgid "Enable Plugin"
 #~ msgstr "Plugin aktivieren"
@@ -10323,6 +10335,11 @@ msgstr "Ihre Plattform"
 #~ msgid "Save in file store"
 #~ msgstr "Im Dateispeicher speichern"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Anlage in Drive-App speichern"
+#~ msgstr[1] "Anlagen in Drive-App speichern"
+
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Neueste Änderungen werden gespeichert..."
 
@@ -10773,6 +10790,9 @@ msgstr "Ihre Plattform"
 #~ "Diese Tour gibt Ihnen eine kurze Einführung in das Produkt. Weitere "
 #~ "Informationen finden Sie in den Guided Tours für die einzelnen Apps und "
 #~ "in der Online-Hilfe."
+
+#~ msgid "This may take some seconds"
+#~ msgstr "Dies kann eine Weile dauern..."
 
 #~ msgid "Tile"
 #~ msgstr "Kachel"

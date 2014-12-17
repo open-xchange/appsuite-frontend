@@ -1080,7 +1080,9 @@ msgstr "Archivovať správy"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "Archivujú sa správy"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1505,7 +1507,9 @@ msgid "Checkboxes"
 msgstr "Zaškrtávacie políčka"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "Kontroluje sa poverenia... To môže trvať niekoľko sekúnd."
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1521,8 +1525,10 @@ msgid "Clean up"
 msgstr "Vyčistiť"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "Prebieha čistenie... To môže niekoľko sekúnd trvať."
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "Vyčistiť"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2398,7 +2404,7 @@ msgstr "Dokumenty"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2724,8 +2730,10 @@ msgstr "Nájdený prázdny názov a popis."
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "Vyprázdňuje sa priečinok... To môže niekoľko sekúnd trvať."
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "Prázdny priečinok"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4287,7 +4295,7 @@ msgstr "Nový"
 msgid "New Folder"
 msgstr "Nový priečinok"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nová pošta"
 
@@ -5792,7 +5800,7 @@ msgstr "Uložená príloha kontaktu"
 msgid "Saved in"
 msgstr "Uložené v"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Uložená príloha pošty"
 
@@ -5801,11 +5809,13 @@ msgid "Saved task attachment"
 msgstr "Uložená príloha úlohy"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Ukladá sa príloha na Drive"
-msgstr[1] "Ukladajú sa prílohy na Drive"
-msgstr[2] "Ukladajú sa prílohy na Drive"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "Uložiť prílohu"
+msgstr[1] "Uložiť prílohu"
+msgstr[2] "Uložiť prílohu"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7126,10 +7136,6 @@ msgstr "Tento email bol pridaný do portálu"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Tento email nemá žiadny obsah"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "Môže to trvať niekoľko sekúnd"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -9464,6 +9470,9 @@ msgstr "vaša platforma"
 #~ msgid "Classic"
 #~ msgstr "Klasické"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Prebieha čistenie... To môže niekoľko sekúnd trvať."
+
 #~ msgid "Clear cache"
 #~ msgstr "Vyčistiť vyrovnávaciu pamäť"
 
@@ -10232,6 +10241,9 @@ msgstr "vaša platforma"
 
 #~ msgid "Employee ID:"
 #~ msgstr "ID zamestnanca:"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Vyprázdňuje sa priečinok... To môže niekoľko sekúnd trvať."
 
 #~ msgid "Enable Calendar Hover"
 #~ msgstr "Zapnúť tipy kalendára"
@@ -12405,6 +12417,12 @@ msgstr "vaša platforma"
 #~ msgid "Save in file store"
 #~ msgstr "Uložiť v úložisku súborov"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Ukladá sa príloha na Drive"
+#~ msgstr[1] "Ukladajú sa prílohy na Drive"
+#~ msgstr[2] "Ukladajú sa prílohy na Drive"
+
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Ukladajú sa najnovšie zmeny..."
 
@@ -13296,6 +13314,9 @@ msgstr "vaša platforma"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Táto správa obsahuje URL k publikácii."
+
+#~ msgid "This may take some seconds"
+#~ msgstr "Môže to trvať niekoľko sekúnd"
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

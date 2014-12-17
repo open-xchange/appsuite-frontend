@@ -14,13 +14,12 @@
 define('io.ox/core/api/autocomplete', [
     'io.ox/core/http',
     'io.ox/core/capabilities',
-    'io.ox/mail/api',
-    'io.ox/contacts/api',
     'io.ox/contacts/util',
+    'io.ox/contacts/api',
     'io.ox/core/api/resource',
     'io.ox/core/api/group',
     'settings!io.ox/contacts'
-], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI, settings) {
+], function (http, capabilities, util, contactsAPI, resourceAPI, groupAPI, settings) {
 
     'use strict';
 
@@ -48,12 +47,9 @@ define('io.ox/core/api/autocomplete', [
             this.apis.push({ type: 'group', api: groupAPI });
         }
 
-        contactsAPI.on('create update delete', function () {
-            that.cache = {};
-        });
-
-        mailAPI.on('send', function () {
-            // clear on mail send. Auto-collect contacts might have added new contacts
+        // If contacts auto-collector might have added new contacts
+        contactsAPI.on('maybyNewContact', function () {
+            console.log('clear autocomplete cache');
             that.cache = {};
         });
     }

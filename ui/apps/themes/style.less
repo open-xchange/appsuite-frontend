@@ -23,7 +23,6 @@ html.high-contrast {
 body {
     // add a bit of perfection
     -webkit-font-feature-settings: "liga", "kern";
-    -webkit-font-smoothing: antialiased;
     font-feature-settings: "liga", "kern";
 }
 
@@ -998,7 +997,7 @@ html.ios8-standalone-ipad-fix {
     width: 460px;
     background-color: rgba(255, 255, 255, 0.95);
     z-index: 65500;
-    box-shadow: 0 0 50px -1px rgba(0, 0, 0, 0.30);
+    box-shadow: 0 0 50px -1px rgba(0, 0, 0, 0.80);
     outline: 0;
     opacity: 0;
     .border-radius(5px);
@@ -1019,8 +1018,8 @@ html.ios8-standalone-ipad-fix {
     }
 
     .message {
-        padding: 20px 60px 20px 70px;
-        min-height: 70px;
+        padding: 25px 60px 25px 70px;
+        min-height: 60px;
         & > div {
             max-height: 300px;
             overflow: auto;
@@ -1032,7 +1031,7 @@ html.ios8-standalone-ipad-fix {
 
     .icon {
         position: absolute;
-        top: 15px;
+        top: 23px;
         left: 10px;
         font-size: 24px;
         color: #aaa;
@@ -3049,6 +3048,21 @@ ul.io-ox-inline-links + header {
 
 // ------
 
+.window-body {
+    .transition(top 0.3s linear);
+}
+
+.search-active {
+    .window-body {
+        top: 45px;
+    }
+    .inplace-search {
+        position: fixed;
+        top: 40px;
+        .input-group { max-width: 600px; }
+    }
+}
+
 .io-ox-search {
 
     &.inplace-search {
@@ -3056,6 +3070,7 @@ ul.io-ox-inline-links + header {
         line-height: 20px;
         z-index: 10;
     }
+
     .search-field {
         //space for fa-times
         padding-right: 36px;

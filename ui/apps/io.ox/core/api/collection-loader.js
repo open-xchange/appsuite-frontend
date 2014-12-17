@@ -39,7 +39,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         function apply(collection, type, data) {
             Pool.preserve(function () {
                 var method = methods[type];
-                collection[method](data);
+                collection[method](data, { parse: true });
             });
             if (type === 'paginate' && data.length === 0) collection.trigger('complete');
             collection.trigger(type);

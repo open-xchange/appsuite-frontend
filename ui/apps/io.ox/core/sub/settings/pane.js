@@ -284,7 +284,7 @@ define('io.ox/core/sub/settings/pane', [
             var baton = ext.Baton({ model: this.model, view: this });
             ev.preventDefault();
             yell({
-                type: 'info',
+                type: 'busy',
                 headline: gt('Subscription refresh'),
                 message: gt(
                     'A refresh takes some time, so please be patient, while the refresh runs in the background. ' +

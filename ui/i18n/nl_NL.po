@@ -1071,7 +1071,9 @@ msgstr "Berichten archiveren"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "Berichten archiveren"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1496,7 +1498,9 @@ msgid "Checkboxes"
 msgstr "Selectievakken"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "Referenties controleren ... Dit kan enkele seconden duren."
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1512,8 +1516,10 @@ msgid "Clean up"
 msgstr "Opschonen"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "Opschonen ... Dit kan enkele seconden duren."
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "Opschonen"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2394,7 +2400,7 @@ msgstr "Documenten"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2727,8 +2733,10 @@ msgstr "Lege naam en omschrijving gevonden."
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "Map leegmaken ... Dit kan enkele seconden duren."
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "Map leegmaken"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4291,7 +4299,7 @@ msgstr "Nieuw"
 msgid "New Folder"
 msgstr "Nieuwe Map"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nieuwe e-mail"
 
@@ -5806,7 +5814,7 @@ msgstr "Contactbijlage opgeslagen"
 msgid "Saved in"
 msgstr "Opgeslagen in"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "E-mailbijlage opgeslagen"
 
@@ -5815,10 +5823,12 @@ msgid "Saved task attachment"
 msgstr "Taakbijlage opgeslagen"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Bijlage opslaan naar Drive"
-msgstr[1] "Bijlagen opslaan naar Drive"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "Bijlage opslaan"
+msgstr[1] "Bijlage opslaan"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7149,10 +7159,6 @@ msgstr "Dit e-mailbericht is toegevoegd aan het portaal"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Dit e-mailbericht heeft geen inhoud"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "Dit kan enige tijd in beslag nemen"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -8703,6 +8709,9 @@ msgstr "uw platform"
 #~ msgid "Change state"
 #~ msgstr "Status wijzigen"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Opschonen ... Dit kan enkele seconden duren."
+
 #~ msgid "Click here to add your account"
 #~ msgstr "Klik hier om uw account toe te voegen"
 
@@ -8875,6 +8884,9 @@ msgstr "uw platform"
 
 #~ msgid "Email notification for appointment creator?"
 #~ msgstr "E-mailattentie voor maker van afspraak?"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Map leegmaken ... Dit kan enkele seconden duren."
 
 # (Reinout) Portal = portaal, niet portable
 #~ msgid "Enabled for all mail folders"
@@ -9246,6 +9258,11 @@ msgstr "uw platform"
 #~ msgid "Save in file store"
 #~ msgstr "Opslaan in gegevensdepot"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Bijlage opslaan naar Drive"
+#~ msgstr[1] "Bijlagen opslaan naar Drive"
+
 #~ msgid "Search for items"
 #~ msgstr "Zoek naar items"
 
@@ -9520,6 +9537,9 @@ msgstr "uw platform"
 #~ msgstr ""
 #~ "Deze map heeft publicaties maar u heeft geen toestemming om deze te zien "
 #~ "of te bewerken"
+
+#~ msgid "This may take some seconds"
+#~ msgstr "Dit kan enige tijd in beslag nemen"
 
 #~ msgid "Tile"
 #~ msgstr "Vlak"

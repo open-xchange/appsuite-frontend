@@ -1065,7 +1065,9 @@ msgstr "Archivar mensajes"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "Archivado de mensajes"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1489,7 +1491,9 @@ msgid "Checkboxes"
 msgstr "Casillas de verificación"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "Comprobando credenciales... Esto puede tardar unos segundos."
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1505,8 +1509,10 @@ msgid "Clean up"
 msgstr "Limpiar"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "Limpiando... Esto puede tardar unos segundos."
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "Limpiar"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2381,7 +2387,7 @@ msgstr "Documentos"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2708,8 +2714,10 @@ msgstr "Se encontraron un nombre y descripción vacíos."
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "Vaciando carpeta... Esto puede tardar unos segundos."
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "Vaciar Carpeta"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4272,7 +4280,7 @@ msgstr "Nuevo"
 msgid "New Folder"
 msgstr "Nueva carpeta"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nuevo correo"
 
@@ -5785,7 +5793,7 @@ msgstr "Adjunto de contacto guardado"
 msgid "Saved in"
 msgstr "Guardado en"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Adjunto de correo guardado"
 
@@ -5794,10 +5802,12 @@ msgid "Saved task attachment"
 msgstr "Adjunto de tarea guardado"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Guardando adjunto en Drive"
-msgstr[1] "Guardando adjuntos en Drive"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "Guardar adjunto"
+msgstr[1] "Guardar adjunto"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7123,10 +7133,6 @@ msgstr "Este correo se ha añadido al portal"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Este correo no tiene contenido"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "Esto puede tardar unos segundos"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -11032,6 +11038,9 @@ msgstr "su plataforma"
 #~ msgid "Classic"
 #~ msgstr "Clásico"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Limpiando... Esto puede tardar unos segundos."
+
 #~ msgid "Clear cache"
 #~ msgstr "Limpiar caché"
 
@@ -11869,6 +11878,9 @@ msgstr "su plataforma"
 
 #~ msgid "Employee ID:"
 #~ msgstr "ID de empleado:"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Vaciando carpeta... Esto puede tardar unos segundos."
 
 #~ msgid "Enable Calendar Hover"
 #~ msgstr "Activar elementos emergentes en Calendario"
@@ -14663,6 +14675,11 @@ msgstr "su plataforma"
 #~ msgid "Save in file store"
 #~ msgstr "Guardar en almacén de ficheros"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Guardando adjunto en Drive"
+#~ msgstr[1] "Guardando adjuntos en Drive"
+
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Guardando los últimos cambios ..."
 
@@ -15917,6 +15934,9 @@ msgstr "su plataforma"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Este correo contiene una URL de una publicación."
+
+#~ msgid "This may take some seconds"
+#~ msgstr "Esto puede tardar unos segundos"
 
 #~ msgid ""
 #~ "This message comes from an internal user. You do not need to do anything "
