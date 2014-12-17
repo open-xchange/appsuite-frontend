@@ -41,8 +41,8 @@ define([
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
                     timestamp: 1368791630910,
                     data: [
-                        { id: '1337' },
-                        { id: '1337' }
+                        { id: '1337', folder_id: '4711', version: 1 },
+                        { id: '1337', folder_id: '4711', version: 2 }
                     ]
                 }));
             });
@@ -259,6 +259,29 @@ define([
                     expect('api.clear failed').to.equal('api.clear succeeded');
                 }).done(function () {
                     expect(clearSpy.called, 'folder clear action sent to server').to.be.true;
+                });
+            });
+        });
+
+        describe('detach versions', function () {
+            it('should remove a single version', function () {
+                this.server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify({
+                        timestamp: 1368791630910,
+                        data: []
+                    }));
+                });
+                return api.get({ id: '1337', folder_id: '4711' }).then(function (m) {
+                    var def = $.Deferred();
+                    m.on('change:versions', def.resolve);
+                    return $.when(m, def);
+                }).then(function (m) {
+                    expect(m.get('versions')).to.have.length(2);
+                    return $.when(m, api.detach(m.get('versions')[0]));
+                }).then(function (m) {
+                    expect(m.get('versions')).to.have.length(1);
+                }, function () {
+                    throw 'api.detach failed';
                 });
             });
         });
