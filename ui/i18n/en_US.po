@@ -1009,7 +1009,7 @@ msgstr ""
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr ""
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1421,7 +1421,7 @@ msgid "Checkboxes"
 msgstr ""
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1437,7 +1437,7 @@ msgid "Clean up"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
+msgid "Cleaning up ..."
 msgstr ""
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
@@ -2294,7 +2294,7 @@ msgstr ""
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2615,7 +2615,7 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
+msgid "Emptying folder ..."
 msgstr ""
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
@@ -4128,7 +4128,7 @@ msgstr ""
 msgid "New Folder"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr ""
 
@@ -5595,7 +5595,7 @@ msgstr ""
 msgid "Saved in"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr ""
 
@@ -5604,8 +5604,8 @@ msgid "Saved task attachment"
 msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -6839,10 +6839,6 @@ msgstr ""
 
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
-msgstr ""
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
 msgstr ""
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts

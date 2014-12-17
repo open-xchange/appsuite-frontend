@@ -1066,7 +1066,9 @@ msgstr "Üzenetek archiválása"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "Üzenetek archiválása"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1490,7 +1492,9 @@ msgid "Checkboxes"
 msgstr "Jelölőnégyzetek"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "Hitelesítési adatok ellenőrzése… ez eltarthat pár másodpercig."
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1506,8 +1510,10 @@ msgid "Clean up"
 msgstr "Törlés"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "Takarítás… Ez eltarthat pár másodpercig."
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "Törlés"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2388,7 +2394,7 @@ msgstr "Dokumentumok"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2714,8 +2720,10 @@ msgstr "A név és a leírás üres."
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "Mappa kiürítése… Ez eltarthat pár másodpercig."
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "Mappa ürítése"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4272,7 +4280,7 @@ msgstr "Új"
 msgid "New Folder"
 msgstr "Új mappa"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "Új levél"
 
@@ -5778,7 +5786,7 @@ msgstr "Névjegymelléklet mentve"
 msgid "Saved in"
 msgstr "Mentés itt:"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Mentett melléklet"
 
@@ -5787,10 +5795,12 @@ msgid "Saved task attachment"
 msgstr "Feladatmelléklet mentve"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Melléklet mentése a Drive-ra"
-msgstr[1] "Mellékletek mentése a Drive-ra"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "Melléklet mentése"
+msgstr[1] "Melléklet mentése"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7109,10 +7119,6 @@ msgstr "A levél hozzáadva a portálhoz"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "A levélnek nincs tartalma"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "Ez eltarthat pár másodpercig"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -8890,6 +8896,9 @@ msgstr "az Ön rendszere"
 #~ msgid "Change state"
 #~ msgstr "Állapot módosítása"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Takarítás… Ez eltarthat pár másodpercig."
+
 #~ msgid "Clear cache"
 #~ msgstr "Gyorsítótár törlése"
 
@@ -9232,6 +9241,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Email notification for appointment creator?"
 #~ msgstr "E-mail értesítés a találkozó szervezőjének?"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Mappa kiürítése… Ez eltarthat pár másodpercig."
 
 #~ msgid "Enable Plugin"
 #~ msgstr "Bővítmény engedélyezése"
@@ -9992,6 +10004,11 @@ msgstr "az Ön rendszere"
 #~ msgid "Save in file store"
 #~ msgstr "Mentés fájltárolóba"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Melléklet mentése a Drive-ra"
+#~ msgstr[1] "Mellékletek mentése a Drive-ra"
+
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Legutóbbi változtatások mentése…"
 
@@ -10398,6 +10415,9 @@ msgstr "az Ön rendszere"
 #~ msgstr ""
 #~ "Ez a mappa publikációkat tartalmaz, de nem nézheti meg vagy szerkesztheti "
 #~ "azokat"
+
+#~ msgid "This may take some seconds"
+#~ msgstr "Ez eltarthat pár másodpercig"
 
 #~ msgid "Tile"
 #~ msgstr "Mozaik"

@@ -1056,7 +1056,9 @@ msgstr "Arkistoi viestit"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "Viestejä arkistoidaan"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1479,7 +1481,9 @@ msgid "Checkboxes"
 msgstr "Valintaruutuja"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "Tarkistetaan valtuuksia Tämä voi kestää muutaman sekunnin."
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1495,8 +1499,10 @@ msgid "Clean up"
 msgstr "Siivoa"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "Siivotaan... Tämä voi kestää muutaman sekunnin."
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "Siivoa"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2367,7 +2373,7 @@ msgstr "Asiakirjat"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2691,8 +2697,10 @@ msgstr "Löydetty tyhjä nimi ja kuvaus."
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "Tyhjennetään kansiota... Tämä voi kestää muutaman sekunnin."
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "Tyhjennä kansio"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4247,7 +4255,7 @@ msgstr "Uusi"
 msgid "New Folder"
 msgstr "Uusi kansio"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "Uusi viesti"
 
@@ -5748,7 +5756,7 @@ msgstr "Tallennettu yhteystietoliite"
 msgid "Saved in"
 msgstr "Tallennettu"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Tallennettu viestin liite"
 
@@ -5757,10 +5765,12 @@ msgid "Saved task attachment"
 msgstr "Tallennettu tehtäväliite"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Tallennetaan liite Drivelle"
-msgstr[1] "Tallennetaan liitteet Drivelle"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "Tallenna liite"
+msgstr[1] "Tallenna liite"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7079,10 +7089,6 @@ msgstr "Tämä viesti on lisätty portaaliin"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Tässä viestissä ei ole sisältöä"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "Tämä voi kestää muutaman sekunnin"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -8623,6 +8629,9 @@ msgstr "Alustasi"
 #~ msgid "Change state"
 #~ msgstr "Muuta tilaa"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Siivotaan... Tämä voi kestää muutaman sekunnin."
+
 #~ msgid "Click here to add your account"
 #~ msgstr "Napsauta tästä lisätäksesi tilisi"
 
@@ -8794,6 +8803,9 @@ msgstr "Alustasi"
 
 #~ msgid "Email notification for appointment creator?"
 #~ msgstr "Sähköposti-ilmoitus tapaamisen luojalle?"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Tyhjennetään kansiota... Tämä voi kestää muutaman sekunnin."
 
 #~ msgid "Enabled for all mail folders"
 #~ msgstr "Käytössä kaikille viestikansioille"
@@ -9154,6 +9166,11 @@ msgstr "Alustasi"
 #~ msgid "Save in file store"
 #~ msgstr "Tallenna tiedostovarastoon"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Tallennetaan liite Drivelle"
+#~ msgstr[1] "Tallennetaan liitteet Drivelle"
+
 #~ msgid "Search for items"
 #~ msgstr "Etsi kohteita"
 
@@ -9403,6 +9420,9 @@ msgstr "Alustasi"
 #~ msgstr ""
 #~ "Tässä kansiossa on julkaisuja, mutta sinulla ei ole oikeuksia katsella "
 #~ "tai muokata niitä"
+
+#~ msgid "This may take some seconds"
+#~ msgstr "Tämä voi kestää muutaman sekunnin"
 
 #~ msgid "Tile"
 #~ msgstr "Pinoa"

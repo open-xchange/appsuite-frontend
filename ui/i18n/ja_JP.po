@@ -1043,7 +1043,9 @@ msgstr "メッセージをアーカイブ"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "メッセージのアーカイブ"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1459,7 +1461,9 @@ msgid "Checkboxes"
 msgstr "チェックボックス"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "認証情報をチェックしています... 数秒かかる場合があります。"
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1475,8 +1479,10 @@ msgid "Clean up"
 msgstr "クリーン アップ"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "クリーン アップしています... 数秒かかる場合があります。"
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "クリーン アップ"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2352,7 +2358,7 @@ msgstr "ドキュメント"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2684,8 +2690,10 @@ msgstr "名前と説明が未入力です。"
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "フォルダを空にしています... 数秒かかる場合があります。"
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "フォルダを空にする"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4245,7 +4253,7 @@ msgstr "新規"
 msgid "New Folder"
 msgstr "新規フォルダ"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "新規メール"
 
@@ -5741,7 +5749,7 @@ msgstr "保存された連絡先の添付ファイル"
 msgid "Saved in"
 msgstr "保存先:"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存された添付ファイル"
 
@@ -5750,9 +5758,11 @@ msgid "Saved task attachment"
 msgstr "保存された仕事の添付ファイル"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Drive に添付ファイルを保存しています"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "添付ファイルを保存"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7060,10 +7070,6 @@ msgstr "このメールをポータルに追加しました。"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "このメールには内容がありません。"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "この処理には数秒かかる場合があります。"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -10060,6 +10066,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Classic"
 #~ msgstr "クラシック"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "クリーン アップしています... 数秒かかる場合があります。"
+
 #~ msgid "Clear cache"
 #~ msgstr "キャッシュをクリア"
 
@@ -10915,6 +10924,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Employee ID:"
 #~ msgstr "社員 ID:"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "フォルダを空にしています... 数秒かかる場合があります。"
 
 #~ msgid "Enable Calendar Hover"
 #~ msgstr "予定表のホバー表示を有効化"
@@ -13549,6 +13561,10 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Save in file store"
 #~ msgstr "ファイル ストアに保存"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Drive に添付ファイルを保存しています"
+
 #~ msgid "Saving latest changes ..."
 #~ msgstr "最新の変更を保存しています..."
 
@@ -14594,6 +14610,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "このメールには公開への URL があります。"
+
+#~ msgid "This may take some seconds"
+#~ msgstr "この処理には数秒かかる場合があります。"
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"

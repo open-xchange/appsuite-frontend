@@ -1053,7 +1053,9 @@ msgstr "封存訊息"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "正在封存訊息"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1469,7 +1471,9 @@ msgid "Checkboxes"
 msgstr "選取盒"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "正在檢查帳號密碼... 可能需要幾秒鐘。"
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1485,8 +1489,10 @@ msgid "Clean up"
 msgstr "清理"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "正在清理... 可能需要幾秒鐘。"
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "清理"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2354,7 +2360,7 @@ msgstr "文件"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2677,8 +2683,10 @@ msgstr "找到空白的名稱與描述。"
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "正在清空資料夾... 可能需要幾秒鐘。"
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "空文件夾"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4219,7 +4227,7 @@ msgstr "新增"
 msgid "New Folder"
 msgstr "新資料夾"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "新增郵件"
 
@@ -5710,7 +5718,7 @@ msgstr "已儲存聯絡人附件"
 msgid "Saved in"
 msgstr "保存於"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "儲存郵件附件"
 
@@ -5719,10 +5727,12 @@ msgid "Saved task attachment"
 msgstr "已儲存任務附件"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "將附件保存到 Drive"
-msgstr[1] "將附件保存到 Drive"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "儲存附件"
+msgstr[1] "儲存附件"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7010,10 +7020,6 @@ msgstr "此郵件已被加入入口畫面"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "此郵件沒有內容"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "這可能需要幾秒鐘.."
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -9260,6 +9266,9 @@ msgstr "您的平台"
 #~ msgid "Classic"
 #~ msgstr "經典"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "正在清理... 可能需要幾秒鐘。"
+
 #~ msgid "Clear cache"
 #~ msgstr "清除快取"
 
@@ -9987,6 +9996,9 @@ msgstr "您的平台"
 
 #~ msgid "Employee ID:"
 #~ msgstr "員工 ID："
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "正在清空資料夾... 可能需要幾秒鐘。"
 
 #~ msgid "Enable Calendar Hover"
 #~ msgstr "啟用日曆懸停窗口"
@@ -10840,6 +10852,11 @@ msgstr "您的平台"
 #~ msgid "Save in file store"
 #~ msgstr "保存在資訊存儲"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "將附件保存到 Drive"
+#~ msgstr[1] "將附件保存到 Drive"
+
 #~ msgid "Saving latest changes ..."
 #~ msgstr "正在儲存最新修改..."
 
@@ -11223,6 +11240,9 @@ msgstr "您的平台"
 #~ msgid ""
 #~ "This folder has publications but you are not allowed to view or edit them"
 #~ msgstr "此資料夾中有發佈內容，但您不被允許檢視或編輯"
+
+#~ msgid "This may take some seconds"
+#~ msgstr "這可能需要幾秒鐘.."
 
 #~ msgid "Tile"
 #~ msgstr "磚塊"

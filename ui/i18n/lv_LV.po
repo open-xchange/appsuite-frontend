@@ -1080,7 +1080,9 @@ msgstr "Ziņojumu arhīvs"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js:28 module:io.ox/core
-msgid "Archiving messages"
+#, fuzzy
+#| msgid "Archiving messages"
+msgid "Archiving messages ..."
 msgstr "Ziņojumu arhivēšana"
 
 #: apps/plugins/portal/twitter/util.js:410 module:plugins/portal
@@ -1506,7 +1508,9 @@ msgid "Checkboxes"
 msgstr "Iezīmes"
 
 #: apps/io.ox/core/sub/subscriptions.js:66 module:io.ox/core/sub
-msgid "Checking credentials... This may take a few seconds."
+#, fuzzy
+#| msgid "Checking credentials... This may take a few seconds."
+msgid "Checking credentials ..."
 msgstr "Pieslēguma informācijas pārbaude... Tas var aizņemt vairākas sekundes."
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
@@ -1522,8 +1526,10 @@ msgid "Clean up"
 msgstr "Tīrīt"
 
 #: apps/io.ox/core/folder/actions/common.js:33 module:io.ox/core
-msgid "Cleaning up... This may take a few seconds."
-msgstr "Notiek tīrīšana.. Tas var aizņemt vairākas sekundes."
+#, fuzzy
+#| msgid "Clean up"
+msgid "Cleaning up ..."
+msgstr "Tīrīt"
 
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
@@ -2400,7 +2406,7 @@ msgstr "Dokumenti"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50 module:io.ox/core/wizard
-#: apps/io.ox/core/yell.js:165 module:io.ox/core
+#: apps/io.ox/core/yell.js:159 module:io.ox/core
 #: apps/io.ox/tasks/actions/doneUndone.js:35 module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:261 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:32 apps/io.ox/tasks/toolbar.js:68
@@ -2731,8 +2737,10 @@ msgstr "Atrasts tukšs nosaukums un apraksts."
 
 #: apps/io.ox/core/folder/actions/common.js:47 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:42 module:io.ox/mail
-msgid "Emptying folder... This may take a few seconds."
-msgstr "Mapes tukšošana... Tas var aizņemt vairākas sekundes."
+#, fuzzy
+#| msgid "Empty folder"
+msgid "Emptying folder ..."
+msgstr "Tukšot mapi"
 
 #: apps/io.ox/core/sub/settings/pane.js:213 module:io.ox/core/sub
 #: apps/io.ox/core/sub/settings/pane.js:214
@@ -4292,7 +4300,7 @@ msgstr "Jauns"
 msgid "New Folder"
 msgstr "Jauna mape"
 
-#: apps/io.ox/mail/api.js:1326 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1328 module:io.ox/mail
 msgid "New Mail"
 msgstr "Jaunais pasts"
 
@@ -5798,7 +5806,7 @@ msgstr "Saglabāts kontakta pievienojums"
 msgid "Saved in"
 msgstr "Saglabāt iekš"
 
-#: apps/io.ox/mail/api.js:1057 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1059 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Pievienojums saglabāts"
 
@@ -5807,11 +5815,13 @@ msgid "Saved task attachment"
 msgstr "Saglabāts uzdevuma pievienojums"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:31 module:io.ox/mail
-msgid "Saving attachment to Drive"
-msgid_plural "Saving attachments to Drive"
-msgstr[0] "Saglabā pielvienojumu diskā Drive"
-msgstr[1] "Saglabā pielvienojumus diskā Drive"
-msgstr[2] "Saglabā pielvienojumus diskā Drive"
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saving attachment ..."
+msgid_plural "Saving attachments ..."
+msgstr[0] "Saglabāt pievienojumu"
+msgstr[1] "Saglabāt pievienojumu"
+msgstr[2] "Saglabāt pievienojumu"
 
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49 module:io.ox/calendar
@@ -7143,10 +7153,6 @@ msgstr "Šī vēstule ir pievienota portālam"
 #: apps/io.ox/mail/detail/content.js:145 module:io.ox/mail
 msgid "This mail has no content"
 msgstr "Šai vēstulei nav satura"
-
-#: apps/io.ox/core/yell.js:161 module:io.ox/core
-msgid "This may take some seconds"
-msgstr "Process var aizņemt dažas sekundes"
 
 #: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
@@ -9488,6 +9494,9 @@ msgstr "jūsu platforma"
 #~ msgid "Classic"
 #~ msgstr "Klasika"
 
+#~ msgid "Cleaning up... This may take a few seconds."
+#~ msgstr "Notiek tīrīšana.. Tas var aizņemt vairākas sekundes."
+
 #~ msgid "Clear cache"
 #~ msgstr "Tīrīt kešatmiņu"
 
@@ -10256,6 +10265,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "Employee ID:"
 #~ msgstr "Darbinieka ID:"
+
+#~ msgid "Emptying folder... This may take a few seconds."
+#~ msgstr "Mapes tukšošana... Tas var aizņemt vairākas sekundes."
 
 #~ msgid "Enable Calendar Hover"
 #~ msgstr "Iespējot kalendāra apskatlogus"
@@ -12434,6 +12446,12 @@ msgstr "jūsu platforma"
 #~ msgid "Save in file store"
 #~ msgstr "Saglabāt infoglabātuvē"
 
+#~ msgid "Saving attachment to Drive"
+#~ msgid_plural "Saving attachments to Drive"
+#~ msgstr[0] "Saglabā pielvienojumu diskā Drive"
+#~ msgstr[1] "Saglabā pielvienojumus diskā Drive"
+#~ msgstr[2] "Saglabā pielvienojumus diskā Drive"
+
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Saglabā izmaiņas..."
 
@@ -13334,6 +13352,9 @@ msgstr "jūsu platforma"
 
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Šis pasts satur URL uz publikāciju."
+
+#~ msgid "This may take some seconds"
+#~ msgstr "Process var aizņemt dažas sekundes"
 
 #~ msgid ""
 #~ "This object does not contain a file, would you like to send the link?"
