@@ -1,0 +1,5 @@
+{
+    "path": "io.ox/dynamic-theme/register",
+    "namespace": "core",
+    "requires": "dynamic-theme"
+}
