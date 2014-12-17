@@ -240,7 +240,7 @@ define([
             });
             it('should trigger reset event for folder collection', function () {
                 api.clear('4711').fail(function () {
-                    expect('api.clear failed').to.equal('api.clear succeeded');
+                    throw 'api.clear failed';
                 });
                 return def.then(function (c) {
                     expect(c).to.have.length(0);
@@ -249,14 +249,14 @@ define([
 
             it('should reload the folder', function () {
                 api.clear('4711').fail(function () {
-                    expect('api.clear failed').to.equal('api.clear succeeded');
+                    throw 'api.clear failed';
                 });
                 return folderReload;
             });
 
             it('should send action=clear to folder module', function () {
                 return api.clear('4711').fail(function () {
-                    expect('api.clear failed').to.equal('api.clear succeeded');
+                    throw 'api.clear failed';
                 }).done(function () {
                     expect(clearSpy.called, 'folder clear action sent to server').to.be.true;
                 });
