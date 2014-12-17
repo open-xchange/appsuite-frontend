@@ -224,6 +224,8 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Tue Dec 16 2014 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2014-12-22
 * Fri Dec 12 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Fourth candidate for 7.6.2 release
 * Wed Dec 10 2014 Marcus Klein <marcus.klein@open-xchange.com>
