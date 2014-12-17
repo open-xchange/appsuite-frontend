@@ -28,7 +28,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
         events: {
             'click a.left.carousel-control': 'onPreviousSlide',
-            'click a.right.carousel-control': 'onNextSlide'
+            'click a.right.carousel-control': 'onNextSlide',
+            'keydown': 'onKeydown'
         },
 
         initialize: function () {
@@ -129,6 +130,18 @@ define('io.ox/core/viewer/views/displayerview', [
         onNextSlide: function () {
             //console.warn('DisplayerView.onNextSlide()');
             EventDispatcher.trigger('viewer:display:next');
+        },
+
+        onKeydown: function (event) {
+            //console.warn('DisplayerView.onKeydown()', event, event.which);
+            switch (event.which || event.keyCode) {
+                case 39: // right arrow
+                    EventDispatcher.trigger('viewer:display:next');
+                    break;
+                case 37: // left arrow
+                    EventDispatcher.trigger('viewer:display:previous');
+                    break;
+            }
         },
 
         dispose: function () {

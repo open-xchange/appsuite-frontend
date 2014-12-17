@@ -31,37 +31,33 @@ define('io.ox/core/viewer/views/mainview', [
 
         className: 'io-ox-viewer abs',
 
+        events: {
+            'keydown': 'onKeydown'
+        },
+
         initialize: function (/*options*/) {
             //console.info('MainView.initialize()');
             // create children views
             this.toolbarView = new ToolbarView();
             this.displayerView = new DisplayerView({ collection: this.collection });
             this.sidebarView = new SidebarView();
-
             // clean Viewer element and all event handlers on viewer close
             this.listenTo(this.toolbarView, 'close', function () {
                 this.$el.remove();
             });
-
             // listen to the Viewer event 'bus' for useful events
             this.listenTo(EventDispatcher, 'viewer:display:previous', this.onPreviousSlide);
             this.listenTo(EventDispatcher, 'viewer:display:next', this.onNextSlide);
             this.listenTo(EventDispatcher, 'viewer:toggle:sidebar', this.onToggleSidebar.bind(this));
-
             // handle DOM events
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
-            this.$el.on('keydown', this.onKeydown.bind(this));
-
             // clean stuff on dispose event from core/commons.js
             this.$el.on('dispose', this.dispose.bind(this));
-
             // display initially first file
             // TODO get real selection from Drive or Mail app
             this.displayedFileIndex = 0;
-
             // render viewer initially
             this.render();
-
             // trigger item changed event initally for the first file
             EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
         },
@@ -75,18 +71,16 @@ define('io.ox/core/viewer/views/mainview', [
                 this.displayerView.render().el,
                 this.sidebarView.render().el
             );
-
             // focus the active slide initially
             _.defer(function () {
                 self.displayerView.$el.find('.active').focus();
             });
-
             return this;
         },
 
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
-            //console.warn('MainView.onKeydown()', event.which, event);
+            //console.warn('MainView.onKeyDown() event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
             var viewerRootEl = this.$el;
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
@@ -106,37 +100,35 @@ define('io.ox/core/viewer/views/mainview', [
                 // focus next action candidate
                 tabableActions.eq(nextElementIndex).focus();
             }
-            // handle TAB traversal
-            if (event.which === 9) { tabHandler(event); }
+            switch (event.which || event.keyCode) {
+                case 9: // TAB key
+                    tabHandler(event);
+                    break;
+                case 27: // ESC key
+                    this.$el.remove();
+                    break;
+            }
         },
 
         onPreviousSlide: function () {
             //console.warn('MainView.onPreviousSlide(), old index: ', this.displayedFileIndex);
-
             if (this.displayedFileIndex > 0) {
                 this.displayedFileIndex--;
-
             } else {
                 this.displayedFileIndex = this.collection.length - 1;
             }
-
             //console.warn('MainView.onPreviousSlide(), new index: ', this.displayedFileIndex);
-
             EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
         },
 
         onNextSlide: function () {
             //console.warn('MainView.onNextSlide(), old index: ', this.displayedFileIndex);
-
             if (this.displayedFileIndex < this.collection.length - 1) {
                 this.displayedFileIndex++;
-
             } else {
                 this.displayedFileIndex = 0;
             }
-
             //console.warn('MainView.onNextSlide(), new index: ', this.displayedFileIndex);
-
             EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
         },
 
