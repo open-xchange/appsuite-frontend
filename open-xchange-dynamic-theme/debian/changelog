@@ -1,3 +1,9 @@
+open-xchange-dynamic-theme (7.6.2-1) stable; urgency=low
+
+  * Moved open-xchange-dynamic-theme to the core repository
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Wed, 17 Dec 2014 15:51:00 +0100
+
 open-xchange-dynamic-theme (7.6.1-5) stable; urgency=low
 
   * Follow-up release for rpost theme
