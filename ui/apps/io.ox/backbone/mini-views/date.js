@@ -147,6 +147,8 @@ define('io.ox/backbone/mini-views/date',
 
         setup: function (options) {
             this.name = options.name;
+            this.future = options.future || 0; // use positive integers to allow years in the future
+            this.past = options.past || 150; // use positive integers to allow years in the past
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
 
@@ -161,7 +163,7 @@ define('io.ox/backbone/mini-views/date',
                     if (y) {
                         year = (new date.Local()).getYear();
                         node = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">').append(
-                            createSelect('year', year, year - 150, proto.setYear, y).addClass('year')
+                            createSelect('year', year + self.future, year - self.past, proto.setYear, y).addClass('year')
                         );
                     } else if (m) {
                         node = $('<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">').append(
