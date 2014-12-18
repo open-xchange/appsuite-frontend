@@ -531,7 +531,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elementen geselecteerd"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:510 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "Een leesbevestiging is verzonden"
 
@@ -1348,7 +1348,7 @@ msgstr "Agendaoverzicht"
 #: apps/io.ox/core/folder/actions/common.js:45
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:130
+#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:142
 #: apps/io.ox/core/main.js:489 apps/io.ox/core/main.js:1343
 #: apps/io.ox/core/permissions/permissions.js:367
 #: apps/io.ox/core/permissions/permissions.js:409 apps/io.ox/core/print.js:113
@@ -1981,11 +1981,11 @@ msgstr "Deze pagina aanpassen"
 msgid "Dark colors"
 msgstr "Donkere kleuren"
 
-#: apps/io.ox/core/import/import.js:219 module:io.ox/core
+#: apps/io.ox/core/import/import.js:231 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Gegevens zijn succesvol geïmporteerd"
 
-#: apps/io.ox/core/import/import.js:221 module:io.ox/core
+#: apps/io.ox/core/import/import.js:233 module:io.ox/core
 msgid "Data only partially imported ( %1$s of %2$s records)"
 msgstr "Gegevens zijn gedeeltelijk geïmporteerd ( %1$s van %2$s records)"
 
@@ -2935,7 +2935,7 @@ msgstr "Uitgebreid overzicht"
 msgid "External contact"
 msgstr "Extern contact"
 
-#: apps/io.ox/mail/common-extensions.js:457 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:467 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3523,7 +3523,7 @@ msgstr "Negeer waarschuwingen"
 msgid "Ignore conflicts"
 msgstr "Negeer conflicten"
 
-#: apps/io.ox/core/import/import.js:119 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3536,11 +3536,11 @@ msgid "Image 1"
 msgstr "Afbeelding 1"
 
 #: apps/io.ox/core/folder/contextmenu.js:311 module:io.ox/core
-#: apps/io.ox/core/import/import.js:129
+#: apps/io.ox/core/import/import.js:141
 msgid "Import"
 msgstr "Importeren"
 
-#: apps/io.ox/core/import/import.js:150 module:io.ox/core
+#: apps/io.ox/core/import/import.js:162 module:io.ox/core
 msgid "Import into"
 msgstr "Importeren in"
 
@@ -5114,11 +5114,11 @@ msgid ""
 msgstr ""
 "Voer uw oude wachtwoord in zodat het account wachtwoord hersteld kan worden."
 
-#: apps/io.ox/core/import/import.js:186 module:io.ox/core
+#: apps/io.ox/core/import/import.js:198 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selecteer een bestand voor import"
 
-#: apps/io.ox/core/import/import.js:190 module:io.ox/core
+#: apps/io.ox/core/import/import.js:202 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Selecteer een geldig iCal bestand voor import"
 
@@ -5881,7 +5881,7 @@ msgid "Send"
 msgstr "Verzenden"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:540 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:550 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Verzend een leesbevestiging"
 
@@ -6123,7 +6123,7 @@ msgstr "Verborgen bestanden en mappen tonen"
 msgid "Show icons"
 msgstr "Toon pictogrammen"
 
-#: apps/io.ox/mail/common-extensions.js:456 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:466 module:io.ox/mail
 msgid "Show images"
 msgstr "Afbeeldingen tonen"
 
@@ -6839,7 +6839,7 @@ msgid ""
 "another folder."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:543 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:553 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "De verzender wil een bevestiging ontvangen als u dit e-mailbericht heeft "
@@ -6968,7 +6968,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "Er was een probleem met XING. De foutmelding was: \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:180 module:io.ox/core
+#: apps/io.ox/core/import/import.js:192 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Er waren geen afspraakgegevens om te importeren"
 
@@ -6992,13 +6992,13 @@ msgstr ""
 "Deze statistieken bevatten alleen mappen welke minder dan vier niveaus "
 "hebben in de mappenboom onder de map \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:413 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:424
+#: apps/io.ox/mail/common-extensions.js:423 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:434
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "Dit e-mailbericht is gelezen, klik om deze als ongelezen te markeren."
 
-#: apps/io.ox/mail/common-extensions.js:416 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:424
+#: apps/io.ox/mail/common-extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:434
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "Dit e-mailbericht is ongelezen, klik om deze als gelezen te markeren."
 
@@ -7607,7 +7607,7 @@ msgstr "Bron tonen"
 msgid "Waiting"
 msgstr "Wachten"
 
-#: apps/io.ox/mail/common-extensions.js:483 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:493 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn!"
 

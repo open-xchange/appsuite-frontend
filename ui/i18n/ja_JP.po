@@ -505,7 +505,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> 個の要素が選択されています。"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:510 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "開封通知が送信されました。"
 
@@ -1313,7 +1313,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/core/folder/actions/common.js:45
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:130
+#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:142
 #: apps/io.ox/core/main.js:489 apps/io.ox/core/main.js:1343
 #: apps/io.ox/core/permissions/permissions.js:367
 #: apps/io.ox/core/permissions/permissions.js:409 apps/io.ox/core/print.js:113
@@ -1941,11 +1941,11 @@ msgstr "このページをカスタマイズ"
 msgid "Dark colors"
 msgstr "暗色"
 
-#: apps/io.ox/core/import/import.js:219 module:io.ox/core
+#: apps/io.ox/core/import/import.js:231 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "データは正しくインポートされました。"
 
-#: apps/io.ox/core/import/import.js:221 module:io.ox/core
+#: apps/io.ox/core/import/import.js:233 module:io.ox/core
 msgid "Data only partially imported ( %1$s of %2$s records)"
 msgstr ""
 "データの一部だけがインポートされました (%2$s レコード中の %1$s レコード)。"
@@ -2891,7 +2891,7 @@ msgstr "拡張ビュー"
 msgid "External contact"
 msgstr "外部連絡先"
 
-#: apps/io.ox/mail/common-extensions.js:457 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:467 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "スパムの危険性を回避するため、画像のダウンロードをブロックしました。"
@@ -3475,7 +3475,7 @@ msgstr "警告を無視"
 msgid "Ignore conflicts"
 msgstr "競合を無視"
 
-#: apps/io.ox/core/import/import.js:119 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3488,11 +3488,11 @@ msgid "Image 1"
 msgstr "画像 1"
 
 #: apps/io.ox/core/folder/contextmenu.js:311 module:io.ox/core
-#: apps/io.ox/core/import/import.js:129
+#: apps/io.ox/core/import/import.js:141
 msgid "Import"
 msgstr "インポート"
 
-#: apps/io.ox/core/import/import.js:150 module:io.ox/core
+#: apps/io.ox/core/import/import.js:162 module:io.ox/core
 msgid "Import into"
 msgstr "インポート先:"
 
@@ -5058,11 +5058,11 @@ msgid ""
 msgstr ""
 "アカウント パスワードを復元するため、ご利用のパスワードを入力してください。"
 
-#: apps/io.ox/core/import/import.js:186 module:io.ox/core
+#: apps/io.ox/core/import/import.js:198 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "インポートするファイルを選択してください。"
 
-#: apps/io.ox/core/import/import.js:190 module:io.ox/core
+#: apps/io.ox/core/import/import.js:202 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "インポートする有効な iCal ファイルを選択してください。"
 
@@ -5815,7 +5815,7 @@ msgid "Send"
 msgstr "送信"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:540 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:550 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "開封通知を送信"
 
@@ -6056,7 +6056,7 @@ msgstr "隠しフォルダと隠しファイルを表示"
 msgid "Show icons"
 msgstr "アイコンを表示"
 
-#: apps/io.ox/mail/common-extensions.js:456 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:466 module:io.ox/mail
 msgid "Show images"
 msgstr "画像を表示"
 
@@ -6765,7 +6765,7 @@ msgid ""
 "another folder."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:543 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:553 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
 "このメールをお読みになったら差出人に連絡するよう、差出人が求めています。"
@@ -6889,7 +6889,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "XING に問題があります。エラー メッセージ: \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:180 module:io.ox/core
+#: apps/io.ox/core/import/import.js:192 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "インポートするアポイント データがありません。"
 
@@ -6912,14 +6912,14 @@ msgstr ""
 "これらの統計情報には、フォルダ \"%1$s\" から 4 階層未満のフォルダのみが含まれ"
 "ます。"
 
-#: apps/io.ox/mail/common-extensions.js:413 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:424
+#: apps/io.ox/mail/common-extensions.js:423 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:434
 msgid "This E-mail is read, press to mark it as unread."
 msgstr ""
 "このメールには既読になっています。未読にするには、クリックしてください。"
 
-#: apps/io.ox/mail/common-extensions.js:416 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:424
+#: apps/io.ox/mail/common-extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:434
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "このメールは未読になっています。既読にするには、クリックしてください。"
 
@@ -7518,7 +7518,7 @@ msgstr "ソースを表示"
 msgid "Waiting"
 msgstr "待機中"
 
-#: apps/io.ox/mail/common-extensions.js:483 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:493 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告: このメッセージは詐欺メールの疑いがあります。"
 
