@@ -42,7 +42,6 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 
 %post
 if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
-/opt/open-xchange/sbin/update-dynamic-theme
 
 %postun
 if [ -x %{update} ]; then %{update}; fi
