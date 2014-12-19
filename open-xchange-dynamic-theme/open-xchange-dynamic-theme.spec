@@ -51,7 +51,6 @@ if [ -x %{update} ]; then %{update}; fi
 %defattr(-,root,root)
 %dir /opt/open-xchange
 /opt/open-xchange/appsuite
-/opt/open-xchange/sbin
 /opt/open-xchange/dynamic-theme
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
