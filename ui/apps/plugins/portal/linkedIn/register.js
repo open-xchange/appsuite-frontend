@@ -208,9 +208,13 @@ define('plugins/portal/linkedIn/register',
         },
 
         load: function (baton) {
+
+            if (!keychain.hasStandardAccount('linkedin')) {
+                // load can still be called on refresh
+                return $.Deferred().reject({ code: 'OAUTH-0006' });
+            }
+
             if (capabilities.has('linkedinPlus')) {
-                if (!keychain.hasStandardAccount('linkedin'))
-                    return $.Deferred().reject({ code: 'OAUTH-0006' });
 
                 return proxy.request({
                     api: 'linkedin',
@@ -226,12 +230,13 @@ define('plugins/portal/linkedIn/register',
                 .fail(require('io.ox/core/notifications').yell);
 
             } else {
+
                 return http.GET({
                     module: 'integrations/linkedin/portal',
                     params: { action: 'updates' }
                 })
                 .then(function (activities) {
-                    if (activities.values && activities.values !== 0) {
+                    if (activities && activities.values && activities.values !== 0) {
                         baton.data = activities.values;
                     } else {
                         baton.data = activities;
