@@ -10,7 +10,7 @@ module.exports = function (grunt) {
                 expand: true,
                 src: 'update-dynamic-theme',
                 cwd: 'bin/',
-                dest: 'dist/sbin/'
+                dest: 'dist/appsuite/share/update-themes.d/'
             }]
         },
         dist_libs: {
