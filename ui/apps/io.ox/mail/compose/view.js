@@ -18,9 +18,6 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/extensions',
     'io.ox/mail/api',
     'io.ox/mail/util',
-    'io.ox/contacts/api',
-    'io.ox/contacts/util',
-    'io.ox/contacts/model',
     'settings!io.ox/mail',
     'settings!io.ox/core',
     'io.ox/core/notifications',
@@ -29,7 +26,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentEmpty',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, ContactModel, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
+], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -212,7 +209,7 @@ define('io.ox/mail/compose/view', [
         draw: function (baton) {
             this.append(
                 $('<div class="contact-image">')
-                    .attr('data-original', contactsAPI.pictureHalo($.extend(baton.data, { width: 42, height: 42, scaleType: 'contain' })))
+                    .attr('data-original', baton.participantModel.getImageURL({ width: 42, height: 42, scaleType: 'contain' }))
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
                     .lazyload({
                         effect: 'fadeIn',
@@ -230,7 +227,7 @@ define('io.ox/mail/compose/view', [
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<div class="recipient-name">').text(contactsUtil.getMailFullName(baton.data))
+                $('<div class="recipient-name">').text(baton.participantModel.getDisplayName())
             );
         }
     });
@@ -242,26 +239,14 @@ define('io.ox/mail/compose/view', [
         id: 'emailAddress',
         index: 100,
         draw: function (baton) {
-            var data = baton.data;
-            if (baton.autocomplete) {
-                this.append(
-                    $('<div class="ellipsis email">').append(
-                        $.txt(baton.data.email + (baton.data.phone || '') + ' '),
-                        ContactModel.fields[baton.data.field] ?
-                            $('<span style="color: #888;">').text('(' + ContactModel.fields[baton.data.field] + ')') : []
-                    )
-                );
-            } else {
-                this.append(
-                    $('<div>').append(
-                        data.email ?
-                            $('<a href="#" class="halo-link">')
-                            .data({ email1: data.email })
-                            .text(_.noI18n(String(data.email).toLowerCase())) :
-                            $('<span>').text(_.noI18n(data.phone || ''))
-                    )
-                );
-            }
+            var model = baton.participantModel;
+            this.append(
+                $('<div class="ellipsis email">').append(
+                    $.txt(model.getTarget() + ' '),
+                    model.getFieldName() !== '' ?
+                        $('<span style="color: #888;">').text('(' + model.getFieldName() + ')') : model.getTypeString()
+                )
+            );
         }
     });
 
@@ -273,7 +258,6 @@ define('io.ox/mail/compose/view', [
         index: 100,
         draw: function (baton) {
             this.addClass('io-ox-mail-compose-contact');
-            baton.autocomplete = true;
             // contact picture
             ext.point(POINT + '/contactPicture').invoke('draw', this, baton);
             // display name
@@ -511,7 +495,10 @@ define('io.ox/mail/compose/view', [
 
             if (this.model.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    //button texts may become quite large in some languages (e. g. french, see Bug 35581)
+                    //add some extra space
+                    //TODO maybe we could use a more dynamical approach
+                    new dialogs.ModalDialog({ width: 550 })
                         .text(gt('Do you really want to discard your message?'))
                         //#. "Discard message" appears in combination with "Cancel" (this action)
                         //#. Translation should be distinguishable for the user

@@ -17,14 +17,12 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
     'io.ox/core/tk/tokenfield',
-    'io.ox/contacts/api',
-    'io.ox/contacts/util',
     'io.ox/core/dropzone',
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js'
-    ], function (sender, mini, Dropdown, ext, Tokenfield, contactsAPI, contactsUtil, dropzone, capabilities, settings, gt) {
+], function (sender, mini, Dropdown, ext, Tokenfield, dropzone, capabilities, settings, gt) {
 
     function renderFrom(array) {
         if (!array) return;
@@ -146,19 +144,17 @@ define('io.ox/mail/compose/extensions', [
                     tokenfieldView = new Tokenfield({
                         id: guid,
                         className: attr,
+                        placeholder: tokenfieldTranslations[attr],
                         apiOptions: {
                             contacts: true,
-                            msisdn: true
+                            distributionlists: true,
+                            msisdn: true,
+                            emailAutoComplete: true
                         },
                         maxResults: 20,
-                        stringify: function (data) {
-                            return {
-                                value: data.email || data.phone || '',
-                                label: contactsUtil.getMailFullName(data)
-                            };
-                        },
-                        draw: function (data) {
-                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, _.extend(baton, { data: data }));
+                        draw: function (token) {
+                            baton.participantModel = token.model;
+                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
                         },
                         lazyload: 'div.contact-image'
                     });
@@ -194,46 +190,35 @@ define('io.ox/mail/compose/extensions', [
                         )
                     );
 
-                tokenfieldView.render().$el.on({
-                    'tokenfield:createdtoken': function (e) {
-                        // for validation etc.
-                        ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
-                        // add contact picture
-                        if (e.attrs) {
-                            var data = e.attrs.data ? e.attrs.data : { email: e.attrs.value };
-                            _.extend(data, { width: 16, height: 16, scaleType: 'contain' });
-                            $(e.relatedTarget).prepend(
-                                contactsAPI.pictureHalo($('<div class="contact-image">'), data)
-                            );
-                        }
-                    },
-                    'change': function () {
-                        baton.model.setTokens(attr, tokenfieldView.getTokens());
-                    }
+                tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
+                    // extension point for validation etc.
+                    ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 
-                // bind tokeninput to model and set initial values
-                baton.model.on('change:' + attr, function () {
-                    var tokens = this.getTokens(attr);
-                    tokenfieldView.setTokens(tokens);
-                    if (attr !== 'to') {
-                        baton.view.toggleInput(attr, tokens.length > 0);
-                    }
-                }).trigger('change:' + attr);
+                // bind model to collection
+                tokenfieldView.listenTo(baton.model, 'change:' + attr, function (mailModel, recipients) {
+                    var recArray = _(recipients).map(function (recipient) {
+                        return {
+                            type: 5,
+                            display_name: recipient[0],
+                            email1: recipient[1],
+                            token: {
+                                label: recipient[0],
+                                value: recipient[1]
+                            }
+                        };
+                    });
+                    this.collection.reset(recArray);
+                });
 
-                // init drag 'n' drop sort
-                tokenfieldView.$el.closest('div.tokenfield').sortable({
-                    items: '> .token',
-                    connectWith: 'div.tokenfield',
-                    cancel: 'a.close',
-                    placeholder: 'token placeholder',
-                    revert: 0,
-                    forcePlaceholderSize: true,
-                    update: function () {
-                        baton.model.setTokens(attr, tokenfieldView.getTokens());
-                    }
-                }).droppable({
-                    hoverClass: 'drophover'
+                baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
+
+                tokenfieldView.collection.on('change add remove sort', function () {
+                    var recipients = this.map(function (model) {
+                        var token = model.get('token');
+                        return [token.label, token.value];
+                    });
+                    baton.model.set(attr, recipients, { silent: true });
                 });
             };
         },
@@ -301,12 +286,12 @@ define('io.ox/mail/compose/extensions', [
                     }
                 });
 
-                view.listenToOnce(view.collection, 'add remove reset', function () {
+                view.listenToOnce(view.collection, 'add remove reset', _.debounce(function () {
                     if (this.getValidModels().length > 0) {
                         this.$el.addClass('open');
                         if (!this.isListRendered) this.renderList();
                     }
-                });
+                }));
 
                 view.render();
                 if (view.getValidModels().length > 0) {
@@ -357,23 +342,18 @@ define('io.ox/mail/compose/extensions', [
                     var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
                         fileInput = $('<input type="file" name="file">').css('display', 'none')
                             .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true),
-                        link;
+                            .prop('multiple', true);
 
                     this.append(
                         fileInput,
                         dropdown.append(
-                            link = $('<a href="#" draggable="false">').append($.txt(gt('Add local file'))).on('click', function () {
+                            $('<a href="#">').append($.txt(gt('Add local file'))).on('click', function () {
                                 fileInput.trigger('click');
                             })
                         )
                         .link('add-file', gt('Add from Drive'), openFilePicker.bind(this, baton.model))
                         .render().$el
                     );
-                    //in firefox draggable=false is not enough to prevent dragging...
-                    if ( _.device('firefox') ) {
-                        link.attr('ondragstart', 'return false;');
-                    }
                 } else {
                     this.append($('<button type="button" class="btn btn-link hidden-file-picker">').append(
                         $('<span class="hidden">'),

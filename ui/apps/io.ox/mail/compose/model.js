@@ -126,6 +126,12 @@ define('io.ox/mail/compose/model', [
                 }.bind(this));
             }
 
+            if (this.get('mode') === 'edit') {
+                this.set({ 'signature': '' });
+            } else if (_.device('!smartphone') && (this.get('mode') === 'reply' || this.get('mode') == 'forward')) {
+                this.set({ 'signature': settings.get('defaultReplyForwardSignature') });
+            }
+
             this.updateShadow();
         },
 
@@ -206,14 +212,6 @@ define('io.ox/mail/compose/model', [
                     var typesuffix = mailUtil.getChannel(recipient[1]) === 'email' ? '' : mailUtil.getChannelSuffixes().msisdn;
                     return ['"' + recipient[0] + '"', recipient[1], typesuffix];
                 });
-        },
-
-        setTokens: function (type, tokens, opt) {
-            this.set(type, _.map(tokens, function (o) { return [o.label, o.value]; }), opt);
-        },
-
-        getTokens: function (type) {
-            return this.get(type, []).map(function (o) { return { label: o[0] || '', value: o[1] || '' }; });
         },
 
         getFailSave: function () {

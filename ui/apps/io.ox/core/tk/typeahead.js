@@ -14,11 +14,10 @@
 
 define('io.ox/core/tk/typeahead', [
     'io.ox/core/api/autocomplete',
-    'io.ox/core/util',
     'settings!io.ox/contacts',
     'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
     'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
-], function (AutocompleteAPI, util, settings) {
+], function (AutocompleteAPI, settings) {
 
     'use strict';
 
@@ -45,26 +44,14 @@ define('io.ox/core/tk/typeahead', [
             highlight: true,
             // Typeahead will not show a hint
             hint: true,
-            // mode: participant or search
-            mode: 'participant',
             // Get data
             source: function (query) {
                 return this.api.search(query);
             },
             // Filter items
             reduce: _.identity,
-            name: function (data) {
-                return util.unescapeDisplayName(data.display_name);
-            },
             // Object related unique string
-            stringify: function (data) {
-                if (data.type === 2 || data.type === 3)
-                    return this.name(data.contact);
-
-                var name = this.name(data);
-                name = name ? '"' + name + '" <' + data.email + '>' : data.email;
-                return name || '';
-            },
+            stringify: _.identity,
             // lazyload selector
             lazyload: null
         },
@@ -95,37 +82,14 @@ define('io.ox/core/tk/typeahead', [
                         })
                         .then(function (data) {
                             data = o.placement === 'top' ? data.reverse() : data;
-                            return _(data).map(function (data) {
-                                if (o.mode === 'participant') {
-                                    data = {
-                                        contact: data.data,
-                                        email: data.email,
-                                        field: data.field || '',
-                                        phone: data.phone || '',
-                                        type: data.type,
-                                        distlistarray: data.data.distribution_list,
-                                        id: data.data.id,
-                                        folder_id: data.data.folder_id,
-                                        image1_url: data.data.image1_url,
-                                        first_name: data.data.first_name,
-                                        last_name: data.data.last_name,
-                                        display_name: data.data.display_name
-                                    };
-                                }
-                                var stringResult = o.stringify(data);
-                                return {
-                                    value: stringResult.value || stringResult,
-                                    label: stringResult.label || stringResult,
-                                    data: data
-                                };
-                            });
+                            return _(data).map(o.stringify);
                         })
                         .then(callback);
                 },
                 templates: {
-                    suggestion: function (tokenData) {
+                    suggestion: function (searchresult) {
                         var node = $('<div class="autocomplete-item">');
-                        o.draw.call(node, tokenData.data);
+                        o.draw.call(node, searchresult);
                         return node;
                     }
                 }
