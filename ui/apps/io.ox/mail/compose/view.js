@@ -334,7 +334,9 @@ define('io.ox/mail/compose/view', [
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
                 self.model.set(data);
-                self.model.set('attachments', self.model.get('attachments').reset(attachments));
+                var attachmentCollection = self.model.get('attachments');
+                attachmentCollection.reset(attachments);
+                self.model.set('attachments', attachmentCollection);
             });
         },
 
