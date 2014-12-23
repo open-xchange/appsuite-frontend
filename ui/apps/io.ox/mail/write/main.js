@@ -153,7 +153,7 @@ define('io.ox/mail/write/main',
         // move nested messages into attachment array
         _(mail.data.nested_msgs).each(function (obj) {
             mail.data.attachments.push({
-                id: mail.data.attachments.length + 1,
+                id: obj.id,
                 filemname: obj.subject,
                 content_type: 'message/rfc822',
                 msgref: obj.msgref
