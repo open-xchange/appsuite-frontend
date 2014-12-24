@@ -794,7 +794,7 @@ msgstr "Teksts augstāk"
 msgid "Add signature below quoted text"
 msgstr "Teksts zemāk"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
 msgid "Add subject"
 msgstr "Pievienot tematu"
 
@@ -1381,7 +1381,7 @@ msgstr "Kalendāra skats"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/compose/view.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1711,7 +1711,7 @@ msgid "Company"
 msgstr "Uzņēmums"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:347
+#: apps/io.ox/mail/compose/view.js:349
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2227,7 +2227,7 @@ msgstr "Atcelt izmaiņas"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Atsaukt ziņojumu"
@@ -2355,7 +2355,7 @@ msgstr "Vai tiešām vēlaties dzēst šo vidžetu?"
 msgid "Do you really want to discard your changes?"
 msgstr "Vai tiešām vēlaties atsaukt izmaiņas?"
 
-#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Vai tiešām vēlaties atsaukt šo ziņojumu?"
 
@@ -3941,11 +3941,11 @@ msgstr "Vēstules ir importētas"
 msgid "Mail has been moved"
 msgstr "Vēstules ir pārvietotas"
 
-#: apps/io.ox/mail/compose/view.js:651 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Vēstulei nav subjekta teksta. Vai vienalga to nosūtīt?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Vēstulei nav saņēmēja."
 
@@ -3965,8 +3965,8 @@ msgstr "Vēstules atgādinājums"
 msgid "Mail reminder for"
 msgstr "Atgādinājuma saņēmējs"
 
-#: apps/io.ox/mail/compose/view.js:387 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:409
+#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:411
 msgid "Mail saved as draft"
 msgstr "Saglabāts kā melnraksts"
 
@@ -5769,7 +5769,7 @@ msgstr "Saglabāt"
 msgid "Save as distribution list"
 msgstr "Saglabāt kā izplatīšanas sarakstu"
 
-#: apps/io.ox/mail/compose/view.js:506 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Saglabāt melnrakstu"
 
@@ -5922,7 +5922,7 @@ msgid "Sender/From"
 msgstr "Sūtītājs/No"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Nosūtīts no %s ar mobilo ierīci"
 
@@ -6731,7 +6731,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "E-pasta adrese %1$s jau ir sarakstā"
 
-#: apps/io.ox/mail/compose/view.js:582 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Vēstule ir nosūtīta"
 
@@ -7748,7 +7748,7 @@ msgstr "Dzeltens"
 msgid "Yes"
 msgstr "Jā"
 
-#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Jā, nosūtīt bez temata"
 

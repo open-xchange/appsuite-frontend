@@ -777,7 +777,7 @@ msgstr "Idézett szöveg fölé"
 msgid "Add signature below quoted text"
 msgstr "Idézett szöveg alá"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
 msgid "Add subject"
 msgstr "Tárgy hozzáadása"
 
@@ -1366,7 +1366,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/compose/view.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1696,7 +1696,7 @@ msgid "Company"
 msgstr "Cég"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:347
+#: apps/io.ox/mail/compose/view.js:349
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2213,7 +2213,7 @@ msgstr "Módosítások elvetése"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Üzenet elvetése"
@@ -2338,7 +2338,7 @@ msgstr "Biztos, hogy törölni szeretné ezt a widgetet?"
 msgid "Do you really want to discard your changes?"
 msgstr "Eldobja ezeket a módosításokat?"
 
-#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Valóban eldobja az üzenetet?"
 
@@ -3921,11 +3921,11 @@ msgstr "A levelek importálva"
 msgid "Mail has been moved"
 msgstr "A levelek áthelyezésre kerültek"
 
-#: apps/io.ox/mail/compose/view.js:651 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "A levél tárgya üres. Mindenképp elküldi?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "A levélnek nincs címzettje."
 
@@ -3945,8 +3945,8 @@ msgstr "Emlékeztető küldése"
 msgid "Mail reminder for"
 msgstr "Emlékeztető küldése:"
 
-#: apps/io.ox/mail/compose/view.js:387 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:409
+#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:411
 msgid "Mail saved as draft"
 msgstr "Levél mentve piszkozatként"
 
@@ -5749,7 +5749,7 @@ msgstr "Mentés"
 msgid "Save as distribution list"
 msgstr "Mentés disztribúciós listaként"
 
-#: apps/io.ox/mail/compose/view.js:506 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Mentés piszkozatként"
 
@@ -5901,7 +5901,7 @@ msgid "Sender/From"
 msgstr "Küldő/Feladó"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Küldve erről: %s mobilon"
 
@@ -6707,7 +6707,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "A(z) %1$s e-mail cím már szerepel a listában"
 
-#: apps/io.ox/mail/compose/view.js:582 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Az e-mail elküldve"
 
@@ -7714,7 +7714,7 @@ msgstr "Sárga"
 msgid "Yes"
 msgstr "Igen"
 
-#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Igen, küldés tárgy nélkül"
 

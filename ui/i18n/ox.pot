@@ -399,7 +399,7 @@ msgstr ""
 #: apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/compose/view.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259
 #: apps/io.ox/mail/main.js:991
@@ -7039,7 +7039,7 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js:36
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:347
+#: apps/io.ox/mail/compose/view.js:349
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207
 #: apps/io.ox/mail/toolbar.js:42
@@ -7132,57 +7132,57 @@ msgstr ""
 msgid "No signature"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:387
+#: apps/io.ox/mail/compose/view.js:389
 #: module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:409
+#: apps/io.ox/mail/compose/view.js:411
 msgid "Mail saved as draft"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:502
+#: apps/io.ox/mail/compose/view.js:504
 #: module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr ""
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:505
+#: apps/io.ox/mail/compose/view.js:507
 #: module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:506
+#: apps/io.ox/mail/compose/view.js:508
 #: module:io.ox/mail
 msgid "Save as draft"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:582
+#: apps/io.ox/mail/compose/view.js:584
 #: module:io.ox/mail
 msgid "The email has been sent"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:644
+#: apps/io.ox/mail/compose/view.js:646
 #: module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:651
+#: apps/io.ox/mail/compose/view.js:653
 #: module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:652
+#: apps/io.ox/mail/compose/view.js:654
 #: module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr ""
 
-#: apps/io.ox/mail/compose/view.js:653
+#: apps/io.ox/mail/compose/view.js:655
 #: module:io.ox/mail
 msgid "Add subject"
 msgstr ""
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:821
+#: apps/io.ox/mail/compose/view.js:823
 #: module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr ""

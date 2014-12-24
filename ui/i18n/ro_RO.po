@@ -796,7 +796,7 @@ msgstr "Deasupra textului între ghilimele"
 msgid "Add signature below quoted text"
 msgstr "Sub textul între ghilimele"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
 msgid "Add subject"
 msgstr "Adaugă subiect"
 
@@ -1383,7 +1383,7 @@ msgstr "Vedere calendar"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/compose/view.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1716,7 +1716,7 @@ msgid "Company"
 msgstr "Firmă"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:347
+#: apps/io.ox/mail/compose/view.js:349
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2233,7 +2233,7 @@ msgstr "Renunță la modificări"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Renunță la messaj"
@@ -2359,7 +2359,7 @@ msgstr "Sigur doriți să ștergeți această aplicație?"
 msgid "Do you really want to discard your changes?"
 msgstr "Sigur doriți să renunțați la modificări?"
 
-#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Sigur doriți să renunțați la acest mesaj?"
 
@@ -3944,11 +3944,11 @@ msgstr "Mailul a fost importat"
 msgid "Mail has been moved"
 msgstr "Mesajul a fost mutat"
 
-#: apps/io.ox/mail/compose/view.js:651 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Subiectul mesajului este gol. Trimiteți oricum?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Mesajul nu are niciun destinatar."
 
@@ -3968,8 +3968,8 @@ msgstr "Memento pentru mail"
 msgid "Mail reminder for"
 msgstr "Memento pentru mail pentru"
 
-#: apps/io.ox/mail/compose/view.js:387 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:409
+#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:411
 msgid "Mail saved as draft"
 msgstr "Mesaj salvat ca schiță"
 
@@ -5776,7 +5776,7 @@ msgstr "Salvează"
 msgid "Save as distribution list"
 msgstr "Salvează ca listă de distribuție"
 
-#: apps/io.ox/mail/compose/view.js:506 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Salvează ca schiță"
 
@@ -5929,7 +5929,7 @@ msgid "Sender/From"
 msgstr "Expeditor/De la"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Trimis de pe %s utilizând un mobil"
 
@@ -6736,7 +6736,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "Adresa de e-mail %1$s este deja pe listă"
 
-#: apps/io.ox/mail/compose/view.js:582 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "E-mailul a fost trimis"
 
@@ -7762,7 +7762,7 @@ msgstr "Galben"
 msgid "Yes"
 msgstr "Da"
 
-#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Da, trimite fără subiect"
 

@@ -772,7 +772,7 @@ msgstr "引用文本上方"
 msgid "Add signature below quoted text"
 msgstr "引用文本下方"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
 msgid "Add subject"
 msgstr "添加题目"
 
@@ -1346,7 +1346,7 @@ msgstr "日历视图"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/compose/view.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1673,7 +1673,7 @@ msgid "Company"
 msgstr "公司"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:347
+#: apps/io.ox/mail/compose/view.js:349
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2187,7 +2187,7 @@ msgstr "丢弃更改"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "丢弃消息"
@@ -2311,7 +2311,7 @@ msgstr "您确定要删除这个迷你程序吗？"
 msgid "Do you really want to discard your changes?"
 msgstr "您真的想放弃更改吗？"
 
-#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "您真的想丢弃您的消息吗？"
 
@@ -3870,11 +3870,11 @@ msgstr "电子邮件已导入"
 msgid "Mail has been moved"
 msgstr "邮件已移动"
 
-#: apps/io.ox/mail/compose/view.js:651 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "邮件没有题目，您还要发送吗？"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "邮件没有收件人。"
 
@@ -3894,8 +3894,8 @@ msgstr "邮件提醒"
 msgid "Mail reminder for"
 msgstr "邮件提醒于"
 
-#: apps/io.ox/mail/compose/view.js:387 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:409
+#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:411
 msgid "Mail saved as draft"
 msgstr "邮件已保存为草稿"
 
@@ -5684,7 +5684,7 @@ msgstr "保存"
 msgid "Save as distribution list"
 msgstr "保存为通讯组列表"
 
-#: apps/io.ox/mail/compose/view.js:506 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
 msgid "Save as draft"
 msgstr "保存为草稿"
 
@@ -5836,7 +5836,7 @@ msgid "Sender/From"
 msgstr "发送者/来自"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "从 %s 经过移动网路发送"
 
@@ -6633,7 +6633,7 @@ msgstr "结束时间不能在开始时间之前。调整开始时间？"
 msgid "The email address %1$s is already in the list"
 msgstr "邮件地址 %1$s 已经在列表里"
 
-#: apps/io.ox/mail/compose/view.js:582 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "已发送电子邮件"
 
@@ -7607,7 +7607,7 @@ msgstr "黄色"
 msgid "Yes"
 msgstr "是"
 
-#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "是，不带题目发送"
 

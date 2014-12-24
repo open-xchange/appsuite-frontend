@@ -778,7 +778,7 @@ msgstr "Sobre el texto citado"
 msgid "Add signature below quoted text"
 msgstr "Debajo del texto citado"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
 msgid "Add subject"
 msgstr "Añadir asunto"
 
@@ -1365,7 +1365,7 @@ msgstr "Vista de calendario"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/compose/view.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1693,7 +1693,7 @@ msgid "Company"
 msgstr "Empresa"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:347
+#: apps/io.ox/mail/compose/view.js:349
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2210,7 +2210,7 @@ msgstr "Descartar cambios"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Descartar mensaje"
@@ -2335,7 +2335,7 @@ msgstr "¿Está seguro de querer borrar este widget?"
 msgid "Do you really want to discard your changes?"
 msgstr "De verdad desea descartar los cambios?"
 
-#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "¿De verdad desea descartar los mensajes?"
 
@@ -3921,11 +3921,11 @@ msgstr "El correo ha sido importado"
 msgid "Mail has been moved"
 msgstr "Los correos se han movido"
 
-#: apps/io.ox/mail/compose/view.js:651 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "El correo tiene el asunto vacío. ¿Desea enviarlo de todos modos?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "El correo no tiene destinatario."
 
@@ -3945,8 +3945,8 @@ msgstr "Recordatorio por correo electrónico"
 msgid "Mail reminder for"
 msgstr "Recordatorio por correo electrónico para"
 
-#: apps/io.ox/mail/compose/view.js:387 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:409
+#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:411
 msgid "Mail saved as draft"
 msgstr "Correo guardado como borrador"
 
@@ -5758,7 +5758,7 @@ msgstr "Guardar"
 msgid "Save as distribution list"
 msgstr "Guardar como lista de distribución"
 
-#: apps/io.ox/mail/compose/view.js:506 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Guardar como borrador"
 
@@ -5910,7 +5910,7 @@ msgid "Sender/From"
 msgstr "Remitente/De"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Enviado desde %s vía celular"
 
@@ -6716,7 +6716,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "La dirección de correo electrónico %1$s ya existe en la lista"
 
-#: apps/io.ox/mail/compose/view.js:582 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "El correo se ha enviado"
 
@@ -7735,7 +7735,7 @@ msgstr "Amarillo"
 msgid "Yes"
 msgstr "Sí"
 
-#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Sí, enviarlo sin asunto"
 
