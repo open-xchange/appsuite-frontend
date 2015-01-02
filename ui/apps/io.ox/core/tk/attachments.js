@@ -543,7 +543,7 @@ define('io.ox/core/tk/attachments', [
                 });
                 slideshow.init({
                     baton: { allIds: files },
-                    attachmentMode: false,
+                    attachmentMode: true,
                     selector: baton.options.selector
                 });
             });

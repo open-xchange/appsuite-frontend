@@ -177,7 +177,7 @@ define('io.ox/tasks/actions', [
                 });
                 slideshow.init({
                     baton: { allIds: files },
-                    attachmentMode: false,
+                    attachmentMode: true,
                     selector: '.window-container.io-ox-tasks-window'
                 });
             });

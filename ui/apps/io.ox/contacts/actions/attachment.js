@@ -79,7 +79,7 @@ define('io.ox/contacts/actions/attachment', [
                 });
                 slideshow.init({
                     baton: { allIds: files },
-                    attachmentMode: false,
+                    attachmentMode: true,
                     selector: '.window-container.io-ox-contacts-window'
                 });
             });
