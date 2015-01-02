@@ -549,8 +549,8 @@ define('io.ox/core/tk/attachments',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
-                    attachmentMode: false,
+                    baton: { allIds: files },
+                    attachmentMode: true,
                     selector: baton.options.selector
                 });
             });

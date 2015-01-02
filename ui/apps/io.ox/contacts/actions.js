@@ -432,8 +432,8 @@ define('io.ox/contacts/actions',
                     };
                 });
                 slideshow.init({
-                    baton: {allIds: files},
-                    attachmentMode: false,
+                    baton: { allIds: files },
+                    attachmentMode: true,
                     selector: '.window-container.io-ox-contacts-window'
                 });
             });
