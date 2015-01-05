@@ -588,6 +588,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             isError = 'error' in response && !isWarning;
 
         if (isError) {
+            // forward all errors to respond to special codes
+            ox.trigger('http:error', response);
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);

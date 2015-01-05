@@ -1542,6 +1542,13 @@ define('io.ox/core/main',
         }
     });
 
+    //
+    // Respons to special http error codes (see bug 32836)
+    //
+    ox.on('http:error', function (e, error) {
+        if (error.code === 'MSG-1000' || error.code === 'MSG-1001') notifications.yell(error);
+    });
+
     return {
         logout: logout,
         launch: launch,
