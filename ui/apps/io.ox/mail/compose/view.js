@@ -352,7 +352,9 @@ define('io.ox/mail/compose/view', [
                     delete data.nested_msgs;
                 }
                 self.model.set(data);
-                self.model.set('attachments', self.model.get('attachments').reset(attachments));
+                var attachmentCollection = self.model.get('attachments');
+                attachmentCollection.reset(attachments);
+                self.model.set('attachments', attachmentCollection);
             });
         },
 
