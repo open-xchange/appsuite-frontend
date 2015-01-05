@@ -65,14 +65,15 @@ define('io.ox/core/viewer/views/mainview', [
         render: function () {
             //console.info('MainView.render()');
             var self = this;
-            // append children views
-            this.$el.append(
-                this.toolbarView.render().el,
-                this.displayerView.render().el,
-                this.sidebarView.render().el
-            );
+            // append toolbar view
+            this.$el.append(this.toolbarView.render().el);
             // focus the active slide initially
             _.defer(function () {
+                // append displayerView and sidebarView deferred, for preview image optimal height calculation
+                self.$el.append(
+                    self.displayerView.render().el,
+                    self.sidebarView.render().el
+                );
                 self.displayerView.$el.find('.active').focus();
             });
             return this;

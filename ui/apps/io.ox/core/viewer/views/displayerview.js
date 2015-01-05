@@ -47,7 +47,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 fileSelection = 0,
                 // preload 1 neigboring slides
                 preload = 1,
-                slidesCount = this.collection.length;
+                slidesCount = this.collection.length,
+                displayerTopOffset = $('.viewer-toolbar').outerHeight();
 
             // create a Bootstrap carousel slide
             function createSlide (model, modelIndex) {
@@ -58,7 +59,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     filename = model && model.get('filename') || '';
                 if (previewUrl) {
                     image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
-                        .css({ maxHeight: window.innerHeight - carouselRoot.offset().top });
+                        .css({ maxHeight: window.innerHeight - displayerTopOffset });
                     caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
                     slide.append(image, caption);
                 }
