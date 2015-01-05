@@ -165,7 +165,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         index: 100,
         id: 'share',
         label: gt('Share'),
-        ref: 'io.ox/files/actions/sendlink'
+        ref: 'io.ox/files/icons/share'
     });
     new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
         index: 200,
@@ -216,7 +216,6 @@ define('io.ox/core/viewer/views/toolbarview', [
         events: {
             'click a.viewer-toolbar-close': 'onClose',
             'click a.viewer-toolbar-togglesidebar': 'onToggleSidebar',
-            'click a[data-action="io.ox/files/actions/sendlink"]': 'onShare',
             'dblclick a.viewer-toolbar-filename': 'onRename'
         },
 
@@ -239,12 +238,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             //console.warn('ToolbarView.onClose()', event);
             $(event.currentTarget).toggleClass('active');
             EventDispatcher.trigger('viewer:toggle:sidebar');
-        },
-
-        onShare: function () {
-            //console.warn('ToolbarView.onShare()', event);
-            // close viewer upon triggering share per mail
-            this.onClose();
         },
 
         onRename: function () {
