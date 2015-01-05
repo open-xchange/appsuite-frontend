@@ -333,6 +333,18 @@ define('io.ox/mail/compose/view', [
                 data.mode = obj.mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
+                if (obj.mode === 'forward') {
+                    // move nested messages into attachment array
+                    _(data.nested_msgs).each(function (obj) {
+                        attachments.push({
+                            id: attachments.length + 1,
+                            filename: obj.subject,
+                            content_type: 'message/rfc822',
+                            msgref: obj.msgref
+                        });
+                    });
+                    delete data.nested_msgs;
+                }
                 self.model.set(data);
                 self.model.set('attachments', self.model.get('attachments').reset(attachments));
             });
