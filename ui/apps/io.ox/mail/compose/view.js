@@ -322,18 +322,24 @@ define('io.ox/mail/compose/view', [
         },
 
         fetchMail: function (obj) {
-            var self = this;
-            if (/(compose|edit)/.test(obj.mode)) {
+            var self = this,
+            mode = obj.mode;
+            delete obj.mode;
+            if (/(compose|edit)/.test(mode)) {
                 return $.when();
+            } else if (mode === 'forward' && !obj.id) {
+                obj = _(obj).map(function (o) {
+                    return _.pick(o, 'id', 'folder_id', 'csid');
+                });
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'mode', 'csid');
+                obj = _.pick(obj, 'id', 'folder_id', 'csid');
             }
-            return mailAPI[obj.mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
-                data.sendtype = obj.mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
-                data.mode = obj.mode;
+            return mailAPI[mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
+                data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                data.mode = mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
-                if (obj.mode === 'forward') {
+                if (mode === 'forward') {
                     // move nested messages into attachment array
                     _(data.nested_msgs).each(function (obj) {
                         attachments.push({
