@@ -523,7 +523,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elements selected"
 
 #. read receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:510 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
 msgid "A read receipt has been sent"
 msgstr "A read receipt has been sent"
 
@@ -776,7 +776,7 @@ msgstr "Above quoted text"
 msgid "Add signature below quoted text"
 msgstr "Below quoted text"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
 msgid "Add subject"
 msgstr "Add subject"
 
@@ -1336,7 +1336,7 @@ msgstr "Calendar view"
 #: apps/io.ox/core/folder/actions/common.js:45
 #: apps/io.ox/core/folder/actions/remove.js:34
 #: apps/io.ox/core/folder/actions/rename.js:66
-#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:130
+#: apps/io.ox/core/folder/picker.js:94 apps/io.ox/core/import/import.js:142
 #: apps/io.ox/core/main.js:489 apps/io.ox/core/main.js:1343
 #: apps/io.ox/core/permissions/permissions.js:367
 #: apps/io.ox/core/permissions/permissions.js:409 apps/io.ox/core/print.js:113
@@ -1359,7 +1359,7 @@ msgstr "Calendar view"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:507
+#: apps/io.ox/mail/compose/view.js:509
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1686,7 +1686,7 @@ msgid "Company"
 msgstr "Company"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:347
+#: apps/io.ox/mail/compose/view.js:349
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -1963,11 +1963,11 @@ msgstr "Customise this page"
 msgid "Dark colors"
 msgstr "Dark colours"
 
-#: apps/io.ox/core/import/import.js:219 module:io.ox/core
+#: apps/io.ox/core/import/import.js:231 module:io.ox/core
 msgid "Data imported successfully"
 msgstr "Data imported successfully"
 
-#: apps/io.ox/core/import/import.js:221 module:io.ox/core
+#: apps/io.ox/core/import/import.js:233 module:io.ox/core
 msgid "Data only partially imported ( %1$s of %2$s records)"
 msgstr "Data only partially imported ( %1$s of %2$s records)"
 
@@ -2202,7 +2202,7 @@ msgstr "Discard changes"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:505 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Discard message"
@@ -2327,7 +2327,7 @@ msgstr "Do you really want to delete this widget?"
 msgid "Do you really want to discard your changes?"
 msgstr "Do you really want to discard your changes?"
 
-#: apps/io.ox/mail/compose/view.js:502 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Do you really want to discard your message?"
 
@@ -2911,7 +2911,7 @@ msgstr "Extended view"
 msgid "External contact"
 msgstr "External contact"
 
-#: apps/io.ox/mail/common-extensions.js:457 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:467 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -3495,7 +3495,7 @@ msgstr "Ignore Warnings"
 msgid "Ignore conflicts"
 msgstr "Ignore conflicts"
 
-#: apps/io.ox/core/import/import.js:119 module:io.ox/core
+#: apps/io.ox/core/import/import.js:130 module:io.ox/core
 msgid ""
 "Ignore existing events. Helpful to import public holiday calendars, for "
 "example."
@@ -3508,11 +3508,11 @@ msgid "Image 1"
 msgstr "Image 1"
 
 #: apps/io.ox/core/folder/contextmenu.js:311 module:io.ox/core
-#: apps/io.ox/core/import/import.js:129
+#: apps/io.ox/core/import/import.js:141
 msgid "Import"
 msgstr "Import"
 
-#: apps/io.ox/core/import/import.js:150 module:io.ox/core
+#: apps/io.ox/core/import/import.js:162 module:io.ox/core
 msgid "Import into"
 msgstr "Import into"
 
@@ -3911,11 +3911,11 @@ msgstr "Email has been imported"
 msgid "Mail has been moved"
 msgstr "Email has been moved"
 
-#: apps/io.ox/mail/compose/view.js:651 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Email has an empty subject. Send it anyway?"
 
-#: apps/io.ox/mail/compose/view.js:644 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Email has no recipient."
 
@@ -3935,8 +3935,8 @@ msgstr "Email reminder"
 msgid "Mail reminder for"
 msgstr "Email reminder for"
 
-#: apps/io.ox/mail/compose/view.js:387 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:409
+#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:411
 msgid "Mail saved as draft"
 msgstr "Email saved as draft"
 
@@ -5077,11 +5077,11 @@ msgid ""
 msgstr ""
 "Please provide the old password so the account passwords can be recovered."
 
-#: apps/io.ox/core/import/import.js:186 module:io.ox/core
+#: apps/io.ox/core/import/import.js:198 module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Please select a file to import"
 
-#: apps/io.ox/core/import/import.js:190 module:io.ox/core
+#: apps/io.ox/core/import/import.js:202 module:io.ox/core
 msgid "Please select a valid iCal File to import"
 msgstr "Please select a valid iCal file to import"
 
@@ -5736,7 +5736,7 @@ msgstr "Save"
 msgid "Save as distribution list"
 msgstr "Save as distribution list"
 
-#: apps/io.ox/mail/compose/view.js:506 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Save as draft"
 
@@ -5840,7 +5840,7 @@ msgid "Send"
 msgstr "Send"
 
 #. Respond to a read receipt request; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:540 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:550 module:io.ox/mail
 msgid "Send a read receipt"
 msgstr "Send a read receipt"
 
@@ -5888,7 +5888,7 @@ msgid "Sender/From"
 msgstr "Sender/From"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:821 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Sent from %s via mobile"
 
@@ -6082,7 +6082,7 @@ msgstr "Show hidden files and folders"
 msgid "Show icons"
 msgstr "Show icons"
 
-#: apps/io.ox/mail/common-extensions.js:456 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:466 module:io.ox/mail
 msgid "Show images"
 msgstr "Show images"
 
@@ -6689,7 +6689,7 @@ msgstr "The due date cannot be before the start date. Adjust the start date?"
 msgid "The email address %1$s is already in the list"
 msgstr "The e-mail address %1$s is already in the list"
 
-#: apps/io.ox/mail/compose/view.js:582 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "The e-mail has been sent"
 
@@ -6790,7 +6790,7 @@ msgid ""
 "another folder."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:543 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:553 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "The sender would like to be notified when you have read this e-mail"
 
@@ -6915,7 +6915,7 @@ msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "There was a problem with XING. The error message was: \"%s\""
 
 #. Error message if calender import failed
-#: apps/io.ox/core/import/import.js:180 module:io.ox/core
+#: apps/io.ox/core/import/import.js:192 module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "There was no appointment data to import"
 
@@ -6938,13 +6938,13 @@ msgstr ""
 "These statistics only include folders which have a depth less than four in "
 "the folder structure from the folder \"%1$s\"."
 
-#: apps/io.ox/mail/common-extensions.js:413 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:424
+#: apps/io.ox/mail/common-extensions.js:423 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:434
 msgid "This E-mail is read, press to mark it as unread."
 msgstr "This E-mail is read, press to mark it as unread."
 
-#: apps/io.ox/mail/common-extensions.js:416 module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js:424
+#: apps/io.ox/mail/common-extensions.js:426 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:434
 msgid "This E-mail is unread, press to mark it as read."
 msgstr "This E-mail is unread, press to mark it as read."
 
@@ -7545,7 +7545,7 @@ msgstr "View source"
 msgid "Waiting"
 msgstr "Waiting"
 
-#: apps/io.ox/mail/common-extensions.js:483 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:493 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Warning: This message might be a phishing or scam email"
 
@@ -7694,7 +7694,7 @@ msgstr "Yellow"
 msgid "Yes"
 msgstr "Yes"
 
-#: apps/io.ox/mail/compose/view.js:652 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Yes, send without subject"
 
