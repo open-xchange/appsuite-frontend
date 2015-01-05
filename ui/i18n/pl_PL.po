@@ -1605,7 +1605,7 @@ msgstr "Firma"
 #: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/toolbar.js:42
 #: apps/io.ox/mail/write/main.js:210
 msgid "Compose"
-msgstr "Redagowanie"
+msgstr "Utwórz e-mail"
 
 #: apps/io.ox/mail/toolbar.js:43 module:io.ox/mail
 msgid "Compose new email"
