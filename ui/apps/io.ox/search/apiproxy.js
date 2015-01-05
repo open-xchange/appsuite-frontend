@@ -170,22 +170,6 @@ define('io.ox/search/apiproxy',
                                 return error;
                             })
                             .then(function (data) {
-
-                                var pool = model.get('pool'),
-                                    hash = {};
-
-                                _.each(data, function (facet) {
-                                    hash[facet.id] = true;
-                                });
-
-                                // add
-                                _.each(pool, function (facet) {
-                                    if (!hash[facet.id])
-                                        data.unshift(facet);
-                                });
-                                return data;
-                            })
-                            .then(function (data) {
                                 // match convention in autocomplete tk
                                 var data = {
                                     list: data,
