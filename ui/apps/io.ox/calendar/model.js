@@ -77,7 +77,7 @@ define('io.ox/calendar/model',
                         return;
                     }
                     resetListUpdate = true;
-                    self.set('participants', participants.toJSON(), {validate: true});
+                    self.set('participants', participants.getAPIData(), { validate: true });
                     resetListUpdate = false;
                 }
 
