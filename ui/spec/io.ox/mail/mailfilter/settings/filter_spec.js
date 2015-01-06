@@ -11,7 +11,11 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function (filters, gt) {
+define([
+    'io.ox/mail/mailfilter/settings/filter',
+    'waitsFor',
+    'gettext!io.ox/mail'
+], function (filters, waitsFor, gt) {
 
     'use strict';
 
@@ -78,50 +82,88 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
                 'active': true
             }]
         },
-        resultWithoutFilter = { data: [] };
+        resultWithoutFilter = { data: [] },
+        resultConfig = { timestamp: 1378223251586, data: {
+            tests: [
+                { test: 'address', comparison: ['user', 'detail'] },
+                { test: 'envelope', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'exists', comparison: [] },
+                { test: 'false', comparison: [] },
+                { test: 'true', comparison: [] },
+                { test: 'not', comparison: [] },
+                { test: 'size', comparison: ['over', 'under'] },
+                { test: 'header', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'allof', comparison: [] },
+                { test: 'anyof', comparison: [] },
+                { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'currentdate', comparison: ['ge', 'le', 'is', 'contains','matches'] }
+            ],
+            actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'addflags', 'set']
+        }};
 
     describe('Mailfilter filter with rules', function () {
 
-        it('should draw the list of tests', function (done) {
+        beforeEach(function () {
+            var that = this;
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultWithFilter));
             });
+
+            this.server.respondWith('PUT', /api\/mailfilter\?action=config/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultConfig));
+            });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 
-            filters.editMailfilter(this.node).then(function () {
-                expect(this.node.find('h1')).to.have.length(1);
-                expect(this.node.find('.btn-primary[data-action="add"]')).to.have.length(1);
-                expect(this.node.find('li[data-id="0"]')).to.have.length(1);
-                expect(this.node.find('li[data-id="0"]').hasClass('editable')).to.be.true;
-                expect(this.node.find('li[data-id="1"]')).to.have.length(1);
-                expect(this.node.find('li[data-id="1"]').hasClass('editable')).to.be.false;
-                expect(this.node.find('li[data-id="2"]').hasClass('disabled')).to.be.true;
-                expect(this.node.find('li[data-id="3"]').hasClass('editable')).to.be.false;
-                expect(this.node.find('li a.drag-handle')).to.have.length(4);
-                expect(this.node.find('li .widget-title')).to.have.length(4);
-                expect(this.node.find('li [data-action="edit"]')).to.have.length(2);
-                expect(this.node.find('li [data-action="edit-vacation"]')).to.have.length(1);
-                expect(this.node.find('li [data-action="toggle"]')).to.have.length(3);
-                expect(this.node.find('li [data-action="delete"]')).to.have.length(3);
+            filters.editMailfilter(this.node);
+            return waitsFor(function () {
+                return that.node.find('h1').length === 1;
+            });
 
-                this.node.remove();
-                done();
-            }.bind(this));
+        });
+
+        afterEach(function () {
+            $('#filtertestNode', document).remove();
+        });
+
+        it('should draw the list of tests', function () {
+
+            expect(this.node.find('h1')).to.have.length(1);
+            expect(this.node.find('.btn-primary[data-action="add"]')).to.have.length(1);
+            expect(this.node.find('li[data-id="0"]')).to.have.length(1);
+            expect(this.node.find('li[data-id="0"]').hasClass('editable')).to.be.true;
+            expect(this.node.find('li[data-id="1"]')).to.have.length(1);
+            expect(this.node.find('li[data-id="1"]').hasClass('editable')).to.be.false;
+            expect(this.node.find('li[data-id="2"]').hasClass('disabled')).to.be.true;
+            expect(this.node.find('li[data-id="3"]').hasClass('editable')).to.be.false;
+            expect(this.node.find('li a.drag-handle')).to.have.length(4);
+            expect(this.node.find('li .widget-title')).to.have.length(4);
+            expect(this.node.find('li [data-action="edit"]')).to.have.length(2);
+            expect(this.node.find('li [data-action="edit-vacation"]')).to.have.length(1);
+            expect(this.node.find('li [data-action="toggle"]')).to.have.length(3);
+            expect(this.node.find('li [data-action="delete"]')).to.have.length(3);
+
         });
 
     });
 
     describe('Mailfilter filter without rules', function () {
 
-        beforeEach(function (done) {
+        beforeEach(function () {
+            var that = this;
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultWithoutFilter));
             });
+
+            this.server.respondWith('PUT', /api\/mailfilter\?action=config/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultConfig));
+            });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 
-            filters.editMailfilter(this.node).then(function () {
-                done();
+            filters.editMailfilter(this.node);
+            return waitsFor(function () {
+                return that.node.find('h1').length === 1;
             });
+
         });
 
         afterEach(function () {

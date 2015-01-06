@@ -21,6 +21,23 @@ define([
 
     var resultWithoutFilter = { data: [] },
         resultAfterSave = { data: 1 },
+        resultConfig = { timestamp: 1378223251586, data: {
+            tests: [
+                { test: 'address', comparison: ['user', 'detail'] },
+                { test: 'envelope', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'exists', comparison: [] },
+                { test: 'false', comparison: [] },
+                { test: 'true', comparison: [] },
+                { test: 'not', comparison: [] },
+                { test: 'size', comparison: ['over', 'under'] },
+                { test: 'header', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'allof', comparison: [] },
+                { test: 'anyof', comparison: [] },
+                { test: 'body', comparison: ['regex', 'is', 'contains', 'matches'] },
+                { test: 'currentdate', comparison: ['ge', 'le', 'is', 'contains','matches'] }
+            ],
+            actioncommands: ['keep', 'discard', 'redirect', 'move', 'reject', 'stop', 'vacation', 'notify', 'addflags', 'set']
+        }},
         model;
 
     describe('Mailfilter detailview', function () {
@@ -37,6 +54,10 @@ define([
 
             this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultAfterSave));
+            });
+
+            this.server.respondWith('PUT', /api\/mailfilter\?action=config/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(resultConfig));
             });
 
             filters.editMailfilter($container.empty()).done(function (filtercollection) {
