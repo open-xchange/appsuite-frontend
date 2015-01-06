@@ -293,7 +293,12 @@ msgstr "%3$s %2$s %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js:303 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:63
+#: apps/io.ox/calendar/settings/pane.js:64
+#: apps/io.ox/calendar/settings/pane.js:65
+#: apps/io.ox/calendar/settings/pane.js:66
+#: apps/io.ox/calendar/settings/pane.js:67 apps/io.ox/calendar/util.js:303
 #: apps/io.ox/core/date.js:114 module:io.ox/core
 #, c-format
 msgid "%d day"
@@ -311,7 +316,13 @@ msgstr[0] "%d 日"
 
 #. General duration (nominative case): X hours
 #. %d is the number of hours
-#: apps/io.ox/core/date.js:146 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:57
+#: apps/io.ox/calendar/settings/pane.js:58
+#: apps/io.ox/calendar/settings/pane.js:59
+#: apps/io.ox/calendar/settings/pane.js:60
+#: apps/io.ox/calendar/settings/pane.js:61 apps/io.ox/core/date.js:146
+#: module:io.ox/core
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -328,7 +339,11 @@ msgstr[0] "%d 時間"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/core/date.js:172 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:53
+#: apps/io.ox/calendar/settings/pane.js:54
+#: apps/io.ox/calendar/settings/pane.js:55 apps/io.ox/core/date.js:172
+#: module:io.ox/core
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -345,7 +360,11 @@ msgstr[0] "%d 分"
 
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
-#: apps/io.ox/core/date.js:95 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:69
+#: apps/io.ox/calendar/settings/pane.js:70
+#: apps/io.ox/calendar/settings/pane.js:71 apps/io.ox/core/date.js:95
+#: module:io.ox/core
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -380,21 +399,9 @@ msgstr "%s クライアント (iOS 用)"
 msgid "%s is also available for other platforms:"
 msgstr "%s は次のプラットフォームでも利用可能です: "
 
-#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
-msgid "0 minutes"
-msgstr "0 分"
-
-#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
-msgid "1 day"
-msgstr "1 日"
-
 #: apps/plugins/portal/recentfiles/register.js:73 module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "最近変更されたファイルが 1 個あります。"
-
-#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
-msgid "1 hour"
-msgstr "1 時間"
 
 #: apps/io.ox/core/tk/list-dnd.js:32 module:io.ox/core
 #: apps/io.ox/core/tk/selection.js:35
@@ -405,10 +412,6 @@ msgstr[0] "%1$d 個のアイテム"
 #: apps/io.ox/mail/settings/pane.js:49 module:io.ox/mail
 msgid "1 minute"
 msgstr "1 分"
-
-#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
-msgid "1 week"
-msgstr "1 週間"
 
 #: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
@@ -422,83 +425,25 @@ msgstr "10 分"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/calendar/settings/pane.js:61 module:io.ox/calendar
-msgid "12 hour"
-msgstr "12 時間"
-
-#: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 分"
 
-#: apps/io.ox/calendar/settings/pane.js:63 module:io.ox/calendar
-msgid "2 days"
-msgstr "2 日"
-
-#: apps/io.ox/calendar/settings/pane.js:57 module:io.ox/calendar
-msgid "2 hour"
-msgstr "2 時間"
-
-#: apps/io.ox/calendar/settings/pane.js:69 module:io.ox/calendar
-msgid "2 weeks"
-msgstr "2 週間"
-
-#: apps/io.ox/calendar/settings/pane.js:64 module:io.ox/calendar
-msgid "3 days"
-msgstr "3 日"
-
 #: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 分"
 
-#: apps/io.ox/calendar/settings/pane.js:70 module:io.ox/calendar
-msgid "3 weeks"
-msgstr "3 週間"
-
-#: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 分"
-
-#: apps/io.ox/calendar/settings/pane.js:65 module:io.ox/calendar
-msgid "4 days"
-msgstr "4 日"
-
-#: apps/io.ox/calendar/settings/pane.js:58 module:io.ox/calendar
-msgid "4 hour"
-msgstr "4 時間"
-
-#: apps/io.ox/calendar/settings/pane.js:71 module:io.ox/calendar
-msgid "4 weeks"
-msgstr "4 週間"
-
-#: apps/io.ox/calendar/settings/pane.js:55 module:io.ox/calendar
-msgid "45 minutes"
-msgstr "45 分"
-
-#: apps/io.ox/calendar/settings/pane.js:66 module:io.ox/calendar
-msgid "5 days"
-msgstr "5 日"
 
 #: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 分"
-
-#: apps/io.ox/calendar/settings/pane.js:67 module:io.ox/calendar
-msgid "6 days"
-msgstr "6 日"
-
-#: apps/io.ox/calendar/settings/pane.js:59 module:io.ox/calendar
-msgid "6 hour"
-msgstr "6 時間"
-
-#: apps/io.ox/calendar/settings/pane.js:60 module:io.ox/calendar
-msgid "8 hour"
-msgstr "8 時間"
 
 #: apps/io.ox/core/commons.js:52 module:io.ox/core
 msgid "<b>%1$d</b> elements selected"
@@ -758,7 +703,7 @@ msgstr "引用文の上"
 msgid "Add signature below quoted text"
 msgstr "引用文の下"
 
-#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:673 module:io.ox/mail
 msgid "Add subject"
 msgstr "件名を追加"
 
@@ -1336,7 +1281,7 @@ msgstr "予定表ビュー"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:509
+#: apps/io.ox/mail/compose/view.js:527
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1665,7 +1610,7 @@ msgid "Company"
 msgstr "会社"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:349
+#: apps/io.ox/mail/compose/view.js:367
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2181,7 +2126,7 @@ msgstr "変更を破棄"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "メッセージを破棄"
@@ -2303,7 +2248,7 @@ msgstr "このウィジェットを削除しますか？"
 msgid "Do you really want to discard your changes?"
 msgstr "変更を破棄しますか？"
 
-#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:522 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "メッセージを本当に破棄しますか？"
 
@@ -3892,11 +3837,11 @@ msgstr "メールをインポートしました。"
 msgid "Mail has been moved"
 msgstr "メールを移動しました。"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:671 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "メールに件名がありません。このまま送信しますか？"
 
-#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:664 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "メールには宛先がありません。"
 
@@ -3916,8 +3861,8 @@ msgstr "メール通知"
 msgid "Mail reminder for"
 msgstr "件名"
 
-#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:411
+#: apps/io.ox/mail/compose/view.js:407 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:429
 msgid "Mail saved as draft"
 msgstr "メールの下書きを保存しました。"
 
@@ -5712,7 +5657,7 @@ msgstr "保存"
 msgid "Save as distribution list"
 msgstr "配布リストとして保存"
 
-#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:526 module:io.ox/mail
 msgid "Save as draft"
 msgstr "下書きを保存"
 
@@ -5863,7 +5808,7 @@ msgid "Sender/From"
 msgstr "差出人"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:841 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "%s からモバイル経由で送信されました。"
 
@@ -6665,7 +6610,7 @@ msgstr "期限を開始日の前に設定できません。開始日を変更し
 msgid "The email address %1$s is already in the list"
 msgstr "メールアドレス %1$s は既に一覧に存在します。"
 
-#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:602 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "メールを送信しました。"
 
@@ -7668,7 +7613,7 @@ msgstr "黄"
 msgid "Yes"
 msgstr "はい"
 
-#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:672 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "件名なしで送信"
 
@@ -8645,8 +8590,23 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "... or create a fresh one for your profile"
 #~ msgstr "... または、プロファイルに新規アイテムを作成します。"
 
+#~ msgid "0 minutes"
+#~ msgstr "0 分"
+
+#~ msgid "1 day"
+#~ msgstr "1 日"
+
+#~ msgid "1 hour"
+#~ msgstr "1 時間"
+
+#~ msgid "1 week"
+#~ msgstr "1 週間"
+
 #~ msgid "10"
 #~ msgstr "10"
+
+#~ msgid "12 hour"
+#~ msgstr "12 時間"
 
 #~ msgid "15"
 #~ msgstr "15"
@@ -8654,26 +8614,65 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "150%"
 #~ msgstr "150%"
 
+#~ msgid "2 days"
+#~ msgstr "2 日"
+
+#~ msgid "2 hour"
+#~ msgstr "2 時間"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 週間"
+
 #~ msgid "20"
 #~ msgstr "20"
 
 #~ msgid "200%"
 #~ msgstr "200%"
 
+#~ msgid "3 days"
+#~ msgstr "3 日"
+
+#~ msgid "3 weeks"
+#~ msgstr "3 週間"
+
 #~ msgid "30"
 #~ msgstr "30"
+
+#~ msgid "4 days"
+#~ msgstr "4 日"
+
+#~ msgid "4 hour"
+#~ msgstr "4 時間"
+
+#~ msgid "4 weeks"
+#~ msgstr "4 週間"
+
+#~ msgid "45 minutes"
+#~ msgstr "45 分"
 
 #~ msgid "5"
 #~ msgstr "5"
 
+#~ msgid "5 days"
+#~ msgstr "5 日"
+
 #~ msgid "50%"
 #~ msgstr "50%"
+
+#~ msgid "6 days"
+#~ msgstr "6 日"
+
+#~ msgid "6 hour"
+#~ msgstr "6 時間"
 
 #~ msgid "60"
 #~ msgstr "60"
 
 #~ msgid "75%"
 #~ msgstr "75%"
+
+#~ msgid "8 hour"
+#~ msgstr "8 時間"
 
 #~ msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 #~ msgstr ""

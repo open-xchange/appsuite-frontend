@@ -305,7 +305,12 @@ msgstr "%3$s %1$s %2$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js:303 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:63
+#: apps/io.ox/calendar/settings/pane.js:64
+#: apps/io.ox/calendar/settings/pane.js:65
+#: apps/io.ox/calendar/settings/pane.js:66
+#: apps/io.ox/calendar/settings/pane.js:67 apps/io.ox/calendar/util.js:303
 #: apps/io.ox/core/date.js:114 module:io.ox/core
 #, c-format
 msgid "%d day"
@@ -325,7 +330,13 @@ msgstr[1] "%d jours"
 
 #. General duration (nominative case): X hours
 #. %d is the number of hours
-#: apps/io.ox/core/date.js:146 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:57
+#: apps/io.ox/calendar/settings/pane.js:58
+#: apps/io.ox/calendar/settings/pane.js:59
+#: apps/io.ox/calendar/settings/pane.js:60
+#: apps/io.ox/calendar/settings/pane.js:61 apps/io.ox/core/date.js:146
+#: module:io.ox/core
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -344,7 +355,11 @@ msgstr[1] "%d heures"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/core/date.js:172 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:53
+#: apps/io.ox/calendar/settings/pane.js:54
+#: apps/io.ox/calendar/settings/pane.js:55 apps/io.ox/core/date.js:172
+#: module:io.ox/core
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -363,7 +378,11 @@ msgstr[1] "%d minutes"
 
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
-#: apps/io.ox/core/date.js:95 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:69
+#: apps/io.ox/calendar/settings/pane.js:70
+#: apps/io.ox/calendar/settings/pane.js:71 apps/io.ox/core/date.js:95
+#: module:io.ox/core
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -402,21 +421,9 @@ msgstr "Client %s pour iOS"
 msgid "%s is also available for other platforms:"
 msgstr "%s est également disponible pour d'autres plates-formes :"
 
-#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
-msgid "0 minutes"
-msgstr "0 minute"
-
-#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
-msgid "1 day"
-msgstr "1 jour"
-
 #: apps/plugins/portal/recentfiles/register.js:73 module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 fichier a été modifié récemment"
-
-#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
-msgid "1 hour"
-msgstr "1 heure"
 
 #: apps/io.ox/core/tk/list-dnd.js:32 module:io.ox/core
 #: apps/io.ox/core/tk/selection.js:35
@@ -428,10 +435,6 @@ msgstr[1] "%1$d éléments"
 #: apps/io.ox/mail/settings/pane.js:49 module:io.ox/mail
 msgid "1 minute"
 msgstr "1 minute"
-
-#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
-msgid "1 week"
-msgstr "1 semaine"
 
 #: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
@@ -445,83 +448,25 @@ msgstr "10 minutes"
 msgid "100%"
 msgstr "100 %"
 
-#: apps/io.ox/calendar/settings/pane.js:61 module:io.ox/calendar
-msgid "12 hour"
-msgstr "12 heures"
-
-#: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 minutes"
 
-#: apps/io.ox/calendar/settings/pane.js:63 module:io.ox/calendar
-msgid "2 days"
-msgstr "2 jours"
-
-#: apps/io.ox/calendar/settings/pane.js:57 module:io.ox/calendar
-msgid "2 hour"
-msgstr "2 heures"
-
-#: apps/io.ox/calendar/settings/pane.js:69 module:io.ox/calendar
-msgid "2 weeks"
-msgstr "2 semaines"
-
-#: apps/io.ox/calendar/settings/pane.js:64 module:io.ox/calendar
-msgid "3 days"
-msgstr "3 jours"
-
 #: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 minutes"
 
-#: apps/io.ox/calendar/settings/pane.js:70 module:io.ox/calendar
-msgid "3 weeks"
-msgstr "3 semaines"
-
-#: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 minutes"
-
-#: apps/io.ox/calendar/settings/pane.js:65 module:io.ox/calendar
-msgid "4 days"
-msgstr "4 jours"
-
-#: apps/io.ox/calendar/settings/pane.js:58 module:io.ox/calendar
-msgid "4 hour"
-msgstr "4 heures"
-
-#: apps/io.ox/calendar/settings/pane.js:71 module:io.ox/calendar
-msgid "4 weeks"
-msgstr "4 semaines"
-
-#: apps/io.ox/calendar/settings/pane.js:55 module:io.ox/calendar
-msgid "45 minutes"
-msgstr "45 minutes"
-
-#: apps/io.ox/calendar/settings/pane.js:66 module:io.ox/calendar
-msgid "5 days"
-msgstr "5 jours"
 
 #: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minutes"
-
-#: apps/io.ox/calendar/settings/pane.js:67 module:io.ox/calendar
-msgid "6 days"
-msgstr "6 jours"
-
-#: apps/io.ox/calendar/settings/pane.js:59 module:io.ox/calendar
-msgid "6 hour"
-msgstr "6 heures"
-
-#: apps/io.ox/calendar/settings/pane.js:60 module:io.ox/calendar
-msgid "8 hour"
-msgstr "8 heures"
 
 #: apps/io.ox/core/commons.js:52 module:io.ox/core
 msgid "<b>%1$d</b> elements selected"
@@ -782,7 +727,7 @@ msgstr "Au-dessus du contenu cité"
 msgid "Add signature below quoted text"
 msgstr "Au-dessous du contenu cité"
 
-#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:673 module:io.ox/mail
 msgid "Add subject"
 msgstr "Ajouter un sujet"
 
@@ -1371,7 +1316,7 @@ msgstr "Vue en calendrier"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:509
+#: apps/io.ox/mail/compose/view.js:527
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1701,7 +1646,7 @@ msgid "Company"
 msgstr "Entreprise"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:349
+#: apps/io.ox/mail/compose/view.js:367
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2221,7 +2166,7 @@ msgstr "Abandonner les modifications"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Abandonner le message"
@@ -2345,7 +2290,7 @@ msgstr "Voulez-vous vraiment supprimer ce composant ?"
 msgid "Do you really want to discard your changes?"
 msgstr "Voulez-vous vraiment perdre toutes vos modifications ?"
 
-#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:522 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Voulez-vous vraiment supprimer votre message ?"
 
@@ -3944,11 +3889,11 @@ msgstr "Le courrier électronique a été importé"
 msgid "Mail has been moved"
 msgstr "Le courriel a été déplacé"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:671 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Le message a un sujet vide. L'envoyer quand même ?"
 
-#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:664 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Le message n'a pas de destinataire."
 
@@ -3968,8 +3913,8 @@ msgstr "Rappel par courriel"
 msgid "Mail reminder for"
 msgstr "Rappel par courriel de"
 
-#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:411
+#: apps/io.ox/mail/compose/view.js:407 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:429
 msgid "Mail saved as draft"
 msgstr "Message enregistré en tant que brouillon"
 
@@ -5789,7 +5734,7 @@ msgstr "Enregistrer"
 msgid "Save as distribution list"
 msgstr "Enregistrer comme liste de distribution"
 
-#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:526 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Enregistrer en tant que brouillon"
 
@@ -5941,7 +5886,7 @@ msgid "Sender/From"
 msgstr "Expéditeur / De"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:841 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Envoyé depuis %s sur un mobile"
 
@@ -6750,7 +6695,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "L'adresse électronique %1$s figure déjà dans la liste"
 
-#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:602 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Le courriel a été envoyé"
 
@@ -7782,7 +7727,7 @@ msgstr "Jaune"
 msgid "Yes"
 msgstr "Oui"
 
-#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:672 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Oui, envoyer sans sujet"
 
@@ -8669,8 +8614,23 @@ msgstr "votre plate-forme"
 #~ msgid "(Default)"
 #~ msgstr "(Par défaut)"
 
+#~ msgid "0 minutes"
+#~ msgstr "0 minute"
+
+#~ msgid "1 day"
+#~ msgstr "1 jour"
+
+#~ msgid "1 hour"
+#~ msgstr "1 heure"
+
+#~ msgid "1 week"
+#~ msgstr "1 semaine"
+
 #~ msgid "10"
 #~ msgstr "10"
+
+#~ msgid "12 hour"
+#~ msgstr "12 heures"
 
 #~ msgid "15"
 #~ msgstr "15"
@@ -8678,26 +8638,65 @@ msgstr "votre plate-forme"
 #~ msgid "150%"
 #~ msgstr "150 %"
 
+#~ msgid "2 days"
+#~ msgstr "2 jours"
+
+#~ msgid "2 hour"
+#~ msgstr "2 heures"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 semaines"
+
 #~ msgid "20"
 #~ msgstr "20"
 
 #~ msgid "200%"
 #~ msgstr "200 %"
 
+#~ msgid "3 days"
+#~ msgstr "3 jours"
+
+#~ msgid "3 weeks"
+#~ msgstr "3 semaines"
+
 #~ msgid "30"
 #~ msgstr "30"
+
+#~ msgid "4 days"
+#~ msgstr "4 jours"
+
+#~ msgid "4 hour"
+#~ msgstr "4 heures"
+
+#~ msgid "4 weeks"
+#~ msgstr "4 semaines"
+
+#~ msgid "45 minutes"
+#~ msgstr "45 minutes"
 
 #~ msgid "5"
 #~ msgstr "5"
 
+#~ msgid "5 days"
+#~ msgstr "5 jours"
+
 #~ msgid "50%"
 #~ msgstr "50 %"
+
+#~ msgid "6 days"
+#~ msgstr "6 jours"
+
+#~ msgid "6 hour"
+#~ msgstr "6 heures"
 
 #~ msgid "60"
 #~ msgstr "60"
 
 #~ msgid "75%"
 #~ msgstr "75 %"
+
+#~ msgid "8 hour"
+#~ msgstr "8 heures"
 
 #~ msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 #~ msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"

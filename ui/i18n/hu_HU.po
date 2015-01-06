@@ -303,7 +303,12 @@ msgstr "%3$s %2$s %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js:303 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:63
+#: apps/io.ox/calendar/settings/pane.js:64
+#: apps/io.ox/calendar/settings/pane.js:65
+#: apps/io.ox/calendar/settings/pane.js:66
+#: apps/io.ox/calendar/settings/pane.js:67 apps/io.ox/calendar/util.js:303
 #: apps/io.ox/core/date.js:114 module:io.ox/core
 #, c-format
 msgid "%d day"
@@ -323,7 +328,13 @@ msgstr[1] "%d nap"
 
 #. General duration (nominative case): X hours
 #. %d is the number of hours
-#: apps/io.ox/core/date.js:146 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:57
+#: apps/io.ox/calendar/settings/pane.js:58
+#: apps/io.ox/calendar/settings/pane.js:59
+#: apps/io.ox/calendar/settings/pane.js:60
+#: apps/io.ox/calendar/settings/pane.js:61 apps/io.ox/core/date.js:146
+#: module:io.ox/core
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -342,7 +353,11 @@ msgstr[1] "%d óra"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/core/date.js:172 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:53
+#: apps/io.ox/calendar/settings/pane.js:54
+#: apps/io.ox/calendar/settings/pane.js:55 apps/io.ox/core/date.js:172
+#: module:io.ox/core
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -361,7 +376,11 @@ msgstr[1] "%d perc"
 
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
-#: apps/io.ox/core/date.js:95 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:69
+#: apps/io.ox/calendar/settings/pane.js:70
+#: apps/io.ox/calendar/settings/pane.js:71 apps/io.ox/core/date.js:95
+#: module:io.ox/core
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -398,21 +417,9 @@ msgstr "%s kliens iOS-hez"
 msgid "%s is also available for other platforms:"
 msgstr "%s elérhető más rendszerekre is:"
 
-#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
-msgid "0 minutes"
-msgstr "0 perc"
-
-#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
-msgid "1 day"
-msgstr "1 nap"
-
 #: apps/plugins/portal/recentfiles/register.js:73 module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "1 fájl változott mostanság"
-
-#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
-msgid "1 hour"
-msgstr "1 óra"
 
 #: apps/io.ox/core/tk/list-dnd.js:32 module:io.ox/core
 #: apps/io.ox/core/tk/selection.js:35
@@ -424,10 +431,6 @@ msgstr[1] "%1$d elem"
 #: apps/io.ox/mail/settings/pane.js:49 module:io.ox/mail
 msgid "1 minute"
 msgstr "1 perc"
-
-#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
-msgid "1 week"
-msgstr "1 hét"
 
 #: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
@@ -441,83 +444,25 @@ msgstr "10 perc"
 msgid "100%"
 msgstr "100%"
 
-#: apps/io.ox/calendar/settings/pane.js:61 module:io.ox/calendar
-msgid "12 hour"
-msgstr "12 óra"
-
-#: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 perc"
 
-#: apps/io.ox/calendar/settings/pane.js:63 module:io.ox/calendar
-msgid "2 days"
-msgstr "2 nap"
-
-#: apps/io.ox/calendar/settings/pane.js:57 module:io.ox/calendar
-msgid "2 hour"
-msgstr "2 óra"
-
-#: apps/io.ox/calendar/settings/pane.js:69 module:io.ox/calendar
-msgid "2 weeks"
-msgstr "2 hét"
-
-#: apps/io.ox/calendar/settings/pane.js:64 module:io.ox/calendar
-msgid "3 days"
-msgstr "3 nap"
-
 #: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 perc"
 
-#: apps/io.ox/calendar/settings/pane.js:70 module:io.ox/calendar
-msgid "3 weeks"
-msgstr "3 hét"
-
-#: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 perc"
-
-#: apps/io.ox/calendar/settings/pane.js:65 module:io.ox/calendar
-msgid "4 days"
-msgstr "4 nap"
-
-#: apps/io.ox/calendar/settings/pane.js:58 module:io.ox/calendar
-msgid "4 hour"
-msgstr "4 óra"
-
-#: apps/io.ox/calendar/settings/pane.js:71 module:io.ox/calendar
-msgid "4 weeks"
-msgstr "4 hét"
-
-#: apps/io.ox/calendar/settings/pane.js:55 module:io.ox/calendar
-msgid "45 minutes"
-msgstr "45 perc"
-
-#: apps/io.ox/calendar/settings/pane.js:66 module:io.ox/calendar
-msgid "5 days"
-msgstr "5 nap"
 
 #: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 perc"
-
-#: apps/io.ox/calendar/settings/pane.js:67 module:io.ox/calendar
-msgid "6 days"
-msgstr "6 nap"
-
-#: apps/io.ox/calendar/settings/pane.js:59 module:io.ox/calendar
-msgid "6 hour"
-msgstr "6 óra"
-
-#: apps/io.ox/calendar/settings/pane.js:60 module:io.ox/calendar
-msgid "8 hour"
-msgstr "8 óra"
 
 #: apps/io.ox/core/commons.js:52 module:io.ox/core
 msgid "<b>%1$d</b> elements selected"
@@ -777,7 +722,7 @@ msgstr "Idézett szöveg fölé"
 msgid "Add signature below quoted text"
 msgstr "Idézett szöveg alá"
 
-#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:673 module:io.ox/mail
 msgid "Add subject"
 msgstr "Tárgy hozzáadása"
 
@@ -1366,7 +1311,7 @@ msgstr "Naptár nézet"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:509
+#: apps/io.ox/mail/compose/view.js:527
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1696,7 +1641,7 @@ msgid "Company"
 msgstr "Cég"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:349
+#: apps/io.ox/mail/compose/view.js:367
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2213,7 +2158,7 @@ msgstr "Módosítások elvetése"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Üzenet elvetése"
@@ -2338,7 +2283,7 @@ msgstr "Biztos, hogy törölni szeretné ezt a widgetet?"
 msgid "Do you really want to discard your changes?"
 msgstr "Eldobja ezeket a módosításokat?"
 
-#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:522 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Valóban eldobja az üzenetet?"
 
@@ -3921,11 +3866,11 @@ msgstr "A levelek importálva"
 msgid "Mail has been moved"
 msgstr "A levelek áthelyezésre kerültek"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:671 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "A levél tárgya üres. Mindenképp elküldi?"
 
-#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:664 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "A levélnek nincs címzettje."
 
@@ -3945,8 +3890,8 @@ msgstr "Emlékeztető küldése"
 msgid "Mail reminder for"
 msgstr "Emlékeztető küldése:"
 
-#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:411
+#: apps/io.ox/mail/compose/view.js:407 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:429
 msgid "Mail saved as draft"
 msgstr "Levél mentve piszkozatként"
 
@@ -5749,7 +5694,7 @@ msgstr "Mentés"
 msgid "Save as distribution list"
 msgstr "Mentés disztribúciós listaként"
 
-#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:526 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Mentés piszkozatként"
 
@@ -5901,7 +5846,7 @@ msgid "Sender/From"
 msgstr "Küldő/Feladó"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:841 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Küldve erről: %s mobilon"
 
@@ -6707,7 +6652,7 @@ msgstr ""
 msgid "The email address %1$s is already in the list"
 msgstr "A(z) %1$s e-mail cím már szerepel a listában"
 
-#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:602 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Az e-mail elküldve"
 
@@ -7714,7 +7659,7 @@ msgstr "Sárga"
 msgid "Yes"
 msgstr "Igen"
 
-#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:672 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Igen, küldés tárgy nélkül"
 
@@ -8588,8 +8533,23 @@ msgstr "az Ön rendszere"
 #~ msgid "(Default)"
 #~ msgstr "(Alapértelmezett)"
 
+#~ msgid "0 minutes"
+#~ msgstr "0 perc"
+
+#~ msgid "1 day"
+#~ msgstr "1 nap"
+
+#~ msgid "1 hour"
+#~ msgstr "1 óra"
+
+#~ msgid "1 week"
+#~ msgstr "1 hét"
+
 #~ msgid "10"
 #~ msgstr "10"
+
+#~ msgid "12 hour"
+#~ msgstr "12 óra"
 
 #~ msgid "15"
 #~ msgstr "15"
@@ -8597,26 +8557,65 @@ msgstr "az Ön rendszere"
 #~ msgid "150%"
 #~ msgstr "150%"
 
+#~ msgid "2 days"
+#~ msgstr "2 nap"
+
+#~ msgid "2 hour"
+#~ msgstr "2 óra"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 hét"
+
 #~ msgid "20"
 #~ msgstr "20"
 
 #~ msgid "200%"
 #~ msgstr "200%"
 
+#~ msgid "3 days"
+#~ msgstr "3 nap"
+
+#~ msgid "3 weeks"
+#~ msgstr "3 hét"
+
 #~ msgid "30"
 #~ msgstr "30"
+
+#~ msgid "4 days"
+#~ msgstr "4 nap"
+
+#~ msgid "4 hour"
+#~ msgstr "4 óra"
+
+#~ msgid "4 weeks"
+#~ msgstr "4 hét"
+
+#~ msgid "45 minutes"
+#~ msgstr "45 perc"
 
 #~ msgid "5"
 #~ msgstr "5"
 
+#~ msgid "5 days"
+#~ msgstr "5 nap"
+
 #~ msgid "50%"
 #~ msgstr "50%"
+
+#~ msgid "6 days"
+#~ msgstr "6 nap"
+
+#~ msgid "6 hour"
+#~ msgstr "6 óra"
 
 #~ msgid "60"
 #~ msgstr "60"
 
 #~ msgid "75%"
 #~ msgstr "75%"
+
+#~ msgid "8 hour"
+#~ msgstr "8 óra"
 
 #~ msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 #~ msgstr ""

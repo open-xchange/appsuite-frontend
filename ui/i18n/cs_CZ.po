@@ -313,7 +313,12 @@ msgstr "%3$s %2$s, %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js:303 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:63
+#: apps/io.ox/calendar/settings/pane.js:64
+#: apps/io.ox/calendar/settings/pane.js:65
+#: apps/io.ox/calendar/settings/pane.js:66
+#: apps/io.ox/calendar/settings/pane.js:67 apps/io.ox/calendar/util.js:303
 #: apps/io.ox/core/date.js:114 module:io.ox/core
 #, c-format
 msgid "%d day"
@@ -335,7 +340,13 @@ msgstr[2] "%d dní"
 
 #. General duration (nominative case): X hours
 #. %d is the number of hours
-#: apps/io.ox/core/date.js:146 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:57
+#: apps/io.ox/calendar/settings/pane.js:58
+#: apps/io.ox/calendar/settings/pane.js:59
+#: apps/io.ox/calendar/settings/pane.js:60
+#: apps/io.ox/calendar/settings/pane.js:61 apps/io.ox/core/date.js:146
+#: module:io.ox/core
 #, c-format
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -356,7 +367,11 @@ msgstr[2] "%d hodin"
 
 #. General duration (nominative case): X minutes
 #. %d is the number of minutes
-#: apps/io.ox/core/date.js:172 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:53
+#: apps/io.ox/calendar/settings/pane.js:54
+#: apps/io.ox/calendar/settings/pane.js:55 apps/io.ox/core/date.js:172
+#: module:io.ox/core
 #, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -377,7 +392,11 @@ msgstr[2] "%d minut"
 
 #. General duration (nominative case): X weeks
 #. %d is the number of weeks
-#: apps/io.ox/core/date.js:95 module:io.ox/core
+#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
+#: apps/io.ox/calendar/settings/pane.js:69
+#: apps/io.ox/calendar/settings/pane.js:70
+#: apps/io.ox/calendar/settings/pane.js:71 apps/io.ox/core/date.js:95
+#: module:io.ox/core
 #, c-format
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -416,21 +435,9 @@ msgstr "%s klient pro iOS"
 msgid "%s is also available for other platforms:"
 msgstr "%s je také k dispozici pro jiné platformy:"
 
-#: apps/io.ox/calendar/settings/pane.js:52 module:io.ox/calendar
-msgid "0 minutes"
-msgstr "0 minut"
-
-#: apps/io.ox/calendar/settings/pane.js:62 module:io.ox/calendar
-msgid "1 day"
-msgstr "1 den"
-
 #: apps/plugins/portal/recentfiles/register.js:73 module:plugins/portal
 msgid "1 file has been changed recently"
 msgstr "V nedávné době byl změněn jeden soubor"
-
-#: apps/io.ox/calendar/settings/pane.js:56 module:io.ox/calendar
-msgid "1 hour"
-msgstr "1 hodina"
 
 #: apps/io.ox/core/tk/list-dnd.js:32 module:io.ox/core
 #: apps/io.ox/core/tk/selection.js:35
@@ -444,10 +451,6 @@ msgstr[2] "%1$d položek"
 msgid "1 minute"
 msgstr "1 minuta"
 
-#: apps/io.ox/calendar/settings/pane.js:68 module:io.ox/calendar
-msgid "1 week"
-msgstr "1 týden"
-
 #: apps/io.ox/core/settings/pane.js:267 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:338 apps/io.ox/mail/settings/pane.js:52
 #: module:io.ox/mail
@@ -460,83 +463,25 @@ msgstr "10 minut"
 msgid "100%"
 msgstr "100 %"
 
-#: apps/io.ox/calendar/settings/pane.js:61 module:io.ox/calendar
-msgid "12 hour"
-msgstr "12 hodin"
-
-#: apps/io.ox/calendar/settings/pane.js:53 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:268 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:339
 msgid "15 minutes"
 msgstr "15 minut"
 
-#: apps/io.ox/calendar/settings/pane.js:63 module:io.ox/calendar
-msgid "2 days"
-msgstr "2 dny"
-
-#: apps/io.ox/calendar/settings/pane.js:57 module:io.ox/calendar
-msgid "2 hour"
-msgstr "2 hodiny"
-
-#: apps/io.ox/calendar/settings/pane.js:69 module:io.ox/calendar
-msgid "2 weeks"
-msgstr "2 týdny"
-
-#: apps/io.ox/calendar/settings/pane.js:64 module:io.ox/calendar
-msgid "3 days"
-msgstr "3 dny"
-
 #: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 minuty"
 
-#: apps/io.ox/calendar/settings/pane.js:70 module:io.ox/calendar
-msgid "3 weeks"
-msgstr "3 týdny"
-
-#: apps/io.ox/calendar/settings/pane.js:54 module:io.ox/calendar
 #: apps/io.ox/core/settings/pane.js:269 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:340
 msgid "30 minutes"
 msgstr "30 minut"
-
-#: apps/io.ox/calendar/settings/pane.js:65 module:io.ox/calendar
-msgid "4 days"
-msgstr "4 dny"
-
-#: apps/io.ox/calendar/settings/pane.js:58 module:io.ox/calendar
-msgid "4 hour"
-msgstr "4 hodiny"
-
-#: apps/io.ox/calendar/settings/pane.js:71 module:io.ox/calendar
-msgid "4 weeks"
-msgstr "4 týdny"
-
-#: apps/io.ox/calendar/settings/pane.js:55 module:io.ox/calendar
-msgid "45 minutes"
-msgstr "45 minut"
-
-#: apps/io.ox/calendar/settings/pane.js:66 module:io.ox/calendar
-msgid "5 days"
-msgstr "5 dní"
 
 #: apps/io.ox/core/settings/pane.js:266 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:337 apps/io.ox/mail/settings/pane.js:51
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minut"
-
-#: apps/io.ox/calendar/settings/pane.js:67 module:io.ox/calendar
-msgid "6 days"
-msgstr "6 dní"
-
-#: apps/io.ox/calendar/settings/pane.js:59 module:io.ox/calendar
-msgid "6 hour"
-msgstr "6 hodin"
-
-#: apps/io.ox/calendar/settings/pane.js:60 module:io.ox/calendar
-msgid "8 hour"
-msgstr "8 hodin"
 
 #: apps/io.ox/core/commons.js:52 module:io.ox/core
 msgid "<b>%1$d</b> elements selected"
@@ -797,7 +742,7 @@ msgstr "Nad citovaným textem"
 msgid "Add signature below quoted text"
 msgstr "Pod citovaným textem"
 
-#: apps/io.ox/mail/compose/view.js:655 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:673 module:io.ox/mail
 msgid "Add subject"
 msgstr "Přidat předmět"
 
@@ -1376,7 +1321,7 @@ msgstr "Kalendář"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:509
+#: apps/io.ox/mail/compose/view.js:527
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1705,7 +1650,7 @@ msgid "Company"
 msgstr "Firma"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:349
+#: apps/io.ox/mail/compose/view.js:367
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2221,7 +2166,7 @@ msgstr "Zahodit změny"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:507 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Zahodit zprávu"
@@ -2347,7 +2292,7 @@ msgstr "Opravdu chcete smazat tento widget?"
 msgid "Do you really want to discard your changes?"
 msgstr "Opravdu chcete zahodit své změny?"
 
-#: apps/io.ox/mail/compose/view.js:504 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:522 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "Opravdu chcete zprávu zahodit?"
 
@@ -3919,11 +3864,11 @@ msgstr "Pošta byla importována"
 msgid "Mail has been moved"
 msgstr "Zprávy byly přesunuty"
 
-#: apps/io.ox/mail/compose/view.js:653 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:671 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Zpráva nemá předmět. Poslat i tak?"
 
-#: apps/io.ox/mail/compose/view.js:646 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:664 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Zpráva nemá žádného adresáta."
 
@@ -3943,8 +3888,8 @@ msgstr "Poslat upomínku"
 msgid "Mail reminder for"
 msgstr "Poslat upomínku pro"
 
-#: apps/io.ox/mail/compose/view.js:389 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:411
+#: apps/io.ox/mail/compose/view.js:407 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:429
 msgid "Mail saved as draft"
 msgstr "Zpráva uložena jako koncept"
 
@@ -5748,7 +5693,7 @@ msgstr "Uložit"
 msgid "Save as distribution list"
 msgstr "Uložit jako distribuční seznam"
 
-#: apps/io.ox/mail/compose/view.js:508 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:526 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Uložit jako koncept"
 
@@ -5901,7 +5846,7 @@ msgid "Sender/From"
 msgstr "Odesílatel/od"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:823 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:841 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Posláno z %s z mobilního telefonu"
 
@@ -6702,7 +6647,7 @@ msgstr "Datum dokončení nemůže být před datem začátku. Upravit datum za�
 msgid "The email address %1$s is already in the list"
 msgstr "E-mailová adresa %1$s už na seznamu je"
 
-#: apps/io.ox/mail/compose/view.js:584 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:602 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Zpráva byla odeslána"
 
@@ -7721,7 +7666,7 @@ msgstr "Žlutá"
 msgid "Yes"
 msgstr "Ano"
 
-#: apps/io.ox/mail/compose/view.js:654 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:672 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Ano, poslat bez předmětu"
 
@@ -8807,8 +8752,23 @@ msgstr "vaše platforma"
 #~ msgid "... or create a fresh one for your profile"
 #~ msgstr "...nebo vytvořte nový pro svůj profil"
 
+#~ msgid "0 minutes"
+#~ msgstr "0 minut"
+
+#~ msgid "1 day"
+#~ msgstr "1 den"
+
+#~ msgid "1 hour"
+#~ msgstr "1 hodina"
+
+#~ msgid "1 week"
+#~ msgstr "1 týden"
+
 #~ msgid "10"
 #~ msgstr "10"
+
+#~ msgid "12 hour"
+#~ msgstr "12 hodin"
 
 #~ msgid "15"
 #~ msgstr "15"
@@ -8816,26 +8776,65 @@ msgstr "vaše platforma"
 #~ msgid "150%"
 #~ msgstr "150 %"
 
+#~ msgid "2 days"
+#~ msgstr "2 dny"
+
+#~ msgid "2 hour"
+#~ msgstr "2 hodiny"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 týdny"
+
 #~ msgid "20"
 #~ msgstr "20"
 
 #~ msgid "200%"
 #~ msgstr "200 %"
 
+#~ msgid "3 days"
+#~ msgstr "3 dny"
+
+#~ msgid "3 weeks"
+#~ msgstr "3 týdny"
+
 #~ msgid "30"
 #~ msgstr "30"
+
+#~ msgid "4 days"
+#~ msgstr "4 dny"
+
+#~ msgid "4 hour"
+#~ msgstr "4 hodiny"
+
+#~ msgid "4 weeks"
+#~ msgstr "4 týdny"
+
+#~ msgid "45 minutes"
+#~ msgstr "45 minut"
 
 #~ msgid "5"
 #~ msgstr "5"
 
+#~ msgid "5 days"
+#~ msgstr "5 dní"
+
 #~ msgid "50%"
 #~ msgstr "50 %"
+
+#~ msgid "6 days"
+#~ msgstr "6 dní"
+
+#~ msgid "6 hour"
+#~ msgstr "6 hodin"
 
 #~ msgid "60"
 #~ msgstr "60"
 
 #~ msgid "75%"
 #~ msgstr "75 %"
+
+#~ msgid "8 hour"
+#~ msgstr "8 hodin"
 
 #~ msgid "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
 #~ msgstr "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
