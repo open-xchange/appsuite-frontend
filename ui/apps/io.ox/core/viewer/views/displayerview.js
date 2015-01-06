@@ -37,16 +37,14 @@ define('io.ox/core/viewer/views/displayerview', [
             this.$el.on('dispose', this.dispose.bind(this));
         },
 
-        render: function () {
-            //console.warn('DisplayerView.render()');
+        render: function (startIndex) {
+            //console.warn('DisplayerView.render() startIndex', startIndex);
             var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
                 carouselInner = $('<div class="carousel-inner">'),
                 prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev" tabindex="1"><i class="fa fa-angle-left"></i></a>'),
                 nextSlide = $('<a class="right carousel-control" href="#viewer-carousel" role="button" data-slide="next" tabindex="1"><i class="fa fa-angle-right"></i></a>'),
-                // simulation with first file in the folder selected
-                fileSelection = 0,
                 // preload 1 neigboring slides
-                preload = 1,
+                slidesToPreload = 1,
                 slidesCount = this.collection.length,
                 displayerTopOffset = $('.viewer-toolbar').outerHeight();
 
@@ -103,19 +101,18 @@ define('io.ox/core/viewer/views/displayerview', [
                 carouselInner.append(createSlide(model, modelIndex));
             });
 
-            // set first item active, load first item and its neighbors initially
-            // TODO load selected file from OX Drive/Mail
+            // set the first selected file active and preload its neighbours
             var slidesList = carouselInner.children();
-            slidesList.first().addClass('active');
-            preloadSlide(fileSelection, preload, 'left');
-            preloadSlide(fileSelection, preload, 'right');
+            slidesList.eq(startIndex).addClass('active');
+            preloadSlide(startIndex, slidesToPreload, 'left');
+            preloadSlide(startIndex, slidesToPreload, 'right');
 
             // init the carousel and preload neighboring slides on next/prev
             carouselRoot.append(carouselInner, prevSlide, nextSlide)
                 .carousel()
                 .on('slid.bs.carousel', function (event) {
                     var activeSlideIndex = $(event.relatedTarget).data('slide');
-                    preloadSlide(activeSlideIndex, preload, event.direction);
+                    preloadSlide(activeSlideIndex, slidesToPreload, event.direction);
                 });
 
             // append carousel to view

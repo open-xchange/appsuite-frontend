@@ -53,17 +53,15 @@ define('io.ox/core/viewer/views/mainview', [
             $(window).on('resize.viewer', this.onWindowResize.bind(this));
             // clean stuff on dispose event from core/commons.js
             this.$el.on('dispose', this.dispose.bind(this));
-            // display initially first file
-            // TODO get real selection from Drive or Mail app
-            this.displayedFileIndex = 0;
-            // render viewer initially
-            this.render();
+            // display the selected file initially
+            var startIndex = this.collection.getStartIndex();
+            this.render(startIndex);
             // trigger item changed event initally for the first file
-            EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
+            EventDispatcher.trigger('viewer:displayeditem:change', { index: startIndex, model: this.collection.at(startIndex) } );
         },
 
-        render: function () {
-            //console.info('MainView.render()');
+        render: function (startIndex) {
+            //console.info('MainView.render()', startIndex);
             var self = this;
             // append toolbar view
             this.$el.append(this.toolbarView.render().el);
@@ -71,7 +69,7 @@ define('io.ox/core/viewer/views/mainview', [
             _.defer(function () {
                 // append displayerView and sidebarView deferred, for preview image optimal height calculation
                 self.$el.append(
-                    self.displayerView.render().el,
+                    self.displayerView.render(startIndex).el,
                     self.sidebarView.render().el
                 );
                 self.displayerView.$el.find('.active').focus();

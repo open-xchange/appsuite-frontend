@@ -298,8 +298,28 @@ define('io.ox/core/viewer/backbone', [
             return model;
         },
 
-        initialize: function () {
-            //console.info('FileCollection.initialize()');
+        /**
+         * Finds the current start (selected) file in the model and save the model index
+         * in the collection. If the selected file is not found, zero index will be set.
+         *
+         * @param {Object} startFile
+         *  The file descriptor of the currently selected file.
+         */
+        setStartIndex: function (startFile) {
+            if (!startFile || !startFile.id ) { return; }
+            var startModel = this.findWhere({ id: startFile.id }),
+                startModelIndex = this.indexOf(startModel);
+            this.startIndex = startModelIndex < 0 ? 0 : startModelIndex;
+        },
+
+        /**
+         * Gets the index of the selected file in the collection.
+         *
+         * @returns {Number} startIndex
+         *  Returns the start index or zero if startIndex is not set.
+         */
+        getStartIndex: function () {
+            return this.startIndex || 0;
         }
 
     });
