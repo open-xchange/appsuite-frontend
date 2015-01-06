@@ -907,7 +907,7 @@ define('io.ox/mail/write/main',
                                 win.idle();
                                 if (_.device('!smartphone')) ed.focus();
                                 view.scrollpane.scrollTop(0);
-                                def.resolve({app: app});
+                                def.resolve({ app: app });
                                 if (_.device('smartphone')) {
                                     // trigger keyup to resize the textarea
                                     view.textarea.trigger('keyup');
@@ -921,6 +921,7 @@ define('io.ox/mail/write/main',
                                     if (_.device('!ios')) view.textarea.focus();
                                     app.getWindow().nodes.main.scrollTop(0);
                                 }
+                                ox.trigger('mail:reply:ready', data, app);
                             });
                         })
                         .fail(function (e) {

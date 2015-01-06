@@ -1109,6 +1109,7 @@ define('io.ox/core/desktop',
                             self.trigger('open');
                             self.state.running = true;
                             ox.ui.windowManager.trigger('window.open', self);
+                            ox.trigger('app:ready', self.app);
                             firstShow = false;
                         }
                         ox.ui.windowManager.trigger('window.show', self);

@@ -398,7 +398,8 @@ define.async('io.ox/core/tk/html-editor',
 
         var def = $.Deferred(), ed,
             toolbar1, toolbar2, toolbar3, advanced,
-            width = $(document).width();
+            width = $(document).width(),
+            self = this;
 
         // toolbar default
         toolbar1 = 'undo redo | bold italic | emoji | bullist numlist outdent indent';
@@ -497,6 +498,8 @@ define.async('io.ox/core/tk/html-editor',
                     if (_.browser.Firefox && _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'))
                         e.preventDefault();
                 });
+
+                ox.trigger('editor:ready', { editor: self, tinymce: ed });
 
                 def.resolve();
             },
