@@ -164,7 +164,7 @@ define('io.ox/core/tk/text-editor', function () {
                 resizeEditorMargin();
                 $(window).on('resize.text-editor', resizeEditorMargin);
             } else {
-                textarea.parents('.window-content').find('.editable, .editable-toolbar').hide();
+                textarea.parents('.window-content').find('.editable-toolbar').hide().next().hide();
                 resizeEditorMargin();
                 $(window).on('resize.text-editor', resizeEditorMargin);
             }
