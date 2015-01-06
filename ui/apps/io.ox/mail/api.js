@@ -543,33 +543,6 @@ define('io.ox/mail/api',
         all = all || ids;
 
         if (all.length === 1) {
-            api.threads.touch(all[0]);
-        }
-
-        // we need the original list of ids "all" to also catch threads
-        // that start with an email from the sent folder
-        api.trigger('beforedelete', all);
-
-        _(all).each(function (item) {
-            var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
-        });
-    }
-
-    /**
-     * wrapper for factories remove to update counters
-     * @param  {array} ids
-     * @param  {object} options [see api factory]
-     * @return {deferred} resolves as array
-     */
-    api.remove = function (ids, all) {
-
-        var collection = pool.get('detail');
-
-        // fallback
-        all = all || ids;
-
-        if (all.length === 1) {
             api.threads.remove(all[0]);
             api.threads.touch(all[0]);
         }
@@ -582,7 +555,7 @@ define('io.ox/mail/api',
             var cid = _.cid(item), model = collection.get(cid);
             if (model) collection.remove(model);
         });
-    };
+    }
 
     /**
      * wrapper for factories remove to update counters
