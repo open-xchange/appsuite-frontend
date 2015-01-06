@@ -324,7 +324,7 @@ define([
             });
         });
 
-        describe.only('signature handling', function () {
+        describe('signature handling', function () {
             describe('for HTML mails', function () {
                 it('should clean plain text signatures containing < and >', function () {
                     var clean = util.signatures.cleanAdd('Test <test@example.com>', true);
