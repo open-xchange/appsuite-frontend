@@ -341,10 +341,8 @@ define('io.ox/files/main',
                 } else {
                     $view.addClass('checkboxes-hidden');
                     app.pages.getNavbar('fluid').setRight(gt('Edit')).show('.left');
-
                 }
             });
-
         },
 
         'toggle-secondary-toolbar': function (app) {

@@ -209,6 +209,13 @@ define('io.ox/files/mobile-toolbar-actions',
             app.pages.getPage('fluid').on('pageshow', function () {
                 app.pages.getToolbar('fluid').setBaton(new ext.Baton({app: app}));
             });
+
+            // enable standard toolbar after checkbox dismiss
+            app.props.on('change:showCheckboxes', function (data) {
+                if (!data.attributes.showCheckboxes) {
+                    app.pages.getToolbar('fluid').setBaton(new ext.Baton({app: app}));
+                }
+            });
         }
     });
 
