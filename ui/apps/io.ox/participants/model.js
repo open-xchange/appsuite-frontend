@@ -245,6 +245,18 @@ define('io.ox/participants/model', [
                     break;
             }
             this.set('type', newType);
+        },
+
+        getAPIData: function () {
+            var ret = {
+                type: this.get('type')
+            };
+            if (this.get('type') === 5) {
+                ret.mail = this.get('email1');
+            } else if (this.has('id')) {
+                ret.id = this.get('id');
+            }
+            return ret;
         }
 
     });
@@ -252,6 +264,10 @@ define('io.ox/participants/model', [
     var Collection = Backbone.Collection.extend({
 
         model: Model,
+
+        getAPIData: function () {
+            return this.map(function (model) { return model.getAPIData(); });
+        },
 
         initialize: function () {
             var self = this;
