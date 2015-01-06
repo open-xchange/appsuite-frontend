@@ -318,7 +318,7 @@ define('io.ox/mail/compose/view', [
 
         filterData: function (data) {
             if (/(compose|edit)/.test(data.mode)) return data;
-            return _.pick(data, 'id', 'folder_id', 'mode', 'csid');
+            return _.pick(data, 'id', 'folder_id', 'mode', 'csid', 'content_type');
         },
 
         fetchMail: function (obj) {
@@ -332,9 +332,16 @@ define('io.ox/mail/compose/view', [
                     return _.pick(o, 'id', 'folder_id', 'csid');
                 });
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'csid');
+                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
             }
-            return mailAPI[mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
+
+            var content_type = this.messageFormat;
+
+            if (content_type === 'alternative') {
+                content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
+            }
+
+            return mailAPI[mode](obj, content_type).then(function (data) {
                 data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                 data.mode = mode;
                 var attachments = _.clone(data.attachments);
