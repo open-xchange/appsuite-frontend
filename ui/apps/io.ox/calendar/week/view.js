@@ -789,7 +789,14 @@ define('io.ox/calendar/week/view',
                 tmpDate = new date.Local(this.startDate.getTime());
 
             // something new?
-            if (this.startDate.getTime() === this.startLabelRef && today.getTime() === this.dayLabelRef) return;
+            if (this.startDate.getTime() === this.startLabelRef && today.getTime() === this.dayLabelRef) {
+                if (this.options.todayClass && this.columns > 1) {
+                    var weekViewContainer = $('.week-view-container');
+                    weekViewContainer.find('.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
+                    weekViewContainer.find('.day[date="' + (today.getDays() - this.startDate.getDays()) + '"]', this.$el).addClass(this.options.todayClass);
+                }
+                return;
+            }
 
             if (this.options.todayClass) {
                 $('.week-view-container').find('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
