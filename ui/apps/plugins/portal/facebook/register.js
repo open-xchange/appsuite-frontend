@@ -200,12 +200,21 @@ define('plugins/portal/facebook/register',
         title: gt('Facebook'),
 
         initialize: function (baton) {
-            keychain.submodules.facebook.on('update create delete', function () {
+            keychain.submodules.facebook.on('update create', function () {
                 loadFromFacebook().done(function (data) {
                     baton.data = data;
                     if (baton.contentNode) {
                         baton.contentNode.empty();
                         drawPreview(baton);
+                    }
+                });
+            });
+            keychain.submodules.facebook.on('delete', function () {
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.facebook_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
                     }
                 });
             });

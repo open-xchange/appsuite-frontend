@@ -186,6 +186,18 @@ define('plugins/portal/linkedIn/register',
 
         title: 'LinkedIn',
 
+        initialize: function () {
+            keychain.submodules.linkedin.on('delete', function () {
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.linkedIn_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+            });
+        },
+
         isEnabled: function () {
             return keychain.isEnabled('linkedin');
         },
