@@ -336,7 +336,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetTabIndex(items, items.eq(index));
             this.resetCheckmark(items);
             this.pick(index, items, e);
-            this.triggerChange(items);
+            //alternative selection mode needs this, has no effect in default mode
+            if ( this.isMultiple(e) || this.isRange(e) ) {
+                this.triggerChange(items);
+            } else {
+                this.selectEvents(items);
+            }
         },
 
         onPageUpDown: function (e) {
