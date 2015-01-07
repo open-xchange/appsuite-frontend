@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'settings!io.ox/mail'], function (bot, settings) {
+define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'settings!io.ox/mail', 'io.ox/mail/api'], function (bot, settings, api) {
 
     'use strict';
 
@@ -19,10 +19,14 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
 
         this.suite(function () {
 
-            this.test('Test 1', function () {
+            //
+            // Test 1
+            //
+
+            this.xtest('Open and answer mail', function () {
 
                 this.step('Switch to mail app', function (done) {
-                    this.launchApp('io.ox/mail', done);
+                    this.waitForApp('io.ox/mail', done);
                 });
 
                 this.step('Select first mail', function () {
@@ -52,11 +56,71 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                     // wait for proper event
                     ox.on('mail:send:stop', done);
                 });
+
+                this.step('Switch back to mail app', function (done) {
+                    this.waitForSelector('.io-ox-mail-window:visible', done);
+                });
             });
 
-            this.test('Test 2', function () {
-                this.step('Noop', function () {
-                    console.log('Noop');
+            //
+            // Test 2
+            //
+
+            this.test('Copy and delete mail', function () {
+
+                var INBOX = 'default0/INBOX', TEST = 'default0/INBOX/Test';
+
+                this.step('Switch to mail app', function (done) {
+                    this.waitForApp('io.ox/mail', done);
+                });
+
+                this.step('Switch to INBOX', function (done) {
+                    this.waitForFolder(INBOX, done);
+                });
+
+                this.step('Wait for list view to update', function (done) {
+                    this.waitForListView(this.app.listView, INBOX, done);
+                });
+
+                this.step('Select first message', function () {
+                    this.app.listView.selection.select(0);
+                    // remember cid to copy via API directly
+                    this.message = _.cid(this.app.listView.selection.get()[0].replace(/^thread\./, ''));
+                });
+
+                this.step('Copy selected message to test folder', function (done) {
+
+                    var self = this;
+
+                    api.copy(this.message, TEST).done(function (list) {
+                        self.message = list[0];
+                        done();
+                    });
+                });
+
+                this.step('Switch to test folder', function (done) {
+                    this.waitForFolder(TEST, done);
+                });
+
+                this.step('Wait for list view to update', function (done) {
+                    this.waitForListView(this.app.listView, TEST, done);
+                });
+
+                this.step('Select copied message', function (done) {
+
+                    this.waitFor(function () {
+                        return !$('.io-ox-action-link[data-ref="io.ox/mail/actions/delete"]').hasClass('disabled');
+                    })
+                    .done(done);
+
+                    var cid = 'thread.' + _.cid(this.message);
+                    this.app.listView.selection.set([cid]);
+                    this.app.listView.selection.triggerChange();
+                });
+
+                this.step('Delete message', function (done) {
+                    $('.io-ox-action-link[data-ref="io.ox/mail/actions/delete"]').click();
+                    this.waitForEvent(api, 'delete', done);
                 });
             });
         });

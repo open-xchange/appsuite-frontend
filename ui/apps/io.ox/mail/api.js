@@ -1077,30 +1077,33 @@ define('io.ox/mail/api',
      */
     api.copy = function (list, targetFolderId) {
 
-        var response;
+        // mark target folder as expired
+        _(pool.getByFolder(targetFolderId)).each(function (collection) {
+            collection.expired = true;
+        });
 
         return update(list, { folder_id: targetFolderId }, 'copy')
-            .then(function (resp) {
-                response = resp.response;
+            .then(function (result) {
                 return (clearCaches(list, targetFolderId)()).then(function () {
-                    return resp.list;
+                    return result;
                 });
             })
-            .then(function () {
+            .then(function (result) {
 
-                var errorText;
+                var response = result.response, errorText;
+
                 // look if something went wrong
                 for (var i = 0; i < response.length; i++) {
                     if (response[i].error) {
-                        errorText = response[i].error.error;
+                        response = response[i].error.error;
                         break;
                     }
                 }
 
                 api.trigger('copy', list, targetFolderId);
-                folderAPI.reload(targetFolderId, list);
+                folderAPI.reload(targetFolderId);
 
-                if (errorText) return errorText;
+                return errorText ? errorText : _(response).pluck('data');
             });
     };
 

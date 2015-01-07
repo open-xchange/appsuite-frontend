@@ -19,6 +19,9 @@ define('io.ox/core/metrics/bot/util', [], function () {
     var ready = $.Deferred();
     ox.on('core:ready', ready.resolve);
 
+    // tick - frequency of "waitFor"
+    var TICK = 50;
+
     var that = {
 
         // general timeout
@@ -35,11 +38,11 @@ define('io.ox/core/metrics/bot/util', [], function () {
                     if (fail) fail();
                     def.reject();
                 }
-            }, 100);
+            }, TICK);
             return def.promise();
         },
 
-        waitForEvent: function (id, callback) {
+        waitForEvent: function (hub, id, callback) {
             var def = $.Deferred();
             var timeout = setTimeout(function () {
                 console.error('Event not triggered', id);
@@ -47,10 +50,15 @@ define('io.ox/core/metrics/bot/util', [], function () {
             }, that.TIMEOUT);
             var handler = function () {
                 clearTimeout(timeout);
-                ox.off(id, handler);
+                hub.off(id, handler);
                 def.resolve();
             };
-            ox.on(id, handler);
+            if (_.isString(hub)) {
+                callback = id;
+                id = hub;
+                hub = ox;
+            }
+            hub.on(id, handler);
             return def.promise().done(callback);
         },
 
@@ -67,7 +75,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
         },
 
         // launch app, e.g. io.ox/mail
-        launchApp: function (id, callback) {
+        waitForApp: function (id, callback) {
             var def = $.Deferred();
             var timeout = setTimeout(function () {
                 console.error('Cannot launch app', id);
@@ -79,12 +87,30 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 if (name === id) {
                     clearTimeout(timeout);
                     ox.off('app:resume app:ready', handler);
-                    def.resolve();
+                    this.app = app;
+                    def.resolve(app);
                 }
             };
-            ox.on('app:resume app:ready', handler);
+            ox.on('app:resume app:ready', handler.bind(this));
             ox.launch(id + '/main');
             return def.promise().done(callback);
+        },
+
+        waitForFolder: function (id, callback) {
+            // get current app and set folder
+            var app = ox.ui.App.getCurrentApp();
+            return app.folder.set(id).done(callback);
+        },
+
+        // wait for list view to change collection and display content
+        waitForListView: function (listView, folder, callback) {
+            return that.waitFor(function check() {
+                if (!listView.collection) return false;
+                if (listView.collection.cid.indexOf('folder=' + folder) === -1) return false;
+                // must wait for more than one node (first one is busy-indicator)
+                return listView.el.childNodes.length > 1;
+            })
+            .done(callback);
         },
 
         // call callback when core is ready (+ 3 seconds to be safe)

@@ -49,6 +49,8 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
 
     function Suite(callback) {
         AbstractSuite.call(this, callback);
+        // for debugging purposes
+        window.suite = this;
     }
 
     _.extend(Suite.prototype, AbstractSuite.prototype, {
@@ -70,7 +72,12 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
 
         test: function (description, callback) {
             this.items.push(new Test(description, callback));
+        },
+
+        // typical convenience function; instead of commenting stuff out
+        xtest: function () {
         }
+
     });
 
     //
@@ -87,6 +94,10 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
 
         step: function (description, callback) {
             this.items.push({ description: description, callback: callback, duration: -1 });
+        },
+
+        // typical convenience function; instead of commenting stuff out
+        xstep: function () {
         },
 
         process: function (item) {
@@ -109,7 +120,7 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
             // run step
             if (item.callback.length === 0) {
                 // call without "done" callback
-                item.callback();
+                item.callback.call(this);
                 done.call(this);
             } else {
                 // async
@@ -123,10 +134,12 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
             }, 0);
         },
 
-        launchApp: util.launchApp,
         waitFor: util.waitFor,
+        waitForApp: util.waitForApp,
         waitForEvent: util.waitForEvent,
-        waitForSelector: util.waitForSelector
+        waitForSelector: util.waitForSelector,
+        waitForFolder: util.waitForFolder,
+        waitForListView: util.waitForListView
     });
 
     var that = {
