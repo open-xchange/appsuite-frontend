@@ -717,7 +717,7 @@ msgstr "引用文本上方"
 msgid "Add signature below quoted text"
 msgstr "引用文本下方"
 
-#: apps/io.ox/mail/compose/view.js:673 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:680 module:io.ox/mail
 msgid "Add subject"
 msgstr "添加题目"
 
@@ -1291,7 +1291,7 @@ msgstr "日历视图"
 #: apps/io.ox/mail/actions/delete.js:50 apps/io.ox/mail/actions/delete.js:69
 #: apps/io.ox/mail/actions/reminder.js:35
 #: apps/io.ox/mail/compose/extensions.js:326
-#: apps/io.ox/mail/compose/view.js:527
+#: apps/io.ox/mail/compose/view.js:534
 #: apps/io.ox/mail/mailfilter/settings/filter.js:101
 #: apps/io.ox/mail/main.js:259 apps/io.ox/mail/main.js:991
 #: apps/io.ox/mail/settings/signatures/register.js:141
@@ -1618,7 +1618,7 @@ msgid "Company"
 msgstr "公司"
 
 #: apps/io.ox/mail/compose/main.js:36 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:367
+#: apps/io.ox/mail/compose/view.js:374
 #: apps/io.ox/mail/mobile-toolbar-actions.js:36
 #: apps/io.ox/mail/settings/pane.js:207 apps/io.ox/mail/toolbar.js:42
 msgid "Compose"
@@ -2132,7 +2132,7 @@ msgstr "丢弃更改"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/compose/view.js:525 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:532 module:io.ox/mail
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "丢弃消息"
@@ -2256,7 +2256,7 @@ msgstr "您确定要删除这个迷你程序吗？"
 msgid "Do you really want to discard your changes?"
 msgstr "您真的想放弃更改吗？"
 
-#: apps/io.ox/mail/compose/view.js:522 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:529 module:io.ox/mail
 msgid "Do you really want to discard your message?"
 msgstr "您真的想丢弃您的消息吗？"
 
@@ -2552,7 +2552,7 @@ msgstr "电子邮件 3"
 msgid "Email address"
 msgstr "电子邮件地址"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:141 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:176 module:io.ox/mail
 msgid "Email addresses"
 msgstr "电子邮件地址"
 
@@ -2646,11 +2646,11 @@ msgstr "启用"
 msgid "Enabled"
 msgstr "启用"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:140 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:175 module:io.ox/mail
 msgid "Enabled for the following addresses"
 msgstr "为以下地址启用"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:143 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:178 module:io.ox/mail
 msgid "End"
 msgstr "结束"
 
@@ -2726,7 +2726,7 @@ msgstr "每 %1$d 天"
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:495 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:497 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "每 %1$d 月的第 %2$d 天"
 
@@ -2734,26 +2734,26 @@ msgstr "每 %1$d 月的第 %2$d 天"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:507 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:509 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "每 %1$d 月的 %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:483 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:484 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "每 %1$d 周的 %2$s"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:463 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:464 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "每 %1$d 周的每一天"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:473 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:474 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "每 %1$d 周的工作天"
 
@@ -2761,7 +2761,7 @@ msgstr "每 %1$d 周的工作天"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:521 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:524 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "每 %1$d 年的 %2$s 月 %3$d 日"
 
@@ -2770,12 +2770,12 @@ msgstr "每 %1$d 年的 %2$s 月 %3$d 日"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:535 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:538 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "每 %1$d 年 %4$d 月的第 %2$s 个 %3$s"
 
 #: apps/io.ox/calendar/util.js:450 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:460
+#: apps/io.ox/calendar/util.js:461
 msgid "Every day"
 msgstr "每天"
 
@@ -3761,7 +3761,7 @@ msgstr "低优先级"
 msgid "MB"
 msgstr "MB"
 
-#: apps/io.ox/mail/compose/model.js:226 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
 msgid "Mail"
 msgstr "邮件"
 
@@ -3815,11 +3815,11 @@ msgstr "电子邮件已导入"
 msgid "Mail has been moved"
 msgstr "邮件已移动"
 
-#: apps/io.ox/mail/compose/view.js:671 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:678 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "邮件没有题目，您还要发送吗？"
 
-#: apps/io.ox/mail/compose/view.js:664 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:671 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "邮件没有收件人。"
 
@@ -3839,8 +3839,8 @@ msgstr "邮件提醒"
 msgid "Mail reminder for"
 msgstr "邮件提醒于"
 
-#: apps/io.ox/mail/compose/view.js:407 module:io.ox/mail
-#: apps/io.ox/mail/compose/view.js:429
+#: apps/io.ox/mail/compose/view.js:414 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:436
 msgid "Mail saved as draft"
 msgstr "邮件已保存为草稿"
 
@@ -4054,14 +4054,14 @@ msgstr "月视图"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:491 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:493 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "每月 %1$d 日"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:502 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:504 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "每月的第 %1$s 个 %2$s"
 
@@ -4371,7 +4371,7 @@ msgstr "没有慢速请求"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js:226 module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js:225 module:io.ox/mail
 #: apps/io.ox/mail/util.js:388 module:io.ox/core
 #: apps/plugins/notifications/mail/register.js:61 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:64
@@ -4460,7 +4460,7 @@ msgstr "以电子邮件通知所有参与者。"
 msgid "November"
 msgstr "十一月"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:139 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "向同一发送人的假期通知时间间隔"
 
@@ -4522,7 +4522,7 @@ msgid "On new notifications except mails"
 msgstr "在除了邮件的新通知"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:470 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:471 module:io.ox/calendar
 msgid "On work days"
 msgstr "在工作天"
 
@@ -5629,7 +5629,7 @@ msgstr "保存"
 msgid "Save as distribution list"
 msgstr "保存为通讯组列表"
 
-#: apps/io.ox/mail/compose/view.js:526 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:533 module:io.ox/mail
 msgid "Save as draft"
 msgstr "保存为草稿"
 
@@ -5771,7 +5771,7 @@ msgstr "发送邮件到所有参与者"
 msgid "Send new mail"
 msgstr "发送新电子邮件"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:144 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:179 module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "只于此时间发送假期通知"
 
@@ -5781,7 +5781,7 @@ msgid "Sender/From"
 msgstr "发送者/来自"
 
 #. %s is the product name
-#: apps/io.ox/mail/compose/view.js:841 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:848 module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "从 %s 经过移动网路发送"
 
@@ -6168,7 +6168,7 @@ msgstr "配偶姓名"
 msgid "Standard folders"
 msgstr "常规文件夹"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:142 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:177 module:io.ox/mail
 #: apps/io.ox/tasks/print.js:91 module:io.ox/tasks
 msgid "Start"
 msgstr "开始于"
@@ -6227,7 +6227,7 @@ msgstr "学生"
 #: apps/io.ox/mail/compose/extensions.js:234
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/vacationnotice/settings/model.js:137
+#: apps/io.ox/mail/vacationnotice/settings/model.js:172
 #: apps/io.ox/mail/view-options.js:35
 #: apps/io.ox/tasks/edit/view-template.js:110 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/main.js:673 module:io.ox/tasks
@@ -6417,7 +6417,7 @@ msgstr "暂定"
 msgid "Tentatively accepted"
 msgstr "暂定接受"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:138 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:173 module:io.ox/mail
 msgid "Text"
 msgstr "文本"
 
@@ -6578,7 +6578,7 @@ msgstr "结束时间不能在开始时间之前。调整开始时间？"
 msgid "The email address %1$s is already in the list"
 msgstr "邮件地址 %1$s 已经在列表里"
 
-#: apps/io.ox/mail/compose/view.js:602 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:609 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "已发送电子邮件"
 
@@ -6702,6 +6702,21 @@ msgid ""
 msgstr ""
 "系列 <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">永不结束"
 "</a>。"
+
+#: apps/io.ox/calendar/util.js:550 module:io.ox/calendar
+#, fuzzy
+#| msgid "after %1$d appointment"
+#| msgid_plural "after %1$d appointments"
+msgid "The series ends after %1$d appointment"
+msgid_plural "The series ends after %1$d appointments"
+msgstr[0] "%1$d 次约会后"
+msgstr[1] "%1$d 次约会后"
+
+#: apps/io.ox/calendar/util.js:545 module:io.ox/calendar
+#, fuzzy
+#| msgid "This file is locked by %1$s"
+msgid "The series ends on %1$s"
+msgstr "此文件被 %1$s 锁着"
 
 #: apps/io.ox/calendar/settings/pane.js:83 module:io.ox/calendar
 #: apps/io.ox/contacts/settings/pane.js:38 module:io.ox/contacts
@@ -7363,7 +7378,7 @@ msgstr "用户名称"
 msgid "Username must not be empty."
 msgstr "用户名称不得为空。"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:136 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:171 module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js:41
 msgid "Vacation Notice"
 msgstr "假期通知"
@@ -7441,7 +7456,7 @@ msgstr "周视图"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:479 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:480 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "每周的 %1$s"
 
@@ -7522,7 +7537,7 @@ msgstr "年"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:516 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "每年的 %1$s %2$d"
 
@@ -7530,7 +7545,7 @@ msgstr "每年的 %1$s %2$d"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:529 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:532 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "每年 %3$d 月的第 %1$s 个 %2$s"
 
@@ -7552,7 +7567,7 @@ msgstr "黄色"
 msgid "Yes"
 msgstr "是"
 
-#: apps/io.ox/mail/compose/view.js:672 module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js:679 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "是，不带题目发送"
 
@@ -8345,7 +8360,7 @@ msgstr "无限"
 msgid "vCard"
 msgstr "vCard"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js:111 module:io.ox/mail
+#: apps/io.ox/mail/vacationnotice/settings/model.js:146 module:io.ox/mail
 msgid "vacation notice"
 msgstr "假期通知"
 
