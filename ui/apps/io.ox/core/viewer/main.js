@@ -30,15 +30,23 @@ define('io.ox/core/viewer/main', [
          * Main bootstrap file for the OX Viewer.
          */
         this.launch = function (baton) {
-            //console.warn('Main.launch() ', baton);
+            //console.warn('Main.launch() ');
+            if (!baton) {
+                console.error('Core.Viewer.launch(): no files to preview.');
+                return;
+            }
+            // Drive has the list in the allIds property, Mail in the root
+            var fileList = baton.allIds || baton;
             // create file collection and populate it with file models
-            var fileCollection = new backbone.Collection();
-            fileCollection.set(baton.allIds, { parse: true });
-            // set the index of the selected file
-            fileCollection.setStartIndex(baton.data);
+            this.fileCollection = new backbone.Collection();
+            this.fileCollection.set(fileList, { parse: true });
+            // set the index of the selected file (Drive only)
+            if (baton.data) {
+                this.fileCollection.setStartIndex(baton.data);
+            }
             // create main view and append main view to core
-            var mainView =  new MainView({ collection: fileCollection });
-            $('#io-ox-core').append(mainView.el);
+            this.mainView =  new MainView({ collection: this.fileCollection });
+            $('#io-ox-core').append(this.mainView.el);
         };
     };
 

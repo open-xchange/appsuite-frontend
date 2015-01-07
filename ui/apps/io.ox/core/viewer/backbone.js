@@ -25,8 +25,9 @@
 
 define('io.ox/core/viewer/backbone', [
     'io.ox/files/api',
-    'io.ox/core/api/attachment'
-], function (FilesAPI, AttachmentAPI) {
+    'io.ox/core/api/attachment',
+    'io.ox/mail/api'
+], function (FilesAPI, AttachmentAPI, MailAPI) {
 
     'use strict';
 
@@ -250,9 +251,10 @@ define('io.ox/core/viewer/backbone', [
         },
 
         getPreviewUrl: function () {
-            //console.warn('backbone.getPreviewUrl()');
             if (this.isMailAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
+                // AttachmentAPI does not delivering working image url! Use Mail API instead.
+                //return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
+                return MailAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
             } else if (this.isDriveFile()) {
                 // temporary workaround to show previews of office documents
                 var fileCategory = this.get('fileCategory'),
