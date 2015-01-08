@@ -191,20 +191,43 @@ define('io.ox/core/tk/list',
             this.trigger('remove', model);
         },
 
-        onSort: function () {
-            // sort all nodes by index
-            var nodes = $(_(this.getItems()).sortBy(function (node) {
+        onSort: (function () {
+
+            function getIndex(node) {
                 // don't use data() here
-                var index = $(node).attr('data-index');
-                return parseInt(index, 10);
-            }));
-            // store focus & scroll position
-            var active = nodes.index(document.activeElement), top = this.$el.scrollTop();
-            // re-append to apply sorting
-            this.$el.append(nodes);
-            // restore focus
-            if (active > -1) { nodes.eq(active).focus(); this.$el.scrollTop(top); }
-        },
+                return node && parseInt(node.getAttribute('data-index'), 10);
+            }
+
+            return function () {
+
+                var dom, sorted, i, j, length, node, reference, index, done = {};
+
+                // sort all nodes by index
+                dom = this.getItems().toArray();
+                sorted = _(dom).sortBy(getIndex);
+
+                // apply sorting (step by step to keep focus)
+                // the arrays "dom" and "sorted" always have the same length
+                for (i = 0, j = 0, length = sorted.length; i < length; i++) {
+                    node = sorted[i];
+                    reference = dom[j];
+                    // mark as processed
+                    done[i] = true;
+                    // same element?
+                    if (node === reference) {
+                        // fast forward "j" if pointing at processed items
+                        do index = getIndex(dom[++j]); while (done[index]);
+                    } else if (reference) {
+                        // change position in dom
+                        this.el.insertBefore(node, reference);
+                    }
+                }
+
+                // reduce scroll momentum
+                this.$el.css('overflow', 'hidden');
+                setTimeout(function ($el) { $el.css('overflow', ''); }, 100, this.$el);
+            };
+        }()),
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
@@ -299,7 +322,10 @@ define('io.ox/core/tk/list',
         // return alls items of this list
         // the filter is important, as we might have a header
         getItems: function () {
-            return this.$el.children('.list-item');
+            var items = this.$el.children('.list-item');
+            // much faster than :not(.busy-indicator)
+            if (items.last().hasClass('busy-indicator')) items = items.slice(0, -1);
+            return items;
         },
 
         connect: function (loader) {
