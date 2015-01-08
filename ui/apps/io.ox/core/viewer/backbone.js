@@ -147,7 +147,8 @@ define('io.ox/core/viewer/backbone', [
                 folderId: null,
                 meta: {},
                 lastModified: null,
-                description: null
+                description: null,
+                versions: null
             };
         },
 

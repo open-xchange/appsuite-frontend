@@ -21,9 +21,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
     'use strict';
 
-    var DRIVE_ROOT_FOLDER = '9';
+    var DRIVE_ROOT_FOLDER = '9',
+        POINT = 'io.ox/core/viewer/sidebar/fileinfo';
 
-    Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
+    Ext.point(POINT).extend({
         index: 100,
         id: 'fileinfo',
         draw: function (baton) {
@@ -109,10 +110,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             //console.info('FileInfoView.render() ', data);
             if (!data || !data.model) { return this; }
 
-            var fileinfo = this.$el,
-                baton = Ext.Baton({ $el: fileinfo, model: data.model, data: data.model.get('origData') });
+            var baton = Ext.Baton({ $el: this.$el, model: data.model, data: data.model.get('origData') });
 
-            Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', fileinfo, baton);
+            Ext.point('io.ox/core/viewer/sidebar/fileinfo').invoke('draw', this.$el, baton);
             return this;
         },
 

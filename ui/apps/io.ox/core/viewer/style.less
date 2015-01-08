@@ -193,7 +193,9 @@
         }
     }
 
-    .viewer-fileinfo, .viewer-filedescription {
+    .viewer-fileinfo,
+    .viewer-filedescription,
+    .viewer-fileversions {
 
         .panel {
             background-color: transparent;
@@ -218,9 +220,27 @@
             }
 
             .panel-body {
-            
+
                 dt {
                     color: #999999;
+                }
+
+                .versiontable {
+                    white-space:nowrap;
+
+                    .versionLabel {
+                       max-width: 32px;
+                       overflow: hidden;
+                       i.fa {
+                           margin-left: -2px;
+                       }
+                    }
+
+                    td {
+                        padding: 4px;
+                        border-top: none;
+                        border-bottom: 1px solid #555555;
+                    }
                 }
 
                 .description {

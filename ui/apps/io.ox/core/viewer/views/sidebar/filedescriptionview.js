@@ -25,7 +25,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     // Extensions for the file description view
     Ext.point(POINT).extend({
         index: 200,
-        id: 'fileinfo',
+        id: 'description',
         draw: function (baton) {
             //console.info('FileDescriptionView.draw()');
             var panel, panelHeader, panelBody, descriptionLabel, descriptionTextArea,

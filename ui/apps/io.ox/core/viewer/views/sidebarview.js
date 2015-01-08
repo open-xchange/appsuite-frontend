@@ -14,8 +14,9 @@ define('io.ox/core/viewer/views/sidebarview', [
     'io.ox/core/extensions',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/core/viewer/views/sidebar/fileinfoview',
-    'io.ox/core/viewer/views/sidebar/filedescriptionview'
-], function (Ext, EventDispatcher, FileInfoView, FileDescriptionView) {
+    'io.ox/core/viewer/views/sidebar/filedescriptionview',
+    'io.ox/core/viewer/views/sidebar/fileversionsview'
+], function (Ext, EventDispatcher, FileInfoView, FileDescriptionView, FileVersionsView) {
 
     'use strict';
 
@@ -48,6 +49,7 @@ define('io.ox/core/viewer/views/sidebarview', [
 
             this.fileInfoView = new FileInfoView();
             this.fileDescriptionView = new FileDescriptionView();
+            this.fileVersionsView = new FileVersionsView();
 
             this.listenTo(EventDispatcher, 'viewer:displayeditem:change', function (data) {
                 //console.warn('SidebarbarView viewer:displayeditem:change', data);
@@ -73,7 +75,8 @@ define('io.ox/core/viewer/views/sidebarview', [
             // append sub views
             this.$el.append(
                 this.fileInfoView.render(data).el,
-                this.fileDescriptionView.render(data).el
+                this.fileDescriptionView.render(data).el,
+                this.fileVersionsView.render(data).el
             );
 
             return this;
