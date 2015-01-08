@@ -193,7 +193,7 @@ define('io.ox/mail/detail/view',
             pubtype = /^(\w+),(.*)$/.exec(data.headers['X-OX-PubType']) || ['', '', ''];
             pub.module  = pubtype[1];
             pub.type  = pubtype[2];
-            pub.name = _.first(_.last(pub.url.split('/')).split('?'));
+            pub.name = decodeURIComponent(_.first(_.last(pub.url.split('/')).split('?')));
             pub.parent = require('settings!io.ox/core').get('folder/' + pub.module);
             pub.folder = '';
             label = pub.module === 'infostore' ?
