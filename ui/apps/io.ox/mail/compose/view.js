@@ -374,6 +374,13 @@ define('io.ox/mail/compose/view', [
             this.app.setTitle(this.model.get('subject') || gt('Compose'));
         },
 
+        parseMsgref: function (msgref) {
+            var base = _(msgref.toString().split(mailAPI.separator)),
+                id = base.last(),
+                folder = base.without(id).join(mailAPI.separator);
+            return { folder_id: folder, id: id };
+        },
+
         saveDraft: function () {
             // get mail
             var self = this,
@@ -400,19 +407,22 @@ define('io.ox/mail/compose/view', [
             old_vcard_flag = mail.vcard;
             delete mail.vcard;
 
-            // fix inline images
-            //mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
-
             var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
                 return mailAPI.send(mail, mail.files).always(function (result) {
                     if (result.error) {
                         notifications.yell(result);
                         def.reject(result);
                     } else {
-                        self.model.set('msgref', result.data, { silent: true });
-                        self.model.dirty(false);
-                        notifications.yell('success', gt('Mail saved as draft'));
-                        def.resolve(result);
+                        mailAPI.get(self.parseMsgref(result.data)).then(function (data) {
+                            // Replace inline images in contenteditable with links from draft response
+                            $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                                $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                            });
+                            self.model.set('msgref', result.data, { silent: true });
+                            self.model.dirty(false);
+                            notifications.yell('success', gt('Mail saved as draft'));
+                            def.resolve(result);
+                        });
                     }
                 });
             });

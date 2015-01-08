@@ -1372,20 +1372,7 @@ define('io.ox/mail/api',
             .then(function (text) {
                 // wait a moment, then update mail index
                 setTimeout(function () {
-                    // clear inbox & sent folder
-                    var folders = [].concat(
-                        accountAPI.getFoldersByType('inbox'),
-                        accountAPI.getFoldersByType('sent'),
-                        accountAPI.getFoldersByType('drafts')
-                    );
-                    $.when.apply($,
-                        _(folders).map(function (id) {
-                            return api.caches.all.grepRemove(id + DELIM);
-                        })
-                    )
-                    .done(function () {
-                        api.trigger('refresh.all');
-                    });
+                    api.trigger('refresh.all');
                 }, 3000);
                 // IE9
                 if (_.isObject(text))
@@ -1400,23 +1387,21 @@ define('io.ox/mail/api',
                 }
             })
             .then(function (result) {
-                //skip block if error returned
                 if (result.data) {
                     var base = _(result.data.toString().split(api.separator)),
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
-                    api.get({ folder_id: folder, id: id }).then(function () {
-                        $.when(accountAPI.getUnifiedMailboxName(), api.caches.list.add(data), api.caches.get.add(data))
-                        .done(function (isUnified) {
-                            if (isUnified !== null) {
-                                folderAPI.refresh();
-                            } else {
-                                folderAPI.reload(folder);
-                            }
-                            api.trigger('refresh.list');
-                        });
+                    $.when(accountAPI.getUnifiedMailboxName())
+                    .done(function (isUnified) {
+                        if (isUnified !== null) {
+                            folderAPI.refresh();
+                        } else {
+                            folderAPI.reload(folder);
+                        }
+                        api.trigger('refresh.list');
                     });
                 }
+
                 return result;
             });
     };
