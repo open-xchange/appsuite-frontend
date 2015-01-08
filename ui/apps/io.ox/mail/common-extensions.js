@@ -233,7 +233,11 @@ define('io.ox/mail/common-extensions',
                     show = showTO || showCC || showBCC,
                     container = $('<div class="recipients">');
 
-                if (!show) return;
+                if (!show) {
+                    // fix broken layout when mail has only 'to' and 'attachments'
+                    this.append(container.append($.txt(_.noI18n('\u00A0'))));
+                    return;
+                }
 
                 if (showTO) {
                     container.append(
