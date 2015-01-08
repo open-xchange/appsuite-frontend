@@ -54,14 +54,30 @@ define('io.ox/core/viewer/views/mainview', [
             // clean stuff on dispose event from core/commons.js
             this.$el.on('dispose', this.dispose.bind(this));
             // display the selected file initially
-            var startIndex = this.collection.getStartIndex();
-            this.render(startIndex);
+            this.displayedFileIndex = this.collection.getStartIndex();
+            var displayedData = { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) };
+            this.render(displayedData);
             // trigger item changed event initally for the first file
-            EventDispatcher.trigger('viewer:displayeditem:change', { index: startIndex, model: this.collection.at(startIndex) } );
+            EventDispatcher.trigger('viewer:displayeditem:change', displayedData);
         },
 
-        render: function (startIndex) {
-            //console.info('MainView.render()', startIndex);
+        /**
+         * Renders this MainView with the supplied data model.
+         *
+         * @param {Object} data
+         *  @param {Number} data.index
+         *   The index of the model to render.
+         *  @param {Object} data.model
+         *   The model object itself.
+         *
+         * @returns {MainView}
+         */
+        render: function (data) {
+            //console.warn('MainView.render()', data);
+            if (!data) {
+                console.error('Core.Viewer.MainView.render(): no file to render');
+                return;
+            }
             var self = this;
             // append toolbar view
             this.$el.append(this.toolbarView.render().el);
@@ -69,7 +85,7 @@ define('io.ox/core/viewer/views/mainview', [
             _.defer(function () {
                 // append displayerView and sidebarView deferred, for preview image optimal height calculation
                 self.$el.append(
-                    self.displayerView.render(startIndex).el,
+                    self.displayerView.render(data).el,
                     self.sidebarView.render().el
                 );
                 self.displayerView.$el.find('.active').focus();
@@ -117,7 +133,10 @@ define('io.ox/core/viewer/views/mainview', [
                 this.displayedFileIndex = this.collection.length - 1;
             }
             //console.warn('MainView.onPreviousSlide(), new index: ', this.displayedFileIndex);
-            EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
+            EventDispatcher.trigger('viewer:displayeditem:change', {
+                index: this.displayedFileIndex,
+                model: this.collection.at(this.displayedFileIndex)
+            } );
         },
 
         onNextSlide: function () {
@@ -128,7 +147,10 @@ define('io.ox/core/viewer/views/mainview', [
                 this.displayedFileIndex = 0;
             }
             //console.warn('MainView.onNextSlide(), new index: ', this.displayedFileIndex);
-            EventDispatcher.trigger('viewer:displayeditem:change', { index: this.displayedFileIndex, model: this.collection.at(this.displayedFileIndex) } );
+            EventDispatcher.trigger('viewer:displayeditem:change', {
+                index: this.displayedFileIndex,
+                model: this.collection.at(this.displayedFileIndex)
+            });
         },
 
         // refresh view sizes and broadcast window resize event

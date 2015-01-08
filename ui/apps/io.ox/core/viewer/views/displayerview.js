@@ -37,8 +37,23 @@ define('io.ox/core/viewer/views/displayerview', [
             this.$el.on('dispose', this.dispose.bind(this));
         },
 
-        render: function (startIndex) {
-            //console.warn('DisplayerView.render() startIndex', startIndex);
+        /**
+         * Renders this DisplayerView with the supplied data model.
+         *
+         * @param {Object} data
+         *  @param {Number} data.index
+         *   The index of the model to render.
+         *  @param {Object} data.model
+         *   The model object itself.
+         *
+         * @returns {DisplayerView}
+         */
+        render: function (data) {
+            //console.warn('DisplayerView.render() data', data);
+            if (!data) {
+                console.error('Core.Viewer.DisplayerView.render(): no file to render');
+                return;
+            }
             var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
                 carouselInner = $('<div class="carousel-inner">'),
                 prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev" tabindex="1"><i class="fa fa-angle-left"></i></a>'),
@@ -46,7 +61,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 // preload 1 neigboring slides
                 slidesToPreload = 1,
                 slidesCount = this.collection.length,
-                displayerTopOffset = $('.viewer-toolbar').outerHeight();
+                displayerTopOffset = $('.viewer-toolbar').outerHeight(),
+                startIndex = data.index;
 
             // create a Bootstrap carousel slide
             function createSlide (model, modelIndex) {
