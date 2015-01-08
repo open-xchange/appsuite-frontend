@@ -312,6 +312,16 @@ define('io.ox/mail/detail/view',
             'click .detail-view-header': 'onToggle'
         },
 
+        onChangeHeaders: function () {
+            var data = this.model.toJSON(),
+                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
+                $header = this.$el.find('header.detail-view-header').empty(),
+                $notifications = this.$el.find('section.notifications').empty();
+
+            ext.point('io.ox/mail/detail/header').invoke('draw', $header, baton);
+            ext.point('io.ox/mail/detail/notifications').invoke('draw', $notifications, baton);
+        },
+
         onChangeFlags: function () {
             // update unread state
             this.$el.toggleClass('unread', util.isUnseen(this.model.get('flags')));
@@ -434,6 +444,7 @@ define('io.ox/mail/detail/view',
             this.model = pool.getDetailModel(options.data);
             this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
+            this.listenTo(this.model, 'change:headers', this.onChangeHeaders);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);
             this.$el.on('dispose', this.dispose.bind(this));
 
