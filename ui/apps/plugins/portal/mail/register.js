@@ -51,8 +51,10 @@ define('plugins/portal/mail/register',
                     collection = app.getWidgetCollection();
                 collection.chain()
                     .filter(function (model) {
-                        model.get('baton').cache = !!cache;
                         return model.get('type') === type;
+                    })
+                    .each(function (model) {
+                        (model.get('baton') || {}).cache = !!cache;
                     })
                     .each(app.refreshWidget);
             });
