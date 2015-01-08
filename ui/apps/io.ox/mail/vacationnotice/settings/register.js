@@ -42,7 +42,8 @@ define('io.ox/mail/vacationnotice/settings/register', [
         ref: 'io.ox/vacation',
         loadSettingPane: false,
         index: 300,
-        lazySaveSettings: true
+        lazySaveSettings: true,
+        settingsgroup: 'main/mail'
     });
 
     ext.point('io.ox/vacation/settings/detail').extend({

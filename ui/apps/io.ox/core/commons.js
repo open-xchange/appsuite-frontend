@@ -662,6 +662,10 @@ define('io.ox/core/commons', [
                     }
                     e.data.app.getGrid().selection.clear();
                 }
+
+                if (_.device('smartphone')) {
+                    $(this).closest('.vsplit').find('.leftside .tree-container').trigger('changeMobile');
+                }
             };
 
             var select = function () {

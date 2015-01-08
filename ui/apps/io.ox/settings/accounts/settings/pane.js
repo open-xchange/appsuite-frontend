@@ -295,7 +295,7 @@ define('io.ox/settings/accounts/settings/pane', [
             redraw();
 
             api.on('refresh.all refresh.list', redraw);
-            data.grid.selection.on('change', function () {
+            data.tree.on('virtual', function () {
                 api.off('refresh.all refresh.list', redraw);
             });
         },

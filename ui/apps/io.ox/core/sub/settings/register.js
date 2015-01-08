@@ -24,7 +24,8 @@ define('io.ox/core/sub/settings/register', [
     point.extend({
         id: id,
         title: gt('Subscriptions'),
-        ref: 'io.ox/core/sub'
+        ref: 'io.ox/core/sub',
+        settingsgroup: 'tools'
     });
 
     if (!capabilities.has('subscription')) {
