@@ -27,7 +27,7 @@
         display: inline-block;
         border-right: 1px solid @weekview-border;
         overflow: hidden;
-        .transition(background-color 0.4s);
+        .transition(background-color 0.2s);
         .backface-visibility(hidden);
     }
 
@@ -224,7 +224,7 @@
         position: absolute;
         background-color: @appointment-reserved;
         opacity: 1;
-        .transition(~"opacity 0.2s, background-color 0.3s, color 0.3s");
+        .transition(~"opacity 0.2s, background-color 0.2s, color 0.2s");
         .backface-visibility(hidden);
         // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
         box-sizing: content-box;
@@ -242,7 +242,7 @@
 
         &.current, &.hover {
             z-index: 999 !important;
-            .transition(background-color 0.4s);
+            .transition(background-color 0.2s);
         }
 
         &.lasso {
@@ -264,7 +264,7 @@
             height: 100%;
             font-size: 12px;
             padding: 0 7px;
-            border-left: 3px solid;
+            border-left: 2px solid;
             border-color: inherit;
             .ellipsis();
 

@@ -60,12 +60,20 @@ define('io.ox/calendar/list/view-grid-template', [
                     tmpStr = '',
                     timeSplits = util.getStartAndEndTime(data);
 
+                // clear classes of time to prevent adding multiple classes on reuse
+                fields.time.removeClass().addClass('time');
+
                 if (data.folder_id) {
                     //conflicts with appointments, where you aren't a participant don't have a folder_id.
                     var folder = folderAPI.get(data.folder_id);
                     folder.done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+
                         self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
+                        fields.time.addClass(util.getAppointmentColorClass(folder, data))
+                            .attr({
+                                'data-folder': util.canAppointmentChangeColor(folder, data) ? folder.id : ''
+                            });
                     });
                 }
 

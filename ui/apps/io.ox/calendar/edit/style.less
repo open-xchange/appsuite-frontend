@@ -123,10 +123,68 @@
             padding: 3px 15px 3px 3px;
         }
     }
+
+    .custom-color {
+        .generate-color-label(@counter) when (@counter > 0) {
+            .generate-color-label((@counter - 1));
+
+            @color-label-bg-mod: ~"color-label-bg-@{counter}";
+            @color-label-contrast: contrast(@@color-label-bg-mod);
+
+            .color-label-@{counter} {
+                background-color: ~"@{color-label-bg-@{counter}}";
+                .fa {
+                    color: @color-label-contrast;
+                }
+            }
+        }
+
+        .generate-color-label(10);
+
+        .color-label {
+            width: 20px;
+            height: 20px;
+            margin: 2px;
+            text-align: center;
+            border-radius: 2px;
+            cursor: pointer;
+
+            &.no-color {
+                border: 1px solid #555;
+                margin-right: 22px;
+                color: @black;
+            }
+
+            .fa {
+                display: none;
+            }
+
+            &.active {
+                .fa {
+                    display: inline-block;
+                }
+            }
+        }
+    }
 }
 
 /* Mobile */
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
+    .io-ox-calendar-edit-window {
+        .custom-color {
+            .color-label {
+                &.no-color {
+                    margin-right: 52px;
+                }
+
+                width: 40px;
+                height: 40px;
+                margin: 4px;
+                font-size: 34px;
+                padding-top: 4px;
+            }
+        }
+    }
 
     .io-ox-calendar-edit {
         margin-top: 0;

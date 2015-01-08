@@ -309,7 +309,9 @@ define('io.ox/core/folder/node', [
                     .append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow"><i class="fa fa-fw"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
-                        this.$.label = $('<div class="folder-label">'),
+                        $('<div class="folder-label">').append(
+                            this.$.label = $('<div>')
+                        ),
                         this.$.counter = $('<div class="folder-counter">')
                     ),
                     // subfolders

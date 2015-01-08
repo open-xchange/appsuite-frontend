@@ -20,8 +20,9 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/user',
     'io.ox/mail/api',
     'gettext!io.ox/core',
+    'io.ox/calendar/util',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt) {
+], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt, calendarUtil) {
 
     'use strict';
 
@@ -465,6 +466,19 @@ define('io.ox/core/folder/extensions', [
                         $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions'))
                         .on('click', { folder: baton.data }, openSubSettings)
                     );
+                }
+            },
+            {
+                id: 'color',
+                index: 400,
+                draw: function (baton) {
+                    if (!/^calendar$/.test(baton.data.module)) return;
+                    if (!api.is('private', baton.data)) return;
+                    if (/^virtual/.test(baton.data.id)) return;
+
+                    var folderColor = calendarUtil.getFolderColor(baton.data);
+
+                    this.find('.folder-label').addClass('color-label color-label-' + folderColor);
                 }
             }
         );

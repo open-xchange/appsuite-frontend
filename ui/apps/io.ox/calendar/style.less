@@ -245,6 +245,84 @@
             box-shadow: 0 0 20px 1px #08C;
         }
     }
+
+    .custom-colors & .appointment {
+
+        .generate-color-label(@counter) when (@counter > 0) {
+
+            .generate-color-label((@counter - 1));
+
+            &.color-label-@{counter} {
+
+                @color: ~"color-label-fg-@{counter}";
+                @background: ~"color-label-bg-@{counter}";
+                @background-light: lighten(@@background, @custom-color-pattern-pct);
+
+                color: @@color;
+                background-color: @@background;
+                border-left-color: lighten(@@color, 20%);
+
+                &.private {
+                    border-left-color: #222;
+                }
+
+                &.hover {
+                    background-color: darken(@@background, @custom-color-hover-pct);
+                }
+
+                &.free {
+                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+                    opacity: 0.70;
+                }
+
+                &.temporary {
+                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+                }
+            }
+        }
+
+        .generate-color-label(10);
+    }
+}
+
+.custom-colors {
+    .folder-tree {
+        .folder-node {
+            .folder-label {
+
+                position: relative;
+
+                &.color-label {
+                    &:before {
+                        content: "";
+                        display: inline-block;
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        left: -26px;
+                        top: 7px;
+                        border-radius: 2px;
+                        border: 1px solid rgba(0, 0, 0, 0.2);
+                        background-clip: border-box;
+                    }
+                }
+
+                .generate-color-label(@counter) when (@counter > 0) {
+                    .generate-color-label((@counter - 1));
+
+                    &.color-label-@{counter}:before { background-color: ~"@{color-label-bg-@{counter}}"; }
+                }
+
+                .generate-color-label(10);
+            }
+        }
+    }
 }
 
 // Grid , only used in conflicts. Listview styles are located under list/style.less
@@ -799,5 +877,69 @@
 
     .label {
         margin-left: 5px;
+    }
+}
+
+li {
+    .custom-colors {
+        max-width: 160px;
+        display: inline-block;
+        padding: 3px 20px;
+        clear: both;
+
+        .generate-color-label(@counter) when (@counter > 0) {
+            .generate-color-label((@counter - 1));
+
+            @color-label-bg-mod: ~"color-label-bg-@{counter}";
+            @color-label-contrast: contrast(@@color-label-bg-mod);
+
+            .color-label-@{counter} {
+                background-color: ~"@{color-label-bg-@{counter}}";
+                .fa {
+                    color: @color-label-contrast;
+                }
+            }
+        }
+
+        .generate-color-label(10);
+
+        .color-label {
+            width: 20px;
+            height: 20px;
+            margin: 2px;
+            text-align: center;
+            border-radius: 2px;
+            cursor: pointer;
+
+            .fa {
+                display: none;
+                width: 14px;
+            }
+
+            &.active {
+                .fa {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}
+
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
+    li {
+        .custom-colors {
+            max-width: 320px;
+            .color-label {
+                width: 40px;
+                height: 40px;
+                margin: 4px;
+                font-size: 34px;
+                padding-top: 8px;
+
+                .fa {
+                    width: 34px;
+                }
+            }
+        }
     }
 }

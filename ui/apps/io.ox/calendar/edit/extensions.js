@@ -23,8 +23,9 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/calendar/edit/recurrence-view',
     'io.ox/calendar/api',
     'io.ox/participants/views',
-    'io.ox/core/capabilities'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/calendar'
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, capabilities, settings) {
 
     'use strict';
 
@@ -314,6 +315,45 @@ define('io.ox/calendar/edit/extensions', [
     }, {
         nextTo: 'shown_as',
         rowClass: 'collapsed'
+    });
+
+    function colorClickHandler(e) {
+        // toggle active class
+        $(this).siblings('.active').removeClass('active').end().addClass('active');
+        // update model
+        e.data.model.set({ 'color_label': e.data.color_label });
+    }
+
+    //color selection
+    point.extend({
+        id: 'color',
+        index: 1200,
+        render: function () {
+
+            if (settings.get('colorScheme') !== 'custom') return;
+
+            var activeColor = this.model.get('color_label') || 0;
+
+            this.listenTo(this.model, 'change:private_flag', function (model, value) {
+                this.$el.find('.no-color').toggleClass('color-label-10', value);
+            });
+
+            this.$el.append(
+                $('<label class="control-label col-xs-12">').append(
+                    $.txt(gt('Color')),
+                    $('<div class="custom-color">').append(
+                        _.map(_.range(0, 11), function (color_label) {
+                            return $('<div class="color-label pull-left">')
+                                .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
+                                .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
+                                .addClass(activeColor == color_label ? 'active' : '')
+                                .append('<i class="fa fa-check">')
+                                .on('click', { color_label: color_label, model: this.model }, colorClickHandler);
+                        }, this)
+                    )
+                )
+            );
+        }
     });
 
     // participants label

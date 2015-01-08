@@ -1701,6 +1701,23 @@ define('io.ox/calendar/week/view', [
                 conf = 1,
                 confString = _.noI18n('%1$s'),
                 classes = '';
+
+            function addColorClasses(f) {
+                self.addClass(util.getAppointmentColorClass(f, a.attributes));
+
+                if (util.canAppointmentChangeColor(f, a.attributes)) {
+                    self.attr('data-folder',  f.id);
+                }
+            }
+
+            if (String(folder.id) === String(a.get('folder_id'))) {
+                addColorClasses(folder);
+            } else {
+                folderAPI.get(a.get('folder_id')).done(function (f) {
+                    addColorClasses(f);
+                });
+            }
+
             if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {

@@ -728,6 +728,49 @@ define('io.ox/calendar/util', [
             return contactAPI.get({ id: internal, folder: 6 }).then(function (data) {
                 return data.user_id;
             });
+        },
+
+        getAppointmentColorClass: function (folder, appointment) {
+            var folderColor = that.getFolderColor(folder),
+                appointmentColor = appointment.color_label || 0,
+                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+
+            // shared appointments which are unconfirmed or declined don't receive color classes
+            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) {
+                return '';
+            }
+
+            // private appointments are colored with gray instead of folder color
+            if (appointment.private_flag) {
+                folderColor = 10;
+            }
+
+            if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
+                // public appointments which are not from you are always colored in the calendar color
+                return 'color-label-' + folderColor;
+            } else {
+                // set color of appointment. if color is 0, then use color of folder
+                var color = appointmentColor === 0 ? folderColor : appointmentColor;
+
+                return 'color-label-' + color;
+            }
+        },
+
+        canAppointmentChangeColor: function (folder, appointment) {
+            var appointmentColor = appointment.color_label || 0,
+                privateFlag = appointment.private_flag || false,
+                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+
+            // shared appointments which are unconfirmed or declined don't receive color classes
+            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) {
+                return false;
+            }
+
+            return appointmentColor === 0 && !privateFlag;
+        },
+
+        getFolderColor: function (folder) {
+            return folder.meta ? folder.meta.color_label || settings.get('defaultFolderColor', 1) : settings.get('defaultFolderColor', 1);
         }
     };
 

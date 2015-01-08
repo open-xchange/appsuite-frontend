@@ -4158,7 +4158,6 @@ wbr:after {
         }
 
         .folder-label {
-
             &:first-child { // needed when arrows are hidden
                 margin-left: 14px;
             }
@@ -4286,7 +4285,10 @@ wbr:after {
     .selected > .folder-node > .folder-label {
         max-width: 120px;
         vertical-align: top;
-        .ellipsis();
+
+        div {
+            .ellipsis();
+        }
     }
 
     .flat-tree {
