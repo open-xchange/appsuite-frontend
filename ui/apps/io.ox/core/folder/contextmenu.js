@@ -466,9 +466,13 @@ define('io.ox/core/folder/contextmenu', [
 
                 var folderColor = util.getFolderColor(baton.data);
 
-                return $('<div class="color-label pull-left">')
+                return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
                     .addClass('color-label-' + color_label)
                     .addClass(folderColor == color_label ? 'active' : '')
+                    .attr({
+                        'aria-checked': folderColor == color_label,
+                        'aria-label': util.getColorLabel(color_label)
+                    })
                     .append('<i class="fa fa-check">')
                     .on('click', { color_label: color_label, baton: baton }, clickHandler);
             }

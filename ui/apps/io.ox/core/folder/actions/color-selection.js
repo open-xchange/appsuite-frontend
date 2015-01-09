@@ -29,7 +29,7 @@ define('io.ox/core/folder/actions/color-selection', [
             function success() {
 
                 //toggle active class
-                elem.siblings('.active').removeClass('active').end().addClass('active');
+                elem.siblings('.active').removeClass('active').attr('aria-checked', false).end().addClass('active').attr('aria-checked', true);
 
                 // update all appointments without color
                 $('[data-folder="' + folder.id + '"]').each(function () {
