@@ -13,8 +13,9 @@
 
 define('io.ox/tasks/view-grid-template',
     ['io.ox/core/tk/vgrid',
+     'io.ox/tasks/util',
      'less!io.ox/tasks/style'
-    ], function (VGrid) {
+    ], function (VGrid, util) {
 
     'use strict';
 
@@ -41,6 +42,12 @@ define('io.ox/tasks/view-grid-template',
                 },
 
                 set: function (data, fields, index) {
+
+                    if (!data.badge) {
+                        //data needs to be processed first
+                        data = util.interpretTask(data);
+                    }
+
                     var a11yLabel = '';
                     fields.title.text(a11yLabel = _.noI18n(data.title));
                     fields.end_date.text(_.noI18n(data.end_date));
