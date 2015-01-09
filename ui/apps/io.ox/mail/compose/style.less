@@ -23,8 +23,16 @@
             font-weight: 500;
         }
 
-        &.sender .dropdown {
-            padding-top: 8px;
+        &.sender {
+
+            @media (max-width: 480px) {
+                display: none;
+            }
+
+            .dropdown {
+                padding-top: 8px;
+            }
+
         }
 
         div.dropdown {
@@ -63,10 +71,16 @@
             }
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 480px) {
+
+            margin-bottom: 7px;
 
             &.subject input {
                 padding-left: 8px;
+            }
+
+            &.composetoolbar {
+                margin-top: 5px;
             }
 
             .token-input, &.subject input {
@@ -93,6 +107,9 @@
                 border-bottom: 1px solid #aaa;
                 border-radius: 0;
                 box-shadow: none;
+                &.focus, &:focus {
+                    border-color: #66afe9;
+                }
             }
 
         }
@@ -158,6 +175,7 @@
 
 
     .editable-toolbar {
+
         position: relative;
         height: 100%;
 
@@ -168,7 +186,6 @@
             height: 34px;
             top: 90px;
             z-index: 1;
-            //box-shadow: 0 1px 5px rgba(0,0,0,0.75);
             border-bottom: 1px solid #ccc;
             opacity: 0.9;
         }
@@ -185,6 +202,10 @@
         input.file-input:hover { cursor: pointer; }
         .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { background-color: #fff; }
         .mce-panel.mce-edit-area { border:1px solid #fff !important; }
+
+        @media (max-width: 480px) {
+            display: none;
+        }
     }
 
     textarea.editable, .mce-content-body.editable {
@@ -196,6 +217,11 @@
         &.mce-edit-focus {
             outline: none;
             .form-control-focus();
+            @media (max-width: 480px) {
+                &:focus {
+                    box-shadow: none;
+                }
+            }
         }
 
         a {
@@ -205,11 +231,13 @@
                 text-decoration: underline;
             }
         }
+
         table {
             border: 0 none;
             line-height: normal;
             td, th { padding: 8px; }
         }
+
         blockquote {
             font-size: 14px;
             border-left: 1px solid #08C;
@@ -218,6 +246,13 @@
             opacity: 0.5;
             blockquote { opacity: 1.0; }
         }
+
+        @media (max-width: 480px) {
+            border: none;
+            border-top: 1px solid #aaa;
+            outline: none;
+        }
+
     }
 
     .plain-text {

@@ -92,7 +92,7 @@ define('io.ox/mail/compose/view', [
         id: 'add_attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div data-extension-id="add_attachments" class="col-xs-12 col-md-5 col-md-offset-1">');
+            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
             extensions.attachment.call(node, baton);
             this.append(node);
         }
@@ -153,7 +153,7 @@ define('io.ox/mail/compose/view', [
             signatureDropdown.$ul.addClass('pull-right');
 
             this.append(
-                $('<div data-extension-id="composetoolbar-menu" class="col-xs-12 col-md-6">').append(
+                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(
                     $('<div class="pull-right text-right">').append(
                         signatureDropdown.render().$el.addClass('signatures text-left'),
                         optionDropdown.render().$el.addClass('text-left')
@@ -747,13 +747,11 @@ define('io.ox/mail/compose/view', [
             if (input.hasClass('hidden') || show) {
                 this.showInput(type, input);
                 button.addClass('active').attr('aria-checked', true);
-            }
-            /*
-            We don't want to close it automatically! Bug: 35730
-            else {
+            } else if (this.model.get(type).length === 0) {
+                //We don't want to close it automatically! Bug: 35730
                 this.closeInput(type, input);
                 button.removeClass('active').attr('aria-checked', false);
-            } */
+            }
             return input;
         },
 
