@@ -125,32 +125,10 @@ define([
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['true'];
 
-                    /* disable these tests temporarily, till we know what API is the official one to use
-                    expect(model.getPreviewUrl()).to.contain('/api/files?')
-                                                .and.to.contain('action=document')
-                                                .and.to.contain('folder=124')
-                                                .and.to.contain('id=124/374')
-                                                .and.to.contain('version=1')
-                                                .and.to.contain('delivery=view')
-                                                .and.to.contain('format=preview_image')
-                                                .and.to.contain('content_type=image/jpeg');
+                    expect(model.getPreviewUrl()).to.be.a('string');
+                    expect(model.getDownloadUrl()).to.be.a('string');
+                    expect(model.getThumbnailUrl()).to.be.a('string');
 
-                    expect(model.getDownloadUrl()).to.contain('/api/files/cola.jpg?')
-                                                .and.to.contain('action=document')
-                                                .and.to.contain('folder=124')
-                                                .and.to.contain('id=124/374')
-                                                .and.to.contain('version=1')
-                                                .and.to.contain('delivery=download');
-
-                    expect(model.getThumbnailUrl()).to.contain('/api/files?')
-                                                .and.to.contain('action=document')
-                                                .and.to.contain('folder=124')
-                                                .and.to.contain('id=124/374')
-                                                .and.to.contain('version=1')
-                                                .and.to.contain('delivery=view')
-                                                .and.to.contain('scaleType=contain')
-                                                .and.to.contain('content_type=image/jpeg');
-                    */
                 });
             });
 
@@ -177,20 +155,10 @@ define([
                     expect(model.isMailAttachment()).to.be['true'];
                     expect(model.isDriveFile()).to.be['false'];
 
-                    expect(model.getPreviewUrl()).to.contain('/api/attachment/cola.jpg?')
-                                                .and.to.contain('action=document')
-                                                .and.to.contain('id=2')
-                                                .and.to.contain('delivery=view');
+                    expect(model.getPreviewUrl()).to.be.a('string');
+                    expect(model.getDownloadUrl()).to.be.a('string');
+                    expect(model.getThumbnailUrl()).to.be.a('string');
 
-                    expect(model.getDownloadUrl()).to.contain('/api/attachment/cola.jpg?')
-                                                .and.to.contain('action=document')
-                                                .and.to.contain('id=2')
-                                                .and.to.contain('delivery=download');
-
-                    expect(model.getThumbnailUrl()).to.contain('/api/attachment/cola.jpg?')
-                                                .and.to.contain('action=document')
-                                                .and.to.contain('id=2')
-                                                .and.to.contain('delivery=view');
                 });
             });
         });
