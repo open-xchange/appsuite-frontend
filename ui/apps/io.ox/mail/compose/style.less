@@ -11,18 +11,6 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-.io-ox-mail-compose-window .window-header {
-
-    h1.title {
-        font-size: 20px;
-        line-height: 0;
-    }
-
-    .btn {
-        margin-left: 13px;
-    }
-}
-
 .io-ox-mail-compose {
 
     padding-top: 10px;
@@ -300,4 +288,8 @@
 }
 
 
-
+@media (max-width: 480px), (max-device-width: 480px) {
+    .window-container.header-top .window-header .btn[data-action="save"] {
+        display: none;
+    }
+}

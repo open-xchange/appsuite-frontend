@@ -78,9 +78,6 @@ define('io.ox/calendar/edit/main', [
                         chromeless: true
                     });
 
-                    win.addClass('header-top');
-                    win.nodes.header.addClass('container default-header-padding');
-
                     self.setWindow(win);
 
                     self.model.setDefaultParticipants({ create: opt.mode === 'create' }).done(function () {

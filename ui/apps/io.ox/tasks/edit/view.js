@@ -88,7 +88,7 @@ define('io.ox/tasks/edit/view', [
                 //leave out all the rest, for now
                 if (key !== 'rest') {
                     //row 0 is the headline
-                    var node = $('<div class="row">').appendTo(key === '0' ? app.getWindow().nodes.header : self.$el);
+                    var node = $('<div class="row">').appendTo(self.$el);
                     for (var i = 0; i < row.length; i++) {
                         row[i].invoke('draw', node, self.baton);
                     }
@@ -99,11 +99,6 @@ define('io.ox/tasks/edit/view', [
             _(rows.rest).each(function (extension) {
                 extension.invoke('draw', self.$el, self.baton);
             });
-
-            if (_.device('smartphone')) {
-                // create new toolbar on bottom
-                ext.point('io.ox/tasks/edit/bottomToolbar').invoke('draw', this, self.baton);
-            }
 
             //change title if available
             if (self.model.get('title')) {

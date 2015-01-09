@@ -35,10 +35,10 @@ define('io.ox/calendar/edit/extensions', [
         id: 'header',
         index: 10,
         draw: function (baton) {
-            var row = $('<div class="col-xs-12 header">');
+            var row = $('<div class="header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
-            this.append(row);
+            baton.app.getWindow().setHeader(row);
         }
     });
 
@@ -75,7 +75,8 @@ define('io.ox/calendar/edit/extensions', [
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
+                .text(gt('Discard'))
                 .on('click', function () {
                     baton.app.quit();
                 })
@@ -658,30 +659,6 @@ define('io.ox/calendar/edit/extensions', [
             }
         }
     });
-
-    if (_.device('smartphone')) {
-        // disable header buttons
-        ext.point('io.ox/calendar/edit/section/buttons').disable('save').disable('discard');
-        // bottom toolbar for mobile only
-        point.basicExtend({
-            id: 'toolbar',
-            index: 2500,
-            draw: function (baton) {
-                // must be on a non overflow container to work with position:fixed
-                var node = $(baton.app.attributes.window.nodes.body),
-                    toolbar;
-                node.append(toolbar = $('<div class="app-bottom-toolbar">'));
-                ext.point('io.ox/calendar/edit/section/buttons').replace({
-                    id: 'save',
-                    index: 100
-                }).replace({
-                    id: 'discard',
-                    index: 200
-                });
-                ext.point('io.ox/calendar/edit/section/buttons').enable('save').enable('discard').invoke('draw', toolbar, baton);
-            }
-        });
-    }
 
     if (!capabilities.has('infostore')) {
         ext.point('io.ox/calendar/edit/section')
