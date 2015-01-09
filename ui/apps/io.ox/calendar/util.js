@@ -38,7 +38,8 @@ define('io.ox/calendar/util', [
             gt('declined'),
             gt('tentative')
         ],
-        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'];
+        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'],
+        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')];
 
     var that = {
 
@@ -771,6 +772,14 @@ define('io.ox/calendar/util', [
 
         getFolderColor: function (folder) {
             return folder.meta ? folder.meta.color_label || settings.get('defaultFolderColor', 1) : settings.get('defaultFolderColor', 1);
+        },
+
+        getColorLabel: function (colorIndex) {
+            if (colorIndex >= 0 && colorIndex < colorLabels.length) {
+                return colorLabels[colorIndex];
+            }
+
+            return '';
         }
     };
 

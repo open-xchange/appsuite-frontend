@@ -320,7 +320,7 @@ define('io.ox/calendar/edit/extensions', [
 
     function colorClickHandler(e) {
         // toggle active class
-        $(this).siblings('.active').removeClass('active').end().addClass('active');
+        $(this).siblings('.active').removeClass('active').attr('aria-checked', false).end().addClass('active').attr('aria-checked', true);
         // update model
         e.data.model.set({ 'color_label': e.data.color_label });
     }
@@ -344,10 +344,14 @@ define('io.ox/calendar/edit/extensions', [
                     $.txt(gt('Color')),
                     $('<div class="custom-color">').append(
                         _.map(_.range(0, 11), function (color_label) {
-                            return $('<div class="color-label pull-left">')
+                            return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
                                 .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
                                 .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
                                 .addClass(activeColor == color_label ? 'active' : '')
+                                .attr({
+                                    'aria-checked': activeColor == color_label,
+                                    'aria-label': calendarUtil.getColorLabel(color_label)
+                                })
                                 .append('<i class="fa fa-check">')
                                 .on('click', { color_label: color_label, model: this.model }, colorClickHandler);
                         }, this)
