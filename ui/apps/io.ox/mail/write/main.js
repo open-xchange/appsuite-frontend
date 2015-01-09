@@ -871,7 +871,8 @@ define('io.ox/mail/write/main',
                             focus('to');
                         }
                     }
-                    def.resolve({app: app});
+                    def.resolve({ app: app });
+                    ox.trigger('mail:compose:ready', data, app);
                 })
                 .fail(function (e) {
                     notifications.yell(e);
@@ -970,7 +971,7 @@ define('io.ox/mail/write/main',
                         win.idle();
                         if (_.device('!smartphone')) focus('to');
                         def.resolve();
-
+                        ox.trigger('mail:forward:ready', data, app);
                     });
                 })
                 .fail(function (e) {

@@ -92,7 +92,6 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 }
             };
             ox.on('app:resume app:ready', handler.bind(this));
-            ox.launch(id + '/main');
             return def.promise().done(callback);
         },
 
