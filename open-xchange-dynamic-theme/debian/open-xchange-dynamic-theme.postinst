@@ -1,0 +1,3 @@
+#!/bin/sh
+UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
+if [ -x $UPDATE ]; then $UPDATE; fi

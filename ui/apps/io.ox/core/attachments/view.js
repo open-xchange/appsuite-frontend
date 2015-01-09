@@ -141,7 +141,7 @@ define('io.ox/core/attachments/view', [
         addAttachment: function (model) {
             if (!this.isListRendered) return;
             this.$list.append(this.renderAttachment('list', model));
-            this.$preview.append(this.renderAttachment('list', model));
+            this.$preview.append(this.renderAttachment('preview', model));
         },
 
         filter: function (model) {

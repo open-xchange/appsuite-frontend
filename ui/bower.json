@@ -1,6 +1,6 @@
 {
   "name": "OX App Suite",
-  "version": "7.6",
+  "version": "7.8",
   "private": true,
   "ignore": [
     "**/.*",

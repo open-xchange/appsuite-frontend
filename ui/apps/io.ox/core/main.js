@@ -46,7 +46,8 @@ define('io.ox/core/main', [
         };
     }
 
-    debug('Code loaded');
+    debug('core: Loaded');
+    ox.trigger('core:load');
 
     _.stepwiseInvoke = function (list, method, context) {
         if (!_.isArray(list)) return $.when();
@@ -1517,14 +1518,15 @@ define('io.ox/core/main', [
         });
 
         new Stage('io.ox/core/stages', {
-            id: 'last',
+            id: 'ready',
             index: 'last',
             run: function () {
                 debug('DONE!');
+                ox.trigger('core:ready');
             }
         });
 
-        debug('Run stages ...');
+        debug('core: launch > run stages');
         Stage.run('io.ox/core/stages', baton);
     }
 
@@ -1567,6 +1569,13 @@ define('io.ox/core/main', [
                gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
             );
         }
+    });
+
+    //
+    // Respons to special http error codes (see bug 32836)
+    //
+    ox.on('http:error', function (e, error) {
+        if (error.code === 'MSG-1000' || error.code === 'MSG-1001') notifications.yell(error);
     });
 
     return {

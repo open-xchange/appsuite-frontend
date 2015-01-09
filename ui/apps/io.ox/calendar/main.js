@@ -396,7 +396,7 @@ define('io.ox/calendar/main', [
         'store-view-options': function (app) {
             if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function (model, options) {
-                if (!options || options.fluent) return;
+                if (!options || options.fluent) return;
                 var data = app.props.toJSON();
                 app.settings
                     .set('viewView', data.layout)
@@ -492,7 +492,7 @@ define('io.ox/calendar/main', [
                 win.on({
                     'search:query': function () {
                         // switch to supported perspective
-                        lastPerspective =  app.props.get('layout') || _.url.hash('perspective');
+                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
                         if (lastPerspective !== SEARCH_PERSPECTIVE) {
                             // fluent option: do not write to user settings
                             app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
@@ -507,6 +507,8 @@ define('io.ox/calendar/main', [
                             app.props.set('layout', lastPerspective);
                         // disable
                         app.props.off('change', cancelSearch);
+                        // reset
+                        lastPerspective = undefined;
                     }
                 });
             });

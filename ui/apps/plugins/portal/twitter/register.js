@@ -249,7 +249,7 @@ define('plugins/portal/twitter/register', [
         title: gt('Twitter'),
 
         initialize: function (baton) {
-            keychain.submodules.twitter.on('update create delete', function () {
+            keychain.submodules.twitter.on('update create', function () {
                 loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
                     baton.data = data;
                     if (baton.contentNode) {
@@ -260,6 +260,15 @@ define('plugins/portal/twitter/register', [
                     network.fetchUserID().then(function success(id) {
                         util.setCurrentUserID(id);
                     });
+                });
+            });
+            keychain.submodules.twitter.on('delete', function () {
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.twitter_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
                 });
             });
             network.fetchUserID().then(function success(id) {
@@ -286,7 +295,9 @@ define('plugins/portal/twitter/register', [
 
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+
             return keychain.createInteractively('twitter', win).done(function () {
+                baton.model.node.find('h2 .fa-twitter').replaceWith($('<span class="title">').text(gt('Twitter')));
                 baton.model.node.removeClass('requires-setup widget-color-custom color-twitter');
                 ox.trigger('refresh^');
             });

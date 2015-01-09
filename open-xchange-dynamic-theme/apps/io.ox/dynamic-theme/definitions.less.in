@@ -1,0 +1,29 @@
+@topbar-background: @io-ox-dynamic-theme-frameColor;
+@toolbar-button-color: @io-ox-dynamic-theme-iconColor;
+@selected-background: @io-ox-dynamic-theme-selectionColor;
+
+@topbar-launcher-color: contrast(@topbar-background);
+@topbar-background-alt: @topbarBackground;
+@topbar-launcher-background-hover: darken(@topbar-background, 10%);
+@topbar-launcher-background-active: darken(@topbar-background, 10%);
+@topbar-launcher-color-hover: @topbar-launcher-color;
+@topbar-launcher-color-active: @topbar-launcher-color;
+@topbar-icon-color: @topbar-launcher-color;
+
+@window-head-color: @topbar-background;
+@toolbar-button-accent: darken(@topbar-background, 10%);
+
+@selected-color: contrast(@selected-background);
+
+.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected * {
+    color: @selected-color !important;
+}
+
+@foldertree-selected-focus-background: @selected-background;
+@foldertree-badge-focus-background: darken(@selected-background, 10%);
+@foldertree-focused-label-color: @selected-color;
+
+#io-ox-top-logo-small {
+    width: @io-ox-dynamic-theme-logoWidth;
+    background-image: @io-ox-dynamic-theme-logoURL;
+}

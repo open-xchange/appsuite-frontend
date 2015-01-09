@@ -294,7 +294,7 @@ define('io.ox/core/page-controller', ['less!io.ox/core/page-controller'], functi
             if (bar) {
                 // remove old stuff
                 app.toolbar.children().detach();
-                // appen new toolbar view and show toolbar container
+                // append new toolbar view and show toolbar container
                 app.toolbar.append(bar.$el).show();
                 if (!secondary) {
                     bar.render();

@@ -1,0 +1,4 @@
+#!/bin/sh
+if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
+cd /opt/open-xchange/appsuite
+$NODEJS /opt/open-xchange/dynamic-theme/lib/update-dynamic-theme.js "$@"

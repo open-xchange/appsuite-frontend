@@ -990,23 +990,21 @@ define('io.ox/mail/api', [
                 }
             })
             .then(function (result) {
-                //skip block if error returned
                 if (result.data) {
                     var base = _(result.data.toString().split(api.separator)),
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
-                    api.get({ folder_id: folder, id: id }).then(function () {
-                        $.when(accountAPI.getUnifiedMailboxName(), api.caches.list.add(data), api.caches.get.add(data))
-                        .done(function (isUnified) {
-                            if (isUnified !== null) {
-                                folderAPI.refresh();
-                            } else {
-                                folderAPI.reload(folder);
-                            }
-                            api.trigger('refresh.list');
-                        });
+                    $.when(accountAPI.getUnifiedMailboxName())
+                    .done(function (isUnified) {
+                        if (isUnified !== null) {
+                            folderAPI.refresh();
+                        } else {
+                            folderAPI.reload(folder);
+                        }
+                        api.trigger('refresh.list');
                     });
                 }
+
                 return result;
             });
     };

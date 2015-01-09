@@ -7606,6 +7606,11 @@ msgstr "Warnhinweise"
 msgid "Weather • Season"
 msgstr "Wetter • Jahreszeit"
 
+#: apps/plugins/notifications/tasks/register.js:258
+#: module:plugins/notifications
+msgid "Task reminders"
+msgstr "Aufgaben-Erinnerungen"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:47
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:606
