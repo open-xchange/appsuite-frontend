@@ -81,7 +81,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                             }
                         }, baton);
                     this.append('<i class="fa fa-caret-down">')
-                        .after(dropdownLinks)
+                        .after(dropdownLinks.addClass('dropdown-menu-right'))
                         .addClass('dropdown-toggle viewer-toolbar-dropdown')
                         .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1' })
                         .dropdown();
