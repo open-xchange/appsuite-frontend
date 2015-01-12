@@ -28,13 +28,13 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 400,
         id: 'versions',
         draw: function (baton) {
-            console.info('FileVersionsView.draw()');
+            //console.info('FileVersionsView.draw()');
             var panel, panelHeader, panelBody,
                 model = baton && baton.model,
                 versions = model && model.get('versions');
 
             baton.$el.empty();
-            if (!model) { return; }
+            if (!model || !model.isDriveFile()) { return; } // mail and PIM attachments don't support versions
 
             // render panel
             panel = $('<div>').addClass('panel panel-default');
@@ -60,7 +60,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 10,
         id: 'versions-list',
         draw: function (baton) {
-            console.info('FileVersionsView.draw()');
+            //console.info('FileVersionsView.draw()');
             var model = baton && baton.model,
                 versions = model && model.get('versions'),
                 table;
@@ -192,11 +192,11 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                         id: model.get('id')
                     })
                     .done(function (versions) {
-                        console.info('FilesAPI.versions() ok ', versions);
+                        //console.info('FilesAPI.versions() ok ', versions);
                         model.set('versions', (_.isArray(versions) ? versions : []));
                     })
                     .fail(function (err) {
-                        console.info('FilesAPI.versions() error ', err);
+                        console.warn('FilesAPI.versions() error ', err);
                     });
                 } else {
                     // expand the panel
@@ -250,7 +250,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         },
 
         dispose: function () {
-            console.info('FileVersionsView.dispose()');
+            //console.info('FileVersionsView.dispose()');
 
             this.stopListening();
             return this;

@@ -32,7 +32,8 @@ define('io.ox/core/viewer/backbone', [
     'use strict';
 
     var ITEM_TYPE_FILE = 'file',
-        ITEM_TYPE_ATTACHMENT = 'attachment',
+        ITEM_TYPE_MAIL_ATTACHMENT = 'mail-attachment',
+        ITEM_TYPE_PIM_ATTACHMENT = 'pim-attachment',
         THUMBNAIL_SIZE = { thumbnailWidth: 400, thumbnailHeight: 600 }, // temporary default size for office docs
         VIEW_MODES = { VIEW: 'view', PREVIEW: 'preview', THUMBNAIL: 'thumbnail', DOWNLOAD: 'download' },
         MIME_TYPES = {
@@ -161,21 +162,31 @@ define('io.ox/core/viewer/backbone', [
             var result = {};
 
             /**
-             * Guesses the source of a file by its properties.
+             * Guesses (duck check) the source type of a file by its properties.
              *
              * @param {Object} data
-             *  a file descriptor object passed from e.g Drive or Mail app.
+             *  a file descriptor object passed from e.g Drive, Calendar or Mail app.
              *
-             * @returns {String}
-             *  returns the file source string constant ('file' or 'attachment')
+             * @returns {String|null}
+             *  returns the file source type or null:
+             *      ITEM_TYPE_FILE for Drive files
+             *      ITEM_TYPE_MAIL_ATTACHMENT for mail attachments
+             *      ITEM_TYPE_PIM_ATTACHMENT for attachments of contacts, appointments or tasks
              */
-            function getFileSource (data) {
+            function getFileSourceType (data) {
                 if (!data || !data.id) { return null; }
+
                 if ((data.mail && data.mail.id && data.mail.folder_id) || (data.group === 'mail') || (data.disp === 'attachment')) {
-                    return ITEM_TYPE_ATTACHMENT;
-                } else {
+                    return ITEM_TYPE_MAIL_ATTACHMENT;
+
+                } else if (_.isNumber(data.attached) && _.isNumber(data.folder) && _.isNumber(data.module)) {
+                    return ITEM_TYPE_PIM_ATTACHMENT;
+
+                } else if (_.isString(data.version)) {
                     return ITEM_TYPE_FILE;
                 }
+
+                return null;
             }
 
             /**
@@ -219,15 +230,23 @@ define('io.ox/core/viewer/backbone', [
             }
 
             result.origData = _.copy(data, true);   // create a deep copy, since we want to do updates later
-            result.source = getFileSource (data);
+            result.source = getFileSourceType (data);
 
-            if (result.source === ITEM_TYPE_ATTACHMENT) {
+            if (result.source === ITEM_TYPE_MAIL_ATTACHMENT) {
                 result.filename = data.filename;
                 result.size = data.size;
                 result.contentType = data.content_type;
                 result.fileCategory = getFileCategory(data.content_type, getExtension(data.filename));
                 result.id = data.id;    // could be a attachment id, or drive file id
                 result.folderId = data.mail && data.mail.folder_id || null;
+
+            } else if (result.source === ITEM_TYPE_PIM_ATTACHMENT) {
+                result.filename = data.filename;
+                result.size = data.file_size;
+                result.contentType = data.file_mimetype;
+                result.id = data.id;
+                result.folderId = data.folder;
+
             } else if (result.source === ITEM_TYPE_FILE) {
                 result.filename = data.filename;
                 result.size = data.file_size;
@@ -244,7 +263,11 @@ define('io.ox/core/viewer/backbone', [
         },
 
         isMailAttachment: function () {
-            return this.get('source') === ITEM_TYPE_ATTACHMENT;
+            return this.get('source') === ITEM_TYPE_MAIL_ATTACHMENT;
+        },
+
+        isPIMAttachment: function () {
+            return this.get('source') === ITEM_TYPE_PIM_ATTACHMENT;
         },
 
         isDriveFile: function () {
@@ -256,6 +279,7 @@ define('io.ox/core/viewer/backbone', [
                 // AttachmentAPI does not delivering working image url! Use Mail API instead.
                 //return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
                 return MailAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
+
             } else if (this.isDriveFile()) {
                 // temporary workaround to show previews of office documents
                 var fileCategory = this.get('fileCategory'),
@@ -264,6 +288,9 @@ define('io.ox/core/viewer/backbone', [
                     viewMode = VIEW_MODES.PREVIEW;
                 }
                 return FilesAPI.getUrl(this.get('origData'), viewMode, null);
+
+            } else if (this.isPIMAttachment()) {
+                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
             }
             return null;
         },
@@ -271,8 +298,12 @@ define('io.ox/core/viewer/backbone', [
         getDownloadUrl: function () {
             if (this.isMailAttachment()) {
                 return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
+
             } else if (this.isDriveFile()) {
                 return FilesAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
+
+            }  else if (this.isPIMAttachment()) {
+                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
             }
             return null;
         },
@@ -280,8 +311,12 @@ define('io.ox/core/viewer/backbone', [
         getThumbnailUrl: function () {
             if (this.isMailAttachment()) {
                 return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
+
             } else if (this.isDriveFile()) {
                 return FilesAPI.getUrl(this.get('origData'), VIEW_MODES.THUMBNAIL, THUMBNAIL_SIZE);
+
+            } else if (this.isPIMAttachment()) {
+                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
             }
             return null;
         }

@@ -441,6 +441,14 @@ define('io.ox/core/tk/attachments', [
     }
 
     ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+        id: 'viewer',
+        index: 100,
+        label: gt('Viewer'),
+        mobile: 'hi',
+        ref: 'io.ox/core/tk/attachment/actions/viewer'
+    }));
+
+    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
         id: 'slideshow',
         index: 100,
         label: gt('Slideshow'),
@@ -522,6 +530,16 @@ define('io.ox/core/tk/attachments', [
                         popup.append($('<h4>').text(gt('No preview available')));
                     }
                 });
+            });
+        }
+    });
+
+    new links.Action('io.ox/core/tk/attachment/actions/viewer', {
+        id: 'viewer',
+        requires: 'some',
+        multiple: function (attachmentList) {
+            ox.load(['io.ox/core/viewer/main']).done(function (Viewer) {
+                Viewer.launch(attachmentList);
             });
         }
     });

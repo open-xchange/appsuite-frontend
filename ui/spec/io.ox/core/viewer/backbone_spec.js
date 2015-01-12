@@ -55,6 +55,16 @@ define([
                 group: 'mail',
                 uploaded: 1,
                 meta: {}
+            },
+            
+            pimAttachment = {
+                attached: 1,
+                file_mimetype: "image/png",
+                file_size: 24670,
+                filename: "Happy-Minion-Icon.png",
+                folder: 187,
+                id: 3,
+                module: 4
             };
 
         describe('Model and Collection definition', function () {
@@ -92,8 +102,11 @@ define([
                     expect(model.get('folderId')).to.equal(null);
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(null);
+                    expect(model.get('versions')).to.equal(null);
+                    expect(model.get('description')).to.equal(null);
 
                     expect(model.isMailAttachment()).to.be['false'];
+                    expect(model.isPIMAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['false'];
 
                     expect(model.getPreviewUrl()).to.equal(null);
@@ -123,6 +136,7 @@ define([
                     expect(model.get('lastModified')).to.equal(1402646241319);
 
                     expect(model.isMailAttachment()).to.be['false'];
+                    expect(model.isPIMAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['true'];
 
                     expect(model.getPreviewUrl()).to.be.a('string');
@@ -142,7 +156,7 @@ define([
                 it('should be initialized with correct attributes', function () {
                     var model = new Model(mailAttachment, { parse: true });
                     expect(model.get('origData')).to.be.not.empty;
-                    expect(model.get('source')).to.equal('attachment');
+                    expect(model.get('source')).to.equal('mail-attachment');
                     expect(model.get('filename')).to.equal('cola.jpg');
                     expect(model.get('size')).to.equal(145218);
                     expect(model.get('version')).to.equal(null);
@@ -153,6 +167,7 @@ define([
                     expect(model.get('lastModified')).to.equal(null);
 
                     expect(model.isMailAttachment()).to.be['true'];
+                    expect(model.isPIMAttachment()).to.be['false'];
                     expect(model.isDriveFile()).to.be['false'];
 
                     expect(model.getPreviewUrl()).to.be.a('string');
@@ -161,6 +176,38 @@ define([
 
                 });
             });
+            
+            describe('result of creating a Model from a PIM attachment', function () {
+                it('should return a non empty object', function () {
+                    var model = new Model(pimAttachment, { parse: true });
+                    expect(model).to.be.an('object');
+                    expect(model).to.be.not.empty;
+                });
+
+                it('should be initialized with correct attributes', function () {
+                    var model = new Model(pimAttachment, { parse: true });
+                    expect(model.get('origData')).to.be.not.empty;
+                    expect(model.get('source')).to.equal('pim-attachment');
+                    expect(model.get('filename')).to.equal('Happy-Minion-Icon.png');
+                    expect(model.get('size')).to.equal(24670);
+                    expect(model.get('version')).to.equal(null);
+                    expect(model.get('contentType')).to.equal('image/png');
+                    expect(model.get('id')).to.equal(3);
+                    expect(model.get('folderId')).to.equal(187);
+                    expect(model.get('meta')).to.deep.equal({});
+                    expect(model.get('lastModified')).to.equal(null);
+                    
+                    expect(model.isMailAttachment()).to.be['false'];
+                    expect(model.isPIMAttachment()).to.be['true'];
+                    expect(model.isDriveFile()).to.be['false'];
+
+                    expect(model.getPreviewUrl()).to.be.a('string');
+                    expect(model.getDownloadUrl()).to.be.a('string');
+                    expect(model.getThumbnailUrl()).to.be.a('string');
+
+                });
+            });
+            
         });
 
         // ----------------------------------------------------------------

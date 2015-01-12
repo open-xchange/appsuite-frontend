@@ -250,6 +250,17 @@ define('io.ox/contacts/actions', [
         }
     });
 
+    // Viewer 2.0
+    new Action('io.ox/contacts/actions/viewer', {
+        id: 'viewer',
+        requires: 'some',
+        multiple: function (attachmentList) {
+            ox.load(['io.ox/contacts/actions/viewer']).done(function (action) {
+                action(attachmentList);
+            });
+        }
+    });
+
     // attachment actions
     new Action('io.ox/contacts/actions/slideshow-attachment', {
         id: 'slideshow',
@@ -522,6 +533,14 @@ define('io.ox/contacts/actions', [
     }));
 
     // Attachments
+    ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
+        id: 'viewer',
+        index: 100,
+        label: gt('Viewer'),
+        mobile: 'hi',
+        ref: 'io.ox/contacts/actions/viewer'
+    }));
+
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'slideshow',
         index: 100,
