@@ -139,7 +139,8 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
         waitForEvent: util.waitForEvent,
         waitForSelector: util.waitForSelector,
         waitForFolder: util.waitForFolder,
-        waitForListView: util.waitForListView
+        waitForListView: util.waitForListView,
+        waitForImage: util.waitForImage
     });
 
     var that = {

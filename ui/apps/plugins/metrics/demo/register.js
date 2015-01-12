@@ -187,7 +187,63 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
             // Test 4
             //
 
-            this.xtest('Write mail and send with attachment', function () {
+            this.xtest('Write mail and send with attachment (local)', function () {
+
+                this.step('Open compose dialog', function (done) {
+
+                    ox.on('mail:compose:ready', function (e, data, app) {
+                        this.app = app;
+                        done();
+                    }.bind(this));
+
+                    ox.registry.call('mail-compose', 'compose');
+                });
+
+                this.step('Add attachment', function (done) {
+                    this.waitForImage('apps/plugins/metrics/demo/test.jpg', function (blob) {
+                        this.app.getView().fileList.add(_.extend(blob, { group: 'file', filename: 'test.jpg', lastModified: _.now(), webkitRelativePath: '' }));
+                        done();
+                    }.bind(this));
+                });
+
+                this.step('Enter subject and first 3 letters of recipient', function (done) {
+                    this.app.setSubject('Test 3');
+                    $('#writer_field_to').focus().val(FIRST_LETTERS).trigger('keyup');
+                    done();
+                });
+
+                this.step('Wait for auto-complete', function (done) {
+                    this.waitFor(function () {
+                        var item = $('.autocomplete-item').filter(function () {
+                            return $.trim($(this).find('.email').text()) === RECIPIENT;
+                        });
+                        item.click();
+                        return item.length;
+                    })
+                    .done(done);
+                });
+
+                this.step('Write 100 words', function () {
+                    this.app.getEditor().setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                });
+
+                this.step('Send message', function (done) {
+                    // send
+                    this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
+                    // wait for proper event
+                    ox.on('mail:send:stop', done);
+                });
+
+                this.step('Switch back to mail app', function (done) {
+                    this.waitForSelector('.io-ox-mail-window:visible', done);
+                });
+            });
+
+            //
+            // Test 5
+            //
+
+            this.test('Write mail and send with attachment (local)', function () {
                 // TODO!
             });
         });
