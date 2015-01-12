@@ -636,17 +636,12 @@ define('io.ox/contacts/api',
         }
 
         // node is optional. if missing function returns just the URL
-        return function (/* [node], options */) {
+        return function (node, options) {
 
-            var args = _(arguments).toArray(), node, options, params, url;
+            var params, url;
 
             // use copy of data object because of delete-statements
-            if (args.length === 1) {
-                options = _.clone(args[0]);
-            } else {
-                node = args[0];
-                options = _.clone(args[1]);
-            }
+            options = _.clone(options);
 
             // duck checks
             if (api.looksLikeResource(options)) {
@@ -672,7 +667,7 @@ define('io.ox/contacts/api',
             }
 
             // already done?
-            if (url) return node ? load(node, url, options) : url;
+            if (url) return load(node, url, options);
 
             // preference; internal_userid must not be undefined, null, or zero
             if (options.internal_userid || options.userid || options.user_id) {
@@ -708,9 +703,6 @@ define('io.ox/contacts/api',
             }
 
             url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
-
-            // just return URL
-            if (!node) return url;
 
             // cached?
             if (cachesURLs[url]) {
