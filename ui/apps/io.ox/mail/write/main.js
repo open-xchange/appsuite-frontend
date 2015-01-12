@@ -1331,6 +1331,13 @@ define('io.ox/mail/write/main',
             return def;
         };
 
+        app.parseMsgref = function (msgref) {
+            var base = _(msgref.toString().split(mailAPI.separator)),
+                id = base.last(),
+                folder = base.without(id).join(mailAPI.separator);
+            return { folder_id: folder, id: id };
+        };
+
         app.saveDraft = function () {
 
             // get mail
@@ -1370,6 +1377,14 @@ define('io.ox/mail/write/main',
                             def.reject(result);
                         } else {
                             app.setMsgRef(result.data);
+                            mailAPI.get(app.parseMsgref(result.data)).then(function (data) {
+                                // Replace inline images in contenteditable with links from draft response
+                                var t = editor.getContainer().contents().find('body');
+                                $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                                    $('img:not(.emoji):eq(' + index + ')', t).attr('src', $(el).attr('src'));
+                                });
+                                editor.setContent(t.html());
+                            });
                             app.dirty(false);
                             notifications.yell('success', gt('Mail saved as draft'));
                             def.resolve(result);
