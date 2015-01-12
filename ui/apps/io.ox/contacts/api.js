@@ -641,6 +641,9 @@ define('io.ox/contacts/api',
             var params,
                 url,
                 opt = _.extend({
+                    width: 48,
+                    height: 48,
+                    scaleType: 'cover',
                     lazyload: false
                 }, options);
 
@@ -660,9 +663,9 @@ define('io.ox/contacts/api',
 
                 params = $.extend({}, {
                     // scale
-                    width: data.width,
-                    height: data.height,
-                    scaleType: data.scaleType
+                    width: opt.width,
+                    height: opt.height,
+                    scaleType: opt.scaleType
                 });
                 url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
@@ -693,9 +696,9 @@ define('io.ox/contacts/api',
                 id: data.contact_id || data.id,
                 internal_userid: data.internal_userid || data.userid || data.user_id,
                 // scale
-                width: data.width,
-                height: data.height,
-                scaleType: data.scaleType,
+                width: opt.width,
+                height: opt.height,
+                scaleType: opt.scaleType,
                 uniq: uniq
             });
 

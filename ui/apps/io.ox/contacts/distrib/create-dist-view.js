@@ -236,14 +236,18 @@ define('io.ox/contacts/distrib/create-dist-view',
             var self = this;
 
             // get proper data for picture halo but ignore client-side ids (0.99988765533211)
-            var halo = $.extend({}, o, { width: 48, height: 48, scaleType: 'cover' });
+            var halo = $.extend({}, o);
             if (/^0\./.test(halo.id)) delete halo.id;
 
             return $('<div class="listed-item col-xs-12 col-md-6">')
                 .attr('data-mail', o.display_name + '_' + o.mail)
                 .append(
                     // contact picture
-                    api.pictureHalo($('<div class="contact-image">'), halo),
+                    api.pictureHalo(
+                        $('<div class="contact-image">'),
+                        halo,
+                        { width: 48, height: 48 }
+                    ),
                     // name
                     $('<div class="person-name">').text(o.display_name),
                     // mail address

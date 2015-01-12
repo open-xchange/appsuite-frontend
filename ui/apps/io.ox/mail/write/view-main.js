@@ -93,7 +93,7 @@ define('io.ox/mail/write/view-main',
 
     });
 
-    var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };
+    var contactPictureOptions = { width: 42, height: 42 };
 
     var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
 
@@ -1103,7 +1103,8 @@ define('io.ox/mail/write/view-main',
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-image">'),
-                    $.extend(baton.data, contactPictureOptions)
+                    baton.data,
+                    $.extend({}, contactPictureOptions)
                 )
             );
         }
