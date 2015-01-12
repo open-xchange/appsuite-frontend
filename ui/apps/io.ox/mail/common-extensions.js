@@ -58,7 +58,7 @@ define('io.ox/mail/common-extensions', [
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
                     { email: data.picture || (from && from[0] && from[0][1]) },
-                    { width: size, height: size }
+                    { width: size, height: size, effect: 'fadeIn' }
                 )
             );
         },
