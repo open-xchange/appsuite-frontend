@@ -604,22 +604,22 @@ define('io.ox/contacts/api',
             uniq = _.now();
         });
 
-        function load(node, url) {
+        function load(node, url, opt) {
             _.defer(function () {
                 // use lazyload?
-                var scrollpane = node.closest('.scrollpane');
-                if (scrollpane.length) {
+                var container = node.closest('.scrollpane, .scrollpane-lazyload');
+                if (container.length || !!opt.lazyload) {
                     node.attr('data-original', url).lazyload({
-                        container: scrollpane,
+                        container: container.length ? container : undefined,
                         effect: 'show',
                         error: function () {
                             node.css('background-image', 'url(' + fallback + ')');
-                            node = scrollpane = null;
+                            node = container = null;
                         },
                         load: function (elements_left, settings, image) {
                             if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
                             else cachesURLs[url] = url;
-                            node = scrollpane = null;
+                            node = container = null;
                         }
                     });
                 } else {
@@ -636,9 +636,13 @@ define('io.ox/contacts/api',
         }
 
         // node is optional. if missing function returns just the URL
-        return function (node, data) {
+        return function (node, data, options) {
 
-            var params, url;
+            var params,
+                url,
+                opt = _.extend({
+                    lazyload: false
+                }, options);
 
             // use copy of data object because of delete-statements
             data = _.clone(data);
@@ -667,7 +671,7 @@ define('io.ox/contacts/api',
             }
 
             // already done?
-            if (url) return load(node, url, data);
+            if (url) return load(node, url, opt);
 
             // preference; internal_userid must not be undefined, null, or zero
             if (data.internal_userid || data.userid || data.user_id) {
@@ -709,7 +713,7 @@ define('io.ox/contacts/api',
                 return node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
 
-            load(node, url, data);
+            load(node, url, opt);
 
             // remove data
             data = null;
