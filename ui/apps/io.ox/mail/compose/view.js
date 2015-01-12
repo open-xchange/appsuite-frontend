@@ -958,8 +958,8 @@ define('io.ox/mail/compose/view', [
 
             return this.changeEditorMode().done(function () {
                 if (data.replaceBody !== 'no') {
-                    // control focus in compose mode
-                    if (self.model.get('mode') === 'compose') {
+                    // set focus in compose and forward mode to recipient tokenfield
+                    if (/(compose|forward)/.test(self.model.get('mode'))) {
                         self.$el.find('.tokenfield:first .token-input').focus();
                     } else {
                         self.editor.focus();
