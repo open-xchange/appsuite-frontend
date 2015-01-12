@@ -143,6 +143,12 @@ define('io.ox/contacts/distrib/create-dist-view',
                     );
                 });
             }
+
+            // draw empty item again
+            this.listenTo(this.model, 'change:distribution_list', function () {
+                if (self.model.get('distribution_list').length === 0)
+                    self.drawEmptyItem(self.$el.find('.item-list'));
+            });
         },
 
        /**
