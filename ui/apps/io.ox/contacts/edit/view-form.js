@@ -168,28 +168,7 @@ define('io.ox/contacts/edit/view-form', [
                 tagName: 'div',
                 className: 'edit-contact compact',
                 render: function () {
-                    //own render function so we are able to draw extensionpoints into 2 nodes (header and body)
-                    if (this.header) {
-                        var header = [],
-                            body = [];
-                        _(this.point.all()).each(function (extension) {
-                            if (extension.header)  {
-                                header.push(extension);
-                            } else {
-                                body.push(extension);
-                            }
-                        });
-                        for (var i = 0; i < header.length; i++) {
-                            header[i].invoke.apply(this.point, ['draw', this.header].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
-                        }
-                        for (var i = 0; i < body.length; i++) {
-                            body[i].invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
-                        }
-
-                    } else {
-                        this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
-                    }
-
+                    this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
                     return this;
                 }
             });
@@ -203,32 +182,45 @@ define('io.ox/contacts/edit/view-form', [
                 // so we just go on here
                 this.$el.addClass('contact-picture-upload f6-target');
             }
-        }), { header: true });
+        }));
 
-        // Save
-        if (!isMyContactData) {
-            point.basicExtend(new links.Button({
-                id: 'save',
-                index: 110,
-                header: true,
-                label: gt('Save'),
-                ref: ref + '/actions/edit/save',
-                cssClasses: 'btn btn-primary control f6-target',
-                tabIndex: 2,
-                tagtype: 'button'
-            }));
+        point.basicExtend({
+            id: 'header',
+            index: 10,
+            draw: function (baton) {
+                var row = $('<div class="header">');
+                ext.point(ref + '/edit/buttons').invoke('draw', row, baton);
+                baton.app.getWindow().setHeader(row);
+            }
+        });
 
-            point.basicExtend(new links.Button({
-                id: 'discard',
-                index: 120,
-                header: true,
-                label: gt('Discard'),
-                ref: ref + '/actions/edit/discard',
-                cssClasses: 'btn btn-default control',
-                tabIndex: 3,
-                tagtype: 'button'
-            }));
-        }
+        // buttons
+        ext.point(ref + '/edit/buttons').extend({
+            index: 100,
+            id: 'save',
+            draw: function (baton) {
+                this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
+                    .text(gt('Save'))
+                    .on('click', function () {
+                        actions.invoke(ref + '/actions/edit/save', this, baton);
+                    })
+                );
+
+            }
+        });
+
+        ext.point(ref + '/edit/buttons').extend({
+            index: 200,
+            id: 'discard',
+            draw: function (baton) {
+                this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
+                    .text(gt('Discard'))
+                    .on('click', function () {
+                        actions.invoke(ref + '/actions/edit/discard', this, baton);
+                    })
+                );
+            }
+        });
 
         point.basicExtend({
             id: 'autoExpand',
@@ -245,24 +237,6 @@ define('io.ox/contacts/edit/view-form', [
                     }
                 });
             }
-        });
-
-        /*
-         * extension point for mobile toolbar on the bottom of the page
-         */
-        ext.point('io.ox/contacts/edit/bottomToolbar').extend({
-            id: 'toolbar',
-            index: 100,
-            draw: function () {
-                var node = $(this.attributes.window.nodes.body),
-                    header = $(this.attributes.window.nodes.header),
-                    toolbar = $('<div class="app-bottom-toolbar">');
-                // due to the very strange usage of extension points in contacts module
-                // we have to do move the buttons the old-school way
-                toolbar.append(header.find('[data-action="save"], [data-action="discard"]'));
-                node.append(toolbar);
-            }
-
         });
 
         function toggle(e) {
@@ -344,7 +318,6 @@ define('io.ox/contacts/edit/view-form', [
         point.basicExtend({
             id: 'summary',
             index: 150,
-            header: true,
             draw: function (baton) {
 
                 this.append(
@@ -426,19 +399,12 @@ define('io.ox/contacts/edit/view-form', [
 
         new actions.Action(ref + '/actions/edit/discard', {
             id: 'discard',
-            action: function (options) {
+            action: function () {
                 if (ref === 'io.ox/core/user') {
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
                 } else {
-                    var button;
-                    if (_.device('smartphone')) {
-                        // really not so nice...
-                        button = options.parentView.$el.parent().parent().parent().find('[data-action="discard"]');
-                    } else {
-                        button = options.parentView.header.find('[data-action="discard"]');
-                    }
-                    button.trigger('controller:quit');
+                    $(this).trigger('controller:quit');
                 }
             }
         });

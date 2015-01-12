@@ -673,7 +673,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 $('<div>').addClass('col-md-6 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations.flag)
                                 ),
-
                                 $('<div>').addClass('col-md-6').append(
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-3 col-md-offset-9 rightalign').append(

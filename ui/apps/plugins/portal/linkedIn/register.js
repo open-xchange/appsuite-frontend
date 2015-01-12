@@ -186,6 +186,18 @@ define('plugins/portal/linkedIn/register', [
 
         title: 'LinkedIn',
 
+        initialize: function () {
+            keychain.submodules.linkedin.on('delete', function () {
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                        portalModel = portalApp.getWidgetCollection()._byId.linkedIn_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+            });
+        },
+
         isEnabled: function () {
             return keychain.isEnabled('linkedin');
         },
@@ -202,15 +214,20 @@ define('plugins/portal/linkedIn/register', [
         performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychain.createInteractively('linkedin', win).done(function () {
+                baton.model.node.find('h2 .fa-linkedin').replaceWith($('<span class="title">').text(gt('LinkedIn')));
                 baton.model.node.removeClass('requires-setup widget-color-custom color-linkedin');
                 ox.trigger('refresh^');
             });
         },
 
         load: function (baton) {
+
+            if (!keychain.hasStandardAccount('linkedin')) {
+                // load can still be called on refresh
+                return $.Deferred().reject({ code: 'OAUTH-0006' });
+            }
+
             if (capabilities.has('linkedinPlus')) {
-                if (!keychain.hasStandardAccount('linkedin'))
-                    return $.Deferred().reject({ code: 'OAUTH-0006' });
 
                 return proxy.request({
                     api: 'linkedin',
@@ -226,12 +243,13 @@ define('plugins/portal/linkedIn/register', [
                 .fail(require('io.ox/core/notifications').yell);
 
             } else {
+
                 return http.GET({
                     module: 'integrations/linkedin/portal',
                     params: { action: 'updates' }
                 })
                 .then(function (activities) {
-                    if (activities.values && activities.values !== 0) {
+                    if (activities && activities.values && activities.values !== 0) {
                         baton.data = activities.values;
                     } else {
                         baton.data = activities;

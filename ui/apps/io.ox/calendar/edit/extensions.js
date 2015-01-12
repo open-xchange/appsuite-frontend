@@ -23,8 +23,9 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/calendar/edit/recurrence-view',
     'io.ox/calendar/api',
     'io.ox/participants/views',
-    'io.ox/core/capabilities'
-], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/calendar'
+], function (ext, gt, calendarUtil, contactUtil, views, mini, DatePicker, attachments, RecurrenceView, api, pViews, capabilities, settings) {
 
     'use strict';
 
@@ -34,10 +35,10 @@ define('io.ox/calendar/edit/extensions', [
         id: 'header',
         index: 10,
         draw: function (baton) {
-            var row = $('<div class="col-xs-12 header">');
+            var row = $('<div class="header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
-            this.append(row);
+            baton.app.getWindow().setHeader(row);
         }
     });
 
@@ -74,7 +75,8 @@ define('io.ox/calendar/edit/extensions', [
         index: 200,
         id: 'discard',
         draw: function (baton) {
-            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >').text(gt('Discard'))
+            this.append($('<button type="button" class="btn btn-default discard" data-action="discard" >')
+                .text(gt('Discard'))
                 .on('click', function () {
                     baton.app.quit();
                 })
@@ -314,6 +316,49 @@ define('io.ox/calendar/edit/extensions', [
     }, {
         nextTo: 'shown_as',
         rowClass: 'collapsed'
+    });
+
+    function colorClickHandler(e) {
+        // toggle active class
+        $(this).siblings('.active').removeClass('active').attr('aria-checked', false).end().addClass('active').attr('aria-checked', true);
+        // update model
+        e.data.model.set({ 'color_label': e.data.color_label });
+    }
+
+    //color selection
+    point.extend({
+        id: 'color',
+        index: 1200,
+        render: function () {
+
+            if (settings.get('colorScheme') !== 'custom') return;
+
+            var activeColor = this.model.get('color_label') || 0;
+
+            this.listenTo(this.model, 'change:private_flag', function (model, value) {
+                this.$el.find('.no-color').toggleClass('color-label-10', value);
+            });
+
+            this.$el.append(
+                $('<label class="control-label col-xs-12">').append(
+                    $.txt(gt('Color')),
+                    $('<div class="custom-color">').append(
+                        _.map(_.range(0, 11), function (color_label) {
+                            return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                                .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
+                                .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
+                                .addClass(activeColor == color_label ? 'active' : '')
+                                .attr({
+                                    'aria-checked': activeColor == color_label,
+                                    'aria-label': calendarUtil.getColorLabel(color_label)
+                                })
+                                .append('<i class="fa fa-check">')
+                                .on('click', { color_label: color_label, model: this.model }, colorClickHandler);
+                        }, this)
+                    )
+                )
+            );
+        }
     });
 
     // participants label
@@ -618,30 +663,6 @@ define('io.ox/calendar/edit/extensions', [
             }
         }
     });
-
-    if (_.device('smartphone')) {
-        // disable header buttons
-        ext.point('io.ox/calendar/edit/section/buttons').disable('save').disable('discard');
-        // bottom toolbar for mobile only
-        point.basicExtend({
-            id: 'toolbar',
-            index: 2500,
-            draw: function (baton) {
-                // must be on a non overflow container to work with position:fixed
-                var node = $(baton.app.attributes.window.nodes.body),
-                    toolbar;
-                node.append(toolbar = $('<div class="app-bottom-toolbar">'));
-                ext.point('io.ox/calendar/edit/section/buttons').replace({
-                    id: 'save',
-                    index: 100
-                }).replace({
-                    id: 'discard',
-                    index: 200
-                });
-                ext.point('io.ox/calendar/edit/section/buttons').enable('save').enable('discard').invoke('draw', toolbar, baton);
-            }
-        });
-    }
 
     if (!capabilities.has('infostore')) {
         ext.point('io.ox/calendar/edit/section')

@@ -46,11 +46,17 @@ define('io.ox/core/extPatterns/links', [
                 var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
+                        'draggable': options.draggable || false,
                         'role': 'menuitem',
                         'data-section': self.section || 'default',
                         'data-prio': _.device('smartphone') ? (self.mobile || 'none') : (self.prio || 'lo'),
                         'data-ref': self.ref
                     });
+                //in firefox draggable=false is not enough to prevent dragging...
+                if (!options.draggable && _.device('firefox')) {
+                    a.attr('ondragstart', 'return false;');
+                }
+
                 // add icon or text? (icons are prefered over labels)
                 if (icons && prio === 'hi') {
                     // add icon and title attribut
@@ -345,6 +351,7 @@ define('io.ox/core/extPatterns/links', [
                         dd = $('<a>').addClass('actionlink').attr({
                             href: '#',
                             tabindex: 1,
+                            draggable: false,
                             role: 'menuitem',
                             'data-toggle': 'dropdown',
                             'data-action': 'more',
@@ -364,6 +371,11 @@ define('io.ox/core/extPatterns/links', [
                             .append(lo)
                     )
                 );
+
+                //in firefox draggable=false is not enough to prevent dragging...
+                if (_.device('firefox')) {
+                    dd.attr('ondragstart', 'return false;');
+                }
                 dd.dropdown();
                 injectDividers(nav.find('ul'));
             }

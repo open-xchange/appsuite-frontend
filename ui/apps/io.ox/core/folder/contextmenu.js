@@ -15,10 +15,9 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/extensions',
     'io.ox/core/folder/actions/common',
     'io.ox/core/folder/api',
-    'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'gettext!io.ox/core'
-], function (ext, actions, api, notifications, capabilities, gt) {
+], function (ext, actions, api, capabilities, gt) {
 
     'use strict';
 
@@ -444,7 +443,67 @@ define('io.ox/core/folder/contextmenu', [
                     text: hidden ? gt('Show') : gt('Hide')
                 });
             };
-        }())
+        }()),
+
+        customColor: (function () {
+
+            var util;
+
+            function clickHandler(e) {
+
+                //prevent dialog from closing
+                e.stopPropagation();
+                e.preventDefault();
+
+                e.data.baton.elem = $(this);
+
+                require(['io.ox/core/folder/actions/color-selection'], function (colorSelection) {
+                    colorSelection(e.data.baton, e.data.color_label);
+                });
+            }
+
+            function getColorLabel(color_label, baton) {
+
+                var folderColor = util.getFolderColor(baton.data);
+
+                return $('<div class="color-label pull-left" tabindex="1" role="checkbox">')
+                    .addClass('color-label-' + color_label)
+                    .addClass(folderColor == color_label ? 'active' : '')
+                    .attr({
+                        'aria-checked': folderColor == color_label,
+                        'aria-label': util.getColorLabel(color_label)
+                    })
+                    .append('<i class="fa fa-check">')
+                    .on('click', { color_label: color_label, baton: baton }, clickHandler);
+            }
+
+            return function (baton) {
+
+                if (!/^calendar$/.test(baton.module)) return;
+                if (!api.is('private', baton.data)) return;
+
+                var listItem;
+
+                this.append(
+                    listItem = $('<li role="presentation">')
+                );
+
+                require(['settings!io.ox/calendar', 'io.ox/calendar/util'], function (settings, calendarUtil) {
+                    if (settings.get('colorScheme') === 'custom') {
+                        util = calendarUtil;
+                        listItem.append(
+                            $('<div class="custom-colors">').append(
+                                _.map(_.range(1, 11), function (opt) {
+                                    return getColorLabel(opt, baton);
+                                })
+                            )
+                        );
+                    } else {
+                        listItem.remove();
+                    }
+                });
+            };
+        })()
     };
 
     //
@@ -499,8 +558,13 @@ define('io.ox/core/folder/contextmenu', [
             draw: extensions.subscribe
         },
         {
-            id: 'divider-2',
+            id: 'customColor',
             index: 1500,
+            draw: extensions.customColor
+        },
+        {
+            id: 'divider-2',
+            index: 1600,
             draw: divider
         },
         // -----------------------------------------------

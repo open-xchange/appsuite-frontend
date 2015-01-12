@@ -110,6 +110,8 @@ define('io.ox/core/session', [
             })
             .then(function (data) {
                 set(data);
+                // global event
+                ox.trigger('login', data);
                 // call store for token-based login / not for pure auto-login
                 return store ? that.store().then(function () { return data; }) : data;
             });
@@ -176,6 +178,10 @@ define('io.ox/core/session', [
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
                             set(data, forceLanguage);
+
+                            // global event
+                            ox.trigger('login', data);
+
                             if (options.store) {
                                 return that.store().then(function () { return data; });
                             } else {

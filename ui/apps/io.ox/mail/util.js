@@ -533,8 +533,7 @@ define('io.ox/mail/util', [
         },
 
         signatures: (function () {
-            var htmltags = /(<([^>]+)>)/ig,
-                nothing = /.^/,
+            var htmltags = /(<\/?\w+(\s[^<>]*)?>)/g,
                 general = function (text) {
                     return String(text || '')
                         //replace white-space and evil \r
@@ -544,11 +543,27 @@ define('io.ox/mail/util', [
                         .trim();
                 },
                 add = function (text, isHTML) {
-                    var clean = general(text)
-                                //remove html tags (for plaintext emails)
-                                .replace(isHTML ? nothing : htmltags, '');
+                    var clean = general(text);
                     //special entities like '&'/&amp;
-                    return isHTML ? $('<dummy>').html(clean).html() : clean;
+                    var $parsed = $('<dummy>').html(clean);
+                    if (isHTML) {
+                        if (!htmltags.test(clean)) {
+                            $parsed.text(clean);
+                        }
+
+                        return $parsed.html();
+                    } else {
+                        if (!htmltags.test(clean)) {
+                            $parsed.text(clean);
+                        }
+                        $parsed.find('p').replaceWith(function () {
+                            return $(this).html() + '\n\n';
+                        });
+                        $parsed.find('br').replaceWith(function () {
+                            return $(this).html() + '\n';
+                        });
+                        return $parsed.text().trim();
+                    }
                 },
                 preview = function (text) {
                     return general(text)

@@ -30,7 +30,6 @@ define('io.ox/contacts/distrib/main', [
             container,
             model,
             view,
-            header,
             considerSaved = false,
             initialDistlist;
 
@@ -60,7 +59,10 @@ define('io.ox/contacts/distrib/main', [
                 model = contactModel.factory.create(initialDistlist);
             }
 
-            view = new ContactCreateDistView({ model: model });
+            view = new ContactCreateDistView({
+                model: model,
+                app: this
+            });
 
             function quit () {
                 app.quit();
@@ -93,12 +95,6 @@ define('io.ox/contacts/distrib/main', [
                 }
             });
 
-            //draw header first
-            //disable does not prevent manual drawing of single extensions, we're using this here to separate the header from the rest
-            view.point.disable('title-controls');
-            view.point.get('title-controls', function (ext) {
-                return ext.invoke.apply(view.point, ['draw', header, view.baton]);
-            });
             // go!
             container.append(view.render().$el);
             win.show();
@@ -144,12 +140,6 @@ define('io.ox/contacts/distrib/main', [
                     }
                 });
 
-                //draw header first
-                //disable does not prevent manual drawing of single extensions, we're using this here to separate the header from the rest
-                view.point.disable('title-controls');
-                view.point.get('title-controls', function (ext) {
-                    return ext.invoke.apply(view.point, ['draw', header, view.baton]);
-                });
                 // go!
                 container.append(view.render().$el);
                 win.show();
@@ -165,12 +155,12 @@ define('io.ox/contacts/distrib/main', [
             }));
 
             function fnToggleSave(isDirty) {
-                header.find('.btn[data-action="save"]').prop('disabled', !isDirty);
+                app.getWindow().nodes.header.find('.btn[data-action="save"]').prop('disabled', !isDirty);
             }
 
             win.on('show', function () {
                 if (!container.find('[data-extension-id="displayname"] input').val()) {
-                    header.find('.btn[data-action="save"]').prop('disabled', true);
+                    app.getWindow().nodes.header.find('.btn[data-action="save"]').prop('disabled', true);
                 }
                 container.find('input[type=text]:visible').eq(0).focus();
                 container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
@@ -180,9 +170,6 @@ define('io.ox/contacts/distrib/main', [
             });
 
             container = $('<div>').addClass('create-distributionlist container default-content-padding');
-            win.addClass('header-top');
-            header = win.nodes.header;
-            header.addClass('container default-header-padding');
 
             win.nodes.main.addClass('scrollable').append(container);
 

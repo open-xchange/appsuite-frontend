@@ -45,9 +45,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 buttonText = gt('Save');
                 header = gt('Edit distribution list');
             }
-
-            this.$el.append(
-                $('<div class="header col-md-12">').append(
+            this.baton.app.getWindow().setHeader(
+                $('<div class="header">').append(
                     $('<h1 class="clear-title title">').text(header),
                     // save/create button
                     $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {

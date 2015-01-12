@@ -12,10 +12,49 @@
  */
 
 .io-ox-settings-main {
+
     .window-controls label {
         display: inline-block;
         margin-bottom: 0;
     }
+
+    .window-content .leftside {
+
+        .toolbar {
+            position: absolute;
+            right: 0;
+            left: 0;
+            font-size: 14px;
+            line-height: 44px;
+            width: 100%;
+            height: 45px;
+            padding: 0;
+            border: 0 solid #e4e4e4;
+            border-top: 1px solid #ddd;
+            border-top-width: 1px;
+            display: block;
+            bottom: 0;
+            background-color: #fff;
+            z-index: 2;
+         }
+
+        .advanced-mode {
+            margin: 10px;
+            line-height: 20px;
+        }
+    }
+
+    .window-content .leftside .folder-tree {
+        font-size: 14px;
+        padding: 0;
+        bottom: 45px;
+
+        .selected > .folder-node > .folder-label {
+            max-width: none;
+        }
+
+    }
+
     .window-content .rightside > .scrollable-pane {
         max-width: 780px;
 

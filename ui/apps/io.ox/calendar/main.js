@@ -363,7 +363,7 @@ define('io.ox/calendar/main', [
             app.props = new Backbone.Model({
                 'layout': view,
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
-                'darkColors': app.settings.get('darkColors', false),
+                'colorScheme': app.settings.get('colorScheme', 'custom'),
                 'mobileFolderSelectMode': false
             });
         },
@@ -396,12 +396,12 @@ define('io.ox/calendar/main', [
         'store-view-options': function (app) {
             if (_.device('smartphone')) return;
             app.props.on('change', _.debounce(function (model, options) {
-                if (!options || options.fluent) return;
+                if (!options || options.fluent) return;
                 var data = app.props.toJSON();
                 app.settings
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
-                    .set('darkColors', data.darkColors)
+                    .set('colorScheme', data.colorScheme)
                     .save();
             }, 500));
         },
@@ -433,14 +433,30 @@ define('io.ox/calendar/main', [
         },
 
         /*
-         * Respond to change:darkColors
+         * Respond to change:colorScheme
          */
-        'change:darkColors': function (app) {
-            if (_.device('smartphone')) return;
-            app.props.on('change:darkColors', function (model, value) {
-                app.getWindow().nodes.outer.toggleClass('dark-colors', value);
+        'change:colorScheme': function (app) {
+            var selectScheme = function (app, value) {
+                var node = app.getWindow().nodes.outer;
+
+                switch (value) {
+                    case 'classic': node.removeClass('dark-colors custom-colors'); break;
+                    case 'dark':
+                        if (_.device('smartphone')) {
+                            node.removeClass('dark-colors custom-colors');
+                        } else {
+                            node.removeClass('custom-colors').addClass('dark-colors');
+                        }
+                        break;
+                    case 'custom': node.removeClass('dark-colors').addClass('custom-colors'); break;
+                    default: node.removeClass('dark-colors custom-colors'); break;
+                }
+            };
+
+            app.props.on('change:colorScheme', function (model, value) {
+                selectScheme(app, value);
             });
-            app.getWindow().nodes.outer.toggleClass('dark-colors', app.props.get('darkColors'));
+            selectScheme(app, app.props.get('colorScheme'));
         },
 
         /*
@@ -476,7 +492,7 @@ define('io.ox/calendar/main', [
                 win.on({
                     'search:query': function () {
                         // switch to supported perspective
-                        lastPerspective =  app.props.get('layout') || _.url.hash('perspective');
+                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
                         if (lastPerspective !== SEARCH_PERSPECTIVE) {
                             // fluent option: do not write to user settings
                             app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
@@ -491,6 +507,8 @@ define('io.ox/calendar/main', [
                             app.props.set('layout', lastPerspective);
                         // disable
                         app.props.off('change', cancelSearch);
+                        // reset
+                        lastPerspective = undefined;
                     }
                 });
             });

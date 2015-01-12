@@ -28,13 +28,6 @@
         border: 0;
     }
 
-    h1.clear-title {
-        line-height:0;
-        font-size: 20px;
-        float: left;
-        padding-bottom: 10px;
-    }
-
     .task-edit-cancel { float: right; }
 
     .task-edit-save{
@@ -94,13 +87,8 @@
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
-        margin-top: 0;
-        padding-bottom: 40px;
-
         //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
         .form-control[readonly] { background-color: #fff; }
-
-        .clear-title { width: 100%; } //to push the buttons under the title
 
         .task-edit-cancel { float: none; }
 

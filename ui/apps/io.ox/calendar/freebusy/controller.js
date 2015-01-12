@@ -103,8 +103,6 @@ define('io.ox/calendar/freebusy/controller', [
             };
 
             this.postprocess = function () {
-                // hide show all checkbox
-                this.getCalendarView().showAll(false);
                 // pre-fill participants list
                 _(options.participants).each(function (participant) {
                     resolveParticipants(participant);
@@ -303,7 +301,6 @@ define('io.ox/calendar/freebusy/controller', [
 
                 view.folder(folderData);
 
-                view.showAll(false);
                 view.render();
                 this.$el.append(view.$el.addClass('abs week-view'));
 

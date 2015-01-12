@@ -423,9 +423,93 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                     done();
                 });
             });
-
         });
 
+        describe('can compute folder color', function () {
+            describe('resolves folder color', function () {
+                it('without meta', function () {
+                    expect(util.getFolderColor({})).to.equal(1);
+                });
+                it('with meta but without color label', function () {
+                    expect(util.getFolderColor({ meta: {} })).to.equal(1);
+                });
+                it('with meta and color label', function () {
+                    expect(util.getFolderColor({ meta: { color_label: 4 } })).to.equal(4);
+                });
+            });
+            describe('resolve appointment color class', function () {
+                it('with appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 0 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                });
+                it('with appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 6 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-6');
+                });
+                it('with private appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 0 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-10');
+                });
+
+                it('with private appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 5 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-5');
+                });
+                it('with shared unconfirmed appointment', function () {
+                    var folder = { meta: { color_label: 2 }, type: 3 },
+                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('');
+                });
+                it('with public folder', function () {
+                    var folder = { meta: { color_label: 2 }, type: 2 },
+                        appointment = { color_label: 0, created_by: 377 };
+
+                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                });
+            });
+            describe('detects, if appointment is editable', function () {
+                it('with appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 0 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
+                });
+                it('with appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { color_label: 6 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+                it('with private appointment without color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 0 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+
+                it('with private appointment with color', function () {
+                    var folder = { meta: { color_label: 2 } },
+                        appointment = { private_flag: true, color_label: 5 };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+                it('with shared unconfirmed appointment', function () {
+                    var folder = { meta: { color_label: 2 }, type: 3 },
+                        appointment = { color_label: 2, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+
+                    expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
+                });
+            });
+        });
     });
 
 });

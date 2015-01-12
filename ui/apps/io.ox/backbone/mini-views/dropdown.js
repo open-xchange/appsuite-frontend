@@ -72,12 +72,14 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         option: function (name, value, text) {
-            return this.append(
-                $('<a href="#">')
+            var link;
+            this.append(
+                link = $('<a href="#">')
                 .attr({
                     role: 'menuitemcheckbox',
                     'aria-checked': _.isEqual(this.model.get(name), value),
                     'data-name': name,
+                    'draggable': false,
                     'data-value': this.stringify(value),
                     'data-toggle': _.isBoolean(value)
                 })
@@ -90,13 +92,21 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     _.isFunction(text) ? text() : $('<span>').text(text)
                 )
             );
+            //in firefox draggable=false is not enough to prevent dragging...
+            if ( _.device('firefox') ) {
+                link.attr('ondragstart', 'return false;');
+            }
+            return this;
         },
 
         link: function (name, text, callback) {
-            return this.append(
-                $('<a>', { href: '#', 'data-name': name })
-                    .text(text).on('click', callback)
-            );
+            var link = $('<a draggable="false">', { href: '#', 'data-name': name })
+                    .text(text).on('click', callback);
+            //in firefox draggable=false is not enough to prevent dragging...
+            if ( _.device('firefox') ) {
+                link.attr('ondragstart', 'return false;');
+            }
+            return this.append( link );
         },
 
         header: function (text) {
@@ -120,6 +130,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 toggle = $('<a>').attr({
                     href: '#',
                     tabindex: 1,
+                    draggable: false,
                     role: 'menuitem',
                     'aria-haspopup': true,
                     'aria-label': ariaLabel,
@@ -134,6 +145,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 ),
                 this.$ul
             );
+            //in firefox draggable=false is not enough to prevent dragging...
+            if ( _.device('firefox') ) {
+                toggle.attr('ondragstart', 'return false;');
+            }
             toggle.dropdown();
             // update custom label
             this.label();

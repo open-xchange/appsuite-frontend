@@ -20,8 +20,9 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/user',
     'io.ox/mail/api',
     'gettext!io.ox/core',
+    'io.ox/calendar/util',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt) {
+], function (TreeNodeView, api, account, ext, capabilities, userAPI, mailAPI, gt, calendarUtil) {
 
     'use strict';
 
@@ -439,12 +440,12 @@ define('io.ox/core/folder/extensions', [
                 index: 200,
                 draw: function (baton) {
 
-                    this.find('.folder-shared').remove();
+                    this.find('.folder-shared:first').remove();
 
                     if (_.device('smartphone')) return;
                     if (!api.is('unlocked', baton.data)) return;
 
-                    this.find('.folder-node').append(
+                    this.find('.folder-node:first').append(
                         $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users'))
                         .on('click', { id: baton.data.id }, openPermissions)
                     );
@@ -455,16 +456,29 @@ define('io.ox/core/folder/extensions', [
                 index: 300,
                 draw: function (baton) {
 
-                    this.find('.folder-sub').remove();
+                    this.find('.folder-sub:first').remove();
 
                     // ignore shared folders
                     if (api.is('shared', baton.data)) return;
                     if (!api.is('subscribed', baton.data)) return;
 
-                    this.find('.folder-node').append(
+                    this.find('.folder-node:first').append(
                         $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions'))
                         .on('click', { folder: baton.data }, openSubSettings)
                     );
+                }
+            },
+            {
+                id: 'color',
+                index: 400,
+                draw: function (baton) {
+                    if (!/^calendar$/.test(baton.data.module)) return;
+                    if (!api.is('private', baton.data)) return;
+                    if (/^virtual/.test(baton.data.id)) return;
+
+                    var folderColor = calendarUtil.getFolderColor(baton.data);
+
+                    this.find('.folder-label').addClass('color-label color-label-' + folderColor);
                 }
             }
         );

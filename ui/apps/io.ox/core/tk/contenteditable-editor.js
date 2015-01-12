@@ -743,7 +743,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.handleShow = function () {
             el.parents('.window-content').find('textarea').hide();
             el.idle().show();
-            $(fixed_toolbar).show();
+            // set display to empty sting because of overide 'display' property in css
+            $(fixed_toolbar).css('display','');
             resizeEditor();
             $(window).on('resize.tinymce', resizeEditor);
         };

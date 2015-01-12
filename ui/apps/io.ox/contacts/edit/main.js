@@ -29,7 +29,7 @@ define('io.ox/contacts/edit/main', [
     // multi instance pattern
     function createInstance(data) {
 
-        var app, getDirtyStatus, container, header, editView;
+        var app, getDirtyStatus, container, editView;
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
@@ -50,11 +50,6 @@ define('io.ox/contacts/edit/main', [
             app.setWindow(win);
 
             container = win.nodes.main.scrollable();
-            header = win.nodes.header;
-
-            //non standard header class because contacts header is bigger
-            win.addClass('contacts-header-top');
-            header.addClass('container default-header-padding');
 
             var cont = function (data) {
 
@@ -68,8 +63,7 @@ define('io.ox/contacts/edit/main', [
                         var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
                         app.setTitle(appTitle || gt('Create contact'));
                         app.contact = contact;
-                        editView = new view.ContactEditView({ model: contact });
-                        editView.header = header;
+                        editView = new view.ContactEditView({ model: contact, app: app });
                         container.append(
                             editView.render().$el.addClass('default-content-padding container')
                         );
@@ -171,9 +165,6 @@ define('io.ox/contacts/edit/main', [
                                 app.setState({ folder: contact.get('folder_id'), id: null });
                             }
                         });
-                        if (_.device('smartphone')) {
-                            ext.point('io.ox/contacts/edit/bottomToolbar').invoke('draw', app, new ext.Baton(contact));
-                        }
 
                         ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 

@@ -38,7 +38,8 @@ define('io.ox/calendar/util', [
             gt('declined'),
             gt('tentative')
         ],
-        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'];
+        n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'],
+        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')];
 
     var that = {
 
@@ -446,17 +447,18 @@ define('io.ox/calendar/util', [
 
             // DAILY
             case 1:
-                return interval === 1 ?
+                str = interval === 1 ?
                 gt('Every day') :
                 //#. recurrence string
                 //#. %1$d: numeric
                 gt('Every %1$d days', interval);
+                break;
 
             // WEEKLY
             case 2:
                 // special case: weekly but all days checked
                 if (days === 127) {
-                    return interval === 1 ?
+                    str = interval === 1 ?
                         gt('Every day') :
                         //#. recurrence string
                         //#. %1$d: numeric
@@ -465,7 +467,7 @@ define('io.ox/calendar/util', [
 
                 // special case: weekly on work days
                 if (days === 62) {
-                    return interval === 1 ?
+                    str = interval === 1 ?
                         //#. recurrence string
                         gt('On work days') :
                         //#. recurrence string
@@ -473,7 +475,7 @@ define('io.ox/calendar/util', [
                         gt('Every %1$d weeks on work days', interval);
                 }
 
-                return interval === 1 ?
+                str = interval === 1 ?
                 //#. recurrence string
                 //#. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
                 gt('Weekly on %1$s', getDayString(days)) :
@@ -481,11 +483,12 @@ define('io.ox/calendar/util', [
                 //#. %1$d: numeric
                 //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
                 gt('Every %1$d weeks on %2$s', interval, getDayString(days));
+                break;
 
             // MONTHLY
             case 3:
                 if (days === null) {
-                    return interval === 1 ?
+                    str = interval === 1 ?
                         //#. recurrence string
                         //#. %1$d: numeric, day in month
                         gt('Monthly on day %1$d', day_in_month) :
@@ -495,7 +498,7 @@ define('io.ox/calendar/util', [
                         gt('Every %1$d months on day %2$d', interval, day_in_month);
                 }
 
-                return interval === 1 ?
+                str = interval === 1 ?
                 //#. recurrence string
                 //#. %1$s: count string, e.g. first, second, or last
                 //#. %2$s: day string, e.g. Monday
@@ -505,11 +508,12 @@ define('io.ox/calendar/util', [
                 //#. %2$s: count string, e.g. first, second, or last
                 //#. %3$s: day string, e.g. Monday
                 gt('Every %1$d months on the %2$s %3$s', interval, getCountString(day_in_month), getDayString(days));
+                break;
 
             // YEARLY
             case 4:
                 if (days === null) {
-                    return !interval || interval === 1 ?
+                    str = !interval || interval === 1 ?
                         //#. recurrence string
                         //#. %1$s: Month nane, e.g. January
                         //#. %2$d: Date, numeric, e.g. 29
@@ -521,7 +525,7 @@ define('io.ox/calendar/util', [
                         gt('Every %1$d years on %2$s %3$d', interval, getMonthString(month), day_in_month);
                 }
 
-                return !interval || interval === 1 ?
+                str = !interval || interval === 1 ?
                 //#. recurrence string
                 //#. %1$s: count string, e.g. first, second, or last
                 //#. %2$s: day string, e.g. Monday
@@ -533,6 +537,19 @@ define('io.ox/calendar/util', [
                 //#. %3$s: day string, e.g. Monday
                 //#. %4$s: month nane, e.g. January
                 gt('Every %1$d years on the %2$s %3$s of %4$d', interval, getCountString(day_in_month), getDayString(days), getMonthString(month));
+                break;
+            }
+
+            if (data.recurrence_type > 0) {
+                if (data.until) {
+                    str += ' / ';
+                    str += gt('The series ends on %1$s', new date.Local(data.until).format(date.DATE));
+                }
+                if (data.occurrences) {
+                    var n = data.occurrences;
+                    str += ' / ';
+                    str += gt.format(gt.ngettext('The series ends after %1$d appointment', 'The series ends after %1$d appointments', n), n);
+                }
             }
 
             return str;
@@ -712,6 +729,57 @@ define('io.ox/calendar/util', [
             return contactAPI.get({ id: internal, folder: 6 }).then(function (data) {
                 return data.user_id;
             });
+        },
+
+        getAppointmentColorClass: function (folder, appointment) {
+            var folderColor = that.getFolderColor(folder),
+                appointmentColor = appointment.color_label || 0,
+                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+
+            // shared appointments which are unconfirmed or declined don't receive color classes
+            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) {
+                return '';
+            }
+
+            // private appointments are colored with gray instead of folder color
+            if (appointment.private_flag) {
+                folderColor = 10;
+            }
+
+            if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
+                // public appointments which are not from you are always colored in the calendar color
+                return 'color-label-' + folderColor;
+            } else {
+                // set color of appointment. if color is 0, then use color of folder
+                var color = appointmentColor === 0 ? folderColor : appointmentColor;
+
+                return 'color-label-' + color;
+            }
+        },
+
+        canAppointmentChangeColor: function (folder, appointment) {
+            var appointmentColor = appointment.color_label || 0,
+                privateFlag = appointment.private_flag || false,
+                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+
+            // shared appointments which are unconfirmed or declined don't receive color classes
+            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) {
+                return false;
+            }
+
+            return appointmentColor === 0 && !privateFlag;
+        },
+
+        getFolderColor: function (folder) {
+            return folder.meta ? folder.meta.color_label || settings.get('defaultFolderColor', 1) : settings.get('defaultFolderColor', 1);
+        },
+
+        getColorLabel: function (colorIndex) {
+            if (colorIndex >= 0 && colorIndex < colorLabels.length) {
+                return colorLabels[colorIndex];
+            }
+
+            return '';
         }
     };
 

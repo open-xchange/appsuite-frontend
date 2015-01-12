@@ -1119,10 +1119,67 @@ html.ios8-standalone-ipad-fix {
 
         .window-body{
             top: 50px;
+            bottom: 0;
         }
 
         .window-header {
             height: 50px;
+
+            h1.title {
+                margin: 0.2em 0;
+                font-size: 20px;
+                float: left;
+            }
+
+            .btn {
+                float: right;
+                margin-left: 1em;
+            }
+        }
+
+        @media (max-width: 480px), (max-device-width: 480px) {
+
+            .window-body{
+                top: 0;
+                bottom: 40px;
+            }
+
+            .window-header {
+                position: fixed;
+                left: 0;
+                right: 0;
+                z-index: 666;
+                bottom: 0px;
+                width: 100%;
+                height: 40px;
+                background-color: #ddd;
+                padding: 0;
+
+                h1.title {
+                    display: none;
+                }
+
+                a.btn {
+                    padding: 0;
+                    line-height: 40px;
+                    border: 0;
+                    border-radius: 0;
+                    margin: 0;
+                    height: 40px;
+                    width: 50%;
+
+                }
+
+                button.btn {
+                    border: 0;
+                    border-radius: 0;
+                    margin: 0;
+                    height: 40px;
+                    width: 50%;
+                }
+
+            }
+
         }
 
     }
@@ -2114,11 +2171,6 @@ a.button {
                 }
             }
 
-        }
-
-        .advanced-mode {
-            margin: 10px;
-            line-height: 20px;
         }
 
         .grid-options.dropdown {
@@ -3671,38 +3723,6 @@ input.flat-input {
     }
 }
 
-.app-bottom-toolbar {
-
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 40px;
-    background-color: #ddd;
-    z-index: 666;
-
-    a.btn {
-        padding: 0;
-        line-height: 40px;
-        border: 0;
-        border-radius: 0;
-        margin: 0;
-        height: 40px;
-        width: 50%;
-
-    }
-
-    button.btn {
-        border: 0;
-        border-radius: 0;
-        margin: 0;
-        height: 40px;
-        width: 50%;
-    }
-
-}
-
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
@@ -4163,7 +4183,6 @@ wbr:after {
         }
 
         .folder-label {
-
             &:first-child { // needed when arrows are hidden
                 margin-left: 14px;
             }
@@ -4291,7 +4310,10 @@ wbr:after {
     .selected > .folder-node > .folder-label {
         max-width: 120px;
         vertical-align: top;
-        .ellipsis();
+
+        div {
+            .ellipsis();
+        }
     }
 
     .flat-tree {
@@ -4303,7 +4325,6 @@ wbr:after {
         // set proper limit when selected (see above)
         .selected > .folder-node > .folder-label {
             width: 150px;
-            max-width: 150;
         }
     }
 

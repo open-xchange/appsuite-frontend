@@ -28,7 +28,8 @@ define('io.ox/mail/autoforward/settings/register', [
         ref: 'io.ox/autoforward',
         loadSettingPane: false,
         index: 400,
-        lazySaveSettings: true
+        lazySaveSettings: true,
+        settingsgroup: 'main/mail'
     });
 
     ext.point('io.ox/autoforward/settings/detail').extend({

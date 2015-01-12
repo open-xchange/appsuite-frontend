@@ -294,10 +294,18 @@ define('io.ox/settings/accounts/settings/pane', [
 
             redraw();
 
+            function onChange(e, list) {
+                if (!list || list.length === 0 || list[0].id !== 'io.ox/settings/accounts') {
+                    api.off('refresh.all refresh.list', redraw);
+                    data.grid.selection.off('change', onChange);
+                }
+            }
+
             api.on('refresh.all refresh.list', redraw);
-            data.grid.selection.on('change', function () {
+            data.tree.on('virtual', function () {
                 api.off('refresh.all refresh.list', redraw);
             });
+            data.grid.selection.on('change', onChange);
         },
         save: function () {
             // TODO

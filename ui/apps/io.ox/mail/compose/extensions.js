@@ -55,39 +55,37 @@ define('io.ox/mail/compose/extensions', [
 
         header: function (baton) {
             if (!baton.view.app.getWindow()) return;
-            var header = $('<div class="row" data-extension-id="header">');
+            var header = $('<div data-extension-id="header">');
             ext.point(POINT + '/header').invoke('draw', header, baton);
             baton.view.app.getWindow().setHeader(header).addClass('container default-header-padding');
         },
 
         title: function () {
             this.append(
-                $('<h1 class="col-sm-6 hidden-xs clear-title title">').text(gt('Compose new mail'))
+                $('<h1 class="hidden-xs clear-title title">').text(gt('Compose new mail'))
             );
         },
 
         buttons: function (baton) {
             this.append(
-                $('<div class="col-xs-12 col-sm-6 text-right">').append(
-                    $('<button type="button" class="btn btn-default" data-action="discard">')
-                        .on('click', function () { baton.view.app.quit(); })
-                        .text(gt('Discard')),
-                    $('<button type="button" class="btn btn-default" data-action="save">')
-                        .on('click', function () {
-                            if (baton.view.isSaving === true) return false;
-                            baton.view.isSaving = true;
-                            baton.view.saveDraft().done(function () {
-                                baton.view.isSaving = false;
-                            }).fail(function () {
-                                baton.view.isSaving = false;
-                            });
-                        })
-                        .text(gt('Save')),
-                    $('<button type="button" class="btn btn-primary" data-action="send">')
-                        .on('click', function () { baton.view.send(); })
-                        .text(gt('Send'))
-                )
-            );
+                $('<button type="button" class="btn btn-default" data-action="discard">')
+                    .on('click', function () { baton.view.app.quit(); })
+                    .text(gt('Discard')),
+                $('<button type="button" class="btn btn-default" data-action="save">')
+                    .on('click', function () {
+                        if (baton.view.isSaving === true) return false;
+                        baton.view.isSaving = true;
+                        baton.view.saveDraft().done(function () {
+                            baton.view.isSaving = false;
+                        }).fail(function () {
+                            baton.view.isSaving = false;
+                        });
+                    })
+                    .text(gt('Save')),
+                $('<button type="button" class="btn btn-primary" data-action="send">')
+                    .on('click', function () { baton.view.send(); })
+                    .text(gt('Send'))
+        );
         },
 
         sender: function (baton) {

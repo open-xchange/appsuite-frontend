@@ -40,16 +40,16 @@ define('io.ox/tasks/edit/view-template', [
         draw: function (baton) {
             var saveBtnText = gt('Create'),
                 headlineText = gt('Create task'),
-                headline,
-                saveBtn,
+                headline, saveBtn, row,
                 app = baton.app;
             if (baton.model.attributes.id) {
                 saveBtnText = gt('Save');
                 headlineText = gt('Edit task');
             }
-            this.append($('<div class="col-lg-12">').append(
+
+            row = $('<div class="header">').append(
                 //title
-                headline = $('<h1 class="clear-title">').text(headlineText),
+                headline = $('<h1 class="title clear-title">').text(headlineText),
                 //save button
                 saveBtn = $('<button type="button" data-action="save" class="btn btn-primary task-edit-save">')
                     .text(saveBtnText)
@@ -85,7 +85,9 @@ define('io.ox/tasks/edit/view-template', [
                 $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
                     .text(gt('Discard'))
                     .on('click', function () { app.quit(); })
-                ));
+                );
+
+            app.getWindow().setHeader(row);
 
             baton.parentView.on('changeMode', function (e, mode) {
                 if (mode === 'edit') {
@@ -733,19 +735,6 @@ define('io.ox/tasks/edit/view-template', [
             );
         }
     }, { row: '19' });
-
-    // bottom toolbar for mobile only
-    ext.point('io.ox/tasks/edit/bottomToolbar').extend({
-        id: 'toolbar',
-        index: 2900,
-        draw: function (baton) {
-            // must be on a non overflow container to work with position:fixed
-            var node = $(baton.app.attributes.window.nodes.body),
-                save = baton.app.getWindow().nodes.header.find('.task-edit-save'),
-                cancel = baton.app.getWindow().nodes.header.find('.task-edit-cancel');
-            node.append($('<div class="app-bottom-toolbar">').append(save, cancel));
-        }
-    });
 
     ext.point('io.ox/tasks/edit/dnd/actions').extend({
         id: 'attachment',

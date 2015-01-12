@@ -1037,7 +1037,7 @@ define('io.ox/core/desktop', [
                 this.shown = shown.promise();
 
                 this.setHeader = function (node) {
-                    this.nodes.header.append(node);
+                    this.nodes.header.append(node).addClass('container default-header-padding');
                     this.nodes.outer.addClass('header-top');
                     return this.nodes.header;
                 };
@@ -1100,6 +1100,7 @@ define('io.ox/core/desktop', [
                             self.trigger('open');
                             self.state.running = true;
                             ox.ui.windowManager.trigger('window.open', self);
+                            ox.trigger('app:ready', self.app);
                             firstShow = false;
                         }
                         ox.ui.windowManager.trigger('window.show', self);

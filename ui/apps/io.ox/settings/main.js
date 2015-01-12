@@ -19,71 +19,28 @@ define('io.ox/settings/main', [
     'gettext!io.ox/core',
     'settings!io.ox/settings/configjump',
     'settings!io.ox/core',
+    'io.ox/core/folder/tree',
+    'io.ox/core/folder/node',
+    'io.ox/core/folder/api',
     'io.ox/core/api/mailfilter',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, mailfilterAPI) {
+], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, TreeView, TreeNodeView, api, mailfilterAPI) {
 
     'use strict';
-
-    var tmpl = {
-        main: {
-            build: function () {
-                var title;
-                this.addClass('application')
-                    .append(
-                        title = $('<div>')
-                            .addClass('title')
-                    );
-                if (_.device('smartphone')) {
-                    // must use inline styles because vgrid's height calculon-o-mat does not
-                    // respect any css values bound via classes for its calculation
-                    title.css('margin', '4px 0');
-                    title.prepend($('<i class="fa fa-chevron-right pull-right">'));
-                }
-                return { title: title };
-            },
-            set: function (data, fields) {
-                var title = /*#, dynamic*/gt.pgettext('app', data.title);
-                this.attr({
-                    'aria-label': title
-                });
-                //clean template
-                fields.title.empty();
-                fields.title.append($.txt(
-                        title === data.title ? /*#, dynamic*/gt(data.title) : title
-                    )
-                );
-            }
-        },
-        label: {
-            build: function () {
-                this.addClass('settings-label');
-            },
-            set: function (data) {
-                this.text(data.group || '');
-            }
-        }
-        // might be good to introduce real groups!
-        // requiresLabel: function (i, data, current) {
-        //     if (!data) { return false; }
-        //     return data.group !== current ? data.group : false;
-        // }
-    };
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
         win,
-        // grid
-        grid,
         // nodes
         left,
         right,
         expertmode = coreSettings.get('settings/advancedMode', false),
         currentSelection = null,
-        previousSelection = null;
+        previousSelection = null,
+        pool = api.pool;
 
     function updateExpertMode() {
         var nodes = $('.expertmode');
@@ -103,6 +60,7 @@ define('io.ox/settings/main', [
         }));
 
         var changeStatus = false,
+            ignoreChangeEvent,
 
             saveSettings = function (triggeredBy) {
 
@@ -150,27 +108,6 @@ define('io.ox/settings/main', [
 
         var vsplit = commons.vsplit(win.nodes.main, app);
 
-        left = vsplit.left.addClass('leftside border-right');
-        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
-            'tabindex': 1,
-            'aria-describedby': 'currentsettingtitle',
-            //needed or mac voice over reads the whole settings pane when an input element is focused
-            'role': 'main'
-        }).scrollable();
-
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
-
-        // disable the Deserializer
-        grid.setDeserialize(function (cid) {
-            return cid;
-        });
-
-        grid.addTemplate(tmpl.main);
-        grid.addLabelTemplate(tmpl.label);
-
-        //grid.requiresLabel = tmpl.requiresLabel;
-
-        // Create extensions for the apps
         var appsInitialized = appsAPI.getInstalled().done(function (installed) {
 
             var apps = _.filter(installed, function (item) {
@@ -190,6 +127,197 @@ define('io.ox/settings/main', [
                 index += 100;
             });
         });
+
+        var getAllSettingsPanes = function () {
+            var def = $.Deferred(),
+                disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [],
+                actionPoints = {
+                    'redirect': 'io.ox/autoforward',
+                    'vacation': 'io.ox/vacation'
+                };
+            mailfilterAPI.getConfig().done(function (config) {
+                _.each(actionPoints, function (val, key) {
+                    if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+                });
+                appsInitialized.done(function () {
+                    def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
+                        var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
+                        if (expertmode && shown) {
+                            return true;
+                        } else if (!point.advancedMode && shown) {
+                            return true;
+                        }
+                    }));
+                });
+
+                appsInitialized.fail(def.reject);
+            });
+
+            return def;
+        };
+
+        left = vsplit.left.addClass('leftside border-right');
+        right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr({
+            'tabindex': 1,
+            'aria-describedby': 'currentsettingtitle',
+            //needed or mac voice over reads the whole settings pane when an input element is focused
+            'role': 'main'
+        }).scrollable();
+
+        var defaultExtension = {
+            id: 'standard-folders',
+            index: 100,
+            draw: function (tree) {
+                var defaults = { headless: true, count: 0, empty: false, indent: false, open: true, tree: tree, parent: tree, folder: 'virtual/settings' };
+
+                this.append(
+
+                    new TreeNodeView(_.extend({}, defaults, {
+                        model_id: 'virtual/settings/general'
+                    }))
+                    .render().$el.addClass('standard-folders'),
+                    new TreeNodeView(_.extend({}, defaults, {
+                        model_id: 'virtual/settings/main'
+                    }))
+                    .render().$el.addClass('standard-folders'),
+                    new TreeNodeView(_.extend({}, defaults, {
+                        model_id: 'virtual/settings/tools'
+                    }))
+                    .render().$el.addClass('standard-folders'),
+                    new TreeNodeView(_.extend({}, defaults, {
+                        model_id: 'virtual/settings/external'
+                    }))
+                    .render().$el.addClass('standard-folders')
+
+                );
+            }
+        };
+
+        ext.point('io.ox/core/foldertree/settings/app').extend(_.extend({}, defaultExtension));
+
+        var listOfVirtualFolders = ['settings/general', 'settings/main', 'settings/external', 'settings/tools'];
+
+        //create virtual folders
+        _.each(listOfVirtualFolders, function (val) {
+            api.virtual.add('virtual/' + val, function () {
+                return [];
+            });
+        });
+
+        // tree view
+        var tree = new TreeView({
+            root: '1',
+            all: false,
+            app: app,
+            contextmenu: false,
+            flat: false,
+            indent: true,
+            module: 'settings'
+        });
+
+        tree.on('virtual', function (id, item, baton) {
+            var focus = true;
+            tree.selection.preselect(id);
+            previousSelection = currentSelection;
+            currentSelection = pool.getModel(id).get('meta');
+            if (!baton) {
+                baton = pool.getModel(id).get('meta');
+                focus = false;
+            }
+            showSettings(baton, focus);
+
+            left.trigger('select');
+            if (!ignoreChangeEvent) {
+                saveSettings('changeGrid');
+            }
+            ignoreChangeEvent = false;
+
+        });
+
+        if (_.device('smartphone')) {
+            tree.$container.on('click', '.folder.selectable.selected .folder-label', function () {
+                left.trigger('select');
+            });
+
+            tree.$container.on('changeMobile', function () {
+                saveSettings('changeGridMobile');
+            });
+        }
+
+        function paintTree() {
+            var dfd = $.Deferred();
+            getAllSettingsPanes().done(function (data) {
+                addModelsToPool(data);
+
+                tree.$container.empty();
+
+                vsplit.left.append(tree.render().$el);
+
+                ignoreChangeEvent = true;
+                dfd.resolve();
+            });
+            return dfd;
+        }
+
+        function addModelsToPool(allApps) {
+            var collectedModels = {
+                general: [],
+                main: [],
+                tools: [],
+                external: [],
+                submenu: []
+            };
+            _.each(allApps, function (val) {
+                var menuStrucktur = [],
+                    defaultModel = {
+                        id: 'virtual/' + val.id,
+                        module: 'settings',
+                        own_rights: 134225984,
+                        title: /*#, dynamic*/gt.pgettext('app', val.title),
+                        subfolder: false,
+                        meta: val
+                    };
+
+                if (val.settingsgroup) {
+                    menuStrucktur = val.settingsgroup.split('/');
+                }
+
+                pool.addModel(_.extend(defaultModel, { menuStrucktur: menuStrucktur }));
+
+                if (menuStrucktur.length === 1) {
+                    collectedModels[val.settingsgroup].push(pool.getModel('virtual/' + val.id).toJSON());
+
+                } else if (menuStrucktur.length === 0) {
+                    collectedModels.external.push(pool.getModel('virtual/' + val.id).toJSON());
+                } else if (menuStrucktur.length >= 1) {
+                    collectedModels.submenu.push(pool.getModel('virtual/' + val.id).toJSON());
+                }
+            });
+
+            _.each(collectedModels, function (val, key) {
+                if (key === 'submenu') {
+                    var sort = {};
+                    _.each(val, function (val) {
+                        if (!sort[val.menuStrucktur[1]]) {
+                            sort[val.menuStrucktur[1]] = [];
+                        }
+                        sort[val.menuStrucktur[1]].push(val);
+
+                    });
+                    _.each(sort, function (val, key) {
+                        //create virtual folders
+                        api.virtual.add('virtual/io.ox/' + key, function () {
+                            return [];
+                        });
+
+                        pool.addCollection('virtual/io.ox/' + key, val, { reset: true });
+                    });
+
+                } else {
+                    pool.addCollection('virtual/settings/' + key, val, { reset: true });
+                }
+            });
+        }
 
         // Create extensions for the config jump pages
         _(configJumpSettings.get()).chain().keys().each(function (id) {
@@ -248,52 +376,20 @@ define('io.ox/settings/main', [
         ext.point('io.ox/settings/pane').extend({
             title: gt('Basic settings'),
             index: 50,
-            id: 'io.ox/core'
+            id: 'io.ox/core',
+            settingsgroup: 'general'
         });
 
         ext.point('io.ox/settings/pane').extend({
             title: gt('Mail and Social Accounts'),
             index: 600,
-            id: 'io.ox/settings/accounts'
+            id: 'io.ox/settings/accounts',
+            settingsgroup: 'general'
         });
 
-        var getAllSettingsPanes = function () {
-            var def = $.Deferred(),
-                disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [],
-                actionPoints = {
-                    'redirect': 'io.ox/autoforward',
-                    'vacation': 'io.ox/vacation'
-                };
-            mailfilterAPI.getConfig().done(function (config) {
-                _.each(actionPoints, function (val, key) {
-                    if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
-                });
-                appsInitialized.done(function () {
-                    def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
-                        var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
-                        if (expertmode && shown) {
-                            return true;
-                        } else if (!point.advancedMode && shown) {
-                            return true;
-                        }
-                    }));
-                });
-
-                appsInitialized.fail(def.reject);
-            });
-
-            return def;
-        };
-
-        grid.setAllRequest(getAllSettingsPanes);
-
-        var showSettingsEnabled = true;
-        var showSettings = function (baton) {
-
-            if (!showSettingsEnabled) return;
-
+        var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
-            baton.grid = grid;
+            baton.tree = tree;
 
             var data = baton.data,
                 settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
@@ -309,6 +405,7 @@ define('io.ox/settings/main', [
                     ext.point(extPointPart).invoke('draw', right, baton);
                     vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     updateExpertMode();
+                    if (focus) vsplit.right.focus();
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
@@ -319,27 +416,10 @@ define('io.ox/settings/main', [
                     vsplit.right.append($('<span class="sr-only" id="currentsettingtitle">').text(baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
+                    if (focus) vsplit.right.focus();
                 });
             }
         };
-
-        // trigger auto save
-        grid.selection.on('change', function (e, selection) {
-            if (selection.length === 1) {
-                previousSelection = currentSelection;
-                currentSelection = selection[0];
-            }
-        });
-
-        grid.selection.on('change', function () {
-            saveSettings('changeGrid');
-        });
-
-        if (_.device('smartphone')) {
-            grid.selection.on('changeMobile', function () {
-                saveSettings('changeGridMobile');
-            });
-        }
 
         // trigger auto save on any change
 
@@ -358,27 +438,22 @@ define('io.ox/settings/main', [
             }
         });
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
-        commons.wireGridAndWindow(grid, win);
-
         app.setSettingsPane = function (options) {
             if (options && options.id) {
-                return getAllSettingsPanes().done(function (apps) {
-                    var obj = _(apps).find(function (obj) { return obj.id === options.id; }),
-                        baton = new ext.Baton({ data: obj, options: options || {} });
-                    if (obj) {
-                        showSettingsEnabled = false;
-                        grid.selection.set([obj]);
-                        showSettingsEnabled = true;
-                        showSettings(baton);
-                    }
+                paintTree(options).done(function () {
+                    var baton = new ext.Baton({ data: pool.getModel('virtual/' + options.id).get('meta'), options: options || {} });
+                    tree.trigger('virtual', 'virtual/' + options.id, {}, baton);
                 });
             } else {
+                var id = tree.selection.getItems().first().attr('data-id');
+                if (!_.device('smartphone')) {
+                    tree.selection.set(id);
+                }
                 return $.when();
             }
         };
 
-        ext.point('settings/vgrid/toolbar').extend({
+        ext.point('settings/toolbar').extend({
             id: 'info',
             index: 200,
             draw: function () {
@@ -387,8 +462,7 @@ define('io.ox/settings/main', [
                     var checkbox = $('<input type="checkbox" class="input-xlarge">').on('change', function () {
                         expertmode = checkbox.prop('checked');
                         coreSettings.set('settings/advancedMode', expertmode).save();
-                        grid.setAllRequest(getAllSettingsPanes);
-                        grid.paint();
+                        paintTree();
                         updateExpertMode();
                     });
                     checkbox.prop('checked', expertmode);
@@ -396,10 +470,12 @@ define('io.ox/settings/main', [
                 };
 
                 this.append(
-                    $('<div>').addClass('advanced-mode').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Advanced Settings')).prepend(
-                                buildCheckbox()
+                    $('<div class="toolbar">').append(
+                        $('<div>').addClass('advanced-mode').append(
+                            $('<div>').addClass('checkbox').append(
+                                $('<label>').addClass('control-label').text(gt('Advanced Settings')).prepend(
+                                    buildCheckbox()
+                                )
                             )
                         )
                     )
@@ -407,11 +483,11 @@ define('io.ox/settings/main', [
             }
         });
 
-        ext.point('settings/vgrid/toolbar').invoke('draw', grid.getToolbar());
+        ext.point('settings/toolbar').invoke('draw', vsplit.left);
 
         // go!
         win.show(function () {
-            grid.paint().done(function () {
+            paintTree().done(function () {
                 app.setSettingsPane(options);
             });
         });

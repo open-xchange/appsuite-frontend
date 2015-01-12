@@ -113,10 +113,9 @@ define('io.ox/mail/compose/model', [
             }
 
             if (settings.get('messageFormat', 'html') === 'alternative') {
-                if (content && content.get('content_type') === 'text/plain') {
+                this.set('editorMode', 'html', { silent: true });
+                if (this.get('content_type') === 'text/plain') {
                     this.set('editorMode', 'text', { silent: true });
-                } else {
-                    this.set('editorMode', 'html', { silent: true });
                 }
             }
 
@@ -241,16 +240,6 @@ define('io.ox/mail/compose/model', [
             if (mail.data.contacts_ids) {
                 mail.data.contacts_ids = _(mail.data.contacts_ids).map(function (o) { return _.pick(o, 'folder_id', 'id'); });
             }
-            // move nested messages into attachment array
-            _(mail.data.nested_msgs).each(function (obj) {
-                mail.data.attachments.push({
-                    id: mail.data.attachments.length + 1,
-                    filemname: obj.subject,
-                    content_type: 'message/rfc822',
-                    msgref: obj.msgref
-                });
-            });
-            delete mail.data.nested_msgs;
             */
 
             //convert to target emoji send encoding

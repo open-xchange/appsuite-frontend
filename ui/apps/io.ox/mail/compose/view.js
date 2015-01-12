@@ -92,7 +92,7 @@ define('io.ox/mail/compose/view', [
         id: 'add_attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div data-extension-id="add_attachments" class="col-xs-12 col-md-5 col-md-offset-1">');
+            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
             extensions.attachment.call(node, baton);
             this.append(node);
         }
@@ -153,7 +153,7 @@ define('io.ox/mail/compose/view', [
             signatureDropdown.$ul.addClass('pull-right');
 
             this.append(
-                $('<div data-extension-id="composetoolbar-menu" class="col-xs-12 col-md-6">').append(
+                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(
                     $('<div class="pull-right text-right">').append(
                         signatureDropdown.render().$el.addClass('signatures text-left'),
                         optionDropdown.render().$el.addClass('text-left')
@@ -318,21 +318,46 @@ define('io.ox/mail/compose/view', [
 
         filterData: function (data) {
             if (/(compose|edit)/.test(data.mode)) return data;
-            return _.pick(data, 'id', 'folder_id', 'mode', 'csid');
+            return _.pick(data, 'id', 'folder_id', 'mode', 'csid', 'content_type');
         },
 
         fetchMail: function (obj) {
-            var self = this;
-            if (/(compose|edit)/.test(obj.mode)) {
+            var self = this,
+            mode = obj.mode;
+            delete obj.mode;
+            if (/(compose|edit)/.test(mode)) {
                 return $.when();
+            } else if (mode === 'forward' && !obj.id) {
+                obj = _(obj).map(function (o) {
+                    return _.pick(o, 'id', 'folder_id', 'csid');
+                });
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'mode', 'csid');
+                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
             }
-            return mailAPI[obj.mode](obj, settings.get('messageFormat', 'html')).then(function (data) {
-                data.sendtype = obj.mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
-                data.mode = obj.mode;
+
+            var content_type = this.messageFormat;
+
+            if (content_type === 'alternative') {
+                content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
+            }
+
+            return mailAPI[mode](obj, content_type).then(function (data) {
+                data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
+                data.mode = mode;
                 var attachments = _.clone(data.attachments);
                 delete data.attachments;
+                if (mode === 'forward') {
+                    // move nested messages into attachment array
+                    _(data.nested_msgs).each(function (obj) {
+                        attachments.push({
+                            id: attachments.length + 1,
+                            filename: obj.subject,
+                            content_type: 'message/rfc822',
+                            msgref: obj.msgref
+                        });
+                    });
+                    delete data.nested_msgs;
+                }
                 self.model.set(data);
                 var attachmentCollection = self.model.get('attachments');
                 attachmentCollection.reset(attachments);
@@ -347,6 +372,13 @@ define('io.ox/mail/compose/view', [
 
         setTitle: function () {
             this.app.setTitle(this.model.get('subject') || gt('Compose'));
+        },
+
+        parseMsgref: function (msgref) {
+            var base = _(msgref.toString().split(mailAPI.separator)),
+                id = base.last(),
+                folder = base.without(id).join(mailAPI.separator);
+            return { folder_id: folder, id: id };
         },
 
         saveDraft: function () {
@@ -375,19 +407,22 @@ define('io.ox/mail/compose/view', [
             old_vcard_flag = mail.vcard;
             delete mail.vcard;
 
-            // fix inline images
-            //mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
-
             var defSend = attachmentEmpty.emptinessCheck(mail.files).done(function () {
                 return mailAPI.send(mail, mail.files).always(function (result) {
                     if (result.error) {
                         notifications.yell(result);
                         def.reject(result);
                     } else {
-                        self.model.set('msgref', result.data, { silent: true });
-                        self.model.dirty(false);
-                        notifications.yell('success', gt('Mail saved as draft'));
-                        def.resolve(result);
+                        mailAPI.get(self.parseMsgref(result.data)).then(function (data) {
+                            // Replace inline images in contenteditable with links from draft response
+                            $(data.attachments[0].content).find('img:not(.emoji)').each(function (index, el) {
+                                $('img:not(.emoji):eq(' + index + ')', self.contentEditable).attr('src', $(el).attr('src'));
+                            });
+                            self.model.set('msgref', result.data, { silent: true });
+                            self.model.dirty(false);
+                            notifications.yell('success', gt('Mail saved as draft'));
+                            def.resolve(result);
+                        });
                     }
                 });
             });
@@ -712,13 +747,11 @@ define('io.ox/mail/compose/view', [
             if (input.hasClass('hidden') || show) {
                 this.showInput(type, input);
                 button.addClass('active').attr('aria-checked', true);
-            }
-            /*
-            We don't want to close it automatically! Bug: 35730
-            else {
+            } else if (this.model.get(type).length === 0) {
+                //We don't want to close it automatically! Bug: 35730
                 this.closeInput(type, input);
                 button.removeClass('active').attr('aria-checked', false);
-            } */
+            }
             return input;
         },
 

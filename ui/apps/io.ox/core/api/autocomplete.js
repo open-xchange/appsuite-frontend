@@ -49,7 +49,6 @@ define('io.ox/core/api/autocomplete', [
 
         // If contacts auto-collector might have added new contacts
         contactsAPI.on('maybyNewContact', function () {
-            console.log('clear autocomplete cache');
             that.cache = {};
         });
     }

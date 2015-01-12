@@ -8,6 +8,7 @@
         "requires": "contacts",
         "refreshable": true,
         "index": 700,
+        "settingsgroup": "main",
         "advancedMode": true,
         "help": {
             "base": "help",
