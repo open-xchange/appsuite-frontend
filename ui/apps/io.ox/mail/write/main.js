@@ -1320,6 +1320,9 @@ define('io.ox/mail/write/main',
                     notifications.yell(result);
                     def.reject(result);
                 } else {
+                    _(view.fileList.get()).each(function (o) {
+                        o.atmsgref = result;
+                    });
                     app.dirty(false);
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
