@@ -19,7 +19,7 @@ define('io.ox/core/upsell', [
 
     'use strict';
 
-    function showUpgradeDialog(e, options) {
+    function showUpgradeDialog(options) {
         console.debug('upsell:requires-upgrade', options);
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
             new dialogs.ModalDialog()
@@ -52,7 +52,7 @@ define('io.ox/core/upsell', [
         });
     }
 
-    function upgrade(e, options) {
+    function upgrade(options) {
         console.debug('upsell:upgrade', options);
         // needs no translation; just for demo purposes
         alert('User decided to upgrade! (global event: upsell:upgrade)');

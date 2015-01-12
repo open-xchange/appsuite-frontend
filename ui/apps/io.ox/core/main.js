@@ -1574,7 +1574,7 @@ define('io.ox/core/main', [
     //
     // Respons to special http error codes (see bug 32836)
     //
-    ox.on('http:error', function (e, error) {
+    ox.on('http:error', function (error) {
         if (error.code === 'MSG-1000' || error.code === 'MSG-1001') notifications.yell(error);
     });
 

@@ -117,7 +117,7 @@ define('plugins/upsell/simple-wizard/register', [
                 'language=$language,type=$type,id=$id,missing=$missing,hostname=$hostname#session=$session'
         }, settings.get()),
 
-        open: function (e, options) {
+        open: function (options) {
 
             if (instance) return;
 

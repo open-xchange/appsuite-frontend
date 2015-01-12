@@ -38,7 +38,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                 });
 
                 this.step('Wait for editor and write 100 words', function (done) {
-                    ox.on('mail:reply:ready', function (e, data, app) {
+                    ox.on('mail:reply:ready', function (data, app) {
                         app.getEditor().prependContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
                         this.app = app;
                         done();
