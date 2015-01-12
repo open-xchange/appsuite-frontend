@@ -636,62 +636,62 @@ define('io.ox/contacts/api',
         }
 
         // node is optional. if missing function returns just the URL
-        return function (node, options) {
+        return function (node, data) {
 
             var params, url;
 
             // use copy of data object because of delete-statements
-            options = _.clone(options);
+            data = _.clone(data);
 
             // duck checks
-            if (api.looksLikeResource(options)) {
+            if (api.looksLikeResource(data)) {
 
                 url = ox.base + '/apps/themes/default/dummypicture_resource.png';
 
-            } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+            } else if (api.looksLikeGroup(data) || api.looksLikeDistributionList(data)) {
 
                 url = ox.base + '/apps/themes/default/dummypicture_group.png';
 
-            } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+            } else if (_.isString(data.image1_url) && data.image1_url !== '') {
 
                 params = $.extend({}, {
                     // scale
-                    width: options.width,
-                    height: options.height,
-                    scaleType: options.scaleType
+                    width: data.width,
+                    height: data.height,
+                    scaleType: data.scaleType
                 });
-                url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+                url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
-            } else if (!options.email && !options.contact_id && !options.id && !options.internal_userid) {
+            } else if (!data.email && !data.contact_id && !data.id && !data.internal_userid) {
                 url = fallback;
             }
 
             // already done?
-            if (url) return load(node, url, options);
+            if (url) return load(node, url, data);
 
             // preference; internal_userid must not be undefined, null, or zero
-            if (options.internal_userid || options.userid || options.user_id) {
-                delete options.contact_id;
-                delete options.folder_id;
-                delete options.folder;
-                delete options.id;
+            if (data.internal_userid || data.userid || data.user_id) {
+                delete data.contact_id;
+                delete data.folder_id;
+                delete data.folder;
+                delete data.id;
             } else {
-                delete options.internal_userid;
-                delete options.userid;
-                delete options.user_id;
+                delete data.internal_userid;
+                delete data.userid;
+                delete data.user_id;
             }
 
             // empty extend trick to restrict to non-undefined values
             params = $.extend({}, {
                 // identifier
-                email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
-                folder: options.folder_id || options.folder,
-                id: options.contact_id || options.id,
-                internal_userid: options.internal_userid || options.userid || options.user_id,
+                email: data.email && String(data.email).toLowerCase() || data.mail && String(data.mail).toLowerCase() || data.email1 && String(data.email1).toLowerCase(),
+                folder: data.folder_id || data.folder,
+                id: data.contact_id || data.id,
+                internal_userid: data.internal_userid || data.userid || data.user_id,
                 // scale
-                width: options.width,
-                height: options.height,
-                scaleType: options.scaleType,
+                width: data.width,
+                height: data.height,
+                scaleType: data.scaleType,
                 uniq: uniq
             });
 
@@ -709,10 +709,10 @@ define('io.ox/contacts/api',
                 return node.css('background-image', 'url(' + cachesURLs[url] + ')');
             }
 
-            load(node, url, options);
+            load(node, url, data);
 
-            // remove options
-            options = null;
+            // remove data
+            data = null;
 
             return node;
         };
