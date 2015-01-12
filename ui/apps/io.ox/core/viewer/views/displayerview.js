@@ -125,7 +125,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // init the carousel and preload neighboring slides on next/prev
             carouselRoot.append(carouselInner, prevSlide, nextSlide)
-                .carousel()
+                .carousel({ keyboard: false })
                 .on('slid.bs.carousel', function (event) {
                     var activeSlideIndex = $(event.relatedTarget).data('slide');
                     preloadSlide(activeSlideIndex, slidesToPreload, event.direction);
@@ -139,23 +139,32 @@ define('io.ox/core/viewer/views/displayerview', [
         onPreviousSlide: function () {
             //console.warn('DisplayerView.onPreviousSlide()');
             EventDispatcher.trigger('viewer:display:previous');
+            this.focusDisplayerDeferred();
         },
 
         onNextSlide: function () {
             //console.warn('DisplayerView.onNextSlide()');
             EventDispatcher.trigger('viewer:display:next');
+            this.focusDisplayerDeferred();
         },
 
         onKeydown: function (event) {
             //console.warn('DisplayerView.onKeydown()', event, event.which);
             switch (event.which || event.keyCode) {
                 case 39: // right arrow
-                    EventDispatcher.trigger('viewer:display:next');
+                    this.onNextSlide();
                     break;
                 case 37: // left arrow
-                    EventDispatcher.trigger('viewer:display:previous');
+                    this.onPreviousSlide();
                     break;
             }
+        },
+
+        focusDisplayerDeferred: function () {
+            var self = this;
+            _.defer(function () {
+                self.$el.find('.active').focus();
+            });
         },
 
         dispose: function () {

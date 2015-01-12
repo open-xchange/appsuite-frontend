@@ -81,15 +81,15 @@ define('io.ox/core/viewer/views/mainview', [
             var self = this;
             // append toolbar view
             this.$el.append(this.toolbarView.render(data).el);
-            // focus the active slide initially
+            // append displayerView and sidebarView deferred, for preview image optimal height calculation
             _.defer(function () {
-                // append displayerView and sidebarView deferred, for preview image optimal height calculation
                 self.$el.append(
                     self.displayerView.render(data).el,
                     self.sidebarView.render(data).el
                 );
-                self.displayerView.$el.find('.active').focus();
             });
+            // focus the active slide initially
+            self.displayerView.focusDisplayerDeferred();
             return this;
         },
 
