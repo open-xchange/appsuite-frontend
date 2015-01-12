@@ -120,7 +120,13 @@ define('io.ox/core/viewer/views/mainview', [
                     tabHandler(event);
                     break;
                 case 27: // ESC key
-                    this.$el.remove();
+                    var escTarget = $(event.target),
+                        isDropdownMenuItem = escTarget.parents('.dropdown-menu').length > 0,
+                        isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown';
+                    // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
+                    if ( !isDropdownMenuItem && !isDropdownToggler ) {
+                        this.$el.remove();
+                    }
                     break;
             }
         },
