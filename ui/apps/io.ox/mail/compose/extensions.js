@@ -155,8 +155,7 @@ define('io.ox/mail/compose/extensions', [
                         draw: function (token) {
                             baton.participantModel = token.model;
                             ext.point(POINT + '/autoCompleteItem').invoke('draw', this, baton);
-                        },
-                        lazyload: 'div.contact-image'
+                        }
                     });
 
                 this.append(

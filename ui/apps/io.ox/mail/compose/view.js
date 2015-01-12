@@ -16,6 +16,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/model',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extensions',
+    'io.ox/contacts/api',
     'io.ox/mail/api',
     'io.ox/mail/util',
     'settings!io.ox/mail',
@@ -26,7 +27,7 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentEmpty',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style'
-], function (extensions, MailModel, Dropdown, ext, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
+], function (extensions, MailModel, Dropdown, ext, contactAPI, mailAPI, mailUtil, settings, coreSettings, notifications, snippetAPI, gt, attachmentEmpty) {
 
     'use strict';
 
@@ -207,15 +208,13 @@ define('io.ox/mail/compose/view', [
         id: 'contactPicture',
         index: 100,
         draw: function (baton) {
+            var node;
             this.append(
-                $('<div class="contact-image">')
-                    .attr('data-original', baton.participantModel.getImageURL({ width: 42, height: 42, scaleType: 'contain' }))
+                node = $('<div class="contact-image lazyload">')
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
-                    .lazyload({
-                        effect: 'fadeIn',
-                        container: this
-                    })
             );
+            // apply picture halo lazy load
+            contactAPI.pictureHalo(node, _.extend({}, baton.participantModel.toJSON(), { width: 42, height: 42, scaleType: 'contain' }));
         }
     });
 
