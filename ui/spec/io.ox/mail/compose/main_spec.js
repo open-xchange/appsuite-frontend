@@ -15,51 +15,47 @@ define(['io.ox/mail/compose/main'], function (compose) {
 
     describe('Mail Compose', function () {
 
-        describe.skip('main app', function () {
+        describe('main app', function () {
             var app;
-            beforeEach(function (done) {
+            beforeEach(function () {
                 app = compose.getApp();
-                app.launch().then(done);
+                return app.launch();
             });
-            afterEach(function (done) {
-                app.quit().then(done);
-            });
-
-            it('should open up a new mail compose window', function (done) {
-                app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                    expect(app.get('state')).to.equal('running');
-                    expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
-                    done();
-                });
+            afterEach(function () {
+                return app.quit();
             });
 
-            it('should update the url hash', function (done) {
-                app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                    expect(_.url.hash('app')).to.equal('io.ox/mail/compose:compose');
-                    done();
-                });
-            });
-
-            it('should provide an edit window', function (done) {
-                app.edit({ folder_id: 'default0/INBOX' }).then(function () {
+            it('should open up a new mail compose window', function () {
+                return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
                     expect(app.get('state')).to.equal('running');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:compose');
-                    done();
                 });
             });
 
-            xit('should provide a reply window', function (done) {
+            it('should provide an edit window', function () {
+                this.server.respondWith('PUT', /api\/mail\?action=edit/, function (xhr) {
+                    xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                        data: {}
+                    }));
+                });
+                return app.edit({ folder_id: 'default0/INBOX' }).done(function () {
+                    expect(app.get('state')).to.equal('running');
+                    expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
+                    expect(_.url.hash('app')).to.equal('io.ox/mail/compose:edit');
+                });
+            });
+
+            it('should provide a reply window', function () {
                 this.server.respondWith('PUT', /api\/mail\?action=reply/, function (xhr) {
                     xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
                         data: {}
                     }));
                 });
-                app.reply({ folder: 'default0/INBOX' }).done(function () {
+                return app.reply({ folder: 'default0/INBOX' }).done(function () {
                     expect(app.get('state')).to.equal('running');
-                    expect(_.url.hash('app')).to.equal('io.ox/mail/compose:reply');
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
-                    done();
+                    expect(_.url.hash('app')).to.equal('io.ox/mail/compose:reply');
                 });
             });
         });
