@@ -122,6 +122,7 @@
 
 .io-ox-mail-write input[type=text],
 .io-ox-mail-write input[type=text].discreet:focus {
+
     font-size: @font-size-base;
     line-height: 18px;
     height: 29px;
@@ -134,6 +135,11 @@
     width: 100%;
     -webkit-border-radius: 0;
     -webkit-appearance: none;
+
+    &:-ms-input-placeholder {
+        color: #aaa;
+    }
+
 }
 
 .touch .io-ox-mail-write input[type=text],
