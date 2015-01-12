@@ -605,29 +605,32 @@ define('io.ox/contacts/api',
         });
 
         function load(node, url, opt) {
+            function fail () {
+                node.css('background-image', 'url(' + fallback + ')');
+                node = url = opt = null;
+            }
+            function success () {
+                cachesURLs[url] = url;
+                node.css('background-image', 'url(' + url + ')');
+                node = url = opt = null;
+            }
             _.defer(function () {
                 // use lazyload?
-                var container = node.closest('.scrollpane, .scrollpane-lazyload');
-                if (container.length || !!opt.lazyload) {
-                    node.attr('data-original', url).lazyload({
-                        container: container.length ? container : undefined,
-                        effect: 'show',
-                        error: function () {
-                            node.css('background-image', 'url(' + fallback + ')');
-                            node = container = null;
-                        },
-                        load: function (elements_left, settings, image) {
-                            if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
-                            else cachesURLs[url] = url;
-                            node = container = null;
-                        }
-                    });
+                opt.container = opt.container || _.first(node.closest('.scrollpane, .scrollpane-lazyload'));
+                if (opt.lazyload || opt.container) {
+                    node.css('background-image', 'url(' + fallback + ')')
+                        .attr('data-original', url)
+                        .lazyload({
+                            container: opt.container,
+                            effect: opt.effect,
+                            error: fail,
+                            load: function (elements_left, settings, image) {
+                                (image.width === 1 ? fail : success)();
+                            }
+                        });
                 } else {
                     $(new Image()).one('load error', function (e) {
-                        var fail = this.width === 1 || e.type === 'error';
-                        if (!fail) cachesURLs[url] = url;
-                        node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-                        node = null;
+                        (this.width === 1 || e.type === 'error' ? fail : success)();
                     })
                     .attr('src', url);
                 }
@@ -635,16 +638,16 @@ define('io.ox/contacts/api',
             return node;
         }
 
-        // node is optional. if missing function returns just the URL
         return function (node, data, options) {
-
             var params,
                 url,
                 opt = _.extend({
                     width: 48,
                     height: 48,
                     scaleType: 'cover',
-                    lazyload: false
+                    // lazy load block
+                    lazyload: false,
+                    effect: 'show'
                 }, options);
 
             // use copy of data object because of delete-statements
