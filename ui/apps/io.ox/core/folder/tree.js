@@ -107,6 +107,9 @@ define('io.ox/core/folder/tree',
         },
 
         getTreeNodeOptions: function (options, model) {
+            // context===appp
+            // introduced with 53adc4646275bba89879f830b660f83e20d6f337
+            // https://gitweb.open-xchange.com/?p=wd/frontend/web;a=commit;h=53adc4646275bba89879f830b660f83e20d6f337
             if (this.context === 'app' && model.get('id') === 'default0/INBOX' && options.parent.folder === 'virtual/standard') {
                 options.subfolders = false;
             }
