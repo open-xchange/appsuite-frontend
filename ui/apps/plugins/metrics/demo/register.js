@@ -11,17 +11,23 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'settings!io.ox/mail', 'io.ox/mail/api'], function (bot, settings, api) {
+define('plugins/metrics/demo/register', [
+    'io.ox/core/metrics/bot/main',
+    'settings!plugins/metrics/demo',
+    'settings!io.ox/mail',
+    'io.ox/mail/api'
+], function (bot, settings, mailSettings, api) {
 
     'use strict';
 
     // settings
-    var INBOX = 'default0/INBOX',
-        TEST = 'default0/INBOX/Test',
-        SUBJECT = 'Automatic performance test',
-        FIRST_LETTERS = 'bigge',
-        RECIPIENT = 'matthias.biggeleben@open-xchange.com',
-        FILE = { folder_id: '13894', id: '63605' };
+    var INBOX = settings.get('inbox', 'default0/INBOX'),
+        TEST = settings.get('test-folder', 'default0/INBOX/Test'),
+        SUBJECT = settings.get('subject', 'Automatic performance test'),
+        FIRST_LETTERS = settings.get('first-letters', 'bigge'),
+        RECIPIENT = settings.get('recipient', 'matthias.biggeleben@open-xchange.com'),
+        FILE = settings.get('cloud-attachment', { folder_id: '13894', id: '63605' }),
+        MAIL_WITH_THUMBNAILS = settings.get('message-with-thumbnails', { folder_id: 'default0/INBOX', id: 61192 });
 
     bot.ready(function () {
 
@@ -58,7 +64,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                     // clear recipient lists
                     this.app.getWindowNode().find('.recipient-list').empty();
                     // add myself as recipient
-                    var to = [['Myself', settings.get('defaultSendAddress')]];
+                    var to = [['Myself', mailSettings.get('defaultSendAddress')]];
                     this.app.setTo(to);
                     // send
                     this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
@@ -346,7 +352,41 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
             //
 
             this.test('Open a mail with thumbnails', function () {
-                // TODO!
+
+                this.step('Switch to mail app', function (done) {
+                    this.waitForApp('io.ox/mail', done);
+                    ox.launch('io.ox/mail/main');
+                });
+
+                this.step('Switch to folder', function (done) {
+                    this.waitForFolder(MAIL_WITH_THUMBNAILS.folder_id, done);
+                });
+
+                this.step('Wait for list view to update', function (done) {
+                    this.waitForListView(this.app.listView, 'folder=' + MAIL_WITH_THUMBNAILS.folder_id, done);
+                });
+
+                this.step('Select message', function () {
+                    var cid = 'thread.' + _.cid(MAIL_WITH_THUMBNAILS);
+                    this.app.listView.selection.set([cid]);
+                    this.app.listView.selection.triggerChange();
+                });
+
+                this.step('Wait for attachment list', function (done) {
+                    this.waitForSelector('.mail-attachment-list .toggle-details', done);
+                });
+
+                this.step('Open details and toggle mode', function () {
+                    $('.mail-attachment-list').find('.toggle-details, .toggle-mode').click();
+                });
+
+                this.step('Wait for first thumbnail to load', function (done) {
+                    this.waitFor(function () {
+                        var image = $('.mail-attachment-list .item.lazy').css('background-image');
+                        return image !== undefined && image !== 'none';
+                    })
+                    .done(done);
+                });
             });
         });
     });
