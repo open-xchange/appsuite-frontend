@@ -300,14 +300,11 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/slideshow-attachment', {
         id: 'slideshow',
-        requires: function (e) {
-            return e.collection.has('multiple') && _(e.context).reduce(function (memo, obj) {
-                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
-            }, false);
-        },
-        multiple: function (list, baton) {
-            require(['io.ox/mail/actions/slideshowAttachment'], function (action) {
-                action.multiple(list, baton);
+        // TODO capabilites check, files filter?
+        requires: 'some',
+        multiple: function (attachmentList) {
+            ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
+                action(attachmentList);
             });
         }
     });
@@ -338,17 +335,6 @@ define('io.ox/mail/actions', [
         multiple: function (list) {
             require(['io.ox/mail/actions/attachmentSave'], function (action) {
                 action.multiple(list);
-            });
-        }
-    });
-
-    // Viewer 2.0
-    new Action('io.ox/mail/actions/viewer', {
-        id: 'viewer',
-        requires: 'some',
-        multiple: function (attachmentList) {
-            ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
-                action(attachmentList);
             });
         }
     });
