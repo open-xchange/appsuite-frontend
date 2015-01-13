@@ -874,7 +874,7 @@ $(window).load(function () {
                     for (id in langSorted) {
                         i++;
                         node.attr({'role': 'menu', 'aria-labelledby': 'io-ox-languages-label'}).append(
-                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
+                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '" lang="' + langSorted[id] + '">')
                                 .on('click', { id: langSorted[id] }, fnChangeLanguage)
                                 .text(lang[langSorted[id]])
                         );
