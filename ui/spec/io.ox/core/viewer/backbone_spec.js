@@ -102,6 +102,7 @@ define([
                     expect(model.get('folderId')).to.equal(null);
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(null);
+                    expect(model.get('module')).to.equal(null);
                     expect(model.get('versions')).to.equal(null);
                     expect(model.get('description')).to.equal(null);
 
@@ -134,6 +135,7 @@ define([
                     expect(model.get('folderId')).to.equal('124');
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(1402646241319);
+                    expect(model.get('module')).to.equal(null);
 
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['false'];
@@ -165,6 +167,7 @@ define([
                     expect(model.get('folderId')).to.equal('default0/INBOX');
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(null);
+                    expect(model.get('module')).to.equal(null);
 
                     expect(model.isMailAttachment()).to.be['true'];
                     expect(model.isPIMAttachment()).to.be['false'];
@@ -196,6 +199,7 @@ define([
                     expect(model.get('folderId')).to.equal(187);
                     expect(model.get('meta')).to.deep.equal({});
                     expect(model.get('lastModified')).to.equal(null);
+                    expect(model.get('module')).to.equal(4);
                     
                     expect(model.isMailAttachment()).to.be['false'];
                     expect(model.isPIMAttachment()).to.be['true'];

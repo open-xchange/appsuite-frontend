@@ -39,7 +39,15 @@ define('io.ox/core/viewer/views/toolbarview', [
             'PDF': 'fa-file-pdf-o'
         },
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
-        DROPDOWN_ACTION_ID = TOOLBAR_ACTION_ID + '/dropdown';
+        DROPDOWN_ACTION_ID = TOOLBAR_ACTION_ID + '/dropdown',
+        ITEM_TYPE_FILE = 'file',
+        ITEM_TYPE_MAIL_ATTACHMENT = 'mail-attachment',
+        ITEM_TYPE_PIM_ATTACHMENT = 'pim-attachment',
+        ACTION_REF_PREFIX = {
+            '1': 'io.ox/core/tk/attachment',
+            '4': 'io.ox/tasks',
+            '7': 'io.ox/contacts'
+        };
 
     // define extension points for this ToolbarView
     var toolbarPoint = Ext.point('io.ox/core/viewer/toolbar'),
@@ -70,8 +78,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function (baton) {
                     var self = this,
                         fileSource = baton.model.get('source'),
+                        pimModule = baton.model.get('module') || '',
                         dropdownLinks = LinksPattern.DropdownLinks({
-                            ref: DROPDOWN_ACTION_ID + '/' + fileSource,
+                            ref: DROPDOWN_ACTION_ID + '/' + fileSource + pimModule,
                             wrap: false,
                             //function to call when dropdown is empty
                             emptyCallback: function () {
@@ -161,25 +170,25 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     // action links for the function dropdown for Drive files
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
         index: 100,
         id: 'share',
         label: gt('Share'),
         ref: 'io.ox/files/icons/share'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
         index: 200,
         id: 'download',
         label: gt('Download'),
         ref: 'io.ox/files/actions/download'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
         index: 300,
         id: 'print',
         label: gt('Print'),
         ref: TOOLBAR_ACTION_ID + '/print'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/file', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
         index: 400,
         id: 'delete',
         label: gt('Delete'),
@@ -187,23 +196,45 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     // action links of the function dropdown for mail attachments
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/attachment', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
         index: 100,
         id: 'open',
         label: gt('Open in browser'),
         ref: 'io.ox/mail/actions/open-attachment'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/attachment', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
         index: 200,
         id: 'download',
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/attachment', {
+    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
         index: 300,
         id: 'save',
         label: gt('Save to Drive'),
         ref: 'io.ox/mail/actions/save-attachment'
+    });
+
+    // action links of the function dropdown for pim attachments
+    _.each(ACTION_REF_PREFIX, function (prefix, moduleId) {
+        new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
+            index: 100,
+            id: 'open',
+            label: gt('Open in browser'),
+            ref: prefix + '/actions/open-attachment'
+        });
+        new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
+            index: 200,
+            id: 'download',
+            label: gt('Download'),
+            ref: prefix + '/actions/download-attachment'
+        });
+        new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
+            index: 300,
+            id: 'save',
+            label: gt('Save to Drive'),
+            ref: prefix + '/actions/save-attachment'
+        });
     });
 
     // define the Backbone view

@@ -148,6 +148,7 @@ define('io.ox/core/viewer/backbone', [
                 folderId: null,
                 meta: {},
                 lastModified: null,
+                module: null,
                 description: null,
                 versions: null
             };
@@ -246,6 +247,7 @@ define('io.ox/core/viewer/backbone', [
                 result.contentType = data.file_mimetype;
                 result.id = data.id;
                 result.folderId = data.folder;
+                result.module = data.module;
 
             } else if (result.source === ITEM_TYPE_FILE) {
                 result.filename = data.filename;
