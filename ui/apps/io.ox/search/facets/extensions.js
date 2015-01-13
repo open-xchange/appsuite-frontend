@@ -24,11 +24,13 @@ define('io.ox/search/facets/extensions',
         require(['io.ox/core/folder/picker', 'io.ox/core/folder/api'], function (picker, api) {
             var value = facet.values.custom,
                 id = value.custom,
-                type = baton.model.getModule();
+                type = baton.model.getModule(),
+                module = type === 'files' ? 'infostore' : type;
 
             picker({
                 folder: id,
-                module: type === 'files' ? 'infostore' : type,
+                module: module,
+                flat: api.isFlat(module),
                 root: type === 'files' ? '9' : '1',
                 done: function (target) {
                     //get folder data
