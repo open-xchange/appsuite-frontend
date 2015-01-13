@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-12-09 16:31+0100\n"
+"PO-Revision-Date: 2015-01-07 12:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl_PL\n"
@@ -2279,7 +2279,7 @@ msgstr "Czy na pewno chcesz odrzucić zmiany?"
 #: apps/io.ox/mail/compose/view.js:515 module:io.ox/mail
 #: apps/io.ox/mail/write/main.js:1433
 msgid "Do you really want to discard your message?"
-msgstr "Czy na pewno chcesz odrzucić tę wiadomość?"
+msgstr "Czy na pewno chcesz odrzucić wiadomość?"
 
 #: apps/io.ox/core/folder/actions/common.js:42 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:36 module:io.ox/mail
@@ -4595,6 +4595,10 @@ msgstr ""
 "wiadomość e-mail. Pliki nie zostaną wysłane jako załączniki, tylko zostaną "
 "zachowane na serwerze. Wysyłana wiadomość e-mail zawiera tylko łącza "
 "umożliwiające pobranie tych plików."
+
+#: apps/io.ox/portal/settings/pane.js:436 module:io.ox/portal
+msgid "Only show widget summary on mobile devices"
+msgstr "Na urządzeniach mobilnych pokazuj tylko zestawienie widgetów"
 
 #: apps/io.ox/core/pubsub/settings/pane.js:69 module:io.ox/core/pubsub
 msgid "Only showing items related to folder \"%1$s\""

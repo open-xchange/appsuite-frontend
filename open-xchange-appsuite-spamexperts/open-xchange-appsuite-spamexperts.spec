@@ -86,6 +86,8 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}
 
 %changelog
+* Wed Jan 07 2015 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2015-01-12
 * Tue Dec 16 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2014-12-22
 * Fri Dec 12 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
