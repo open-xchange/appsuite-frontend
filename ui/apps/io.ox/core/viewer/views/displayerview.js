@@ -35,6 +35,7 @@ define('io.ox/core/viewer/views/displayerview', [
         initialize: function () {
             //console.warn('DisplayerView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
+            this.captionTimeoutId = null;
         },
 
         /**
@@ -62,7 +63,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 slidesToPreload = 1,
                 slidesCount = this.collection.length,
                 displayerTopOffset = $('.viewer-toolbar').outerHeight(),
-                startIndex = data.index;
+                startIndex = data.index,
+                captionTimeoutId = this.captionTimeoutId;
 
             // create a Bootstrap carousel slide
             function createSlide (model, modelIndex) {
@@ -95,7 +97,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     var slideIndex = slideIndex % slidesCount,
                         slideEl = slidesList.eq(slideIndex),
                         imageToLoad = slideEl.find('img');
-                    if (imageToLoad.attr('src')) { return ;}
+                    if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
                     slideEl.busy();
                     imageToLoad.attr('src', imageToLoad.attr('data-src'));
                     imageToLoad[0].onload = function () {
@@ -110,6 +112,17 @@ define('io.ox/core/viewer/views/displayerview', [
                 }
                 // load the load range, containing the requested slide and preload slides
                 _.each(loadRange, loadSlide);
+            }
+
+            // blends in the caption of the passed slide index for a specific duration in milliseconds.
+            function blendSlideCaption(slideIndex, duration) {
+                var duration = duration || 3000,
+                    slideCaption = carouselRoot.find('.item').eq(slideIndex).find('.viewer-displayer-caption');
+                window.clearTimeout(captionTimeoutId);
+                slideCaption.show();
+                captionTimeoutId = window.setTimeout(function () {
+                    slideCaption.fadeOut();
+                }, duration);
             }
 
             // create slides from file collection and append them to the carousel
@@ -127,12 +140,16 @@ define('io.ox/core/viewer/views/displayerview', [
             carouselRoot.append(carouselInner, prevSlide, nextSlide)
                 .carousel({ keyboard: false })
                 .on('slid.bs.carousel', function (event) {
-                    var activeSlideIndex = $(event.relatedTarget).data('slide');
+                    var activeSlideIndex = $(event.relatedTarget).data('slide'),
+                        captionShowDuration = 3000;
                     preloadSlide(activeSlideIndex, slidesToPreload, event.direction);
+                    blendSlideCaption(activeSlideIndex, captionShowDuration);
                 });
 
-            // append carousel to view
+            // append carousel to view and blend the slide caption in
             this.$el.append(carouselRoot);
+            blendSlideCaption(startIndex, 3000);
+
             return this;
         },
 

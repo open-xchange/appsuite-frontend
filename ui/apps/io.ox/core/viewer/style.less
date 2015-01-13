@@ -32,7 +32,7 @@
     background-color: @viewer-background-color;
     z-index: 11; // just to one more than #io-ox-screens
     color: @viewer-text-color;
-    
+
     ::-webkit-scrollbar {
         width: 8px;
     }
@@ -53,7 +53,7 @@
     }
     ::-webkit-scrollbar-thumb:hover {
         background: #7d7d7d;
-    }   
+    }
 
     .viewer-toolbar {
         position: absolute;
@@ -141,8 +141,9 @@
                 line-height: 40px;
                 width: 100px;
                 text-align: center;
-                background: rgba(0,0,0,0.4);
+                background: rgba(0,0,0,0.5);
                 .border-radius(4px);
+                display: none;
             }
             &.io-ox-busy::before { color: rgba(255, 255, 255, 0.3); }
         }
@@ -213,7 +214,7 @@
                     top: 4px;
                     right: 10px;
                 }
-                
+
                 h3 {
                     font-weight: bold;
                 }
