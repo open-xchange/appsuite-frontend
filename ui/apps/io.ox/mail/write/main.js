@@ -437,7 +437,7 @@ define('io.ox/mail/write/main',
                 // change?
                 mode = getEditorMode(mode);
 
-                if(_.device('!smartphone')) {
+                if (view.sections.format) {
                     view.sections.format.find('input[name="format"]').val([mode]);
                 }
 
