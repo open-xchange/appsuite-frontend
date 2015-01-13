@@ -55,86 +55,20 @@ define('io.ox/core/viewer/views/displayerview', [
                 console.error('Core.Viewer.DisplayerView.render(): no file to render');
                 return;
             }
+
             var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
                 carouselInner = $('<div class="carousel-inner">'),
                 prevSlide = $('<a class="left carousel-control" href="#viewer-carousel"><i class="fa fa-angle-left"></i></a>'),
                 nextSlide = $('<a class="right carousel-control" href="#viewer-carousel"><i class="fa fa-angle-right"></i></a>'),
                 // preload 1 neigboring slides
                 slidesToPreload = 1,
-                slidesCount = this.collection.length,
-                displayerTopOffset = $('.viewer-toolbar').outerHeight(),
                 startIndex = data.index,
-                captionTimeoutId = this.captionTimeoutId;
-
-            // create a Bootstrap carousel slide
-            function createSlide (model, modelIndex) {
-                var slide = $('<div class="item">'),
-                    image = $('<img class="viewer-displayer-image">'),
-                    caption = $('<div class="viewer-displayer-caption">'),
-                    previewUrl = model && model.getPreviewUrl(),
-                    filename = model && model.get('filename') || '';
-                if (previewUrl) {
-                    image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
-                        .css({ maxHeight: window.innerHeight - displayerTopOffset });
-                    caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
-                    slide.append(image, caption);
-                }
-                slide.attr('data-slide', modelIndex);
-                return slide;
-            }
-
-            // load the given slide index and additionally number of neigboring slides in the given direction.
-            function preloadSlide(slideToLoad, preloadOffset, preloadDirection) {
-                var preloadOffset = preloadOffset || 0,
-                    step = preloadDirection === 'left' ? 1 : -1,
-                    slideToLoad = slideToLoad || 0,
-                    loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step);
-                // load a single slide with the given slide index
-                function loadSlide (slideIndex) {
-                    if (typeof slideIndex !== 'number' || isNaN(slideIndex) || Math.abs(slideIndex) >= slidesCount) {
-                        return;
-                    }
-                    var slideIndex = slideIndex % slidesCount,
-                        slideEl = slidesList.eq(slideIndex),
-                        imageToLoad = slideEl.find('img');
-                    if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
-                    slideEl.busy();
-                    imageToLoad.attr('src', imageToLoad.attr('data-src'));
-                    imageToLoad[0].onload = function () {
-                        slideEl.idle();
-                        imageToLoad.show();
-                    };
-                    imageToLoad[0].onerror = function () {
-                        var notification = $('<p class="viewer-displayer-notification">')
-                            .text(gt('Sorry, there is no preview available for this file.'));
-                        slideEl.idle().append(notification);
-                    };
-                }
-                // load the load range, containing the requested slide and preload slides
-                _.each(loadRange, loadSlide);
-            }
-
-            // blends in the caption of the passed slide index for a specific duration in milliseconds.
-            function blendSlideCaption(slideIndex, duration) {
-                var duration = duration || 3000,
-                    slideCaption = carouselRoot.find('.item').eq(slideIndex).find('.viewer-displayer-caption');
-                window.clearTimeout(captionTimeoutId);
-                slideCaption.show();
-                captionTimeoutId = window.setTimeout(function () {
-                    slideCaption.fadeOut();
-                }, duration);
-            }
+                self = this;
 
             // create slides from file collection and append them to the carousel
             this.collection.each(function (model, modelIndex) {
-                carouselInner.append(createSlide(model, modelIndex));
+                carouselInner.append(self.createSlide(model, modelIndex));
             });
-
-            // set the first selected file active and preload its neighbours
-            var slidesList = carouselInner.children();
-            slidesList.eq(startIndex).addClass('active');
-            preloadSlide(startIndex, slidesToPreload, 'left');
-            preloadSlide(startIndex, slidesToPreload, 'right');
 
             // init the carousel and preload neighboring slides on next/prev
             prevSlide.attr({ title: gt('Previous'), 'data-slide': 'prev', tabindex: '1', role: 'button' });
@@ -144,15 +78,113 @@ define('io.ox/core/viewer/views/displayerview', [
                 .on('slid.bs.carousel', function (event) {
                     var activeSlideIndex = $(event.relatedTarget).data('slide'),
                         captionShowDuration = 3000;
-                    preloadSlide(activeSlideIndex, slidesToPreload, event.direction);
-                    blendSlideCaption(activeSlideIndex, captionShowDuration);
+                    self.preloadSlide(activeSlideIndex, slidesToPreload, event.direction);
+                    self.blendSlideCaption(activeSlideIndex, captionShowDuration);
                 });
 
             // append carousel to view and blend the slide caption in
             this.$el.append(carouselRoot);
-            blendSlideCaption(startIndex, 3000);
+
+            // set the first selected file active, blend its caption, and preload its neighbours
+            carouselInner.children().eq(startIndex).addClass('active');
+            this.blendSlideCaption(startIndex, 3000);
+            this.preloadSlide(startIndex, slidesToPreload, 'left');
+            this.preloadSlide(startIndex, slidesToPreload, 'right');
 
             return this;
+        },
+
+        /**
+         * Create a Bootstrap carousel slide element.
+         *
+         * @param {Object} model
+         *  the Viewer model.
+         * @param {Number} modelIndex
+         *  the model index in the Viewer Collection.
+         *
+         * @returns {jQuery}
+         */
+        createSlide: function (model, modelIndex) {
+            var slide = $('<div class="item">'),
+                image = $('<img class="viewer-displayer-image">'),
+                caption = $('<div class="viewer-displayer-caption">'),
+                previewUrl = model && model.getPreviewUrl(),
+                filename = model && model.get('filename') || '',
+                slidesCount = this.collection.length,
+                displayerTopOffset = $('.viewer-toolbar').outerHeight();
+            if (previewUrl) {
+                image.attr({ 'data-src': _.unescapeHTML(previewUrl), alt: filename })
+                    .css({ maxHeight: window.innerHeight - displayerTopOffset });
+                caption.text(modelIndex + 1 + ' ' + gt('of') + ' ' + slidesCount);
+                slide.append(image, caption);
+            }
+            slide.attr('data-slide', modelIndex);
+            return slide;
+        },
+
+        /**
+         * Load the given slide index and additionally number of neigboring slides in the given direction.
+         *
+         * @param {Number} slideToLoad
+         *  The current active slide to be loaded.
+         *
+         * @param {Number} preloadOffset
+         *  Number of neighboring slides to preload.
+         *
+         * @param {String} preloadDirection
+         *  Direction of the preload: 'left' or 'right' are supported.
+         *
+         */
+        preloadSlide: function (slideToLoad, preloadOffset, preloadDirection) {
+            var preloadOffset = preloadOffset || 0,
+                step = preloadDirection === 'left' ? 1 : -1,
+                slideToLoad = slideToLoad || 0,
+                loadRange = _.range(slideToLoad, (preloadOffset + 1) * step + slideToLoad, step),
+                slidesCount = this.collection.length,
+                slidesList = this.$el.find('.item');
+            // load a single slide with the given slide index
+            function loadSlide (slideIndex) {
+                if (typeof slideIndex !== 'number' || isNaN(slideIndex) || Math.abs(slideIndex) >= slidesCount) {
+                    return;
+                }
+                var slideIndex = slideIndex % slidesCount,
+                    slideEl = slidesList.eq(slideIndex),
+                    imageToLoad = slideEl.find('img');
+                if (imageToLoad.length === 0 || imageToLoad.attr('src')) { return ;}
+                slideEl.busy();
+                imageToLoad.attr('src', imageToLoad.attr('data-src'));
+                imageToLoad[0].onload = function () {
+                    slideEl.idle();
+                    imageToLoad.show();
+                };
+                imageToLoad[0].onerror = function () {
+                    var notification = $('<p class="viewer-displayer-notification">')
+                        .text(gt('Sorry, there is no preview available for this file.'));
+                    slideEl.idle().append(notification);
+                };
+            }
+            // load the load range, containing the requested slide and preload slides
+            _.each(loadRange, loadSlide);
+        },
+
+        /**
+         * Blends in the caption of the passed slide index for a specific duration in milliseconds.
+         *
+         * @param {Number} slideIndex
+         *  index of the slide, which caption is to be blended in.
+         *
+         * @param {Number} duration
+         *  Duration of the blend-in in milliseconds. Defaults to 3000 ms.
+         *
+         */
+        blendSlideCaption: function (slideIndex, duration) {
+            var duration = duration || 3000,
+                slideCaption = this.$el.find('.item').eq(slideIndex).find('.viewer-displayer-caption');
+            window.clearTimeout(this.captionTimeoutId);
+            slideCaption.show();
+            this.captionTimeoutId = window.setTimeout(function () {
+                slideCaption.fadeOut();
+            }, duration);
         },
 
         onPreviousSlide: function () {
