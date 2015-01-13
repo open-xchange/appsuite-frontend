@@ -92,8 +92,7 @@ define('io.ox/participants/views',
 
             api.pictureHalo(
                 this.nodes.$img,
-                data,
-                { width: 54, height: 54 }
+                $.extend(data, { width: 54, height: 54, scaleType: 'cover' })
             );
         },
 

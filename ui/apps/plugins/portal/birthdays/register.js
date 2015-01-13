@@ -162,8 +162,7 @@ define('plugins/portal/birthdays/register',
                             $('<div class="birthday" tabindex="1">').data('contact', contact).append(
                                 api.pictureHalo(
                                     $('<div class="picture">'),
-                                    contact,
-                                    { width: 48, height: 48 }
+                                    $.extend(contact, { width: 48, height: 48, scaleType: 'cover' })
                                 ),
                                 $('<div class="name">').text(_.noI18n(name)),
                                 $('<div>').append(

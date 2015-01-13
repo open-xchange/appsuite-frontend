@@ -210,8 +210,7 @@ define('io.ox/core/permissions/permissions',
                 this.append(
                     contactsAPI.pictureHalo(
                         $('<div class="pull-left contact-picture">'),
-                        baton.user,
-                        { width: 64, height: 64 }
+                        $.extend(baton.user, { width: 64, height: 64, scaleType: 'cover' })
                     )
                 );
             } else {

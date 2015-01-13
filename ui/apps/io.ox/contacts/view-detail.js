@@ -127,8 +127,7 @@ define('io.ox/contacts/view-detail',
             this.append(
                 api.pictureHalo(
                     $('<div class="picture" aria-hidden="true">'),
-                    baton.data,
-                    { width: 64, height: 64 }
+                    $.extend(baton.data, { width: 64, height: 64, scaleType: 'cover' })
                 )
             );
         }
@@ -232,8 +231,7 @@ define('io.ox/contacts/view-detail',
                 $('<div class="member">').append(
                     api.pictureHalo(
                         $('<div class="member-picture">'),
-                       data,
-                       { width: 48, height: 48 }
+                        $.extend(data, { width: 48, height: 48, scaleType: 'cover' })
                     ),
                     coreUtil.renderPersonalName({
                         $el: $('<div class="member-name">'),

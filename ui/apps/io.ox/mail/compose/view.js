@@ -214,11 +214,7 @@ define('io.ox/mail/compose/view', [
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
             );
             // apply picture halo lazy load
-            contactAPI.pictureHalo(
-                node,
-                baton.participantModel.toJSON(),
-                { width: 42, height: 42 }
-            );
+            contactAPI.pictureHalo(node, _.extend({}, baton.participantModel.toJSON(), { width: 42, height: 42, scaleType: 'contain' }));
         }
     });
 

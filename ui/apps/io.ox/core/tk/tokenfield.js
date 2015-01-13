@@ -143,11 +143,7 @@ define('io.ox/core/tk/tokenfield', [
 
                         // add contact picture
                         $(e.relatedTarget).prepend(
-                            contactsAPI.pictureHalo(
-                                $('<div class="contact-image">'),
-                                model.toJSON(),
-                                { width: 16, height: 16, scaleType: 'contain' }
-                            )
+                            contactsAPI.pictureHalo($('<div class="contact-image">'), _.extend(model.toJSON(), { width: 16, height: 16, scaleType: 'contain' }))
                         );
                     }
                 },
