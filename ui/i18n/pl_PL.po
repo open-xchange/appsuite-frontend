@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-12-09 16:31+0100\n"
+"PO-Revision-Date: 2015-01-07 12:54+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl_PL\n"
@@ -2327,7 +2327,7 @@ msgstr "Czy na pewno chcesz odrzucić zmiany?"
 
 #: apps/io.ox/mail/compose/view.js:529 module:io.ox/mail
 msgid "Do you really want to discard your message?"
-msgstr "Czy na pewno chcesz odrzucić tę wiadomość?"
+msgstr "Czy na pewno chcesz odrzucić wiadomość?"
 
 #: apps/io.ox/core/folder/actions/common.js:43 module:io.ox/core
 #: apps/io.ox/files/folderview-extensions.js:36 module:io.ox/mail
@@ -2484,6 +2484,10 @@ msgid ""
 msgstr ""
 "Upuść tutaj, aby przesłać <b class=\"dndignore\">nową wersję</b> pliku \"%1$s"
 "\""
+
+#: apps/io.ox/mail/write/main.js:350 module:io.ox/mail
+msgid "Drop the file anywhere to add attachment"
+msgstr "Aby dodać załącznik, upuść plik w dowolnym miejscu"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js:90 module:io.ox/tasks
@@ -4627,7 +4631,22 @@ msgstr "Przy nowych powiadomieniach, z wyjątkiem wiadomości"
 msgid "On work days"
 msgstr "W dni robocze"
 
-#: apps/io.ox/core/sub/settings/pane.js:68 module:io.ox/core/sub
+#: apps/io.ox/mail/write/main.js:1166 module:io.ox/mail
+msgid ""
+"One or more attached files exceed the size limit per email. Therefore, the "
+"files are not sent as attachments but kept on the server. The email you have "
+"sent just contains links to download these files."
+msgstr ""
+"Co najmniej jeden z załączonych plików przekracza limit rozmiaru na "
+"wiadomość e-mail. Pliki nie zostaną wysłane jako załączniki, tylko zostaną "
+"zachowane na serwerze. Wysyłana wiadomość e-mail zawiera tylko łącza "
+"umożliwiające pobranie tych plików."
+
+#: apps/io.ox/portal/settings/pane.js:436 module:io.ox/portal
+msgid "Only show widget summary on mobile devices"
+msgstr "Na urządzeniach mobilnych pokazuj tylko zestawienie widgetów"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:69 module:io.ox/core/pubsub
 msgid "Only showing items related to folder \"%1$s\""
 msgstr "Pokaż tylko elementy związane z folderem %1$s"
 
@@ -6745,6 +6764,11 @@ msgstr ""
 "Nie można przesłać pliku \"%1$s\", ponieważ jego rozmiar przekracza limit "
 "przydziału miejsca wynoszący %2$s"
 
+#. %1$s is the publication link http://...
+#: apps/io.ox/core/pubsub/publications.js:97 module:io.ox/core/pubsub
+msgid "The file is available at %1$s"
+msgstr "Plik jest dostępny tutaj: %1$s"
+
 #: apps/io.ox/core/upsell.js:33 module:io.ox/core
 msgid "The first 90 days are free."
 msgstr "Pierwsze 90 dni jest darmowe."
@@ -6874,6 +6898,22 @@ msgstr ""
 msgid "The setting requires a reload or relogin to take effect."
 msgstr ""
 "Wprowadzenie ustawienia wymaga przeładowania lub ponownego zalogowania."
+
+#: apps/io.ox/core/api/folder.js:491 module:io.ox/core
+msgid ""
+"The settings for collecting contacts in this folder will become disabled "
+"when you enter the application the next time."
+msgstr ""
+"Ustawienia zbierania kontaktów w tym folderze zostaną wyłączone przy "
+"następnym załadowaniu aplikacji."
+
+#: apps/io.ox/core/pubsub/publications.js:413 module:io.ox/core/pubsub
+msgid ""
+"The shared data will be accessible to everyone on the Internet. Please "
+"consider, which data you want to share."
+msgstr ""
+"Udostępnione dane będą dostępne dla wszystkich w Internecie. Zastanów się, "
+"które dane chcesz udostępnić."
 
 #: apps/io.ox/tasks/model.js:118 module:io.ox/tasks
 msgid "The start date must be before the due date."
@@ -7107,15 +7147,24 @@ msgid "This file will be written in your default folder to allow editing"
 msgstr ""
 "Ten plik zostanie zapisany w folderze domyślnym. Pozwoli to na jego edycję"
 
+#: apps/io.ox/core/pubsub/settings/pane.js:407 module:io.ox/core/pubsub
+msgid "This folder has no publications"
+msgstr "Ten folder nie ma publikacji"
+
 #: apps/io.ox/core/sub/settings/pane.js:373 module:io.ox/core/sub
 msgid "This folder has no subscriptions"
 msgstr "Ten folder nie ma subskrypcji"
 
-#: apps/io.ox/core/folder/extensions.js:466 module:io.ox/core
-#, fuzzy
-#| msgid "This folder has no subscriptions"
-msgid "This folder has subscriptions"
-msgstr "Ten folder nie ma subskrypcji"
+#: apps/io.ox/core/folder/extensions.js:415 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:941
+msgid "This folder has publications and/or subscriptions"
+msgstr "Folder zawiera publikacje lub subskrypcje"
+
+#: apps/io.ox/core/pubsub/settings/pane.js:399 module:io.ox/core/pubsub
+msgid ""
+"This folder has publications but you are not allowed to view or edit them"
+msgstr ""
+"Ten folder zawiera publikacje, ale nie możesz ich przeglądać ani edytować"
 
 #: apps/io.ox/core/sub/settings/pane.js:368 module:io.ox/core/sub
 msgid ""
@@ -7407,6 +7456,10 @@ msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 "Niezapisane dokumenty zostaną utracone. Czy chcesz się teraz wylogować?"
 
+#: apps/io.ox/mail/settings/signatures/register.js:376 module:io.ox/mail
+msgid "Unset default signature"
+msgstr "Anuluj konfigurację domyślnego podpisu"
+
 #: apps/io.ox/core/boot/i18n.js:44 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:44 module:io.ox/core/login
 msgid ""
@@ -7687,7 +7740,36 @@ msgstr ""
 "systemu Windows®. Updater automatycznie informuje o nowych aktualizacjach i "
 "pozwala na ich pobieranie."
 
-#: apps/io.ox/calendar/util.js:299 module:io.ox/calendar
+#: apps/io.ox/core/pubsub/publications.js:417 module:io.ox/core/pubsub
+msgid ""
+"When using this feature, you as the current owner of the data are "
+"responsible for being careful with privacy rules and for complying with "
+"legal obligations (Copyright, Privacy Laws). Especially when sharing "
+"personal data you are the responsible party according to the Federal Data "
+"Protection Act (BDSG, Germany) or other Privacy Acts of your country. "
+"According to European and other national regulations you as the responsible "
+"party are in charge of data economy, and must not publish or forward "
+"personal data without the person's consent. Beyond legal obligations, we "
+"would like to encourage extreme care when dealing with personal data. Please "
+"consider carefully where you store and to whom you forward personal data. "
+"Please ensure appropriate access protection, e.g. by proper password "
+"protection."
+msgstr ""
+"Używając tej funkcji, aktualny właściciel danych odpowiada za przestrzeganie "
+"przepisów o poufności danych i realizację obowiązków prawnych (w zakresie "
+"prawa autorskiego i prawa dotyczącego ochrony danych osobowych). W przypadku "
+"udostępnienia danych osobowych strona udostępniająca jest stroną "
+"odpowiedzialną zgodnie z Federalną Ustawą o Ochronie Danych (BDSG, Niemcy) "
+"lub innymi ustawami o poufności danych obowiązującymi w danym kraju. Zgodnie "
+"z przepisami europejskimi i innymi przepisami krajowymi jesteś stroną "
+"odpowiedzialną za obsługę danych i nie możesz publikować ani przekazywać "
+"danych osobowych bez zgody osoby, której one dotyczą. Poza dopełnieniem "
+"obowiązków wynikających z przepisów prawa Open-Xchange zaleca zwiększoną "
+"ostrożność podczas pracy z danymi osobowymi. Pamiętaj, aby przemyśleć, gdzie "
+"dane te mają być przechowywane oraz komu zostaną przekazane. Pamiętaj o "
+"odpowiedniej ochronie tych danych, np. przez zabezpieczenie ich hasłem."
+
+#: apps/io.ox/calendar/util.js:298 module:io.ox/calendar
 msgid "Whole day"
 msgstr "Całodniowe"
 
@@ -7822,9 +7904,10 @@ msgstr "Jesteś organizatorem"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
 msgid ""
-"You attached an empty file. It could be, that this file has been deleted on "
-"your drive. Send it anyway?"
+"You can drag and drop files from your computer here to add as attachment."
 msgstr ""
+"Aby dodać pliki jako załączniki, wystarczy przeciągnąć je z komputera i "
+"upuścić w tym miejscu."
 
 #: apps/io.ox/files/views/create.js:29 module:io.ox/files
 msgid ""
