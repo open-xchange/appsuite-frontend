@@ -271,6 +271,8 @@ define('io.ox/core/folder/contextmenu',
 
                 if (_.device('ios || android')) return;
                 if (!api.can('export', baton.data)) return;
+                if (baton.data.total === 0) return;
+                if (!_.isNumber(baton.data.total) && baton.data.total !== null) return;
 
                 addLink(this, {
                     action: 'export',
