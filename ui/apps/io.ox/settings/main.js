@@ -248,10 +248,9 @@ define('io.ox/settings/main', [
             var dfd = $.Deferred();
             getAllSettingsPanes().done(function (data) {
                 addModelsToPool(data);
-
-                tree.$container.empty();
-
-                vsplit.left.append(tree.render().$el);
+                if (vsplit.left.find('.folder-tree').length === 0) {
+                    vsplit.left.append(tree.render().$el);
+                }
 
                 ignoreChangeEvent = true;
                 dfd.resolve();
@@ -274,7 +273,7 @@ define('io.ox/settings/main', [
                         module: 'settings',
                         own_rights: 134225984,
                         title: /*#, dynamic*/gt.pgettext('app', val.title),
-                        subfolder: false,
+                        subfolders: false,
                         meta: val
                     };
 
@@ -440,14 +439,14 @@ define('io.ox/settings/main', [
 
         app.setSettingsPane = function (options) {
             if (options && options.id) {
-                paintTree(options).done(function () {
+                return paintTree().done(function () {
                     var baton = new ext.Baton({ data: pool.getModel('virtual/' + options.id).get('meta'), options: options || {} });
                     tree.trigger('virtual', 'virtual/' + options.id, {}, baton);
                 });
             } else {
-                var id = tree.selection.getItems().first().attr('data-id');
                 if (!_.device('smartphone')) {
-                    tree.selection.set(id);
+                    tree.selection.resetSelected(tree.selection.getItems());
+                    tree.selection.pick(0);
                 }
                 return $.when();
             }
@@ -459,11 +458,19 @@ define('io.ox/settings/main', [
             draw: function () {
 
                 var buildCheckbox = function () {
-                    var checkbox = $('<input type="checkbox" class="input-xlarge">').on('change', function () {
+                    var checkbox = $('<input type="checkbox" tabindex="1" class="input-xlarge">').on('change', function () {
                         expertmode = checkbox.prop('checked');
                         coreSettings.set('settings/advancedMode', expertmode).save();
-                        paintTree();
-                        updateExpertMode();
+
+                        getAllSettingsPanes().done(function (data) {
+                            addModelsToPool(data);
+                            updateExpertMode();
+                            tree.selection.resetSelected(tree.selection.getItems());
+                            if (!_.device('smartphone')) {
+                                tree.selection.pick(0);
+                            }
+                        });
+
                     });
                     checkbox.prop('checked', expertmode);
                     return checkbox;
@@ -483,11 +490,10 @@ define('io.ox/settings/main', [
             }
         });
 
-        ext.point('settings/toolbar').invoke('draw', vsplit.left);
-
         // go!
         win.show(function () {
             paintTree().done(function () {
+                ext.point('settings/toolbar').invoke('draw', vsplit.left);
                 app.setSettingsPane(options);
             });
         });
