@@ -625,8 +625,7 @@ define('io.ox/contacts/api', [
             uniq = _.now();
         });
 
-        function load(node, url, options) {
-            var hideOnFallback = options.hideOnFallback || false;
+        function load(node, url) {
             _.defer(function () {
                 // use lazyload?
                 var scrollpane = node.closest('.scrollpane');
@@ -636,7 +635,6 @@ define('io.ox/contacts/api', [
                         effect: 'show',
                         error: function () {
                             node.css('background-image', 'url(' + fallback + ')');
-                            if (hideOnFallback) node.hide();
                             node = scrollpane = null;
                         },
                         load: function (elements_left, settings, image) {
@@ -652,7 +650,6 @@ define('io.ox/contacts/api', [
                     $(new Image()).one('load error', function (e) {
                         var fail = this.width === 1 || e.type === 'error';
                         if (!fail) cachesURLs[url] = url;
-                        if (fail && hideOnFallback) node.hide();
                         node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
                         node = null;
                     })

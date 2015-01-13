@@ -203,10 +203,6 @@ define('io.ox/participants/model', [
             return util.getMail(this.toJSON());
         },
 
-        getImageURL: function (options) {
-            return contactAPI.pictureHalo(_.extend({}, this.toJSON(), options));
-        },
-
         getTarget: function () {
             return this.get(this.get('field')) || '';
         },

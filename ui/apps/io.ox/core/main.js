@@ -834,6 +834,10 @@ define('io.ox/core/main', [
             id: 'change-user-data',
             index: 150,
             draw: function () {
+
+                // check if users can edit their own data (see bug 34617)
+                if (settings.get('user/internalUserEdit', true) === false) return;
+
                 this.append(
                     $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">')
