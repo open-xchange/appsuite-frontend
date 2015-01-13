@@ -57,8 +57,8 @@ define('io.ox/core/viewer/views/displayerview', [
             }
             var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
                 carouselInner = $('<div class="carousel-inner">'),
-                prevSlide = $('<a class="left carousel-control" href="#viewer-carousel" role="button" data-slide="prev" tabindex="1"><i class="fa fa-angle-left"></i></a>'),
-                nextSlide = $('<a class="right carousel-control" href="#viewer-carousel" role="button" data-slide="next" tabindex="1"><i class="fa fa-angle-right"></i></a>'),
+                prevSlide = $('<a class="left carousel-control" href="#viewer-carousel"><i class="fa fa-angle-left"></i></a>'),
+                nextSlide = $('<a class="right carousel-control" href="#viewer-carousel"><i class="fa fa-angle-right"></i></a>'),
                 // preload 1 neigboring slides
                 slidesToPreload = 1,
                 slidesCount = this.collection.length,
@@ -137,6 +137,8 @@ define('io.ox/core/viewer/views/displayerview', [
             preloadSlide(startIndex, slidesToPreload, 'right');
 
             // init the carousel and preload neighboring slides on next/prev
+            prevSlide.attr({ title: gt('Previous'), 'data-slide': 'prev', tabindex: '1', role: 'button' });
+            nextSlide.attr({ title: gt('Next'), 'data-slide': 'next', tabindex: '1', role: 'button' });
             carouselRoot.append(carouselInner, prevSlide, nextSlide)
                 .carousel({ keyboard: false })
                 .on('slid.bs.carousel', function (event) {

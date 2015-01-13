@@ -65,6 +65,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                         fileIcon = $('<i class="fa">').addClass(iconClass),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('viewer-toolbar-filename')
+                        .attr('title', gt('Double click to rename'))
                         .append(fileIcon, filenameLabel)
                         .parent().addClass('pull-left');
                 }
@@ -73,7 +74,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-bars',
-                title: gt('More functions'),
                 ref: DROPDOWN_ACTION_ID,
                 customize: function (baton) {
                     var self = this,
@@ -92,7 +92,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.append('<i class="fa fa-caret-down">')
                         .after(dropdownLinks.addClass('dropdown-menu-right'))
                         .addClass('dropdown-toggle viewer-toolbar-dropdown')
-                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1' })
+                        .attr({ 'aria-haspopup': 'true', 'data-toggle': 'dropdown', 'role': 'button', 'tabindex': '1', 'title': gt('More functions') })
                         .dropdown();
                     this.parent().addClass('dropdown');
                 }
@@ -103,7 +103,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 icon: 'fa fa-info-circle',
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
-                    this.addClass('viewer-toolbar-togglesidebar').attr('tabindex', '1');
+                    this.addClass('viewer-toolbar-togglesidebar').attr({ tabindex: '1', title: gt('View details') });
                 }
             },
             'close': {
@@ -112,7 +112,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 icon: 'fa fa-times',
                 ref: TOOLBAR_ACTION_ID + '/close',
                 customize: function () {
-                    this.addClass('viewer-toolbar-close').attr('tabindex', '1');
+                    this.addClass('viewer-toolbar-close').attr({ tabindex: '1', title: gt('Close') });
                 }
             }
         };
