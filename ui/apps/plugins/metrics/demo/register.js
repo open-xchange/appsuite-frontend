@@ -18,8 +18,10 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
     // settings
     var INBOX = 'default0/INBOX',
         TEST = 'default0/INBOX/Test',
+        SUBJECT = 'Automatic performance test',
         FIRST_LETTERS = 'bigge',
-        RECIPIENT = 'matthias.biggeleben@open-xchange.com';
+        RECIPIENT = 'matthias.biggeleben@open-xchange.com',
+        FILE = { folder_id: '13894', id: '63605' };
 
     bot.ready(function () {
 
@@ -45,7 +47,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                 });
 
                 this.step('Wait for editor and write 100 words', function (done) {
-                    ox.on('mail:reply:ready', function (e, data, app) {
+                    ox.one('mail:reply:ready', function (e, data, app) {
                         app.getEditor().prependContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
                         this.app = app;
                         done();
@@ -61,7 +63,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                     // send
                     this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
-                    ox.on('mail:send:stop', done);
+                    ox.one('mail:send:stop', done);
                 });
 
                 this.step('Switch back to mail app', function (done) {
@@ -85,7 +87,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                 });
 
                 this.step('Wait for list view to update', function (done) {
-                    this.waitForListView(this.app.listView, INBOX, done);
+                    this.waitForListView(this.app.listView, 'folder=' + INBOX, done);
                 });
 
                 this.step('Select first message', function () {
@@ -109,7 +111,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                 });
 
                 this.step('Wait for list view to update', function (done) {
-                    this.waitForListView(this.app.listView, TEST, done);
+                    this.waitForListView(this.app.listView, 'folder=' + TEST, done);
                 });
 
                 this.step('Select copied message', function (done) {
@@ -142,7 +144,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
 
                 this.step('Open compose dialog', function (done) {
 
-                    ox.on('mail:compose:ready', function (e, data, app) {
+                    ox.one('mail:compose:ready', function (e, data, app) {
                         this.app = app;
                         done();
                     }.bind(this));
@@ -151,7 +153,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                 });
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
-                    this.app.setSubject('Test 3');
+                    this.app.setSubject(SUBJECT);
                     $('#writer_field_to').focus().val(FIRST_LETTERS).trigger('keyup');
                     done();
                 });
@@ -175,7 +177,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                     // send
                     this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
-                    ox.on('mail:send:stop', done);
+                    ox.one('mail:send:stop', done);
                 });
 
                 this.step('Switch back to mail app', function (done) {
@@ -191,7 +193,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
 
                 this.step('Open compose dialog', function (done) {
 
-                    ox.on('mail:compose:ready', function (e, data, app) {
+                    ox.one('mail:compose:ready', function (e, data, app) {
                         this.app = app;
                         done();
                     }.bind(this));
@@ -207,7 +209,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                 });
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
-                    this.app.setSubject('Test 3');
+                    this.app.setSubject(SUBJECT + ' (local attachment)');
                     $('#writer_field_to').focus().val(FIRST_LETTERS).trigger('keyup');
                     done();
                 });
@@ -231,7 +233,7 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
                     // send
                     this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
-                    ox.on('mail:send:stop', done);
+                    ox.one('mail:send:stop', done);
                 });
 
                 this.step('Switch back to mail app', function (done) {
@@ -243,7 +245,107 @@ define('plugins/metrics/demo/register', ['io.ox/core/metrics/bot/main', 'setting
             // Test 5
             //
 
-            this.test('Write mail and send with attachment (local)', function () {
+            this.xtest('Write mail and send with attachment (cloud)', function () {
+
+                this.step('Open compose dialog with attachment from cloud', function (done) {
+
+                    ox.one('mail:compose:ready', function (e, data, app) {
+                        this.app = app;
+                        done();
+                    }.bind(this));
+
+                    var file = _.extend({ group: 'infostore', filename: 'test.jpg' }, FILE);
+                    ox.registry.call('mail-compose', 'compose', { infostore_ids: [file] });
+                });
+
+                this.step('Enter subject and first 3 letters of recipient', function (done) {
+                    this.app.setSubject(SUBJECT  + ' (cloud attachment)');
+                    $('#writer_field_to').focus().val(FIRST_LETTERS).trigger('keyup');
+                    done();
+                });
+
+                this.step('Wait for auto-complete', function (done) {
+                    this.waitFor(function () {
+                        var item = $('.autocomplete-item').filter(function () {
+                            return $.trim($(this).find('.email').text()) === RECIPIENT;
+                        });
+                        item.click();
+                        return item.length;
+                    })
+                    .done(done);
+                });
+
+                this.step('Write 100 words', function () {
+                    this.app.getEditor().setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                });
+
+                this.step('Send message', function (done) {
+                    // send
+                    this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
+                    // wait for proper event
+                    ox.one('mail:send:stop', done);
+                });
+
+                this.step('Switch back to mail app', function (done) {
+                    this.waitForSelector('.io-ox-mail-window:visible', done);
+                });
+            });
+
+            //
+            // Test 6
+            //
+
+            this.xtest('Search and display mail listing', function () {
+
+                this.step('Switch to mail app', function (done) {
+                    this.waitForApp('io.ox/mail', done);
+                    ox.launch('io.ox/mail/main');
+                });
+
+                this.step('Switch to INBOX', function (done) {
+                    this.waitForFolder(INBOX, done);
+                });
+
+                this.step('Wait for list view to update', function (done) {
+                    this.waitForListView(this.app.listView, 'folder=' + INBOX, done);
+                });
+
+                this.step('Focus search field to load related code', function (done) {
+                    this.waitForEvent('search:load', done);
+                    $('.search-field').trigger('load');
+                });
+
+                this.step('Pick random subject and search for it', function () {
+
+                    var list = this.app.listView,
+                        length = list.collection.length,
+                        // pick one random message
+                        mail = list.collection.at(Math.random() * length >> 0),
+                        subject = mail.get('subject'),
+                        // look for first word in subject
+                        word = subject.match(/[a-zäöüéèáàêß\-]{3,}/i)[0];
+
+                    $('.search-field').focus().val(word).trigger('keyup');
+                });
+
+                this.step('Wait for auto-complete', function (done) {
+
+                    this.waitFor(function () {
+                        return $('.autocomplete-item').eq(1).click().length;
+                    })
+                    .done(done);
+                });
+
+                this.step('Wait for list view to display results', function (done) {
+                    this.waitForListView(this.app.listView, 'search/subject', done);
+                });
+            });
+
+            //
+            // Test 7
+            //
+
+            this.test('Open a mail with thumbnails', function () {
                 // TODO!
             });
         });

@@ -1817,13 +1817,14 @@ define('io.ox/core/desktop',
                                                     }
                                                 });
                                                 win.trigger('search:loaded');
+                                                ox.trigger('search:load', win);
                                         });
                                     });
                                 };
 
                             // lazy load search app when search field gets the focus for the first time
-                            field.one('focus', run);
-
+                            // also listen to "load" to trigger this manually
+                            field.one('focus load', run);
                         }
                     });
 
