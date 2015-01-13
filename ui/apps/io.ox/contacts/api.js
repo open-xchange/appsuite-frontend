@@ -662,7 +662,7 @@ define('io.ox/contacts/api',
                 });
                 url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
-            } else if (!data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
+            } else if (!data.email && !data.contact_id && !data.id && !data.internal_userid) {
                 url = fallback;
             }
 
