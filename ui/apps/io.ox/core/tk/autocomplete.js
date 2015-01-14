@@ -259,13 +259,13 @@ define('io.ox/core/tk/autocomplete', [
                                 // delimiter
                                 .appendTo(scrollpane)
                                 // kepp open on click
-                                .on('mousedown click', fnIgnore);
+                                .on('click mousedown', fnIgnore);
                         }
                         //values
                         _([].concat(facet.values || facet)).each(function (value) {
                             value.facet = facet.id;
                             var node = $('<div class="autocomplete-item">')
-                                .on('click', fnSelectItem);
+                                .on('click mousedown', fnSelectItem);
                             //intend
                             if (regular)
                                 node.addClass('indent');
