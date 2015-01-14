@@ -427,7 +427,7 @@ define.async('io.ox/core/tk/html-editor',
             extended_valid_elements: 'blockquote[type]',
 
             // CSS for Editor content (See /apps/io.ox/core/tk/html-editor.less)
-            content_css: ox.base + '/apps/themes/' + require('settings!io.ox/core').get('theme') + '/io.ox/core/tk/html-editor.css',
+            content_css: ox.base + '/apps/themes/default/io.ox/core/tk/html-editor.css',
 
             menubar: false,
             statusbar: false,
