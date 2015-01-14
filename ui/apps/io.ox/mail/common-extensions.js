@@ -57,7 +57,8 @@ define('io.ox/mail/common-extensions', [
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: data.picture || (from && from[0] && from[0][1]), width: size, height: size, scaleType: 'cover' }
+                    { email: data.picture || (from && from[0] && from[0][1]) },
+                    { width: size, height: size, effect: 'fadeIn' }
                 )
             );
         },
@@ -571,90 +572,15 @@ define('io.ox/mail/common-extensions', [
             /**
              * @description actions for publication invitation mails
              */
-            var cont = function (baton) {
-                var data = baton.data,
-                    label = '',
-                    pub = {},
-                    pubtype = '';
-
-                //exists publication header
-                pub.url  = data.headers && data.headers['X-OX-PubURL'] || '';
-                if (pub.url === '') {
-                    return false;
-                }
-                //qualify data
-                pubtype = /^(\w+),(.*)$/.exec(data.headers['X-OX-PubType']) || ['', '', ''];
-                pub.module  = pubtype[1];
-                pub.type  = pubtype[2];
-                pub.name = decodeURIComponent(_.first(_.last(pub.url.split('/')).split('?')));
-                pub.parent = require('settings!io.ox/core').get('folder/' + pub.module);
-                pub.folder = '';
-                label = pub.module === 'infostore' ?
-                    /*#. folder publication of type 'files' (drive/infostore)
-                     */
-                    gt('files') :
-                    /*#, dynamic*/
-                    gt(pub.module);
-
-                // published folder have much more data, single file just has a name and a URL.
-                var isSingleFilePublication = !pub.type;
-
-                this.append(
-                    $('<div class="notification-item subscription">').append(
-                        $('<div class="invitation">').text(
-                            isSingleFilePublication ?
-                                gt('Someone shared a file with you') :
-                                /*#. %1$s is the (translated) type of the publication like "files", "contacts", …
-                                */
-                                gt('Someone shared a folder with you. Would you like to subscribe those %1$s?', label)
-                        ),
-                        $('<div class="actions">').append(
-                            $('<button type="button" class="btn btn-default btn-sm" data-action="show">').text(
-                                isSingleFilePublication ? gt('Show file') : gt('Show original publication')
-                            ),
-                            isSingleFilePublication ? '' :
-                                $('<button type="button" class="btn btn-primary btn-sm" data-action="subscribe">').text(gt('Subscribe'))
-                        )
-                    )
-                );
-
-                //actions
-                this.on('click', '.subscription .btn', function (e) {
-                    var button = $(e.target),
-                        notifications = require('io.ox/core/notifications');
-                    //disble button
-                    if (button.data('action') === 'show') {
-                        window.open(pub.url, '_blank');
-                    } else {
-                        $(e.target).prop('disabled', true);
-                        notifications.yell('info', gt('Adding subscription. This may take some seconds …'));
-                        var opt = opt || {};
-                        //create folder; create and refresh subscription
-                        require(['io.ox/core/pubsub/util', 'io.ox/core/folder/api']).done(function (pubsubUtil, folder) {
-                            pubsubUtil.autoSubscribe(pub.module, pub.name, pub.url).then(
-                                function success() {
-                                    /*#. %1$s is the publication name
-                                     *#. %2$s is the (translated) type of the publication like "files", "contacts", …
-                                     */
-                                    notifications.yell('success', gt('Created private folder \'%1$s\' in %2$s and subscribed successfully to shared folder', pub.name, pub.module));
-                                    //refresh folder views
-                                    folder.trigger('update');
-                                },
-                                function fail(data) {
-                                    notifications.yell('error', data.error || gt('An unknown error occurred'));
-                                }
-                            );
-                        });
+            return function (baton) {
+                var $el = this;
+                require(['io.ox/core/pubsub/notifications/subscription'], function (draw) {
+                    if (baton.model && baton.model.has('headers')) {
+                        draw.call($el, baton.model);
+                    } else if (baton.model) {
+                        baton.view.listenToOnce(baton.model, 'change:headers', draw.bind($el));
                     }
                 });
-            };
-
-            return function (baton) {
-                if (baton.model.has('headers')) {
-                    cont.bind(this)(baton);
-                } else {
-                    baton.model.listenToOnce('changes:headers', cont.bind(this), baton);
-                }
             };
 
         }())

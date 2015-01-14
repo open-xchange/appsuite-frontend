@@ -92,7 +92,6 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 }
             };
             ox.on('app:resume app:ready', handler.bind(this));
-            ox.launch(id + '/main');
             return def.promise().done(callback);
         },
 
@@ -111,6 +110,20 @@ define('io.ox/core/metrics/bot/util', [], function () {
                 return listView.el.childNodes.length > 1;
             })
             .done(callback);
+        },
+
+        waitForImage: function (url, callback) {
+            // inspired by http://www.html5rocks.com/de/tutorials/file/xhr2/
+            // and https://developer.mozilla.org/en-US/docs/Web/API/Blob
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'arraybuffer';
+            xhr.onload = function () {
+                if (this.status !== 200) return;
+                var blob = new window.Blob([this.response], { type: 'image/jpg' });
+                if (callback) callback (blob);
+            };
+            xhr.send();
         },
 
         // call callback when core is ready (+ 3 seconds to be safe)

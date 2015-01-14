@@ -834,6 +834,10 @@ define('io.ox/core/main', [
             id: 'change-user-data',
             index: 150,
             draw: function () {
+
+                // check if users can edit their own data (see bug 34617)
+                if (settings.get('user/internalUserEdit', true) === false) return;
+
                 this.append(
                     $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" role="menuitem" aria-haspopup="true" tabindex="1">')
@@ -1574,7 +1578,7 @@ define('io.ox/core/main', [
     //
     // Respons to special http error codes (see bug 32836)
     //
-    ox.on('http:error', function (e, error) {
+    ox.on('http:error', function (error) {
         if (error.code === 'MSG-1000' || error.code === 'MSG-1001') notifications.yell(error);
     });
 

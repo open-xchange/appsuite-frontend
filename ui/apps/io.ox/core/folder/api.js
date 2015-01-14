@@ -189,8 +189,8 @@ define('io.ox/core/folder/api', [
         folder_id: '1',
         id: 'virtual/all-my-appointments',
         module: 'calendar',
-        own_rights: 134225984, // all rights but admin
-        permissions: [{ bits: 134225984, entity: ox.user_id, group: false }],
+        own_rights: 403710016, // all rights but admin
+        permissions: [{ bits: 403710016, entity: ox.user_id, group: false }],
         standard_folder: true,
         supported_capabilities: [],
         title: gt('All my appointments'),

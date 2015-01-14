@@ -143,7 +143,11 @@ define('io.ox/core/tk/tokenfield', [
 
                         // add contact picture
                         $(e.relatedTarget).prepend(
-                            contactsAPI.pictureHalo($('<div class="contact-image">'), _.extend(model.toJSON(), { width: 16, height: 16, scaleType: 'contain' }))
+                            contactsAPI.pictureHalo(
+                                $('<div class="contact-image">'),
+                                model.toJSON(),
+                                { width: 16, height: 16, scaleType: 'contain' }
+                            )
                         );
                     }
                 },
@@ -175,15 +179,6 @@ define('io.ox/core/tk/tokenfield', [
                 },
                 'blur': o.blur
             });
-
-            if (o.lazyload) {
-                // get original input element to get the typeahead dataset
-                this.input.data('ttTypeahead').dropdown.onAsync('datasetRendered', function () {
-                    $(o.lazyload, this.$menu).lazyload({
-                        container: this.$menu
-                    });
-                });
-            }
 
             this.$el.parent().addClass(this.options.className);
 

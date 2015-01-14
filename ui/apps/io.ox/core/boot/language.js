@@ -130,7 +130,7 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
                     for (id in langSorted) {
                         i++;
                         node.attr({ 'role': 'menu', 'aria-labelledby': 'io-ox-languages-label' }).append(
-                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
+                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '" lang="' + langSorted[id] + '">')
                                 .on('click', { id: langSorted[id] }, $.proxy(this.onChangeLanguage, this))
                                 .text(lang[langSorted[id]])
                         );

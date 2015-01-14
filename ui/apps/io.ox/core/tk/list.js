@@ -211,10 +211,6 @@ define('io.ox/core/tk/list', [
                         this.el.insertBefore(node, reference);
                     }
                 }
-
-                // reduce scroll momentum
-                this.$el.css('overflow', 'hidden');
-                setTimeout(function ($el) { $el.css('overflow', ''); }, 100, this.$el);
             };
         }()),
 
