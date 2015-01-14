@@ -34,7 +34,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 model = baton && baton.model,
                 description = model && model.get('description');
 
-            if (!model) { return; }
+            if (!model || !model.isDriveFile()) { return; } // mail and PIM attachments don't support file description
 
             baton.$el.empty();
 
