@@ -25,6 +25,7 @@
 
 @viewer-sidebar-bgcolor: #202020;
 @viewer-sidebar-width: 400px;
+@viewer-sidebar-active-bgcolor: #333333;
 
 .io-ox-viewer {
 
@@ -200,17 +201,23 @@
             background-color: transparent;
             border-color: transparent;
 
+            a { outline: none; }
+
             .panel-heading {
                 color: #999999;
                 border-color: #999999;
                 background-color: transparent;
                 position: relative;
 
-                a.panel-heading-button {
+                .panel-heading-button {
                     color: @viewer-text-color;
                     position: absolute;
                     top: 4px;
                     right: 10px;
+                    width: 40px;
+                    &:active, &:focus, &:hover {
+                        background-color: @viewer-sidebar-active-bgcolor
+                    }
                 }
 
                 h3 {
@@ -244,6 +251,9 @@
                         color: hsl(196, 100%, 50%);
                         &:hover {
                             color: hsl(196, 90%, 40%);
+                        }
+                        &:active, &:focus{
+                            background-color: #444444;
                         }
                     }
 
