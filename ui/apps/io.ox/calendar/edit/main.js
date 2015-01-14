@@ -69,9 +69,7 @@ define('io.ox/calendar/edit/main',
 
                 function cont(data) {
                     self.model = appointmentModel.factory.create(data);
-                    appointmentModel.applyAutoLengthMagic(self.model);
-                    appointmentModel.fullTimeChangeBindings(self.model);
-                    appointmentModel.setDefaultParticipants(self.model, { create: opt.mode === 'create' }).done(function () {
+                    self.model.setDefaultParticipants({ create: opt.mode === 'create' }).done(function () {
 
                         var baton = { model: self.model, mode: opt.mode, app: self, callbacks: {} };
                         baton.callbacks.extendDescription = app.extendDescription;
