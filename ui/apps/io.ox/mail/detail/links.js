@@ -29,9 +29,10 @@ define('io.ox/mail/detail/links',
             // open file in side-popup
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail','io.ox/core/notifications']).done(function (dialogs, api, view, notifications) {
                 var sidePopup = new dialogs.SidePopup({ tabTrap: true }),
+                    // this pseudo app is used instead of the real files app to save resources. Because the real files app is not required when displaying a side popup.
                     pseudoApp = {
-                        getName: function() { return ''; },
-                        folder: {
+                        getName: function() { return 'io.ox/files'; },
+                        folder: _.extend({
                             set: function (folderId) {
                                 ox.launch('io.ox/files/main', { folder: folderId, perspective: 'fluid:list' }).done(function () {
                                     var app = this;
@@ -49,9 +50,9 @@ define('io.ox/mail/detail/links',
                                 });
                             },
                             getData: function () {
-                                return $.Deferred().reject();
+                                return $.Deferred().resolve(data);
                             }
-                        }
+                        }, data)
                     };
 
                 sidePopup.show(e, function (popupNode) {
