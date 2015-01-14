@@ -320,6 +320,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onCursorUpDown: function (e) {
 
             var items = this.getItems(),
+                viewLayout = this.view.app.props.get('layout') || 'list',
                 current = $(document.activeElement),
                 index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
 
@@ -337,7 +338,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetCheckmark(items);
             this.pick(index, items, e);
             //alternative selection mode needs this, has no effect in default mode
-            if ( this.isMultiple(e) || this.isRange(e) ) {
+            if ( this.isMultiple(e) || this.isRange(e) || viewLayout === 'list') {
                 this.triggerChange(items);
             } else {
                 this.selectEvents(items);
