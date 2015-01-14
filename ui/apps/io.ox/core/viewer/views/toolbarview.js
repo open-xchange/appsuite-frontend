@@ -38,8 +38,11 @@ define('io.ox/core/viewer/views/toolbarview', [
             'AUDIO': 'fa-file-audio-o',
             'PDF': 'fa-file-pdf-o'
         },
+        TOOLBAR_ID = 'io.ox/core/viewer/toolbar',
+        TOOLBAR_LINKS_ID = TOOLBAR_ID + '/links',
+        TOOLBAR_LINKS_DROPDOWN_ID = TOOLBAR_LINKS_ID + '/dropdown',
         TOOLBAR_ACTION_ID = 'io.ox/core/viewer/actions/toolbar',
-        DROPDOWN_ACTION_ID = TOOLBAR_ACTION_ID + '/dropdown',
+        TOOLBAR_ACTION_DROPDOWN_ID = TOOLBAR_ACTION_ID + '/dropdown',
         ITEM_TYPE_FILE = 'file',
         ITEM_TYPE_MAIL_ATTACHMENT = 'mail-attachment',
         ITEM_TYPE_PIM_ATTACHMENT = 'pim-attachment',
@@ -50,8 +53,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         };
 
     // define extension points for this ToolbarView
-    var toolbarPoint = Ext.point('io.ox/core/viewer/toolbar'),
-        toolbarLinksPoint = Ext.point('io.ox/core/viewer/toolbar/links'),
+    var toolbarPoint = Ext.point(TOOLBAR_ID),
+        toolbarLinksPoint = Ext.point(TOOLBAR_LINKS_ID),
         // toolbar link meta object used to generate extension points later
         toolbarLinksMeta = {
             // high priority links
@@ -74,13 +77,13 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'hi',
                 icon: 'fa fa-bars',
-                ref: DROPDOWN_ACTION_ID,
+                ref: TOOLBAR_ACTION_DROPDOWN_ID,
                 customize: function (baton) {
                     var self = this,
                         fileSource = baton.model.get('source'),
                         pimModule = baton.model.get('module') || '',
                         dropdownLinks = LinksPattern.DropdownLinks({
-                            ref: DROPDOWN_ACTION_ID + '/' + fileSource + pimModule,
+                            ref: TOOLBAR_LINKS_DROPDOWN_ID + '/' + fileSource + pimModule,
                             wrap: false,
                             //function to call when dropdown is empty
                             emptyCallback: function () {
@@ -137,9 +140,23 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // define actions of this ToolbarView
     var Action = ActionsPattern.Action;
-    new Action(DROPDOWN_ACTION_ID, {
+    new Action(TOOLBAR_ACTION_DROPDOWN_ID, {
         requires: function () { return true; },
         action: $.noop
+    });
+    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription', {
+        id: 'edit-description',
+        requires: function () {
+            return true;
+        },
+        action: function (baton) {
+            var actionBaton = Ext.Baton({ data: {
+                id: baton.model.get('id'),
+                folder_id: baton.model.get('folderId'),
+                description: baton.model.get('description')
+            }});
+            ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
+        }
     });
     new Action(TOOLBAR_ACTION_ID + '/print', {
         id: 'print',
@@ -170,25 +187,39 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     // action links for the function dropdown for Drive files
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
+        index: 80,
+        id: 'rename',
+        label: gt('Rename'),
+        ref: 'io.ox/files/actions/rename',
+        section: 'edit'
+    });
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
+        index: 90,
+        id: 'editdescription',
+        label: gt('Edit description'),
+        ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription',
+        section: 'edit'
+    });
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 100,
         id: 'share',
         label: gt('Share'),
         ref: 'io.ox/files/icons/share'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 200,
         id: 'download',
         label: gt('Download'),
         ref: 'io.ox/files/actions/download'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 300,
         id: 'print',
         label: gt('Print'),
         ref: TOOLBAR_ACTION_ID + '/print'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_FILE, {
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 400,
         id: 'delete',
         label: gt('Delete'),
@@ -196,19 +227,19 @@ define('io.ox/core/viewer/views/toolbarview', [
     });
 
     // action links of the function dropdown for mail attachments
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
         index: 100,
         id: 'open',
         label: gt('Open in browser'),
         ref: 'io.ox/mail/actions/open-attachment'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
         index: 200,
         id: 'download',
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     });
-    new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
+    new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
         index: 300,
         id: 'save',
         label: gt('Save to Drive'),
@@ -217,19 +248,19 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     // action links of the function dropdown for pim attachments
     _.each(ACTION_REF_PREFIX, function (prefix, moduleId) {
-        new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
+        new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
             index: 100,
             id: 'open',
             label: gt('Open in browser'),
             ref: prefix + '/actions/open-attachment'
         });
-        new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
+        new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
             index: 200,
             id: 'download',
             label: gt('Download'),
             ref: prefix + '/actions/download-attachment'
         });
-        new LinksPattern.ActionLink(DROPDOWN_ACTION_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
+        new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
             index: 300,
             id: 'save',
             label: gt('Save to Drive'),
