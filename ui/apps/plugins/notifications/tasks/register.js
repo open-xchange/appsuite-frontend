@@ -453,6 +453,12 @@ define('plugins/notifications/tasks/register',
                     }
                 });
             });
+            api.on('update', function (e, task) {
+                if (notifications.collection._byId[task.id]) {
+                    //get fresh data to be consistent(name, due date change etc)
+                    reminderAPI.getReminders();
+                }
+            });
         }
     });
 
