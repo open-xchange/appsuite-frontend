@@ -250,14 +250,16 @@ define('io.ox/core/tk/autocomplete',
                                     label: facet.name,
                                     type: 'group'
                                 })
-                                //delimiter
-                                .appendTo(scrollpane);
+                                // delimiter
+                                .appendTo(scrollpane)
+                                // kepp open on click
+                                .on('click mousedown', fnIgnore);
                         }
                         //values
                         _([].concat(facet.values || facet)).each(function (value) {
                             value.facet = facet.id;
                             var node = $('<div class="autocomplete-item">')
-                                .on('click', fnSelectItem);
+                                .on('click mousedown', fnSelectItem);
                             //intend
                             if (regular)
                                 node.addClass('indent');
@@ -273,6 +275,12 @@ define('io.ox/core/tk/autocomplete',
                 select(e.data.index);
                 o.click.call(self.get(0), e);
                 close();
+            },
+
+            fnIgnore = function () {
+                // kepp dropdown open
+                // stopPropagation, preventDefault
+                return false;
             },
 
             // handle search result
