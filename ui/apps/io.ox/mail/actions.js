@@ -478,7 +478,10 @@ define('io.ox/mail/actions',
         id: 'vcard',
         capabilities: 'contacts',
         requires: function (e) {
-            var context = _.isArray(e.context) ? _.first(e.context) : e.context,
+            if (!e.collection.has('one')) {
+                return false;
+            }
+            var context = e.context,
                 hasRightSuffix = (/\.vcf$/i).test(context.filename),
                 isVCardType = (/^text\/(x-)?vcard/i).test(context.content_type),
                 isDirectoryType = (/^text\/directory/i).test(context.content_type);
