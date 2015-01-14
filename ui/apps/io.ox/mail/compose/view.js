@@ -93,7 +93,7 @@ define('io.ox/mail/compose/view', [
         id: 'add_attachments',
         index: INDEX += 100,
         draw: function (baton) {
-            var node = $('<div data-extension-id="add_attachments" class="col-xs-12 col-md-5 col-md-offset-1">');
+            var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
             extensions.attachment.call(node, baton);
             this.append(node);
         }
@@ -154,7 +154,7 @@ define('io.ox/mail/compose/view', [
             signatureDropdown.$ul.addClass('pull-right');
 
             this.append(
-                $('<div data-extension-id="composetoolbar-menu" class="col-xs-12 col-md-6">').append(
+                $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(
                     $('<div class="pull-right text-right">').append(
                         signatureDropdown.render().$el.addClass('signatures text-left'),
                         optionDropdown.render().$el.addClass('text-left')
@@ -214,7 +214,11 @@ define('io.ox/mail/compose/view', [
                     .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)')
             );
             // apply picture halo lazy load
-            contactAPI.pictureHalo(node, _.extend({}, baton.participantModel.toJSON(), { width: 42, height: 42, scaleType: 'contain' }));
+            contactAPI.pictureHalo(
+                node,
+                baton.participantModel.toJSON(),
+                { width: 42, height: 42 }
+            );
         }
     });
 
@@ -271,8 +275,8 @@ define('io.ox/mail/compose/view', [
         className: 'io-ox-mail-compose container default-content-padding',
 
         events: {
-            'click [data-action="add-cc"]':     'toggleCC',
-            'click [data-action="add-bcc"]':    'toggleBCC',
+            'click [data-action="add-cc"]': function () { this.toggleTokenfield('cc'); },
+            'click [data-action="add-bcc"]': function () { this.toggleTokenfield('bcc'); },
             'keyup [data-extension-id="subject"] input': 'setSubject'
         },
 
@@ -732,43 +736,20 @@ define('io.ox/mail/compose/view', [
             return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
         },
 
-        toggleCC: function () {
-            return this.toggleInput('cc');
-        },
-
-        toggleBCC: function () {
-            return this.toggleInput('bcc');
-        },
-
-        toggleInput: function (type, show) {
+        toggleTokenfield: function (type, show) {
             var button = $('[data-action="add-' + type + '"]'),
                 input = this.$el.find('[data-extension-id="' + type + '"]');
             if (input.hasClass('hidden') || show) {
-                this.showInput(type, input);
+                input.removeClass('hidden');
                 button.addClass('active').attr('aria-checked', true);
-            }
-            /*
-            We don't want to close it automatically! Bug: 35730
-            else {
-                this.closeInput(type, input);
+            } else if (this.model.get(type).length === 0) {
+                //We don't want to close it automatically! Bug: 35730
+                this.model.set(type, []);
+                input.addClass('hidden');
+                $(window).trigger('resize.tinymce');
                 button.removeClass('active').attr('aria-checked', false);
-            } */
+            }
             return input;
-        },
-
-        showInput: function (type, input) {
-            var type = type || 'cc',
-                input = input || this.$el.find('[data-extension-id="' + type + '"]');
-            input.removeClass('hidden');
-        },
-
-        closeInput: function (type, input) {
-            var type = type || 'cc',
-                input = input || this.$el.find('[data-extension-id="' + type + '"]');
-
-            this.model.set(type, []);
-            input.addClass('hidden');
-            $(window).trigger('resize.tinymce');
         },
 
         loadEditor: function (content) {
@@ -957,11 +938,15 @@ define('io.ox/mail/compose/view', [
 
             return this.changeEditorMode().done(function () {
                 if (data.replaceBody !== 'no') {
+                    var mode = self.model.get('mode');
                     // set focus in compose and forward mode to recipient tokenfield
-                    if (/(compose|forward)/.test(self.model.get('mode'))) {
+                    if (/(compose|forward)/.test(mode)) {
                         self.$el.find('.tokenfield:first .token-input').focus();
                     } else {
                         self.editor.focus();
+                    }
+                    if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
+                        self.toggleTokenfield('cc', true);
                     }
                     self.setBody(self.model.getContent());
                     self.model.dirty(false);
@@ -1019,10 +1004,10 @@ define('io.ox/mail/compose/view', [
                             $(this).typeahead('val', '');
                         } else if ((/^cc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleInput('cc', true).find('.token-input').focus();
+                            self.toggleTokenfield('cc', true).find('.token-input').focus();
                         } else if ((/^bcc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleInput('bcc', true).find('.token-input').focus();
+                            self.toggleTokenfield('bcc', true).find('.token-input').focus();
                         }
                     }
                 });
