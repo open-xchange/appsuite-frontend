@@ -29,7 +29,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         id: 'fileinfo',
         draw: function (baton) {
             //console.info('FileInfoView.draw()');
-            var panel, panelHeader, panelBody,
+            var panel, panelBody,
                 fileName, size, modified, folderId,
                 model = baton && baton.model;
 
@@ -43,7 +43,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 labelNode = $('<dt>').addClass('col-xs-12 col-md-4').text(label);
                 contentNode = $('<dd>').addClass('col-xs-12 col-md-8').text(content);
                 row.append(labelNode, contentNode);
-                panelBody.append(row);
+                panelBody.find('dl').append(row);
             }
 
             if (!model) { return; }
@@ -53,10 +53,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             modified = Util.getDateFormated(model.get('lastModified'));
             folderId = model.get('folderId');
 
-            panel = $('<div>').addClass('panel panel-default');
-            panelHeader = $('<div>').addClass('panel-heading');
-            panelHeader.append($('<h3>').addClass('panel-title').text(gt('General Info')));
-            panelBody = $('<dl>').addClass('panel-body');
+            panel = Util.createPanelNode({ title: gt('General Info') });
+            panelBody = panel.find('.panel-body').append($('<dl>'));
 
             addRow(gt('Filename'), fileName);
             addRow(gt('Size'), size);
@@ -84,7 +82,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 addRow(gt('Saved in'), '-');
             });
 
-            panel.append(panelHeader, panelBody);
             baton.$el.empty().append(panel);
         }
     });
@@ -98,7 +95,20 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         className: 'viewer-fileinfo',
 
         events: {
+            'click .toggle-panel': 'onTogglePanel'
+        },
 
+        onTogglePanel: function (event) {
+            var panelBody = this.$el.find('.panel>.panel-body');
+            event.preventDefault();
+
+            if (panelBody.hasClass('panel-collapsed')) {
+                // expand the panel
+                panelBody.slideDown().removeClass('panel-collapsed');
+            } else {
+                // collapse the panel
+                panelBody.slideUp().addClass('panel-collapsed');
+            }
         },
 
         initialize: function () {

@@ -29,7 +29,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         id: 'versions',
         draw: function (baton) {
             //console.info('FileVersionsView.draw()');
-            var panel, panelHeader, panelBody,
+            var panel, panelBody,
                 model = baton && baton.model,
                 versions = model && model.get('versions');
 
@@ -37,20 +37,13 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             if (!model || !model.isDriveFile()) { return; } // mail and PIM attachments don't support versions
 
             // render panel
-            panel = $('<div>').addClass('panel panel-default');
-            panelHeader = $('<div>').addClass('panel-heading').append(
-                $('<h3>').addClass('panel-title').text(gt('Versions')),
-                $('<a>', { href: '#', role: 'button', tabindex: 1 }).addClass('toggle-panel panel-heading-button btn').append(
-                    $('<i>').addClass('fa fa-chevron-down')
-                )
-            );
-            panelBody = $('<div>').addClass('panel-body panel-collapsed').css('display', 'none');
+            panel = Util.createPanelNode({ title: gt('Versions'), collapsed: true });
+            panelBody = panel.find('.panel-body');
 
             if (_.isArray(versions)) {
                 Ext.point(POINT + '/list').invoke('draw', panelBody, Ext.Baton({ $el: panelBody, model: model, data: model.get('origData') }));
             }
 
-            panel.append(panelHeader, panelBody);
             baton.$el.append(panel);
         }
     });
@@ -174,18 +167,14 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             'click .toggle-panel': 'onTogglePanel'
         },
 
-        onTogglePanel: function () {
-
+        onTogglePanel: function (event) {
             var model = this.model,
-                panelBody = this.$el.find('.panel>.panel-body'),
-                panelIcon = this.$el.find('.panel>.panel-heading i');
+                panelBody = this.$el.find('.panel>.panel-body');
 
+            event.preventDefault();
             if (!model) { return; }
 
             if (panelBody.hasClass('panel-collapsed')) {
-                // switch panel icon
-                panelIcon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-
                 // get file version history
                 if (model.get('versions') === null) {
                     FilesAPI.versions({
@@ -198,17 +187,15 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                     .fail(function (err) {
                         console.warn('FilesAPI.versions() error ', err);
                     });
+
                 } else {
                     // expand the panel
-                    panelBody.slideDown();
-                    panelBody.removeClass('panel-collapsed');
+                    panelBody.slideDown().removeClass('panel-collapsed');
                 }
 
             } else {
                 // collapse the panel
-                panelBody.slideUp();
-                panelBody.addClass('panel-collapsed');
-                panelIcon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                panelBody.slideUp().addClass('panel-collapsed');
             }
         },
 
@@ -220,8 +207,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             Ext.point(POINT + '/list').invoke('draw', panelBody, baton);
 
             // expand the panel
-            panelBody.slideDown();
-            panelBody.removeClass('panel-collapsed');
+            panelBody.slideDown().removeClass('panel-collapsed');
         },
 
         initialize: function () {

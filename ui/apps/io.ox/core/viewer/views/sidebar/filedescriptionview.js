@@ -15,8 +15,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
     'io.ox/core/extPatterns/actions',
     'io.ox/core/viewer/eventdispatcher',
     'io.ox/files/api',
+    'io.ox/core/viewer/util',
     'gettext!io.ox/core/viewer'
-], function (Ext, ActionsPattern, EventDispatcher, FilesAPI, gt) {
+], function (Ext, ActionsPattern, EventDispatcher, FilesAPI, Util, gt) {
 
     'use strict';
 
@@ -28,7 +29,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         id: 'description',
         draw: function (baton) {
             //console.info('FileDescriptionView.draw()');
-            var panel, panelHeader, panelBody, descriptionLabel, descriptionTextArea,
+            var panel,
                 labelString,
                 model = baton && baton.model,
                 description = model && model.get('description');
@@ -47,29 +48,24 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                     //console.info('FilesAPI.get() ok ', file);
                     model.set('description', (file && _.isString(file.description) ? file.description : ''));
                 })
-                .fail(function (/*err*/) {
-                    //console.info('FilesAPI.get() error ', err);
+                .fail(function (err) {
+                    console.warn('FilesAPI.get() error ', err);
                 });
 
             } else {
-                // render panel
                 labelString = (description.length > 0) ? description : gt('Add a description');
 
-                panel = $('<div>').addClass('panel panel-default');
-                panelHeader = $('<div>').addClass('panel-heading');
-                panelHeader.append($('<h3>').addClass('panel-title').text(gt('Description')));
-                //panelHeader.append($('<a>', { id: 'edit-button', href: '#', role: 'button', tabindex: 1 }).addClass('panel-heading-button btn').append($('<i>').addClass('fa fa-pencil')));
-                Ext.point(POINT + '/edit').invoke('draw', panelHeader, baton);
+                // render panel
+                panel = Util.createPanelNode({ title: gt('Description') });
+                panel.find('.panel-body').append(
+                    $('<div>').addClass('row').append(
+                        $('<div>').addClass('col-xs-12 col-md-12').append(
+                            $('<span>').addClass('description description-label').text(labelString),
+                            $('<textarea>').addClass('description description-text').val(description)
+                        )
+                    )
+                );
 
-                descriptionLabel = $('<span>').addClass('description description-label').text(labelString);
-                descriptionTextArea = $('<textarea>').addClass('description description-text').val(description);
-
-                panelBody = $('<div>').addClass('panel-body')
-                .append(($('<div>').addClass('row'))
-                        .append(($('<div>').addClass('col-xs-12 col-md-12'))
-                                .append(descriptionLabel, descriptionTextArea)));
-
-                panel.append(panelHeader, panelBody);
                 baton.$el.append(panel);
             }
         }
@@ -110,10 +106,23 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         className: 'viewer-filedescription',
 
         events: {
-            //'click #edit-button': 'onStartEdit',
-            'click .description-label': 'onStartEdit'
+            'click .toggle-panel': 'onTogglePanel',
+            'dblclick .description-label': 'onStartEdit'
             //'blur .description-text': 'onStopEdit',
             //'keyup': 'onKeyUp'
+        },
+
+        onTogglePanel: function (event) {
+            var panelBody = this.$el.find('.panel>.panel-body');
+            event.preventDefault();
+
+            if (panelBody.hasClass('panel-collapsed')) {
+                // expand the panel
+                panelBody.slideDown().removeClass('panel-collapsed');
+            } else {
+                // collapse the panel
+                panelBody.slideUp().addClass('panel-collapsed');
+            }
         },
 
         onStartEdit: function () {
