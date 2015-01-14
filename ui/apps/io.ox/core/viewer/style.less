@@ -26,8 +26,6 @@
 @viewer-sidebar-bgcolor: #202020;
 @viewer-sidebar-width: 400px;
 
-@viewer-sidebar-description-max-height: 200px;
-
 .io-ox-viewer {
 
     background-color: @viewer-background-color;
@@ -240,13 +238,18 @@
                     td {
                         padding: 4px;
                         border-top: none;
-                        border-bottom: 1px solid #555555;
                     }
+
+                    .dropdown > a {
+                        color: hsl(196, 100%, 50%);
+                        &:hover {
+                            color: hsl(196, 90%, 40%);
+                        }
+                    }
+
                 }
 
                 .description {
-                    max-height: @viewer-sidebar-description-max-height;
-
                     &.description-text {
                         color: @viewer-text-color;
                         background-color: transparent;
@@ -260,9 +263,8 @@
                     &.description-label {
                         display: block;
                         white-space: pre-wrap;
-                        cursor: pointer;
-                        overflow-y: auto;
                         padding: 3px;
+                        .user-select(text);
 
                         &.editmode {
                             display: none;
