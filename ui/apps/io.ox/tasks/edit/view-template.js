@@ -17,6 +17,7 @@ define('io.ox/tasks/edit/view-template',
      'io.ox/core/date',
      'io.ox/core/notifications',
      'io.ox/backbone/forms',
+     'io.ox/backbone/mini-views/datepicker',
      'io.ox/calendar/util',
      'io.ox/tasks/edit/util',
      'io.ox/calendar/edit/recurrence-view',
@@ -26,7 +27,7 @@ define('io.ox/tasks/edit/view-template',
      'io.ox/core/extensions',
      'io.ox/tasks/util',
      'settings!io.ox/tasks'
-    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
+    ], function (gt, views, date, notifications, forms, DatePicker, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
 
     'use strict';
 
@@ -154,34 +155,38 @@ define('io.ox/tasks/edit/view-template',
         }
     });
 
-    point.extend(new forms.DatePicker({
+    point.basicExtend({
         id: 'start_date',
         index: 500,
-        labelClassName: 'task-edit-label',
-        display: 'DATE',
-        className: 'col-xs-6 collapsed',
-        attribute: 'start_date',
-        required: false,
-        label: gt('Start date'),
-        utc: true,
-        clearButton: _.device('small')
-    }), {
-        row: '4'
+        row: '4',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'col-xs-6 collapsed',
+                    attribute: 'start_date',
+                    label: gt('Start date'),
+                    clearButton: true
+                }).render().$el
+            );
+        }
     });
 
-    point.extend(new forms.DatePicker({
+    point.basicExtend({
         id: 'end_date',
         index: 600,
-        labelClassName: 'task-edit-label',
-        display: 'DATE',
-        className: 'col-xs-6 collapsed',
-        attribute: 'end_date',
-        required: false,
-        label: gt('Due date'),
-        utc: true,
-        clearButton: _.device('small')
-    }), {
-        row: '4'
+        row: '4',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'col-xs-6 collapsed',
+                    attribute: 'end_date',
+                    label: gt('Due date'),
+                    clearButton: true
+                }).render().$el
+            );
+        }
     });
 
     point.extend(new RecurrenceView({
@@ -200,7 +205,7 @@ define('io.ox/tasks/edit/view-template',
         row: '6',
         draw: function (baton) {
             var selector;
-            this.append($('<div class="col-sm-5 collapsed">').append(
+            this.append($('<div class="col-sm-6 collapsed">').append(
                     $('<label>').text(gt('Remind me')).attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('form-control')
                     .append($('<option>')
                     .text(''), taskUtil.buildDropdownMenu())
@@ -217,18 +222,22 @@ define('io.ox/tasks/edit/view-template',
     });
 
     // reminder date
-    point.extend(new forms.DatePicker({
+    point.basicExtend({
         id: 'alarm',
         index: 900,
-        className: 'col-sm-6 col-sm-offset-1 collapsed',
-        display: 'DATETIME',
-        attribute: 'alarm',
-        label: gt('Reminder date'),
-        required: false,
-        //add clearbutton on mobile devices
-        clearButton: _.device('small')
-    }), {
-        row: '6'
+        row: '6',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    display: 'DATETIME',
+                    className: 'col-xs-6 collapsed',
+                    attribute: 'alarm',
+                    label: gt('Reminder date'),
+                    clearButton: true
+                }).render().$el
+            );
+        }
     });
 
     point.extend(new forms.SelectBoxField({

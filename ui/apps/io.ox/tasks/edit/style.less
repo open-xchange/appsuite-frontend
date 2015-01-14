@@ -146,6 +146,8 @@
             margin-top: 0;
             padding-bottom: 40px;
         }
+        //datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
+        .form-control[readonly] { background-color: #fff; }
 
         .participant-wrapper {
             .participant-email {

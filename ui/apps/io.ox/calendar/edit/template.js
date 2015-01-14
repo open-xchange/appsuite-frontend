@@ -18,13 +18,14 @@ define('io.ox/calendar/edit/template',
      'io.ox/contacts/util',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
+     'io.ox/backbone/mini-views/datepicker',
      'io.ox/core/tk/attachments',
      'io.ox/calendar/edit/recurrence-view',
      'io.ox/calendar/api',
      'io.ox/participants/views',
      'settings!io.ox/calendar',
      'io.ox/core/capabilities'
-    ], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, capabilities) {
+    ], function (ext, gt, calendarUtil, contactUtil, views, forms, DatePicker, attachments, RecurrenceView, api, pViews, settings, capabilities) {
 
     'use strict';
 
@@ -130,27 +131,42 @@ define('io.ox/calendar/edit/template',
     }));
 
     // start date
-    point.extend(new forms.DatePicker({
+    point.basicExtend({
         id: 'start-date',
         index: 400,
-        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
-        labelClassName: 'control-label',
-        display: 'DATETIME',
-        attribute: 'start_date',
-        label: gt('Starts on')
-    }));
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'dateinput col-xs-6 col-md-4',
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
+                    attribute: 'start_date',
+                    label: gt('Starts on')
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                }).render().$el
+            );
+        }
+    });
 
     // end date
-    point.extend(new forms.DatePicker({
+    point.basicExtend({
         id: 'end-date',
-        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
-        labelClassName: 'control-label',
-        display: 'DATETIME',
         index: 500,
-        attribute: 'end_date',
-        label: gt('Ends on')
-    }), {
-        nextTo: 'start-date'
+        nextTo: 'start-date',
+        draw: function (baton) {
+            this.append(
+                new DatePicker({
+                    model: baton.model,
+                    className: 'dateinput col-xs-6 col-md-4',
+                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
+                    attribute: 'end_date',
+                    label: gt('Ends on')
+                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                    this.toggleTimeInput(!fulltime);
+                }).render().$el
+            );
+        }
     });
 
     // find free time link

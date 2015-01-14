@@ -94,6 +94,31 @@ define('io.ox/calendar/model',
                 });
 
                 return participants;
+            },
+
+            // special get function for datepicker
+            getDate: function (attr) {
+                var time = this.get.apply(this, arguments);
+                if (this.get('full_time')) {
+                    time = date.Local.utc(time);
+                    // fake end date for datepicker
+                    if (attr === 'end_date') {
+                        time = new date.Local(time).add(-date.DAY).getTime();
+                    }
+                }
+                return time;
+            },
+
+            // special set function for datepicker
+            setDate: function (attr, time) {
+                if (this.get('full_time')) {
+                    // fix fake end date for model
+                    if (attr === 'end_date') {
+                        time = new date.Local(time).add(date.DAY).getTime();
+                    }
+                    arguments[1] = date.Local.localTime(time);
+                }
+                return this.set.apply(this, arguments);
             }
         },
         getUpdatedAttributes: function (model) {
