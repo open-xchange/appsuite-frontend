@@ -19,6 +19,7 @@
 @viewer-toolbar-bgcolor: #000000;
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-hover-bgcolor: #333333;
+@viewer-toolbar-focus-bgcolor: #222222;
 @viewer-toolbar-active-bgcolor: #222222;
 @viewer-toolbar-link-width: 60px;
 
@@ -34,25 +35,21 @@
     color: @viewer-text-color;
 
     ::-webkit-scrollbar {
-        width: 8px;
+        width: 12px;
     }
     ::-webkit-scrollbar-button {
-        width: 8px;
+        width: 12px;
         height:5px;
     }
     ::-webkit-scrollbar-track {
-        background: #eee;
-        border: thin solid lightgray;
-        box-shadow: 0px 0px 3px #dfdfdf inset;
-        border-radius:10px;
+        background: #999;
     }
     ::-webkit-scrollbar-thumb {
-        background: #888;
-        border: thin solid #707070;
-        border-radius:10px;
+        background: #666;
+        border: thin solid #555;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #7d7d7d;
+        background: #555;
     }
 
     .viewer-toolbar {
@@ -78,11 +75,15 @@
                 outline: none;
                 text-decoration: none;
                 color: #999999 !important;
-                &:hover,
+                border-right: 1px solid #000000;
+                &:hover {
+                    color: #ffffff !important;
+                    background-color: @viewer-toolbar-hover-bgcolor;
+                }
                 &:focus,
                 &:active {
                     color: #ffffff !important;
-                    background-color: @viewer-toolbar-hover-bgcolor;
+                    background-color: @viewer-toolbar-focus-bgcolor;
                 }
             }
 
