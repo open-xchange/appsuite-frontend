@@ -459,6 +459,7 @@ define('io.ox/core/tk/selection', [
             nodes.removeClass(self.classSelected).find('input.reflect-selection').prop('checked', false);
 
             for (; i < nodes.length; i++) {
+
                 node = nodes.eq(i);
                 // is selected?
                 var objID = node.attr('data-obj-id');
