@@ -450,7 +450,7 @@ define('io.ox/files/api',
             var formData = new FormData();
             if ('filename' in options) {
                 formData.append('file', options.file, options.filename);
-            } else {
+            } else if ('file' in options) {
                 formData.append('file', options.file);
             }
 

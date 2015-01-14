@@ -35,11 +35,25 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
 
         next: function () {
             var item = this.items[++this.current];
-            if (item) this.process(item); else this.done();
+            if (item) this.process(item); else this.resolve();
         },
 
-        done: function () {
+        resolve: function () {
             this.deferred.resolve(this);
+        },
+
+        done: function (callback) {
+            return this.deferred.done(callback.bind(this));
+        },
+
+        getState: function () {
+            return this.deferred.state();
+        },
+
+        getResults: function () {
+            return _(this.items).map(function (item) {
+                return { description: item.description, duration: item.getDuration(), state: item.getState() };
+            });
         }
     });
 
@@ -58,10 +72,16 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
         // process item
         process: function (item) {
             console.log('Running test:', item.description);
-            item.run().done(function () {
-                console.log('Test finished. Took:', metrics.formatTimestamp(item.getDuration()));
-                this.next();
-            }.bind(this));
+            item.run().then(
+                function success() {
+                    console.log('Test finished. Took:', metrics.formatTimestamp(item.getDuration()));
+                    this.next();
+                }.bind(this),
+                function fail() {
+                    console.error('Test failed:', item.description);
+                    this.next();
+                }.bind(this)
+            );
         },
 
         getDuration: function () {
@@ -150,9 +170,11 @@ define('io.ox/core/metrics/bot/main', ['io.ox/core/metrics/metrics', 'io.ox/core
         },
 
         suite: function (callback) {
-            new Suite(callback).run().done(function (suite) {
+            var suite = new Suite(callback);
+            suite.run().done(function (suite) {
                 console.log('Suite finished.', 'Took: ' + metrics.formatTimestamp(suite.getDuration()), 'Browser: ' + metrics.getBrowser());
             });
+            return suite;
         }
     };
 

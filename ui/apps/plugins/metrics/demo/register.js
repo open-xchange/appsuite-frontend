@@ -12,11 +12,12 @@
  */
 
 define('plugins/metrics/demo/register', [
+    'io.ox/core/metrics/metrics',
     'io.ox/core/metrics/bot/main',
     'settings!plugins/metrics/demo',
     'settings!io.ox/mail',
     'io.ox/mail/api'
-], function (bot, settings, mailSettings, api) {
+], function (metrics, bot, settings, mailSettings, api) {
 
     'use strict';
 
@@ -27,17 +28,18 @@ define('plugins/metrics/demo/register', [
         FIRST_LETTERS = settings.get('first-letters', 'bigge'),
         RECIPIENT = settings.get('recipient', 'matthias.biggeleben@open-xchange.com'),
         FILE = settings.get('cloud-attachment', { folder_id: '13894', id: '63605' }),
-        MAIL_WITH_THUMBNAILS = settings.get('message-with-thumbnails', { folder_id: 'default0/INBOX', id: 61192 });
+        MAIL_WITH_THUMBNAILS = settings.get('message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 85 }),
+        STORE_FOLDER = settings.get('store-folder', 73407);
 
     bot.ready(function () {
 
-        this.suite(function () {
+        var suite = this.suite(function () {
 
             //
             // Test 1
             //
 
-            this.xtest('Open and answer mail', function () {
+            this.test('Open and answer mail', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -81,7 +83,7 @@ define('plugins/metrics/demo/register', [
             // Test 2
             //
 
-            this.xtest('Copy and delete mail', function () {
+            this.test('Copy and delete mail', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -146,7 +148,7 @@ define('plugins/metrics/demo/register', [
             // Test 3
             //
 
-            this.xtest('Write and send mail', function () {
+            this.test('Write and send mail', function () {
 
                 this.step('Open compose dialog', function (done) {
 
@@ -195,7 +197,7 @@ define('plugins/metrics/demo/register', [
             // Test 4
             //
 
-            this.xtest('Write mail and send with attachment (local)', function () {
+            this.test('Write mail and send with attachment (local)', function () {
 
                 this.step('Open compose dialog', function (done) {
 
@@ -251,7 +253,7 @@ define('plugins/metrics/demo/register', [
             // Test 5
             //
 
-            this.xtest('Write mail and send with attachment (cloud)', function () {
+            this.test('Write mail and send with attachment (cloud)', function () {
 
                 this.step('Open compose dialog with attachment from cloud', function (done) {
 
@@ -301,7 +303,7 @@ define('plugins/metrics/demo/register', [
             // Test 6
             //
 
-            this.xtest('Search and display mail listing', function () {
+            this.test('Search and display mail listing', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -388,6 +390,19 @@ define('plugins/metrics/demo/register', [
                     .done(done);
                 });
             });
+        });
+
+        suite.done(function () {
+
+            var line = metrics.getBrowser() + ';' + _.now() + ';';
+
+            line += _(this.getResults())
+                .map(function (item) {
+                    return item.state === 'resolved' ? metrics.toSeconds(item.duration) : 'N/A';
+                })
+                .join(';');
+
+            metrics.store.toFile(STORE_FOLDER, 'performance', line);
         });
     });
 });
