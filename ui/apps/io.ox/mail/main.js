@@ -1046,7 +1046,17 @@ define('io.ox/mail/main', [
                         var collectionLoader = new CollectionLoader({
                                 module: 'mail',
                                 mode: 'search',
-                                fetch: function () {
+                                fetch: function (params) {
+                                    var limit = params.limit.split(','),
+                                        start = parseInt(limit[0]),
+                                        size = parseInt(limit[1]) - start;
+
+                                    search.model.set({
+                                        'start': start,
+                                        'size': size,
+                                        'extra': 1
+                                    }, { silent: true });
+
                                     var self = this;
                                     var params = { sort: app.props.get('sort'), order: app.props.get('order') };
                                     return search.apiproxy.query(true, params).then(function (response) {
@@ -1059,11 +1069,6 @@ define('io.ox/mail/main', [
                                         };
                                         return list;
                                     });
-                                },
-                                getQueryParams: function (params) {
-                                    // paging support
-                                    search.model.set('start', params.offset || 0, { silent: true });
-                                    return {};
                                 },
                                 cid: function () {
                                     return 'search/' + search.model.getCompositeId() +
@@ -1095,6 +1100,13 @@ define('io.ox/mail/main', [
                                         if (appname === app.get('name')) {
                                             // register/connect once
                                             if (app.listView.loader.mode !== 'search') register();
+                                            // reset start index
+                                            win.facetedsearch.view.model.set(
+                                                {
+                                                    'start': 0,
+                                                    'size': 30,
+                                                    'extra': 1
+                                                }, {silent: true});
                                             // load
                                             app.listView.load();
                                             win.facetedsearch.focus();
