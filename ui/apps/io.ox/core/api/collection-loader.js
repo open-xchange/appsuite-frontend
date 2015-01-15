@@ -66,6 +66,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                         // use case: reload on new messages; race-conditions with external clients
                         if (_.cid(_(data).first()) !== self.collection.last().cid) {
                             self.done();
+                            params.thread = params.action === 'threadedAll';
                             self.reload(params, self.LIMIT);
                             return;
                         }
