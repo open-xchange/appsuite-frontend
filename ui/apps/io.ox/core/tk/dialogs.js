@@ -590,7 +590,9 @@ define('io.ox/core/tk/dialogs', [
             pane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a href="#" class="close" data-action="close" role="button" tabindex="1">&times;</a>')
+                    $('<a href="#" class="close" data-action="close" role="button" tabindex="1">').append(
+                        $('<i class="fa fa-times">')
+                    )
                 ),
 
             popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
