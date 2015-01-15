@@ -79,6 +79,8 @@ define('io.ox/core/viewer/views/sidebarview', [
                 this.fileVersionsView.render(data).el
             );
 
+            this.$el.attr('tabindex', -1);
+
             return this;
         },
 

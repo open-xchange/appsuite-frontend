@@ -34,18 +34,18 @@
     color: @viewer-text-color;
 
     ::-webkit-scrollbar {
-        width: 12px;
+        width: 14px;
     }
     ::-webkit-scrollbar-button {
-        width: 12px;
-        height:5px;
+        height: 2px;
     }
     ::-webkit-scrollbar-track {
-        background: #999;
+        background: #aaa;
     }
     ::-webkit-scrollbar-thumb {
         background: #666;
-        border: thin solid #555;
+        border: 2px solid #aaa;
+        width: 12px;
     }
     ::-webkit-scrollbar-thumb:hover {
         background: #555;
@@ -125,6 +125,7 @@
         top: @viewer-toolbar-height;
         width: 100%;
         bottom: 0;
+        outline: none;
 
         #viewer-carousel,
         .carousel-inner,
@@ -201,6 +202,7 @@
         display: none;
         box-shadow: inset 0px 2px 2px 0px #000000;
         overflow-y: auto;
+        outline: none;
         &.opened {
             display: block;
         }

@@ -84,6 +84,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // append carousel to view and blend the slide caption in
             this.$el.append(carouselRoot);
+            this.$el.attr('tabindex', -1);
 
             // set the first selected file active, blend its caption, and preload its neighbours
             carouselInner.children().eq(startIndex).addClass('active');

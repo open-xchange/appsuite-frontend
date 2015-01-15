@@ -101,7 +101,7 @@ define('io.ox/core/viewer/views/mainview', [
             var viewerRootEl = this.$el;
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
-                var tabableActions = viewerRootEl.find('[tabindex][disabled!="disabled"]:visible'),
+                var tabableActions = viewerRootEl.find('[tabindex]:not([tabindex^="-"]):visible'),
                     tabableActionsCount = tabableActions.length;
                 // quit immediately if no tabable actions are found
                 if (tabableActionsCount === 0) { return; }
