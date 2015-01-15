@@ -42,6 +42,23 @@ define('io.ox/search/util', [
     };
 
     return {
+        addTooltip: function (node, title) {
+            if(!_.device('touch')) {
+                node.attr({
+                    'data-toggle': 'tooltip',
+                    'data-placement': 'bottom',
+                    'data-animation': 'false',
+                    'data-container': 'body',
+                    'data-original-title': title
+                    })
+                    .tooltip(/*{delay: { 'show': 500, 'hide': 200 }}*/)
+                    .on('click', function () {
+                        if (node.tooltip)
+                            node.tooltip('hide');
+                    });
+            }
+            return node;
+        },
         getOptionLabel: function (options, id) {
             var current = _.find(options, function (item) {
                 return item.id === id;
