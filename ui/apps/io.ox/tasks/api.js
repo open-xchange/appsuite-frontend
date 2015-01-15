@@ -245,7 +245,7 @@ define('io.ox/tasks/api',
             },
             search: {
                 action: 'search',
-                columns: '1,20,101,200,202,203,220,221,300,301,309',
+                columns: '1,2,20,101,200,202,203,220,221,300,301,309',
                 extendColumns: 'io.ox/tasks/api/all',
                 sort: '202',
                 order: 'asc',
@@ -538,7 +538,7 @@ define('io.ox/tasks/api',
         }
 
         function filter(task) {
-            return !task.participants || task.participants.length === 0 || delegatedToMe(task.participants);
+            return (task.created_by === ox.user_id && (!task.participants || task.participants.length === 0)) || delegatedToMe(task.participants);
         }
 
         return function () {
