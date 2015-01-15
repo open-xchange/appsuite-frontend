@@ -137,7 +137,7 @@ define('plugins/portal/rss/register', [
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true }),
-            $url = $('<textarea id="rss_url" class="form-control" rows="5">').attr({ placeholder: 'http://', tabindex: 1 }).placeholder(),
+            $url = $('<textarea id="rss_url" class="form-control" rows="5">').attr({ placeholder: 'http://', tabindex: 1 }),
             $description = $('<input id="rss_desc" type="text" class="form-control" tabindex="1">'),
             $error = $('<div class="alert alert-danger">').css('margin-top', '15px').hide(),
             props = model.get('props') || {};

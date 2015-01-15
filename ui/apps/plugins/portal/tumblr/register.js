@@ -234,7 +234,7 @@ define('plugins/portal/tumblr/register', [
         model.set('candidate', true, { silent: true, validate: true });
 
         var dialog = new dialogs.ModalDialog({ async: true, width: 400 }),
-            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">').placeholder(),
+            $url = $('<input id="tumblr_url" type="text" class="form-control" placeholder=".tumblr.com">'),
             $description = $('<input id="tumblr_desc" type="text" class="form-control">'),
             $error = $('<div>').addClass('alert alert-danger').css('margin-top', '15px').hide(),
             props = model.get('props') || {};
