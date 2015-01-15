@@ -134,7 +134,7 @@ define('plugins/portal/tasks/register',
     });
 
     ext.point('io.ox/portal/widget/tasks/settings').extend({
-        title: gt('Tasks'),
+        title: gt('My tasks'),
         type: 'tasks',
         editable: false,
         unique: true
