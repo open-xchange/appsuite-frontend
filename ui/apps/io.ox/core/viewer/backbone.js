@@ -244,6 +244,7 @@ define('io.ox/core/viewer/backbone', [
                 result.filename = data.filename;
                 result.size = data.file_size;
                 result.contentType = data.file_mimetype;
+                result.fileCategory = getFileCategory(data.file_mimetype, getExtension(data.filename));
                 result.id = data.id;
                 result.folderId = data.folder;
                 result.module = data.module;
