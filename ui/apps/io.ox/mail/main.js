@@ -1106,7 +1106,7 @@ define('io.ox/mail/main', [
                                                     'start': 0,
                                                     'size': 30,
                                                     'extra': 1
-                                                }, {silent: true});
+                                                }, { silent: true });
                                             // load
                                             app.listView.load();
                                             win.facetedsearch.focus();

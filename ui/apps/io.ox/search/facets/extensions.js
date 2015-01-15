@@ -308,7 +308,7 @@ define('io.ox/search/facets/extensions', [
                     // add caret
                     this.prepend(
                         $('<div class="caret-container">').append(
-                            action =$('<i class="fa fa-caret-down action">')
+                            action = $('<i class="fa fa-caret-down action">')
                         )
                     );
 
