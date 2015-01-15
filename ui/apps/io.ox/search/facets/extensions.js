@@ -296,37 +296,26 @@ define('io.ox/search/facets/extensions',
 
                 );
                 // tooltip
-                if(!_.device('touch')) {
-                    node.attr({
-                        'data-toggle': 'tooltip',
-                        'data-placement': 'bottom',
-                        'data-animation': 'false',
-                        'data-container': 'body',
-                        'data-original-title': gt('Remove')
-                        })
-                        .tooltip()
-                        .on('click', function () {
-                            if (node.tooltip)
-                                node.tooltip('hide');
-                        });
-                }
+                util.addTooltip(node, gt('Remove'));
             },
 
             facetDropdown: function (baton, value, facet) {
                 var options = facet.options || _.values(facet.values)[0].options || [],
                     current = value._compact ? value._compact.option : '',
-                    option,
                     parent = this.parent(),
-                    menu;
+                    menu, action, option;
 
                 if (options.length) {
                     this.attr('data-toggle', 'dropdown');
                     // add caret
                     this.prepend(
                         $('<div class="caret-container">').append(
-                            $('<i class="fa fa-caret-down">')
+                            action = $('<i class="fa fa-caret-down">')
                         )
                     );
+
+                    // tooltip
+                    util.addTooltip(action, gt('Adjust'));
 
                     // create menu
                     menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
@@ -543,7 +532,7 @@ define('io.ox/search/facets/extensions',
                 var self = this,
                     button = this.find('a[type="button"]'),
                     current = value.custom,
-                    option, link,
+                    option, link, action,
                     menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
                         .attr({
                             'data-facet': 'folder',
@@ -559,9 +548,12 @@ define('io.ox/search/facets/extensions',
 
                 button.prepend(
                     $('<div class="caret-container">').append(
-                        $('<i class="fa fa-caret-down">')
+                        action = $('<i class="fa fa-caret-down">')
                     )
                 );
+
+                // tooltip
+                util.addTooltip(action, gt('Change folder'));
 
                 // disable dropdown until menu is added (mobiles custom dropdown)
                 if (phone) { button.addClass('disabled'); }
