@@ -88,7 +88,7 @@ define('io.ox/calendar/list/view-grid-template',
                     fields.date.show();
                 }
 
-                tmpStr = gt.noI18n(util.getTimeInterval(data));
+                tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
 
                 a11yLabel += ', ' + tmpStr;
 

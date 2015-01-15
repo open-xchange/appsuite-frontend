@@ -13,8 +13,9 @@
 
 define('io.ox/core/tk/reminder-util',
     ['gettext!io.ox/core',
+     'io.ox/calendar/util',
      'less!io.ox/core/tk/reminder-util'
-    ], function (gt) {
+    ], function (gt, util) {
 
     'use strict';
 
@@ -97,7 +98,7 @@ define('io.ox/core/tk/reminder-util',
                     //#. %4$s Appointment location
                     //#, c-format
             label = gt('Appointment reminder. %1$s %2$s %3$s %4$s. Press [enter] to open',
-                    _.noI18n(model.get('title')), _.noI18n(model.get('date')), _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '');
+                    _.noI18n(model.get('title')), _.noI18n(model.get('date')), _.noI18n(util.getTimeIntervalA11y(model.get('caldata'))), _.noI18n(model.get('location')) || '');
         }
 
         var focusId = model.attributes.cid;

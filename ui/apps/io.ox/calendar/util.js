@@ -313,6 +313,21 @@ define('io.ox/calendar/util',
                 return new D(data.start_date).formatInterval(new D(data.end_date), diff.a || diff.m);
             }
         },
+        getTimeIntervalA11y: function (data) {
+            if (!data || !data.start_date || !data.end_date) return '';
+            if (data.full_time) {
+                return this.getFullTimeInterval(data, true);
+            } else {
+                var start = new date.Local(data.start_date),
+                    end = new date.Local(data.end_date);
+                        //#. Time intervals for screenreaders
+                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                        //#. %1$s is the start date
+                        //#. %2$s is the end date
+                        //#, c-format
+                return gt('%1$s to %2$s', start.format(date.TIME), end.format(date.TIME));
+            }
+        },
 
         getStartAndEndTime: function (data) {
             var ret = [];

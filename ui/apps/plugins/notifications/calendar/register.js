@@ -51,40 +51,43 @@ define('plugins/notifications/calendar/register',
 
     ext.point('io.ox/core/notifications/invites/item').extend({
         draw: function (baton) {
-            var model = baton.model;
-            this.attr({
-                role: 'listitem',
-                'data-cid': model.get('cid'),
-                'focus-id': 'calendar-invite-' + model.get('cid'),
-                'tabindex': 1,
-                            //#. %1$s Appointment title
-                            //#. %2$s Appointment date
-                            //#. %3$s Appointment time
-                            //#. %4$s Appointment location
-                            //#. %5$s Appointment Organizer
-                            //#, c-format
-                'aria-label': gt('Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open',
-                        _.noI18n(model.get('title')), _.noI18n(model.get('date')),
-                        _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '',
-                        _.noI18n(model.get('organizer')))
-            }).append(
-                $('<div class="time">').text(model.get('time')),
-                $('<div class="date">').text(model.get('date')),
-                $('<div class="title">').text(model.get('title')),
-                $('<div class="location">').text(model.get('location')),
-                $('<div class="organizer">').text(model.get('organizer')),
-                $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
-                        .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
-                        .css('margin-right', '14px')
-                        .text(gt('Accept / Decline')),
-                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                        .attr({'title': gt('Accept invitation'),
-                               'aria-label': gt('Accept invitation'),
-                               'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
-                        .append('<i class="fa fa-check">')
-                )
-            );
+            var model = baton.model,
+                self = this;
+            require(['io.ox/calendar/util'], function (util) {
+                self.attr({
+                    role: 'listitem',
+                    'data-cid': model.get('cid'),
+                    'focus-id': 'calendar-invite-' + model.get('cid'),
+                    'tabindex': 1,
+                                //#. %1$s Appointment title
+                                //#. %2$s Appointment date
+                                //#. %3$s Appointment time
+                                //#. %4$s Appointment location
+                                //#. %5$s Appointment Organizer
+                                //#, c-format
+                    'aria-label': gt('Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open',
+                            _.noI18n(model.get('title')), _.noI18n(model.get('date')),
+                            _.noI18n(util.getTimeIntervalA11y(model.get('data'))), _.noI18n(model.get('location')) || '',
+                            _.noI18n(model.get('organizer')))
+                }).append(
+                    $('<div class="time">').text(model.get('time')),
+                    $('<div class="date">').text(model.get('date')),
+                    $('<div class="title">').text(model.get('title')),
+                    $('<div class="location">').text(model.get('location')),
+                    $('<div class="organizer">').text(model.get('organizer')),
+                    $('<div class="actions">').append(
+                        $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
+                            .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
+                            .css('margin-right', '14px')
+                            .text(gt('Accept / Decline')),
+                        $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                            .attr({'title': gt('Accept invitation'),
+                                   'aria-label': gt('Accept invitation'),
+                                   'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
+                            .append('<i class="fa fa-check">')
+                    )
+                );
+            });
         }
     });
 
