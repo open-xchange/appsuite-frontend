@@ -281,7 +281,8 @@ define('io.ox/core/viewer/views/toolbarview', [
         events: {
             'click a.viewer-toolbar-close': 'onClose',
             'click a.viewer-toolbar-togglesidebar': 'onToggleSidebar',
-            'dblclick a.viewer-toolbar-rename': 'onRename'
+            'dblclick a.viewer-toolbar-rename': 'onRename',
+            'keydown a.viewer-toolbar-rename': 'onRename'
         },
 
         initialize: function () {
@@ -305,10 +306,16 @@ define('io.ox/core/viewer/views/toolbarview', [
             EventDispatcher.trigger('viewer:toggle:sidebar');
         },
 
-        onRename: function () {
+        /**
+         * Handler for the file rename event.
+         * Invokes the file rename action on SPACE key, ENTER key or a mouse double click.
+         *
+         * @param {jQuery.Event} event
+         */
+        onRename: function (event) {
             //console.warn('TooölbarView.onRename()', event);
             var fileSource = this.model.get('source');
-            if (fileSource === 'file') {
+            if (fileSource === 'file' && (event.which === 32 || event.which === 13 || event.type === 'dblclick')) {
                 ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData') });
             }
         },
