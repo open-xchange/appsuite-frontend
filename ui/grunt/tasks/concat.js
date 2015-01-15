@@ -212,7 +212,7 @@ module.exports = function (grunt) {
                             'bower_components/mobiscroll/js/mobiscroll.widget.js',
                             'bower_components/mobiscroll/js/mobiscroll.scroller.js',
                             'bower_components/mobiscroll/js/mobiscroll.datetime.js',
-                            'bower_components/mobiscroll/js/mobiscroll.widget.ios7.js'
+                            'bower_components/mobiscroll/js/mobiscroll.widget.ios.js'
                         ],
                         dest: 'build/static/3rd.party/mobiscroll/mobiscroll.js',
                         nonull: true
@@ -220,9 +220,9 @@ module.exports = function (grunt) {
                     {
                         src: [
                             'bower_components/mobiscroll/css/mobiscroll.widget.css',
-                            'bower_components/mobiscroll/css/mobiscroll.widget.ios7.css',
+                            'bower_components/mobiscroll/css/mobiscroll.widget.ios.css',
                             'bower_components/mobiscroll/css/mobiscroll.scroller.css',
-                            'bower_components/mobiscroll/css/mobiscroll.scroller.ios7.css'
+                            'bower_components/mobiscroll/css/mobiscroll.scroller.ios.css'
                         ],
                         dest: 'build/apps/3rd.party/mobiscroll/mobiscroll.css',
                         nonull: true
