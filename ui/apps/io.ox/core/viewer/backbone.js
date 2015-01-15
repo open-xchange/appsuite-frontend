@@ -34,7 +34,6 @@ define('io.ox/core/viewer/backbone', [
     var ITEM_TYPE_FILE = 'file',
         ITEM_TYPE_MAIL_ATTACHMENT = 'mail-attachment',
         ITEM_TYPE_PIM_ATTACHMENT = 'pim-attachment',
-        THUMBNAIL_SIZE = { thumbnailWidth: 400, thumbnailHeight: 600 }, // temporary default size for office docs
         VIEW_MODES = { VIEW: 'view', PREVIEW: 'preview', THUMBNAIL: 'thumbnail', DOWNLOAD: 'download' },
         MIME_TYPES = {
             IMAGE: {
@@ -276,46 +275,28 @@ define('io.ox/core/viewer/backbone', [
             return this.get('source') === ITEM_TYPE_FILE;
         },
 
+        /**
+         * Whether this file is a 'Document' file. Office or PDF are declared
+         * as documents at the moment.
+         *
+         * @returns {boolean}
+         */
+        isDocumentFile: function () {
+            var category = this.get('fileCategory');
+            return (_.isString(category) && category.indexOf('OFFICE') >= 0) || (category === 'PDF');
+        },
+
         getPreviewUrl: function () {
             if (this.isMailAttachment()) {
-                // AttachmentAPI does not delivering working image url! Use Mail API instead.
-                //return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
                 return MailAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
 
             } else if (this.isDriveFile()) {
+                var viewMode = VIEW_MODES.THUMBNAIL;
                 // temporary workaround to show previews of office documents
-                var fileCategory = this.get('fileCategory'),
-                    viewMode = VIEW_MODES.THUMBNAIL;
-                if (fileCategory && fileCategory.indexOf('OFFICE') >= 0) {
+                if (this.isDocumentFile()) {
                     viewMode = VIEW_MODES.PREVIEW;
                 }
                 return FilesAPI.getUrl(this.get('origData'), viewMode, null);
-
-            } else if (this.isPIMAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
-            }
-            return null;
-        },
-
-        getDownloadUrl: function () {
-            if (this.isMailAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
-
-            } else if (this.isDriveFile()) {
-                return FilesAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
-
-            }  else if (this.isPIMAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.DOWNLOAD);
-            }
-            return null;
-        },
-
-        getThumbnailUrl: function () {
-            if (this.isMailAttachment()) {
-                return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
-
-            } else if (this.isDriveFile()) {
-                return FilesAPI.getUrl(this.get('origData'), VIEW_MODES.THUMBNAIL, THUMBNAIL_SIZE);
 
             } else if (this.isPIMAttachment()) {
                 return AttachmentAPI.getUrl(this.get('origData'), VIEW_MODES.VIEW);
