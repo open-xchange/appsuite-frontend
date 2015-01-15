@@ -531,9 +531,18 @@
     }
 
     .io-ox-label {
-        font-size: 0.9em;
+
+        font-size: 14px;
         padding: 1em 0 0.25em 0em;
         margin-bottom: 0.5em;
+
+        h2 {
+            display: inline;
+            font-size: 14px;
+            font-weight: 300;
+            margin: 10px 0;
+        }
+
     }
 
     .attachment-list .dropdown.attachment-link {
@@ -708,6 +717,14 @@
             width: 250px;
             margin: 0 20px 0em 0;
             cursor: pointer;
+
+            &:focus, &:hover {
+                .person {
+                    &.accepted, &.declined {
+                        color: black;
+                    }
+                }
+            }
 
             .person {
 

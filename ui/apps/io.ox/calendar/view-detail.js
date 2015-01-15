@@ -165,7 +165,9 @@ define('io.ox/calendar/view-detail', [
             this.append(
                 $('<fieldset class="details expandable">').append(
                     $('<legend class="io-ox-label">').append(
-                        $('<a href="#" class="expandable-toggle" role="button">').text(gt('Details')),
+                        $('<a href="#" class="expandable-toggle" role="button">').append(
+                            $('<h2>').text(gt('Details'))
+                        ),
                         $.txt(' '),
                         $('<i class="fa expandable-indicator">')
                     ),
@@ -329,7 +331,9 @@ define('io.ox/calendar/view-detail', [
         index: 550,
         draw: function (baton) {
             var $node = $('<fieldset>').append(
-                $('<legend>').addClass('io-ox-label').text(gt('Attachments'))
+                $('<legend>').addClass('io-ox-label').append(
+                    $('<h2>').text(gt('Attachments'))
+                )
             );
 
             if (calAPI.uploadInProgress(_.ecid(baton.data))) {
