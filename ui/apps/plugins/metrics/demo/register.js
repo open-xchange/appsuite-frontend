@@ -352,7 +352,7 @@ define('plugins/metrics/demo/register', [
                         // look for first word in subject
                         word = subject.match(/[a-zäöüéèáàêß\-]{3,}/i)[0];
 
-                    $('.search-field').focus().val(word).trigger('keyup');
+                    $('.search-field').val(word).trigger('search');
                 });
 
                 this.step('Wait for auto-complete', function (done) {

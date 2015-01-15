@@ -158,6 +158,7 @@ define('io.ox/core/tk/autocomplete',
 
             open = function () {
                     if (!isOpen) {
+                        isOpen = true;
                         // toggle blur handlers
                         self.off('blur', o.blur).on('blur', fnBlur);
                         $(window).on('resize', reposition);
@@ -185,13 +186,12 @@ define('io.ox/core/tk/autocomplete',
                         if (_.isFunction(o.cbshow)) o.cbshow();
 
                         window.container = o.container;
-
-                        isOpen = true;
                     }
                 },
 
             close = function () {
                     if (isOpen) {
+                        isOpen = false;                     
                         // toggle blur handlers
                         self.on('blur', o.blur).off('blur', fnBlur);
                         //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
@@ -203,7 +203,6 @@ define('io.ox/core/tk/autocomplete',
                         $(window).off('resize', reposition);
                         scrollpane.empty();
                         o.container.detach();
-                        isOpen = false;
                         index = -1;
                     }
                 },
@@ -470,9 +469,20 @@ define('io.ox/core/tk/autocomplete',
                     }
                 }
             },
+            
+            fnSearch = function () {
+                var val = $.trim($(this).val());
+                lastSearch = $.Deferred();
+                lastValue = val;
+                o.container.busy();
+                o.source(val)
+                    .then(o.reduce)
+                    .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
+            },
 
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, options) {
+                
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
                 this.focus();
@@ -486,12 +496,7 @@ define('io.ox/core/tk/autocomplete',
                 if (val.length >= o.minLength && !opt.keepClosed) {
                     //request data?
                     if (opt.isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
-                        lastSearch = $.Deferred();
-                        lastValue = val;
-                        o.container.busy();
-                        o.source(val)
-                            .then(o.reduce)
-                            .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
+                        fnSearch.call(this);
                     }
                 } else {
                     lastValue = val;
@@ -515,20 +520,24 @@ define('io.ox/core/tk/autocomplete',
             var isModalPopup = o.parentSelector.indexOf('.permissions-dialog') > -1;
 
             $.each(this, function () {
+                // avoid multiple instances
+                if ($(this).data('autocomplete') === true) return;
                 // bind fundamental handlers
-                $(this)
+                $(this)                    
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
                     // for IME support
                     .on('compositionend', fnKeyUp)
                     .on('blur', o.blur)
                     .on('blur', fnBlur)
+                    .on('search', fnSearch)
                     .attr({
                         autocapitalize: 'off',
                         //naming conflict with function
                         autocomplete: 'off',
-                        autocorrect: 'off'
-                    });
+                        autocorrect: 'off',
+                    })
+                    .data('autocomplete', true);
             });
 
             //internet explorer needs this fix too or it closes if you try to scroll
