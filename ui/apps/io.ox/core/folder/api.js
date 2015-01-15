@@ -168,8 +168,8 @@ define('io.ox/core/folder/api', [
     // Use ramp-up data
     //
 
-    _(ox.rampup.folder).each(function (data) {
-        pool.addModel(data);
+    _(ox.rampup.folder).chain().keys().each(function (data) {
+        pool.addModel(ox.rampup.folder[data]);
     });
 
     var rampup = {};
