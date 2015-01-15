@@ -68,7 +68,7 @@ define('io.ox/core/viewer/util', [
     Util.createPanelNode = function (options) {
         var options = $.extend({ title: '', collapsed: false }, options || {}),
             panelBody = $('<div>').addClass('panel-body ' + (options.collapsed ? 'panel-collapsed' : '')).css('display', (options.collapsed ? 'none' : 'block')),
-            toggleButton = $('<a>', { href: '#', role: 'button', tabindex: 1, title: gt('toggle panel'), 'aria-expanded': options.collapsed ? 'false' : 'true' }).addClass('toggle-panel panel-heading-button btn'),
+            toggleButton = $('<a>', { href: '#', role: 'button', tabindex: 1, title: gt('Toggle panel'), 'aria-expanded': options.collapsed ? 'false' : 'true' }).addClass('toggle-panel panel-heading-button btn'),
             buttonIcon = $('<i>').addClass('fa fa-chevron-' + (options.collapsed ? 'right' : 'down')),
             panel;
 

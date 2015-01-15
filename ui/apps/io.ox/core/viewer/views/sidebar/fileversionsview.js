@@ -64,8 +64,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 .each(function (version) {
                     var entryRow = $('<tr>').addClass('version').append(
                                 $('<td>').addClass('versionLabel').append(
-                                    $('<div>').text(gt.noI18n(version.version)).attr('title', gt.noI18n(version.version)),
-                                    (version.current_version ? $('<i>').addClass('fa fa-check-square-o').attr('title', gt('current version')) : '')
+                                    $('<div>').text(gt.noI18n(version.version)).attr('title', gt.noI18n(version.version))
                                 )
                             );
 
@@ -75,6 +74,12 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             }
 
             function versionSorter (version1, version2) {
+                // current version always on top
+                if (version1.current_version) {
+                    return -versions.length;
+                } else if (version2.current_version) {
+                    return versions.length;
+                }
                 return version2.version - version1.version;
             }
 
@@ -152,6 +157,16 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         draw: function (baton) {
             var size = (_.isNumber(baton.data.file_size)) ? _.filesize(baton.data.file_size) : '-';
             this.find('td:last').append($('<div class="col-xs-4 col-md-4 size">').text(gt.noI18n(size)));
+        }
+    });
+
+    Ext.point(POINT + '/version').extend({
+        id: 'current_version',
+        index: 50,
+        draw: function (baton) {
+            if (baton.data.current_version) {
+                this.find('td:last').append($('<div class="col-xs-12 col-md-12 current-version">').text(gt('current version')));
+            }
         }
     });
 
