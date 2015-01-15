@@ -171,7 +171,8 @@ define('io.ox/mail/compose/extensions', [
                                     $('<a>').attr({
                                         href: '#',
                                         tabindex: 1,
-                                        'data-action': 'add-cc',
+                                        'data-action': 'add',
+                                        'data-type': 'cc',
                                         role: 'checkbox',
                                         'aria-checked': false,
                                         'aria-label': gt('Show carbon copy input field')
@@ -179,7 +180,8 @@ define('io.ox/mail/compose/extensions', [
                                     $('<a>').attr({
                                         href: '#',
                                         tabindex: 1,
-                                        'data-action': 'add-bcc',
+                                        'data-action': 'add',
+                                        'data-type': 'bcc',
                                         role: 'checkbox',
                                         'aria-checked': false,
                                         'aria-label': gt('Show blind carbon copy input field')
