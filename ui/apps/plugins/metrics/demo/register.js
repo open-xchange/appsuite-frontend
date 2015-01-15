@@ -33,13 +33,16 @@ define('plugins/metrics/demo/register', [
 
     bot.ready(function () {
 
+        // ensure new mail compose
+        ox.registry.set('mail-compose', 'io.ox/mail/compose/main');
+
         var suite = this.suite(function () {
 
             //
             // Test 1
             //
 
-            this.xtest('Open and answer mail', function () {
+            this.test('Open and answer mail', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -85,7 +88,7 @@ define('plugins/metrics/demo/register', [
             // Test 2
             //
 
-            this.xtest('Copy and delete mail', function () {
+            this.test('Copy and delete mail', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -150,7 +153,7 @@ define('plugins/metrics/demo/register', [
             // Test 3
             //
 
-            this.xtest('Write and send mail', function () {
+            this.test('Write and send mail', function () {
 
                 this.step('Open compose dialog', function (done) {
 
@@ -202,7 +205,7 @@ define('plugins/metrics/demo/register', [
             // Test 4
             //
 
-            this.xtest('Write mail and send with attachment (local)', function () {
+            this.test('Write mail and send with attachment (local)', function () {
 
                 this.step('Open compose dialog', function (done) {
 
@@ -262,7 +265,7 @@ define('plugins/metrics/demo/register', [
             // Test 5
             //
 
-            this.xtest('Write mail and send with attachment (cloud)', function () {
+            this.test('Write mail and send with attachment (cloud)', function () {
 
                 this.step('Open compose dialog with attachment from cloud', function (done) {
 
@@ -315,7 +318,7 @@ define('plugins/metrics/demo/register', [
             // Test 6
             //
 
-            this.xtest('Search and display mail listing', function () {
+            this.test('Search and display mail listing', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -365,7 +368,7 @@ define('plugins/metrics/demo/register', [
             // Test 7
             //
 
-            this.xtest('Open a mail with thumbnails', function () {
+            this.test('Open a mail with thumbnails', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -406,7 +409,7 @@ define('plugins/metrics/demo/register', [
 
         suite.done(function () {
 
-            var line = metrics.getBrowser() + ';' + _.now() + ';';
+            var line = metrics.getBrowser() + ';' + _.now() + ';' + metrics.toSeconds(this.getDuration()) + ';';
 
             line += _(this.getResults())
                 .map(function (item) {
