@@ -202,11 +202,17 @@ define('io.ox/core/viewer/views/displayerview', [
         onKeydown: function (event) {
             //console.warn('DisplayerView.onKeydown()', event, event.which);
             switch (event.which || event.keyCode) {
+                case 37: // left arrow
+                    this.onPreviousSlide();
+                    break;
+                case 38: // up arrow
+                    event.stopPropagation();
+                    break;
                 case 39: // right arrow
                     this.onNextSlide();
                     break;
-                case 37: // left arrow
-                    this.onPreviousSlide();
+                case 40: // down arrow
+                    event.stopPropagation();
                     break;
             }
         },
