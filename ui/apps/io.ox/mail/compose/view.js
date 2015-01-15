@@ -275,8 +275,7 @@ define('io.ox/mail/compose/view', [
         className: 'io-ox-mail-compose container default-content-padding',
 
         events: {
-            'click [data-action="add-cc"]': function () { this.toggleTokenfield('cc'); },
-            'click [data-action="add-bcc"]': function () { this.toggleTokenfield('bcc'); },
+            'click [data-action="add"]': 'toggleTokenfield',
             'keyup [data-extension-id="subject"] input': 'setSubject'
         },
 
@@ -736,10 +735,13 @@ define('io.ox/mail/compose/view', [
             return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
         },
 
-        toggleTokenfield: function (type, show) {
-            var button = $('[data-action="add-' + type + '"]'),
+        toggleTokenfield: function (e) {
+            var isString = typeof e === 'string',
+                type = isString ? e : $(e.target).attr('data-type'),
+                button = this.$el.find('[data-type="' + type + '"]'),
                 input = this.$el.find('[data-extension-id="' + type + '"]');
-            if (input.hasClass('hidden') || show) {
+            if (!isString) e.preventDefault();
+            if (input.hasClass('hidden') || isString) {
                 input.removeClass('hidden');
                 button.addClass('active').attr('aria-checked', true);
             } else if (this.model.get(type).length === 0) {
@@ -946,7 +948,7 @@ define('io.ox/mail/compose/view', [
                         self.editor.focus();
                     }
                     if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
-                        self.toggleTokenfield('cc', true);
+                        self.toggleTokenfield('cc');
                     }
                     self.setBody(self.model.getContent());
                     self.model.dirty(false);
@@ -1004,10 +1006,10 @@ define('io.ox/mail/compose/view', [
                             $(this).typeahead('val', '');
                         } else if ((/^cc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleTokenfield('cc', true).find('.token-input').focus();
+                            self.toggleTokenfield('cc').find('.token-input').focus();
                         } else if ((/^bcc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleTokenfield('bcc', true).find('.token-input').focus();
+                            self.toggleTokenfield('bcc').find('.token-input').focus();
                         }
                     }
                 });
