@@ -60,7 +60,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 panel.find('.panel-body').append(
                     $('<div>').addClass('row').append(
                         $('<div>').addClass('col-xs-12 col-md-12').append(
-                            $('<span>').addClass('description description-label').text(labelString),
+                            $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label').text(labelString),
                             $('<textarea>').addClass('description description-text').val(description)
                         )
                     )
@@ -107,9 +107,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         events: {
             'click .toggle-panel': 'onTogglePanel',
-            'dblclick .description-label': 'onStartEdit'
-            //'blur .description-text': 'onStopEdit',
-            //'keyup': 'onKeyUp'
+            'dblclick .description-label': 'onStartEdit',
+            'keyup': 'onKeyUp'
+            //'blur .description-text': 'onStopEdit'
         },
 
         onTogglePanel: function (event) {
@@ -136,15 +136,21 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             this.saveDescription(this.$el.find('.description-text').first().val());
         },
 
-        onKeyUp: function (e) {
-            //console.info('event type: ', e.type, 'keyCode: ', e.keyCode, 'charCode: ', e.charCode);
+        onKeyUp: function (event) {
+            //console.info('event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
 
-            switch (e.which || e.keyCode) {
-            case 27:
+            switch (event.which || event.keyCode) {
+            case 13:
+            case 32:
+                this.startEdit();
+                event.preventDefault();
+                break;
+            }
+            /*case 27:
                 this.stopEdit();
                 this.resetDescriptionString();
                 break;
-            }
+            }*/
         },
 
         onModelChangeDescription: function (model) {
