@@ -118,10 +118,13 @@ define('io.ox/core/metrics/bot/util', [], function () {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.responseType = 'arraybuffer';
-            xhr.onload = function () {
-                if (this.status !== 200) return;
-                var blob = new window.Blob([this.response], { type: 'image/jpg' });
-                if (callback) callback (blob);
+            xhr.onload = function () {                
+                if (this.status === 200) {
+                    var blob = new window.Blob([this.response], { type: 'image/jpg' });
+                    if (callback) callback (blob);
+                } else {
+                    console.error('Failed to load image', url);
+                }
             };
             xhr.send();
         },

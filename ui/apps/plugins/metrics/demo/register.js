@@ -15,9 +15,10 @@ define('plugins/metrics/demo/register', [
     'io.ox/core/metrics/metrics',
     'io.ox/core/metrics/bot/main',
     'settings!plugins/metrics/demo',
+    'settings!io.ox/core',
     'settings!io.ox/mail',
     'io.ox/mail/api'
-], function (metrics, bot, settings, mailSettings, api) {
+], function (metrics, bot, settings, coreSettings, mailSettings, api) {
 
     'use strict';
 
@@ -30,7 +31,10 @@ define('plugins/metrics/demo/register', [
         FILE = settings.get('cloud-attachment', { folder_id: '13894', id: '63605' }),
         MAIL_WITH_THUMBNAILS = settings.get('message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 85 }),
         STORE_FOLDER = settings.get('store-folder', 73407);
-
+    
+    // ensure normal selection mode
+    coreSettings.set('selectionMode', 'normal');
+    
     bot.ready(function () {
 
         // ensure new mail compose
@@ -167,7 +171,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT);
-                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input').trigger('keydown');
                     done();
                 });
 
@@ -227,7 +231,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT + ' (local attachment)');
-                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input').trigger('keydown');
                     done();
                 });
 
@@ -280,7 +284,7 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
                     this.app.view.model.set('subject', SUBJECT + ' (cloud attachment)');
-                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input').trigger('keydown');
                     done();
                 });
 
