@@ -111,8 +111,6 @@ define([
                     expect(model.isDriveFile()).to.be['false'];
 
                     expect(model.getPreviewUrl()).to.equal(null);
-                    expect(model.getDownloadUrl()).to.equal(null);
-                    expect(model.getThumbnailUrl()).to.equal(null);
                 });
             });
 
@@ -142,9 +140,6 @@ define([
                     expect(model.isDriveFile()).to.be['true'];
 
                     expect(model.getPreviewUrl()).to.be.a('string');
-                    expect(model.getDownloadUrl()).to.be.a('string');
-                    expect(model.getThumbnailUrl()).to.be.a('string');
-
                 });
             });
 
@@ -174,9 +169,6 @@ define([
                     expect(model.isDriveFile()).to.be['false'];
 
                     expect(model.getPreviewUrl()).to.be.a('string');
-                    expect(model.getDownloadUrl()).to.be.a('string');
-                    expect(model.getThumbnailUrl()).to.be.a('string');
-
                 });
             });
             
@@ -206,9 +198,6 @@ define([
                     expect(model.isDriveFile()).to.be['false'];
 
                     expect(model.getPreviewUrl()).to.be.a('string');
-                    expect(model.getDownloadUrl()).to.be.a('string');
-                    expect(model.getThumbnailUrl()).to.be.a('string');
-
                 });
             });
             
