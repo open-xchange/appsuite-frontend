@@ -61,16 +61,21 @@ define('io.ox/core/viewer/views/toolbarview', [
             'filename': {
                 prio: 'hi',
                 mobile: 'lo',
-                title: gt('Click to rename'),
+                title: gt('File name'),
                 customize: function (baton) {
                     //console.warn('ToolbarView.meta.customize()', baton);
-                    var iconClass = CATEGORY_ICON_MAP[baton.model.get('fileCategory')] || 'fa-file-o',
+                    var fileSource = baton.model.get('source'),
+                        iconClass = CATEGORY_ICON_MAP[baton.model.get('fileCategory')] || 'fa-file-o',
                         fileIcon = $('<i class="fa">').addClass(iconClass),
                         filenameLabel = $('<span class="filename-label">').text(baton.model.get('filename'));
                     this.addClass('viewer-toolbar-filename')
-                        .attr('title', gt('Double click to rename'))
+                        .attr('title', gt('File name'))
                         .append(fileIcon, filenameLabel)
                         .parent().addClass('pull-left');
+                    if (fileSource === 'file') {
+                        this.attr('title', gt('Double click to rename'))
+                            .addClass('viewer-toolbar-rename');
+                    }
                 }
             },
             'functiondropdown': {
@@ -158,7 +163,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             ActionsPattern.invoke('io.ox/files/actions/edit-description', null, actionBaton);
         }
     });
-    new Action(TOOLBAR_ACTION_ID + '/print', {
+    new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
         id: 'print',
         requires: function () {
             return true;
@@ -191,15 +196,13 @@ define('io.ox/core/viewer/views/toolbarview', [
         index: 80,
         id: 'rename',
         label: gt('Rename'),
-        ref: 'io.ox/files/actions/rename',
-        section: 'edit'
+        ref: 'io.ox/files/actions/rename'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 90,
         id: 'editdescription',
         label: gt('Edit description'),
-        ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription',
-        section: 'edit'
+        ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 100,
@@ -217,7 +220,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         index: 300,
         id: 'print',
         label: gt('Print'),
-        ref: TOOLBAR_ACTION_ID + '/print'
+        ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 400,
@@ -278,7 +281,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         events: {
             'click a.viewer-toolbar-close': 'onClose',
             'click a.viewer-toolbar-togglesidebar': 'onToggleSidebar',
-            'dblclick a.viewer-toolbar-filename': 'onRename'
+            'dblclick a.viewer-toolbar-rename': 'onRename'
         },
 
         initialize: function () {
@@ -304,7 +307,10 @@ define('io.ox/core/viewer/views/toolbarview', [
 
         onRename: function () {
             //console.warn('TooölbarView.onRename()', event);
-            ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData') });
+            var fileSource = this.model.get('source');
+            if (fileSource === 'file') {
+                ActionsPattern.invoke('io.ox/files/actions/rename', null, { data: this.model.get('origData') });
+            }
         },
 
         render: function (data) {
