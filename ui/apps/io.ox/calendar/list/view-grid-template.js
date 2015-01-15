@@ -92,7 +92,7 @@ define('io.ox/calendar/list/view-grid-template',
 
                 a11yLabel += ', ' + tmpStr;
 
-                tmpStr = gt.noI18n(util.getDateInterval(data));
+                tmpStr = gt.noI18n(util.getDateIntervalA11y(data));
                 a11yLabel += ', ' + tmpStr;
 
                 if (data.private_flag === true) {

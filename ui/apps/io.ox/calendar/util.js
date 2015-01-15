@@ -129,6 +129,12 @@ define('io.ox/calendar/util',
             return d.format(date.DAYOFWEEK_DATE);
         },
 
+        //returns date with full weekday name
+        getDateA11y: function (timestamp) {
+            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
+            return date.locale.days[d.getDay()] + ', ' + d.format(date.DATE);
+        },
+
         getSmartDate: function (data, showDate) {
 
             var timestamp = data.full_time ? date.Local.utc(data.start_date) : data.start_date,
@@ -155,7 +161,7 @@ define('io.ox/calendar/util',
 
                 if (diff >= -1 * date.DAY) {
                     return gt('Yesterday');
-                } else if (diffWeek > -7 * date.DAY || lastSunday) {
+                } else if (diffWeek > -7 * date.DAY || lastSunday) {
                     return gt('Last Week');
                 }
             } else {
@@ -221,6 +227,30 @@ define('io.ox/calendar/util',
                     return this.getDate(startDate);
                 } else {
                     return this.getDate(startDate) + ' \u2013 ' + this.getDate(endDate);
+                }
+            } else {
+                return '';
+            }
+        },
+
+        getDateIntervalA11y: function (data) {
+            if (data && data.start_date && data.end_date) {
+                var startDate = data.start_date,
+                    endDate = data.end_date;
+                if (data.full_time) {
+                    startDate = date.Local.utc(startDate);
+                    endDate = date.Local.utc(endDate);
+                    endDate -= date.DAY;
+                }
+                if (this.onSameDay(startDate, endDate)) {
+                    return this.getDateA11y(startDate);
+                } else {
+                            //#. date intervals for screenreaders
+                            //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                            //#. %1$s is the start date
+                            //#. %2$s is the end date
+                            //#, c-format
+                    return gt('%1$s to %2$s', this.getDateA11y(startDate), this.getDateA11y(endDate));
                 }
             } else {
                 return '';
@@ -322,8 +352,8 @@ define('io.ox/calendar/util',
                     end = new date.Local(data.end_date);
                         //#. Time intervals for screenreaders
                         //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
-                        //#. %1$s is the start date
-                        //#. %2$s is the end date
+                        //#. %1$s is the start time
+                        //#. %2$s is the end time
                         //#, c-format
                 return gt('%1$s to %2$s', start.format(date.TIME), end.format(date.TIME));
             }
