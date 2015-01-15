@@ -6,18 +6,18 @@
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
   "optionalDependencies": {
-    "assemble": "^0.4.17",
+    "assemble": "^0.4.42",
     "open-xchange-shared-grunt-config": "^0.10.0"
   },
   "devDependencies": {
     "appserver": "^0.4.0",
-    "grunt-contrib-connect": "^0.8.0",
+    "grunt-contrib-connect": "^0.9.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-curl": "~2.0.3",
+    "grunt-curl": "~2.1.0",
     "grunt-devtools": "~0.2.0",
-    "grunt-karma": "^0.8.2",
+    "grunt-karma": "^0.10.1",
     "grunt-modernizr": "~0.6.0",
-    "grunt-zip": "~0.15.0",
+    "grunt-zip": "~0.16.2",
     "karma": "^0.12.2",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.2",
@@ -27,9 +27,9 @@
     "karma-phantomjs-launcher": "^0.1.2",
     "karma-sinon": "^1.0.3",
     "karma-spec-reporter": "0.0.12",
-    "mocha": "^1.18.2",
-    "q": "~1.0.0",
-    "sinon": "~1.10.0",
+    "mocha": "^2.1.0",
+    "q": "~1.1.2",
+    "sinon": "~1.12.2",
     "time-grunt": "^1.0.0"
   },
   "engines": {
