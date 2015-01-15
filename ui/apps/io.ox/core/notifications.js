@@ -143,17 +143,20 @@ define('io.ox/core/notifications',
             }
 
             _(self.subviews).each(function (category) {
+                category.$el.detach();
                 //subviews must be rendered even if they have 0 items.
                 //this is because the empty call had to be moved from the general render of the notification area to each subview.
                 //if empty is called here the notificationviews loose their events on redraw and if we don't call render views with 0 items they might not clear old items properly
-                self.$el.append(category.render().el);
+                category.render();
                 if (category.collection.length > 0) {
                     empty = false;
+                    //only attach views again if they contain items, to not confuse screenreaders
+                    self.$el.append(category.el);
                 }
             });
 
             if (empty) {
-                self.$el.append($('<legend class="section-title no-news-message">').text(gt('No notifications')));
+                self.$el.append($('<li class="no-news-message">').append($('<h1 class="section-title">').text(gt('No notifications'))));
             }
 
             //restore focus if possible

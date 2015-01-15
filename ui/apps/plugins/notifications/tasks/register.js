@@ -30,7 +30,7 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/due-tasks/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Overdue Tasks')).append(
+                $('<h1 class="section-title">').text(gt('Overdue Tasks')).append(
                     $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({ tabindex: 1,
                         'aria-label': gt('Press to hide all notifications for overdue tasks.'),
@@ -255,7 +255,7 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task reminders')).append(
+                $('<h1 class="section-title">').text(gt('Task reminders')).append(
                     $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({
                         tabindex: 1,
@@ -501,7 +501,7 @@ define('plugins/notifications/tasks/register',
     ext.point('io.ox/core/notifications/task-confirmation/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Task invitations'))
+                $('<h1 class="section-title">').text(gt('Task invitations'))
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({ tabindex: 1,
                         'aria-label': gt('Press to hide all task invitations.'),

@@ -25,7 +25,7 @@ define('plugins/notifications/mail/register',
     ext.point('io.ox/core/notifications/mail/header').extend({
         draw: function (baton) {
             this.append(
-                $('<legend class="section-title">').text(gt('New Mails'))
+                $('<h1 class="section-title">').text(gt('New Mails'))
                     //special attribute to restore focus on redraw
                     .attr('focusId', 'mail-notification-')
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')

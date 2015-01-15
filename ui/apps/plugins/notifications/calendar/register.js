@@ -24,7 +24,7 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/invites/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Appointment invitations'))
+                $('<h1 class="section-title">').text(gt('Appointment invitations'))
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all appointment invitations.'),
@@ -38,7 +38,7 @@ define('plugins/notifications/calendar/register',
     ext.point('io.ox/core/notifications/reminder/header').extend({
         draw: function () {
             this.append(
-                $('<legend class="section-title">').text(gt('Appointment reminders'))
+                $('<h1 class="section-title">').text(gt('Appointment reminders'))
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all appointment reminders.'),
