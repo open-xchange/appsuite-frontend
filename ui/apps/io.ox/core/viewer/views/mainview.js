@@ -79,6 +79,8 @@ define('io.ox/core/viewer/views/mainview', [
                 return;
             }
             var self = this;
+            // make this main view focusable and prevent focus from leaving the viewer.
+            this.$el.attr('tabindex', -1);
             // append toolbar view
             this.$el.append(this.toolbarView.render(data).el);
             // append displayerView and sidebarView deferred, for preview image optimal height calculation
