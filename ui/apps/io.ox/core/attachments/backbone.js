@@ -108,11 +108,12 @@ define('io.ox/core/attachments/backbone',
         },
 
         initialize: function (obj) {
-            if (obj instanceof window.File) {
+            // check if its a blob (also superclass of File)
+            if (obj instanceof window.Blob) {
                 this.fileObj = obj;
-                this.set('filename', obj.name, {silent: true});
-                this.set('uploaded', 0, {silent: true});
-                this.set('file_size', obj.size, {silent: true});
+                this.set('filename', obj.name, { silent: true });
+                this.set('uploaded', 0, { silent: true });
+                this.set('file_size', obj.size, { silent: true });
             }
         },
 

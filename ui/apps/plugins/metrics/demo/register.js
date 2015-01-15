@@ -39,7 +39,7 @@ define('plugins/metrics/demo/register', [
             // Test 1
             //
 
-            this.test('Open and answer mail', function () {
+            this.xtest('Open and answer mail', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -56,7 +56,9 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Wait for editor and write 100 words', function (done) {
                     ox.one('mail:reply:ready', function (e, data, app) {
-                        app.getEditor().prependContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                        app.view.getEditor().done(function (editor) {
+                            editor.prependContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                        });
                         this.app = app;
                         done();
                     }.bind(this));
@@ -64,12 +66,12 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Send to myself', function (done) {
                     // clear recipient lists
-                    this.app.getWindowNode().find('.recipient-list').empty();
+                    this.app.view.model.set({ cc: [], bcc: [] });
                     // add myself as recipient
                     var to = [['Myself', mailSettings.get('defaultSendAddress')]];
-                    this.app.setTo(to);
+                    this.app.view.model.set('to', to);
                     // send
-                    this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.one('mail:send:stop', done);
                 });
@@ -83,7 +85,7 @@ define('plugins/metrics/demo/register', [
             // Test 2
             //
 
-            this.test('Copy and delete mail', function () {
+            this.xtest('Copy and delete mail', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -148,7 +150,7 @@ define('plugins/metrics/demo/register', [
             // Test 3
             //
 
-            this.test('Write and send mail', function () {
+            this.xtest('Write and send mail', function () {
 
                 this.step('Open compose dialog', function (done) {
 
@@ -161,15 +163,15 @@ define('plugins/metrics/demo/register', [
                 });
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
-                    this.app.setSubject(SUBJECT);
-                    $('#writer_field_to').focus().val(FIRST_LETTERS).trigger('keyup');
+                    this.app.view.model.set('subject', SUBJECT);
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input');
                     done();
                 });
 
                 this.step('Wait for auto-complete', function (done) {
                     this.waitFor(function () {
-                        var item = $('.autocomplete-item').filter(function () {
-                            return $.trim($(this).find('.email').text()) === RECIPIENT;
+                        var item = $('.tt-suggestion').filter(function () {
+                            return $(this).find('.email').text().indexOf(RECIPIENT) === 0;
                         });
                         item.click();
                         return item.length;
@@ -177,13 +179,16 @@ define('plugins/metrics/demo/register', [
                     .done(done);
                 });
 
-                this.step('Write 100 words', function () {
-                    this.app.getEditor().setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                this.step('Write 100 words', function (done) {
+                    this.app.view.getEditor().done(function (editor) {
+                        editor.setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                        done();
+                    });
                 });
 
                 this.step('Send message', function (done) {
                     // send
-                    this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.one('mail:send:stop', done);
                 });
@@ -197,7 +202,7 @@ define('plugins/metrics/demo/register', [
             // Test 4
             //
 
-            this.test('Write mail and send with attachment (local)', function () {
+            this.xtest('Write mail and send with attachment (local)', function () {
 
                 this.step('Open compose dialog', function (done) {
 
@@ -211,21 +216,22 @@ define('plugins/metrics/demo/register', [
 
                 this.step('Add attachment', function (done) {
                     this.waitForImage('apps/plugins/metrics/demo/test.jpg', function (blob) {
-                        this.app.getView().fileList.add(_.extend(blob, { group: 'file', filename: 'test.jpg', lastModified: _.now(), webkitRelativePath: '' }));
+                        var collection = this.app.view.model.get('attachments');
+                        collection.add(_.extend(blob, { group: 'localFile', filename: 'test.jpg', lastModified: _.now(), webkitRelativePath: '' }));
                         done();
                     }.bind(this));
                 });
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
-                    this.app.setSubject(SUBJECT + ' (local attachment)');
-                    $('#writer_field_to').focus().val(FIRST_LETTERS).trigger('keyup');
+                    this.app.view.model.set('subject', SUBJECT + ' (local attachment)');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input');
                     done();
                 });
 
                 this.step('Wait for auto-complete', function (done) {
                     this.waitFor(function () {
-                        var item = $('.autocomplete-item').filter(function () {
-                            return $.trim($(this).find('.email').text()) === RECIPIENT;
+                        var item = $('.tt-suggestion').filter(function () {
+                            return $(this).find('.email').text().indexOf(RECIPIENT) === 0;
                         });
                         item.click();
                         return item.length;
@@ -233,13 +239,16 @@ define('plugins/metrics/demo/register', [
                     .done(done);
                 });
 
-                this.step('Write 100 words', function () {
-                    this.app.getEditor().setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                this.step('Write 100 words', function (done) {
+                    this.app.view.getEditor().done(function (editor) {
+                        editor.setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                        done();
+                    });
                 });
 
                 this.step('Send message', function (done) {
                     // send
-                    this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.one('mail:send:stop', done);
                 });
@@ -253,7 +262,7 @@ define('plugins/metrics/demo/register', [
             // Test 5
             //
 
-            this.test('Write mail and send with attachment (cloud)', function () {
+            this.xtest('Write mail and send with attachment (cloud)', function () {
 
                 this.step('Open compose dialog with attachment from cloud', function (done) {
 
@@ -267,15 +276,15 @@ define('plugins/metrics/demo/register', [
                 });
 
                 this.step('Enter subject and first 3 letters of recipient', function (done) {
-                    this.app.setSubject(SUBJECT  + ' (cloud attachment)');
-                    $('#writer_field_to').focus().val(FIRST_LETTERS).trigger('keyup');
+                    this.app.view.model.set('subject', SUBJECT + ' (cloud attachment)');
+                    this.app.view.$('.tokenfield.to .token-input.tt-input').focus().val(FIRST_LETTERS).trigger('input');
                     done();
                 });
 
                 this.step('Wait for auto-complete', function (done) {
                     this.waitFor(function () {
-                        var item = $('.autocomplete-item').filter(function () {
-                            return $.trim($(this).find('.email').text()) === RECIPIENT;
+                        var item = $('.tt-suggestion').filter(function () {
+                            return $(this).find('.email').text().indexOf(RECIPIENT) === 0;
                         });
                         item.click();
                         return item.length;
@@ -283,13 +292,16 @@ define('plugins/metrics/demo/register', [
                     .done(done);
                 });
 
-                this.step('Write 100 words', function () {
-                    this.app.getEditor().setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                this.step('Write 100 words', function (done) {
+                    this.app.view.getEditor().done(function (editor) {
+                        editor.setContent('Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
+                        done();
+                    });
                 });
 
                 this.step('Send message', function (done) {
                     // send
-                    this.app.getWindowNode().find('.btn-primary[data-action="send"]').click();
+                    this.app.getWindow().nodes.header.find('.btn-primary[data-action="send"]').click();
                     // wait for proper event
                     ox.one('mail:send:stop', done);
                 });
@@ -303,7 +315,7 @@ define('plugins/metrics/demo/register', [
             // Test 6
             //
 
-            this.test('Search and display mail listing', function () {
+            this.xtest('Search and display mail listing', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
@@ -353,7 +365,7 @@ define('plugins/metrics/demo/register', [
             // Test 7
             //
 
-            this.test('Open a mail with thumbnails', function () {
+            this.xtest('Open a mail with thumbnails', function () {
 
                 this.step('Switch to mail app', function (done) {
                     this.waitForApp('io.ox/mail', done);
