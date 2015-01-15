@@ -23,9 +23,8 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/date',
     'io.ox/core/util',
     'gettext!io.ox/contacts',
-    'settings!io.ox/contacts',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, gt, settings) {
+], function (ext, util, api, actions, model, getBreadcrumb, links, date, coreUtil, gt) {
 
     'use strict';
 
@@ -692,53 +691,6 @@ define('io.ox/contacts/view-detail', [
                     )
                 );
             }
-        }
-    });
-
-    function showQRCode(node) {
-        require(['3rd.party/view-qrcode'], function (qr) {
-            node.find('a').text(gt('Hide QR code'));
-            var vc = qr.getVCard(node.data());
-            node.qrcode(vc);
-        });
-    }
-
-    function hideQRCode(node) {
-        node.find('canvas').remove();
-        node.find('a').text(gt('Show QR code'));
-    }
-
-    function toggleQRCode(e) {
-        e.preventDefault();
-        var node = $(e.delegateTarget);
-        if (node.find('canvas').length) {
-            hideQRCode(node);
-            $(this).attr('aria-checked', false);
-        } else {
-            showQRCode(node);
-            $(this).attr('aria-checked', true);
-        }
-    }
-
-    ext.point('io.ox/contacts/detail/content').extend({
-        index: 10000,
-        id: 'qr',
-        draw: function (baton) {
-
-            // disabled?
-            if (!settings.get('features/qrcode', true)) return;
-            // not supported
-            if (!Modernizr.canvas || baton.data.mark_as_distributionlist) return;
-
-            this.append(
-                $('<fieldset class="block">').append(
-                    $('<legend class="sr-only">').text(gt('Show QR code')),
-                    $('<i class="fa fa-qrcode" aria-hidden="true">'), $.txt(' '),
-                    $('<a href="#" role="checkbox" aria-checked="false">').text(gt('Show QR code'))
-                )
-                .data(baton.data)
-                .on('click', 'a', toggleQRCode)
-            );
         }
     });
 

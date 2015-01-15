@@ -34,7 +34,7 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['view-qrcode.js', 'hopscotch/*'],
+                        src: ['hopscotch/*'],
                         cwd: 'lib/',
                         dest: 'build/apps/3rd.party/'
                     },
