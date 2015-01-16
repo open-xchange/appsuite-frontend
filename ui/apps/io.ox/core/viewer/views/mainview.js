@@ -135,7 +135,7 @@ define('io.ox/core/viewer/views/mainview', [
                     this.onPreviousSlide();
                     break;
                 case 38: // up arrow
-                    if ($(event.target).hasClass('io-ox-viewer')) {
+                    if ($(event.currentTarget).hasClass('io-ox-viewer')) {
                         event.stopPropagation();
                     }
                     break;
@@ -143,7 +143,7 @@ define('io.ox/core/viewer/views/mainview', [
                     this.onNextSlide();
                     break;
                 case 40: // down arrow
-                    if ($(event.target).hasClass('io-ox-viewer')) {
+                    if ($(event.currentTarget).hasClass('io-ox-viewer')) {
                         event.stopPropagation();
                     }
                     break;
