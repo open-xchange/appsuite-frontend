@@ -160,6 +160,9 @@ define('io.ox/search/autocomplete/extensions',
         },
 
         searchfieldMobile: function (baton) {
+
+            if (!_.device('small')) return;
+
             var group,
                 label = gt('Search'),
                 id = 'search-search-field';
