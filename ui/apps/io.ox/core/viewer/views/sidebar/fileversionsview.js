@@ -63,7 +63,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 .sort(versionSorter)
                 .each(function (version) {
                     var entryRow = $('<tr>').addClass('version').append(
-                                $('<td>').addClass('versionLabel').append(
+                                $('<td>').addClass('version-label' + (version.current_version ? ' current' : '')).append(
                                     $('<div>').text(gt.noI18n(version.version)).attr('title', gt.noI18n(version.version))
                                 )
                             );
@@ -90,9 +90,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             drawAllVersions(versions);
 
-            this.append($('<div class="row">')
-                .append($('<div class="col-xs-12 col-md-12">')
-                    .append(table)));
+            this.append(table);
         }
     });
 
@@ -112,12 +110,12 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             var row;
 
             this.append(
-                row = $('<td>').addClass('row')
+                row = $('<td>').addClass('version-content')
             );
 
             Ext.point(POINT + '/version/dropdown').invoke('draw', row, baton);
 
-            row.children('div.dropdown').addClass('col-xs-12 col-md-12')
+            row.children('div.dropdown')
                 .children('a').attr('title', baton.data.filename);
         }
     });
@@ -128,7 +126,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 20,
         draw: function (baton) {
             var $node;
-            this.find('td:last').append($node = $('<div class="col-xs-12 col-md-12 createdby">'));
+            this.find('td:last').append($node = $('<div class="createdby">'));
 
             UserAPI.getName(baton.data.created_by)
             .done(function (name) {
@@ -147,7 +145,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 30,
         draw: function (baton) {
             var d = Util.getDateFormated(baton.data.last_modified, { fulldate: true, filtertoday: false });
-            this.find('td:last').append($('<div class="col-xs-8 col-md-8 last_modified">').text(gt.noI18n(d)));
+            this.find('td:last').append($('<div class="last_modified">').text(gt.noI18n(d)));
         }
     });
 
@@ -156,17 +154,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         index: 40,
         draw: function (baton) {
             var size = (_.isNumber(baton.data.file_size)) ? _.filesize(baton.data.file_size) : '-';
-            this.find('td:last').append($('<div class="col-xs-4 col-md-4 size">').text(gt.noI18n(size)));
-        }
-    });
-
-    Ext.point(POINT + '/version').extend({
-        id: 'current_version',
-        index: 50,
-        draw: function (baton) {
-            if (baton.data.current_version) {
-                this.find('td:last').append($('<div class="col-xs-12 col-md-12 current-version">').text(gt('current version')));
-            }
+            this.find('td:last').append($('<div class="size">').text(gt.noI18n(size)));
         }
     });
 

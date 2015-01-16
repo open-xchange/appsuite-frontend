@@ -202,6 +202,7 @@
         display: none;
         box-shadow: inset 0px 2px 2px 0px #000000;
         overflow-y: auto;
+        overflow-x: hidden;
         outline: none;
         &.opened {
             display: block;
@@ -253,18 +254,31 @@
                 .versiontable {
                     white-space:nowrap;
 
-                    .versionLabel {
-                       max-width: 32px;
-                       overflow: hidden;
-                    }
-
-                    .current-version {
-                        color: lightgreen;
-                    }
-
                     td {
                         padding: 4px;
                         border-top: none;
+                    }
+
+                    .version-label {
+                        max-width: 30px;
+                        overflow: hidden;
+                        color: lightgrey;
+
+                        &.current {
+                            font-weight: bold;
+                            color: @viewer-text-color;
+                        }
+                    }
+
+                    .version-content {
+                        padding-left: 10px;
+
+                        .last_modified {
+                            float: left;
+                        }
+                        .size {
+                            text-align: right;
+                        }
                     }
 
                     .dropdown > a {
@@ -276,7 +290,6 @@
                             background-color: #444444;
                         }
                     }
-
                 }
 
                 .description {
