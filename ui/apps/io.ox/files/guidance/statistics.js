@@ -62,6 +62,7 @@ define('io.ox/files/guidance/statistics',
             'mobi' : 'Books',
 
             //Spreadsheet
+            'csv' : 'Spreadsheets',
             'ods' : 'Spreadsheets',
             'ots' : 'Spreadsheets',
             'xlsx': 'Spreadsheets',

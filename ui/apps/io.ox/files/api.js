@@ -153,6 +153,8 @@ define('io.ox/files/api',
         'ogv' : 'video/ogg',
         'ogm' : 'video/ogg',
         'webm': 'video/webm',
+        // CSV
+        'csv': 'text/csv',
         // open office
         'odc': 'application/vnd.oasis.opendocument.chart',
         'odb': 'application/vnd.oasis.opendocument.database',
