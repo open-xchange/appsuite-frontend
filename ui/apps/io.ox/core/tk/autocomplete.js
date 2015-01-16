@@ -191,7 +191,7 @@ define('io.ox/core/tk/autocomplete',
 
             close = function () {
                     if (isOpen) {
-                        isOpen = false;                     
+                        isOpen = false;
                         // toggle blur handlers
                         self.on('blur', o.blur).off('blur', fnBlur);
                         //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
@@ -469,7 +469,7 @@ define('io.ox/core/tk/autocomplete',
                     }
                 }
             },
-            
+
             fnSearch = function () {
                 var val = $.trim($(this).val());
                 lastSearch = $.Deferred();
@@ -482,7 +482,7 @@ define('io.ox/core/tk/autocomplete',
 
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, options) {
-                
+
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
                 this.focus();
@@ -523,7 +523,7 @@ define('io.ox/core/tk/autocomplete',
                 // avoid multiple instances
                 if ($(this).data('autocomplete') === true) return;
                 // bind fundamental handlers
-                $(this)                    
+                $(this)
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
                     // for IME support
