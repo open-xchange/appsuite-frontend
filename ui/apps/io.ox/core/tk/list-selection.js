@@ -21,13 +21,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         behavior = settings.get('selectionMode', 'normal'),
         THRESHOLD_X = 5, // touchmove threshold for mobiles in PX
         THRESHOLD_STICK = 25, // threshold in percent
-        THRESHOLD_REMOVE = 70; // percent
+        THRESHOLD_REMOVE = 75; //percentage
+
 
     function Selection(view) {
 
         this.view = view;
         this.behavior = behavior;
-
         this.view.$el
             // normal click/keybard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
@@ -63,7 +63,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 .on('touchend', SELECTABLE, this, this.onTouchEnd)//$.proxy(this.onTouchEnd, this))
                 .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this))
                 .on('tap', SWIPEPANE, this.onSwipePaneTap);
-
         }
     }
 
@@ -434,49 +433,67 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             //always trigger in multiple mode (sometimes only checkbox is changed)
             if (!_.isEqual(previous, this.get())) this.triggerChange(items);
         },
-
+        resetSwipeCell: function () {
+            this.startX = 0;
+            this.startY = 0;
+            $(this).removeAttr('style').removeClass('unfolded');
+            this.unfold = false;
+            this.target = null;
+            this.swipeCell.remove();
+            this.swipeCell = null;
+            this.t0 = 0;
+        },
 
         onTouchStart: function (e) {
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX, currentY = touches.pageY,
-                t = $(e.currentTarget).css('transition','');
+                t = $(this).css('transition','');
+
+            // var unfold indicates if any node is unfolded
+            // var unfolded indicates if currently touched node is unfolded
             this.startX = currentX;
             this.startY = currentY;
-            this.unfold = false;
-            this.remove = false;
-            this.scrolling = false;
-
+            this.distanceX = 0;
+            this.unfold = this.remove = this.scrolling = false;
             this.t0 = new Date().getTime();
             this.cellWidth = t.outerWidth(); // for later use
-            console.log('touchstart', t.hasClass('unfolded'));
-            if (t.hasClass('unfolded')) this.unfolded = true;
 
+            // check if this node is already opened
+            this.unfolded = t.hasClass('unfolded'); // mark current node as unfolded once
+            this.otherUnfolded = !!t.parent().find('.unfolded').length; // not so nice...
+            // this is needed to handle the correct translation for the touchmove event (offset is added)
+
+            // check if other nodes than the current one are unfolded
+            // if so, close other nodes and stop event propagation
+            if (!this.unfolded && this.otherUnfolded) {
+                e.data.resetSwipeCell.call(e.data.currentSelection);
+                return false;
+            }
         },
 
         onTouchMove: function (e) {
 
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX,
-                currentY = touches.pageY,
-                width = 100 / this.cellWidth,
-                distanceX = (this.startX - currentX) * -1, // invert value
-                distanceY = Math.abs(this.startY - currentY); // positive value
-                //width = 100 / this.cellWidth; // for later calculations of cell percentage
-            if (distanceY > 30) {
+                //currentY = touches.pageY,
+                width = 100 / this.cellWidth;
+                //distanceY = Math.abs(this.startY - currentY); // positive value
+
+            this.distanceX = (this.startX - currentX) * -1; // invert value
+
+            if (e.data.isScrolling) {
                 this.scrolling = true;
                 return; // return early on a simple scroll
             }
             // special handling for already unfolded cell
             //
             if (this.unfolded) {
-                console.log('unfolded!, using offset');
-                distanceX = -126 + distanceX;
+                this.distanceX += -126;// + this.distanceX;
             }
 
-            if (Math.abs(distanceX) > THRESHOLD_X) {
+            if (Math.abs(this.distanceX) > THRESHOLD_X) {
                 e.preventDefault(); // prevent further scrolling
 
-                this.distanceX = distanceX; // saving for touchend event
                 if (!this.target) {
                     // do expensive jquery select only once
                     this.target = $(e.currentTarget);
@@ -490,10 +507,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.target.before(this.swipeCell);
                 }
                 // translate the moved cell
-                this.target.css('-webkit-transform', 'translate3d(' + distanceX + 'px, 0, 0)');
+                this.target.css('-webkit-transform', 'translate3d(' + this.distanceX + 'px, 0, 0)');
 
                 // if delete threshold is reached, enlarge delete cell
-                if (Math.abs(width * distanceX) >= THRESHOLD_REMOVE) {
+                if (Math.abs(width * this.distanceX) >= THRESHOLD_REMOVE) {
                     this.expandDelete = true;
                     this.btnMore.css({width: 0});
                     this.btnDelete.css('transition', 'width 200ms');
@@ -509,48 +526,63 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         onTouchEnd: function (e) {
             if (this.scrolling) return; // return if simple list scroll
-
             var t1 = new Date().getTime(), // for calculation of momentum
                 distanceX = this.distanceX,
-                width = 100 / this.cellWidth;
-
-            this.target = $(e.currentTarget);
+                width = 100 / this.cellWidth,
+                distanceXAbs = Math.abs(width * distanceX),
+                time = (t1 - this.t0);
+            //this.target = $(e.currentTarget);
             this.remove = false;
             this.unfold = false;
 
-            if (Math.abs(width * distanceX) >= THRESHOLD_STICK) {
-                console.log('unfold reached');
+            // check for tap on unfolded cell
+            if (this.unfolded && this.distanceX <= 10) {
+                e.data.resetSwipeCell.call(e.data.currentSelection);
+                return false; // don't do a select after this
+            }
+            if (distanceXAbs >= THRESHOLD_STICK) {
                 // unfold automatically and stay at a position
                 this.unfold = true;
             }
 
-            if (Math.abs(width * distanceX) >= THRESHOLD_REMOVE) {
-                console.log('remove threshold reached');
+            if (distanceXAbs >= THRESHOLD_REMOVE) {
                 // remove cell after this threshold
                 this.remove = true;
                 this.unfold = false;
             }
+            var animTime, w = 100, velocity = 0;
+            // momentum wins against thresholds, try to define distance better
+            if (time <= 150 && distanceXAbs >= 10) {
+                //var acc = distanceXAbs / time;
+                //console.log('acc', acc);
+                //animTime = 200 * Math.pow(acc, 2);
+                animTime = 126 / distanceXAbs * time;
+                w = animTime / 126 * (126-distanceX);
+                console.log('setting as endtime', w);
 
-            // momentum wins against thresholds
-            if ((t1 - this.t0) <= 150) {
+                var v = 1000 * distanceXAbs / (1 + time);
+                var velocity = 0.8 * v + 0.2 * velocity;
+                console.log('velocity', velocity, v);
                 this.unfold = true;
             }
 
             if (this.unfold) {
-                console.log('doing unfold animation');
-                this.target.css('transition', '-webkit-transform 200ms');
-                this.target.css('-webkit-transform', 'translate3d(-126px, 0, 0)');
+                // todo: introduce deceleration with velocity calculated above
+                $(this).css('transition', '-webkit-transform ' + 80 + 'ms');
+                $(this).css('-webkit-transform', 'translate3d(-126px, 0, 0)');
 
                 this.btnMore.removeAttr('style');
                 this.btnDelete.removeAttr('style');
                 this.expandDelete = false;
 
-                this.target.addClass('unfolded');
+                $(this).addClass('unfolded');
+
+                e.data.unfold = true;
+                e.data.currentSelection = this;
             } else if (this.remove) {
                 // remove
-                console.log('doing remove animation');
-                this.target.css('transition', '-webkit-transform 100ms');
-                this.target.css('-webkit-transform', 'translate3d(-100%, 0, 0)');
+                $(this).css('transition', '-webkit-transform 100ms');
+                $(this).css('-webkit-transform', 'translate3d(-100%, 0, 0)');
                 var self = this;
                 setTimeout(function () {
                     //debugger;
@@ -558,40 +590,40 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     self.startX = 0;
                     self.startY = 0;
 
-                    $(e.currentTarget).animate({
+                    // todo: use requestAnimationFrame
+                    $(self).animate({
                         height: '0px',
                         padding: '0px',
                         border: 0
                     }, 200, function () {
 
-                        var node = self.target.closest(SELECTABLE),
+                        var node = $(self).closest(SELECTABLE),
                             cid = node.attr('data-cid');
                         // propagate event
                         console.log('trigger delete', cid);
                         //e.data.view.trigger('selection:delete', [cid]);
-                        self.target.removeAttr('style');
+                        $(self).removeAttr('style');
                         //self.swipeCell.remove();
                         self.swipeCell.remove();
                         self.swipeCell = null;
-                        self.target.removeClass('unfolded');
+                        $(self).removeClass('unfolded');
                         self.unfolded = false;
-                        delete self.target;
+
                     });
 
                     self.swipeCell.hide(200);
 
                 }, 100);
 
-            } else {
-                console.log('no delete, no unfold, resetting');
-                $(e.currentTarget).removeAttr('style');
+            } else if (distanceX) {
+                //$(e.currentTarget).removeAttr('style');
                 this.startX = 0;
                 this.startY = 0;
-                this.target.removeAttr('style').removeClass('unfolded');
+                $(this).removeAttr('style').removeClass('unfolded');
                 this.unfolded = false;
-                this.target = null;
                 this.swipeCell.remove();
                 this.swipeCell = null;
+                e.data.unfold = false;
             }
         },
 
@@ -687,6 +719,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
     if (behavior === 'alternative') {
         _.extend(Selection.prototype, alternativeBehavior);
     }
+
 
     return Selection;
 });

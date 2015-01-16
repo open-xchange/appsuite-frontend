@@ -296,6 +296,23 @@ define('io.ox/core/tk/list', [
 
             // make sure busy & idle use proper this (for convenient callbacks)
             _.bindAll(this, 'busy', 'idle');
+
+            // set special class if not on smartphones (different behavior)
+            if (_.device('!smartphone')) {
+                this.$el.addClass('visible-selection');
+
+            }
+            if (_.device('smartphone')) {
+                 var self = this,
+                    timer;
+                 this.$el.scroll(function () {
+                    self.selection.isScrolling = true;
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        self.selection.isScrolling = false;
+                    }, 250);
+                });
+            }
         },
 
         forwardCollectionEvents: function (name) {
