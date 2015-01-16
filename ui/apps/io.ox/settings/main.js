@@ -285,6 +285,7 @@ define('io.ox/settings/main',
 
             baton = ext.Baton.ensure(baton);
             baton.grid = grid;
+            app.get('window').setTitle(gt('%1$s %2$s', gt('Settings'), baton.data.title));
 
             var data = baton.data,
                 settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
