@@ -211,6 +211,7 @@ module.exports = function (grunt) {
                             'bower_components/mobiscroll/js/mobiscroll.util.datetime.js',
                             'bower_components/mobiscroll/js/mobiscroll.widget.js',
                             'bower_components/mobiscroll/js/mobiscroll.scroller.js',
+                            'bower_components/mobiscroll/js/mobiscroll.datetimebase.js',
                             'bower_components/mobiscroll/js/mobiscroll.datetime.js',
                             'bower_components/mobiscroll/js/mobiscroll.widget.ios.js'
                         ],

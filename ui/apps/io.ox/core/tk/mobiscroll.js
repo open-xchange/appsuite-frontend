@@ -40,7 +40,7 @@ define('io.ox/core/tk/mobiscroll', [
             separator: ' ',
             setText: gt('Ok'),
             showLabel: true,
-            theme: 'ios7',
+            theme: 'ios',
             timeFormat: date.getFormat(date.TIME).replace(/m/g, 'i').replace(/a/g, 'A'),
             yearText: gt('Years')
         };
