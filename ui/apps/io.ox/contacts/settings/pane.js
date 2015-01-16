@@ -75,7 +75,9 @@ define('io.ox/contacts/settings/pane',
             ];
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Display of names')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Display of names'))
+                    ),
                     new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: contactsModel}).render().$el
                 )
             );

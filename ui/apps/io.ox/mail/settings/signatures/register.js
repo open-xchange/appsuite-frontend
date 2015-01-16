@@ -340,11 +340,12 @@ define('io.ox/mail/settings/signatures/register',
                 if (_.device('smartphone')) {
                     var type = settings.get('mobileSignatureType');
                     if (type !== 'custom') type = 'none';
-                    $node.append($('<legend class="sectiontitle">')
-                    .text(
+                    $node.append($('<legend class="sectiontitle">').append(
+                        $('<h2>').text(
                         //#. Section title for the mobile signature
-                        gt('Signature')
-                    ))
+                            gt('Signature')
+                        ))
+                    )
                     .append(
                         $('<div class="form-group">').append(
                             $('<div class="radio">').append(
@@ -368,7 +369,9 @@ define('io.ox/mail/settings/signatures/register',
                         )
                     );
                 } else {
-                    $node.append($('<legend class="sectiontitle">').text(gt('Signatures')));
+                    $node.append($('<legend class="sectiontitle">').append(
+                        $('<h2>').text(gt('Signatures'))
+                    ));
                     addSignatureList($node);
                 }
             } catch (e) {

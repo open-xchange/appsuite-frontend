@@ -432,7 +432,9 @@ define('io.ox/portal/settings/pane',
             };
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Smartphone settings:')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Smartphone settings:'))
+                    ),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').text(gt('Reduce to widget summary')).prepend(
