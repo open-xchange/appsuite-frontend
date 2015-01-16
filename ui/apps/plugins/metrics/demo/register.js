@@ -414,7 +414,9 @@ define('plugins/metrics/demo/register', [
                 });
 
                 this.step('Open details and toggle mode', function () {
-                    $('.mail-attachment-list').find('.toggle-details, .toggle-mode').click();
+                    var list = $('.mail-attachment-list');
+                    list.find('.toggle-details').click();
+                    list.find('.toggle-mode').click();
                 });
 
                 this.step('Wait for first thumbnail to load', function (done) {
