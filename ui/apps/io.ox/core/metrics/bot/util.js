@@ -103,13 +103,18 @@ define('io.ox/core/metrics/bot/util', [], function () {
 
         // wait for list view to change collection and display content
         waitForListView: function (listView, needle, callback) {
-            return that.waitFor(function check() {
-                if (!listView.collection) return false;
-                if (listView.collection.cid.indexOf(needle) === -1) return false;
-                // must wait for more than one node (first one is busy-indicator)
-                return listView.el.childNodes.length > 1;
+
+            function hasProperCollection() {
+                return listView.collection && listView.collection.cid.indexOf(needle) > -1;
+            }
+
+            this.waitFor(function () {
+                if (!hasProperCollection()) return false;
+                return listView.loader.loading === false;
             })
-            .done(callback);
+            .done(function () {
+                setTimeout(callback, 0);
+            });
         },
 
         waitForImage: function (url, callback) {
@@ -118,7 +123,7 @@ define('io.ox/core/metrics/bot/util', [], function () {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.responseType = 'arraybuffer';
-            xhr.onload = function () {                
+            xhr.onload = function () {
                 if (this.status === 200) {
                     var blob = new window.Blob([this.response], { type: 'image/jpg' });
                     if (callback) callback (blob);

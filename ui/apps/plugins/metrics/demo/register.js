@@ -31,10 +31,10 @@ define('plugins/metrics/demo/register', [
         FILE = settings.get('cloud-attachment', { folder_id: '13894', id: '63605' }),
         MAIL_WITH_THUMBNAILS = settings.get('message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 85 }),
         STORE_FOLDER = settings.get('store-folder', 73407);
-    
+
     // ensure normal selection mode
     coreSettings.set('selectionMode', 'normal');
-    
+
     bot.ready(function () {
 
         // ensure new mail compose
@@ -53,8 +53,24 @@ define('plugins/metrics/demo/register', [
                     ox.launch('io.ox/mail/main');
                 });
 
-                this.step('Select first mail', function () {
-                    window.list.selection.select(0);
+                this.step('Switch to INBOX', function (done) {
+                    this.waitForFolder(INBOX, done);
+                });
+
+                this.step('Wait for list view to update', function (done) {
+                    this.waitForListView(this.app.listView, 'folder=' + INBOX, done);
+                });
+
+                this.step('Select first message', function (done) {
+                    if (window.list.collection.length === 0) {
+                        return console.error('No message to reply to');
+                    } else {
+                        window.list.selection.select(0);
+                        this.waitFor(function () {
+                            return !$('.io-ox-action-link[data-ref="io.ox/mail/actions/reply"]').hasClass('disabled');
+                        })
+                        .done(done);
+                    }
                 });
 
                 this.step('Click on reply', function () {
