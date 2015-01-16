@@ -375,7 +375,7 @@ define('io.ox/settings/main',
             draw: function () {
 
                 var buildCheckbox = function () {
-                    var checkbox = $('<input type="checkbox">')
+                    var checkbox = $('<input type="checkbox" tabindex="1">')
                     .on('change', function () {
 
                         expertmode = checkbox.prop('checked');
