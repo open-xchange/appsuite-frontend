@@ -37,13 +37,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
              * adds a row to the panel body
              */
             function addRow(label, content) {
-                var row, labelNode, contentNode;
-
-                row = $('<div>').addClass('row');
-                labelNode = $('<dt>').addClass('col-xs-12 col-md-4').text(label);
-                contentNode = $('<dd>').addClass('col-xs-12 col-md-8').text(content);
-                row.append(labelNode, contentNode);
-                panelBody.find('dl').append(row);
+                panelBody.find('dl').append(
+                    $('<dt>').text(label),
+                    $('<dd>').text(content)
+                );
             }
 
             if (!model) { return; }

@@ -58,11 +58,9 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 // render panel
                 panel = Util.createPanelNode({ title: gt('Description') });
                 panel.find('.panel-body').append(
-                    $('<div>').addClass('row').append(
-                        $('<div>').addClass('col-xs-12 col-md-12').append(
-                            $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label').text(labelString),
-                            $('<textarea>').addClass('description description-text').val(description)
-                        )
+                    $('<div>').append(
+                        $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label').text(labelString),
+                        $('<textarea>').addClass('description description-text').val(description)
                     )
                 );
 
