@@ -332,8 +332,8 @@ define('io.ox/files/mediaplayer',
 
         minimize: function () {
             var minimizedPlayerLauncher;
-            $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
-            $('#io-ox-topbar > div.launchers-secondary').prepend(
+            $('#io-ox-topbar > ul.launchers-secondary > .minimizedmediaplayer').remove();
+            $('#io-ox-topbar > ul.launchers-secondary').prepend(
                 minimizedPlayerLauncher = $('<li class="launcher minimizedmediaplayer">').append(
                     $('<a href="#" tabindex="1">').append($('<i>').addClass('fa fa-play'))
                 ).one('click', function () {
@@ -355,8 +355,8 @@ define('io.ox/files/mediaplayer',
         },
 
         restore: function () {
-            if ($('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').length > 0) {
-                $('#io-ox-topbar > div.launchers-secondary > .minimizedmediaplayer').remove();
+            if ($('#io-ox-topbar > ul.launchers-secondary > .minimizedmediaplayer').length > 0) {
+                $('#io-ox-topbar > ul.launchers-secondary > .minimizedmediaplayer').remove();
                 this.list = [];
                 this.container.show();
                 _.defer(function () { $('#io-ox-mediaplayer').focus(); });

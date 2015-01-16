@@ -1067,7 +1067,7 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
 
-                var rightbar = $('<div class="launchers-secondary">');
+                var rightbar = $('<ul class="launchers-secondary">');
 
                 // right side
                 ext.point('io.ox/core/topbar/right').invoke('draw', rightbar);
