@@ -196,36 +196,42 @@ define('io.ox/core/viewer/views/toolbarview', [
         index: 80,
         id: 'rename',
         label: gt('Rename'),
+        section: 'edit',
         ref: 'io.ox/files/actions/rename'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 90,
         id: 'editdescription',
         label: gt('Edit description'),
+        section: 'edit',
         ref: TOOLBAR_ACTION_DROPDOWN_ID + '/editdescription'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 100,
         id: 'share',
         label: gt('Share'),
+        section: 'export',
         ref: 'io.ox/files/icons/share'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 200,
         id: 'download',
         label: gt('Download'),
+        section: 'export',
         ref: 'io.ox/files/actions/download'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 300,
         id: 'print',
         label: gt('Print'),
+        section: 'export',
         ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_FILE, {
         index: 400,
         id: 'delete',
         label: gt('Delete'),
+        section: 'delete',
         ref: 'io.ox/files/actions/delete'
     });
 

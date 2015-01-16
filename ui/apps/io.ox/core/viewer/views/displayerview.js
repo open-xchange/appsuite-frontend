@@ -26,12 +26,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
         className: 'viewer-displayer',
 
-        events: {
-            'click a.left.carousel-control': 'onPreviousSlide',
-            'click a.right.carousel-control': 'onNextSlide',
-            'keydown': 'onKeydown'
-        },
-
         initialize: function () {
             //console.warn('DisplayerView.initialize()');
             this.$el.on('dispose', this.dispose.bind(this));
@@ -58,8 +52,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             var carouselRoot = $('<div id="viewer-carousel" class="carousel">'),
                 carouselInner = $('<div class="carousel-inner">'),
-                prevSlide = $('<a class="left carousel-control" href="#viewer-carousel"><i class="fa fa-angle-left"></i></a>'),
-                nextSlide = $('<a class="right carousel-control" href="#viewer-carousel"><i class="fa fa-angle-right"></i></a>'),
+                prevSlide = $('<a class="left carousel-control"><i class="fa fa-angle-left"></i></a>'),
+                nextSlide = $('<a class="right carousel-control"><i class="fa fa-angle-right"></i></a>'),
                 // preload 1 neigboring slides
                 slidesToPreload = 1,
                 startIndex = data.index,
@@ -71,8 +65,8 @@ define('io.ox/core/viewer/views/displayerview', [
             });
 
             // init the carousel and preload neighboring slides on next/prev
-            prevSlide.attr({ title: gt('Previous'), 'data-slide': 'prev', tabindex: '1', role: 'button' });
-            nextSlide.attr({ title: gt('Next'), 'data-slide': 'next', tabindex: '1', role: 'button' });
+            prevSlide.attr({ title: gt('Previous'), tabindex: '1', role: 'button' });
+            nextSlide.attr({ title: gt('Next'), tabindex: '1', role: 'button' });
             carouselRoot.append(carouselInner, prevSlide, nextSlide)
                 .carousel({ keyboard: false })
                 .on('slid.bs.carousel', function (event) {
@@ -82,9 +76,9 @@ define('io.ox/core/viewer/views/displayerview', [
                     self.blendSlideCaption(activeSlideIndex, captionShowDuration);
                 });
 
-            // append carousel to view and blend the slide caption in
-            this.$el.append(carouselRoot);
-            this.$el.attr('tabindex', -1);
+            // append carousel to view
+            this.$el.append(carouselRoot).attr('tabindex', -1);
+            this.carouselRoot = carouselRoot;
 
             // set the first selected file active, blend its caption, and preload its neighbours
             carouselInner.children().eq(startIndex).addClass('active');
@@ -188,41 +182,12 @@ define('io.ox/core/viewer/views/displayerview', [
             }, duration);
         },
 
-        onPreviousSlide: function () {
-            //console.warn('DisplayerView.onPreviousSlide()');
-            EventDispatcher.trigger('viewer:display:previous');
-            this.focusDisplayerDeferred();
+        prevSlide: function () {
+            this.carouselRoot.carousel('prev');
         },
 
-        onNextSlide: function () {
-            //console.warn('DisplayerView.onNextSlide()');
-            EventDispatcher.trigger('viewer:display:next');
-            this.focusDisplayerDeferred();
-        },
-
-        onKeydown: function (event) {
-            //console.warn('DisplayerView.onKeydown()', event, event.which);
-            switch (event.which || event.keyCode) {
-                case 37: // left arrow
-                    this.onPreviousSlide();
-                    break;
-                case 38: // up arrow
-                    event.stopPropagation();
-                    break;
-                case 39: // right arrow
-                    this.onNextSlide();
-                    break;
-                case 40: // down arrow
-                    event.stopPropagation();
-                    break;
-            }
-        },
-
-        focusDisplayerDeferred: function () {
-            var self = this;
-            _.defer(function () {
-                self.$el.find('.active').focus();
-            });
+        nextSlide: function () {
+            this.carouselRoot.carousel('next');
         },
 
         dispose: function () {

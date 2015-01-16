@@ -32,7 +32,9 @@ define('io.ox/core/viewer/views/mainview', [
         className: 'io-ox-viewer abs',
 
         events: {
-            'keydown': 'onKeydown'
+            'keydown': 'onKeydown',
+            'click a.left.carousel-control': 'onPreviousSlide',
+            'click a.right.carousel-control': 'onNextSlide'
         },
 
         initialize: function (/*options*/) {
@@ -89,15 +91,14 @@ define('io.ox/core/viewer/views/mainview', [
                     self.displayerView.render(data).el,
                     self.sidebarView.render(data).el
                 );
+                self.$el.focus();
             });
-            // focus the active slide initially
-            self.displayerView.focusDisplayerDeferred();
             return this;
         },
 
         // handler for keyboard events on the viewer
         onKeydown: function (event) {
-            //console.warn('MainView.onKeyDown() event type: ', event.type, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
+            //console.warn('MainView.onKeyDown() event', event, 'keyCode: ', event.keyCode, 'charCode: ', event.charCode);
             var viewerRootEl = this.$el;
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
@@ -130,6 +131,22 @@ define('io.ox/core/viewer/views/mainview', [
                         this.$el.remove();
                     }
                     break;
+                case 37: // left arrow
+                    this.onPreviousSlide();
+                    break;
+                case 38: // up arrow
+                    if ($(event.target).hasClass('io-ox-viewer')) {
+                        event.stopPropagation();
+                    }
+                    break;
+                case 39: // right arrow
+                    this.onNextSlide();
+                    break;
+                case 40: // down arrow
+                    if ($(event.target).hasClass('io-ox-viewer')) {
+                        event.stopPropagation();
+                    }
+                    break;
             }
         },
 
@@ -145,6 +162,9 @@ define('io.ox/core/viewer/views/mainview', [
                 index: this.displayedFileIndex,
                 model: this.collection.at(this.displayedFileIndex)
             } );
+            // tell Bootstrap carousel to show previous slide
+            this.displayerView.prevSlide();
+            this.$el.focus();
         },
 
         onNextSlide: function () {
@@ -159,6 +179,9 @@ define('io.ox/core/viewer/views/mainview', [
                 index: this.displayedFileIndex,
                 model: this.collection.at(this.displayedFileIndex)
             });
+            // tell Bootstrap carousel to show the next slide
+            this.displayerView.nextSlide();
+            this.$el.focus();
         },
 
         // refresh view sizes and broadcast window resize event
