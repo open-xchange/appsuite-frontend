@@ -30,7 +30,7 @@ define('plugins/notifications/mail/register',
                     .attr('focusId', 'mail-notification-')
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({ tabindex: 1,
-                            'aria-label': gt('Press to hide all notifications for new mails.'),
+                            'aria-label': gt('Hide all notifications for new mails.'),
                             'data-action': 'clear',
                             'focus-id': 'mail-notification-clear'})),
                 $('<div class="items">'),

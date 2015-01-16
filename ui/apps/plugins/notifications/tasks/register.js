@@ -33,7 +33,7 @@ define('plugins/notifications/tasks/register',
                 $('<h1 class="section-title">').text(gt('Overdue Tasks')).append(
                     $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({ tabindex: 1,
-                        'aria-label': gt('Press to hide all notifications for overdue tasks.'),
+                        'aria-label': gt('Hide all notifications for overdue tasks.'),
                         'data-action': 'clear',
                         'focus-id': 'task-overdue-notification-clear'
                     })
@@ -259,7 +259,7 @@ define('plugins/notifications/tasks/register',
                     $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({
                         tabindex: 1,
-                        'aria-label': gt('Press to hide all task reminders.'),
+                        'aria-label': gt('Hide all task reminders.'),
                         'data-action': 'clear',
                         'focus-id': 'task-reminder-notification-clear'
                     })
@@ -504,7 +504,7 @@ define('plugins/notifications/tasks/register',
                 $('<h1 class="section-title">').text(gt('Task invitations'))
                     .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({ tabindex: 1,
-                        'aria-label': gt('Press to hide all task invitations.'),
+                        'aria-label': gt('Hide all task invitations.'),
                         'data-action': 'clear',
                         'focus-id': 'task-invitation-notification-clear'})),
                 $('<div class="notifications">')

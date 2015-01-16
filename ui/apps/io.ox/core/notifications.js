@@ -33,19 +33,18 @@ define('io.ox/core/notifications',
             var count = this.model.get('count'),
                 //#. %1$d number of notifications
                 //#, c-format
-                a11y = gt.format(gt.ngettext('You have %1$d notification.', 'You have %1$d notifications.', count), count),
-                a11yState = this.$el.attr('aria-pressed') ? gt('The notification area is open') : gt('The notification area is closed');
+                a11y = gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count);
             //don't create a loop here
             this.model.set('a11y', a11y, {silent: true});
             this.nodes.badge.toggleClass('empty', count === 0);
-            this.$el.attr('aria-label', a11y + ' ' + a11yState);
+            this.$el.attr('aria-label', a11y);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
             new NotificationController().yell('screenreader', a11y);
         },
         onToggle: function (open) {
             var a11yState = open ? gt('The notification area is open') : gt('The notification area is closed');
             this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
-            this.$el.attr({'aria-pressed': open ? true : false,
+            this.$el.attr({'aria-expanded': open ? true : false,
                            'aria-label': this.model.get('a11y') + ' ' + a11yState});
         },
         render: function () {
@@ -53,7 +52,7 @@ define('io.ox/core/notifications',
                     href: '#',
                     tabindex: '1',
                     role: 'button',
-                    'aria-pressed': false
+                    'aria-expanded': false
                 })
                 .append(
                     this.nodes.badge = $('<span class="badge">').append(
