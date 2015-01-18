@@ -333,6 +333,7 @@ define('io.ox/mail/accounts/settings',
                     successDialogbox.getFooter().find('.btn').addClass('closebutton');
                     var message = gt('Account added successfully');
                     drawMessage(alertPlaceholder, message);
+                    alertPlaceholder.find('.alert-success').attr('id', 'dialog-title');
                 });
             });
         },
