@@ -114,7 +114,9 @@ define('io.ox/calendar/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Time')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Time'))
+                    ),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('row').append(
                             $('<label>').attr('for', 'interval').addClass('control-label col-sm-4').text(gt('Time scale in minutes')),
@@ -150,7 +152,9 @@ define('io.ox/calendar/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Default calendar view')),
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('Default calendar view'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').addClass('control-label').text(gt('Show declined appointments')).prepend(
@@ -169,7 +173,9 @@ define('io.ox/calendar/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('New appointment')),
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('New appointment'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('row').append(
                             $('<label>').attr('for', 'defaultReminder').addClass('control-label col-sm-4').text(gt('Default reminder')),
@@ -196,7 +202,9 @@ define('io.ox/calendar/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notifications')),
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('Email notifications'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').addClass('control-label').text(gt('Receive notification for appointment changes')).prepend(

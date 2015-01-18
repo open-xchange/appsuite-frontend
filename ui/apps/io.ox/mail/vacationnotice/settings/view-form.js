@@ -101,7 +101,9 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
                 this.append(
                     $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').text(model.fields.headlineAdresses),
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(model.fields.headlineAdresses)
+                        ),
                         checkboxes
                     )
                 );
@@ -172,7 +174,9 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
                         this.append(
                             $('<fieldset class="col-md-12 form-group dateFrom">').append(
-                                $('<legend class="simple">').text(model.fields.dateFrom),
+                                $('<legend class="simple">').append(
+                                    $('<h2>').text(model.fields.dateFrom)
+                                ),
                                 // don't wrap the date control with a label (see bug #27559)
                                 dateView.render().$el
                             )
@@ -193,7 +197,9 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
                         this.append(
                             $('<fieldset class="col-md-12 form-group dateUntil">').append(
-                                $('<legend class="simple">').text(model.fields.dateUntil),
+                                $('<legend class="simple">').append(
+                                    $('<h2>').text(model.fields.dateUntil)
+                                ),
                                 // don't wrap the date control with a label (see bug #27559)
                                 dateView.render().$el
                             )

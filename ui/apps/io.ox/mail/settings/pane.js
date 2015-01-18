@@ -164,7 +164,9 @@ define('io.ox/mail/settings/pane', [
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend class="sectiontitle expertmode">').text(gt('Common')),
+                    $('<legend class="sectiontitle expertmode">').append(
+                        $('<h2>').text(gt('Common'))
+                    ),
                     $('<div class="form-group">').append(
                         // Permanently remove
                         $('<div class="checkbox expertmode">').append(
@@ -204,7 +206,9 @@ define('io.ox/mail/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Compose')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Compose'))
+                    ),
                     $('<div>').addClass('controls').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').text(gt('Append vCard')).prepend(
@@ -219,14 +223,18 @@ define('io.ox/mail/settings/pane', [
                     )
                 ),
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Forward emails as')),
+                    $('<legend>').addClass('sectiontitle').append(
+                        $('<h2>').text(gt('Forward emails as'))
+                    ),
                     new mini.RadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: mailSettings }).render().$el
                 ),
 
                 (function () {
                     if (_.device('smartphone || tablet')) return $();
                     return $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').text(gt('Format emails as')),
+                        $('<legend>').addClass('sectiontitle').append(
+                            $('<h2>').text(gt('Format emails as'))
+                        ),
                         new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: mailSettings }).render().$el
                     );
                 })(),
@@ -279,7 +287,9 @@ define('io.ox/mail/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Display')),
+                    $('<legend>').addClass('sectiontitle expertmode').append(
+                        $('<h2>').text(gt('Display'))
+                    ),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('checkbox').append(
                             $('<label>').text(gt('Allow html formatted emails')).prepend(
@@ -324,7 +334,9 @@ define('io.ox/mail/settings/pane', [
 
             this.append(
                 $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
+                    $('<legend class="sectiontitle">').append(
+                        $('<h2>').text(gt('IMAP folder subscription'))
+                    ),
                     $('<div class="sectioncontent">').append(
                         $('<button type="button" class="btn btn-primary" tabindex="1">')
                         .on('click', changeIMAPSubscription)
