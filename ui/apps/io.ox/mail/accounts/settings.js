@@ -271,7 +271,7 @@ define('io.ox/mail/accounts/settings', [
                     enter: 'add'
                 })
                 .header(
-                    $('<h4>').text(gt('Add mail account'))
+                    $('<h2>').text(gt('Add mail account'))
                 )
                 .build(function () {
                     // invoke extensions
