@@ -805,8 +805,6 @@ define('io.ox/mail/write/view-main',
                     return $('<div class="abs editor-outer-container">').append(
                         // white background
                         $('<div>').addClass('abs editor-background'),
-                        // editor's print margin
-                        $('<div>').addClass('abs editor-print-margin'),
                         // inner div
                         $('<div>').addClass('abs editor-inner-container')
                         .css('overflow', 'hidden')

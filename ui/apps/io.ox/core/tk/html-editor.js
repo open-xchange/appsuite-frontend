@@ -781,7 +781,6 @@ define.async('io.ox/core/tk/html-editor',
         };
 
         this.handleShow = function () {
-            textarea.parents('.window-content').find('.editor-print-margin').hide();
             textarea.prop('disabled', false).idle();
             textarea.parents('.window-content').find('.mce-tinymce').show();
             textarea.hide();
