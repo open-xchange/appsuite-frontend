@@ -266,6 +266,7 @@ define('io.ox/mail/compose/model', [
                 'priority',
                 'vcard',
                 'nested_msgs',
+                'sendtype',
                 'csid'
             );
 

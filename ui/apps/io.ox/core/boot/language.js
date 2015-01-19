@@ -48,10 +48,6 @@ define('io.ox/core/boot/language', ['gettext', 'io.ox/core/boot/util'], function
                 });
                 // Set Cookie
                 _.setCookie('language', (ox.language = id));
-                // update placeholder (IE9 fix)
-                if (_.browser.IE) {
-                    $('input[type=text], input[type=password]').val('').placeholder();
-                }
                 ox.trigger('language');
             });
         },

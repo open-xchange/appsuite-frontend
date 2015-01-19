@@ -250,9 +250,15 @@
         html.high-contrast & a {
             color: #333;
         }
-        label>span {
-            overflow: hidden;
-            .ellipsis();
+
+        label {
+            // ellipsis color
+            color: rgba(0,0,0,.5);
+            &>span {
+                color: #000000;
+                overflow: hidden;
+                .ellipsis();
+            }
         }
     }
 
@@ -294,6 +300,13 @@
     // reduce space between button and dropdown
     .dropdown-menu {
         margin-top: 0;
+    }
+
+    i.action {
+        opacity: .8;
+        &:hover, &:focus {
+            opacity: .4;
+        }
     }
 }
 

@@ -275,8 +275,7 @@ define('io.ox/mail/compose/view', [
         className: 'io-ox-mail-compose container default-content-padding',
 
         events: {
-            'click [data-action="add-cc"]':     'toggleCC',
-            'click [data-action="add-bcc"]':    'toggleBCC',
+            'click [data-action="add"]': 'toggleTokenfield',
             'keyup [data-extension-id="subject"] input': 'setSubject'
         },
 
@@ -393,10 +392,12 @@ define('io.ox/mail/compose/view', [
 
             if (mail.msgref) {
                 mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
                 mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
             if (_(mail.flags).isUndefined()) {
@@ -446,6 +447,7 @@ define('io.ox/mail/compose/view', [
                     def.reject(result);
                 } else {
                     self.model.set('msgref', result, { silent: true });
+                    self.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT, { silent: true });
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
@@ -736,41 +738,23 @@ define('io.ox/mail/compose/view', [
             return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
         },
 
-        toggleCC: function () {
-            return this.toggleInput('cc');
-        },
-
-        toggleBCC: function () {
-            return this.toggleInput('bcc');
-        },
-
-        toggleInput: function (type, show) {
-            var button = $('[data-action="add-' + type + '"]'),
+        toggleTokenfield: function (e) {
+            var isString = typeof e === 'string',
+                type = isString ? e : $(e.target).attr('data-type'),
+                button = this.$el.find('[data-type="' + type + '"]'),
                 input = this.$el.find('[data-extension-id="' + type + '"]');
-            if (input.hasClass('hidden') || show) {
-                this.showInput(type, input);
+            if (!isString) e.preventDefault();
+            if (input.hasClass('hidden') || isString) {
+                input.removeClass('hidden');
                 button.addClass('active').attr('aria-checked', true);
             } else if (this.model.get(type).length === 0) {
                 //We don't want to close it automatically! Bug: 35730
-                this.closeInput(type, input);
+                this.model.set(type, []);
+                input.addClass('hidden');
+                $(window).trigger('resize.tinymce');
                 button.removeClass('active').attr('aria-checked', false);
             }
             return input;
-        },
-
-        showInput: function (type, input) {
-            var type = type || 'cc',
-                input = input || this.$el.find('[data-extension-id="' + type + '"]');
-            input.removeClass('hidden');
-        },
-
-        closeInput: function (type, input) {
-            var type = type || 'cc',
-                input = input || this.$el.find('[data-extension-id="' + type + '"]');
-
-            this.model.set(type, []);
-            input.addClass('hidden');
-            $(window).trigger('resize.tinymce');
         },
 
         loadEditor: function (content) {
@@ -959,11 +943,15 @@ define('io.ox/mail/compose/view', [
 
             return this.changeEditorMode().done(function () {
                 if (data.replaceBody !== 'no') {
+                    var mode = self.model.get('mode');
                     // set focus in compose and forward mode to recipient tokenfield
-                    if (/(compose|forward)/.test(self.model.get('mode'))) {
+                    if (/(compose|forward)/.test(mode)) {
                         self.$el.find('.tokenfield:first .token-input').focus();
                     } else {
                         self.editor.focus();
+                    }
+                    if (mode === 'replyall' && !_.isEmpty(self.model.get('cc'))) {
+                        self.toggleTokenfield('cc');
                     }
                     self.setBody(self.model.getContent());
                     self.model.dirty(false);
@@ -1021,10 +1009,10 @@ define('io.ox/mail/compose/view', [
                             $(this).typeahead('val', '');
                         } else if ((/^cc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleInput('cc', true).find('.token-input').focus();
+                            self.toggleTokenfield('cc').find('.token-input').focus();
                         } else if ((/^bcc:?\s/i).test(val)) {
                             $(this).typeahead('val', '');
-                            self.toggleInput('bcc', true).find('.token-input').focus();
+                            self.toggleTokenfield('bcc').find('.token-input').focus();
                         }
                     }
                 });

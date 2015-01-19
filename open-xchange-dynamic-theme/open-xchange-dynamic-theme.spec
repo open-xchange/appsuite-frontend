@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 1
+%define         ox_release 0
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -10,7 +10,11 @@ Source:         %{name}_%{version}.orig.tar.bz2
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
+%if 0%{?rhel_version} && 0%{?rhel_version} >= 700
+BuildRequires:  ant
+%else
 BuildRequires:  ant-nodeps
+%endif
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
 
