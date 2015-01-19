@@ -29,6 +29,7 @@ define('plugins/metrics/demo/register', [
         FIRST_LETTERS = settings.get('first-letters', 'bigge'),
         RECIPIENT = settings.get('recipient', 'matthias.biggeleben@open-xchange.com'),
         FILE = settings.get('cloud-attachment', { folder_id: '13894', id: '63605' }),
+        KEYWORD = settings.get('search-keyword', 'automatic'),
         MAIL_WITH_THUMBNAILS = settings.get('message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 85 }),
         STORE_FOLDER = settings.get('store-folder', 73407);
 
@@ -358,17 +359,8 @@ define('plugins/metrics/demo/register', [
                     $('.search-field').trigger('load');
                 });
 
-                this.step('Pick random subject and search for it', function () {
-
-                    var list = this.app.listView,
-                        length = list.collection.length,
-                        // pick one random message
-                        mail = list.collection.at(Math.random() * length >> 0),
-                        subject = mail.get('subject'),
-                        // look for first word in subject
-                        word = subject.match(/[a-zäöüéèáàêß\-]{3,}/i)[0];
-
-                    $('.search-field').val(word).trigger('search');
+                this.step('Search for particular keyword', function () {
+                    $('.search-field').val(KEYWORD).trigger('search');
                 });
 
                 this.step('Wait for auto-complete', function (done) {
@@ -380,7 +372,7 @@ define('plugins/metrics/demo/register', [
                 });
 
                 this.step('Wait for list view to display results', function (done) {
-                    this.waitForListView(this.app.listView, 'search/subject', done);
+                    this.waitForListView(this.app.listView, 'search/', done);
                 });
             });
 
