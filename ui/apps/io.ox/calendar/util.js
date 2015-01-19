@@ -375,7 +375,7 @@ define('io.ox/calendar/util',
             var current = date.Local.getTTInfoLocal(data.start_date);
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data))),
-                $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label label-default pointer" tabindex="1">').text(gt.noI18n(current.abbr)).popover({
                     container: '#io-ox-core',
                     content: getContent(),
                     html: true,
@@ -386,7 +386,7 @@ define('io.ox/calendar/util',
                         return 'left';
                     },
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
-                    trigger: 'hover'
+                    trigger: 'hover focus'
                 }).on('blur', function () {
                     $(this).popover('hide');
                 })
