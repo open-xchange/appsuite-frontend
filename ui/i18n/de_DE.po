@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-09 13:05+0100\n"
+"PO-Revision-Date: 2015-01-19 12:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -140,9 +140,6 @@ msgstr ""
 "%5$s"
 
 #: apps/io.ox/settings/main.js:392 module:io.ox/core
-#, fuzzy
-#| msgctxt "mail address"
-#| msgid "%1$s %2$s"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -748,10 +745,8 @@ msgstr "Der neue Teilnehmer wurde hinzugefügt"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:75
 #: module:io.ox/core/pubsub
-#, fuzzy
-#| msgid "This may take some seconds"
 msgid "Adding subscription. This may take some seconds …"
-msgstr "Dies kann eine Weile dauern..."
+msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern ..."
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:215 module:io.ox/mail
@@ -1450,9 +1445,8 @@ msgstr "Aufräumen ..."
 #: apps/io.ox/core/tk/datepicker.js:35 module:io.ox/core
 #: apps/io.ox/core/tk/mobiscroll.js:29
 #, fuzzy
-#| msgid "clear"
 msgid "Clear"
-msgstr "löschen"
+msgstr "Löschen"
 
 #: apps/io.ox/search/autocomplete/extensions.js:192 module:io.ox/core
 msgid "Clear field"
@@ -6015,10 +6009,8 @@ msgstr "Erledigte Aufgaben anzeigen"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:58
 #: module:io.ox/core/pubsub
-#, fuzzy
-#| msgid "Show tiles"
 msgid "Show file"
-msgstr "Kacheln anzeigen"
+msgstr "Datei anzeigen"
 
 #: apps/io.ox/files/settings/pane.js:66 module:io.ox/files
 msgid "Show hidden files and folders"
@@ -8105,16 +8097,12 @@ msgid "daily"
 msgstr "täglich"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Dark blue"
 msgid "dark blue"
-msgstr "Dunkelblau"
+msgstr "dunkelblau"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Dark red"
 msgid "dark green"
-msgstr "Dunkelrot"
+msgstr "dunkelgrün"
 
 #: apps/io.ox/search/apiproxy.js:67 module:io.ox/core
 msgid "date range"
@@ -8284,7 +8272,7 @@ msgstr "vierten"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "gray"
-msgstr ""
+msgstr "grau"
 
 #: apps/io.ox/core/import/import.js:70 module:io.ox/core
 msgid "iCal"
@@ -8336,16 +8324,12 @@ msgid "late in the evening"
 msgstr "spät am Abend"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Light blue"
 msgid "light blue"
-msgstr "Hellblau"
+msgstr "hellblau"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Light green"
 msgid "light green"
-msgstr "Hellgrün"
+msgstr "hellgrün"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:498
 #: module:io.ox/calendar/edit/main
@@ -8387,10 +8371,8 @@ msgid "next Wednesday"
 msgstr "nächsten Mittwoch"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Set color"
 msgid "no color"
-msgstr "Farbe zuweisen"
+msgstr "keine Farbe"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js:165 module:io.ox/core
@@ -8424,14 +8406,12 @@ msgid "one year"
 msgstr "ein Jahr"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Orange"
 msgid "orange"
-msgstr "Orange"
+msgstr "orange"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "pink"
-msgstr ""
+msgstr "pink"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:169 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:174
@@ -8439,10 +8419,8 @@ msgid "process subsequent rules"
 msgstr "gegen nachfolgende Regeln prüfen"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Purple"
 msgid "purple"
-msgstr "Lila"
+msgstr "lila"
 
 #. object permissions - read
 #: apps/io.ox/core/permissions/permissions.js:149 module:io.ox/core
@@ -8456,10 +8434,8 @@ msgid "read own objects"
 msgstr "eigene Objekte lesen"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Red"
 msgid "red"
-msgstr "Rot"
+msgstr "rot"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:177 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:182
@@ -8583,10 +8559,8 @@ msgid "yearly"
 msgstr "jährlich"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
-#, fuzzy
-#| msgid "Yellow"
 msgid "yellow"
-msgstr "Gelb"
+msgstr "gelb"
 
 #: apps/plugins/portal/oxdriveclients/register.js:35 module:plugins/portal
 msgid "your platform"
