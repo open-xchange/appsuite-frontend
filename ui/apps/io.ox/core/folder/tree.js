@@ -27,9 +27,9 @@ define('io.ox/core/folder/tree',
         className: 'folder-tree abs',
 
         events: {
-            'click .contextmenu-control'    : 'onToggleContextMenu',
-            'keydown .contextmenu-control'  : 'onKeydown',
-            'contextmenu .selectable'       : 'onContextMenu'
+            'click .contextmenu-control'                    : 'onToggleContextMenu',
+            'keydown .contextmenu-control'                  : 'onKeydown',
+            'contextmenu .selectable, .contextmenu-control'  : 'onContextMenu'
         },
 
         initialize: function (options) {
@@ -160,6 +160,7 @@ define('io.ox/core/folder/tree',
         onContextMenu: function (e) {
             // clicks bubbles. right-click not
             e.stopPropagation();
+            e.preventDefault();
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
             this.toggleContextMenu(target, top, left);
         },
@@ -174,24 +175,15 @@ define('io.ox/core/folder/tree',
 
             var dropdown = this.$dropdown;
             // done if not open
-            if (!dropdown.hasClass('open')) return;
+            // if (!dropdown.hasClass('open')) return;
             // shift-tab
-            if (e.shiftKey && e.which === 9) return;
-
+            // if (e.shiftKey && e.which === 9) return;
             switch (e.which) {
-            case 9:
-                // tab
-            case 40:
+            case 32:
                 // cursor down
                 e.preventDefault();
+                $(e.currentTarget).click();
                 return dropdown.find('.dropdown-menu > li:first > a').focus();
-            case 38:
-                // cursor up
-                e.preventDefault();
-                return dropdown.find('.dropdown-menu > li:last > a').focus();
-            case 27:
-                // escape
-                return dropdown.find('.dropdown-toggle').dropdown('toggle');
             }
         },
 
@@ -212,7 +204,7 @@ define('io.ox/core/folder/tree',
                 if (_.device('smartphone')) {
                     ul.append(
                         $('<li role="presentation">').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').append(
+                            $('<a href="#" class="io-ox-action-link" data-action="close-menu" role="menuitem" data-toggle="dropdown" aria-haspopup="true">').append(
                                 $('<i class="fa fa-chevron-down" aria-hidden="true">'),
                                 $('<span class="sr-only">')
                             )
