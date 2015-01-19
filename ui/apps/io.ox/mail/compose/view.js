@@ -392,10 +392,12 @@ define('io.ox/mail/compose/view', [
 
             if (mail.msgref) {
                 mail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
             if (mail.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
                 mail.sendtype = mailAPI.SENDTYPE.DRAFT;
+                this.model.set('sendtype', mail.sendtype, { silent: true });
             }
 
             if (_(mail.flags).isUndefined()) {
@@ -445,6 +447,7 @@ define('io.ox/mail/compose/view', [
                     def.reject(result);
                 } else {
                     self.model.set('msgref', result, { silent: true });
+                    self.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT, { silent: true });
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
