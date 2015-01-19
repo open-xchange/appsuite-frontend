@@ -106,7 +106,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
         events: {
             'click .toggle-panel': 'onTogglePanel',
             'dblclick .description-label': 'onStartEdit',
-            'keyup': 'onKeyUp'
+            'keyup .description-label': 'onKeyUp'
             //'blur .description-text': 'onStopEdit'
         },
 
