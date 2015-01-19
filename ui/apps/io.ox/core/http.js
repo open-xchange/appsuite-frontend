@@ -671,7 +671,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
     var ajax = (function () {
 
-        // helps joining identical requests
+        // helps consolidating identical requests
         var requests = {};
 
         /**
@@ -855,15 +855,17 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
                 try { hash = JSON.stringify(r.xhr); } catch (e) { }
 
-                if (hash && _.isArray(requests[hash])) {
+                if (r.o.consolidate !== false && hash && _.isArray(requests[hash])) {
                     // enqueue callbacks
                     requests[hash].push(r);
                     r = hash = null;
                 } else {
+                    // init queue
+                    requests[hash] = [];
                     // create new request
                     r.def.then(
                         function success() {
-                            if (!requests[hash].length) return;
+                            if (!requests[hash] || !requests[hash].length) return;
                             var args = _(arguments).map(clone);
                             _(requests[hash]).each(function (r) {
                                 r.def.resolve.apply(r.def, args);
@@ -871,8 +873,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                             });
                         },
                         function fail() {
+                            if (!requests[hash] || !requests[hash].length) return;
                             var args = _(arguments).map(clone);
-                            if (!requests[hash].length) return;
                             _(requests[hash]).each(function (r) {
                                 r.def.reject.apply(r.def, args);
                                 that.trigger('stop fail', r.xhr);
@@ -883,7 +885,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         delete requests[hash];
                         hash = null;
                     });
-                    requests[hash] = [];
                     limitedSend(r);
                     r = null;
                 }
@@ -1185,6 +1186,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         retry: function (request) {
             // get type
             var type = (request.type || 'GET').toUpperCase();
+            // avoid consolidating requests
+            request.consolidate = false;
             return this[type](request);
         },
 
