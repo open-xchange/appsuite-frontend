@@ -644,6 +644,11 @@ ul.breadcrumb li.prefix {
                 .file-cell {
                     span {
                         line-height: 1.6em;
+                        &.not-selectable {
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
                     }
                     .title {
                         width: 100%;

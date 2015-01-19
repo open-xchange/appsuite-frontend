@@ -176,8 +176,8 @@ define('io.ox/files/fluid/perspective',
                 // wait for transition to be done
                 dView.one('pageshow', function () {
                     dView.idle();
-                    // append preview image
-                    $('.mobile-detail-view-wrap', dView).append(viewDetail.draw(file, app));
+                    // append preview image and ensure it is really empty
+                    $('.mobile-detail-view-wrap', dView).empty().append(viewDetail.draw(file, app));
                 });
 
                 dView.empty()
