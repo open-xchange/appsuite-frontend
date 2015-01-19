@@ -441,13 +441,15 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 self = this;
 
-            mailAPI.autosave(mail, mail.files).always(function (result) {
+            mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     def.reject(result);
                 } else {
-                    self.model.set('msgref', result, { silent: true });
-                    self.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT, { silent: true });
+                    if (mail.sendtype !== mailAPI.SENDTYPE.FORWARD) {
+                        self.model.set('msgref', result, { silent: true });
+                        self.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT, { silent: true });
+                    }
                     notifications.yell('success', gt('Mail saved as draft'));
                     def.resolve(result);
                 }
