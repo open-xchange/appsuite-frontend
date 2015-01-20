@@ -39,6 +39,7 @@ define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
         gt('You need to use iOS %n or higher.');
         gt('Your operating system is not supported.');
         gt('Please update your browser.');
+        //#. browser recommendation: sentence ends with 'Google Chrome' (wrappend in a clickable link)
         gt('For best results, please use ');
         gt('You have been automatically signed out');
         gt('Unsupported Preview - Certain functions disabled and stability ' +

@@ -446,7 +446,9 @@ define('io.ox/core/permissions/permissions',
                             if (!('entity' in obj)) {
                                 notifications.yell(
                                     'error',
-                                    data.display_name + gt(' is not a valid user or group.') || gt('This is not a valid user or group.')
+                                    //#. permissions dialog
+                                    //#. error message when selected user or group can not be used
+                                    gt('This is not a valid user or group.')
                                 );
                             } else {
                                 // duplicate check
