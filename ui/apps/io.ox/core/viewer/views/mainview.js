@@ -61,6 +61,9 @@ define('io.ox/core/viewer/views/mainview', [
             this.render(displayedData);
             // trigger item changed event initally for the first file
             EventDispatcher.trigger('viewer:displayeditem:change', displayedData);
+
+            // Remove carousel a11y plugin event handler to avoid focus problems on cursor up/down key events.
+            $(document).off('keydown.carousel.data-api');
         },
 
         /**
@@ -134,18 +137,8 @@ define('io.ox/core/viewer/views/mainview', [
                 case 37: // left arrow
                     this.onPreviousSlide();
                     break;
-                case 38: // up arrow
-                    if ($(event.currentTarget).hasClass('io-ox-viewer')) {
-                        event.stopPropagation();
-                    }
-                    break;
                 case 39: // right arrow
                     this.onNextSlide();
-                    break;
-                case 40: // down arrow
-                    if ($(event.currentTarget).hasClass('io-ox-viewer')) {
-                        event.stopPropagation();
-                    }
                     break;
             }
         },
