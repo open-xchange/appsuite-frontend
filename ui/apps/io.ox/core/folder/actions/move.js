@@ -99,10 +99,10 @@ define('io.ox/core/folder/actions/move',
                     if (type === 'copy' || id !== current) commit(id);
                 },
 
-                disable: function (data) {
+                disable: function (data, options) {
                     var same = type === 'move' && data.id === current,
                         create = api.can('create', data);
-                    return same || !create;
+                    return same || !create || (options && /^virtual/.test(options.folder));
                 }
             });
         },
