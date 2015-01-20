@@ -177,6 +177,11 @@ define('io.ox/search/facets/extensions',
                                 .on('click ', function () {
                                     var visible = self.is(':visible');
                                     $(this).text(visible ? LABEL.show : LABEL.hide);
+                                    require(['io.ox/core/yell'], function (yell) {
+                                        //#. screenreader: feedback when clicking on action 'show' respectively 'hide' advanced filters
+                                        yell('screenreader', visible ? gt('Advanced facets block was closed.') : gt('Advanced facets block was opened.'));
+                                    });
+
                                     baton.model.set('showadv', !visible);
                                     self.toggle();
                                 })
