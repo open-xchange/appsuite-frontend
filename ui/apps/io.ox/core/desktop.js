@@ -1446,6 +1446,13 @@ define('io.ox/core/desktop',
 
                         // facets container
                         nodes.container = $('<div class="abs search-container">').hide().append(
+                            // help
+                            $('<div class="sr-only">')
+                                .attr('tabIndex', 1)
+                                .text(
+                                    //#. search feature help text for screenreaders
+                                    gt('To narrow down or expand the result please adjust/remove active facets or add new ones')
+                                ),
                             // active facets
                             $('<div class="default">').append(
                                 $('<h3 class="sr-only">').text(
@@ -1820,6 +1827,16 @@ define('io.ox/core/desktop',
                                                 view.model.on({
                                                     'query': function (appname) {
                                                         view.trigger('query', appname);
+                                                    },
+                                                    'query:result': function (response) {
+                                                        // screenreader
+                                                        var n = response.results.length,
+                                                            //#. 'no results' message for screenreaders with additional hint to adjust active filters
+                                                            empty = gt('No items were found. Please adjust currently used facets.'),
+                                                            //#. result count for screenreaders
+                                                            //#. %1$s number of items found by search feature
+                                                            some = gt.format(gt.ngettext('One item was found.', '%1$s items were found.', n), n);
+                                                        notifications.yell('screenreader', n ? some : empty);
                                                     },
                                                     'cancel': function (appname) {
                                                         view.trigger('button:cancel', appname);
