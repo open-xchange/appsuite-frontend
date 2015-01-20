@@ -162,6 +162,10 @@ define('io.ox/core/folder/tree',
             e.stopPropagation();
             e.preventDefault();
             var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
+            if (target.is('.contextmenu-control')) {
+                top = target.offset().top;
+                left = target.offset().left + 40;
+            }
             this.toggleContextMenu(target, top, left);
         },
 
