@@ -21,7 +21,8 @@ define('io.ox/core/folder/api',
      'io.ox/core/folder/bitmask',
      'io.ox/core/api/account',
      'settings!io.ox/core',
-     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, settings, gt) {
+     'settings!io.ox/mail',
+     'gettext!io.ox/core'], function (http, Events, util, sort, blacklist, getFolderTitle, Bitmask, account, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -819,6 +820,9 @@ define('io.ox/core/folder/api',
         return internal.concat(external);
     }
 
+    // Check if "altnamespace" is enabled (mail server setting)
+    var altnamespace = mailSettings.get('namespace', 'INBOX/') === '';
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
@@ -854,7 +858,8 @@ define('io.ox/core/folder/api',
         changeUnseenCounter: changeUnseenCounter,
         getSection: getSection,
         Bitmask: Bitmask,
-        propagate: propagate
+        propagate: propagate,
+        altnamespace: altnamespace
     });
 
     return api;
