@@ -216,7 +216,7 @@ define('io.ox/files/fluid/perspective',
         id: 'selection',
         register: function (baton) {
 
-            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined});
+            Selection.extend(this, scrollpane, { draggable: true, dragType: 'mail', scrollpane: wrapper, focus: undefined });
             //selection accessible via app
             baton.app.selection = this.selection;
 
@@ -354,7 +354,7 @@ define('io.ox/files/fluid/perspective',
                     return !baton.app.folderViewIsVisible();
                 };
             this.append(
-                filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
+                filesContainer = $('<ul class="files-container list-unstyled f6-target view-' + baton.options.mode + '" tabindex="1">')
                     .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
                     .on('click', function () {
                         //force focus on container click
@@ -609,6 +609,14 @@ define('io.ox/files/fluid/perspective',
                 });
             });
 
+            scrollpane
+                .on('focus', '.file-cell', function (e) {
+                    $(e.delegateTarget).removeAttr('tabindex');
+                })
+                .on('blur', '.file-cell', function (e) {
+                    $(e.delegateTarget).attr('tabindex', 1);
+                });
+
             if (_.device('!smartphone')) {
                 scrollpane.on('click', '.selectable', function (e, data) {
                     var cid = _.cid($(this).attr('data-obj-id')),
@@ -649,7 +657,7 @@ define('io.ox/files/fluid/perspective',
             });
 
             drawFile = function (file, update) {
-                var node = $('<a>');
+                var node = $('<li>');
                 ext.point('io.ox/files/icons/file').invoke(
                     'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options), update: update })
                 );
@@ -746,7 +754,7 @@ define('io.ox/files/fluid/perspective',
                         ext.point('io.ox/files/icons').invoke('draw', scrollpane, baton);
 
                         //anchor node
-                        if (!breadcrumb) scrollpane.prepend(breadcrumb = $('<div>'));
+                        if (!breadcrumb) scrollpane.prepend(breadcrumb = $());
 
                         displayedRows = layout.iconRows;
                         start = 0;

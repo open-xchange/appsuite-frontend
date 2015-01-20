@@ -241,18 +241,23 @@
 
                 //highlighting
                 &.selected {
+                    outline: 0;
                     background-color: #ddd;
                     .image-effect(0.9);
+                    &:focus {
+                        background-color: #08c;
+                        color: #fff;
+                    }
+                    &:hover {
+                        background-color: darken(#08c, 10%);
+                        color: #fff;
+                        .image-effect(0.9);
+                    }
                 }
                 &:hover {
                     background-color: #F6F6F6;
                     .image-effect(0.9);
                 }
-                &.selected:hover {
-                    background-color: #ccc;
-                    .image-effect(0.9);
-                }
-
             }
         }
 
