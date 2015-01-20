@@ -205,7 +205,8 @@ define('io.ox/core/folder/util',
             return !is('defaultfolder', data);
         case 'create:folder':
             // check 4th bit (see http://oxpedia.org/wiki/index.php?title=HTTP_API#PermissionFlags)
-            return isAdmin || (rights & 4) === 4;
+            // backend promised that it's sufficient to check this bit; isAdmin would be wrong here
+            return (rights & 4) === 4;
         case 'delete:folder':
         case 'remove:folder':
             // must be admin; system and default folder cannot be deleted
