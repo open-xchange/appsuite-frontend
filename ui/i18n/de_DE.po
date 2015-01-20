@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-12-01 15:10+0100\n"
+"PO-Revision-Date: 2015-01-20 12:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -19,9 +19,8 @@ msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js:449 module:io.ox/core
 #, fuzzy
-#| msgid "is not a valid user or group."
 msgid " is not a valid user or group."
-msgstr " ist kein gültiger Benutzer bzw. keine gültige Gruppe."
+msgstr " ist keine gültige Gruppe bzw. kein gültiger Benutzer."
 
 #. File size
 #. %1$d is the number
@@ -122,13 +121,11 @@ msgstr "%1$d Nachrichten markiert"
 
 #. %1$d number of notifications
 #: apps/io.ox/core/notifications.js:36 module:io.ox/core
-#, fuzzy, c-format
-#| msgid "You have %1$d notification."
-#| msgid_plural "You have %1$d notifications."
+#, c-format
 msgid "%1$d notification."
 msgid_plural "%1$d notifications."
-msgstr[0] "Sie haben %1$d Benachrichtigung"
-msgstr[1] "Sie haben %1$d Benachrichtigungen"
+msgstr[0] "%1$d Benachrichtigung."
+msgstr[1] "%1$d Benachrichtigungen."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js:626 module:io.ox/mail
@@ -156,9 +153,6 @@ msgstr ""
 "%5$s"
 
 #: apps/io.ox/settings/main.js:288 module:io.ox/core
-#, fuzzy
-#| msgctxt "mail address"
-#| msgid "%1$s %2$s"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
@@ -244,10 +238,9 @@ msgstr "%1$s empfiehlt diesen Link:"
 #. %2$s is the end time
 #: apps/io.ox/calendar/util.js:253 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:358
-#, fuzzy, c-format
-#| msgid "%1$s at %2$s"
+#, c-format
 msgid "%1$s to %2$s"
-msgstr "%1$s bei %2$s"
+msgstr "%1$s bis %2$s"
 
 #: apps/plugins/portal/xing/activities.js:193 module:plugins/portal
 #: apps/plugins/portal/xing/activities.js:210
@@ -591,16 +584,12 @@ msgid "Account settings"
 msgstr "Account-Einstellungen"
 
 #: apps/io.ox/mail/accounts/settings.js:71 module:io.ox/mail/accounts/settings
-#, fuzzy
-#| msgid ""
-#| "Account settings could not be saved. Please take a look at the "
-#| "annotations in the form."
 msgid ""
 "Account settings could not be saved. Please take a look at the annotations "
 "in the form. "
 msgstr ""
 "Account-Einstellungen konnten nicht gespeichert werden. Bitte lesen Sie die "
-"Anmerkungen im Popup-Fenster."
+"Anmerkungen im Formular."
 
 #: apps/io.ox/mail/accounts/view-form.js:279 module:io.ox/settings
 msgid "Account updated"
@@ -805,10 +794,8 @@ msgstr "Der neue Teilnehmer wurde hinzugefügt"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:75
 #: module:io.ox/core/pubsub
-#, fuzzy
-#| msgid "This may take some seconds"
 msgid "Adding subscription. This may take some seconds …"
-msgstr "Dies kann eine Weile dauern..."
+msgstr "Abonnement wird hinzugefügt. Dies kann eine Weile dauern ..."
 
 #: apps/io.ox/contacts/settings/pane.js:61 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:216 module:io.ox/mail
@@ -3222,7 +3209,6 @@ msgstr "Essen"
 
 #: apps/io.ox/core/login-i18n.js:42 module:io.ox/core/login
 #, fuzzy
-#| msgid "For best results, please use"
 msgid "For best results, please use "
 msgstr "Für beste Ergebnisse, verwenden Sie bitte "
 
@@ -3423,46 +3409,32 @@ msgstr "Erweiterte Filter ausblenden"
 
 #: apps/plugins/notifications/calendar/register.js:30
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all appointment invitations."
 msgid "Hide all appointment invitations."
-msgstr "Zum Ausblenden aller Termin-Einladungen hier drücken."
+msgstr "Alle Termin-Einladungen ausblenden."
 
 #: apps/plugins/notifications/calendar/register.js:44
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all appointment reminders."
 msgid "Hide all appointment reminders."
-msgstr "Zum Ausblenden aller Termin-Erinnerungen hier drücken."
+msgstr "Alle Termin-Erinnerungen ausblenden."
 
 #: apps/plugins/notifications/mail/register.js:33 module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all notifications for new mails."
 msgid "Hide all notifications for new mails."
-msgstr "Zum Ausblenden aller Benachrichtigungen für neue E-Mails hier drücken."
+msgstr "Alle Benachrichtigungen für neue E-Mails ausblenden."
 
 #: apps/plugins/notifications/tasks/register.js:36
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all notifications for overdue tasks."
 msgid "Hide all notifications for overdue tasks."
-msgstr ""
-"Zum Ausblenden aller Benachrichtigungen für überfällige Aufgaben hier "
-"drücken."
+msgstr "Alle Benachrichtigungen für überfällige Aufgaben ausblenden."
 
 #: apps/plugins/notifications/tasks/register.js:507
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all task invitations."
 msgid "Hide all task invitations."
-msgstr "Zum Ausblenden aller Aufgaben-Einladungen hier drücken."
+msgstr "Alle Aufgaben-Einladungen ausblenden."
 
 #: apps/plugins/notifications/tasks/register.js:262
 #: module:plugins/notifications
-#, fuzzy
-#| msgid "Press to hide all task reminders."
 msgid "Hide all task reminders."
-msgstr "Zum Ausblenden aller Aufgaben-Erinnerungen hier drücken."
+msgstr "Alle Aufgaben-Erinnerungen ausblenden."
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 msgid "Hide comments"
@@ -4313,10 +4285,8 @@ msgstr "Mein Passwort"
 
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
 #: apps/plugins/portal/tasks/register.js:137
-#, fuzzy
-#| msgid "Print tasks"
 msgid "My tasks"
-msgstr "Druckaufgaben"
+msgstr "Meine Aufgaben"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:77 module:io.ox/contacts
@@ -5077,10 +5047,8 @@ msgid "Please choose a sentence below."
 msgstr "Wählen Sie unten einen Satz."
 
 #: apps/io.ox/calendar/acceptdeny.js:98 module:io.ox/calendar
-#, fuzzy
-#| msgid "Change confirmation status"
 msgid "Please comment your confirmation status."
-msgstr "Bestätigungsstatus ändern"
+msgstr "Kommentieren Sie bitte Ihren Bestätigungsstatus."
 
 #: apps/io.ox/backbone/validation.js:80 module:io.ox/backbone/validation
 msgid "Please enter a date in the past"
@@ -5215,8 +5183,6 @@ msgid "Please sign in again to continue"
 msgstr "Zum Fortfahren bitte erneut anmelden"
 
 #: apps/io.ox/files/api.js:407 module:io.ox/files
-#, fuzzy
-#| msgid "Please specify these missing variables:"
 msgid "Please specify these missing variables: "
 msgstr "Bitte geben Sie diese fehlenden Variablen an:"
 
@@ -6176,10 +6142,8 @@ msgstr "Erledigte Aufgaben anzeigen"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:58
 #: module:io.ox/core/pubsub
-#, fuzzy
-#| msgid "Show tiles"
 msgid "Show file"
-msgstr "Kacheln anzeigen"
+msgstr "Datei anzeigen"
 
 #: apps/io.ox/files/settings/pane.js:67 module:io.ox/files
 msgid "Show hidden files and folders"
@@ -7967,15 +7931,11 @@ msgstr ""
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:218 module:io.ox/files
-#, fuzzy
-#| msgid ""
-#| "You are currently using %1$s of your %2$s available disk space. You have "
-#| "%3$s left."
 msgid ""
 "You are currently using %1$s of your %2$s available disk space. You have "
 "%3$s left. "
 msgstr ""
-"Sie verwenden derzeit %1$s von dem für Sie verfügbaren %2$s Speicherplatz. "
+"Sie verwenden derzeit %1$s von %2$s des für Sie verfügbaren Speicherplatzes. "
 "Sie haben noch %3$s zur Verfügung."
 
 #. Warning dialog
@@ -8214,11 +8174,6 @@ msgstr ""
 #. %2$s total disk space
 #. %3$s free disk space
 #: apps/io.ox/files/guidance/statistics.js:205 module:io.ox/files
-#, fuzzy
-#| msgid ""
-#| "Your capacity is shared with all members of your group. Your group is "
-#| "currently using %1$s of its %2$s available disk space. The amount of free "
-#| "space is %3$s."
 msgid ""
 "Your capacity is shared with all members of your group. Your group is "
 "currently using %1$s of its %2$s available disk space. The amount of free "
@@ -8419,8 +8374,6 @@ msgstr "eigene Objekte bearbeiten"
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js:522
-#, fuzzy
-#| msgid "end date"
 msgid "end date "
 msgstr "Enddatum"
 
@@ -8692,8 +8645,6 @@ msgid "show image"
 msgstr "Bild anzeigen"
 
 #: apps/io.ox/core/tk/reminder-util.js:82 module:io.ox/core
-#, fuzzy
-#| msgid "status"
 msgid "status "
 msgstr "Status"
 
