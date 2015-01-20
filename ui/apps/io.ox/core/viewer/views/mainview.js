@@ -96,6 +96,13 @@ define('io.ox/core/viewer/views/mainview', [
                 );
                 self.$el.focus();
             });
+
+            // Hotfix to prevent Halo View from stealing the focus
+            // TODO: remove when Viewer replaces the Halo View
+            _.delay(function () {
+                self.$el.focus();
+            }, 100);
+
             return this;
         },
 
