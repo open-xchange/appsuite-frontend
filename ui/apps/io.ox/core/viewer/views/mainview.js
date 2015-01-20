@@ -150,14 +150,20 @@ define('io.ox/core/viewer/views/mainview', [
             } else {
                 this.displayedFileIndex = this.collection.length - 1;
             }
-            //console.warn('MainView.onPreviousSlide(), new index: ', this.displayedFileIndex);
-            EventDispatcher.trigger('viewer:displayeditem:change', {
-                index: this.displayedFileIndex,
-                model: this.collection.at(this.displayedFileIndex)
-            } );
             // tell Bootstrap carousel to show previous slide
-            this.displayerView.prevSlide();
-            this.$el.focus();
+            this.displayerView.prevSlideAsync()
+            .done(function () {
+                //console.warn('MainView.onPreviousSlide(), new index: ', this.displayedFileIndex);
+                EventDispatcher.trigger('viewer:displayeditem:change', {
+                    index: this.displayedFileIndex,
+                    model: this.collection.at(this.displayedFileIndex)
+                } );
+                this.$el.focus();
+            }.bind(this))
+            .fail(function () {
+                console.error('Slide transition timed out.');
+            });
+
         },
 
         onNextSlide: function () {
@@ -167,14 +173,19 @@ define('io.ox/core/viewer/views/mainview', [
             } else {
                 this.displayedFileIndex = 0;
             }
-            //console.warn('MainView.onNextSlide(), new index: ', this.displayedFileIndex);
-            EventDispatcher.trigger('viewer:displayeditem:change', {
-                index: this.displayedFileIndex,
-                model: this.collection.at(this.displayedFileIndex)
-            });
             // tell Bootstrap carousel to show the next slide
-            this.displayerView.nextSlide();
-            this.$el.focus();
+            this.displayerView.nextSlideAsync()
+            .done(function () {
+                //console.warn('MainView.onNextSlide(), new index: ', this.displayedFileIndex);
+                EventDispatcher.trigger('viewer:displayeditem:change', {
+                    index: this.displayedFileIndex,
+                    model: this.collection.at(this.displayedFileIndex)
+                });
+                this.$el.focus();
+            }.bind(this))
+            .fail(function () {
+                console.error('Slide transition timed out.');
+            });
         },
 
         // refresh view sizes and broadcast window resize event
