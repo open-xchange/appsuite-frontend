@@ -182,6 +182,74 @@ define('io.ox/core/viewer/views/displayerview', [
             }, duration);
         },
 
+        /**
+         * Displays the next slide. Returns a promise that is:
+         *  resolved when the sliding transition of the carousel item is completed, or
+         *  rejected if the sliding transition didn't finish within the timeout.
+         *
+         * @param {Number} [timeout=2000]
+         *  The sliding transition timeout in milliseconds
+         *
+         * @return {$.Deferred}
+         *  The promise indicationg the sliding transition state.
+         */
+        prevSlideAsync: function (timeout) {
+            var def = $.Deferred(),
+                carouselRoot = this.carouselRoot;
+
+            function prevSlideResolver () {
+                def.resolve();
+                carouselRoot.off('slid.bs.carousel', prevSlideResolver);
+            }
+
+            timeout = _.isNumber(timeout) ? timeout : 2000;
+            carouselRoot.on('slid.bs.carousel', prevSlideResolver);
+            this.carouselRoot.carousel('prev');
+
+            _.delay(function () {
+                if (def.state() === 'pending') {
+                    def.reject();
+                    carouselRoot.off('slid.bs.carousel', prevSlideResolver);
+                }
+            }, timeout);
+
+            return def;
+        },
+
+        /**
+         * Displays the next slide. Returns a promise that is:
+         *  resolved when the sliding transition of the carousel item is completed, or
+         *  rejected if the sliding transition didn't finish within the timeout.
+         *
+         * @param {Number} [timeout=2000]
+         *  The sliding transition timeout in milliseconds
+         *
+         * @return {$.Deferred}
+         *  The promise indicationg the sliding transition state.
+         */
+        nextSlideAsync: function (timeout) {
+            var def = $.Deferred(),
+                carouselRoot = this.carouselRoot;
+
+            function nextSlideResolver () {
+                def.resolve();
+                carouselRoot.off('slid.bs.carousel', nextSlideResolver);
+            }
+
+            timeout = _.isNumber(timeout) ? timeout : 2000;
+            carouselRoot.on('slid.bs.carousel', nextSlideResolver);
+            carouselRoot.carousel('next');
+
+            _.delay(function () {
+                if (def.state() === 'pending') {
+                    def.reject();
+                    carouselRoot.off('slid.bs.carousel', nextSlideResolver);
+                }
+            }, timeout);
+
+            return def;
+        },
+
         prevSlide: function () {
             this.carouselRoot.carousel('prev');
         },
