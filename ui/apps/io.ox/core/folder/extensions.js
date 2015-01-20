@@ -215,8 +215,16 @@ define('io.ox/core/folder/extensions',
 
     ext.point('io.ox/core/foldertree/mail/popup').extend(
         {
+            id: 'unified-folders',
+            draw: extensions.unifiedFolders
+        },
+        {
             id: 'standard-folders',
             draw: extensions.standardFolders
+        },
+        {
+            id: 'local-folders',
+            draw: extensions.localFolders
         },
         {
             id: 'other',
