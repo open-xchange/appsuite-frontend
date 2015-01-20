@@ -1147,7 +1147,8 @@ define('io.ox/core/main',
             if (isEmpty) {
                 drawDesktop();
                 ox.ui.screens.show('desktop');
-                ox.launch(getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app);
+                var autoStart = getAutoLaunchDetails(win || settings.get('autoStart', 'io.ox/mail/main')).app;
+                if (autoStart !== 'none/main') ox.launch(autoStart);
             } else {
                 ox.ui.screens.show('windowmanager');
             }
