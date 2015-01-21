@@ -126,7 +126,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
         _.defer(function () {
             node.append(
-                $('<div role="alert" aria-live="polite" class="message user-select-text">').append(
+                $('<div role="alert" aria-live="assertive" class="message user-select-text">').append(
                     o.headline ? $('<h2 class="headline">').text(o.headline) : [],
                     $('<div>').css('word-break', wordbreak).html(html)
                 )
