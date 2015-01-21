@@ -376,7 +376,7 @@ define('io.ox/files/fluid/view-detail',
                     });
 
                 this.append(
-                    $('<h2>').append(
+                    $('<h2 class="version-button">').append(
                         $historyButton
                     ),
                     $content
