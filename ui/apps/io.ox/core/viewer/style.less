@@ -321,6 +321,11 @@
                         outline: none;
                         .user-select(text);
 
+                        &.description-empty {
+                            .user-select(none);
+                            cursor: default;
+                        }
+
                         &:active, &:focus{
                             border-color: #444444;
                         }

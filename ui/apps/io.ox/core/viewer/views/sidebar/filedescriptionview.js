@@ -59,7 +59,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
                 panel = Util.createPanelNode({ title: gt('Description') });
                 panel.find('.panel-body').append(
                     $('<div>').append(
-                        $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label').text(labelString),
+                        $('<div>', { tabindex: 1, title: gt('Description text') }).addClass('description description-label' + ((description.length === 0) ? ' description-empty' : '')).text(labelString),
                         $('<textarea>').addClass('description description-text').val(description)
                     )
                 );
