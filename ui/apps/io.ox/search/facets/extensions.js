@@ -88,9 +88,9 @@ define('io.ox/search/facets/extensions',
                         value = facet.values[item.value];
 
                         // create facet node
-                        node = $('<li role="presentation" class="facet btn-group">').append(
+                        node = $('<li role="presentation" class="facet btn-group" tabindex="1">').append(
                             // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                            button = $('<div class="facet-container btn" tabindex="1">')
+                            button = $('<div class="facet-container">')
                             .on('click', function (e) { e.preventDefault(); })
                             .append($('<label class="facet-label">'))
                         );
@@ -143,9 +143,9 @@ define('io.ox/search/facets/extensions',
                     value = value || {facet: facet.id, placeholder: true};
 
                     // create facet node
-                    node = $('<li role="presentation" class="facet btn-group">').append(
+                    node = $('<li role="presentation" class="facet btn-group" tabindex="1">').append(
                         // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                        button = $('<div href="#" type="button" role="button" class="facet-container btn" tabindex="1">')
+                        button = $('<div class="facet-container">')
                         .on('click', function (e) { e.preventDefault(); })
                         .append($('<label class="facet-label">'))
                     );
@@ -280,7 +280,20 @@ define('io.ox/search/facets/extensions',
             },
 
             facetRemove: function (baton, value, facet, fn) {
-                var isMandatory = baton.model.isMandatory(value.facet), node;
+                var isMandatory = baton.model.isMandatory(value.facet), node,
+                    fnRemove = function (e) {
+
+                        if (e.type === 'keyup' && e.which !== 13) return false;
+
+                        // use custom handler
+                        if (fn)  {
+                            fn();
+                        } else {
+                            baton.model.remove(value.facet || value._compact.facet, value.id);
+
+                        }
+                        return false;
+                    };
 
                 // remove action for non mandatory facets
                 if ((isMandatory && value.facet === 'folder') || _.contains(facet.flags, 'advanced') || value.placeholder) return;
@@ -288,17 +301,13 @@ define('io.ox/search/facets/extensions',
                 this.prepend(
                     node = $('<span class="remove">')
                      .attr({
-                        'tabindex': '1',
-                        'aria-label': gt('Remove')
+                        'tabindex': 1,
+                        'aria-label': gt('Remove facet')
                     })
                     .append(
                         $('<i class="fa fa-times action">')
                     )
-                    .on('click', fn || function () {
-                        baton.model.remove(value.facet || value._compact.facet, value.id);
-                        return false;
-                    })
-
+                    .on('click mousdown keyup', fnRemove)
                 );
                 // tooltip
                 util.addTooltip(node, gt('Remove'));
@@ -318,7 +327,10 @@ define('io.ox/search/facets/extensions',
                     this.prepend(
                         $('<span class="toggle-options">').append(
                             action =$('<i class="fa fa-caret-down action">')
-                        )
+                        ).attr({
+                            'tabindex': '1',
+                            'aria-label': gt('Toggle options')
+                        })
                     );
 
                     // tooltip
@@ -556,7 +568,10 @@ define('io.ox/search/facets/extensions',
                 button.prepend(
                     $('<span class="toggle-options">').append(
                         action = $('<i class="fa fa-caret-down action">')
-                    )
+                    ).attr({
+                        'tabindex': '1',
+                        'aria-label': gt('Toggle options')
+                    })
                 );
 
                 // tooltip

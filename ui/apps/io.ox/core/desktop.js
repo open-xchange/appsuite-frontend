@@ -1458,7 +1458,7 @@ define('io.ox/core/desktop',
                                 $('<h3 class="sr-only">').text(
                                     //#. search: headline for list of common facets/filters
                                     gt('Common Facets')
-                                ),
+                                ).attr('tabIndex', 1),
                                 $('<ul class="search-facets">')
                             ),
                             // advanced facets
@@ -1467,7 +1467,7 @@ define('io.ox/core/desktop',
                                 $('<h3 class="sr-only">').text(
                                     //#. search: clickable headline to show/hide list of advanced facets/filters
                                     gt('Advanced Facets')
-                                ),
+                                ).attr('tabIndex', 1),
                                 $('<ul class="search-facets search-facets-advanced">')
                             ),
                             // cancel button
