@@ -2130,6 +2130,11 @@ a.button {
             line-height: 40px;
             padding-left: 18px;
             display: none;
+            input {
+                // proper alignment for IE (see bug 35940)
+                margin: 0;
+                vertical-align: middle;
+            }
         }
 
         .select-all-toggle {
