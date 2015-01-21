@@ -121,7 +121,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         render: function () {
             var label = _.isFunction(this.options.label) ? this.options.label() : $.txt(this.options.label),
-                ariaLabel = this.options.aria ? this.options.aria : '',
+                ariaLabel = this.options.aria ? this.options.aria : null,
                 toggle;
             if (_.isString(label)) {
                 ariaLabel += (' ' + label);
