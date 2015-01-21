@@ -320,7 +320,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onCursorUpDown: function (e) {
 
             var items = this.getItems(),
-                viewLayout = this.view.app.props.get('layout') || 'list',
                 current = $(document.activeElement),
                 index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
 
@@ -338,7 +337,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.resetCheckmark(items);
             this.pick(index, items, e);
             //alternative selection mode needs this, has no effect in default mode
-            if ( this.isMultiple(e) || this.isRange(e) || viewLayout === 'list') {
+            if ( this.isMultiple(e) || this.isRange(e)) {
                 this.triggerChange(items);
             } else {
                 this.selectEvents(items);
@@ -487,8 +486,14 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         // normal select now triggers selection:action instead of the usual events (item will be shown in detail view and checkbox is not checked)
-        selectEvents: function () {
-            this.view.trigger('selection:change selection:action', this.get());
+        selectEvents: function (items) {
+            var layout = this.view.app.props.get('layout') || 'list';
+            //in list layout we need the old events or mails open when they are not supposed to (for example when moving with arrow keys)
+            if (layout === 'list') {
+                this.triggerChange(items);
+            } else {
+                this.view.trigger('selection:change selection:action', this.get());
+            }
         }
     };
 
