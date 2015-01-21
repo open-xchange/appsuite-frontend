@@ -185,6 +185,16 @@
         .remove {
             display: inline-block;
         }
+
+        &:not(.lazy) {
+            @media (max-width: 480px) {
+                display: block;
+                margin: 0 0 2px 0;
+                padding: 5px 30px 5px 5px;
+                height: auto;
+                span.filesize { white-space: nowrap; }
+            }
+        }
     }
 
     //
