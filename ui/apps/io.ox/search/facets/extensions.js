@@ -116,12 +116,15 @@ define('io.ox/search/facets/extensions',
                 var facets = baton.model.get('autocomplete'),
                     pool = baton.model.get('pool'),
                     list = baton.model.get('poollist'),
+                    headline = this.parent().find('h3.sr-only'),
                     self = this,
                     nodes = [];
 
 
-                if (!baton.model.get('showadv'))
+                if (!baton.model.get('showadv')) {
                     self.hide();
+                    headline.hide();
+                }
 
                 // add inactive advanced facets
                 nodes = _(facets).map(function (facet) {
@@ -174,7 +177,7 @@ define('io.ox/search/facets/extensions',
                                     role: 'button',
                                     href: '#'
                                 })
-                                .on('click ', function () {
+                                .on('click', function () {
                                     var visible = self.is(':visible');
                                     $(this).text(visible ? LABEL.show : LABEL.hide);
                                     require(['io.ox/core/yell'], function (yell) {
@@ -183,7 +186,9 @@ define('io.ox/search/facets/extensions',
                                     });
 
                                     baton.model.set('showadv', !visible);
+
                                     self.toggle();
+                                    headline.toggle();
                                 })
                         )
                     );
