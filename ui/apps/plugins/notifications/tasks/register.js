@@ -296,7 +296,11 @@ define('plugins/notifications/tasks/register',
 
         deleteReminder: function (e) {
             e.stopPropagation();
-            reminderAPI.deleteReminder(this.model.get('reminder').id);
+            var obj = { id: this.model.get('reminder').id };
+            if (this.model.get('reminder').recurrence_position) {
+                obj.recurrence_position = this.model.get('reminder').recurrence_position;
+            }
+            reminderAPI.deleteReminder(obj);
             this.model.collection.remove(this.model);
         },
 
@@ -398,7 +402,7 @@ define('plugins/notifications/tasks/register',
             if ((e.type === 'keydown') && (e.which !== 13)) { return; }
             //hide all items from view
             this.collection.each(function (item) {
-                hiddenReminderItems[_.ecid(item.attributes)] = true;
+                hiddenReminderItems[_.ecid(item.attributes.reminder)] = true;
             });
             this.collection.reset();
         }
@@ -412,8 +416,10 @@ define('plugins/notifications/tasks/register',
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
 
-            reminderAPI.on('add:tasks:reminder', function (e, reminders) {
+            reminderAPI.on('set:tasks:reminder', function (e, reminders) {
+
                 var taskIds = [];
+
                 _(reminders).each(function (reminder) {
                     if (!hiddenReminderItems[_.ecid(reminder)]) {
                         taskIds.push({id: reminder.target_id,
@@ -421,37 +427,55 @@ define('plugins/notifications/tasks/register',
                     }
                 });
 
+                if (taskIds.length === 0) {//no reminders to display
+                    notifications.collection.reset([]);
+                    return;
+                }
+
                 api.getList(taskIds).done(function (tasks) {
                     if (tasks && tasks.length > 0) {
                         require(['io.ox/tasks/util'], function (util) {
+                            var tempTasks = [];
                             _(tasks).each(function (task) {
                                 _(reminders).each(function (reminder) {
                                     if (reminder.target_id === task.id) {
                                         var obj = util.interpretTask(task);
                                         obj.reminder = reminder;
-                                        notifications.collection.add(new Backbone.Model(obj));
+                                        tempTasks.push(obj);
+                                        
                                     }
                                 });
                             });
+                            notifications.collection.reset(tempTasks);
                         });
                     }
-                });
-            }).on('remove:reminder', function (e, ids) {//ids of task objects
-                _(ids).each(function (id) {
-                    notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
             });
             api.on('delete', function (e, ids) {//ids of task objects
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
-                reminderAPI.getReminders();//to delete stored reminders
             }).on('mark:task:confirmed', function (e, ids) {
+                var reminders = [];
                 _(ids).each(function (id) {
-                    if (!id.data || id.data.confirmation === 2) {//remove reminders for declined tasks
+                    if ((!id.data || id.data.confirmation === 2) && notifications.collection._byId[id.id]) {//remove reminders for declined tasks
+                        var obj = { id: notifications.collection._byId[id.id].get('reminder').id };
+                        if (notifications.collection._byId[id.id].get('reminder').recurrence_position) {
+                            obj.recurrence_position = notifications.collection._byId[id.id].get('reminder').recurrence_position;
+                        }
+                        reminders.push(obj);
                         notifications.collection.remove(notifications.collection._byId[id.id]);
                     }
                 });
+                if (reminders.length > 0) {
+                   reminderAPI.deleteReminder(reminders);//remove reminders correctly from server too  
+                }
+            });
+            api.on('update', function (e, task) {
+                if (notifications.collection._byId[task.id]) {
+                    //get fresh data to be consistent(name, due date change etc)
+                    reminderAPI.getReminders();
+                }
             });
         }
     });
