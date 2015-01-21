@@ -26,6 +26,7 @@
 @viewer-sidebar-bgcolor: #202020;
 @viewer-sidebar-width: 400px;
 @viewer-sidebar-active-bgcolor: #333333;
+@viewer-sidebar-label-text-color: #999999;
 
 .io-ox-viewer {
 
@@ -37,20 +38,20 @@
     ::-webkit-scrollbar {
         width: 14px;
     }
-    ::-webkit-scrollbar-button {
-        height: 2px;
-    }
     ::-webkit-scrollbar-track {
-        background: #aaa;
+        background: @viewer-sidebar-bgcolor;
     }
     ::-webkit-scrollbar-thumb {
-        background: #666;
-        border: 2px solid #aaa;
+        background: #666666;
         width: 12px;
     }
     ::-webkit-scrollbar-thumb:hover {
-        background: #555;
+        background: #555555;
     }
+
+    scrollbar-base-color: #666666;
+    scrollbar-track-color: @viewer-sidebar-bgcolor;
+    scrollbar-arrow-color: @viewer-sidebar-label-text-color;
 
     .viewer-toolbar {
         position: absolute;
@@ -63,6 +64,7 @@
         list-style: none;
         padding-left: 0;
         text-align: right;
+        z-index: 1;
         > li {
             display: inline-block;
             min-width: @viewer-toolbar-link-width;
@@ -221,8 +223,8 @@
             a.btn, div.dropdown > a { outline: none; }
 
             .panel-heading {
-                color: #999999;
-                border-color: #999999;
+                color: @viewer-sidebar-label-text-color;
+                border-color: @viewer-sidebar-label-text-color;
                 background-color: transparent;
                 position: relative;
 
@@ -239,6 +241,7 @@
 
                 h3 {
                     font-weight: bold;
+                    cursor: default;
                 }
             }
 
@@ -247,7 +250,8 @@
                 dt {
                     width: 33%;
                     float: left;
-                    color: #999999;
+                    color: @viewer-sidebar-label-text-color;
+                    cursor: default;
                 }
 
                 dd {
