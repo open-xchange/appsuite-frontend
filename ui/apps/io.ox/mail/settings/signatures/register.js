@@ -17,10 +17,13 @@ define('io.ox/mail/settings/signatures/register',
      'settings!io.ox/mail',
      'io.ox/core/tk/dialogs',
      'io.ox/core/api/snippets',
+     'io.ox/core/http',
      'less!io.ox/mail/settings/signatures/style'
-    ], function (ext, gt, settings, dialogs, snippets) {
+    ], function (ext, gt, settings, dialogs, snippets, http) {
 
     'use strict';
+
+    var intervals = [];
 
     ext.point('io.ox/mail/settings/signature-dialog').extend({
         id: 'name',
@@ -59,10 +62,12 @@ define('io.ox/mail/settings/signatures/register',
                 )
             );
 
+            baton.$.contentEditable.on('addInlineImage', function (e, id) { addKeepalive(id); });
+
             require(['io.ox/core/tk/contenteditable-editor'], function (Editor) {
                 var ed;
                 (ed = new Editor(baton.$.contentEditable, {
-                    toolbar1: 'bold italic | alignleft aligncenter alignright | link',
+                    toolbar1: 'bold italic | alignleft aligncenter alignright | link | image',
                     advanced: 'fontselect fontsizeselect | forecolor',
                     css: {
                         'min-height': '230px', //overwrite min-height of editor
@@ -100,6 +105,27 @@ define('io.ox/mail/settings/signatures/register',
             );
         }
     });
+
+    function addKeepalive (id) {
+        var timeout = Math.round(settings.get('maxUploadIdleTimeout', 200000) * 0.9);
+        intervals.push(setInterval(keepalive, timeout, id));
+    }
+
+    function clearKeepalive () {
+        _(intervals).each(clearInterval);
+        intervals = [];
+    }
+
+    /**
+     * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
+     * Needed for inline images
+     */
+    function keepalive(id) {
+        return http.GET({
+            module: 'file',
+            params: { action: 'keepalive', id: id }
+        });
+    }
 
     function looksLikeHTML(str) {
         str = str || '';
@@ -141,11 +167,11 @@ define('io.ox/mail/settings/signatures/register',
         .addButton('cancel', gt('Cancel'), 'cancel', { tabIndex: 1 })
         .on('save', function () {
             if (baton.$.name.val() !== '') {
-                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below' }},
+                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below', 'content-type': 'text/html' }},
                     editorContent = baton.editor.getContent();
 
                 update.id = signature.id;
-                update.misc = { insertion: baton.$.insertion.val() };
+                update.misc = { insertion: baton.$.insertion.val(), 'content-type': 'text/html' };
 
                 if (editorContent !== signature.content) update.content = editorContent;
                 if (baton.$.name.val() !== signature.displayname) update.displayname = baton.$.name.val();
@@ -167,9 +193,12 @@ define('io.ox/mail/settings/signatures/register',
                         popup.idle();
                         popup.close();
                     });
-                }).fail(require('io.ox/core/notifications').yell);
-
-                popup.close();
+                }).fail(function (error) {
+                    require(['io.ox/core/notifications'], function(notifications) {
+                        notifications.yell(error);
+                        popup.idle();
+                    });
+                });
             } else {
                 popup.idle();
                 validateField(baton.$.name, baton.$.error);
@@ -177,6 +206,7 @@ define('io.ox/mail/settings/signatures/register',
         })
         .on('close', function () {
             baton.editor.destroy();
+            clearKeepalive();
         })
         .show();
 
@@ -283,7 +313,8 @@ define('io.ox/mail/settings/signatures/register',
                         displayname: classicSignature.signature_name,
                         content: classicSignature.signature_text,
                         misc: {
-                            insertion: classicSignature.position
+                            insertion: classicSignature.position,
+                            'content-type': 'text/html'
                         },
                         meta: {
                             imported: classicSignature
