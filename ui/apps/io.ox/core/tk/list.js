@@ -29,7 +29,13 @@ define('io.ox/core/tk/list',
         40: 'cursor:down'
     };
 
-    var NOOP = function () { return $.when(); };
+    // helper
+    function NOOP() { return $.when(); }
+
+    function topPosition(node, scrollpane) {
+        // fast replacement for node.position().top
+        return node[0].offsetTop - scrollpane.scrollTop;
+    }
 
     var ListView = Backbone.View.extend({
 
@@ -150,7 +156,7 @@ define('io.ox/core/tk/list',
             if (index < children.length) children.eq(index).before(li); else this.$el.append(li);
             this.selection.add(this.getCID(model), li);
 
-            if (li.position().top <= 0) {
+            if (topPosition(li, this.el) <= 0) {
                 this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
             }
 
@@ -177,7 +183,7 @@ define('io.ox/core/tk/list',
             }
 
             // keep scroll position
-            if (li.position().top < top) this.$el.scrollTop(top - li.outerHeight(true));
+            if (topPosition(li, this.el) < top) this.$el.scrollTop(top - li.outerHeight(true));
 
             this.selection.remove(cid, li);
             li.remove();
