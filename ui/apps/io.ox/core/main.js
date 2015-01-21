@@ -908,7 +908,7 @@ define('io.ox/core/main',
                 var ul, a;
                 this.append(
                     $('<li class="launcher dropdown" role="presentation">').append(
-                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
+                        a = $('<a class="dropdown-toggle f6-target" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">')
                         .append(
                             $('<i class="fa fa-cog launcher-icon" aria-hidden="true">'),
                             $('<span class="sr-only">').text(gt('Settings'))

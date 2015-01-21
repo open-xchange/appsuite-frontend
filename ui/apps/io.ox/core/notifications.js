@@ -23,7 +23,7 @@ define('io.ox/core/notifications',
 
     var BadgeView = Backbone.View.extend({
         tagName: 'a',
-        className: 'notifications-icon',
+        className: 'notifications-icon f6-target',
         initialize: function () {
             this.model.set('a11y', '');
             this.model.on('change', _.bind(this.onChange, this));
