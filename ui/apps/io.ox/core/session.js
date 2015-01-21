@@ -262,7 +262,9 @@ define('io.ox/core/session', [
                 return $.Deferred().resolve();
             }
         },
-
+        setClient: function (client) {
+            if (client) CLIENT = client;
+        },
         client: function () {
             return CLIENT;
         },
