@@ -167,20 +167,20 @@ define([], function () {
                 expect(_.ellipsis(val, { max: 1 })).to.equal(chr);
             });
             it('should handle also invalid length options', function () {
-                expect(_.ellipsis(val, { max: 10, length: 5, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
-                expect(_.ellipsis(val, { max: 10, length: 10, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
-                expect(_.ellipsis(val, { max: 10, length: 11, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 10, length: 5, charpos: 'middle' })).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 10, length: 10, charpos: 'middle' })).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 10, length: 11, charpos: 'middle' })).to.equal('Lore' + chr + 'onum');
             });
             it('should use char option', function () {
                 expect(_.ellipsis(val, { max: 10, char: '...' })).to.equal('Lorem i...');
             });
             it('should use charpos option', function () {
                 expect(_.ellipsis(val, { max: 8, charpos: 'end' })).to.equal('Lorem i' + chr);
-                expect(_.ellipsis(val, { max: 11, charpos: 'middel' })).to.equal('Lorem' + chr + 'nonum');
-                expect(_.ellipsis(val, { max: 10, charpos: 'middel' })).to.equal('Lore' + chr + 'onum');
+                expect(_.ellipsis(val, { max: 11, charpos: 'middle' })).to.equal('Lorem' + chr + 'nonum');
+                expect(_.ellipsis(val, { max: 10, charpos: 'middle' })).to.equal('Lore' + chr + 'onum');
             });
             it('should use length option', function () {
-                expect(_.ellipsis(val, { length: 5, charpos: 'middel' })).to.equal('Lorem' + chr + 'nonum');
+                expect(_.ellipsis(val, { length: 5, charpos: 'middle' })).to.equal('Lorem' + chr + 'nonum');
             });
         });
 

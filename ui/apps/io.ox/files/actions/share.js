@@ -22,7 +22,7 @@ define('io.ox/files/actions/share', [
 
     return function (files) {
         var count = files.length,
-            insert = count === 1 ? _.ellipsis(files[0].filename, { max: 40, charpos: 'middel' }) : count,
+            insert = count === 1 ? _.ellipsis(files[0].filename, { max: 40, charpos: 'middle' }) : count,
             //#. if only one item -> insert filename / on more than one item -> item count
             header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), insert),
             view = new ShareView({ files: files });

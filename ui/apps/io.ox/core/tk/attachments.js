@@ -83,7 +83,7 @@ define('io.ox/core/tk/attachments', [
                 var $el = $('<div class="col-lg-6 col-md-6">').append(
                     $('<div class="io-ox-core-tk-attachment file">').append(
                         $('<i class="fa fa-paperclip">'),
-                        $('<div class="row-1">').text(_.ellipsis(attachment.filename, { max: 40, charpos: 'middel' })),
+                        $('<div class="row-1">').text(_.ellipsis(attachment.filename, { max: 40, charpos: 'middle' })),
                         $('<div class="row-2">').append(
                             size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
                         ),
