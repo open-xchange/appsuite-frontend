@@ -349,9 +349,9 @@ define('io.ox/core/permissions/permissions',
                         isFolderAdmin = false;
                     }
 
-                    var options = {top: 60, width: 800, center: false, maximize: true};
+                    var options = {top: 60, width: 800, center: false, maximize: true, async: true };
                     if (_.device('!desktop')) {
-                        options = {top: '40px', center: false};
+                        options = {top: '40px', center: false, async: true };
                     }
                     var dialog = new dialogs.ModalDialog(options);
                     dialog.getHeader().append(
@@ -467,18 +467,19 @@ define('io.ox/core/permissions/permissions',
                         dialog.addPrimaryButton('ok', gt('Close'));
                     }
                     dialog.getPopup().addClass('permissions-dialog');
-                    dialog.show(function () {
-                        this.find('input').focus();
-                    })
-                    .done(function (action) {
-                        if (isFolderAdmin && action === 'save') {
-                            api.update(folder_id, { permissions: collection.toJSON() }).always(function () {
-                                //TODO: dialog should stay open if error occurs
-                                collection.off();
+                    dialog.on('save', function () {
+                        if (isFolderAdmin) {
+                            api.update(folder_id, { permissions: collection.toJSON() }).then(function success () {
+                                dialog.close();
+                            }, function fail (error) {
+                                dialog.idle();
+                                notifications.yell(error);
                             });
-                        } else if (action === 'cancel' || action === 'ok') {
-                            collection.off();
                         }
+                    }).on('close', function () {
+                        collection.off();
+                    }).show(function () {
+                        this.find('input').focus();
                     });
                 } catch (e) {
                     console.error('Error', e);
