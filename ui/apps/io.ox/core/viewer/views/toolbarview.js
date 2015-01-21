@@ -239,7 +239,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
         index: 100,
         id: 'open',
-        label: gt('Open in browser'),
+        label: gt('Open in browser tab'),
         ref: 'io.ox/mail/actions/open-attachment'
     });
     new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_MAIL_ATTACHMENT, {
@@ -260,7 +260,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
             index: 100,
             id: 'open',
-            label: gt('Open in browser'),
+            label: gt('Open in browser tab'),
             ref: prefix + '/actions/open-attachment'
         });
         new LinksPattern.ActionLink(TOOLBAR_LINKS_DROPDOWN_ID + '/' + ITEM_TYPE_PIM_ATTACHMENT + moduleId, {
