@@ -352,7 +352,8 @@ define('io.ox/tasks/actions',
     new Action('io.ox/tasks/actions/download-attachment', {
         id: 'download',
         requires: function (e) {
-            return e.collection.has('some') && _.device('!ios');
+            //browser support for downloading more than one file at once is pretty bad (see Bug #36212)
+            return e.collection.has('one') && _.device('!ios');
         },
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {
