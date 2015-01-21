@@ -414,7 +414,10 @@ define('io.ox/search/facets/extensions',
                 var self = this,
                     VALUE = 'daterange',
                     isUpdate = !!baton.model.get('pool')['date.custom'],
-                    data, from, to, group, current, container;
+                    data, from, to, group, current, container,
+                    facetcontainer = $('<fieldset class="facet-container">');
+
+                this.find('.facet-container').replaceWith(facetcontainer);
 
                 // add styles
                 self.addClass('timefacet');
@@ -505,24 +508,39 @@ define('io.ox/search/facets/extensions',
                     container = $('<div class="datepicker-container">').hide()
                 );
 
+
+                var getBlock = function (label, name, value) {
+                    var guid = _.uniqueId('form-control-label-');
+                    return [
+                        $('<label class="sr-only">').attr('for', guid).text(label),
+                        $('<input type="text" class="input-sm form-control" />')
+                            .attr({
+                                'name': name,
+                                'id': guid,
+                                'placeholder': label,
+                                'tabIndex': 1,
+                                'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
+                            })
+                            .val(value)
+                            .on('change', lazyApply)
+                    ];
+                };
+
+
                 // input group
-                self.find('.facet-label')
+                facetcontainer
                     .append(
                         $('<div>')
                             .addClass('type')
                             .text(facet.name),
+                        $('<legend>')
+                            .addClass('sr-only')
+                            .text(facet.name),
                         group = $('<div class="input-daterange input-group" id="datepicker">')
                                     .append(
-                                        $('<input type="text" class="input-sm form-control" name="start" />')
-                                            .attr('placeholder', gt('Starts on'))
-                                            .val(from)
-                                            .on('change', lazyApply),
-                                        $('<span class="input-group-addon">')
-                                            .text('-'),
-                                        $('<input type="text" class="input-sm form-control" name="end" />')
-                                            .attr('placeholder', gt('Ends on'))
-                                            .val(to)
-                                            .on('change', lazyApply)
+                                        getBlock(gt('Starts on'), 'start', from),
+                                        $('<span class="input-group-addon">').text('-'),
+                                        getBlock(gt('Ends on'), 'start', to)
                                     )
                                     .datepicker({
                                         format: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
