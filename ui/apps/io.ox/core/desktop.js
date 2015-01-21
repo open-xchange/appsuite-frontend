@@ -1096,7 +1096,7 @@ define('io.ox/core/desktop',
                                 //#. %2$s is the title of the active app, e.g. Calendar
                                 gt.pgettext('window title', '%1$s %2$s'),
                                 _.noI18n(ox.serverConfig.pageTitle),
-                                self.getTitle()
+                                _.noI18n(self.getTitle())
                             );
                         } else {
                             document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
@@ -1265,7 +1265,7 @@ define('io.ox/core/desktop',
                                     //#. %2$s is the title of the active app, e.g. Calendar
                                     gt.pgettext('window title', '%1$s %2$s'),
                                     _.noI18n(ox.serverConfig.pageTitle),
-                                    title
+                                    _.noI18n(title)
                                 );
                             } else {
                                 document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);

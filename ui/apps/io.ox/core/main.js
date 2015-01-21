@@ -694,9 +694,9 @@ define('io.ox/core/main',
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
-            $('a.apptitle', node).text(value);
+            $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
-            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(value);
+            launcherDropdown.find('a[data-app-guid="' + model.guid + '"]').text(_.noI18n(value));
             tabManager();
         });
 
