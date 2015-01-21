@@ -339,9 +339,10 @@ define('io.ox/mail/compose/extensions', [
             return function (baton) {
                 if (capabilities.has('infostore')) {
                     var dropdown = new Dropdown({ label: gt('Attachments'), caret: true }),
-                        fileInput = $('<input type="file" name="file">').css('display', 'none')
+                        fileInput = $('<input type="file" name="file" capture="camera">').css('display', 'none')
                             .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true);
+                            // multiple is off on smartphones in favor of camera roll/capture selection
+                            .prop('multiple', _.device('!smartphone'));
 
                     this.append(
                         fileInput,
@@ -358,9 +359,10 @@ define('io.ox/mail/compose/extensions', [
                         $('<span class="hidden">'),
                         $.txt(gt('Attachments')),
                         // file input
-                        $('<input type="file" name="file" tabindex="1">')
+                        $('<input type="file" name="file" tabindex="1" capture="camera">')
                             .on('change', addLocalFile.bind(this, baton.model))
-                            .prop('multiple', true)
+                            // multiple is off on smartphones in favor of camera roll/capture selection
+                            .prop('multiple', _.device('!smartphone'))
                     ));
                 }
             };
