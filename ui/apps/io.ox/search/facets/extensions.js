@@ -63,7 +63,7 @@ define('io.ox/search/facets/extensions',
         extensions = {
 
             item: function (baton, value, facet) {
-                var button = this.find('a');
+                var button = this.find('.facet-container');
                 ext.point('io.ox/search/facets/facet-type').invoke('draw', button, baton, value, facet);
                 ext.point('io.ox/search/facets/facet-name').invoke('draw', button, baton, value, facet);
                 ext.point('io.ox/search/facets/facet-dropdown').invoke('draw', button, baton, value, facet);
@@ -90,9 +90,9 @@ define('io.ox/search/facets/extensions',
                         // create facet node
                         node = $('<li role="presentation" class="facet btn-group">').append(
                             // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                            button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
+                            button = $('<div class="facet-container btn" tabindex="1">')
                             .on('click', function (e) { e.preventDefault(); })
-                            .append($('<label>'))
+                            .append($('<label class="facet-label">'))
                         );
 
                         var special = ext.point('io.ox/search/facets/item/' + value.facet);
@@ -145,9 +145,9 @@ define('io.ox/search/facets/extensions',
                     // create facet node
                     node = $('<li role="presentation" class="facet btn-group">').append(
                         // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle" tabindex="1">')
+                        button = $('<div href="#" type="button" role="button" class="facet-container btn" tabindex="1">')
                         .on('click', function (e) { e.preventDefault(); })
-                        .append($('<label>'))
+                        .append($('<label class="facet-label">'))
                     );
 
                     var special = ext.point('io.ox/search/facets/item/' + value.facet);
@@ -248,7 +248,7 @@ define('io.ox/search/facets/extensions',
                     type = util.getOptionLabel(options, id);
                 // append type
                 if (facet.style !== 'simple') {
-                    this.find('label').prepend(
+                    this.find('.facet-label').prepend(
                         $('<span>')
                             .addClass('type')
                             .text(type || facet.name)
@@ -276,7 +276,7 @@ define('io.ox/search/facets/extensions',
                     node.text(optionslabel || label || gt('All'));
                 }
 
-                this.find('label').append(node);
+                this.find('.facet-label').append(node);
             },
 
             facetRemove: function (baton, value, facet, fn) {
@@ -311,10 +311,12 @@ define('io.ox/search/facets/extensions',
                     menu, action, option;
 
                 if (options.length) {
+                    this.addClass('dropdown-toggle');
+
                     this.attr('data-toggle', 'dropdown');
                     // add caret
                     this.prepend(
-                        $('<div class="caret-container">').append(
+                        $('<span class="toggle-options">').append(
                             action =$('<i class="fa fa-caret-down action">')
                         )
                     );
@@ -487,7 +489,7 @@ define('io.ox/search/facets/extensions',
                 );
 
                 // input group
-                self.find('label')
+                self.find('.facet-label')
                     .append(
                         $('<div>')
                             .addClass('type')
@@ -535,7 +537,7 @@ define('io.ox/search/facets/extensions',
 
             folderFacet: function (baton, value, facet) {
                 var self = this,
-                    button = this.find('a[type="button"]'),
+                    button = this.find('.facet-container'),
                     current = value.custom,
                     option, link, action,
                     menu = $('<ul class="dropdown dropdown-menu facet-dropdown">')
@@ -552,7 +554,7 @@ define('io.ox/search/facets/extensions',
                     });
 
                 button.prepend(
-                    $('<div class="caret-container">').append(
+                    $('<span class="toggle-options">').append(
                         action = $('<i class="fa fa-caret-down action">')
                     )
                 );
