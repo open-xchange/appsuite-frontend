@@ -1934,7 +1934,8 @@ a.button {
         margin-bottom: 0;
     }
 
-    .list-item.busy-indicator {
+    .busy-indicator {
+        .list-item();
         color: #aaa;
         background-color: #f5f5f5;
         font-size: 20px;
@@ -1945,12 +1946,12 @@ a.button {
         margin-bottom: 0px;
     }
 
-    .list-item.busy-indicator.io-ox-busy {
+    .busy-indicator.io-ox-busy {
         text-align: left;
     }
 
     // use this for empty list
-    .list-item.busy-indicator:first-child {
+    .busy-indicator:first-child {
         height: 100%;
         background-color: transparent;
     }

@@ -51,7 +51,7 @@ define('io.ox/core/tk/list',
             '</li>'
         ),
 
-        busyIndicator: $('<li class="list-item busy-indicator"><i class="fa fa-chevron-down"/></li>'),
+        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
 
         events: {
             'focus .list-item': 'onItemFocus',
@@ -153,12 +153,18 @@ define('io.ox/core/tk/list',
                 li = this.renderListItem(model);
 
             // insert or append
-            if (index < children.length) children.eq(index).before(li); else this.$el.append(li);
-            this.selection.add(this.getCID(model), li);
-
-            if (topPosition(li, this.el) <= 0) {
-                this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
+            if (index < children.length) {
+                children.eq(index).before(li);
+                // scroll position might have changed due to insertion
+                if (topPosition(li, this.el) <= 0) {
+                    this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
+                }
+            } else {
+                this.$el.append(li);
             }
+
+            // add to selection
+            this.selection.add(this.getCID(model), li);
 
             // forward event
             this.trigger('add', model, index);
@@ -323,11 +329,9 @@ define('io.ox/core/tk/list',
 
         // return alls items of this list
         // the filter is important, as we might have a header
+        // although we could use children(), we use find() as it's still faster (see http://jsperf.com/jquery-children-vs-find/8)
         getItems: function () {
-            var items = this.$el.children('.list-item');
-            // much faster than :not(.busy-indicator)
-            if (items.last().hasClass('busy-indicator')) items = items.slice(0, -1);
-            return items;
+            return this.$el.find('.list-item');
         },
 
         connect: function (loader) {
@@ -395,7 +399,7 @@ define('io.ox/core/tk/list',
         },
 
         getBusyIndicator: function () {
-            return this.$el.find('.list-item.busy-indicator');
+            return this.$el.find('.busy-indicator');
         },
 
         addBusyIndicator: function () {
