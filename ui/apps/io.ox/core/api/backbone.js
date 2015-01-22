@@ -33,7 +33,7 @@ define('io.ox/core/api/backbone', [], function () {
         model: Model,
         parse: function (array) {
             return _(array).map(function (item) {
-                return new Model(item);
+                return item instanceof Model ? item : new Model(item);
             });
         }
     });
