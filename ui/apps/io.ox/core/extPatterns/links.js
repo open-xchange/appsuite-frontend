@@ -588,7 +588,7 @@ define('io.ox/core/extPatterns/links',
                             'aria-haspopup': true
                         });
 
-                        div.attr('role', 'menu');
+                        div.attr('role', 'toolbar');
                         // add footer label?
                         if (extension.label) {
                             ul.append(

@@ -148,7 +148,7 @@ define('io.ox/tasks/toolbar',
     });
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
+    var toolbar = $('<ul class="classic-toolbar" role="toolbar">');
 
     var invoke = function (list) {
         // extract single object if length === 1
@@ -168,7 +168,7 @@ define('io.ox/tasks/toolbar',
         index: 10000,
         setup: function (app) {
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
+               toolbar = $('<ul class="classic-toolbar" role="toolbar">')
             );
             app.updateToolbar = updateToolbar;
         }

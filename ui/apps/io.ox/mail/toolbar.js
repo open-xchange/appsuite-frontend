@@ -252,7 +252,7 @@ define('io.ox/mail/toolbar',
     });
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
+    var toolbar = $('<ul class="classic-toolbar" role="toolbar">');
 
     var updateToolbar = _.debounce(function (list) {
 
@@ -281,7 +281,7 @@ define('io.ox/mail/toolbar',
         setup: function (app) {
             if (_.device('smartphone')) return;
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
+               toolbar = $('<ul class="classic-toolbar" role="toolbar">')
             );
             app.updateToolbar = updateToolbar;
         }
