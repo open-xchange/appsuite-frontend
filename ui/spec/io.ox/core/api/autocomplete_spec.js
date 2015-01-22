@@ -21,9 +21,6 @@ define(['io.ox/core/api/autocomplete'], function (api) {
                 it('should define a search method', function () {
                     expect(instance.search).to.be.a('function');
                 });
-                it('should define a processItem method', function () {
-                    expect(instance.processItem).to.be.a('function');
-                });
                 it('should define a processContactItem method', function () {
                     expect(instance.processContactItem).to.be.a('function');
                 });

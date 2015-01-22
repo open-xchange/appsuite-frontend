@@ -20,7 +20,7 @@ define([
 
     describe('upload api', function () {
         it('has no inital estimation time', function () {
-            expect(upload.getEstimatedTime()).to.equal('0 seconds');
+            expect(upload.getEstimatedTime()).to.equal(gt('%1$s seconds', 0));
         });
 
         describe('time estimation', function () {
