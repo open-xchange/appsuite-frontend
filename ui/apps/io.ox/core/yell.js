@@ -26,6 +26,13 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             screenreader: 100,
         },
 
+        ariaText = {
+            error: gt('Error'),
+            info: gt('Info'),
+            success: gt('Success'),
+            warning: gt('Warning')
+        },
+
         icons = {
             busy: 'fa fa-refresh fa-spin',
             error: 'fa fa-exclamation',
@@ -127,6 +134,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         _.defer(function () {
             node.append(
                 $('<div role="alert" aria-live="assertive" class="message user-select-text">').append(
+                    ariaText[o.type] ? $('<span class="sr-only">').text(ariaText[o.type]) : [],
                     o.headline ? $('<h2 class="headline">').text(o.headline) : [],
                     $('<div>').css('word-break', wordbreak).html(html)
                 )
