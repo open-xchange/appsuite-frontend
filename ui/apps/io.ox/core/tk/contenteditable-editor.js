@@ -391,7 +391,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
     function Editor(el, opt) {
 
-        var def = $.Deferred(), ed;
+        var rendered = $.Deferred(), initialized = $.Deferred(), ed;
 
         opt = _.extend({
             toolbar1: 'undo redo | bold italic | emoji | bullist numlist outdent indent',
@@ -463,7 +463,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
             init_instance_callback: function (editor) {
                 ed = editor;
-                def.resolve();
+                initialized.resolve();
             },
 
             execcommand_callback: function (editor_id, elm, command) {
@@ -480,6 +480,9 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
             setup: function (ed) {
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
+                ed.on('BeforeRenderUI', function () {
+                    rendered.resolve();
+                });
             }
         };
 
@@ -566,8 +569,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
 
         // publish internal 'done'
         this.done = function (fn) {
-            def.done(fn);
-            return def;
+            return $.when(initialized, rendered).done(fn);
         };
 
         this.focus = function () {
@@ -766,7 +768,7 @@ define.async('io.ox/core/tk/contenteditable-editor',
                 el.empty();
                 el.tinymce().remove();
             }
-            el = el.tinymce = def = ed = null;
+            el = el.tinymce = initialized = rendered = ed = null;
         };
     }
 
