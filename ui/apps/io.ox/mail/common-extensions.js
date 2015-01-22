@@ -396,10 +396,16 @@ define('io.ox/mail/common-extensions',
 
                 if (util.isUnseen(data)) {
                     api.markRead(data);
-                    node.attr('aria-label', gt('This E-mail is read, press to mark it as unread.'));
+                    node.attr({
+                        'aria-label': gt('Message is read'),
+                        'aria-checked': false
+                    });
                 } else {
                     api.markUnread(data);
-                    node.attr('aria-label', gt('This E-mail is unread, press to mark it as read.'));
+                    node.attr({
+                        'aria-label': gt('Message is unread'),
+                        'aria-checked': true
+                    });
                 }
             }
 
@@ -407,9 +413,19 @@ define('io.ox/mail/common-extensions',
 
                 if (util.isEmbedded(baton.data)) return;
 
-                var a11y = util.isUnseen(baton.data) ? gt('This E-mail is unread, press to mark it as read.') : gt('This E-mail is read, press to mark it as unread.'),
-                    button = $('<a href="#" role="button" class="unread-toggle" tabindex="1" aria-label="' + a11y + '"><i class="fa" aria-hidden="true"/></a>');
-                this.append(button.on('click', { view: baton.view, node: button }, toggle)
+                var unseen = util.isUnseen(baton.data),
+                    button = $('<a>').attr({
+                    href: '#',
+                    role: 'checkbox',
+                    tabindex: 1,
+                    'aria-label': unseen ? gt('Message is unread') : gt('Message is read'),
+                    'aria-checked': unseen
+                }).append(
+                    $('<i class="fa" aria-hidden="true"/>')
+                ).addClass('unread-toggle');
+
+                this.append(
+                    button.on('click', { view: baton.view, node: button }, toggle)
                 );
             };
         }()),
