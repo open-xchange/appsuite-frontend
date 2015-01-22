@@ -169,7 +169,7 @@ define([
                 it(' and it should show the title of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
 
-                    expect(right.find('.title').text()).to.equal('Termin 1');
+                    expect(right.find('.subject').text()).to.equal('Termin 1');
                 });
 
                 it('and it should show the locations of the appointment', function () {
@@ -179,12 +179,12 @@ define([
 
                 it('and it should show the day and date of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
-                    expect(right.find('.day').text()).to.equal('Do., 28.11.2013');
+                    expect(right.find('.date').text()).to.equal('Do., 28.11.2013');
                 });
 
                 it('and it should show the duration of the appointment', function () {
                     var right = this.nodes.body.find('.rightside');
-                    expect(right.find('.interval').text()).to.equal('13:00-14:00UTC');
+                    expect(right.find('.time').text()).to.equal('13:00-14:00UTC');
                 });
 
                 it('and it should show the notes of the appointment', function () {
