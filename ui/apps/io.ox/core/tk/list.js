@@ -302,6 +302,7 @@ define('io.ox/core/tk/list', [
                 this.$el.addClass('visible-selection');
 
             }
+            // helper to detect scrolling in action, only used by mobiles
             if (_.device('smartphone')) {
                  var self = this,
                     timer;

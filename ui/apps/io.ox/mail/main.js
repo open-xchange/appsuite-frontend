@@ -21,6 +21,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/threadview',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/actions',
+    'io.ox/core/extPatterns/links',
     'io.ox/core/api/account',
     'io.ox/core/notifications',
     'io.ox/core/toolbars-mobile',
@@ -37,7 +38,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, links, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
 
     'use strict';
 
@@ -947,6 +948,36 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
             app.listView.on('selection:doubleclick', function (list) {
                 ox.launch('io.ox/mail/detail/main', { cid: list[0] });
+            });
+        },
+
+         /*
+         * Add support for selection:
+         */
+        'selection-mobile-swipe': function (app) {
+            if (_.device('!smartphone')) return;
+
+            ext.point('io.ox/mail/mobile/swipeButtonMore').extend(new links.Dropdown({
+                id: 'actions',
+                index: 1,
+                classes: '',
+                label: '',
+                ariaLabel: '',
+                icon: '',
+                noCaret: true,
+                ref: 'io.ox/mail/links/inline',
+            }));
+
+            app.listView.on('selection:more', function (list, node) {
+                var baton = ext.Baton({ data: list });
+                // remember if this list is based on a single thread
+                baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
+                // resolve thread
+                baton.data = api.resolve(baton.data, app.props.get('thread'));
+                // call action
+                // we open a dropdown here with options.
+                ext.point('io.ox/mail/mobile/swipeButtonMore').invoke('draw', node, baton);
+                node.find('a').click();
             });
         },
 

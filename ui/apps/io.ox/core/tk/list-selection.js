@@ -16,13 +16,88 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
     'use strict';
 
     var SELECTABLE = '.selectable',
-        SWIPEPANE = '.swipe-option-cell',
+        SWIPEDELETE = '.swipe-button.delete',
+        SWIPEMORE = '.swipe-button.more',
         isTouch = _.device('touch'),
         behavior = settings.get('selectionMode', 'normal'),
+        // mobile stuff
         THRESHOLD_X = 5, // touchmove threshold for mobiles in PX
-        THRESHOLD_STICK = 25, // threshold in percent
-        THRESHOLD_REMOVE = 75; //percentage
+        THRESHOLD_STICK = 30, // threshold in percent
+        THRESHOLD_REMOVE = 75, //percentage
+        hasRaf = !!window.requestAnimationFrame,
+        // animation support
+        amplitude = 0,
+        timeConstant = 50,
+        timestamp,
+        movetarget,
+        cell,
+        velocity = 0,
+        sX,
+        cX;
 
+    // animate function using requestAnimationFrame to be smooth
+    var animate = function () {
+        // do animation, aka. move the cell to the left
+        var elapsed, delta, c;
+        elapsed = Date.now() - (timestamp + 50); // simple tweak
+        delta = amplitude * Math.exp(-elapsed / timeConstant);
+        if (delta > 0.5 || delta < -0.5) {
+            // delta decreases over time, this is the deceleration
+            if (delta < 35 || delta > -35) {
+               delta = delta * -1; // bounce
+            }
+            c = (-movetarget + delta);
+            cell.css('-webkit-transform', 'translate3d(' + c + 'px, 0, 0)');
+            window.requestAnimationFrame(animate); // to understand recursion you must understand recursion
+        } else {
+            cell.css('-webkit-transform', 'translate3d(' + -movetarget + 'px, 0, 0)');
+            cell.trigger('animationend');
+        }
+    };
+
+    // animation is called after a cell was swiped outside the viewport, aka. delted
+    function animateUp(cellsBelow, cb) {
+
+        var height = 0, decrease = 10;
+
+        function frame() {
+            if (height >= 63) {
+                cellsBelow.css('-webkit-transform', 'translate3d(0, -63px,0)');
+                cb();
+            } else {
+                /*
+                important note
+                The browser can only animate a few properties really cheap, these are;
+                    transform: translate
+                    transform: scale
+                    transform: rotate
+                    opacity
+                All other properties will cause multiple reflows and recalcuations which will drop
+                the animation performance even if we use requestAnimationFrame
+                After testing a lot the conclusion is: It's faster to translate ALL cells below the current cell up (Y-axis)
+                than just animating the height of the current cell down from 63px to 0px to get the desired effect.
+                */
+
+                height += decrease;
+                cellsBelow.css('-webkit-transform', 'translate3d(0,-' + height + 'px,0)');
+                window.requestAnimationFrame(frame);
+            }
+        }
+        // request our first frame
+        window.requestAnimationFrame(frame);
+    }
+
+    // track speed during touchmove and (re-)calculate the current velocity
+    // based on the distance the cell is moved between two concurrent tracking calls
+    var track = function () {
+        var now, elapsed, delta;
+        now = Date.now();
+        elapsed = now - timestamp; // time ellapsed since last track
+        timestamp = now;
+        delta = sX - cX; // distance dragged
+        velocity = 1000 * delta / (1 + elapsed); // real velocity
+        //velocity = 0.8 * v + 0.2 * velocity; // moving-average-filtered velocity to erase large variations in velocity
+    };
 
     function Selection(view) {
 
@@ -54,15 +129,22 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
-        if (isTouch) {
+        if (isTouch && hasRaf) {
             this.view.$el
-                //.on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
-                //.on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
-                .on('touchstart', SELECTABLE, this, this.onTouchStart)//$.proxy(this.onTouchStart, this))
-                .on('touchmove', SELECTABLE, this, this.onTouchMove)//$.proxy(this.onTouchMove, this))
-                .on('touchend', SELECTABLE, this, this.onTouchEnd)//$.proxy(this.onTouchEnd, this))
-                .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this))
-                .on('tap', SWIPEPANE, this.onSwipePaneTap);
+                .on('touchstart', SELECTABLE, this, this.onTouchStart)
+                .on('touchmove', SELECTABLE, this, this.onTouchMove)
+                .on('touchend', SELECTABLE, this, this.onTouchEnd)
+                .on('tap', SWIPEDELETE,  $.proxy(function (e) {
+                    this.onSwipeDelete(e);
+                }, this))
+                .on('tap', SWIPEMORE,  $.proxy(function (e) {
+                    this.onSwipeMore(e);
+                }, this));
+        } else if (isTouch && !hasRaf) {
+            this.view.$el
+                .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
+                .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
+                .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
         }
     }
 
@@ -433,15 +515,45 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             //always trigger in multiple mode (sometimes only checkbox is changed)
             if (!_.isEqual(previous, this.get())) this.triggerChange(items);
         },
+
+        onSwipeDelete: function (e) {
+            e.preventDefault();
+            var node = $(this.currentSelection).closest(SELECTABLE),
+                cid = node.attr('data-cid');
+            // propagate event
+            this.view.trigger('selection:delete', [cid]);
+        },
+
+        onSwipeMore: function (e) {
+            e.preventDefault();
+            var node = $(this.currentSelection).closest(SELECTABLE),
+                cid = node.attr('data-cid');
+            // propagate event
+            this.view.trigger('selection:more', [cid], $(this.currentSelection.btnMore));
+        },
+
         resetSwipeCell: function () {
-            this.startX = 0;
-            this.startY = 0;
-            $(this).removeAttr('style').removeClass('unfolded');
-            this.unfold = false;
-            this.target = null;
-            this.swipeCell.remove();
-            this.swipeCell = null;
-            this.t0 = 0;
+            try {
+                this.startX = 0;
+                this.startY = 0;
+                this.unfold = false;
+                this.target = null;
+                this.swipeCell.remove();
+                this.swipeCell = null;
+                this.t0 = 0;
+                movetarget = 0;
+                velocity = 1;
+                amplitude = 50;
+                var self = this;
+                timestamp = Date.now();
+                $(this).one('animationend', function () {
+                    $(self).removeAttr('style');
+                    $(self).removeClass('unfolded');
+                });
+                window.requestAnimationFrame(animate);
+            } catch (e) {
+                console.warn('something went wrong during reset', e);
+            }
         },
 
         onTouchStart: function (e) {
@@ -451,7 +563,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // var unfold indicates if any node is unfolded
             // var unfolded indicates if currently touched node is unfolded
-            this.startX = currentX;
+            this.startX = sX = currentX;
             this.startY = currentY;
             this.distanceX = 0;
             this.unfold = this.remove = this.scrolling = false;
@@ -461,7 +573,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // check if this node is already opened
             this.unfolded = t.hasClass('unfolded'); // mark current node as unfolded once
             this.otherUnfolded = !!t.parent().find('.unfolded').length; // not so nice...
-            // this is needed to handle the correct translation for the touchmove event (offset is added)
 
             // check if other nodes than the current one are unfolded
             // if so, close other nodes and stop event propagation
@@ -469,26 +580,33 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 e.data.resetSwipeCell.call(e.data.currentSelection);
                 return false;
             }
+
+            // reset values for momentum calculation
+            velocity = amplitude = 0;
+            timestamp = Date.now();
+            track(); // calculate momentum
         },
 
         onTouchMove: function (e) {
 
             var touches = e.originalEvent.touches[0],
                 currentX = touches.pageX,
-                //currentY = touches.pageY,
                 width = 100 / this.cellWidth;
-                //distanceY = Math.abs(this.startY - currentY); // positive value
+
+            cX = currentX;
 
             this.distanceX = (this.startX - currentX) * -1; // invert value
+
+            if (currentX > this.startX && !this.unfolded) return; // left to right is not allowed
 
             if (e.data.isScrolling) {
                 this.scrolling = true;
                 return; // return early on a simple scroll
             }
+
             // special handling for already unfolded cell
-            //
             if (this.unfolded) {
-                this.distanceX += -126;// + this.distanceX;
+                this.distanceX += -190; // add already moved pixels
             }
 
             if (Math.abs(this.distanceX) > THRESHOLD_X) {
@@ -499,7 +617,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.target = $(e.currentTarget);
                 }
                 if (!this.swipeCell) {
-                    // append cell once
+                    // append swipe action cell once, will be removed afterwards
                     this.swipeCell = $('<div class="swipe-option-cell">').append(
                         this.btnDelete = $('<div class="swipe-button delete">').append($('<i class="fa fa-trash">')),
                         this.btnMore = $('<div class="swipe-button more">').append($('<i class="fa fa-bars">'))
@@ -509,11 +627,11 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 // translate the moved cell
                 this.target.css('-webkit-transform', 'translate3d(' + this.distanceX + 'px, 0, 0)');
 
-                // if delete threshold is reached, enlarge delete cell
+                // if delete threshold is reached, enlarge delete button over whole cell
                 if (Math.abs(width * this.distanceX) >= THRESHOLD_REMOVE) {
                     this.expandDelete = true;
-                    this.btnMore.css({width: 0});
-                    this.btnDelete.css('transition', 'width 200ms');
+                    this.btnMore.hide();
+                    this.btnDelete.css('transition', 'width 100ms');
                     this.btnDelete.css('width', '100%');
                 } else if (this.expandDelete){
                     // remove style
@@ -526,14 +644,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
         onTouchEnd: function (e) {
             if (this.scrolling) return; // return if simple list scroll
-            var t1 = new Date().getTime(), // for calculation of momentum
-                distanceX = this.distanceX,
+            var distanceX = this.distanceX,
                 width = 100 / this.cellWidth,
-                distanceXAbs = Math.abs(width * distanceX),
-                time = (t1 - this.t0);
-            //this.target = $(e.currentTarget);
-            this.remove = false;
-            this.unfold = false;
+                distanceXAbs = Math.abs(width * distanceX);
+
+            this.remove = this.unfold = false;
+
+            cell = $(this); // save for later animation
 
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
@@ -545,31 +662,36 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 this.unfold = true;
             }
 
-            if (distanceXAbs >= THRESHOLD_REMOVE) {
+            if (this.expandDelete) {
                 // remove cell after this threshold
                 this.remove = true;
                 this.unfold = false;
             }
-            var animTime, w = 100, velocity = 0;
-            // momentum wins against thresholds, try to define distance better
-            if (time <= 150 && distanceXAbs >= 10) {
-                //var acc = distanceXAbs / time;
-                //console.log('acc', acc);
-                //animTime = 200 * Math.pow(acc, 2);
-                animTime = 126 / distanceXAbs * time;
-                w = animTime / 126 * (126-distanceX);
-                console.log('setting as endtime', w);
 
-                var v = 1000 * distanceXAbs / (1 + time);
-                var velocity = 0.8 * v + 0.2 * velocity;
-                console.log('velocity', velocity, v);
-                this.unfold = true;
+            track(); // caluclate velocity and amplitude
+            timestamp = Date.now(); // reset timestamp
+
+            // only do this if velocity is higher than 25. Values might be changed
+            if ((velocity > 25 || velocity < -25) && !this.expandDelete) {
+                if (velocity > 800) velocity = 800; // ceil velocity
+                amplitude = 0.1 * velocity; // modify threshold, add a virtual "weight"
+                movetarget = Math.round(-distanceX + amplitude); // calculate endposition of movement
+                if (movetarget >= 190) {
+                    movetarget = 190; // ceil endposition
+                    window.requestAnimationFrame(animate); // do animation
+                    $(this).addClass('unfolded');
+                    this.unfold = true;
+                } else if (movetarget <= 190 && movetarget >= 30) {
+                    movetarget = 190;
+                    velocity = 1;
+                    amplitude = 500;
+                    $(this).addClass('unfolded');
+                    this.unfold = true;
+                    window.requestAnimationFrame(animate);
+                }
             }
 
             if (this.unfold) {
-                // todo: introduce deceleration with velocity calculated above
-                $(this).css('transition', '-webkit-transform ' + 80 + 'ms');
-                $(this).css('-webkit-transform', 'translate3d(-126px, 0, 0)');
 
                 this.btnMore.removeAttr('style');
                 this.btnDelete.removeAttr('style');
@@ -578,61 +700,38 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 $(this).addClass('unfolded');
 
                 e.data.unfold = true;
-                e.data.currentSelection = this;
+                e.data.currentSelection = this; // save this for later use
             } else if (this.remove) {
                 // remove
                 $(this).css('transition', '-webkit-transform 100ms');
                 $(this).css('-webkit-transform', 'translate3d(-100%, 0, 0)');
+                this.btnMore.remove();
                 var self = this;
+
                 setTimeout(function () {
-                    //debugger;
                     // reset touchcoords
                     self.startX = 0;
                     self.startY = 0;
+                    var cellsBelow = $(self).nextAll();
 
-                    // todo: use requestAnimationFrame
-                    $(self).animate({
-                        height: '0px',
-                        padding: '0px',
-                        border: 0
-                    }, 200, function () {
-
+                    animateUp(cellsBelow, function () {
                         var node = $(self).closest(SELECTABLE),
                             cid = node.attr('data-cid');
                         // propagate event
-                        console.log('trigger delete', cid);
-                        //e.data.view.trigger('selection:delete', [cid]);
+                        e.data.view.trigger('selection:delete', [cid]);
+                        cellsBelow.removeAttr('style');
                         $(self).removeAttr('style');
-                        //self.swipeCell.remove();
+                        self.swipeCell.remove();
                         self.swipeCell.remove();
                         self.swipeCell = null;
                         $(self).removeClass('unfolded');
                         self.unfolded = false;
-
                     });
-
-                    self.swipeCell.hide(200);
-
-                }, 100);
+                }, 110);
 
             } else if (distanceX) {
-                //$(e.currentTarget).removeAttr('style');
-                this.startX = 0;
-                this.startY = 0;
-                $(this).removeAttr('style').removeClass('unfolded');
-                this.unfolded = false;
-                this.swipeCell.remove();
-                this.swipeCell = null;
-                e.data.unfold = false;
+                e.data.resetSwipeCell.call(e.data.currentSelection);
             }
-        },
-
-        onSwipePaneTap: function () {
-            /*var node = $(e.currentTarget).data('emitterNode');
-            node.removeAttr('style');
-            this.remove();
-            e.preventDefault();
-            return false;*/
         },
 
         onSwipeLeft: function (e) {
