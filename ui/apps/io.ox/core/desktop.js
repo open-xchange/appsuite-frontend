@@ -1446,13 +1446,6 @@ define('io.ox/core/desktop',
 
                         // facets container
                         nodes.container = $('<div class="abs search-container">').hide().append(
-                            // help
-                            $('<div class="sr-only">')
-                                .attr('tabIndex', 1)
-                                .text(
-                                    //#. search feature help text for screenreaders
-                                    gt('To narrow down or expand the result please adjust/remove active facets or add new ones')
-                                ),
                             // active facets
                             $('<div class="default">').append(
                                 $('<h3 class="sr-only">').text(
@@ -1713,7 +1706,9 @@ define('io.ox/core/desktop',
                             var node = this.nodes.facetedsearch.toolbar,
                                 label = gt('Search'),
                                 id = win.name + '-search-field',
+                                guid = _.uniqueId('form-control-description-'),
                                 group;
+
                             // input group and dropdown
                             node.append(
                                 group = $('<div class="input-group">')
@@ -1723,11 +1718,20 @@ define('io.ox/core/desktop',
                                                 class: 'form-control search-field',
                                                 tabindex: 1,
                                                 id: id,
-                                                placeholder: label + ' ...'
+                                                placeholder: label + ' ...',
+                                                'aria-describedby': guid
                                             }),
                                             $('<label class="sr-only">')
                                                 .attr('for', id)
-                                                .text(label)
+                                                .text(label),
+                                            $('<p class="sr-only sr-description">')
+                                                .attr({
+                                                    id: guid,
+                                                })
+                                                .text(
+                                                    //#. search feature help text for screenreaders
+                                                    gt('Search results page lists all active facets to allow them to be easly adjustable/removable. Below theses common facets additonal advanced facets are listed. To narrow down search result please adjust active facets or add new ones')
+                                                )
                                     )
                             );
                         }
