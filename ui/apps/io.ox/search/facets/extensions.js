@@ -28,7 +28,7 @@ define('io.ox/search/facets/extensions',
                 module = type === 'files' ? 'infostore' : type;
 
             picker({
-                folder: id,
+                folder: id || api.getDefaultFolder(module),
                 module: module,
                 flat: api.isFlat(module),
                 root: type === 'files' ? '9' : '1',
