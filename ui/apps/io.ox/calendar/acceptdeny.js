@@ -90,8 +90,8 @@ define('io.ox/calendar/acceptdeny',
                             $('<p>').text(
                                 gt('You are about to change your confirmation status. Please leave a comment for other participants.')
                             ),
-                            $('<p>').append(
-                                description.attr('id', descriptionId)
+                            $('<p>').attr('id', descriptionId).append(
+                                description
                             ),
                             $('<div class="form-group">').css({'margin-top': '20px'}).append(
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment'))
