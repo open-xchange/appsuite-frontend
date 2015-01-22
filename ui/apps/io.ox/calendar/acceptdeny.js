@@ -104,9 +104,9 @@ define('io.ox/calendar/acceptdeny',
                             )
                         );
                     })
-                    .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
-                    .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
                     .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
+                    .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
+                    .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
                     .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                     .show(function () {
                         $(this).find('[data-property="comment"]').focus();
