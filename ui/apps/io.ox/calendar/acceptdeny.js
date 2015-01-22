@@ -69,7 +69,8 @@ define('io.ox/calendar/acceptdeny',
                         }
 
                         var recurrenceString = util.getRecurrenceString(data),
-                            description = $('<b>').text(data.title);
+                            description = $('<b>').text(data.title),
+                            descriptionId = _.uniqueId('confirmation-dialog-description-');
                         if (!options.taskmode) {
                             description = [
                                 $('<b>').text(data.title),
@@ -81,21 +82,22 @@ define('io.ox/calendar/acceptdeny',
                             ];
                         }
 
+                        this.getPopup().attr('aria-describedby', descriptionId);
                         this.getHeader().append(
-                            $('<h4>').text(gt('Change confirmation status'))
+                            $('<h4 id="dialog-title">').text(gt('Change confirmation status'))
                         );
                         this.getContentNode().append(
                             $('<p>').text(
                                 gt('You are about to change your confirmation status. Please leave a comment for other participants.')
                             ),
                             $('<p>').append(
-                                description
+                                description.attr('id', descriptionId)
                             ),
                             $('<div class="form-group">').css({'margin-top': '20px'}).append(
-                                $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
+                                $('<label class="control-label">').attr('for', inputid).text(gt('Comment'))
+                                .append($('<span class="sr-only">').text(data.title + ' ' + gt('Please comment your confirmation status.'))),
                                 $('<input type="text" class="form-control" data-property="comment">')
                                     .attr({
-                                        'aria-label': data.title + ' ' + gt('Please comment your confirmation status.'),
                                         id: inputid, tabindex: '1'
                                     }).val(message),
                                 reminderSelect
