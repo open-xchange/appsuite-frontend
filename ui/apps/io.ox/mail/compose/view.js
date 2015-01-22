@@ -441,7 +441,7 @@ define('io.ox/mail/compose/view', [
                 def = new $.Deferred(),
                 self = this;
 
-            mailAPI.autosave(mail, mail.files).always(function (result) {
+            mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
                     notifications.yell(result);
                     def.reject(result);
