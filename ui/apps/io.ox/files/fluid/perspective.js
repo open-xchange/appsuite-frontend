@@ -671,6 +671,9 @@ define('io.ox/files/fluid/perspective',
                         return drawFile(file);
                     })
                 );
+
+                // global event for tracking purposes
+                ox.trigger('files:items:render');
             };
 
             function onScroll() {

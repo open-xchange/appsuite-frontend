@@ -1514,6 +1514,9 @@ define('io.ox/calendar/week/view',
                         self.onUpdateAppointment(app);
                     }
                 });
+
+            // global event for tracking purposes
+            ox.trigger('calendar:items:render', this);
         },
 
         /**
