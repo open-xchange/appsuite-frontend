@@ -310,7 +310,7 @@ define('io.ox/core/tk/dialogs',
                 dataaction: dataaction,
                 purelink: options.purelink,
                 inverse: options.inverse,
-                tabIndex: options.tabIndex
+                tabIndex: options.tabIndex || options.tabindex
             };
 
             if (options.type) {
