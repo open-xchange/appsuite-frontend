@@ -311,34 +311,6 @@ define('io.ox/mail/common-extensions',
                     })
                     .draw.call(node, ext.Baton({ context: this.model.collection.toJSON(), data: data, $el: node }));
 
-                    // support for fixed position
-                    // TODO: introduce as general solution
-                    node.on('show.bs.dropdown', function (e) {
-                        var link = $(e.relatedTarget),
-                            offset = link.offset(),
-                            // need to use siblings() instead of next() due to funky backdrop injection on mobile devices (see bug 35863)
-                            menu = link.siblings('.dropdown-menu'),
-                            top, overlay;
-                        top = offset.top + link.height();
-                        menu.css({ top: offset.top + link.height(), bottom: 'auto', left: offset.left });
-                        if ((top + menu.height()) > $(window).height()) menu.css({ top: 'auto', bottom: '20px' });
-                        overlay = $('<div class="dropdown-overlay">').append(menu);
-                        // catch click manually (same idea as boostrap's dropdown-backdrop)
-                        if (_.device('touch')) {
-                            overlay.on('click', { link: link }, function (e) {
-                                e.data.link.dropdown('toggle');
-                            });
-                        }
-                        link.data('overlay', overlay);
-                        $('body').append(overlay);
-                    });
-
-                    node.on('hide.bs.dropdown', function (e) {
-                        var link = $(e.relatedTarget), overlay = link.data('overlay');
-                        link.parent().append(overlay.children());
-                        overlay.remove();
-                    });
-
                     url = api.getUrl(data, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
 

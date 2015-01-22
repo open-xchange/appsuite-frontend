@@ -83,8 +83,8 @@ define('io.ox/core/attachments/view',
                 ),
                 // preview list
                 $('<div class="preview-container">').append(
-                    $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left"></i></button>'),
-                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right"></i></button>'),
+                    $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
+                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>'),
                     this.$preview
                 )
             );
@@ -99,9 +99,9 @@ define('io.ox/core/attachments/view',
         renderHeader: function () {
 
             this.$header.append(
-                $('<a href="#" class="toggle-details">').append(
-                    $('<i class="fa toggle-caret">'),
-                    $('<i class="fa fa-paperclip">'),
+                $('<a href="#" class="toggle-details" tabindex="1">').append(
+                    $('<i class="fa toggle-caret" aria-hidden="true">'),
+                    $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
                 ),
                 $('<span class="links">'),
