@@ -2809,7 +2809,7 @@ msgstr "Var %1$d dag"
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:496 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "Var %1$d månad den %2$d"
 
@@ -2817,14 +2817,14 @@ msgstr "Var %1$d månad den %2$d"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:510 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:507 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "Var %1$d månad den %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:485 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:481 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "Var %1$d vecka på %2$s"
 
@@ -2836,7 +2836,7 @@ msgstr "Var %1$d vecka, alla dagar"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:472 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "Var %1$d vecka på arbetsdagar"
 
@@ -2844,7 +2844,7 @@ msgstr "Var %1$d vecka på arbetsdagar"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:524 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Var %1$d år den %3$d %2$s"
 
@@ -2853,7 +2853,7 @@ msgstr "Var %1$d år den %3$d %2$s"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:539 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:537 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Var %1$d år den %2$s %3$s i %4$d"
 
@@ -4151,14 +4151,14 @@ msgstr "Månadsvy"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:494 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "Varje månad den %1$d"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:502 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "Varje månad den %1$s %2$s"
 
@@ -4619,7 +4619,7 @@ msgid "On new notifications except mails"
 msgstr "Vid nya notifieringar förutom e-post"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:472 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:469 module:io.ox/calendar
 msgid "On work days"
 msgstr "På arbetsdagar"
 
@@ -7618,7 +7618,7 @@ msgstr "Veckovy"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:481 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:477 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Varje vecka på %1$s"
 
@@ -7702,7 +7702,7 @@ msgstr "År"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:520 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Varje år den %2$d %1$s"
 
@@ -7710,7 +7710,7 @@ msgstr "Varje år den %2$d %1$s"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:533 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:531 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Varje år den %1$s %2$s i %3$d"
 

@@ -2821,7 +2821,7 @@ msgstr "Ogni %1$d giorni"
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:496 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "Ogni %1$d mesi il %2$d giorno"
 
@@ -2829,14 +2829,14 @@ msgstr "Ogni %1$d mesi il %2$d giorno"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:510 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:507 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "Ogni %1$d mesi il %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:485 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:481 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "Ogni %1$d settimane il %2$s"
 
@@ -2848,7 +2848,7 @@ msgstr "Ogni %1$d settimane tutti i giorni"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:472 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "Ogni %1$d settimane nei giorni feriali"
 
@@ -2856,7 +2856,7 @@ msgstr "Ogni %1$d settimane nei giorni feriali"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:524 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "Ogni %1$d anni il %3$d %2$s"
 
@@ -2865,7 +2865,7 @@ msgstr "Ogni %1$d anni il %3$d %2$s"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:539 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:537 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "Ogni %1$d anni il %2$s %3$s di %4$d"
 
@@ -4167,14 +4167,14 @@ msgstr "Vista Mese"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:494 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "Mensilmente il giorno %1$d"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:502 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "Mensilmente il %1$s %2$s"
 
@@ -4642,7 +4642,7 @@ msgid "On new notifications except mails"
 msgstr "Per le nuove notifiche eccetto i messaggi di posta"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:472 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:469 module:io.ox/calendar
 msgid "On work days"
 msgstr "Nei giorni feriali"
 
@@ -7670,7 +7670,7 @@ msgstr "Vista Settimana"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:481 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:477 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "Settimanalmente il %1$s"
 
@@ -7755,7 +7755,7 @@ msgstr "Anno"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:520 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "Annualmente il %2$d %1$s"
 
@@ -7763,7 +7763,7 @@ msgstr "Annualmente il %2$d %1$s"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:533 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:531 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "Annualmente il %1$s %2$s di %3$d"
 

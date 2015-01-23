@@ -2787,7 +2787,7 @@ msgstr "每 %1$d 天"
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:498 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:496 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "每 %1$d 月的第 %2$d 天"
 
@@ -2795,14 +2795,14 @@ msgstr "每 %1$d 月的第 %2$d 天"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:510 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:507 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "每 %1$d 月的 %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:485 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:481 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "每 %1$d 週的 %2$s"
 
@@ -2814,7 +2814,7 @@ msgstr "每 %1$d 週中的每一天"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:472 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "每 %1$d 週的工作日"
 
@@ -2822,7 +2822,7 @@ msgstr "每 %1$d 週的工作日"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:524 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "每  %1$d 年的  %2$s %3$s 日"
 
@@ -2831,7 +2831,7 @@ msgstr "每  %1$d 年的  %2$s %3$s 日"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:539 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:537 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "每 %1$d 年 %4$d 月的 %2$s %3$s"
 
@@ -4111,14 +4111,14 @@ msgstr "月視圖"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:494 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:492 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "每月的 %1$d 日"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:505 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:502 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "每月的  %1$s %2$s"
 
@@ -4580,7 +4580,7 @@ msgid "On new notifications except mails"
 msgstr "在新通知時，但郵件通知除外"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:472 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:469 module:io.ox/calendar
 msgid "On work days"
 msgstr "工作日"
 
@@ -7535,7 +7535,7 @@ msgstr "周視圖"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:481 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:477 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "每週的 %1$s"
 
@@ -7617,7 +7617,7 @@ msgstr "年"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:520 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:519 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "每年的 %1$s %2$d 日"
 
@@ -7625,7 +7625,7 @@ msgstr "每年的 %1$s %2$d 日"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:533 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:531 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "每年 %3$d 月的 %1$s %2$s"
 
