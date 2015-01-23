@@ -3884,7 +3884,13 @@ input.flat-input {
         }
 
         .dropdown-header {
-            display: none;
+            max-width: 100%;
+            background: transparent;
+            color: #fff;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 16px;
+            font-weight: 300;
         }
 
         li {
@@ -3895,6 +3901,10 @@ input.flat-input {
 
             a {
                 padding: (3px + @extraPadding) 20px;
+            }
+
+            a[role~="menuitemcheckbox"] {
+                margin-left: -30px;
             }
 
             .fa {
