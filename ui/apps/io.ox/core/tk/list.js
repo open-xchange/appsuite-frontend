@@ -304,9 +304,9 @@ define('io.ox/core/tk/list', [
             }
             // helper to detect scrolling in action, only used by mobiles
             if (_.device('smartphone')) {
-                 var self = this,
+                var self = this,
                     timer;
-                 this.$el.scroll(function () {
+                this.$el.scroll(function () {
                     self.selection.isScrolling = true;
                     if (timer) clearTimeout(timer);
                     timer = setTimeout(function () {

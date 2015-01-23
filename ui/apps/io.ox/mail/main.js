@@ -38,7 +38,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, links, actions, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, gt, settings) {
 
     'use strict';
 
@@ -965,7 +965,7 @@ define('io.ox/mail/main', [
                 ariaLabel: '',
                 icon: '',
                 noCaret: true,
-                ref: 'io.ox/mail/links/inline',
+                ref: 'io.ox/mail/links/inline'
             }));
 
             app.listView.on('selection:more', function (list, node) {
