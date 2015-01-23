@@ -80,6 +80,8 @@ define('io.ox/core/tk/autocomplete',
             // state
             isOpen = false,
 
+            disableBlurHandler = false,
+
             reposition = _.debounce(function () {
                     //popup stays next to input
                     var left = parseInt(o.container.css('left').replace('px', ''), 10),
@@ -97,6 +99,11 @@ define('io.ox/core/tk/autocomplete',
                     lastValue = String(o.stringify(data));
                     changed = lastValue !== current;
                     if (changed) self.val(lastValue);
+
+                    // ignore blur hanlder when moving focus
+                    disableBlurHandler = true;
+                    scrollpane.children().eq(Math.max(0, index)).focus();
+                    disableBlurHandler = false;
                 }
 
                 // if two related Fields are needed
@@ -143,7 +150,8 @@ define('io.ox/core/tk/autocomplete',
             },
 
             fnBlur = function () {
-                    setTimeout(close, 200);
+                    if (!disableBlurHandler)
+                        setTimeout(close, 200);
                 },
 
             blurOff = function () {
@@ -153,6 +161,26 @@ define('io.ox/core/tk/autocomplete',
             blurOn = function () {
                     _.defer(function () {
                         self.on('blur', fnBlur).focus();
+                    });
+                },
+
+            resetFocus = function ()  {
+                    // reset focus when in listMoode
+                    var selected = scrollpane.find('.selected');
+                    if (selected.length) {
+                        self.focus();
+                    }
+                },
+
+            listModeOff = function () {
+                    $('.autocomplete-popup').off('blur', '.autocomplete-item', fnBlur);
+                    $('.autocomplete-popup').off('keydown', '.autocomplete-item', fnKeyDown);
+                },
+
+            listModeOn = function () {
+                    _.defer(function () {
+                        $('.autocomplete-popup').on('blur', '.autocomplete-item', fnBlur);
+                        $('.autocomplete-popup').on('keydown', '.autocomplete-item', fnKeyDown);
                     });
                 },
 
@@ -183,6 +211,9 @@ define('io.ox/core/tk/autocomplete',
                         }
 
                         o.container.show();
+
+                        listModeOn();
+
                         if (_.isFunction(o.cbshow)) o.cbshow();
 
                         window.container = o.container;
@@ -201,6 +232,10 @@ define('io.ox/core/tk/autocomplete',
                             self.trigger('blur');
                         }
                         $(window).off('resize', reposition);
+
+                        listModeOff();
+                        resetFocus();
+
                         scrollpane.empty();
                         o.container.detach();
                         index = -1;

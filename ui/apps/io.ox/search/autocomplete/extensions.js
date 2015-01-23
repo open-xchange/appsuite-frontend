@@ -240,6 +240,8 @@ define('io.ox/search/autocomplete/extensions',
             ext.point(POINT + '/name').invoke('draw', this, baton);
             // email address
             ext.point(POINT + '/detail').invoke('draw', this, baton);
+            // aria lebel
+            ext.point(POINT + '/a11y').invoke('draw', this, baton);
         },
 
         image: function (baton) {
@@ -292,7 +294,14 @@ define('io.ox/search/autocomplete/extensions',
                     $('<i>').text('\u00A0' + detail)
                 );
             }
+        },
 
+        a11y: function () {
+            var text = this.find('.name').text() + ' ' +  this.find('.detail').text();
+            this.attr({
+                'aria-label': text,
+                'tabIndex': 1
+            });
         }
 
     };

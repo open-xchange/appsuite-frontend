@@ -76,6 +76,16 @@ define('io.ox/search/autocomplete/view',
         draw: extensions.detail
     });
 
+
+    /**
+     * dropdown item: detail
+     * @id  io.ox/search/autocomplete/detail
+     */
+    ext.point(POINT + '/a11y').extend({
+        index: 100,
+        draw: extensions.a11y
+    });
+
     /**
      * dropdown item: image
      * @id  io.ox/search/autocomplete/image
