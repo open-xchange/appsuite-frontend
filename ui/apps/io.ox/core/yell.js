@@ -15,6 +15,15 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 
+    if (false) {
+        //make sure, translations of ariaText types are always available
+        //only for create_pot task to pickup the strings.
+        gt('Error');
+        gt('Info');
+        gt('Success');
+        gt('Warning');
+    }
+
     var validType = /^(busy|error|info|success|warning|screenreader)$/,
 
         durations = {
@@ -27,10 +36,10 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         },
 
         ariaText = {
-            error: gt('Error'),
-            info: gt('Info'),
-            success: gt('Success'),
-            warning: gt('Warning')
+            error: 'Error',
+            info: 'Info',
+            success: 'Success',
+            warning: 'Warning'
         },
 
         icons = {
@@ -134,7 +143,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         _.defer(function () {
             node.append(
                 $('<div role="alert" aria-live="assertive" class="message user-select-text">').append(
-                    ariaText[o.type] ? $('<span class="sr-only">').text(ariaText[o.type]) : [],
+                    ariaText[o.type] ? $('<span class="sr-only">').text(/*#, dynamic*/gt(ariaText[o.type])) : [],
                     o.headline ? $('<h2 class="headline">').text(o.headline) : [],
                     $('<div>').css('word-break', wordbreak).html(html)
                 )
