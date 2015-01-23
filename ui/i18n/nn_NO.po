@@ -1,14 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
-"PO-Revision-Date: DATE\n"
-"Last-Translator: NAME <EMAIL>\n"
+"PO-Revision-Date: 2015-01-22 10:17+0000\n"
+"Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
-"Language: nn_NO\n"
+"Language: no_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1421921875.000000\n"
 
 #. File size
 #. %1$d is the number
@@ -461,7 +463,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:276 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Absent"
-msgstr ""
+msgstr "Fraværende"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:104 module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js:27 module:io.ox/calendar/main
@@ -479,7 +481,7 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js:28 module:io.ox/calendar/main
 #: apps/io.ox/calendar/invitations/register.js:32
 msgid "Accept changes"
-msgstr ""
+msgstr "Godta endringer"
 
 #: apps/plugins/notifications/calendar/register.js:87
 #: module:plugins/notifications
@@ -633,7 +635,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:30 module:io.ox/calendar/main
 msgid "Add new participant"
-msgstr ""
+msgstr "Legg til deltaker"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:458 module:io.ox/mail
 msgid "Add new rule"
@@ -657,7 +659,7 @@ msgstr ""
 #: apps/io.ox/calendar/freebusy/templates.js:92 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/freebusy/templates.js:94
 msgid "Add participant"
-msgstr ""
+msgstr "Legg til deltaker"
 
 #: apps/io.ox/calendar/edit/extensions.js:409 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/extensions.js:411
@@ -665,7 +667,7 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js:421 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:423
 msgid "Add participant/resource"
-msgstr ""
+msgstr "Legg til deltaker/ressurs"
 
 #: apps/io.ox/files/share/view.js:166 module:io.ox/files
 #: apps/io.ox/files/share/view.js:167
@@ -726,7 +728,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:58 module:io.ox/calendar/main
 msgid "Added the new participant"
-msgstr ""
+msgstr "Deltakeren ble lagt til"
 
 #: apps/io.ox/core/pubsub/notifications/subscription.js:75
 #: module:io.ox/core/pubsub
@@ -894,7 +896,7 @@ msgstr ""
 #: apps/io.ox/calendar/week/perspective.js:159
 #: apps/io.ox/mail/detail/links.js:214 module:io.ox/mail
 msgid "Appointment"
-msgstr ""
+msgstr "Avtale"
 
 #: apps/io.ox/calendar/detail/main.js:38 module:io.ox/calendar
 #: apps/io.ox/calendar/list/perspective.js:55
@@ -952,7 +954,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:691
 msgid "April"
-msgstr ""
+msgstr "april"
 
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js:551 module:io.ox/settings
@@ -1030,7 +1032,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:695
 msgid "August"
-msgstr ""
+msgstr "august"
 
 #: apps/io.ox/mail/accounts/view-form.js:519 module:io.ox/settings
 msgid "Authentication"
@@ -1351,7 +1353,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:391 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:64
 msgid "Change status"
-msgstr ""
+msgstr "Endre status"
 
 #: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
 msgid "Change subscription"
@@ -1359,7 +1361,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:74 module:io.ox/calendar/freebusy
 msgid "Change view"
-msgstr ""
+msgstr "Endre visning"
 
 #: apps/io.ox/tasks/common-extensions.js:112 module:io.ox/tasks
 #: apps/io.ox/tasks/common-extensions.js:118
@@ -1368,7 +1370,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:56 module:io.ox/calendar/main
 msgid "Changes have been saved"
-msgstr ""
+msgstr "Endringene har blitt lagret"
 
 #: apps/io.ox/oauth/settings.js:55 module:io.ox/settings/oauth
 msgid "Changes have been saved."
@@ -1623,7 +1625,7 @@ msgstr ""
 #: apps/io.ox/calendar/conflicts/conflictList.js:21
 #: module:io.ox/calendar/conflicts/conflicts
 msgid "Conflicts detected"
-msgstr ""
+msgstr "Konflikter ble oppdaget"
 
 #: apps/io.ox/calendar/edit/main.js:144 module:io.ox/calendar/edit/main
 msgid "Conflicts with resources cannot be ignored"
@@ -1805,7 +1807,7 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js:41 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view-template.js:98
 msgid "Create"
-msgstr ""
+msgstr "Opprett"
 
 #: apps/io.ox/files/share/view.js:33 module:io.ox/files
 msgid ""
@@ -1816,7 +1818,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:50 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:163 apps/io.ox/calendar/edit/main.js:312
 msgid "Create appointment"
-msgstr ""
+msgstr "Opprett avtale"
 
 #: apps/io.ox/contacts/edit/main.js:64 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:177
@@ -1896,7 +1898,7 @@ msgstr ""
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:119
 #: apps/io.ox/mail/view-options.js:31 module:io.ox/mail
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #: apps/io.ox/tasks/print.js:103 module:io.ox/tasks
 #: apps/io.ox/tasks/view-detail.js:126
@@ -1912,7 +1914,7 @@ msgstr ""
 #: apps/io.ox/calendar/freebusy/templates.js:79 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:152 module:io.ox/calendar
 msgid "Day"
-msgstr ""
+msgstr "Dag"
 
 #: apps/io.ox/calendar/week/perspective.js:299 module:io.ox/calendar
 msgid "Day View"
@@ -2018,7 +2020,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/delete.js:77 module:io.ox/calendar
 msgid "Delete appointment"
-msgstr ""
+msgstr "Slett avtale"
 
 #: apps/io.ox/files/actions.js:589 module:io.ox/files
 msgid "Delete version"
@@ -2026,7 +2028,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions/delete.js:78 module:io.ox/calendar
 msgid "Delete whole series"
-msgstr ""
+msgstr "Slett hele serien"
 
 #: apps/io.ox/portal/main.js:612 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
@@ -2255,24 +2257,24 @@ msgstr ""
 msgid ""
 "Do you want to confirm the whole series or just one appointment within the "
 "series?"
-msgstr ""
+msgstr "Ønsker du å bekrefte hele serien, eller bare én enkeltavtale i serien?"
 
 #: apps/io.ox/calendar/actions/delete.js:76 module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
-msgstr ""
+msgstr "Ønsker du å slette hele serien, eller bare én enkeltavtale i serien?"
 
 #: apps/io.ox/calendar/actions/delete.js:89 module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
-msgstr ""
+msgstr "Ønsker du å slette denne avtalen?"
 
 #: apps/io.ox/calendar/actions/edit.js:37 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:156
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
-msgstr ""
+msgstr "Ønsker du å redigere hele serien, eller bare én enkeltavtale i serien?"
 
 #: apps/io.ox/mail/actions/delete.js:37 module:io.ox/mail
 msgid "Do you want to permanently delete this mail?"
@@ -2469,7 +2471,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:50 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:163 apps/io.ox/calendar/edit/main.js:310
 msgid "Edit appointment"
-msgstr ""
+msgstr "Rediger avtale"
 
 #: apps/io.ox/files/actions.js:518 module:io.ox/files
 msgid "Edit description"
@@ -3106,7 +3108,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:277 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Free"
-msgstr ""
+msgstr "Ledig"
 
 #: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
@@ -3118,7 +3120,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:679
 #: apps/io.ox/calendar/util.js:423 module:io.ox/calendar
 msgid "Friday"
-msgstr ""
+msgstr "Fredag"
 
 #: apps/io.ox/mail/actions/reminder.js:51 module:io.ox/mail
 #: apps/io.ox/mail/compose/extensions.js:99
@@ -3344,7 +3346,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:37 module:io.ox/calendar/main
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorer"
 
 #: apps/io.ox/mail/accounts/view-form.js:326 module:io.ox/settings
 msgid "Ignore Warnings"
@@ -3357,7 +3359,7 @@ msgstr ""
 #: apps/plugins/notifications/calendar/register.js:196
 #: module:plugins/notifications
 msgid "Ignore conflicts"
-msgstr ""
+msgstr "Ignorer konflikter"
 
 #: apps/io.ox/core/import/import.js:130 module:io.ox/core
 msgid ""
@@ -3458,7 +3460,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js:130 module:io.ox/core
 msgid "Invalid data"
-msgstr ""
+msgstr "Ugyldig data"
 
 #: apps/plugins/xing/main.js:75 module:plugins/portal
 msgid "Invitation sent"
@@ -3495,7 +3497,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions.js:443 module:io.ox/calendar
 msgid "Invite to new appointment"
-msgstr ""
+msgstr "Inviter til ny avtale"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:29
 #: module:io.ox/settings/settings
@@ -3543,13 +3545,13 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:694
 msgid "July"
-msgstr ""
+msgstr "juli"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:644
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:693
 msgid "June"
-msgstr ""
+msgstr "juni"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js:622 module:io.ox/portal
@@ -3851,7 +3853,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:690
 msgid "March"
-msgstr ""
+msgstr "mars"
 
 #: apps/io.ox/contacts/model.js:236 module:io.ox/contacts
 msgid "Marital status"
@@ -3926,7 +3928,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:692
 msgid "May"
-msgstr ""
+msgstr "mai"
 
 #: apps/io.ox/tasks/edit/view-template.js:343 module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js:33 module:io.ox/tasks
@@ -3992,12 +3994,12 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:675
 #: apps/io.ox/calendar/util.js:419 module:io.ox/calendar
 msgid "Monday"
-msgstr ""
+msgstr "Mandag"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js:155 module:io.ox/calendar
 msgid "Month"
-msgstr ""
+msgstr "Måned"
 
 #: apps/io.ox/calendar/month/perspective.js:406 module:io.ox/calendar
 msgid "Month View"
@@ -4399,7 +4401,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:698
 msgid "November"
-msgstr ""
+msgstr "november"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:174 module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
@@ -4428,7 +4430,7 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:697
 msgid "October"
-msgstr ""
+msgstr "oktober"
 
 #: apps/io.ox/core/settings/pane.js:336 module:io.ox/core
 msgid "Off"
@@ -4650,7 +4652,7 @@ msgstr ""
 #: apps/io.ox/calendar/participants.js:176 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:387 module:io.ox/tasks/edit
 msgid "Participants"
-msgstr ""
+msgstr "Deltakere"
 
 #: apps/io.ox/core/boot/i18n.js:24 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:24 module:io.ox/core/login
@@ -4807,11 +4809,11 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:1089
 #: module:io.ox/calendar/edit/main
 msgid "Please choose a sentence below."
-msgstr ""
+msgstr "Vennligst velg en setning under."
 
 #: apps/io.ox/backbone/validation.js:81 module:io.ox/backbone/validation
 msgid "Please enter a date in the past"
-msgstr ""
+msgstr "Vennligst oppgi en dato som har passert"
 
 #: apps/plugins/portal/flickr/register.js:267 module:plugins/portal
 msgid "Please enter a description"
@@ -4833,15 +4835,15 @@ msgstr ""
 #: apps/io.ox/backbone/validation.js:71 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:78
 msgid "Please enter a valid date"
-msgstr ""
+msgstr "Vennligst oppgi en gyldig dato"
 
 #: apps/io.ox/backbone/validation.js:87 module:io.ox/backbone/validation
 msgid "Please enter a valid email address"
-msgstr ""
+msgstr "Vennligst oppgi en gyldig epostadresse"
 
 #: apps/io.ox/backbone/validation.js:100 module:io.ox/backbone/validation
 msgid "Please enter a valid email address or phone number"
-msgstr ""
+msgstr "Vennligst oppgi en gyldig epostadresse eller telefonnummer"
 
 #: apps/io.ox/mail/settings/signatures/register.js:122 module:io.ox/mail
 msgid "Please enter a valid name"
@@ -4850,7 +4852,7 @@ msgstr ""
 #: apps/io.ox/backbone/validation.js:46 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:56
 msgid "Please enter a valid number"
-msgstr ""
+msgstr "Vennligst oppgi et gyldig tall"
 
 #: apps/io.ox/backbone/validation.js:107 module:io.ox/backbone/validation
 msgid "Please enter a valid object"
@@ -4858,7 +4860,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/validation.js:93 module:io.ox/backbone/validation
 msgid "Please enter a valid phone number. Allowed characters are: %1$s"
-msgstr ""
+msgstr "Vennligst oppgi et gyldig telefonnummer. Tillatte tegn er: %1$s"
 
 #: apps/io.ox/backbone/validation.js:158 module:io.ox/backbone/validation
 msgid "Please enter a value"
@@ -5091,7 +5093,7 @@ msgstr ""
 #: apps/io.ox/contacts/view-detail.js:152 module:io.ox/contacts
 #: apps/io.ox/tasks/edit/view-template.js:373 module:io.ox/tasks/edit
 msgid "Private"
-msgstr ""
+msgstr "Privat"
 
 #: apps/plugins/halo/xing/register.js:164 module:plugins/portal
 msgid "Private address"
@@ -5304,7 +5306,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
-msgstr ""
+msgstr "Avvis endringer"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:63
 #: module:io.ox/settings/settings
@@ -5372,7 +5374,7 @@ msgstr ""
 #: apps/io.ox/core/tk/attachments.js:90
 #: apps/io.ox/core/tk/attachmentsUtil.js:229
 msgid "Remove attachment"
-msgstr ""
+msgstr "Fjern vedlegg"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:270 module:io.ox/contacts
 msgid "Remove contact"
@@ -5400,7 +5402,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:1210
 #: module:io.ox/calendar/edit/main
 msgid "Repeat"
-msgstr ""
+msgstr "Gjenta"
 
 #: apps/plugins/portal/userSettings/register.js:127 module:io.ox/core
 msgid "Repeat new password"
@@ -5432,7 +5434,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:274 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Reserved"
-msgstr ""
+msgstr "Reservert"
 
 #: apps/io.ox/core/emoji/view.js:221 module:io.ox/mail/emoji
 msgid "Reset this list"
@@ -5516,7 +5518,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:680
 #: apps/io.ox/calendar/util.js:424 module:io.ox/calendar
 msgid "Saturday"
-msgstr ""
+msgstr "Lørdag"
 
 #: apps/io.ox/calendar/edit/extensions.js:60 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js:45 module:io.ox/contacts
@@ -5542,12 +5544,12 @@ msgstr ""
 #: apps/plugins/portal/tumblr/register.js:260
 #: apps/plugins/portal/userSettings/register.js:44
 msgid "Save"
-msgstr ""
+msgstr "Lagre"
 
 #: apps/io.ox/calendar/actions.js:452 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:578 module:io.ox/mail
 msgid "Save as distribution list"
-msgstr ""
+msgstr "Lagre som distribusjonsliste"
 
 #: apps/io.ox/mail/compose/view.js:548 module:io.ox/mail
 msgid "Save as draft"
@@ -5624,7 +5626,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/view-addparticipants.js:186
 #: module:io.ox/calendar/edit/main
 msgid "Search here"
-msgstr ""
+msgstr "Søk her"
 
 #: apps/io.ox/mail/accounts/view-form.js:572 module:io.ox/settings
 msgid "Select"
@@ -5683,7 +5685,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/actions.js:434 module:io.ox/calendar
 msgid "Send mail to all participants"
-msgstr ""
+msgstr "Send epost til alle deltakere"
 
 #: apps/io.ox/mail/actions.js:560 module:io.ox/mail
 msgid "Send new mail"
@@ -5717,14 +5719,14 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:696
 msgid "September"
-msgstr ""
+msgstr "september"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js:220 module:io.ox/calendar
 #: apps/io.ox/calendar/actions/edit.js:40
 #: apps/io.ox/calendar/week/perspective.js:158
 msgid "Series"
-msgstr ""
+msgstr "Serier"
 
 #: apps/io.ox/mail/accounts/view-form.js:426 module:io.ox/settings
 #: apps/io.ox/mail/accounts/view-form.js:498
@@ -5743,7 +5745,7 @@ msgstr ""
 #: apps/io.ox/backbone/basicModel.js:145 module:io.ox/core
 #: apps/io.ox/core/main.js:201
 msgid "Server unreachable"
-msgstr ""
+msgstr "Systemet er utilgjengelig"
 
 #: apps/io.ox/core/about/about.js:32 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:122
@@ -5933,7 +5935,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
 msgid "Show task details"
-msgstr ""
+msgstr "Vis oppgavedetaljer"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js:70 module:io.ox/mail
 msgid "Show tiles"
@@ -5946,7 +5948,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:283 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/view-detail.js:217 module:io.ox/calendar
 msgid "Shown as"
-msgstr ""
+msgstr "Vist som"
 
 #: apps/io.ox/core/boot/i18n.js:25 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:25 module:io.ox/core/login
@@ -6200,7 +6202,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:674
 #: apps/io.ox/calendar/util.js:418 module:io.ox/calendar
 msgid "Sunday"
-msgstr ""
+msgstr "Søndag"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js:109 module:io.ox/mail/emoji
@@ -6321,7 +6323,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:275 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Temporary"
-msgstr ""
+msgstr "Midlertidig"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js:103 module:io.ox/calendar
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
@@ -6371,11 +6373,11 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:61 module:io.ox/calendar/main
 msgid "The appointment has been deleted"
-msgstr ""
+msgstr "Avtalen ble slettet"
 
 #: apps/io.ox/calendar/invitations/register.js:60 module:io.ox/calendar/main
 msgid "The appointment has been updated"
-msgstr ""
+msgstr "Avtalen ble oppdatert"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:505
 #: module:io.ox/calendar/edit/main
@@ -6891,7 +6893,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:678
 #: apps/io.ox/calendar/util.js:422 module:io.ox/calendar
 msgid "Thursday"
-msgstr ""
+msgstr "Torsdag"
 
 #: apps/io.ox/files/toolbar.js:213 module:io.ox/files
 msgid "Tiles"
@@ -6900,7 +6902,7 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/datepicker.js:79 module:io.ox/core
 #: apps/io.ox/calendar/settings/pane.js:118 module:io.ox/calendar
 msgid "Time"
-msgstr ""
+msgstr "Tidspunkt"
 
 #: apps/io.ox/calendar/settings/pane.js:122 module:io.ox/calendar
 msgid "Time scale in minutes"
@@ -6941,7 +6943,7 @@ msgstr ""
 #: module:io.ox/core apps/plugins/portal/birthdays/register.js:86
 #: module:plugins/portal apps/plugins/portal/birthdays/register.js:159
 msgid "Today"
-msgstr ""
+msgstr "Idag"
 
 #: apps/io.ox/core/tk/vgrid.js:310 module:io.ox/core
 msgid "Toggle checkboxes"
@@ -7005,7 +7007,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:676
 #: apps/io.ox/calendar/util.js:420 module:io.ox/calendar
 msgid "Tuesday"
-msgstr ""
+msgstr "Tirsdag"
 
 #: apps/plugins/portal/tumblr/register.js:334 module:io.ox/portal
 msgid "Tumblr"
@@ -7024,7 +7026,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/extensions.js:308 module:io.ox/calendar/edit/main
 #: apps/plugins/portal/flickr/register.js:221 module:plugins/portal
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: apps/io.ox/core/about/about.js:31 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:121
@@ -7198,6 +7200,9 @@ msgid ""
 "change year or shift-key to change month. Close date-picker by pressing ESC "
 "key."
 msgstr ""
+"Bruk piltastene for å endre datoen. Hold nede CTRL-knappen samtidig for å "
+"endre år, eller SHIFT-tasten for å endre måned. Lukk datovelgeren ved å "
+"trykke ESC-tasten."
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:265 module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js:264 module:io.ox/portal
@@ -7221,6 +7226,8 @@ msgstr ""
 msgid ""
 "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr ""
+"Bruk opp- og ned-pilene for å endre tidspunktet. Lukk valgene ved å trykke "
+"ESC-tasten."
 
 #: apps/plugins/portal/userSettings/register.js:234 module:io.ox/core
 #: apps/plugins/portal/userSettings/register.js:260
@@ -7310,7 +7317,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:677
 #: apps/io.ox/calendar/util.js:421 module:io.ox/calendar
 msgid "Wednesday"
-msgstr ""
+msgstr "Onsdag"
 
 #: apps/io.ox/calendar/freebusy/templates.js:81 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:154 module:io.ox/calendar
@@ -7395,7 +7402,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/date.js:23 module:io.ox/core
 msgid "Year"
-msgstr ""
+msgstr "År"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
@@ -7486,7 +7493,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:145 module:io.ox/calendar/main
 msgid "You are the organizer"
-msgstr ""
+msgstr "Du er organiserer"
 
 #: apps/io.ox/mail/actions/attachmentEmpty.js:27 module:io.ox/mail
 msgid ""
@@ -7510,11 +7517,11 @@ msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You declined this appointment"
-msgstr ""
+msgstr "Du avslo avtalen"
 
 #: apps/io.ox/calendar/invitations/register.js:161 module:io.ox/calendar/main
 msgid "You declined this task"
-msgstr ""
+msgstr "Du avslo oppgaven"
 
 #: apps/plugins/portal/calendar/register.js:61 module:plugins/portal
 #: apps/plugins/portal/calendar/register.js:89
@@ -7551,15 +7558,15 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js:59
 #: apps/io.ox/calendar/invitations/register.js:68
 msgid "You have accepted the appointment"
-msgstr ""
+msgstr "Du har akseptert avtalen"
 
 #: apps/io.ox/calendar/invitations/register.js:154 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
-msgstr ""
+msgstr "Du har akseptert avtalen"
 
 #: apps/io.ox/calendar/invitations/register.js:155 module:io.ox/calendar/main
 msgid "You have accepted this task"
-msgstr ""
+msgstr "Du har akseptert oppgaven"
 
 #: apps/io.ox/core/boot/i18n.js:43 module:io.ox/core/boot
 #: apps/io.ox/core/login-i18n.js:43 module:io.ox/core/login
@@ -7884,7 +7891,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:715
 #: module:io.ox/calendar/edit/main
 msgid "ends"
-msgstr ""
+msgstr "slutter"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:712
 #: module:io.ox/calendar/edit/main
@@ -7904,8 +7911,8 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:520
 msgid "every %1$d day"
 msgid_plural "every %1$d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "hver %1$d dag"
+msgstr[1] "hver %1$d dager"
 
 #. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
 #. This is inserted into an HTML construct.
@@ -7927,15 +7934,15 @@ msgstr[1] ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:541
 msgid "every %1$d week"
 msgid_plural "every %1$d weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "hver %1$d uke"
+msgstr[1] "hver %1$d uke"
 
 #. as in: The appointment is repeated every day
 #. This is inserted into an HTML construct and is the form without the number
 #: apps/io.ox/calendar/edit/recurrence-view.js:512
 #: module:io.ox/calendar/edit/main
 msgid "every day"
-msgstr ""
+msgstr "hver dag"
 
 #. as in: The appointment is repeated every month
 #. This is inserted into an HTML construct and is the form without the number
@@ -7943,14 +7950,14 @@ msgstr ""
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:619
 msgid "every month"
-msgstr ""
+msgstr "hver måned"
 
 #. as in: The appointment is repeated every week
 #. This is inserted into an HTML construct and is the form without the number
 #: apps/io.ox/calendar/edit/recurrence-view.js:534
 #: module:io.ox/calendar/edit/main
 msgid "every week"
-msgstr ""
+msgstr "hver uke"
 
 #: apps/plugins/portal/facebook/register.js:303 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:312
@@ -8036,7 +8043,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:669
 #: apps/io.ox/calendar/util.js:28 module:io.ox/calendar
 msgid "last"
-msgstr ""
+msgstr "forrige"
 
 #: apps/io.ox/tasks/util.js:26 module:io.ox/tasks
 msgid "late in the evening"
@@ -8275,7 +8282,7 @@ msgstr ""
 #: apps/io.ox/calendar/edit/recurrence-view.js:499
 #: module:io.ox/calendar/edit/main
 msgid "yearly"
-msgstr ""
+msgstr "årlig"
 
 #: apps/io.ox/calendar/util.js:42 module:io.ox/calendar
 msgid "yellow"
