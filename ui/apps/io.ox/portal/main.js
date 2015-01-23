@@ -593,6 +593,7 @@ define('io.ox/portal/main',
 
             widgets.loadUsedPlugins().done(function (cleanCollection) {
                 cleanCollection.each(app.drawWidget);
+                ox.trigger('portal:items:render');
             });
 
             // add side popup

@@ -14,7 +14,7 @@
 define('plugins/metrics/demo/register', [
     'io.ox/core/metrics/metrics',
     'io.ox/core/metrics/bot/main',
-    'settings!plugins/metrics/demo',
+    'settings!io.ox/core/metrics',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'io.ox/mail/api'
@@ -23,15 +23,15 @@ define('plugins/metrics/demo/register', [
     'use strict';
 
     // settings
-    var INBOX = settings.get('inbox', 'default0/INBOX'),
-        TEST = settings.get('test-folder', 'default0/INBOX/Test'),
-        SUBJECT = settings.get('subject', 'Automatic performance test'),
-        FIRST_LETTERS = settings.get('first-letters', 'bigge'),
-        RECIPIENT = settings.get('recipient', 'matthias.biggeleben@open-xchange.com'),
-        FILE = settings.get('cloud-attachment', { folder_id: '13894', id: '63605' }),
-        KEYWORD = settings.get('search-keyword', 'automatic'),
-        MAIL_WITH_THUMBNAILS = settings.get('message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 85 }),
-        STORE_FOLDER = settings.get('store-folder', 73407);
+    var INBOX = settings.get('demo/inbox', 'default0/INBOX'),
+        TEST = settings.get('demo/test-folder', 'default0/INBOX/Test'),
+        SUBJECT = settings.get('demo/subject', 'Automatic performance test'),
+        FIRST_LETTERS = settings.get('demo/first-letters', 'bigge'),
+        RECIPIENT = settings.get('demo/recipient', 'matthias.biggeleben@open-xchange.com'),
+        FILE = settings.get('demo/cloud-attachment', { folder_id: '13894', id: '63605' }),
+        KEYWORD = settings.get('demo/search-keyword', 'automatic'),
+        MAIL_WITH_THUMBNAILS = settings.get('demo/message-with-thumbnails', { folder_id: 'default0/INBOX/Test', id: 85 }),
+        STORE_FOLDER = settings.get('demo/store-folder', 73407);
 
     // ensure normal selection mode
     coreSettings.set('selectionMode', 'normal');
@@ -422,16 +422,7 @@ define('plugins/metrics/demo/register', [
         });
 
         suite.done(function () {
-
-            var line = metrics.getBrowser() + ';' + _.now() + ';' + metrics.toSeconds(this.getDuration()) + ';';
-
-            line += _(this.getResults())
-                .map(function (item) {
-                    return item.state === 'resolved' ? metrics.toSeconds(item.duration) : 'N/A';
-                })
-                .join(';');
-
-            metrics.store.toFile(STORE_FOLDER, 'performance', line);
+            metrics.store.toFile(STORE_FOLDER, 'performance', this.toCSV());
         });
     });
 });
