@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/metrics/performance/register', [
+define('plugins/metrics/stopwatch/register', [
     'io.ox/core/metrics/metrics',
     'io.ox/core/metrics/bot/main',
     'settings!io.ox/core/metrics',
@@ -20,7 +20,7 @@ define('plugins/metrics/performance/register', [
 
     'use strict';
 
-    var STORE_FOLDER = settings.get('performance/store-folder', 73407);
+    var STORE_FOLDER = settings.get('stopwatch/store-folder', 73407);
 
     // make sure we start without any app
     coreSettings.set('autoStart', 'none');
@@ -146,7 +146,7 @@ define('plugins/metrics/performance/register', [
         });
 
         suite.done(function () {
-            metrics.store.toFile(STORE_FOLDER, 'qa', this.toCSV());
+            metrics.store.toFile(STORE_FOLDER, 'stopwatch', this.toCSV());
         });
     });
 });
