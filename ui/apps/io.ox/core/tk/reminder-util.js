@@ -39,7 +39,7 @@ define('io.ox/core/tk/reminder-util',
             // special link dropdown
             node.append(
                 $('<div>').addClass('dropdown').css({float: 'left'}).append(
-                    $('<a href="#" role="listbox" aria-label="' + gt('Press [enter] to select a time when you want to be reminded again') + '"tabindex="1" data-action="reminderbutton" aria-haspopup="true">')
+                    $('<a role="listbox" aria-label="' + gt('Press [enter] to select a time when you want to be reminded again') + '"tabindex="1" data-action="reminderbutton" aria-haspopup="true">')
                     .attr({'data-toggle': 'dropdown', 'focus-id': focusId + '-select'})
                     .text(gt('Remind me again')).addClass('refocus')
                     .append(

@@ -88,9 +88,8 @@ define('io.ox/core/notifications',
     });
 
     var NotificationsView = Backbone.View.extend({
-        tagName: 'ul',
+        tagName: 'div',
         id: 'io-ox-notifications-display',
-        className: 'list-unstyled',
         initialize: function (options) {
             options = options || {};
             this.subviews = options.subviews || {};
@@ -155,7 +154,7 @@ define('io.ox/core/notifications',
             });
 
             if (empty) {
-                self.$el.append($('<li class="no-news-message">').append($('<h1 class="section-title">').text(gt('No notifications'))));
+                self.$el.append($('<h1 class="section-title no-news-message">').text(gt('No notifications')));
             }
 
             //restore focus if possible

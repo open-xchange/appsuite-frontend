@@ -30,7 +30,7 @@ define('plugins/notifications/calendar/register',
                             'aria-label': gt('Hide all appointment invitations.'),
                             'data-action': 'clear',
                             'focus-id': 'calendar-invite-clear'})),
-                $('<div class="notifications">')
+                $('<ul class="items list-unstyled">')
             );
         }
     });
@@ -44,7 +44,7 @@ define('plugins/notifications/calendar/register',
                             'aria-label': gt('Hide all appointment reminders.'),
                             'data-action': 'clear',
                             'focus-id': 'calendar-reminder-notification-clear'})),
-                $('<div class="reminder">')
+                $('<ul class="items list-unstyled">')
             );
         }
     });
@@ -109,7 +109,7 @@ define('plugins/notifications/calendar/register',
     var InviteView = Backbone.View.extend({
 
         className: 'item refocus',
-
+        tagName: 'li',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
@@ -226,7 +226,7 @@ define('plugins/notifications/calendar/register',
     var ReminderView = Backbone.View.extend({
 
         className: 'item',
-
+        tagName: 'li',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
@@ -329,7 +329,7 @@ define('plugins/notifications/calendar/register',
 
     var InviteNotificationsView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-calendar',
 
@@ -346,7 +346,7 @@ define('plugins/notifications/calendar/register',
                 ext.point('io.ox/core/notifications/invites/header').invoke('draw', this.$el, baton);
 
                 this.collection.each(function (model) {
-                    this.$el.append(
+                    this.$el.find('.items').append(
                         new InviteView({ model: model, collection: this.collection }).render().$el
                     );
                 }, this);
@@ -366,7 +366,7 @@ define('plugins/notifications/calendar/register',
 
     var ReminderNotificationsView = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'div',
         className: 'notifications',
         id: 'io-ox-notifications-calendar-reminder',
 
@@ -383,7 +383,7 @@ define('plugins/notifications/calendar/register',
                 ext.point('io.ox/core/notifications/reminder/header').invoke('draw', this.$el, baton);
 
                 this.collection.each(function (model) {
-                    this.$el.append(
+                    this.$el.find('.items').append(
                         new ReminderView({ model: model, collection: this.collection }).render().$el
                     );
                 }, this);
