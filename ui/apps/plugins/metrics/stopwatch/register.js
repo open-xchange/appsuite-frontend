@@ -142,6 +142,21 @@ define('plugins/metrics/stopwatch/register', [
                 this.step('Wait for vgrid', function (done) {
                     this.waitForEvent('grid:stop', done);
                 });
+
+                this.step('Open create task dialog', function (done) {
+                    this.waitForApp('io.ox/tasks/edit', done);
+                    ox.launch('io.ox/tasks/edit/main');
+                });
+
+                this.step('Wait for form fields', function (done) {
+                    this.waitForSelector('div[data-extension-id="title"]', done);
+                });
+
+                this.step('Quit dialog', function (done) {
+                    this.app.quit();
+                    this.waitForApp('io.ox/tasks', done);
+                    ox.launch('io.ox/tasks/main');
+                });
             });
         });
 
