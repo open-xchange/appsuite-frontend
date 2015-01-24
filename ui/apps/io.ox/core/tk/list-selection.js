@@ -44,7 +44,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         if (delta > 0.5 || delta < -0.5) {
             // delta decreases over time, this is the deceleration
             if (delta < 35 || delta > -35) {
-               delta = delta * -1; // bounce
+                delta = delta * -1; // bounce
             }
             c = (-movetarget + delta);
             cell.css('-webkit-transform', 'translate3d(' + c + 'px, 0, 0)');
@@ -519,9 +519,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onSwipeDelete: function (e) {
             e.preventDefault();
             var node = $(this.currentSelection).closest(SELECTABLE),
-                cid = node.attr('data-cid');
-            // propagate event
-            this.view.trigger('selection:delete', [cid]);
+                cid = node.attr('data-cid'),
+                cellsBelow = node.nextAll(),
+                self = this;
+            // animate cell and delete mail afterwards
+            animateUp(cellsBelow, function () {
+                self.view.trigger('selection:delete', [cid]);
+            });
         },
 
         onSwipeMore: function (e) {
@@ -541,6 +545,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 this.swipeCell.remove();
                 this.swipeCell = null;
                 this.t0 = 0;
+                this.otherUnfolded = false;
                 movetarget = 0;
                 velocity = 1;
                 amplitude = 50;
@@ -572,13 +577,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // check if this node is already opened
             this.unfolded = t.hasClass('unfolded'); // mark current node as unfolded once
-            this.otherUnfolded = !!t.parent().find('.unfolded').length; // not so nice...
+            this.otherUnfolded = t.siblings().hasClass('unfolded'); // is there another node unfolded
 
             // check if other nodes than the current one are unfolded
             // if so, close other nodes and stop event propagation
             if (!this.unfolded && this.otherUnfolded) {
                 e.data.resetSwipeCell.call(e.data.currentSelection);
-                return false;
             }
 
             // reset values for momentum calculation
@@ -625,7 +629,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.target.before(this.swipeCell);
                 }
                 // translate the moved cell
-                this.target.css('-webkit-transform', 'translate3d(' + this.distanceX + 'px, 0, 0)');
+                if (this.distanceX < 0) this.target.css('-webkit-transform', 'translate3d(' + this.distanceX + 'px, 0, 0)');
 
                 // if delete threshold is reached, enlarge delete button over whole cell
                 if (Math.abs(width * this.distanceX) >= THRESHOLD_REMOVE) {
@@ -633,7 +637,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.btnMore.hide();
                     this.btnDelete.css('transition', 'width 100ms');
                     this.btnDelete.css('width', '100%');
-                } else if (this.expandDelete){
+                } else if (this.expandDelete) {
                     // remove style
                     this.btnMore.removeAttr('style');
                     this.btnDelete.removeAttr('style');
@@ -650,13 +654,17 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             this.remove = this.unfold = false;
 
-            cell = $(this); // save for later animation
-
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
                 e.data.resetSwipeCell.call(e.data.currentSelection);
                 return false; // don't do a select after this
             }
+
+            if (this.otherUnfolded && Math.abs(this.distanceX) <= 10) {
+                // other cell is opened, handle this as cancel action
+                return false;
+            }
+
             if (distanceXAbs >= THRESHOLD_STICK) {
                 // unfold automatically and stay at a position
                 this.unfold = true;
@@ -668,6 +676,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 this.unfold = false;
             }
 
+            cell = $(this); // save for later animation
             track(); // caluclate velocity and amplitude
             timestamp = Date.now(); // reset timestamp
 
@@ -678,7 +687,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 movetarget = Math.round(-distanceX + amplitude); // calculate endposition of movement
                 if (movetarget >= 190) {
                     movetarget = 190; // ceil endposition
-                    window.requestAnimationFrame(animate); // do animation
+                    animate($(this), $.noop, 190, Date.now());//window.requestAnimationFrame(animate); // do animation
                     $(this).addClass('unfolded');
                     this.unfold = true;
                 } else if (movetarget <= 190 && movetarget >= 30) {
@@ -707,7 +716,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 $(this).css('-webkit-transform', 'translate3d(-100%, 0, 0)');
                 this.btnMore.remove();
                 var self = this;
-
+                // delay start with 100ms to wait for other transition to finish
                 setTimeout(function () {
                     // reset touchcoords
                     self.startX = 0;
@@ -818,7 +827,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
     if (behavior === 'alternative') {
         _.extend(Selection.prototype, alternativeBehavior);
     }
-
 
     return Selection;
 });
