@@ -683,34 +683,31 @@ define('io.ox/mail/compose/view', [
 
             // ask for empty to,cc,bcc and/or empty subject
             var noRecipient = _.isEmpty(mail.to) && _.isEmpty(mail.cc) && _.isEmpty(mail.bcc);
-            if ($.trim(mail.subject) === '' || noRecipient) {
-                if (noRecipient) {
-                    notifications.yell('error', gt('Mail has no recipient.'));
-                    self.$el.find('.tokenfield:first .token-input').focus();
-                    def.reject();
-                } else if ($.trim(mail.subject) === '') {
-                    // show dialog
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog({ focus: false })
-                            .text(gt('Mail has empty subject. Send it anyway?'))
-                            .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
-                            .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
-                            .show(function () {
-                                def.notify('empty subject');
-                            })
-                            .done(function (action) {
-                                if (action === 'send') {
-                                    attachmentEmpty.emptinessCheck(mail.files).done(function () {
-                                        cont();
-                                    });
-                                } else {
-                                    self.$el.find('input[name="subject"]').focus();
-                                    def.reject();
-                                }
-                            });
-                    });
-                }
-
+            if (noRecipient) {
+                notifications.yell('error', gt('Mail has no recipient.'));
+                self.$el.find('.tokenfield:first .token-input').focus();
+                def.reject();
+            } else if ($.trim(mail.subject) === '') {
+                // show dialog
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({ focus: false })
+                        .text(gt('Mail has empty subject. Send it anyway?'))
+                        .addPrimaryButton('send', gt('Yes, send without subject'), 'send', { tabIndex: 1 })
+                        .addButton('subject', gt('Add subject'), 'subject', { tabIndex: 1 })
+                        .show(function () {
+                            def.notify('empty subject');
+                        })
+                        .done(function (action) {
+                            if (action === 'send') {
+                                attachmentEmpty.emptinessCheck(mail.files).done(function () {
+                                    cont();
+                                });
+                            } else {
+                                self.$el.find('input[name="subject"]').focus();
+                                def.reject();
+                            }
+                        });
+                });
             } else {
                 attachmentEmpty.emptinessCheck(mail.files).done(function () {
                     cont();
