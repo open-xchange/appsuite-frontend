@@ -26,7 +26,6 @@ define('io.ox/mail/actions/delete', [
     return {
 
         multiple: function (list) {
-
             var all = list.slice();
             list = folderAPI.ignoreSentItems(list);
 

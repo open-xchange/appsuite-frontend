@@ -22,12 +22,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         behavior = settings.get('selectionMode', 'normal'),
         // mobile stuff
         THRESHOLD_X = 5, // touchmove threshold for mobiles in PX
-        THRESHOLD_STICK = 30, // threshold in percent
+        THRESHOLD_STICK = 40, // threshold in percent
         THRESHOLD_REMOVE = 75, //percentage
         hasRaf = !!window.requestAnimationFrame,
         // animation support
         amplitude = 0,
-        timeConstant = 50,
+        timeConstant = 125,
         timestamp,
         movetarget,
         cell,
@@ -36,23 +36,26 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         cX;
 
     // animate function using requestAnimationFrame to be smooth
-    var animate = function () {
-        // do animation, aka. move the cell to the left
-        var elapsed, delta, c;
-        elapsed = Date.now() - (timestamp + 50); // simple tweak
-        delta = amplitude * Math.exp(-elapsed / timeConstant);
-        if (delta > 0.5 || delta < -0.5) {
-            // delta decreases over time, this is the deceleration
-            if (delta < 35 || delta > -35) {
-                delta = delta * -1; // bounce
+    var animate = function (cb) {
+        function frame () {
+            // do animation, aka. move the cell to the left
+            var elapsed, delta, c;
+            elapsed = Date.now() - timestamp; // simple tweak
+            delta = amplitude * Math.exp(-elapsed / timeConstant);
+            if (delta > 0.5 || delta < -0.5) {
+                // delta decreases over time, this is the deceleration
+                if (delta < 35 || delta > -35) {
+                    delta = delta * -1; // bounce
+                }
+                c = (-movetarget + delta);
+                cell.css('-webkit-transform', 'translate3d(' + c + 'px, 0, 0)');
+                window.requestAnimationFrame(frame); // to understand recursion you must understand recursion
+            } else {
+                cell.css('-webkit-transform', 'translate3d(' + -movetarget + 'px, 0, 0)');
+                cb();
             }
-            c = (-movetarget + delta);
-            cell.css('-webkit-transform', 'translate3d(' + c + 'px, 0, 0)');
-            window.requestAnimationFrame(animate); // to understand recursion you must understand recursion
-        } else {
-            cell.css('-webkit-transform', 'translate3d(' + -movetarget + 'px, 0, 0)');
-            cell.trigger('animationend');
         }
+        window.requestAnimationFrame(frame);
     };
 
     // animation is called after a cell was swiped outside the viewport, aka. delted
@@ -525,37 +528,45 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // animate cell and delete mail afterwards
             animateUp(cellsBelow, function () {
                 self.view.trigger('selection:delete', [cid]);
+                node.closest('.swipe-option-cell').remove();
+                cellsBelow.removeAttr('style');
             });
         },
 
         onSwipeMore: function (e) {
             e.preventDefault();
             var node = $(this.currentSelection).closest(SELECTABLE),
-                cid = node.attr('data-cid');
+                cid = node.attr('data-cid'),
+                self = this;
             // propagate event
             this.view.trigger('selection:more', [cid], $(this.currentSelection.btnMore));
+            // wait for popup to open, rest cell afterwards
+            _.delay(function () {
+                self.resetSwipeCell.call(self.currentSelection);
+            }, 250);
         },
 
-        resetSwipeCell: function () {
+        resetSwipeCell: function (a) {
             try {
                 this.startX = 0;
                 this.startY = 0;
                 this.unfold = false;
                 this.target = null;
-                this.swipeCell.remove();
-                this.swipeCell = null;
+
                 this.t0 = 0;
                 this.otherUnfolded = false;
                 movetarget = 0;
                 velocity = 1;
-                amplitude = 50;
-                var self = this;
+                amplitude = a || 200;
                 timestamp = Date.now();
-                $(this).one('animationend', function () {
+                // do animation
+                animate(function () {
                     $(self).removeAttr('style');
                     $(self).removeClass('unfolded');
+                    self.swipeCell.remove();
+                    self.swipeCell = null;
                 });
-                window.requestAnimationFrame(animate);
+
             } catch (e) {
                 console.warn('something went wrong during reset', e);
             }
@@ -654,6 +665,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             this.remove = this.unfold = false;
 
+            if ((distanceX > 0) && !this.unfolded) return; // left to right is not allowed
+
             // check for tap on unfolded cell
             if (this.unfolded && this.distanceX <= 10) {
                 e.data.resetSwipeCell.call(e.data.currentSelection);
@@ -687,7 +700,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 movetarget = Math.round(-distanceX + amplitude); // calculate endposition of movement
                 if (movetarget >= 190) {
                     movetarget = 190; // ceil endposition
-                    animate($(this), $.noop, 190, Date.now());//window.requestAnimationFrame(animate); // do animation
+                    animate();
                     $(this).addClass('unfolded');
                     this.unfold = true;
                 } else if (movetarget <= 190 && movetarget >= 30) {
@@ -696,7 +709,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     amplitude = 500;
                     $(this).addClass('unfolded');
                     this.unfold = true;
-                    window.requestAnimationFrame(animate);
+                    animate();
                 }
             }
 
@@ -728,18 +741,17 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                             cid = node.attr('data-cid');
                         // propagate event
                         e.data.view.trigger('selection:delete', [cid]);
-                        cellsBelow.removeAttr('style');
-                        $(self).removeAttr('style');
-                        self.swipeCell.remove();
                         self.swipeCell.remove();
                         self.swipeCell = null;
+                        cellsBelow.removeAttr('style');
+                        $(self).removeAttr('style');
                         $(self).removeClass('unfolded');
                         self.unfolded = false;
                     });
                 }, 110);
-
             } else if (distanceX) {
-                e.data.resetSwipeCell.call(e.data.currentSelection);
+                e.data.resetSwipeCell.call(this, Math.abs(distanceX));
+                return false;
             }
         },
 
