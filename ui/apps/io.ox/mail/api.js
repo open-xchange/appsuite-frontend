@@ -479,7 +479,7 @@ define('io.ox/mail/api',
         if (!obj.view) obj.view = defaultView(obj);
 
         // limit default size (30KB)
-        obj.max_size = 1024 * 30;
+        obj.max_size = settings.get('maxSize/view', 1024 * 30);
 
         return get.call(api, obj, options && options.cache).done(function (data) {
             if (model) {
@@ -1136,19 +1136,21 @@ define('io.ox/mail/api',
         view = view === 'text/html' ? 'html' : view;
 
         // attach original message on touch devices?
-        var attachOriginalMessage = view === 'text' &&
-                Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
+        var attachOriginalMessage = view === 'text' && Modernizr.touch && settings.get('attachOriginalMessage', false) === true,
             csid = api.csid();
 
         return http.PUT({
                 module: 'mail',
-                params: {
+                // using jQuery's params because it ignores undefined values
+                params: $.extend({}, {
                     action: action || '',
                     attachOriginalMessage: attachOriginalMessage,
                     view: view,
                     setFrom: (/reply|replyall|forward/.test(action)),
-                    csid: csid
-                },
+                    csid: csid,
+                    embedded: obj.embedded,
+                    max_size: obj.max_size
+                }),
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
                 }),

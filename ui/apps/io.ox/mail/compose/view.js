@@ -324,9 +324,11 @@ define('io.ox/mail/compose/view', [
         },
 
         fetchMail: function (obj) {
+
             var self = this,
             mode = obj.mode;
             delete obj.mode;
+
             if (/(compose|edit)/.test(mode)) {
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
@@ -342,6 +344,10 @@ define('io.ox/mail/compose/view', [
             if (content_type === 'alternative') {
                 content_type = obj.content_type === 'text/plain' ? 'text' : 'html';
             }
+
+            // use CSS sanitizing and size limit (large than detail view)
+            obj.embedded = true;
+            obj.max_size = settings.get('maxSize/compose', 1024 * 256);
 
             return mailAPI[mode](obj, content_type).then(function (data) {
                 data.sendtype = mode === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
