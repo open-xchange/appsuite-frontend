@@ -10,7 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/mail/compose/main'], function (compose) {
+define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
@@ -22,6 +22,9 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 return app.launch();
             });
             afterEach(function () {
+                if (app.view && app.view.model) {
+                    app.view.model.dirty(false);
+                }
                 return app.quit();
             });
 
@@ -57,6 +60,103 @@ define(['io.ox/mail/compose/main'], function (compose) {
                     expect(app.view.$el.is(':visible'), 'view element is visible').to.be.true;
                     expect(_.url.hash('app')).to.equal('io.ox/mail/compose:reply');
                 });
+            });
+
+            describe('model change events', function () {
+                var address = 'testuser@open-xchange.com',
+                    addressEntry = [[address, address]];
+                it('should add recipients to "to" tokenfield', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('to', addressEntry);
+                        expect(app.view.$el.find('.tokenfield.to .token').attr('title')).to.equal(address);
+                    });
+                });
+                it('should add recipients to "cc" tokenfield', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('cc', addressEntry);
+                        expect(app.view.$el.find('.tokenfield.cc .token').attr('title')).to.equal(address);
+                    });
+                });
+                it('should add recipients to "bcc" tokenfield', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('bcc', addressEntry);
+                        expect(app.view.$el.find('.tokenfield.bcc .token').attr('title')).to.equal(address);
+                    });
+                });
+                it('should add text to subject', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('subject', 'Test subject');
+                        expect(app.view.$el.find('.subject input').val()).to.equal('Test subject');
+                    });
+                });
+                it('should set priority to high', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('priority', 0);
+                        expect(app.view.$el.find('a[data-name="priority"][data-value="0"] i').hasClass('fa-check'), ' option is checked in menu options').to.be.true;
+                    });
+                });
+                it('should set priority to normal', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('priority', 3);
+                        expect(app.view.$el.find('a[data-name="priority"][data-value="3"] i').hasClass('fa-check'), ' option is checked in menu options').to.be.true;
+                    });
+                });
+                it('should set priority to low', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('priority', 5);
+                        expect(app.view.$el.find('a[data-name="priority"][data-value="5"] i').hasClass('fa-check'), ' option is checked in menu options').to.be.true;
+                    });
+                });
+                it('should set request read receipt', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('disp_notification_to', true);
+                        expect(app.view.$el.find('a[data-name="disp_notification_to"] i').hasClass('fa-check'), ' option is checked in menu options').to.be.true;
+                    });
+                });
+                it('should set attach vcard', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('vcard', 1);
+                        expect(app.view.$el.find('a[data-name="vcard"] i').hasClass('fa-check'), ' option is checked in menu options').to.be.true;
+                    });
+                });
+                it('should set attach vcard', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('vcard', 0);
+                        expect(app.view.$el.find('a[data-name="vcard"] i').hasClass('fa-check'), ' option is unchecked in menu options').to.be.false;
+                    });
+                });
+                it('should change editor mode from text to html', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).done(function () {
+                        app.view.model.set('editorMode', 'html');
+                        expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;
+                        expect(app.view.$el.find('.editable.mce-content-body').is(':visible'), 'tinymce contenteditable editor element is visible').to.be.true;
+                    });
+                });
+                it('should change editor mode from html to text', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
+                        app.view.model.set('editorMode', 'text');
+                        return waitsFor(function () {
+                            return app.view.$el.find('textarea.plain-text').is(':visible') === true;
+                        });
+                    }).then(function () {
+                        expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.true;
+                        expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.false;
+                        expect(app.view.$el.find('.editable.mce-content-body').is(':visible'), 'tinymce contenteditable editor element is visible').to.be.false;
+                    });
+                });
+                it('should change editor mode from text to html', function () {
+                    return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
+                        app.view.model.set('editorMode', 'html');
+                        return waitsFor(function () {
+                            return app.view.$el.find('.editable.mce-content-body').is(':visible') === true;
+                        });
+                    }).then(function () {
+                        expect(app.view.$el.find('textarea.plain-text').is(':visible'), 'plain text editor is visible').to.be.false;
+                        expect(app.view.$el.find('.editable-toolbar').is(':visible'), 'tinymce toolbar element is visible').to.be.true;
+                        expect(app.view.$el.find('.editable.mce-content-body').is(':visible'), 'tinymce contenteditable editor element is visible').to.be.true;
+                    });
+                });
+
             });
         });
     });
