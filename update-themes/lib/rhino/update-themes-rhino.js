@@ -46,11 +46,13 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     var paths = env.paths || ['.'];
     if (paths.indexOf(path) < 0) paths.push(path);
     var data = '';
+    var fileFound = false;
     paths.forEach(function (path) {
         try {
             //first, try to load directly
             //see bug 33460
             data += readFile(less.modules.path.join(path, href));
+            fileFound = true;
         } catch (e) {
             try {
                 // alternatively, try to load only the basename part in path
@@ -59,7 +61,7 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
             }
         }
     });
-    if (!data) {
+    if (!fileFound && !data) {
         callback({ type: 'File', message: "'" + less.modules.path.basename(href) + "' wasn't found. Looked in:\n" + paths.join('\n') });
         return;
     }
