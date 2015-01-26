@@ -478,6 +478,9 @@ define('io.ox/mail/api',
         // determine default view parameter
         if (!obj.view) obj.view = defaultView(obj);
 
+        // limit default size (30KB)
+        obj.max_size = 1024 * 30;
+
         return get.call(api, obj, options && options.cache).done(function (data) {
             if (model) {
                 // if we already have a model we promote changes for threads
