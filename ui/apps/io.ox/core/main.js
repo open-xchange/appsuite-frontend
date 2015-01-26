@@ -1501,10 +1501,20 @@ define('io.ox/core/main',
     });
 
     //
-    // Respons to special http error codes (see bug 32836)
+    // Respond to special http error codes (see bug 32836)
     //
     ox.on('http:error', function (e, error) {
-        if (error.code === 'MSG-1000' || error.code === 'MSG-1001') notifications.yell(error);
+        switch (error.code) {
+            case 'MSG-1000':
+            case 'MSG-1001':
+                // IMAP-specific: 'Relogin required'
+                notifications.yell(error);
+                break;
+            case 'LGI-0016':
+                // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
+                location.href = error.error;
+                break;
+        }
     });
 
     return {
