@@ -1829,7 +1829,7 @@ define('io.ox/mail/api',
         }
 
         function original() {
-            document.title = document.customTitle;
+            if (document.customTitle) document.title = document.customTitle;
             if (interval) { clearInterval(interval); interval = null; }
         }
 
