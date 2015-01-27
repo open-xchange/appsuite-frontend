@@ -464,10 +464,11 @@ define('io.ox/core/permissions/permissions',
                         }
 
                     } else {
-                        dialog.addPrimaryButton('ok', gt('Close'));
+                        dialog.addPrimaryButton('cancel', gt('Close'));
                     }
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.on('save', function () {
+                        console.log('oder hier?');
                         if (isFolderAdmin) {
                             api.update(folder_id, { permissions: collection.toJSON() }).then(function success () {
                                 dialog.close();
@@ -476,9 +477,11 @@ define('io.ox/core/permissions/permissions',
                                 notifications.yell(error);
                             });
                         }
-                    }).on('close', function () {
+                    })
+                    .on('cancel', function () {
                         collection.off();
-                    }).show(function () {
+                    })
+                    .show(function () {
                         this.find('input').focus();
                     });
                 } catch (e) {
