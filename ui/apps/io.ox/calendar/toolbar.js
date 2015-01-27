@@ -55,6 +55,7 @@ define('io.ox/calendar/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Edit'),
+            title: gt('Edit appointment'),
             ref: 'io.ox/calendar/detail/actions/edit'
         },
         'changestatus': {
@@ -68,6 +69,7 @@ define('io.ox/calendar/toolbar',
             prio: 'hi',
             mobile: 'hi',
             label: gt('Delete'),
+            title: gt('Delete appointment'),
             ref: 'io.ox/calendar/detail/actions/delete'
         },
         //

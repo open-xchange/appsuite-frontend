@@ -413,6 +413,19 @@ define('io.ox/core/folder/api',
         return pool.getCollection(getFlatCollectionId(module, section));
     }
 
+    function getFlatViews() {
+        return _(pool.collections).chain()
+            .keys()
+            .filter(function (id) {
+                return /^flat/.test(id);
+            })
+            .map(function (id) {
+                return id.split('/')[1];
+            })
+            .uniq()
+            .value();
+    }
+
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
@@ -797,6 +810,10 @@ define('io.ox/core/folder/api',
         _(api.pool.models).chain().invoke('get', 'folder_id').uniq().compact().without('0').each(function (id) {
             list(id, { cache: false });
         });
+        // loop over flat views
+        _(getFlatViews()).each(function (module) {
+            flat({ module: module, cache: false });
+        });
         // go!
         http.resume();
     }
@@ -858,6 +875,7 @@ define('io.ox/core/folder/api',
         virtual: virtual,
         isFlat: isFlat,
         getFlatCollection: getFlatCollection,
+        getFlatViews: getFlatViews,
         getDefaultFolder: util.getDefaultFolder,
         getStandardMailFolders: getStandardMailFolders,
         getTextNode: getTextNode,

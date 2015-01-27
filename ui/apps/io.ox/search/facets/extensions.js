@@ -266,6 +266,8 @@ define('io.ox/search/facets/extensions',
                 var node = $('<span>').addClass('name'),
                     detail = (value.item || {}).detail,
                     label = value.name || (value.item || {}).name,
+                    labelnode = this.find('.facet-label'),
+                    labels,
                     optionslabel;
 
                 if (detail) {
@@ -281,7 +283,17 @@ define('io.ox/search/facets/extensions',
                     node.text(optionslabel || label || gt('All'));
                 }
 
-                this.find('.facet-label').append(node);
+                labelnode.append(node);
+
+                // a11y facet label
+                labels = labelnode.find('span').map(
+                    function (index, span) {
+                        // text() does not return separators (css after content)
+                        return $(span).text() + ' ';
+                    }
+                );
+                this.attr('aria-label', labels.toArray().join(''));
+
             },
 
             facetRemove: function (baton, value, facet, fn) {
@@ -532,9 +544,6 @@ define('io.ox/search/facets/extensions',
                     .append(
                         $('<div>')
                             .addClass('type')
-                            .text(facet.name),
-                        $('<legend>')
-                            .addClass('sr-only')
                             .text(facet.name),
                         group = $('<div class="input-daterange input-group" id="datepicker">')
                                     .append(
