@@ -533,9 +533,6 @@ define('io.ox/search/facets/extensions',
                         $('<div>')
                             .addClass('type')
                             .text(facet.name),
-                        $('<legend>')
-                            .addClass('sr-only')
-                            .text(facet.name),
                         group = $('<div class="input-daterange input-group" id="datepicker">')
                                     .append(
                                         getBlock(gt('Starts on'), 'start', from),
