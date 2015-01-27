@@ -87,7 +87,8 @@ define('io.ox/core/permissions/permissions',
                 return this;
             },
 
-            removeEntity: function () {
+            removeEntity: function (e) {
+                e.preventDefault();
                 this.collection.remove(this.model);
                 this.remove();
             },
@@ -391,15 +392,6 @@ define('io.ox/core/permissions/permissions',
 
                     dialog.getContentNode().addClass('scrollpane').busy();
 
-                    userAPI.getList(ids, true, { allColumns: true }).done(function () {
-                        // stop being busy
-                        dialog.getContentNode().idle();
-                        // draw users
-                        collection.reset(_(data.permissions).map(function (obj) {
-                            return new Permission(obj);
-                        }));
-                    });
-
                     if (isFolderAdmin) {
                         if (_.device('desktop')) {
                             dialog.addPrimaryButton('save', gt('Save')).addButton('cancel', gt('Cancel'));
@@ -466,17 +458,20 @@ define('io.ox/core/permissions/permissions',
                     } else {
                         dialog.addPrimaryButton('cancel', gt('Close'));
                     }
+
                     dialog.getPopup().addClass('permissions-dialog');
                     dialog.on('save', function () {
-                        console.log('oder hier?');
-                        if (isFolderAdmin) {
-                            api.update(folder_id, { permissions: collection.toJSON() }).then(function success () {
+                        if (!isFolderAdmin) return dialog.idle();
+                        api.update(folder_id, { permissions: collection.toJSON() }).then(
+                            function success () {
+                                collection.off();
                                 dialog.close();
-                            }, function fail (error) {
+                            },
+                            function fail (error) {
                                 dialog.idle();
                                 notifications.yell(error);
-                            });
-                        }
+                            }
+                        );
                     })
                     .on('cancel', function () {
                         collection.off();
@@ -484,6 +479,17 @@ define('io.ox/core/permissions/permissions',
                     .show(function () {
                         this.find('input').focus();
                     });
+
+                    // load user data after opening the dialog
+                    userAPI.getList(ids, true, { allColumns: true }).done(function () {
+                        // stop being busy
+                        dialog.getContentNode().idle();
+                        // draw users
+                        collection.reset(_(data.permissions).map(function (obj) {
+                            return new Permission(obj);
+                        }));
+                    });
+
                 } catch (e) {
                     console.error('Error', e);
                 }
