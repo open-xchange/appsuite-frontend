@@ -129,9 +129,11 @@ define('plugins/portal/xing/register',
                     notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
                 })
                 .done(function () {
-                    notifications.yell('success', gt('Your %s account has been created. Expect a confirmation mail from %s soon.', XING_NAME, XING_NAME));
-                    notifications.yell('success', gt('The next step is allowing this system to access your %s account for you.', XING_NAME));
-                    addXingAccount(e);
+                    notifications.yell({
+                        type: 'success',
+                        duration: 60000,
+                        message: gt('Please check your inbox for a confirmation email.\n\nFollow the instructions in the email and then return to the widget to complete account setup.')
+                    });
                 });
             }
         );
