@@ -837,7 +837,7 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editor.setContent(content);
-            this.setSelectedSignature();
+            this.setSelectedSignature(this.model.get('signature'));
         },
 
         getMobileSignature: function () {
@@ -850,21 +850,28 @@ define('io.ox/mail/compose/view', [
             return value;
         },
 
-        setSelectedSignature: function () {
-            var ds = _.where(this.signatures, { id: String(this.model.get('signature')) })[0];
-            if (ds) {
+        setSelectedSignature: function (model, id) {
+            if (_.isString(model)) {
+                id = model;
+            }
+            var newSignature = _.where(this.signatures, { id: String(id) })[0],
+                prevSignature = _.where(this.signatures, { id: _.isObject(model) ? model.previous('signature') : '' })[0];
+
+            if (prevSignature) {
+                this.removeSignature(prevSignature);
+            }
+            if (newSignature) {
+                var ds = newSignature;
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 this.setSignature(ds);
-            } else {
-                this.removeSignature();
             }
             this.prependNewLine();
         },
 
-        removeSignature: function () {
+        removeSignature: function (signature) {
             var self = this,
                 isHTML = !!this.editor.find,
-                currentSignature = this.model.get('currentSignature');
+                currentSignature = mailUtil.signatures.cleanAdd(signature.content, isHTML);
 
             // remove current signature from editor
 
@@ -905,8 +912,6 @@ define('io.ox/mail/compose/view', [
             var text,
                 isHTML = !!this.editor.find;
 
-            this.removeSignature();
-
             // add signature?
             if (this.signatures.length > 0) {
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
@@ -919,7 +924,6 @@ define('io.ox/mail/compose/view', [
                     this.editor.prependContent(text);
                     this.editor.scrollTop('top');
                 }
-                this.model.set('currentSignature', text);
             }
         },
 
@@ -946,7 +950,9 @@ define('io.ox/mail/compose/view', [
 
             this.model.setInitialMailContentType();
 
-            return this.changeEditorMode().done(function () {
+            return this.changeEditorMode().then(function () {
+                return self.signaturesLoading;
+            }).done(function () {
                 if (data.replaceBody !== 'no') {
                     var mode = self.model.get('mode');
                     // set focus in compose and forward mode to recipient tokenfield
