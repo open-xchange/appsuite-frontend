@@ -263,9 +263,12 @@ define('plugins/portal/xing/register',
 
         drawDefaultSetup: function (baton) {
 
+            var content = this.find('.content');
+
             this.find('h2 .title').replaceWith('<i class="fa fa-xing">');
             this.addClass('widget-color-custom color-xing');
-            this.find('.content').append(
+            content.find('.paragraph').empty().text(gt('Get news from your XING network delivered to you. Stay in touch and find out about new business opportunities.'));
+            content.append(
                 $('<a href="#" class="action" tabindex="1" role="button">').text(
                     //#. %1$s is social media name, e.g. Facebook
                     gt('Create new %1$s account', XING_NAME)
